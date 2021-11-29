@@ -1,6 +1,6 @@
 import { CommonModule, DecimalPipe } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NgModule } from '@angular/core';
+import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 import { UserDetailsRoutingModule } from './userDetails.routing.module';
 import { UserDetailsComponent } from './userDetails.component';
 import { TabsModule } from 'ngx-bootstrap/tabs';
@@ -23,6 +23,21 @@ import { AllFeaturesComponent } from './components/all-features/all-features.com
 import { AddCompanyComponent } from './components/add-company/add-company.component';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { NoDataModule } from '../shared/no-data/no-data.module';
+import { SubscriptionComponent } from './components/subscription/subscription.component';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatSelectModule } from '@angular/material/select';
+import { MatButtonModule } from '@angular/material/button';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatTableModule } from '@angular/material/table';
+import { MatDialogModule } from '@angular/material/dialog';
+import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
+
+
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: true
@@ -39,7 +54,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         CompanyDetailsSidebarComponent,
         MoveCompanyComponent,
         AllFeaturesComponent,
-        AddCompanyComponent
+        AddCompanyComponent,
+        SubscriptionComponent
     ],
     exports: [],
     imports: [
@@ -58,7 +74,19 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         BsDropdownModule.forRoot(),
         TooltipModule.forRoot(),
         ScrollingModule,
-        NoDataModule
+        NoDataModule,
+        MatToolbarModule,
+        MatSelectModule,
+        MatButtonModule,
+        MatGridListModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatTabsModule,
+        MatExpansionModule,
+        MatDividerModule,
+        MatTableModule,
+        MatDialogModule,
+        ShSelectModule
     ],
     providers: [
         {
@@ -67,6 +95,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         },
         DecimalPipe
     ]
+    
 })
 export class UserDetailsModule {
 

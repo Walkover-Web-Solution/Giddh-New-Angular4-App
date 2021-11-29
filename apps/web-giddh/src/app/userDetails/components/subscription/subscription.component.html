@@ -1,0 +1,1080 @@
+<div class="menu-one-button">
+    <button mat-flat-button color="primary">Buy New Plan</button>
+</div>
+<mat-grid-list cols="16" rowHeight="{{ menuBarHeight }}px" gutterSize="0px">
+    <mat-grid-tile colspan="{{ menuOneWidth }}" rowspan="1">
+        <div class="menu-two">
+            <label for="Search-box">
+                <img src="{{ imgPath }}search.png" alt="SearchBar" />
+            </label>
+            <mat-form-field class="form-field" appearance="none">
+                <input matInput class="search-bar" placeholder="Search plans and companies" />
+            </mat-form-field>
+        </div>
+    </mat-grid-tile>
+    <mat-grid-tile colspan="{{ menuTwoWidth }}">
+        <div class="menu-two-list">
+            <div class="menu-two-list-items">
+                <span class="mat-body-1 plan">Plan</span>
+                <mat-form-field appearance="none" floatLabel="never" class="form_select">
+                    <mat-select placeholder="Select">
+                        <mat-option value="trial">Trial</mat-option>
+                        <mat-option value="brich">Brich</mat-option>
+                        <mat-option value="oak">Oak</mat-option>
+                        <mat-option value="vine">Vine</mat-option>
+                        <mat-option value="sequoia">Sequoia</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="menu-two-list-items">
+                <span class="mat-body-1 expiring-within">Expiring Within</span>
+                <mat-form-field appearance="none" floatLabel="never" class="form_select">
+                    <mat-select placeholder="Select">
+                        <mat-option value="5_days">5 Days</mat-option>
+                        <mat-option value="15_days">15 Days</mat-option>
+                        <mat-option value="1_month">1 Month</mat-option>
+                        <mat-option value="6_months">6 Months</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="menu-two-list-items transaction-box">
+                <span class="mat-body-1 transaction-balance">Transactions Balance</span>
+                <mat-form-field appearance="none" floatLabel="never" class="form_select">
+                    <mat-select placeholder="Select" class="transaction-select">
+                        <mat-option value="less_than_1,000">Less than 1,000</mat-option>
+                        <mat-option value="less_than_5,000">Less than 5,000</mat-option>
+                        <mat-option value="less_than_10,000">Less than 10,000</mat-option>
+                        <mat-option value="less_than_50,000">Less than 50,000</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="menu-two-button">
+            <a href="#" class="mat-body-2">Clear</a>
+        </div>
+    </mat-grid-tile>
+    <mat-grid-tile colspan="{{ sideBarBoxWidth }}" rowspan="{{ sideBarBoxLength }}">
+        <div class="sidebar">
+            <mat-grid-list cols="2" rowHeight="{{ rowLength }}px" gutterSize="0px" class="sidebar-box">
+                <mat-grid-tile colspan="2">
+                    <div class="side-bar-items">
+                        <p class="mat-body-2 side-bar-head">
+                            Oak Plan<img src="{{ imgPath }}dot.png" alt="dot" /><span>SUB-20201222-14</span>
+                        </p>
+                        <div class="side-bar-list">
+                            <img src="{{ imgPath }}transaction.png" alt="transaction" />
+                            <p class="side-bar-list-title">Transactions</p>
+                            <span>:</span>
+                            <p class="mat-body-2">5000 <span class="warning mat-body-2">Left</span></p>
+                        </div>
+                        <div class="side-bar-list">
+                            <img src="{{ imgPath }}companies.png" alt="companies" />
+                            <p class="mat-subheading-4 side-bar-list-title">Companies</p>
+                            <span>:</span>
+                            <p>5</p>
+                        </div>
+                        <div class="side-bar-list plan-timeline">
+                            <img src="{{ imgPath }}plan_timeline.png" alt="plan_timeline" />
+                            <p class="mat-subheading-4 side-bar-list-title">Plan Timeline</p>
+                            <span>:</span>
+                            <p class="date">22 Dec, 2020 - 6 Jan, 2021</p>
+                        </div>
+                    </div>
+                </mat-grid-tile>
+                <mat-grid-tile colspan="2">
+                    <div class="side-bar-items">
+                        <p class="mat-body-2 side-bar-head">
+                            Oak Plan<img src="{{ imgPath }}dot.png" alt="dot" /><span>SUB-20201222-14</span>
+                        </p>
+                        <div class="side-bar-list">
+                            <img src="{{ imgPath }}transaction.png" alt="transaction" />
+                            <p class="mat-subheading-4 side-bar-list-title">Transactions</p>
+                            <span>:</span>
+                            <p>5000 <span class="warning mat-body-2">Left</span></p>
+                        </div>
+                        <div class="side-bar-list">
+                            <img src="{{ imgPath }}companies.png" alt="companies" />
+                            <p class="mat-subheading-4 side-bar-list-title">Companies</p>
+                            <span>:</span>
+                            <p>5</p>
+                        </div>
+                        <div class="side-bar-list plan-timeline">
+                            <img src="{{ imgPath }}plan_timeline.png" alt="plan_timeline" />
+                            <p class="mat-subheading-4 side-bar-list-title">Plan Timeline</p>
+                            <span>:</span>
+                            <p class="date">22 Dec, 2020 - 6 Jan, 2021</p>
+                        </div>
+                    </div>
+                </mat-grid-tile>
+                <mat-grid-tile colspan="2">
+                    <div class="side-bar-items">
+                        <p class="mat-body-2 side-bar-head">
+                            Oak Plan<img src="{{ imgPath }}dot.png" alt="dot" /><span>SUB-20201222-14</span>
+                        </p>
+                        <div class="side-bar-list">
+                            <img src="{{ imgPath }}transaction.png" alt="transaction" />
+                            <p class="mat-subheading-4 side-bar-list-title">Transactions</p>
+                            <span>:</span>
+                            <p>5000 <span class="warning mat-body-2">Left</span></p>
+                        </div>
+                        <div class="side-bar-list">
+                            <img src="{{ imgPath }}companies.png" alt="companies" />
+                            <p class="mat-subheading-4 side-bar-list-title">Companies</p>
+                            <span>:</span>
+                            <p>5</p>
+                        </div>
+                        <div class="side-bar-list plan-timeline">
+                            <img src="{{ imgPath }}plan_timeline.png" alt="plan_timeline" />
+                            <p class="mat-subheading-4 side-bar-list-title">Plan Timeline</p>
+                            <span>:</span>
+                            <p class="date">22 Dec, 2020 - 6 Jan, 2021</p>
+                        </div>
+                    </div>
+                </mat-grid-tile>
+                <mat-grid-tile colspan="2">
+                    <div class="side-bar-items">
+                        <p class="mat-body-2 side-bar-head">
+                            Oak Plan<img src="{{ imgPath }}dot.png" alt="dot" /><span>SUB-20201222-14</span>
+                        </p>
+                        <div class="side-bar-list">
+                            <img src="{{ imgPath }}transaction.png" alt="transaction" />
+                            <p class="mat-subheading-4 side-bar-list-title">Transactions</p>
+                            <span>:</span>
+                            <p>5000 <span class="warning mat-body-2">Left</span></p>
+                        </div>
+                        <div class="side-bar-list">
+                            <img src="{{ imgPath }}companies.png" alt="companies" />
+                            <p class="mat-subheading-4 side-bar-list-title">Companies</p>
+                            <span>:</span>
+                            <p>5</p>
+                        </div>
+                        <div class="side-bar-list plan-timeline">
+                            <img src="{{ imgPath }}plan_timeline.png" alt="plan_timeline" />
+                            <p class="mat-subheading-4 side-bar-list-title">Plan Timeline</p>
+                            <span>:</span>
+                            <p class="date">22 Dec, 2020 - 6 Jan, 2021</p>
+                        </div>
+                    </div>
+                </mat-grid-tile>
+                <mat-grid-tile colspan="2">
+                    <div class="side-bar-items">
+                        <p class="mat-body-2 side-bar-head">
+                            Oak Plan<img src="{{ imgPath }}dot.png" alt="dot" /><span>SUB-20201222-14</span>
+                        </p>
+                        <div class="side-bar-list">
+                            <img src="{{ imgPath }}transaction.png" alt="transaction" />
+                            <p class="mat-subheading-4 side-bar-list-title">Transactions</p>
+                            <span>:</span>
+                            <p>5000 <span class="warning mat-body-2">Left</span></p>
+                        </div>
+                        <div class="side-bar-list">
+                            <img src="{{ imgPath }}companies.png" alt="companies" />
+                            <p class="mat-subheading-4 side-bar-list-title">Companies</p>
+                            <span>:</span>
+                            <p>5</p>
+                        </div>
+                        <div class="side-bar-list plan-timeline">
+                            <img src="{{ imgPath }}plan_timeline.png" alt="plan_timeline" />
+                            <p class="mat-subheading-4 side-bar-list-title">Plan Timeline</p>
+                            <span>:</span>
+                            <p class="date">22 Dec, 2020 - 6 Jan, 2021</p>
+                        </div>
+                    </div>
+                </mat-grid-tile>
+                <mat-grid-tile colspan="2">
+                    <div class="side-bar-items">
+                        <p class="mat-body-2 side-bar-head">
+                            Oak Plan<img src="{{ imgPath }}dot.png" alt="dot" /><span>SUB-20201222-14</span>
+                        </p>
+                        <div class="side-bar-list">
+                            <img src="{{ imgPath }}transaction.png" alt="transaction" />
+                            <p class="mat-subheading-4 side-bar-list-title">Transactions</p>
+                            <span>:</span>
+                            <p>5000 <span class="warning mat-body-2">Left</span></p>
+                        </div>
+                        <div class="side-bar-list">
+                            <img src="{{ imgPath }}companies.png" alt="companies" />
+                            <p class="mat-subheading-4 side-bar-list-title">Companies</p>
+                            <span>:</span>
+                            <p>5</p>
+                        </div>
+                        <div class="side-bar-list plan-timeline">
+                            <img src="{{ imgPath }}plan_timeline.png" alt="plan_timeline" />
+                            <p class="mat-subheading-4 side-bar-list-title">Plan Timeline</p>
+                            <span>:</span>
+                            <p class="date">22 Dec, 2020 - 6 Jan, 2021</p>
+                        </div>
+                    </div>
+                </mat-grid-tile>
+            </mat-grid-list>
+        </div>
+    </mat-grid-tile>
+    <mat-grid-tile colspan="{{ mainContentWidth }}" rowspan="{{ sideBarBoxLength }}">
+        <div class="main-content">
+            <!-- <div>
+                <p>
+                    Select a plan to see its <br />
+                    Overall comsumption and balance summary
+                </p>
+                <br /><br />
+                <p>You have total 10 plans</p>
+            </div> -->
+            <mat-toolbar class="main-content-head">
+                <div class="left-side">
+                    <p>Trial Plan <br /><span>SUB-20201222-14</span></p>
+                </div>
+                <div class="right-side">
+                    <div>
+                        <p>Expires on - 6 Jan, 2021 <br /><span>5 days left</span></p>
+                    </div>
+                    <button mat-flat-button color="primary" class="right-side-btn">Renew Plan</button>
+                    <button mat-flat-button color="primary">Buy Add-ons</button>
+                </div>
+            </mat-toolbar>
+            <p class="summary">Overall summary</p>
+            <div class="balance-info">
+                <mat-grid-list cols="2" rowHeight="10px" gutterSize="3px">
+                    <mat-grid-tile colspan="2" rowspan="{{ overallSummaryTopRow }}">
+                        <div class="overall-summary-bar-one">
+                            <div class="box item-1">
+                                <div class="box-heading">
+                                    <img src="{{ imgPath }}transaction.png" alt="" /> <span>Transaction</span>
+                                </div>
+                                <p>Balance <span>2,000</span></p>
+                            </div>
+                            <div class="box item-2">
+                                <div class="box-heading">
+                                    <img class="set-height" src="{{ imgPath }}branch.png" alt="" /> <span>Branch</span>
+                                </div>
+                                <p>
+                                    Active <span>10</span> <img src="{{ imgPath }}dot.png" alt="" />Balance
+                                    <span class="balance">-2</span>
+                                </p>
+                            </div>
+                            <div class="box item-3">
+                                <div class="box-heading">
+                                    <img class="set-height" src="{{ imgPath }}warehouse.png" alt="" />
+                                    <span>Warehouse</span>
+                                </div>
+                                <p>
+                                    Active <span>10</span> <img src="{{ imgPath }}dot.png" alt="" />Balance
+                                    <span class="balance">-2</span>
+                                </p>
+                            </div>
+                            <div class="box item-4">
+                                <div class="box-heading">
+                                    <img src="{{ imgPath }}companies.png" alt="" /> <span>Companies</span>
+                                </div>
+                                <p>Active <span>2</span></p>
+                            </div>
+                        </div>
+                    </mat-grid-tile>
+                    <mat-grid-tile colspan="2" rowspan="{{ overallSummaryBottomRow }}">
+                        <div class="overall-summary-bar-two">
+                            <p>Total dues <span class="tomato">₹5,200 </span> <span class="grey">Settle now</span></p>
+                        </div>
+                    </mat-grid-tile>
+                </mat-grid-list>
+            </div>
+            <div class="expand-button">
+                <button mat-button disableRipple="true" (click)="accordion.openAll()">Expand all</button>
+            </div>
+            <div class="menu-two accordion-search-box main-content-search-box">
+                <label for="Search-box">
+                    <img src="{{ imgPath }}search.png" alt="SearchBar" />
+                </label>
+                <mat-form-field class="form-field" appearance="none">
+                    <input matInput class="search-bar" placeholder="Search month" />
+                </mat-form-field>
+            </div>
+            <mat-tab-group>
+                <mat-tab label="Monthly">
+                    <mat-accordion multi="true">
+                        <mat-expansion-panel hideToggle>
+                            <mat-expansion-panel-header>
+                                <mat-panel-title> January, 2021 </mat-panel-title>
+                            </mat-expansion-panel-header>
+
+                            <img src="{{ imgPath }}transaction.png" alt="" class="consumed-transaction" />
+                            <img src="{{ imgPath }}branch.png" alt="" class="consumed-branch" />
+                            <img src="{{ imgPath }}warehouse.png" alt="" class="consumed-warehouse" />
+
+                            <table mat-table [dataSource]="dataSource" class="monthly-table">
+                                <ng-container matColumnDef="consumed">
+                                    <th mat-header-cell *matHeaderCellDef>Consumed</th>
+                                    <td mat-cell *matCellDef="let element">{{ element.consumed }}</td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="balance">
+                                    <th mat-header-cell *matHeaderCellDef>Balance</th>
+                                    <td mat-cell *matCellDef="let element">{{ element.balance }}</td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="dues">
+                                    <th mat-header-cell *matHeaderCellDef>Dues</th>
+                                    <td mat-cell *matCellDef="let element">{{ element.dues }}</td>
+                                </ng-container>
+
+                                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                            </table>
+
+                            <img src="{{ imgPath }}transaction.png" alt="" class="added-transaction" />
+                            <img src="{{ imgPath }}branch.png" alt="" class="added-branch" />
+                            <img src="{{ imgPath }}warehouse.png" alt="" class="added-warehouse" />
+
+                            <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+                                <ng-container matColumnDef="consumed">
+                                    <th mat-header-cell *matHeaderCellDef class="added-row">Added</th>
+                                    <td mat-cell *matCellDef="let element">{{ element.consumed }}</td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="balance">
+                                    <th mat-header-cell *matHeaderCellDef class="added-balance">Balance</th>
+                                    <td mat-cell *matCellDef="let element">{{ element.balance }}</td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="dues">
+                                    <th mat-header-cell *matHeaderCellDef class="added-charges">Charges</th>
+                                    <td mat-cell *matCellDef="let element">{{ element.dues }}</td>
+                                </ng-container>
+
+                                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                            </table>
+                        </mat-expansion-panel>
+
+                        <mat-expansion-panel hideToggle>
+                            <mat-expansion-panel-header>
+                                <mat-panel-title> December, 2020 </mat-panel-title>
+                            </mat-expansion-panel-header>
+
+                            <img src="{{ imgPath }}transaction.png" alt="" class="consumed-transaction" />
+                            <img src="{{ imgPath }}branch.png" alt="" class="consumed-branch" />
+                            <img src="{{ imgPath }}warehouse.png" alt="" class="consumed-warehouse" />
+
+                            <table mat-table [dataSource]="dataSource" class="monthly-table">
+                                <ng-container matColumnDef="consumed">
+                                    <th mat-header-cell *matHeaderCellDef>Consumed</th>
+                                    <td mat-cell *matCellDef="let element">{{ element.consumed }}</td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="balance">
+                                    <th mat-header-cell *matHeaderCellDef>Balance</th>
+                                    <td mat-cell *matCellDef="let element">{{ element.balance }}</td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="dues">
+                                    <th mat-header-cell *matHeaderCellDef>Dues</th>
+                                    <td mat-cell *matCellDef="let element">{{ element.dues }}</td>
+                                </ng-container>
+
+                                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                            </table>
+
+                            <img src="{{ imgPath }}transaction.png" alt="" class="added-transaction" />
+                            <img src="{{ imgPath }}branch.png" alt="" class="added-branch" />
+                            <img src="{{ imgPath }}warehouse.png" alt="" class="added-warehouse" />
+
+                            <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+                                <ng-container matColumnDef="consumed">
+                                    <th mat-header-cell *matHeaderCellDef class="added-row">Added</th>
+                                    <td mat-cell *matCellDef="let element">{{ element.consumed }}</td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="balance">
+                                    <th mat-header-cell *matHeaderCellDef class="added-balance">Balance</th>
+                                    <td mat-cell *matCellDef="let element">{{ element.balance }}</td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="dues">
+                                    <th mat-header-cell *matHeaderCellDef class="added-charges">Charges</th>
+                                    <td mat-cell *matCellDef="let element">{{ element.dues }}</td>
+                                </ng-container>
+
+                                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                            </table>
+                        </mat-expansion-panel>
+
+                        <mat-expansion-panel hideToggle>
+                            <mat-expansion-panel-header>
+                                <mat-panel-title> November, 2020 </mat-panel-title>
+                            </mat-expansion-panel-header>
+
+                            <img src="{{ imgPath }}transaction.png" alt="" class="consumed-transaction" />
+                            <img src="{{ imgPath }}branch.png" alt="" class="consumed-branch" />
+                            <img src="{{ imgPath }}warehouse.png" alt="" class="consumed-warehouse" />
+
+                            <table mat-table [dataSource]="dataSource" class="monthly-table">
+                                <ng-container matColumnDef="consumed">
+                                    <th mat-header-cell *matHeaderCellDef>Consumed</th>
+                                    <td mat-cell *matCellDef="let element">{{ element.consumed }}</td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="balance">
+                                    <th mat-header-cell *matHeaderCellDef>Balance</th>
+                                    <td mat-cell *matCellDef="let element">{{ element.balance }}</td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="dues">
+                                    <th mat-header-cell *matHeaderCellDef>Dues</th>
+                                    <td mat-cell *matCellDef="let element">{{ element.dues }}</td>
+                                </ng-container>
+
+                                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                            </table>
+
+                            <img src="{{ imgPath }}transaction.png" alt="" class="added-transaction" />
+                            <img src="{{ imgPath }}branch.png" alt="" class="added-branch" />
+                            <img src="{{ imgPath }}warehouse.png" alt="" class="added-warehouse" />
+
+                            <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+                                <ng-container matColumnDef="consumed">
+                                    <th mat-header-cell *matHeaderCellDef class="added-row">Added</th>
+                                    <td mat-cell *matCellDef="let element">{{ element.consumed }}</td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="balance">
+                                    <th mat-header-cell *matHeaderCellDef class="added-balance">Balance</th>
+                                    <td mat-cell *matCellDef="let element">{{ element.balance }}</td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="dues">
+                                    <th mat-header-cell *matHeaderCellDef class="added-charges">Charges</th>
+                                    <td mat-cell *matCellDef="let element">{{ element.dues }}</td>
+                                </ng-container>
+
+                                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                            </table>
+                        </mat-expansion-panel>
+
+                        <mat-expansion-panel hideToggle>
+                            <mat-expansion-panel-header>
+                                <mat-panel-title> October, 2020 </mat-panel-title>
+                            </mat-expansion-panel-header>
+
+                            <img src="{{ imgPath }}transaction.png" alt="" class="consumed-transaction" />
+                            <img src="{{ imgPath }}branch.png" alt="" class="consumed-branch" />
+                            <img src="{{ imgPath }}warehouse.png" alt="" class="consumed-warehouse" />
+
+                            <table mat-table [dataSource]="dataSource" class="monthly-table">
+                                <ng-container matColumnDef="consumed">
+                                    <th mat-header-cell *matHeaderCellDef>Consumed</th>
+                                    <td mat-cell *matCellDef="let element">{{ element.consumed }}</td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="balance">
+                                    <th mat-header-cell *matHeaderCellDef>Balance</th>
+                                    <td mat-cell *matCellDef="let element">{{ element.balance }}</td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="dues">
+                                    <th mat-header-cell *matHeaderCellDef>Dues</th>
+                                    <td mat-cell *matCellDef="let element">{{ element.dues }}</td>
+                                </ng-container>
+
+                                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                            </table>
+
+                            <img src="{{ imgPath }}transaction.png" alt="" class="added-transaction" />
+                            <img src="{{ imgPath }}branch.png" alt="" class="added-branch" />
+                            <img src="{{ imgPath }}warehouse.png" alt="" class="added-warehouse" />
+
+                            <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+                                <ng-container matColumnDef="consumed">
+                                    <th mat-header-cell *matHeaderCellDef class="added-row">Added</th>
+                                    <td mat-cell *matCellDef="let element">{{ element.consumed }}</td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="balance">
+                                    <th mat-header-cell *matHeaderCellDef class="added-balance">Balance</th>
+                                    <td mat-cell *matCellDef="let element">{{ element.balance }}</td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="dues">
+                                    <th mat-header-cell *matHeaderCellDef class="added-charges">Charges</th>
+                                    <td mat-cell *matCellDef="let element">{{ element.dues }}</td>
+                                </ng-container>
+
+                                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                            </table>
+                        </mat-expansion-panel>
+
+                        <mat-expansion-panel hideToggle>
+                            <mat-expansion-panel-header>
+                                <mat-panel-title> September, 2020 </mat-panel-title>
+                            </mat-expansion-panel-header>
+
+                            <img src="{{ imgPath }}transaction.png" alt="" class="consumed-transaction" />
+                            <img src="{{ imgPath }}branch.png" alt="" class="consumed-branch" />
+                            <img src="{{ imgPath }}warehouse.png" alt="" class="consumed-warehouse" />
+
+                            <table mat-table [dataSource]="dataSource" class="monthly-table">
+                                <ng-container matColumnDef="consumed">
+                                    <th mat-header-cell *matHeaderCellDef>Consumed</th>
+                                    <td mat-cell *matCellDef="let element">{{ element.consumed }}</td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="balance">
+                                    <th mat-header-cell *matHeaderCellDef>Balance</th>
+                                    <td mat-cell *matCellDef="let element">{{ element.balance }}</td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="dues">
+                                    <th mat-header-cell *matHeaderCellDef>Dues</th>
+                                    <td mat-cell *matCellDef="let element">{{ element.dues }}</td>
+                                </ng-container>
+
+                                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                            </table>
+
+                            <img src="{{ imgPath }}transaction.png" alt="" class="added-transaction" />
+                            <img src="{{ imgPath }}branch.png" alt="" class="added-branch" />
+                            <img src="{{ imgPath }}warehouse.png" alt="" class="added-warehouse" />
+
+                            <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+                                <ng-container matColumnDef="consumed">
+                                    <th mat-header-cell *matHeaderCellDef class="added-row">Added</th>
+                                    <td mat-cell *matCellDef="let element">{{ element.consumed }}</td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="balance">
+                                    <th mat-header-cell *matHeaderCellDef class="added-balance">Balance</th>
+                                    <td mat-cell *matCellDef="let element">{{ element.balance }}</td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="dues">
+                                    <th mat-header-cell *matHeaderCellDef class="added-charges">Charges</th>
+                                    <td mat-cell *matCellDef="let element">{{ element.dues }}</td>
+                                </ng-container>
+
+                                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                            </table>
+                        </mat-expansion-panel>
+
+                        <mat-expansion-panel hideToggle>
+                            <mat-expansion-panel-header>
+                                <mat-panel-title> August, 2020 </mat-panel-title>
+                            </mat-expansion-panel-header>
+
+                            <img src="{{ imgPath }}transaction.png" alt="" class="consumed-transaction" />
+                            <img src="{{ imgPath }}branch.png" alt="" class="consumed-branch" />
+                            <img src="{{ imgPath }}warehouse.png" alt="" class="consumed-warehouse" />
+
+                            <table mat-table [dataSource]="dataSource" class="monthly-table">
+                                <ng-container matColumnDef="consumed">
+                                    <th mat-header-cell *matHeaderCellDef>Consumed</th>
+                                    <td mat-cell *matCellDef="let element">{{ element.consumed }}</td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="balance">
+                                    <th mat-header-cell *matHeaderCellDef>Balance</th>
+                                    <td mat-cell *matCellDef="let element">{{ element.balance }}</td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="dues">
+                                    <th mat-header-cell *matHeaderCellDef>Dues</th>
+                                    <td mat-cell *matCellDef="let element">{{ element.dues }}</td>
+                                </ng-container>
+
+                                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                            </table>
+
+                            <img src="{{ imgPath }}transaction.png" alt="" class="added-transaction" />
+                            <img src="{{ imgPath }}branch.png" alt="" class="added-branch" />
+                            <img src="{{ imgPath }}warehouse.png" alt="" class="added-warehouse" />
+
+                            <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+                                <ng-container matColumnDef="consumed">
+                                    <th mat-header-cell *matHeaderCellDef class="added-row">Added</th>
+                                    <td mat-cell *matCellDef="let element">{{ element.consumed }}</td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="balance">
+                                    <th mat-header-cell *matHeaderCellDef class="added-balance">Balance</th>
+                                    <td mat-cell *matCellDef="let element">{{ element.balance }}</td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="dues">
+                                    <th mat-header-cell *matHeaderCellDef class="added-charges">Charges</th>
+                                    <td mat-cell *matCellDef="let element">{{ element.dues }}</td>
+                                </ng-container>
+
+                                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                            </table>
+                        </mat-expansion-panel>
+
+                        <mat-expansion-panel hideToggle>
+                            <mat-expansion-panel-header>
+                                <mat-panel-title> July, 2020 </mat-panel-title>
+                            </mat-expansion-panel-header>
+
+                            <img src="{{ imgPath }}transaction.png" alt="" class="consumed-transaction" />
+                            <img src="{{ imgPath }}branch.png" alt="" class="consumed-branch" />
+                            <img src="{{ imgPath }}warehouse.png" alt="" class="consumed-warehouse" />
+
+                            <table mat-table [dataSource]="dataSource" class="monthly-table">
+                                <ng-container matColumnDef="consumed">
+                                    <th mat-header-cell *matHeaderCellDef>Consumed</th>
+                                    <td mat-cell *matCellDef="let element">{{ element.consumed }}</td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="balance">
+                                    <th mat-header-cell *matHeaderCellDef>Balance</th>
+                                    <td mat-cell *matCellDef="let element">{{ element.balance }}</td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="dues">
+                                    <th mat-header-cell *matHeaderCellDef>Dues</th>
+                                    <td mat-cell *matCellDef="let element">{{ element.dues }}</td>
+                                </ng-container>
+
+                                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                            </table>
+
+                            <img src="{{ imgPath }}transaction.png" alt="" class="added-transaction" />
+                            <img src="{{ imgPath }}branch.png" alt="" class="added-branch" />
+                            <img src="{{ imgPath }}warehouse.png" alt="" class="added-warehouse" />
+
+                            <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+                                <ng-container matColumnDef="consumed">
+                                    <th mat-header-cell *matHeaderCellDef class="added-row">Added</th>
+                                    <td mat-cell *matCellDef="let element">{{ element.consumed }}</td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="balance">
+                                    <th mat-header-cell *matHeaderCellDef class="added-balance">Balance</th>
+                                    <td mat-cell *matCellDef="let element">{{ element.balance }}</td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="dues">
+                                    <th mat-header-cell *matHeaderCellDef class="added-charges">Charges</th>
+                                    <td mat-cell *matCellDef="let element">{{ element.dues }}</td>
+                                </ng-container>
+
+                                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                            </table>
+                        </mat-expansion-panel>
+
+                        <mat-expansion-panel hideToggle>
+                            <mat-expansion-panel-header>
+                                <mat-panel-title> June, 2020 </mat-panel-title>
+                            </mat-expansion-panel-header>
+
+                            <img src="{{ imgPath }}transaction.png" alt="" class="consumed-transaction" />
+                            <img src="{{ imgPath }}branch.png" alt="" class="consumed-branch" />
+                            <img src="{{ imgPath }}warehouse.png" alt="" class="consumed-warehouse" />
+
+                            <table mat-table [dataSource]="dataSource" class="monthly-table">
+                                <ng-container matColumnDef="consumed">
+                                    <th mat-header-cell *matHeaderCellDef>Consumed</th>
+                                    <td mat-cell *matCellDef="let element">{{ element.consumed }}</td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="balance">
+                                    <th mat-header-cell *matHeaderCellDef>Balance</th>
+                                    <td mat-cell *matCellDef="let element">{{ element.balance }}</td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="dues">
+                                    <th mat-header-cell *matHeaderCellDef>Dues</th>
+                                    <td mat-cell *matCellDef="let element">{{ element.dues }}</td>
+                                </ng-container>
+
+                                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                            </table>
+
+                            <img src="{{ imgPath }}transaction.png" alt="" class="added-transaction" />
+                            <img src="{{ imgPath }}branch.png" alt="" class="added-branch" />
+                            <img src="{{ imgPath }}warehouse.png" alt="" class="added-warehouse" />
+
+                            <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+                                <ng-container matColumnDef="consumed">
+                                    <th mat-header-cell *matHeaderCellDef class="added-row">Added</th>
+                                    <td mat-cell *matCellDef="let element">{{ element.consumed }}</td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="balance">
+                                    <th mat-header-cell *matHeaderCellDef class="added-balance">Balance</th>
+                                    <td mat-cell *matCellDef="let element">{{ element.balance }}</td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="dues">
+                                    <th mat-header-cell *matHeaderCellDef class="added-charges">Charges</th>
+                                    <td mat-cell *matCellDef="let element">{{ element.dues }}</td>
+                                </ng-container>
+
+                                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                            </table>
+                        </mat-expansion-panel>
+
+                        <mat-expansion-panel hideToggle>
+                            <mat-expansion-panel-header>
+                                <mat-panel-title> May, 2020 </mat-panel-title>
+                            </mat-expansion-panel-header>
+
+                            <img src="{{ imgPath }}transaction.png" alt="" class="consumed-transaction" />
+                            <img src="{{ imgPath }}branch.png" alt="" class="consumed-branch" />
+                            <img src="{{ imgPath }}warehouse.png" alt="" class="consumed-warehouse" />
+
+                            <table mat-table [dataSource]="dataSource" class="monthly-table">
+                                <ng-container matColumnDef="consumed">
+                                    <th mat-header-cell *matHeaderCellDef>Consumed</th>
+                                    <td mat-cell *matCellDef="let element">{{ element.consumed }}</td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="balance">
+                                    <th mat-header-cell *matHeaderCellDef>Balance</th>
+                                    <td mat-cell *matCellDef="let element">{{ element.balance }}</td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="dues">
+                                    <th mat-header-cell *matHeaderCellDef>Dues</th>
+                                    <td mat-cell *matCellDef="let element">{{ element.dues }}</td>
+                                </ng-container>
+
+                                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                            </table>
+
+                            <img src="{{ imgPath }}transaction.png" alt="" class="added-transaction" />
+                            <img src="{{ imgPath }}branch.png" alt="" class="added-branch" />
+                            <img src="{{ imgPath }}warehouse.png" alt="" class="added-warehouse" />
+
+                            <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+                                <ng-container matColumnDef="consumed">
+                                    <th mat-header-cell *matHeaderCellDef class="added-row">Added</th>
+                                    <td mat-cell *matCellDef="let element">{{ element.consumed }}</td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="balance">
+                                    <th mat-header-cell *matHeaderCellDef class="added-balance">Balance</th>
+                                    <td mat-cell *matCellDef="let element">{{ element.balance }}</td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="dues">
+                                    <th mat-header-cell *matHeaderCellDef class="added-charges">Charges</th>
+                                    <td mat-cell *matCellDef="let element">{{ element.dues }}</td>
+                                </ng-container>
+
+                                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                            </table>
+                        </mat-expansion-panel>
+
+                        <mat-expansion-panel hideToggle>
+                            <mat-expansion-panel-header>
+                                <mat-panel-title> April, 2020 </mat-panel-title>
+                            </mat-expansion-panel-header>
+
+                            <img src="{{ imgPath }}transaction.png" alt="" class="consumed-transaction" />
+                            <img src="{{ imgPath }}branch.png" alt="" class="consumed-branch" />
+                            <img src="{{ imgPath }}warehouse.png" alt="" class="consumed-warehouse" />
+
+                            <table mat-table [dataSource]="dataSource" class="monthly-table">
+                                <ng-container matColumnDef="consumed">
+                                    <th mat-header-cell *matHeaderCellDef>Consumed</th>
+                                    <td mat-cell *matCellDef="let element">{{ element.consumed }}</td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="balance">
+                                    <th mat-header-cell *matHeaderCellDef>Balance</th>
+                                    <td mat-cell *matCellDef="let element">{{ element.balance }}</td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="dues">
+                                    <th mat-header-cell *matHeaderCellDef>Dues</th>
+                                    <td mat-cell *matCellDef="let element">{{ element.dues }}</td>
+                                </ng-container>
+
+                                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                            </table>
+
+                            <img src="{{ imgPath }}transaction.png" alt="" class="added-transaction" />
+                            <img src="{{ imgPath }}branch.png" alt="" class="added-branch" />
+                            <img src="{{ imgPath }}warehouse.png" alt="" class="added-warehouse" />
+
+                            <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+                                <ng-container matColumnDef="consumed">
+                                    <th mat-header-cell *matHeaderCellDef class="added-row">Added</th>
+                                    <td mat-cell *matCellDef="let element">{{ element.consumed }}</td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="balance">
+                                    <th mat-header-cell *matHeaderCellDef class="added-balance">Balance</th>
+                                    <td mat-cell *matCellDef="let element">{{ element.balance }}</td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="dues">
+                                    <th mat-header-cell *matHeaderCellDef class="added-charges">Charges</th>
+                                    <td mat-cell *matCellDef="let element">{{ element.dues }}</td>
+                                </ng-container>
+
+                                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                            </table>
+                        </mat-expansion-panel>
+                    </mat-accordion>
+                </mat-tab>
+                <mat-tab label="Companies">
+                    <mat-accordion multi="true" class="companies">
+                        <mat-expansion-panel hideToggle class="companies-expansion-panel">
+                            <mat-expansion-panel-header>
+                                <mat-panel-title>
+                                    MSG91
+                                    <a (click)="openDialog()">Move</a>
+                                </mat-panel-title>
+                            </mat-expansion-panel-header>
+                            <div class="companies-container">
+                                <div class="companies-container-items">
+                                    <p>
+                                        <img src="{{ imgPath }}transaction.png" alt="Transaction" /> 2000 transaction
+                                        used
+                                    </p>
+                                </div>
+                                <div class="companies-container-items">
+                                    <p><img src="{{ imgPath }}branch.png" alt="Transaction" /> 6 branches active</p>
+                                </div>
+                                <div class="companies-container-items">
+                                    <p><img src="{{ imgPath }}warehouse.png" alt="Transaction" /> 6 warehouse active</p>
+                                </div>
+                            </div>
+                        </mat-expansion-panel>
+
+                        <mat-expansion-panel hideToggle class="companies-expansion-panel">
+                            <mat-expansion-panel-header>
+                                <mat-panel-title>
+                                    ViaSoket
+                                    <a (click)="openDialog()">Move</a>
+                                </mat-panel-title>
+                            </mat-expansion-panel-header>
+                            <div class="companies-container">
+                                <div class="companies-container-items">
+                                    <p>
+                                        <img src="{{ imgPath }}transaction.png" alt="Transaction" /> 2000 transaction
+                                        used
+                                    </p>
+                                </div>
+                                <div class="companies-container-items">
+                                    <p><img src="{{ imgPath }}branch.png" alt="Transaction" /> 6 branches active</p>
+                                </div>
+                                <div class="companies-container-items">
+                                    <p><img src="{{ imgPath }}warehouse.png" alt="Transaction" /> 6 warehouse active</p>
+                                </div>
+                            </div>
+                        </mat-expansion-panel>
+
+                        <mat-expansion-panel hideToggle class="companies-expansion-panel">
+                            <mat-expansion-panel-header>
+                                <mat-panel-title>
+                                    Hitman
+                                    <a (click)="openDialog()">Move</a>
+                                </mat-panel-title>
+                            </mat-expansion-panel-header>
+                            <div class="companies-container">
+                                <div class="companies-container-items">
+                                    <p>
+                                        <img src="{{ imgPath }}transaction.png" alt="Transaction" /> 2000 transaction
+                                        used
+                                    </p>
+                                </div>
+                                <div class="companies-container-items">
+                                    <p><img src="{{ imgPath }}branch.png" alt="Transaction" /> 6 branches active</p>
+                                </div>
+                                <div class="companies-container-items">
+                                    <p><img src="{{ imgPath }}warehouse.png" alt="Transaction" /> 6 warehouse active</p>
+                                </div>
+                            </div>
+                        </mat-expansion-panel>
+
+                        <mat-expansion-panel hideToggle class="companies-expansion-panel">
+                            <mat-expansion-panel-header>
+                                <mat-panel-title>
+                                    Giddh
+                                    <a (click)="openDialog()">Move</a>
+                                </mat-panel-title>
+                            </mat-expansion-panel-header>
+                            <div class="companies-container">
+                                <div class="companies-container-items">
+                                    <p>
+                                        <img src="{{ imgPath }}transaction.png" alt="Transaction" /> 2000 transaction
+                                        used
+                                    </p>
+                                </div>
+                                <div class="companies-container-items">
+                                    <p><img src="{{ imgPath }}branch.png" alt="Transaction" /> 6 branches active</p>
+                                </div>
+                                <div class="companies-container-items">
+                                    <p><img src="{{ imgPath }}warehouse.png" alt="Transaction" /> 6 warehouse active</p>
+                                </div>
+                            </div>
+                        </mat-expansion-panel>
+
+                        <mat-expansion-panel hideToggle class="companies-expansion-panel">
+                            <mat-expansion-panel-header>
+                                <mat-panel-title>
+                                    Muneem
+                                    <a (click)="openDialog()">Move</a>
+                                </mat-panel-title>
+                            </mat-expansion-panel-header>
+                            <div class="companies-container">
+                                <div class="companies-container-items">
+                                    <p>
+                                        <img src="{{ imgPath }}transaction.png" alt="Transaction" /> 2000 transaction
+                                        used
+                                    </p>
+                                </div>
+                                <div class="companies-container-items">
+                                    <p><img src="{{ imgPath }}branch.png" alt="Transaction" /> 6 branches active</p>
+                                </div>
+                                <div class="companies-container-items">
+                                    <p><img src="{{ imgPath }}warehouse.png" alt="Transaction" /> 6 warehouse active</p>
+                                </div>
+                            </div>
+                        </mat-expansion-panel>
+
+                        <mat-expansion-panel hideToggle class="companies-expansion-panel">
+                            <mat-expansion-panel-header>
+                                <mat-panel-title>
+                                    Feedio
+                                    <a (click)="openDialog()">Move</a>
+                                </mat-panel-title>
+                            </mat-expansion-panel-header>
+                            <div class="companies-container">
+                                <div class="companies-container-items">
+                                    <p>
+                                        <img src="{{ imgPath }}transaction.png" alt="Transaction" /> 2000 transaction
+                                        used
+                                    </p>
+                                </div>
+                                <div class="companies-container-items">
+                                    <p><img src="{{ imgPath }}branch.png" alt="Transaction" /> 6 branches active</p>
+                                </div>
+                                <div class="companies-container-items">
+                                    <p><img src="{{ imgPath }}warehouse.png" alt="Transaction" /> 6 warehouse active</p>
+                                </div>
+                            </div>
+                        </mat-expansion-panel>
+
+                        <mat-expansion-panel hideToggle class="companies-expansion-panel">
+                            <mat-expansion-panel-header>
+                                <mat-panel-title>
+                                    UtterU
+                                    <a (click)="openDialog()">Move</a>
+                                </mat-panel-title>
+                            </mat-expansion-panel-header>
+                            <div class="companies-container">
+                                <div class="companies-container-items">
+                                    <p>
+                                        <img src="{{ imgPath }}transaction.png" alt="Transaction" /> 2000 transaction
+                                        used
+                                    </p>
+                                </div>
+                                <div class="companies-container-items">
+                                    <p><img src="{{ imgPath }}branch.png" alt="Transaction" /> 6 branches active</p>
+                                </div>
+                                <div class="companies-container-items">
+                                    <p><img src="{{ imgPath }}warehouse.png" alt="Transaction" /> 6 warehouse active</p>
+                                </div>
+                            </div>
+                        </mat-expansion-panel>
+
+                        <mat-expansion-panel hideToggle class="companies-expansion-panel">
+                            <mat-expansion-panel-header>
+                                <mat-panel-title>
+                                    Whozzat
+                                    <a (click)="openDialog()">Move</a>
+                                </mat-panel-title>
+                            </mat-expansion-panel-header>
+                            <div class="companies-container">
+                                <div class="companies-container-items">
+                                    <p>
+                                        <img src="{{ imgPath }}transaction.png" alt="Transaction" /> 2000 transaction
+                                        used
+                                    </p>
+                                </div>
+                                <div class="companies-container-items">
+                                    <p><img src="{{ imgPath }}branch.png" alt="Transaction" /> 6 branches active</p>
+                                </div>
+                                <div class="companies-container-items">
+                                    <p><img src="{{ imgPath }}warehouse.png" alt="Transaction" /> 6 warehouse active</p>
+                                </div>
+                            </div>
+                        </mat-expansion-panel>
+
+                        <mat-expansion-panel hideToggle class="companies-expansion-panel">
+                            <mat-expansion-panel-header>
+                                <mat-panel-title>
+                                    Phonebook
+                                    <a (click)="openDialog()">Move</a>
+                                </mat-panel-title>
+                            </mat-expansion-panel-header>
+                            <div class="companies-container">
+                                <div class="companies-container-items">
+                                    <p>
+                                        <img src="{{ imgPath }}transaction.png" alt="Transaction" /> 2000 transaction
+                                        used
+                                    </p>
+                                </div>
+                                <div class="companies-container-items">
+                                    <p><img src="{{ imgPath }}branch.png" alt="Transaction" /> 6 branches active</p>
+                                </div>
+                                <div class="companies-container-items">
+                                    <p><img src="{{ imgPath }}warehouse.png" alt="Transaction" /> 6 warehouse active</p>
+                                </div>
+                            </div>
+                        </mat-expansion-panel>
+
+                        <mat-expansion-panel hideToggle class="companies-expansion-panel">
+                            <mat-expansion-panel-header>
+                                <mat-panel-title>
+                                    Save&Search
+                                    <a (click)="openDialog()">Move</a>
+                                </mat-panel-title>
+                            </mat-expansion-panel-header>
+                            <div class="companies-container">
+                                <div class="companies-container-items">
+                                    <p>
+                                        <img src="{{ imgPath }}transaction.png" alt="Transaction" /> 2000 transaction
+                                        used
+                                    </p>
+                                </div>
+                                <div class="companies-container-items">
+                                    <p><img src="{{ imgPath }}branch.png" alt="Transaction" /> 6 branches active</p>
+                                </div>
+                                <div class="companies-container-items">
+                                    <p><img src="{{ imgPath }}warehouse.png" alt="Transaction" /> 6 warehouse active</p>
+                                </div>
+                            </div>
+                        </mat-expansion-panel>
+                    </mat-accordion>
+                </mat-tab>
+            </mat-tab-group>
+        </div>
+    </mat-grid-tile>
+</mat-grid-list>
+<ng-template #moveCompany>
+    <move-company
+        (moveCompany)="addOrMoveCompanyCallback($event)"
+        [subscriptions]="subscriptions"
+        [moveSelectedCompany]="selectedCompany"
+        [localeData]="localeData"
+        [commonLocaleData]="commonLocaleData"
+    >
+    </move-company>
+</ng-template>
