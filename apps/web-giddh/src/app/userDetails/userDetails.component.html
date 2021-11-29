@@ -273,11 +273,12 @@
                 [id]="activeTab == 'subscription' ? 'giddh-page-heading' : ''"
             >
                 <div class="wrap-tab-content-pd-15">
-                    <subscriptions
+                    <!-- <subscriptions
                         [activeTab]="activeTab"
                         [localeData]="localeData"
                         [commonLocaleData]="commonLocaleData"
-                    ></subscriptions>
+                    ></subscriptions> -->
+                    <subscription [localeData]="localeData" [commonLocaleData]="commonLocaleData"></subscription>
                 </div>
             </tab>
         </tabset>
