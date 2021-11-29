@@ -604,15 +604,18 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
      * Bulk update model show hide
      *
      * @param {boolean} isClose Boolean to check model need to close or not
+     * @param {boolean} [refreshVouchers]
      * @memberof InvoicePreviewComponent
      */
-    public toggleBulkUpdatePopup(isClose: boolean): void {
+    public toggleBulkUpdatePopup(isClose: boolean, refreshVouchers?: boolean): void {
         if (isClose) {
             this.bulkUpdate.hide();
+            if (refreshVouchers) {
+                this.getVoucher(this.isUniversalDateApplicable);
+            }
         } else {
             this.bulkUpdate.show();
         }
-
     }
 
     public toggleEwayBillPopup() {
