@@ -607,6 +607,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     private userDeposit: number = null;
     /** This will hold previous deposit (in case of update only) */
     private previousDeposit: any;
+    /** True if we need to hide deposit section */
+    public hideDepositSection: boolean = false;
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -983,6 +985,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         // get account details and set it to local var
         this.selectedAccountDetails$.subscribe(accountDetails => {
             if (accountDetails) {
+                this.hideDepositSectionForCashBankGroups(accountDetails);
                 this.assignAccountDetailsValuesInForm(accountDetails);
                 this.openProductDropdown();
             }
@@ -990,6 +993,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
         this.updatedAccountDetails$.subscribe(accountDetails => {
             if (accountDetails) {
+                this.hideDepositSectionForCashBankGroups(accountDetails);
                 this.accountAddressList = accountDetails.addresses;
             }
         });
@@ -2423,12 +2427,15 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 if (this.isCreditNote) {
                     updatedData['invoiceLinkingRequest'] = data.voucherDetails.invoiceLinkingRequest;
                 }
-                if (this.voucherApiVersion === 2) {
+                if (this.voucherApiVersion === 2 && !this.isPurchaseInvoice) {
                     updatedData = this.proformaInvoiceUtilityService.getVoucherRequestObjectForInvoice(updatedData);
                 }
             }
             if (this.isPurchaseInvoice) {
                 if (this.invFormData.accountDetails.shippingDetails.state.code && this.invFormData.accountDetails.billingDetails.state.code) {
+                    if (this.voucherApiVersion === 2) {
+                        updatedData = this.proformaInvoiceUtilityService.getVoucherRequestObjectForInvoice(updatedData);
+                    }
                     this.generatePurchaseRecord(updatedData);
                 } else {
                     if (this.shippingState && this.shippingState.nativeElement && !this.invFormData.accountDetails.shippingDetails.state.code) {
@@ -7396,5 +7403,23 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         }
 
         return deposit;
+    }
+
+    /**
+     * We don't have to show deposit section for cash/bank accounts currently for purchase invoice
+     *
+     * @private
+     * @param {*} accountDetails
+     * @memberof ProformaInvoiceComponent
+     */
+    private hideDepositSectionForCashBankGroups(accountDetails: any): void {
+        this.hideDepositSection = false;
+        if (this.voucherApiVersion === 2 && this.isPurchaseInvoice && accountDetails?.parentGroups?.length > 0) {
+            accountDetails?.parentGroups.forEach(group => {
+                if (group.uniqueName === "cash" || group.uniqueName === "bankaccounts") {
+                    this.hideDepositSection = true;
+                }
+            });
+        }
     }
 }
