@@ -166,23 +166,22 @@
                                                                                 align="right">
                                                                                 {{txn.amount}}
                                                                                 <template
-                                                                                    v-if="ledger.voucherGenerated && ledger.voucherNumber">
+                                                                                    v-if="ledger.attachedFileUniqueName">
                                                                                     <span
                                                                                         class="download-invoice-ledger"
-                                                                                        v-tooltip="'Download '+((ledger.voucherGeneratedType === 'sales') ? 'Invoice' : 'Voucher')+' : '+ledger.voucherNumber"
-                                                                                        v-on:click="downloadInvoice(ledger)"
+                                                                                        v-tooltip="'Download file: '+ledger.attachedFileName"
+                                                                                        v-on:click="downloadAttachedFile(ledger, ledger.attachedFileUniqueName,ledger.attachedFileName)"
                                                                                         container="body">
                                                                                         <img src="../assets/images/attachment.png"
                                                                                             width="15">
                                                                                     </span>
                                                                                 </template>
                                                                                 <template
-                                                                                    v-if="ledger.attachedFileUniqueName">
-
+                                                                                    v-if="ledger.voucherGenerated && ledger.voucherNumber">
                                                                                     <span
                                                                                         class="download-invoice-ledger"
-                                                                                        v-tooltip="'Download file: '+ledger.attachedFileName"
-                                                                                        v-on:click="downloadAttachedFile(ledger, ledger.attachedFileUniqueName,ledger.attachedFileName)"
+                                                                                        v-tooltip="'Download '+((ledger.voucherGeneratedType === 'sales') ? 'Invoice' : 'Voucher')+' : '+ledger.voucherNumber"
+                                                                                        v-on:click="downloadInvoice(ledger)"
                                                                                         container="body">
                                                                                         <img src="../assets/images/download.png"
                                                                                             width="15">
@@ -288,22 +287,22 @@
                                                                                 align="right">
                                                                                 {{txn.amount}}
                                                                                 <template
-                                                                                    v-if="ledger.voucherGenerated && ledger.voucherNumber">
+                                                                                    v-if="ledger.attachedFileUniqueName">
                                                                                     <span
                                                                                         class="download-invoice-ledger"
-                                                                                        v-tooltip="'Download '+((ledger.voucherGeneratedType === 'sales') ? 'Invoice' : 'Voucher')+' : '+ledger.voucherNumber"
-                                                                                        v-on:click="downloadInvoice(ledger)"
+                                                                                        v-tooltip="'Download file: '+ledger.attachedFileName"
+                                                                                        v-on:click="downloadAttachedFile(ledger, ledger.attachedFileUniqueName,ledger.attachedFileName)"
                                                                                         container="body">
                                                                                         <img src="../assets/images/attachment.png"
                                                                                             width="15">
                                                                                     </span>
                                                                                 </template>
                                                                                 <template
-                                                                                    v-if="ledger.attachedFileUniqueName">
+                                                                                    v-if="ledger.voucherGenerated && ledger.voucherNumber">
                                                                                     <span
                                                                                         class="download-invoice-ledger"
-                                                                                        v-tooltip="'Download file: '+ledger.attachedFileName"
-                                                                                        v-on:click="downloadAttachedFile(ledger, ledger.attachedFileUniqueName,ledger.attachedFileName)"
+                                                                                        v-tooltip="'Download '+((ledger.voucherGeneratedType === 'sales') ? 'Invoice' : 'Voucher')+' : '+ledger.voucherNumber"
+                                                                                        v-on:click="downloadInvoice(ledger)"
                                                                                         container="body">
                                                                                         <img src="../assets/images/download.png"
                                                                                             width="15">
