@@ -10,7 +10,7 @@ import { GeneralService } from '../../services/general.service';
 
 export class SendEmailInvoiceComponent implements OnInit {
     @Input() voucherType: VoucherTypeEnum;
-    @Input() selectedItem: { voucherNumber: string, uniqueName: string, account: { email: string } };
+    @Input() selectedItem: { voucherNumber: string, uniqueName: string, account: { email: string }, voucherUniqueName?: string };
     @Output() public successEvent: EventEmitter<any> = new EventEmitter<any>();
     @Output() public cancelEvent: EventEmitter<boolean> = new EventEmitter<boolean>();
     public emailAddresses: string = '';

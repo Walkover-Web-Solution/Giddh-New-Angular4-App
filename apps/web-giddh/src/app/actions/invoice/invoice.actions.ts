@@ -1123,7 +1123,7 @@ export class InvoiceActions {
         };
     }
 
-    public SendInvoiceOnMail(accountUniqueName: string, dataToSend: { emailId: string[], voucherNumber: string[], typeOfInvoice: string[], voucherType?: string }): CustomActions {
+    public SendInvoiceOnMail(accountUniqueName: string, dataToSend: { emailId: string[], voucherNumber: string[], typeOfInvoice: string[], voucherType?: string, uniqueName?: string }): CustomActions {
         return {
             type: INVOICE_ACTIONS.SEND_MAIL,
             payload: { accountUniqueName, dataToSend }

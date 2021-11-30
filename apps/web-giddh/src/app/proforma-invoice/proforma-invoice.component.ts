@@ -610,6 +610,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     private previousDeposit: any;
     /** True if we need to hide deposit section */
     public hideDepositSection: boolean = false;
+    /** Holds created voucher unique name */
+    public newVoucherUniqueName: string = '';
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -4446,22 +4448,25 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 emailId: request.email.split(','),
                 voucherNumber: [this.invoiceNo],
                 voucherType: this.invoiceType,
-                typeOfInvoice: request.invoiceType ? request.invoiceType : []
+                typeOfInvoice: request.invoiceType ? request.invoiceType : [],
+                uniqueName: (this.voucherApiVersion === 2) ? this.newVoucherUniqueName : undefined
             }));
         }
         this.cancelEmailModal();
     }
 
-    cancelEmailModal() {
+    public cancelEmailModal(): void {
         this.accountUniqueName = '';
         this.invoiceNo = '';
+        this.newVoucherUniqueName = '';
         this.sendEmailModal.hide();
         this.showInvoicePending();
     }
 
-    cancelPrintModal() {
+    public cancelPrintModal(): void {
         this.accountUniqueName = '';
         this.invoiceNo = '';
+        this.newVoucherUniqueName = '';
         this.printVoucherModal.hide();
         this.showInvoicePending();
     }
@@ -4678,8 +4683,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
         return discountArray;
     }
-
-
 
     private updateVoucherSuccess() {
         this.startLoader(false);
@@ -5676,6 +5679,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             // reset form and other
             this.resetInvoiceForm(form);
 
+            this.newVoucherUniqueName = response?.body?.uniqueName;
+
             if (response.body.account) {
                 this.voucherNumber = response.body.number;
                 this.invoiceNo = this.voucherNumber;
@@ -5947,8 +5952,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 };
                 apiCallObservable = this.salesService.getAllAdvanceReceiptVoucher(requestObject);
             } else {
+                const accountUniqueName = (this.voucherApiVersion === 2 && this.selectedVoucherType === VoucherTypeEnum.purchase) ? "purchases" : this.selectedVoucherType;
                 const requestObject = {
-                    accountUniqueNames: [this.selectedVoucherType, customerUniqueName],
+                    accountUniqueNames: [accountUniqueName, customerUniqueName],
                     voucherType: this.selectedVoucherType
                 }
                 apiCallObservable = this.salesService.getInvoiceList(requestObject, voucherDate);
