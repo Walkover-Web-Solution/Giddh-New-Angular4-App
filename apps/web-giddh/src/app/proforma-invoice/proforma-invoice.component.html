@@ -3289,6 +3289,7 @@
                                     <div
                                         class="table-row"
                                         *ngIf="
+                                            !hideDepositSection &&
                                             (isSalesInvoice || currentVoucherFormDetails?.depositAllowed) &&
                                             !(isPendingVoucherType && isCashInvoice) &&
                                             !(
@@ -4935,7 +4936,9 @@
                                 <div
                                     class="table-row"
                                     *ngIf="
-                                        (isSalesInvoice || currentVoucherFormDetails?.depositAllowed) && !isUpdateMode
+                                        !hideDepositSection &&
+                                        (isSalesInvoice || currentVoucherFormDetails?.depositAllowed) &&
+                                        !isUpdateMode
                                     "
                                 >
                                     <div class="table-cell deposit-section">
