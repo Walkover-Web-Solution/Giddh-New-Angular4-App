@@ -286,7 +286,11 @@
                                                         #copyPreviousEstimate
                                                         *ngIf="
                                                             !isPurchaseInvoice &&
-                                                            !(isPendingVoucherType && isCashInvoice) &&
+                                                            ((voucherApiVersion === 2 &&
+                                                                !isPendingVoucherType &&
+                                                                !isCashInvoice) ||
+                                                                (voucherApiVersion !== 2 &&
+                                                                    !(isPendingVoucherType && isCashInvoice))) &&
                                                             invFormData.voucherDetails.customerName &&
                                                             lastInvoices.length &&
                                                             !isUpdateMode
@@ -5336,7 +5340,8 @@
                         [selectedItem]="{
                             voucherNumber: invoiceNo,
                             uniqueName: accountUniqueName,
-                            account: customerAccount
+                            account: customerAccount,
+                            voucherUniqueName: newVoucherUniqueName
                         }"
                         (cancelEvent)="cancelEmailModal()"
                     ></app-send-email-invoice-component>
@@ -5416,7 +5421,11 @@
                         [voucherType]="invoiceType"
                         [localeData]="localeData"
                         [commonLocaleData]="commonLocaleData"
-                        [selectedItem]="{ voucherNumber: invoiceNo, uniqueName: accountUniqueName }"
+                        [selectedItem]="{
+                            voucherNumber: invoiceNo,
+                            uniqueName: accountUniqueName,
+                            voucherUniqueName: newVoucherUniqueName
+                        }"
                         (cancelEvent)="cancelPrintModal()"
                     ></proforma-print-in-place-component>
                 </ng-container>
