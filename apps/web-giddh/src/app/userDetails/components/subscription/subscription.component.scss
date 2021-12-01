@@ -133,6 +133,7 @@
             height: inherit;
             position: absolute;
             padding-left: 1rem;
+            cursor: pointer;
             :hover {
                 background: none;
             }
@@ -394,7 +395,7 @@
                 background-color: rgb(231, 233, 235);
 
                 a {
-                    visibility: visible;
+                    display: block;
                     font-size: 0.7rem;
                     text-decoration: underline;
                 }
@@ -405,14 +406,14 @@
             a {
                 position: absolute;
                 right: 1rem;
-                visibility: hidden;
+                display: none;
                 color: rgb(102, 140, 255);
                 font-size: 0.9rem;
             }
 
             :hover {
                 a {
-                    visibility: visible;
+                    display: block;
                 }
             }
         }
@@ -421,7 +422,7 @@
         position: absolute;
         width: 21%;
         left: 77%;
-        top: 39.5%;
+        top: 31.5%;
         z-index: 2;
 
         button {
@@ -517,6 +518,12 @@
     mat-accordion .mat-expanded {
         background-color: rgb(245, 245, 245);
     }
+}
+.main-content-condition {
+    text-align: center;
+}
+.mat-expansion-panel:not(.mat-expanded) .mat-expansion-panel-header:hover {
+    background: rgba(102, 140, 255, 0.1);
 }
 
 @media screen and (max-width: 1024px) and (orientation: landscape) {
