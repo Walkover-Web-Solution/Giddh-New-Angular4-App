@@ -798,7 +798,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     }
 
     public deleteAttachedFile() {
-        this.ledgerService.removeAttachment(this.vm.selectedLedger.attachedFile).subscribe((response) => {
+        this.ledgerService.removeAttachment(this.vm.selectedLedger?.attachedFile).subscribe((response) => {
             if (response?.status === 'success') {
                 this.vm.selectedLedger.attachedFile = '';
                 this.vm.selectedLedger.attachedFileName = '';

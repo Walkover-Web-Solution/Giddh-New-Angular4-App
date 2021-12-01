@@ -115,7 +115,10 @@
     background-color: $medium-gray;
 }
 .mf-report-head {
-    margin-top: 55px;
+    margin-top: 15px;
+    &.parent {
+        margin-top: 55px !important;
+    }
 }
 
 .table-responsive {
