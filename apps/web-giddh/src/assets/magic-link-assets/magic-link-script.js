@@ -104,7 +104,7 @@ var app = new Vue({
         this.folderPath = window.location.hostname === 'localhost' ? '' : 'app/';
         var id = this.getParameterByName('id');
         this.getMagicLinkData(id);
-        this.voucherVersion = this.getParameterByName('voucherVersion');
+        this.voucherVersion = Number(this.getParameterByName('voucherVersion'));
     },
     created: function () {
         window.addEventListener('resize', this.handleResize);
@@ -279,8 +279,8 @@ var app = new Vue({
             if (id) {
                 var voucherVersion = this.voucherVersion;
                 var apiObservable;
-                if(voucherVersion == 2) {
-                    apiObservable = axios.post(apiBaseUrl + 'magic-link/' + id + '/download-voucher?voucherVersion=2', {
+                if(voucherVersion === 2) {
+                    apiObservable = axios.post(apiBaseUrl + 'magic-link/' + id + '/download-voucher?voucherVersion=' + voucherVersion + '&downloadOption=VOUCHER', {
                         voucherType: entry.voucherName,
                         uniqueName: (entry.voucherUniqueName) ? entry.voucherUniqueName : undefined,
                         entryUniqueName: (entry.voucherUniqueName) ? undefined : entry.entryUniqueName
@@ -291,12 +291,10 @@ var app = new Vue({
                     apiObservable = axios.get(apiBaseUrl + 'magic-link/' + id + '/download-invoice/' + entry.voucherNumber);
                 }
 
-                let fileName = (entry.voucherNumber && entry.attachedFileUniqueName) ? entry.voucherNumber + '.zip' : entry.voucherNumber ? entry.voucherNumber + '.pdf' : entry.attachedFileUniqueName;
-
                 apiObservable.then(response => {
                     // JSON responses are automatically parsed.
                     if (response?.data?.status !== "error") {
-                        return saveAs(response?.data, fileName);
+                        return saveAs(response?.data, entry.voucherNumber + '.pdf');
                     } else {
                         this.$toaster.error('Invoice for ' + entry.voucherNumber + ' cannot be downloaded now.');
                     }
@@ -308,23 +306,40 @@ var app = new Vue({
                 this.$toaster.error('Magic link ID not found.');
             }
         },
-        downloadAttachedFile: function (attachedFileUniqueName, attachedFileName) {
+        downloadAttachedFile: function (entry, attachedFileUniqueName, attachedFileName) {
             var id = this.getParameterByName('id');
             var apiBaseUrl = this.getApi();
             if (id) {
-                axios.get(apiBaseUrl + 'magic-link/' + id + '/ledger/upload/' + attachedFileUniqueName)
-                    .then(response => {
-                        // JSON responses are automatically parsed.
-                        if (response && response.status === 200 && response.data.status === 'success') {
+                var voucherVersion = this.voucherVersion;
+                var apiObservable;
+                if(voucherVersion === 2) {
+                    apiObservable = axios.post(apiBaseUrl + 'magic-link/' + id + '/download-voucher?voucherVersion=' + voucherVersion + '&downloadOption=ATTACHMENT', {
+                        voucherType: entry.voucherName,
+                        uniqueName: (entry.voucherUniqueName) ? entry.voucherUniqueName : undefined,
+                        entryUniqueName: (entry.voucherUniqueName) ? undefined : entry.entryUniqueName
+                    }, {
+                        responseType: 'blob'
+                    });
+                } else {
+                    apiObservable = axios.get(apiBaseUrl + 'magic-link/' + id + '/ledger/upload/' + attachedFileUniqueName);
+                }
+
+                apiObservable.then(response => {
+                    // JSON responses are automatically parsed.
+                    if (response?.data?.status !== "error") {
+                        if(voucherVersion === 2) {
+                            return saveAs(response?.data, attachedFileName);
+                        } else {
                             var blobData = this.base64ToBlob(response.data.body.uploadedFile, 'image/' + response.data.body.fileType, 512);
                             return saveAs(blobData, response.data.body.name);
-                        } else {
-                            this.$toaster.error('Attachment ' + attachedFileName + ' cannot be downloaded now.');
                         }
-                    })
-                    .catch(e => {
+                    } else {
                         this.$toaster.error('Attachment ' + attachedFileName + ' cannot be downloaded now.');
-                    })
+                    }
+                })
+                .catch(e => {
+                    this.$toaster.error('Attachment ' + attachedFileName + ' cannot be downloaded now.');
+                })
             } else {
                 this.$toaster.error('Magic link ID not found.');
             }

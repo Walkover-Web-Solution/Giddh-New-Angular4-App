@@ -723,7 +723,7 @@ export class InvoiceActions {
     public setTemplateAsDefault$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(INVOICE.TEMPLATE.SET_TEMPLATE_AS_DEFAULT),
-            switchMap((action: CustomActions) => this._invoiceTemplatesService.setTemplateAsDefault(action.payload.templateUniqueName, action.payload.templateType)),
+            switchMap((action: CustomActions) => this._invoiceTemplatesService.setTemplateAsDefault(action.payload?.templateUniqueName, action.payload?.templateType)),
             map(response => {
                 return this.setTemplateAsDefaultResponse(response);
             })));
@@ -1123,7 +1123,7 @@ export class InvoiceActions {
         };
     }
 
-    public SendInvoiceOnMail(accountUniqueName: string, dataToSend: { emailId: string[], voucherNumber: string[], typeOfInvoice: string[], voucherType?: string }): CustomActions {
+    public SendInvoiceOnMail(accountUniqueName: string, dataToSend: { emailId: string[], voucherNumber: string[], typeOfInvoice: string[], voucherType?: string, uniqueName?: string }): CustomActions {
         return {
             type: INVOICE_ACTIONS.SEND_MAIL,
             payload: { accountUniqueName, dataToSend }

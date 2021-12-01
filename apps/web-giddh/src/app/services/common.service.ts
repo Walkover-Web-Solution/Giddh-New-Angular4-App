@@ -58,13 +58,15 @@ export class CommonService {
      * Download files
      *
      * @param {*} model
+     * @param {string} downloadOption
      * @param {string} [fileType="base64"]
      * @returns {Observable<any>}
      * @memberof CommonService
      */
-    public downloadFile(model: any, fileType: string = "base64"): Observable<any> {
+    public downloadFile(model: any, downloadOption: string, fileType: string = "base64"): Observable<any> {
         let url = this.config.apiUrl + COMMON_API.DOWNLOAD_FILE
             .replace(':fileType', fileType)
+            .replace(':downloadOption', downloadOption)
             .replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName));
 
         let responseType = (fileType === "base64") ? {} : { responseType: 'blob' };
