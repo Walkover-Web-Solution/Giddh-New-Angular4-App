@@ -209,9 +209,9 @@
                     </mat-grid-tile> -->
                 </mat-grid-list>
             </div>
-            <div class="expand-button">
+            <!-- <div class="expand-button">
                 <button mat-button disableRipple="true" (click)="accordion.openAll()">Expand all</button>
-            </div>
+            </div> -->
             <!-- <div class="menu-two accordion-search-box main-content-search-box">
                 <label for="Search-box">
                     <img src="{{ imgPath }}search.png" alt="SearchBar" />
@@ -821,5 +821,6 @@
         (addCompany)="addOrMoveCompanyCallback($event)"
         [localeData]="localeData"
         [commonLocaleData]="commonLocaleData"
-    ></add-company>
+    >
+    </add-company>
 </ng-template>

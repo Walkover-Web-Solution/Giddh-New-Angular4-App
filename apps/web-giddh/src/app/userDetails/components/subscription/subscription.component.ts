@@ -196,7 +196,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
    * @param {*} event
    * @memberof SubscriptionsComponent
    */
-     public addOrMoveCompanyCallback(event): void {
+    public addOrMoveCompanyCallback(event): void {
         if (event === true) {
             this.store.dispatch(this.subscriptionsActions.SubscribedCompanies());
         }
