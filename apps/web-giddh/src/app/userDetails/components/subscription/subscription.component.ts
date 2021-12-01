@@ -55,10 +55,11 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
     @Input() public localeData: any = {};
     /** This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
+    // This will use for companies list in accordian
     @ViewChild(MatAccordion) accordion: MatAccordion;
+    // This will use for move company to another company
     @ViewChild("moveCompany", { static: false }) public moveCompany: any;
     public modalRef: BsModalRef;
-
     // This will store the subscriptions in blank array
     public subscriptions: SubscriptionsUser[] = [];
     // This will get the subscriptions data 
@@ -71,6 +72,15 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
     public selectedCompany: any;
     // This will show the plan 
     public isPlanShow: boolean = false;
+    // This will search the subscriptions and plans in subscription list 
+    public searchSubscription: FormControl = new FormControl();
+    /** To destroy observers */
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** True if api call in progress */
+    public showLoader: boolean = false;
+    public imgPath: string = '';
+    // This will filter the plan dropdwon , expiry dropdown and transaction balance dropdown in subscription list 
+    public filters: any = { plan: '', expiration: '', transactionBalance: '' };
 
     // This will store the static data in expiry list 
     public expiringList: any[] = [
@@ -89,14 +99,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
         { name: 'Less than 50,000', value: 50000 }
     ];
 
-    // This will search the subscriptions and plans in subscription list 
-    public searchSubscription: FormControl = new FormControl();
 
-    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    public imgPath: string = '';
-
-    // This will filter the plan dropdwon , expiry dropdown and transaction balance dropdown in subscription list 
-    public filters: any = { plan: '', expiration: '', transactionBalance: '' };
 
     constructor(
         public dialog: MatDialog,
@@ -112,13 +115,8 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     public ngOnInit(): void {
-        //This service will use for get subscribed companies
-        this.subscriptionService.getSubScribedCompanies().pipe(takeUntil(this.destroyed$)).subscribe((res) => {
-            if (res?.status === "success" && res?.body) {
-                this.store.dispatch(this.subscriptionsActions.SubscribedCompaniesResponse(res));
-            }
-        });
 
+        this.getCompanies();
         // This subscription subscribes and get the response
         this.subscriptions$.subscribe(response => {
             if (response) {
@@ -178,6 +176,20 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
                 this.menuTwoWidth = 12;
             }
         })
+    }
+
+    // This function will use for get subscribed companies 
+    public getCompanies(): void {
+        this.showLoader = true;
+        //This service will use for get subscribed companies
+        this.subscriptionService.getSubScribedCompanies().pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+            this.showLoader = false;
+            if (res?.status === "success" && res?.body) {
+                this.store.dispatch(this.subscriptionsActions.SubscribedCompaniesResponse(res));
+            }
+
+
+        });
     }
 
     displayedColumns: string[] = ['consumed', 'balance', 'dues'];
@@ -262,5 +274,4 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
         this.filters.transactionBalance = '';
         this.filterSubscriptions();
     }
-
 }
