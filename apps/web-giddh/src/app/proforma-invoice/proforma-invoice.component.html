@@ -76,7 +76,6 @@
             </div>
         </ng-container>
         <!--endregion-->
-
         <!-- region main form -->
         <div [hidden]="(isUpdateMode && isUpdateDataInProcess) || (isLastInvoiceCopied && isUpdateDataInProcess)">
             <form
@@ -84,7 +83,8 @@
                 novalidate
                 autocomplete="off"
                 [ngClass]="{
-                    'customer-invoice-form': !invFormData.voucherDetails.customerName,
+                    'customer-invoice-form':
+                        !invFormData.voucherDetails.customerName && !invFormData.voucherDetails.customerUniquename,
                     'customer-invoice-form-purchase': isPurchaseInvoice || isCreditNote || isDebitNote,
                     'sales-proforma-estimate': isSalesInvoice || isProformaInvoice || isEstimateInvoice,
                     'for-multi-currency': isMulticurrencyAccount
@@ -293,7 +293,8 @@
                                                                 !isCashInvoice) ||
                                                                 (voucherApiVersion !== 2 &&
                                                                     !(isPendingVoucherType && isCashInvoice))) &&
-                                                            invFormData.voucherDetails.customerName &&
+                                                            (invFormData.voucherDetails.customerName ||
+                                                                invFormData.voucherDetails.customerUniquename) &&
                                                             lastInvoices.length &&
                                                             !isUpdateMode
                                                         "
