@@ -1,11 +1,11 @@
-import { Component, OnInit, ViewChild, Input, OnDestroy, ChangeDetectorRef, ChangeDetectionStrategy, SimpleChanges, OnChanges } from "@angular/core";
+import { Component, OnInit, ViewChild, Input, OnDestroy, ChangeDetectorRef, ChangeDetectionStrategy, SimpleChanges, OnChanges, TemplateRef } from "@angular/core";
 import { BreakpointObserver, BreakpointState } from "@angular/cdk/layout";
 import { MatAccordion } from "@angular/material/expansion";
 import { MatDialog } from "@angular/material/dialog";
 import { SubscriptionsActions } from '../../../actions/userSubscriptions/subscriptions.action';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
-import { BsModalRef } from 'ngx-bootstrap/modal';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { SubscriptionsUser } from "../../../models/api-models/Subscriptions";
 import { Observable, ReplaySubject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
@@ -14,6 +14,7 @@ import { uniqBy } from "../../../lodash-optimized";
 import * as moment from "moment";
 import { GIDDH_DATE_FORMAT } from "../../../shared/helpers/defaultDateFormat";
 import { FormControl } from "@angular/forms";
+import { Router } from "@angular/router";
 
 
 export interface PeriodicElement {
@@ -66,6 +67,10 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
     public selectedSubscription: any;
     // This will hold the plan list data by unique name 
     public plansList: any[] = [];
+    //This will select the company
+    public selectedCompany: any;
+    // This will show the plan 
+    public isPlanShow: boolean = false;
 
     // This will store the static data in expiry list 
     public expiringList: any[] = [
@@ -88,6 +93,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
     public searchSubscription: FormControl = new FormControl();
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    public imgPath: string = '';
 
     // This will filter the plan dropdwon , expiry dropdown and transaction balance dropdown in subscription list 
     public filters: any = { plan: '', expiration: '', transactionBalance: '' };
@@ -99,15 +105,13 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
         private subscriptionsActions: SubscriptionsActions,
         private store: Store<AppState>,
         private subscriptionService: SubscriptionsService,
+        private modalService: BsModalService,
         private changeDetectionRef: ChangeDetectorRef) {
 
         this.subscriptions$ = this.store.pipe(select(state => state.subscriptions.subscriptions), takeUntil(this.destroyed$));
     }
 
-    public imgPath: string = '';
-
     public ngOnInit(): void {
-
         //This service will use for get subscribed companies
         this.subscriptionService.getSubScribedCompanies().pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             if (res?.status === "success" && res?.body) {
@@ -192,11 +196,22 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
    * @param {*} event
    * @memberof SubscriptionsComponent
    */
-    public addOrMoveCompanyCallback(event): void {
+     public addOrMoveCompanyCallback(event): void {
         if (event === true) {
             this.store.dispatch(this.subscriptionsActions.SubscribedCompanies());
         }
-        // this.modalRef.hide();
+        this.modalRef.hide();
+    }
+
+    //This will open the deactive company popup
+    public openModal(MoveCompany: TemplateRef<any>) {
+        this.modalRef = this.modalService.show(MoveCompany);
+    }
+
+    //This will open the move company popup
+    public openModalMove(deactivateCompany: TemplateRef<any>, company: any) {
+        this.selectedCompany = company;
+        this.modalRef = this.modalService.show(deactivateCompany);
     }
 
     // This function will use for destroy on next and complete
@@ -247,4 +262,5 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
         this.filters.transactionBalance = '';
         this.filterSubscriptions();
     }
+
 }
