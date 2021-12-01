@@ -83,11 +83,8 @@ export class PreviewComponent implements OnInit, OnDestroy, OnChanges, AfterView
     public isAttachmentExpanded: boolean = false;
     /** This will hold the attached file */
     private attachedAttachmentBlob: Blob;
-    /** True if voucher downloading in progress */
-    public isVoucherDownloading: boolean = false;
-    /** True if voucher download has error */
-    public isVoucherDownloadError: boolean = false;
-    public selectedItem: any;
+    /** This will hold pdf and attachment */
+    public selectedItem: any = {};
 
     constructor(
         private sanitizer: DomSanitizer,
@@ -165,7 +162,7 @@ export class PreviewComponent implements OnInit, OnDestroy, OnChanges, AfterView
             this.filteredData = changes.allVouchers.currentValue;
         }
 
-        if (changes?.params?.currentValue && changes?.params?.currentValue !== changes?.params?.previousValue) {
+        if (changes?.params?.currentValue && !changes?.params?.firstChange && changes?.params?.currentValue !== changes?.params?.previousValue) {
             if (changes?.params?.currentValue?.uniqueName) {
                 this.getVoucherDetails();
             }
@@ -215,18 +212,23 @@ export class PreviewComponent implements OnInit, OnDestroy, OnChanges, AfterView
             uniqueName: this.params.uniqueName
         };
 
-        this.commonService.downloadFile(model).pipe(takeUntil(this.destroyed$)).subscribe(result => {
+        this.commonService.downloadFile(model, "ALL").pipe(takeUntil(this.destroyed$)).subscribe(result => {
+            this.pdfPreviewLoaded = true;
+
             if (result?.body) {
-                /** Creating voucher pdf start */
-                this.selectedItem.blob = this.generalService.base64ToBlob(result.body.data, 'application/pdf', 512);
-                const file = new Blob([this.selectedItem.blob], { type: 'application/pdf' });
-                this.attachedDocumentBlob = file;
-                URL.revokeObjectURL(this.pdfFileURL);
-                this.pdfFileURL = URL.createObjectURL(file);
-                this.sanitizedPdfFileUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.pdfFileURL);
-                this.isVoucherDownloadError = false;
-                this.pdfPreviewLoaded = true;
-                /** Creating voucher pdf finish */
+                if(result.body.data) {
+                    /** Creating voucher pdf start */
+                    this.selectedItem.blob = this.generalService.base64ToBlob(result.body.data, 'application/pdf', 512);
+                    const file = new Blob([this.selectedItem.blob], { type: 'application/pdf' });
+                    this.attachedDocumentBlob = file;
+                    URL.revokeObjectURL(this.pdfFileURL);
+                    this.pdfFileURL = URL.createObjectURL(file);
+                    this.sanitizedPdfFileUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.pdfFileURL);
+                    this.pdfPreviewHasError = false;
+                    /** Creating voucher pdf finish */
+                } else {
+                    this.pdfPreviewHasError = true;
+                }
 
                 if(result.body.attachments?.length > 0) {
                     /** Creating attachment start */
@@ -239,7 +241,6 @@ export class PreviewComponent implements OnInit, OnDestroy, OnChanges, AfterView
                         let objectURL = `data:image/${fileExtention};base64,` + result.body.attachments[0].encodedData;
                         this.imagePreviewSource = this.sanitizer.bypassSecurityTrustUrl(objectURL);
                         this.attachedDocumentType = { name: result.body.attachments[0].name, type: 'image', value: fileExtention };
-                        this.isVoucherDownloadError = false;
                     } else if (FILE_ATTACHMENT_TYPE.PDF.includes(fileExtention)) {
                         // Attached file type is PDF
                         this.attachedDocumentType = { name: result.body.attachments[0].name, type: 'pdf', value: fileExtention };
@@ -252,21 +253,28 @@ export class PreviewComponent implements OnInit, OnDestroy, OnChanges, AfterView
                             this.attachedPdfFileUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.pdfFileURL);
                             this.changeDetectionRef.detectChanges();
                         }, 250);
-                        this.isVoucherDownloadError = false;
                     } else {
                         // Unsupported type
                         this.attachedAttachmentBlob = this.generalService.base64ToBlob(result.body.attachments[0].encodedData, '', 512);
                         this.attachedDocumentType = { name: result.body.attachments[0].name, type: 'unsupported', value: fileExtention };
                     }
+                    /** Creating attachment finish */
+                } else {
+                    this.selectedItem.hasAttachment = false;
+                    this.isAttachmentExpanded = false;
+                    this.attachedAttachmentBlob = null;
+                    this.attachedDocumentType = {};
                 }
-                /** Creating attachment finish */
+                this.changeDetectionRef.detectChanges();
             } else {
-                this.isVoucherDownloadError = true;
+                this.selectedItem.hasAttachment = false;
+                this.isAttachmentExpanded = false;
+                this.attachedAttachmentBlob = null;
+                this.attachedDocumentType = {};
                 this.pdfPreviewHasError = true;
                 this.toaster.showSnackBar("error", this.commonLocaleData?.app_something_went_wrong);
+                this.changeDetectionRef.detectChanges();
             }
-            this.isVoucherDownloading = false;
-            this.changeDetectionRef.detectChanges();
         });
     }
 
@@ -289,11 +297,24 @@ export class PreviewComponent implements OnInit, OnDestroy, OnChanges, AfterView
      * @returns {void}
      * @memberof PreviewComponent
      */
-    public downloadFile(): void {
+    public downloadPdf(): void {
         if (this.pdfPreviewHasError || !this.pdfPreviewLoaded) {
             return;
         }
         saveAs(this.attachedDocumentBlob, this.voucherType + '-' + this.voucherDetails?.number + '.pdf');
+    }
+
+    /**
+     * This will download the attachment
+     *
+     * @returns {void}
+     * @memberof PreviewComponent
+     */
+     public downloadFile(): void {
+        if (!this.selectedItem?.hasAttachment) {
+            return;
+        }
+        saveAs(this.attachedAttachmentBlob, this.attachedDocumentType?.name);
     }
 
     /**
@@ -385,22 +406,9 @@ export class PreviewComponent implements OnInit, OnDestroy, OnChanges, AfterView
                 emailId: event.email?.split(','),
                 voucherNumber: [this.voucherDetails?.number],
                 voucherType: this.voucherDetails?.type,
-                typeOfInvoice: event.downloadCopy ? event.downloadCopy : []
+                typeOfInvoice: event.downloadCopy ? event.downloadCopy : [],
+                uniqueName: this.voucherDetails?.uniqueName
             }));
         }
-    }
-
-    /**
-     * Download error handler
-     *
-     * @private
-     * @param {*} error Error object
-     * @memberof PreviewComponent
-     */
-    private handleDownloadError(error: any): void {
-        this.toaster.showSnackBar("error", error.message);
-        this.isVoucherDownloading = false;
-        this.isVoucherDownloadError = true;
-        this.changeDetectionRef.detectChanges();
     }
 }
