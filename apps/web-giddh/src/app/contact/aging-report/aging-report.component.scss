@@ -251,6 +251,7 @@ tr.aging-table-top td {
         .table-responsive {
             max-height: calc(100vh - 295px);
             overflow-y: auto;
+            min-height: 200px;
         }
     }
 }
