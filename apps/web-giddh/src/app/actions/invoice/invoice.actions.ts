@@ -724,7 +724,7 @@ export class InvoiceActions {
     public setTemplateAsDefault$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(INVOICE.TEMPLATE.SET_TEMPLATE_AS_DEFAULT),
-            switchMap((action: CustomActions) => this._invoiceTemplatesService.setTemplateAsDefault(action.payload.templateUniqueName, action.payload.templateType)),
+            switchMap((action: CustomActions) => this._invoiceTemplatesService.setTemplateAsDefault(action.payload?.templateUniqueName, action.payload?.templateType)),
             map(response => {
                 return this.setTemplateAsDefaultResponse(response);
             })));
