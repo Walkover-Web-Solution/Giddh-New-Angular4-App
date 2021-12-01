@@ -8,12 +8,7 @@
                 <img src="{{ imgPath }}search.png" alt="SearchBar" />
             </label>
             <mat-form-field class="form-field" appearance="none">
-                <input
-                    matInput
-                    class="search-bar"
-                    placeholder="Search plans and companies"
-                    [formControl]="searchSubscription"
-                />
+                <input matInput class="search-bar" placeholder="Search Company" [formControl]="searchSubscription" />
             </mat-form-field>
         </div>
     </mat-grid-tile>
@@ -137,13 +132,12 @@
                 </div>
                 <div class="right-side">
                     <div>
-                        <p>{{ selectedSubscription?.remainingDays }}</p>
                         <p>
                             {{ selectedSubscription?.remainingDays > 0 ? "Expires" : "Expired" }} on:
                             {{ selectedSubscription?.expiry }} <br />
                             <span
                                 *ngIf="
-                                    selectedSubscription?.remainingDays > 0 && selectedSubscription?.remainingDays <= 7
+                                    selectedSubscription?.remainingDays > 0 || selectedSubscription?.remainingDays <= 7
                                 "
                                 >{{ selectedSubscription?.remainingDays + " days left" }}</span
                             >
@@ -153,7 +147,7 @@
                         mat-flat-button
                         color="primary"
                         class="right-side-btn"
-                        routerLink="['pages', 'billing-detail', 'buy-plan']"
+                        *ngIf="seletedUserPlans?.planDetails?.uniqueName !== defaultTrialPlan"
                     >
                         {{ commonLocaleData?.app_renew }}
                     </button>
@@ -779,7 +773,9 @@
                                 <mat-expansion-panel-header>
                                     <mat-panel-title>
                                         {{ company?.name }}
-                                        <a (click)="openDialog()">Move</a>
+                                        <a (click)="openModalMove(MoveCompany, company)">{{
+                                            localeData?.subscription?.move_company
+                                        }}</a>
                                     </mat-panel-title>
                                 </mat-expansion-panel-header>
                                 <div class="companies-container">
@@ -805,7 +801,8 @@
         </div>
     </mat-grid-tile>
 </mat-grid-list>
-<ng-template #moveCompany>
+<!-- MoveCompany Modal -->
+<ng-template #MoveCompany>
     <move-company
         (moveCompany)="addOrMoveCompanyCallback($event)"
         [subscriptions]="subscriptions"
@@ -814,4 +811,15 @@
         [commonLocaleData]="commonLocaleData"
     >
     </move-company>
+</ng-template>
+
+<!-- deactivate Company Modal -->
+<ng-template #AddCompany>
+    <add-company
+        [allAssociatedCompanies]="allAssociatedCompanies"
+        [activeCompany]="activeCompany"
+        (addCompany)="addOrMoveCompanyCallback($event)"
+        [localeData]="localeData"
+        [commonLocaleData]="commonLocaleData"
+    ></add-company>
 </ng-template>
