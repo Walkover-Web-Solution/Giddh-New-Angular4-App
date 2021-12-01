@@ -98,6 +98,8 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     /** Observable if loading in process */
     public getAgingReportRequestInProcess$: Observable<boolean>;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** True if due range request is in progress */
+    private isDueRangeRequestInProgress: boolean = false;
 
     constructor(
         private store: Store<AppState>,
@@ -234,6 +236,17 @@ export class AgingReportComponent implements OnInit, OnDestroy {
             takeUntil(this.destroyed$)
         ).subscribe(searchedText => {
             this.searchStr$.next(searchedText);
+        });
+
+        this.store.pipe(select(state => state.agingreport.setDueRangeRequestInFlight), takeUntil(this.destroyed$)).subscribe(response => {
+            if(response) {
+                this.isDueRangeRequestInProgress = true;
+            } else {
+                if(this.isDueRangeRequestInProgress) {
+                    this.isDueRangeRequestInProgress = false;
+                    this.getDueReport();
+                }
+            }
         });
     }
 
