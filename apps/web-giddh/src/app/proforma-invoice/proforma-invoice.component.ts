@@ -1079,22 +1079,24 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         let dueDate = this.invFormData.voucherDetails.dueDate;
 
                         //if last invoice is copied then create new Voucher and copy only needed things not all things
-                        obj.accountDetails = this.invFormData.accountDetails;
-                        obj.voucherDetails = this.invFormData.voucherDetails;
-                        obj.templateDetails = this.invFormData.templateDetails;
-                        obj.companyDetails = this.invFormData.companyDetails;
-                        obj.depositEntry = this.invFormData.depositEntry;
-                        obj.depositEntryToBeUpdated = this.invFormData.depositEntryToBeUpdated;
-                        obj.depositAccountUniqueName = this.invFormData.depositAccountUniqueName;
-                        obj.templateUniqueName = this.invFormData.templateUniqueName;
-                        obj.number = this.invFormData.number;
+                        obj.accountDetails = cloneDeep(this.invFormData.accountDetails);
+                        obj.account = cloneDeep(this.invFormData.accountDetails);
+                        obj.voucherDetails = cloneDeep(this.invFormData.voucherDetails);
+                        obj.templateDetails = cloneDeep(this.invFormData.templateDetails);
+                        obj.companyDetails = cloneDeep(this.invFormData.companyDetails);
+                        obj.depositEntry = cloneDeep(this.invFormData.depositEntry);
+                        obj.depositEntryToBeUpdated = cloneDeep(this.invFormData.depositEntryToBeUpdated);
+                        obj.depositAccountUniqueName = cloneDeep(this.invFormData.depositAccountUniqueName);
+                        obj.templateUniqueName = cloneDeep(this.invFormData.templateUniqueName);
+                        obj.number = cloneDeep(this.invFormData.number);
+                        obj.entries = cloneDeep(results[0].entries);
 
                         if (this.isMultiCurrencyModule()) {
                             // parse normal response to multi currency response
-                            let convertedRes1 = await this.modifyMulticurrencyRes(results[0]);
+                            let convertedRes1 = await this.modifyMulticurrencyRes(obj);
                             tempObj = cloneDeep(convertedRes1) as VoucherClass;
                         } else {
-                            tempObj = cloneDeep((results[0] as GenericRequestForGenerateSCD).voucher);
+                            tempObj = cloneDeep((obj as GenericRequestForGenerateSCD).voucher);
                         }
 
                         tempObj.entries.forEach((entry, index) => {
@@ -1102,9 +1104,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                             tempObj.entries[index].uniqueName = undefined;
                         });
 
-                        obj.entries = tempObj.entries;
-                        obj.voucherDetails.voucherDate = voucherDate;
-                        obj.voucherDetails.dueDate = dueDate;
+                        obj = cloneDeep(tempObj);
+                        obj.voucherDetails.voucherDate = cloneDeep(voucherDate);
+                        obj.voucherDetails.dueDate = cloneDeep(dueDate);
                     } else {
                         this.previousDeposit = results[0]?.deposit;
                         if (this.isMultiCurrencyModule()) {
@@ -1185,7 +1187,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
                         // if last invoice is copied then don't copy customer/vendor name and it's details
                         if (!this.isLastInvoiceCopied && !this.isUpdateMode) {
-
                             // assign account details uniqueName because we are using accounts uniqueName not name
                             if (obj.accountDetails?.uniqueName !== 'cash') {
                                 obj.voucherDetails.customerUniquename = obj.accountDetails?.uniqueName;
@@ -1262,8 +1263,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                             obj.accountDetails.currencySymbol = '';
                         }
                         if (this.currentVoucherFormDetails?.depositAllowed || (this.isPendingVoucherType && obj.accountDetails && obj.voucherDetails)) {
-                            obj.accountDetails.name = results[0].account.name;
-                            obj.voucherDetails.customerName = results[0].account.name;
+                            if(!this.isLastInvoiceCopied) {
+                                obj.accountDetails.name = results[0].account.name;
+                                obj.voucherDetails.customerName = results[0].account.name;
+                            }
                             this.loadBankCashAccounts(obj?.accountDetails?.currency?.code);
                         }
                         this.invFormData = obj;
@@ -1747,7 +1750,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.isEstimateInvoice = this.invoiceType === VoucherTypeEnum.estimate || this.invoiceType === VoucherTypeEnum.generateEstimate;
 
         // special case when we double click on account name and that accountUniqueName is cash then we have to mark as Cash Invoice
-        if (this.isSalesInvoice) {
+        if (this.isSalesInvoice && !this.isLastInvoiceCopied) {
             if (this.accountUniqueName === 'cash') {
                 this.isSalesInvoice = false;
                 this.isCashInvoice = true;
@@ -4755,7 +4758,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     salesTransactionItemClass.stockDetails.uniqueName = t.stock.uniqueName;
                     salesTransactionItemClass.stockDetails.skuCodeHeading = t.stock.skuCodeHeading;
                     salesTransactionItemClass.quantity = t.stock.quantity;
-                    salesTransactionItemClass.rate = t.stock.rate.amountForAccount ?? t.stock.rate.rateForAccount;
+                    salesTransactionItemClass.rate = t.stock.rate?.amountForAccount ?? t.stock.rate?.rateForAccount;
                     salesTransactionItemClass.stockDetails.skuCode = t.stock.sku;
                     salesTransactionItemClass.stockUnit = t.stock.stockUnit.code;
                     salesTransactionItemClass.fakeAccForSelect2 = t.account.uniqueName + '#' + t.stock.uniqueName;
@@ -4867,15 +4870,15 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         voucherDetails.balanceStatus = result.balanceStatus;
 
         voucherDetails.customerUniquename = result.account.uniqueName;
-        voucherDetails.grandTotal = result.grandTotal.amountForAccount;
-        voucherDetails.grantTotalAmountForCompany = result.grandTotal.amountForCompany;
+        voucherDetails.grandTotal = result.grandTotal?.amountForAccount;
+        voucherDetails.grantTotalAmountForCompany = result.grandTotal?.amountForCompany;
         if ([VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote].indexOf(this.invoiceType) > -1) {
             // Credit note and Debit note
             voucherDetails.voucherNumber = result.invoiceNumberAgainstVoucher || (this.voucherApiVersion === 2 ? result.number : '') || '';
         } else if (!this.copyPurchaseBill) {
             voucherDetails.voucherNumber = result.number;
         }
-        voucherDetails.subTotal = result.subTotal.amountForAccount;
+        voucherDetails.subTotal = result.subTotal?.amountForAccount;
         voucherDetails.taxesTotal = result.taxTotal?.cumulativeAmountForAccount ?? result.taxTotal?.amountForAccount ?? 0;
         voucherDetails.totalAsWords = (result.totalAsWords) ? result.totalAsWords.amountForAccount : '';
 
@@ -4902,7 +4905,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.isCashInvoice = true;
             this.isSalesInvoice = false;
         }
-        if (this.isCashInvoice || result.type.toString().toUpperCase() === VoucherTypeEnum.cash.toString().toUpperCase()) {
+        if (this.isCashInvoice || result?.type?.toString()?.toUpperCase() === VoucherTypeEnum.cash.toString().toUpperCase()) {
             voucherDetails.customerName = result.account.customerName;
             this.depositAccountUniqueName = result.account.uniqueName;
         } else {
@@ -4918,7 +4921,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     this.selectedPoItems.push(order?.uniqueName);
 
                     if (!this.linkedPoNumbers[order?.uniqueName]) {
-                        this.purchaseOrders.push({ label: order.number, value: order?.uniqueName, additional: { amount: order.grandTotal.amountForAccount } });
+                        this.purchaseOrders.push({ label: order.number, value: order?.uniqueName, additional: { amount: order.grandTotal?.amountForAccount } });
                     }
 
                     this.linkedPoNumbers[order.uniqueName] = [];
