@@ -4,6 +4,7 @@
     (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event"
 >
+    <hamburger-menu></hamburger-menu>
     <mat-card class="receipt-preview-card p-0">
         <mat-card-content>
             <div class="row mr-0 ml-0">
@@ -125,23 +126,45 @@
                                                     </span>
 
                                                     <span>
-                                                        <a
+                                                        <button
+                                                            mat-button
                                                             href="javascript:;"
                                                             [matTooltip]="commonLocaleData?.app_print"
                                                             [matTooltipPosition]="'above'"
                                                             (click)="!pdfPreviewHasError ? printVoucher() : ''"
-                                                            ><i class="fa fa-print"></i
-                                                        ></a>
+                                                            [disabled]="pdfPreviewHasError"
+                                                            class="preview-button"
+                                                        >
+                                                            <i class="fa fa-print"></i>
+                                                        </button>
                                                     </span>
 
                                                     <span>
-                                                        <a
+                                                        <button
+                                                            mat-button
                                                             href="javascript:;"
                                                             [matTooltip]="commonLocaleData?.app_download"
                                                             [matTooltipPosition]="'above'"
-                                                            (click)="!pdfPreviewHasError ? downloadFile() : ''"
-                                                            ><i class="icon-file"></i
-                                                        ></a>
+                                                            (click)="!pdfPreviewHasError ? downloadPdf() : ''"
+                                                            [disabled]="pdfPreviewHasError"
+                                                            class="preview-button"
+                                                        >
+                                                            <i class="icon-download-new"></i>
+                                                        </button>
+                                                    </span>
+
+                                                    <span>
+                                                        <button
+                                                            mat-button
+                                                            href="javascript:;"
+                                                            [matTooltip]="commonLocaleData?.app_download"
+                                                            [matTooltipPosition]="'above'"
+                                                            (click)="selectedItem?.hasAttachment ? downloadFile() : ''"
+                                                            [disabled]="!selectedItem?.hasAttachment"
+                                                            class="preview-button"
+                                                        >
+                                                            <i class="icon-attachment"></i>
+                                                        </button>
                                                     </span>
 
                                                     <span *ngIf="!isCompany">
@@ -181,7 +204,7 @@
                                     class="img-expand-collapse"
                                     [ngClass]="{ 'image-collapsed': !isAttachmentExpanded }"
                                 >
-                                    <img class="image-preview img-expand w-100" [src]="imagePreviewSource" />
+                                    <img class="image-preview img-expand" [src]="imagePreviewSource" />
                                 </div>
                                 <div class="expand-file" *ngIf="imagePreviewSource || attachedPdfFileUrl">
                                     <a
