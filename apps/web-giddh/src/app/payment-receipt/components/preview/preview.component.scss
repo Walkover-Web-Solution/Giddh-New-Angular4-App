@@ -163,6 +163,24 @@
                     }
                 }
             }
+            .expand-file {
+                position: absolute;
+                right: 15px;
+                font-size: 14px;
+                margin: 15px;
+                top: 0;
+
+                a {
+                    color: $gray;
+                    span {
+                        margin-right: 5px;
+                    }
+                }
+            }
         }
     }
+}
+.preview-button {
+    margin-left: 5px;
+    min-width: 34px !important;
 }
