@@ -51,8 +51,6 @@ export class PreviewComponent implements OnInit, OnDestroy, OnChanges, AfterView
     public pdfPreviewHasError: boolean = false;
     /** PDF file url created with blob */
     public sanitizedPdfFileUrl: any = '';
-    /** PDF src */
-    public pdfFileURL: any = '';
     /** Holds receipt voucher type */
     public receiptVoucherType: string = VoucherTypeEnum.receipt;
     /** Holds payment voucher type */
@@ -212,25 +210,31 @@ export class PreviewComponent implements OnInit, OnDestroy, OnChanges, AfterView
             uniqueName: this.params.uniqueName
         };
 
+        this.selectedItem.hasAttachment = false;
+        this.isAttachmentExpanded = false;
+        this.attachedAttachmentBlob = null;
+        this.attachedDocumentType = {};
+
         this.commonService.downloadFile(model, "ALL").pipe(takeUntil(this.destroyed$)).subscribe(result => {
             this.pdfPreviewLoaded = true;
 
             if (result?.body) {
-                if(result.body.data) {
+                if (result.body.data) {
                     /** Creating voucher pdf start */
                     this.selectedItem.blob = this.generalService.base64ToBlob(result.body.data, 'application/pdf', 512);
                     const file = new Blob([this.selectedItem.blob], { type: 'application/pdf' });
                     this.attachedDocumentBlob = file;
-                    URL.revokeObjectURL(this.pdfFileURL);
-                    this.pdfFileURL = URL.createObjectURL(file);
-                    this.sanitizedPdfFileUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.pdfFileURL);
+                    let pdfFileURL;
+                    URL.revokeObjectURL(pdfFileURL);
+                    pdfFileURL = URL.createObjectURL(file);
+                    this.sanitizedPdfFileUrl = this.sanitizer.bypassSecurityTrustResourceUrl(pdfFileURL);
                     this.pdfPreviewHasError = false;
                     /** Creating voucher pdf finish */
                 } else {
                     this.pdfPreviewHasError = true;
                 }
 
-                if(result.body.attachments?.length > 0) {
+                if (result.body.attachments?.length > 0) {
                     /** Creating attachment start */
                     this.selectedItem.hasAttachment = true;
                     this.isAttachmentExpanded = false;
@@ -246,11 +250,11 @@ export class PreviewComponent implements OnInit, OnDestroy, OnChanges, AfterView
                         this.attachedDocumentType = { name: result.body.attachments[0].name, type: 'pdf', value: fileExtention };
                         this.attachedAttachmentBlob = this.generalService.base64ToBlob(result.body.attachments[0].encodedData, 'application/pdf', 512);
                         setTimeout(() => {
-                            this.selectedItem.blob = this.attachedAttachmentBlob;
                             const file = new Blob([this.attachedAttachmentBlob], { type: 'application/pdf' });
-                            URL.revokeObjectURL(this.pdfFileURL);
-                            this.pdfFileURL = URL.createObjectURL(file);
-                            this.attachedPdfFileUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.pdfFileURL);
+                            let pdfFileURL;
+                            URL.revokeObjectURL(pdfFileURL);
+                            pdfFileURL = URL.createObjectURL(file);
+                            this.attachedPdfFileUrl = this.sanitizer.bypassSecurityTrustResourceUrl(pdfFileURL);
                             this.changeDetectionRef.detectChanges();
                         }, 250);
                     } else {
@@ -259,20 +263,11 @@ export class PreviewComponent implements OnInit, OnDestroy, OnChanges, AfterView
                         this.attachedDocumentType = { name: result.body.attachments[0].name, type: 'unsupported', value: fileExtention };
                     }
                     /** Creating attachment finish */
-                } else {
-                    this.selectedItem.hasAttachment = false;
-                    this.isAttachmentExpanded = false;
-                    this.attachedAttachmentBlob = null;
-                    this.attachedDocumentType = {};
                 }
                 this.changeDetectionRef.detectChanges();
             } else {
-                this.selectedItem.hasAttachment = false;
-                this.isAttachmentExpanded = false;
-                this.attachedAttachmentBlob = null;
-                this.attachedDocumentType = {};
                 this.pdfPreviewHasError = true;
-                this.toaster.showSnackBar("error", this.commonLocaleData?.app_something_went_wrong);
+                this.toaster.showSnackBar("error", result?.message ?? this.commonLocaleData?.app_something_went_wrong);
                 this.changeDetectionRef.detectChanges();
             }
         });
@@ -310,7 +305,7 @@ export class PreviewComponent implements OnInit, OnDestroy, OnChanges, AfterView
      * @returns {void}
      * @memberof PreviewComponent
      */
-     public downloadFile(): void {
+    public downloadFile(): void {
         if (!this.selectedItem?.hasAttachment) {
             return;
         }

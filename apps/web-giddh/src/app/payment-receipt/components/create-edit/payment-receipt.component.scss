@@ -181,6 +181,9 @@ section.billing-address-wrap {
 input.mat-input-element {
     border: none;
     border-bottom: 1px solid $gainsboro !important;
+    &.no-border {
+        border-bottom: 0px !important;
+    }
 }
 
 .pd-b01 {
