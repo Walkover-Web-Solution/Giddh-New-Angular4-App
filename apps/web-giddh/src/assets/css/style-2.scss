@@ -4572,6 +4572,7 @@ virtual-scroll .scrollable-content .item:hover > a {
 virtual-scroll .scrollable-content .item > a .item-unique,
 virtual-scroll .scrollable-content .item > a .item-stock {
     color: $moody-blue;
+    text-transform: none !important;
 }
 .customer-invoice-form virtual-scroll .scrollable-content .item > a {
     color: $nero;
