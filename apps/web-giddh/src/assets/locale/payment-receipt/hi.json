@@ -32,5 +32,7 @@
     "invalid_tax_field": "[FIELD_NAME] में अमान्य [TAX_NAME]! कृपया ठीक करें और पुनः प्रयास करें",
     "invalid_tax": "अमान्य [TAX_NAME]! कृपया ठीक करें और पुनः प्रयास करें",
     "description": "विवरण",
-    "confirm_delete_file": "क्या आप वाकई संलग्न फ़ाइल को हटाना चाहते हैं?"
+    "confirm_delete_file": "क्या आप वाकई संलग्न फ़ाइल को हटाना चाहते हैं?",
+    "print_voucher": "प्रिंट वाउचर",
+    "voucher_preview_unavailable": "अभी वाउचर पूर्वावलोकन उपलब्ध नहीं है! कृपया पुन: प्रयास करें.."
 }

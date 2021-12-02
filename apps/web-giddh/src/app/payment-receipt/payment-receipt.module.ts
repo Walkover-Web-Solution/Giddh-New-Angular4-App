@@ -26,6 +26,7 @@ import { PaymentReceiptComponent } from "./components/create-edit/payment-receip
 import { PaymentReceiptRoutingModule } from "./payment-receipt.routing.module";
 import { GiddhPageLoaderModule } from "../shared/giddh-page-loader/giddh-page-loader.module";
 import { SendEmailModule } from "../shared/send-email/send-email.module";
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 @NgModule({
     declarations: [
@@ -58,7 +59,8 @@ import { SendEmailModule } from "../shared/send-email/send-email.module";
         TaxControlModule,
         SendEmailModule,
         MatDialogModule,
-        GiddhPageLoaderModule
+        GiddhPageLoaderModule,
+        MatAutocompleteModule
     ],
     providers: [TitleCasePipe]
 })

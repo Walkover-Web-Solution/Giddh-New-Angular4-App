@@ -252,14 +252,21 @@
                                                                                         commonLocaleData?.app_state
                                                                                     }}</mat-label
                                                                                 >
-                                                                                <mat-select
-                                                                                    name="billingdetails-statecode"
-                                                                                    disableOptionCentering
-                                                                                    [(ngModel)]="
-                                                                                        voucherFormData.account
-                                                                                            .billingDetails.state.code
+                                                                                <input
+                                                                                    type="text"
+                                                                                    [placeholder]="
+                                                                                        commonLocaleData?.app_state
                                                                                     "
-                                                                                    (selectionChange)="
+                                                                                    name="billingdetails-statecode"
+                                                                                    class="no-border"
+                                                                                    matInput
+                                                                                    [formControl]="searchBillingStates"
+                                                                                    [matAutocomplete]="billingStateAuto"
+                                                                                />
+                                                                                <mat-autocomplete
+                                                                                    #billingStateAuto="matAutocomplete"
+                                                                                    [displayWith]="displayLabel"
+                                                                                    (optionSelected)="
                                                                                         fillShippingBillingDetails(
                                                                                             $event,
                                                                                             true
@@ -267,28 +274,14 @@
                                                                                         autoFillShippingDetails()
                                                                                     "
                                                                                 >
-                                                                                    <mat-option>
-                                                                                        <ngx-mat-select-search
-                                                                                            [formControl]="
-                                                                                                searchBillingStates
-                                                                                            "
-                                                                                            [placeholderLabel]="
-                                                                                                commonLocaleData?.app_search
-                                                                                            "
-                                                                                            [noEntriesFoundLabel]="
-                                                                                                commonLocaleData?.app_no_records_found
-                                                                                            "
-                                                                                        >
-                                                                                        </ngx-mat-select-search>
-                                                                                    </mat-option>
                                                                                     <mat-option
                                                                                         *ngFor="
                                                                                             let state of filteredBillingStates
                                                                                         "
-                                                                                        [value]="state.value"
+                                                                                        [value]="state"
                                                                                         >{{ state?.label }}
                                                                                     </mat-option>
-                                                                                </mat-select>
+                                                                                </mat-autocomplete>
                                                                             </mat-form-field>
                                                                         </div>
 
@@ -505,44 +498,39 @@
                                                                                             commonLocaleData?.app_state
                                                                                         }}</mat-label
                                                                                     >
-                                                                                    <mat-select
-                                                                                        name="shippingdetails-statecode"
-                                                                                        disableOptionCentering
-                                                                                        [(ngModel)]="
-                                                                                            voucherFormData.account
-                                                                                                .shippingDetails.state
-                                                                                                .code
+                                                                                    <input
+                                                                                        type="text"
+                                                                                        [placeholder]="
+                                                                                            commonLocaleData?.app_state
                                                                                         "
-                                                                                        (selectionChange)="
+                                                                                        name="shippingdetails-statecode"
+                                                                                        class="no-border"
+                                                                                        matInput
+                                                                                        [formControl]="
+                                                                                            searchShippingStates
+                                                                                        "
+                                                                                        [matAutocomplete]="
+                                                                                            shippingStateAuto
+                                                                                        "
+                                                                                    />
+                                                                                    <mat-autocomplete
+                                                                                        #shippingStateAuto="matAutocomplete"
+                                                                                        [displayWith]="displayLabel"
+                                                                                        (optionSelected)="
                                                                                             fillShippingBillingDetails(
                                                                                                 $event,
                                                                                                 false
                                                                                             )
                                                                                         "
-                                                                                        [disabled]="autoFillShipping"
                                                                                     >
-                                                                                        <mat-option>
-                                                                                            <ngx-mat-select-search
-                                                                                                [formControl]="
-                                                                                                    searchShippingStates
-                                                                                                "
-                                                                                                [placeholderLabel]="
-                                                                                                    commonLocaleData?.app_search
-                                                                                                "
-                                                                                                [noEntriesFoundLabel]="
-                                                                                                    commonLocaleData?.app_no_records_found
-                                                                                                "
-                                                                                            >
-                                                                                            </ngx-mat-select-search>
-                                                                                        </mat-option>
                                                                                         <mat-option
                                                                                             *ngFor="
                                                                                                 let state of filteredShippingStates
                                                                                             "
-                                                                                            [value]="state.value"
+                                                                                            [value]="state"
                                                                                             >{{ state?.label }}
                                                                                         </mat-option>
-                                                                                    </mat-select>
+                                                                                    </mat-autocomplete>
                                                                                 </mat-form-field>
                                                                             </div>
 
@@ -858,36 +846,26 @@
                                                             >
                                                                 {{ commonLocaleData?.app_select }}</mat-label
                                                             >
-                                                            <mat-select
+                                                            <input
+                                                                type="text"
+                                                                [placeholder]="commonLocaleData?.app_select"
                                                                 name="receipt-mode"
-                                                                disableOptionCentering
-                                                                [(ngModel)]="
-                                                                    voucherFormData.entries[0].transactions[0].account
-                                                                        .uniqueName
-                                                                "
-                                                                [(value)]="
-                                                                    voucherFormData.entries[0].transactions[0].account
-                                                                        .uniqueName
-                                                                "
+                                                                class="no-border"
+                                                                matInput
+                                                                [formControl]="searchBankAccount"
+                                                                [matAutocomplete]="bankAccountAuto"
+                                                            />
+                                                            <mat-autocomplete
+                                                                #bankAccountAuto="matAutocomplete"
+                                                                [displayWith]="displayLabel"
+                                                                (optionSelected)="selectBank($event)"
                                                             >
-                                                                <mat-option>
-                                                                    <ngx-mat-select-search
-                                                                        [formControl]="searchBankAccount"
-                                                                        [placeholderLabel]="
-                                                                            commonLocaleData?.app_search
-                                                                        "
-                                                                        [noEntriesFoundLabel]="
-                                                                            commonLocaleData?.app_no_records_found
-                                                                        "
-                                                                    >
-                                                                    </ngx-mat-select-search>
-                                                                </mat-option>
                                                                 <mat-option
                                                                     *ngFor="let bankAccount of bankAccounts"
-                                                                    [value]="bankAccount.value"
+                                                                    [value]="bankAccount"
                                                                     >{{ bankAccount?.label }}
                                                                 </mat-option>
-                                                            </mat-select>
+                                                            </mat-autocomplete>
                                                         </mat-form-field>
                                                     </div>
                                                     <div class="clearfix mt-2">

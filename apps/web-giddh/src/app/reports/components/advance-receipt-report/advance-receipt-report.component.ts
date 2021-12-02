@@ -31,19 +31,19 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
     /** Customer name search bar */
     @ViewChild('customerName', { static: false }) public customerName: ElementRef;
     /** Parent of customer name search bar */
-    @ViewChild('customerNameParent', { static: true }) public customerNameParent: ElementRef;
+    @ViewChild('customerNameParent', { static: false }) public customerNameParent: ElementRef;
     /** Receipt number search bar */
     @ViewChild('receiptNumber', { static: false }) public receiptNumber: ElementRef;
     /** Parent of receipt number search bar */
-    @ViewChild('receiptNumberParent', { static: true }) public receiptNumberParent: ElementRef;
+    @ViewChild('receiptNumberParent', { static: false }) public receiptNumberParent: ElementRef;
     /** Payment mode search bar */
     @ViewChild('paymentMode', { static: false }) public paymentMode: ElementRef;
     /** Parent of payment mode search bar */
-    @ViewChild('paymentModeParent', { static: true }) public paymentModeParent: ElementRef;
+    @ViewChild('paymentModeParent', { static: false }) public paymentModeParent: ElementRef;
     /** Invoice number search bar */
     @ViewChild('invoiceNumber', { static: false }) public invoiceNumber: ElementRef;
     /** Parent of invoice number search bar */
-    @ViewChild('invoiceNumberParent', { static: true }) public invoiceNumberParent: ElementRef;
+    @ViewChild('invoiceNumberParent', { static: false }) public invoiceNumberParent: ElementRef;
     /** Advance search modal instance */
     @ViewChild('receiptAdvanceSearchFilterModal', { static: true }) public receiptAdvanceSearchFilterModal: ElementViewContainerRef;
     /** Container of Advance search modal instance */
@@ -383,8 +383,8 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
      * @returns {boolean} True, if element is child of parent
      * @memberof AdvanceReceiptReportComponent
      */
-    public childOf(element, parent): boolean {
-        return parent.contains(element);
+    public childOf(element: any, parent: any): boolean {
+        return parent?.contains(element);
     }
 
     /**
@@ -575,12 +575,11 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
                 this.pageConfiguration.totalItems = response.body.totalItems;
                 this.allReceipts = (this.voucherApiVersion === 2) ? response.body.items : response.body.results;
 
-                this.allReceipts.map(receipt => {
-                    let isSeleted = this.selectedReceipts.filter(selectedReceipt => selectedReceipt === receipt?.uniqueName);
-                    if(isSeleted?.length > 0) {
+                this.allReceipts.forEach(receipt => {
+                    let isSeleted = this.selectedReceipts?.some(selectedReceipt => selectedReceipt === receipt?.uniqueName);
+                    if(isSeleted) {
                         receipt.isSelected = true;
                     }
-                    return receipt;
                 });
                 
                 this.changeDetectorRef.detectChanges();

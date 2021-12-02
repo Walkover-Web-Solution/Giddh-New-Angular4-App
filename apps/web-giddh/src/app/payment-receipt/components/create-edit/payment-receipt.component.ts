@@ -8,7 +8,7 @@ import { select, Store } from "@ngrx/store";
 import * as moment from "moment";
 import { UploaderOptions, UploadInput, UploadOutput } from "ngx-uploader";
 import { combineLatest, Observable, of as observableOf, ReplaySubject } from "rxjs";
-import { auditTime, take, takeUntil } from "rxjs/operators";
+import { auditTime, map, startWith, take, takeUntil } from "rxjs/operators";
 import { CommonActions } from "../../../actions/common.actions";
 import { CompanyActions } from "../../../actions/company.actions";
 import { InvoiceActions } from "../../../actions/invoice/invoice.actions";
@@ -375,16 +375,16 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
         this.fileUploadOptions = { concurrency: 0 };
 
         // listen for search field value changes
-        this.searchBankAccount.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(() => {
-            this.filterBankAccounts();
+        this.searchBankAccount.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(search => {
+            this.filterBankAccounts(search);
         });
 
-        this.searchBillingStates.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(() => {
-            this.filterStates(true);
+        this.searchBillingStates.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(search => {
+            this.filterStates(search, true);
         });
 
-        this.searchShippingStates.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(() => {
-            this.filterStates(false);
+        this.searchShippingStates.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(search => {
+            this.filterStates(search, false);
         });
 
         combineLatest([this.voucherDetails$, this.selectedAccountDetails$]).pipe(takeUntil(this.destroyed$), auditTime(700)).subscribe(response => {
@@ -419,6 +419,9 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
                 }
 
                 this.voucherFormData.account = accountDetails;
+
+                this.searchBillingStates.setValue(accountDetails.billingDetails?.state?.name);
+                this.searchShippingStates.setValue(accountDetails.shippingDetails?.state?.name);
 
                 this.voucherFormData.attachedFiles = response[0].attachedFiles;
                 this.selectedFileName = response[0].attachedFileName;
@@ -492,8 +495,8 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
         this.resetForm();
         this.store.dispatch(this.salesAction.resetAccountDetailsForSales());
         this.store.dispatch(this.invoiceReceiptAction.ResetVoucherDetails());
+        this.destroyed$.next(true);
         this.destroyed$.complete();
-        this.destroyed$.next();
     }
 
     /**
@@ -907,14 +910,15 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
      * This will filter bank accounts
      *
      * @private
+     * @param {*} search
      * @memberof PaymentReceiptComponent
      */
-    private filterBankAccounts(): void {
+    private filterBankAccounts(search: any): void {
         let bankAccounts: IOption[] = [];
         this.bankAccounts$.subscribe(response => {
             if (response) {
                 response.forEach(account => {
-                    if (account?.label?.toLowerCase()?.indexOf(this.searchBankAccount?.value?.toLowerCase()) > -1) {
+                    if (typeof search !== "string" || account?.label?.toLowerCase()?.indexOf(search?.toLowerCase()) > -1) {
                         bankAccounts.push({ label: account.label, value: account.value, additional: account });
                     }
                 });
@@ -1004,6 +1008,7 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
     public autoFillShippingDetails(): void {
         if (this.autoFillShipping) {
             this.voucherFormData.account.shippingDetails = cloneDeep(this.voucherFormData.account.billingDetails);
+            this.searchShippingStates.setValue(this.searchBillingStates.value);
             if (this.shippingState && this.shippingState.nativeElement) {
                 this.shippingState.nativeElement.classList.remove('error-box');
             }
@@ -1018,7 +1023,7 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
      * @memberof PaymentReceiptComponent
      */
     public fillShippingBillingDetails(event: any, isBilling: boolean): void {
-        let stateCode = event?.value;
+        let stateCode = event?.option?.value?.value;
 
         if (isBilling) {
             // update account details address if it's billing details
@@ -1026,15 +1031,16 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
                 this.billingState.nativeElement.classList.remove('error-box');
             }
             this.voucherFormData.account.billingDetails.state.code = stateCode;
+
+            if (this.autoFillShipping) {
+                this.voucherFormData.account.shippingDetails.state.code = stateCode;
+                this.searchShippingStates.setValue(event?.option?.value?.label);
+            }
         } else {
             if (this.shippingState && this.shippingState.nativeElement) {
                 this.shippingState.nativeElement.classList.remove('error-box');
             }
-            // if it's not billing address then only update shipping details
-            // check if it's not auto fill shipping address from billing address then and then only update shipping details
-            if (!this.autoFillShipping) {
-                this.voucherFormData.account.shippingDetails.state.code = stateCode;
-            }
+            this.voucherFormData.account.shippingDetails.state.code = stateCode;
         }
     }
 
@@ -1667,13 +1673,14 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
      * This will filter states
      *
      * @private
+     * @param {*} search
+     * @param {boolean} [isBillingStates=true]
      * @memberof PaymentReceiptComponent
      */
-    private filterStates(isBillingStates: boolean = true): void {
+    private filterStates(search: any, isBillingStates: boolean = true): void {
         let filteredStates: IOption[] = [];
-        const search = (isBillingStates) ? this.searchBillingStates : this.searchShippingStates;
         this.statesSource.forEach(state => {
-            if (state?.label?.toLowerCase()?.indexOf(search?.value?.toLowerCase()) > -1) {
+            if (typeof search !== "string" || state?.label?.toLowerCase()?.indexOf(search?.toLowerCase()) > -1) {
                 filteredStates.push({ label: state.label, value: state.value, additional: state });
             }
         });
@@ -1726,5 +1733,27 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
                 this.toaster.showSnackBar("error", response?.message)
             }
         });
+    }
+
+    /**
+     * This will show label value in the search field
+     *
+     * @param {*} option
+     * @returns {string}
+     * @memberof PaymentReceiptComponent
+     */
+    public displayLabel(option: any): string {
+        return option?.label;
+    }
+
+    /**
+     * Select bank callback
+     *
+     * @param {*} event
+     * @memberof PaymentReceiptComponent
+     */
+    public selectBank(event: any): void {
+        this.voucherFormData.entries[0].transactions[0].account.uniqueName = event?.option?.value?.value;
+        console.log(this.voucherFormData.entries[0].transactions[0].account.uniqueName);
     }
 }
