@@ -21,5 +21,7 @@
     "suppliers_name": "पुरवठादार नाव",
     "new_voucher": "+ नवीन पेमेंट",
     "preview_unavailable": "Preview is not available right now! Please try again...",
-    "delete_voucher": "Do you want to delete the payment?"
+    "delete_voucher": "Do you want to delete the payment?",
+    "delete_vouchers": "Do you want to delete the voucher(s) / payment(s)?",
+    "uploaded_bill": "Uploaded Bill"
 }

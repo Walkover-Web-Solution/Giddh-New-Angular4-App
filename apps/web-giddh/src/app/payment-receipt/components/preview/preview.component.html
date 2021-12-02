@@ -182,9 +182,9 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="pd-l15" *ngIf="attachedDocumentType">
+                            <div class="pd-l15" *ngIf="attachedDocumentType?.type === 'unsupported'">
                                 <h5 class="pd-b05 font-16">
-                                    <strong>Uploaded Bill</strong>
+                                    <strong>{{ localeData?.uploaded_bill }}</strong>
                                 </h5>
                             </div>
                         </div>
@@ -205,6 +205,19 @@
                                     [ngClass]="{ 'image-collapsed': !isAttachmentExpanded }"
                                 >
                                     <img class="image-preview img-expand" [src]="imagePreviewSource" />
+                                </div>
+                                <div
+                                    *ngIf="attachedDocumentType?.type === 'pdf' && attachedPdfFileUrl"
+                                    #attachedDocumentPreview
+                                    class="pdf-expand-collapse pdf-preview mt-0"
+                                    [ngClass]="{ 'image-collapsed': !isAttachmentExpanded }"
+                                >
+                                    <iframe
+                                        #pdfContainer
+                                        width="100%"
+                                        height="100%"
+                                        [src]="attachedPdfFileUrl"
+                                    ></iframe>
                                 </div>
                                 <div class="expand-file" *ngIf="imagePreviewSource || attachedPdfFileUrl">
                                     <a

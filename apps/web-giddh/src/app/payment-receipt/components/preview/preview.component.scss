@@ -130,17 +130,20 @@
         height: 100%;
 
         .relative {
+            height: 100%;
             .error {
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                height: 100%;
                 font-size: 36px;
                 margin: 0 auto;
                 color: $red;
             }
             .img-expand-collapse {
                 padding: 50px 50px 0 50px;
+            }
+            .pdf-expand-collapse {
+                padding: 50px 0px 0 0px;
             }
             .image-collapsed {
                 max-height: 130px;
