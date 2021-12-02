@@ -32,5 +32,7 @@
     "invalid_tax_field": "Invalid [TAX_NAME] in [FIELD_NAME]! Please fix and try again",
     "invalid_tax": "Invalid [TAX_NAME]! Please fix and try again",
     "description": "Description",
-    "confirm_delete_file": "Are you sure you want to delete the attached file?"
+    "confirm_delete_file": "Are you sure you want to delete the attached file?",
+    "print_voucher": "Print Voucher",
+    "voucher_preview_unavailable": "Voucher Preview is not available right now! Please try again.."
 }

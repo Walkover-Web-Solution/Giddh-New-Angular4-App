@@ -31,19 +31,19 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
     /** Vendor name search bar */
     @ViewChild('vendorName', { static: false }) public vendorName: ElementRef;
     /** Parent of vendor name search bar */
-    @ViewChild('vendorNameParent', { static: true }) public vendorNameParent: ElementRef;
+    @ViewChild('vendorNameParent', { static: false }) public vendorNameParent: ElementRef;
     /** Receipt number search bar */
     @ViewChild('receiptNumber', { static: false }) public receiptNumber: ElementRef;
     /** Parent of payment number search bar */
-    @ViewChild('paymentNumberParent', { static: true }) public paymentNumberParent: ElementRef;
+    @ViewChild('paymentNumberParent', { static: false }) public paymentNumberParent: ElementRef;
     /** Payment mode search bar */
     @ViewChild('paymentMode', { static: false }) public paymentMode: ElementRef;
     /** Parent of payment mode search bar */
-    @ViewChild('paymentModeParent', { static: true }) public paymentModeParent: ElementRef;
+    @ViewChild('paymentModeParent', { static: false }) public paymentModeParent: ElementRef;
     /** Invoice number search bar */
     @ViewChild('invoiceNumber', { static: false }) public invoiceNumber: ElementRef;
     /** Parent of invoice number search bar */
-    @ViewChild('invoiceNumberParent', { static: true }) public invoiceNumberParent: ElementRef;
+    @ViewChild('invoiceNumberParent', { static: false }) public invoiceNumberParent: ElementRef;
     /** Advance search modal instance */
     @ViewChild('paymentSearchFilterModal', { static: true }) public paymentSearchFilterModal: ElementViewContainerRef;
     /** Container of Advance search modal instance */
@@ -360,8 +360,8 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
      * @returns {boolean} True, if element is child of parent
      * @memberof PaymentReportComponent
      */
-    public childOf(element, parent): boolean {
-        return parent.contains(element);
+    public childOf(element: any, parent: any): boolean {
+        return parent?.contains(element);
     }
 
     /**
@@ -528,12 +528,11 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
                 this.pageConfiguration.totalItems = response.body.totalItems;
                 this.allPayments = response.body.items;
 
-                this.allPayments.map(payment => {
-                    let isSeleted = this.selectedPayments.filter(selectedPayment => selectedPayment === payment?.uniqueName);
-                    if (isSeleted?.length > 0) {
+                this.allPayments.forEach(payment => {
+                    let isSeleted = this.selectedPayments.some(selectedPayment => selectedPayment === payment?.uniqueName);
+                    if (isSeleted) {
                         payment.isSelected = true;
                     }
-                    return payment;
                 });
 
                 this.changeDetectorRef.detectChanges();
