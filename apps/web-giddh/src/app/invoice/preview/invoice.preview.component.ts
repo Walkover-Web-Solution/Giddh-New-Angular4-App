@@ -735,7 +735,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         this.performActionOnInvoiceModel.hide();
         if (data) {
             data.action = 'paid';
-            this.store.dispatch(this.invoiceActions.ActionOnInvoice(this.selectedInvoice.uniqueName, data));
+            this.store.dispatch(this.invoiceActions.ActionOnInvoice(data.uniqueName, data));
         }
     }
 
