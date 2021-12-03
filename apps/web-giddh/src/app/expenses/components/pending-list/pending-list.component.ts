@@ -22,6 +22,8 @@ import { Lightbox } from 'ngx-lightbox';
 export class PendingListComponent implements OnInit, OnChanges {
     /** Instance of approve confirm dialog */
     @ViewChild("approveConfirm") public approveConfirm;
+    /** Instance of approve confirm dialog */
+    @ViewChild("rejectConfirm") public rejectConfirm;
     /** Instance of sort header */
     @ViewChild(MatSort) sortBy: MatSort;
     @Input() public isClearFilter: boolean = false;
@@ -40,6 +42,7 @@ export class PendingListComponent implements OnInit, OnChanges {
     @Output() public reportDates: EventEmitter<any> = new EventEmitter();
     /** This will emit the filter object to reload the report */
     @Output() public reloadReportList: EventEmitter<any> = new EventEmitter();
+    @Output() public reloadRejectReportList: EventEmitter<any> = new EventEmitter();
     public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public expensesItems: ExpenseResults[] = [];
     public universalDate$: Observable<any>;
@@ -359,5 +362,48 @@ export class PendingListComponent implements OnInit, OnChanges {
             images.push({ src: ApiUrl + 'company/' + this.companyUniqueName + '/image/' + file });
         });
         this.lightbox.open(images, 0);
+    }
+
+    /**
+     * Shows approve confirm dialog
+     *
+     * @param {TemplateRef<any>} ref
+     * @param {ExpenseResults} item
+     * @memberof PendingListComponent
+     */
+     public showRejectConfirmPopup(ref: TemplateRef<any>, item: ExpenseResults): void {
+        this.selectedEntryForApprove = item;
+        this.approveEntryModalRef = this.dialog.open(ref, {
+            width: '500px',
+            disableClose: true
+        });
+    }
+
+    /**
+     * Hides approve confirm dialog
+     *
+     * @param {boolean} isApproved
+     * @memberof PendingListComponent
+     */
+    public hideRejectConfirmPopup(isRejected: boolean): void {
+        this.approveEntryModalRef.close();
+
+        if(isRejected) {
+            this.getPettyCashPendingReports(this.pettycashRequest);
+            this.getPettyCashRejectedReports(this.pettycashRequest);
+        }
+    }
+
+    /**
+     * Emits the filter to reload report
+     *
+     * @param {CommonPaginatedRequest} salesDetailedfilter
+     * @memberof RejectedListComponent
+     */
+     public getPettyCashRejectedReports(salesDetailedfilter: CommonPaginatedRequest): void {
+        salesDetailedfilter.status = 'rejected';
+        salesDetailedfilter.sort = this.pettycashRequest.sort;
+        salesDetailedfilter.sortBy = this.pettycashRequest.sortBy;
+        this.reloadRejectReportList.emit(salesDetailedfilter);
     }
 }

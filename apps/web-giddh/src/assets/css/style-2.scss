@@ -1905,6 +1905,16 @@ input[type="checkbox"]:checked:after {
     background: $light-sea-green !important;
 }
 
+.btn-danger-outline {
+    border: 1px solid $red !important;
+    color: $red !important;
+}
+
+.btn-danger-outline:hover {
+    color: $white !important;
+    background: $red !important;
+}
+
 .btn-success {
     background: $light-sea-green !important;
     color: $white !important;
