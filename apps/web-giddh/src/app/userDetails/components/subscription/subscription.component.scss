@@ -172,7 +172,7 @@
     $tomato: rgb(229, 69, 86);
 
     width: 100%;
-    height: inherit;
+    height: 100%;
     color: rgb(136, 137, 157);
 
     .consumed-transaction,
@@ -387,7 +387,6 @@
         margin: 0px 17px;
         // background: pink;
         margin-top: 10px;
-        height: 22rem;
 
         .companies-expansion-panel {
             mat-expansion-panel-header:not([aria-expanded="false"]) {
@@ -473,6 +472,11 @@
             }
         }
     }
+
+    .expansion-panel-container {
+        height: 65%;
+        overflow: auto;
+    }
 }
 
 ::ng-deep {
@@ -517,8 +521,22 @@
     mat-accordion .mat-expanded {
         background-color: rgb(245, 245, 245);
     }
+    // .extra .mat-grid-tile-content {
+    //     display: inline-block !important;
+    //     height: 100vh !important;
+    // }
 }
 
+@media screen and (min-width: 1900px) and (orientation: landscape) {
+    .main-content {
+        .main-content-search-box {
+            height: 6%;
+        }
+        .expand-button {
+            top: 33%;
+        }
+    }
+}
 @media screen and (max-width: 1024px) and (orientation: landscape) {
     * {
         font-size: 14px;
@@ -663,6 +681,7 @@
             }
         }
         .expand-button {
+            top: 33%;
             button {
                 top: -28px;
                 border-bottom: none;

@@ -58,7 +58,8 @@ export class SubscriptionComponent implements OnInit {
         this.breakpointObserver.observe([
             '(min-width: 768px)',
             '(min-width: 1024px)',
-            '(min-width: 1536px)'
+            '(min-width: 1536px)',
+            '(min-width: 1900px)'
         ]).subscribe((state: BreakpointState) => {
 
             if (state.breakpoints['(min-width: 768px)']) {
@@ -91,6 +92,9 @@ export class SubscriptionComponent implements OnInit {
                 this.mainContentWidth = 12;
                 this.menuOneWidth = 4;
                 this.menuTwoWidth = 12;
+            }
+            if (state.breakpoints['(min-width: 1900px)']) {
+                this.sideBarBoxLength = 18;
             }
         })
     }
