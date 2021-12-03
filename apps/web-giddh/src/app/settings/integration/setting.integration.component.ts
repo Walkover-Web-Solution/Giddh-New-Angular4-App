@@ -16,7 +16,7 @@ import {
 } from '../../models/api-models/SettingsIntegraion';
 import { ToasterService } from '../../services/toaster.service';
 import { IOption } from '../../theme/ng-select/option.interface';
-import { TabsetComponent, TabDirective } from "ngx-bootstrap/tabs";
+//import { TabsetComponent, TabDirective } from "ngx-bootstrap/tabs";
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { CompanyActions } from "../../actions/company.actions";
 import { ShSelectComponent } from '../../theme/ng-virtual-select/sh-select.component';
@@ -36,12 +36,51 @@ import { cloneDeep, find, isEmpty } from '../../lodash-optimized';
 
 export declare const gapi: any;
 
+export interface table1{
+    activeTriggers: string;
+    type: string;
+    content: string;
+    createdOn: any;
+    copy: string;
+    edit: string;
+    delete: string;
+}
+
+export interface table2 {
+    triggers: string;
+    type: string;
+    content: string;
+    text: string;
+    icon: string;
+    button: string;
+}
+
+const TABLE1_ELEMENT_DATA: table1[] = [
+    { activeTriggers: 'On-Board', type: 'Email', content: 'Hello user, Welcome to Giddh. Please setup your account by providing your company details', createdOn: 'Saturday, 12 Oct, 21 9:35 AM', copy: 'copy.svg', edit: 'edit.svg', delete: 'delete.svg' },
+    { activeTriggers: 'Invoice Generation', type: 'SMS', content: 'Hello user, Welcome to Giddh. Please setup your account by providing your company details', createdOn: 'Saturday, 12 Oct, 21 9:35 AM', copy: 'copy.svg', edit: 'edit.svg', delete: 'delete.svg' },
+    { activeTriggers: 'Dues', type: 'Voice', content: 'Hello user, Welcome to Giddh. Please setup your account by providing your company details', createdOn: 'Saturday, 12 Oct, 21 9:35 AM', copy: 'copy.svg', edit: 'edit.svg', delete: 'delete.svg' }
+];
+
+const TABLE2_ELEMENT_DATA: table2[] = [
+    { triggers: 'On-Board', type: 'Email', content: 'Hello user, Welcome to Giddh. Please setup your account by providing your company details', text: '',icon: 'copy.svg', button: 'Activate' },
+    { triggers: 'Invoice Generation', type: 'SMS', content: 'Hello user, Welcome to Giddh. Please setup your account by providing your company details', text: '', icon: 'copy.svg', button: 'Activate' },
+    { triggers: 'Dues', type: 'Voice', content: 'Hello user, Welcome to Giddh. Please setup your account by providing your company details', text: '',icon: 'copy.svg', button: 'Activate' },
+    { triggers: 'Dues', type: 'Voice', content: 'Hello user, Welcome to Giddh. Please setup your account by providing your company details', text: '',icon: 'copy.svg', button: 'Activate' },
+    { triggers: 'Dues', type: 'Voice', content: 'Hello user, Welcome to Giddh. Please setup your account by providing your company details', text: '',icon: 'copy.svg', button: 'Activate' },
+];
+
 @Component({
     selector: 'setting-integration',
     templateUrl: './setting.integration.component.html',
     styleUrls: ['./setting.integration.component.scss']
 })
 export class SettingIntegrationComponent implements OnInit, AfterViewInit {
+
+    displayedtable1Columns: string[] = ['activeTriggers', 'type', 'content', 'createdOn', 'copy' ,'edit', 'delete'];
+    table1 = TABLE1_ELEMENT_DATA;
+
+    displayedtable2Columns: string[] = ['triggers', 'type', 'content', 'text', 'icon', 'button'];
+    table2 = TABLE2_ELEMENT_DATA;
 
     public auth2: any;
     public smsFormObj: SmsKeyClass = new SmsKeyClass();
@@ -74,7 +113,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public isIndianCompany: boolean = true;
 
     @Input() private selectedTabParent: number;
-    @ViewChild('integrationTab', { static: true }) public integrationTab: TabsetComponent;
+    //@ViewChild('integrationTab', { static: true }) public integrationTab: TabsetComponent;
     @ViewChild('removegmailintegration', { static: true }) public removegmailintegration: ModalDirective;
     @ViewChild('paymentForm', { static: true }) paymentForm: NgForm;
     @ViewChild('paymentFormAccountName', { static: true }) paymentFormAccountName: ShSelectComponent;
@@ -502,9 +541,9 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     }
 
     public selectTab(id: number) {
-        if (this.integrationTab.tabs[id] && this.integrationTab.tabs[id] !== undefined) {
-            this.integrationTab.tabs[id].active = true;
-        }
+        // if (this.integrationTab.tabs[id] && this.integrationTab.tabs[id] !== undefined) {
+        //     this.integrationTab.tabs[id].active = true;
+        // }
     }
 
     /**
@@ -587,16 +626,16 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @memberof SettingIntegrationComponent
      */
     public loadPaymentData(event?: any): void {
-        if (event && event instanceof TabDirective || !event) {
-            this.loadDefaultBankAccountsSuggestions();
-            this.getAllBankAccounts();
-            this.store.dispatch(this._companyActions.getAllRegistrations());
-            this.store.dispatch(this.settingsIntegrationActions.GetPaymentGateway());
-            this.store.pipe(take(1)).subscribe(s => {
-                this.selectedCompanyUniqueName = s.session.companyUniqueName;
-                this.store.dispatch(this.settingsPermissionActions.GetUsersWithPermissions(this.selectedCompanyUniqueName));
-            });
-        }
+        //if (event && event instanceof TabDirective || !event) {
+        this.loadDefaultBankAccountsSuggestions();
+        this.getAllBankAccounts();
+        this.store.dispatch(this._companyActions.getAllRegistrations());
+        this.store.dispatch(this.settingsIntegrationActions.GetPaymentGateway());
+        this.store.pipe(take(1)).subscribe(s => {
+            this.selectedCompanyUniqueName = s.session.companyUniqueName;
+            this.store.dispatch(this.settingsPermissionActions.GetUsersWithPermissions(this.selectedCompanyUniqueName));
+        });
+        // }
     }
 
     /**
@@ -606,9 +645,9 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @memberof SettingIntegrationComponent
      */
     public loadEcommerceData(event?: any): void {
-        if (event && event instanceof TabDirective || !event) {
-            this.store.dispatch(this.settingsIntegrationActions.GetAmazonSellers());
-        }
+        //if (event && event instanceof TabDirective || !event) {
+        this.store.dispatch(this.settingsIntegrationActions.GetAmazonSellers());
+        // }
     }
 
     /**
@@ -618,11 +657,11 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @memberof SettingIntegrationComponent
      */
     public loadCollectionData(event?): void {
-        if (event && event instanceof TabDirective || !event) {
-            this.loadDefaultAccountsSuggestions();
-            this.loadDefaultBankAccountsSuggestions();
-            this.store.dispatch(this.settingsIntegrationActions.GetRazorPayDetails());
-        }
+        // if (event && event instanceof TabDirective || !event) {
+        this.loadDefaultAccountsSuggestions();
+        this.loadDefaultBankAccountsSuggestions();
+        this.store.dispatch(this.settingsIntegrationActions.GetRazorPayDetails());
+        //}
     }
 
     /**
@@ -632,10 +671,10 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @memberof SettingIntegrationComponent
      */
     public loadEmailData(event?: any): void {
-        if (event && event instanceof TabDirective || !event) {
-            this.store.dispatch(this.settingsIntegrationActions.GetGmailIntegrationStatus());
-            this.store.dispatch(this.settingsIntegrationActions.GetEmailKey());
-        }
+        // if (event && event instanceof TabDirective || !event) {
+        this.store.dispatch(this.settingsIntegrationActions.GetGmailIntegrationStatus());
+        this.store.dispatch(this.settingsIntegrationActions.GetEmailKey());
+        // }
     }
 
     /**
@@ -645,11 +684,11 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @memberof SettingIntegrationComponent
      */
     public loadSmsData(event?: any): void {
-        if (event && event instanceof TabDirective || !event) {
-            if (event && event instanceof TabDirective || !event) {
-                this.store.dispatch(this.settingsIntegrationActions.GetSMSKey());
-            }
-        }
+        // if (event && event instanceof TabDirective || !event) {
+        // if (event && event instanceof TabDirective || !event) {
+        this.store.dispatch(this.settingsIntegrationActions.GetSMSKey());
+        // }
+        // }
     }
 
     /**
@@ -874,7 +913,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                 this.connectedBankAccounts = response.body;
 
                 this.connectedBankAccounts.forEach(bankAccount => {
-                    if(bankAccount?.iciciDetailsResource?.payor?.length > 0) {
+                    if (bankAccount?.iciciDetailsResource?.payor?.length > 0) {
                         bankAccount?.iciciDetailsResource?.payor.forEach(payor => {
                             this.getPayorRegistrationStatus(bankAccount, payor);
                         });
@@ -1014,7 +1053,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         this.settingsIntegrationService.getPayorRegistrationStatus(request).pipe(take(1)).subscribe(response => {
             payor.isConnected = (response?.body?.status === ACCOUNT_REGISTERED_STATUS);
 
-            if(!payor.isConnected && response?.body?.message) {
+            if (!payor.isConnected && response?.body?.message) {
                 this.toasty.errorToast(response?.body?.message);
             }
         });

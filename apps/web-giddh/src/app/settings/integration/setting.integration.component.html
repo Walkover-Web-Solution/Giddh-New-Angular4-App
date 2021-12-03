@@ -5,9 +5,8 @@
     (commonLocaleData)="commonLocaleData = $event"
 >
     <div class="clearfix">
-        <tabset
+        <mat-tab-group
             [ngClass]="{ 'tab-integration': true, 'hide-payment-tab': !isIndianCompany }"
-            #integrationTab
             id="tab-integration"
         >
             <!-- <tab (selectTab)="loadSmsData($event); tabChanged('sms');">
@@ -48,10 +47,333 @@
                 </div>
             </tab> -->
 
-            <tab (selectTab)="loadEmailData($event); tabChanged('email')">
-                <ng-template tabHeading>
-                    <span class="icon-mail"></span> {{ localeData?.email?.tab_heading }}
-                </ng-template>
+            <mat-tab label="Communication">
+                <!-- Page-1 to Page-3 -->
+                <div class="msg91-container">
+                    <div class="image">
+                        <img src="{{ imgPath }}msgOne.png" class="logo" alt="" />
+                        <img src="{{ imgPath }}msgTwo.png" class="msg" alt="" />
+                    </div>
+                    <div class="integrate">
+                        <p>Integrate now</p>
+                    </div>
+                </div>
+                <div class="form">
+                    <div class="input-field">
+                        <p class="label">Auth Key<span>*</span></p>
+                        <input matInput placeholder="Enter auth key" />
+                        <button mat-flat-button color="primary">Next</button>
+                    </div>
+
+                    <div class="input-field">
+                        <p class="label">Whitelist Our IPs</p>
+                        <input matInput placeholder="Enter Whitelist Our IPs" />
+                        <button mat-flat-button color="primary">Verify</button>
+                    </div>
+                </div>
+
+                <!-- Page-3 to Page-5 -->
+                <!-- <div class="msg91-container">
+                    <div class="menu">
+                        <button mat-icon-button disableRipple [matMenuTriggerFor]="beforeMenu"
+                            aria-label="Example icon-button with a menu">
+                            <mat-icon>more_vert</mat-icon>
+                        </button>
+                        <mat-menu #beforeMenu="matMenu" xPosition="before">
+                            <button mat-menu-item>
+                                <span>Remove Account</span>
+                            </button>
+                        </mat-menu>
+                    </div>
+
+                    <div class="image">
+                        <img src="{{ imgPath }}msgOne-color.png" class="logo" alt="">
+                        <img src="{{ imgPath }}msgTwo-color.png" class="msg" alt="">
+                    </div>
+                    <div class="integrate mini-icons">
+                        <img src="{{ imgPath }}Bmsg.PNG" alt="">
+                        <img src="{{ imgPath }}p.PNG" alt="">
+                        <img src="{{ imgPath }}wApp.PNG" alt="">
+                        <img src="{{ imgPath }}msg.PNG" alt="">
+                        <img src="{{ imgPath }}9109.PNG" alt="">
+                        <img src="{{ imgPath }}say.PNG" alt="">
+                    </div>
+                </div>
+
+                <button class="new-trigger" mat-flat-button color="primary">+ Create New Trigger</button>
+
+                <div class="main-content">
+                    <p>Giddh Suggested Trigger</p>
+
+                    <table mat-table [dataSource]="table2" class="mat-elevation-z8">
+
+                        <ng-container matColumnDef="triggers">
+                            <th mat-header-cell *matHeaderCellDef> Triggers </th>
+                            <td class="triggers-content" mat-cell *matCellDef="let element"> {{element.triggers}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="type">
+                            <th class="type-column" mat-header-cell *matHeaderCellDef> Type </th>
+                            <td mat-cell *matCellDef="let element"> {{element.type}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="content">
+                            <th mat-header-cell *matHeaderCellDef> content </th>
+                            <td class="content-text" mat-cell *matCellDef="let element"> {{element.content}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="text">
+                            <th class="number-container" mat-header-cell *matHeaderCellDef>  </th>
+                            <td class="number-container" mat-cell *matCellDef="let element"> {{element.text}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="icon">
+                            <th mat-header-cell *matHeaderCellDef> </th>
+                            <td class="icon-container" mat-cell *matCellDef="let element"><img class="hideShow" src="{{imgPath}}{{element.icon}}" alt=""> </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="button">
+                            <th mat-header-cell *matHeaderCellDef> </th>
+                            <td mat-cell *matCellDef="let element"> <button class="hideShow" mat-flat-button color="primary">{{element.button}}</button> </td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="displayedtable2Columns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedtable2Columns;"></tr>
+                    </table>
+
+
+                </div> -->
+
+                <!-- Page-6 to Page-9 -->
+                <!-- <div class="trigger-form">
+                    <div class="trigger-form-left-side">
+                        <div class="create-trigger-head">
+                            <img class="return" src="{{ imgPath }}return.svg" alt="">
+                            <p class="trigger-heading">Create Trigger</p>
+                        </div>
+
+                        <div class="trigger-input">
+                            <p class="trigger-input-label">Title</p>
+                            <input matInput type="text" placeholder="Name Trigger">
+                        </div>
+                        <div class="trigger-input">
+                            <p class="trigger-input-label">Condition<span>*</span></p>
+                            <mat-select placeholder="Select Conditions">
+                                <mat-option value="one">First option</mat-option>
+                                <mat-option value="two">Second option</mat-option>
+                            </mat-select>
+                        </div>
+                        <div class="trigger-input">
+                            <p class="trigger-input-label">Communication Platform<span>*</span></p>
+                            <mat-select placeholder="Choose Platform">
+                                <mat-option value="one">First option</mat-option>
+                                <mat-option value="two">Second option</mat-option>
+                            </mat-select>
+                        </div>
+                        <div class="trigger-input">
+                            <p class="trigger-input-label">Communication Channel<span>*</span></p>
+                            <mat-select placeholder="Choose Channel">
+                                <mat-option value="one">First option</mat-option>
+                                <mat-option value="two">Second option</mat-option>
+                            </mat-select>
+                        </div>
+                        <div class="trigger-input">
+                            <p class="trigger-input-label">Template<span>*</span></p>
+                            <mat-select placeholder="Choose Template">
+                                <mat-option value="one">First option</mat-option>
+                                <mat-option value="two">Second option</mat-option>
+                            </mat-select>
+                        </div>
+                        <button mat-flat-button color="primary">Launch Trigger</button>
+                    </div>
+                    <div class="trigger-form-right-side">
+                        <p class="compose">Compose Email</p>
+                        <div class="compose-subject">
+                            <p class="compose-subject-label">Subject<span>*</span></p>
+                            <div class="subject-box">Invoice Payment Due</div>
+                        </div>
+                        <div class="compose-subject">
+                            <p class="compose-subject-label">Body</p>
+                            <div class="subject-box text-box">
+                                <p>Hello <span>NAME</span> ,</p>
+                                <p>
+                                    Your Invoice Number <span>INVOICE NUMBER</span> Payment of Rs. <span>AMOUNT</span>
+                                    for account name <span>ACCOUNT NAME</span> is due for Date <span>DATE</span>.
+                                    Attention to <span>ATTENTION TO</span>. Make the full payment and avoid late fees.
+                                </p>
+                                <p>Regards,</p>
+                            </div>
+                        </div>
+                        <div class="dropdown-box">
+                            <div class="dropdown-list">
+                                <span class="dropdown-list-label">Name</span>
+                                <mat-select placeholder="Name">
+                                    <mat-option value="one">First option</mat-option>
+                                </mat-select>
+                            </div>
+
+                            <div class="dropdown-list right-label">
+                                <span class="dropdown-list-label">Invoice Number</span>
+                                <mat-select placeholder="Invoice No.">
+                                    <mat-option value="one">First option</mat-option>
+                                </mat-select>
+                            </div>
+                            <br>
+
+                            <div class="dropdown-list bottom-label">
+                                <span class="dropdown-list-label">Amount</span>
+                                <mat-select placeholder="Amount Na">
+                                    <mat-option value="one">First option</mat-option>
+                                </mat-select>
+                            </div>
+
+                            <div class="dropdown-list right-label">
+                                <span class="dropdown-list-label">Account Name</span>
+                                <mat-select placeholder="Account Name">
+                                    <mat-option value="one">First option</mat-option>
+                                </mat-select>
+                            </div>
+                            <br>
+
+                            <div class="dropdown-list bottom-label">
+                                <span class="dropdown-list-label">Due Date</span>
+                                <mat-select placeholder="Due Date">
+                                    <mat-option value="one">First option</mat-option>
+                                </mat-select>
+                            </div>
+
+                            <div class="dropdown-list right-label">
+                                <span class="dropdown-list-label">Attention to</span>
+                                <mat-select placeholder="Attention To">
+                                    <mat-option value="one">First option</mat-option>
+                                </mat-select>
+                            </div>
+                            <br>
+
+                            <button mat-flat-button color="primary" class="preview-button">Send Me Preview Mail</button>
+                        </div>
+                    </div>
+                </div> -->
+
+                <!-- Page 10 -->
+                <!-- <div class="msg91-container">
+                    <div class="menu">
+                        <button mat-icon-button disableRipple [matMenuTriggerFor]="beforeMenu"
+                            aria-label="Example icon-button with a menu">
+                            <mat-icon>more_vert</mat-icon>
+                        </button>
+                        <mat-menu #beforeMenu="matMenu" xPosition="before">
+                            <button mat-menu-item>
+                                <span>Remove Account</span>
+                            </button>
+                        </mat-menu>
+                    </div>
+
+                    <div class="image">
+                        <img src="{{ imgPath }}msgOne-color.png" class="logo" alt="">
+                        <img src="{{ imgPath }}msgTwo-color.png" class="msg" alt="">
+                    </div>
+                    <div class="integrate mini-icons">
+                        <img src="{{ imgPath }}Bmsg.PNG" alt="">
+                        <img src="{{ imgPath }}p.PNG" alt="">
+                        <img src="{{ imgPath }}wApp.PNG" alt="">
+                        <img src="{{ imgPath }}msg.PNG" alt="">
+                        <img src="{{ imgPath }}9109.PNG" alt="">
+                        <img src="{{ imgPath }}say.PNG" alt="">
+                    </div>
+                </div>
+
+                <button class="new-trigger" mat-flat-button color="primary">+ Create New Trigger</button>
+
+                <div class="table-one">
+
+                    <table mat-table [dataSource]="table1" class="mat-elevation-z8">
+
+                        <ng-container matColumnDef="activeTriggers">
+                            <th class="activeTriggers-width" mat-header-cell *matHeaderCellDef> <img class="active-trigger-search" src="{{imgPath}}active-trigger-search.svg" alt=""> Active Triggers </th>
+                            <td mat-cell *matCellDef="let element"> {{element.activeTriggers}} </td>
+                        </ng-container>
+    
+                        <ng-container matColumnDef="type">
+                            <th class="type-width" mat-header-cell *matHeaderCellDef> Type </th>
+                            <td mat-cell *matCellDef="let element"> {{element.type}} </td>
+                        </ng-container>
+    
+                        <ng-container matColumnDef="content">
+                            <th class="content-width" mat-header-cell *matHeaderCellDef> Content </th>
+                            <td class="smaller-font" mat-cell *matCellDef="let element"> {{element.content}} </td>
+                        </ng-container>
+    
+                        <ng-container matColumnDef="createdOn">
+                            <th class="createdOn-width" mat-header-cell *matHeaderCellDef> Created On </th>
+                            <td class="smaller-font" mat-cell *matCellDef="let element"> {{element.createdOn}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="copy">
+                            <th class="icons-left" mat-header-cell *matHeaderCellDef> </th>
+                            <td mat-cell *matCellDef="let element"> <img class="icon-hideShow" src="{{imgPath}}{{element.copy}}" alt=""> </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="edit">
+                            <th class="icons-left" mat-header-cell *matHeaderCellDef> </th>
+                            <td mat-cell *matCellDef="let element"> <img class="icon-hideShow" src="{{imgPath}}{{element.edit}}" alt=""> </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="delete">
+                            <th class="icons-right" mat-header-cell *matHeaderCellDef> </th>
+                            <td mat-cell *matCellDef="let element"> <img class="icon-hideShow" src="{{imgPath}}{{element.delete}}" alt=""> </td>
+                        </ng-container>
+    
+                        <tr mat-header-row *matHeaderRowDef="displayedtable1Columns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedtable1Columns;"></tr>
+                    </table>
+
+                </div>
+
+                <div class="main-content">
+                    <p>Giddh Suggested Trigger</p>
+
+                    <table mat-table [dataSource]="table2" class="mat-elevation-z8">
+
+                        <ng-container matColumnDef="triggers">
+                            <th mat-header-cell *matHeaderCellDef> Triggers </th>
+                            <td class="triggers-content" mat-cell *matCellDef="let element"> {{element.triggers}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="type">
+                            <th class="type-column" mat-header-cell *matHeaderCellDef> Type </th>
+                            <td mat-cell *matCellDef="let element"> {{element.type}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="content">
+                            <th mat-header-cell *matHeaderCellDef> content </th>
+                            <td class="content-text" mat-cell *matCellDef="let element"> {{element.content}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="text">
+                            <th class="number-container" mat-header-cell *matHeaderCellDef>  </th>
+                            <td class="number-container" mat-cell *matCellDef="let element"> {{element.text}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="icon">
+                            <th mat-header-cell *matHeaderCellDef> </th>
+                            <td class="icon-container" mat-cell *matCellDef="let element"><img class="hideShow" src="{{imgPath}}{{element.icon}}" alt=""> </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="button">
+                            <th mat-header-cell *matHeaderCellDef> </th>
+                            <td mat-cell *matCellDef="let element"> <button class="hideShow" mat-flat-button color="primary">{{element.button}}</button> </td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="displayedtable2Columns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedtable2Columns;"></tr>
+                    </table>
+
+                </div> -->
+            </mat-tab>
+
+            <mat-tab label="Email" (selectTab)="loadEmailData($event); tabChanged('email')">
+                <ng-template> <span class="icon-mail"></span> {{ localeData?.email?.tab_heading }} </ng-template>
 
                 <div class="box clearfix mb-2">
                     <h3 class="section-head">{{ localeData?.email?.gmail_integration }}</h3>
@@ -136,12 +458,10 @@
                         </div>
                     </form>
                 </div>
-            </tab>
+            </mat-tab>
 
-            <tab (selectTab)="loadCollectionData($event); tabChanged('collection')">
-                <ng-template tabHeading>
-                    <span class="icon-card"></span> {{ localeData?.collection?.tab_heading }}
-                </ng-template>
+            <mat-tab label="Collection" (selectTab)="loadCollectionData($event); tabChanged('collection')">
+                <ng-template> <span class="icon-card"></span> {{ localeData?.collection?.tab_heading }} </ng-template>
 
                 <div class="box clearfix mb-2">
                     <h3 class="font-20 bold mb-2">{{ localeData?.collection?.razorpay_form_heading }}</h3>
@@ -247,12 +567,10 @@
                         </div>
                     </form>
                 </div>
-            </tab>
+            </mat-tab>
 
-            <tab (selectTab)="loadEcommerceData($event); tabChanged('ecommerce')">
-                <ng-template tabHeading>
-                    <span class="icon-ecomm"></span> {{ localeData?.ecommerce?.tab_heading }}
-                </ng-template>
+            <mat-tab label="E-Commerce" (selectTab)="loadEcommerceData($event); tabChanged('ecommerce')">
+                <ng-template> <span class="icon-ecomm"></span> {{ localeData?.ecommerce?.tab_heading }} </ng-template>
                 <div class="mr-t2 box clearfix">
                     <h3 class="section-head mb-2">{{ localeData?.ecommerce?.shopify_form_heading }}</h3>
                     <span *ngIf="isEcommerceShopifyUserVerified">{{
@@ -266,10 +584,15 @@
                         <span>{{ localeData?.ecommerce?.connect_shopify }}</span></a
                     >
                 </div>
-            </tab>
-            <tab (selectTab)="loadPaymentData($event); tabChanged('payment')" [hidden]="!isIndianCompany">
+            </mat-tab>
+
+            <mat-tab
+                label="Payment"
+                (selectTab)="loadPaymentData($event); tabChanged('payment')"
+                [hidden]="!isIndianCompany"
+            >
                 <div *ngIf="isIndianCompany">
-                    <ng-template tabHeading>
+                    <ng-template>
                         <span class="icon-payment"></span> {{ localeData?.payment?.tab_heading }}
                     </ng-template>
                     <div class="mb-2 bank-logo">
@@ -459,14 +782,20 @@
                                     >
                                         {{ localeData?.payment?.add_more_users }}
                                     </button>
-                                    <!-- <a class="btn icici-button font-12 mt-2 pull-right mr-0" href="javascript:;"><span class="icon-icici-logo"><span class="path1"></span><span class="path2"></span><span class="path3"></span></span> {{localeData?.payment?.get_instant_overdraft}}</a> -->
+                                    <a class="btn icici-button font-12 mt-2 pull-right mr-0" href="javascript:;"
+                                        ><span class="icon-icici-logo"
+                                            ><span class="path1"></span><span class="path2"></span
+                                            ><span class="path3"></span
+                                        ></span>
+                                        {{ localeData?.payment?.get_instant_overdraft }}</a
+                                    >
                                 </div>
                             </div>
                         </ng-container>
                     </div>
                 </div>
-            </tab>
-        </tabset>
+            </mat-tab>
+        </mat-tab-group>
     </div>
     <div bsModal #createNewAccountModal="bs-modal" [config]="{ backdrop: 'static' }" class="modal" role="dialog">
         <div class="modal-dialog account-modal" *ngIf="createNewAccountModal?.isShown">
@@ -475,7 +804,8 @@
                     [commonLocaleData]="commonLocaleData"
                     (getAllBankAccounts)="getAllBankAccounts()"
                     (closeModalEvent)="closeCreateNewAccountModal()"
-                ></icici-account-create-edit>
+                >
+                </icici-account-create-edit>
             </div>
         </div>
     </div>
@@ -487,7 +817,8 @@
                     [activeBankAccount]="activeBankAccount"
                     (getAllBankAccounts)="getAllBankAccounts()"
                     (closeModalEvent)="closeEditAccountModal()"
-                ></icici-account-create-edit>
+                >
+                </icici-account-create-edit>
             </div>
         </div>
     </div>
@@ -512,7 +843,8 @@
                     [activePayorAccount]="activePayorAccount"
                     (getAllBankAccounts)="getAllBankAccounts()"
                     (closeModalEvent)="closeEditAccountUserModal()"
-                ></icici-payor-account-create-edit>
+                >
+                </icici-payor-account-create-edit>
             </div>
         </div>
     </div>
@@ -529,7 +861,8 @@
                     [body]="localeData?.payment?.delete_login | replace: '[LOGIN_ID]':activeBankAccount?.loginId"
                     (cancelCallBack)="confirmationModal?.hide()"
                     (successCallBack)="deleteBankAccountLogin(true)"
-                ></confirm-modal>
+                >
+                </confirm-modal>
             </div>
         </div>
     </div>
