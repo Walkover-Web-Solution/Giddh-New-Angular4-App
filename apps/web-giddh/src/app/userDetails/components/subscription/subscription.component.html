@@ -1,17 +1,22 @@
 <!-- <giddh-page-loader *ngIf="  isGetAccountsInProcess">
 </giddh-page-loader> -->
-<giddh-page-loader *ngIf="showLoader"></giddh-page-loader>
-<ng-container *ngIf="!showLoader">
+<!-- <giddh-page-loader *ngIf="showLoader"></giddh-page-loader> -->
+
+<!-- <ng-container *ngIf="!showLoader "> -->
+<!-- <div *ngIf="!isPlanShow"> -->
+<div class="main-content-subsription">
     <div class="menu-one-button">
-        <button mat-flat-button color="primary">{{ commonLocaleData?.app_buy_new_plan }}</button>
+        <button mat-flat-button color="primary" (click)="isPlanShow = true" *ngIf="!showLoader">
+            {{ commonLocaleData?.app_buy_new_plan }}
+        </button>
     </div>
     <mat-grid-list cols="16" rowHeight="{{ menuBarHeight }}px" gutterSize="0px">
         <mat-grid-tile colspan="{{ menuOneWidth }}" rowspan="1">
-            <div class="menu-two">
+            <div class="menu-two" [ngClass]="{ 'skelton-common-class': showLoader }">
                 <label for="Search-box">
-                    <img src="{{ imgPath }}search.png" alt="SearchBar" />
+                    <img src="{{ imgPath }}search.png" alt="SearchBar" *ngIf="!showLoader" />
                 </label>
-                <mat-form-field class="form-field" appearance="none">
+                <mat-form-field class="form-field" appearance="none" *ngIf="!showLoader">
                     <input
                         matInput
                         class="search-bar"
@@ -22,8 +27,8 @@
             </div>
         </mat-grid-tile>
         <mat-grid-tile colspan="{{ menuTwoWidth }}">
-            <div class="menu-two-list">
-                <div class="menu-two-list-items">
+            <div class="menu-two-list" [ngClass]="{ 'skelton-common-class': showLoader }">
+                <div class="menu-two-list-items" *ngIf="!showLoader">
                     <span class="mat-body-1 plan">Plan</span>
                     <mat-form-field appearance="none" floatLabel="never" class="form_select">
                         <mat-select
@@ -38,7 +43,7 @@
                         </mat-select>
                     </mat-form-field>
                 </div>
-                <div class="menu-two-list-items">
+                <div class="menu-two-list-items" *ngIf="!showLoader">
                     <span class="mat-body-1 expiring-within">Expiring Within</span>
                     <mat-form-field appearance="none" floatLabel="never" class="form_select">
                         <mat-select
@@ -53,7 +58,7 @@
                         </mat-select>
                     </mat-form-field>
                 </div>
-                <div class="menu-two-list-items transaction-box">
+                <div class="menu-two-list-items transaction-box" *ngIf="!showLoader">
                     <span class="mat-body-1 transaction-balance">Transactions Balance</span>
                     <mat-form-field appearance="none" floatLabel="never" class="form_select">
                         <mat-select
@@ -72,9 +77,8 @@
                     </mat-form-field>
                 </div>
             </div>
-            <div class="menu-two-button">
+            <div class="menu-two-button" [ngClass]="{ 'skelton-common-class': showLoader }">
                 <a
-                    style="cursor: pointer"
                     class="mat-body-2"
                     *ngIf="
                         searchSubscription?.value || filters?.plan || filters?.expiration || filters?.transactionBalance
@@ -85,7 +89,7 @@
             </div>
         </mat-grid-tile>
         <mat-grid-tile colspan="{{ sideBarBoxWidth }}" rowspan="{{ sideBarBoxLength }}">
-            <div class="sidebar">
+            <div class="sidebar" *ngIf="!showLoader">
                 <ng-container *ngFor="let subscription of subscriptions; let i = index">
                     <mat-grid-list cols="2" rowHeight="{{ rowLength }}px" gutterSize="0px" class="sidebar-box">
                         <mat-grid-tile colspan="2">
@@ -122,6 +126,178 @@
                     </mat-grid-list>
                 </ng-container>
             </div>
+            <div class="sidebar-clone" *ngIf="showLoader">
+                <mat-grid-list cols="2" rowHeight="{{ rowLength }}px" gutterSize="0px" class="sidebar-box-clone">
+                    <mat-grid-tile colspan="2">
+                        <div class="side-bar-items-clone">
+                            <p
+                                class="mat-body-2 side-bar-head-clone"
+                                [ngClass]="{ 'skelton-common-class': showLoader }"
+                            >
+                                <span></span>
+                            </p>
+                            <div class="side-bar-list-clone" [ngClass]="{ 'skelton-common-class': showLoader }">
+                                <p class="side-bar-list-title">Transactions</p>
+                                <span>:</span>
+                                <p class="mat-body-2">5000 <span class="warning mat-body-2"></span></p>
+                            </div>
+                            <div class="side-bar-list-clone" [ngClass]="{ 'skelton-common-class': showLoader }">
+                                <p class="mat-subheading-4 side-bar-list-title"></p>
+                                <span></span>
+                                <p>5</p>
+                            </div>
+                            <div
+                                class="side-bar-list-clone plan-timeline"
+                                [ngClass]="{ 'skelton-common-class': showLoader }"
+                            >
+                                <p class="mat-subheading-4 side-bar-list-title">Plan Timeline</p>
+                                <span>:</span>
+                                <p class="date">22 Dec, 2020 - 6 Jan, 2021</p>
+                            </div>
+                        </div>
+                    </mat-grid-tile>
+                    <mat-grid-tile colspan="2">
+                        <div class="side-bar-items-clone">
+                            <p
+                                class="mat-body-2 side-bar-head-clone"
+                                [ngClass]="{ 'skelton-common-class': showLoader }"
+                            >
+                                <span></span>
+                            </p>
+                            <div class="side-bar-list-clone" [ngClass]="{ 'skelton-common-class': showLoader }">
+                                <p class="side-bar-list-title">Transactions</p>
+                                <span>:</span>
+                                <p class="mat-body-2">5000 <span class="warning mat-body-2"></span></p>
+                            </div>
+                            <div class="side-bar-list-clone" [ngClass]="{ 'skelton-common-class': showLoader }">
+                                <p class="mat-subheading-4 side-bar-list-title"></p>
+                                <span></span>
+                                <p>5</p>
+                            </div>
+                            <div
+                                class="side-bar-list-clone plan-timeline"
+                                [ngClass]="{ 'skelton-common-class': showLoader }"
+                            >
+                                <p class="mat-subheading-4 side-bar-list-title">Plan Timeline</p>
+                                <span>:</span>
+                                <p class="date">22 Dec, 2020 - 6 Jan, 2021</p>
+                            </div>
+                        </div>
+                    </mat-grid-tile>
+                    <mat-grid-tile colspan="2">
+                        <div class="side-bar-items-clone">
+                            <p
+                                class="mat-body-2 side-bar-head-clone"
+                                [ngClass]="{ 'skelton-common-class': showLoader }"
+                            >
+                                <span></span>
+                            </p>
+                            <div class="side-bar-list-clone" [ngClass]="{ 'skelton-common-class': showLoader }">
+                                <p class="side-bar-list-title">Transactions</p>
+                                <span>:</span>
+                                <p class="mat-body-2">5000 <span class="warning mat-body-2"></span></p>
+                            </div>
+                            <div class="side-bar-list-clone" [ngClass]="{ 'skelton-common-class': showLoader }">
+                                <p class="mat-subheading-4 side-bar-list-title"></p>
+                                <span></span>
+                                <p>5</p>
+                            </div>
+                            <div
+                                class="side-bar-list-clone plan-timeline"
+                                [ngClass]="{ 'skelton-common-class': showLoader }"
+                            >
+                                <p class="mat-subheading-4 side-bar-list-title">Plan Timeline</p>
+                                <span>:</span>
+                                <p class="date">22 Dec, 2020 - 6 Jan, 2021</p>
+                            </div>
+                        </div>
+                    </mat-grid-tile>
+                    <mat-grid-tile colspan="2">
+                        <div class="side-bar-items-clone">
+                            <p
+                                class="mat-body-2 side-bar-head-clone"
+                                [ngClass]="{ 'skelton-common-class': showLoader }"
+                            >
+                                <span></span>
+                            </p>
+                            <div class="side-bar-list-clone" [ngClass]="{ 'skelton-common-class': showLoader }">
+                                <p class="side-bar-list-title">Transactions</p>
+                                <span>:</span>
+                                <p class="mat-body-2">5000 <span class="warning mat-body-2"></span></p>
+                            </div>
+                            <div class="side-bar-list-clone" [ngClass]="{ 'skelton-common-class': showLoader }">
+                                <p class="mat-subheading-4 side-bar-list-title"></p>
+                                <span></span>
+                                <p>5</p>
+                            </div>
+                            <div
+                                class="side-bar-list-clone plan-timeline"
+                                [ngClass]="{ 'skelton-common-class': showLoader }"
+                            >
+                                <p class="mat-subheading-4 side-bar-list-title">Plan Timeline</p>
+                                <span>:</span>
+                                <p class="date">22 Dec, 2020 - 6 Jan, 2021</p>
+                            </div>
+                        </div>
+                    </mat-grid-tile>
+                    <mat-grid-tile colspan="2">
+                        <div class="side-bar-items-clone">
+                            <p
+                                class="mat-body-2 side-bar-head-clone"
+                                [ngClass]="{ 'skelton-common-class': showLoader }"
+                            >
+                                <span></span>
+                            </p>
+                            <div class="side-bar-list-clone" [ngClass]="{ 'skelton-common-class': showLoader }">
+                                <p class="side-bar-list-title">Transactions</p>
+                                <span>:</span>
+                                <p class="mat-body-2">5000 <span class="warning mat-body-2"></span></p>
+                            </div>
+                            <div class="side-bar-list-clone" [ngClass]="{ 'skelton-common-class': showLoader }">
+                                <p class="mat-subheading-4 side-bar-list-title"></p>
+                                <span></span>
+                                <p>5</p>
+                            </div>
+                            <div
+                                class="side-bar-list-clone plan-timeline"
+                                [ngClass]="{ 'skelton-common-class': showLoader }"
+                            >
+                                <p class="mat-subheading-4 side-bar-list-title">Plan Timeline</p>
+                                <span>:</span>
+                                <p class="date">22 Dec, 2020 - 6 Jan, 2021</p>
+                            </div>
+                        </div>
+                    </mat-grid-tile>
+                    <mat-grid-tile colspan="2">
+                        <div class="side-bar-items-clone">
+                            <p
+                                class="mat-body-2 side-bar-head-clone"
+                                [ngClass]="{ 'skelton-common-class': showLoader }"
+                            >
+                                <span></span>
+                            </p>
+                            <div class="side-bar-list-clone" [ngClass]="{ 'skelton-common-class': showLoader }">
+                                <p class="side-bar-list-title">Transactions</p>
+                                <span>:</span>
+                                <p class="mat-body-2">5000 <span class="warning mat-body-2"></span></p>
+                            </div>
+                            <div class="side-bar-list-clone" [ngClass]="{ 'skelton-common-class': showLoader }">
+                                <p class="mat-subheading-4 side-bar-list-title"></p>
+                                <span></span>
+                                <p>5</p>
+                            </div>
+                            <div
+                                class="side-bar-list-clone plan-timeline"
+                                [ngClass]="{ 'skelton-common-class': showLoader }"
+                            >
+                                <p class="mat-subheading-4 side-bar-list-title">Plan Timeline</p>
+                                <span>:</span>
+                                <p class="date">22 Dec, 2020 - 6 Jan, 2021</p>
+                            </div>
+                        </div>
+                    </mat-grid-tile>
+                </mat-grid-list>
+            </div>
         </mat-grid-tile>
 
         <mat-grid-tile colspan="{{ mainContentWidth }}" rowspan="{{ sideBarBoxLength }}">
@@ -149,6 +325,7 @@
                             color="primary"
                             class="right-side-btn"
                             *ngIf="seletedUserPlans?.planDetails?.uniqueName !== defaultTrialPlan"
+                            (click)="renewPlan()"
                         >
                             {{ commonLocaleData?.app_renew }}
                         </button>
@@ -214,14 +391,14 @@
                     <button mat-button disableRipple="true" (click)="accordion.openAll()">Expand all</button>
                     <button mat-button disableRipple="true" (click)="accordion.closeAll()">Collapse all</button>
                 </div>
-                <div class="menu-two accordion-search-box main-content-search-box">
-                    <label for="Search-box">
-                        <img src="{{ imgPath }}search.png" alt="SearchBar" />
-                    </label>
-                    <mat-form-field class="form-field" appearance="none">
-                        <input matInput class="search-bar" placeholder="Search month" />
-                    </mat-form-field>
-                </div>
+                <!-- <div class="menu-two accordion-search-box main-content-search-box">
+                        <label for="Search-box">
+                            <img src="{{ imgPath }}search.png" alt="SearchBar" />
+                        </label>
+                        <mat-form-field class="form-field" appearance="none">
+                            <input matInput class="search-bar" placeholder="Search month" />
+                        </mat-form-field>
+                    </div> -->
                 <mat-tab-group>
                     <!-- <mat-tab label="Monthly">
                         <mat-accordion multi="true">
@@ -809,17 +986,36 @@
                 </mat-tab-group>
             </div>
             <div class="main-content-condition" *ngIf="!selectedSubscription && plansList?.length">
-                <p>
+                <p class="main-content-para">
                     Select a plan to see its <br />
                     Overall comsumption and balance summary
                 </p>
                 <br /><br />
-                <p>You have total {{ plansList?.length }} plans</p>
+                <p class="main-content-para">You have total {{ plansList?.length }} plans</p>
+            </div>
+            <div class="main-content-condition" *ngIf="showLoader">
+                <p [ngClass]="{ 'skelton-common-class': showLoader }">
+                    Select a plan to see its <br />
+                    Overall comsumption and balance summary
+                </p>
+                <br /><br />
+                <p [ngClass]="{ 'skelton-common-class': showLoader }">You have total {{ plansList?.length }} plans</p>
             </div>
         </mat-grid-tile>
     </mat-grid-list>
-</ng-container>
-
+</div>
+<!-- </div> -->
+<!-- </ng-container> -->
+<!-- <subscription-plans
+    *ngIf="isPlanShow && localeData?.subscription"
+    [subscriptions]="subscriptions"
+    (isSubscriptionPlanShow)="isSubscriptionPlanShow($event)"
+    [localeData]="localeData"
+    [commonLocaleData]="commonLocaleData"
+></subscription-plans> -->
+<!-- <subscriptions-plans *ngIf="isPlanShow && localeData?.subscription" [subscriptions]="subscriptions"
+    (isSubscriptionPlanShow)="isSubscriptionPlanShow($event)" [localeData]="localeData"
+    [commonLocaleData]="commonLocaleData"></subscriptions-plans> -->
 <!-- MoveCompany Modal -->
 <ng-template #MoveCompany>
     <move-company

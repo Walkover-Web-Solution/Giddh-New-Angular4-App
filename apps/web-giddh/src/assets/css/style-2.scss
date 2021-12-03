@@ -10217,3 +10217,39 @@ input[type="checkbox"].cdk-visually-hidden::after {
     outline: 0px !important;
     border: none !important;
 }
+
+/** Skelton Effects  **/
+
+.skelton-common-class {
+    background: $skelton-effects-light;
+    color: transparent;
+    position: relative;
+    overflow: hidden !important;
+    &::before {
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+            to right,
+            $skelton-effects-light 25%,
+            $skelton-effects-dark 50%,
+            $skelton-effects-light 100%
+        );
+        animation-name: gradient-animation;
+        animation-duration: 2s;
+        animation-iteration-count: infinite;
+        filter: blur(5px);
+        position: absolute;
+        left: 0%;
+        top: 0;
+        content: "";
+        overflow: hidden !important;
+    }
+}
+@keyframes gradient-animation {
+    from {
+        left: 0%;
+    }
+    to {
+        left: 100%;
+    }
+}
