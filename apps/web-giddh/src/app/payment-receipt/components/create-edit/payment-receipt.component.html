@@ -258,10 +258,16 @@
                                                                                         commonLocaleData?.app_state
                                                                                     "
                                                                                     name="billingdetails-statecode"
-                                                                                    class="no-border"
+                                                                                    class="no-border pd-l1"
                                                                                     matInput
                                                                                     [formControl]="searchBillingStates"
                                                                                     [matAutocomplete]="billingStateAuto"
+                                                                                    autocomplete="off"
+                                                                                    (blur)="
+                                                                                        resetValueIfOptionNotSelected(
+                                                                                            'billingState'
+                                                                                        )
+                                                                                    "
                                                                                 />
                                                                                 <mat-autocomplete
                                                                                     #billingStateAuto="matAutocomplete"
@@ -504,13 +510,19 @@
                                                                                             commonLocaleData?.app_state
                                                                                         "
                                                                                         name="shippingdetails-statecode"
-                                                                                        class="no-border"
+                                                                                        class="no-border pd-l1"
                                                                                         matInput
                                                                                         [formControl]="
                                                                                             searchShippingStates
                                                                                         "
                                                                                         [matAutocomplete]="
                                                                                             shippingStateAuto
+                                                                                        "
+                                                                                        autocomplete="off"
+                                                                                        (blur)="
+                                                                                            resetValueIfOptionNotSelected(
+                                                                                                'shippingState'
+                                                                                            )
                                                                                         "
                                                                                     />
                                                                                     <mat-autocomplete
@@ -850,10 +862,12 @@
                                                                 type="text"
                                                                 [placeholder]="commonLocaleData?.app_select"
                                                                 name="receipt-mode"
-                                                                class="no-border"
+                                                                class="no-border pd-l1"
                                                                 matInput
                                                                 [formControl]="searchBankAccount"
                                                                 [matAutocomplete]="bankAccountAuto"
+                                                                autocomplete="off"
+                                                                (blur)="resetValueIfOptionNotSelected('bankAccount')"
                                                             />
                                                             <mat-autocomplete
                                                                 #bankAccountAuto="matAutocomplete"
