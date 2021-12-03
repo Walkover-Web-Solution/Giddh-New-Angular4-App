@@ -419,10 +419,6 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
                 }
 
                 this.voucherFormData.account = accountDetails;
-
-                this.searchBillingStates.setValue(accountDetails.billingDetails?.state?.name);
-                this.searchShippingStates.setValue(accountDetails.shippingDetails?.state?.name);
-
                 this.voucherFormData.attachedFiles = response[0].attachedFiles;
                 this.selectedFileName = response[0].attachedFileName;
                 this.voucherFormData.date = moment(response[0].date, GIDDH_DATE_FORMAT).toDate();
@@ -466,6 +462,10 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
                 if (response[0].templateDetails?.other?.message2) {
                     this.voucherFormData.templateDetails = response[0].templateDetails;
                 }
+
+                this.searchBillingStates.setValue({ label: accountDetails.billingDetails?.state?.name });
+                this.searchShippingStates.setValue({ label: accountDetails.shippingDetails?.state?.name });
+                this.searchBankAccount.setValue({ label: this.voucherFormData.entries[0]?.transactions[0]?.account?.name});
 
                 this.exchangeRate = response[0].exchangeRate;
                 this.originalExchangeRate = this.exchangeRate;
@@ -915,7 +915,7 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
      */
     private filterBankAccounts(search: any): void {
         let bankAccounts: IOption[] = [];
-        this.bankAccounts$.subscribe(response => {
+        this.bankAccounts$?.subscribe(response => {
             if (response) {
                 response.forEach(account => {
                     if (typeof search !== "string" || account?.label?.toLowerCase()?.indexOf(search?.toLowerCase()) > -1) {
@@ -1023,7 +1023,9 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
      * @memberof PaymentReceiptComponent
      */
     public fillShippingBillingDetails(event: any, isBilling: boolean): void {
-        let stateCode = event?.option?.value?.value;
+        let selectedOption = event?.option?.value;
+        let stateCode = selectedOption?.value;
+        let stateName = selectedOption?.label;
 
         if (isBilling) {
             // update account details address if it's billing details
@@ -1031,16 +1033,19 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
                 this.billingState.nativeElement.classList.remove('error-box');
             }
             this.voucherFormData.account.billingDetails.state.code = stateCode;
+            this.voucherFormData.account.billingDetails.state.name = stateName;
 
             if (this.autoFillShipping) {
                 this.voucherFormData.account.shippingDetails.state.code = stateCode;
-                this.searchShippingStates.setValue(event?.option?.value?.label);
+                this.voucherFormData.account.shippingDetails.state.name = stateName;
+                this.searchShippingStates.setValue(stateName);
             }
         } else {
             if (this.shippingState && this.shippingState.nativeElement) {
                 this.shippingState.nativeElement.classList.remove('error-box');
             }
             this.voucherFormData.account.shippingDetails.state.code = stateCode;
+            this.voucherFormData.account.shippingDetails.state.name = stateName;
         }
     }
 
@@ -1754,6 +1759,44 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
      */
     public selectBank(event: any): void {
         this.voucherFormData.entries[0].transactions[0].account.uniqueName = event?.option?.value?.value;
-        console.log(this.voucherFormData.entries[0].transactions[0].account.uniqueName);
+        this.voucherFormData.entries[0].transactions[0].account.name = event?.option?.value?.label;
+    }
+
+    /**
+     * Resets the value if value not selected from option
+     *
+     * @param {string} field
+     * @memberof PaymentReceiptComponent
+     */
+    public resetValueIfOptionNotSelected(field: string): void {
+        setTimeout(() => {
+            switch (field) {
+                case "billingState":
+                    this.checkAndResetValue(this.searchBillingStates, this.voucherFormData.account.billingDetails.state.name);
+                    break;
+
+                case "shippingState":
+                    this.checkAndResetValue(this.searchShippingStates, this.voucherFormData.account.shippingDetails.state.name);
+                    break;
+
+                case "bankAccount":
+                    this.checkAndResetValue(this.searchBankAccount, this.voucherFormData.entries[0].transactions[0].account.name);
+                    break;
+            }
+        }, 200);
+    }
+
+    /**
+     * Checks and reset value
+     *
+     * @private
+     * @param {FormControl} formControl
+     * @param {*} value
+     * @memberof PaymentReceiptComponent
+     */
+    private checkAndResetValue(formControl: FormControl, value: any): void {
+        if (typeof formControl?.value !== "object" && formControl?.value !== value) {
+            formControl.setValue({ label: value });
+        }
     }
 }

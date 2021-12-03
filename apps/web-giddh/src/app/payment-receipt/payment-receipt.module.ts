@@ -27,6 +27,7 @@ import { PaymentReceiptRoutingModule } from "./payment-receipt.routing.module";
 import { GiddhPageLoaderModule } from "../shared/giddh-page-loader/giddh-page-loader.module";
 import { SendEmailModule } from "../shared/send-email/send-email.module";
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatTooltipModule } from "@angular/material/tooltip";
 
 @NgModule({
     declarations: [
@@ -49,7 +50,6 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
         MatCheckboxModule,
         MatMenuModule,
         AmountFieldComponentModule,
-        NgxMatSelectSearchModule,
         ReactiveFormsModule,
         DecimalDigitsModule,
         NgxMaskModule.forRoot(),
@@ -60,7 +60,8 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
         SendEmailModule,
         MatDialogModule,
         GiddhPageLoaderModule,
-        MatAutocompleteModule
+        MatAutocompleteModule,
+        MatTooltipModule
     ],
     providers: [TitleCasePipe]
 })
