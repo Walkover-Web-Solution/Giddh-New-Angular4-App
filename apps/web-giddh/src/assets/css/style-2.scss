@@ -10232,7 +10232,7 @@ input[type="checkbox"].cdk-visually-hidden::after {
 /** Skelton Effects  **/
 
 .skelton-common-class {
-    background: $skelton-effects-light;
+    background: $skelton-loading-gradient-bg;
     color: transparent;
     position: relative;
     overflow: hidden !important;
@@ -10241,14 +10241,14 @@ input[type="checkbox"].cdk-visually-hidden::after {
         height: 100%;
         background: linear-gradient(
             to right,
-            $skelton-effects-light 25%,
-            $skelton-effects-dark 50%,
-            $skelton-effects-light 100%
+            $skelton-loading-gradient 62%,
+            $skelton-loading-linear 50%,
+            $skelton-loading-gradient-inner 100%
         );
         animation-name: gradient-animation;
-        animation-duration: 2s;
+        animation-duration: 1s;
         animation-iteration-count: infinite;
-        filter: blur(5px);
+        filter: blur(21px);
         position: absolute;
         left: 0%;
         top: 0;
