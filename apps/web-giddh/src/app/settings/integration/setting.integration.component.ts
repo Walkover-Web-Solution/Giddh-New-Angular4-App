@@ -79,7 +79,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     displayedtable1Columns: string[] = ['activeTriggers', 'type', 'content', 'createdOn', 'copy' ,'edit', 'delete'];
     table1 = TABLE1_ELEMENT_DATA;
 
-    displayedtable2Columns: string[] = ['triggers', 'type', 'content', 'text', 'icon', 'button'];
+    displayedtable2Columns: string[] = ['triggers', 'type', 'content', 'icon', 'button'];
     table2 = TABLE2_ELEMENT_DATA;
 
     public auth2: any;

@@ -190,6 +190,9 @@
                 .hideShow {
                     display: none;
                 }
+                .right-side {
+                    padding-left: 82%;
+                }
             }
             .mat-row {
                 font-size: 20px !important;
@@ -403,7 +406,7 @@
         width: 16%;
     }
     .icon-container {
-        width: 5%;
+        width: 25%;
     }
     .mat-table tbody .mat-row:hover td {
         background-color: rgb(231, 235, 246) !important;
@@ -668,6 +671,26 @@
                     width: 250px;
                 }
             }
+        }
+        .main-content {
+            table {
+                .mat-cell {
+                    .small-button {
+                        height: 35px;
+                        font-size: 0.6rem;
+                        padding: 0px;
+                        min-width: 100%;
+                    }
+                    .right-side {
+                        width: 95%;
+                    }
+                }
+            }
+        }
+    }
+    ::ng-deep {
+        table .type-column {
+            width: 14% !important;
         }
     }
 }

@@ -49,7 +49,7 @@
 
             <mat-tab label="Communication">
                 <!-- Page-1 to Page-3 -->
-                <div class="msg91-container">
+                <!-- <div class="msg91-container">
                     <div class="image">
                         <img src="{{ imgPath }}msgOne.png" class="logo" alt="" />
                         <img src="{{ imgPath }}msgTwo.png" class="msg" alt="" />
@@ -70,7 +70,7 @@
                         <input matInput placeholder="Enter Whitelist Our IPs" />
                         <button mat-flat-button color="primary">Verify</button>
                     </div>
-                </div>
+                </div> -->
 
                 <!-- Page-3 to Page-5 -->
                 <!-- <div class="msg91-container">
@@ -122,19 +122,14 @@
                             <td class="content-text" mat-cell *matCellDef="let element"> {{element.content}} </td>
                         </ng-container>
 
-                        <ng-container matColumnDef="text">
-                            <th class="number-container" mat-header-cell *matHeaderCellDef>  </th>
-                            <td class="number-container" mat-cell *matCellDef="let element"> {{element.text}} </td>
-                        </ng-container>
-
                         <ng-container matColumnDef="icon">
                             <th mat-header-cell *matHeaderCellDef> </th>
-                            <td class="icon-container" mat-cell *matCellDef="let element"><img class="hideShow" src="{{imgPath}}{{element.icon}}" alt=""> </td>
+                            <td class="icon-container" mat-cell *matCellDef="let element"><img class="hideShow right-side" src="{{imgPath}}{{element.icon}}" alt=""> </td>
                         </ng-container>
 
                         <ng-container matColumnDef="button">
                             <th mat-header-cell *matHeaderCellDef> </th>
-                            <td mat-cell *matCellDef="let element"> <button class="hideShow" mat-flat-button color="primary">{{element.button}}</button> </td>
+                            <td mat-cell *matCellDef="let element"> <button class="hideShow small-button" mat-flat-button color="primary">{{element.button}}</button> </td>
                         </ng-container>
 
                         <tr mat-header-row *matHeaderRowDef="displayedtable2Columns"></tr>
@@ -145,16 +140,16 @@
                 </div> -->
 
                 <!-- Page-6 to Page-9 -->
-                <!-- <div class="trigger-form">
+                <div class="trigger-form">
                     <div class="trigger-form-left-side">
                         <div class="create-trigger-head">
-                            <img class="return" src="{{ imgPath }}return.svg" alt="">
+                            <img class="return" src="{{ imgPath }}return.svg" alt="" />
                             <p class="trigger-heading">Create Trigger</p>
                         </div>
 
                         <div class="trigger-input">
                             <p class="trigger-input-label">Title</p>
-                            <input matInput type="text" placeholder="Name Trigger">
+                            <input matInput type="text" placeholder="Name Trigger" />
                         </div>
                         <div class="trigger-input">
                             <p class="trigger-input-label">Condition<span>*</span></p>
@@ -197,9 +192,10 @@
                             <div class="subject-box text-box">
                                 <p>Hello <span>NAME</span> ,</p>
                                 <p>
-                                    Your Invoice Number <span>INVOICE NUMBER</span> Payment of Rs. <span>AMOUNT</span>
-                                    for account name <span>ACCOUNT NAME</span> is due for Date <span>DATE</span>.
-                                    Attention to <span>ATTENTION TO</span>. Make the full payment and avoid late fees.
+                                    Your Invoice Number <span>INVOICE NUMBER</span> Payment of Rs.
+                                    <span>AMOUNT</span> for account name <span>ACCOUNT NAME</span> is due for Date
+                                    <span>DATE</span>. Attention to <span>ATTENTION TO</span>. Make the full payment and
+                                    avoid late fees.
                                 </p>
                                 <p>Regards,</p>
                             </div>
@@ -218,7 +214,7 @@
                                     <mat-option value="one">First option</mat-option>
                                 </mat-select>
                             </div>
-                            <br>
+                            <br />
 
                             <div class="dropdown-list bottom-label">
                                 <span class="dropdown-list-label">Amount</span>
@@ -233,7 +229,7 @@
                                     <mat-option value="one">First option</mat-option>
                                 </mat-select>
                             </div>
-                            <br>
+                            <br />
 
                             <div class="dropdown-list bottom-label">
                                 <span class="dropdown-list-label">Due Date</span>
@@ -248,12 +244,12 @@
                                     <mat-option value="one">First option</mat-option>
                                 </mat-select>
                             </div>
-                            <br>
+                            <br />
 
                             <button mat-flat-button color="primary" class="preview-button">Send Me Preview Mail</button>
                         </div>
                     </div>
-                </div> -->
+                </div>
 
                 <!-- Page 10 -->
                 <!-- <div class="msg91-container">
