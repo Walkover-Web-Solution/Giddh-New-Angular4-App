@@ -6,79 +6,88 @@
 >
     <hamburger-menu [pageHeading]="localeData?.welcome_to_giddh"></hamburger-menu>
     <div *ngIf="!isCreateAndSwitchCompanyInProcess && localeData?.welcome_to_giddh" id="main" class="welcome-outer">
-        <div class="welcome-msg">
+        <div class="main-heading-billing">
             <div class="row">
-                <div class="col-sm-10">
-                    <div class="">
-                        <p>{{ getHelloUserText() }}</p>
-                        <p>{{ localeData?.check_details_note }}</p>
-                    </div>
-                </div>
-                <div class="col-sm-2">
+                <div class="col-sm-1">
                     <div class="back-btn">
-                        <button class="btn btn-default" (click)="backToSubscriptions()">
+                        <button class="btn btn-default back-button" (click)="backToSubscriptions()">
                             {{ commonLocaleData?.app_back }}
                         </button>
+                    </div>
+                </div>
+                <div class="col-sm-11">
+                    <h2 class="giddh-heading">Welcome to Giddh!</h2>
+                </div>
+            </div>
+        </div>
+        <div class="welcome-msg">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="user-details">
+                        <p class="user-title">{{ getHelloUserText() }}</p>
+                        <p class="user-content">{{ localeData?.check_details_note }}</p>
                     </div>
                 </div>
             </div>
         </div>
         <div class="billing-details">
+            <h3 class="billing-name">{{ localeData?.billing_details }}</h3>
             <div class="row">
-                <div class="col-sm-6 col-xs-12">
+                <div class="col-sm-3 col-xs-12">
                     <div class="billing-wrapper">
-                        <h3>{{ localeData?.billing_details }}</h3>
                         <form name="form" #billingForm="ngForm" novalidate="" autocomplete="off">
                             <div class="form-group">
-                                <label>{{ localeData?.billing_name }} <span class="red-text">*</span></label>
-                                <input
-                                    type="text"
-                                    required
-                                    class="form-control"
-                                    id="name"
-                                    name="name"
-                                    [(ngModel)]="billingDetailsObj.name"
-                                />
+                                <mat-form-field appearance="fill" class="mat-input">
+                                    <label>{{ localeData?.billing_name }} <span class="red-text">*</span></label>
+                                    <input
+                                        type="text"
+                                        required
+                                        class="form-control"
+                                        id="name"
+                                        name="name"
+                                        [(ngModel)]="billingDetailsObj.name"
+                                        matInput
+                                    />
+                                </mat-form-field>
                             </div>
                             <div class="form-group">
-                                <label>{{ commonLocaleData?.app_email_id }} <span class="red-text">*</span></label>
-                                <input
-                                    type="email"
-                                    required
-                                    name="email"
-                                    id="email"
-                                    [(ngModel)]="billingDetailsObj.email"
-                                    class="form-control"
-                                />
+                                <mat-form-field appearance="fill" class="mat-input">
+                                    <label>{{ commonLocaleData?.app_email_id }} <span class="red-text">*</span></label>
+                                    <input
+                                        type="email"
+                                        required
+                                        name="email"
+                                        id="email"
+                                        [(ngModel)]="billingDetailsObj.email"
+                                        class="form-control"
+                                        matInput
+                                    />
+                                </mat-form-field>
                             </div>
                             <div class="form-group">
-                                <label>{{ commonLocaleData?.app_mobile_number }}</label>
-                                <input
-                                    type="text"
-                                    id="contactNo"
-                                    class="form-control"
-                                    name="contactNo"
-                                    [(ngModel)]="billingDetailsObj.contactNo"
-                                    #mobileNoEl
-                                />
+                                <mat-form-field appearance="fill" class="mat-input">
+                                    <label>{{ commonLocaleData?.app_mobile_number }}</label>
+                                    <input
+                                        type="text"
+                                        id="contactNo"
+                                        class="form-control"
+                                        name="contactNo"
+                                        [(ngModel)]="billingDetailsObj.contactNo"
+                                        #mobileNoEl
+                                        matInput
+                                    />
+                                </mat-form-field>
                             </div>
 
-                            <div class="form-group" *ngIf="formFields['taxName'] !== undefined">
+                            <!-- <div class="form-group" *ngIf="formFields['taxName'] !== undefined">
+                                <mat-form-field appearance="fill" class="mat-input">
                                 <label>{{ formFields["taxName"].label }}</label>
-                                <input
-                                    type="text"
-                                    class="form-control"
-                                    name="gstin"
-                                    id="gstin"
-                                    autocomplete="false"
-                                    maxlength="15"
-                                    [(ngModel)]="billingDetailsObj.gstin"
-                                    #gstinNumberField
-                                    (keyup)="
+                                <input type="text" class="form-control" name="gstin" id="gstin" autocomplete="false"
+                                    maxlength="15" [(ngModel)]="billingDetailsObj.gstin" #gstinNumberField (keyup)="
                                         getStateCode(gstinNumberField, states); checkGstNumValidation(gstinNumberField)
-                                    "
-                                />
-                            </div>
+                                    " matInput/>
+                                    </mat-form-field>
+                            </div> -->
                             <div class="form-group">
                                 <label>{{ commonLocaleData?.app_state }} <span class="red-text">*</span></label>
                                 <sh-select
@@ -95,106 +104,108 @@
                                     name="stateCode"
                                 >
                                 </sh-select>
+                                <!-- <mat-form-field class="example-full-width" appearance="fill">
+                                    <label>{{ commonLocaleData?.app_state }} <span class="red-text">*</span></label>
+
+                                    <input type="text"
+                                           placeholder="Pick one"
+                                           aria-label="Number"
+                                           matInput
+                                           [formControl]="myControl"
+                                           [matAutocomplete]="auto"> -->
+                                <!-- <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+                                      <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+                                        {{option}}
+                                      </mat-option>
+                                    </mat-autocomplete> -->
+                                <!-- </mat-form-field> -->
                             </div>
                             <!-- static pincode start -->
-                            <div class="form-group">
-                                <label for="pinCodeNum"
-                                    >{{ localeData?.pincode }} <span class="red-text">*</span></label
-                                >
+                            <!-- <div class="form-group">
+                                <label for="pinCodeNum">{{ localeData?.pincode }} <span
+                                        class="red-text">*</span></label>
                                 <input type="text" class="form-control" autocomplete="false" name="pinCodeNum" />
-                            </div>
+                            </div> -->
                             <!-- static pincode end -->
                             <div class="form-group">
-                                <label>{{ commonLocaleData?.app_address }}</label>
-                                <textarea
-                                    class="form-control"
-                                    name="address"
-                                    id="address"
-                                    [(ngModel)]="billingDetailsObj.address"
-                                    [placeholder]="commonLocaleData?.app_address"
-                                    rows="5"
-                                    cols="12"
-                                ></textarea>
-                            </div>
-                            <div class="form-group">
-                                <input
-                                    type="checkbox"
-                                    (click)="autoRenewSelected($event)"
-                                    id="autorenew"
-                                    name="autorenew"
-                                    [(ngModel)]="billingDetailsObj.autorenew"
-                                /><label class="mr-l1">{{ localeData?.renew_subscription }}</label>
-                            </div>
-                            <div class="form-group">
-                                <button
-                                    type="button"
-                                    id="rzp-button1"
-                                    (click)="payWithRazor(billingForm)"
-                                    [disabled]="billingForm.invalid || !isMobileNumberValid"
-                                    class="btn btn-success"
-                                >
-                                    {{ commonLocaleData?.app_pay_now }}
-                                </button>
+                                <mat-form-field appearance="fill" class="mat-input">
+                                    <label>{{ commonLocaleData?.app_address }}</label>
+                                    <textarea
+                                        class="form-control"
+                                        name="address"
+                                        id="address"
+                                        [(ngModel)]="billingDetailsObj.address"
+                                        [placeholder]="commonLocaleData?.app_address"
+                                        rows="5"
+                                        cols="12"
+                                        matInput
+                                    ></textarea>
+                                </mat-form-field>
                             </div>
                         </form>
                     </div>
                 </div>
-                <div class="col-sm-6 col-xs-12">
-                    <div class="professional-plan">
-                        <p class="plan-title">
-                            {{ selectedPlans?.planDetails?.name }}
-                            <span class="grey-text"> {{ localeData?.current_plan }} </span>
-                        </p>
-
-                        <div class="your-account">
-                            <div class="row">
-                                <div class="col-6">
-                                    <span>
-                                        {{ localeData?.subscription_price }}
-                                    </span>
-                                </div>
-                                <div class="col-6">
-                                    <p>
-                                        {{ selectedPlans?.planDetails?.amount | number }}
-                                    </p>
-                                </div>
+                <div class="col-sm-3 col-xs-12">
+                    <div class="whole-renewal">
+                        <div class="renewal-heading">
+                            <h3 class="renwal-details">Renewal Plan Details</h3>
+                        </div>
+                        <div class="renewal-data">
+                            <mat-card class="renewal-card">
+                                <mat-card-subtitle class="renewal-card-subtitle"
+                                    >{{ selectedPlans?.planDetails?.name }}
+                                    <span class="current-plan-details"> {{ localeData?.current_plan }} </span>
+                                </mat-card-subtitle>
+                                <mat-card-title class="renewal-card-title">
+                                    {{ selectedPlans?.planDetails?.amount | number }}
+                                    <span class="year"
+                                        >/{{ selectedPlans?.planDetails?.duration }}
+                                        {{ selectedPlans?.planDetails?.durationUnit }}(s)</span
+                                    ></mat-card-title
+                                >
+                                <p class="renewal-off">₹15000 <span class="discount-off">20% off</span></p>
+                                <mat-card-content class="renewal-card-content">
+                                    <ul class="renewal-list">
+                                        <li class="features">
+                                            {{ selectedPlans?.planDetails?.transactionLimit | number }} Transactions
+                                        </li>
+                                        <li class="features">
+                                            {{ selectedPlans?.planDetails?.companiesLimit | number }} Companies
+                                        </li>
+                                        <!-- <li class="features">10 hrs Muneem Consultant</li> -->
+                                        <li class="features">Unlimited Users</li>
+                                        <li class="features">Unlimited Customers/Vendors</li>
+                                        <li class="features">Desktop/Mobile App</li>
+                                    </ul>
+                                </mat-card-content>
+                            </mat-card>
+                        </div>
+                        <section class="renewal-section">
+                            <div class="form-group">
+                                <mat-checkbox
+                                    class="renewal-subscription"
+                                    (click)="autoRenewSelected($event)"
+                                    id="autorenew"
+                                    name="autorenew"
+                                    [(ngModel)]="billingDetailsObj.autorenew"
+                                >
+                                    {{ localeData?.renew_subscription }}</mat-checkbox
+                                >
                             </div>
-                            <div class="row">
-                                <div class="col-6">
-                                    <span>
-                                        {{ localeData?.total_companies }}
-                                    </span>
-                                </div>
-                                <div class="col-6">
-                                    <p>
-                                        {{ selectedPlans?.planDetails?.companiesLimit | number }}
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-6">
-                                    <span>
-                                        {{ localeData?.transaction_limit }}
-                                    </span>
-                                </div>
-                                <div class="col-6">
-                                    <p>
-                                        {{ selectedPlans?.planDetails?.transactionLimit | number }}
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-6">
-                                    <span>
-                                        {{ localeData?.subscription_renewal }}
-                                    </span>
-                                </div>
-                                <div class="col-6">
-                                    <p>
-                                        {{ selectedPlans?.planDetails?.duration }}
-                                        {{ selectedPlans?.planDetails?.durationUnit }}(s)
-                                    </p>
-                                </div>
+                        </section>
+                        <div class="renewal-payable">
+                            <h3 class="new-payable">Net payable amount</h3>
+                            <h2 class="renwal-amount">
+                                ₹14,160 <span class="including-tax">Including Tax (18% GST)</span>
+                            </h2>
+                            <div class="form-group">
+                                <button
+                                    class="btn btn-secondary pay-now"
+                                    (click)="payWithRazor(billingForm)"
+                                    [disabled]="billingForm.invalid || !isMobileNumberValid"
+                                >
+                                    {{ commonLocaleData?.app_pay_now }}
+                                </button>
                             </div>
                         </div>
                     </div>
