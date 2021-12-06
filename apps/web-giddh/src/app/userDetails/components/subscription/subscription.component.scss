@@ -1,3 +1,4 @@
+@import "../../../../assets/css/color.scss";
 .menu-one-button {
     position: absolute;
     z-index: 9;
@@ -9,7 +10,6 @@
         font-weight: bold;
     }
 }
-
 .menu-two {
     height: inherit;
     background-color: rgb(231, 233, 235);
@@ -45,7 +45,9 @@
         }
     }
 }
-
+.main-content-para {
+    color: gray;
+}
 .menu-two-list {
     width: 79%;
     height: inherit;
@@ -132,7 +134,7 @@
             width: 100%;
             height: inherit;
             position: absolute;
-            padding-left: 1rem;
+            cursor: pointer;
             :hover {
                 background: none;
             }
@@ -166,7 +168,101 @@
         }
     }
 }
+.sidebar-clone {
+    min-width: 100%;
+    overflow: hidden;
+    height: 100%;
+    background-color: white;
+    border-left: none;
+    border-right: 2px solid rgb(203, 207, 210);
+    position: relative;
+    padding: 0;
+    .sidebar-box-clone {
+        mat-grid-tile {
+            border-bottom: 1px solid rgb(231, 233, 235);
+        }
+        .side-bar-head-clone {
+            color: rgb(26, 35, 126);
+            font-size: 13px;
+            font-weight: 600;
+            margin-top: 5px;
+            margin-bottom: 5px;
+            img {
+                position: relative;
+                bottom: 2px;
+                width: 3px;
+                height: auto;
+                margin: 0px 5px;
+            }
+            span {
+                color: rgb(106, 108, 133);
+            }
+        }
+        .side-bar-items-clone {
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            width: 100%;
+            height: inherit;
+            position: absolute;
 
+            .side-bar-list-clone-1 {
+                display: flex;
+                align-items: center;
+                font-size: 14px;
+                line-height: 30px;
+                margin-top: 5px;
+                margin-bottom: 5px;
+                img {
+                    width: 18px;
+                    height: auto;
+                    margin-right: 0.4rem;
+                }
+                .side-bar-list-title-clone {
+                    width: 95px;
+                    height: inherit;
+                    color: rgb(106, 108, 133);
+                }
+            }
+            .side-bar-list-clone-2 {
+                display: flex;
+                align-items: center;
+                font-size: 14px;
+                line-height: 25px;
+                margin-top: 5px;
+                margin-bottom: 5px;
+                img {
+                    width: 18px;
+                    height: auto;
+                    margin-right: 0.4rem;
+                }
+                .side-bar-list-title-clone {
+                    width: 95px;
+                    height: inherit;
+                    color: rgb(106, 108, 133);
+                }
+            }
+            .side-bar-list-clone-3 {
+                display: flex;
+                align-items: center;
+                font-size: 14px;
+                line-height: 20px;
+                margin-top: 5px;
+                margin-bottom: 5px;
+                img {
+                    width: 18px;
+                    height: auto;
+                    margin-right: 0.4rem;
+                }
+                .side-bar-list-title-clone {
+                    width: 95px;
+                    height: inherit;
+                    color: rgb(106, 108, 133);
+                }
+            }
+        }
+    }
+}
 .main-content {
     $grey: rgb(106, 108, 133);
     $tomato: rgb(229, 69, 86);
@@ -213,6 +309,122 @@
     .added-balance,
     .added-charges {
         background-color: rgb(237, 250, 245);
+    }
+    button {
+        margin-left: 17px;
+        .back-arrow {
+            margin-left: -13px;
+        }
+    }
+
+    .add-extra-wrapper {
+        margin: 17px 0px 0px 17px;
+        width: 96.5%;
+        .add-extra {
+            img {
+                width: 24px;
+                height: auto;
+                transform: translateY(15px);
+            }
+            .img-label {
+                font-size: 12px;
+                font-weight: 600;
+                color: rgb(106, 108, 133);
+                transform: translateY(7px);
+            }
+            .branch {
+                width: 22px;
+            }
+            .warehouse {
+                width: 20px;
+            }
+            .balance-value {
+                font-size: 14px;
+                font-weight: 700;
+                color: rgb(33, 37, 40);
+                transform: translateY(7px);
+            }
+            .tomato {
+                color: $tomato;
+            }
+            .add-extra-value {
+                font-size: 10px;
+                color: rgb(166, 167, 182);
+                transform: translateY(15px);
+            }
+            .mat-slider {
+                transform: translateY(-8px);
+                width: 82%;
+            }
+            .slider-value {
+                font-size: 14px;
+                font-weight: 600;
+                background-color: rgb(231, 233, 235);
+                color: rgb(33, 37, 40);
+                transform: translateY(-24px);
+                text-align: center;
+                width: 77%;
+                height: 34px;
+                padding-top: 6px;
+            }
+            .total-value {
+                font-size: 16px;
+                font-weight: 700;
+                color: rgb(33, 37, 40);
+                transform: translateY(-14px);
+            }
+            .per-value {
+                font-size: 10px;
+                color: rgb(122, 124, 126);
+                transform: translateY(-18px);
+            }
+            .checkout-button {
+                transform: translateY(-21px);
+                margin-left: 0px;
+                width: 77%;
+            }
+        }
+        mat-grid-tile {
+            border: 1px solid rgb(203, 207, 210);
+        }
+
+        ::ng-deep {
+            .mat-grid-tile-content {
+                flex-direction: column;
+                justify-content: space-evenly;
+            }
+        }
+    }
+
+    .net-payable-amount {
+        display: block;
+        background-color: white;
+        height: 131px;
+        .label {
+            font-size: 14px;
+            color: rgb(106, 108, 133);
+        }
+        .amount {
+            font-size: 24px;
+            font-weight: 700;
+            margin-top: -3px;
+            color: rgb(33, 37, 40);
+            span {
+                font-size: 12px;
+                font-weight: 400;
+                color: rgb(106, 108, 133);
+            }
+        }
+        button {
+            margin-left: 0px;
+        }
+        .cancel {
+            font-size: 14px;
+            text-decoration: underline;
+            font-weight: 600;
+            color: rgb(122, 124, 126);
+            margin-left: 0.7rem;
+        }
     }
     table {
         width: 97%;
@@ -393,7 +605,7 @@
                 background-color: rgb(231, 233, 235);
 
                 a {
-                    visibility: visible;
+                    display: block;
                     font-size: 0.7rem;
                     text-decoration: underline;
                 }
@@ -404,14 +616,14 @@
             a {
                 position: absolute;
                 right: 1rem;
-                visibility: hidden;
+                display: none;
                 color: rgb(102, 140, 255);
                 font-size: 0.9rem;
             }
 
             :hover {
                 a {
-                    visibility: visible;
+                    display: block;
                 }
             }
         }
@@ -420,7 +632,7 @@
         position: absolute;
         width: 21%;
         left: 77%;
-        top: 39.5%;
+        top: 31.5%;
         z-index: 2;
 
         button {
@@ -493,6 +705,9 @@
         top: 43px;
         left: 12px;
     }
+    .mat-tab-header {
+        display: none !important;
+    }
     .mat-tab-labels {
         background-color: rgb(231, 233, 235);
         .mat-tab-label {
@@ -525,6 +740,12 @@
     //     display: inline-block !important;
     //     height: 100vh !important;
     // }
+}
+.main-content-condition {
+    text-align: center;
+}
+.mat-expansion-panel:not(.mat-expanded) .mat-expansion-panel-header:hover {
+    background: rgba(102, 140, 255, 0.1);
 }
 
 @media screen and (min-width: 1900px) and (orientation: landscape) {
