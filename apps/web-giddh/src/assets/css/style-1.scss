@@ -2907,7 +2907,7 @@ td.mat-footer-cell {
                 padding: 0 !important;
                 white-space: normal;
                 word-break: break-word;
-                font-size: 12px;
+                font-size: 14px;
                 &:hover {
                     background: transparent;
                 }
@@ -2928,5 +2928,8 @@ td.mat-footer-cell {
 }
 .mat-option {
     font-size: 14px !important;
+}
+.border-radius-5 {
+    border-radius: 5px !important;
 }
 /* material css for ledger end*/
