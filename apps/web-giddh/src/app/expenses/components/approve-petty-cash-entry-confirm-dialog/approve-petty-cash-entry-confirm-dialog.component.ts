@@ -99,6 +99,7 @@ export class ApprovePettyCashEntryConfirmDialogComponent implements OnInit {
      */
     public ngOnInit(): void {
         if (this.showCategoryOption) {
+            this.selectedEntryForApprove.particular = this.selectedEntryForApprove.baseAccount;
             this.prepareEntryAgainstObject(this.selectedEntryForApprove);
         }
         this.buildCreatorString();
