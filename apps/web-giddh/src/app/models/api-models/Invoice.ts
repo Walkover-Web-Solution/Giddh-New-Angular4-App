@@ -688,4 +688,5 @@ export class InvoicePaymentRequest {
     paymentDate: string | Date;
     tagUniqueName?: string;
     description?: string;
+    uniqueName?: string;
 }
