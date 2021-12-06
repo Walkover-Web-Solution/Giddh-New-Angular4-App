@@ -21,6 +21,7 @@ import { OnboardingFormRequest } from "../../../models/api-models/Common";
 import { TaxResponse } from "../../../models/api-models/Company";
 import { AccountDetailsClass, IForceClear, PaymentReceipt, PaymentReceiptTransaction, StateCode, VoucherTypeEnum } from "../../../models/api-models/Sales";
 import { LEDGER_API } from "../../../services/apiurls/ledger.api";
+import { GeneralService } from "../../../services/general.service";
 import { LedgerService } from "../../../services/ledger.service";
 import { SalesService } from "../../../services/sales.service";
 import { SearchService } from "../../../services/search.service";
@@ -246,7 +247,8 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
         private route: ActivatedRoute,
         private titleCasePipe: TitleCasePipe,
         private invoiceReceiptAction: InvoiceReceiptActions,
-        private router: Router
+        private router: Router,
+        private generalService: GeneralService
     ) {
         this.voucherFormData = new PaymentReceipt();
 
@@ -363,6 +365,10 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
      * @memberof PaymentReceiptComponent
      */
     public ngOnInit(): void {
+        if (this.generalService.voucherApiVersion === 1) {
+            this.router.navigate(['pages', 'home']);
+        }
+
         this.imgPath = (isElectron || isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         this.loadDefaultSearchSuggestions();
         this.loadBankCashAccounts('');

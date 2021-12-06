@@ -19,6 +19,7 @@
                         type="button"
                         class="btn btn-sky-blue dropdown-btn-new"
                         [routerLink]="'/pages/voucher/receipt/create'"
+                        *ngIf="voucherApiVersion === 2"
                     >
                         {{ localeData?.new_voucher }}
                     </button>
@@ -141,7 +142,7 @@
                                     <amount-field
                                         [amount]="receiptsSummaryData?.advance?.amount"
                                         [currencySymbol]="receiptsSummaryData?.advance?.symbol"
-                                        [currencyCode]="activeCompany.baseCurrency"
+                                        [currencyCode]="activeCompany?.baseCurrency"
                                     >
                                     </amount-field>
                                 </span>
@@ -156,7 +157,7 @@
                                     <amount-field
                                         [amount]="receiptsSummaryData?.normal?.amount"
                                         [currencySymbol]="receiptsSummaryData?.normal?.symbol"
-                                        [currencyCode]="activeCompany.baseCurrency"
+                                        [currencyCode]="activeCompany?.baseCurrency"
                                     >
                                     </amount-field>
                                 </span>
@@ -171,7 +172,7 @@
                                     <amount-field
                                         [amount]="receiptsSummaryData?.total?.amount"
                                         [currencySymbol]="receiptsSummaryData?.total?.symbol"
-                                        [currencyCode]="activeCompany.baseCurrency"
+                                        [currencyCode]="activeCompany?.baseCurrency"
                                     >
                                     </amount-field>
                                 </span>
@@ -186,7 +187,7 @@
                                     <amount-field
                                         [amount]="receiptsSummaryData?.unUsed?.amount"
                                         [currencySymbol]="receiptsSummaryData?.unUsed?.symbol"
-                                        [currencyCode]="activeCompany.baseCurrency"
+                                        [currencyCode]="activeCompany?.baseCurrency"
                                     >
                                     </amount-field>
                                 </span>
@@ -215,11 +216,22 @@
                     >
                         <tr>
                             <th>
-                                <div *ngIf="!hoveredReceiptTable && !allReceiptsSelected && !selectedReceipts?.length">
+                                <div
+                                    *ngIf="
+                                        (voucherApiVersion === 2 &&
+                                            !hoveredReceiptTable &&
+                                            !allReceiptsSelected &&
+                                            !selectedReceipts?.length) ||
+                                        voucherApiVersion !== 2
+                                    "
+                                >
                                     #
                                 </div>
                                 <div
-                                    *ngIf="hoveredReceiptTable || allReceiptsSelected || selectedReceipts?.length > 0"
+                                    *ngIf="
+                                        voucherApiVersion === 2 &&
+                                        (hoveredReceiptTable || allReceiptsSelected || selectedReceipts?.length > 0)
+                                    "
                                     class="check-image d-flex justify-content-start"
                                 >
                                     <img
@@ -409,9 +421,11 @@
                             <td data-title="#">
                                 <div
                                     *ngIf="
-                                        hoveredReceiptUniqueName !== receipt?.uniqueName &&
-                                        !receipt.isSelected &&
-                                        !selectedReceipts?.length
+                                        (voucherApiVersion === 2 &&
+                                            hoveredReceiptUniqueName !== receipt?.uniqueName &&
+                                            !receipt.isSelected &&
+                                            !selectedReceipts?.length) ||
+                                        voucherApiVersion !== 2
                                     "
                                 >
                                     {{ i + 1 }}
@@ -419,9 +433,10 @@
                                 <div
                                     class="check-image d-flex justify-content-start"
                                     *ngIf="
-                                        hoveredReceiptUniqueName === receipt?.uniqueName ||
-                                        receipt.isSelected ||
-                                        selectedReceipts?.length > 0
+                                        voucherApiVersion === 2 &&
+                                        (hoveredReceiptUniqueName === receipt?.uniqueName ||
+                                            receipt.isSelected ||
+                                            selectedReceipts?.length > 0)
                                     "
                                 >
                                     <img
@@ -479,7 +494,7 @@
                                                 ? receipt?.companyCurrencySymbol
                                                 : receipt?.totalAmount?.symbol
                                         "
-                                        [currencyCode]="activeCompany.baseCurrency"
+                                        [currencyCode]="activeCompany?.baseCurrency"
                                     >
                                     </amount-field>
                                 </span>
@@ -497,7 +512,7 @@
                                                 ? receipt?.balanceDue?.amountForCompany
                                                 : receipt?.unusedAmount?.symbol
                                         "
-                                        [currencyCode]="activeCompany.baseCurrency"
+                                        [currencyCode]="activeCompany?.baseCurrency"
                                     >
                                     </amount-field>
                                 </span>
