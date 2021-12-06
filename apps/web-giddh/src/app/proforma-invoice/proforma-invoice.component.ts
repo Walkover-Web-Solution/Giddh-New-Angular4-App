@@ -195,9 +195,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     /** Template reference for each entry */
     @ViewChild('entry', { read: TemplateRef, static: false }) template: TemplateRef<any>;
     /** Billing state field instance */
-    @ViewChild('statesBilling', {static: true}) statesBilling: SalesShSelectComponent;
+    @ViewChild('statesBilling', { static: false }) statesBilling: SalesShSelectComponent;
     /** Billing state field instance */
-    @ViewChild('statesShipping', {static: true}) statesShipping: SalesShSelectComponent;
+    @ViewChild('statesShipping', { static: false }) statesShipping: SalesShSelectComponent;
     public showAdvanceReceiptAdjust: boolean = false;
 
     @Output() public cancelVoucherUpdate: EventEmitter<boolean> = new EventEmitter<boolean>();
