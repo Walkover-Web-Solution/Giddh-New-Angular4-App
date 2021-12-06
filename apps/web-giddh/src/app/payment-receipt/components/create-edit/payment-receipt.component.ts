@@ -615,10 +615,9 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
      */
     public getSearchRequestObject(query: string, page: number = 1): any {
         let withStocks: boolean;
-        let group: string;
+        let group: string = (this.voucherFormData.type === "receipt") ? 'sundrydebtors' : 'sundrycreditors';
         this.searchCustomerResultsPaginationData.query = query;
-        group = 'sundrydebtors';
-        this.selectedGroupUniqueName = 'sundrydebtors';
+        this.selectedGroupUniqueName = group;
         const requestObject = {
             q: encodeURIComponent(query),
             page,
@@ -657,9 +656,9 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
      *
      * @memberof PaymentReceiptComponent
      */
-    public makeCustomerList() {
+    public makeCustomerList(): void {
         this.customerAccounts$ = observableOf(orderBy(this.sundryDebtorsAccountsList, 'label'));
-        this.selectedGroupUniqueName = 'sundrydebtors';
+        this.selectedGroupUniqueName = (this.voucherFormData.type === "receipt") ? 'sundrydebtors' : 'sundrycreditors';
 
         if (!this.isUpdateMode) {
             this.startLoading(false);
@@ -1347,6 +1346,9 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
         this.isValidForm = true;
         this.autoFillShipping = true;
         this.totals = { subTotal: 0, taxTotal: 0, grandTotal: 0, grandTotalMultiCurrency: 0 };
+        this.searchBillingStates.setValue({ label: "" });
+        this.searchShippingStates.setValue({ label: "" });
+        this.searchBankAccount.setValue({ label: "" });
     }
 
     /**
