@@ -8,14 +8,14 @@ import { select, Store } from "@ngrx/store";
 import * as moment from "moment";
 import { UploaderOptions, UploadInput, UploadOutput } from "ngx-uploader";
 import { combineLatest, Observable, of as observableOf, ReplaySubject } from "rxjs";
-import { auditTime, map, startWith, take, takeUntil } from "rxjs/operators";
+import { auditTime, take, takeUntil } from "rxjs/operators";
 import { CommonActions } from "../../../actions/common.actions";
 import { CompanyActions } from "../../../actions/company.actions";
 import { InvoiceActions } from "../../../actions/invoice/invoice.actions";
 import { InvoiceReceiptActions } from "../../../actions/invoice/receipt/receipt.actions";
 import { SalesActions } from "../../../actions/sales/sales.action";
 import { Configuration, SearchResultText, SubVoucher } from "../../../app.constant";
-import { cloneDeep, find, orderBy, uniqBy } from "../../../lodash-optimized";
+import { cloneDeep, find, isEqual, orderBy, uniqBy } from "../../../lodash-optimized";
 import { AccountResponseV2, AddAccountRequest, UpdateAccountRequest } from "../../../models/api-models/Account";
 import { OnboardingFormRequest } from "../../../models/api-models/Common";
 import { TaxResponse } from "../../../models/api-models/Company";
@@ -465,7 +465,7 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
 
                 this.searchBillingStates.setValue({ label: accountDetails.billingDetails?.state?.name });
                 this.searchShippingStates.setValue({ label: accountDetails.shippingDetails?.state?.name });
-                this.searchBankAccount.setValue({ label: this.voucherFormData.entries[0]?.transactions[0]?.account?.name});
+                this.searchBankAccount.setValue({ label: this.voucherFormData.entries[0]?.transactions[0]?.account?.name });
 
                 this.exchangeRate = response[0].exchangeRate;
                 this.originalExchangeRate = this.exchangeRate;
@@ -474,6 +474,8 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
                 this.voucherFormData.updateAccountDetails = true;
                 this.voucherFormData.uniqueName = response[0].uniqueName;
                 this.allowFocus = false;
+
+                this.autoFillShipping = isEqual(this.voucherFormData.account?.billingDetails, this.voucherFormData.account?.shippingDetails);
 
                 if (this.voucherFormData.subVoucher) {
                     this.isAdvanceReceipt = true;
@@ -1170,6 +1172,9 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
             this.voucherFormData.account = new AccountDetailsClass(data);
             this.voucherFormData.account.currencyCode = this.voucherFormData.account.currency.code;
 
+            this.searchBillingStates.setValue({ label: this.voucherFormData.account.billingDetails?.state?.name });
+            this.searchShippingStates.setValue({ label: this.voucherFormData.account.shippingDetails?.state?.name });
+
             setTimeout(() => {
                 this.changeDetectionRef.detectChanges();
             }, 50);
@@ -1273,9 +1278,10 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
      *
      * @param {*} data
      * @param {*} address
+     * @param {boolean} isBillingAddress
      * @memberof PaymentReceiptComponent
      */
-    public selectAddress(data: any, address: any): void {
+    public selectAddress(data: any, address: any, isBillingAddress: boolean): void {
         if (data && address) {
             data.address[0] = address.address;
             if (!data.state) {
@@ -1284,9 +1290,15 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
 
             data.state.code = (address.state) ? address.state.code : "";
             data.state.name = (address.state) ? address.state.name : "";
-            data.gstNumber = address.gstNumber;
+            data.taxNumber = address.gstNumber;
             data.pincode = address.pincode;
-            this.autoFillShippingDetails();
+
+            if (isBillingAddress) {
+                this.searchBillingStates.setValue({ label: data.state.name });
+                this.autoFillShippingDetails();
+            } else {
+                this.searchShippingStates.setValue({ label: data.state.name });
+            }
         }
     }
 
@@ -1543,6 +1555,8 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
 
         if (this.isAdvanceReceipt) {
             this.voucherFormData.subVoucher = SubVoucher.AdvanceReceipt;
+        } else {
+            this.voucherFormData.subVoucher = undefined;
         }
 
         let selectedTaxes = [];
@@ -1588,16 +1602,16 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
      * get state code using Tax number to prefill state
      *
      * @param {string} type billingDetails || shipping
-     * @param {SalesShSelectComponent} statesEle state input box
+     * @param {SalesShSelectComponent} statesElement state input box
      * @memberof PaymentReceiptComponent
      */
-    public getStateCode(type: string, statesEle: SalesShSelectComponent): void {
-        let gstVal = cloneDeep(this.voucherFormData.account[type].gstNumber).toString();
+    public getStateCode(type: string, statesElement: SalesShSelectComponent): void {
+        let gstVal = cloneDeep(this.voucherFormData.account[type].taxNumber).toString();
         if (gstVal && gstVal.length >= 2) {
             const selectedState = this.statesSource.find(item => item.additional?.stateGstCode === gstVal.substring(0, 2));
             if (selectedState) {
                 this.voucherFormData.account[type].state.code = selectedState.value;
-                statesEle.disabled = true;
+                statesElement.disabled = true;
             } else {
                 this.checkTaxNumberValidation(gstVal);
                 if (!this.isValidTaxNumber) {
@@ -1605,10 +1619,10 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
                         and clear the state only when valid number is not provided */
                     this.voucherFormData.account[type].state.code = null;
                 }
-                statesEle.disabled = false;
+                statesElement.disabled = false;
             }
         } else {
-            statesEle.disabled = false;
+            statesElement.disabled = false;
             this.voucherFormData.account[type].state.code = null;
         }
         this.checkTaxNumberValidation(gstVal);

@@ -185,7 +185,8 @@
                                                                                             selectAddress(
                                                                                                 voucherFormData.account
                                                                                                     .billingDetails,
-                                                                                                address
+                                                                                                address,
+                                                                                                true
                                                                                             )
                                                                                         "
                                                                                     >
@@ -298,12 +299,12 @@
                                                                             <text-field
                                                                                 [maxlength]="15"
                                                                                 autocomplete="None"
-                                                                                name="billingdetails-gstnumber"
+                                                                                name="billingdetails-taxnumber"
                                                                                 [cssClass]="'form-control input-custom'"
                                                                                 *ngIf="showGstinNo"
                                                                                 [(ngModel)]="
                                                                                     voucherFormData.account
-                                                                                        .billingDetails.gstNumber
+                                                                                        .billingDetails.taxNumber
                                                                                 "
                                                                                 (change)="
                                                                                     getStateCode(
@@ -321,12 +322,12 @@
                                                                                 [maxlength]="15"
                                                                                 autocomplete="None"
                                                                                 type="text"
-                                                                                name="billingdetails-gstnumber"
+                                                                                name="billingdetails-taxnumber"
                                                                                 [cssClass]="'form-control input-custom'"
                                                                                 *ngIf="showTrnNo"
                                                                                 [(ngModel)]="
                                                                                     voucherFormData.account
-                                                                                        .billingDetails.gstNumber
+                                                                                        .billingDetails.taxNumber
                                                                                 "
                                                                                 (change)="
                                                                                     getStateCode(
@@ -416,7 +417,10 @@
                                                                             >
                                                                                 {{ localeData?.change }}</a
                                                                             >
-                                                                            <mat-menu #shippingAddressMenu="matMenu">
+                                                                            <mat-menu
+                                                                                #shippingAddressMenu="matMenu"
+                                                                                class="change-address-mat-menu"
+                                                                            >
                                                                                 <button
                                                                                     mat-menu-item
                                                                                     *ngFor="
@@ -429,7 +433,8 @@
                                                                                             selectAddress(
                                                                                                 voucherFormData.account
                                                                                                     .shippingDetails,
-                                                                                                address
+                                                                                                address,
+                                                                                                false
                                                                                             )
                                                                                         "
                                                                                     >
@@ -555,14 +560,14 @@
                                                                                     autocomplete="None"
                                                                                     [maxlength]="15"
                                                                                     type="text"
-                                                                                    name="shippingdetails-gstnumber"
+                                                                                    name="shippingdetails-taxnumber"
                                                                                     *ngIf="showGstinNo"
                                                                                     [cssClass]="
                                                                                         'form-control input-custom'
                                                                                     "
                                                                                     [(ngModel)]="
                                                                                         voucherFormData.account
-                                                                                            .shippingDetails.gstNumber
+                                                                                            .shippingDetails.taxNumber
                                                                                     "
                                                                                     (change)="
                                                                                         getStateCode(
@@ -579,14 +584,14 @@
                                                                                     [maxlength]="15"
                                                                                     autocomplete="None"
                                                                                     type="text"
-                                                                                    name="shippingdetails-gstnumber"
+                                                                                    name="shippingdetails-taxnumber"
                                                                                     [cssClass]="
                                                                                         'form-control input-custom'
                                                                                     "
                                                                                     *ngIf="showTrnNo"
                                                                                     [(ngModel)]="
                                                                                         voucherFormData.account
-                                                                                            .shippingDetails.gstNumber
+                                                                                            .shippingDetails.taxNumber
                                                                                     "
                                                                                     (change)="
                                                                                         getStateCode(
@@ -844,7 +849,7 @@
                                                             appearance="fill"
                                                             class="mat-field-select width-100"
                                                             [ngClass]="{
-                                                                'error-box':
+                                                                'error-box border-radius-5':
                                                                     !isValidForm &&
                                                                     !voucherFormData.entries[0].transactions[0].account
                                                                         .uniqueName
@@ -860,7 +865,6 @@
                                                             >
                                                             <input
                                                                 type="text"
-                                                                [placeholder]="commonLocaleData?.app_select"
                                                                 name="receipt-mode"
                                                                 class="no-border pd-l1"
                                                                 matInput
