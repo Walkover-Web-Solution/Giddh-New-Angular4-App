@@ -243,16 +243,6 @@
                                                                                     only-bottom-border
                                                                                 "
                                                                             >
-                                                                                <mat-label
-                                                                                    *ngIf="
-                                                                                        !voucherFormData.account
-                                                                                            .billingDetails.state.code
-                                                                                    "
-                                                                                >
-                                                                                    {{
-                                                                                        commonLocaleData?.app_state
-                                                                                    }}</mat-label
-                                                                                >
                                                                                 <input
                                                                                     type="text"
                                                                                     [placeholder]="
@@ -498,17 +488,6 @@
                                                                                         only-bottom-border
                                                                                     "
                                                                                 >
-                                                                                    <mat-label
-                                                                                        *ngIf="
-                                                                                            !voucherFormData.account
-                                                                                                .shippingDetails.state
-                                                                                                .code
-                                                                                        "
-                                                                                    >
-                                                                                        {{
-                                                                                            commonLocaleData?.app_state
-                                                                                        }}</mat-label
-                                                                                    >
                                                                                     <input
                                                                                         type="text"
                                                                                         [placeholder]="
@@ -855,17 +834,10 @@
                                                                         .uniqueName
                                                             }"
                                                         >
-                                                            <mat-label
-                                                                *ngIf="
-                                                                    !voucherFormData.entries[0].transactions[0].account
-                                                                        .uniqueName
-                                                                "
-                                                            >
-                                                                {{ commonLocaleData?.app_select }}</mat-label
-                                                            >
                                                             <input
                                                                 type="text"
                                                                 name="receipt-mode"
+                                                                [placeholder]="commonLocaleData?.app_select"
                                                                 class="no-border pd-l1"
                                                                 matInput
                                                                 [formControl]="searchBankAccount"
