@@ -69,6 +69,14 @@ const TABLE2_ELEMENT_DATA: table2[] = [
     { triggers: 'Dues', type: 'Voice', content: 'Hello user, Welcome to Giddh. Please setup your account by providing your company details', text: '',icon: 'copy.svg', button: 'Activate' },
 ];
 
+const TABLE3_ELEMENT_DATA: table2[] = [
+    { triggers: 'On-Board', type: 'Email', content: 'Hello user, Welcome to Giddh. Please setup your account by providing your company details', text: '',icon: 'copy.svg', button: 'Activate' },
+    { triggers: 'Invoice Generation', type: 'SMS', content: 'Hello user, Welcome to Giddh. Please setup your account by providing your company details', text: '', icon: 'copy.svg', button: 'Activate' },
+    { triggers: 'Dues', type: 'Voice', content: 'Hello user, Welcome to Giddh. Please setup your account by providing your company details', text: '',icon: 'copy.svg', button: 'Activate' },
+    { triggers: 'Dues', type: 'Voice', content: 'Hello user, Welcome to Giddh. Please setup your account by providing your company details', text: '',icon: 'copy.svg', button: 'Activate' },
+    { triggers: 'Dues', type: 'Voice', content: 'Hello user, Welcome to Giddh. Please setup your account by providing your company details', text: '',icon: 'copy.svg', button: 'Activate' },
+];
+
 @Component({
     selector: 'setting-integration',
     templateUrl: './setting.integration.component.html',
@@ -81,6 +89,9 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
 
     displayedtable2Columns: string[] = ['triggers', 'type', 'content', 'icon', 'button'];
     table2 = TABLE2_ELEMENT_DATA;
+
+    displayedtable3Columns: string[] = ['triggers', 'type', 'content', 'button'];
+    table3 = TABLE3_ELEMENT_DATA;
 
     public auth2: any;
     public smsFormObj: SmsKeyClass = new SmsKeyClass();
