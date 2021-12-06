@@ -10218,6 +10218,33 @@ input[type="checkbox"].cdk-visually-hidden::after {
     border: none !important;
 }
 
+.billing-wrapper {
+    .mat-form-field-wrapper {
+        padding-bottom: 0 !important;
+    }
+
+    .mat-form-field-appearance-fill .mat-form-field-flex {
+        padding: 0 !important;
+    }
+
+    .mat-form-field-appearance-fill .mat-form-field-infix {
+        padding: 0 !important;
+    }
+    .form-group {
+        float: left;
+        width: 93%;
+        margin-bottom: 5px;
+    }
+}
+.back-btn {
+    .btn-default {
+        color: black !important;
+    }
+    .btn-default:hover {
+        color: black !important;
+        border-color: #e2e2ee !important;
+    }
+}
 /** Skelton Effects  **/
 
 .skelton-common-class {
