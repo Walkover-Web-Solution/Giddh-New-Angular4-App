@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, ElementRef, Input, OnChanges, OnDestroy, OnInit, Optional, Self } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input, OnChanges, OnDestroy, OnInit, Optional, Self, SimpleChanges } from "@angular/core";
 import { ControlValueAccessor, NgControl } from "@angular/forms";
 import { MatFormFieldControl } from "@angular/material/form-field";
 import { Subject } from "rxjs";
@@ -12,7 +12,8 @@ const noop = () => { };
     providers: [
         {
             provide: MatFormFieldControl,
-            useExisting: TextFieldComponent
+            useExisting: TextFieldComponent,
+            multi: true
         }
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -25,8 +26,10 @@ export class TextFieldComponent implements OnInit, OnChanges, OnDestroy, Control
     @Input() public name: any = "";
     /** Taking id as input */
     @Input() public id: any = "";
-    /** True if we need input field with matInput directive */
-    @Input() public useMaterial: boolean = false;
+    @Input() public maxlength: number;
+    @Input() public readonly: boolean;
+    @Input() public type: string = "text";
+    @Input() public showError: boolean = false;
     /** ngModel of input */
     public ngModel: any;
     /** Used for change detection */
@@ -37,7 +40,8 @@ export class TextFieldComponent implements OnInit, OnChanges, OnDestroy, Control
 
     constructor(
         @Optional() @Self() public ngControl: NgControl,
-        private elementRef: ElementRef<HTMLElement>
+        private elementRef: ElementRef<HTMLElement>,
+        private changeDetectionRef: ChangeDetectorRef
     ) {
         if (this.ngControl != null) {
             this.ngControl.valueAccessor = this;
@@ -58,8 +62,8 @@ export class TextFieldComponent implements OnInit, OnChanges, OnDestroy, Control
      *
      * @memberof TextFieldComponent
      */
-    public ngOnChanges(): void {
-
+    public ngOnChanges(changes: SimpleChanges): void {
+        
     }
 
     /**
@@ -110,6 +114,7 @@ export class TextFieldComponent implements OnInit, OnChanges, OnDestroy, Control
      */
     public writeValue(value: any): void {
         this.value = value;
+        this.changeDetectionRef.detectChanges();
     }
 
     /**

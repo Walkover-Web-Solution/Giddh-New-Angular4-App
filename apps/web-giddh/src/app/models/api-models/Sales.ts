@@ -17,7 +17,8 @@ export enum VoucherTypeEnum {
     'estimate' = 'estimate',
     'generateEstimate' = 'estimates',
     'cash' = 'cash',
-    'receipt' = 'receipt'
+    'receipt' = 'receipt',
+    'payment' = 'payment'
 }
 
 export enum ActionTypeAfterVoucherGenerateOrUpdate {
@@ -113,6 +114,7 @@ export class GstDetailsClass {
     public stateCode?: string;
     public stateName?: string;
     public pincode?: string;
+    public taxNumber?: string;
 
     constructor() {
         this.address = [];
@@ -176,6 +178,7 @@ export class AccountDetailsClass {
                     : attrs.addresses[0].stateCode;
                 this.billingDetails.state.name = attrs.addresses[0].stateName;
                 this.billingDetails.gstNumber = attrs.addresses[0].gstNumber;
+                this.billingDetails.taxNumber = attrs.addresses[0].gstNumber;
                 this.billingDetails.pincode = attrs.addresses[0].pincode;
                 this.billingDetails.panNumber = '';
                 // set shipping
@@ -186,6 +189,7 @@ export class AccountDetailsClass {
                     : attrs.addresses[0].stateCode;
                 this.shippingDetails.state.name = attrs.addresses[0].stateName;
                 this.shippingDetails.gstNumber = attrs.addresses[0].gstNumber;
+                this.shippingDetails.taxNumber = attrs.addresses[0].gstNumber;
                 this.shippingDetails.pincode = attrs.addresses[0].pincode;
                 this.shippingDetails.panNumber = '';
             }
@@ -683,5 +687,62 @@ export class DiscountMulticurrency {
         this.discountValue = ledgerDiscountClass.discountValue;
         this.name = ledgerDiscountClass.name;
         this.particular = ledgerDiscountClass.particular;
+    }
+}
+
+export class PaymentReceiptTransaction {
+    account: PaymentReceiptAccount;
+    amount: PaymentReceiptAmount;
+
+    constructor() {
+        this.account = new PaymentReceiptAccount();
+        this.amount = new PaymentReceiptAmount();
+    }
+}
+
+export class PaymentReceiptAccount {
+    uniqueName: string;
+    name: string;
+
+    constructor() {
+        this.uniqueName = "";
+        this.name = "";
+    }
+}
+
+export class PaymentReceiptAmount {
+    amountForAccount: number;
+}
+
+export class PaymentReceiptEntry {
+    transactions: PaymentReceiptTransaction[];
+    date: any;
+    chequeNumber: string;
+    chequeClearanceDate: any;
+    taxes: TaxControlData[] = [];
+
+    constructor() {
+        this.transactions = [new PaymentReceiptTransaction()];
+        this.taxes = [];
+    }
+}
+
+export class PaymentReceipt {
+    account: AccountDetailsClass;
+    updateAccountDetails: boolean;
+    entries: PaymentReceiptEntry[];
+    date: any;
+    type: string;
+    exchangeRate: number;
+    attachedFiles: any[];
+    subVoucher: any;
+    uniqueName?: any;
+    templateDetails?: TemplateDetailsClass;
+
+    constructor() {
+        this.account = new AccountDetailsClass();
+        this.entries = [new PaymentReceiptEntry()];
+        this.templateDetails = new TemplateDetailsClass();
+        this.date = "";
     }
 }

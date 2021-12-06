@@ -115,6 +115,12 @@
                     "link": "/pages/contact/vendor",
                     "icon": "icon-vendor",
                     "description": "बल्क एसएमएस / ईमेल पाठवा, स्मरणपत्रे सेट करा"
+                },
+                {
+                    "label": "फेड",
+                    "link": "/pages/reports/payment",
+                    "icon": "icon-reciept-new",
+                    "description": "एकूण, आणि न वापरलेली देयके"
                 }
             ]
         },
