@@ -140,7 +140,7 @@
                 </div> -->
 
                 <!-- Page-6 to Page-9 -->
-                <div class="trigger-form">
+                <!-- <div class="trigger-form">
                     <div class="trigger-form-left-side">
                         <div class="create-trigger-head">
                             <img class="return" src="{{ imgPath }}return.svg" alt="" />
@@ -249,13 +249,17 @@
                             <button mat-flat-button color="primary" class="preview-button">Send Me Preview Mail</button>
                         </div>
                     </div>
-                </div>
+                </div> -->
 
                 <!-- Page 10 -->
-                <!-- <div class="msg91-container">
+                <div class="msg91-container">
                     <div class="menu">
-                        <button mat-icon-button disableRipple [matMenuTriggerFor]="beforeMenu"
-                            aria-label="Example icon-button with a menu">
+                        <button
+                            mat-icon-button
+                            disableRipple
+                            [matMenuTriggerFor]="beforeMenu"
+                            aria-label="Example icon-button with a menu"
+                        >
                             <mat-icon>more_vert</mat-icon>
                         </button>
                         <mat-menu #beforeMenu="matMenu" xPosition="before">
@@ -266,106 +270,118 @@
                     </div>
 
                     <div class="image">
-                        <img src="{{ imgPath }}msgOne-color.png" class="logo" alt="">
-                        <img src="{{ imgPath }}msgTwo-color.png" class="msg" alt="">
+                        <img src="{{ imgPath }}msgOne-color.png" class="logo" alt="" />
+                        <img src="{{ imgPath }}msgTwo-color.png" class="msg" alt="" />
                     </div>
                     <div class="integrate mini-icons">
-                        <img src="{{ imgPath }}Bmsg.PNG" alt="">
-                        <img src="{{ imgPath }}p.PNG" alt="">
-                        <img src="{{ imgPath }}wApp.PNG" alt="">
-                        <img src="{{ imgPath }}msg.PNG" alt="">
-                        <img src="{{ imgPath }}9109.PNG" alt="">
-                        <img src="{{ imgPath }}say.PNG" alt="">
+                        <img src="{{ imgPath }}Bmsg.PNG" alt="" />
+                        <img src="{{ imgPath }}p.PNG" alt="" />
+                        <img src="{{ imgPath }}wApp.PNG" alt="" />
+                        <img src="{{ imgPath }}msg.PNG" alt="" />
+                        <img src="{{ imgPath }}9109.PNG" alt="" />
+                        <img src="{{ imgPath }}say.PNG" alt="" />
                     </div>
                 </div>
 
                 <button class="new-trigger" mat-flat-button color="primary">+ Create New Trigger</button>
 
                 <div class="table-one">
-
                     <table mat-table [dataSource]="table1" class="mat-elevation-z8">
-
                         <ng-container matColumnDef="activeTriggers">
-                            <th class="activeTriggers-width" mat-header-cell *matHeaderCellDef> <img class="active-trigger-search" src="{{imgPath}}active-trigger-search.svg" alt=""> Active Triggers </th>
-                            <td mat-cell *matCellDef="let element"> {{element.activeTriggers}} </td>
+                            <th class="activeTriggers-width" mat-header-cell *matHeaderCellDef>
+                                <img
+                                    class="active-trigger-search"
+                                    src="{{ imgPath }}active-trigger-search.svg"
+                                    alt=""
+                                />
+                                Active Triggers
+                            </th>
+                            <td mat-cell *matCellDef="let element">{{ element.activeTriggers }}</td>
                         </ng-container>
-    
+
                         <ng-container matColumnDef="type">
-                            <th class="type-width" mat-header-cell *matHeaderCellDef> Type </th>
-                            <td mat-cell *matCellDef="let element"> {{element.type}} </td>
+                            <th class="type-width" mat-header-cell *matHeaderCellDef>Type</th>
+                            <td mat-cell *matCellDef="let element">{{ element.type }}</td>
                         </ng-container>
-    
+
                         <ng-container matColumnDef="content">
-                            <th class="content-width" mat-header-cell *matHeaderCellDef> Content </th>
-                            <td class="smaller-font" mat-cell *matCellDef="let element"> {{element.content}} </td>
+                            <th class="content-width" mat-header-cell *matHeaderCellDef>Content</th>
+                            <td class="smaller-font" mat-cell *matCellDef="let element">{{ element.content }}</td>
                         </ng-container>
-    
+
                         <ng-container matColumnDef="createdOn">
-                            <th class="createdOn-width" mat-header-cell *matHeaderCellDef> Created On </th>
-                            <td class="smaller-font" mat-cell *matCellDef="let element"> {{element.createdOn}} </td>
+                            <th class="createdOn-width" mat-header-cell *matHeaderCellDef>Created On</th>
+                            <td class="smaller-font" mat-cell *matCellDef="let element">{{ element.createdOn }}</td>
                         </ng-container>
 
                         <ng-container matColumnDef="copy">
-                            <th class="icons-left" mat-header-cell *matHeaderCellDef> </th>
-                            <td mat-cell *matCellDef="let element"> <img class="icon-hideShow" src="{{imgPath}}{{element.copy}}" alt=""> </td>
+                            <th class="icons-left" mat-header-cell *matHeaderCellDef></th>
+                            <td mat-cell *matCellDef="let element">
+                                <img class="icon-hideShow" src="{{ imgPath }}{{ element.copy }}" alt="" />
+                            </td>
                         </ng-container>
 
                         <ng-container matColumnDef="edit">
-                            <th class="icons-left" mat-header-cell *matHeaderCellDef> </th>
-                            <td mat-cell *matCellDef="let element"> <img class="icon-hideShow" src="{{imgPath}}{{element.edit}}" alt=""> </td>
+                            <th class="icons-left" mat-header-cell *matHeaderCellDef></th>
+                            <td mat-cell *matCellDef="let element">
+                                <img class="icon-hideShow" src="{{ imgPath }}{{ element.edit }}" alt="" />
+                            </td>
                         </ng-container>
 
                         <ng-container matColumnDef="delete">
-                            <th class="icons-right" mat-header-cell *matHeaderCellDef> </th>
-                            <td mat-cell *matCellDef="let element"> <img class="icon-hideShow" src="{{imgPath}}{{element.delete}}" alt=""> </td>
+                            <th class="icons-right" mat-header-cell *matHeaderCellDef></th>
+                            <td mat-cell *matCellDef="let element">
+                                <img class="icon-hideShow" src="{{ imgPath }}{{ element.delete }}" alt="" />
+                            </td>
                         </ng-container>
-    
-                        <tr mat-header-row *matHeaderRowDef="displayedtable1Columns"></tr>
-                        <tr mat-row *matRowDef="let row; columns: displayedtable1Columns;"></tr>
-                    </table>
 
+                        <tr mat-header-row *matHeaderRowDef="displayedtable1Columns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedtable1Columns"></tr>
+                    </table>
                 </div>
 
                 <div class="main-content">
                     <p>Giddh Suggested Trigger</p>
 
                     <table mat-table [dataSource]="table2" class="mat-elevation-z8">
-
                         <ng-container matColumnDef="triggers">
-                            <th mat-header-cell *matHeaderCellDef> Triggers </th>
-                            <td class="triggers-content" mat-cell *matCellDef="let element"> {{element.triggers}} </td>
+                            <th mat-header-cell *matHeaderCellDef>Triggers</th>
+                            <td class="triggers-content" mat-cell *matCellDef="let element">{{ element.triggers }}</td>
                         </ng-container>
 
                         <ng-container matColumnDef="type">
-                            <th class="type-column" mat-header-cell *matHeaderCellDef> Type </th>
-                            <td mat-cell *matCellDef="let element"> {{element.type}} </td>
+                            <th class="type-column" mat-header-cell *matHeaderCellDef>Type</th>
+                            <td mat-cell *matCellDef="let element">{{ element.type }}</td>
                         </ng-container>
 
                         <ng-container matColumnDef="content">
-                            <th mat-header-cell *matHeaderCellDef> content </th>
-                            <td class="content-text" mat-cell *matCellDef="let element"> {{element.content}} </td>
+                            <th mat-header-cell *matHeaderCellDef>content</th>
+                            <td class="content-text" mat-cell *matCellDef="let element">{{ element.content }}</td>
                         </ng-container>
 
                         <ng-container matColumnDef="text">
-                            <th class="number-container" mat-header-cell *matHeaderCellDef>  </th>
-                            <td class="number-container" mat-cell *matCellDef="let element"> {{element.text}} </td>
+                            <th class="number-container" mat-header-cell *matHeaderCellDef></th>
+                            <td class="number-container" mat-cell *matCellDef="let element">{{ element.text }}</td>
                         </ng-container>
 
                         <ng-container matColumnDef="icon">
-                            <th mat-header-cell *matHeaderCellDef> </th>
-                            <td class="icon-container" mat-cell *matCellDef="let element"><img class="hideShow" src="{{imgPath}}{{element.icon}}" alt=""> </td>
+                            <th mat-header-cell *matHeaderCellDef></th>
+                            <td class="icon-container" mat-cell *matCellDef="let element">
+                                <img class="hide" src="{{ imgPath }}{{ element.icon }}" alt="" />
+                            </td>
                         </ng-container>
 
                         <ng-container matColumnDef="button">
-                            <th mat-header-cell *matHeaderCellDef> </th>
-                            <td mat-cell *matCellDef="let element"> <button class="hideShow" mat-flat-button color="primary">{{element.button}}</button> </td>
+                            <th mat-header-cell *matHeaderCellDef></th>
+                            <td mat-cell *matCellDef="let element">
+                                <button class="hideShow" mat-flat-button color="primary">{{ element.button }}</button>
+                            </td>
                         </ng-container>
 
                         <tr mat-header-row *matHeaderRowDef="displayedtable2Columns"></tr>
-                        <tr mat-row *matRowDef="let row; columns: displayedtable2Columns;"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedtable2Columns"></tr>
                     </table>
-
-                </div> -->
+                </div>
             </mat-tab>
 
             <mat-tab label="Email" (selectTab)="loadEmailData($event); tabChanged('email')">
