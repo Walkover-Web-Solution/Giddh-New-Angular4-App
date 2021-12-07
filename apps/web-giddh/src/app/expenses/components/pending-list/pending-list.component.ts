@@ -141,26 +141,27 @@ export class PendingListComponent implements OnInit, OnChanges {
     /**
      * Hides approve confirm dialog
      *
-     * @param {boolean} isApproved
+     * @param {*} event
      * @memberof PendingListComponent
      */
-    public hideApproveConfirmPopup(isApproved: boolean): void {
-        if (!isApproved) {
+    public hideApproveConfirmPopup(event: any): void {
+        if (typeof event === "boolean") {
             this.approveEntryModalRef.close();
             this.selectedEntryForApprove = null;
         } else {
-            this.approveEntry();
+            this.approveEntry(event);
         }
     }
 
     /**
      * Approves the entry
      *
+     * @param {*} event
      * @returns
      * @memberof PendingListComponent
      */
-    public async approveEntry() {
-        if (!this.selectedEntryForApprove.baseAccount.uniqueName) {
+    public async approveEntry(event: any) {
+        if (!event?.baseAccount.uniqueName) {
             this.toaster.showSnackBar("error", this.localeData?.approve_entry_error);
             this.hideApproveConfirmPopup(false);
             return;
@@ -170,11 +171,11 @@ export class PendingListComponent implements OnInit, OnChanges {
         let ledgerRequest;
         let actionType: ActionPettycashRequest = {
             actionType: 'approve',
-            uniqueName: this.selectedEntryForApprove.uniqueName,
-            accountUniqueName: this.selectedEntryForApprove.baseAccount.uniqueName
+            uniqueName: event.uniqueName,
+            accountUniqueName: event.baseAccount.uniqueName
         };
         try {
-            ledgerRequest = await this.expenseService.getPettycashEntry(this.selectedEntryForApprove.uniqueName).toPromise();
+            ledgerRequest = await this.expenseService.getPettycashEntry(event.uniqueName).toPromise();
         } catch (e) {
             this.approveEntryRequestInProcess = false;
             this.toaster.showSnackBar("error", e);
@@ -371,7 +372,7 @@ export class PendingListComponent implements OnInit, OnChanges {
      * @param {ExpenseResults} item
      * @memberof PendingListComponent
      */
-     public showRejectConfirmPopup(ref: TemplateRef<any>, item: ExpenseResults): void {
+    public showRejectConfirmPopup(ref: TemplateRef<any>, item: ExpenseResults): void {
         this.selectedEntryForApprove = item;
         this.approveEntryModalRef = this.dialog.open(ref, {
             width: '500px',
@@ -388,7 +389,7 @@ export class PendingListComponent implements OnInit, OnChanges {
     public hideRejectConfirmPopup(isRejected: boolean): void {
         this.approveEntryModalRef.close();
 
-        if(isRejected) {
+        if (isRejected) {
             this.getPettyCashPendingReports(this.pettycashRequest);
             this.getPettyCashRejectedReports(this.pettycashRequest);
         }
@@ -400,7 +401,7 @@ export class PendingListComponent implements OnInit, OnChanges {
      * @param {CommonPaginatedRequest} salesDetailedfilter
      * @memberof RejectedListComponent
      */
-     public getPettyCashRejectedReports(salesDetailedfilter: CommonPaginatedRequest): void {
+    public getPettyCashRejectedReports(salesDetailedfilter: CommonPaginatedRequest): void {
         salesDetailedfilter.status = 'rejected';
         salesDetailedfilter.sort = this.pettycashRequest.sort;
         salesDetailedfilter.sortBy = this.pettycashRequest.sortBy;
