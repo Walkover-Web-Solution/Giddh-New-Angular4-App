@@ -21,7 +21,7 @@ export class ApprovePettyCashEntryConfirmDialogComponent implements OnInit {
     @Input() public pettyCashEntry: any = null;
     /** This holds Entry against object */
     @Input() public entryAgainstObject: any = null;
-    @Output() approveEntry: EventEmitter<boolean> = new EventEmitter<boolean>();
+    @Output() approveEntry: EventEmitter<any> = new EventEmitter<any>();
     /** This will hold creator name */
     public byCreator: string = '';
     /** Entry type */
@@ -99,7 +99,7 @@ export class ApprovePettyCashEntryConfirmDialogComponent implements OnInit {
      */
     public ngOnInit(): void {
         if (this.showCategoryOption) {
-            if(this.selectedEntryForApprove?.baseAccount?.uniqueName) {
+            if (this.selectedEntryForApprove?.baseAccount?.uniqueName) {
                 this.selectedEntryForApprove.particular = this.selectedEntryForApprove.baseAccount;
             }
             this.prepareEntryAgainstObject(this.selectedEntryForApprove);
@@ -563,6 +563,12 @@ export class ApprovePettyCashEntryConfirmDialogComponent implements OnInit {
             this.showEntryAgainstRequired = true;
             return;
         }
-        this.approveEntry.emit(true);
+        if (this.showCategoryOption) {
+            this.selectedEntryForApprove.baseAccount.name = this.pettyCashEntry.particular.name;
+            this.selectedEntryForApprove.baseAccount.uniqueName = this.pettyCashEntry.particular.uniqueName;
+            this.approveEntry.emit(this.selectedEntryForApprove);
+        } else {
+            this.approveEntry.emit(true);
+        }
     }
 }
