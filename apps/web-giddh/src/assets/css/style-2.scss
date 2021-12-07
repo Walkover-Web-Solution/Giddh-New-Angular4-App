@@ -10244,6 +10244,10 @@ input[type="checkbox"].cdk-visually-hidden::after {
         color: black !important;
         border-color: #e2e2ee !important;
     }
+    .btn-default:not(:disabled):not(.disabled):active {
+        color: black;
+        border-color: none !important;
+    }
 }
 /** Skelton Effects  **/
 
