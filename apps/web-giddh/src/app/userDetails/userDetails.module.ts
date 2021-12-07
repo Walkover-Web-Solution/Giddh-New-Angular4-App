@@ -37,6 +37,8 @@ import { MatTableModule } from '@angular/material/table';
 import { MatDialogModule } from '@angular/material/dialog';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { SubscriptionPlansComponent } from './components/subscription-plans/subscription-plans.component';
+import { AddOnsComponent } from './components/add-ons/add-ons.component';
+import {MatSliderModule} from '@angular/material/slider';
 
 
 
@@ -57,7 +59,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         MoveCompanyComponent,
         AllFeaturesComponent,
         AddCompanyComponent,
-        SubscriptionComponent
+        SubscriptionComponent,
+        AddOnsComponent
     ],
     exports: [],
     imports: [
@@ -88,7 +91,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         MatDividerModule,
         MatTableModule,
         MatDialogModule,
-        ShSelectModule
+        ShSelectModule,
+        MatSliderModule
     ],
     providers: [
         {
