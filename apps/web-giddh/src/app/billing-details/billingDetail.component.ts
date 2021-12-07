@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { GeneralService } from '../services/general.service';
 import { BillingDetails, CompanyCreateRequest, CreateCompanyUsersPlan, States, StatesRequest, SubscriptionRequest } from '../models/api-models/Company';
@@ -8,9 +8,9 @@ import { select, Store } from '@ngrx/store';
 import { AppState } from '../store';
 import { ToasterService } from '../services/toaster.service';
 import { ShSelectComponent } from '../theme/ng-virtual-select/sh-select.component';
-import { take, takeUntil } from 'rxjs/operators';
+import { map, startWith, take, takeUntil } from 'rxjs/operators';
 import { Router } from '@angular/router';
-import { NgForm } from '@angular/forms';
+import { FormControl, NgForm } from '@angular/forms';
 import { CompanyService } from '../services/companyService.service';
 import { GeneralActions } from '../actions/general/general.actions';
 import { CompanyActions } from '../actions/company.actions';
@@ -21,6 +21,7 @@ import { parsePhoneNumberFromString, CountryCode } from 'libphonenumber-js/min';
 import { environment } from '../../environments/environment.prod';
 import { SettingsProfileService } from '../services/settings.profile.service';
 import { EMAIL_VALIDATION_REGEX } from '../app.constant';
+import { cloneDeep, orderBy } from '../lodash-optimized';
 
 @Component({
     selector: 'billing-details',
@@ -78,12 +79,17 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
 
     /** Form instance */
     @ViewChild('billingForm', { static: true }) billingForm: NgForm;
-
     private activeCompany;
     /* This will hold local JSON data */
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** control for the MatSelect filter keyword */
+    public searchBillingStates: FormControl = new FormControl();
+    /** Billing States list */
+    public filteredBillingStates: IOption[] = [];
+    /** Billing state instance */
+    @ViewChild('billingState', { static: true }) billingState: ElementRef;
 
     constructor(private store: Store<AppState>, private generalService: GeneralService, private toasty: ToasterService, private route: Router, private companyService: CompanyService, private generalActions: GeneralActions, private companyActions: CompanyActions, private cdRef: ChangeDetectorRef,
         private settingsProfileActions: SettingsProfileActions, private commonActions: CommonActions, private settingsProfileService: SettingsProfileService) {
@@ -93,6 +99,12 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     public ngOnInit() {
+
+        this.searchBillingStates.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(search => {
+            this.filterStates(search, true);
+        });
+
+
         this.store.dispatch(this.settingsProfileActions.resetPatchProfile());
         this.getCurrentCompanyData();
 
@@ -421,7 +433,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
                         }
                     }
                 });
-
+                this.filteredBillingStates = cloneDeep(res.stateList);
                 this.statesSource$ = observableOf(this.states);
             } else {
                 // initialize new StatesRequest();
@@ -502,5 +514,28 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
         let text = this.localeData?.hello_user;
         text = text?.replace("[USER]", this.logedInuser?.name);
         return text;
+    }
+    
+    /**
+     *
+     *This will filter states
+     * @private
+     * @param {*} search
+     * @param {boolean} [isBillingStates=true]
+     * @memberof BillingDetailComponent
+     */
+    private filterStates(search: any, isBillingStates: boolean = true): void {
+
+    }
+
+    /**
+     *This will show label value in the search field
+     *
+     * @param {*} option
+     * @return {*}  {string}
+     * @memberof BillingDetailComponent
+     */
+    public displayLabel(option: any): string {
+        return option?.code + " - " + option?.name;
     }
 }
