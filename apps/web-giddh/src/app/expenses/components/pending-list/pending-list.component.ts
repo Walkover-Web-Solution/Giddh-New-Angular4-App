@@ -187,11 +187,11 @@ export class PendingListComponent implements OnInit, OnChanges {
             this.approveEntryRequestInProcess = false;
             if (res.status === 'success') {
                 this.toaster.showSnackBar("success", res.body);
-                // if entry approved successfully then re get all entries with already sated filter params
-                this.getPettyCashPendingReports(this.pettycashRequest);
             } else {
                 this.toaster.showSnackBar("error", res.message);
             }
+            this.selectedEntryForApprove = null;
+            this.getPettyCashPendingReports(this.pettycashRequest);
             this.hideApproveConfirmPopup(false);
         });
     }
