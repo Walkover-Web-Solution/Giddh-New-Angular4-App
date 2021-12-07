@@ -33,7 +33,7 @@
         <div class="billing-details">
             <h3 class="billing-name">{{ localeData?.billing_details }}</h3>
             <div class="row">
-                <div class="col-sm-3 col-xs-12">
+                <div class="col-sm-3 col-xs-12 left-side">
                     <div class="billing-wrapper">
                         <form name="form" #billingForm="ngForm" novalidate="" autocomplete="off">
                             <div class="form-group">
@@ -104,21 +104,40 @@
                                     name="stateCode"
                                 >
                                 </sh-select>
-                                <!-- <mat-form-field class="example-full-width" appearance="fill">
-                                    <label>{{ commonLocaleData?.app_state }} <span class="red-text">*</span></label>
+                                <mat-form-field
+                                    appearance="fill"
+                                    class="mat-field-select width-100 only-bottom-border mat-input"
+                                >
+                                    <!-- <mat-label
+                                      *ngIf="
+                                          !voucherFormData.account
+                                              .billingDetails.state.code
+                                      "
+                                  >
+                                      {{
+                                          commonLocaleData?.app_state
+                                      }}</mat-label> -->
 
-                                    <input type="text"
-                                           placeholder="Pick one"
-                                           aria-label="Number"
-                                           matInput
-                                           [formControl]="myControl"
-                                           [matAutocomplete]="auto"> -->
-                                <!-- <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
-                                      <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
-                                        {{option}}
-                                      </mat-option>
-                                    </mat-autocomplete> -->
-                                <!-- </mat-form-field> -->
+                                    <input
+                                        type="text"
+                                        [placeholder]="commonLocaleData?.app_state"
+                                        name="billingdetails-statecode"
+                                        class="no-border pd-l1"
+                                        matInput
+                                        [formControl]="searchBillingStates"
+                                        [matAutocomplete]="billingStateAuto"
+                                        autocomplete="off"
+                                    />
+                                    <mat-autocomplete
+                                        #billingStateAuto="matAutocomplete"
+                                        [displayWith]="displayLabel"
+                                        (optionSelected)="fillShippingBillingDetails($event, true)"
+                                    >
+                                        <mat-option *ngFor="let state of filteredBillingStates" [value]="state"
+                                            >{{ state?.code }} - {{ state?.name }}
+                                        </mat-option>
+                                    </mat-autocomplete>
+                                </mat-form-field>
                             </div>
                             <!-- static pincode start -->
                             <!-- <div class="form-group">
@@ -135,7 +154,7 @@
                                         name="address"
                                         id="address"
                                         [(ngModel)]="billingDetailsObj.address"
-                                        [placeholder]="commonLocaleData?.app_address"
+                                        placeholder="Type your address"
                                         rows="5"
                                         cols="12"
                                         matInput
@@ -145,7 +164,7 @@
                         </form>
                     </div>
                 </div>
-                <div class="col-sm-3 col-xs-12">
+                <div class="col-sm-3 col-xs-12 right-side">
                     <div class="whole-renewal">
                         <div class="renewal-heading">
                             <h3 class="renwal-details">Renewal Plan Details</h3>
@@ -154,16 +173,16 @@
                             <mat-card class="renewal-card">
                                 <mat-card-subtitle class="renewal-card-subtitle"
                                     >{{ selectedPlans?.planDetails?.name }}
-                                    <span class="current-plan-details"> {{ localeData?.current_plan }} </span>
+                                    <!-- <span class="current-plan-details"> {{ localeData?.current_plan }} </span> -->
                                 </mat-card-subtitle>
                                 <mat-card-title class="renewal-card-title">
-                                    {{ selectedPlans?.planDetails?.amount | number }}
+                                    ₹{{ selectedPlans?.planDetails?.amount | number }}
                                     <span class="year"
                                         >/{{ selectedPlans?.planDetails?.duration }}
                                         {{ selectedPlans?.planDetails?.durationUnit }}(s)</span
                                     ></mat-card-title
                                 >
-                                <p class="renewal-off">₹15000 <span class="discount-off">20% off</span></p>
+                                <!-- <p class="renewal-off">₹15000 <span class="discount-off">20% off</span></p> -->
                                 <mat-card-content class="renewal-card-content">
                                     <ul class="renewal-list">
                                         <li class="features">
@@ -172,7 +191,7 @@
                                         <li class="features">
                                             {{ selectedPlans?.planDetails?.companiesLimit | number }} Companies
                                         </li>
-                                        <!-- <li class="features">10 hrs Muneem Consultant</li> -->
+                                        <!-- <li class="features">10 hrs<span class="hrs-underline"> Muneem Consultant</span></li> -->
                                         <li class="features">Unlimited Users</li>
                                         <li class="features">Unlimited Customers/Vendors</li>
                                         <li class="features">Desktop/Mobile App</li>
@@ -187,6 +206,7 @@
                                     (click)="autoRenewSelected($event)"
                                     id="autorenew"
                                     name="autorenew"
+                                    color="primary"
                                     [(ngModel)]="billingDetailsObj.autorenew"
                                 >
                                     {{ localeData?.renew_subscription }}</mat-checkbox
@@ -196,11 +216,17 @@
                         <div class="renewal-payable">
                             <h3 class="new-payable">Net payable amount</h3>
                             <h2 class="renwal-amount">
-                                ₹14,160 <span class="including-tax">Including Tax (18% GST)</span>
+                                ₹{{
+                                    selectedPlans?.planDetails?.amount + selectedPlans?.planDetails?.amount * 0.18
+                                        | number
+                                }}
+                                <span class="including-tax">Including Tax (18% GST)</span>
                             </h2>
                             <div class="form-group">
                                 <button
-                                    class="btn btn-secondary pay-now"
+                                    class="pay-now"
+                                    mat-button
+                                    color="primary"
                                     (click)="payWithRazor(billingForm)"
                                     [disabled]="billingForm.invalid || !isMobileNumberValid"
                                 >
@@ -213,8 +239,7 @@
             </div>
         </div>
     </div>
-
     <div *ngIf="isCreateAndSwitchCompanyInProcess || !localeData?.welcome_to_giddh">
-        <giddh-page-loader></giddh-page-loader>
+        <!-- <giddh-page-loader></giddh-page-loader> -->
     </div>
 </ng-container>
