@@ -9,10 +9,16 @@
         <mat-card-content>
             <giddh-page-loader *ngIf="showLoader"></giddh-page-loader>
             <div [ngStyle]="{ 'display': !showLoader ? 'block' : 'none' }">
+                <div class="page-heading-wrapper">
+                    <div class="inner-page-heading">{{ voucherFormData.type | titlecase }}</div>
+                    <div class="cross-icon-wrapper cp" *ngIf="isUpdateMode" (click)="cancelUpdate()">
+                        <img src="{{ imgPath }}multiply.svg" />
+                    </div>
+                </div>
                 <form autocomplete="off" novalidate class="receipt-form" #receiptForm="ngForm">
                     <div class="clearfix">
                         <div
-                            class="clearfix pd-t15"
+                            class="clearfix"
                             [ngClass]="{ 'wrapper-receipt-fields': !voucherFormData.account.uniqueName }"
                         >
                             <div class="inner-container">
@@ -185,8 +191,7 @@
                                                                                             selectAddress(
                                                                                                 voucherFormData.account
                                                                                                     .billingDetails,
-                                                                                                address,
-                                                                                                true
+                                                                                                address
                                                                                             )
                                                                                         "
                                                                                     >
@@ -215,7 +220,6 @@
                                                                         matInput
                                                                         name="billingdetails-address"
                                                                         class="form-control"
-                                                                        (keyup)="autoFillShippingDetails()"
                                                                         rows="3"
                                                                         autocomplete="off"
                                                                         [(ngModel)]="
@@ -264,11 +268,7 @@
                                                                                     #billingStateAuto="matAutocomplete"
                                                                                     [displayWith]="displayLabel"
                                                                                     (optionSelected)="
-                                                                                        fillShippingBillingDetails(
-                                                                                            $event,
-                                                                                            true
-                                                                                        );
-                                                                                        autoFillShippingDetails()
+                                                                                        fillBillingDetails($event)
                                                                                     "
                                                                                 >
                                                                                     <mat-option
@@ -300,8 +300,7 @@
                                                                                     getStateCode(
                                                                                         'billingDetails',
                                                                                         statesBilling
-                                                                                    );
-                                                                                    autoFillShippingDetails()
+                                                                                    )
                                                                                 "
                                                                                 [placeholder]="
                                                                                     commonLocaleData?.app_gstin
@@ -323,8 +322,7 @@
                                                                                     getStateCode(
                                                                                         'billingDetails',
                                                                                         statesBilling
-                                                                                    );
-                                                                                    autoFillShippingDetails()
+                                                                                    )
                                                                                 "
                                                                                 [placeholder]="
                                                                                     commonLocaleData?.app_trn
@@ -350,7 +348,6 @@
                                                                                     "
                                                                                     autocomplete="false"
                                                                                     name="billing-pincode"
-                                                                                    (blur)="autoFillShippingDetails()"
                                                                                     [placeholder]="
                                                                                         commonLocaleData?.app_pin_code
                                                                                     "
@@ -370,257 +367,6 @@
                                                             </div>
                                                         </div>
                                                         <!-- endregion -->
-
-                                                        <!-- region shipping address -->
-                                                        <div class="col-sm-12 col-xl-6 col-md-10 bill-add">
-                                                            <div class="form-group p-0 width-100">
-                                                                <div class="d-flex align-items-center pb-1">
-                                                                    <span class="pb-0 pd-r15">
-                                                                        <mat-checkbox
-                                                                            color="primary"
-                                                                            (change)="autoFillShippingDetails()"
-                                                                            name="autofill-shipping"
-                                                                            [(ngModel)]="autoFillShipping"
-                                                                        >
-                                                                            {{ localeData?.shipping_billing_same }}
-                                                                        </mat-checkbox>
-                                                                    </span>
-                                                                    <span>
-                                                                        <div
-                                                                            class="
-                                                                                btn-group btn-block
-                                                                                change-address-dropdown
-                                                                            "
-                                                                            *ngIf="
-                                                                                accountAddressList?.length > 1 &&
-                                                                                !autoFillShipping
-                                                                            "
-                                                                        >
-                                                                            <a
-                                                                                mat-button
-                                                                                [matMenuTriggerFor]="
-                                                                                    shippingAddressMenu
-                                                                                "
-                                                                                type="button"
-                                                                                class="dropdown-toggle"
-                                                                                [style.height.px]="24"
-                                                                            >
-                                                                                {{ localeData?.change }}</a
-                                                                            >
-                                                                            <mat-menu
-                                                                                #shippingAddressMenu="matMenu"
-                                                                                class="change-address-mat-menu"
-                                                                            >
-                                                                                <button
-                                                                                    mat-menu-item
-                                                                                    *ngFor="
-                                                                                        let address of accountAddressList
-                                                                                    "
-                                                                                >
-                                                                                    <a
-                                                                                        class="dropdown-item"
-                                                                                        (click)="
-                                                                                            selectAddress(
-                                                                                                voucherFormData.account
-                                                                                                    .shippingDetails,
-                                                                                                address,
-                                                                                                false
-                                                                                            )
-                                                                                        "
-                                                                                    >
-                                                                                        {{ address.address }}
-                                                                                        {{ address.state?.name }}
-
-                                                                                        <span class="d-block"
-                                                                                            >{{
-                                                                                                address.gstNumber
-                                                                                                    ? (showGstinNo
-                                                                                                          ? commonLocaleData?.app_gstin +
-                                                                                                            ": "
-                                                                                                          : commonLocaleData?.app_trn +
-                                                                                                            ": ") +
-                                                                                                      address.gstNumber
-                                                                                                    : ""
-                                                                                            }}
-                                                                                        </span>
-                                                                                    </a>
-                                                                                </button>
-                                                                            </mat-menu>
-                                                                        </div>
-                                                                    </span>
-                                                                </div>
-                                                                <div
-                                                                    class="billing-address"
-                                                                    [ngClass]="{ 'disabled': autoFillShipping }"
-                                                                >
-                                                                    <textarea
-                                                                        matInput
-                                                                        [readonly]="autoFillShipping"
-                                                                        name="shippingdetails-address"
-                                                                        class="form-control"
-                                                                        [(ngModel)]="
-                                                                            voucherFormData.account.shippingDetails
-                                                                                .address[0]
-                                                                        "
-                                                                        rows="3"
-                                                                        autocomplete="off"
-                                                                    ></textarea>
-
-                                                                    <div class="clearfix form-group mb-0">
-                                                                        <div class="row">
-                                                                            <div class="col-sm-12 col-md-6">
-                                                                                <div class="form-group mb-0">
-                                                                                    <label class="sales-country-label">
-                                                                                        {{ customerCountryName }}
-                                                                                    </label>
-                                                                                </div>
-                                                                            </div>
-
-                                                                            <div
-                                                                                class="col-sm-12 col-md-6"
-                                                                                #shippingState
-                                                                            >
-                                                                                <mat-form-field
-                                                                                    appearance="fill"
-                                                                                    class="
-                                                                                        mat-field-select
-                                                                                        width-100
-                                                                                        only-bottom-border
-                                                                                    "
-                                                                                >
-                                                                                    <input
-                                                                                        type="text"
-                                                                                        [placeholder]="
-                                                                                            commonLocaleData?.app_state
-                                                                                        "
-                                                                                        name="shippingdetails-statecode"
-                                                                                        class="no-border pd-l1"
-                                                                                        matInput
-                                                                                        [formControl]="
-                                                                                            searchShippingStates
-                                                                                        "
-                                                                                        [matAutocomplete]="
-                                                                                            shippingStateAuto
-                                                                                        "
-                                                                                        autocomplete="off"
-                                                                                        (blur)="
-                                                                                            resetValueIfOptionNotSelected(
-                                                                                                'shippingState'
-                                                                                            )
-                                                                                        "
-                                                                                    />
-                                                                                    <mat-autocomplete
-                                                                                        #shippingStateAuto="matAutocomplete"
-                                                                                        [displayWith]="displayLabel"
-                                                                                        (optionSelected)="
-                                                                                            fillShippingBillingDetails(
-                                                                                                $event,
-                                                                                                false
-                                                                                            )
-                                                                                        "
-                                                                                    >
-                                                                                        <mat-option
-                                                                                            *ngFor="
-                                                                                                let state of filteredShippingStates
-                                                                                            "
-                                                                                            [value]="state"
-                                                                                            >{{ state?.label }}
-                                                                                        </mat-option>
-                                                                                    </mat-autocomplete>
-                                                                                </mat-form-field>
-                                                                            </div>
-
-                                                                            <div
-                                                                                class="col-sm-6"
-                                                                                *ngIf="shouldShowTrnGstField"
-                                                                            >
-                                                                                <text-field
-                                                                                    [readonly]="autoFillShipping"
-                                                                                    autocomplete="None"
-                                                                                    [maxlength]="15"
-                                                                                    type="text"
-                                                                                    name="shippingdetails-taxnumber"
-                                                                                    *ngIf="showGstinNo"
-                                                                                    [cssClass]="
-                                                                                        'form-control input-custom'
-                                                                                    "
-                                                                                    [(ngModel)]="
-                                                                                        voucherFormData.account
-                                                                                            .shippingDetails.taxNumber
-                                                                                    "
-                                                                                    (change)="
-                                                                                        getStateCode(
-                                                                                            'shippingDetails',
-                                                                                            statesShipping
-                                                                                        )
-                                                                                    "
-                                                                                    [placeholder]="
-                                                                                        commonLocaleData?.app_gstin
-                                                                                    "
-                                                                                ></text-field>
-                                                                                <text-field
-                                                                                    [readonly]="autoFillShipping"
-                                                                                    [maxlength]="15"
-                                                                                    autocomplete="None"
-                                                                                    type="text"
-                                                                                    name="shippingdetails-taxnumber"
-                                                                                    [cssClass]="
-                                                                                        'form-control input-custom'
-                                                                                    "
-                                                                                    *ngIf="showTrnNo"
-                                                                                    [(ngModel)]="
-                                                                                        voucherFormData.account
-                                                                                            .shippingDetails.taxNumber
-                                                                                    "
-                                                                                    (change)="
-                                                                                        getStateCode(
-                                                                                            'shippingDetails',
-                                                                                            statesShipping
-                                                                                        )
-                                                                                    "
-                                                                                    [placeholder]="
-                                                                                        commonLocaleData?.app_trn
-                                                                                    "
-                                                                                ></text-field>
-                                                                            </div>
-                                                                            <!-- static pin code  -->
-                                                                            <div
-                                                                                [ngClass]="{
-                                                                                    'col-sm-6':
-                                                                                        showGstinNo || showTrnNo,
-                                                                                    'col-sm-12': !(
-                                                                                        showGstinNo || showTrnNo
-                                                                                    )
-                                                                                }"
-                                                                            >
-                                                                                <div class="form-group mr-b05">
-                                                                                    <text-field
-                                                                                        [type]="'number'"
-                                                                                        [cssClass]="
-                                                                                            'form-control input-custom'
-                                                                                        "
-                                                                                        autocomplete="false"
-                                                                                        name="shipping-pincode"
-                                                                                        [placeholder]="
-                                                                                            commonLocaleData?.app_pin_code
-                                                                                        "
-                                                                                        [(ngModel)]="
-                                                                                            voucherFormData.account
-                                                                                                .shippingDetails.pincode
-                                                                                        "
-                                                                                        decimalDigitsDirective
-                                                                                        [preventDecimal]="true"
-                                                                                    >
-                                                                                    </text-field>
-                                                                                </div>
-                                                                            </div>
-                                                                            <!-- static pin code end-->
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <!-- endregion -->
                                                     </div>
                                                 </div>
                                             </section>
@@ -635,53 +381,34 @@
                                     <div class="clearfix">
                                         <div class="row position-relative">
                                             <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3">
-                                                <label>{{ localeData?.attention_to }}</label>
+                                                <label
+                                                    >{{
+                                                        voucherFormData.type === receiptVoucherType
+                                                            ? localeData?.receipt_date
+                                                            : localeData?.payment_date
+                                                    }}<span class="red-text">*</span></label
+                                                >
                                             </div>
                                             <div class="col-sm-12 col-xl-6 col-lg-5 col-md-10">
-                                                <mat-form-field appearance="fill" class="no-border-top">
-                                                    <text-field
-                                                        [cssClass]="'form-control mat-field-border'"
-                                                        name="attention-to"
-                                                        id="attention-to"
-                                                        [placeholder]="localeData?.attention_to"
-                                                        [(ngModel)]="voucherFormData.account.attentionTo"
-                                                    >
-                                                    </text-field>
-                                                </mat-form-field>
-                                            </div>
-                                            <div class="col-sm-12 col-xl-6 col-lg-10 col-md-10 cheque-details no-top">
-                                                <div class="form-inline flex-row flex-nowrap">
-                                                    <div class="form-group">
-                                                        <label
-                                                            >{{
-                                                                voucherFormData.type === receiptVoucherType
-                                                                    ? localeData?.receipt_date
-                                                                    : localeData?.payment_date
-                                                            }}
-                                                            <span class="red-text">*</span></label
-                                                        >
-                                                        <giddh-datepicker
-                                                            class="inline mr-l1"
-                                                            [showError]="
-                                                                (!isValidForm && !voucherFormData.date) ||
-                                                                isInvalidVoucherDate
-                                                            "
-                                                            name="receipt-date"
-                                                            [(ngModel)]="voucherFormData.date"
-                                                            (ngModelChange)="validateVoucherDate()"
-                                                            [placeholder]="commonLocaleData?.app_select_date"
-                                                            [cssClass]="
-                                                                'mat-field-border border-left-right-none form-control w-100'
-                                                            "
-                                                            [showToggleIcon]="false"
-                                                        ></giddh-datepicker>
-                                                    </div>
-                                                </div>
+                                                <giddh-datepicker
+                                                    class="inline"
+                                                    [showError]="
+                                                        (!isValidForm && !voucherFormData.date) || isInvalidVoucherDate
+                                                    "
+                                                    name="receipt-date"
+                                                    [(ngModel)]="voucherFormData.date"
+                                                    (ngModelChange)="validateVoucherDate()"
+                                                    [placeholder]="commonLocaleData?.app_select_date"
+                                                    [cssClass]="
+                                                        'mat-field-border border-left-right-none form-control w-100'
+                                                    "
+                                                    [showToggleIcon]="false"
+                                                ></giddh-datepicker>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="clearfix" *ngIf="voucherFormData.type === receiptVoucherType">
+                                <div class="clearfix mr-t1" *ngIf="voucherFormData.type === receiptVoucherType">
                                     <div class="row mr-b05">
                                         <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3">
                                             <label>&nbsp;</label>
@@ -692,6 +419,7 @@
                                                     color="primary"
                                                     name="advance-receipt"
                                                     [(ngModel)]="isAdvanceReceipt"
+                                                    (ngModelChange)="calculateTotalForTax()"
                                                 >
                                                     {{ commonLocaleData?.app_voucher_types?.advance_receipt }}
                                                 </mat-checkbox>
@@ -816,7 +544,7 @@
                                                 <th>{{ localeData?.cheque_no }}</th>
                                                 <th>{{ localeData?.cheque_date }}</th>
                                                 <th *ngIf="isAdvanceReceipt">
-                                                    {{ localeData?.tax_on_advance }} <span class="red-text">*</span>
+                                                    {{ localeData?.tax_on_advance }}
                                                 </th>
                                             </tr>
                                         </thead>
@@ -895,7 +623,7 @@
                                                                 voucherFormData.entries[0].transactions[0].amount
                                                                     .amountForAccount
                                                             "
-                                                            (ngModelChange)="calculateTotals()"
+                                                            (ngModelChange)="calculateTotalForTax(); calculateTotals()"
                                                         >
                                                         </text-field>
                                                     </mat-form-field>
@@ -928,17 +656,11 @@
                                                 </td>
                                                 <td class="overflow-visible" *ngIf="isAdvanceReceipt">
                                                     <tax-control
-                                                        [ngClass]="{
-                                                            'error-box': !isValidForm && selectedTaxes?.length === 0
-                                                        }"
                                                         class="dropdown-container w-100"
                                                         [taxes]="companyTaxesList"
                                                         [date]="voucherFormData?.date"
                                                         [taxRenderData]="voucherFormData.entries[0].taxes"
-                                                        [totalForTax]="
-                                                            voucherFormData.entries[0].transactions[0].amount
-                                                                .amountForAccount
-                                                        "
+                                                        [totalForTax]="totalForTax"
                                                         [showHeading]="false"
                                                         [isMandatory]="true"
                                                         [exceptTaxTypes]="['tdsrc', 'tdspay', 'tcspay', 'tcsrc']"
@@ -1030,7 +752,7 @@
                                                             </span>
                                                         </div>
                                                     </div>
-                                                    <div class="table-row">
+                                                    <div class="table-row" *ngIf="isAdvanceReceipt">
                                                         <div class="table-cell">{{ localeData?.tax_total }}</div>
                                                         <div class="table-cell figure-cell">
                                                             <span class="d-flex justify-content-end">
@@ -1160,14 +882,7 @@
                                         type="button"
                                         mat-raised-button
                                         *ngIf="isUpdateMode"
-                                        [routerLink]="
-                                            '/pages/voucher/' +
-                                            voucherFormData.type +
-                                            '/preview/' +
-                                            queryParams?.uniqueName +
-                                            '/' +
-                                            queryParams?.accountUniqueName
-                                        "
+                                        (click)="cancelUpdate()"
                                     >
                                         {{ commonLocaleData?.app_cancel }}
                                     </button>

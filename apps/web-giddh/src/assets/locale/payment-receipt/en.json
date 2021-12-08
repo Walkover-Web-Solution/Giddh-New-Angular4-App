@@ -10,7 +10,7 @@
     "enter_amount": "Enter Amount",
     "receipt_mode": "Receipt Mode",
     "cheque_no": "Cheque#",
-    "cheque_date": "Cheque Date",
+    "cheque_date": "Cheque Clearance Date",
     "tax_on_advance": "Tax on advance",
     "attach_file": "Attach file",
     "drag_drop_file": "Drag/Drop file or click here",
@@ -34,5 +34,6 @@
     "description": "Description",
     "confirm_delete_file": "Are you sure you want to delete the attached file?",
     "print_voucher": "Print Voucher",
-    "voucher_preview_unavailable": "Voucher Preview is not available right now! Please try again.."
+    "voucher_preview_unavailable": "Voucher Preview is not available right now! Please try again..",
+    "tax_error": "Cess cannot be applied without GST."
 }

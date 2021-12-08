@@ -10,7 +10,7 @@
     "enter_amount": "राशी डालें",
     "receipt_mode": "रसीद मोड",
     "cheque_no": "चेक#",
-    "cheque_date": "चेक तिथि",
+    "cheque_date": "चेक क्लीयरेंस तिथि",
     "tax_on_advance": "अग्रिम पर कर",
     "attach_file": "फ़ाइल जोड़ें",
     "drag_drop_file": "फ़ाइल खींचें/छोड़ें या यहां क्लिक करें",
@@ -34,5 +34,6 @@
     "description": "विवरण",
     "confirm_delete_file": "क्या आप वाकई संलग्न फ़ाइल को हटाना चाहते हैं?",
     "print_voucher": "प्रिंट वाउचर",
-    "voucher_preview_unavailable": "अभी वाउचर पूर्वावलोकन उपलब्ध नहीं है! कृपया पुन: प्रयास करें.."
+    "voucher_preview_unavailable": "अभी वाउचर पूर्वावलोकन उपलब्ध नहीं है! कृपया पुन: प्रयास करें..",
+    "tax_error": "जीएसटी के बिना सेस नहीं लगाया जा सकता है।"
 }

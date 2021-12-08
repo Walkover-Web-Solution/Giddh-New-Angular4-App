@@ -2,12 +2,17 @@
 
 .receipt-card {
     box-shadow: none !important;
+    padding: 0px !important;
 
     .receipt-table {
         th,
         td {
             border: 1px solid $gainsboro !important;
         }
+    }
+
+    .receipt-form {
+        padding: 16px;
     }
 }
 .inner-container {
@@ -26,7 +31,7 @@
 .balance-due-absolute {
     position: absolute;
     right: 0;
-    top: 30px;
+    top: 50px;
 
     .balance-due {
         display: block;
@@ -83,7 +88,7 @@
         width: 100%;
         height: 100%;
         bottom: 0;
-        top: 132px;
+        top: 140px;
         opacity: 0.6;
         z-index: 98;
         background: $alice-blue-light;
@@ -223,7 +228,45 @@ input.mat-input-element {
     width: 4%;
     cursor: pointer;
 }
+.change-address-dropdown {
+    a {
+        line-height: 2.7;
+    }
+}
+.page-heading-wrapper {
+    width: 100%;
+    border-bottom: 1px solid #d9d9d9;
+    padding-left: 16px;
+    height: 34px;
 
+    .inner-page-heading {
+        font-size: 24px;
+        position: absolute;
+        top: -7px;
+    }
+
+    .cross-icon-wrapper {
+        width: 34px;
+        height: 34px;
+        position: absolute;
+        top: -6px;
+        right: 28px;
+        background-color: #ddd;
+        border: 1px solid #d9d9d9;
+
+        img {
+            width: 50%;
+            margin-left: 8px;
+            margin-top: 7px;
+        }
+    }
+}
+.custom-file-label {
+    text-align: center;
+    &:after {
+        display: none;
+    }
+}
 input.form-control.edit-currency {
     display: inline-block !important;
     width: 80px;

@@ -19,7 +19,7 @@
                         type="button"
                         class="btn btn-sky-blue dropdown-btn-new"
                         [routerLink]="'/pages/voucher/receipt/create'"
-                        *ngIf="voucherApiVersion === 2"
+                        *ngIf="voucherApiVersion === 2 && !isCompany"
                     >
                         {{ localeData?.new_voucher }}
                     </button>

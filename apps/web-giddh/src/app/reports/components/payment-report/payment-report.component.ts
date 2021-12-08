@@ -155,6 +155,8 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
     public hoveredPaymentUniqueName: string = "";
     /** True if table is hovered */
     public hoveredPaymentTable: boolean = false;
+    /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
+    public isCompany: boolean;
 
     /** @ignore */
     constructor(
@@ -188,6 +190,12 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
         }
 
         this.currentOrganizationType = this.generalService.currentOrganizationType;
+        this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                const branches = response || [];
+                this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && branches.length > 1;
+            }
+        });
         this.store.dispatch(this.generalAction.setAppTitle('/pages/reports/payment'));
         this.store.pipe(select(state => state.session.companyUniqueName), take(1)).subscribe(uniqueName => this.activeCompanyUniqueName = uniqueName);
         this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$)).subscribe((applicationDate) => {

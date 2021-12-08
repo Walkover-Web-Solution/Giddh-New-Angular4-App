@@ -19,6 +19,7 @@
                         type="button"
                         class="btn btn-sky-blue dropdown-btn-new"
                         [routerLink]="'/pages/voucher/payment/create'"
+                        *ngIf="!isCompany"
                     >
                         {{ localeData?.new_voucher }}
                     </button>

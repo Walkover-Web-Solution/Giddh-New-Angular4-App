@@ -712,6 +712,10 @@ export class PaymentReceiptAccount {
 
 export class PaymentReceiptAmount {
     amountForAccount: number;
+
+    constructor() {
+        this.amountForAccount = 0;
+    }
 }
 
 export class PaymentReceiptEntry {
