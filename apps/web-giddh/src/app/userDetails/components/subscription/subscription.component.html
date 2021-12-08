@@ -10,8 +10,8 @@
                 {{ commonLocaleData?.app_buy_new_plan }}
             </button>
         </div>
-        <mat-grid-list cols="16" rowHeight="{{ menuBarHeight }}px" gutterSize="0px">
-            <mat-grid-tile colspan="{{ menuOneWidth }}" rowspan="1">
+        <mat-grid-list cols="16" rowHeight="40px" gutterSize="0px">
+            <mat-grid-tile colspan="4" rowspan="1">
                 <div class="menu-two" [ngClass]="{ 'skelton-common-class': showLoader }">
                     <label for="Search-box">
                         <img src="{{ imgPath }}search.png" alt="SearchBar" *ngIf="!showLoader" />
@@ -26,7 +26,7 @@
                     </mat-form-field>
                 </div>
             </mat-grid-tile>
-            <mat-grid-tile colspan="{{ menuTwoWidth }}">
+            <mat-grid-tile colspan="12">
                 <div class="menu-two-list" [ngClass]="{ 'skelton-common-class': showLoader }">
                     <div class="menu-two-list-items" *ngIf="!showLoader">
                         <span class="mat-body-1 plan">Plan</span>
@@ -91,10 +91,10 @@
                     >
                 </div>
             </mat-grid-tile>
-            <mat-grid-tile colspan="{{ sideBarBoxWidth }}" rowspan="{{ sideBarBoxLength }}">
+            <mat-grid-tile colspan="4" rowspan="20">
                 <div class="sidebar" *ngIf="!showLoader">
                     <ng-container *ngFor="let subscription of subscriptions; let i = index">
-                        <mat-grid-list cols="2" rowHeight="{{ rowLength }}px" gutterSize="0px" class="sidebar-box">
+                        <mat-grid-list cols="2" rowHeight="130px" gutterSize="0px" class="sidebar-box">
                             <mat-grid-tile colspan="2">
                                 <div class="side-bar-items" (click)="selectSubscription(subscription)">
                                     <p class="mat-body-2 side-bar-head">
@@ -104,7 +104,11 @@
                                         }}</span>
                                     </p>
                                     <div class="side-bar-list">
-                                        <img src="{{ imgPath }}transaction.png" alt="transaction" />
+                                        <img
+                                            src="{{ imgPath }}transaction.png"
+                                            alt="transaction"
+                                            matTooltip="Transactions"
+                                        />
                                         <p class="side-bar-list-title">Transactions</p>
                                         <span>:</span>
                                         <p class="mat-body-2">
@@ -113,13 +117,17 @@
                                         </p>
                                     </div>
                                     <div class="side-bar-list">
-                                        <img src="{{ imgPath }}companies.png" alt="companies" />
+                                        <img src="{{ imgPath }}companies.png" alt="companies" matTooltip="Companies" />
                                         <p class="mat-subheading-4 side-bar-list-title">Companies</p>
                                         <span>:</span>
                                         <p>{{ subscription?.totalCompanies | number }}</p>
                                     </div>
                                     <div class="side-bar-list plan-timeline">
-                                        <img src="{{ imgPath }}plan_timeline.png" alt="plan_timeline" />
+                                        <img
+                                            src="{{ imgPath }}plan_timeline.png"
+                                            alt="plan_timeline"
+                                            matTooltip="Plan Timeline"
+                                        />
                                         <p class="mat-subheading-4 side-bar-list-title">Plan Timeline</p>
                                         <span>:</span>
                                         <p class="date">{{ subscription?.startedAt }} - {{ subscription?.expiry }}</p>
@@ -130,7 +138,7 @@
                     </ng-container>
                 </div>
                 <div class="sidebar-clone" *ngIf="showLoader">
-                    <mat-grid-list cols="2" rowHeight="{{ rowLength }}px" gutterSize="0px" class="sidebar-box-clone">
+                    <mat-grid-list cols="2" rowHeight="130px" gutterSize="0px" class="sidebar-box-clone">
                         <mat-grid-tile colspan="2">
                             <div class="side-bar-items-clone">
                                 <p
@@ -303,7 +311,7 @@
                 </div>
             </mat-grid-tile>
 
-            <mat-grid-tile colspan="{{ mainContentWidth }}" rowspan="{{ sideBarBoxLength }}">
+            <mat-grid-tile colspan="12" rowspan="20">
                 <div class="main-content" *ngIf="selectedSubscription">
                     <mat-toolbar class="main-content-head">
                         <div class="left-side">
@@ -340,7 +348,7 @@
                     <p class="summary">Overall summary</p>
                     <div class="balance-info">
                         <mat-grid-list cols="2" rowHeight="10px" gutterSize="3px">
-                            <mat-grid-tile colspan="2" rowspan="{{ overallSummaryTopRow }}">
+                            <mat-grid-tile colspan="2" rowspan="6">
                                 <div class="overall-summary-bar-one">
                                     <div class="box item-1">
                                         <div class="box-heading">
@@ -385,7 +393,7 @@
                                     </div>
                                 </div>
                             </mat-grid-tile>
-                            <!-- <mat-grid-tile colspan="2" rowspan="{{ overallSummaryBottomRow }}">
+                            <!-- <mat-grid-tile colspan="2" rowspan="4">
                             <div class="overall-summary-bar-two">
                                 <p>Total dues <span class="tomato">₹5,200 </span> <span class="grey">Settle now</span></p>
                             </div>

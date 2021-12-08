@@ -1,5 +1,4 @@
-import { Component, OnInit, ViewChild, Input, OnDestroy, ChangeDetectorRef, ChangeDetectionStrategy, SimpleChanges, OnChanges, TemplateRef } from "@angular/core";
-import { BreakpointObserver, BreakpointState } from "@angular/cdk/layout";
+import { Component, OnInit, ViewChild, Input, OnDestroy, ChangeDetectorRef, ChangeDetectionStrategy, SimpleChanges, OnChanges, TemplateRef, ViewEncapsulation } from "@angular/core";
 import { MatAccordion } from "@angular/material/expansion";
 import { MatDialog } from "@angular/material/dialog";
 import { SubscriptionsActions } from '../../../actions/userSubscriptions/subscriptions.action';
@@ -37,23 +36,12 @@ const ELEMENT_DATA: PeriodicElement[] = [
     selector: 'subscription',
     templateUrl: './subscription.component.html',
     styleUrls: ['./subscription.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    encapsulation: ViewEncapsulation.None,
 })
 
 export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
-    /** This will change the search bar height dynamically */
-    public menuBarHeight: Number = 40;
-    public menuOneWidth: Number;
-    public menuTwoWidth: Number;
-    /** This will change the rowspan of main content and oak plan list dynamically */
-    public sideBarBoxLength: Number = 15;
-    public sideBarBoxWidth: Number;
-    public mainContentWidth: Number;
-    /** This will change the height of oak plan list dynamically */
-    public rowLength: Number = 180;
-    /** This will change the length of overall summary box dynamically */
-    public overallSummaryTopRow: Number = 6;
-    public overallSummaryBottomRow: Number = 4;
+   
     /** This will hold local JSON data */
     @Input() public localeData: any = {};
     /** This will hold common JSON data */
@@ -123,8 +111,6 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
 
     constructor(
         public dialog: MatDialog,
-        public breakpointObserver:
-            BreakpointObserver,
         private subscriptionsActions: SubscriptionsActions,
         private store: Store<AppState>,
         private subscriptionService: SubscriptionsService,
@@ -178,47 +164,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
         
         /** This will use for image format */
         this.imgPath = (isElectron || isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
-
-
-        /** This will use for responsive */
-        this.breakpointObserver.observe([
-            '(min-width: 768px)',
-            '(min-width: 1024px)',
-            '(min-width: 1536px)'
-        ]).subscribe((state: BreakpointState) => {
-
-            if (state.breakpoints['(min-width: 768px)']) {
-                this.rowLength = 120;
-                //         this.menuBarHeight = 5.5;
-                //         this.sideBarBoxLength = 13;
-                this.sideBarBoxWidth = 5;
-                this.mainContentWidth = 11;
-                this.menuOneWidth = 5;
-                this.menuTwoWidth = 11;
-            }
-            if (state.breakpoints['(min-width: 1024px)']) {
-                this.rowLength = 120;
-                this.menuBarHeight = 40;
-                this.sideBarBoxLength = 15;
-                this.overallSummaryTopRow = 5;
-                this.overallSummaryBottomRow = 3;
-                this.sideBarBoxWidth = 4;
-                this.mainContentWidth = 12;
-                this.menuOneWidth = 4;
-                this.menuTwoWidth = 12;
-            }
-            if (state.breakpoints['(min-width: 1536px)']) {
-                this.rowLength = 150;
-                this.menuBarHeight = 40;
-                this.sideBarBoxLength = 15;
-                this.overallSummaryTopRow = 6;
-                this.overallSummaryBottomRow = 4;
-                this.sideBarBoxWidth = 4;
-                this.mainContentWidth = 12;
-                this.menuOneWidth = 4;
-                this.menuTwoWidth = 12;
-            }
-        })
+        
     }
 
     /**

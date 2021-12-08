@@ -135,6 +135,7 @@
             height: inherit;
             position: absolute;
             cursor: pointer;
+            padding-left: 23px;
             :hover {
                 background: none;
             }
@@ -163,6 +164,9 @@
                 }
                 .date {
                     font-size: 14px;
+                }
+                .hide-tooltip {
+                    display: none !important;
                 }
             }
         }
@@ -517,7 +521,7 @@
         position: absolute;
         width: 21%;
         left: 77%;
-        top: 31.5%;
+        top: 23.3%;
         z-index: 2;
 
         button {
@@ -614,8 +618,10 @@
         background-color: rgb(245, 245, 245);
     }
 }
+
 .main-content-condition {
     text-align: center;
+    margin-bottom: 270px;
 }
 .mat-expansion-panel:not(.mat-expanded) .mat-expansion-panel-header:hover {
     background: rgba(102, 140, 255, 0.1);
@@ -670,6 +676,9 @@
     .sidebar {
         .sidebar-box {
             .side-bar-items {
+                justify-content: flex-start;
+                padding-left: 16px;
+                padding-top: 18px;
                 .plan-timeline {
                     position: relative;
                     top: 5px;
@@ -765,6 +774,9 @@
             }
         }
         .expand-button {
+            top: 26.2%;
+            width: 25%;
+            left: 74%;
             button {
                 top: -28px;
                 border-bottom: none;
@@ -823,15 +835,17 @@
         .menu-two-list-items {
             mat-select {
                 font-size: 10px;
-                height: 18px;
-                width: 3.2rem;
+                height: 23px;
+                width: 3.8rem;
                 margin-left: 0.2rem;
+                margin-bottom: 3px;
+                padding-top: 6px;
             }
             .transaction-select {
                 width: 4.2rem !important;
             }
             span {
-                font-size: 10px;
+                font-size: 11px;
             }
         }
         .transaction-box {
@@ -850,28 +864,30 @@
     .sidebar {
         .sidebar-box {
             .side-bar-items {
+                padding-left: 0px;
                 .side-bar-head {
-                    font-size: 10px;
+                    font-size: 9.5px;
                     img {
                         height: 2px;
                         width: auto;
-                        margin: 0px 3px;
+                        margin: 0px 2px;
                     }
                     span {
-                        font-size: 10px;
+                        font-size: 9.5px;
                     }
                 }
                 .side-bar-list {
                     line-height: 1.4rem;
                     .date {
-                        font-size: 12px;
+                        font-size: 11.1px;
                         position: absolute;
-                        top: 84px;
-                        left: 43px;
+                        top: 91px;
+                        left: 23px;
                     }
                     img {
                         width: 14px;
-                        margin-right: 0.3rem;
+                        margin-right: 0.2rem;
+                        margin-top: 0.1rem;
                     }
                     .warning {
                         font-size: 9px;
@@ -879,6 +895,13 @@
                     .side-bar-list-title {
                         width: 73px;
                         display: none;
+                    }
+                    span {
+                        margin-right: 2px;
+                    }
+                    p {
+                        font-size: 12px;
+                        padding-top: 0.1rem;
                     }
                 }
             }
@@ -960,12 +983,18 @@
             transform: translate(184px, 10px);
         }
         .expand-button {
+            top: 26.5%;
+            left: 60%;
+            width: 40%;
             button {
                 border-bottom: none;
                 position: relative;
                 text-decoration: underline;
                 top: -24px;
                 font-size: 13px;
+            }
+            :nth-child(2) {
+                margin-right: -10px !important;
             }
         }
         .companies-container {
