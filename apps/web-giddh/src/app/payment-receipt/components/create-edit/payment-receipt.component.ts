@@ -293,6 +293,14 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
             }
         });
 
+        this.store.pipe(select(state => state.sales.createdAccountDetails), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.voucherFormData.account.name = response.name;
+                this.voucherFormData.account.uniqueName = response.uniqueName;
+                this.assignAccountDetailsValuesInForm(response);
+            }
+        });
+
         this.store.pipe(select(state => state.sales.updatedAccountDetails), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 if (this.accountAsideMenuState === 'in') {
@@ -1281,6 +1289,7 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
         this.totals = { subTotal: 0, taxTotal: 0, grandTotal: 0, grandTotalMultiCurrency: 0 };
         this.searchBillingStates.setValue({ label: "" });
         this.searchBankAccount.setValue({ label: "" });
+        this.loadDefaultSearchSuggestions();
     }
 
     /**
