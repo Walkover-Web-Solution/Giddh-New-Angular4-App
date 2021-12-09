@@ -16,6 +16,9 @@
     margin-left: 6px;
     cursor: pointer;
 }
+.icon-search {
+    font-size: 16px;
+}
 
 .linked-entities {
     width: 200px;
@@ -286,7 +289,7 @@ tr.aging-table-top td {
     justify-content: center;
     align-items: center;
     height: 36px !important;
-    border-right: 1px solid $gainsboro !important;
+    // border-right: 1px solid $gainsboro !important;
     cursor: pointer;
 }
 
