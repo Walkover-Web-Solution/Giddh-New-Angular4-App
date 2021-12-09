@@ -99,7 +99,7 @@ export class ApprovePettyCashEntryConfirmDialogComponent implements OnInit {
      */
     public ngOnInit(): void {
         if (this.showCategoryOption) {
-            if (this.selectedEntryForApprove?.baseAccount?.uniqueName) {
+            if (this.selectedEntryForApprove?.baseAccount?.uniqueName && !this.selectedEntryForApprove?.particular?.uniqueName) {
                 this.selectedEntryForApprove.particular = this.selectedEntryForApprove.baseAccount;
             }
             this.prepareEntryAgainstObject(this.selectedEntryForApprove);
@@ -244,6 +244,8 @@ export class ApprovePettyCashEntryConfirmDialogComponent implements OnInit {
             this.showEntryAgainstRequired = false;
             this.pettyCashEntry.particular.uniqueName = option.value;
             this.pettyCashEntry.particular.name = option.label;
+            this.selectedEntryForApprove.baseAccount.uniqueName = option.value;
+            this.selectedEntryForApprove.baseAccount.name = option.label;
         }
     }
 
@@ -256,7 +258,10 @@ export class ApprovePettyCashEntryConfirmDialogComponent implements OnInit {
         this.showEntryAgainstRequired = false;
         this.pettyCashEntry.particular.uniqueName = "";
         this.pettyCashEntry.particular.name = "";
+        this.selectedEntryForApprove.baseAccount.uniqueName = "";
+        this.selectedEntryForApprove.baseAccount.name = "";
         this.entryAgainstObject.model = "";
+        this.forceClear$ = observableOf({ status: true });
     }
 
     /**
@@ -564,8 +569,6 @@ export class ApprovePettyCashEntryConfirmDialogComponent implements OnInit {
             return;
         }
         if (this.showCategoryOption) {
-            this.selectedEntryForApprove.baseAccount.name = this.pettyCashEntry.particular.name;
-            this.selectedEntryForApprove.baseAccount.uniqueName = this.pettyCashEntry.particular.uniqueName;
             this.approveEntry.emit(this.selectedEntryForApprove);
         } else {
             this.approveEntry.emit(true);
