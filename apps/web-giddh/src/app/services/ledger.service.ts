@@ -10,7 +10,6 @@ import { BlankLedgerVM } from '../ledger/ledger.vm';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { DaybookQueryRequest, DayBookRequestModel } from '../models/api-models/DaybookRequest';
-import { HttpClient } from '@angular/common/http';
 import { ToasterService } from './toaster.service';
 import { ReportsDetailedRequestFilter } from '../models/api-models/Reports';
 import { cloneDeep } from '../lodash-optimized';
@@ -24,7 +23,6 @@ export class LedgerService {
     constructor(
         private errorHandler: GiddhErrorHandler,
         public http: HttpWrapperService,
-        private httpClient: HttpClient,
         private generalService: GeneralService,
         @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs,
         private toaster: ToasterService) {
@@ -384,14 +382,13 @@ export class LedgerService {
     * delete Multiple Ledger transaction
     */
     public DeleteMultipleLedgerTransaction(accountUniqueName: string, entryUniqueNamesArray: string[]): Observable<BaseResponse<any, string>> {
-        let sessionId = this.generalService.sessionId;
         this.companyUniqueName = this.generalService.companyUniqueName;
         let url = this.config.apiUrl + LEDGER_API.MULTIPLE_DELETE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName));
 
         if (this.generalService.voucherApiVersion === 2) {
             url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
         }
-        return this.httpClient.request('delete', url, { headers: { 'Session-Id': sessionId }, body: { entryUniqueNames: entryUniqueNamesArray } }).pipe(map((res) => {
+        return this.http.deleteWithBody(url, { entryUniqueNames: entryUniqueNamesArray }).pipe(map((res) => {
             let data: any = res;
             data.queryString = { accountUniqueName, entryUniqueNamesArray };
             return data;
