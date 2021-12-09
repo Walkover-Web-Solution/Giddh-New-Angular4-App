@@ -226,7 +226,7 @@ tr.aging-table-top td {
 .aging-table {
     max-width: 100%;
     width: 100%;
-    -moz-transform: translate(1px, 0);
+    transform: translate(1px, 0);
 
     th,
     td {
@@ -296,6 +296,9 @@ i.icon-options {
     justify-content: center;
     align-items: center;
     border-radius: 5px;
+    position: absolute;
+    right: 3px;
+    bottom: 2px;
 }
 
 i.icon-options:hover {
@@ -443,6 +446,71 @@ button.btn.btn-filter span.icon-cross {
     strong {
         color: $midnight-blue !important;
         font-size: 16px;
+    }
+}
+
+.mat-raised-button {
+    margin-right: 0px !important;
+}
+
+.email-dialog-box {
+    width: 630px !important;
+}
+
+.icon-search,
+.icon-sort-asc {
+    font-size: 16px !important;
+}
+
+.mat-icon-button {
+    width: 25px;
+    i {
+        line-height: 20px;
+    }
+}
+
+.top-bar {
+    height: 62px;
+    margin-bottom: 4px;
+}
+
+.custom-datepicker input {
+    height: 36px;
+}
+
+.customer-form-inline {
+    align-items: center;
+    width: 100.25%;
+    position: relative;
+    bottom: 2px;
+}
+
+.pending-approval-button {
+    background-color: #f8f9fa;
+    width: 140px;
+    height: 37px;
+}
+
+.pending-approval-button:hover {
+    background-color: #e2e6ea;
+}
+
+::ng-deep {
+    .mat-header-cell {
+        padding: 0px 6px !important;
+        height: 51.5px;
+    }
+    tr.mat-header-row {
+        border-bottom: 1.5px solid rgb(203, 207, 218);
+    }
+    .mat-raised-button {
+        width: 96%;
+        padding-left: 0.7rem !important;
+        box-shadow: none !important;
+    }
+    th.mat-header-cell:first-of-type {
+        width: 595px;
+        padding-left: 20px !important;
     }
 }
 
@@ -747,7 +815,7 @@ button.btn.btn-filter span.icon-cross {
     justify-content: center;
     align-items: center;
     height: 36px !important;
-    border-right: 1px solid $gainsboro !important;
+    // border-right: 1px solid $gainsboro !important;
     cursor: pointer;
 }
 

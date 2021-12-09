@@ -430,7 +430,8 @@
                     [(ngModel)]="messageBody.subject"
                     type="text"
                     [placeholder]="localeData?.enter_subject_placeholder"
-                ></text-field>
+                >
+                </text-field>
                 <h1 class="mr-b1">{{ localeData?.type_message_body }}:</h1>
                 <textarea
                     matInput
@@ -464,7 +465,7 @@
     <!--endregion-->
 
     <!--region Modal for Mail/SMS for customer-->
-    <ng-template #mailModal *ngIf="activeTab === 'customer'" tabindex="-1">
+    <ng-template #mailModal *ngIf="activeTab === 'customer'" tabindex="-1" class="email-dialog-box">
         <div>
             <div class="modal-header theme-bg pd-l2 pd-r2">
                 <h3 class="modal-title bg" id="modal-title-mail-customer">{{ messageBody.header.set }}</h3>
@@ -487,7 +488,8 @@
                     [(ngModel)]="messageBody.subject"
                     type="text"
                     [placeholder]="localeData?.enter_subject_placeholder"
-                ></text-field>
+                >
+                </text-field>
 
                 <h1 class="mr-b1">{{ localeData?.type_message_body }}:</h1>
                 <textarea
@@ -673,9 +675,8 @@
                         <th mat-header-cell *matHeaderCellDef>
                             <div class="d-flex align-items-center">
                                 {{ commonLocaleData?.app_parent_group }}
-                                <ng-container
-                                    *ngTemplateOutlet="sortingTemplate; context: { $implicit: 'group' }"
-                                ></ng-container>
+                                <ng-container *ngTemplateOutlet="sortingTemplate; context: { $implicit: 'group' }">
+                                </ng-container>
                             </div>
                         </th>
                         <td mat-cell *matCellDef="let account" [attr.data-title]="commonLocaleData?.app_parent_group">
@@ -689,7 +690,8 @@
                                 {{ localeData?.opening }}
                                 <ng-container
                                     *ngTemplateOutlet="sortingTemplate; context: { $implicit: 'openingBalance' }"
-                                ></ng-container>
+                                >
+                                </ng-container>
                             </div>
                         </th>
                         <td
@@ -948,7 +950,8 @@
                                         class="mr-2 checkbox-left-side-in-table"
                                         (change)="selectAccount($event, account)"
                                         [(ngModel)]="account.isSelected"
-                                    ></mat-checkbox>
+                                    >
+                                    </mat-checkbox>
                                     <span>{{ account.name }}</span>
                                 </div>
                                 <button
@@ -1101,9 +1104,8 @@
                         <th mat-header-cell *matHeaderCellDef>
                             <div class="d-flex align-items-center">
                                 {{ commonLocaleData?.app_parent_group }}
-                                <ng-container
-                                    *ngTemplateOutlet="sortingTemplate; context: { $implicit: 'group' }"
-                                ></ng-container>
+                                <ng-container *ngTemplateOutlet="sortingTemplate; context: { $implicit: 'group' }">
+                                </ng-container>
                             </div>
                         </th>
                         <td mat-cell *matCellDef="let account" [attr.data-title]="commonLocaleData?.app_parent_group">
@@ -1330,7 +1332,7 @@
                             <button
                                 mat-raised-button
                                 *ngIf="!isGetAllIntegratedBankInProgress && isIciciAccountPendingForApproval"
-                                class="btn-small btn-light min-width-137"
+                                class="btn-small btn-light min-width-137 pending-approval-button"
                                 (click)="showIntegrationProcess()"
                             >
                                 {{ localeData?.pending_approval }}
