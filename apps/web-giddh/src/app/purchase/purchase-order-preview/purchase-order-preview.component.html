@@ -14,7 +14,7 @@
                         </button>
                     </div>
                     <ul class="invoice-sidebar">
-                        <perfect-scrollbar *ngIf="filteredData && filteredData.length > 0">
+                        <perfect-scrollbar #perfectScrollbar *ngIf="filteredData && filteredData.length > 0">
                             <li
                                 class="single-invoice-detail cp"
                                 [ngClass]="{ 'activeItem': row.uniqueName === purchaseOrderUniqueName }"
