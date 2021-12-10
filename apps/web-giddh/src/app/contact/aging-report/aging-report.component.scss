@@ -30,7 +30,7 @@
 }
 
 .icon-pointer .font-xxs {
-    font-size: 12px;
+    font-size: 16px;
 }
 
 .aging-table {
@@ -56,6 +56,7 @@
     font-size: 14px;
     border-radius: 5px;
     margin-right: 0;
+    width: 73px;
 }
 
 .search-field {
@@ -131,6 +132,67 @@ tr.aging-table-top td {
 
 .empty-table {
     height: 120px;
+}
+
+tr.mat-header-row {
+    height: 51.5px;
+}
+
+.mat-button {
+    padding: 0;
+    text-decoration: underline;
+    margin-right: 0px !important;
+}
+
+th.mat-header-cell:first-of-type {
+    width: 251px;
+    padding-left: 5px !important;
+}
+
+// .one{
+//     text-decoration: underline;
+// }
+
+.main-table {
+    margin-top: 18px;
+}
+
+.pull-left {
+    button {
+        width: auto;
+        margin-right: 15px;
+    }
+}
+
+::ng-deep {
+    .mat-column-app_days_1 .icon-pointer,
+    .mat-column-app_days_2 .icon-pointer,
+    .mat-column-app_days_3 .icon-pointer,
+    .mat-column-app_days_4 .icon-pointer {
+        text-decoration: underline;
+    }
+    .mat-column-customerName .icon-pointer .font-xxs {
+        color: #01a9f4 !important;
+    }
+    .mat-column-parentGroup {
+        padding-left: 10px !important;
+    }
+    .mat-column-app_days_1,
+    .mat-column-app_days_2,
+    .mat-column-app_days_3,
+    .mat-column-app_days_4 {
+        padding-right: 12px !important;
+    }
+    .mat-header-cell .icon-pointer {
+        margin-left: 0px;
+    }
+
+    .mat-table tbody > tr > td:first-child {
+        padding-left: 18px !important;
+    }
+    .mat-flat-button {
+        padding: 0px 11px;
+    }
 }
 
 // responsive
