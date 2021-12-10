@@ -2,7 +2,7 @@
     <div class="top-bar aging-top-bar d-flex justify-content-between">
         <div class="aging-form-inline">
             <div class="btn-group pull-left on-desktop-view">
-                <button mat-raised-button class="btn-sky-blue" (click)="creteNewCustomerEvent.emit(true)">
+                <button mat-flat-button class="btn-sky-blue" (click)="creteNewCustomerEvent.emit(true)">
                     {{ localeData?.new_customer }}
                 </button>
             </div>
@@ -194,7 +194,7 @@
 <ng-template #sortingTemplate let-col>
     <div class="icon-pointer cp">
         <div
-            class="icon-sort-asc text-light-2 d-block font-xxs"
+            class="icon-sort-asc one text-light-2 d-block font-xxs"
             (click)="sort(col, 'asc')"
             *ngIf="key !== col"
             [ngClass]="{ 'active-text-color': key === col && order === 'asc' }"
@@ -227,7 +227,7 @@
             </mat-menu>
         </div>
 
-        <table mat-table [dataSource]="agingReportDataSource" class="w-100">
+        <table mat-table [dataSource]="agingReportDataSource" class="w-100 main-table">
             <ng-container matColumnDef="customerName">
                 <th
                     mat-header-cell
