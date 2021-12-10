@@ -1,5 +1,5 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, EventEmitter, NgZone, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, EventEmitter, NgZone, OnDestroy, OnInit, QueryList, TemplateRef, ViewChild, ViewChildren } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { LoginActions } from 'apps/web-giddh/src/app/actions/login.action';
@@ -47,6 +47,7 @@ import { ShareLedgerComponent } from './components/share-ledger/share-ledger.com
 import { ConfirmModalComponent } from '../theme/new-confirm-modal/confirm-modal.component';
 import { GenerateVoucherConfirmationModalComponent } from './components/generate-voucher-confirm-modal/generate-voucher-confirm-modal.component';
 import { CommonService } from '../services/common.service';
+import { AttachmentsComponent } from '../theme/attachments/attachments.component';
 
 @Component({
     selector: 'ledger',
@@ -2450,5 +2451,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 this.downloadAttachedFile(transaction.attachedFileUniqueName, event);
             }
         }
+    }
+
+    public openAttachmentsDialog(templateRef: TemplateRef<any>): void {
+        let dialogRef = this.dialog.open(AttachmentsComponent, {
+            width: '630px'
+        });
     }
 }
