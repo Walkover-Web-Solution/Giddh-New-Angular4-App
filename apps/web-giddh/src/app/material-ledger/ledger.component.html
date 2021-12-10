@@ -2713,6 +2713,15 @@
                     </div>
                 </div>
             </ng-template>
+
+            <button mat-raised-button (click)="openAttachmentsDialog(attachments)">Open Attachments</button>
+            <ng-template #attachments>
+                <div class="modal-dialog modal-md">
+                    <div class="modal-content">
+                        <attachments></attachments>
+                    </div>
+                </div>
+            </ng-template>
         </ng-container>
     </div>
 </ng-container>
