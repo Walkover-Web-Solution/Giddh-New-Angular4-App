@@ -27,6 +27,7 @@ import { PurchaseRecordService } from 'apps/web-giddh/src/app/services/purchase-
 import { SalesService } from 'apps/web-giddh/src/app/services/sales.service';
 import { saveAs } from 'file-saver';
 import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal';
+import { PerfectScrollbarComponent } from 'ngx-perfect-scrollbar';
 import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
 import { fromEvent, Observable, ReplaySubject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map, take, takeUntil } from 'rxjs/operators';
@@ -65,7 +66,8 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     @ViewChild('attachedDocumentPreview', { static: true }) attachedDocumentPreview: ElementRef;
     /** Instance of PDF container iframe */
     @ViewChild('pdfContainer', { static: false }) pdfContainer: ElementRef;
-
+    /** Instance of perfect scrollbar */
+    @ViewChild('perfectScrollbar', { static: false }) public perfectScrollbar: PerfectScrollbarComponent;
     @Input() public items: InvoicePreviewDetailsVm[];
     @Input() public selectedItem: InvoicePreviewDetailsVm;
     /** Emits the selected item to the parent for updating the current selected item in parent component */
@@ -293,6 +295,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         this.invoiceDetailWrapperHeight = this.invoiceDetailWrapperView?.nativeElement.offsetHeight;
         this.invoiceDetailViewHeight = this.invoiceDetailView?.nativeElement.offsetHeight;
         this.invoiceImageSectionViewHeight = this.invoiceDetailWrapperHeight - this.invoiceDetailViewHeight - 90;
+        this.scrollToActiveItem();
     }
 
     /**
@@ -953,5 +956,17 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                     this._toasty.errorToast(this.commonLocaleData?.app_something_went_wrong);
                 }));
         }
+    }
+
+    /**
+     * Scrolls to active item in the list
+     *
+     * @private
+     * @memberof PurchaseOrderPreviewComponent
+     */
+     private scrollToActiveItem(): void {
+        setTimeout(() => {
+            this.perfectScrollbar?.directiveRef?.scrollToElement(".single-invoice-detail.activeItem");
+        }, 200);
     }
 }
