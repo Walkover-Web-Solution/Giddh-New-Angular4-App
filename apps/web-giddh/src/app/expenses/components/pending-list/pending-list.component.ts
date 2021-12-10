@@ -146,6 +146,7 @@ export class PendingListComponent implements OnInit, OnChanges {
      */
     public hideApproveConfirmPopup(event: any): void {
         if (typeof event === "boolean") {
+            this.getPettyCashPendingReports(this.pettycashRequest);
             this.approveEntryModalRef.close();
             this.selectedEntryForApprove = null;
         } else {
