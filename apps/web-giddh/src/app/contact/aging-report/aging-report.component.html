@@ -227,7 +227,12 @@
             </mat-menu>
         </div>
 
-        <table mat-table [dataSource]="agingReportDataSource" class="w-100 main-table">
+        <table
+            *ngIf="!(getAgingReportRequestInProcess$ | async)"
+            mat-table
+            [dataSource]="agingReportDataSource"
+            class="w-100 main-table"
+        >
             <ng-container matColumnDef="customerName">
                 <th
                     mat-header-cell
@@ -467,7 +472,11 @@
         <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
     </div>
 
-    <div *ngIf="(dueAmountReportData$ | async)?.totalItems >= 20" class="pagination-wrapper">
+    <div
+        *ngIf="(dueAmountReportData$ | async)?.totalItems >= 20"
+        class="pagination-wrapper"
+        [hidden]="getAgingReportRequestInProcess$ | async"
+    >
         <div class="xs-pl-0">
             <div class="text-center unbold">
                 <div id="pagination" element-view-container-ref #paginationChild="elementviewcontainerref"></div>

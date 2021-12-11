@@ -34,7 +34,7 @@ import { OnboardingFormRequest } from "../models/api-models/Common";
 import { StateDetailsRequest } from "../models/api-models/Company";
 import {
     ContactAdvanceSearchCommonModal,
-    ContactAdvanceSearchModal, CustomerVendorDefaultColumns,
+    ContactAdvanceSearchModal,
     DueAmountReportQueryRequest,
     DueAmountReportResponse,
 } from "../models/api-models/Contact";
@@ -107,7 +107,6 @@ export class ContactComponent implements OnInit, OnDestroy {
     public selectedCheckedContacts: string[] = [];
     public activeAccountDetails: any;
     public allSelectionModel: boolean = false;
-    public LOCAL_STORAGE_KEY_FOR_TABLE_COLUMN = "showTableColumn";
     public localStorageKeysForFilters = { customer: "customerFilterStorageV2", vendor: "vendorFilterStorageV2" };
     public isMobileScreen: boolean = false;
     public modalConfig: ModalOptions = {
@@ -246,6 +245,9 @@ export class ContactComponent implements OnInit, OnDestroy {
     public displayColumns$: Observable<string[]> = this.displayColumns.asObservable().pipe(takeUntil(this.destroyed$), distinctUntilChanged(isEqual));
     public customerColumns: string[] = ["customerName", "sales", "receipt", "closing"];
     public vendorColumns: string[] = ["vendorName", "purchase", "payment", "closing"];
+    /** True/false if select all is checked */
+    public selectAll: boolean = false;
+    public availableColumnsCount: any[] = [];
 
     constructor(public dialog: MatDialog, private store: Store<AppState>, private router: Router, private companyServices: CompanyService, private commonActions: CommonActions, private toaster: ToasterService,
         private contactService: ContactService, private settingsIntegrationActions: SettingsIntegrationActions, private companyActions: CompanyActions, private componentFactoryResolver: ComponentFactoryResolver,
@@ -265,7 +267,6 @@ export class ContactComponent implements OnInit, OnDestroy {
             this.dueAmountReportData$ = observableOf(data);
         });
 
-
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
                 this.activeCompany = activeCompany;
@@ -275,20 +276,12 @@ export class ContactComponent implements OnInit, OnDestroy {
                 }
             }
         });
-        Object.keys(CustomerVendorDefaultColumns).forEach(key => {
-            this.showFieldFilter[key] = {
-                visibility: false,
-                displayName: key,
-            };
-        });
-        this.setDisplayColumns();
     }
 
     public ngOnInit() {
         this.imgPath = (isElectron || isCordova) ? "assets/images/" : AppUrl + APP_FOLDER + "assets/images/";
         this.store.dispatch(this.companyActions.getAllRegistrations());
         this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
-        this.getCompanyCustomField();
         this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.isAddAndManageOpenedFromOutside$ = this.store.pipe(select(appStore => appStore.groupwithaccounts.isAddAndManageOpenedFromOutside), takeUntil(this.destroyed$));
         // localStorage supported
@@ -298,8 +291,8 @@ export class ContactComponent implements OnInit, OnDestroy {
                 if (showColumnObj.closingBalance !== undefined) {
                     delete showColumnObj.closingBalance;
                 }
-                // this.showFieldFilter = showColumnObj;
-                // this.setTableColspan();
+                this.showFieldFilter = showColumnObj;
+                this.setTableColspan();
             }
         }
 
@@ -563,7 +556,6 @@ export class ContactComponent implements OnInit, OnDestroy {
             } else {
                 this.setStateDetails(`${this.activeTab}?tab=${this.activeTab}&tabIndex=1`);
             }
-            console.log(tabName);
             this.router.navigate(["/pages/contact/", tabName], { replaceUrl: true });
         }
     }
@@ -571,14 +563,14 @@ export class ContactComponent implements OnInit, OnDestroy {
     public setActiveTab(tabName: "customer" | "aging-report" | "vendor") {
         this.searchStr = "";
         this.tabSelected(tabName);
-        // this.showFieldFilter = {};
+        this.showFieldFilter = {};
         let showColumnObj = JSON.parse(localStorage.getItem(this.localStorageKeysForFilters[this.activeTab === "vendor" ? "vendor" : "customer"]));
         if (showColumnObj) {
             if (showColumnObj.closingBalance !== undefined) {
                 delete showColumnObj.closingBalance;
             }
-            // this.showFieldFilter = showColumnObj;
-            // this.setTableColspan();
+            this.showFieldFilter = showColumnObj;
+            this.setTableColspan();
         }
 
         if (tabName === "vendor") {
@@ -972,7 +964,6 @@ export class ContactComponent implements OnInit, OnDestroy {
     }
 
     public selectAccount(ev: MatCheckboxChange, item: any) {
-
         this.prepareSelectedContactsList(item, ev.checked);
         if (!ev.checked) {
             this.checkboxInfo[this.checkboxInfo.selectedPage] = false;
@@ -1209,16 +1200,16 @@ export class ContactComponent implements OnInit, OnDestroy {
     }
 
     public columnFilter(event: boolean, column: string) {
-        if (this.showFieldFilter[column])
+        if (this.showFieldFilter[column]) {
             this.showFieldFilter[column].visibility = event;
+        }
         this.setTableColspan();
-        // this.showFieldFilter.selectAll = Object.keys(this.showFieldFilter).filter((filterName) => filterName !== "selectAll").every(filterName => this.showFieldFilter[filterName]);
+        
+        this.selectAll = Object.keys(this.showFieldFilter).every(filterName => this.showFieldFilter[filterName].visibility);
+        
         if (window.localStorage) {
             localStorage.setItem(this.localStorageKeysForFilters[this.activeTab === "vendor" ? "vendor" : "customer"], JSON.stringify(this.showFieldFilter));
         }
-        //setTimeout(() => {
-            // this.showFieldFilter.selectAll = Object.keys(this.showFieldFilter).filter((filterName) => filterName !== "selectAll").every(filterName => this.showFieldFilter[filterName]);
-        //}, 500);
         this.setDisplayColumns();
     }
 
@@ -1432,10 +1423,12 @@ export class ContactComponent implements OnInit, OnDestroy {
     public addNewFieldFilters(field: any): void {
         for (let key of field) {
             if (key?.uniqueName) {
+                let index = Object.keys(this.showFieldFilter).length;
                 this.showFieldFilter[key.uniqueName] = {
                     visibility: false,
                     displayName: key.key,
                 };
+                this.availableColumnsCount.push({key: index, value: key.uniqueName});
             }
         }
         this.setDisplayColumns();
@@ -1536,6 +1529,38 @@ export class ContactComponent implements OnInit, OnDestroy {
                     value: "%s_AN",
                 },
             ];
+
+            const availableColumns = [
+                {
+                    key: this.commonLocaleData?.app_parent_group,
+                    uniqueName: 'parentGroup'
+                },
+                {
+                    key: this.localeData?.opening,
+                    uniqueName: 'openingBalance'
+                },
+                {
+                    key: this.localeData?.contacts,
+                    uniqueName: 'contact'
+                },
+                {
+                    key: this.commonLocaleData?.app_state,
+                    uniqueName: 'state'
+                },
+                {
+                    key: this.commonLocaleData?.app_tax_number,
+                    uniqueName: 'gstin'
+                },
+                {
+                    key: this.localeData?.comment,
+                    uniqueName: 'comment'
+                }
+            ];
+
+            this.addNewFieldFilters(availableColumns);
+            this.setTableColspan();
+
+            this.getCompanyCustomField();
         }
     }
 
@@ -1573,7 +1598,7 @@ export class ContactComponent implements OnInit, OnDestroy {
             this.showNameSearch = true;
         }
         setTimeout(() => {
-            el.focus();
+            el?.focus();
         });
     }
 

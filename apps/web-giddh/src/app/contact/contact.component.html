@@ -172,24 +172,29 @@
                                             <i class="icon-options"></i>
                                         </button>
                                         <mat-menu #menu="matMenu">
-                                            <button mat-menu-item>
+                                            <button mat-menu-item (click)="$event.stopPropagation()">
                                                 <mat-checkbox
                                                     color="primary"
                                                     name="selectAll"
+                                                    [(ngModel)]="selectAll"
                                                     (change)="selectAllColumns($event.checked)"
                                                     >Select All
                                                 </mat-checkbox>
                                             </button>
-                                            <ng-container *ngFor="let item of showFieldFilter | keyvalue">
-                                                <button mat-menu-item>
+                                            <ng-container *ngFor="let item of availableColumnsCount">
+                                                <button
+                                                    *ngIf="showFieldFilter[item.value]"
+                                                    mat-menu-item
+                                                    (click)="$event.stopPropagation()"
+                                                >
                                                     <mat-checkbox
                                                         class="text-capitalize"
                                                         color="primary"
-                                                        name="field_filter.parentGroup"
-                                                        (ngModelChange)="columnFilter($event, item.key)"
-                                                        [(ngModel)]="item.value.visibility"
+                                                        name="{{ item?.value }}"
+                                                        (ngModelChange)="columnFilter($event, item.value)"
+                                                        [(ngModel)]="showFieldFilter[item.value].visibility"
                                                     >
-                                                        {{ item.value.displayName }}</mat-checkbox
+                                                        {{ showFieldFilter[item.value].displayName }}</mat-checkbox
                                                     >
                                                 </button>
                                             </ng-container>
@@ -281,7 +286,7 @@
                             </div>
                             <div
                                 class="total-details-box mr-r05 border-none opening-box min-width-230"
-                                *ngIf="showFieldFilter.openingBalance"
+                                *ngIf="showFieldFilter?.openingBalance?.visibility"
                             >
                                 <h5>
                                     {{ localeData?.opening }}
