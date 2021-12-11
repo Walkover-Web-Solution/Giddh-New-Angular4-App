@@ -177,6 +177,9 @@ form label {
     right: 8px;
     top: 9px;
 }
+.align-items-center {
+    align-items: center;
+}
 @media (max-width: 1100px) {
     .payment-top-form {
         .otp-success-msg {

@@ -87,7 +87,7 @@
                     mat-stroked-button
                     color="primary"
                     class="advance-icon"
-                    (click)="toggleAdvanceSearchPopup()"
+                    (click)="showAdvanceSearchPopup()"
                     matTooltip="{{ commonLocaleData?.app_advance_search }}"
                     matTooltipPosition="right"
                 >
@@ -184,7 +184,7 @@
             [localeData]="localeData"
             [commonLocaleData]="commonLocaleData"
             (applyAdvanceSearchEvent)="applyAdvanceSearch($event)"
-            (closeModelEvent)="onNoClick()"
+            (closeModelEvent)="hideAdvanceSearchPopup()"
         >
         </app-contact-advance-search-component>
     </div>
