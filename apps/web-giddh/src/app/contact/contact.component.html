@@ -142,7 +142,7 @@
                                                 name="searchStr"
                                                 [placeholder]="localeData?.name_email_mobile"
                                                 [cssClass]="'form-control'"
-                                                [ngModel]="searchStr"
+                                                [(ngModel)]="searchStr"
                                                 (ngModelChange)="searchStr$.next($event)"
                                             ></text-field>
                                             <span class="input-addon">
@@ -178,7 +178,7 @@
                                                     name="selectAll"
                                                     [(ngModel)]="selectAll"
                                                     (change)="selectAllColumns($event.checked)"
-                                                    >Select All
+                                                    >{{ commonLocaleData?.app_select_all }}
                                                 </mat-checkbox>
                                             </button>
                                             <ng-container *ngFor="let item of availableColumnsCount">
@@ -280,6 +280,13 @@
                                         </button>
                                         <button mat-menu-item (click)="downloadCSV()">
                                             {{ commonLocaleData?.app_download_csv }}
+                                        </button>
+                                        <button
+                                            mat-menu-item
+                                            *ngIf="selectedAccountsList?.length > 0 && activeTab === 'vendor'"
+                                            (click)="openBulkPaymentModal()"
+                                        >
+                                            {{ localeData?.bulk_payment }}
                                         </button>
                                     </mat-menu>
                                 </div>
@@ -559,7 +566,13 @@
     <ng-template #mainTable>
         <div class="mobile-card-wrapper table-responsive vendor-page">
             <ng-container *ngIf="activeTab === 'customer'">
-                <table mat-table [dataSource]="sundryDebtorsAccounts" class="w-100">
+                <table
+                    mat-table
+                    [dataSource]="sundryDebtorsAccounts"
+                    class="w-100"
+                    (mouseenter)="showSelectAll = true"
+                    (mouseleave)="showSelectAll = false"
+                >
                     <ng-container matColumnDef="customerName">
                         <th
                             mat-header-cell
@@ -644,7 +657,7 @@
                                                 class="account-detail-padding"
                                                 (click)="updateCustomerAcc('customer', account)"
                                             >
-                                                <img src="./assets/images/path.svg" />
+                                                <img src="{{ imgPath }}path.svg" />
                                             </button>
                                         </div>
                                         <div class="custom-detail">
@@ -900,7 +913,13 @@
             </ng-container>
 
             <ng-container *ngIf="activeTab === 'vendor'">
-                <table mat-table [dataSource]="sundryCreditorsAccounts" class="w-100">
+                <table
+                    mat-table
+                    [dataSource]="sundryCreditorsAccounts"
+                    class="w-100"
+                    (mouseenter)="showSelectAll = true"
+                    (mouseleave)="showSelectAll = false"
+                >
                     <ng-container matColumnDef="vendorName">
                         <th
                             mat-header-cell
@@ -984,7 +1003,7 @@
                                                 class="account-detail-padding"
                                                 (click)="updateCustomerAcc('vendor', account)"
                                             >
-                                                <img src="./assets/images/path.svg" />
+                                                <img src="{{ imgPath }}path.svg" />
                                             </button>
                                         </div>
                                         <div class="custom-detail">
@@ -1361,7 +1380,7 @@
                                     mat-raised-button
                                     *ngIf="account?.bankPaymentDetails && account?.country?.code === 'IN'"
                                     class="btn-small btn-success min-width-137"
-                                    (click)="openBulkPaymentModal(template, account)"
+                                    (click)="openBulkPaymentModal(account)"
                                 >
                                     {{ commonLocaleData?.app_pay_now }}
                                 </button>

@@ -239,7 +239,9 @@ export class ContactComponent implements OnInit, OnDestroy {
     public imgPath: string = "";
     /** True if single icici bank account is there and is pending for approval */
     public isIciciAccountPendingForApproval: boolean = false;
+    /** Instance of mail modal */
     @ViewChild("mailModal") public mailModalComponent: TemplateRef<any>;
+    /** Instance of bulk payment modal */
     @ViewChild("template") public bulkPaymentModalRef: TemplateRef<any>;
     public displayColumns: BehaviorSubject<string[]> = new BehaviorSubject<string[]>([]);
     public displayColumns$: Observable<string[]> = this.displayColumns.asObservable().pipe(takeUntil(this.destroyed$), distinctUntilChanged(isEqual));
@@ -247,7 +249,10 @@ export class ContactComponent implements OnInit, OnDestroy {
     public vendorColumns: string[] = ["vendorName", "purchase", "payment", "closing"];
     /** True/false if select all is checked */
     public selectAll: boolean = false;
+    /** Holds count of available columns on the page */
     public availableColumnsCount: any[] = [];
+    /** True if we should select all checkbox */
+    public showSelectAll: boolean = false;
 
     constructor(public dialog: MatDialog, private store: Store<AppState>, private router: Router, private companyServices: CompanyService, private commonActions: CommonActions, private toaster: ToasterService,
         private contactService: ContactService, private settingsIntegrationActions: SettingsIntegrationActions, private companyActions: CompanyActions, private componentFactoryResolver: ComponentFactoryResolver,
@@ -796,10 +801,14 @@ export class ContactComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Closes all dialogs
+     *
+     * @memberof ContactComponent
+     */
     public closeAllDialogs(): void {
         this.dialog.closeAll();
     }
-
 
     /**
      * Open Modal for SMS
@@ -1204,9 +1213,9 @@ export class ContactComponent implements OnInit, OnDestroy {
             this.showFieldFilter[column].visibility = event;
         }
         this.setTableColspan();
-        
+
         this.selectAll = Object.keys(this.showFieldFilter).every(filterName => this.showFieldFilter[filterName].visibility);
-        
+
         if (window.localStorage) {
             localStorage.setItem(this.localStorageKeysForFilters[this.activeTab === "vendor" ? "vendor" : "customer"], JSON.stringify(this.showFieldFilter));
         }
@@ -1428,7 +1437,7 @@ export class ContactComponent implements OnInit, OnDestroy {
                     visibility: false,
                     displayName: key.key,
                 };
-                this.availableColumnsCount.push({key: index, value: key.uniqueName});
+                this.availableColumnsCount.push({ key: index, value: key.uniqueName });
             }
         }
         this.setDisplayColumns();
@@ -1619,10 +1628,9 @@ export class ContactComponent implements OnInit, OnDestroy {
     /**
      * To open bulk payment model
      *
-     * @param {TemplateRef<any>} template template/model hash reference
      * @memberof ContactComponent
      */
-    public openBulkPaymentModal(template: TemplateRef<any>, item?: any): void {
+    public openBulkPaymentModal(item?: any): void {
         this.isBulkPaymentShow = true;
         this.selectedAccForPayment = null;
         if (this.selectedAccountsList?.length) {
@@ -1646,8 +1654,6 @@ export class ContactComponent implements OnInit, OnDestroy {
             this.toaster.showSnackBar("info", message);
         }
         if (this.selectedAccountsList?.length || this.selectedAccForPayment) {
-            this.selectedAccountsList = [this.selectedAccountsList[0]]; // since we don't have bulk payment now, we are only passing 1st available value, once bulk payment is done from API, we will remove this line of code
-            // this.bulkPaymentModalRef = this.modalService.show(template, Object.assign({}, { class: "payment-modal modal-xl" }),
             this.dialog.open(this.bulkPaymentModalRef);
         }
     }

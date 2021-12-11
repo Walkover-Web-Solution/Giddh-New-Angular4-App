@@ -384,16 +384,21 @@ export class AgingReportComponent implements OnInit, OnDestroy {
         this.getDueReport();
     }
 
-    public toggleAdvanceSearchPopup() {
-
-        const dialogRef = this.dialog.open(this.advanceSearchTemplate);
-
-        dialogRef.afterClosed().subscribe(() => {
-            console.log("The dialog was closed");
-        });
-
+    /**
+     * Shows advance search popup
+     *
+     * @memberof AgingReportComponent
+     */
+    public showAdvanceSearchPopup(): void {
+        this.dialog.open(this.advanceSearchTemplate);
     }
-    onNoClick(): void {
+
+    /**
+     * Hides the advance search popup
+     *
+     * @memberof AgingReportComponent
+     */
+    public hideAdvanceSearchPopup(): void {
         this.dialog.closeAll();
     }
 
