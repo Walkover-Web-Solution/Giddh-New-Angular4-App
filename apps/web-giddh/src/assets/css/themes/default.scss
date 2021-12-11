@@ -1,0 +1,6 @@
+@import "../color.scss";
+
+body,
+body.default-theme {
+    --primary-color: #{$midnight-blue};
+}
