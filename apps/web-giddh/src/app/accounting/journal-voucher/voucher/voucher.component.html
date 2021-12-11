@@ -182,7 +182,7 @@
                                     </div>
                                 </div>
                                 <table
-                                    *ngIf="requestObj.voucherType !== 'Contra' && requestObj.voucherType !== 'Receipt'"
+                                    *ngIf="requestObj.voucherType !== 'contra' && requestObj.voucherType !== 'receipt'"
                                 >
                                     <tbody>
                                         <ng-container *ngIf="transaction.inventory && transaction.inventory.length">
@@ -442,6 +442,7 @@
     <div class="modal-dialog modal-sm">
         <div class="modal-content">
             <form
+                *ngIf="chequeDetailForm"
                 autocomplete="off"
                 novalidate
                 name="chequeDetailForm"

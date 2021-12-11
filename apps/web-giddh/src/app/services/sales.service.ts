@@ -70,7 +70,7 @@ export class SalesService {
                 catchError((e) => this.errorHandler.HandleCatch<any, GenericRequestForGenerateSCD>(e, model)));
     }
 
-    public updateVoucherV4(model: GenericRequestForGenerateSCD): Observable<BaseResponse<any, GenericRequestForGenerateSCD>> {
+    public updateVoucherV4(model: any): Observable<BaseResponse<any, GenericRequestForGenerateSCD>> {
         let accountUniqueName = model.account.uniqueName;
         this.companyUniqueName = this.generalService.companyUniqueName;
         let url = this.config.apiUrl + SALES_API_V4.UPDATE_VOUCHER
@@ -82,11 +82,11 @@ export class SalesService {
         return this.http.put(url, model)
             .pipe(
                 map((res) => {
-                    let data: BaseResponse<any, GenericRequestForGenerateSCD> = res;
+                    let data: BaseResponse<any, any> = res;
                     data.request = model;
                     return data;
                 }),
-                catchError((e) => this.errorHandler.HandleCatch<any, GenericRequestForGenerateSCD>(e, model)));
+                catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)));
     }
 
     public getStateCode(country) {
@@ -132,7 +132,13 @@ export class SalesService {
      */
     public adjustAnInvoiceWithAdvanceReceipts(model: VoucherAdjustments, invoiceUniqueName: string): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.post(this.config.apiUrl + ADVANCE_RECEIPTS_API.INVOICE_ADJUSTMENT_WITH_ADVANCE_RECEIPT.replace(':companyUniqueName', this.companyUniqueName).replace(':invoiceUniqueName', invoiceUniqueName), model).pipe(
+        let url = this.config.apiUrl + ADVANCE_RECEIPTS_API.INVOICE_ADJUSTMENT_WITH_ADVANCE_RECEIPT.replace(':companyUniqueName', this.companyUniqueName).replace(':invoiceUniqueName', invoiceUniqueName);
+
+        if (this.generalService.voucherApiVersion === 2) {
+            url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
+        }
+
+        return this.http.post(url, model).pipe(
             map((res) => {
                 let data: BaseResponse<any, any> = res;
                 data.request = model;

@@ -206,7 +206,7 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
         } else {
             this.SubscriptionRequestObj.licenceKey = "";
         }
-        this.router.navigate(['billing-detail', 'buy-plan']);
+        this.router.navigate(['pages', 'billing-detail', 'buy-plan']);
         this.store.dispatch(this.companyActions.selectedPlan(plan));
     }
 

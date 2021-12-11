@@ -46,6 +46,7 @@ import { ExportLedgerComponent } from './components/export-ledger/export-ledger.
 import { ShareLedgerComponent } from './components/share-ledger/share-ledger.component';
 import { ConfirmModalComponent } from '../theme/new-confirm-modal/confirm-modal.component';
 import { GenerateVoucherConfirmationModalComponent } from './components/generate-voucher-confirm-modal/generate-voucher-confirm-modal.component';
+import { CommonService } from '../services/common.service';
 
 @Component({
     selector: 'ledger',
@@ -265,7 +266,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
         private searchService: SearchService,
         private settingsBranchAction: SettingsBranchActions,
         private zone: NgZone,
-        public dialog: MatDialog
+        public dialog: MatDialog,
+        private commonService: CommonService
     ) {
 
         this.lc = new LedgerVM();
@@ -2413,5 +2415,40 @@ export class LedgerComponent implements OnInit, OnDestroy {
      */
     public cancelMergeEntry(): void {
         this.lc.showNewLedgerPanel = true;
+    }
+
+    /**
+     * Download files (voucher/attachment)
+     *
+     * @param {*} transaction
+     * @param {string} downloadOption
+     * @memberof LedgerComponent
+     */
+    public downloadFiles(transaction: any, downloadOption: string, event: any): void {
+        if(this.voucherApiVersion === 2) {
+            let dataToSend = {
+                voucherType: transaction.voucherGeneratedType,
+                entryUniqueName: (transaction.voucherUniqueName) ? undefined : transaction.entryUniqueName,
+                uniqueName: (transaction.voucherUniqueName) ? transaction.voucherUniqueName : undefined
+            };
+
+            let fileName = (downloadOption === "VOUCHER") ? transaction.voucherNumber + '.pdf' : transaction.attachedFileName;
+
+            this.commonService.downloadFile(dataToSend, downloadOption, 'pdf').pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                if (response?.status !== "error") {
+                    saveAs(response, fileName);
+                } else {
+                    this.toaster.errorToast(this.commonLocaleData?.app_something_went_wrong);
+                }
+            }, (error => {
+                this.toaster.errorToast(this.commonLocaleData?.app_something_went_wrong);
+            }));
+        } else {
+            if(downloadOption === "VOUCHER") {
+                this.downloadInvoice(transaction, event);
+            } else {
+                this.downloadAttachedFile(transaction.attachedFileUniqueName, event);
+            }
+        }
     }
 }

@@ -676,6 +676,7 @@ export class InvoicePreviewDetailsVm {
     blob?: Blob;
     voucherStatus?: string;
     accountCurrencySymbol?: string;
+    hasAttachment?: boolean;
 }
 
 export class InvoicePaymentRequest {
@@ -687,4 +688,5 @@ export class InvoicePaymentRequest {
     paymentDate: string | Date;
     tagUniqueName?: string;
     description?: string;
+    uniqueName?: string;
 }

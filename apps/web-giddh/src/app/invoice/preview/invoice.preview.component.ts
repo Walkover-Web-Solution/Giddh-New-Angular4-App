@@ -606,15 +606,18 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
      * Bulk update model show hide
      *
      * @param {boolean} isClose Boolean to check model need to close or not
+     * @param {boolean} [refreshVouchers]
      * @memberof InvoicePreviewComponent
      */
-    public toggleBulkUpdatePopup(isClose: boolean): void {
+    public toggleBulkUpdatePopup(isClose: boolean, refreshVouchers?: boolean): void {
         if (isClose) {
             this.bulkUpdate.hide();
+            if (refreshVouchers) {
+                this.getVoucher(this.isUniversalDateApplicable);
+            }
         } else {
             this.bulkUpdate.show();
         }
-
     }
 
     public toggleEwayBillPopup() {
@@ -763,7 +766,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         this.performActionOnInvoiceModel.hide();
         if (data) {
             data.action = 'paid';
-            this.store.dispatch(this.invoiceActions.ActionOnInvoice(this.selectedInvoice.uniqueName, data));
+            this.store.dispatch(this.invoiceActions.ActionOnInvoice(data.uniqueName, data));
         }
     }
 
@@ -776,19 +779,9 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
      */
     public onSelectInvoice(invoice: ReceiptItem) {
         this.selectedInvoice = cloneDeep(invoice);
-
         let allItems: InvoicePreviewDetailsVm[] = cloneDeep(this.itemsListForDetails);
-        let newIndex;
-        if (this.selectedVoucher === VoucherTypeEnum.purchase) {
-            newIndex = allItems.findIndex(item => item.uniqueName === invoice.uniqueName);
-        } else {
-            newIndex = allItems.findIndex(f => f.voucherNumber === invoice.voucherNumber);
-        }
-        const removedItem = allItems.splice(newIndex, 1)[0];
-        allItems.unshift(removedItem);
-
         setTimeout(() => {
-            this.selectedInvoiceForDetails = cloneDeep(allItems[0]);
+            this.selectedInvoiceForDetails = cloneDeep(invoice);
             this.itemsListForDetails = cloneDeep(allItems);
             this.toggleBodyClass();
         }, 200);
@@ -1431,7 +1424,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         // To get re-assign receipts voucher store
         this.store.dispatch(this.invoiceReceiptActions.getVoucherDetailsV4(customerUniqueName, {
             invoiceNumber: item.voucherNumber,
-            voucherType: VoucherTypeEnum.sales
+            voucherType: VoucherTypeEnum.sales,
+            uniqueName: item.uniqueName
         }));
     }
 
@@ -1515,8 +1509,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             }
             apiCallObservable.pipe(takeUntil(this.destroyed$)).subscribe(res => {
                 if (res && res.status === 'success') {
-                    if (res.body && (res.body.length || res.body.results?.length)) {
-                        this.voucherForAdjustment = res.body;
+                    if (res.body && (res.body.length || res.body.results?.length || res.body.items?.length)) {
+                        this.voucherForAdjustment = (res.body.items?.length) ? res.body.items : (res.body.results?.length) ? res.body.results : res.body;
                         this.isAccountHaveAdvanceReceipts = true;
                         this.showAdvanceReceiptAdjust = true;
                         this.adjustPaymentModal.show();

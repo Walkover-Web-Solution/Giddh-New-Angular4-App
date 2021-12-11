@@ -227,7 +227,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
             distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe((voucher: any) => {
                 if (voucher) {
                     this.voucherDetails = voucher;
-                    if (voucher && voucher.templateDetails && voucher.templateDetails.templateUniqueName) {
+                    if (voucher?.templateDetails?.templateUniqueName) {
                         this.getInvoiceTemplateDetails(voucher.templateDetails.templateUniqueName)
                     }
                     this.store.dispatch(this.generalActions.setAppTitle('/pages/invoice/preview/' + this.selectedVoucher));
@@ -379,9 +379,18 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     public previewInvoice() {
-        let model = {
-            uniqueNames: uniq(this.selectedLedgerItems)
-        };
+        let model;
+        
+        if (this.voucherApiVersion === 2) {
+            model = {
+                entryUniqueNames: uniq(this.selectedLedgerItems)
+            };
+        } else {
+            model = {
+                uniqueNames: uniq(this.selectedLedgerItems)
+            };
+        }
+
         let res = find(this.ledgersData.results, (item: ILedgersInvoiceResult) => {
             return item.uniqueName === this.selectedLedgerItems[0];
         });
@@ -391,7 +400,13 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
         } else {
             this.selectedAccountUniqueName = '';
         }
-        this.store.dispatch(this.invoiceActions.ModifiedInvoiceStateData(model?.uniqueNames));
+
+        if (this.voucherApiVersion === 2) {
+            this.store.dispatch(this.invoiceActions.ModifiedInvoiceStateData(model?.entryUniqueNames));
+        } else {
+            this.store.dispatch(this.invoiceActions.ModifiedInvoiceStateData(model?.uniqueNames));
+        }
+        
         if (res?.account?.uniqueName) {
             this.store.dispatch(this.invoiceActions.PreviewInvoice(res.account?.uniqueName, model));
         }

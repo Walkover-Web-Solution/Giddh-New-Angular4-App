@@ -254,7 +254,7 @@
                                                     vm.selectedLedger.attachedFile.length > 0 &&
                                                     (txn?.particular?.name || txn?.particular?.uniqueName)
                                                 "
-                                                (click)="downloadAttachedFile(vm.selectedLedger.attachedFile, $event)"
+                                                (click)="downloadFiles('ATTACHMENT', $event)"
                                                 [matTooltipPosition]="'left'"
                                                 [containerClass]="'col-xs-3'"
                                                 [matTooltip]="
@@ -262,7 +262,7 @@
                                                 "
                                                 matTooltipClass="tooltip-black"
                                             >
-                                                <i class="icon-download-circle pull-left"></i>
+                                                <i class="icon-attachment pull-left"></i>
                                             </span>
 
                                             <span
@@ -283,10 +283,10 @@
                                                     ' : ' +
                                                     vm.selectedLedger.voucherNumber
                                                 "
-                                                (click)="downloadInvoice(vm.selectedLedger, $event)"
+                                                (click)="downloadFiles('VOUCHER', $event)"
                                                 matTooltipClass="tooltip-black"
                                             >
-                                                <i class="icon-download-circle pull-left"></i>
+                                                <i class="icon-download-new pull-left"></i>
                                             </span>
                                         </td>
 
@@ -558,9 +558,9 @@
                                                     vm.selectedLedger.attachedFileName
                                                 "
                                                 matTooltipClass="tooltip-black"
-                                                (click)="downloadAttachedFile(vm.selectedLedger.attachedFile, $event)"
+                                                (click)="downloadFiles('ATTACHMENT', $event)"
                                             >
-                                                <i class="icon-download-circle pull-left"></i>
+                                                <i class="icon-attachment pull-left"></i>
                                             </span>
 
                                             <span
@@ -582,9 +582,9 @@
                                                     vm.selectedLedger.voucherNumber
                                                 "
                                                 matTooltipClass="tooltip-black"
-                                                (click)="downloadInvoice(vm.selectedLedger, $event)"
+                                                (click)="downloadFiles('VOUCHER', $event)"
                                             >
-                                                <i class="icon-download-circle pull-left"></i>
+                                                <i class="icon-download-new pull-left"></i>
                                             </span>
                                         </td>
 
@@ -1836,11 +1836,12 @@
                                             *ngIf="vm.selectedLedger?.attachedFile?.length > 0"
                                         >
                                             <span>{{ vm.selectedLedger?.attachedFileName }}</span>
-                                            <label
-                                                class="remove cp pl-1 text-danger"
-                                                (click)="showDeleteAttachedFileModal()"
-                                                >({{ commonLocaleData?.app_remove | lowercase }})</label
-                                            >
+                                            <span class="delete-attachment cursor-pointer">
+                                                <img
+                                                    (click)="showDeleteAttachedFileModal()"
+                                                    src="assets/images/multiply.svg"
+                                                />
+                                            </span>
                                         </div>
 
                                         <label class="upload-div" [ngClass]="{ hide: vm.selectedLedger.attachedFile }">

@@ -1,25 +1,16 @@
 <div class="text-field-container">
     <input
-        type="text"
-        *ngIf="useMaterial"
         matInput
         [name]="name"
+        [type]="type"
         [id]="id"
         [class]="cssClass"
         [type]="type"
         [placeholder]="placeholder"
         [(ngModel)]="ngModel"
         (input)="handleInput()"
-    />
-    <input
-        type="text"
-        *ngIf="!useMaterial"
-        [name]="name"
-        [id]="id"
-        [class]="cssClass"
-        [type]="type"
-        [placeholder]="placeholder"
-        [(ngModel)]="ngModel"
-        (input)="handleInput()"
+        [maxlength]="maxlength"
+        [readonly]="readonly"
+        [ngClass]="{ 'error-box': showError }"
     />
 </div>
