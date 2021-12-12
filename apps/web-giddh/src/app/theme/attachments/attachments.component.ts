@@ -7,6 +7,9 @@ import { Component, OnChanges, OnDestroy, OnInit } from "@angular/core";
 })
 export class AttachmentsComponent implements OnInit, OnChanges, OnDestroy {
 
+    // adding items in dialog list
+    names: string[] = ['item 1', 'item 2', 'item 3', 'item 4', 'item 5', 'item 6', 'item 7', 'item 8', 'item 9', 'item 10'];
+
     constructor(
 
     ) {
