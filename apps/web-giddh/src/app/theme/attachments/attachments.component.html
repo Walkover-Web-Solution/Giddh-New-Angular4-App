@@ -1,1 +1,31 @@
-Attachments
+<div class="wrapper">
+    <div class="header">
+        <mat-icon aria-hidden="false" aria-label="Return">arrow_back</mat-icon>
+    </div>
+    <div class="section">
+        <div class="left-side">
+            <mat-checkbox class="select-all">Select All</mat-checkbox>
+            <p class="left-side-subHead">Voucher</p>
+            <p class="invoice-head">Invoice 2021 <mat-icon area-label="Clear">clear</mat-icon></p>
+            <p class="attachment">Attachment</p>
+            <div class="attachment-list">
+                <mat-list role="list" *ngFor="let name of names">
+                    <mat-list-item role="listitem"
+                        ><mat-checkbox>{{ name }}</mat-checkbox>
+                        <mat-icon area-label="Clear">clear</mat-icon></mat-list-item
+                    >
+                </mat-list>
+            </div>
+            <button mat-flat-button color="primary">Upload</button>
+        </div>
+
+        <div class="right-side">
+            <div class="right-side-buttons">
+                <button mat-flat-button color="primary">Preview</button>
+                <button mat-flat-button color="primary">Download</button>
+                <button mat-flat-button color="primary">Print</button>
+            </div>
+            <div class="display-area"></div>
+        </div>
+    </div>
+</div>
