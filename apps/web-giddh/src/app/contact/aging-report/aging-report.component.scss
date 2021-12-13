@@ -57,6 +57,8 @@
     border-radius: 5px;
     margin-right: 0;
     width: 73px;
+    position: relative;
+    right: 1px;
 }
 
 .search-field {
@@ -196,8 +198,19 @@ th.mat-header-cell:first-of-type {
             button {
                 min-width: 88px;
                 padding-right: 10px;
+                padding-left: 10px !important;
             }
         }
+    }
+    .total-padding {
+        height: 70px !important;
+    }
+    .mat-column-customerName span:nth-child(2) {
+        position: relative;
+        right: 3px;
+    }
+    .top-aging-table-top1 p {
+        font-weight: 600;
     }
 }
 
@@ -367,5 +380,9 @@ th.mat-header-cell:first-of-type {
 
 ::ng-deep.aging-dropdown-table {
     max-width: 100%;
-    width: 514px;
+    width: 534px;
+    height: 93px;
+    padding-top: 10px;
+    margin-top: 17px;
+    box-shadow: 0 0 19px rgb(0 0 0 / 20%);
 }

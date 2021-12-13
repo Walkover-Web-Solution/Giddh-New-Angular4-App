@@ -392,6 +392,8 @@ button.btn.btn-filter {
     justify-content: space-between;
     align-items: center;
     padding: 4px 10px;
+    width: 11%;
+    transform: translateX(-31px);
 }
 
 button.btn.btn-filter span.icon-cross {
@@ -514,10 +516,7 @@ button.btn.btn-filter span.icon-cross {
     }
     th.mat-header-cell:first-of-type {
         width: 595px;
-        padding-left: 20px !important;
-    }
-    .mat-table tbody > tr > td:first-child {
-        padding-left: 12px !important;
+        padding-left: 5px !important;
     }
     th.mat-header-cell:last-of-type,
     td.mat-cell:last-of-type,
@@ -527,6 +526,20 @@ button.btn.btn-filter span.icon-cross {
     .icon-search:before {
         position: relative;
         bottom: 2px;
+    }
+    .mat-column-customerName {
+        padding-left: 10px !important;
+        .mat-checkbox {
+            transform: translateX(-3px);
+        }
+    }
+    .mat-column-vendorName {
+        padding-left: 28px !important;
+    }
+    .mat-column-customerName span:nth-child(2) {
+        position: relative;
+        right: 0px;
+        left: 3px;
     }
 }
 
@@ -869,12 +882,21 @@ button.btn.btn-filter span.icon-cross {
     min-width: 230px;
 }
 .arrow-icon {
-    top: 11px;
-    right: 11px;
+    right: -3px;
+    width: 30px;
+    height: 30px;
+    border: 2px solid rgb(217, 217, 217);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.arrow-icon:hover {
+    color: white;
+    background-color: rgb(91, 100, 201);
 }
 .select-all-checkbox-wrapper {
     align-items: center;
-    padding-left: 11px;
+    padding-left: 25px;
     .mat-checkbox {
         left: 10px;
     }
