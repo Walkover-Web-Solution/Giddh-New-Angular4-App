@@ -165,12 +165,6 @@ th.mat-header-cell:first-of-type {
 }
 
 ::ng-deep {
-    .mat-column-app_days_1 .icon-pointer,
-    .mat-column-app_days_2 .icon-pointer,
-    .mat-column-app_days_3 .icon-pointer,
-    .mat-column-app_days_4 .icon-pointer {
-        text-decoration: underline;
-    }
     .mat-column-customerName .icon-pointer .font-xxs {
         color: #01a9f4 !important;
     }
@@ -186,12 +180,24 @@ th.mat-header-cell:first-of-type {
     .mat-header-cell .icon-pointer {
         margin-left: 0px;
     }
-
     .mat-table tbody > tr > td:first-child {
         padding-left: 18px !important;
     }
     .mat-flat-button {
         padding: 0px 11px;
+    }
+    .search-table {
+        margin-left: 21px;
+    }
+    .ng-untouched {
+        .pull-right {
+            display: flex;
+            width: 191.3px;
+            button {
+                min-width: 88px;
+                padding-right: 10px;
+            }
+        }
     }
 }
 
