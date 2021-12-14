@@ -236,7 +236,7 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
                 this.currentBranch.uniqueName = currentBranchUniqueName ? currentBranchUniqueName : this.currentBranch?.uniqueName;
                 this.selectedType = currentTimeFilter ? currentTimeFilter.toLowerCase() : this.selectedType;
                 this.populateRecords(this.selectedType);
-                this.purchaseRegisterTotal.particular = this.activeFinacialYr.uniqueName;
+                this.purchaseRegisterTotal.particular = this.activeFinacialYr?.uniqueName;
             }
         });
     }
