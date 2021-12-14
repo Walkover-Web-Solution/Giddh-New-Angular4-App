@@ -208,12 +208,11 @@ tr:last-child td.position-relative.word-wrap.vendor-customer-name.cursor-pointer
         right: 0;
     }
 
-    &:hover .table-menu-first-td {
-        display: block;
-        line-height: 1;
-    }
-
     &:hover {
+        .table-menu-first-td {
+            display: block;
+            line-height: 1;
+        }
         .checkbox-left-side-in-table {
             visibility: visible;
         }
