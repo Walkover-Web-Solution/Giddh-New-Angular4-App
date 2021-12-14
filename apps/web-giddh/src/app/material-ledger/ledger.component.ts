@@ -47,7 +47,6 @@ import { ShareLedgerComponent } from './components/share-ledger/share-ledger.com
 import { ConfirmModalComponent } from '../theme/new-confirm-modal/confirm-modal.component';
 import { GenerateVoucherConfirmationModalComponent } from './components/generate-voucher-confirm-modal/generate-voucher-confirm-modal.component';
 import { CommonService } from '../services/common.service';
-import { AttachmentsComponent } from '../theme/attachments/attachments.component';
 
 @Component({
     selector: 'ledger',
@@ -248,6 +247,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public isMoreDetailsOpened: boolean = false;
     /** Stores the voucher API version of current company */
     public voucherApiVersion: 1 | 2;
+    /** Selected entry details */
+    public selectedItem: any;
 
     constructor(
         private store: Store<AppState>,
@@ -2453,9 +2454,23 @@ export class LedgerComponent implements OnInit, OnDestroy {
         }
     }
 
-    public openAttachmentsDialog(templateRef: TemplateRef<any>): void {
-        let dialogRef = this.dialog.open(AttachmentsComponent, {
+    /**
+     * Shows the attachments popup
+     *
+     * @param {TemplateRef<any>} templateRef
+     * @param {*} transaction
+     * @memberof LedgerComponent
+     */
+    public openAttachmentsDialog(templateRef: TemplateRef<any>, transaction: any): void {
+        this.selectedItem = transaction;
+        let dialogRef = this.dialog.open(templateRef, {
             width: '630px'
+        });
+
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            if (response) {
+                this.getTransactionData();
+            }
         });
     }
 }

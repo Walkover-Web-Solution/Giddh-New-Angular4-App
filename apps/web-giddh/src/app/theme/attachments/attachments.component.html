@@ -5,27 +5,85 @@
     <div class="section">
         <div class="left-side">
             <mat-checkbox class="select-all">Select All</mat-checkbox>
-            <p class="left-side-subHead">Voucher</p>
-            <p class="invoice-head">Invoice 2021 <mat-icon area-label="Clear">clear</mat-icon></p>
-            <p class="attachment">Attachment</p>
-            <div class="attachment-list">
-                <mat-list role="list" *ngFor="let name of names">
-                    <mat-list-item role="listitem"
-                        ><mat-checkbox>{{ name }}</mat-checkbox>
-                        <mat-icon area-label="Clear">clear</mat-icon></mat-list-item
+            <ng-container *ngIf="voucherPdf">
+                <p class="left-side-subHead">Voucher</p>
+                <p class="invoice-head">
+                    <mat-checkbox
+                        color="primary"
+                        [(ngModel)]="voucherPdf.isChecked"
+                        (change)="selectAttachment($event, voucherPdf)"
+                        >&nbsp;</mat-checkbox
+                    ><span (click)="showVoucherPreview()">{{ voucherPdf?.name }}</span>
+                    <mat-icon area-label="Clear" class="cursor-pointer" (click)="showDeleteVoucherModal()"
+                        >clear</mat-icon
                     >
-                </mat-list>
-            </div>
-            <button mat-flat-button color="primary">Upload</button>
+                </p>
+            </ng-container>
+            <ng-container *ngIf="attachments?.length > 0">
+                <p class="attachment">Attachments</p>
+                <div class="attachment-list">
+                    <mat-list role="list" *ngFor="let attachment of attachments; let i = index">
+                        <mat-list-item role="listitem">
+                            <mat-checkbox
+                                color="primary"
+                                [(ngModel)]="attachment.isChecked"
+                                (change)="selectAttachment($event, attachment)"
+                                >&nbsp;</mat-checkbox
+                            ><span (click)="showFilePreview(attachment)">{{ attachment?.name }}</span>
+                            <mat-icon area-label="Clear" class="cursor-pointer" (click)="showDeleteAttachedFileModal(i)"
+                                >clear</mat-icon
+                            >
+                        </mat-list-item>
+                    </mat-list>
+                </div>
+            </ng-container>
+            <!-- <label class="upload-div">
+                <input [disabled]="
+                        !isPettyCash &&
+                        currentOrganizationType === 'COMPANY' &&
+                        branches?.length > 1
+                    " type="file" name="invoiceFile" #fileInputUpdate id="invoiceFile" ngFileSelect
+                    [uploadInput]="uploadInput" [options]="fileUploadOptions" (uploadOutput)="onUploadOutput($event)" />
+                <label for="invoiceFile" class="cp font-16">
+                    <i [ngClass]="
+                            !isFileUploading ? 'icon-file-path' : 'fa fa-spinner rotate'
+                        "></i>
+                    Attach File</label>
+            </label> -->
         </div>
-
         <div class="right-side">
             <div class="right-side-buttons">
-                <button mat-flat-button color="primary">Preview</button>
-                <button mat-flat-button color="primary">Download</button>
+                <a
+                    mat-flat-button
+                    color="primary"
+                    *ngIf="previewedFile && previewedFile?.type !== 'image'"
+                    [href]="previewedFile?.src"
+                    target="_blank"
+                    >Preview</a
+                >
+                <button
+                    mat-flat-button
+                    color="primary"
+                    *ngIf="previewedFile && previewedFile?.type === 'image'"
+                    (click)="openPreview()"
+                >
+                    Preview
+                </button>
+                <button mat-flat-button color="primary" [disabled]="!allowFilesDownload" (click)="downloadFiles()">
+                    Download
+                </button>
                 <button mat-flat-button color="primary">Print</button>
             </div>
-            <div class="display-area"></div>
+            <div class="display-area">
+                <img *ngIf="previewedFile?.type === 'image'" [src]="previewedFile?.src" />
+                <iframe
+                    *ngIf="previewedFile?.type === 'pdf'"
+                    #pdfContainer
+                    width="100%"
+                    height="100%"
+                    [src]="previewedFile?.src"
+                ></iframe>
+            </div>
         </div>
     </div>
 </div>
