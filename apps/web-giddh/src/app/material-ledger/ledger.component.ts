@@ -2464,7 +2464,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public openAttachmentsDialog(templateRef: TemplateRef<any>, transaction: any): void {
         this.selectedItem = transaction;
         let dialogRef = this.dialog.open(templateRef, {
-            width: '630px'
+            width: '70%',
+            height: '650px'
         });
 
         dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
