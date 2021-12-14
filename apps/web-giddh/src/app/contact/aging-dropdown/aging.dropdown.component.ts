@@ -65,6 +65,6 @@ export class AgingDropdownComponent implements OnDestroy {
     }
 
     private showToaster() {
-        this.toasty.errorToast(this.localeData?.aging_dropdown_error);
+        this.toasty.showSnackBar("error", this.localeData?.aging_dropdown_error);
     }
 }
