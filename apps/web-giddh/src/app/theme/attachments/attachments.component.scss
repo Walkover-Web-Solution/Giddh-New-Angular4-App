@@ -1,7 +1,6 @@
 @import "../../../assets/css/color.scss";
 
 .wrapper {
-    height: 50vh;
     .header {
         display: flex;
         align-items: center;
@@ -57,12 +56,6 @@
 }
 
 ::ng-deep {
-    .mat-dialog-container {
-        min-width: 73vw !important;
-        height: 84vh !important;
-        position: relative;
-        right: 12rem;
-    }
     .mat-list-item-content {
         justify-content: space-between;
         height: 40px !important;
