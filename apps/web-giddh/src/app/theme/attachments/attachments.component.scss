@@ -33,14 +33,6 @@
                 mat-list {
                     mat-list-item {
                         height: 45px;
-                        mat-icon {
-                            display: none;
-                        }
-                    }
-                    mat-list-item:hover {
-                        mat-icon {
-                            display: block;
-                        }
                     }
                 }
             }
