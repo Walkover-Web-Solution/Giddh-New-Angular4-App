@@ -5,6 +5,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatListModule } from '@angular/material/list';
 import { CommonModule } from "@angular/common";
+import { NgxUploaderModule } from "ngx-uploader";
+import { NewConfirmModalModule } from "../new-confirm-modal";
+import { MatDialogRef } from "@angular/material/dialog";
 
 @NgModule({
     declarations: [
@@ -15,10 +18,18 @@ import { CommonModule } from "@angular/common";
         MatButtonModule,
         MatCheckboxModule,
         MatListModule,
-        CommonModule
+        CommonModule,
+        NgxUploaderModule,
+        NewConfirmModalModule
     ],
     exports: [
         AttachmentsComponent
+    ],
+    providers: [
+        {
+            provide: MatDialogRef,
+            useValue: {}
+        }
     ]
 })
 export class AttachmentsModule {
