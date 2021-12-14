@@ -213,8 +213,10 @@ tr:last-child td.position-relative.word-wrap.vendor-customer-name.cursor-pointer
         line-height: 1;
     }
 
-    &:hover .checkbox-left-side-in-table {
-        visibility: visible;
+    &:hover {
+        .checkbox-left-side-in-table {
+            visibility: visible;
+        }
     }
 }
 
@@ -527,16 +529,16 @@ button.btn.btn-filter span.icon-cross {
         position: relative;
         bottom: 2px;
     }
-    .mat-column-customerName {
+    .mat-customer-name {
         padding-left: 10px !important;
         .mat-checkbox {
             transform: translateX(-3px);
         }
     }
-    .mat-column-vendorName {
+    .mat-vendor-name {
         padding-left: 28px !important;
     }
-    .mat-column-customerName span:nth-child(2) {
+    .mat-customer-name span:nth-child(2) {
         position: relative;
         right: 0px;
         left: 3px;
@@ -898,7 +900,7 @@ button.btn.btn-filter span.icon-cross {
     align-items: center;
     padding-left: 25px;
     .mat-checkbox {
-        left: 10px;
+        left: 12px;
     }
 }
 .select-single-checkbox-wrapper {
