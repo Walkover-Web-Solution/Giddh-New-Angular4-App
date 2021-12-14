@@ -235,6 +235,7 @@
         >
             <ng-container matColumnDef="customerName">
                 <th
+                    class="mat-customer-name"
                     mat-header-cell
                     *matHeaderCellDef
                     #searchCustomerContainer
@@ -263,7 +264,7 @@
             </ng-container>
 
             <ng-container matColumnDef="parentGroup">
-                <th mat-header-cell *matHeaderCellDef>
+                <th class="mat-parent-group" mat-header-cell *matHeaderCellDef>
                     <div class="d-flex align-items-center">
                         {{ commonLocaleData?.app_parent_group }}
                         <ng-container
@@ -297,7 +298,7 @@
             </ng-container>
 
             <ng-container matColumnDef="app_days_1">
-                <th mat-header-cell *matHeaderCellDef>
+                <th class="mat-app-days-1" mat-header-cell *matHeaderCellDef>
                     <div class="d-flex align-items-center justify-content-end">
                         <button
                             mat-button
@@ -332,7 +333,7 @@
             </ng-container>
 
             <ng-container matColumnDef="app_days_2">
-                <th mat-header-cell *matHeaderCellDef>
+                <th class="mat-app-days-2" mat-header-cell *matHeaderCellDef>
                     <div class="d-flex align-items-center justify-content-end">
                         <button
                             [matMenuTriggerFor]="agingDropdown"
@@ -375,7 +376,7 @@
             </ng-container>
 
             <ng-container matColumnDef="app_days_3">
-                <th mat-header-cell *matHeaderCellDef>
+                <th class="mat-app-days-3" mat-header-cell *matHeaderCellDef>
                     <div class="d-flex align-items-center justify-content-end">
                         <button
                             mat-button
@@ -416,7 +417,7 @@
             </ng-container>
 
             <ng-container matColumnDef="app_days_4">
-                <th mat-header-cell *matHeaderCellDef>
+                <th class="mat-app-days-4" mat-header-cell *matHeaderCellDef>
                     <div class="d-flex align-items-center justify-content-end">
                         <button
                             mat-button
@@ -478,7 +479,7 @@
         [hidden]="getAgingReportRequestInProcess$ | async"
     >
         <div class="xs-pl-0">
-            <div class="text-center unbold">
+            <div class="text-center unbold pagination-sm">
                 <div id="pagination" element-view-container-ref #paginationChild="elementviewcontainerref"></div>
             </div>
         </div>

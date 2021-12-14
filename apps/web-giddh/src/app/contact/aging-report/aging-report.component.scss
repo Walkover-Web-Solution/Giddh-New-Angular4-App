@@ -151,10 +151,6 @@ th.mat-header-cell:first-of-type {
     padding-left: 5px !important;
 }
 
-// .one{
-//     text-decoration: underline;
-// }
-
 .main-table {
     margin-top: 18px;
 }
@@ -167,16 +163,20 @@ th.mat-header-cell:first-of-type {
 }
 
 ::ng-deep {
-    .mat-column-customerName .icon-pointer .font-xxs {
-        color: #01a9f4 !important;
+    .mat-customer-name {
+        .icon-pointer {
+            .font-xxs {
+                color: $deep-sky-blue !important;
+            }
+        }
     }
-    .mat-column-parentGroup {
+    .mat-parent-group {
         padding-left: 10px !important;
     }
-    .mat-column-app_days_1,
-    .mat-column-app_days_2,
-    .mat-column-app_days_3,
-    .mat-column-app_days_4 {
+    .mat-app-days-1,
+    .mat-app-days-2,
+    .mat-app-days-3,
+    .mat-app-days-4 {
         padding-right: 12px !important;
     }
     .mat-header-cell .icon-pointer {
@@ -205,7 +205,7 @@ th.mat-header-cell:first-of-type {
     .total-padding {
         height: 70px !important;
     }
-    .mat-column-customerName span:nth-child(2) {
+    .mat-customer-name span:nth-child(2) {
         position: relative;
         right: 3px;
     }

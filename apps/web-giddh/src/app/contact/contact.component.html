@@ -575,6 +575,7 @@
                 >
                     <ng-container matColumnDef="customerName">
                         <th
+                            class="mat-customer-name"
                             mat-header-cell
                             *matHeaderCellDef
                             #searchCustomerContainer
@@ -584,7 +585,6 @@
                                 <mat-checkbox
                                     class="pos-abs"
                                     color="primary"
-                                    type="checkbox"
                                     *ngIf="selectedCheckedContacts?.length || showSelectAll"
                                     [(ngModel)]="allSelectionModel"
                                     (ngModelChange)="toggleAllSelection(allSelectionModel)"
@@ -922,6 +922,7 @@
                 >
                     <ng-container matColumnDef="vendorName">
                         <th
+                            class="mat-vendor-name"
                             mat-header-cell
                             *matHeaderCellDef
                             #searchCustomerContainer
@@ -929,9 +930,9 @@
                         >
                             <div class="d-flex select-all-checkbox-wrapper">
                                 <mat-checkbox
+                                    class="pos-abs"
                                     color="primary"
-                                    type="checkbox"
-                                    *ngIf="selectedCheckedContacts.length"
+                                    *ngIf="selectedCheckedContacts?.length || showSelectAll"
                                     [(ngModel)]="allSelectionModel"
                                     (ngModelChange)="toggleAllSelection(allSelectionModel)"
                                 ></mat-checkbox>
