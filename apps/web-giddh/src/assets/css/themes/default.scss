@@ -1,7 +1,7 @@
 @import "../color.scss";
 
 body,
-body.default-theme {
+.default-theme {
     --primary-color: #{$midnight-blue};
     --header-button-background-color: #{$white};
     --header-icon-background-color: #{$white};

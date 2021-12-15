@@ -40,6 +40,8 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
     private newVersionAvailableForWebApp: boolean = false;
     /** This holds the active locale */
     public activeLocale: string = "";
+    /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
+    public isCompany: boolean;
 
     constructor(private store: Store<AppState>,
         private router: Router,
@@ -108,6 +110,8 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
                 }
             }
         });
+
+        this.isCompany = this._generalService.currentOrganizationType !== OrganizationType.Branch;
     }
     
 
