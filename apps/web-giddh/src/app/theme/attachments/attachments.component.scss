@@ -4,34 +4,54 @@
     .header {
         display: flex;
         align-items: center;
-        background-color: #1a237e;
-        color: white;
+        background-color: $midnight-blue;
+        color: $white;
         width: 100%;
         padding-left: 10px;
-        height: 14%;
+        height: 50px;
     }
     .section {
         display: flex;
         height: 77vh;
         .left-side {
-            border-right: 1px solid #8080804d;
+            border-right: 1px solid $dim-gray;
             width: 35%;
             padding: 10px 10px 10px 13px;
             .left-side-subHead {
                 font-size: 1.2rem;
+                margin-top: 10px;
             }
             .invoice-head {
                 display: flex;
-                justify-content: space-between;
-                padding-right: 18px;
+                position: relative;
+                span {
+                    margin-left: 5px;
+                    width: 71%;
+                }
+                .clear-icon {
+                    position: absolute;
+                    right: 0px;
+                }
+            }
+            .attachment {
+                font-size: 1.2rem;
+                margin-top: 10px;
             }
             .attachment-list {
-                height: 53.7vh;
+                height: 52vh;
                 overflow: auto;
                 margin-bottom: 14px;
                 mat-list {
                     mat-list-item {
                         height: 45px;
+                        .file-name {
+                            margin-left: 5px;
+                            width: 77%;
+                        }
+                        .clear-icon {
+                            position: absolute;
+                            right: 0px;
+                        }
                     }
                 }
             }
@@ -42,14 +62,19 @@
             .right-side-buttons {
                 width: 100%;
                 display: flex;
-                justify-content: space-between;
+                justify-content: flex-end;
+                .download-button {
+                    margin: 0px 15px;
+                }
             }
             .display-area {
-                width: 100%;
+                max-width: 669px;
                 height: 67.1vh;
-                border: 1px solid #99999973;
+                border: 2px solid $dim-gray;
+                // border: 5px solid red;
                 margin-top: 12px;
                 border-radius: 5px;
+                overflow: hidden;
             }
         }
     }
@@ -57,7 +82,8 @@
 
 ::ng-deep {
     .mat-list-item-content {
-        justify-content: space-between;
-        height: 40px !important;
+        height: auto !important;
+        padding: 0px !important;
+        align-items: flex-start !important;
     }
 }
