@@ -1,5 +1,24 @@
 @import "../color.scss";
 
 body.dark-theme {
-    --primary-color: #{$light-sea-green};
+    --primary-color: #{$black-pearl-dark-theme};
+    --header-button-background-color: #{$midnight-dark-theme};
+    --header-button-text-color: #{$midnight-blue};
+    --company-branch-sidebar-background: #{$bay-leaf};
+    --side-bar-background: #{$bunker};
+    --company-branch-sidebar-head-text-color: #{$dark-fog};
+    --company-branch-sidebar-input-background-color: #{$licorice};
+    --company-branch-sidebar-input-two-background-color: #{$licorice};
+    --company-branch-sidebar-input-two-color: #{$grey-chateau};
+    --company-branch-sidebar-company-count-text-color: #{$grey-chateau};
+    --company-branch-sidebar-company-count-background: #{$licorice};
+    --company-branch-sidebar-tabs-color: #{$white};
+    --company-branch-sidebar-button-background: #{$bay-leaf};
+    --company-branch-sidebar-reload-color: #{$omiod};
+    --company-branch-sidebar-branchName-hover: #{$licorice};
+    --company-branch-sidebar-main-content-color: #{$link-water-dark-theme};
+    --company-branch-sidebar-main-content-color-hover: #{$bay-leaf};
+    --company-branch-sidebar-footer: #{$licorice};
+    --company-branch-sidebar-selected-branch-hover: #{$licorice};
+    --company-branch-sidebar-tab-color: #{$white};
 }

@@ -3,4 +3,21 @@
 body,
 body.default-theme {
     --primary-color: #{$midnight-blue};
+    --header-button-background-color: #{$white};
+    --header-icon-background-color: #{$white};
+    --header-button-text-color: #{$persian-blue};
+    --side-bar-background: #{$white};
+    --company-branch-sidebar-background: #{$solitude-light};
+    --company-branch-sidebar-head-text-color: #{$omiod};
+    --company-branch-sidebar-main-content-color: #{$trout};
+    --company-branch-sidebar-main-content-color-hover: #{$cornflower};
+    --company-branch-sidebar-border-headnav-input: #{$gainsboro};
+    --company-branch-sidebar-rightside-icon-color: #{$grey-chateau};
+    --company-branch-sidebar-input-background-color: #{$solitude-new};
+    --company-branch-sidebar-input-two-background-color: #{$gray-95};
+    --company-branch-sidebar-company-count-background: #{$dark-fog};
+    --company-branch-sidebar-selected-branch-hover: #{$sunshine};
+    --company-branch-sidebar-branchName-hover: #{$light-alice-blue};
+    --company-branch-sidebar-button-background: #{$cornflower};
+    --company-branch-sidebar-tab-color: #{$midnight-blue};
 }
