@@ -53,6 +53,7 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
     public sessionKey$: Observable<string>;
     public allowFilesDownload: boolean = false;
     public invoiceSettings: any;
+    public selectAll: boolean = false;
 
     constructor(
         private commonService: CommonService,
@@ -331,5 +332,27 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
                 });
             }
         });
+    }
+
+    public selectAllAttachments(event: any): void {
+        if(event?.checked) {
+            this.attachments?.map(attachment => {
+                attachment.isChecked = true;
+                return attachment;
+            });
+
+            if(this.voucherPdf) {
+                this.voucherPdf.isChecked = true;
+            }
+        } else {
+            this.attachments?.map(attachment => {
+                attachment.isChecked = false;
+                return attachment;
+            });
+            
+            if(this.voucherPdf) {
+                this.voucherPdf.isChecked = false;
+            }
+        }
     }
 }
