@@ -4,7 +4,9 @@
     </div>
     <div class="section">
         <div class="left-side">
-            <mat-checkbox class="select-all">Select All</mat-checkbox>
+            <mat-checkbox class="select-all" color="primary" (change)="selectAllAttachments($event)"
+                >Select All</mat-checkbox
+            >
             <ng-container *ngIf="voucherPdf">
                 <p class="left-side-subHead">Voucher</p>
                 <p class="invoice-head">
@@ -15,8 +17,8 @@
                         >&nbsp;</mat-checkbox
                     ><span (click)="showVoucherPreview()">{{ voucherPdf?.name }}</span>
                     <mat-icon area-label="Clear" class="cursor-pointer" (click)="showDeleteVoucherModal()"
-                        >clear</mat-icon
-                    >
+                        >clear
+                    </mat-icon>
                 </p>
             </ng-container>
             <ng-container *ngIf="attachments?.length > 0">
