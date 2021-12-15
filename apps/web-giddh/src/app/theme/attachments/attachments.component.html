@@ -1,6 +1,6 @@
 <div class="wrapper">
     <div class="header">
-        <mat-icon aria-hidden="false" aria-label="Return">arrow_back</mat-icon>
+        <mat-icon class="cursor-pointer" aria-hidden="false" aria-label="Return">arrow_back</mat-icon>
     </div>
     <div class="section">
         <div class="left-side">
@@ -15,8 +15,9 @@
                         [(ngModel)]="voucherPdf.isChecked"
                         (change)="selectAttachment($event, voucherPdf)"
                         >&nbsp;</mat-checkbox
-                    ><span (click)="showVoucherPreview()">{{ voucherPdf?.name }}</span>
-                    <mat-icon area-label="Clear" class="cursor-pointer" (click)="showDeleteVoucherModal()"
+                    >
+                    <span class="cursor-pointer" (click)="showVoucherPreview()">{{ voucherPdf?.name }}</span>
+                    <mat-icon area-label="Clear" class="clear-icon cursor-pointer" (click)="showDeleteVoucherModal()"
                         >clear
                     </mat-icon>
                 </p>
@@ -31,8 +32,14 @@
                                 [(ngModel)]="attachment.isChecked"
                                 (change)="selectAttachment($event, attachment)"
                                 >&nbsp;</mat-checkbox
-                            ><span (click)="showFilePreview(attachment)">{{ attachment?.name }}</span>
-                            <mat-icon area-label="Clear" class="cursor-pointer" (click)="showDeleteAttachedFileModal(i)"
+                            >
+                            <span class="file-name cursor-pointer" (click)="showFilePreview(attachment)"
+                                >{{ attachment?.name }} Lorem ipsum dolor sit amet consectetur adipisicing elit.</span
+                            >
+                            <mat-icon
+                                area-label="Clear"
+                                class="clear-icon cursor-pointer"
+                                (click)="showDeleteAttachedFileModal(i)"
                                 >clear</mat-icon
                             >
                         </mat-list-item>
@@ -71,7 +78,13 @@
                 >
                     Preview
                 </button>
-                <button mat-flat-button color="primary" [disabled]="!allowFilesDownload" (click)="downloadFiles()">
+                <button
+                    class="download-button"
+                    mat-flat-button
+                    color="primary"
+                    [disabled]="!allowFilesDownload"
+                    (click)="downloadFiles()"
+                >
                     Download
                 </button>
                 <button mat-flat-button color="primary">Print</button>
