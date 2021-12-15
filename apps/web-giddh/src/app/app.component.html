@@ -4,4 +4,6 @@
         <div class="cube2"></div>
     </div>
 </div>
-<router-outlet></router-outlet>
+<div [ngClass]="{ 'default-theme': isCompany, 'dark-theme': !isCompany }">
+    <router-outlet></router-outlet>
+</div>

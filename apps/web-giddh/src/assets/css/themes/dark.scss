@@ -1,6 +1,6 @@
 @import "../color.scss";
 
-body.dark-theme {
+.dark-theme {
     --primary-color: #{$black-pearl-dark-theme};
     --header-button-background-color: #{$midnight-dark-theme};
     --header-button-text-color: #{$midnight-blue};
