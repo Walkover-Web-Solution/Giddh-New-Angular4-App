@@ -203,7 +203,7 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
     /**
      * This will open the all features popup
      *
-     * 
+     *
      * @memberof SubscriptionsPlansComponent
      */
     public openDialog() {
@@ -368,7 +368,7 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
 
 
     /**
-     * This function will use for get plans 
+     * This function will use for get plans
      *
      * @private
      * @param {*} activeCompany
@@ -419,7 +419,7 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
      * This function will use for format table input row for plans
      *
      * @param {*} row
-     * @return {*} 
+     * @return {*}
      * @memberof SubscriptionsPlansComponent
      */
     public formatInputRow(row) {
