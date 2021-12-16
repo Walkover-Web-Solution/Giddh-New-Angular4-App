@@ -27,6 +27,7 @@
                 span {
                     margin-left: 5px;
                     width: 71%;
+                    margin-top: 3px;
                 }
                 .clear-icon {
                     position: absolute;
@@ -47,6 +48,7 @@
                         .file-name {
                             margin-left: 5px;
                             width: 77%;
+                            margin-top: 1px;
                         }
                         .clear-icon {
                             position: absolute;
@@ -68,13 +70,13 @@
                 }
             }
             .display-area {
-                max-width: 669px;
-                height: 67.1vh;
-                border: 2px solid $dim-gray;
-                // border: 5px solid red;
+                height: 90%;
                 margin-top: 12px;
                 border-radius: 5px;
                 overflow: hidden;
+                img {
+                    max-width: 100%;
+                }
             }
         }
     }
@@ -85,5 +87,18 @@
         height: auto !important;
         padding: 0px !important;
         align-items: flex-start !important;
+    }
+}
+
+@media (max-width: 767px) {
+    .wrapper {
+        .section {
+            .left-side {
+                width: 100%;
+            }
+            .right-side {
+                display: none;
+            }
+        }
     }
 }

@@ -1294,9 +1294,10 @@
                                                             class="download-invoice-ledger d-flex"
                                                             *ngIf="
                                                                 voucherApiVersion === 2 &&
-                                                                (txn.attachedFileUniqueName || txn.voucherGenerated)
+                                                                (transactions.attachedFileUniqueName ||
+                                                                    transactions.voucherGenerated)
                                                             "
-                                                            (click)="openAttachmentsDialog(attachments, txn)"
+                                                            (click)="openAttachmentsDialog(attachments, transactions)"
                                                         >
                                                             <i class="icon-attachment pull-left"></i>
                                                         </span>
