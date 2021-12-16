@@ -33,9 +33,7 @@
                     *matCellDef="let element"
                 >
                     <div [ngClass]="{ 'whole-plan-span': showLoader, 'skelton-common-class': showLoader }">
-                        <span class="hide-plan-td" *ngIf="!showLoader" [innerHTML]="element[column]">
-                            {{ element[column] }}
-                        </span>
+                        <span class="hide-plan-td" *ngIf="!showLoader" [innerHTML]="element[column] | safe"> </span>
                     </div>
                 </td>
             </ng-container>
@@ -52,12 +50,12 @@
     <!-- <div class="no-plan col-md-3">
          <div class="renewal-data">
              <mat-card class="renewal-card">
-                <mat-card-subtitle [ngClass]="{ 'skelton-common-class': showLoader , 'renewal-card-subtitle-loading': showLoader}" class="renewal-card-subtitle">{{ this.activeCompany?.subscription?.planDetails?.name }} 
+                <mat-card-subtitle [ngClass]="{ 'skelton-common-class': showLoader , 'renewal-card-subtitle-loading': showLoader}" class="renewal-card-subtitle">{{ this.activeCompany?.subscription?.planDetails?.name }}
                 </mat-card-subtitle>
                 <mat-card-title [ngClass]="{ 'skelton-common-class': showLoader, 'renewal-card-title-loading': showLoader}" class="renewal-card-title">
                     ₹{{ this.activeCompany?.subscription?.planDetails?.amount | number }}
                     <span class="year">/{{ this.activeCompany?.subscription?.planDetails?.duration }} {{ this.activeCompany?.subscription?.planDetails?.durationUnit }} {{ this.activeCompany?.subscription?.planDetails?.duration !== 1 ? "(s)" : "" }}
-                       </span></mat-card-title>  
+                       </span></mat-card-title>
         <p [ngClass]="{ 'skelton-common-class': showLoader}" class="renewal-off">₹15000 <span class="discount-off" *ngIf="!showLoader">20% off</span></p>
         <mat-card-content class="renewal-card-content">
                     <ul class="renewal-list" [ngClass]="{ 'renewal-list-loading': showLoader}">
@@ -67,7 +65,7 @@
                         <li  [ngClass]="{ 'skelton-common-class': showLoader, 'features-loading': showLoader}" class="features">
                             {{ this.activeCompany?.subscription?.planDetails?.companiesLimit | number }}  Companies
                         </li>
-        <li  [ngClass]="{ 'skelton-common-class': showLoader, 'features-loading': showLoader}" class="features">10 hrs<span class="hrs-underline"> Muneem Consultant</span></li> 
+        <li  [ngClass]="{ 'skelton-common-class': showLoader, 'features-loading': showLoader}" class="features">10 hrs<span class="hrs-underline"> Muneem Consultant</span></li>
        <li [ngClass]="{ 'skelton-common-class': showLoader, 'features-loading': showLoader}" class="features">{{ localeData?.subscription?.unlimited_users }}</li>
                         <li [ngClass]="{ 'skelton-common-class': showLoader, 'features-loading': showLoader}" class="features">{{ localeData?.subscription?.unlimited_contacts }}</li>
                         <li  [ngClass]="{ 'skelton-common-class': showLoader, 'features-loading': showLoader}" class="features">{{ localeData?.subscription?.desktop_mobile_app }}</li>
