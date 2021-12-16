@@ -39,8 +39,8 @@ import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { AddOnsComponent } from './components/add-ons/add-ons.component';
 import {MatSliderModule} from '@angular/material/slider';
 import { MatCardModule } from '@angular/material/card';
-
-
+import { SafePipeModule } from '../shared/helpers/pipes/safePipe/safePipe.module';
+import {MatIconModule} from '@angular/material/icon';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: true
@@ -92,17 +92,19 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         MatDialogModule,
         ShSelectModule,
         MatSliderModule,
-        MatCardModule
+        MatCardModule,
+        SafePipeModule,
+        MatIconModule
     ],
     providers: [
-        
+
         {
             provide: PERFECT_SCROLLBAR_CONFIG,
             useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG
         },
         DecimalPipe
     ]
-    
+
 })
 export class UserDetailsModule {
 
