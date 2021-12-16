@@ -1,6 +1,6 @@
 import { takeUntil } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
-import { Component, OnDestroy, OnInit, TemplateRef, Output, EventEmitter, Input } from '@angular/core';
+import { Component, OnDestroy, OnInit, TemplateRef, Output, EventEmitter, Input, ChangeDetectorRef, ElementRef, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ReplaySubject, Observable } from 'rxjs';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { UserDetails } from '../../../models/api-models/loginModels';
@@ -15,18 +15,61 @@ import { FormControl } from '@angular/forms';
 import { DEFAULT_SIGNUP_TRIAL_PLAN, DEFAULT_POPULAR_PLAN } from '../../../app.constant';
 import { SettingsProfileService } from '../../../services/settings.profile.service';
 import { ToasterService } from '../../../services/toaster.service';
+import { MatDialog } from '@angular/material/dialog';
+import { AllFeaturesComponent } from '../all-features/all-features.component';
+import { SubscriptionsUser } from '../../../models/api-models/Subscriptions';
+import { uniqBy } from '../../../lodash-optimized';
 
+
+/** This interface will be used for table layout */
+export interface PlanTable {
+    name: any;
+    transactions: any;
+    companies: any;
+    consultant: any;
+    unlimited_users: any;
+    unlimited_customers: any;
+    desktop_mobile_app: any;
+    check_all_features: any;
+}
+
+/** This will use for static data for plan table  */
+const TABLE_DATA: PlanTable[] = [
+    { name: 'Benefits', transactions: 1000, companies: 1, consultant: '2hrs', unlimited_users: 'check', unlimited_customers: 'check', desktop_mobile_app: 'check', check_all_features: 'button' },
+    { name: 'Transactions', transactions: 1000, companies: 1, consultant: '3hrs', unlimited_users: 'check', unlimited_customers: 'check', desktop_mobile_app: 'check', check_all_features: 'button' },
+    { name: 'Companies', transactions: 1000, companies: 1, consultant: '5hrs', unlimited_users: 'check', unlimited_customers: 'check', desktop_mobile_app: 'check', check_all_features: 'button' },
+    { name: 'Consultant', transactions: 1000, companies: 1, consultant: '5hrs', unlimited_users: 'check', unlimited_customers: 'check', desktop_mobile_app: 'check', check_all_features: 'button' },
+    { name: 'Unlimited Users', transactions: 1000, companies: 1, consultant: '6hrs', unlimited_users: 'check', unlimited_customers: 'check', desktop_mobile_app: 'check', check_all_features: 'button' },
+    { name: 'Unlimited Customers', transactions: 1000, companies: 1, consultant: '1hrs', unlimited_users: 'check', unlimited_customers: 'check', desktop_mobile_app: 'check', check_all_features: 'button' },
+    { name: 'Desktop/ Mobile App', transactions: 1000, companies: 1, consultant: '3hrs', unlimited_users: 'check', unlimited_customers: 'check', desktop_mobile_app: 'check', check_all_features: 'button' },
+    { name: 'Check All Features', transactions: 1000, companies: 1, consultant: '7hrs', unlimited_users: 'check', unlimited_customers: 'check', desktop_mobile_app: 'check', check_all_features: 'button' },
+];
 @Component({
     selector: 'subscriptions-plans',
     styleUrls: ['./subscriptions-plans.component.scss'],
-    templateUrl: './subscriptions-plans.component.html'
+    templateUrl: './subscriptions-plans.component.html',
+    encapsulation: ViewEncapsulation.Emulated
 })
 export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
+
     @Input() public subscriptions: any;
     /** This will hold local JSON data */
     @Input() public localeData: any = {};
     /** This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
+    /** This will hold to show subscription plan */
+    @Output() public isSubscriptionPlanShow = new EventEmitter<boolean>();
+    /** This will use for table content scroll in mobile */
+    @ViewChild('tableContent', { read: ElementRef }) public tableContent: ElementRef<any>;
+    /** This will use for table columns */
+    public inputColumns = ['name', 'transactions', 'companies', 'consultant', 'unlimited_users', 'unlimited_customers', 'desktop_mobile_app', 'check_all_features'];
+    /** This will use for hold table data */
+    public inputData = TABLE_DATA;
+    /** This will be use for display columns of plan table  */
+    public displayColumns: any[];
+    /** This will use for display data of plan table */
+    public displayData: any[];
+    /** This will hold the login user */
     public logedInUser: UserDetails;
     public subscriptionPlans: CreateCompanyUsersPlan[] = [];
     public currentCompany: any;
@@ -42,9 +85,8 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
     public isSwitchPlanInProcess: boolean = false;
     public selectNewPlan: boolean = false;
     public isShow = true;
-    @Output() public isSubscriptionPlanShow = new EventEmitter<boolean>();
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    modalRef: BsModalRef;
+    public modalRef: BsModalRef;
     /** This will contain the type of plans we have to show */
     public showPlans: any = '';
     /** This will contain the number of plans with multiple companies */
@@ -65,78 +107,57 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
     public unlimitedUsersTooltipContent: string = "";
     /** This will contain the tooltip content of unlimited customers */
     public unlimitedCustomersVendorsTooltipContent: string = "";
-    /** This will contain the tooltip content of desktop and mobile app */
-    public desktopMobileAppTooltipContent: string = "";
+    /** This will contain the tooltip content of desktop_mobile_appp and mobile app */
+    public desktop_mobile_apppMobileAppTooltipContent: string = "";
     /** This will contain the plan unique name of default trial plan */
     public defaultTrialPlan: string = DEFAULT_SIGNUP_TRIAL_PLAN;
     /** This will contain the plan name of popular plan */
     public defaultPopularPlan: string = DEFAULT_POPULAR_PLAN;
     /** This will hold if plans are showing */
     public isShowPlans: boolean = false;
+    /** This will hold the object of active company */
+    public activeCompany;
+    /** This will stores the seleceted user plans */
+    public seletedUserPlans: SubscriptionsUser;
+    /** This will stores the subscription plans  */
+    public subscriptionPlan: CreateCompanyUsersPlan;
+    /** True if api call in progress */
+    public showLoader: boolean = true;
+
 
     constructor(private modalService: BsModalService, private generalService: GeneralService,
-        private authenticationService: AuthenticationService, private store: Store<AppState>,
-        private router: Router, private companyActions: CompanyActions,
+        private changeDetectionRef: ChangeDetectorRef, private authenticationService: AuthenticationService, private store: Store<AppState>,
+        private router: Router, private companyActions: CompanyActions, public dialog: MatDialog,
         private settingsProfileActions: SettingsProfileActions, private settingsProfileService: SettingsProfileService, private toasty: ToasterService, public route: ActivatedRoute) {
 
         this.store.pipe(select(profile => profile.settings.profile), takeUntil(this.destroyed$)).subscribe((response) => {
             if (response && !_.isEmpty(response)) {
                 let companyInfo = _.cloneDeep(response);
-
-                if(companyInfo?.countryV2?.alpha2CountryCode) {
-                    this.authenticationService.getAllUserSubsciptionPlans(companyInfo?.countryV2?.alpha2CountryCode).pipe(takeUntil(this.destroyed$)).subscribe(res => {
-                        this.subscriptionPlans = res.body;
-
-                        this.totalMultipleCompanyPlans = 0;
-                        this.totalSingleCompanyPlans = 0;
-                        this.totalFreePlans = 0;
-
-                        if (this.subscriptionPlans && this.subscriptionPlans.length > 0) {
-                            this.subscriptionPlans.forEach(item => {
-                                if (!item.subscriptionId && item.planDetails) {
-                                    if (item.planDetails.uniqueName !== this.defaultTrialPlan) {
-                                        if (item.planDetails.amount && item.planDetails.companiesLimit > 1) {
-
-                                            if (!this.defaultMultipleCompanyPlan) {
-                                                this.defaultMultipleCompanyPlan = item;
-                                            }
-
-                                            this.totalMultipleCompanyPlans++;
-                                        } else if (item.planDetails.amount && item.planDetails.companiesLimit === 1) {
-
-                                            if (!this.defaultSingleCompanyPlan && item.planDetails.name === this.defaultPopularPlan) {
-                                                this.defaultSingleCompanyPlan = item;
-                                            }
-
-                                            this.totalSingleCompanyPlans++;
-                                        } else if (!item.planDetails.amount) {
-
-                                            if (!this.defaultFreePlan) {
-                                                this.defaultFreePlan = item;
-                                            }
-
-                                            this.totalFreePlans++;
-                                        }
-                                    }
-                                }
-                            });
-                        }
-                    });
-                }
+                if (companyInfo?.countryV2?.alpha2CountryCode) { }
                 this.currentCompany = companyInfo?.name;
             }
         });
         this.isUpdateCompanyInProgress$ = this.store.pipe(select(s => s.settings.updateProfileInProgress), takeUntil(this.destroyed$));
         this.isUpdateCompanySuccess$ = this.store.pipe(select(s => s.settings.updateProfileSuccess), takeUntil(this.destroyed$));
+
     }
 
     public ngOnInit() {
+        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if (activeCompany) {
+                if (!this.activeCompany) {
+                    this.getPlans(activeCompany);
+                }
+                this.activeCompany = activeCompany;
+            }
+        });
+
         this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
-        
+
         this.transactionLimitTooltipContent = this.localeData?.subscription?.transaction_limit_content;
         this.unlimitedUsersTooltipContent = this.localeData?.subscription?.unlimited_users_content;
         this.unlimitedCustomersVendorsTooltipContent = this.localeData?.subscription?.unlimited_customers_content;
-        this.desktopMobileAppTooltipContent = this.localeData?.subscription?.desktop_mobile_app_content;
+        this.desktop_mobile_apppMobileAppTooltipContent = this.localeData?.subscription?.desktop_mobile_appp_mobile_app_content;
 
         this.router.navigate(['/pages', 'user-details', 'subscription'], {
             queryParams: {
@@ -182,12 +203,15 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
     /**
      * This will open the all features popup
      *
-     * @param {TemplateRef<any>} AllFeatures
+     * 
      * @memberof SubscriptionsPlansComponent
      */
-    public allFeaturesModal(AllFeatures: TemplateRef<any>) {
-        this.modalRef = this.modalService.show(AllFeatures, { class: 'modal-xl all-features-modal' });
+    public openDialog() {
+        this.dialog.open(AllFeaturesComponent, {
+            panelClass: 'custom-modalbox'
+        });
     }
+
 
     /**
      * This will take the user back to last page
@@ -265,7 +289,7 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
             this.showPlans = type;
         }
     }
-    
+
     /**
      * This function smooth scroller for all plans section
      * @param {string} type
@@ -295,4 +319,133 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
         text = text?.replace("[USER_NAME]", this.logedInUser?.name);
         return text;
     }
+
+    /**
+    * This function will use for renew plan
+    *
+    * @memberof SubscriptionsPlansComponent
+    */
+    public renewPlan(): void {
+        if (this.seletedUserPlans && this.seletedUserPlans.planDetails && this.seletedUserPlans.planDetails.amount > 0) {
+
+            this.subscriptionPlan = {
+                companies: this.seletedUserPlans.companies,
+                totalCompanies: this.seletedUserPlans.totalCompanies,
+                userDetails: {
+                    name: this.seletedUserPlans.userDetails?.name,
+                    uniqueName: this.seletedUserPlans.userDetails?.uniqueName,
+                    email: this.seletedUserPlans.userDetails?.email,
+                    signUpOn: this.seletedUserPlans.userDetails?.signUpOn,
+                    mobileno: this.seletedUserPlans.userDetails?.mobileno
+                },
+                additionalTransactions: this.seletedUserPlans.additionalTransactions,
+                createdAt: this.seletedUserPlans.createdAt,
+                planDetails: this.seletedUserPlans.planDetails,
+                additionalCharges: this.seletedUserPlans.additionalCharges,
+                status: this.seletedUserPlans.status,
+                subscriptionId: this.seletedUserPlans.subscriptionId,
+                balance: this.seletedUserPlans.balance,
+                expiry: this.seletedUserPlans.expiry,
+                startedAt: this.seletedUserPlans.startedAt,
+                companiesWithTransactions: this.seletedUserPlans.companiesWithTransactions,
+                companyTotalTransactions: this.seletedUserPlans.companyTotalTransactions,
+                totalTransactions: this.seletedUserPlans.totalTransactions
+            };
+
+            this.router.navigate(['pages', 'billing-detail', 'buy-plan']);
+            this.store.dispatch(this.companyActions.selectedPlan(this.subscriptionPlan));
+        } else {
+            this.SubscriptionRequestObj.userUniqueName = this.logedInUser.uniqueName;
+            if (this.seletedUserPlans?.subscriptionId) {
+                this.SubscriptionRequestObj.subscriptionId = this.seletedUserPlans?.subscriptionId;
+                this.patchProfile({ subscriptionRequest: this.SubscriptionRequestObj, callNewPlanApi: true });
+            } else if (!this.seletedUserPlans?.subscriptionId) {
+                this.SubscriptionRequestObj.planUniqueName = this.seletedUserPlans?.planDetails?.uniqueName;
+                this.patchProfile({ subscriptionRequest: this.SubscriptionRequestObj, callNewPlanApi: true });
+            }
+        }
+    }
+
+
+    /**
+     * This function will use for get plans 
+     *
+     * @private
+     * @param {*} activeCompany
+     * @memberof SubscriptionsPlansComponent
+     */
+    private getPlans(activeCompany): void {
+        this.authenticationService.getAllUserSubsciptionPlans(activeCompany?.countryV2?.alpha2CountryCode).pipe(takeUntil(this.destroyed$)).subscribe(res => {
+            this.subscriptionPlans = res.body;
+            let subscriptions = res.body;
+            this.inputData = [];
+            this.inputData.push({
+                name: '<b>Benefits</b>',
+                transactions: '<b>Transactions</b>',
+                companies: '<b>Companies</b>',
+                consultant: '<b>Munnem.co Consultant</b>',
+                unlimited_users: '<b>Unlimited Users</b>',
+                unlimited_customers: '<b>Unlimited Customers/Vendors</b>',
+                desktop_mobile_app: ' <b>Desktop/Mobile App</b>',
+                check_all_features: '<a>Check all features</a>'
+            });
+
+            let planObj = uniqBy(subscriptions.map(subscription => { return subscription.planDetails }), "name");
+            planObj.forEach(plan => {
+                this.inputData.push({
+                    name: plan?.name + '<br>' + '<span class="susbcription-plan-amount">' + '₹' + plan?.amount + '</span>' + '/' + '<span class="susbcription-plan-years" >' + plan?.durationUnit + '</span>',
+                    transactions: plan?.transactionLimit,
+                    companies: plan?.companiesLimit,
+                    consultant: '2hrs',
+                    unlimited_users: '<mat-icon>check</mat-icon>',
+                    unlimited_customers: '<mat-icon>check</mat-icon>',
+                    desktop_mobile_app: '<mat-icon>check</mat-icon>',
+                    check_all_features: '<button mat-raised-button color="primary">Renew</button>'
+                });
+            });
+
+            this.displayColumns = this.inputData.map(x => {
+                return x.name.toString()
+            });
+            this.displayData = this.inputColumns.map(x => { return this.formatInputRow(x) });
+            this.changeDetectionRef.detectChanges();
+
+            setTimeout(() => {
+                this.showLoader = false;
+            }, 100);
+        });
+    }
+    /**
+     * This function will use for format table input row for plans
+     *
+     * @param {*} row
+     * @return {*} 
+     * @memberof SubscriptionsPlansComponent
+     */
+    public formatInputRow(row) {
+        const output = {};
+        for (let i = 0; i < this.inputData.length; ++i) {
+            output[this.inputData[i].name] = this.inputData[i][row];
+        }
+        return output;
+    }
+
+    /**
+    * This will scroll the right slide in mobile view for table
+    *
+    * @memberof SubscriptionsPlansComponent
+    */
+    public scrollRight(): void {
+        this.tableContent.nativeElement.scrollTo({ left: (this.tableContent.nativeElement.scrollLeft + 150), behavior: 'smooth' });
+    }
+
+    /**
+     *This will scroll the left slide in mobile view for table
+     *
+     * @memberof SubscriptionsPlansComponent
+     */
+    public scrollLeft(): void {
+        this.tableContent.nativeElement.scrollTo({ left: (this.tableContent.nativeElement.scrollLeft - 150), behavior: 'smooth' });
+    }
 }
+
