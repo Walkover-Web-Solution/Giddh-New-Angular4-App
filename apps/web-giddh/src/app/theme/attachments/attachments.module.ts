@@ -8,6 +8,8 @@ import { CommonModule } from "@angular/common";
 import { NgxUploaderModule } from "ngx-uploader";
 import { NewConfirmModalModule } from "../new-confirm-modal";
 import { MatDialogRef } from "@angular/material/dialog";
+import { GiddhPageLoaderModule } from "../../shared/giddh-page-loader/giddh-page-loader.module";
+import { FormsModule } from "@angular/forms";
 
 @NgModule({
     declarations: [
@@ -20,7 +22,9 @@ import { MatDialogRef } from "@angular/material/dialog";
         MatListModule,
         CommonModule,
         NgxUploaderModule,
-        NewConfirmModalModule
+        NewConfirmModalModule,
+        GiddhPageLoaderModule,
+        FormsModule
     ],
     exports: [
         AttachmentsComponent

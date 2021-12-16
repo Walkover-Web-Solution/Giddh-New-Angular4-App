@@ -20,6 +20,9 @@ import { ConfirmModalComponent } from "../new-confirm-modal/confirm-modal.compon
 import { InvoiceSetting } from "../../models/interfaces/invoice.setting.interface";
 import { InvoiceActions } from "../../actions/invoice/invoice.actions";
 import { InvoiceBulkUpdateService } from "../../services/invoice.bulkupdate.service";
+import { BreakpointObserver } from "@angular/cdk/layout";
+import { NewConfirmationModalComponent } from "../new-confirmation-modal/confirmation-modal.component";
+import { ConfirmationModalButton } from "../../common/confirmation-modal/confirmation-modal.interface";
 
 @Component({
     selector: "attachments",
@@ -54,6 +57,8 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
     public allowFilesDownload: boolean = false;
     public invoiceSettings: any;
     public selectAll: boolean = false;
+    public isLoading: boolean = true;
+    public isMobileView: boolean = false;
 
     constructor(
         private commonService: CommonService,
@@ -68,9 +73,16 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
         private ledgerService: LedgerService,
         private invoiceAction: InvoiceActions,
         private invoiceBulkUpdateService: InvoiceBulkUpdateService,
-        private dialogRef: MatDialogRef<any>
+        private dialogRef: MatDialogRef<any>,
+        private breakpointObserver: BreakpointObserver
     ) {
         this.sessionKey$ = this.store.pipe(select(state => state.session.user.session.id), takeUntil(this.destroyed$));
+
+        this.breakpointObserver.observe([
+            '(max-width: 767px)'
+        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
+            this.isMobileView = result.matches;
+        });
     }
 
     public ngOnInit(): void {
@@ -84,7 +96,7 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
         });
 
         this.store.pipe(select(state => state.invoice.settings), takeUntil(this.destroyed$)).subscribe((settings: InvoiceSetting) => {
-            if(settings) {
+            if (settings) {
                 this.invoiceSettings = settings;
             } else {
                 this.store.dispatch(this.invoiceAction.getInvoiceSetting());
@@ -147,37 +159,87 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
                 if (response.body?.data) {
                     let objectURL = this.generalService.base64ToBlob(response.body?.data, 'application/pdf', 512);
                     this.voucherPdf = { name: this.selectedItem?.voucherNumber, uniqueName: this.selectedItem?.voucherUniqueName, type: "pdf", src: objectURL, originalSrc: objectURL, encodedData: response.body?.data, isChecked: false };
-                    this.showVoucherPreview();
+                    if (!this.isMobileView) {
+                        this.showVoucherPreview();
+                    }
                 } else {
                     this.showFilePreview(this.attachments[0]);
                 }
-
+                this.isLoading = false;
                 this.changeDetectionRef.detectChanges();
             } else {
+                this.isLoading = false;
+                this.changeDetectionRef.detectChanges();
                 this.toaster.errorToast(this.commonLocaleData?.app_something_went_wrong);
             }
         }, (error => {
+            this.isLoading = false;
+            this.changeDetectionRef.detectChanges();
             this.toaster.errorToast(this.commonLocaleData?.app_something_went_wrong);
         }));
     }
 
     public showFilePreview(attachment: any): void {
         this.previewedFile = attachment;
+        if (!this.isMobileView) {
+            if (attachment?.type === "pdf") {
+                const file = new Blob([attachment?.src], { type: 'application/pdf' });
+                let pdfFileURL = URL.createObjectURL(file);
+                this.previewedFile.src = this.domSanitizer.bypassSecurityTrustResourceUrl(pdfFileURL);
+            }
+            this.changeDetectionRef.detectChanges();
+        } else {
+            let dialogRef = this.dialog.open(NewConfirmationModalComponent, {
+                width: '310px',
+                data: {
+                    configuration: this.getConfirmationModalConfiguration()
+                }
+            });
 
-        if (attachment?.type === "pdf") {
-            const file = new Blob([attachment?.src], { type: 'application/pdf' });
-            let pdfFileURL = URL.createObjectURL(file);
-            this.previewedFile.src = this.domSanitizer.bypassSecurityTrustResourceUrl(pdfFileURL);
+            dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+                if (response === "Preview") {
+                    if (this.previewedFile?.type === "pdf") {
+                        const file = new Blob([this.previewedFile?.src], { type: 'application/pdf' });
+                        let pdfFileURL = URL.createObjectURL(file);
+                        this.previewedFile.src = pdfFileURL;
+                    }
+                    this.openPreview();
+                } else if (response === "Download") {
+                    this.downloadFiles();
+                } else if (response === "Print") {
+
+                }
+            });
         }
-        this.changeDetectionRef.detectChanges();
     }
 
     public showVoucherPreview(): void {
-        this.previewedFile = cloneDeep(this.voucherPdf);
-        const file = new Blob([this.voucherPdf?.src], { type: 'application/pdf' });
-        let pdfFileURL = URL.createObjectURL(file);
-        this.previewedFile.src = this.domSanitizer.bypassSecurityTrustResourceUrl(pdfFileURL);
-        this.changeDetectionRef.detectChanges();
+        if (!this.isMobileView) {
+            this.previewedFile = cloneDeep(this.voucherPdf);
+            const file = new Blob([this.voucherPdf?.src], { type: 'application/pdf' });
+            let pdfFileURL = URL.createObjectURL(file);
+            this.previewedFile.src = this.domSanitizer.bypassSecurityTrustResourceUrl(pdfFileURL);
+            this.changeDetectionRef.detectChanges();
+        } else {
+            let dialogRef = this.dialog.open(NewConfirmationModalComponent, {
+                width: '310px',
+                data: {
+                    configuration: this.getConfirmationModalConfiguration()
+                }
+            });
+
+            dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+                if (response === "Preview") {
+                    const file = new Blob([this.voucherPdf?.src], { type: 'application/pdf' });
+                    let pdfFileURL = URL.createObjectURL(file);
+                    window.open(pdfFileURL);
+                } else if (response === "Download") {
+                    saveAs(this.voucherPdf.src, `${this.voucherPdf.name}.pdf`);
+                } else if (response === "Print") {
+
+                }
+            });
+        }
     }
 
     public openPreview(): void {
@@ -226,6 +288,14 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
         if (isAttachmentSelected?.length > 0 || this.voucherPdf?.isChecked) {
             this.allowFilesDownload = true;
         }
+
+        let allAttachmentSelected = this.attachments?.filter(attachment => !attachment.isChecked);
+        if (!allAttachmentSelected?.length && this.voucherPdf?.isChecked) {
+            this.selectAll = true;
+        } else {
+            this.selectAll = false;
+        }
+
         this.changeDetectionRef.detectChanges();
     }
 
@@ -292,7 +362,7 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
     public showDeleteVoucherModal(): void {
         let messageBody = this.localeData?.confirm_delete_file;
         let autoDeleteEntries = this.invoiceSettings?.invoiceSettings?.autoDeleteEntries;
-        if(autoDeleteEntries) {
+        if (autoDeleteEntries) {
             messageBody = "You enabled to delete entries on voucher delete, so this will delete your entry as well.";
         }
 
@@ -318,8 +388,8 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
                     if (response) {
                         if (response.status === "success") {
                             this.toaster.showSnackBar("success", response.body);
-                            
-                            if(autoDeleteEntries) {
+
+                            if (autoDeleteEntries) {
                                 this.dialogRef.close(true);
                             } else {
                                 this.voucherPdf = null;
@@ -335,24 +405,48 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
     }
 
     public selectAllAttachments(event: any): void {
-        if(event?.checked) {
-            this.attachments?.map(attachment => {
-                attachment.isChecked = true;
-                return attachment;
-            });
+        this.attachments = this.attachments?.map(attachment => {
+            attachment.isChecked = event?.checked;
+            return attachment;
+        });
 
-            if(this.voucherPdf) {
-                this.voucherPdf.isChecked = true;
-            }
-        } else {
-            this.attachments?.map(attachment => {
-                attachment.isChecked = false;
-                return attachment;
-            });
-            
-            if(this.voucherPdf) {
-                this.voucherPdf.isChecked = false;
-            }
+        if (this.voucherPdf) {
+            this.voucherPdf.isChecked = event?.checked;
         }
+
+        this.allowFilesDownload = event?.checked;
+        this.changeDetectionRef.detectChanges();
+    }
+
+    private getConfirmationModalConfiguration(): any {
+        const buttons: Array<ConfirmationModalButton> = [
+            {
+                text: 'Preview',
+                cssClass: 'btn btn-success'
+            },
+            {
+                text: 'Download',
+                cssClass: 'btn btn-success'
+            },
+            {
+                text: 'Print',
+                cssClass: 'btn btn-success'
+            }
+        ];
+
+        const headerText: string = 'Choose';
+        const headerCssClass: string = 'd-inline-block mr-1';
+        const messageCssClass: string = 'mr-b1 text-light';
+        const footerCssClass: string = 'mr-b1';
+
+        return {
+            headerText,
+            headerCssClass,
+            messageText: '',
+            messageCssClass,
+            footerText: '',
+            footerCssClass,
+            buttons
+        };
     }
 }
