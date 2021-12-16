@@ -4,9 +4,14 @@
     </div>
     <div class="section">
         <div class="left-side">
-            <mat-checkbox class="select-all" color="primary" (change)="selectAllAttachments($event)"
-                >Select All</mat-checkbox
-            >
+            <mat-checkbox
+                *ngIf="voucherPdf || attachments?.length > 0"
+                class="select-all font-14"
+                color="primary"
+                [(ngModel)]="selectAll"
+                (change)="selectAllAttachments($event)"
+                >Select All
+            </mat-checkbox>
             <ng-container *ngIf="voucherPdf">
                 <p class="left-side-subHead">Voucher</p>
                 <p class="invoice-head">
@@ -16,9 +21,9 @@
                         (change)="selectAttachment($event, voucherPdf)"
                         >&nbsp;</mat-checkbox
                     >
-                    <span class="cursor-pointer" (click)="showVoucherPreview()">{{ voucherPdf?.name }}</span>
-                    <mat-icon area-label="Clear" class="clear-icon cursor-pointer" (click)="showDeleteVoucherModal()"
-                        >clear
+                    <span class="cursor-pointer font-14" (click)="showVoucherPreview()">{{ voucherPdf?.name }}</span>
+                    <mat-icon area-label="Clear" class="clear-icon cursor-pointer" (click)="showDeleteVoucherModal()">
+                        clear
                     </mat-icon>
                 </p>
             </ng-container>
@@ -33,9 +38,9 @@
                                 (change)="selectAttachment($event, attachment)"
                                 >&nbsp;</mat-checkbox
                             >
-                            <span class="file-name cursor-pointer" (click)="showFilePreview(attachment)"
-                                >{{ attachment?.name }} Lorem ipsum dolor sit amet consectetur adipisicing elit.</span
-                            >
+                            <span class="file-name cursor-pointer font-14" (click)="showFilePreview(attachment)">{{
+                                attachment?.name
+                            }}</span>
                             <mat-icon
                                 area-label="Clear"
                                 class="clear-icon cursor-pointer"
@@ -60,7 +65,7 @@
                     Attach File</label>
             </label> -->
         </div>
-        <div class="right-side">
+        <div class="right-side" *ngIf="!isMobileView">
             <div class="right-side-buttons">
                 <a
                     mat-flat-button
