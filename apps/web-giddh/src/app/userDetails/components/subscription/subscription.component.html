@@ -1,7 +1,3 @@
-<!-- <giddh-page-loader *ngIf="  isGetAccountsInProcess">
-</giddh-page-loader> -->
-<!-- <giddh-page-loader *ngIf="showLoader"></giddh-page-loader> -->
-
 <!-- <ng-container *ngIf="!showLoader "> -->
 <div *ngIf="!isPlanShow">
     <div class="main-content-subsription">
@@ -332,7 +328,7 @@
                             >
                                 {{ commonLocaleData?.app_renew }}
                             </button>
-                            <button mat-flat-button color="primary">Buy Add-ons</button>
+                            <!-- <button mat-flat-button color="primary">Buy Add-ons</button> -->
                         </div>
                     </mat-toolbar>
                     <!-- Addons selector  -->
@@ -1016,13 +1012,7 @@
     </div>
 </div>
 <!-- </ng-container> -->
-<!-- <subscription-plans
-    *ngIf="isPlanShow && localeData?.subscription"
-    [subscriptions]="subscriptions"
-    (isSubscriptionPlanShow)="isSubscriptionPlanShow($event)"
-    [localeData]="localeData"
-    [commonLocaleData]="commonLocaleData"
-></subscription-plans> -->
+
 <subscriptions-plans
     *ngIf="isPlanShow && localeData?.subscription"
     [subscriptions]="subscriptions"

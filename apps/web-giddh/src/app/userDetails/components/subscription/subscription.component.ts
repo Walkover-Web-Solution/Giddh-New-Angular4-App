@@ -82,7 +82,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** True if api call in progress */
     public showLoader: boolean = false;
-    /**  Image path variable */
+    /** Image path variable */
     public imgPath: string = '';
     /** This will filter the dropdowns of expiry and transaction balance in subscription list */
     public filters: any = { plan: '', expiration: '', transactionBalance: '' };
@@ -142,6 +142,8 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
 
     public ngOnInit(): void {
 
+        this.isPlanShow = false;
+
         /** This condition will use for general service for logged in user */
         if (this.generalService.user) {
             this.loggedInUser = this.generalService.user;
@@ -175,6 +177,8 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
                 this.isPlanShow = true;
             }
         });
+
+        
         
         /** This will use for image format */
         this.imgPath = (isElectron || isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
@@ -232,11 +236,11 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
         //This service will use for get subscribed companies
         this.subscriptionService.getSubScribedCompanies().pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             this.showLoader = false;
-            this.isPlanShow = true;
+            // this.isPlanShow = true;
             if (res?.status === "success" && res?.body) {
                 this.store.dispatch(this.subscriptionsActions.SubscribedCompaniesResponse(res));
             } else {
-                this.isPlanShow = true;
+                // this.isPlanShow = true;
                 this.showLoader = false;
             }
         });
@@ -251,7 +255,6 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
         const dialogRef = this.dialog.open(this.moveCompany, { height: '50%', width: '40%' });
 
         dialogRef.afterClosed().subscribe(result => {
-            console.log(`Dialog result: ${result}`);
         });
     }
 

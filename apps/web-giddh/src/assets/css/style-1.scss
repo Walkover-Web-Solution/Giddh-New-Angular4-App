@@ -251,6 +251,7 @@ aside-menu-account .container-fluid {
 .pd {
     padding: 5px;
 }
+
 .pd-1 {
     padding: 10px !important;
 }
@@ -286,6 +287,7 @@ aside-menu-account .container-fluid {
 .pd-r05 {
     padding-right: 5px;
 }
+
 .pd-t1 {
     padding-top: 10px;
 }
@@ -377,6 +379,7 @@ aside-menu-account .container-fluid {
 .pd-t15 {
     padding-top: 15px;
 }
+
 .pd-b15 {
     padding-bottom: 15px;
 }
@@ -476,9 +479,11 @@ aside-menu-account .container-fluid {
 .mr-t5 {
     margin-top: 50px;
 }
+
 .mr-b5 {
     margin-bottom: 50px;
 }
+
 .mr-b4 {
     margin-bottom: 40px;
 }
@@ -527,12 +532,15 @@ aside-menu-account .container-fluid {
 .border-none {
     border: none;
 }
+
 .border-top-none {
     border-top: none;
 }
+
 .bd-r-right-none {
     border-right: none;
 }
+
 .bd-rt {
     border-top: 1px solid $gainsboro;
 }
@@ -652,9 +660,11 @@ aside-menu-account .container-fluid {
     border-radius: 5px;
     padding: 14px 30px;
     width: 100%;
+
     h5 {
         font-size: 12px;
         color: $omiod;
+
         .number-total {
             font-size: 16px;
             font-weight: 800;
@@ -662,38 +672,48 @@ aside-menu-account .container-fluid {
         }
     }
 }
+
 .count-box {
     background: $white;
 }
+
 .opening-box {
     background: $fog-green;
+
     h5 {
         .number-total {
             color: $success-green;
         }
     }
 }
+
 .sales-purchase {
     background: $light-orange;
+
     h5 {
         .number-total {
             color: $dull-yellow;
         }
     }
 }
+
 .payment-receipt {
     background: $pale-blue;
+
     h5 {
         .number-total {
             color: $chetwode-blue;
         }
     }
 }
+
 .closing-box {
     background: $gray-95;
 }
+
 .due-box {
     background: $light-red;
+
     h5 {
         .number-total {
             color: $red;
@@ -841,11 +861,13 @@ aside-menu-account .container-fluid {
         transform: translateY(0);
         -moz-transform: translateY(0);
     }
+
     20% {
         background: rgba(0, 0, 0, 0.75);
         transform: translateY(13px);
         -moz-transform: translateY(13px);
     }
+
     40% {
         background: rgba(0, 0, 0, 0.75);
         transform: translateY(-13px);
@@ -861,11 +883,13 @@ aside-menu-account .container-fluid {
         transform: translateY(0);
         -webkit-transform: translateY(0);
     }
+
     20% {
         background: rgba(0, 0, 0, 0.75);
         transform: translateY(13px);
         -webkit-transform: translateY(13px);
     }
+
     40% {
         background: rgba(0, 0, 0, 0.75);
         transform: translateY(-13px);
@@ -1011,6 +1035,7 @@ aside-menu-account .container-fluid {
 .max-width-500 {
     max-width: 500px;
 }
+
 /* styles for trial-balance */
 
 .page-title {
@@ -1136,6 +1161,7 @@ aside-menu-account .container-fluid {
     from {
         opacity: 0;
     }
+
     to {
         opacity: 1;
     }
@@ -1145,6 +1171,7 @@ aside-menu-account .container-fluid {
     from {
         opacity: 0;
     }
+
     to {
         opacity: 1;
     }
@@ -1154,6 +1181,7 @@ aside-menu-account .container-fluid {
     from {
         opacity: 0;
     }
+
     to {
         opacity: 1;
     }
@@ -1163,6 +1191,7 @@ aside-menu-account .container-fluid {
     from {
         opacity: 0;
     }
+
     to {
         opacity: 1;
     }
@@ -1172,6 +1201,7 @@ aside-menu-account .container-fluid {
     from {
         opacity: 0;
     }
+
     to {
         opacity: 1;
     }
@@ -1359,9 +1389,11 @@ table:focus {
 .min160 {
     min-width: 160px;
 }
+
 .min-height-100 {
     min-height: 100px;
 }
+
 .account-card {
     max-width: 300px;
     min-height: 240px;
@@ -1377,9 +1409,11 @@ table:focus {
     border: 1px solid $gainsboro;
     word-break: break-all;
 }
+
 .account-card:first-child {
     margin-left: 0px;
 }
+
 .account-card:hover {
     background: $white;
     box-shadow: 0 5px 5px 0 rgba(58, 58, 58, 0.18);
@@ -1537,6 +1571,7 @@ table:focus {
     body.unresponsive {
         width: 100%;
     }
+
     .container {
         width: 100%;
     }
@@ -1555,13 +1590,16 @@ table:focus {
         float: left;
         margin: 0;
     }
+
     hamburger-menu .navbar-nav {
         float: none;
     }
+
     .navbar-nav.navbar-right {
         float: right;
         margin: 0;
     }
+
     .navbar-nav .open .dropdown-menu {
         position: absolute;
         float: none;
@@ -1583,6 +1621,7 @@ table:focus {
     .modal-liq-90 {
         width: 900px;
     }
+
     .manage-account-popup .modal-liq-90 {
         width: 100%;
     }
@@ -1788,6 +1827,7 @@ ul.pills li {
         transform: translateY(-100%);
         opacity: 0;
     }
+
     to {
         transform: translateY(0);
         opacity: 1;
@@ -1799,6 +1839,7 @@ ul.pills li {
         transform: translateY(-100%);
         opacity: 0;
     }
+
     to {
         transform: translateY(0);
         opacity: 1;
@@ -1810,6 +1851,7 @@ ul.pills li {
         transform: translateY(-100%);
         opacity: 0;
     }
+
     to {
         transform: translateY(0);
         opacity: 1;
@@ -1821,6 +1863,7 @@ ul.pills li {
         transform: translateY(-100%);
         opacity: 0;
     }
+
     to {
         transform: translateY(0);
         opacity: 1;
@@ -2213,8 +2256,10 @@ ul.pills li {
     border: 1px solid rgba(0, 0, 0, 0.15);
     border-radius: 4px;
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+
     li {
         margin-bottom: 10px;
+
         &:last-child {
             margin-bottom: 0;
         }
@@ -2318,6 +2363,7 @@ ul.pills li {
 #setting-tab .nav > li > a:hover {
     background: transparent;
 }
+
 .navbar-inverse .navbar-nav > .open > a {
     background-color: $nero;
     border-color: transparent;
@@ -2398,6 +2444,7 @@ bs-datepicker-container {
     align-items: center;
     -ms-flex-align: center;
 }
+
 .justify-content-end {
     justify-content: flex-end;
 }
@@ -2450,6 +2497,7 @@ perfect-scrollbar.ps-show-active > .ps.ps--active-y > .ps-overlay:not(.ps-at-bot
 .discount-item:hover {
     background-color: $lavender !important;
     color: $chetwode-blue !important;
+
     &:hover {
         .pull-left.text-ellipsis {
             color: $chetwode-blue !important;
@@ -2499,9 +2547,11 @@ perfect-scrollbar.ps-show-active > .ps.ps--active-y > .ps-overlay:not(.ps-at-bot
 body.fixed {
     overflow-y: hidden;
 }
+
 #blank-ledger-container tbody tr:empty {
     display: none;
 }
+
 #getGroupModal {
     height: 100vh;
 }
@@ -2510,15 +2560,19 @@ form#groupDetailForm {
     max-width: 660px;
     width: 100%;
 }
+
 .mobile-header {
     display: none;
 }
+
 #getGroupModal #middleBody {
     height: 100%;
 }
+
 #getGroupModal.get-group-modal #middleBody {
     height: auto;
 }
+
 .select2-ledger .menu .item {
     white-space: initial;
 }
@@ -2527,6 +2581,7 @@ form#groupDetailForm {
 .right-col-new {
     width: 50% !important;
 }
+
 /* responsive */
 
 @media (min-width: 768px) {
@@ -2539,6 +2594,7 @@ form#groupDetailForm {
     .mobile-header .upper-layer-header .navbar-nav {
         float: none;
     }
+
     .desktop-header {
         display: block;
     }
@@ -2546,6 +2602,7 @@ form#groupDetailForm {
     .mobile-header .btn-xs {
         padding: 3px 8px !important;
     }
+
     .universal-date {
         margin-right: 0;
     }
@@ -2555,10 +2612,12 @@ form#groupDetailForm {
     .modal-dialog.universal_modal .shortcuts {
         display: none;
     }
+
     .pd-t1-md {
         padding-top: 10px;
     }
 }
+
 @media (max-width: 1024px) {
     #inventory-sidebar {
         .parent-group {
@@ -2569,6 +2628,7 @@ form#groupDetailForm {
             }
         }
     }
+
     .no-data {
         height: 60vh;
         justify-content: center;
@@ -2577,6 +2637,7 @@ form#groupDetailForm {
         flex-direction: column;
         margin: 0 !important;
     }
+
     .expense-ledger {
         update-ledger-entry-panel {
             .modal-body {
@@ -2584,9 +2645,11 @@ form#groupDetailForm {
                     .ledger-head {
                         display: none !important;
                     }
+
                     .custom-tabs {
                         margin-left: -15px;
                         margin-right: -15px;
+
                         .nav.nav-tabs {
                             position: relative !important;
                             width: 100% !important;
@@ -2601,11 +2664,13 @@ form#groupDetailForm {
         }
     }
 }
+
 @media screen and (max-width: 768px) {
     .table-container.trial-balance {
         .table-responsive {
             display: table;
         }
+
         section {
             div {
                 div {
@@ -2616,6 +2681,7 @@ form#groupDetailForm {
                         max-width: 20% !important;
                         min-width: 150px;
                     }
+
                     white-space: nowrap !important;
                     width: 30% !important;
                     max-width: 30% !important;
@@ -2623,6 +2689,7 @@ form#groupDetailForm {
                 }
             }
         }
+
         .table-footer {
             th {
                 &:first-child {
@@ -2632,6 +2699,7 @@ form#groupDetailForm {
                     max-width: 20% !important;
                     min-width: 150px;
                 }
+
                 white-space: nowrap;
                 width: 30% !important;
                 max-width: 30% !important;
@@ -2639,11 +2707,13 @@ form#groupDetailForm {
                 border-right: none !important;
             }
         }
+
         .row {
             flex-wrap: nowrap;
         }
     }
 }
+
 @media only screen and (max-width: 767px) {
     .mobile-header {
         display: block;
@@ -2651,9 +2721,11 @@ form#groupDetailForm {
         top: 0;
         z-index: 101;
     }
+
     .desktop-header {
         display: none;
     }
+
     .ledger-book .h-table tbody .ledger-row td {
         position: relative;
         display: block;
@@ -2662,6 +2734,7 @@ form#groupDetailForm {
         border: 0px;
         text-align: left;
     }
+
     .ledger-book .h-table tbody .ledger-row td:after {
         content: attr(data-title);
         position: absolute;
@@ -2674,10 +2747,12 @@ form#groupDetailForm {
     .transactions-page .right-col-new {
         padding-bottom: 20px;
     }
+
     .ledger-book .h-table tbody .ledger-row {
         width: 100%;
         border-bottom: 1px solid $gainsboro;
     }
+
     bs-daterangepicker-container,
     bs-datepicker-container {
         overflow-y: auto;
@@ -2728,10 +2803,12 @@ form#groupDetailForm {
     height: 100vh;
     color: $black;
 }
+
 .aside-pane {
     max-width: 760px;
     width: 100%;
 }
+
 .aside-overlay {
     position: fixed;
     top: 0;
@@ -2745,27 +2822,33 @@ form#groupDetailForm {
     -o-transition: opacity 0.15s linear;
     transition: opacity 0.15s linear;
 }
+
 .aside-body {
     padding: 0 15px;
 }
+
 @media (max-width: 768px) {
     .aside-pane {
         max-width: 600px;
     }
 }
+
 @media (max-width: 575px) {
     .aside-pane {
         max-width: 370px;
     }
+
     .advance-icon {
         font-size: 16px !important;
     }
 }
+
 @media (max-width: 375px) {
     .aside-pane {
         max-width: 310px;
     }
 }
+
 @media (max-width: 320px) {
     .aside-pane {
         max-width: 280px;
@@ -2775,16 +2858,20 @@ form#groupDetailForm {
 .delete-custom-field-modal-container {
     z-index: 999999 !important;
 }
+
 /* material css for ledger */
 .mat-dialog-container {
     padding: 0px !important;
 }
+
 .mat-dialog-title {
     margin-bottom: 0px !important;
 }
+
 .mat-radio-button {
     margin-right: 16px;
 }
+
 .ledg-head,
 #import-statement-modal,
 .xs-table-block,
@@ -2797,32 +2884,38 @@ form#groupDetailForm {
     .mat-form-field {
         .mat-form-field-wrapper {
             padding-bottom: 0 !important;
+
             .mat-form-field-flex {
                 padding: 0 !important;
                 align-items: center;
+
                 .mat-form-field-infix {
                     padding: 0 !important;
                     border-top: 0 !important;
                     width: 100% !important;
                 }
             }
+
             .mat-form-field-underline {
                 display: none !important;
             }
         }
     }
 }
+
 .password-label,
 .clearance-date {
     .mat-form-field-appearance-fill .mat-form-field-flex {
         background-color: $white !important;
     }
 }
+
 giddh-datepicker {
     .mat-form-field {
         width: 100% !important;
     }
 }
+
 .other-details-section,
 .collapse-pane,
 .left-col-new,
@@ -2833,6 +2926,7 @@ giddh-datepicker {
         }
     }
 }
+
 .ledg-head {
     .ledger-row {
         .mat-input-element {
@@ -2840,11 +2934,13 @@ giddh-datepicker {
             height: 38px;
         }
     }
+
     .mat-form-field-appearance-fill {
         .mat-form-field-flex {
             background: $white !important;
         }
     }
+
     .ledger-book {
         .left-col-new,
         .right-col-new {
@@ -2855,6 +2951,7 @@ giddh-datepicker {
                         width: 100%;
                         justify-content: flex-start !important;
                     }
+
                     &:nth-child(3) {
                         .mat-grid-tile-content {
                             justify-content: center !important;
@@ -2872,9 +2969,11 @@ giddh-datepicker {
     .mat-expansion-panel-header {
         padding: 0 15px !important;
     }
+
     .mat-expansion-panel-body {
         padding: 0 0px 0px !important;
     }
+
     sh-select {
         .chip {
             height: auto !important;
@@ -2929,15 +3028,19 @@ giddh-datepicker {
         }
     }
 }
+
 .mat-field-border {
     border: 1px solid $gainsboro !important;
 }
+
 .mat-grid-tile.select2-parent.select2-ledger .mat-grid-tile-content {
     padding-left: 0px !important;
 }
+
 .ledg-head .mat-grid-list .mat-grid-tile.new-entry-date .mat-grid-tile-content {
     padding-left: 2px !important;
 }
+
 .ledg-head
     .mat-grid-list
     .mat-grid-tile.new-entry-ledger.select2-parent.select2-ledger
@@ -2945,15 +3048,18 @@ giddh-datepicker {
     input.form-control.focused {
     padding-left: 1px !important;
 }
+
 .ledger-advance-search-field {
     .mat-form-field-suffix {
         right: 10px !important;
         position: absolute;
     }
 }
+
 .mat-input-element {
     box-sizing: border-box !important;
 }
+
 update-ledger-entry-panel .ledger-main .mat-form-field {
     min-width: auto !important;
 }
@@ -2972,41 +3078,51 @@ update-ledger-entry-panel .ledger-main .mat-form-field {
     color: $white !important;
     font-size: 13px;
 }
+
 .mat-snack-bar-container.error {
     background-color: $red-toast !important;
 }
+
 .mat-snack-bar-container.success {
     background-color: $green-toast !important;
 }
+
 .mat-snack-bar-container.warning {
     background-color: $warning-toast !important;
 }
+
 .mat-snack-bar-container.info {
     background-color: $info-toast !important;
 }
+
 .mat-form-field-appearance-fill .mat-form-field-flex,
 .mat-form-field-ripple,
 .mat-form-field-appearance-fill .mat-form-field-underline::before {
     background: none !important;
 }
+
 .overflow-visible {
     overflow: visible !important;
 }
+
 .container-modal-class {
     .mat-dialog-container {
         overflow: initial !important;
     }
 }
+
 .mat-header-cell {
     color: $midnight-blue !important;
     font-family: "opensans-semibold";
     font-size: 14px !important;
 }
+
 .mat-header-cell.text-right {
     .mat-sort-header-container {
         justify-content: flex-end !important;
     }
 }
+
 .mat-header-cell,
 .mat-cell {
     font-weight: 400;
@@ -3014,20 +3130,24 @@ update-ledger-entry-panel .ledger-main .mat-form-field {
     text-transform: capitalize;
     display: table-cell !important;
 }
+
 .mat-table {
     tbody {
         > tr {
             > td {
                 color: $omiod !important;
+
                 &:first-child {
                     color: $black-pearl !important;
                 }
             }
+
             > td.no-wrap {
                 white-space: nowrap !important;
             }
         }
-        tr {
+
+        tr:not(.plan-row-columns) {
             &:hover {
                 td {
                     background: $light-alice-blue !important;
@@ -3042,10 +3162,12 @@ update-ledger-entry-panel .ledger-main .mat-form-field {
     tr.mat-footer-row {
         border-top: 1px solid $gainsboro;
     }
+
     td.mat-cell {
         border-bottom-width: 0px !important;
         border-top: 1px solid $gainsboro;
     }
+
     .nested-table {
         > tbody {
             tr {
@@ -3053,7 +3175,9 @@ update-ledger-entry-panel .ledger-main .mat-form-field {
                     border: 0 !important;
                     padding: 8px 0;
                 }
+
                 border-top: 1px solid $blue-grey;
+
                 &:first-child {
                     border-top: none !important;
                 }
@@ -3065,6 +3189,7 @@ update-ledger-entry-panel .ledger-main .mat-form-field {
 table.mat-table {
     border-spacing: 2px !important;
 }
+
 th.mat-header-cell:first-of-type,
 td.mat-cell:first-of-type,
 td.mat-footer-cell:first-of-type {
@@ -3072,6 +3197,7 @@ td.mat-footer-cell:first-of-type {
     white-space: normal !important;
     word-break: inherit;
 }
+
 th.mat-header-cell,
 td.mat-cell,
 td.mat-footer-cell {
@@ -3081,12 +3207,14 @@ td.mat-footer-cell {
     border-bottom-width: 1px;
     border-bottom-color: $gainsboro !important;
 }
+
 .mat-header-row,
 .mat-row {
     display: table-row !important;
     vertical-align: inherit;
     border-color: inherit;
 }
+
 .mat-row,
 .mat-header-row,
 .mat-footer-row {
@@ -3094,6 +3222,7 @@ td.mat-footer-cell {
         display: none !important;
     }
 }
+
 .responsive-label {
     display: none;
 }
@@ -3101,6 +3230,7 @@ td.mat-footer-cell {
 .mat-dialog-container {
     height: auto !important;
 }
+
 .mat-snack-bar-container {
     padding: 0px !important;
 
@@ -3109,22 +3239,26 @@ td.mat-footer-cell {
             background-image: url("../images/failure.svg");
         }
     }
+
     &.success {
         .snack-container {
             background-image: url("../images/success.svg");
         }
     }
+
     &.warning {
         .snack-container {
             background-image: url("../images/exclamation-white.svg");
         }
     }
+
     &.info {
         .snack-container {
             background-image: url("../images/info-white.svg");
         }
     }
 }
+
 .other-tax {
     .mat-checkbox-layout {
         .mat-checkbox-label {
@@ -3132,12 +3266,15 @@ td.mat-footer-cell {
         }
     }
 }
+
 .petty-cash {
     .mat-tab-group {
         .mat-tab-header {
             background: $alice-blue-light !important;
+
             .mat-tab-label-container {
                 padding-left: 15px !important;
+
                 .mat-tab-list {
                     .mat-tab-label {
                         padding: 0 35px 0 0 !important;
@@ -3145,18 +3282,22 @@ td.mat-footer-cell {
                         min-width: auto !important;
                         height: 44px !important;
                         color: $night-rider !important;
+
                         .mat-tab-label-content {
                             margin-bottom: 5px !important;
                         }
+
                         &:focus {
                             font-weight: 800 !important;
                             color: $nero !important;
                         }
+
                         &.active {
                             font-weight: 800 !important;
                             color: $nero !important;
                         }
                     }
+
                     .mat-ink-bar {
                         background-color: $vivid-blue !important;
                         height: 4px !important;
@@ -3166,6 +3307,7 @@ td.mat-footer-cell {
             }
         }
     }
+
     .bg-white {
         .form-group {
             .mat-form-field {
@@ -3186,6 +3328,7 @@ td.mat-footer-cell {
 .mr-0 {
     margin-right: 0 !important;
 }
+
 .disable-ripple {
     .mat-radio-ripple {
         display: none;
@@ -3210,6 +3353,7 @@ td.mat-footer-cell {
             }
         }
     }
+
     .petty-cash {
         .mat-tab-group {
             .mat-tab-header {
@@ -3217,6 +3361,7 @@ td.mat-footer-cell {
                 width: 100%;
                 z-index: 9;
             }
+
             .mat-tab-body-wrapper {
                 padding-top: 60px;
             }
@@ -3245,4 +3390,5 @@ td.mat-footer-cell {
     opacity: 1 !important;
     transform: none !important;
 }
+
 /* material css for ledger end*/
