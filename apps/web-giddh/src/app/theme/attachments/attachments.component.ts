@@ -458,38 +458,62 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
             || 0;
         const left = (windowWidth / 2) - 450;
         const printWindow = window.open('', '', `left=${left},top=0,width=900,height=900`);
-
-        let html = "";
+        let pdfFiles = [];
+        let hasAttachments: boolean = false;
 
         if (this.voucherPdf?.isChecked) {
             const file = new Blob([this.voucherPdf?.src], { type: 'application/pdf' });
             let pdfFileURL = URL.createObjectURL(file);
-            html += "<iframe name='printf' width='100%' height='100%' src='" + encodeURI(pdfFileURL) + "'></iframe>";
+            pdfFiles.push(encodeURI(pdfFileURL));
         }
 
         if (isAttachmentSelected?.length > 0) {
             isAttachmentSelected.forEach(attachment => {
-                if(attachment?.type === "image") {
+                if (attachment?.type === "image") {
                     let file = new Image();
                     file.src = attachment.originalSrc;
-                    html += file.outerHTML;
-                } else if(attachment?.type === "pdf") {
+                    printWindow.document.write(file.outerHTML);
+                    hasAttachments = true;
+                } else if (attachment?.type === "pdf") {
                     const file = new Blob([attachment?.src], { type: 'application/pdf' });
                     let pdfFileURL = URL.createObjectURL(file);
-                    html += "<iframe name='printf' width='100%' height='100%' src='" + encodeURI(pdfFileURL) + "'></iframe>";
+                    pdfFiles.push(encodeURI(pdfFileURL));
                 }
             });
+            printWindow.document.close();
         }
 
-        printWindow.document.write(html);
-        printWindow.document.close();
+        setTimeout(() => {
+            if (hasAttachments) {
+                printWindow.focus();
+                printWindow.print();
+            }
 
-        printWindow.frames["printf"].focus();
-        printWindow.frames["printf"].print();
+            if (pdfFiles?.length > 0) {
+                this.printDocuments(printWindow, pdfFiles, 0);
+            } else {
+                printWindow.close();
+            }
+        }, 50);
+    }
+
+    private printDocuments(printWindow, pdfFiles: any, index: number): void {
+        const file = pdfFiles[index];
+        printWindow.location.href = file;
+        index++;
 
         setTimeout(() => {
             printWindow.focus();
             printWindow.print();
-        });
+
+            printWindow.addEventListener("afterprint", () => {
+                console.log("print");
+                if (index < pdfFiles.length) {
+                    this.printDocuments(printWindow, pdfFiles, index);
+                } else {
+                    printWindow.close();
+                }
+            });
+        }, 50);
     }
 }
