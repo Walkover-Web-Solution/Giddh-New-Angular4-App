@@ -40,7 +40,16 @@ const ELEMENT_DATA: PeriodicElement[] = [
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
+export class SubscriptionComponent implements OnInit, OnDestroy {
+
+    /** This will hold local JSON data */
+    @Input() public localeData: any = {};
+    /** This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
+    /**  This will use for companies list expansion in accordian */
+    @ViewChild(MatAccordion) accordion: MatAccordion;
+    /** This will use for move company in to another company  */
+    @ViewChild("moveCompany", { static: false }) public moveCompany: any;
     /** This will change the search bar height dynamically */
     public menuBarHeight: Number = 40;
     public menuOneWidth: Number;
@@ -54,14 +63,6 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
     /** This will change the length of overall summary box dynamically */
     public overallSummaryTopRow: Number = 6;
     public overallSummaryBottomRow: Number = 4;
-    /** This will hold local JSON data */
-    @Input() public localeData: any = {};
-    /** This will hold common JSON data */
-    @Input() public commonLocaleData: any = {};
-    /**  This will use for companies list expansion in accordian */
-    @ViewChild(MatAccordion) accordion: MatAccordion;
-    /** This will use for move company in to another company  */
-    @ViewChild("moveCompany", { static: false }) public moveCompany: any;
     /* Object of bootstrap modal */
     public modalRef: BsModalRef;
     /* This will hold list of subscriptions */
@@ -116,10 +117,14 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
         { name: 'Less than 10,000', value: 10000 },
         { name: 'Less than 50,000', value: 50000 }
     ];
-    
+
     /** This will displays the columns of consumed  */
     displayedColumns: string[] = ['consumed', 'balance', 'dues'];
+    /** This will use for static data for consumed */
     dataSource = ELEMENT_DATA;
+    /** This will use for expand collapse for companies */
+    public isExpand: boolean = false;
+
 
     constructor(
         public dialog: MatDialog,
@@ -136,11 +141,11 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
         private settingsProfileActions: SettingsProfileActions,
         private generalService: GeneralService
     ) {
-
         this.subscriptions$ = this.store.pipe(select(state => state.subscriptions.subscriptions), takeUntil(this.destroyed$));
     }
 
     public ngOnInit(): void {
+        console.log("get companies function called");
 
         this.isPlanShow = false;
 
@@ -150,7 +155,18 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
         }
 
         /** This will hit the api of get companies */
-        this.getCompanies();
+        // this.getCompanies();
+        this.showLoader = true;
+        this.subscriptionService.getSubScribedCompanies().pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+            this.showLoader = false;
+            if (res && res.status === "success") {
+                this.showLoader = false;
+                if (!res.body || !res.body[0]) {
+                } else {
+                    this.store.dispatch(this.subscriptionsActions.SubscribedCompaniesResponse(res));
+                }
+            }
+        });
 
         /** This subscription subscribes and get the response */
         this.subscriptions$.subscribe(response => {
@@ -178,8 +194,6 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
             }
         });
 
-        
-        
         /** This will use for image format */
         this.imgPath = (isElectron || isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
 
@@ -231,30 +245,19 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
      * @memberof SubscriptionComponent
      */
     public getCompanies(): void {
-        this.isPlanShow = false;
+        console.log("loader will true here");
+
         this.showLoader = true;
+
         //This service will use for get subscribed companies
         this.subscriptionService.getSubScribedCompanies().pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             this.showLoader = false;
-            // this.isPlanShow = true;
-            if (res?.status === "success" && res?.body) {
-                this.store.dispatch(this.subscriptionsActions.SubscribedCompaniesResponse(res));
-            } else {
-                // this.isPlanShow = true;
-                this.showLoader = false;
+            if (res && res.status === "success") {
+                if (!res.body || !res.body[0]) {
+                } else {
+                    this.store.dispatch(this.subscriptionsActions.SubscribedCompaniesResponse(res));
+                }
             }
-        });
-    }
-
-    /**
-     * This function will use foe open dialog
-     *
-     * @memberof SubscriptionComponent
-     */
-    public openDialog() {
-        const dialogRef = this.dialog.open(this.moveCompany, { height: '50%', width: '40%' });
-
-        dialogRef.afterClosed().subscribe(result => {
         });
     }
 
@@ -266,38 +269,29 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
    */
     public addOrMoveCompanyCallback(event): void {
         if (event === true) {
-            this.store.dispatch(this.subscriptionsActions.SubscribedCompanies());
+            this.getCompanies();
         }
-        this.modalRef.hide();
-    }
-
-    /**
-     *  This function will open the deactive company popup
-     *
-     * @param {TemplateRef<any>} MoveCompany
-     * @memberof SubscriptionComponent
-     */
-    public openModal(MoveCompany: TemplateRef<any>) {
-        this.modalRef = this.modalService.show(MoveCompany);
     }
 
     /**
      *This function will open the move company popup
      *
-     * @param {TemplateRef<any>} deactivateCompany
+     * @param {TemplateRef<any>} moveCompany
      * @param {*} company
      * @memberof SubscriptionComponent
      */
-    public openModalMove(deactivateCompany: TemplateRef<any>, company: any) {
+    public openModalMove(moveCompany: TemplateRef<any>, company: any, event: any) {
+        event.preventDefault();
+        event.stopPropagation();
         this.selectedCompany = company;
-        this.modalRef = this.modalService.show(deactivateCompany);
+        this.dialog.open(this.moveCompany, { height: '50%', width: '40%' });
     }
 
     /**
-     * This function will use for destroy on next and complete
-     *
-     * @memberof SubscriptionComponent
-     */
+    * This function will use for destroy on next and complete
+    *
+    * @memberof SubscriptionComponent
+    */
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
@@ -312,14 +306,6 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
     public selectSubscription(subscription: any): void {
         this.selectedSubscription = subscription;
     }
-
-    /**
-     *  This function will use for on changes
-     *
-     * @param {SimpleChanges} changes
-     * @memberof SubscriptionComponent
-     */
-    public ngOnChanges(changes: SimpleChanges): void { }
 
     /**
      *  This function will use for filter plans , withing and expiry in dropdown and searching subscriptions

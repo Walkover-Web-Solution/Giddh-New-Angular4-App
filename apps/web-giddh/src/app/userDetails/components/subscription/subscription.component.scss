@@ -56,7 +56,7 @@
     align-items: center;
     background-color: rgb(231, 233, 235);
     .menu-two-list-items {
-        .form_select {
+        .form-select {
             width: 5rem;
         }
         mat-select {
@@ -94,6 +94,7 @@
         place-items: center;
         float: right;
         margin-right: 13px;
+        cursor: pointer;
     }
 }
 .sidebar {
@@ -135,6 +136,7 @@
             height: inherit;
             position: absolute;
             cursor: pointer;
+            padding-left: 11px;
             :hover {
                 background: none;
             }
@@ -384,6 +386,7 @@
             }
             .right-side-btn {
                 margin: 0px 9px;
+                font-weight: 700;
             }
         }
     }

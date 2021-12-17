@@ -1,4 +1,4 @@
-<!-- <ng-container *ngIf="!showLoader "> -->
+<!-- <ng-container *ngIf=" !showLoader"> -->
 <div *ngIf="!isPlanShow">
     <div class="main-content-subsription">
         <div class="menu-one-button">
@@ -26,7 +26,7 @@
                 <div class="menu-two-list" [ngClass]="{ 'skelton-common-class': showLoader }">
                     <div class="menu-two-list-items" *ngIf="!showLoader">
                         <span class="mat-body-1 plan">Plan</span>
-                        <mat-form-field appearance="none" floatLabel="never" class="form_select">
+                        <mat-form-field appearance="none" floatLabel="never" class="form-select">
                             <mat-select
                                 placeholder="Select"
                                 (selectionChange)="filterSubscriptions()"
@@ -41,22 +41,22 @@
                     </div>
                     <div class="menu-two-list-items" *ngIf="!showLoader">
                         <span class="mat-body-1 expiring-within">Expiring Within</span>
-                        <mat-form-field appearance="none" floatLabel="never" class="form_select">
+                        <mat-form-field appearance="none" floatLabel="never" class="form-select">
                             <mat-select
                                 placeholder="Select"
                                 [(ngModel)]="filters.expiration"
                                 (selectionChange)="filterSubscriptions()"
                             >
                                 <mat-option value="">Select</mat-option>
-                                <mat-option *ngFor="let expiring of expiringList" [value]="expiring?.value"
-                                    >{{ expiring?.name }}
+                                <mat-option *ngFor="let expiring of expiringList" [value]="expiring?.value">
+                                    {{ expiring?.name }}
                                 </mat-option>
                             </mat-select>
                         </mat-form-field>
                     </div>
                     <div class="menu-two-list-items transaction-box" *ngIf="!showLoader">
                         <span class="mat-body-1 transaction-balance">Transactions Balance</span>
-                        <mat-form-field appearance="none" floatLabel="never" class="form_select">
+                        <mat-form-field appearance="none" floatLabel="never" class="form-select">
                             <mat-select
                                 placeholder="Select"
                                 class="transaction-select"
@@ -389,8 +389,22 @@
                         </mat-grid-list>
                     </div>
                     <div class="expand-button">
-                        <button mat-button disableRipple="true" (click)="accordion.openAll()">Expand all</button>
-                        <button mat-button disableRipple="true" (click)="accordion.closeAll()">Collapse all</button>
+                        <button
+                            (click)="accordion.openAll(); isExpand = true"
+                            mat-button
+                            disableRipple="true"
+                            *ngIf="!isExpand"
+                        >
+                            Expand all
+                        </button>
+                        <button
+                            (click)="accordion.closeAll(); isExpand = false"
+                            mat-button
+                            disableRipple="true"
+                            *ngIf="isExpand"
+                        >
+                            Collapse all
+                        </button>
                     </div>
                     <!-- <div class="menu-two accordion-search-box main-content-search-box">
                         <label for="Search-box">
@@ -961,8 +975,8 @@
                                             <mat-panel-title>
                                                 {{ company?.name }}
                                                 <a
-                                                    (click)="openModalMove(MoveCompany, company)"
-                                                    href="javascript:void(0)"
+                                                    (click)="openModalMove(moveCompany, company, $event)"
+                                                    href="javascript:void(0);"
                                                     >{{ localeData?.subscription?.move_company }}</a
                                                 >
                                             </mat-panel-title>
@@ -989,7 +1003,7 @@
                         </mat-tab>
                     </mat-tab-group>
                 </div>
-                <div class="main-content-condition" *ngIf="!selectedSubscription && plansList?.length">
+                <div class="main-content-condition" *ngIf="!selectedSubscription && plansList?.length && !showLoader">
                     <p class="main-content-para">
                         Select a plan to see its <br />
                         Overall comsumption and balance summary
@@ -1012,7 +1026,6 @@
     </div>
 </div>
 <!-- </ng-container> -->
-
 <subscriptions-plans
     *ngIf="isPlanShow && localeData?.subscription"
     [subscriptions]="subscriptions"
@@ -1021,7 +1034,7 @@
     [commonLocaleData]="commonLocaleData"
 ></subscriptions-plans>
 <!-- MoveCompany Modal -->
-<ng-template #MoveCompany>
+<ng-template #moveCompany>
     <move-company
         (moveCompany)="addOrMoveCompanyCallback($event)"
         [subscriptions]="subscriptions"
@@ -1031,7 +1044,6 @@
     >
     </move-company>
 </ng-template>
-
 <!-- deactivate Company Modal -->
 <ng-template #AddCompany>
     <add-company

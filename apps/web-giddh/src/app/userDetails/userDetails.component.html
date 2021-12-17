@@ -7,6 +7,7 @@
     <div class="setting-page user-detail-page relative" id="setting-tab" *ngIf="!isCreateAndSwitchCompanyInProcess">
         <hamburger-menu *ngIf="localeData?.auth_key" [pageHeading]="getPageHeading()"></hamburger-menu>
         <!-- start of tab set -->
+
         <tabset #staticTabs>
             <!-- start auth tab tab -->
             <tab
