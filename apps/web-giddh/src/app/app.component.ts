@@ -1,10 +1,6 @@
 import { NavigationEnd, NavigationStart, Router, RouteConfigLoadEnd, RouteConfigLoadStart } from '@angular/router';
 import { isCordova } from '@giddh-workspaces/utils';
-/**
- * Angular 2 decorators and services
- */
 import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
-
 import { Store, select } from '@ngrx/store';
 import { AppState } from './store/roots';
 import { GeneralService } from './services/general.service';
@@ -34,7 +30,6 @@ import { CommonActions } from './actions/common.actions';
     templateUrl: './app.component.html'
 })
 export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
-
     public sideMenu: { isopen: boolean } = { isopen: true };
     public companyMenu: { isopen: boolean } = { isopen: false };
     public isProdMode: boolean = false;
@@ -45,6 +40,8 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
     private newVersionAvailableForWebApp: boolean = false;
     /** This holds the active locale */
     public activeLocale: string = "";
+    /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
+    public isCompany: boolean;
 
     constructor(private store: Store<AppState>,
         private router: Router,
@@ -115,6 +112,8 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
                 APP_FOLDER
             });
         }
+
+        this.isCompany = this._generalService.currentOrganizationType !== OrganizationType.Branch;
     }
 
     public sidebarStatusChange(event) {
