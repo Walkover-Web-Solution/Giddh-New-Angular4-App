@@ -7,6 +7,7 @@ import { Component } from "@angular/core";
 })
 
 export class AddOnsComponent{
+    
     /**  Image path variable */
     public imgPath: string = '';
 

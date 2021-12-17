@@ -59,13 +59,19 @@
         white-space: nowrap !important;
     }
 
+    .plan-top-row .plan-td {
+        padding-bottom: 0 !important;
+        padding-top: 0px !important;
+        height: 122px !important;
+    }
+
     .plan-td-changes.mat-cell:nth-child(even) {
         background-color: transparent !important;
         height: 70px;
         color: transparent !important;
         padding-left: 78px;
         padding-right: 77px;
-        border: 1px solid #e2e2e2;
+        border: 1px solid $skelton-loading-gradient-bg;
     }
 
     .plan-td-changes.mat-cell:nth-child(odd) {
@@ -74,7 +80,7 @@
         color: transparent !important;
         padding-left: 69px;
         padding-right: 59px;
-        border: 1px solid #e2e2e2;
+        border: 1px solid $skelton-loading-gradient-bg;
 
         .mat-column--b-Benefits--b- {
             max-width: 484px !important;
@@ -83,7 +89,7 @@
 
     .whole-plan-span {
         float: left;
-        width: 200px;
+        width: 195px;
         height: 39px;
     }
 
@@ -109,7 +115,7 @@
         padding-right: 126px;
         max-width: 373px;
         width: 504px;
-        line-height: 42px !important;
+        line-height: 30px !important;
         left: 0 !important;
         z-index: 1 !important;
     }
@@ -417,6 +423,10 @@
 
     .box {
         padding-top: 0 !important;
+    }
+
+    .text-gray {
+        font-size: 17px;
     }
 
     .radeem-ddtails {
@@ -1204,11 +1214,11 @@
     }
 
     .plan-table {
-        height: 523px !important;
+        height: 500px !important;
     }
 
     .plan-table-content {
-        height: 566px !important;
+        height: 608px !important;
     }
 
     .plan-table .mat-column--b-Benefits--b- {

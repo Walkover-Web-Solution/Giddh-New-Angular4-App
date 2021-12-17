@@ -128,10 +128,12 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
 
     public ngOnInit() {
 
+        /** This will use for filter states  */
         this.searchBillingStates.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(search => {
             this.filterStates(search);
         });
 
+        /** This will use for filter country  */
         this.searchCountry.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(search => {
             this.filterCountry(search);
         });

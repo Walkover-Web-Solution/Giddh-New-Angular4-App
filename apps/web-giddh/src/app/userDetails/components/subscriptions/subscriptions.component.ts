@@ -106,7 +106,7 @@ export class SubscriptionsComponent implements OnInit, OnChanges, OnDestroy {
                 this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
                     if (activeCompany) {
                         this.sortAssociatedCompanies();
-                        
+
                         this.seletedUserPlans = this.activeCompany.subscription;
 
                         if (this.seletedUserPlans?.startedAt) {
@@ -437,10 +437,10 @@ export class SubscriptionsComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof SubscriptionsComponent
      */
     public getSubscribedCompaniesCount(totalCompanies: any, companiesLimit: any): string {
-        if(!totalCompanies) {
+        if (!totalCompanies) {
             totalCompanies = 0;
         }
-        if(!companiesLimit) {
+        if (!companiesLimit) {
             companiesLimit = 0;
         }
         let text = this.localeData?.subscription?.companies_limit;

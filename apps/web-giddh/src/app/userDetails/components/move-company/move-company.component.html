@@ -1,5 +1,5 @@
 <div class="modal-header d-flex align-items-center flex-row-reverse">
-    <span aria-hidden="true" class="close" data-dismiss="modal" mat-dialog-close (click)="closePopup()">×</span>
+    <span aria-hidden="true" class="close" mat-dialog-close>×</span>
     <h3>{{ localeData?.subscription?.move_company }}</h3>
 </div>
 <div id="my-frame" class="modal-body move-company-modal-body clearfix">
@@ -20,7 +20,13 @@
         </div>
     </div>
     <div class="clearfix">
-        <button class="btn btn-primary" (click)="moveCompanyInNewPlan()" [disabled]="!selectedPlan">
+        <button
+            mat-raised-button
+            color="primary"
+            mat-dialog-close
+            (click)="moveCompanyInNewPlan()"
+            [disabled]="!selectedPlan"
+        >
             {{ localeData?.subscription?.move }}
         </button>
     </div>

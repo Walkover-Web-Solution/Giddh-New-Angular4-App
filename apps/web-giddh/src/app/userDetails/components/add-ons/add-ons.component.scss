@@ -1,43 +1,53 @@
+@import "../../../../assets/css/color.scss";
+
 .add-extra-wrapper {
-    $tomato: rgb(229, 69, 86);
     margin: 17px 0px 0px 17px;
     width: 96.5%;
+
     .add-extra {
         img {
             width: 24px;
             height: auto;
             transform: translateY(15px);
         }
+
         .img-label {
             font-size: 12px;
             font-weight: 600;
             color: rgb(106, 108, 133);
             transform: translateY(7px);
         }
+
         .branch {
             width: 22px;
         }
+
         .warehouse {
             width: 20px;
         }
+
         .balance-value {
             font-size: 14px;
             font-weight: 700;
             color: rgb(33, 37, 40);
             transform: translateY(7px);
         }
+
         .tomato {
-            color: $tomato;
+            color: $red;
         }
+
         .add-extra-value {
             font-size: 10px;
             color: rgb(166, 167, 182);
             transform: translateY(15px);
         }
+
         .mat-slider {
             transform: translateY(-8px);
             width: 82%;
         }
+
         .slider-value {
             font-size: 14px;
             font-weight: 600;
@@ -49,23 +59,27 @@
             height: 34px;
             padding-top: 6px;
         }
+
         .total-value {
             font-size: 16px;
             font-weight: 700;
             color: rgb(33, 37, 40);
             transform: translateY(-14px);
         }
+
         .per-value {
             font-size: 10px;
             color: rgb(122, 124, 126);
             transform: translateY(-18px);
         }
+
         .checkout-button {
             transform: translateY(-21px);
             margin-left: 0px;
             width: 77%;
         }
     }
+
     mat-grid-tile {
         border: 1px solid rgb(203, 207, 210);
     }
@@ -82,24 +96,29 @@
     display: block;
     background-color: white;
     height: 131px;
+
     .label {
         font-size: 14px;
         color: rgb(106, 108, 133);
     }
+
     .amount {
         font-size: 24px;
         font-weight: 700;
         margin-top: -3px;
         color: rgb(33, 37, 40);
+
         span {
             font-size: 12px;
             font-weight: 400;
             color: rgb(106, 108, 133);
         }
     }
+
     button {
         margin-left: 0px;
     }
+
     .cancel {
         font-size: 14px;
         text-decoration: underline;

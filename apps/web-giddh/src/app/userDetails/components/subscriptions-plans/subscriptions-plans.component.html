@@ -38,7 +38,14 @@
                 </td>
             </ng-container>
             <tr class="plan-tr" mat-header-row *matHeaderRowDef="displayColumns"></tr>
-            <tr class="plan-row-columns" mat-row *matRowDef="let row; columns: displayColumns"></tr>
+            <tr
+                [ngClass]="{
+                    'plan-top-row': i === 0
+                }"
+                class="plan-row-columns"
+                mat-row
+                *matRowDef="let row; columns: displayColumns; let i = index"
+            ></tr>
         </table>
     </div>
     <p [ngClass]="{ 'skelton-common-class': showLoader }" class="extra-addons-content">
@@ -92,7 +99,7 @@
                             [ngClass]="{ 'skelton-common-class': showLoader, 'radeem-plan': showLoader }"
                             class="font-26 text-gray bold mb-3 radeem-plan"
                         >
-                            Radeem
+                            Redeem
                             {{ localeData?.subscription?.activation_key }}
                         </h2>
                         <p
