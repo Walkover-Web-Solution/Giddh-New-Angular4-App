@@ -1,24 +1,67 @@
 @import "../color.scss";
 
-.dark-theme {
-    --primary-color: #{$black-pearl-dark-theme};
-    --header-button-background-color: #{$midnight-dark-theme};
-    --header-button-text-color: #{$midnight-blue};
-    --company-branch-sidebar-background: #{$bay-leaf};
-    --side-bar-background: #{$bunker};
-    --company-branch-sidebar-head-text-color: #{$dark-fog};
-    --company-branch-sidebar-input-background-color: #{$licorice};
-    --company-branch-sidebar-input-two-background-color: #{$licorice};
-    --company-branch-sidebar-input-two-color: #{$grey-chateau};
-    --company-branch-sidebar-company-count-text-color: #{$grey-chateau};
-    --company-branch-sidebar-company-count-background: #{$licorice};
-    --company-branch-sidebar-tabs-color: #{$white};
-    --company-branch-sidebar-button-background: #{$bay-leaf};
-    --company-branch-sidebar-reload-color: #{$omiod};
-    --company-branch-sidebar-branchName-hover: #{$licorice};
-    --company-branch-sidebar-main-content-color: #{$link-water-dark-theme};
-    --company-branch-sidebar-main-content-color-hover: #{$bay-leaf};
-    --company-branch-sidebar-footer: #{$licorice};
-    --company-branch-sidebar-selected-branch-hover: #{$licorice};
-    --company-branch-sidebar-tab-color: #{$white};
+body.dark-theme {
+    // Button Color Variables
+    --primary-button-text-color: #ffffff;
+    --primary-button-background-color: #222d3e;
+    --secondary-button-text-color: #ffffff;
+    --secondary-button-background-color: #78af8f;
+    --tertiary-button-text-color: #e7e9eb;
+    --tertiary-button-background-color: transparent;
+    --tertiary-button-background-color-hover: #e7e9eb30;
+
+    // Search Bar Color Variables
+    --sidebar-search-bar-text-color: #999da0;
+    --sidebar-search-bar-background-color: #303843;
+
+    // Pagination Color Variables
+    --pagination-button-color: #222d3e;
+    --pagination-background-color: #222d3e;
+    --pagination-active-button-color: #ffffff;
+    --pagination--button-hover-background-color: #303843;
+
+    // Header Color Variables
+    --primary-header-color: #1a2228;
+
+    // Sidebar Color Variables
+    --sidebar-content-text-color: #e7e9eb;
+    --sidebar-anchor-text-color: #cbcfd2;
+    --sidebar-menu-list-items-color: #ffffff;
+    --sidebar-list-head-color: #ffffff;
+    --sidebar-anchor-text-color-hover: #78af8f;
+    --sidebar-company-background-color: #78af8f;
+    --sidebar-background-color: #1d2229;
+    --sidebar-footer-logout-section-background-color: #303843;
+    --sidebar-company-count-text-color: #999da0;
+    --sidebar-company-count-background-color: #303843;
+    --sidebar-create-company-list-text-color: #ffffff;
+    --sidebar-create-company-list-background-color: #303843;
+
+    /*
+        COLORS BELOW ARE NOT APPLIED YET
+
+        // Table Color Variables
+        --table-heading-primary-color: #1c1c1c;
+        --table-heading-secondary-color: #1a237e;
+        --table-content-primary-color: #1c1c1c;
+        --table-content-secondary-color: #999999;
+        --table-content-tertiary-color: #212528;
+        --table-content-quaternary-color: #6a6c85;
+
+        // Total Details Box above table Color Variables
+        --total-details-heading-color: #6a6c85;
+        --total-details-content-primary-color: #000000;
+        --total-details-primary-background-color: #ffffff;
+        --total-details-content-secondary-color: #ec8f02;
+        --total-details-secondary-background-color: #ffe8c6;
+        --total-details-content-tertiary-color: #5b64c9;
+        --total-details-tertiary-background-color: #e7edf7;
+        --total-details-quaternary-background-color: #f5f5f5;
+
+        // Common Color Variables
+        --danger-color: #ff0000;
+        --success-color: #2fab4a;
+        --main-content-background-color: #ffffff;
+
+    */
 }

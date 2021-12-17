@@ -203,6 +203,30 @@ th.mat-header-cell:first-of-type {
         font-weight: 600;
     }
 }
+::ng-deep {
+    .btn-sky-blue {
+        color: var(--secondary-button-text-color);
+        background-color: var(--secondary-button-background-color);
+        border-color: var(--secondary-button-background-color);
+    }
+
+    .pagination > li > a {
+        color: var(--pagination-button-color) !important;
+        border-color: var(--pagination-background-color) !important;
+    }
+
+    .pagination > li.active > a {
+        color: var(--pagination-active-button-color) !important;
+        background-color: var(--pagination-background-color) !important;
+        border-color: var(--pagination-background-color) !important;
+    }
+
+    .pagination > li > a:hover {
+        color: var(--pagination-active-button-color) !important;
+        background-color: var(--pagination--button-hover-background-color) !important;
+    }
+}
+
 // responsive
 @media (min-width: 769px) {
     .on-mobile-view > .top-aging-table-top {
