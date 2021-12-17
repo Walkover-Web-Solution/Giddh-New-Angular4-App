@@ -35,14 +35,14 @@ export interface PlanTable {
 
 /** This will use for static data for plan table  */
 const TABLE_DATA: PlanTable[] = [
-    { name: 'Benefits', transactions: 1000, companies: 1, consultant: '2hrs', unlimited_users: 'check', unlimited_customers: 'check', desktop_mobile_app: 'check', check_all_features: 'button' },
-    { name: 'Transactions', transactions: 1000, companies: 1, consultant: '3hrs', unlimited_users: 'check', unlimited_customers: 'check', desktop_mobile_app: 'check', check_all_features: 'button' },
-    { name: 'Companies', transactions: 1000, companies: 1, consultant: '5hrs', unlimited_users: 'check', unlimited_customers: 'check', desktop_mobile_app: 'check', check_all_features: 'button' },
-    { name: 'Consultant', transactions: 1000, companies: 1, consultant: '5hrs', unlimited_users: 'check', unlimited_customers: 'check', desktop_mobile_app: 'check', check_all_features: 'button' },
-    { name: 'Unlimited Users', transactions: 1000, companies: 1, consultant: '6hrs', unlimited_users: 'check', unlimited_customers: 'check', desktop_mobile_app: 'check', check_all_features: 'button' },
-    { name: 'Unlimited Customers', transactions: 1000, companies: 1, consultant: '1hrs', unlimited_users: 'check', unlimited_customers: 'check', desktop_mobile_app: 'check', check_all_features: 'button' },
-    { name: 'Desktop/ Mobile App', transactions: 1000, companies: 1, consultant: '3hrs', unlimited_users: 'check', unlimited_customers: 'check', desktop_mobile_app: 'check', check_all_features: 'button' },
-    { name: 'Check All Features', transactions: 1000, companies: 1, consultant: '7hrs', unlimited_users: 'check', unlimited_customers: 'check', desktop_mobile_app: 'check', check_all_features: 'button' },
+    { name: 'Benefits', transactions: 1000, companies: 1, consultant: '2hrs', unlimited_users: '<mat-icon>check</mat-icon>', unlimited_customers: '<mat-icon>check</mat-icon>', desktop_mobile_app: '<mat-icon>check</mat-icon>', check_all_features: '<button class="all_feature_button" mat-raised-button color="primary">Renew</button>' },
+    { name: 'Transactions', transactions: 1000, companies: 1, consultant: '3hrs', unlimited_users: '<mat-icon>check</mat-icon>', unlimited_customers: '<mat-icon>check</mat-icon>', desktop_mobile_app: '<mat-icon>check</mat-icon>', check_all_features: '<button class="all_feature_button" mat-raised-button color="primary">Renew</button>' },
+    { name: 'Companies', transactions: 1000, companies: 1, consultant: '5hrs', unlimited_users: '<mat-icon>check</mat-icon>', unlimited_customers: '<mat-icon>check</mat-icon>', desktop_mobile_app: '<mat-icon>check</mat-icon>', check_all_features: '<button class="all_feature_button" mat-raised-button color="primary">Renew</button>' },
+    { name: 'Consultant', transactions: 1000, companies: 1, consultant: '5hrs', unlimited_users: '<mat-icon>check</mat-icon>', unlimited_customers: '<mat-icon>check</mat-icon>', desktop_mobile_app: '<mat-icon>check</mat-icon>', check_all_features: '<button class="all_feature_button" mat-raised-button color="primary">Renew</button>' },
+    { name: 'Unlimited Users', transactions: 1000, companies: 1, consultant: '6hrs', unlimited_users: '<mat-icon>check</mat-icon>', unlimited_customers: '<mat-icon>check</mat-icon>', desktop_mobile_app: '<mat-icon>check</mat-icon>', check_all_features: '<button class="all_feature_button" mat-raised-button color="primary">Renew</button>' },
+    { name: 'Unlimited Customers', transactions: 1000, companies: 1, consultant: '1hrs', unlimited_users: '<mat-icon>check</mat-icon>', unlimited_customers: '<mat-icon>check</mat-icon>', desktop_mobile_app: '<mat-icon>check</mat-icon>', check_all_features: '<button class="all_feature_button" mat-raised-button color="primary">Renew</button>' },
+    { name: 'Desktop/ Mobile App', transactions: 1000, companies: 1, consultant: '3hrs', unlimited_users: '<mat-icon>check</mat-icon>', unlimited_customers: '<mat-icon>check</mat-icon>', desktop_mobile_app: '<mat-icon>check</mat-icon>', check_all_features: '<button class="all_feature_button" mat-raised-button color="primary">Renew</button>' },
+    { name: 'Check All Features', transactions: 1000, companies: 1, consultant: '7hrs', unlimited_users: '<mat-icon>check</mat-icon>', unlimited_customers: '<mat-icon>check</mat-icon>', desktop_mobile_app: '<mat-icon>check</mat-icon>', check_all_features: '<button class="all_feature_button" mat-raised-button color="primary">Renew</button>' },
 ];
 @Component({
     selector: 'subscriptions-plans',
@@ -143,8 +143,9 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
+
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
-            if (activeCompany) {
+            if (activeCompany) {  
                 if (!this.activeCompany) {
                     this.getPlans(activeCompany);
                 }
@@ -376,6 +377,8 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
      */
     private getPlans(activeCompany): void {
         this.authenticationService.getAllUserSubsciptionPlans(activeCompany?.countryV2?.alpha2CountryCode).pipe(takeUntil(this.destroyed$)).subscribe(res => {
+            console.log(activeCompany);
+            
             this.subscriptionPlans = res.body;
             let subscriptions = res.body;
             this.inputData = [];
@@ -387,11 +390,22 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
                 unlimited_users: '<b>Unlimited Users</b>',
                 unlimited_customers: '<b>Unlimited Customers/Vendors</b>',
                 desktop_mobile_app: ' <b>Desktop/Mobile App</b>',
-                check_all_features: '<a>Check all features</a>'
+                check_all_features: '<a class="check_all_plan_features">Check all features</a>'
             });
 
             let planObj = uniqBy(subscriptions.map(subscription => { return subscription.planDetails }), "name");
             planObj.forEach(plan => {
+
+                let button ='';
+                if (plan.uniqueName === activeCompany.subscription.planDetails.uniqueName) {
+                    button = '<button class="all_feature_button" mat-raised-button color="primary">Renew Plan</button>';
+                } else if(plan.amount >= activeCompany.subscription.planDetails.amount ) {
+                    button = '<button class="all_feature_button" mat-raised-button color="primary">Upgrade Now</button>';
+                }
+                else if(plan.amount < activeCompany.subscription.planDetails.amount ) {
+                    button = '<button class="all_feature_button" mat-raised-button color="primary">Downgrade Now</button>';
+                }
+                
                 this.inputData.push({
                     name: plan?.name + '<br>' + '<span class="susbcription-plan-amount">' + '₹' + plan?.amount + '</span>' + '/' + '<span class="susbcription-plan-years" >' + plan?.durationUnit + '</span>',
                     transactions: plan?.transactionLimit,
@@ -400,7 +414,7 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
                     unlimited_users: '<mat-icon>check</mat-icon>',
                     unlimited_customers: '<mat-icon>check</mat-icon>',
                     desktop_mobile_app: '<mat-icon>check</mat-icon>',
-                    check_all_features: '<button mat-raised-button color="primary">Renew</button>'
+                    check_all_features: button
                 });
             });
 
@@ -412,7 +426,9 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
 
             setTimeout(() => {
                 this.showLoader = false;
-            }, 100);
+            this.changeDetectionRef.detectChanges();
+
+            }, 500);
         });
     }
     /**

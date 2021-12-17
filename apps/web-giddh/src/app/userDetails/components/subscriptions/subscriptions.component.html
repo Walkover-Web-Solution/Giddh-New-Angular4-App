@@ -497,16 +497,14 @@
         </div>
     </div>
 </ng-container>
-<div *ngIf="isLoading">
-    <giddh-page-loader></giddh-page-loader>
-</div>
 <subscriptions-plans
     *ngIf="isPlanShow && localeData?.subscription"
     [subscriptions]="subscriptions"
     (isSubscriptionPlanShow)="isSubscriptionPlanShow($event)"
     [localeData]="localeData"
     [commonLocaleData]="commonLocaleData"
-></subscriptions-plans>
+>
+</subscriptions-plans>
 
 <div class="aside-overlay" *ngIf="companyDetailsAsideMenuState === 'in'"></div>
 <company-details-sidebar
@@ -516,7 +514,8 @@
     [selectedCompany]="selectedCompany"
     [localeData]="localeData"
     [commonLocaleData]="commonLocaleData"
-></company-details-sidebar>
+>
+</company-details-sidebar>
 
 <!-- MoveCompany Modal -->
 <ng-template #MoveCompany>
@@ -538,5 +537,6 @@
         (addCompany)="addOrMoveCompanyCallback($event)"
         [localeData]="localeData"
         [commonLocaleData]="commonLocaleData"
-    ></add-company>
+    >
+    </add-company>
 </ng-template>

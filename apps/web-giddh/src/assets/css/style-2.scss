@@ -10897,6 +10897,23 @@ input[type="checkbox"].cdk-visually-hidden::after {
     text-transform: lowercase;
 }
 
+.all_feature_button {
+    background-color: #1a237e;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    height: 40px;
+    width: 157px;
+    font-weight: 700;
+}
+.check_all_plan_features {
+    cursor: pointer;
+    text-decoration: underline;
+}
+.plan-top-row .plan-td:first-child {
+    vertical-align: bottom !important;
+}
+
 /** Skelton Effects  **/
 
 .skelton-common-class {
