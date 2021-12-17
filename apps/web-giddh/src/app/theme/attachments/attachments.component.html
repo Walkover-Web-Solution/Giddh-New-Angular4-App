@@ -73,6 +73,7 @@
                     *ngIf="previewedFile && previewedFile?.type !== 'image'"
                     [href]="previewedFile?.src"
                     target="_blank"
+                    [disabled]="selectAll"
                     >Preview</a
                 >
                 <button
@@ -87,12 +88,14 @@
                     class="download-button"
                     mat-flat-button
                     color="primary"
-                    [disabled]="!allowFilesDownload"
+                    [disabled]="!filesSelected"
                     (click)="downloadFiles()"
                 >
                     Download
                 </button>
-                <button mat-flat-button color="primary">Print</button>
+                <button mat-flat-button color="primary" [disabled]="!filesSelected" (click)="printFiles()">
+                    Print
+                </button>
             </div>
             <div class="display-area">
                 <img *ngIf="previewedFile?.type === 'image'" [src]="previewedFile?.src" />

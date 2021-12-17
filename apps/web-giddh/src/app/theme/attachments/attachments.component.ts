@@ -54,7 +54,7 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
     public activeCompany: any = {};
     /** Holds session key observable */
     public sessionKey$: Observable<string>;
-    public allowFilesDownload: boolean = false;
+    public filesSelected: boolean = false;
     public invoiceSettings: any;
     public selectAll: boolean = false;
     public isLoading: boolean = true;
@@ -282,11 +282,11 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
 
     public selectAttachment(event: any, attachment: any): void {
         attachment.isChecked = event?.checked;
-        this.allowFilesDownload = false;
+        this.filesSelected = false;
 
         let isAttachmentSelected = this.attachments?.filter(attachment => attachment.isChecked);
         if (isAttachmentSelected?.length > 0 || this.voucherPdf?.isChecked) {
-            this.allowFilesDownload = true;
+            this.filesSelected = true;
         }
 
         let allAttachmentSelected = this.attachments?.filter(attachment => !attachment.isChecked);
@@ -414,7 +414,7 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
             this.voucherPdf.isChecked = event?.checked;
         }
 
-        this.allowFilesDownload = event?.checked;
+        this.filesSelected = event?.checked;
         this.changeDetectionRef.detectChanges();
     }
 
@@ -448,5 +448,48 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
             footerCssClass,
             buttons
         };
+    }
+
+    public printFiles(): void {
+        let isAttachmentSelected = this.attachments?.filter(attachment => attachment.isChecked);
+        const windowWidth = window.innerWidth
+            || document.documentElement.clientWidth
+            || document.body.clientWidth
+            || 0;
+        const left = (windowWidth / 2) - 450;
+        const printWindow = window.open('', '', `left=${left},top=0,width=900,height=900`);
+
+        let html = "";
+
+        if (this.voucherPdf?.isChecked) {
+            const file = new Blob([this.voucherPdf?.src], { type: 'application/pdf' });
+            let pdfFileURL = URL.createObjectURL(file);
+            html += "<iframe name='printf' width='100%' height='100%' src='" + encodeURI(pdfFileURL) + "'></iframe>";
+        }
+
+        if (isAttachmentSelected?.length > 0) {
+            isAttachmentSelected.forEach(attachment => {
+                if(attachment?.type === "image") {
+                    let file = new Image();
+                    file.src = attachment.originalSrc;
+                    html += file.outerHTML;
+                } else if(attachment?.type === "pdf") {
+                    const file = new Blob([attachment?.src], { type: 'application/pdf' });
+                    let pdfFileURL = URL.createObjectURL(file);
+                    html += "<iframe name='printf' width='100%' height='100%' src='" + encodeURI(pdfFileURL) + "'></iframe>";
+                }
+            });
+        }
+
+        printWindow.document.write(html);
+        printWindow.document.close();
+
+        printWindow.frames["printf"].focus();
+        printWindow.frames["printf"].print();
+
+        setTimeout(() => {
+            printWindow.focus();
+            printWindow.print();
+        });
     }
 }
