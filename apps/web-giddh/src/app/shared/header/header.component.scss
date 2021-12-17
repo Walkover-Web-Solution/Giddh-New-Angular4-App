@@ -12,7 +12,7 @@
     top: 57px;
     bottom: 0;
     min-height: calc(100vh - 60px);
-    background-color: var(--header-button-background-color);
+    background-color: $white;
     width: 60px;
     left: 0;
     z-index: 991;
@@ -26,7 +26,7 @@
     background-color: transparent;
     vertical-align: top;
     line-height: 1.8;
-    border: 0px solid var(--header-button-background-color);
+    border: 0px solid $white;
 }
 
 .account-search .input-group-addon i.icon-search {
@@ -39,7 +39,7 @@
     background: none !important;
     height: 36px;
     padding-left: 3px !important;
-    border: 0px solid var(--header-button-background-color) !important;
+    border: 0px solid $white !important;
 }
 
 .account-search .form-control:focus {
@@ -63,7 +63,7 @@
 
 a[vr-item]:focus {
     background-color: $vivid-blue;
-    color: var(--header-button-background-color);
+    color: $white;
     cursor: pointer;
 }
 
@@ -139,7 +139,7 @@ a[vr-item]:focus {
 
 .main-company-name > li > a:hover .company-text .company-name,
 .main-company-name > li > a:hover .icon-dots-three-vertical {
-    color: var(--header-button-background-color);
+    color: $white;
 }
 
 .left-fixed-header > li {
@@ -274,7 +274,7 @@ a[vr-item]:focus {
     text-align: center;
     line-height: 15.9px;
     border-radius: 2px;
-    color: var(--header-button-background-color);
+    color: $white;
     margin-top: 1px;
     margin-right: 2px;
 }
@@ -294,7 +294,7 @@ a[vr-item]:focus {
 }
 
 .left-fixed-header > h6 > i:hover {
-    color: var(--header-button-background-color);
+    color: $white;
     background: $rich-blue;
 }
 
@@ -331,7 +331,7 @@ a[vr-item]:focus {
 }
 
 .left-sub-menu {
-    background: var(--header-button-background-color);
+    background: $white;
     position: absolute;
     left: -12px;
     bottom: 0;
@@ -418,7 +418,7 @@ a[vr-item]:focus {
 .universal-date li {
     display: inline-block;
     position: relative;
-    border: 1px solid var(--header-button-background-color);
+    border: 1px solid $white;
     border-radius: 20px;
     padding: 0 7px;
     i {
@@ -427,14 +427,14 @@ a[vr-item]:focus {
         position: relative;
         left: 16px;
         padding: 0 20px;
-        color: var(--header-button-background-color);
+        color: $white;
         font-size: 20px;
     }
 }
 
 .universal-date li input {
     padding-left: 10px !important;
-    color: var(--header-button-background-color) !important;
+    color: $white !important;
     padding-right: 0 !important;
     text-align: left;
 }
@@ -445,7 +445,7 @@ a[vr-item]:focus {
 .header-date {
     padding: 5px 11px;
     border-radius: 0px 2px 2px 0px;
-    color: var(--header-button-background-color);
+    color: $white;
     padding-left: 0;
 }
 
@@ -470,7 +470,7 @@ a[vr-item]:focus {
         margin: auto;
     }
     .input-date {
-        border: 1px solid var(--header-button-background-color);
+        border: 1px solid $white;
         border-radius: 20px !important;
         height: 34px;
         width: 220px;
@@ -483,13 +483,13 @@ a[vr-item]:focus {
 
 #add-manage.btn-gray {
     background: transparent;
-    color: var(--header-button-background-color);
+    color: $white;
     position: relative;
     padding-left: 15px;
     padding-top: 5px;
     padding-bottom: 6px;
     padding-right: 15px;
-    border: 1px solid var(--header-button-background-color);
+    border: 1px solid $white;
     border-radius: 20px;
     margin-right: 15px;
     display: inline-block !important;
@@ -500,7 +500,7 @@ a[vr-item]:focus {
 }
 span.icon-support.dropdown-toggle {
     background-color: $governor-bay;
-    color: var(--header-button-background-color);
+    color: $white;
     padding: 6px 7px;
     font-size: 17px;
     border: 1px solid $governor-bay;
@@ -665,7 +665,7 @@ ul.sub-list {
     z-index: 10;
 }
 .help-setting-icons {
-    color: var(--header-button-background-color);
+    color: $white;
     i {
         font-size: 20px;
         line-height: 1.3;
@@ -681,7 +681,7 @@ ul.sub-list {
 }
 /*notification css*/
 .white-row {
-    background-color: var(--header-button-background-color);
+    background-color: $white;
     padding: 10px 15px;
     margin-bottom: 10px;
     font-size: 16px;
@@ -884,12 +884,12 @@ ul.sub-list {
     position: fixed;
     width: 100%;
     top: 0;
-    background-color: var(--primary-color);
+    background-color: var(--primary-header-color);
     z-index: 990;
     padding-top: 12px;
     padding-bottom: 12px;
     .universal-date {
-        color: var(--header-button-text-color) !important;
+        color: $persian-blue !important;
         display: flex;
         align-items: center;
         li {
@@ -908,7 +908,7 @@ ul.sub-list {
         .icon-plus,
         i,
         .btn-link {
-            color: var(--header-icon-background-color) !important;
+            color: $white !important;
             position: static !important;
         }
         .notification {
@@ -919,23 +919,24 @@ ul.sub-list {
         .not-today {
             .calendar-addon {
                 padding: 6px 7px 7px 8px;
+                color: var(--primary-button-text-color);
             }
             .input-date {
                 height: 32px;
             }
         }
         .input-date {
-            background-color: var(--header-button-background-color);
+            background-color: var(--primary-button-background-color);
             border-radius: 5px !important;
             border: none;
             input {
-                color: var(--header-button-text-color) !important;
+                color: var(--primary-button-text-color) !important;
             }
         }
         #add-manage {
-            color: var(--header-button-text-color) !important;
+            color: var(--primary-button-text-color) !important;
             padding: 6px 8px;
-            background-color: var(--header-button-background-color);
+            background-color: var(--primary-button-background-color);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -944,7 +945,7 @@ ul.sub-list {
             i {
                 padding: 0 5px !important;
                 padding-left: 0 !important;
-                color: var(--header-button-text-color) !important;
+                color: var(--primary-button-text-color) !important;
             }
         }
         .header-utility-icons {
@@ -1079,7 +1080,7 @@ aside-setting {
             }
             .hamburger-menu {
                 i {
-                    color: var(--header-button-background-color);
+                    color: $white;
                 }
             }
             .universal-date {
@@ -1147,7 +1148,7 @@ aside-setting {
             position: relative;
             left: 0;
             padding: 0 20px;
-            color: var(--header-button-background-color);
+            color: $white;
             margin-right: 0;
             height: 34px;
             align-items: center;
@@ -1165,7 +1166,7 @@ aside-setting {
     .close-2 {
         top: 65px;
         right: 66px;
-        background-color: var(--header-button-background-color);
+        background-color: $white;
         width: 35px;
         height: 35px;
         position: fixed;
@@ -1203,7 +1204,7 @@ aside-setting {
     .mobile-menu-icon {
         position: absolute;
         top: 14px;
-        color: var(--header-button-background-color);
+        color: $white;
         right: -35px;
         background-color: $midnight-blue;
         width: 35px;
@@ -1220,7 +1221,7 @@ aside-setting {
         display: flex;
     }
     .upper-layer-header .open .dropdown-menu {
-        background-color: var(--header-button-background-color);
+        background-color: $white;
         -webkit-background-clip: padding-box;
         background-clip: padding-box;
         border: 1px solid $gainsboro;
@@ -1299,7 +1300,7 @@ aside-setting {
     }
     .mobile-back-btn {
         display: none;
-        color: var(--header-button-background-color);
+        color: $white;
         margin-right: 10px;
     }
     .not-today {
