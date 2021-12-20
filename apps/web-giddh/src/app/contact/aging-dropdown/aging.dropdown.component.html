@@ -14,8 +14,8 @@
                     [name]="'opt_4th'"
                     [type]="'number'"
                     digitsOnlyDirective
-                    (blur)="saveAgingDropdown()"
-                    [ngModel]="options.fourth"
+                    (change)="saveAgingDropdown()"
+                    [(ngModel)]="options.fourth"
                     (click)="$event.stopPropagation()"
                 ></text-field>
             </div>
@@ -29,8 +29,8 @@
                     [name]="'opt_4th'"
                     [type]="'number'"
                     digitsOnlyDirective
-                    [ngModel]="options.fifth"
-                    (blur)="saveAgingDropdown()"
+                    [(ngModel)]="options.fifth"
+                    (change)="saveAgingDropdown()"
                     (click)="$event.stopPropagation()"
                 ></text-field>
             </div>
@@ -44,8 +44,8 @@
                     [name]="'opt_4th'"
                     digitsOnlyDirective
                     [type]="'number'"
-                    [ngModel]="options.sixth"
-                    (blur)="saveAgingDropdown()"
+                    [(ngModel)]="options.sixth"
+                    (change)="saveAgingDropdown()"
                     (click)="$event.stopPropagation()"
                 ></text-field>
             </div>

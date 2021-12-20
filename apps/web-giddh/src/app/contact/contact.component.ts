@@ -1412,11 +1412,11 @@ export class ContactComponent implements OnInit, OnDestroy {
     public getCompanyCustomField(): void {
         this.groupService.getCompanyCustomField().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.status === "success") {
-                this.companyCustomFields$ = observableOf(response.body);
                 if (response.body) {
                     this.colspanLength = 11 + response.body.length;
                     this.addNewFieldFilters(response.body);
                 }
+                this.companyCustomFields$ = observableOf(response.body);
             } else {
                 this.toaster.showSnackBar("error", response.message);
             }
@@ -1599,16 +1599,12 @@ export class ContactComponent implements OnInit, OnDestroy {
      * Toogles the search field
      *
      * @param {string} fieldName Field name to toggle
-     * @param {*} el Element reference for focusing
      * @memberof ContactComponent
      */
-    public toggleSearch(fieldName: string, el: any): void {
+    public toggleSearch(fieldName: string): void {
         if (fieldName === "name") {
             this.showNameSearch = true;
-        }
-        setTimeout(() => {
-            el?.focus();
-        });
+        }    
     }
 
     /**
