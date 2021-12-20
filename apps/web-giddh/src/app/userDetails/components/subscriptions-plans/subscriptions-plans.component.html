@@ -17,7 +17,12 @@
             <i class="icon-right"></i>
         </button>
     </div>
-    <div #tableContent class="plan-table mat-elevation-z8" [ngClass]="{ 'plan-table-content': showLoader }">
+    <div
+        #tableContent
+        class="plan-table mat-elevation-z8"
+        [style.width.px]="plansContainerWidth"
+        [ngClass]="{ 'plan-table-content': showLoader }"
+    >
         <!-- <table mat-table class="plan-table-layout" [dataSource]="inputData"> -->
         <!-- <ng-container [matColumnDef]="column" *ngFor="let column of inputData; let i = index">
                 <th class="plan-th" mat-header-cell *matHeaderCellDef>&nbsp;</th>

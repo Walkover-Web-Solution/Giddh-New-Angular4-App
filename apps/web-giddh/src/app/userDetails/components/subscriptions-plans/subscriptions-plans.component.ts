@@ -111,6 +111,7 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
     /** True if api call in progress */
     public showLoader: boolean = true;
     public plansCount: any[] = [];
+    public plansContainerWidth: number = 0;
 
     constructor(private modalService: BsModalService, private generalService: GeneralService,
         private changeDetectionRef: ChangeDetectorRef, private authenticationService: AuthenticationService, private store: Store<AppState>,
@@ -381,7 +382,7 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
             
             
             
-            //let loop = 0;
+            let loop = 0;
             // let names = [];
             // let amount = [];
             // let durationUnit = [];
@@ -397,9 +398,9 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
 
 
 
-                //this.plansCount.push(loop);
+                this.plansCount.push(loop);
                 this.inputData.push(plan);
-                //loop++;
+                loop++;
 
                 // let button ='';
                 // if (plan.uniqueName === activeCompany.subscription.planDetails.uniqueName) {
@@ -422,6 +423,8 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
                 //     check_all_features: button
                 // });
             });
+
+            this.plansContainerWidth = (this.plansCount?.length + 1) * 150;
 
             // for(let i = 0; i <= 7; i++) {
             //     if(i === 0) {
