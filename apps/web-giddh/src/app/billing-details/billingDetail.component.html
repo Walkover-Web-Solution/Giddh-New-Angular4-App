@@ -16,7 +16,9 @@
                     </div>
                 </div>
                 <div class="col-sm-11">
-                    <h2 class="giddh-heading" [ngClass]="{ 'skelton-common-class': showLoader }">Welcome to Giddh!</h2>
+                    <h2 class="giddh-heading" [ngClass]="{ 'skelton-common-class': showLoader }">
+                        {{ localeData?.welcome_to_giddh }}
+                    </h2>
                 </div>
             </div>
         </div>
@@ -160,7 +162,7 @@
                                     <label
                                         [ngClass]="{ 'form-label': showLoader, 'skelton-common-class': showLoader }"
                                         *ngIf="showTaxNo"
-                                        >Tax Number</label
+                                        >{{ localeData?.tax_number }}</label
                                     >
                                     <ng-container *ngTemplateOutlet="skeltonLoader"></ng-container>
                                     <input
@@ -249,7 +251,7 @@
                                         id="address"
                                         [ngClass]="{ 'form-field': showLoader }"
                                         [(ngModel)]="billingDetailsObj.address"
-                                        placeholder="Type your address"
+                                        [placeholder]="commonLocaleData?.type_your_address"
                                         rows="5"
                                         cols="12"
                                         matInput
@@ -269,7 +271,7 @@
                                     'renewal-details-content': showLoader
                                 }"
                             >
-                                Renewal Plan Details
+                                {{ localeData?.renewal_plan_details }}
                             </h3>
                         </div>
                         <div class="renewal-data">
@@ -295,20 +297,22 @@
                                 <mat-card-content class="renewal-card-content">
                                     <ul class="renewal-list" [ngClass]="{ 'renewal-list-content': showLoader }">
                                         <li class="features" [ngClass]="{ 'skelton-common-class': showLoader }">
-                                            {{ selectedPlans?.planDetails?.transactionLimit | number }} Transactions
+                                            {{ selectedPlans?.planDetails?.transactionLimit | number }}
+                                            {{ localeData?.app_transactions }}
                                         </li>
                                         <li class="features" [ngClass]="{ 'skelton-common-class': showLoader }">
-                                            {{ selectedPlans?.planDetails?.companiesLimit | number }} Companies
+                                            {{ selectedPlans?.planDetails?.companiesLimit | number }}
+                                            {{ localeData?.companies }}
                                         </li>
                                         <!-- <li class="features">10 hrs<span class="hrs-underline"> Muneem Consultant</span></li> -->
                                         <li class="features" [ngClass]="{ 'skelton-common-class': showLoader }">
-                                            Unlimited Users
+                                            {{ localeData?.unlimited_users }}
                                         </li>
                                         <li class="features" [ngClass]="{ 'skelton-common-class': showLoader }">
-                                            Unlimited Customers/Vendors
+                                            {{ localeData?.unlimited_contacts }}
                                         </li>
                                         <li class="features" [ngClass]="{ 'skelton-common-class': showLoader }">
-                                            Desktop/Mobile App
+                                            {{ localeData?.desktop_mobile_app }}
                                         </li>
                                     </ul>
                                 </mat-card-content>
@@ -340,7 +344,7 @@
                                 class="new-payable"
                                 [ngClass]="{ 'skelton-common-class': showLoader, 'new-payable-content': showLoader }"
                             >
-                                Net payable amount
+                                {{ localeData?.net_payable_amount }}
                             </h3>
                             <h2
                                 class="renwal-amount"
@@ -350,9 +354,9 @@
                                     selectedPlans?.planDetails?.amount + selectedPlans?.planDetails?.amount * 0.18
                                         | number
                                 }}
-                                <span class="including-tax" [ngClass]="{ 'including-text-content': showLoader }"
-                                    >Including Tax (18% GST)</span
-                                >
+                                <span class="including-tax" [ngClass]="{ 'including-text-content': showLoader }">{{
+                                    localeData?.including_tax
+                                }}</span>
                             </h2>
 
                             <div class="form-group" [ngClass]="{ 'form-group-div': showLoader }">

@@ -35,8 +35,7 @@ const TABLE_DATA: any[] = [
 @Component({
     selector: 'subscriptions-plans',
     styleUrls: ['./subscriptions-plans.component.scss'],
-    templateUrl: './subscriptions-plans.component.html',
-    encapsulation: ViewEncapsulation.Emulated
+    templateUrl: './subscriptions-plans.component.html'
 })
 export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
     @Input() public subscriptions: any;
@@ -73,6 +72,7 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
     public selectNewPlan: boolean = false;
     public isShow = true;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Ths reference will use for bootstrap model */
     public modalRef: BsModalRef;
     /** This will contain the type of plans we have to show */
     public showPlans: any = '';
@@ -131,6 +131,7 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
 
+        /** This will use for get the active company from store  */
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {  
                 if (!this.activeCompany) {

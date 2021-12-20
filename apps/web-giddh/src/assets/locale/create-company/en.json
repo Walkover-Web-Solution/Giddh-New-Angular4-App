@@ -39,5 +39,12 @@
     "total_companies": "Total Companies",
     "transaction_limit": "Transactions Limit",
     "subscription_renewal": "Subscription Renewal",
-    "invalid_email_error": "Enter valid Email ID"
+    "invalid_email_error": "Enter valid Email ID",
+    "type_your_address": "Type your address",
+    "including_tax":"Including Tax (18% GST)",
+    "renewal_plan_details":"Renewal Plan Details",
+    "tax_number":"Tax Number",
+    "net_payable_amount":"Net payable amount",
+    "plan_timeline":" Plan Timeline ",
+    "transactions": "Transactions"
 }
