@@ -42,6 +42,10 @@ export class AgingDropdownComponent implements OnDestroy {
 
     public saveAgingDropdown() {
         this.isValid = true;
+        this.options.fourth = Number(this.options.fourth);
+        this.options.fifth = Number(this.options.fifth);
+        this.options.sixth = Number(this.options.sixth);
+
         if (this.options.fourth >= (this.options.fifth || this.options.sixth)) {
             this.showToaster();
             this.isValid = false;

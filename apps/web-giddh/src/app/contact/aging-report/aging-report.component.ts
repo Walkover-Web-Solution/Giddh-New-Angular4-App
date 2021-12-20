@@ -491,16 +491,12 @@ export class AgingReportComponent implements OnInit, OnDestroy {
      * Toogles the search field
      *
      * @param {string} fieldName Field name to toggle
-     * @param {*} el Element reference for focusing
      * @memberof AgingReportComponent
      */
-    public toggleSearch(fieldName: string, el: any): void {
+    public toggleSearch(fieldName: string): void {
         if (fieldName === "name") {
             this.showNameSearch = true;
         }
-        setTimeout(() => {
-            el.focus();
-        });
     }
 
     /**
