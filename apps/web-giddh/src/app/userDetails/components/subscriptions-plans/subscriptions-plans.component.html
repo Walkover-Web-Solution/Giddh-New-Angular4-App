@@ -1,7 +1,7 @@
 <div class="welcome-msg">
     <div class="row">
         <div [ngClass]="{ 'skelton-common-class': showLoader, 'radeem-back': showLoader }"></div>
-        <div class="col-md-1 col-sm-1" *ngIf="subscriptions && subscriptions.length > 0 && !showLoader">
+        <div class="col-md-1 col-sm-1" *ngIf="!showLoader">
             <button (click)="backClicked()" class="btn-cancel pr-3 pl-3 mb-2 mr-0" mat-button>
                 {{ commonLocaleData?.app_back }}
             </button>

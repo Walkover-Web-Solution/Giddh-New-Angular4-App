@@ -427,6 +427,11 @@
 
     .text-gray {
         font-size: 17px;
+        font-weight: 700;
+    }
+
+    .footer-plan {
+        padding-top: 11px;
     }
 
     .radeem-ddtails {
@@ -862,13 +867,13 @@
 
 @media screen and (max-width: 1024px) and (orientation: landscape) {
     .plan-td.mat-cell:nth-child(even) {
-        padding-left: 94px !important;
-        padding-right: 92px !important;
+        padding-left: 70px !important;
+        padding-right: 70px !important;
     }
 
     .plan-td.mat-cell:nth-child(odd) {
-        padding-left: 97px !important;
-        padding-right: 97px !important;
+        padding-left: 70px !important;
+        padding-right: 70px !important;
     }
 
     .plan-td-changes.mat-cell:nth-child(even) {
@@ -884,6 +889,7 @@
     .plan-table .mat-column--b-Benefits--b- {
         padding-left: 0 !important;
         max-width: 427px !important;
+        padding-right: 105px !important;
     }
 
     .welcome-msg {
