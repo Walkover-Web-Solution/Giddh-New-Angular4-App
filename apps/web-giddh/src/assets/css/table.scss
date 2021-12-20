@@ -13,7 +13,7 @@
         font-size: 14px;
         border-left: none;
         border-right: none;
-        background: #fff;
+        background: var(--table-heading-primary-background-color);
         padding: 15px 11px;
         border-bottom: 1px solid $gainsboro;
         font-family: "opensans-semibold";
@@ -21,7 +21,7 @@
     thead > tr > th {
         border-top: none;
         white-space: nowrap;
-        color: $midnight-blue !important;
+        color: var(--table-heading-secondary-color) !important;
         position: sticky !important;
         top: 0;
         z-index: 1;
@@ -60,14 +60,15 @@
         font-family: "opensans-regular";
         border-bottom: none !important;
         white-space: nowrap !important;
-        color: $omiod;
+        color: var(--table-content-quaternary-color);
         border-top: 1px solid $dark-fog !important;
+        background-color: var(--table-body-primary-background-color) !important;
         &.text-break {
             white-space: normal !important;
         }
     }
     tbody > tr > td:first-child {
-        color: $black-pearl;
+        color: var(--table-content-tertiary-color);
     }
     thead > tr > th:first-child,
     tbody > tr > td:first-child {

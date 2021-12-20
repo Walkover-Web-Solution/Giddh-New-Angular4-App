@@ -482,7 +482,7 @@ input {
 .invoice-control .nav.nav-tabs {
     margin-bottom: 15px;
     padding: 0 0px 0 15px !important;
-    background-color: $white;
+    background-color: var(--tab-primary-background-color);
     z-index: 9;
     position: relative;
     top: -4px;
@@ -508,7 +508,7 @@ input {
     margin-right: 35px !important;
     margin-left: 0 !important;
     font-size: 14px;
-    color: $nero !important;
+    color: var(--tab-secondary-text-color) !important;
     border-width: 0px 0 4px 0 !important;
     height: 41px;
 }
@@ -518,7 +518,7 @@ input {
 }
 .invoice-control .nav-tabs > li.active > a {
     border-bottom: 4px solid $deep-sky-blue !important;
-    color: $nero !important;
+    color: var(--tab-secondary-text-color) !important;
 }
 .other-account-entry .header {
     border: 1px solid $red !important;
@@ -669,8 +669,8 @@ ul.sub-list {
 }
 
 .tab-integration .nav-tabs > li.active a {
-    background: $white !important;
-    box-shadow: 0 6px 7px $very-light-gray;
+    background: var(--rectangular-tab-primary-background-color) !important;
+    box-shadow: 0 6px 7px var(--rectangular-tab-box-shadow-color);
     border: 1px solid $midnight-express !important;
     color: $night-rider !important;
     border-radius: 3px;
@@ -680,7 +680,7 @@ ul.sub-list {
 }
 .tab-integration .nav-tabs > li > a > span {
     font-size: 30px;
-    color: $midnight-express;
+    color: var(--rectangular-tab-inactive-icon-primary-color);
     opacity: 0.4;
     margin-bottom: 6px;
 }
@@ -766,14 +766,14 @@ ul.sub-list {
     display: none !important;
 }
 .btn-sky-blue {
-    background: $faux-cornflower-blue;
-    border: 1px solid $faux-cornflower-blue;
+    background: var(--secondary-button-background-color);
+    border: 1px solid var(--secondary-button-background-color);
     color: $white;
 }
 .btn-sky-blue:hover,
 .btn-sky-blue:focus {
-    background: $chetwode-blue !important;
-    border-color: $chetwode-blue;
+    background: var(--secondary-button-background-color-hover) !important;
+    border-color: var(--secondary-button-background-color-hover);
     color: $white;
 }
 .btn-light-gray {
@@ -874,9 +874,9 @@ ul.sub-list {
     border: 1px solid $midnight-blue !important;
 }
 .pagination > li.active > a {
-    background: $midnight-blue !important;
-    color: $white !important;
-    border: 1px solid $midnight-blue !important;
+    color: var(--pagination-active-button-color) !important;
+    background: var(--pagination-background-color) !important;
+    border: 1px solid var(--pagination-background-color) !important;
 }
 .table-checkbox {
     position: absolute;
@@ -988,12 +988,12 @@ ul.sub-list {
 }
 
 .btn-green {
-    background: $deep-sky-blue;
+    background: var(--secondary-button-background-color);
     color: $white;
 }
 .btn-green:hover {
     color: $white;
-    background: $deep-sky-blue-hover;
+    background: var(--secondary-button-background-color-hover);
 }
 
 .choose-size label {
@@ -1254,7 +1254,7 @@ modal-container.modal {
         font-size: 13px;
         top: 11px;
         left: 10px;
-        color: $gray;
+        color: var(--sidebar-search-bar-text-color);
     }
 
     .form-control {
@@ -1338,12 +1338,13 @@ modal-container.modal {
 /*input*/
 
 .form-control {
-    background: $white !important;
+    background: var(--sidebar-search-bar-background-color) !important;
     border: 1px solid $gainsboro;
     border-radius: 5px !important;
     padding: 6px !important;
     outline: 0;
-    color: $nero !important;
+    color: var(--sidebar-search-bar-text-color) !important;
+    // color: $nero !important;
     box-shadow: none;
     font-size: 14px !important;
 }
@@ -1370,7 +1371,7 @@ input:-moz-placeholder {
 }
 .form-control:focus {
     outline: none;
-    border-color: $chetwode-blue !important;
+    border-color: var(--active-search-bar-border-color) !important;
     box-shadow: none;
 }
 .p-0 {
@@ -3267,8 +3268,8 @@ label {
 .pagination > li > a:hover,
 .pagination > li > span:focus,
 .pagination > li > span:hover {
-    background-color: $gainsboro !important;
-    border-color: $gainsboro;
+    background-color: var(--pagination--button-hover-background-color) !important;
+    border-color: var(--pagination--button-hover-background-color);
 }
 #manufacture .section-title {
     color: $dark-gray;
@@ -5602,7 +5603,7 @@ span.red-text {
 }
 #invoice-setting .nav > li > a:focus,
 #invoice-setting .nav > li > a:hover {
-    background: $white !important;
+    background: var(--rectangular-tab-primary-background-color) !important;
     border: 1px solid rgba(26, 35, 126, 0.4) !important;
 }
 #groupDetailForm .btn {
@@ -5746,7 +5747,7 @@ ul.dropdown-menu p.lead.pd {
 }
 .nav-tabs > li.active > a,
 .invoice-control .nav-tabs > li.active > a {
-    border-bottom: 4px solid $deep-sky-blue !important;
+    border-bottom: 4px solid var(--tab-primary-selected-tab-bottom-border-color) !important;
     font-family: "opensans-semibold";
     background-color: inherit;
 }
@@ -5782,21 +5783,23 @@ ul.dropdown-menu p.lead.pd {
 #invoice-setting ul.nav.nav-tabs a {
     border-bottom: 1px solid rgba(26, 35, 126, 0.4) !important;
     font-family: "opensans-regular";
-    color: $charcoal !important;
+    color: var(--rectangular-tab-inactive-icon-primary-color) !important;
     margin-right: 0 !important;
     margin-left: 0 !important;
     border-radius: 4px;
+    background-color: var(--rectangular-tab-primary-background-color);
 }
 #invoice-setting ul.nav-tabs > li {
     margin-right: 35px;
 }
 #invoice-setting .nav > li > a.active {
-    border: 1px solid $deep-sky-blue !important;
-    border-bottom-color: $deep-sky-blue !important;
-    color: $deep-sky-blue !important;
+    border: 1px solid var(--rectangular-tab-active-primary-border-color) !important;
+    border-bottom-color: var(--rectangular-tab-active-primary-border-color) !important;
+    color: var(--rectangular-tab-active-primary-text-color) !important;
+    background-color: var(--rectangular-tab-primary-background-color) !important;
 }
 #invoice-setting .nav > li > a.active span {
-    color: $deep-sky-blue;
+    color: var(--rectangular-tab-active-primary-text-color);
 }
 .aging-table th .table-checkbox {
     top: 16px;
@@ -5821,7 +5824,7 @@ ul.dropdown-menu p.lead.pd {
 .setting-page ul.nav.nav-tabs {
     margin-bottom: 15px;
     padding: 0 0px 0 15px !important;
-    background-color: $alice-blue-light;
+    background-color: var(--tab-secondary-background-color);
     z-index: 9;
     position: relative;
     top: -2px;
@@ -5846,10 +5849,10 @@ ul.dropdown-menu p.lead.pd {
     margin-right: 25px;
     padding-bottom: 7px;
     font-size: 14px;
-    color: $night-rider !important;
+    color: var(--tab-tertiary-text-color) !important;
 }
 .setting-page .nav > li > a:hover {
-    color: $deep-sky-blue !important;
+    color: var(--tab-tertiary-text-color-hover) !important;
 }
 #tab-integration .nav-tabs {
     padding: 40px;
@@ -5860,7 +5863,7 @@ ul.dropdown-menu p.lead.pd {
     padding-top: 0 !important;
 }
 .setting-page .nav > li > a.active {
-    color: $nero !important;
+    color: var(--tab-secondary-text-color) !important;
 }
 #tab-integration .nav-tabs > li {
     margin-right: 0;
@@ -5869,18 +5872,20 @@ ul.dropdown-menu p.lead.pd {
     border-bottom: 1px solid rgba(26, 35, 126, 0.4) !important;
     font-size: 18px;
     border-radius: 4px;
+    background-color: var(--rectangular-tab-primary-background-color);
 }
 #tab-integration .nav-tabs > li a:hover {
-    background-color: $white !important;
+    background-color: var(--rectangular-tab-primary-background-color) !important;
 }
 #tab-integration .nav-tabs > li a.active {
-    border: 1px solid $deep-sky-blue !important;
+    border: 1px solid var(--rectangular-tab-active-primary-border-color) !important;
     font-family: "opensans-regular";
-    color: $deep-sky-blue !important;
-    border-color: $deep-sky-blue !important;
+    color: var(--rectangular-tab-active-primary-text-color) !important;
+    border-color: var(--rectangular-tab-active-primary-border-color) !important;
+    background-color: var(--rectangular-tab-primary-background-color);
 }
 #tab-integration .nav-tabs > li a.active span {
-    color: $deep-sky-blue;
+    color: var(--rectangular-tab-active-primary-text-color);
 }
 .input-group-addon {
     padding: 5px 12px;
@@ -6532,7 +6537,7 @@ span#HW_badge_cont:nth-child(3) {
             a {
                 span {
                     i {
-                        color: $gray;
+                        color: var(--right-sidebar-icon-color);
                         margin-right: 10px;
                         font-size: 22px;
                     }
@@ -6834,13 +6839,13 @@ span#HW_badge_cont:nth-child(3) {
             .nav-item {
                 .nav-link {
                     font-size: 16px !important;
-                    color: $midnight-blue !important;
+                    color: var(--tab-primary-text-color) !important;
                 }
             }
 
             .active {
                 > .nav-link {
-                    color: $midnight-blue !important;
+                    color: var(--tab-primary-text-color) !important;
                 }
             }
         }

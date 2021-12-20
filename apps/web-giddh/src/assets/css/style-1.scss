@@ -477,7 +477,7 @@ aside-menu-account .container-fluid {
     color: $black;
 }
 .white-bg {
-    background: $white !important;
+    background: var(--common-background-color-for-all-components) !important;
 }
 .min-width-100 {
     min-width: 100px;
@@ -1884,10 +1884,10 @@ ul.pills li {
 /*box styles  on settings integration page*/
 .box {
     padding: 15px;
-    background-color: $white;
+    background-color: var(--common-background-color-for-all-components);
 }
 #setting-tab .nav > li > a {
-    color: $nero;
+    color: var(--tab-secondary-text-color);
     border: 0;
 }
 #setting-tab .nav-tabs > li.active > a {
@@ -2340,7 +2340,7 @@ form#groupDetailForm {
     position: relative;
     z-index: 5;
     height: 100vh;
-    color: $black;
+    color: var(--right-sidebar-settings-color);
 }
 .aside-pane {
     max-width: 760px;
