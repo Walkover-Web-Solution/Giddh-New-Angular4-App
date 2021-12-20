@@ -25,7 +25,7 @@
 
     .welcome-msg {
         padding: 25px 0 0;
-        margin-bottom: 30px;
+        margin-bottom: 5px;
         float: left;
         width: 100%;
 
@@ -188,6 +188,7 @@
             .year {
                 font-size: 14px;
                 margin-left: -3px;
+                text-transform: lowercase;
             }
 
             .renewal-list {
@@ -265,9 +266,9 @@
 
             .pay-now {
                 margin-top: 11px;
-                width: 119px;
+                width: 102px;
                 font-weight: bolder;
-                height: 47px;
+                height: 38px;
                 font-size: 17px;
                 background-color: $midnight-blue;
                 color: $white;
@@ -423,5 +424,12 @@
 
     .billing-name {
         padding-left: 0px;
+    }
+}
+
+@media (max-width: 480px) and (orientation: portrait) {
+    #main .main-heading-billing .giddh-heading {
+        width: 100%;
+        margin-top: 22px;
     }
 }

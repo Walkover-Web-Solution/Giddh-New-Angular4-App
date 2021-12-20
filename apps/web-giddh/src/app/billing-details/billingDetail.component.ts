@@ -141,6 +141,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
         this.store.dispatch(this.settingsProfileActions.resetPatchProfile());
         this.getCurrentCompanyData();
 
+        /** This will use for get active company data */
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
                 this.getUpdatedStateCodes(activeCompany.countryV2?.alpha3CountryCode, true);
@@ -612,7 +613,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
 
     /**
      *
-     *This will filter states
+     *This will use for filter states
      * @private
      * @param {*} search
      * @param {boolean} [isBillingStates=true]
@@ -632,7 +633,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
         this.filteredBillingStates = filteredStates;
     }
     /**
-    * This will filter billing country
+    * This will use for filter billing country
     *
     * @private
     * @param {*} search
@@ -693,7 +694,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     /**
-  * Checks and reset value
+  *  This will use fpr checks and reset value
   *
   * @public
   * @param {FormControl} formControl
@@ -708,7 +709,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
 
 
     /**
-   * This will hide/show GSTIN/Tax Number Label by default based on country
+   * This will use for  hide/show GSTIN/Tax Number Label by default based on country
    *
    * @public
    * @param {string} name
@@ -727,7 +728,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     /**
-     * On change country GST label Hide/Show
+     *  This will use for on change country GST label Hide/Show
      *
      * @param {*} evt
      * @memberof BillingDetailComponent
@@ -785,6 +786,14 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
         });
     }
 
+    /**
+     * This will use for modify state response by country
+     *
+     * @param {StateCode[]} stateList
+     * @param {string} countryCode
+     * @return {*} 
+     * @memberof BillingDetailComponent
+     */
     public modifyStateResp(stateList: StateCode[], countryCode: string) {
         let stateListRet: IOption[] = [];
         stateList.forEach(stateR => {

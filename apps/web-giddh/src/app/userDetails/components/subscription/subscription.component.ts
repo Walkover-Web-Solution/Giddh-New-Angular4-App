@@ -19,15 +19,18 @@ import { CreateCompanyUsersPlan, SubscriptionRequest } from "../../../models/api
 import { CompanyActions } from "../../../actions/company.actions";
 import { SettingsProfileActions } from "../../../actions/settings/profile/settings.profile.action";
 import { GeneralService } from "../../../services/general.service";
+import { DeclareFunctionStmt } from "@angular/compiler";
 
 
-export interface PeriodicElement {
+/** This interface will use for monthly data */
+export interface MonthlyData {
     consumed: number;
     balance: number;
     dues: string;
 }
 
-const ELEMENT_DATA: PeriodicElement[] = [
+/** This static dummy data will use for monthly tab  */
+const MONTHLY_DATA: MonthlyData[] = [
     { consumed: 2000, balance: 8000, dues: '₹500' },
     { consumed: 6, balance: 14, dues: '₹4,000' },
     { consumed: 6, balance: 14, dues: '₹2,000' },
@@ -118,10 +121,19 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
         { name: 'Less than 50,000', value: 50000 }
     ];
 
+    /** This will store the static data in transaction balance list  */
+    public subscriptionsDummy: any[] = [
+        { name: 'Oak Plan', remainingTransactions: 1000, totalCompanies: 2, startedAt: '22 Dec,2020', expiry: '6 Jan,2021' },
+        { name: 'Default', remainingTransactions: 5000, totalCompanies: 2, startedAt: '22 Dec,2020', expiry: '6 Jan,2021' },
+        { name: 'Trial', remainingTransactions: 10000, totalCompanies: 1, startedAt: '22 Dec,2020', expiry: '6 Jan,2021' },
+        { name: 'Test Plan', remainingTransactions: 50000, totalCompanies: 3, startedAt: '22 Dec,2020', expiry: '6 Jan,2021' },
+        { name: 'Demo Plan', remainingTransactions: 50000, totalCompanies: 4, startedAt: '22 Dec,2020', expiry: '6 Jan,2021' }
+    ];
+
     /** This will displays the columns of consumed  */
     displayedColumns: string[] = ['consumed', 'balance', 'dues'];
     /** This will use for static data for consumed */
-    dataSource = ELEMENT_DATA;
+    dataSource = MONTHLY_DATA;
     /** This will use for expand collapse for companies */
     public isExpand: boolean = false;
 
@@ -145,8 +157,8 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit(): void {
-        console.log("get companies function called");
 
+        /** This will use for by default plan div hide */
         this.isPlanShow = false;
 
         /** This condition will use for general service for logged in user */
@@ -155,18 +167,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
         }
 
         /** This will hit the api of get companies */
-        // this.getCompanies();
-        this.showLoader = true;
-        this.subscriptionService.getSubScribedCompanies().pipe(takeUntil(this.destroyed$)).subscribe((res) => {
-            this.showLoader = false;
-            if (res && res.status === "success") {
-                this.showLoader = false;
-                if (!res.body || !res.body[0]) {
-                } else {
-                    this.store.dispatch(this.subscriptionsActions.SubscribedCompaniesResponse(res));
-                }
-            }
-        });
+        this.getCompanies();
 
         /** This subscription subscribes and get the response */
         this.subscriptions$.subscribe(response => {
