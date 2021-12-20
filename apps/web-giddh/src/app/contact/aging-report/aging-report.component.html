@@ -517,18 +517,18 @@
     let-formControl="formControl"
 >
     <div class="align-items-center d-flex" [hidden]="show">
-        <button mat-icon-button (click)="toggleSearch(fieldName, searchBox)">
+        <button mat-icon-button (click)="toggleSearch(fieldName)">
             <span class="icon-search"></span>
         </button>
         <span>{{ title }}</span>
     </div>
     <div [hidden]="!show">
         <text-field
-            type="text"
+            [type]="'text'"
             [placeholder]="getSearchFieldText(fieldName)"
             [cssClass]="'form-control search-table'"
-            #searchBox
             [formControl]="formControl"
+            [autoFocus]="show"
         ></text-field>
     </div>
 </ng-template>

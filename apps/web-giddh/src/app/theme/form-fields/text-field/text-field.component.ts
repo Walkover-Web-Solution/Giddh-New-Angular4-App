@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input, OnChanges, OnDestroy, OnInit, Optional, Self, SimpleChanges } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input, OnChanges, OnDestroy, OnInit, Optional, Self, SimpleChanges, ViewChild } from "@angular/core";
 import { ControlValueAccessor, NgControl } from "@angular/forms";
 import { MatFormFieldControl } from "@angular/material/form-field";
 import { Subject } from "rxjs";
@@ -19,6 +19,7 @@ const noop = () => { };
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TextFieldComponent implements OnInit, OnChanges, OnDestroy, ControlValueAccessor {
+    @ViewChild('textField', {static: false}) public textField: ElementRef;
     @Input() public cssClass: string = "";
     /** Taking placeholder as input */
     @Input() public placeholder: any = "";
@@ -30,6 +31,8 @@ export class TextFieldComponent implements OnInit, OnChanges, OnDestroy, Control
     @Input() public readonly: boolean;
     @Input() public type: string = "text";
     @Input() public showError: boolean = false;
+    /** It will focus in the text field */
+    @Input() public autoFocus: boolean = false;
     /** ngModel of input */
     public ngModel: any;
     /** Used for change detection */
@@ -63,7 +66,11 @@ export class TextFieldComponent implements OnInit, OnChanges, OnDestroy, Control
      * @memberof TextFieldComponent
      */
     public ngOnChanges(changes: SimpleChanges): void {
-        
+        if(this.autoFocus) {
+            setTimeout(() => {
+                this.textField?.nativeElement?.focus();
+            }, 20);
+        }
     }
 
     /**
