@@ -31,6 +31,7 @@ export class TextFieldComponent implements OnInit, OnChanges, OnDestroy, Control
     @Input() public readonly: boolean;
     @Input() public type: string = "text";
     @Input() public showError: boolean = false;
+    /** It will focus in the text field */
     @Input() public autoFocus: boolean = false;
     /** ngModel of input */
     public ngModel: any;
