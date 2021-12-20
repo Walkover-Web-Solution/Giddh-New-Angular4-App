@@ -574,7 +574,7 @@ aside-menu-account .container-fluid {
 }
 
 .white-bg {
-    background: $white !important;
+    background: var(--common-background-color-for-all-components) !important;
 }
 
 .min-width-100 {
@@ -2257,11 +2257,11 @@ ul.pills li {
 
 .box {
     padding: 15px;
-    background-color: $white;
+    background-color: var(--common-background-color-for-all-components);
 }
 
 #setting-tab .nav > li > a {
-    color: $nero;
+    color: var(--tab-secondary-text-color);
     border: 0;
 }
 
@@ -2726,7 +2726,7 @@ form#groupDetailForm {
     position: relative;
     z-index: 5;
     height: 100vh;
-    color: $black;
+    color: var(--right-sidebar-settings-color);
 }
 .aside-pane {
     max-width: 760px;

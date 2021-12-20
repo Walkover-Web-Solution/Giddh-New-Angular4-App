@@ -2,6 +2,12 @@
 
 body,
 body.default-theme {
+    // Body Color Variables
+    --body-background-color: #ffffff;
+
+    // Common variable to set background color of components
+    --common-background-color-for-all-components: #ffffff;
+
     // Button Color Variables
     --primary-button-text-color: #2831b2;
     --primary-button-background-color: #ffffff;
@@ -15,6 +21,25 @@ body.default-theme {
     // Search Bar Color Variables
     --sidebar-search-bar-text-color: #6a6c85;
     --sidebar-search-bar-background-color: #f5f5f5;
+    --active-search-bar-border-color: #5b64c9;
+
+    // Tabs Color Variables
+    --tab-primary-background-color: #ffffff;
+    --tab-primary-text-color: #1a237e;
+    --tab-secondary-text-color: #1c1c1c;
+    --tab-tertiary-text-color: #333333;
+    --tab-tertiary-text-color-hover: #01a9f4;
+    --tab-primary-selected-tab-bottom-border-color: #01a9f4;
+    --tab-secondary-background-color: #f7f8fa;
+
+    // Rectangular Tabs Color Variables
+    --rectangular-tab-active-primary-text-color: #01a9f4;
+    --rectangular-tab-active-primary-border-color: #01a9f4;
+    --rectangular-tab-primary-background-color: #ffffff;
+    --rectangular-tab-inactive-icon-primary-color: #171f48;
+    --rectangular-tab-inactive-text-primary-color: #484848;
+    --rectangular-tab-inactive-primary-border-color: #01a9f4;
+    --rectangular-tab-box-shadow-color: #cccccc;
 
     // Pagination Color Variables
     --pagination-button-color: #1c1c1c;
@@ -25,7 +50,7 @@ body.default-theme {
     // Header Color Variables
     --primary-header-color: #1a237e;
 
-    // Sidebar Color Variables
+    // Left Sidebar Color Variables
     --sidebar-content-text-color: #6a6c85;
     --sidebar-anchor-text-color: #494d50;
     --sidebar-menu-list-items-color: #ffffff;
@@ -40,6 +65,11 @@ body.default-theme {
     --sidebar-create-company-list-background-color: #f0f4ff;
     --sidebar-list-background-color-hover: #f0f5ff; // Not yet used in dark mode
 
+    // Right Sidebar Color Variables
+    --right-sidebar-back-color: #007bff;
+    --right-sidebar-icon-color: #808080;
+    --right-sidebar-settings-color: #000000;
+
     // Table Color Variables
     --table-heading-primary-color: #1c1c1c;
     --table-heading-secondary-color: #1a237e;
@@ -47,6 +77,8 @@ body.default-theme {
     --table-content-secondary-color: #999999;
     --table-content-tertiary-color: #212528;
     --table-content-quaternary-color: #6a6c85;
+    --table-heading-primary-background-color: #ffffff;
+    --table-body-primary-background-color: #ffffff;
 
     // Total Details Box above table Color Variables
     --total-details-heading-color: #6a6c85;
@@ -62,4 +94,7 @@ body.default-theme {
     --danger-color: #ff0000;
     --success-color: #2fab4a;
     --main-content-background-color: #ffffff;
+
+    // Common Chat Button Color Variable
+    --common-chat-button-background-color: #0fbab8;
 }

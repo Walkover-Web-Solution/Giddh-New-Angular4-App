@@ -50,7 +50,7 @@
     margin-bottom: 20px;
 }
 .warehouse-card {
-    background-color: $white;
+    background-color: var(--common-background-color-for-all-components);
     padding: 15px;
     margin-bottom: 15px;
     border: 1px solid $gainsboro;

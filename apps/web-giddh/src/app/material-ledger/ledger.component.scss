@@ -108,6 +108,7 @@ input {
 }
 table.ledger-footer-1 td[class*="col-"] {
     justify-content: flex-end;
+    background-color: var(--common-background-color-for-all-components);
 }
 .ledg-head table td.pd-r25 {
     padding-right: 25px !important;
@@ -175,7 +176,7 @@ table.ledger-footer-1 td[class*="col-"] {
     .single-search-box {
         position: relative;
         i {
-            color: $gray;
+            color: var(--sidebar-search-bar-text-color);
             left: 8px;
             top: -8px;
             z-index: 1;
@@ -203,7 +204,7 @@ table.ledger-footer-1 td[class*="col-"] {
 }
 .ledger-stat {
     padding: 10px 15px 0;
-    background: $white;
+    background: var(--common-background-color-for-all-components);
     color: $gray;
     font-size: 18px;
     box-shadow: 0px 2px 6px $black-russian;
@@ -263,7 +264,7 @@ table.ledger-footer-1 td[class*="col-"] {
     left: 5% !important;
     right: 5%;
     bottom: 100px;
-    background: $white;
+    background: var(--common-background-color-for-all-components);
     padding: 5px;
     font-size: 12px;
     z-index: 0;
@@ -398,11 +399,11 @@ sh-select:focus {
 }
 .ledger-book {
     .left-col-new {
-        background: $white;
+        background: var(--common-background-color-for-all-components);
         padding: 0 0px 350px;
     }
     .right-col-new {
-        background: $white;
+        background: var(--common-background-color-for-all-components);
         padding: 0 0px 350px;
     }
 }
@@ -808,6 +809,7 @@ a#reload-bank-transaction i.icon-refresh {
 input#ledger-search {
     border: 1px solid $gainsboro;
     padding-left: 27px !important;
+    background-color: var(--sidebar-search-bar-background-color) !important;
 }
 .mat-grid-tile.select2-ledger {
     overflow: visible !important;
@@ -834,7 +836,7 @@ input#ledger-search {
     position: sticky;
     top: 55px;
     z-index: 1;
-    background-color: $white;
+    background-color: var(--common-background-color-for-all-components);
     border-bottom: 1px solid $gainsboro;
 }
 .show-if-ledger-open {
@@ -870,6 +872,33 @@ input#ledger-search {
         line-height: normal;
     }
 }
+
+::ng-deep {
+    .ledg-head .mat-grid-tile-content {
+        color: var(--table-content-primary-color);
+    }
+
+    .ledg-head .ledger-row .mat-input-element {
+        color: var(--table-content-primary-color) !important;
+    }
+
+    // .pagination > li > a {
+    //     color: var(--pagination-button-color) !important;
+    //     border-color: var(--pagination-background-color) !important;
+    // }
+
+    // .pagination > li.active > a {
+    //     color: var(--pagination-active-button-color) !important;
+    //     background-color: var(--pagination-background-color) !important;
+    //     border-color: var(--pagination-background-color) !important;
+    // }
+
+    // .pagination > li > a:hover {
+    //     color: var(--pagination-active-button-color) !important;
+    //     background-color: var(--pagination--button-hover-background-color) !important;
+    // }
+}
+
 @media only screen and (max-width: 1540px) {
     .modal-ledger {
         width: 85%;
