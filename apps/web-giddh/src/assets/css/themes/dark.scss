@@ -1,11 +1,18 @@
 @import "../color.scss";
 
 body.dark-theme {
+    // Body Color Variables
+    --body-background-color: #1d2229;
+
+    // Common variable to set background color of components
+    --common-background-color-for-all-components: #1d2229;
+
     // Button Color Variables
     --primary-button-text-color: #ffffff;
     --primary-button-background-color: #222d3e;
     --secondary-button-text-color: #ffffff;
     --secondary-button-background-color: #78af8f;
+    --secondary-button-background-color-hover: #5eaf80;
     --tertiary-button-text-color: #e7e9eb;
     --tertiary-button-background-color: transparent;
     --tertiary-button-background-color-hover: #e7e9eb30;
@@ -13,6 +20,25 @@ body.dark-theme {
     // Search Bar Color Variables
     --sidebar-search-bar-text-color: #999da0;
     --sidebar-search-bar-background-color: #303843;
+    --active-search-bar-border-color: #5eaf80;
+
+    // Tabs Color Variables
+    --tab-primary-background-color: #1d2229;
+    --tab-primary-text-color: #ffffff;
+    --tab-secondary-text-color: #ffffff;
+    --tab-tertiary-text-color: #ffffff;
+    --tab-tertiary-text-color-hover: #78af8f;
+    --tab-primary-selected-tab-bottom-border-color: #78af8f;
+    --tab-secondary-background-color: #1d2229;
+
+    // Rectangular Tabs Color Variables
+    --rectangular-tab-active-primary-text-color: #78af8f;
+    --rectangular-tab-active-primary-border-color: #78af8f;
+    --rectangular-tab-primary-background-color: #1d2229;
+    --rectangular-tab-inactive-icon-primary-color: #ffffff;
+    --rectangular-tab-inactive-text-primary-color: #e7e9eb;
+    --rectangular-tab-inactive-primary-border-color: #ffffff;
+    --rectangular-tab-box-shadow-color: #0000008a;
 
     // Pagination Color Variables
     --pagination-button-color: #222d3e;
@@ -36,6 +62,14 @@ body.dark-theme {
     --sidebar-company-count-background-color: #303843;
     --sidebar-create-company-list-text-color: #ffffff;
     --sidebar-create-company-list-background-color: #303843;
+
+    // Right Sidebar Color Variables
+    --right-sidebar-back-color: #ffffff;
+    --right-sidebar-icon-color: #e7e9eb;
+    --right-sidebar-settings-color: #ffffff;
+
+    // Common Chat Button Color Variable
+    --common-chat-button-background-color: #1d2229;
 
     /*
         COLORS BELOW ARE NOT APPLIED YET

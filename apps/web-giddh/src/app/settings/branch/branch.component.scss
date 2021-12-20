@@ -56,7 +56,7 @@
     font-size: 14px;
 }
 .branch-card {
-    background-color: $white;
+    background-color: var(--common-background-color-for-all-components);
     margin-bottom: 15px;
     font-size: 14px;
     border: 1px solid $gainsboro;
