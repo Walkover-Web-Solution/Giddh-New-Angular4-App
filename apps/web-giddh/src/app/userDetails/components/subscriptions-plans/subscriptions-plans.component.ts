@@ -21,28 +21,16 @@ import { SubscriptionsUser } from '../../../models/api-models/Subscriptions';
 import { uniqBy } from '../../../lodash-optimized';
 
 
-/** This interface will be used for table layout */
-export interface PlanTable {
-    name: any;
-    transactions: any;
-    companies: any;
-    consultant: any;
-    unlimited_users: any;
-    unlimited_customers: any;
-    desktop_mobile_app: any;
-    check_all_features: any;
-}
-
 /** This will use for static data for plan table  */
-const TABLE_DATA: PlanTable[] = [
-    { name: 'Benefits', transactions: 1000, companies: 1, consultant: '2hrs', unlimited_users: '<mat-icon>check</mat-icon>', unlimited_customers: '<mat-icon>check</mat-icon>', desktop_mobile_app: '<mat-icon>check</mat-icon>', check_all_features: '<button class="all_feature_button" mat-raised-button color="primary">Renew</button>' },
-    { name: 'Transactions', transactions: 1000, companies: 1, consultant: '3hrs', unlimited_users: '<mat-icon>check</mat-icon>', unlimited_customers: '<mat-icon>check</mat-icon>', desktop_mobile_app: '<mat-icon>check</mat-icon>', check_all_features: '<button class="all_feature_button" mat-raised-button color="primary">Renew</button>' },
-    { name: 'Companies', transactions: 1000, companies: 1, consultant: '5hrs', unlimited_users: '<mat-icon>check</mat-icon>', unlimited_customers: '<mat-icon>check</mat-icon>', desktop_mobile_app: '<mat-icon>check</mat-icon>', check_all_features: '<button class="all_feature_button" mat-raised-button color="primary">Renew</button>' },
-    { name: 'Consultant', transactions: 1000, companies: 1, consultant: '5hrs', unlimited_users: '<mat-icon>check</mat-icon>', unlimited_customers: '<mat-icon>check</mat-icon>', desktop_mobile_app: '<mat-icon>check</mat-icon>', check_all_features: '<button class="all_feature_button" mat-raised-button color="primary">Renew</button>' },
-    { name: 'Unlimited Users', transactions: 1000, companies: 1, consultant: '6hrs', unlimited_users: '<mat-icon>check</mat-icon>', unlimited_customers: '<mat-icon>check</mat-icon>', desktop_mobile_app: '<mat-icon>check</mat-icon>', check_all_features: '<button class="all_feature_button" mat-raised-button color="primary">Renew</button>' },
-    { name: 'Unlimited Customers', transactions: 1000, companies: 1, consultant: '1hrs', unlimited_users: '<mat-icon>check</mat-icon>', unlimited_customers: '<mat-icon>check</mat-icon>', desktop_mobile_app: '<mat-icon>check</mat-icon>', check_all_features: '<button class="all_feature_button" mat-raised-button color="primary">Renew</button>' },
-    { name: 'Desktop/ Mobile App', transactions: 1000, companies: 1, consultant: '3hrs', unlimited_users: '<mat-icon>check</mat-icon>', unlimited_customers: '<mat-icon>check</mat-icon>', desktop_mobile_app: '<mat-icon>check</mat-icon>', check_all_features: '<button class="all_feature_button" mat-raised-button color="primary">Renew</button>' },
-    { name: 'Check All Features', transactions: 1000, companies: 1, consultant: '7hrs', unlimited_users: '<mat-icon>check</mat-icon>', unlimited_customers: '<mat-icon>check</mat-icon>', desktop_mobile_app: '<mat-icon>check</mat-icon>', check_all_features: '<button class="all_feature_button" mat-raised-button color="primary">Renew</button>' },
+const TABLE_DATA: any[] = [
+    /*{ name: '', transactions: 0, amount: 0, companies: 0, consultant: '', unlimited_users: true, unlimited_customers: true, desktop_mobile_app: true, check_all_features: true },
+    { name: '', transactions: 0, amount: 0, companies: 0, consultant: '', unlimited_users: true, unlimited_customers: true, desktop_mobile_app: true, check_all_features: true },
+    { name: '', transactions: 0, amount: 0, companies: 0, consultant: '', unlimited_users: true, unlimited_customers: true, desktop_mobile_app: true, check_all_features: true },
+    { name: '', transactions: 0, amount: 0, companies: 0, consultant: '', unlimited_users: true, unlimited_customers: true, desktop_mobile_app: true, check_all_features: true },
+    { name: '', transactions: 0, amount: 0, companies: 0, consultant: '', unlimited_users: true, unlimited_customers: true, desktop_mobile_app: true, check_all_features: true },
+    { name: '', transactions: 0, amount: 0, companies: 0, consultant: '', unlimited_users: true, unlimited_customers: true, desktop_mobile_app: true, check_all_features: true },
+    { name: '', transactions: 0, amount: 0, companies: 0, consultant: '', unlimited_users: true, unlimited_customers: true, desktop_mobile_app: true, check_all_features: true },
+{ name: '', transactions: 0, amount: 0, companies: 0, consultant: '', unlimited_users: true, unlimited_customers: true, desktop_mobile_app: true, check_all_features: true }*/
 ];
 @Component({
     selector: 'subscriptions-plans',
@@ -51,7 +39,6 @@ const TABLE_DATA: PlanTable[] = [
     encapsulation: ViewEncapsulation.Emulated
 })
 export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
-
     @Input() public subscriptions: any;
     /** This will hold local JSON data */
     @Input() public localeData: any = {};
@@ -62,7 +49,7 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
     /** This will use for table content scroll in mobile */
     @ViewChild('tableContent', { read: ElementRef }) public tableContent: ElementRef<any>;
     /** This will use for table columns */
-    public inputColumns = ['name', 'transactions', 'companies', 'consultant', 'unlimited_users', 'unlimited_customers', 'desktop_mobile_app', 'check_all_features'];
+    public inputColumns = ['benefits']; //['name', 'transactions', 'companies', 'consultant', 'unlimited_users', 'unlimited_customers', 'desktop_mobile_app', 'check_all_features'];
     /** This will use for hold table data */
     public inputData = TABLE_DATA;
     /** This will be use for display columns of plan table  */
@@ -123,7 +110,7 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
     public subscriptionPlan: CreateCompanyUsersPlan;
     /** True if api call in progress */
     public showLoader: boolean = true;
-
+    public plansCount: any[] = [];
 
     constructor(private modalService: BsModalService, private generalService: GeneralService,
         private changeDetectionRef: ChangeDetectorRef, private authenticationService: AuthenticationService, private store: Store<AppState>,
@@ -375,60 +362,95 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
      * @param {*} activeCompany
      * @memberof SubscriptionsPlansComponent
      */
-    private getPlans(activeCompany): void {
+    private getPlans(activeCompany: any): void {
         this.authenticationService.getAllUserSubsciptionPlans(activeCompany?.countryV2?.alpha2CountryCode).pipe(takeUntil(this.destroyed$)).subscribe(res => {
-            console.log(activeCompany);
-            
-            this.subscriptionPlans = res.body;
             let subscriptions = res.body;
             this.inputData = [];
-            this.inputData.push({
-                name: '<b>Benefits</b>',
-                transactions: '<b>Transactions</b>',
-                companies: '<b>Companies</b>',
-                consultant: '<b>Munnem.co Consultant</b>',
-                unlimited_users: '<b>Unlimited Users</b>',
-                unlimited_customers: '<b>Unlimited Customers/Vendors</b>',
-                desktop_mobile_app: ' <b>Desktop/Mobile App</b>',
-                check_all_features: '<a class="check_all_plan_features">Check all features</a>'
-            });
 
-            let planObj = uniqBy(subscriptions.map(subscription => { return subscription.planDetails }), "name");
-            planObj.forEach(plan => {
+            // this.inputData.push({
+            //     name: '<b>Benefits</b>',
+            //     transactions: '<b>Transactions</b>',
+            //     companies: '<b>Companies</b>',
+            //     consultant: '<b>Munnem.co Consultant</b>',
+            //     unlimited_users: '<b>Unlimited Users</b>',
+            //     unlimited_customers: '<b>Unlimited Customers/Vendors</b>',
+            //     desktop_mobile_app: ' <b>Desktop/Mobile App</b>',
+            //     check_all_features: '<a class="check_all_plan_features">Check all features</a>'
+            // });
+            
+            
+            
+            //let loop = 0;
+            // let names = [];
+            // let amount = [];
+            // let durationUnit = [];
+            let allPlans = uniqBy(subscriptions.map(subscription => { return subscription.planDetails }), "name");
+            allPlans.forEach(plan => {
+            //     names['name'+loop] = plan?.name;
+            //     amount['amount'+loop] = plan?.amount;
+            //     durationUnit['durationunit'+loop] = plan?.durationUnit;
 
-                let button ='';
-                if (plan.uniqueName === activeCompany.subscription.planDetails.uniqueName) {
-                    button = '<button class="all_feature_button" mat-raised-button color="primary">Renew Plan</button>';
-                } else if(plan.amount >= activeCompany.subscription.planDetails.amount ) {
-                    button = '<button class="all_feature_button" mat-raised-button color="primary">Upgrade Now</button>';
-                }
-                else if(plan.amount < activeCompany.subscription.planDetails.amount ) {
-                    button = '<button class="all_feature_button" mat-raised-button color="primary">Downgrade Now</button>';
-                }
+            //     this.inputColumns.push('name'+loop);
+
+            //     loop++;
+
+
+
+                //this.plansCount.push(loop);
+                this.inputData.push(plan);
+                //loop++;
+
+                // let button ='';
+                // if (plan.uniqueName === activeCompany.subscription.planDetails.uniqueName) {
+                //     button = '<button class="all_feature_button" mat-raised-button color="primary">Renew Plan</button>';
+                // } else if(plan.amount >= activeCompany.subscription.planDetails.amount ) {
+                //     button = '<button class="all_feature_button" mat-raised-button color="primary">Upgrade Now</button>';
+                // }
+                // else if(plan.amount < activeCompany.subscription.planDetails.amount ) {
+                //     button = '<button class="all_feature_button" mat-raised-button color="primary">Downgrade Now</button>';
+                // }
                 
-                this.inputData.push({
-                    name: plan?.name + '<br>' + '<span class="susbcription-plan-amount">' + '₹' + plan?.amount + '</span>' + '/' + '<span class="susbcription-plan-years" >' + plan?.durationUnit + '</span>',
-                    transactions: plan?.transactionLimit,
-                    companies: plan?.companiesLimit,
-                    consultant: '2hrs',
-                    unlimited_users: '<mat-icon>check</mat-icon>',
-                    unlimited_customers: '<mat-icon>check</mat-icon>',
-                    desktop_mobile_app: '<mat-icon>check</mat-icon>',
-                    check_all_features: button
-                });
+                // this.inputData.push({
+                //     name: plan?.name + '<br>' + '<span class="susbcription-plan-amount">' + '₹' + plan?.amount + '</span>' + '/' + '<span class="susbcription-plan-years" >' + plan?.durationUnit + '</span>',
+                //     transactions: plan?.transactionLimit,
+                //     companies: plan?.companiesLimit,
+                //     consultant: '2hrs',
+                //     unlimited_users: '<mat-icon>check</mat-icon>',
+                //     unlimited_customers: '<mat-icon>check</mat-icon>',
+                //     desktop_mobile_app: '<mat-icon>check</mat-icon>',
+                //     check_all_features: button
+                // });
             });
 
-            this.displayColumns = this.inputData.map(x => {
-                return x.name.toString()
-            });
-            this.displayData = this.inputColumns.map(x => { return this.formatInputRow(x) });
-            this.changeDetectionRef.detectChanges();
+            // for(let i = 0; i <= 7; i++) {
+            //     if(i === 0) {
+            //         this.inputData[i] = [];
+            //         this.inputData[i]['name'] = names;
+            //         this.inputData[i]['amount'] = amount;
+            //         this.inputData[i]['durationunit'] = durationUnit;
+            //     }
+            // }
 
-            setTimeout(() => {
+            // this.inputData[0] = [];
+            
+            // this.inputData[0]['benefits'] = allPlans.map(plan => { 
+            //     return {
+            //         name: plan.name,
+            //         amount: plan.amount,
+            //         durationunit: plan.durationUnit
+            //     }
+            // });
+
+            // this.displayColumns = this.inputData.map(x => {
+            //     return x.name.toString()
+            // });
+            // this.displayData = this.inputColumns.map(x => { return this.formatInputRow(x) });
+            // this.changeDetectionRef.detectChanges();
+
+            //setTimeout(() => {
                 this.showLoader = false;
-            this.changeDetectionRef.detectChanges();
-
-            }, 500);
+                this.changeDetectionRef.detectChanges();
+            //}, 500);
         });
     }
     /**

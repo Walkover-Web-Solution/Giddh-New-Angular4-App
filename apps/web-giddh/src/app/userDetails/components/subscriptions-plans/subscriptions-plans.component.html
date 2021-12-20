@@ -18,8 +18,8 @@
         </button>
     </div>
     <div #tableContent class="plan-table mat-elevation-z8" [ngClass]="{ 'plan-table-content': showLoader }">
-        <table mat-table class="plan-table-layout" [dataSource]="displayData">
-            <ng-container [matColumnDef]="column" *ngFor="let column of displayColumns; let i = index">
+        <!-- <table mat-table class="plan-table-layout" [dataSource]="inputData"> -->
+        <!-- <ng-container [matColumnDef]="column" *ngFor="let column of inputData; let i = index">
                 <th class="plan-th" mat-header-cell *matHeaderCellDef>&nbsp;</th>
                 <td
                     [ngClass]="{
@@ -36,17 +36,82 @@
                         <span class="hide-plan-td" *ngIf="!showLoader" [innerHTML]="element[column] | safe"> </span>
                     </div>
                 </td>
+            </ng-container> -->
+        <!-- <ng-container *ngFor="let column of inputColumns; let i = index;" [matColumnDef]="column">
+                <th mat-header-cell *matHeaderCellDef>&nbsp;</th>
+                <td mat-cell *matCellDef="let element;"> {{element['benefits'][j]["name"]}} <br> {{ element['benefits'][j]["amount"] }}/{{ element['benefits'][j]["durationunit"] }} </td>
             </ng-container>
-            <tr class="plan-tr" mat-header-row *matHeaderRowDef="displayColumns"></tr>
+            <tr class="plan-tr" mat-header-row *matHeaderRowDef="inputColumns"></tr>
             <tr
                 [ngClass]="{
                     'plan-top-row': i === 0
                 }"
                 class="plan-row-columns"
                 mat-row
-                *matRowDef="let row; columns: displayColumns; let i = index"
+                *matRowDef="let element; columns: inputColumns; let i = index"
             ></tr>
-        </table>
+        </table> -->
+        <mat-grid-list [cols]="plansCount?.length + 1" rowHeight="70px">
+            <mat-grid-tile>Benefits</mat-grid-tile>
+            <ng-container *ngFor="let plan of inputData">
+                <mat-grid-tile
+                    >{{ plan["name"] }} <br />
+                    {{ plan["amount"] }}/{{ plan["durationUnit"] }}</mat-grid-tile
+                >
+            </ng-container>
+        </mat-grid-list>
+        <mat-grid-list [cols]="plansCount?.length + 1" rowHeight="70px">
+            <mat-grid-tile>Transactions</mat-grid-tile>
+            <ng-container *ngFor="let plan of inputData">
+                <mat-grid-tile>{{ plan["transactionLimit"] }}</mat-grid-tile>
+            </ng-container>
+        </mat-grid-list>
+        <mat-grid-list [cols]="plansCount?.length + 1" rowHeight="70px">
+            <mat-grid-tile>Companies</mat-grid-tile>
+            <ng-container *ngFor="let plan of inputData">
+                <mat-grid-tile>{{ plan["companiesLimit"] }}</mat-grid-tile>
+            </ng-container>
+        </mat-grid-list>
+        <mat-grid-list [cols]="plansCount?.length + 1" rowHeight="70px">
+            <mat-grid-tile>Unlimited Users</mat-grid-tile>
+            <ng-container *ngFor="let plan of inputData">
+                <mat-grid-tile><mat-icon>check</mat-icon></mat-grid-tile>
+            </ng-container>
+        </mat-grid-list>
+        <mat-grid-list [cols]="plansCount?.length + 1" rowHeight="70px">
+            <mat-grid-tile>Unlimited Customers/Vendors</mat-grid-tile>
+            <ng-container *ngFor="let plan of inputData">
+                <mat-grid-tile><mat-icon>check</mat-icon></mat-grid-tile>
+            </ng-container>
+        </mat-grid-list>
+        <mat-grid-list [cols]="plansCount?.length + 1" rowHeight="70px">
+            <mat-grid-tile>Desktop/Mobile App</mat-grid-tile>
+            <ng-container *ngFor="let plan of inputData">
+                <mat-grid-tile><mat-icon>check</mat-icon></mat-grid-tile>
+            </ng-container>
+        </mat-grid-list>
+        <mat-grid-list [cols]="plansCount?.length + 1" rowHeight="70px">
+            <mat-grid-tile><a href="javascript:;">Check all features</a></mat-grid-tile>
+            <ng-container *ngFor="let plan of inputData">
+                <mat-grid-tile
+                    ><button
+                        class="all_feature_button"
+                        mat-raised-button
+                        color="primary"
+                        *ngIf="plan?.uniqueName === activeCompany?.subscription?.planDetails?.uniqueName"
+                    >
+                        Renew</button
+                    ><button
+                        class="all_feature_button"
+                        mat-raised-button
+                        color="primary"
+                        *ngIf="plan?.uniqueName !== activeCompany?.subscription?.planDetails?.uniqueName"
+                    >
+                        Buy Now
+                    </button></mat-grid-tile
+                >
+            </ng-container>
+        </mat-grid-list>
     </div>
     <p [ngClass]="{ 'skelton-common-class': showLoader }" class="extra-addons-content">
         * Extra Add-ons:<span *ngIf="!showLoader" class="extra-addons-value"> 0.10 per trasaction</span>
