@@ -17,9 +17,11 @@
             border-right: 1px solid $dim-gray;
             width: 35%;
             padding: 10px 10px 10px 13px;
-            .left-side-subHead {
+            position: relative;
+            .left-side-subhead {
                 font-size: 1.2rem;
                 margin-top: 10px;
+                margin-left: 25px;
             }
             .invoice-head {
                 display: flex;
@@ -29,20 +31,23 @@
                     width: 71%;
                     margin-top: 3px;
                 }
-                .clear-icon {
+                a {
+                    color: $dark-gray !important;
                     position: absolute;
-                    right: 0px;
+                    right: 0;
                 }
             }
             .attachment {
                 font-size: 1.2rem;
                 margin-top: 10px;
+                margin-left: 25px;
             }
             .attachment-list {
                 height: 52vh;
                 overflow: auto;
                 margin-bottom: 14px;
                 mat-list {
+                    padding-top: 0;
                     mat-list-item {
                         height: 45px;
                         .file-name {
@@ -50,11 +55,21 @@
                             width: 77%;
                             margin-top: 1px;
                         }
-                        .clear-icon {
+                        a {
+                            color: $dark-gray !important;
                             position: absolute;
-                            right: 0px;
+                            right: 0;
                         }
                     }
+                }
+            }
+            .right-side-buttons {
+                position: absolute;
+                top: 11px;
+                right: 14px;
+                a {
+                    margin-left: 5px;
+                    color: $dark-gray !important;
                 }
             }
         }
@@ -62,18 +77,38 @@
             width: 65%;
             padding: 10px 13px;
             .right-side-buttons {
-                width: 100%;
                 display: flex;
-                justify-content: flex-end;
-                .download-button {
-                    margin: 0px 15px;
+                background-color: $white;
+                border: 1px solid $gainsboro;
+                border-radius: 5px;
+                min-width: 67px;
+                float: right;
+                margin-right: 2px;
+                span {
+                    border-left: 1px solid $gainsboro;
+                    padding: 5px;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    height: 33px;
+                    width: 32px;
+                    padding-top: 9px !important;
+                    &:first-child {
+                        border-left: none;
+                    }
+                    a {
+                        color: $dark-gray !important;
+                        cursor: pointer;
+                    }
                 }
             }
             .display-area {
                 height: 90%;
-                margin-top: 12px;
+                margin-top: 8px;
                 border-radius: 5px;
                 overflow: hidden;
+                float: left;
+                width: 100%;
                 img {
                     max-width: 100%;
                 }
@@ -82,6 +117,10 @@
     }
 }
 
+.disabled {
+    background-color: $gainsboro !important;
+    cursor: not-allowed !important;
+}
 ::ng-deep {
     .mat-list-item-content {
         height: auto !important;
