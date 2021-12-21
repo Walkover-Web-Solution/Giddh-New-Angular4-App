@@ -118,14 +118,20 @@
 		"left": "बाकी",
 		"plan_timeline": " योजना टाइमलाइन ",
 		"overall_summary": "एकूण सारांश",
-		"select_plan_summary": "  पाहण्यासाठी योजना निवडा <br/> एकूण उपभोग आणि शिल्लक सारांश ",
+		"select_plan_summary": " पाहण्यासाठी योजना निवडा ",
+		"select_plan_consumptions": "एकूण उपभोग आणि शिल्लक सारांश ",
 		"you_have_total": "तुमच्याकडे एकूण आहे ",
 		"plans": "योजना",
 		"benefits": "फायदे",
 		"renew": "नूतनीकरण करा",
 		"buy_plan": "आता खरेदी करा",
 		"redeem": "रिडीम करा",
-		"extra_addons": "अतिरिक्त ऍड-ऑन",
-		"per_transaction": "प्रति व्यवहार"
+		"extra_addons": "* अतिरिक्त ऍड-ऑन",
+		"per_transaction": "0.10 प्रति व्यवहार",
+		"search_companies": "शोध कंपन्या",
+		"transaction_used":"व्यवहार वापरले",
+        "expiring_within":"आत कालबाह्य होत आहे"
+
+
 	}
 }
