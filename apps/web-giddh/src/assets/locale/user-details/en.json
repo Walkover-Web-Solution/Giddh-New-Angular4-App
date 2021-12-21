@@ -118,14 +118,18 @@
         "left": "Left",
         "plan_timeline": " Plan Timeline ",
         "overall_summary": "Overall Summary",
-        "select_plan_summary": "  Select a plan to see its <br/> Overall comsumption and balance summary ",
+        "select_plan_summary": " Select a plan to see its  ",
+        "select_plan_consumptions": " Overall comsumption and balance summary",
         "you_have_total": "You have total ",
         "plans": "plans",
         "benefits": "Benefits",
         "renew": "Renew",
         "buy_plan": "Buy Now",
         "redeem": "Redeem",
-        "extra_addons": "Extra Add-ons",
-        "per_transaction": "per transaction"
+        "extra_addons": "* Extra Add-ons",
+        "per_transaction": "0.10 per transaction",
+        "search_companies": "Search companies",
+        "transaction_used":"transaction used",
+        "expiring_within":"Expiring within"
     }
 }

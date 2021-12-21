@@ -118,14 +118,19 @@
 		"left": "बाएं",
 		"plan_timeline": " योजना समयरेखा",
 		"overall_summary": "समग्र सारांश",
-		"select_plan_summary": "  इसे देखने के लिए एक योजना का चयन करें <br/> समग्र उपभोग और शेष राशि का सारांश ",
+		"select_plan_summary": " इसे देखने के लिए एक योजना का चयन करें  ",
+		"select_plan_consumptions": " समग्र उपभोग और शेष राशि का सारांश ",
 		"you_have_total": "आपके पास कुल है ",
 		"plans": " योजनाओं",
 		"benefits": "लाभ",
 		"renew": "नवीकरण",
 		"buy_plan": "अभी खरीदें",
 		"redeem": "एवज",
-		"extra_addons": "अतिरिक्त ऐड-ऑन",
-		"per_transaction": "प्रति लेनदेन"
+		"extra_addons": "* अतिरिक्त ऐड-ऑन",
+		"per_transaction": "0.10 प्रति लेनदेन",
+		"search_companies": "कंपनियों को खोजें",
+		"transaction_used":"इस्तेमाल किया लेनदेन",
+        "expiring_within":"के भीतर समाप्त हो रहा है"
+
 	}
 }

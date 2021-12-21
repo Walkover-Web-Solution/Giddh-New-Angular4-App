@@ -1,6 +1,6 @@
 import { takeUntil } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
-import { Component, OnDestroy, OnInit, TemplateRef, Output, EventEmitter, Input, ChangeDetectorRef, ElementRef, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, OnDestroy, OnInit, TemplateRef, Output, EventEmitter, Input, ChangeDetectorRef, ElementRef, ViewChild } from '@angular/core';
 import { ReplaySubject, Observable } from 'rxjs';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { UserDetails } from '../../../models/api-models/loginModels';
@@ -130,7 +130,7 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
 
     }
 
-    public ngOnInit() {
+    public ngOnInit() {        
 
         /** This will use for get the active company from store  */
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {

@@ -20,8 +20,9 @@
     <div #tableContent class="plan-table mat-elevation-z8" *ngIf="!showLoader">
         <div class="grid-list-div top-heading">
             <div class="grid-title-left grid-title-left-top">
-                <!-- {{localeData?.benefits}} -->
-                <span class="inner-name inner-name-bold mat-table-sticky"> Benefits</span>
+                <span class="inner-name inner-name-bold mat-table-sticky">
+                    {{ localeData?.subscription?.benefits }}
+                </span>
             </div>
             <div class="grid-title-list font-14" *ngFor="let plan of inputData">
                 <span class="sub-plan-name">{{ plan["name"] }}</span> <br />
@@ -41,7 +42,7 @@
         </div>
         <div class="grid-list-div list-grid">
             <div class="grid-title-left">
-                <span class="inner-name mat-table-sticky">{{ localeData?.companies }}</span>
+                <span class="inner-name mat-table-sticky">{{ localeData?.subscription?.companies }}</span>
             </div>
             <div class="grid-title-list list-grid-title" *ngFor="let plan of inputData">
                 <span>{{ plan["companiesLimit"] }}</span>
@@ -49,7 +50,7 @@
         </div>
         <div class="grid-list-div list-grid">
             <div class="grid-title-left">
-                <span class="inner-name mat-table-sticky">{{ localeData?.unlimited_users }}</span>
+                <span class="inner-name mat-table-sticky">{{ localeData?.subscription?.unlimited_users }}</span>
             </div>
             <div class="grid-title-list list-grid-title" *ngFor="let plan of inputData">
                 <i class="icon-tick"></i>
@@ -57,7 +58,7 @@
         </div>
         <div class="grid-list-div list-grid">
             <div class="grid-title-left">
-                <span class="inner-name mat-table-sticky">{{ localeData?.unlimited_contacts }}</span>
+                <span class="inner-name mat-table-sticky">{{ localeData?.subscription?.unlimited_contacts }}</span>
             </div>
             <div class="grid-title-list list-grid-title" *ngFor="let plan of inputData">
                 <i class="icon-tick"></i>
@@ -65,7 +66,7 @@
         </div>
         <div class="grid-list-div list-grid">
             <div class="grid-title-left">
-                <span class="inner-name mat-table-sticky">{{ localeData?.desktop_mobile_app }}</span>
+                <span class="inner-name mat-table-sticky">{{ localeData?.subscription?.desktop_mobile_app }}</span>
             </div>
             <div class="grid-title-list list-grid-title" *ngFor="let plan of inputData">
                 <i class="icon-tick"></i>
@@ -74,7 +75,7 @@
         <div class="grid-list-div list-grid">
             <div class="grid-title-left">
                 <a class="sub-plan-feature mat-table-sticky" (click)="openDialog()" href="javascript:void(0)">{{
-                    localeData?.check_all_features
+                    localeData?.subscription?.check_all_features
                 }}</a>
             </div>
             <div class="grid-title-list bottom-buy-button" *ngFor="let plan of inputData">
@@ -85,7 +86,7 @@
                     color="primary"
                     *ngIf="plan?.uniqueName === activeCompany?.subscription?.planDetails?.uniqueName"
                 >
-                    {{ localeData?.renew }}
+                    {{ localeData?.subscription?.renew }}
                 </button>
                 <button
                     (click)="buyPlanClicked(plan)"
@@ -94,7 +95,7 @@
                     color="primary"
                     *ngIf="plan?.uniqueName !== activeCompany?.subscription?.planDetails?.uniqueName"
                 >
-                    {{ localeData?.buy_plan }}
+                    {{ localeData?.subscription?.buy_plan }}
                 </button>
             </div>
         </div>
@@ -208,8 +209,8 @@
         </div>
     </div>
     <p [ngClass]="{ 'skelton-common-class': showLoader }" class="extra-addons-content font-16">
-        * {{ localeData?.extra_addons }}:<span *ngIf="!showLoader" class="extra-addons-value">
-            0.10 {{ localeData?.per_transaction }}</span
+        {{ localeData?.subscription?.extra_addons }}:<span *ngIf="!showLoader" class="extra-addons-value">
+            {{ localeData?.subscription?.per_transaction }}</span
         >
 
         <!-- <table mat-table class="plan-table-layout" [dataSource]="inputData"> -->
@@ -294,7 +295,7 @@
                             [ngClass]="{ 'skelton-common-class': showLoader, 'radeem-plan': showLoader }"
                             class="font-26 text-gray bold mb-3 radeem-plan"
                         >
-                            {{ localeData?.redeem }}
+                            {{ localeData?.subscription?.redeem }}
                             {{ localeData?.subscription?.activation_key }}
                         </h2>
                         <p
