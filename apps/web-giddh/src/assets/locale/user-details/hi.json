@@ -113,6 +113,19 @@
 		"activation_key": "सक्रियण कुंजी",
 		"activation_key_note": "आपको पुनर्विक्रेताओं से सक्रियण कुंजी मिल जाएगी।",
 		"enter_activation_key": "सक्रियण कुंजी डालें",
-		"activate": "सक्रिय"
+		"activate": "सक्रिय",
+		"transaction_balance": "लेन-देन संतुलन",
+		"left": "बाएं",
+		"plan_timeline": " योजना समयरेखा",
+		"overall_summary": "समग्र सारांश",
+		"select_plan_summary": "  इसे देखने के लिए एक योजना का चयन करें <br/> समग्र उपभोग और शेष राशि का सारांश ",
+		"you_have_total": "आपके पास कुल है ",
+		"plans": " योजनाओं",
+		"benefits": "लाभ",
+		"renew": "नवीकरण",
+		"buy_plan": "अभी खरीदें",
+		"redeem": "एवज",
+		"extra_addons": "अतिरिक्त ऐड-ऑन",
+		"per_transaction": "प्रति लेनदेन"
 	}
 }

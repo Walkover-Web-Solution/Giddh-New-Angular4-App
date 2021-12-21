@@ -45,44 +45,111 @@
 }
 
 .plan-table-content {
-    overflow: hidden !important;
+    overflow-x: hidden !important;
+    overflow-y: hidden !important;
+    margin-bottom: 10px !important;
+    box-shadow: none !important;
+}
+
+.plan-table-content {
+    .grid-title-list-changes {
+        height: 70px;
+        margin-top: 5px;
+        margin-left: 5px;
+        margin-right: 0;
+        width: 391px;
+    }
+
+    .grid-list-div-changes {
+        display: inline-flex;
+    }
 }
 
 .plan-table {
-    height: 506px;
-    overflow: auto;
+    width: 100%;
+    float: left !important;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    white-space: nowrap;
     box-shadow: none !important;
 
-    td.mat-cell:first-of-type {
-        white-space: nowrap !important;
+    .inner-name.inner-name-bold {
+        font-weight: 700;
+        width: 100%;
+        float: left;
+        height: 100%;
     }
 
-    .plan-top-row .plan-td {
-        padding-bottom: 0 !important;
-        padding-top: 0px !important;
-        height: 122px !important;
+    .grid-title-left-top {
+        padding-top: 1% !important;
     }
 
-    .plan-td-changes.mat-cell:nth-child(even) {
-        background-color: transparent !important;
+    .top-heading {
+        height: 110px !important;
+    }
+
+    .grid-title-left {
+        width: 370px;
+        left: 0px;
+        z-index: 1;
+        border-bottom: 1px solid $default-border-bottom;
+        position: sticky;
+        background-color: $white;
+        padding-top: 24px;
+    }
+
+    .top-plan-div {
+        height: 142px;
+    }
+
+    .grid-list-div {
+        display: inline-flex;
+        float: left;
+        height: 75px;
+    }
+
+    .sub-plan-name {
+        float: left;
+        width: 100%;
+        padding-top: 14px;
+    }
+
+    .sub-plan-amount {
+        float: left !important;
+        width: 100%;
+        font-weight: 700;
+        font-size: 25px;
+    }
+
+    .sub-plan-duration {
+        font-weight: normal;
+        text-transform: lowercase;
+        font-size: 15px;
+    }
+
+    .grid-title-list-changes:nth-child(even) {
+        background-color: $skelton-loading-gradient-bg !important;
         height: 70px;
         color: transparent !important;
-        padding-left: 78px;
-        padding-right: 77px;
         border: 1px solid $skelton-loading-gradient-bg;
+        margin-top: 5px;
+        margin-left: 5px;
     }
 
-    .plan-td-changes.mat-cell:nth-child(odd) {
-        background-color: transparent !important;
+    .grid-title-list-left {
+        float: left;
+        width: 200px;
+        height: 70px;
+        margin-top: 5px;
+    }
+
+    .grid-title-list-changes:nth-child(odd) {
+        background-color: $skelton-loading-gradient-bg !important;
         height: 70px;
         color: transparent !important;
-        padding-left: 69px;
-        padding-right: 59px;
         border: 1px solid $skelton-loading-gradient-bg;
-
-        .mat-column--b-Benefits--b- {
-            max-width: 484px !important;
-        }
+        margin-top: 5px;
+        margin-left: 5px;
     }
 
     .whole-plan-span {
@@ -91,35 +158,40 @@
         height: 39px;
     }
 
-    .mat-cell:nth-child(even) {
+    .list-grid-title {
+        line-height: 4.5 !important;
+    }
+
+    .grid-title-list.bottom-buy-button {
+        line-height: 4 !important;
+    }
+
+    .grid-title-list:nth-child(even) {
         background-color: $solitude-light;
         color: $black !important;
-        font-size: 16px !important;
         text-align: center;
         line-height: 26px;
+        border-bottom: 1px solid $default-border-bottom;
+        width: 205px;
+        font-weight: bold;
     }
 
-    .mat-cell:nth-child(odd) {
+    .all_feature_button {
+        margin-right: 0 !important;
+    }
+
+    .grid-list {
+        border-bottom: 1px solid $default-border-bottom;
+    }
+
+    .grid-title-list:nth-child(odd) {
         background-color: $white;
         color: $black !important;
-        font-size: 16px !important;
         text-align: center;
         line-height: 26px;
-    }
-
-    .mat-column--b-Benefits--b- {
-        text-align: left !important;
-        padding-left: 0;
-        padding-right: 126px;
-        max-width: 373px;
-        width: 504px;
-        line-height: 30px !important;
-        left: 0 !important;
-        z-index: 1 !important;
-    }
-
-    .plan-tr {
-        display: none !important;
+        border-bottom: 1px solid $default-border-bottom;
+        width: 205px;
+        font-weight: bold;
     }
 }
 
@@ -837,8 +909,17 @@
     }
 
     .plan-table {
-        height: 582px;
+        height: 508px;
         margin-bottom: 15px;
+    }
+
+    .grid-title-left {
+        width: 268px !important;
+        padding-top: 25px !important;
+    }
+
+    .grid-title-list-changes {
+        width: 220px !important;
     }
 
     .footer-plan {
@@ -928,7 +1009,16 @@
     }
 
     .plan-table {
-        height: 568px;
+        height: 530px;
+    }
+
+    .grid-title-left {
+        width: 319px !important;
+        padding-top: 22px !important;
+    }
+
+    .grid-title-list-changes {
+        width: 305px !important;
     }
 
     .radeem-back {
@@ -949,8 +1039,16 @@
 }
 
 @media (max-width: 480px) and (orientation: portrait) {
+    .grid-title-left {
+        width: 244px !important;
+    }
+
     .mat-column--b-Benefits--b- {
         display: none !important;
+    }
+
+    .plan-table-content {
+        margin-top: 13% !important;
     }
 
     .left-icon {
@@ -1004,7 +1102,6 @@
 
     .extra-addons-content {
         margin-top: 13px !important;
-        font-size: 17px !important;
         float: left;
         width: 100% !important;
     }
@@ -1038,6 +1135,14 @@
         width: 57px;
     }
 
+    .grid-title-left {
+        width: 326px !important;
+    }
+
+    .plan-table-content {
+        margin-top: 8% !important;
+    }
+
     .right-icon {
         float: right;
         display: block !important;
@@ -1065,7 +1170,7 @@
     }
 
     .plan-table {
-        height: 423px !important;
+        height: 458px !important;
         padding-left: 0px !important;
         padding-right: 0px !important;
     }
@@ -1217,12 +1322,8 @@
         padding-bottom: 5px !important;
     }
 
-    .plan-table {
-        height: 500px !important;
-    }
-
     .plan-table-content {
-        height: 608px !important;
+        height: 532px !important;
     }
 
     .plan-table .mat-column--b-Benefits--b- {

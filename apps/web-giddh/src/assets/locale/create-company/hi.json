@@ -46,5 +46,9 @@
 	"tax_number":"कर नंबर",
 	"net_payable_amount":"शुद्ध देय राशि",
 	"plan_timeline":" योजना समयरेखा ",
-	"transactions": "लेनदेन"
+	"transactions": "लेनदेन",
+	"companies": "कंपनिया",
+	"unlimited_users": "असीमित उपयोगकर्ता",
+	"unlimited_contacts": "असीमित ग्राहक/विक्रेता",
+	"desktop_mobile_app": "डेस्कटॉप/मोबाइल ऐप"
 }
