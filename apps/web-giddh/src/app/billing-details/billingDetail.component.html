@@ -5,7 +5,7 @@
     (commonLocaleData)="commonLocaleData = $event"
 >
     <hamburger-menu [pageHeading]="localeData?.welcome_to_giddh"></hamburger-menu>
-    <div *ngIf="!isCreateAndSwitchCompanyInProcess && localeData?.welcome_to_giddh" id="main" class="welcome-outer">
+    <div *ngIf="localeData?.welcome_to_giddh" id="main" class="welcome-outer">
         <div class="main-heading-billing">
             <div class="row display-line">
                 <div class="col-sm-1" [ngClass]="{ 'skelton-common-class': showLoader }">
@@ -380,7 +380,6 @@
             </div>
         </div>
     </div>
-    <div *ngIf="isCreateAndSwitchCompanyInProcess || !localeData?.welcome_to_giddh"></div>
     <ng-template #skeltonLoader>
         <div [ngClass]="{ 'form-div': showLoader, 'skelton-common-class': showLoader }"></div>
     </ng-template>
