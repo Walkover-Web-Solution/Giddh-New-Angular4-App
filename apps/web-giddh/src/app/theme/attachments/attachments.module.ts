@@ -10,6 +10,7 @@ import { NewConfirmModalModule } from "../new-confirm-modal";
 import { MatDialogRef } from "@angular/material/dialog";
 import { GiddhPageLoaderModule } from "../../shared/giddh-page-loader/giddh-page-loader.module";
 import { FormsModule } from "@angular/forms";
+import { TranslateDirectiveModule } from "../translate/translate.directive.module";
 
 @NgModule({
     declarations: [
@@ -24,7 +25,8 @@ import { FormsModule } from "@angular/forms";
         NgxUploaderModule,
         NewConfirmModalModule,
         GiddhPageLoaderModule,
-        FormsModule
+        FormsModule,
+        TranslateDirectiveModule
     ],
     exports: [
         AttachmentsComponent
