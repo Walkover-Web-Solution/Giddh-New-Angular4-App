@@ -251,7 +251,7 @@
                                         id="address"
                                         [ngClass]="{ 'form-field': showLoader }"
                                         [(ngModel)]="billingDetailsObj.address"
-                                        [placeholder]="commonLocaleData?.type_your_address"
+                                        [placeholder]="localeData?.type_your_address"
                                         rows="5"
                                         cols="12"
                                         matInput
@@ -298,7 +298,7 @@
                                     <ul class="renewal-list" [ngClass]="{ 'renewal-list-content': showLoader }">
                                         <li class="features" [ngClass]="{ 'skelton-common-class': showLoader }">
                                             {{ selectedPlans?.planDetails?.transactionLimit | number }}
-                                            {{ localeData?.app_transactions }}
+                                            {{ localeData?.transactions }}
                                         </li>
                                         <li class="features" [ngClass]="{ 'skelton-common-class': showLoader }">
                                             {{ selectedPlans?.planDetails?.companiesLimit | number }}

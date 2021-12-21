@@ -10913,6 +10913,17 @@ input[type="checkbox"].cdk-visually-hidden::after {
 .plan-top-row .plan-td:first-child {
     vertical-align: bottom !important;
 }
+.grid-title-list {
+    .mat-grid-tile-content {
+        display: block !important;
+        justify-content: left;
+    }
+}
+.grid-title-left {
+    .mat-grid-tile-content {
+        justify-content: left;
+    }
+}
 
 /** Skelton Effects  **/
 

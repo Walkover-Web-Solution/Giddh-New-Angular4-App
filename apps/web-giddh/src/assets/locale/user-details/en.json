@@ -113,6 +113,19 @@
         "activation_key": "Activation Key",
         "activation_key_note": "You will get the activation key from resellers.",
         "enter_activation_key": "Enter activation key",
-        "activate": "Activate"
+        "activate": "Activate",
+        "transaction_balance": "Transactions Balance",
+        "left": "Left",
+        "plan_timeline": " Plan Timeline ",
+        "overall_summary": "Overall Summary",
+        "select_plan_summary": "  Select a plan to see its <br/> Overall comsumption and balance summary ",
+        "you_have_total": "You have total ",
+        "plans": "plans",
+        "benefits": "Benefits",
+        "renew": "Renew",
+        "buy_plan": "Buy Now",
+        "redeem": "Redeem",
+        "extra_addons": "Extra Add-ons",
+        "per_transaction": "per transaction"
     }
 }

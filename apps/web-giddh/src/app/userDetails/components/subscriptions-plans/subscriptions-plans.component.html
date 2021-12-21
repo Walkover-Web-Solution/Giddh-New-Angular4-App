@@ -17,12 +17,201 @@
             <i class="icon-right"></i>
         </button>
     </div>
-    <div
-        #tableContent
-        class="plan-table mat-elevation-z8"
-        [style.width.px]="plansContainerWidth"
-        [ngClass]="{ 'plan-table-content': showLoader }"
-    >
+    <div #tableContent class="plan-table mat-elevation-z8" *ngIf="!showLoader">
+        <div class="grid-list-div top-heading">
+            <div class="grid-title-left grid-title-left-top">
+                <!-- {{localeData?.benefits}} -->
+                <span class="inner-name inner-name-bold mat-table-sticky"> Benefits</span>
+            </div>
+            <div class="grid-title-list font-14" *ngFor="let plan of inputData">
+                <span class="sub-plan-name">{{ plan["name"] }}</span> <br />
+                <span class="sub-plan-amount"
+                    >₹{{ plan["amount"] }}/<span class="sub-plan-duration">{{ plan["durationUnit"] }}</span></span
+                >
+            </div>
+        </div>
+
+        <div class="grid-list-div list-grid">
+            <div class="grid-title-left">
+                <span class="inner-name mat-table-sticky">{{ commonLocaleData?.app_transactions }}</span>
+            </div>
+            <div class="grid-title-list list-grid-title" *ngFor="let plan of inputData">
+                <span>{{ plan["transactionLimit"] }}</span>
+            </div>
+        </div>
+        <div class="grid-list-div list-grid">
+            <div class="grid-title-left">
+                <span class="inner-name mat-table-sticky">{{ localeData?.companies }}</span>
+            </div>
+            <div class="grid-title-list list-grid-title" *ngFor="let plan of inputData">
+                <span>{{ plan["companiesLimit"] }}</span>
+            </div>
+        </div>
+        <div class="grid-list-div list-grid">
+            <div class="grid-title-left">
+                <span class="inner-name mat-table-sticky">{{ localeData?.unlimited_users }}</span>
+            </div>
+            <div class="grid-title-list list-grid-title" *ngFor="let plan of inputData">
+                <i class="icon-tick"></i>
+            </div>
+        </div>
+        <div class="grid-list-div list-grid">
+            <div class="grid-title-left">
+                <span class="inner-name mat-table-sticky">{{ localeData?.unlimited_contacts }}</span>
+            </div>
+            <div class="grid-title-list list-grid-title" *ngFor="let plan of inputData">
+                <i class="icon-tick"></i>
+            </div>
+        </div>
+        <div class="grid-list-div list-grid">
+            <div class="grid-title-left">
+                <span class="inner-name mat-table-sticky">{{ localeData?.desktop_mobile_app }}</span>
+            </div>
+            <div class="grid-title-list list-grid-title" *ngFor="let plan of inputData">
+                <i class="icon-tick"></i>
+            </div>
+        </div>
+        <div class="grid-list-div list-grid">
+            <div class="grid-title-left">
+                <a class="sub-plan-feature mat-table-sticky" (click)="openDialog()" href="javascript:void(0)">{{
+                    localeData?.check_all_features
+                }}</a>
+            </div>
+            <div class="grid-title-list bottom-buy-button" *ngFor="let plan of inputData">
+                <button
+                    (click)="buyPlanClicked(plan)"
+                    class="all_feature_button"
+                    mat-raised-button
+                    color="primary"
+                    *ngIf="plan?.uniqueName === activeCompany?.subscription?.planDetails?.uniqueName"
+                >
+                    {{ localeData?.renew }}
+                </button>
+                <button
+                    (click)="buyPlanClicked(plan)"
+                    class="all_feature_button"
+                    mat-raised-button
+                    color="primary"
+                    *ngIf="plan?.uniqueName !== activeCompany?.subscription?.planDetails?.uniqueName"
+                >
+                    {{ localeData?.buy_plan }}
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div #tableContent class="plan-table-content mat-elevation-z8" *ngIf="showLoader">
+        <div class="grid-list-div-changes">
+            <div
+                class="grid-title-left"
+                [ngClass]="{ 'skelton-common-class': showLoader, 'grid-title-list-changes': showLoader }"
+            >
+                <span class="inner-name inner-name-bold mat-table-sticky">&nbsp;</span>
+            </div>
+            <div
+                class="grid-title-list"
+                *ngFor="let plan of inputData"
+                [ngClass]="{ 'skelton-common-class': showLoader, 'grid-title-list-changes': showLoader }"
+            >
+                <span class="sub-plan-name">&nbsp;</span> <br />
+                <span class="sub-plan-amount">&nbsp;<span class="sub-plan-duration">&nbsp;</span></span>
+            </div>
+        </div>
+
+        <div class="grid-list-div-changes list-grid">
+            <div
+                class="grid-title-left"
+                [ngClass]="{ 'skelton-common-class': showLoader, 'grid-title-list-changes': showLoader }"
+            >
+                <span class="inner-name mat-table-sticky">&nbsp;</span>
+            </div>
+            <div
+                class="grid-title-list list-grid-title"
+                *ngFor="let plan of inputData"
+                [ngClass]="{ 'skelton-common-class': showLoader, 'grid-title-list-changes': showLoader }"
+            >
+                <span>&nbsp;</span>
+            </div>
+        </div>
+        <div class="grid-list-div-changes list-grid">
+            <div
+                class="grid-title-left"
+                [ngClass]="{ 'skelton-common-class': showLoader, 'grid-title-list-changes': showLoader }"
+            >
+                <span class="inner-name mat-table-sticky">&nbsp;</span>
+            </div>
+            <div
+                class="grid-title-list list-grid-title"
+                *ngFor="let plan of inputData"
+                [ngClass]="{ 'skelton-common-class': showLoader, 'grid-title-list-changes': showLoader }"
+            >
+                <span>&nbsp;</span>
+            </div>
+        </div>
+        <div class="grid-list-div-changes list-grid">
+            <div
+                class="grid-title-left"
+                [ngClass]="{ 'skelton-common-class': showLoader, 'grid-title-list-changes': showLoader }"
+            >
+                <span class="inner-name mat-table-sticky">&nbsp;</span>
+            </div>
+            <div
+                class="grid-title-list list-grid-title"
+                *ngFor="let plan of inputData"
+                [ngClass]="{ 'skelton-common-class': showLoader, 'grid-title-list-changes': showLoader }"
+            >
+                <mat-icon>&nbsp;</mat-icon>
+            </div>
+        </div>
+        <div class="grid-list-div-changes list-grid">
+            <div
+                class="grid-title-left"
+                [ngClass]="{ 'skelton-common-class': showLoader, 'grid-title-list-changes': showLoader }"
+            >
+                <span class="inner-name mat-table-sticky">&nbsp;</span>
+            </div>
+            <div
+                class="grid-title-list list-grid-title"
+                *ngFor="let plan of inputData"
+                [ngClass]="{ 'skelton-common-class': showLoader, 'grid-title-list-changes': showLoader }"
+            >
+                <mat-icon>&nbsp;</mat-icon>
+            </div>
+        </div>
+        <div class="grid-list-div-changes list-grid">
+            <div
+                class="grid-title-left"
+                [ngClass]="{ 'skelton-common-class': showLoader, 'grid-title-list-changes': showLoader }"
+            >
+                <span class="inner-name mat-table-sticky">&nbsp;</span>
+            </div>
+            <div
+                class="grid-title-list list-grid-title"
+                *ngFor="let plan of inputData"
+                [ngClass]="{ 'skelton-common-class': showLoader, 'grid-title-list-changes': showLoader }"
+            >
+                <mat-icon>&nbsp;</mat-icon>
+            </div>
+        </div>
+        <div class="grid-list-div-changes list-grid">
+            <div
+                class="grid-title-left"
+                [ngClass]="{ 'skelton-common-class': showLoader, 'grid-title-list-changes': showLoader }"
+            >
+                <a class="sub-plan-feature mat-table-sticky" (click)="openDialog()" href="javascript:void(0)">&nbsp;</a>
+            </div>
+            <div
+                class="grid-title-list list-grid-title"
+                *ngFor="let plan of inputData"
+                [ngClass]="{ 'skelton-common-class': showLoader, 'grid-title-list-changes': showLoader }"
+            ></div>
+        </div>
+    </div>
+    <p [ngClass]="{ 'skelton-common-class': showLoader }" class="extra-addons-content font-16">
+        * {{ localeData?.extra_addons }}:<span *ngIf="!showLoader" class="extra-addons-value">
+            0.10 {{ localeData?.per_transaction }}</span
+        >
+
         <!-- <table mat-table class="plan-table-layout" [dataSource]="inputData"> -->
         <!-- <ng-container [matColumnDef]="column" *ngFor="let column of inputData; let i = index">
                 <th class="plan-th" mat-header-cell *matHeaderCellDef>&nbsp;</th>
@@ -56,70 +245,6 @@
                 *matRowDef="let element; columns: inputColumns; let i = index"
             ></tr>
         </table> -->
-        <mat-grid-list [cols]="plansCount?.length + 1" rowHeight="70px">
-            <mat-grid-tile>Benefits</mat-grid-tile>
-            <ng-container *ngFor="let plan of inputData">
-                <mat-grid-tile
-                    >{{ plan["name"] }} <br />
-                    {{ plan["amount"] }}/{{ plan["durationUnit"] }}</mat-grid-tile
-                >
-            </ng-container>
-        </mat-grid-list>
-        <mat-grid-list [cols]="plansCount?.length + 1" rowHeight="70px">
-            <mat-grid-tile>Transactions</mat-grid-tile>
-            <ng-container *ngFor="let plan of inputData">
-                <mat-grid-tile>{{ plan["transactionLimit"] }}</mat-grid-tile>
-            </ng-container>
-        </mat-grid-list>
-        <mat-grid-list [cols]="plansCount?.length + 1" rowHeight="70px">
-            <mat-grid-tile>Companies</mat-grid-tile>
-            <ng-container *ngFor="let plan of inputData">
-                <mat-grid-tile>{{ plan["companiesLimit"] }}</mat-grid-tile>
-            </ng-container>
-        </mat-grid-list>
-        <mat-grid-list [cols]="plansCount?.length + 1" rowHeight="70px">
-            <mat-grid-tile>Unlimited Users</mat-grid-tile>
-            <ng-container *ngFor="let plan of inputData">
-                <mat-grid-tile><mat-icon>check</mat-icon></mat-grid-tile>
-            </ng-container>
-        </mat-grid-list>
-        <mat-grid-list [cols]="plansCount?.length + 1" rowHeight="70px">
-            <mat-grid-tile>Unlimited Customers/Vendors</mat-grid-tile>
-            <ng-container *ngFor="let plan of inputData">
-                <mat-grid-tile><mat-icon>check</mat-icon></mat-grid-tile>
-            </ng-container>
-        </mat-grid-list>
-        <mat-grid-list [cols]="plansCount?.length + 1" rowHeight="70px">
-            <mat-grid-tile>Desktop/Mobile App</mat-grid-tile>
-            <ng-container *ngFor="let plan of inputData">
-                <mat-grid-tile><mat-icon>check</mat-icon></mat-grid-tile>
-            </ng-container>
-        </mat-grid-list>
-        <mat-grid-list [cols]="plansCount?.length + 1" rowHeight="70px">
-            <mat-grid-tile><a href="javascript:;">Check all features</a></mat-grid-tile>
-            <ng-container *ngFor="let plan of inputData">
-                <mat-grid-tile
-                    ><button
-                        class="all_feature_button"
-                        mat-raised-button
-                        color="primary"
-                        *ngIf="plan?.uniqueName === activeCompany?.subscription?.planDetails?.uniqueName"
-                    >
-                        Renew</button
-                    ><button
-                        class="all_feature_button"
-                        mat-raised-button
-                        color="primary"
-                        *ngIf="plan?.uniqueName !== activeCompany?.subscription?.planDetails?.uniqueName"
-                    >
-                        Buy Now
-                    </button></mat-grid-tile
-                >
-            </ng-container>
-        </mat-grid-list>
-    </div>
-    <p [ngClass]="{ 'skelton-common-class': showLoader }" class="extra-addons-content">
-        * Extra Add-ons:<span *ngIf="!showLoader" class="extra-addons-value"> 0.10 per trasaction</span>
     </p>
     <!-- extra addons :  | 2000 per branch | 1000 per warehous -->
 
@@ -169,7 +294,7 @@
                             [ngClass]="{ 'skelton-common-class': showLoader, 'radeem-plan': showLoader }"
                             class="font-26 text-gray bold mb-3 radeem-plan"
                         >
-                            Redeem
+                            {{ localeData?.redeem }}
                             {{ localeData?.subscription?.activation_key }}
                         </h2>
                         <p
