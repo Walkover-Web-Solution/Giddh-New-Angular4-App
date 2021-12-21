@@ -312,9 +312,9 @@ i.icon-options {
 }
 
 i.icon-options:hover {
-    background: $chetwode-blue;
+    background: var(--filter-hover-background-color);
     color: $white;
-    border-color: $chetwode-blue;
+    border-color: var(--filter-hover-background-color);
 }
 
 .search-field {

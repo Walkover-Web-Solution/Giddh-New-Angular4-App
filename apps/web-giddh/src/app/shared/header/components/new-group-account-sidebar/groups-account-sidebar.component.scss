@@ -2,7 +2,7 @@
 .list-item:focus,
 .list-item:focus .list-item {
     color: $white !important;
-    background: $vivid-blue;
+    background: var(--master-page-sidebar-active-list-color);
 }
 
 .virtual-group-list {

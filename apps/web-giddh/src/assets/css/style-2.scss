@@ -722,7 +722,7 @@ ul.sub-list {
     background: none;
     border: 0;
     font-size: 14px;
-    color: $night-rider !important;
+    color: var(--master-page-tab-secondary-color) !important;
     position: relative;
     padding-bottom: 7px;
     padding-left: 0;
@@ -750,10 +750,10 @@ ul.sub-list {
 }
 
 .custom-tabs .nav.nav-tabs > li a:hover {
-    color: $deep-sky-blue !important;
+    color: var(--master-page-text-primary-hover-color) !important;
 }
 .custom-tabs .nav.nav-tabs > li.active a {
-    color: $nero !important;
+    color: var(--master-page-tab-primary-color) !important;
 }
 .custom-tabs .nav.nav-tabs {
     border-bottom: 1px solid $gainsboro;
@@ -1300,7 +1300,7 @@ modal-container.modal {
     color: $gray;
 }
 .custom-datepicker input {
-    background: $white !important;
+    background: var(--sidebar-search-bar-background-color) !important;
     font-size: 14px;
     position: relative;
     width: 230px !important;
@@ -1344,7 +1344,6 @@ modal-container.modal {
     padding: 6px !important;
     outline: 0;
     color: var(--sidebar-search-bar-text-color) !important;
-    // color: $nero !important;
     box-shadow: none;
     font-size: 14px !important;
 }
@@ -1353,7 +1352,7 @@ modal-container.modal {
 }
 
 input {
-    color: $nero !important;
+    color: var(--popup-list-input-text-color) !important;
 }
 .form-control::-webkit-input-placeholder,
 input::-webkit-input-placeholder,
@@ -1465,9 +1464,9 @@ header .navbar {
 .btn-primary:active:hover,
 .open > .dropdown-toggle.btn-primary:focus,
 .btn-primary:not(:disabled):not(.disabled):active {
-    background: $chetwode-blue !important;
+    background: var(--popup-list-hover-color) !important;
     color: $white !important;
-    border-color: $chetwode-blue !important;
+    border-color: var(--popup-list-hover-color) !important;
 }
 .btn-primary.disabled.focus,
 .btn-primary.disabled:focus,
@@ -1478,9 +1477,9 @@ header .navbar {
 fieldset[disabled] .btn-primary.focus,
 fieldset[disabled] .btn-primary:focus,
 fieldset[disabled] .btn-primary:hover {
-    background: $chetwode-blue !important;
+    background: var(--secondary-button-background-color-hover) !important;
     color: $white !important;
-    border-color: $midnight-blue !important;
+    border-color: var(--secondary-button-background-color-hover) !important;
 }
 .btn {
     padding: 7px 10px;
@@ -2544,7 +2543,7 @@ a.btn.btn-xs.btn-link.pull-right {
 }
 .modal-header {
     position: relative;
-    background: $midnight-blue !important;
+    background: var(--primary-header-background-color) !important;
     color: $white;
 }
 .close-modal {
@@ -2695,6 +2694,7 @@ select.form-control {
     overflow-y: auto;
     height: 100%;
     padding-bottom: 60px;
+    background-color: var(--master-page-left-sidebar-secondary-background-color);
 }
 .grp-list li,
 .new-btn-ul li {
@@ -2744,7 +2744,7 @@ select.form-control {
 }
 
 form label {
-    color: $nero;
+    color: var(--master-page-input-label-color);
     font-weight: normal;
     padding-bottom: 0;
     font-size: 14px;
@@ -2822,20 +2822,20 @@ label {
     white-space: nowrap;
 }
 .isAcc {
-    color: $nero !important;
+    color: var(--master-page-input-label-color) !important;
 }
 .isParent {
     background: $white-smoke;
 }
 .isActive {
     color: $white !important;
-    background: $deep-sky-blue;
-    border-color: $deep-sky-blue;
+    background: var(--master-page-text-primary-hover-color);
+    border-color: var(--master-page-text-primary-hover-color);
 }
 .isActive:hover {
     color: $white !important;
-    background: $deep-sky-blue-hover;
-    border-color: $deep-sky-blue-hover;
+    background: var(--master-page-text-secondary-hover-color);
+    border-color: var(--master-page-text-secondary-hover-color);
 }
 .isParent.isActive {
     color: $white !important;
@@ -2892,13 +2892,14 @@ label {
 
 label {
     font-weight: normal;
+    color: var(--company-profile-input-label-color);
 }
 .horizontal-form label {
     margin-bottom: 4px;
 }
 #getGroupModal .bd-rl,
 #getGroupModal .bd-rr {
-    border-color: $gainsboro;
+    border-color: var(--master-page-main-content-primary-background-color);
 }
 #getGroupModal .detailed label {
     font-size: 14px;
@@ -2999,7 +3000,7 @@ label {
     color: $gray;
 }
 .breadcrumb > .active > a {
-    color: $deep-sky-blue;
+    color: var(--master-page-text-primary-hover-color);
 }
 .breadcrumb a {
     color: $gray;
@@ -3012,7 +3013,7 @@ label {
 }
 .new-btn {
     position: absolute;
-    background: $white;
+    background: var(--master-page-main-content-primary-background-color);
     top: 0;
     padding: 4px 0;
     width: 100%;
@@ -3031,7 +3032,7 @@ label {
     position: absolute;
     height: 100%;
     z-index: 99;
-    background: $white;
+    background: var(--master-page-main-content-secondary-background-color);
     width: 100%;
     left: 0;
     display: table;
@@ -3220,6 +3221,7 @@ label {
 }
 .col-wrapper:first-child .grp-list {
     padding-top: 10px;
+    background-color: var(--master-page-left-sidebar-primary-background-color);
 }
 .d-inline-block {
     display: inline-block !important;
@@ -3850,7 +3852,7 @@ input[type="checkbox"][disabled]:after {
     cursor: not-allowed;
 }
 .form-bg {
-    background: $solitude;
+    background: var(--master-page-main-content-primary-background-color);
 }
 .toggle-btn i {
     margin-right: 9px;
@@ -4055,10 +4057,9 @@ table input[type="number"] {
     padding-right: 25px !important;
 }
 .btn-link {
-    color: $primary !important;
-
+    color: var(--master-page-input-clear-text-color) !important;
     &:hover {
-        color: $primary !important;
+        color: var(--master-page-input-clear-text-color) !important;
     }
 }
 
@@ -4134,7 +4135,7 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
     background: url("../images/Schedule.png") right 100px no-repeat;
 } /**end new modal design**/
 .col-wrapper .btn-link {
-    color: $deep-sky-blue-hover !important;
+    color: var(--master-page-text-secondary-hover-color) !important;
 }
 .form-group sup {
     font-size: 14px;
@@ -4472,9 +4473,10 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
     > li {
         > a {
             padding: 4px 10px;
-            color: $nero;
+            color: var(--dropdown-list-color);
             display: block;
             line-height: 1.4;
+            background-color: var(--dropdown-background-color);
         }
     }
 }
@@ -5440,6 +5442,7 @@ section.ledger-stat.sticky-footer.sticky-footer-sale-amount {
 
 div#getGroupModal {
     height: 100vh;
+    background-color: var(--common-background-color-for-all-components);
 }
 .template-view li .beta-img {
     position: absolute;
@@ -5755,8 +5758,8 @@ ul.dropdown-menu p.lead.pd {
     border-color: 0px solid transparent !important;
 }
 .dropdown-menu > li > a:hover {
-    color: $chetwode-blue !important;
-    background: $lavender !important;
+    color: var(--dropdown-list-hover-text-color) !important;
+    background: var(--dropdown-list-hover-background-color) !important;
 }
 .debit-blank-row td .form-control,
 .credit-blank-row td .form-control {
@@ -5907,10 +5910,10 @@ ul.dropdown-menu p.lead.pd {
 }
 
 table.basic td {
-    color: $nero;
+    color: var(--table-content-primary-color);
 }
 .invoice-table td > a {
-    color: $nero;
+    color: var(--table-content-primary-color);
 }
 
 button.btn.btn-filter {
@@ -5956,7 +5959,7 @@ button.btn.btn-filter {
     min-width: 190px !important;
 }
 .td-search-box div i.icon-search {
-    color: $midnight-blue !important;
+    color: var(--table-heading-secondary-color) !important;
     font-size: 16px;
 }
 .mobileCode .menu {
@@ -6709,6 +6712,7 @@ span#HW_badge_cont:nth-child(3) {
 
 .open > .dropdown-menu {
     display: block;
+    background-color: var(--dropdown-background-color);
 }
 
 .daterangepicker.dropdown-menu {
@@ -7126,7 +7130,7 @@ giddh-datepicker {
     .nav-tabs {
         border-bottom: 1px solid $gainsboro;
         padding: 0 0 0 15px !important;
-        background-color: $alice-blue-light;
+        background-color: var(--master-page-tab-background-color);
         z-index: 9;
         position: relative !important;
         top: 0;
@@ -9309,7 +9313,7 @@ body.prevent-body-scroll {
 /** Angular material datepicker **/
 .mat-calendar-header {
     padding: 2px 8px 2px 8px !important;
-    background-color: $chetwode-blue;
+    background-color: var(--table-datepicker-header-background-color);
     color: $white;
 }
 
@@ -9340,7 +9344,7 @@ body.prevent-body-scroll {
 }
 
 .mat-calendar-table-header th {
-    color: $black;
+    color: var(--table-datepicker-content-color);
     padding: 10px 0 10px 0 !important;
 }
 
@@ -9350,6 +9354,7 @@ body.prevent-body-scroll {
 
 .mat-datepicker-content .mat-calendar {
     height: 320px !important;
+    background-color: var(--table-datepicker-body-background-color);
 }
 
 mat-year-view table tr td.mat-calendar-body-label {

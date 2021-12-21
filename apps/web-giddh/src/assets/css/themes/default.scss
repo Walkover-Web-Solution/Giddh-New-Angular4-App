@@ -8,6 +8,9 @@ body.default-theme {
     // Common variable to set background color of components
     --common-background-color-for-all-components: #ffffff;
 
+    // Filter Color Variables
+    --filter-hover-background-color: #5b64c9;
+
     // Button Color Variables
     --primary-button-text-color: #2831b2;
     --primary-button-background-color: #ffffff;
@@ -18,10 +21,38 @@ body.default-theme {
     --tertiary-button-background-color: transparent;
     --tertiary-button-background-color-hover: #1a237e0f;
 
+    // Dropdown Color Variables
+    --dropdown-list-color: #1c1c1c;
+    --dropdown-list-hover-text-color: #5b64c9;
+    --dropdown-background-color: #ffffff;
+    --dropdown-list-hover-background-color: #eeeff9;
+
     // Search Bar Color Variables
     --sidebar-search-bar-text-color: #6a6c85;
     --sidebar-search-bar-background-color: #f5f5f5;
     --active-search-bar-border-color: #5b64c9;
+    --company-profile-input-label-color: #1c1c1c;
+
+    // Datepicker Color Variables
+    --datepicker-month-name-color: #1c1c1c;
+    --datepicker-date-color: #1a237e;
+    --datepicker-date-icon-color: #00000061;
+    --datepicker-rightside-list-text-color: #333333;
+    --datepicker-rightside-list-primary-color-text-hover: #d2cde6;
+    --datepicker-rightside-list-secondary-color-text-hover: #f2f2f2;
+    --datepicker-input-label-color: #808080;
+    --datepicker-selected-month-color: #1a237e;
+    --datepicker-unselected-month-color: #000000;
+    --datepicker-background-color: #ffffff;
+    --main-content-datepicker: #000000;
+
+    // Popup Color Variables
+    --popup-list-input-text-color: #1c1c1c;
+    --popup-list-head-text-color: #333333;
+    --popup-list-hover-color: #5b64c9;
+    --popup-background-color: #ffffff;
+    --popup-footer-text-color: #000000cc;
+    --popup-footer-background-color: #f5f8f9;
 
     // Tabs Color Variables
     --tab-primary-background-color: #ffffff;
@@ -48,7 +79,22 @@ body.default-theme {
     --pagination--button-hover-background-color: #d9d9d9;
 
     // Header Color Variables
-    --primary-header-color: #1a237e;
+    --primary-header-background-color: #1a237e;
+
+    // Master Page Color Variables
+    --master-page-input-clear-text-color: #2680eb;
+    --master-page-input-no-result-text-color: #808080;
+    --master-page-tab-background-color: #f7f8fa;
+    --master-page-tab-primary-color: #1c1c1c;
+    --master-page-tab-secondary-color: #333333;
+    --master-page-text-primary-hover-color: #10a9f4;
+    --master-page-text-secondary-hover-color: #019ce1;
+    --master-page-sidebar-active-list-color: #2d9ee0;
+    --master-page-input-label-color: #1c1c1c;
+    --master-page-left-sidebar-primary-background-color: #f5f5f5;
+    --master-page-left-sidebar-secondary-background-color: #ffffff;
+    --master-page-main-content-primary-background-color: #f4f5f8;
+    --master-page-main-content-secondary-background-color: #ffffff;
 
     // Left Sidebar Color Variables
     --sidebar-content-text-color: #6a6c85;
@@ -77,8 +123,12 @@ body.default-theme {
     --table-content-secondary-color: #999999;
     --table-content-tertiary-color: #212528;
     --table-content-quaternary-color: #6a6c85;
+    --table-row-hover-background-color: #f0f5ff;
     --table-heading-primary-background-color: #ffffff;
     --table-body-primary-background-color: #ffffff;
+    --table-datepicker-content-color: #000000;
+    --table-datepicker-header-background-color: #5b64c9;
+    --table-datepicker-body-background-color: #ffffff;
 
     // Total Details Box above table Color Variables
     --total-details-heading-color: #6a6c85;
