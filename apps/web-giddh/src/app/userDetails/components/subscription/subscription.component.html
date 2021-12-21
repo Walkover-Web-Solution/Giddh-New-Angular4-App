@@ -16,7 +16,7 @@
                         <input
                             matInput
                             class="search-bar"
-                            [placeholder]="localeData?.search_company"
+                            placeholder="Search companies"
                             [formControl]="searchSubscription"
                         />
                     </mat-form-field>
@@ -28,11 +28,11 @@
                         <span class="mat-body-1 plan">{{ localeData?.plan }}</span>
                         <mat-form-field appearance="none" floatLabel="never" class="form-select">
                             <mat-select
-                                [placeholder]="localeData?.app_select"
+                                [placeholder]="commonLocaleData?.app_select"
                                 (selectionChange)="filterSubscriptions()"
                                 [(ngModel)]="filters.plan"
                             >
-                                <mat-option value="">{{ localeData?.app_select }}</mat-option>
+                                <mat-option value="">{{ commonLocaleData?.app_select }}</mat-option>
                                 <mat-option *ngFor="let plan of plansList" [value]="plan?.uniqueName"
                                     >{{ plan?.name }}
                                 </mat-option>
@@ -43,11 +43,11 @@
                         <span class="mat-body-1 expiring-within">Expiring Within</span>
                         <mat-form-field appearance="none" floatLabel="never" class="form-select">
                             <mat-select
-                                [placeholder]="localeData?.app_select"
+                                [placeholder]="commonLocaleData?.app_select"
                                 [(ngModel)]="filters.expiration"
                                 (selectionChange)="filterSubscriptions()"
                             >
-                                <mat-option value="">{{ localeData?.app_select }}</mat-option>
+                                <mat-option value="">{{ commonLocaleData?.app_select }}</mat-option>
                                 <mat-option *ngFor="let expiring of expiringList" [value]="expiring?.value">
                                     {{ expiring?.name }}
                                 </mat-option>
@@ -55,15 +55,15 @@
                         </mat-form-field>
                     </div>
                     <div class="menu-two-list-items transaction-box" *ngIf="!showLoader">
-                        <span class="mat-body-1 transaction-balance">Transactions Balance</span>
+                        <span class="mat-body-1 transaction-balance">{{ localeData?.transaction_balance }}</span>
                         <mat-form-field appearance="none" floatLabel="never" class="form-select">
                             <mat-select
-                                [placeholder]="localeData?.app_select"
+                                [placeholder]="commonLocaleData?.app_select"
                                 class="transaction-select"
                                 [(ngModel)]="filters.transactionBalance"
                                 (selectionChange)="filterSubscriptions()"
                             >
-                                <mat-option value="">{{ localeData?.app_select }}</mat-option>
+                                <mat-option value="">{{ commonLocaleData?.app_select }}</mat-option>
                                 <mat-option
                                     *ngFor="let transactionBalance of transactionBalanceList"
                                     [value]="transactionBalance?.value"
@@ -83,7 +83,7 @@
                             filters?.transactionBalance
                         "
                         (click)="clearFilters()"
-                        >{{ localeData?.app_clear }}</a
+                        >{{ commonLocaleData?.app_clear }}</a
                     >
                 </div>
             </mat-grid-tile>
@@ -101,22 +101,24 @@
                                     </p>
                                     <div class="side-bar-list">
                                         <img src="{{ imgPath }}transaction.png" alt="transaction" />
-                                        <p class="side-bar-list-title">Transactions</p>
+                                        <p class="side-bar-list-title">{{ commonLocaleData?.app_transactions }}</p>
                                         <span>:</span>
                                         <p class="mat-body-2">
                                             {{ subscription?.remainingTransactions }}
-                                            <span class="warning mat-body-2">Left</span>
+                                            <span class="warning mat-body-2">{{ localeData?.left }}</span>
                                         </p>
                                     </div>
                                     <div class="side-bar-list">
                                         <img src="{{ imgPath }}companies.png" alt="companies" />
-                                        <p class="mat-subheading-4 side-bar-list-title">Companies</p>
+                                        <p class="mat-subheading-4 side-bar-list-title">{{ localeData?.companies }}</p>
                                         <span>:</span>
                                         <p>{{ subscription?.totalCompanies | number }}</p>
                                     </div>
                                     <div class="side-bar-list plan-timeline">
                                         <img src="{{ imgPath }}plan_timeline.png" alt="plan_timeline" />
-                                        <p class="mat-subheading-4 side-bar-list-title">Plan Timeline</p>
+                                        <p class="mat-subheading-4 side-bar-list-title">
+                                            {{ localeData?.plan_timeline }}
+                                        </p>
                                         <span>:</span>
                                         <p class="date">{{ subscription?.startedAt }} - {{ subscription?.expiry }}</p>
                                     </div>
@@ -146,7 +148,7 @@
                                         class="side-bar-list-clone-1"
                                         [ngClass]="{ 'skelton-common-class': showLoader }"
                                     >
-                                        <p class="side-bar-list-title">{{ localeData?.app_transactions }}</p>
+                                        <p class="side-bar-list-title">{{ commonLocaleData?.app_transactions }}</p>
                                         <span>:</span>
                                         <p class="mat-body-2">
                                             {{ subscriptionStatic.remainingTransactions }}
@@ -194,8 +196,8 @@
                             <div>
                                 <p>
                                     {{ selectedSubscription?.remainingDays > 0 ? "Expires" : "Expired" }}
-                                    {{ localeData?.commonLocaleData?.app_date_options?.on }}:
-                                    {{ selectedSubscription?.expiry }} <br />
+                                    {{ commonLocaleData?.app_date_options?.on }}: {{ selectedSubscription?.expiry }}
+                                    <br />
                                     <span *ngIf="selectedSubscription?.remainingDays > 0">{{
                                         selectedSubscription?.remainingDays + " days left"
                                     }}</span>
@@ -215,14 +217,15 @@
                     </mat-toolbar>
                     <!-- Addons selector  -->
                     <!-- <add-ons ></add-ons> -->
-                    <p class="summary">Overall summary</p>
+                    <p class="summary">{{ localeData?.overall_summary }}</p>
                     <div class="balance-info">
                         <mat-grid-list cols="2" rowHeight="10px" gutterSize="3px">
                             <mat-grid-tile colspan="2" rowspan="{{ overallSummaryTopRow }}">
                                 <div class="overall-summary-bar-one">
                                     <div class="box item-1">
                                         <div class="box-heading">
-                                            <img src="{{ imgPath }}transaction.png" alt="" /> <span>Transaction</span>
+                                            <img src="{{ imgPath }}transaction.png" alt="" />
+                                            <span>{{ commonLocaleData?.app_transactions }}</span>
                                         </div>
                                         <p>
                                             Balance<span>
@@ -255,7 +258,8 @@
                                 </div> -->
                                     <div class="box item-4">
                                         <div class="box-heading">
-                                            <img src="{{ imgPath }}companies.png" alt="" /> <span>Companies</span>
+                                            <img src="{{ imgPath }}companies.png" alt="" />
+                                            <span>{{ localeData?.companies }}</span>
                                         </div>
                                         <p>
                                             Active <span>{{ selectedSubscription?.companyCount }}</span>
@@ -840,7 +844,7 @@
                             </mat-expansion-panel>
                         </mat-accordion>
                     </mat-tab> -->
-                        <mat-tab label="Companies">
+                        <mat-tab [label]="localeData?.companies">
                             <mat-accordion class="companies" multi>
                                 <ng-container
                                     *ngFor="
@@ -886,21 +890,20 @@
                     </mat-tab-group>
                 </div>
                 <div class="main-content-condition" *ngIf="!selectedSubscription && plansList?.length && !showLoader">
-                    <p class="main-content-para">
-                        Select a plan to see its <br />
-                        Overall comsumption and balance summary
-                    </p>
+                    <p class="main-content-para" [innerHTMl]="localeData?.select_plan_summary"></p>
                     <br /><br />
-                    <p class="main-content-para">You have total {{ plansList?.length }} plans</p>
+                    <p class="main-content-para">
+                        {{ localeData?.you_have_total }} {{ plansList?.length }} {{ localeData?.plans }}
+                    </p>
                 </div>
                 <div class="main-content-condition" *ngIf="showLoader">
-                    <p [ngClass]="{ 'skelton-common-class': showLoader }">
-                        Select a plan to see its <br />
-                        Overall comsumption and balance summary
-                    </p>
+                    <p
+                        [ngClass]="{ 'skelton-common-class': showLoader }"
+                        [innerHTMl]="localeData?.select_plan_summary"
+                    ></p>
                     <br /><br />
                     <p [ngClass]="{ 'skelton-common-class': showLoader }">
-                        You have total {{ plansList?.length }} plans
+                        {{ localeData?.you_have_total }} {{ plansList?.length }} {{ localeData?.plans }}
                     </p>
                 </div>
             </mat-grid-tile>

@@ -23,14 +23,14 @@ import { uniqBy } from '../../../lodash-optimized';
 
 /** This will use for static data for plan table  */
 const TABLE_DATA: any[] = [
-    /*{ name: '', transactions: 0, amount: 0, companies: 0, consultant: '', unlimited_users: true, unlimited_customers: true, desktop_mobile_app: true, check_all_features: true },
     { name: '', transactions: 0, amount: 0, companies: 0, consultant: '', unlimited_users: true, unlimited_customers: true, desktop_mobile_app: true, check_all_features: true },
     { name: '', transactions: 0, amount: 0, companies: 0, consultant: '', unlimited_users: true, unlimited_customers: true, desktop_mobile_app: true, check_all_features: true },
     { name: '', transactions: 0, amount: 0, companies: 0, consultant: '', unlimited_users: true, unlimited_customers: true, desktop_mobile_app: true, check_all_features: true },
     { name: '', transactions: 0, amount: 0, companies: 0, consultant: '', unlimited_users: true, unlimited_customers: true, desktop_mobile_app: true, check_all_features: true },
     { name: '', transactions: 0, amount: 0, companies: 0, consultant: '', unlimited_users: true, unlimited_customers: true, desktop_mobile_app: true, check_all_features: true },
     { name: '', transactions: 0, amount: 0, companies: 0, consultant: '', unlimited_users: true, unlimited_customers: true, desktop_mobile_app: true, check_all_features: true },
-{ name: '', transactions: 0, amount: 0, companies: 0, consultant: '', unlimited_users: true, unlimited_customers: true, desktop_mobile_app: true, check_all_features: true }*/
+    { name: '', transactions: 0, amount: 0, companies: 0, consultant: '', unlimited_users: true, unlimited_customers: true, desktop_mobile_app: true, check_all_features: true },
+    { name: '', transactions: 0, amount: 0, companies: 0, consultant: '', unlimited_users: true, unlimited_customers: true, desktop_mobile_app: true, check_all_features: true }
 ];
 @Component({
     selector: 'subscriptions-plans',
@@ -110,8 +110,8 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
     public subscriptionPlan: CreateCompanyUsersPlan;
     /** True if api call in progress */
     public showLoader: boolean = true;
-    public plansCount: any[] = [];
-    public plansContainerWidth: number = 0;
+    /**  This will be use for all subscription  */
+    private allSubscriptions: any[] = [];
 
     constructor(private modalService: BsModalService, private generalService: GeneralService,
         private changeDetectionRef: ChangeDetectorRef, private authenticationService: AuthenticationService, private store: Store<AppState>,
@@ -134,7 +134,7 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
 
         /** This will use for get the active company from store  */
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
-            if (activeCompany) {  
+            if (activeCompany) {
                 if (!this.activeCompany) {
                     this.getPlans(activeCompany);
                 }
@@ -198,7 +198,9 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
      */
     public openDialog() {
         this.dialog.open(AllFeaturesComponent, {
-            panelClass: 'custom-modalbox'
+            panelClass: 'custom-modalbox',
+            height: '40%',
+            width: '60%'
         });
     }
 
@@ -221,7 +223,8 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
             this.SubscriptionRequestObj.licenceKey = "";
         }
         this.router.navigate(['pages', 'billing-detail', 'buy-plan']);
-        this.store.dispatch(this.companyActions.selectedPlan(plan));
+        this.store.dispatch(this.companyActions.selectedPlan(this.allSubscriptions[plan.uniqueName]));
+
     }
 
     public patchProfile(obj) {
@@ -367,6 +370,11 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
     private getPlans(activeCompany: any): void {
         this.authenticationService.getAllUserSubsciptionPlans(activeCompany?.countryV2?.alpha2CountryCode).pipe(takeUntil(this.destroyed$)).subscribe(res => {
             let subscriptions = res.body;
+
+            subscriptions.forEach(subscription => {
+                this.allSubscriptions[subscription.planDetails.uniqueName] = [];
+                this.allSubscriptions[subscription.planDetails.uniqueName] = subscription;
+            });
             this.inputData = [];
 
             // this.inputData.push({
@@ -379,26 +387,25 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
             //     desktop_mobile_app: ' <b>Desktop/Mobile App</b>',
             //     check_all_features: '<a class="check_all_plan_features">Check all features</a>'
             // });
-            
-            
-            
+
+
+
             let loop = 0;
             // let names = [];
             // let amount = [];
             // let durationUnit = [];
             let allPlans = uniqBy(subscriptions.map(subscription => { return subscription.planDetails }), "name");
             allPlans.forEach(plan => {
-            //     names['name'+loop] = plan?.name;
-            //     amount['amount'+loop] = plan?.amount;
-            //     durationUnit['durationunit'+loop] = plan?.durationUnit;
+                //     names['name'+loop] = plan?.name;
+                //     amount['amount'+loop] = plan?.amount;
+                //     durationUnit['durationunit'+loop] = plan?.durationUnit;
 
-            //     this.inputColumns.push('name'+loop);
+                //     this.inputColumns.push('name'+loop);
 
-            //     loop++;
+                //     loop++;
 
 
 
-                this.plansCount.push(loop);
                 this.inputData.push(plan);
                 loop++;
 
@@ -411,7 +418,7 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
                 // else if(plan.amount < activeCompany.subscription.planDetails.amount ) {
                 //     button = '<button class="all_feature_button" mat-raised-button color="primary">Downgrade Now</button>';
                 // }
-                
+
                 // this.inputData.push({
                 //     name: plan?.name + '<br>' + '<span class="susbcription-plan-amount">' + '₹' + plan?.amount + '</span>' + '/' + '<span class="susbcription-plan-years" >' + plan?.durationUnit + '</span>',
                 //     transactions: plan?.transactionLimit,
@@ -424,7 +431,6 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
                 // });
             });
 
-            this.plansContainerWidth = (this.plansCount?.length + 1) * 150;
 
             // for(let i = 0; i <= 7; i++) {
             //     if(i === 0) {
@@ -436,7 +442,7 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
             // }
 
             // this.inputData[0] = [];
-            
+
             // this.inputData[0]['benefits'] = allPlans.map(plan => { 
             //     return {
             //         name: plan.name,
@@ -452,8 +458,8 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
             // this.changeDetectionRef.detectChanges();
 
             //setTimeout(() => {
-                this.showLoader = false;
-                this.changeDetectionRef.detectChanges();
+            this.showLoader = false;
+            this.changeDetectionRef.detectChanges();
             //}, 500);
         });
     }
