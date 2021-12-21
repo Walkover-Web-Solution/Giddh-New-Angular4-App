@@ -6,7 +6,7 @@
         display: flex;
         flex-direction: row;
         align-items: center;
-        background-color: $white;
+        background-color: var(--popup-background-color);
         flex-wrap: wrap !important;
         width: 100% !important;
         max-width: 580px;
@@ -17,6 +17,7 @@
             font-weight: normal;
             line-height: initial;
             width: 95%;
+            background-color: var(--popup-background-color);
         }
         .icon-search-icon {
             position: absolute;
@@ -56,7 +57,7 @@
 }
 
 .universal-data-list-wrapper {
-    background-color: $white;
+    background-color: var(--popup-background-color);
     overflow: auto;
     display: none;
     box-sizing: border-box;
@@ -124,7 +125,7 @@
             .item-details {
                 position: relative;
                 font-size: 14px;
-                color: $night-rider;
+                color: var(--popup-list-head-text-color);
                 text-transform: capitalize;
                 margin-left: 25px;
                 padding: 5px 0;
@@ -157,7 +158,7 @@
             }
             // hover effect
             &.selected {
-                background-color: $chetwode-blue;
+                background-color: var(--popup-list-hover-color);
                 .item-details {
                     color: $white;
                     small {
@@ -182,7 +183,17 @@
     padding: 10px;
     font-size: 20px;
     cursor: pointer;
+    color: var(--popup-list-input-text-color);
 }
+
+::ng-deep {
+    .jumper-results {
+        .block {
+            color: var(--popup-list-input-text-color);
+        }
+    }
+}
+
 /*responsive*/
 @media (max-width: 767px) {
     :host {

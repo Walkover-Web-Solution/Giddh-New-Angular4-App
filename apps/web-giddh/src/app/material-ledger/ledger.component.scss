@@ -316,7 +316,7 @@ table.ledger-footer-1 td[class*="col-"] {
     float: left;
     width: 100%;
     margin-bottom: 16px;
-    background: $white;
+    background: var(--common-background-color-for-all-components);
     box-shadow: 0 0 6px $black-russian;
 }
 .Width600 {
@@ -625,6 +625,7 @@ sh-select:focus {
     min-width: 180px !important;
     border-radius: 30px;
     box-sizing: content-box !important;
+    color: var(--main-content-datepicker) !important;
     &:focus {
         border-color: $chetwode-blue;
     }

@@ -56,14 +56,14 @@ $input-height: 3rem !default;
 
 .md-drppicker {
     font-family: Roboto, sans-serif;
-    color: $md-drppicker-color;
+    color: var(--datepicker-month-name-color);
     background-color: $md-drppicker-bg-color;
     border-radius: 4px;
     width: $md-drppicker-width;
     display: flex;
     margin-top: 0;
     font-size: 14px;
-    background-color: $white;
+    background-color: var(--datepicker-background-color);
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.16), 0 2px 8px 0 rgba(0, 0, 0, 0.12);
     &.double {
         width: 100%;
@@ -212,10 +212,10 @@ $input-height: 3rem !default;
         /* new calendar */
     }
     .calendar-table {
-        border: $md-drppicker-calendar-border-size solid $md-drppicker-calendar-border-color;
+        border: $md-drppicker-calendar-border-size solid var(--datepicker-background-color);
         padding: $md-drppicker-calendar-margin;
         border-radius: $md-drppicker-calendar-border-radius;
-        background-color: $md-drppicker-calendar-bg-color;
+        background-color: var(--datepicker-background-color);
     }
 
     table,
@@ -366,8 +366,9 @@ $input-height: 3rem !default;
     }
     td,
     .td-div {
-        color: $midnight-blue;
+        color: var(--datepicker-date-color);
         margin: 0em 0;
+        background-color: var(--datepicker-background-color) !important;
         &.off {
             &,
             &.in-range,
@@ -641,7 +642,7 @@ $input-height: 3rem !default;
         display: flex;
         flex-direction: column;
         border-left: 1px solid $gainsboro;
-        background-color: $white-smoke;
+        background-color: var(--datepicker-background-color);
         height: 490px !important;
         .range-container {
             ul {
@@ -662,7 +663,7 @@ $input-height: 3rem !default;
                         text-align: left;
                         cursor: pointer;
                         font-size: 14px;
-                        color: $night-rider;
+                        color: var(--datepicker-rightside-list-text-color);
                         border-left: 3px solid transparent !important;
                         .available.prev {
                             transform: rotate(180deg);
@@ -692,10 +693,10 @@ $input-height: 3rem !default;
                             }
                         }
                         &.active {
-                            background-color: $gainsboro !important;
-                            border-left: 3px solid $midnight-blue !important;
+                            background-color: var(--datepicker-rightside-list-secondary-color-text-hover) !important;
+                            border-left: 3px solid var(--datepicker-selected-month-color) !important;
                             font-family: "opensans-semibold";
-                            color: $midnight-blue;
+                            color: var(--datepicker-selected-month-color);
                         }
                         &[disabled] {
                             opacity: 0.3;
@@ -709,7 +710,7 @@ $input-height: 3rem !default;
                     }
                 }
                 li:hover {
-                    background-color: $fog;
+                    background-color: var(--datepicker-rightside-list-primary-color-text-hover);
                 }
             }
             ul.range-list {
@@ -774,7 +775,7 @@ $input-height: 3rem !default;
         text-align: center;
         margin: 0;
         padding-right: 0;
-        background-color: $white;
+        background-color: var(--datepicker-background-color);
         padding-top: 20px;
         padding-bottom: 20px;
         z-index: 999 !important;
@@ -1348,7 +1349,7 @@ td span {
                 position: sticky;
                 top: 0;
                 z-index: 1;
-                background-color: $white;
+                background-color: var(--datepicker-background-color);
                 .sticky-header {
                     width: calc(100% - 3px) !important;
                     th.days-td {
@@ -1400,6 +1401,8 @@ td span {
                             padding: 0;
                             border: none;
                             border-bottom: none;
+                            color: var(--datepicker-unselected-month-color);
+                            background-color: var(--datepicker-background-color);
                             &.activeSelectedDate {
                                 border-bottom: none;
                             }
@@ -1412,12 +1415,15 @@ td span {
                             display: flex;
                             align-items: flex-start;
                             align-items: center;
-                            color: $gray;
+                            color: var(--datepicker-input-label-color);
+                            cursor: pointer;
                         }
                         &.focused-date {
-                            border-bottom-color: $midnight-blue;
+                            border-bottom-color: var(--datepicker-selected-month-color);
+                            cursor: pointer;
                             input {
-                                color: $midnight-blue;
+                                color: var(--datepicker-selected-month-color);
+                                cursor: pointer;
                             }
                         }
                     }
@@ -1487,6 +1493,7 @@ td span {
                 text-align: left;
                 cursor: pointer;
                 font-size: 12px;
+                color: var(--datepicker-rightside-list-text-color);
                 .drop-down {
                     position: absolute;
                     z-index: 1017;
@@ -1539,7 +1546,7 @@ td span {
             }
         }
         li:hover {
-            background-color: $white-smoke;
+            background-color: var(--datepicker-rightside-list-secondary-color-text-hover);
         }
     }
 }
