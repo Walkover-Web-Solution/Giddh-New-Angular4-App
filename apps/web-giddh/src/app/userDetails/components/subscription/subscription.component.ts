@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, Input, OnDestroy, ChangeDetectorRef, ChangeDetectionStrategy, SimpleChanges, OnChanges, TemplateRef } from "@angular/core";
+import { Component, OnInit, ViewChild, Input, OnDestroy, ChangeDetectorRef, ChangeDetectionStrategy, TemplateRef } from "@angular/core";
 import { BreakpointObserver, BreakpointState } from "@angular/cdk/layout";
 import { MatAccordion } from "@angular/material/expansion";
 import { MatDialog } from "@angular/material/dialog";
@@ -246,8 +246,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
      * @memberof SubscriptionComponent
      */
     public getCompanies(): void {
-        console.log("loader will true here");
-
+       
         this.showLoader = true;
 
         //This service will use for get subscribed companies
