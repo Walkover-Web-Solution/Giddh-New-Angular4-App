@@ -7,6 +7,9 @@ body.dark-theme {
     // Common variable to set background color of components
     --common-background-color-for-all-components: #1d2229;
 
+    // Filter Color Variables
+    --filter-hover-background-color: #5eaf80;
+
     // Button Color Variables
     --primary-button-text-color: #ffffff;
     --primary-button-background-color: #222d3e;
@@ -17,10 +20,37 @@ body.dark-theme {
     --tertiary-button-background-color: transparent;
     --tertiary-button-background-color-hover: #e7e9eb30;
 
+    // Dropdown Color Variables
+    --dropdown-list-color: #ffffff;
+    --dropdown-list-hover-text-color: #5eaf80;
+    --dropdown-background-color: #1d2229;
+    --dropdown-list-hover-background-color: #212529;
+
     // Search Bar Color Variables
     --sidebar-search-bar-text-color: #999da0;
     --sidebar-search-bar-background-color: #303843;
     --active-search-bar-border-color: #5eaf80;
+    --company-profile-input-label-color: #ffffff;
+
+    // Datepicker Color Variables
+    --datepicker-month-name-color: #ffffff;
+    --datepicker-date-color: #ffffff;
+    --datepicker-date-icon-color: #ffffff;
+    --datepicker-rightside-list-text-color: #ffffff;
+    --datepicker-rightside-list-primary-color-text-hover: #00000033;
+    --datepicker-rightside-list-secondary-color-text-hover: #00000033;
+    --datepicker-input-label-color: #ffffff;
+    --datepicker-selected-month-color: #78af8f;
+    --datepicker-unselected-month-color: #ffffff;
+    --datepicker-background-color: #1d2229;
+
+    // Popup Color Variables
+    --popup-list-input-text-color: #ffffff;
+    --popup-list-head-text-color: #ffffff;
+    --popup-list-hover-color: #78af8f;
+    --popup-background-color: #1d2229;
+    --popup-footer-text-color: #ffffff;
+    --popup-footer-background-color: #1d2229;
 
     // Tabs Color Variables
     --tab-primary-background-color: #1d2229;
@@ -47,7 +77,22 @@ body.dark-theme {
     --pagination--button-hover-background-color: #303843;
 
     // Header Color Variables
-    --primary-header-color: #1a2228;
+    --primary-header-background-color: #1a2228;
+
+    // Master Page Color Variables
+    --master-page-input-clear-text-color: #5eaf80;
+    --master-page-input-no-result-text-color: #ffffff;
+    --master-page-tab-background-color: #1d2229;
+    --master-page-tab-primary-color: #ffffff;
+    --master-page-tab-secondary-color: #e7e9eb;
+    --master-page-text-primary-hover-color: #5eaf80;
+    --master-page-text-secondary-hover-color: #5eaf80;
+    --master-page-sidebar-active-list-color: #5eaf80;
+    --master-page-input-label-color: #ffffff;
+    --master-page-left-sidebar-primary-background-color: #1d2229;
+    --master-page-left-sidebar-secondary-background-color: #1d2229;
+    --master-page-main-content-primary-background-color: #1d2229;
+    --master-page-main-content-secondary-background-color: #1d2229;
 
     // Sidebar Color Variables
     --sidebar-content-text-color: #e7e9eb;
@@ -71,16 +116,22 @@ body.dark-theme {
     // Common Chat Button Color Variable
     --common-chat-button-background-color: #1d2229;
 
+    // Table Color Variables
+    --table-heading-primary-color: #ffffff;
+    --table-heading-secondary-color: #ffffff;
+    --table-content-primary-color: #ffffff;
+    --table-content-secondary-color: #ffffff;
+    --table-content-tertiary-color: #ffffff;
+    --table-content-quaternary-color: #ffffff;
+    --table-row-hover-background-color: #212529;
+    --table-heading-primary-background-color: #1d2229;
+    --table-body-primary-background-color: #1d2229;
+    --table-datepicker-content-color: #ffffff;
+    --table-datepicker-header-background-color: #5eaf80;
+    --table-datepicker-body-background-color: #1d2229;
+
     /*
         COLORS BELOW ARE NOT APPLIED YET
-
-        // Table Color Variables
-        --table-heading-primary-color: #1c1c1c;
-        --table-heading-secondary-color: #1a237e;
-        --table-content-primary-color: #1c1c1c;
-        --table-content-secondary-color: #999999;
-        --table-content-tertiary-color: #212528;
-        --table-content-quaternary-color: #6a6c85;
 
         // Total Details Box above table Color Variables
         --total-details-heading-color: #6a6c85;

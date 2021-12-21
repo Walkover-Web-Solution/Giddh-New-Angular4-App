@@ -338,7 +338,7 @@ ul.select-action-dropdown {
     justify-content: center;
     align-items: center;
     border-right: 1px solid $gainsboro;
-    color: $nobel;
+    color: var(--datepicker-date-icon-color) !important;
 }
 
 .advance-icon {
@@ -410,7 +410,7 @@ button.btn.btn-default.ladda-button {
 }
 
 .btn-link-2 {
-    color: $nero;
+    color: var(--table-content-primary-color);
 }
 
 .input-wrapper {
@@ -507,7 +507,7 @@ span.icon-export-icon {
     tbody {
         tr {
             &:hover {
-                background: $solitude;
+                background: var(--table-row-hover-background-color) !important;
                 td {
                     background: transparent !important;
                 }
@@ -522,6 +522,7 @@ span.icon-export-icon {
             }
             td {
                 background: transparent !important;
+                background-color: var(--table-body-primary-background-color) !important;
             }
         }
     }
