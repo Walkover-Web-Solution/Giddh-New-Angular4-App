@@ -5,7 +5,7 @@
     overflow-y: auto;
     .import-card {
         padding: 15px;
-        background-color: $white;
+        background-color: var(--common-background-color-for-all-components);
         box-shadow: 0px 3px 7px $black-russian;
         border-radius: 2px;
         position: relative;

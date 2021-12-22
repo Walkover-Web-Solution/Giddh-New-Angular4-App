@@ -13,16 +13,25 @@ body.default-theme {
     --common-quaternary-text-color: #000000cc;
     --common-quinary-text-color: #333333;
     --common-senary-text-color: #1a237e;
+    --common-septenary-text-color: #000000;
+    --common-octonary-text-color: #019ce1;
     --common-background-color-for-all-components: #ffffff;
     --common-secondary-background-color-for-all-components: #f4f5f8;
+    --common-tertiary-background-color-for-all-components: #f7f8fa;
 
     // Filter Color Variables
     --filter-hover-background-color: #5b64c9;
 
-    // Account Card Color Variables
+    // Card Color Variables
     --account-card-primary-text-color: #00000099;
     --account-card-background-color: #f4f5f8;
     --account-card-background-color-hover: #ffffff;
+    --upgrade-plan-primary-color: #01a9f4;
+    --upgrade-plan-primary-background-color: #eeeff9;
+    --upgrade-plan-secondary-background-color: #ffffff;
+    --upgrade-plan-card-primary-background-color-hover: #eeeff9;
+    --upgrade-plan-card-primary-border-color-hover: #1a237e;
+    --csv-or-excel-file-card-text-color: #2680eb;
 
     // Button Color Variables
     --primary-button-text-color: #2831b2;
@@ -39,6 +48,8 @@ body.default-theme {
     --dropdown-list-color: #1c1c1c;
     --dropdown-list-secondary-color: #333333;
     --dropdown-list-tertiary-color: #484848;
+    --dropdown-list-quaternary-color: #212529;
+    --dropdown-list-quinary-color: #000000;
     --dropdown-list-icon-color: #212529;
     --dropdown-list-hover-text-color: #5b64c9;
     --dropdown-primary-background-color: #ffffff;
@@ -54,6 +65,8 @@ body.default-theme {
     --discount-search-bar-background-color: #ffffff;
 
     // Datepicker Color Variables
+    --datepicker-title-text-color: #999da0;
+    --datepicker-title-background-color: #eeeeee;
     --datepicker-header-color: #5b64c9;
     --datepicker-month-name-color: #1c1c1c;
     --datepicker-date-color: #1a237e;
@@ -73,8 +86,10 @@ body.default-theme {
     --popup-list-head-text-color: #333333;
     --popup-list-hover-color: #5b64c9;
     --popup-background-color: #ffffff;
+    --popup-secondary-background-color: #fff8eb;
     --popup-footer-text-color: #000000cc;
     --popup-footer-background-color: #f5f8f9;
+    --popup-list-all-features-text-color: #808080;
 
     // Tabs Color Variables
     --tab-primary-background-color: #ffffff;
@@ -100,8 +115,9 @@ body.default-theme {
     --pagination-active-button-color: #ffffff;
     --pagination--button-hover-background-color: #d9d9d9;
 
-    // Header Color Variables
+    // Main Page Color Variables
     --primary-header-background-color: #1a237e;
+    --primary-footer-background-color: #cccccc;
 
     // Ledger Heading Color Variable
     --ledger-heading-color: #313a97;
@@ -149,6 +165,7 @@ body.default-theme {
     --table-content-tertiary-color: #212528;
     --table-content-quaternary-color: #6a6c85;
     --table-content-quinary-color: #212529;
+    --table-content-senary-color: #484848;
     --table-row-hover-primary-background-color: #f0f5ff;
     --table-row-hover-secondary-background-color: #f7f8fa;
     --table-heading-primary-background-color: #ffffff;
@@ -171,6 +188,9 @@ body.default-theme {
 
     // Right Side Popup Color Variables
     --right-side-popup-box-shadow-color: #00000026;
+
+    // Onboarding Contact info color variable
+    --onboard-contact-info-text-color: #343a40;
 
     // Common Color Variables
     --danger-color: #ff0000;

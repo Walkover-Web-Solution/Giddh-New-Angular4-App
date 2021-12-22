@@ -7,7 +7,7 @@
     margin-bottom: 30px;
     li {
         list-style-type: none;
-        color: $gray;
+        color: var(--popup-list-all-features-text-color);
         font-size: 12px;
         padding: 3px 0;
         line-height: 20px;
@@ -33,18 +33,18 @@
 }
 .money-back-guarantee {
     font-size: 12px;
-    background-color: $floral-white;
+    background-color: var(--popup-secondary-background-color);
     color: $cascade;
     padding-left: 20px;
     padding-right: 20px;
 }
 .all-feature-modal {
     p {
-        color: $midnight-blue;
+        color: var(--common-senary-text-color);
         margin-bottom: 10px;
         i {
             font-size: 21px;
-            color: $midnight-blue;
+            color: var(--common-senary-text-color);
         }
     }
     [class*="col-"] {

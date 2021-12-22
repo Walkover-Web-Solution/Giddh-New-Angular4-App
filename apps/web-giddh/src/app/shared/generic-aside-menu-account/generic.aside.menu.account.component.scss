@@ -39,7 +39,7 @@
     padding: 0 15px;
 }
 .aside-pane-form {
-    background-color: $white;
+    background-color: var(--common-background-color-for-all-components);
     box-shadow: 0px 3px 6px $black-russian;
     padding: 15px 15px;
     height: calc(100vh - 90px);

@@ -43,7 +43,7 @@ span.month-dropdown {
 }
 
 .due-amount {
-    color: $nero;
+    color: var(--common-primary-text-color);
     font-size: 16px;
     margin: 0;
     padding: 0;

@@ -83,7 +83,8 @@
     border-right: 0;
     padding: 11px 10px 10px 10px;
     width: 100%;
-    background: $lavender;
+    color: var(--dropdown-list-icon-color);
+    background: var(--dropdown-secondary-background-color);
 }
 
 .account-detail-custom-title {
@@ -104,13 +105,13 @@
 }
 
 ul.list-unstyled li a {
-    color: $black;
+    color: var(--dropdown-list-quinary-color);
 }
 
 .p-modal-tooltip {
     display: block;
     position: absolute;
-    background-color: $white;
+    background-color: var(--dropdown-primary-background-color);
     z-index: 1000;
     width: 257px;
     border: 1px solid $pink-swan;
@@ -140,8 +141,8 @@ ul.list-unstyled li a {
         margin-top: 0 !important;
     }
     a:hover {
-        color: $chetwode-blue !important;
-        background-color: $lavender;
+        color: var(--dropdown-list-hover-text-color) !important;
+        background-color: var(--dropdown-list-hover-background-color);
     }
 }
 
@@ -411,30 +412,6 @@ button.btn.btn-filter span.icon-cross {
         font-size: 16px;
     }
 }
-
-// ::ng-deep {
-// .total-details-box h5{
-//     color: var(--total-details-heading-color);
-// }
-
-// .sales-purchase{
-//     background-color: var(--total-details-secondary-background-color);
-//     h5{
-//         div{
-//             color: red !important;
-//         }
-//     }
-// }
-
-// .total-details-box h5 .number-total:nth-child(1),
-// .total-details-box h5 .number-total:nth-child(4){
-//     color: var(--total-details-content-primary-color);
-// }
-
-// .total-details-box:nth-child(1){
-//     background-color: var(--total-details-primary-background-color) !important;
-// }
-// }
 
 /*responsive*/
 @media (max-width: 1024px) {

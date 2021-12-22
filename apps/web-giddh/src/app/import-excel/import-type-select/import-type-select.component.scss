@@ -44,11 +44,12 @@
     display: block;
     padding: 30px 40px;
     width: 100%;
+    background-color: var(--common-background-color-for-all-components);
 }
 .text-link-2 {
-    color: $primary !important;
+    color: var(--csv-or-excel-file-card-text-color) !important;
     &:hover {
-        color: $primary !important;
+        color: var(--csv-or-excel-file-card-text-color) !important;
     }
 }
 @media (max-width: 991px) {
