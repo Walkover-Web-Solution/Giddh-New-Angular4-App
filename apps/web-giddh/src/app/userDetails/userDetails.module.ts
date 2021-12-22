@@ -41,6 +41,7 @@ import {MatSliderModule} from '@angular/material/slider';
 import { MatCardModule } from '@angular/material/card';
 import { SafePipeModule } from '../shared/helpers/pipes/safePipe/safePipe.module';
 import {MatIconModule} from '@angular/material/icon';
+import { GiddhPageLoaderModule } from '../shared/giddh-page-loader/giddh-page-loader.module';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: true
@@ -94,7 +95,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         MatSliderModule,
         MatCardModule,
         SafePipeModule,
-        MatIconModule
+        MatIconModule,
+        GiddhPageLoaderModule
     ],
     providers: [
 

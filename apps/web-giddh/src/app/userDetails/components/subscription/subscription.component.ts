@@ -1,11 +1,10 @@
-import { Component, OnInit, ViewChild, Input, OnDestroy, ChangeDetectorRef, ChangeDetectionStrategy, TemplateRef } from "@angular/core";
+import { Component, OnInit, ViewChild, Input, OnDestroy, ChangeDetectorRef, ChangeDetectionStrategy } from "@angular/core";
 import { BreakpointObserver, BreakpointState } from "@angular/cdk/layout";
 import { MatAccordion } from "@angular/material/expansion";
 import { MatDialog } from "@angular/material/dialog";
 import { SubscriptionsActions } from '../../../actions/userSubscriptions/subscriptions.action';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { SubscriptionsUser, UserDetails } from "../../../models/api-models/Subscriptions";
 import { Observable, ReplaySubject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
@@ -19,7 +18,6 @@ import { CreateCompanyUsersPlan, SubscriptionRequest } from "../../../models/api
 import { CompanyActions } from "../../../actions/company.actions";
 import { SettingsProfileActions } from "../../../actions/settings/profile/settings.profile.action";
 import { GeneralService } from "../../../services/general.service";
-import { DeclareFunctionStmt } from "@angular/compiler";
 
 
 /** This interface will use for monthly data */
@@ -42,9 +40,7 @@ const MONTHLY_DATA: MonthlyData[] = [
     styleUrls: ['./subscription.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-
 export class SubscriptionComponent implements OnInit, OnDestroy {
-
     /** This will hold local JSON data */
     @Input() public localeData: any = {};
     /** This will hold common JSON data */
@@ -53,21 +49,18 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
     @ViewChild(MatAccordion) accordion: MatAccordion;
     /** This will use for move company in to another company  */
     @ViewChild("moveCompany", { static: false }) public moveCompany: any;
-    /** This will change the search bar height dynamically */
-    public menuBarHeight: Number = 40;
-    public menuOneWidth: Number;
-    public menuTwoWidth: Number;
-    /** This will change the rowspan of main content and oak plan list dynamically */
+    /** This will change the search bar width dynamically */
+    public menuOneWidth: Number = 4;
+    public menuTwoWidth: Number = 12;
+    /** This will change the rowspan of main content and plan list dynamically */
     public sideBarBoxLength: Number = 15;
-    public sideBarBoxWidth: Number;
-    public mainContentWidth: Number;
-    /** This will change the height of oak plan list dynamically */
+    public sideBarBoxWidth: Number = 4;
+    public mainContentWidth: Number = 12;
+    /** This will change the height of plan list dynamically */
     public rowLength: Number = 180;
     /** This will change the length of overall summary box dynamically */
     public overallSummaryTopRow: Number = 6;
     public overallSummaryBottomRow: Number = 4;
-    /* Object of bootstrap modal */
-    public modalRef: BsModalRef;
     /* This will hold list of subscriptions */
     public subscriptions: SubscriptionsUser[] = [];
     /** Observable to listen for subscriptions */
@@ -103,7 +96,6 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
     };
     /** This will hold the login user */
     public loggedInUser: UserDetails;
-
     /** This will store the static data in expiry list */
     public expiringList: any[] = [
         { name: '7 Days', value: 7 },
@@ -112,7 +104,6 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
         { name: '6 Months', value: 180 },
         { name: '1 Year', value: 365 }
     ];
-
     /** This will store the static data in transaction balance list  */
     public transactionBalanceList: any[] = [
         { name: 'Less than 1,000', value: 1000 },
@@ -120,7 +111,6 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
         { name: 'Less than 10,000', value: 10000 },
         { name: 'Less than 50,000', value: 50000 }
     ];
-
     /** This will store the static data in transaction balance list  */
     public subscriptionsDummy: any[] = [
         { name: 'Oak Plan', remainingTransactions: 1000, totalCompanies: 2, startedAt: '22 Dec,2020', expiry: '6 Jan,2021' },
@@ -129,23 +119,19 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
         { name: 'Test Plan', remainingTransactions: 50000, totalCompanies: 3, startedAt: '22 Dec,2020', expiry: '6 Jan,2021' },
         { name: 'Demo Plan', remainingTransactions: 50000, totalCompanies: 4, startedAt: '22 Dec,2020', expiry: '6 Jan,2021' }
     ];
-
     /** This will displays the columns of consumed  */
-    displayedColumns: string[] = ['consumed', 'balance', 'dues'];
+    public displayedColumns: string[] = ['consumed', 'balance', 'dues'];
     /** This will use for static data for consumed */
-    dataSource = MONTHLY_DATA;
+    public dataSource = MONTHLY_DATA;
     /** This will use for expand collapse for companies */
     public isExpand: boolean = false;
 
-
     constructor(
         public dialog: MatDialog,
-        public breakpointObserver:
-            BreakpointObserver,
+        public breakpointObserver: BreakpointObserver,
         private subscriptionsActions: SubscriptionsActions,
         private store: Store<AppState>,
         private subscriptionService: SubscriptionsService,
-        private modalService: BsModalService,
         private activeRoute: ActivatedRoute,
         private changeDetectionRef: ChangeDetectorRef,
         private route: Router,
@@ -156,8 +142,12 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
         this.subscriptions$ = this.store.pipe(select(state => state.subscriptions.subscriptions), takeUntil(this.destroyed$));
     }
 
+    /**
+     * Initializes the component
+     *
+     * @memberof SubscriptionComponent
+     */
     public ngOnInit(): void {
-
         /** This will use for by default plan div hide */
         this.isPlanShow = false;
 
@@ -169,19 +159,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
         /** This will hit the api of get companies */
         this.getCompanies();
 
-        /** This subscription subscribes and get the response */
-        this.subscriptions$.subscribe(response => {
-            if (response) {
-                this.subscriptions = response.map(subscription => {
-                    subscription.remainingDays = Number(moment(subscription.expiry, GIDDH_DATE_FORMAT).diff(moment(), 'days'));
-                    subscription.startedAt = moment(subscription.startedAt, GIDDH_DATE_FORMAT).format("D MMM, y");
-                    subscription.expiry = moment(subscription.expiry, GIDDH_DATE_FORMAT).format("D MMM, y");
-                    return subscription;
-                });
-                this.plansList = uniqBy(response.map(subscription => { return { name: subscription.planDetails?.name, uniqueName: subscription.planDetails?.uniqueName } }), "uniqueName");
-                this.changeDetectionRef.detectChanges();
-            }
-        });
+        this.filterSubscriptions();
 
         /** listen for search field value changes */
         this.searchSubscription.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(() => {
@@ -198,26 +176,20 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
         /** This will use for image format */
         this.imgPath = (isElectron || isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
 
-
         /** This will use for responsive */
         this.breakpointObserver.observe([
             '(min-width: 768px)',
             '(min-width: 1024px)',
             '(min-width: 1536px)'
         ]).subscribe((state: BreakpointState) => {
-
             if (state.breakpoints['(min-width: 768px)']) {
                 this.rowLength = 120;
-                //         this.menuBarHeight = 5.5;
-                //         this.sideBarBoxLength = 13;
                 this.sideBarBoxWidth = 5;
                 this.mainContentWidth = 11;
                 this.menuOneWidth = 5;
                 this.menuTwoWidth = 11;
-            }
-            if (state.breakpoints['(min-width: 1024px)']) {
+            } else if (state.breakpoints['(min-width: 1024px)']) {
                 this.rowLength = 120;
-                this.menuBarHeight = 40;
                 this.sideBarBoxLength = 15;
                 this.overallSummaryTopRow = 5;
                 this.overallSummaryBottomRow = 3;
@@ -225,10 +197,8 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
                 this.mainContentWidth = 12;
                 this.menuOneWidth = 4;
                 this.menuTwoWidth = 12;
-            }
-            if (state.breakpoints['(min-width: 1536px)']) {
+            } else if (state.breakpoints['(min-width: 1536px)']) {
                 this.rowLength = 150;
-                this.menuBarHeight = 40;
                 this.sideBarBoxLength = 15;
                 this.overallSummaryTopRow = 6;
                 this.overallSummaryBottomRow = 4;
@@ -246,7 +216,6 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
      * @memberof SubscriptionComponent
      */
     public getCompanies(): void {
-       
         this.showLoader = true;
 
         //This service will use for get subscribed companies
@@ -254,6 +223,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
             this.showLoader = false;
             if (res && res.status === "success") {
                 if (!res.body || !res.body[0]) {
+                    this.isPlanShow = true;
                 } else {
                     this.store.dispatch(this.subscriptionsActions.SubscribedCompaniesResponse(res));
                 }
@@ -267,7 +237,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
    * @param {*} event
    * @memberof SubscriptionsComponent
    */
-    public addOrMoveCompanyCallback(event): void {
+    public addOrMoveCompanyCallback(event: boolean): void {
         if (event === true) {
             this.getCompanies();
         }
@@ -276,11 +246,10 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
     /**
      *This function will open the move company popup
      *
-     * @param {TemplateRef<any>} moveCompany
      * @param {*} company
      * @memberof SubscriptionComponent
      */
-    public openModalMove(moveCompany: TemplateRef<any>, company: any, event: any) {
+    public openModalMove(company: any, event: any) {
         event.preventDefault();
         event.stopPropagation();
         this.selectedCompany = company;
@@ -315,9 +284,16 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
     public filterSubscriptions(): void {
         let subscriptions = [];
         this.subscriptions = [];
+
         this.subscriptions$.subscribe(response => {
-            if (response) {
+            if (response?.length) {
                 response.forEach(subscription => {
+                    subscription.remainingDays = Number(moment(subscription.expiry, GIDDH_DATE_FORMAT).diff(moment(), 'days'));
+                    if(moment(subscription.startedAt, GIDDH_DATE_FORMAT).format("D MMM, y") !== "Invalid date") {
+                        subscription.startedAt = moment(subscription.startedAt, GIDDH_DATE_FORMAT).format("D MMM, y");
+                        subscription.expiry = moment(subscription.expiry, GIDDH_DATE_FORMAT).format("D MMM, y");
+                    }
+
                     let flag = true;
                     if (
                         (this.searchSubscription?.value && subscription?.planDetails?.name?.toLowerCase()?.indexOf(this.searchSubscription?.value?.toLowerCase()) === -1) ||
@@ -331,6 +307,9 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
                         subscriptions.push(subscription);
                     }
                 });
+
+                this.plansList = uniqBy(response.map(subscription => { return { name: subscription.planDetails?.name, uniqueName: subscription.planDetails?.uniqueName } }), "uniqueName");
+
                 this.subscriptions = subscriptions;
                 this.changeDetectionRef.detectChanges();
             }
@@ -356,7 +335,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
      * @param {*} event
      * @memberof SubscriptionComponent
      */
-    public isSubscriptionPlanShow(event: any) {
+    public isSubscriptionPlanShow(event: any): void {
         if (event) {
             this.isPlanShow = !event;
         }
