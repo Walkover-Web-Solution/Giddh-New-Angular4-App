@@ -23,7 +23,7 @@
     word-break: break-word;
     height: auto !important;
     &:hover {
-        background: $lavender;
+        background: var(--dropdown-list-hover-background-color);
     }
 }
 .item:hover a {
@@ -39,7 +39,7 @@
     background: $lavender !important;
 }
 .item.hilighted a {
-    color: $chetwode-blue !important;
+    color: var(--dropdown-list-hover-text-color) !important;
 }
 
 .item > a {
@@ -47,8 +47,8 @@
     font-size: 14px;
 }
 .item > a:hover {
-    color: $nero !important;
-    background: $lavender !important;
+    color: var(--dropdown-list-color) !important;
+    background: var(--dropdown-list-hover-background-color) !important;
 }
 
 .no-result-link > a {

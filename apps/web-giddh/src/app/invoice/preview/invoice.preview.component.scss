@@ -296,15 +296,15 @@ ul.select-action-dropdown {
 }
 
 .select-action-dropdown a {
-    color: $night-rider;
+    color: var(--dropdown-list-secondary-color);
     font-size: 14px;
     padding: 5px 10px;
     display: block;
 }
 
 .select-action-dropdown a:hover {
-    color: $chetwode-blue !important;
-    background: $lavender !important;
+    color: var(--dropdown-list-hover-text-color) !important;
+    background: var(--dropdown-list-hover-background-color) !important;
 }
 
 .invoice-container {
@@ -511,7 +511,7 @@ span.icon-export-icon {
     tbody {
         tr {
             &:hover {
-                background: var(--table-row-hover-background-color) !important;
+                background: var(--table-row-hover-primary-background-color) !important;
                 td {
                     background: transparent !important;
                 }
