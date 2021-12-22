@@ -160,9 +160,7 @@
                 class="grid-title-list list-grid-title"
                 *ngFor="let plan of inputData"
                 [ngClass]="{ 'skelton-common-class': showLoader, 'grid-title-list-changes': showLoader }"
-            >
-                <mat-icon>&nbsp;</mat-icon>
-            </div>
+            ></div>
         </div>
         <div class="grid-list-div-changes list-grid">
             <div
@@ -175,9 +173,7 @@
                 class="grid-title-list list-grid-title"
                 *ngFor="let plan of inputData"
                 [ngClass]="{ 'skelton-common-class': showLoader, 'grid-title-list-changes': showLoader }"
-            >
-                <mat-icon>&nbsp;</mat-icon>
-            </div>
+            ></div>
         </div>
         <div class="grid-list-div-changes list-grid">
             <div
@@ -190,9 +186,7 @@
                 class="grid-title-list list-grid-title"
                 *ngFor="let plan of inputData"
                 [ngClass]="{ 'skelton-common-class': showLoader, 'grid-title-list-changes': showLoader }"
-            >
-                <mat-icon>&nbsp;</mat-icon>
-            </div>
+            ></div>
         </div>
         <div class="grid-list-div-changes list-grid">
             <div
@@ -212,40 +206,6 @@
         {{ localeData?.subscription?.extra_addons }}:<span *ngIf="!showLoader" class="extra-addons-value">
             {{ localeData?.subscription?.per_transaction }}</span
         >
-
-        <!-- <table mat-table class="plan-table-layout" [dataSource]="inputData"> -->
-        <!-- <ng-container [matColumnDef]="column" *ngFor="let column of inputData; let i = index">
-                <th class="plan-th" mat-header-cell *matHeaderCellDef>&nbsp;</th>
-                <td
-                    [ngClass]="{
-                        'plan-td-changes': showLoader,
-                        'mat-table-sticky': i === 0,
-                        'plan-border-bottom': i === 0
-                    }"
-                    class="plan-td"
-                    mat-cell
-                    sticky
-                    *matCellDef="let element"
-                >
-                    <div [ngClass]="{ 'whole-plan-span': showLoader, 'skelton-common-class': showLoader }">
-                        <span class="hide-plan-td" *ngIf="!showLoader" [innerHTML]="element[column] | safe"> </span>
-                    </div>
-                </td>
-            </ng-container> -->
-        <!-- <ng-container *ngFor="let column of inputColumns; let i = index;" [matColumnDef]="column">
-                <th mat-header-cell *matHeaderCellDef>&nbsp;</th>
-                <td mat-cell *matCellDef="let element;"> {{element['benefits'][j]["name"]}} <br> {{ element['benefits'][j]["amount"] }}/{{ element['benefits'][j]["durationunit"] }} </td>
-            </ng-container>
-            <tr class="plan-tr" mat-header-row *matHeaderRowDef="inputColumns"></tr>
-            <tr
-                [ngClass]="{
-                    'plan-top-row': i === 0
-                }"
-                class="plan-row-columns"
-                mat-row
-                *matRowDef="let element; columns: inputColumns; let i = index"
-            ></tr>
-        </table> -->
     </p>
     <!-- extra addons :  | 2000 per branch | 1000 per warehous -->
 

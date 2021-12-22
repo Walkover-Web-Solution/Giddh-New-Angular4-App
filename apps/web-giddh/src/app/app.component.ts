@@ -21,7 +21,6 @@ import { LoaderService } from './loader/loader.service';
 import { CompanyActions } from './actions/company.actions';
 import { OrganizationType } from './models/user-login-state';
 import { CommonActions } from './actions/common.actions';
-import { MatIcon } from '@angular/material/icon';
 
 /**
  * App Component
@@ -63,8 +62,6 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         this.isProdMode = PRODUCTION_ENV;
         this.isElectron = isElectron;
         this.isCordova = isCordova();
-        const matIconElement = createCustomElement(MatIcon, { injector: this.injector });
-        customElements.define('mat-icon', matIconElement);
 
         this.store.pipe(select(s => s.session), takeUntil(this.destroyed$)).subscribe(ss => {
             if (ss.user && ss.user.session && ss.user.session.id) {
