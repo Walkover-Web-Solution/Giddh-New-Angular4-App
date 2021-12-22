@@ -1,7 +1,7 @@
 @import "../../../../assets/css/color.scss";
 p.bank-name {
     font-size: 14px;
-    color: $midnight-blue;
+    color: var(--common-senary-text-color);
     margin-bottom: 5px;
 }
 p.bank-balance {
@@ -29,7 +29,7 @@ table.basic td {
     padding-top: 20px;
     padding-bottom: 3px;
     font-size: 16px;
-    color: $charcoal;
+    color: var(--table-content-senary-color);
 }
 .table thead th {
     vertical-align: bottom;
@@ -41,8 +41,9 @@ table.basic td {
     border-bottom: none !important;
 }
 table.basic th {
-    color: $midnight-blue;
     font-size: 14px;
+    color: var(--table-heading-secondary-color);
+    background-color: var(--table-heading-primary-background-color);
 }
 .cr-dr-body {
     padding: 15px;

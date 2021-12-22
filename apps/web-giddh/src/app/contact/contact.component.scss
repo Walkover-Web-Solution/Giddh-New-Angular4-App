@@ -93,7 +93,8 @@
 .account-detail-custom-header {
     border-right: 0;
     padding: 11px 10px 10px 10px;
-    background: $lavender;
+    color: var(--dropdown-list-icon-color);
+    background: var(--dropdown-secondary-background-color);
     width: 260px;
     margin-top: -8px;
 }
@@ -118,13 +119,13 @@
 }
 
 ul.list-unstyled li a {
-    color: $black;
+    color: var(--dropdown-list-quinary-color);
 }
 
 .p-modal-tooltip {
     display: block;
     position: absolute;
-    background-color: $white;
+    background-color: var(--dropdown-primary-background-color);
     z-index: 1000;
     width: 257px;
     border: 1px solid $pink-swan;
@@ -158,8 +159,8 @@ ul.list-unstyled li a {
     }
 
     a:hover {
-        color: $chetwode-blue !important;
-        background-color: $lavender;
+        color: var(--dropdown-list-hover-text-color) !important;
+        background-color: var(--dropdown-list-hover-background-color);
     }
 }
 

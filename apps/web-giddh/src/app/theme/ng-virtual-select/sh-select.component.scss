@@ -25,6 +25,7 @@
 
 div {
     display: block;
+    background-color: var(--common-background-color-for-all-components) !important;
 }
 
 input[type="text"] {
@@ -76,7 +77,7 @@ i.close.icon.clear:hover::after {
     font-size: 14px;
     line-height: 30px;
     border-radius: 4px;
-    background-color: $solitude;
+    background-color: var(--common-secondary-background-color-for-all-components);
     margin: 8px 0 5px 8px;
 }
 

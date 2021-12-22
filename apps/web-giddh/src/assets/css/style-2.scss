@@ -42,7 +42,7 @@ $custom-typography: mat-typography-config(
     font-size: 14px;
 }
 .basic {
-    background: $white;
+    background: var(--common-background-color-for-all-components);
 }
 
 .overflow-x-hidden {
@@ -3689,7 +3689,8 @@ label {
 .form-control[disabled],
 .form-control[readonly],
 fieldset[disabled] .form-control {
-    background-color: $whisper-light !important;
+    color: var(--datepicker-title-text-color) !important;
+    background-color: var(--datepicker-title-background-color) !important;
 }
 
 input[type="checkbox"][disabled] {
@@ -4023,11 +4024,12 @@ virtual-scroll .scrollable-content .item > a {
     display: table-cell;
     vertical-align: middle;
     height: 100%;
+    color: var();
     background-color: var(--dropdown-primary-background-color);
 }
 
 virtual-scroll .scrollable-content .item:hover > a {
-    color: $nero !important;
+    color: var(--dropdown-list-color) !important;
 }
 
 virtual-scroll .scrollable-content .item > a .item-unique,
@@ -4037,7 +4039,7 @@ virtual-scroll .scrollable-content .item > a .item-stock {
 }
 
 .customer-invoice-form virtual-scroll .scrollable-content .item > a {
-    color: $nero;
+    color: var(--common-primary-text-color);
     padding: 3px 10px;
     display: flex;
     vertical-align: middle;
@@ -6000,7 +6002,7 @@ button.btn.btn-filter {
 }
 .aside-pane-form #asidePaneFormTabs ul.nav.nav-tabs {
     padding: 0 !important;
-    background-color: $white !important;
+    background-color: var(--tab-primary-background-color) !important;
 }
 .aside-pane-form #asidePaneFormTabs .nav > li > a {
     padding-bottom: 10px !important;
@@ -6186,11 +6188,11 @@ highcharts-chart {
 }
 .create-acc-form li.highlighted.selected,
 .create-acc-form li.highlighted {
-    background-color: $lavender !important;
+    background-color: var(--dropdown-list-hover-background-color) !important;
 }
 .create-acc-form li.highlighted.selected .account-list-item,
 .create-acc-form li.highlighted .account-list-item {
-    color: $chetwode-blue !important;
+    color: var(--dropdown-list-hover-text-color) !important;
 }
 
 button {
@@ -6198,6 +6200,7 @@ button {
 }
 .aside-pane-form label {
     font-size: 14px;
+    color: var(--common-primary-text-color);
 }
 .tax-engine .header-info .dropdown-menu > li > a:hover {
     color: inherit !important;
@@ -6326,7 +6329,7 @@ input.checkbox-custom[type="checkbox"] {
     border: none !important;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
     position: relative;
-    background-color: $white;
+    background-color: var(--popup-background-color);
     background-clip: padding-box;
     border-radius: 6px;
     outline: 0;
@@ -6721,6 +6724,7 @@ span#HW_badge_cont:nth-child(3) {
     .card {
         margin-bottom: 20px;
         min-height: 426px;
+        background-color: var(--common-background-color-for-all-components);
     }
 }
 
