@@ -1,4 +1,3 @@
-<!-- <ng-container *ngIf=" !showLoader"> -->
 <div *ngIf="!isPlanShow">
     <div class="main-content-subsription">
         <div class="menu-one-button">
@@ -6,7 +5,7 @@
                 {{ commonLocaleData?.app_buy_new_plan }}
             </button>
         </div>
-        <mat-grid-list cols="16" rowHeight="{{ menuBarHeight }}px" gutterSize="0px">
+        <mat-grid-list cols="16" rowHeight="40px" gutterSize="0px">
             <mat-grid-tile colspan="{{ menuOneWidth }}" rowspan="1">
                 <div class="menu-two" [ngClass]="{ 'skelton-common-class': showLoader }">
                     <label for="Search-box">
@@ -867,7 +866,7 @@
                                             <mat-panel-title>
                                                 {{ company?.name }}
                                                 <a
-                                                    (click)="openModalMove(moveCompany, company, $event)"
+                                                    (click)="openModalMove(company, $event)"
                                                     href="javascript:void(0);"
                                                     >{{ localeData?.subscription?.move_company }}</a
                                                 >
