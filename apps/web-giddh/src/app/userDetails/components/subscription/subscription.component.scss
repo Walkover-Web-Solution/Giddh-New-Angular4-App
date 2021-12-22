@@ -49,7 +49,7 @@
     color: gray;
 }
 .menu-two-list {
-    width: 79%;
+    width: 95%;
     height: inherit;
     display: flex;
     justify-content: space-around;
@@ -387,6 +387,7 @@
             .right-side-btn {
                 margin: 0px 9px;
                 font-weight: 700;
+                margin-right: 0;
             }
         }
     }
