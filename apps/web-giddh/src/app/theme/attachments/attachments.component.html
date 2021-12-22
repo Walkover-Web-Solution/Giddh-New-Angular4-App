@@ -6,9 +6,16 @@
 >
     <div class="wrapper">
         <div class="header">
-            <span mat-dialog-close><i class="icon-left"></i> {{ commonLocaleData?.app_back }}</span>
+            <span
+                aria-hidden="true"
+                class="cursor-pointer"
+                [attr.aria-label]="commonLocaleData?.app_back"
+                mat-button
+                (click)="closeDialog()"
+                ><i class="icon-left"></i> {{ commonLocaleData?.app_back }}</span
+            >
         </div>
-        <div class="section">
+        <div class="section" *ngIf="!isLoading">
             <div class="left-side">
                 <mat-checkbox
                     *ngIf="voucherPdf || attachments?.length > 0"
@@ -27,9 +34,12 @@
                             (change)="selectAttachment($event, voucherPdf)"
                             >&nbsp;</mat-checkbox
                         >
-                        <span class="cursor-pointer font-14" (click)="showVoucherPreview()">{{
-                            voucherPdf?.name
-                        }}</span>
+                        <span
+                            class="cursor-pointer font-14"
+                            [ngClass]="{ 'active-file': voucherPdf?.uniqueName === previewedFile?.uniqueName }"
+                            (click)="showVoucherPreview()"
+                            >{{ voucherPdf?.name }}</span
+                        >
                         <a class="cursor-pointer" (click)="showDeleteVoucherModal(i)"><i class="icon-trash"></i></a>
                     </div>
                 </ng-container>
@@ -44,9 +54,12 @@
                                     (change)="selectAttachment($event, attachment)"
                                     >&nbsp;</mat-checkbox
                                 >
-                                <span class="file-name cursor-pointer font-14" (click)="showFilePreview(attachment)">{{
-                                    attachment?.name
-                                }}</span>
+                                <span
+                                    class="file-name cursor-pointer font-14"
+                                    [ngClass]="{ 'active-file': attachment?.uniqueName === previewedFile?.uniqueName }"
+                                    (click)="showFilePreview(attachment)"
+                                    >{{ attachment?.name }}</span
+                                >
                                 <a class="cursor-pointer" (click)="showDeleteAttachedFileModal(i)"
                                     ><i class="icon-trash"></i
                                 ></a>
@@ -109,11 +122,12 @@
                         height="100%"
                         [src]="previewedFile?.src"
                     ></iframe>
-                    <p *ngIf="previewedFile?.type === 'unsupported'">
-                        {{ commonLocaleData?.app_no_preview_available }}
+                    <p class="unsupported-format" *ngIf="previewedFile?.type === 'unsupported'">
+                        <img [src]="imgPath + 'img-' + previewedFile?.originalFileExtension + '.png'" />
                     </p>
                 </div>
             </div>
         </div>
+        <giddh-page-loader *ngIf="isLoading"></giddh-page-loader>
     </div>
 </ng-container>
