@@ -81,7 +81,7 @@
     }
 
     .grid-title-left-top {
-        padding-top: 1% !important;
+        padding-top: 0.8% !important;
     }
 
     .top-heading {
@@ -95,7 +95,8 @@
         border-bottom: 1px solid $default-border-bottom;
         position: sticky;
         background-color: $white;
-        padding-top: 24px;
+        padding-top: 0px;
+        line-height: 3.5;
     }
 
     .top-plan-div {
@@ -105,7 +106,7 @@
     .grid-list-div {
         display: inline-flex;
         float: left;
-        height: 75px;
+        height: 60px;
     }
 
     .sub-plan-name {
@@ -159,11 +160,11 @@
     }
 
     .list-grid-title {
-        line-height: 4.5 !important;
+        line-height: 3.5 !important;
     }
 
     .grid-title-list.bottom-buy-button {
-        line-height: 4 !important;
+        line-height: 3.5 !important;
     }
 
     .grid-title-list:nth-child(even) {
@@ -686,6 +687,7 @@
 
     .extra-addons-value {
         color: $midnight-blue;
+        font-weight: bold;
     }
 }
 
