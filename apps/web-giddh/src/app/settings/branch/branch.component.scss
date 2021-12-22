@@ -78,13 +78,13 @@
     .icon-branch-icon,
     .icon-company-HO {
         padding: 4px 5px 0 0;
-        color: $midnight-blue;
+        color: var(--common-senary-text-color);
         font-size: 12px;
     }
 }
 .card-basic-details h2 {
     font-size: 16px;
-    color: $midnight-blue;
+    color: var(--common-senary-text-color);
     font-family: "opensans-bold";
     margin-bottom: 12px;
     white-space: normal;

@@ -91,7 +91,7 @@
         white-space: nowrap;
     }
     tbody tr:hover td {
-        background: $light-alice-blue;
+        background: var(--table-row-hover-primary-background-color);
     }
     tbody tr:last-child td {
         border-bottom: 1px solid $gainsboro !important;
@@ -137,7 +137,7 @@
             padding-right: 40px;
             color: $nero;
             border: none;
-            background-color: $white-smoke;
+            background-color: var(--table-searchbar-background-color) !important;
             border-radius: 5px;
         }
     }

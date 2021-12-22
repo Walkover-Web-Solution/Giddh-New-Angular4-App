@@ -59,7 +59,7 @@
     font-size: 14px;
     text-align: left;
     list-style: none;
-    background-color: $white;
+    background-color: var(--dropdown-primary-background-color);
     background-clip: padding-box;
     border: 1px solid $gainsboro;
     border: 1px solid rgba(0, 0, 0, 0.15);
@@ -128,7 +128,7 @@
     justify-content: space-between;
 }
 .associated-companies-li > a {
-    color: $nero;
+    color: var(--common-primary-text-color);
     font-size: 14px;
     padding: 12px 20px;
     display: flex;
@@ -142,7 +142,7 @@
     min-width: 20px;
 }
 .associated-companies-li > a:hover {
-    color: $deep-sky-blue;
+    color: var(--common-primary-text-color-hover);
 }
 .associated-company-name {
     flex-direction: column;

@@ -6,10 +6,23 @@ body.default-theme {
     --body-background-color: #ffffff;
 
     // Common variable to set background color of components
+    --common-primary-text-color: #1c1c1c;
+    --common-primary-text-color-hover: #01a9f4;
+    --common-secondary-text-color: #4d4d4d;
+    --common-tertiary-text-color: #666666;
+    --common-quaternary-text-color: #000000cc;
+    --common-quinary-text-color: #333333;
+    --common-senary-text-color: #1a237e;
     --common-background-color-for-all-components: #ffffff;
+    --common-secondary-background-color-for-all-components: #f4f5f8;
 
     // Filter Color Variables
     --filter-hover-background-color: #5b64c9;
+
+    // Account Card Color Variables
+    --account-card-primary-text-color: #00000099;
+    --account-card-background-color: #f4f5f8;
+    --account-card-background-color-hover: #ffffff;
 
     // Button Color Variables
     --primary-button-text-color: #2831b2;
@@ -20,20 +33,28 @@ body.default-theme {
     --tertiary-button-text-color: #6a6c85;
     --tertiary-button-background-color: transparent;
     --tertiary-button-background-color-hover: #1a237e0f;
+    --quaternary-button-background-color: #313a97;
 
     // Dropdown Color Variables
     --dropdown-list-color: #1c1c1c;
+    --dropdown-list-secondary-color: #333333;
+    --dropdown-list-tertiary-color: #484848;
+    --dropdown-list-icon-color: #212529;
     --dropdown-list-hover-text-color: #5b64c9;
-    --dropdown-background-color: #ffffff;
+    --dropdown-primary-background-color: #ffffff;
+    --dropdown-secondary-background-color: #eeeff9;
     --dropdown-list-hover-background-color: #eeeff9;
+    --dropdown-list-box-shadow-color: #dddddd;
 
     // Search Bar Color Variables
     --sidebar-search-bar-text-color: #6a6c85;
     --sidebar-search-bar-background-color: #f5f5f5;
     --active-search-bar-border-color: #5b64c9;
     --company-profile-input-label-color: #1c1c1c;
+    --discount-search-bar-background-color: #ffffff;
 
     // Datepicker Color Variables
+    --datepicker-header-color: #5b64c9;
     --datepicker-month-name-color: #1c1c1c;
     --datepicker-date-color: #1a237e;
     --datepicker-date-icon-color: #00000061;
@@ -45,6 +66,7 @@ body.default-theme {
     --datepicker-unselected-month-color: #000000;
     --datepicker-background-color: #ffffff;
     --main-content-datepicker: #000000;
+    --datepicker-box-shadow-color: #aaa;
 
     // Popup Color Variables
     --popup-list-input-text-color: #1c1c1c;
@@ -80,6 +102,9 @@ body.default-theme {
 
     // Header Color Variables
     --primary-header-background-color: #1a237e;
+
+    // Ledger Heading Color Variable
+    --ledger-heading-color: #313a97;
 
     // Master Page Color Variables
     --master-page-input-clear-text-color: #2680eb;
@@ -123,12 +148,16 @@ body.default-theme {
     --table-content-secondary-color: #999999;
     --table-content-tertiary-color: #212528;
     --table-content-quaternary-color: #6a6c85;
-    --table-row-hover-background-color: #f0f5ff;
+    --table-content-quinary-color: #212529;
+    --table-row-hover-primary-background-color: #f0f5ff;
+    --table-row-hover-secondary-background-color: #f7f8fa;
     --table-heading-primary-background-color: #ffffff;
     --table-body-primary-background-color: #ffffff;
     --table-datepicker-content-color: #000000;
     --table-datepicker-header-background-color: #5b64c9;
     --table-datepicker-body-background-color: #ffffff;
+    --table-input-background-color: #ffffff;
+    --table-searchbar-background-color: #f5f5f5;
 
     // Total Details Box above table Color Variables
     --total-details-heading-color: #6a6c85;
@@ -139,6 +168,9 @@ body.default-theme {
     --total-details-content-tertiary-color: #5b64c9;
     --total-details-tertiary-background-color: #e7edf7;
     --total-details-quaternary-background-color: #f5f5f5;
+
+    // Right Side Popup Color Variables
+    --right-side-popup-box-shadow-color: #00000026;
 
     // Common Color Variables
     --danger-color: #ff0000;

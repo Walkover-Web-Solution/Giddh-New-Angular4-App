@@ -5,10 +5,23 @@ body.dark-theme {
     --body-background-color: #1d2229;
 
     // Common variable to set background color of components
+    --common-primary-text-color: #ffffff;
+    --common-primary-text-color-hover: #5eaf80;
+    --common-secondary-text-color: #ffffff;
+    --common-tertiary-text-color: #ffffff;
+    --common-quaternary-text-color: #ffffff;
+    --common-quinary-text-color: #ffffff;
+    --common-senary-text-color: #78af8f;
     --common-background-color-for-all-components: #1d2229;
+    --common-secondary-background-color-for-all-components: #1d2229;
 
     // Filter Color Variables
     --filter-hover-background-color: #5eaf80;
+
+    // Account Card Color Variables
+    --account-card-primary-text-color: #e7e9eb;
+    --account-card-background-color: #1d2229;
+    --account-card-background-color-hover: #212529;
 
     // Button Color Variables
     --primary-button-text-color: #ffffff;
@@ -19,20 +32,28 @@ body.dark-theme {
     --tertiary-button-text-color: #e7e9eb;
     --tertiary-button-background-color: transparent;
     --tertiary-button-background-color-hover: #e7e9eb30;
+    --quaternary-button-background-color: #78af8f;
 
     // Dropdown Color Variables
     --dropdown-list-color: #ffffff;
+    --dropdown-list-secondary-color: #ffffff;
+    --dropdown-list-tertiary-color: #ffffff;
+    --dropdown-list-icon-color: #ffffff;
     --dropdown-list-hover-text-color: #5eaf80;
-    --dropdown-background-color: #1d2229;
+    --dropdown-primary-background-color: #1d2229;
+    --dropdown-secondary-background-color: #1d2229;
     --dropdown-list-hover-background-color: #212529;
+    --dropdown-list-box-shadow-color: #0000008a;
 
     // Search Bar Color Variables
     --sidebar-search-bar-text-color: #999da0;
     --sidebar-search-bar-background-color: #303843;
     --active-search-bar-border-color: #5eaf80;
     --company-profile-input-label-color: #ffffff;
+    --discount-search-bar-background-color: #303840;
 
     // Datepicker Color Variables
+    --datepicker-header-color: #78af8f;
     --datepicker-month-name-color: #ffffff;
     --datepicker-date-color: #ffffff;
     --datepicker-date-icon-color: #ffffff;
@@ -43,6 +64,8 @@ body.dark-theme {
     --datepicker-selected-month-color: #78af8f;
     --datepicker-unselected-month-color: #ffffff;
     --datepicker-background-color: #1d2229;
+    --main-content-datepicker: #ffffff;
+    --datepicker-box-shadow-color: #0000008a;
 
     // Popup Color Variables
     --popup-list-input-text-color: #ffffff;
@@ -78,6 +101,9 @@ body.dark-theme {
 
     // Header Color Variables
     --primary-header-background-color: #1a2228;
+
+    // Ledger Heading Color Variable
+    --ledger-heading-color: #5eaf80;
 
     // Master Page Color Variables
     --master-page-input-clear-text-color: #5eaf80;
@@ -123,12 +149,16 @@ body.dark-theme {
     --table-content-secondary-color: #ffffff;
     --table-content-tertiary-color: #ffffff;
     --table-content-quaternary-color: #ffffff;
-    --table-row-hover-background-color: #212529;
+    --table-content-quinary-color: #ffffff;
+    --table-row-hover-primary-background-color: #212529;
+    --table-row-hover-secondary-background-color: #00000033;
     --table-heading-primary-background-color: #1d2229;
     --table-body-primary-background-color: #1d2229;
     --table-datepicker-content-color: #ffffff;
     --table-datepicker-header-background-color: #5eaf80;
     --table-datepicker-body-background-color: #1d2229;
+    --table-input-background-color: #303843;
+    --table-searchbar-background-color: #303843;
 
     /*
         COLORS BELOW ARE NOT APPLIED YET
@@ -143,10 +173,13 @@ body.dark-theme {
         --total-details-tertiary-background-color: #e7edf7;
         --total-details-quaternary-background-color: #f5f5f5;
 
-        // Common Color Variables
-        --danger-color: #ff0000;
-        --success-color: #2fab4a;
-        --main-content-background-color: #ffffff;
-
     */
+
+    // Right Side Popup Color Variables
+    --right-side-popup-box-shadow-color: #0000008a;
+
+    // Common Color Variables
+    // --danger-color: #ff0000;
+    // --success-color: #2fab4a;
+    // --main-content-background-color: #ffffff;
 }

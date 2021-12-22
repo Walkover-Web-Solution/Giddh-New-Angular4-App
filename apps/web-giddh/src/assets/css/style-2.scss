@@ -35,10 +35,11 @@ $custom-typography: mat-typography-config(
     text-transform: capitalize;
     border-right: none !important;
     border-left: none !important;
+    background-color: var(--body-background-color);
 }
 
 .basic > thead > tr > th {
-    color: $nero;
+    color: var(--table-heading-primary-color);
     border-right: 1px solid $gainsboro;
     padding: 15px 11px !important;
     font-weight: 400;
@@ -762,7 +763,7 @@ ul.sub-list {
 .custom-tabs .nav.nav-tabs {
     border-bottom: 1px solid $gainsboro;
     padding: 10px 0px 0 43px !important;
-    background-color: $alice-blue-light;
+    background-color: var(--tab-secondary-background-color);
     z-index: 9;
     position: relative;
 }
@@ -1207,6 +1208,7 @@ modal-container.modal {
     border: 0px !important;
     font-weight: normal;
     font-size: 14px;
+    color: var(--table-content-quinary-color);
 }
 
 .table-no-border tr th {
@@ -1305,7 +1307,7 @@ modal-container.modal {
 }
 
 .text-blue {
-    color: $midnight-blue;
+    color: var(--common-senary-text-color);
 }
 
 .all-features-modal {
@@ -1609,9 +1611,9 @@ fieldset[disabled] .btn-primary:hover {
 .btn-default:active:focus,
 .open > .dropdown-toggle.btn-default,
 .btn-default:not(:disabled):not(.disabled):active {
-    background: $chetwode-blue !important;
+    background: var(--secondary-button-background-color-hover) !important;
     color: $white !important;
-    border-color: $chetwode-blue !important;
+    border-color: var(--secondary-button-background-color-hover) !important;
 }
 
 .success-btn {
@@ -1637,7 +1639,7 @@ fieldset[disabled] .btn-primary:hover {
 /*btn end*/
 
 .ledger-main .form-control {
-    background: $white !important;
+    background: var(--table-input-background-color) !important;
 }
 
 .ledger-header thead th {
@@ -4219,7 +4221,7 @@ input[type="checkbox"][disabled] {
     padding-bottom: 10px;
     font-family: "opensans-semibold";
     font-size: 110%;
-    color: rgba(0, 0, 0, 0.8);
+    color: var(--common-quaternary-text-color);
 }
 
 .ico-btn .btn-xs {
@@ -4261,7 +4263,7 @@ input[type="checkbox"][disabled] {
 
 .subHead {
     font-size: 105%;
-    color: $night-rider;
+    color: var(--common-quinary-text-color);
     padding-bottom: 10px;
 }
 
@@ -4573,11 +4575,12 @@ ng-select .select-drop i {
 }
 
 virtual-scroll .scrollable-content .item > a {
-    color: $nero;
+    color: var(--dropdown-list-color);
     padding: 10px;
     display: table-cell;
     vertical-align: middle;
     height: 100%;
+    background-color: var(--dropdown-primary-background-color);
 }
 virtual-scroll .scrollable-content .item:hover > a {
     color: $nero !important;
@@ -4809,7 +4812,7 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
 }
 
 .option-box {
-    background: $lavender;
+    background: var(--dropdown-secondary-background-color);
     border-bottom: 1px solid $gainsboro;
     margin-bottom: 10px;
 }
@@ -4834,13 +4837,13 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
     border-bottom: 1px solid $gainsboro;
     border-right: 1px solid $gainsboro;
     font-size: 13px;
-    color: $matterhorn;
+    color: var(--common-secondary-text-color);
     text-overflow: ellipsis;
     white-space: nowrap;
 }
 
 .ledger-row:hover {
-    background-color: $alice-blue-light;
+    background-color: var(--table-row-hover-secondary-background-color);
 }
 
 .ledg-head table td.pd-r25 {
@@ -4920,6 +4923,7 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
     background: $white;
     padding: 5px;
     font-size: 12px;
+    color: var(--common-primary-text-color);
 }
 
 #pagination {
@@ -4996,8 +5000,9 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
 
 .form-header {
     padding: 20px 15px;
-    background: $midnight-blue;
+    background: var(--primary-header-background-color);
     color: $white;
+    border-bottom: 1px solid;
 }
 
 .form-header h3 {
@@ -5137,7 +5142,7 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
             color: var(--dropdown-list-color);
             display: block;
             line-height: 1.4;
-            background-color: var(--dropdown-background-color);
+            background-color: var(--dropdown-primary-background-color);
         }
     }
 }
@@ -6990,7 +6995,7 @@ button.btn.btn-filter {
 }
 
 .select2-ledger .menu .item:hover {
-    background: $lavender !important;
+    background: var(--dropdown-list-hover-background-color) !important;
 }
 
 .select2-ledger .menu .item:hover a {
@@ -7101,7 +7106,7 @@ highcharts-chart {
 }
 
 .theme-green .bs-datepicker-head {
-    background-color: $chetwode-blue;
+    background-color: var(--datepicker-header-color);
 }
 
 .theme-green .bs-datepicker-body table td span.selected,
@@ -7727,7 +7732,7 @@ span#HW_badge_cont:nth-child(3) {
 }
 .open > .dropdown-menu {
     display: block;
-    background-color: var(--dropdown-background-color);
+    background-color: var(--dropdown-primary-background-color);
 }
 .daterangepicker.dropdown-menu {
     box-shadow: 0 3px 28px 0 rgba(0, 0, 0, 0.14);
