@@ -356,6 +356,7 @@ aside-menu-account .container-fluid {
 }
 .mr-t1 {
     margin-top: 10px !important;
+    color: var(--common-primary-text-color);
 }
 .mr-t15 {
     margin-top: 15px !important;
@@ -1131,7 +1132,7 @@ table:focus {
     float: left;
     display: inline-block;
     position: relative;
-    background: $solitude;
+    background: var(--account-card-background-color);
     border-radius: 2px;
     box-sizing: border-box;
     margin: 7px;
@@ -1139,12 +1140,13 @@ table:focus {
     padding: 10px;
     border: 1px solid $gainsboro;
     word-break: break-all;
+    color: var(--common-primary-text-color);
 }
 .account-card:first-child {
     margin-left: 0px;
 }
 .account-card:hover {
-    background: $white;
+    background: var(--account-card-background-color-hover);
     box-shadow: 0 5px 5px 0 rgba(58, 58, 58, 0.18);
 }
 .account-card > h1 {
@@ -1184,7 +1186,7 @@ table:focus {
 .account-card .account-date {
     font-size: 14px;
     margin: 5px 0;
-    color: rgba(0, 0, 0, 0.6);
+    color: var(--account-card-primary-text-color);
 }
 .account-card .account-date > label {
     text-decoration: underline;
@@ -2083,7 +2085,7 @@ perfect-scrollbar.ps-show-active > .ps.ps--active-y > .ps-overlay:not(.ps-at-bot
     text-transform: capitalize;
 }
 .basic tbody tr:hover td {
-    background: $light-alice-blue;
+    background: var(--table-row-hover-primary-background-color);
 }
 
 body.fixed {
@@ -2111,6 +2113,7 @@ form#groupDetailForm {
 }
 .select2-ledger .menu .item {
     white-space: initial;
+    color: var(--common-primary-text-color) !important;
 }
 .left-col-new,
 .right-col-new {
@@ -2336,11 +2339,11 @@ form#groupDetailForm {
 }
 /** aside pane styles */
 .aside-pane {
-    background-color: $solitude;
     position: relative;
     z-index: 5;
     height: 100vh;
     color: var(--right-sidebar-settings-color);
+    background-color: var(--common-secondary-background-color-for-all-components);
 }
 .aside-pane {
     max-width: 760px;
@@ -2457,7 +2460,7 @@ giddh-datepicker {
     }
     .mat-form-field-appearance-fill {
         .mat-form-field-flex {
-            background: $white !important;
+            background: var(--common-background-color-for-all-components) !important;
         }
     }
     .ledger-book {
@@ -2638,7 +2641,7 @@ update-ledger-entry-panel .ledger-main .mat-form-field {
         tr:not(.plan-row-columns) {
             &:hover {
                 td {
-                    background: $light-alice-blue !important;
+                    background: var(--table-row-hover-primary-background-color) !important;
                 }
             }
         }

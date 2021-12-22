@@ -493,15 +493,15 @@ sh-select:focus {
     margin-top: 25px;
 }
 .ledger-stat h1 {
-    color: $nero;
+    color: var(--common-primary-text-color);
     font-size: 14px;
     margin-bottom: 10px;
 }
 .digit-blue {
-    color: $midnight-blue;
+    color: var(--common-senary-text-color);
 }
 .grey-text-color {
-    color: $dark-gray !important;
+    color: var(--common-tertiary-text-color) !important;
     font-size: 14px;
 }
 
@@ -821,7 +821,7 @@ input#ledger-search {
     margin-right: 8px;
 }
 .blue-heading {
-    color: $jacksons-purple;
+    color: var(--ledger-heading-color);
 }
 
 /*responsive*/

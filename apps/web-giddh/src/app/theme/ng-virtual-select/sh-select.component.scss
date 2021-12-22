@@ -96,7 +96,7 @@ i.close.icon.clear:hover::after {
 }
 
 .header .form-control[readonly] {
-    background-color: $white !important;
+    background-color: var(--discount-search-bar-background-color) !important;
     border: 1px solid $gainsboro;
 }
 

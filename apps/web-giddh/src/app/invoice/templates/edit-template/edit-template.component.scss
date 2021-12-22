@@ -1,6 +1,5 @@
 @import "../../../../assets/css/color.scss";
 .template-grid {
-    background: $white;
     max-width: 255px;
     width: 100%;
     padding: 20px;
@@ -10,6 +9,8 @@
     border-radius: 4px;
     margin: 5px 15px 15px 0;
     position: relative;
+    color: var(--common-primary-text-color);
+    background: var(--common-background-color-for-all-components);
 }
 
 .template-grid h3 {
@@ -46,14 +47,14 @@
     border-radius: 5px !important;
     font-size: 14px;
     padding: 5px 10px;
-    background: $white !important;
+    background: var(--dropdown-primary-background-color) !important;
     width: 160px;
     text-align: left;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    color: $charcoal;
+    color: var(--dropdown-list-tertiary-color);
 }
 
 .dropdown-menu > li > a:hover {
@@ -75,7 +76,7 @@
 }
 .badge.btn-sky-blue,
 .badge.btn-sky-blue:hover {
-    background: $jacksons-purple !important;
+    background: var(--quaternary-button-background-color) !important;
     border: none !important;
     color: $white !important;
 }

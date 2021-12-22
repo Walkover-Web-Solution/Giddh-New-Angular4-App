@@ -125,7 +125,7 @@
     float: left;
     width: 66%;
     word-break: break-all;
-    color: $midnight-blue;
+    color: var(--common-senary-text-color);
 }
 span.set-as-default {
     background-color: $gainsboro;
