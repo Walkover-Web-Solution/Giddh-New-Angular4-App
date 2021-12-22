@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, ViewChild } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Input, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { DomSanitizer } from "@angular/platform-browser";
 import { select, Store } from "@ngrx/store";
 import { UploaderOptions, UploadInput, UploadOutput } from "ngx-uploader";
@@ -71,6 +71,8 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
     public isLoading: boolean = true;
     /** True/false if mobile view */
     public isMobileView: boolean = false;
+    /** Holds images folder path */
+    public imgPath: string = "";
 
     constructor(
         private commonService: CommonService,
@@ -103,6 +105,7 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
      * @memberof AttachmentsComponent
      */
     public ngOnInit(): void {
+        this.imgPath = (isElectron || isCordova) ? "assets/images/" : AppUrl + APP_FOLDER + "assets/images/";
         this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
@@ -180,13 +183,13 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
                             fileExtention = "unsupported";
                         }
 
-                        return { name: attachment.name, uniqueName: attachment.uniqueName, type: fileExtention, src: fileSource, originalSrc: objectURL, encodedData: attachment.encodedData, isChecked: false };
+                        return { name: attachment.name, uniqueName: attachment.uniqueName, type: fileExtention, src: fileSource, originalSrc: objectURL, encodedData: attachment.encodedData, isChecked: false, originalFileExtension: attachment?.type?.toLowerCase() };
                     });
                 }
 
                 if (response.body?.data) {
                     let objectURL = this.generalService.base64ToBlob(response.body?.data, 'application/pdf', 512);
-                    this.voucherPdf = { name: this.selectedItem?.voucherNumber, uniqueName: this.selectedItem?.voucherUniqueName, type: "pdf", src: objectURL, originalSrc: objectURL, encodedData: response.body?.data, isChecked: false };
+                    this.voucherPdf = { name: this.selectedItem?.voucherNumber, uniqueName: this.selectedItem?.voucherUniqueName, type: "pdf", src: objectURL, originalSrc: objectURL, encodedData: response.body?.data, isChecked: false, originalFileExtension: "pdf" };
                     if (!this.isMobileView) {
                         this.showVoucherPreview();
                     }
@@ -230,7 +233,7 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
             } else if (this.previewedFile?.type === "image") {
                 this.openPreview();
             } else {
-                this.toaster.showSnackBar("error", "Preview is not available for selected file.");
+                this.toaster.showSnackBar("error", this.localeData?.preview_unavailable);
             }
         }
     }
@@ -359,10 +362,10 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
         } else if (this.voucherPdf?.isChecked) {
             saveAs(this.voucherPdf.src, `${this.voucherPdf.name}.pdf`);
         } else if (this.previewedFile?.type) {
-            let src = this.generalService.base64ToBlob(this.previewedFile.encodedData, this.previewedFile.type, 512);
-            saveAs(src, `${this.previewedFile.name}`);
+            let src = this.generalService.base64ToBlob(this.previewedFile.encodedData, this.previewedFile.originalFileExtension, 512);
+            saveAs(src, `${this.previewedFile.name}.${this.previewedFile.originalFileExtension}`);
         } else {
-            this.toaster.showSnackBar("error", "No supported files available to download.");
+            this.toaster.showSnackBar("error", this.localeData?.download_unavailable);
             return;
         }
     }
@@ -415,7 +418,7 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
         let messageBody = this.localeData?.confirm_delete_file;
         let autoDeleteEntries = this.invoiceSettings?.invoiceSettings?.autoDeleteEntries;
         if (autoDeleteEntries) {
-            messageBody = "You enabled to delete entries on voucher delete, so this will delete your entry as well.";
+            messageBody = this.localeData?.entries_delete_message;
         }
 
         let dialogRef = this.dialog.open(ConfirmModalComponent, {
@@ -486,7 +489,7 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
         let isAttachmentSelected = this.attachments?.filter(attachment => attachment.isChecked && attachment.type !== "unsupported");
 
         if (!isAttachmentSelected?.length && !this.voucherPdf?.isChecked && (!this.previewedFile || this.previewedFile?.type === "unsupported")) {
-            this.toaster.showSnackBar("error", "No supported files available to print.");
+            this.toaster.showSnackBar("error", this.localeData?.print_unavailable);
             return;
         }
 
@@ -513,7 +516,7 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
                     printWindow.document.write(file.outerHTML);
                     hasAttachments = true;
                 } else if (attachment?.type === "pdf") {
-                    const file = new Blob([attachment?.src], { type: 'application/pdf' });
+                    const file = new Blob([attachment?.originalSrc], { type: 'application/pdf' });
                     let pdfFileURL = URL.createObjectURL(file);
                     pdfFiles.push(encodeURI(pdfFileURL));
                 }
@@ -556,7 +559,7 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
      * @param {*} pdfFiles
      * @memberof AttachmentsComponent
      */
-    private printPdfFiles(printWindow, pdfFiles: any): void {
+    private printPdfFiles(printWindow: any, pdfFiles: any): void {
         let html = "";
         pdfFiles.forEach(pdf => {
             html += "<iframe class='frames' src='" + pdf + "' style='display:none;'></iframe>";
@@ -576,4 +579,18 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
             }
         }
     }
+
+    /**
+     * This will close the dialog
+     *
+     * @memberof AttachmentsComponent
+     */
+    public closeDialog(): void {
+        this.dialog?.closeAll();
+    }
+
+    // @HostListener("window:afterprint", [])
+    // public onWindowAfterPrint() {
+    //     console.log('... afterprint');
+    // }
 }

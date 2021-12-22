@@ -112,11 +112,21 @@
                 img {
                     max-width: 100%;
                 }
+                .unsupported-format {
+                    display: flex;
+                    justify-content: center;
+
+                    img {
+                        max-width: 70%;
+                    }
+                }
             }
         }
     }
 }
-
+.active-file {
+    color: $primary;
+}
 .disabled {
     background-color: $gainsboro !important;
     cursor: not-allowed !important;
