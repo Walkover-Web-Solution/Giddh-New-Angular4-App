@@ -130,7 +130,7 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
 
     }
 
-    public ngOnInit() {        
+    public ngOnInit() {
 
         /** This will use for get the active company from store  */
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
@@ -376,91 +376,15 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
                 this.allSubscriptions[subscription.planDetails.uniqueName] = subscription;
             });
             this.inputData = [];
-
-            // this.inputData.push({
-            //     name: '<b>Benefits</b>',
-            //     transactions: '<b>Transactions</b>',
-            //     companies: '<b>Companies</b>',
-            //     consultant: '<b>Munnem.co Consultant</b>',
-            //     unlimited_users: '<b>Unlimited Users</b>',
-            //     unlimited_customers: '<b>Unlimited Customers/Vendors</b>',
-            //     desktop_mobile_app: ' <b>Desktop/Mobile App</b>',
-            //     check_all_features: '<a class="check_all_plan_features">Check all features</a>'
-            // });
-
-
-
             let loop = 0;
-            // let names = [];
-            // let amount = [];
-            // let durationUnit = [];
             let allPlans = uniqBy(subscriptions.map(subscription => { return subscription.planDetails }), "name");
             allPlans.forEach(plan => {
-                //     names['name'+loop] = plan?.name;
-                //     amount['amount'+loop] = plan?.amount;
-                //     durationUnit['durationunit'+loop] = plan?.durationUnit;
-
-                //     this.inputColumns.push('name'+loop);
-
-                //     loop++;
-
-
-
                 this.inputData.push(plan);
                 loop++;
-
-                // let button ='';
-                // if (plan.uniqueName === activeCompany.subscription.planDetails.uniqueName) {
-                //     button = '<button class="all_feature_button" mat-raised-button color="primary">Renew Plan</button>';
-                // } else if(plan.amount >= activeCompany.subscription.planDetails.amount ) {
-                //     button = '<button class="all_feature_button" mat-raised-button color="primary">Upgrade Now</button>';
-                // }
-                // else if(plan.amount < activeCompany.subscription.planDetails.amount ) {
-                //     button = '<button class="all_feature_button" mat-raised-button color="primary">Downgrade Now</button>';
-                // }
-
-                // this.inputData.push({
-                //     name: plan?.name + '<br>' + '<span class="susbcription-plan-amount">' + '₹' + plan?.amount + '</span>' + '/' + '<span class="susbcription-plan-years" >' + plan?.durationUnit + '</span>',
-                //     transactions: plan?.transactionLimit,
-                //     companies: plan?.companiesLimit,
-                //     consultant: '2hrs',
-                //     unlimited_users: '<mat-icon>check</mat-icon>',
-                //     unlimited_customers: '<mat-icon>check</mat-icon>',
-                //     desktop_mobile_app: '<mat-icon>check</mat-icon>',
-                //     check_all_features: button
-                // });
             });
 
-
-            // for(let i = 0; i <= 7; i++) {
-            //     if(i === 0) {
-            //         this.inputData[i] = [];
-            //         this.inputData[i]['name'] = names;
-            //         this.inputData[i]['amount'] = amount;
-            //         this.inputData[i]['durationunit'] = durationUnit;
-            //     }
-            // }
-
-            // this.inputData[0] = [];
-
-            // this.inputData[0]['benefits'] = allPlans.map(plan => { 
-            //     return {
-            //         name: plan.name,
-            //         amount: plan.amount,
-            //         durationunit: plan.durationUnit
-            //     }
-            // });
-
-            // this.displayColumns = this.inputData.map(x => {
-            //     return x.name.toString()
-            // });
-            // this.displayData = this.inputColumns.map(x => { return this.formatInputRow(x) });
-            // this.changeDetectionRef.detectChanges();
-
-            //setTimeout(() => {
             this.showLoader = false;
             this.changeDetectionRef.detectChanges();
-            //}, 500);
         });
     }
     /**
