@@ -48,10 +48,10 @@
 }
 
 .manage-invoice li a {
-    background: $white;
+    background: var(--common-background-color-for-all-components);
     box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
     padding: 9px 15px;
-    color: $deep-sky-blue-hover;
+    color: var(--common-octonary-text-color);
     font-size: 16px;
     margin-top: 15px;
     display: block;
@@ -98,8 +98,11 @@ p {
 }
 
 .text-dark {
-    color: $gray;
     font-size: 20px;
+    color: var(--onboard-contact-info-text-color) !important;
+    &:hover {
+        color: var(--onboard-contact-info-text-color) !important;
+    }
 }
 
 a.text-dark {
@@ -126,7 +129,7 @@ a.text-dark {
     display: inline-flex;
     width: 130px;
     height: 100px;
-    background-color: $white;
+    background-color: var(--common-background-color-for-all-components);
     margin-right: 11px;
     box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
     text-align: center;
@@ -146,7 +149,7 @@ a.text-dark {
 }
 
 .import-data-blocks a p {
-    color: $primary;
+    color: var(--csv-or-excel-file-card-text-color);
 }
 
 .right-section {

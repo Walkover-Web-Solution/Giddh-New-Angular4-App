@@ -234,11 +234,11 @@
 }
 .select-plan-head {
     text-align: center;
-    background: $lavender;
+    background: var(--upgrade-plan-primary-background-color);
     font-size: 18px;
     padding: 20px 15px;
     h2 {
-        color: $midnight-blue;
+        color: var(--common-senary-text-color);
         font-weight: bold;
     }
 }
@@ -246,6 +246,7 @@
     padding: 10px 30px 10px;
     height: 97%;
     justify-content: space-around;
+    background-color: var(--upgrade-plan-secondary-background-color);
     p.total-price {
         margin: 0 -8px;
     }
@@ -262,7 +263,7 @@
 .inner-your-account {
     position: relative;
     z-index: 2;
-    background: $white;
+    background: var(--upgrade-plan-secondary-background-color);
     padding: 30px 15px 15px 30px;
     box-shadow: 0px 3px 6px $black-russian;
     border: 1px solid $gainsboro;
@@ -270,8 +271,8 @@
 }
 .inner-your-account:hover,
 .inner-your-account.active {
-    background: $lavender;
-    border-color: $midnight-blue;
+    background: var(--upgrade-plan-card-primary-background-color-hover);
+    border-color: var(--upgrade-plan-card-primary-border-color-hover);
 }
 .your-account:after,
 .your-account:before {
@@ -282,7 +283,7 @@
     height: 100%;
     position: absolute;
     z-index: 1;
-    background: $white;
+    background: var(--upgrade-plan-secondary-background-color);
 }
 .your-account:after {
     top: -10px;
@@ -307,7 +308,7 @@
 }
 .inner-your-account > h3 {
     font-size: 16px;
-    color: $midnight-blue;
+    color: var(--common-senary-text-color);
     font-weight: bold;
     margin-bottom: 5px;
     .plans-head-top {
@@ -609,6 +610,13 @@
     max-width: 100%;
     float: left;
 }
+
+::ng-deep {
+    .color-primary {
+        color: var(--upgrade-plan-primary-color) !important;
+    }
+}
+
 @media (min-width: 1200px) {
     .select-plan-block {
         height: 97%;

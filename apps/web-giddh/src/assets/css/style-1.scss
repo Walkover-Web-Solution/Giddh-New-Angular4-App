@@ -1853,6 +1853,7 @@ ul.pills li {
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
     li {
         margin-bottom: 10px;
+        color: var(--dropdown-list-quaternary-color);
         &:last-child {
             margin-bottom: 0;
         }
@@ -2674,6 +2675,7 @@ update-ledger-entry-panel .ledger-main .mat-form-field {
 
 table.mat-table {
     border-spacing: 2px !important;
+    background-color: var(--common-secondary-background-color-for-all-component);
 }
 
 th.mat-header-cell:first-of-type,
@@ -2748,27 +2750,28 @@ td.mat-footer-cell {
             background: $alice-blue-light !important;
             .mat-tab-label-container {
                 padding-left: 15px !important;
+                background-color: var(--tab-primary-background-color);
                 .mat-tab-list {
                     .mat-tab-label {
                         padding: 0 35px 0 0 !important;
                         opacity: 1 !important;
                         min-width: auto !important;
                         height: 44px !important;
-                        color: $night-rider !important;
+                        color: var(--tab-tertiary-text-color) !important;
                         .mat-tab-label-content {
                             margin-bottom: 5px !important;
                         }
                         &:focus {
                             font-weight: 800 !important;
-                            color: $nero !important;
+                            color: var(--tab-tertiary-text-color) !important;
                         }
                         &.active {
                             font-weight: 800 !important;
-                            color: $nero !important;
+                            color: var(--tab-tertiary-text-color) !important;
                         }
                     }
                     .mat-ink-bar {
-                        background-color: $vivid-blue !important;
+                        background-color: var(--master-page-sidebar-active-list-color) !important;
                         height: 4px !important;
                         width: 60px !important;
                     }

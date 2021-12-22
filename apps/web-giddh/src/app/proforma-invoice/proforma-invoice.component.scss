@@ -221,7 +221,7 @@ $greyClr: #6d6d6d;
     position: relative;
     float: left;
     @include padBth(20px, 0);
-    @include bgClr(#cccccc);
+    @include bgClr(var(--primary-footer-background-color));
 }
 
 .dropup {
@@ -374,7 +374,7 @@ ng-select.splSales {
 }
 
 .billing-address {
-    background: $white;
+    background: var(--common-background-color-for-all-components);
     border: 1px solid $gainsboro;
     padding: 5px;
     padding-bottom: 10px;
@@ -516,7 +516,7 @@ textarea:focus {
     top: 50%;
     left: inherit;
     width: 282px;
-    background: $solitude;
+    background: var(--common-secondary-background-color-for-all-components);
     display: block;
 }
 
@@ -700,8 +700,7 @@ input.form-control.selected-val.cp.bottom-border-only.ng-star-inserted {
 }
 
 .bg-white {
-    background-color: $white;
-    // padding: 10px 0;
+    background-color: var(--common-background-color-for-all-components);
     margin: 0 0;
 }
 
@@ -936,6 +935,7 @@ span.edit-icon {
 
 .btn-group .dropdown-toggle {
     margin-right: 0;
+    color: var(--table-content-quinary-color);
 }
 
 .wrap-customer {
@@ -1014,6 +1014,7 @@ section.static-invoice-table {
     margin-top: 10px;
     border-bottom: 1px solid $gainsboro;
     margin-bottom: 20px;
+    background-color: var(--common-background-color-for-all-components) !important;
 }
 
 // .customer-invoice-table section.form-inline {
@@ -1378,7 +1379,7 @@ table.table.table-custom-invoice.basic,
     top: 132px;
     opacity: 0.6;
     z-index: 98;
-    background: $alice-blue-light;
+    background: var(--common-tertiary-background-color-for-all-components);
 }
 
 .cash-invoice-input {
