@@ -27,6 +27,7 @@
         background-color: $gray-95;
         border-radius: 2px;
         text-align: center;
+        background-color: var(--primary-button-background-color);
     }
     input[type="file"] {
         display: none;

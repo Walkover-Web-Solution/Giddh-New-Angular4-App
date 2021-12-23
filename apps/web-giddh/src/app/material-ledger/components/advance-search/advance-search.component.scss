@@ -33,6 +33,15 @@
     margin-left: 16px;
     margin-top: 9px;
 }
+
+::ng-deep {
+    .advance-search {
+        .clearfix {
+            background-color: var(--popup-background-color) !important;
+        }
+    }
+}
+
 @media (min-width: 1200px) {
     .container {
         width: 100%;
