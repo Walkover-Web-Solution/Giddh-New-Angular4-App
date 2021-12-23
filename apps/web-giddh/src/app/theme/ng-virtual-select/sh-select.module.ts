@@ -1,4 +1,4 @@
-import { ModuleWithProviders, NgModule, Type } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { VirtualScrollModule } from './virtual-scroll';
 import { ShSelectMenuComponent } from './sh-select-menu.component';
@@ -20,6 +20,5 @@ import { ClickOutsideModule } from 'ng-click-outside';
     exports: [ShSelectComponent]
 })
 
-export class ShSelectModule {
-    static ShSelectComponent: any[] | Type<any>;
+export class ShSelectModule {   
 }

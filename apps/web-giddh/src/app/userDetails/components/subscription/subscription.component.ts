@@ -7,7 +7,7 @@ import { select, Store } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
 import { SubscriptionsUser, UserDetails } from "../../../models/api-models/Subscriptions";
 import { Observable, ReplaySubject } from "rxjs";
-import { takeUntil } from "rxjs/operators";
+import { take, takeUntil } from "rxjs/operators";
 import { SubscriptionsService } from "../../../services/subscriptions.service";
 import { uniqBy } from "../../../lodash-optimized";
 import * as moment from "moment";
@@ -274,7 +274,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
         let subscriptions = [];
         this.subscriptions = [];
 
-        this.subscriptions$.subscribe(response => {
+        this.subscriptions$.pipe(take(1)).subscribe(response => {
             if (response?.length) {
                 response.forEach(subscription => {
                     subscription.remainingDays = Number(moment(subscription.expiry, GIDDH_DATE_FORMAT).diff(moment(), 'days'));
