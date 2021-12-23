@@ -56,13 +56,13 @@ import { QuicklinkModule, QuicklinkStrategy } from 'ngx-quicklink';
 import { DownloadComponent } from './download/download.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { SnackBarModule } from './theme/snackbar/snackbar.module';
-import {MatCardModule} from '@angular/material/card'; 
-import {MatCheckboxModule} from '@angular/material/checkbox';
-import {MatFormFieldModule} from '@angular/material/form-field'; 
-import {MatInputModule} from '@angular/material/input'; 
-import {MatAutocompleteModule} from '@angular/material/autocomplete'; 
-import {MatSelectModule} from '@angular/material/select'; 
-import {MatButtonModule} from '@angular/material/button'; 
+import { MatCardModule } from '@angular/material/card';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatSelectModule } from '@angular/material/select';
+import { MatButtonModule } from '@angular/material/button';
 import { AmountFieldComponentModule } from './shared/amount-field/amount-field.module';
 
 // Application wide providers
@@ -138,7 +138,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         DecoratorsModule.forRoot(),
         ShSelectModule,
         ToastrModule.forRoot({ preventDuplicates: true, maxOpened: 3 }),
-        StoreModule.forRoot(reducers, { metaReducers, runtimeChecks: {strictStateImmutability: false, strictActionImmutability: false} }),
+        StoreModule.forRoot(reducers, { metaReducers, runtimeChecks: { strictStateImmutability: false, strictActionImmutability: false } }),
         PerfectScrollbarModule,
         RouterModule.forRoot(ROUTES, {
             useHash: IS_ELECTRON_WA,

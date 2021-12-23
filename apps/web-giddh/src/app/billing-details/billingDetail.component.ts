@@ -482,7 +482,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof BillingDetailComponent
      */
     public getStates(): void {
-        this.store.pipe(select(s => s.general.states), takeUntil(this.destroyed$)).subscribe(res => {
+        this.store.pipe(select(s => s.general.states), take(1)).subscribe(res => {
             if (res) {
                 this.states = [];
                 Object.keys(res.stateList).forEach(key => {
