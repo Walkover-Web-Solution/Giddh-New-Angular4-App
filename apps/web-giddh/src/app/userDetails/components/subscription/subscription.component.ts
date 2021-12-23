@@ -293,7 +293,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
         let subscriptions = [];
         this.subscriptions = [];
 
-        this.subscriptions$.pipe(take(1)).subscribe(response => {
+        this.subscriptions$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.length) {
                 response.forEach(subscription => {
                     subscription.remainingDays = Number(moment(subscription.expiry, GIDDH_DATE_FORMAT).diff(moment(), 'days'));
