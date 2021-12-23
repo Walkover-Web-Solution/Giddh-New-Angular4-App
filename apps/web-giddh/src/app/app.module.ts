@@ -63,6 +63,7 @@ import {MatInputModule} from '@angular/material/input';
 import {MatAutocompleteModule} from '@angular/material/autocomplete'; 
 import {MatSelectModule} from '@angular/material/select'; 
 import {MatButtonModule} from '@angular/material/button'; 
+import { AmountFieldComponentModule } from './shared/amount-field/amount-field.module';
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -155,6 +156,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         MatAutocompleteModule,
         MatSelectModule,
         MatButtonModule,
+        AmountFieldComponentModule,
         ...CONDITIONAL_IMPORTS
     ],
     /**

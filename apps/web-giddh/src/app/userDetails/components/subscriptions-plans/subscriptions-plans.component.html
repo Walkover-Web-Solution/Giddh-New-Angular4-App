@@ -1,18 +1,18 @@
 <div class="welcome-msg">
     <div class="row">
-        <div [ngClass]="{ 'skelton-common-class': showLoader, 'radeem-back': showLoader }"></div>
+        <div [ngClass]="{ 'skeleton-common-class': showLoader, 'redeem-back': showLoader }"></div>
         <div class="col-md-1 col-sm-1" *ngIf="!showLoader">
             <button (click)="backClicked()" class="btn-cancel pr-3 pl-3 mb-2 mr-0" mat-button>
                 {{ commonLocaleData?.app_back }}
             </button>
         </div>
     </div>
-    <div class="scroll-left" [ngClass]="{ 'skelton-common-class': showLoader, 'left-icon': showLoader }">
+    <div class="scroll-left" [ngClass]="{ 'skeleton-common-class': showLoader, 'left-icon': showLoader }">
         <button mat-raised-button color="primary" (click)="scrollLeft()" *ngIf="!showLoader">
             <i class="icon-left"></i>
         </button>
     </div>
-    <div class="scroll-right" [ngClass]="{ 'skelton-common-class': showLoader, 'right-icon': showLoader }">
+    <div class="scroll-right" [ngClass]="{ 'skeleton-common-class': showLoader, 'right-icon': showLoader }">
         <button mat-raised-button color="primary" (click)="scrollRight()" *ngIf="!showLoader">
             <i class="icon-right"></i>
         </button>
@@ -81,7 +81,7 @@
             <div class="grid-title-list bottom-buy-button" *ngFor="let plan of inputData">
                 <button
                     (click)="buyPlanClicked(plan)"
-                    class="all_feature_button"
+                    class="all-feature-button"
                     mat-raised-button
                     color="primary"
                     *ngIf="plan?.uniqueName === activeCompany?.subscription?.planDetails?.uniqueName"
@@ -90,7 +90,7 @@
                 </button>
                 <button
                     (click)="buyPlanClicked(plan)"
-                    class="all_feature_button"
+                    class="all-feature-button"
                     mat-raised-button
                     color="primary"
                     *ngIf="plan?.uniqueName !== activeCompany?.subscription?.planDetails?.uniqueName"
@@ -105,14 +105,14 @@
         <div class="grid-list-div-changes">
             <div
                 class="grid-title-left"
-                [ngClass]="{ 'skelton-common-class': showLoader, 'grid-title-list-changes': showLoader }"
+                [ngClass]="{ 'skeleton-common-class': showLoader, 'grid-title-list-changes': showLoader }"
             >
                 <span class="inner-name inner-name-bold mat-table-sticky">&nbsp;</span>
             </div>
             <div
                 class="grid-title-list"
                 *ngFor="let plan of inputData"
-                [ngClass]="{ 'skelton-common-class': showLoader, 'grid-title-list-changes': showLoader }"
+                [ngClass]="{ 'skeleton-common-class': showLoader, 'grid-title-list-changes': showLoader }"
             >
                 <span class="sub-plan-name">&nbsp;</span> <br />
                 <span class="sub-plan-amount">&nbsp;<span class="sub-plan-duration">&nbsp;</span></span>
@@ -122,14 +122,14 @@
         <div class="grid-list-div-changes list-grid">
             <div
                 class="grid-title-left"
-                [ngClass]="{ 'skelton-common-class': showLoader, 'grid-title-list-changes': showLoader }"
+                [ngClass]="{ 'skeleton-common-class': showLoader, 'grid-title-list-changes': showLoader }"
             >
                 <span class="inner-name mat-table-sticky">&nbsp;</span>
             </div>
             <div
                 class="grid-title-list list-grid-title"
                 *ngFor="let plan of inputData"
-                [ngClass]="{ 'skelton-common-class': showLoader, 'grid-title-list-changes': showLoader }"
+                [ngClass]="{ 'skeleton-common-class': showLoader, 'grid-title-list-changes': showLoader }"
             >
                 <span>&nbsp;</span>
             </div>
@@ -137,14 +137,14 @@
         <div class="grid-list-div-changes list-grid">
             <div
                 class="grid-title-left"
-                [ngClass]="{ 'skelton-common-class': showLoader, 'grid-title-list-changes': showLoader }"
+                [ngClass]="{ 'skeleton-common-class': showLoader, 'grid-title-list-changes': showLoader }"
             >
                 <span class="inner-name mat-table-sticky">&nbsp;</span>
             </div>
             <div
                 class="grid-title-list list-grid-title"
                 *ngFor="let plan of inputData"
-                [ngClass]="{ 'skelton-common-class': showLoader, 'grid-title-list-changes': showLoader }"
+                [ngClass]="{ 'skeleton-common-class': showLoader, 'grid-title-list-changes': showLoader }"
             >
                 <span>&nbsp;</span>
             </div>
@@ -152,57 +152,57 @@
         <div class="grid-list-div-changes list-grid">
             <div
                 class="grid-title-left"
-                [ngClass]="{ 'skelton-common-class': showLoader, 'grid-title-list-changes': showLoader }"
+                [ngClass]="{ 'skeleton-common-class': showLoader, 'grid-title-list-changes': showLoader }"
             >
                 <span class="inner-name mat-table-sticky">&nbsp;</span>
             </div>
             <div
                 class="grid-title-list list-grid-title"
                 *ngFor="let plan of inputData"
-                [ngClass]="{ 'skelton-common-class': showLoader, 'grid-title-list-changes': showLoader }"
+                [ngClass]="{ 'skeleton-common-class': showLoader, 'grid-title-list-changes': showLoader }"
             ></div>
         </div>
         <div class="grid-list-div-changes list-grid">
             <div
                 class="grid-title-left"
-                [ngClass]="{ 'skelton-common-class': showLoader, 'grid-title-list-changes': showLoader }"
+                [ngClass]="{ 'skeleton-common-class': showLoader, 'grid-title-list-changes': showLoader }"
             >
                 <span class="inner-name mat-table-sticky">&nbsp;</span>
             </div>
             <div
                 class="grid-title-list list-grid-title"
                 *ngFor="let plan of inputData"
-                [ngClass]="{ 'skelton-common-class': showLoader, 'grid-title-list-changes': showLoader }"
+                [ngClass]="{ 'skeleton-common-class': showLoader, 'grid-title-list-changes': showLoader }"
             ></div>
         </div>
         <div class="grid-list-div-changes list-grid">
             <div
                 class="grid-title-left"
-                [ngClass]="{ 'skelton-common-class': showLoader, 'grid-title-list-changes': showLoader }"
+                [ngClass]="{ 'skeleton-common-class': showLoader, 'grid-title-list-changes': showLoader }"
             >
                 <span class="inner-name mat-table-sticky">&nbsp;</span>
             </div>
             <div
                 class="grid-title-list list-grid-title"
                 *ngFor="let plan of inputData"
-                [ngClass]="{ 'skelton-common-class': showLoader, 'grid-title-list-changes': showLoader }"
+                [ngClass]="{ 'skeleton-common-class': showLoader, 'grid-title-list-changes': showLoader }"
             ></div>
         </div>
         <div class="grid-list-div-changes list-grid">
             <div
                 class="grid-title-left"
-                [ngClass]="{ 'skelton-common-class': showLoader, 'grid-title-list-changes': showLoader }"
+                [ngClass]="{ 'skeleton-common-class': showLoader, 'grid-title-list-changes': showLoader }"
             >
                 <a class="sub-plan-feature mat-table-sticky" (click)="openDialog()" href="javascript:void(0)">&nbsp;</a>
             </div>
             <div
                 class="grid-title-list list-grid-title"
                 *ngFor="let plan of inputData"
-                [ngClass]="{ 'skelton-common-class': showLoader, 'grid-title-list-changes': showLoader }"
+                [ngClass]="{ 'skeleton-common-class': showLoader, 'grid-title-list-changes': showLoader }"
             ></div>
         </div>
     </div>
-    <p [ngClass]="{ 'skelton-common-class': showLoader }" class="extra-addons-content font-16">
+    <p [ngClass]="{ 'skeleton-common-class': showLoader }" class="extra-addons-content font-16">
         {{ localeData?.subscription?.extra_addons }}:<span *ngIf="!showLoader" class="extra-addons-value">
             {{ localeData?.subscription?.per_transaction }}</span
         >
@@ -213,28 +213,28 @@
     <!-- <div class="no-plan col-md-3">
          <div class="renewal-data">
              <mat-card class="renewal-card">
-                <mat-card-subtitle [ngClass]="{ 'skelton-common-class': showLoader , 'renewal-card-subtitle-loading': showLoader}" class="renewal-card-subtitle">{{ this.activeCompany?.subscription?.planDetails?.name }}
+                <mat-card-subtitle [ngClass]="{ 'skeleton-common-class': showLoader , 'renewal-card-subtitle-loading': showLoader}" class="renewal-card-subtitle">{{ this.activeCompany?.subscription?.planDetails?.name }}
                 </mat-card-subtitle>
-                <mat-card-title [ngClass]="{ 'skelton-common-class': showLoader, 'renewal-card-title-loading': showLoader}" class="renewal-card-title">
+                <mat-card-title [ngClass]="{ 'skeleton-common-class': showLoader, 'renewal-card-title-loading': showLoader}" class="renewal-card-title">
                     ₹{{ this.activeCompany?.subscription?.planDetails?.amount | number }}
                     <span class="year">/{{ this.activeCompany?.subscription?.planDetails?.duration }} {{ this.activeCompany?.subscription?.planDetails?.durationUnit }} {{ this.activeCompany?.subscription?.planDetails?.duration !== 1 ? "(s)" : "" }}
                        </span></mat-card-title>
-        <p [ngClass]="{ 'skelton-common-class': showLoader}" class="renewal-off">₹15000 <span class="discount-off" *ngIf="!showLoader">20% off</span></p>
+        <p [ngClass]="{ 'skeleton-common-class': showLoader}" class="renewal-off">₹15000 <span class="discount-off" *ngIf="!showLoader">20% off</span></p>
         <mat-card-content class="renewal-card-content">
                     <ul class="renewal-list" [ngClass]="{ 'renewal-list-loading': showLoader}">
-                        <li [ngClass]="{ 'skelton-common-class': showLoader, 'features-loading': showLoader}" class="features">
+                        <li [ngClass]="{ 'skeleton-common-class': showLoader, 'features-loading': showLoader}" class="features">
                             {{ this.activeCompany?.subscription?.planDetails?.transactionLimit | number }}  Transactions
                         </li>
-                        <li  [ngClass]="{ 'skelton-common-class': showLoader, 'features-loading': showLoader}" class="features">
+                        <li  [ngClass]="{ 'skeleton-common-class': showLoader, 'features-loading': showLoader}" class="features">
                             {{ this.activeCompany?.subscription?.planDetails?.companiesLimit | number }}  Companies
                         </li>
-        <li  [ngClass]="{ 'skelton-common-class': showLoader, 'features-loading': showLoader}" class="features">10 hrs<span class="hrs-underline"> Muneem Consultant</span></li>
-       <li [ngClass]="{ 'skelton-common-class': showLoader, 'features-loading': showLoader}" class="features">{{ localeData?.subscription?.unlimited_users }}</li>
-                        <li [ngClass]="{ 'skelton-common-class': showLoader, 'features-loading': showLoader}" class="features">{{ localeData?.subscription?.unlimited_contacts }}</li>
-                        <li  [ngClass]="{ 'skelton-common-class': showLoader, 'features-loading': showLoader}" class="features">{{ localeData?.subscription?.desktop_mobile_app }}</li>
+        <li  [ngClass]="{ 'skeleton-common-class': showLoader, 'features-loading': showLoader}" class="features">10 hrs<span class="hrs-underline"> Muneem Consultant</span></li>
+       <li [ngClass]="{ 'skeleton-common-class': showLoader, 'features-loading': showLoader}" class="features">{{ localeData?.subscription?.unlimited_users }}</li>
+                        <li [ngClass]="{ 'skeleton-common-class': showLoader, 'features-loading': showLoader}" class="features">{{ localeData?.subscription?.unlimited_contacts }}</li>
+                        <li  [ngClass]="{ 'skeleton-common-class': showLoader, 'features-loading': showLoader}" class="features">{{ localeData?.subscription?.desktop_mobile_app }}</li>
                     </ul>
-                    <a [ngClass]="{ 'skelton-common-class': showLoader, 'button-loading': showLoader}" (click)="openDialog()" href="javascript:void(0)">{{ localeData?.subscription?.check_all_features }}</a>
-                    <div [ngClass]="{ 'skelton-common-class': showLoader,'formgroup-div': showLoader}" class="form-group" >
+                    <a [ngClass]="{ 'skeleton-common-class': showLoader, 'button-loading': showLoader}" (click)="openDialog()" href="javascript:void(0)">{{ localeData?.subscription?.check_all_features }}</a>
+                    <div [ngClass]="{ 'skeleton-common-class': showLoader,'formgroup-div': showLoader}" class="form-group" >
                         <button  [ngClass]="{ 'formgroup-button': showLoader}"  *ngIf="this.activeCompany?.subscription?.planDetails?.uniqueName !== defaultTrialPlan" class="pay-now" mat-raised-button color="primary"
                             (click)="renewPlan()">
                             {{ commonLocaleData?.app_renew }}
@@ -252,20 +252,20 @@
                 <div class="col-md-6 col-sm-12 col-xs-12 footer-plan" [ngClass]="{ 'footer-plan-loading': showLoader }">
                     <div class="activation-key mr-b1">
                         <h2
-                            [ngClass]="{ 'skelton-common-class': showLoader, 'radeem-plan': showLoader }"
-                            class="font-26 text-gray bold mb-3 radeem-plan"
+                            [ngClass]="{ 'skeleton-common-class': showLoader, 'redeem-plan': showLoader }"
+                            class="font-26 text-gray bold mb-3 redeem-plan"
                         >
                             {{ localeData?.subscription?.redeem }}
                             {{ localeData?.subscription?.activation_key }}
                         </h2>
                         <p
-                            [ngClass]="{ 'skelton-common-class': showLoader, 'radeem-ddtails': showLoader }"
+                            [ngClass]="{ 'skeleton-common-class': showLoader, 'redeem-details': showLoader }"
                             class="font-14"
                         >
                             {{ localeData?.subscription?.activation_key_note }}
                         </p>
-                        <div class="d-flex radeem-content">
-                            <div [ngClass]="{ 'skelton-common-class': showLoader, 'radeem-input': showLoader }"></div>
+                        <div class="d-flex redeem-content">
+                            <div [ngClass]="{ 'skeleton-common-class': showLoader, 'redeem-input': showLoader }"></div>
                             <input
                                 *ngIf="!showLoader"
                                 type="text"
@@ -279,7 +279,7 @@
                             />
                             <div class="activation-btn mr-l15">
                                 <div
-                                    [ngClass]="{ 'skelton-common-class': showLoader, 'radeem-button': showLoader }"
+                                    [ngClass]="{ 'skeleton-common-class': showLoader, 'redeem-button': showLoader }"
                                 ></div>
                                 <button
                                     *ngIf="!showLoader"

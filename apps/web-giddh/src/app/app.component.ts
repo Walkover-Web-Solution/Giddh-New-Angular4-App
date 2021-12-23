@@ -1,10 +1,9 @@
 import { NavigationEnd, NavigationStart, Router, RouteConfigLoadEnd, RouteConfigLoadStart } from '@angular/router';
 import { isCordova } from '@giddh-workspaces/utils';
-import {createCustomElement} from '@angular/elements';
 /**
  * Angular 2 decorators and services
  */
-import { AfterViewInit, ChangeDetectorRef, Component, Injector, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 
 import { Store, select } from '@ngrx/store';
 import { AppState } from './store/roots';
@@ -55,7 +54,6 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         private loadingService: LoaderService,
         private companyActions: CompanyActions,
         private commonActions: CommonActions,
-        private injector: Injector
     ) {
         this.isProdMode = PRODUCTION_ENV;
         this.isElectron = isElectron;

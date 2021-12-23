@@ -1,8 +1,7 @@
 import { takeUntil } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
-import { Component, OnDestroy, OnInit, TemplateRef, Output, EventEmitter, Input, ChangeDetectorRef, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, Output, EventEmitter, Input, ChangeDetectorRef, ElementRef, ViewChild } from '@angular/core';
 import { ReplaySubject, Observable } from 'rxjs';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { UserDetails } from '../../../models/api-models/loginModels';
 import { GeneralService } from '../../../services/general.service';
 import { CreateCompanyUsersPlan, SubscriptionRequest } from '../../../models/api-models/Company';
@@ -47,14 +46,8 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
     @Output() public isSubscriptionPlanShow = new EventEmitter<boolean>();
     /** This will use for table content scroll in mobile */
     @ViewChild('tableContent', { read: ElementRef }) public tableContent: ElementRef<any>;
-    /** This will use for table columns */
-    public inputColumns = ['benefits']; //['name', 'transactions', 'companies', 'consultant', 'unlimited_users', 'unlimited_customers', 'desktop_mobile_app', 'check_all_features'];
     /** This will use for hold table data */
     public inputData = TABLE_DATA;
-    /** This will be use for display columns of plan table  */
-    public displayColumns: any[];
-    /** This will use for display data of plan table */
-    public displayData: any[];
     /** This will hold the login user */
     public logedInUser: UserDetails;
     public subscriptionPlans: CreateCompanyUsersPlan[] = [];
@@ -72,30 +65,14 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
     public selectNewPlan: boolean = false;
     public isShow = true;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    /** Ths reference will use for bootstrap model */
-    public modalRef: BsModalRef;
     /** This will contain the type of plans we have to show */
     public showPlans: any = '';
     /** This will contain the number of plans with multiple companies */
-    public totalMultipleCompanyPlans: number = 0;
-    /** This will contain the number of plans with single company */
-    public totalSingleCompanyPlans: number = 0;
-    /** This will contain the number of plans with free plan */
-    public totalFreePlans: number = 0;
-    /** This will contain the default plans of multiple companies */
-    public defaultMultipleCompanyPlan: any;
-    /** This will contain the default plans of single companies */
-    public defaultSingleCompanyPlan: any;
-    /** This will contain the default plans of free companies */
-    public defaultFreePlan: any;
-    /** This will contain the tooltip content of transaction limit */
     public transactionLimitTooltipContent: string = "";
     /** This will contain the tooltip content of unlimited users */
     public unlimitedUsersTooltipContent: string = "";
     /** This will contain the tooltip content of unlimited customers */
     public unlimitedCustomersVendorsTooltipContent: string = "";
-    /** This will contain the tooltip content of desktop_mobile_appp and mobile app */
-    public desktop_mobile_apppMobileAppTooltipContent: string = "";
     /** This will contain the plan unique name of default trial plan */
     public defaultTrialPlan: string = DEFAULT_SIGNUP_TRIAL_PLAN;
     /** This will contain the plan name of popular plan */
@@ -113,7 +90,7 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
     /**  This will be use for all subscription  */
     private allSubscriptions: any[] = [];
 
-    constructor(private modalService: BsModalService, private generalService: GeneralService,
+    constructor(private generalService: GeneralService,
         private changeDetectionRef: ChangeDetectorRef, private authenticationService: AuthenticationService, private store: Store<AppState>,
         private router: Router, private companyActions: CompanyActions, public dialog: MatDialog,
         private settingsProfileActions: SettingsProfileActions, private settingsProfileService: SettingsProfileService, private toasty: ToasterService, public route: ActivatedRoute) {
@@ -121,7 +98,6 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
         this.store.pipe(select(profile => profile.settings.profile), takeUntil(this.destroyed$)).subscribe((response) => {
             if (response && !_.isEmpty(response)) {
                 let companyInfo = _.cloneDeep(response);
-                if (companyInfo?.countryV2?.alpha2CountryCode) { }
                 this.currentCompany = companyInfo?.name;
             }
         });
@@ -147,7 +123,6 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
         this.transactionLimitTooltipContent = this.localeData?.subscription?.transaction_limit_content;
         this.unlimitedUsersTooltipContent = this.localeData?.subscription?.unlimited_users_content;
         this.unlimitedCustomersVendorsTooltipContent = this.localeData?.subscription?.unlimited_customers_content;
-        this.desktop_mobile_apppMobileAppTooltipContent = this.localeData?.subscription?.desktop_mobile_appp_mobile_app_content;
 
         this.router.navigate(['/pages', 'user-details', 'subscription'], {
             queryParams: {
@@ -196,7 +171,7 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
      *
      * @memberof SubscriptionsPlansComponent
      */
-    public openDialog() {
+     public openDialog(): void {
         this.dialog.open(AllFeaturesComponent, {
             panelClass: 'custom-modalbox',
             height: '40%',
@@ -293,15 +268,6 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * This is callback for all features popup
-     *
-     * @memberof SubscriptionsPlansComponent
-     */
-    public closeFeaturesModal(): void {
-        this.modalRef.hide();
-    }
-
-    /**
      * This will return welcome user text
      *
      * @returns {string}
@@ -387,20 +353,6 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
             this.changeDetectionRef.detectChanges();
         });
     }
-    /**
-     * This function will use for format table input row for plans
-     *
-     * @param {*} row
-     * @return {*}
-     * @memberof SubscriptionsPlansComponent
-     */
-    public formatInputRow(row) {
-        const output = {};
-        for (let i = 0; i < this.inputData.length; ++i) {
-            output[this.inputData[i].name] = this.inputData[i][row];
-        }
-        return output;
-    }
 
     /**
     * This will scroll the right slide in mobile view for table
@@ -408,7 +360,7 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
     * @memberof SubscriptionsPlansComponent
     */
     public scrollRight(): void {
-        this.tableContent.nativeElement.scrollTo({ left: (this.tableContent.nativeElement.scrollLeft + 150), behavior: 'smooth' });
+        this.tableContent.nativeElement.scrollTo({ left: (this.tableContent.nativeElement?.scrollLeft + 150), behavior: 'smooth' });
     }
 
     /**
@@ -417,7 +369,7 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
      * @memberof SubscriptionsPlansComponent
      */
     public scrollLeft(): void {
-        this.tableContent.nativeElement.scrollTo({ left: (this.tableContent.nativeElement.scrollLeft - 150), behavior: 'smooth' });
+        this.tableContent.nativeElement.scrollTo({ left: (this.tableContent.nativeElement?.scrollLeft - 150), behavior: 'smooth' });
     }
 }
 

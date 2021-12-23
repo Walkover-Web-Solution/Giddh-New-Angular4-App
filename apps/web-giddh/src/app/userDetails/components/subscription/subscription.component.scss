@@ -12,7 +12,7 @@
 }
 .menu-two {
     height: inherit;
-    background-color: rgb(231, 233, 235);
+    background-color: $dark-fog;
     width: 100%;
     height: 100%;
     display: flex;
@@ -29,7 +29,7 @@
         border: none;
         height: 30px;
         width: 240px;
-        background-color: rgb(231, 233, 235);
+        background-color: $dark-fog;
     }
     .menu-two-list {
         width: 66.8%;
@@ -41,12 +41,12 @@
         top: 5px;
         .search-bar {
             font-weight: 500;
-            color: rgb(106, 108, 133);
+            color: $omiod;
         }
     }
 }
 .main-content-para {
-    color: gray;
+    color: $dark-gray-new;
 }
 .menu-two-list {
     width: 95%;
@@ -54,19 +54,17 @@
     display: flex;
     justify-content: space-around;
     align-items: center;
-    background-color: rgb(231, 233, 235);
+    background-color: $dark-fog;
     .menu-two-list-items {
         .form-select {
             width: 5rem;
         }
         mat-select {
-            background: rgb(245, 245, 245);
-            // border: none;
+            background: $gray-95;
             width: 7.5rem;
             margin-top: 10px;
             margin-left: 0.5rem;
             height: 26px;
-            // color: rgb(106, 108, 133);
             font-weight: bold;
             font-size: 14px;
             padding: 5px 0px 0px 5px;
@@ -76,19 +74,19 @@
         }
         span {
             display: inline-block;
-            color: rgb(33, 37, 40);
+            color: $black-pearl;
         }
     }
 }
 .menu-two-button {
     width: 21%;
     height: inherit;
-    background-color: rgb(231, 233, 235);
+    background-color: $dark-fog;
     a {
         text-decoration: underline;
         font-weight: bold;
         font-size: 14px;
-        color: rgb(153, 157, 160);
+        color: $grey-chateau;
         height: inherit;
         display: grid;
         place-items: center;
@@ -101,17 +99,17 @@
     min-width: 100%;
     overflow: auto;
     height: 100%;
-    background-color: white;
+    background-color: $white;
     border-left: none;
-    border-right: 2px solid rgb(203, 207, 210);
+    border-right: 2px solid $default-border-bottom;
     position: relative;
     padding: 0;
     .sidebar-box {
         mat-grid-tile {
-            border-bottom: 1px solid rgb(231, 233, 235);
+            border-bottom: 1px solid $dark-fog;
         }
         .side-bar-head {
-            color: rgb(26, 35, 126);
+            color: $midnight-blue;
             font-size: 13px;
             font-weight: 600;
             img {
@@ -122,7 +120,7 @@
                 margin: 0px 5px;
             }
             span {
-                color: rgb(106, 108, 133);
+                color: $omiod;
             }
         }
         :hover {
@@ -153,10 +151,10 @@
                 .side-bar-list-title {
                     width: 95px;
                     height: inherit;
-                    color: rgb(106, 108, 133);
+                    color: $omiod;
                 }
                 .warning {
-                    color: rgb(229, 138, 0);
+                    color: $orange-new;
                     font-weight: 600;
                     font-size: 12.5px;
                 }
@@ -174,17 +172,17 @@
     min-width: 100%;
     overflow: hidden;
     height: 100%;
-    background-color: white;
+    background-color: $white;
     border-left: none;
-    border-right: 2px solid rgb(203, 207, 210);
+    border-right: 2px solid $default-border-bottom;
     position: relative;
     padding: 0;
     .sidebar-box-clone {
         mat-grid-tile {
-            border-bottom: 1px solid rgb(231, 233, 235);
+            border-bottom: 1px solid $dark-fog;
         }
         .side-bar-head-clone {
-            color: rgb(26, 35, 126);
+            color: $midnight-blue;
             font-size: 13px;
             font-weight: 600;
             margin-top: 5px;
@@ -197,7 +195,7 @@
                 margin: 0px 5px;
             }
             span {
-                color: rgb(106, 108, 133);
+                color: $omiod;
             }
         }
         .side-bar-items-clone {
@@ -223,7 +221,7 @@
                 .side-bar-list-title-clone {
                     width: 95px;
                     height: inherit;
-                    color: rgb(106, 108, 133);
+                    color: $omiod;
                 }
             }
             .side-bar-list-clone-2 {
@@ -241,7 +239,7 @@
                 .side-bar-list-title-clone {
                     width: 95px;
                     height: inherit;
-                    color: rgb(106, 108, 133);
+                    color: $omiod;
                 }
             }
             .side-bar-list-clone-3 {
@@ -259,19 +257,16 @@
                 .side-bar-list-title-clone {
                     width: 95px;
                     height: inherit;
-                    color: rgb(106, 108, 133);
+                    color: $omiod;
                 }
             }
         }
     }
 }
 .main-content {
-    $grey: rgb(106, 108, 133);
-    $tomato: rgb(229, 69, 86);
-
     width: 100%;
     height: inherit;
-    color: rgb(136, 137, 157);
+    color: $lighted-gray;
 
     .consumed-transaction,
     .consumed-branch,
@@ -310,23 +305,22 @@
     .added-row,
     .added-balance,
     .added-charges {
-        background-color: rgb(237, 250, 245);
+        background-color: $fog-green;
     }
     table {
         width: 97%;
-        // border: 1px solid red;
         box-shadow: none;
         margin: 0px 13px;
     }
     ::ng-deep {
         .cdk-header-row {
-            background-color: rgb(203, 207, 210);
+            background-color: $default-border-bottom;
         }
         .mat-header-row {
             height: 30px !important;
         }
         .mat-header-cell {
-            color: rgb(33, 37, 40) !important;
+            color: $black-pearl !important;
             padding: 4px 10px !important;
             font-size: 13px !important;
             letter-spacing: -0.4px;
@@ -339,17 +333,17 @@
         td.mat-cell:first-of-type {
             width: 49%;
             padding-left: 45px !important;
-            color: rgb(33, 37, 40) !important;
+            color: $black-pearl !important;
         }
         .mat-table tbody tr:hover td {
             background-color: none !important;
         }
         td.mat-cell:last-of-type {
-            color: rgb(229, 69, 86) !important;
+            color: $red !important;
         }
         .mat-table tbody > tr > td {
-            color: rgb(33, 37, 40) !important;
-            background-color: rgb(245, 245, 245);
+            color: $black-pearl !important;
+            background-color: $gray-95;
             padding-top: 7px !important;
             padding-bottom: 7px !important;
         }
@@ -360,13 +354,13 @@
         justify-content: space-between;
         align-items: center;
         margin-top: 6px;
-        background-color: white;
+        background-color: $white;
         .left-side {
             p {
                 font-size: 12px;
                 font-weight: 600;
                 line-height: 19px;
-                color: rgb(33, 37, 40);
+                color: $black-pearl;
                 span {
                     font-size: 15px;
                 }
@@ -378,10 +372,10 @@
             p {
                 font-size: 12px;
                 font-weight: bold;
-                color: rgb(153, 157, 160);
+                color: $grey-chateau;
                 line-height: 19px;
                 span {
-                    color: $tomato;
+                    color: $red;
                 }
             }
             .right-side-btn {
@@ -400,16 +394,15 @@
     .balance-info {
         margin: 5px 17px 0px 17px;
         mat-grid-tile {
-            background-color: rgb(255, 240, 217);
+            background-color: $cream-orange;
             .overall-summary-bar-one {
-                background: white;
+                background: $white;
                 width: 100%;
                 height: inherit;
                 display: flex;
                 .box {
                     width: 25%;
-                    background: rgb(255, 240, 217);
-                    // border: 1px solid black;
+                    background: $cream-orange;
                     flex-grow: 1;
                     display: flex;
                     flex-direction: column;
@@ -420,7 +413,7 @@
                     font-weight: bold;
                     p {
                         span {
-                            color: rgb(33, 37, 40);
+                            color: $black-pearl;
                             font-size: 15px;
                             margin-left: 3px;
                         }
@@ -433,7 +426,7 @@
                             margin: 0px 6px;
                         }
                         .balance {
-                            color: $tomato;
+                            color: $red;
                         }
                     }
                     .box-heading {
@@ -470,14 +463,14 @@
                 p {
                     font-size: 14px;
                     .tomato {
-                        color: $tomato;
+                        color: $red;
                         font-weight: 700;
                         margin: 0px 3px;
                     }
                     .grey {
-                        color: rgb(26, 35, 126);
+                        color: $midnight-blue;
                         font-weight: 700;
-                        border-bottom: 1px solid rgb(26, 35, 126);
+                        border-bottom: 1px solid $midnight-blue;
                     }
                 }
             }
@@ -485,13 +478,12 @@
     }
     mat-tab-group {
         margin: 0px 17px;
-        // background: pink;
         margin-top: 10px;
         height: 22rem;
 
         .companies-expansion-panel {
             mat-expansion-panel-header:not([aria-expanded="false"]) {
-                background-color: rgb(231, 233, 235);
+                background-color: $dark-fog;
 
                 a {
                     display: block;
@@ -506,7 +498,7 @@
                 position: absolute;
                 right: 1rem;
                 display: none;
-                color: rgb(102, 140, 255);
+                color: $cornflower;
                 font-size: 0.9rem;
             }
 
@@ -528,7 +520,7 @@
             float: right;
             padding: 0px;
             border-bottom: 1px solid;
-            color: rgb(26, 35, 126);
+            color: $midnight-blue;
             border-radius: 0;
             padding: 0px;
             height: 25px;
@@ -555,7 +547,7 @@
         padding: 0px 1rem;
 
         .companies-container-items {
-            background-color: white;
+            background-color: $white;
             width: 20%;
             height: 100%;
             width: 33%;
@@ -565,7 +557,7 @@
 
             p {
                 padding-left: 1rem;
-                color: rgb(33, 37, 40);
+                color: $black-pearl;
                 img {
                     height: 1.2rem;
                     padding-right: 8px;
@@ -577,10 +569,10 @@
 
 ::ng-deep {
     .mat-select-arrow {
-        color: rgb(106, 108, 133);
+        color: $omiod;
     }
     .mat-select-placeholder {
-        color: rgb(106, 108, 133);
+        color: $omiod;
     }
     #mat-select-0-panel,
     #mat-select-2-panel,
@@ -590,12 +582,12 @@
         left: 12px;
     }
     .mat-tab-labels {
-        background-color: rgb(231, 233, 235);
+        background-color: $dark-fog;
         .mat-tab-label {
             min-width: 110px;
         }
         .mat-tab-label-content {
-            color: rgb(106, 108, 133);
+            color: $omiod;
             font-weight: 700;
         }
     }
@@ -604,18 +596,18 @@
         mat-panel-title {
             font-size: 14px;
             padding-left: 15px;
-            color: rgb(33, 37, 40) !important;
+            color: $black-pearl !important;
         }
     }
     .companies .mat-expanded {
-        background-color: rgb(231, 233, 235);
+        background-color: $dark-fog;
     }
     .mat-expansion-panel-spacing {
         margin: 0 !important;
     }
 
     mat-accordion .mat-expanded {
-        background-color: rgb(245, 245, 245);
+        background-color: $gray-95;
     }
 }
 .main-content-condition {

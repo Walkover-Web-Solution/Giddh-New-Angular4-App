@@ -103,16 +103,18 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
     /** True if we need to show GSTIN number */
     public showGstinNo: boolean;
     /** True if we need to show Tax number */
-    public showTaxNo: boolean;
+    public showTrnNo: boolean;
     /** This will hold onboarding api form request */
     public onboardingFormRequest: OnboardingFormRequest = { formName: '', country: '' };
     /** This will hold states list with respect to country */
     public countryStates: any[] = [];
     public statesSource: IOption[] = [];
-    /* This will hold company's country states */
+    /** This will hold company's country states */
     public companyStatesSource: IOption[] = [];
     /**This will use for country code */
     public countryCode: string = '';
+    /** This will use for tax percentage */
+    public taxPercentage: number = 0.18;
 
     constructor(private store: Store<AppState>, private generalService: GeneralService, private toasty: ToasterService, private route: Router, private companyService: CompanyService, private generalActions: GeneralActions, private companyActions: CompanyActions, private cdRef: ChangeDetectorRef,
         private settingsProfileActions: SettingsProfileActions, private commonActions: CommonActions, private settingsProfileService: SettingsProfileService, private salesService: SalesService,) {
@@ -139,10 +141,11 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
                 this.getUpdatedStateCodes(activeCompany.countryV2?.alpha3CountryCode, true);
-                this.searchCountry.setValue({ label: activeCompany.countryV2?.countryName });
+                this.showGstAndTaxUsingCountryName(activeCompany.countryV2?.countryName);
+                // this.searchCountry.setValue({ label: activeCompany.countryV2?.countryName });
                 this.activeCompany = activeCompany;
                 this.getStates();
-                this.getCountry();
+                // this.getCountry();
                 this.reFillForm();
             }
         });
@@ -210,26 +213,6 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
             this.prepareSelectedPlanFromSubscriptions(this.selectedPlans);
         }
         this.getOnboardingForm();
-    }
-
-    /**
-     * Select bank callback
-     *
-     * @param {string} name
-     * @memberof BillingDetailComponent
-     */
-    public selectBank(name: string): void {
-        if (this.activeCompany?.country === name) {
-            if (name === 'India') {
-                this.showGstinNo = true;
-            } else if (name === 'United Arab Emirates') {
-                this.showGstinNo = false;
-                this.showTaxNo = true;
-            }
-        } else {
-            this.showGstinNo = false;
-            this.showTaxNo = false;
-        }
     }
 
     public getPayAmountForRazorPay(amt: any): number {
@@ -477,7 +460,6 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
                         label: res[key].countryName,
                         additional: res[key].callingCode
                     });
-                    this.showGstAndTaxUsingCountryName(res[key].countryName);
                 });
                 this.countrySource = cloneDeep(this.countrySource)
                 this.countrySource$ = observableOf(this.countrySource);
@@ -708,12 +690,12 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     public showGstAndTaxUsingCountryName(name: string): void {
         if (this.activeCompany?.country === name) {
-            if (name === 'India') {
+            if (name !== 'India') {
                 this.showGstinNo = true;
-                this.showTaxNo = false;
+                this.showTrnNo = false;
             } else {
                 this.showGstinNo = false;
-                this.showTaxNo = true;
+                this.showTrnNo = true;
             }
         }
     }
@@ -729,11 +711,10 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
         this.getUpdatedStateCodes(evt.source.value.value, true);
         if (evt.source.value.label === 'India' && this.activeCompany?.country === 'India') {
             this.showGstinNo = true;
-            this.showTaxNo = false;
+            this.showTrnNo = false;
         } else {
-
             this.showGstinNo = false;
-            this.showTaxNo = true;
+            this.showTrnNo = true;
         }
     }
 
@@ -791,9 +772,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
                 value: stateR.code ? stateR.code : stateR.stateGstCode,
             });
         });
-
         this.countryStates[countryCode] = stateListRet;
-
         return stateListRet;
     }
 }
