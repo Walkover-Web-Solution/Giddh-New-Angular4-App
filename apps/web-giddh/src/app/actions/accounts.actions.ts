@@ -544,7 +544,7 @@ export class AccountsAction {
                 }
                 return { type: 'EmptyAction' };
             })));
-            
+
     constructor(private action$: Actions,
         private _accountService: AccountService,
         private _toasty: ToasterService,

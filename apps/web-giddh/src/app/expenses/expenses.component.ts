@@ -241,6 +241,8 @@ export class ExpensesComponent implements OnInit, OnDestroy {
 
     public getPettyCashPendingReports(request: CommonPaginatedRequest) {
         request.status = 'pending';
+        request.from = this.pettycashRequest.from;
+        request.to = this.pettycashRequest.to;
         this.isPettyCashPendingReportLoading = true;
         this.expenseService.getPettycashReports(request).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if(response?.status === "success") {
@@ -255,6 +257,8 @@ export class ExpensesComponent implements OnInit, OnDestroy {
 
     public getPettyCashRejectedReports(request: CommonPaginatedRequest) {
         request.status = 'rejected';
+        request.from = this.pettycashRequest.from;
+        request.to = this.pettycashRequest.to;
         this.isPettyCashRejectedReportLoading = true;
         this.expenseService.getPettycashRejectedReports(request).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if(response?.status === "success") {

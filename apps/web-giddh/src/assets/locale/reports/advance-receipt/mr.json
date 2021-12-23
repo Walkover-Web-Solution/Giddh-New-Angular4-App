@@ -20,5 +20,10 @@
         "advance_receipts": "आगाऊ पावती"
     },
     "entry_date": "प्रवेश तारीख",
-    "suppliers_name": "पुरवठादार नाव"
+    "suppliers_name": "पुरवठादार नाव",
+    "new_voucher": "+ नवीन पावती",
+    "preview_unavailable": "Preview is not available right now! Please try again...",
+    "delete_voucher": "Do you want to delete the receipt?",
+    "delete_vouchers": "Do you want to delete the voucher(s) / receipt(s)?",
+    "uploaded_bill": "Uploaded Bill"
 }

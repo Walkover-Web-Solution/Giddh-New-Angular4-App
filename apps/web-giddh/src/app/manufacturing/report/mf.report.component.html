@@ -1,5 +1,4 @@
 <section id="manufacture" class="clearfix">
-    <!-- page Title -->
     <hamburger-menu *ngIf="!isInventoryPage" [pageHeading]="'Mfg. Journal Register'"></hamburger-menu>
     <div class="clearfix mr-r15 create-btn" *ngIf="isMobileScreen">
         <div class="mr-r15" *ngIf="showClearFilter()">
@@ -13,7 +12,7 @@
             </button>
         </div>
     </div>
-    <div class="col-12 col-sm-12 mf-report-head">
+    <div class="col-12 col-sm-12 mf-report-head" [ngClass]="{ 'parent': fromParentComponent }">
         <div class="row">
             <div
                 class="col-12"

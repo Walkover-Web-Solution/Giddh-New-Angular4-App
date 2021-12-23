@@ -103,5 +103,7 @@
     "date_change_confirmation_heading": "तारीख बदल पुष्टीकरण",
     "change_single_entry_date": "तुम्हाला एन्ट्रीची तारीखही बदलायची आहे का?",
     "change_all_entry_dates": "आपण या तारखेसह सर्व नोंदी तारीख बदलू इच्छिता??",
-    "exchange_label": "विनिमय"
+    "exchange_label": "विनिमय",
+    "confirm_delete_file": "आपली खात्री आहे की आपण संलग्न केलेली फाइल हटवू इच्छिता?",
+    "enter_amount": "कृपया ठेव रक्कम प्रविष्ट करा"
 }

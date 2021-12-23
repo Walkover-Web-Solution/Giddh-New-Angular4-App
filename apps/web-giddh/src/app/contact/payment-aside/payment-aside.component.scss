@@ -76,9 +76,7 @@ form label {
 .modal-title {
     color: $white;
 }
-.btn-success {
-    padding: 7px 25px;
-}
+
 .payment-top-form .d-flex {
     flex-wrap: wrap;
 }
@@ -178,6 +176,9 @@ form label {
     z-index: 9;
     right: 8px;
     top: 9px;
+}
+.align-items-center {
+    align-items: center;
 }
 @media (max-width: 1100px) {
     .payment-top-form {

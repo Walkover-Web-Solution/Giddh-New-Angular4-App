@@ -7,7 +7,7 @@ import { IOption } from '../../theme/ng-select/ng-select';
 import { AppState } from '../../store';
 import { Store, select } from '@ngrx/store';
 import { takeUntil } from 'rxjs/operators';
-import { ReplaySubject } from 'rxjs';
+import { Observable, ReplaySubject } from 'rxjs';
 import { NgForm } from '@angular/forms';
 import { ToasterService } from '../../services/toaster.service';
 import { cloneDeep } from '../../lodash-optimized';
@@ -98,6 +98,8 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
     public commonLocaleData: any = {};
     /** True, if multi-currency support to voucher adjustment is enabled */
     public enableVoucherAdjustmentMultiCurrency: boolean;
+    /** Stores the voucher API version of current company */
+    public voucherApiVersion: 1 | 2;
 
     constructor(
         private store: Store<AppState>,
@@ -113,6 +115,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
      * @memberof AdvanceReceiptAdjustmentComponent
      */
     public ngOnInit() {
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.adjustVoucherForm = new VoucherAdjustments();
         this.onClear();
         this.store.pipe(select(prof => prof.settings.profile), takeUntil(this.destroyed$)).subscribe(async (profile) => {
@@ -156,21 +159,22 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
             if (typeof customerUniqueName === 'string') {
                 // New entry is created from ledger
                 requestObject = {
-                    accountUniqueNames: [customerUniqueName, this.invoiceFormDetails.activeAccountUniqueName],
+                    accountUniqueNames: [customerUniqueName, this.invoiceFormDetails.activeAccountUniqueName ?? voucherType],
                     voucherType,
                     subVoucher: this.adjustedVoucherType === AdjustedVoucherType.AdvanceReceipt ? SubVoucher.AdvanceReceipt : undefined
                 }
             } else {
                 // A ledger entry is updated
                 requestObject = {
-                    accountUniqueNames: [...customerUniqueName, this.invoiceFormDetails.activeAccountUniqueName],
+                    accountUniqueNames: [...customerUniqueName, this.invoiceFormDetails.activeAccountUniqueName ?? voucherType],
                     voucherType,
                     subVoucher: this.adjustedVoucherType === AdjustedVoucherType.AdvanceReceipt ? SubVoucher.AdvanceReceipt : undefined
                 }
             }
             this.salesService.getInvoiceList(requestObject, this.invoiceFormDetails.voucherDetails.voucherDate).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
                 if (response && response.body) {
-                    this.allAdvanceReceiptResponse = response.body.results?.map(result => ({ ...result, adjustmentAmount: { amountForAccount: result.balanceDue.amountForAccount, amountForCompany: result.balanceDue.amountForCompany } }));
+                    const results = (response.body.results || response.body.items);
+                    this.allAdvanceReceiptResponse = results?.map(result => ({ ...result, adjustmentAmount: { amountForAccount: result.balanceDue?.amountForAccount, amountForCompany: result.balanceDue?.amountForCompany } }));
                     this.adjustVoucherOptions = [];
                     if (this.allAdvanceReceiptResponse && this.allAdvanceReceiptResponse.length) {
                         this.allAdvanceReceiptResponse.forEach(item => {
@@ -189,7 +193,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
                         if (this.isVoucherModule) {
                             this.toaster.warningToast(NO_ADVANCE_RECEIPT_FOUND);
                         } else {
-                            this.toaster.warningToast(this.localeData?.voucher_unavailable);
+                            this.toaster.warningToast(this.commonLocaleData?.app_voucher_unavailable);
                         }
                     }
                 }
@@ -307,7 +311,23 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
         if (this.adjustPayment && this.adjustPayment.customerUniquename && this.adjustPayment.voucherDate) {
             this.getAllAdvanceReceiptsRequest.accountUniqueName = this.adjustPayment.customerUniquename;
             this.getAllAdvanceReceiptsRequest.invoiceDate = this.adjustPayment.voucherDate;
-            this.salesService.getAllAdvanceReceiptVoucher(this.getAllAdvanceReceiptsRequest).pipe(takeUntil(this.destroyed$)).subscribe(res => {
+
+            let apiCallObservable: Observable<any>;
+            if (this.voucherApiVersion !== 2) {
+                const requestObject = {
+                    accountUniqueName: this.getAllAdvanceReceiptsRequest.accountUniqueName,
+                    invoiceDate: this.getAllAdvanceReceiptsRequest.invoiceDate
+                };
+                apiCallObservable = this.salesService.getAllAdvanceReceiptVoucher(requestObject);
+            } else {
+                const requestObject = {
+                    accountUniqueNames: [this.adjustedVoucherType, this.getAllAdvanceReceiptsRequest.accountUniqueName],
+                    voucherType: this.adjustedVoucherType
+                }
+                apiCallObservable = this.salesService.getInvoiceList(requestObject, this.getAllAdvanceReceiptsRequest.invoiceDate);
+            }
+            
+            apiCallObservable.pipe(takeUntil(this.destroyed$)).subscribe(res => {
                 if (res.status === 'success') {
                     this.adjustVoucherOptions = [];
                     if (this.adjustVoucherForm && this.adjustVoucherForm.adjustments) {
@@ -320,8 +340,8 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
                             }
                         });
                     }
-                    this.allAdvanceReceiptResponse = res.body
-                    if (res.body && res.body.length) {
+                    this.allAdvanceReceiptResponse = (res.body.items?.length) ? res.body.items : (res.body.results?.length) ? res.body.results : res.body;
+                    if (this.allAdvanceReceiptResponse?.length) {
                         if (this.allAdvanceReceiptResponse && this.allAdvanceReceiptResponse.length) {
                             this.allAdvanceReceiptResponse.forEach(item => {
                                 if (item) {

@@ -1274,27 +1274,16 @@
                                                         <span
                                                             class="download-invoice-ledger d-flex"
                                                             *ngIf="transactions.attachedFileUniqueName"
-                                                            (click)="
-                                                                downloadAttachedFile(
-                                                                    transactions.attachedFileUniqueName,
-                                                                    $event
-                                                                )
-                                                            "
+                                                            (click)="downloadFiles(transactions, 'ATTACHMENT', $event)"
                                                         >
-                                                            <i class="icon-download-circle pull-left"></i>
+                                                            <i class="icon-attachment pull-left"></i>
                                                         </span>
                                                         <span
                                                             class="download-invoice-ledger d-flex"
                                                             *ngIf="transactions.voucherGenerated"
-                                                            (click)="
-                                                                downloadInvoice(
-                                                                    transactions.voucherNumber,
-                                                                    transactions.voucherGeneratedType,
-                                                                    $event
-                                                                )
-                                                            "
+                                                            (click)="downloadFiles(transactions, 'VOUCHER', $event)"
                                                         >
-                                                            <i class="icon-download-circle pull-left"></i>
+                                                            <i class="icon-download-new pull-left"></i>
                                                         </span>
                                                     </span>
                                                 </div>
@@ -1523,19 +1512,17 @@
                                         <span
                                             class="download-invoice-ledger d-flex"
                                             *ngIf="txn.attachedFileUniqueName"
-                                            (click)="downloadAttachedFile(txn.attachedFileUniqueName, $event)"
+                                            (click)="downloadFiles(txn, 'ATTACHMENT', $event)"
                                             [matTooltip]="localeData?.download_file + ' : ' + txn.attachedFileName"
                                             [matTooltipPosition]="'right'"
                                             matTooltipClass="tooltip-black"
                                         >
-                                            <i class="icon-download-circle pull-left"></i>
+                                            <i class="icon-attachment pull-left"></i>
                                         </span>
                                         <span
                                             class="download-invoice-ledger d-flex"
                                             *ngIf="txn.voucherGenerated"
-                                            (click)="
-                                                downloadInvoice(txn.voucherNumber, txn.voucherGeneratedType, $event)
-                                            "
+                                            (click)="downloadFiles(txn, 'VOUCHER', $event)"
                                             [matTooltip]="
                                                 commonLocaleData?.app_download +
                                                 ' ' +
@@ -1548,7 +1535,7 @@
                                             [matTooltipPosition]="'right'"
                                             matTooltipClass="tooltip-black"
                                         >
-                                            <i class="icon-download-circle pull-left"></i>
+                                            <i class="icon-download-new pull-left"></i>
                                         </span>
                                     </div>
                                 </mat-grid-tile>
@@ -1664,7 +1651,7 @@
                                                                         </div>
                                                                         <div class="item-stock">
                                                                             {{ commonLocaleData?.app_stock }}:
-                                                                            {{ option.additional?.stock.name }}
+                                                                            {{ option.additional?.stock.uniqueName }}
                                                                         </div>
                                                                     </a>
                                                                 </ng-container>
@@ -1931,19 +1918,17 @@
                                         <span
                                             class="download-invoice-ledger d-flex"
                                             *ngIf="txn.attachedFileUniqueName"
-                                            (click)="downloadAttachedFile(txn.attachedFileUniqueName, $event)"
+                                            (click)="downloadFiles(txn, 'ATTACHMENT', $event)"
                                             [matTooltip]="localeData?.download_file + ' : ' + txn.attachedFileName"
                                             [matTooltipPosition]="'right'"
                                             matTooltipClass="tooltip-black"
                                         >
-                                            <i class="icon-download-circle pull-left"></i>
+                                            <i class="icon-attachment pull-left"></i>
                                         </span>
                                         <span
                                             class="download-invoice-ledger d-flex"
                                             *ngIf="txn.voucherGenerated"
-                                            (click)="
-                                                downloadInvoice(txn.voucherNumber, txn.voucherGeneratedType, $event)
-                                            "
+                                            (click)="downloadFiles(txn, 'VOUCHER', $event)"
                                             [matTooltip]="
                                                 commonLocaleData?.app_download +
                                                 ' ' +
@@ -1956,7 +1941,7 @@
                                             [matTooltipPosition]="'right'"
                                             matTooltipClass="tooltip-black"
                                         >
-                                            <i class="icon-download-circle pull-left"></i>
+                                            <i class="icon-download-new pull-left"></i>
                                         </span>
                                     </div>
                                 </mat-grid-tile>
@@ -2066,7 +2051,7 @@
                                                                         </div>
                                                                         <div class="item-stock">
                                                                             {{ commonLocaleData?.app_stock }}:
-                                                                            {{ option.additional?.stock.name }}
+                                                                            {{ option.additional?.stock.uniqueName }}
                                                                         </div>
                                                                     </a>
                                                                 </ng-container>
@@ -2443,7 +2428,10 @@
                                 <div class="ledger-state-box">
                                     <h1>{{ localeData?.net_total }}</h1>
                                     <div class="d-flex justify-content-between">
-                                        <div *ngIf="ledgerTxnBalance?.creditTotal > ledgerTxnBalance?.debitTotal">
+                                        <div
+                                            class="d-flex flex-column justify-content-between"
+                                            *ngIf="ledgerTxnBalance?.creditTotal > ledgerTxnBalance?.debitTotal"
+                                        >
                                             <h3 class="digit-blue d-flex">
                                                 <amount-field
                                                     [amount]="
@@ -2457,7 +2445,7 @@
                                                 <span class="text-capitalize">{{ commonLocaleData?.app_cr }}</span>
                                             </h3>
                                             <h3
-                                                class="digit-blue sub-total font-12 d-inline-flex"
+                                                class="digit-blue sub-total font-12 d-flex"
                                                 *ngIf="isLedgerAccountAllowsMultiCurrency"
                                             >
                                                 <amount-field
@@ -2475,7 +2463,10 @@
                                         </div>
                                     </div>
                                     <div class="d-flex justify-content-between">
-                                        <div *ngIf="ledgerTxnBalance?.creditTotal < ledgerTxnBalance?.debitTotal">
+                                        <div
+                                            class="d-flex flex-column justify-content-between"
+                                            *ngIf="ledgerTxnBalance?.creditTotal < ledgerTxnBalance?.debitTotal"
+                                        >
                                             <h3 class="digit-blue d-inline-flex">
                                                 <amount-field
                                                     [amount]="
@@ -2489,7 +2480,7 @@
                                                 <span class="text-capitalize">{{ commonLocaleData?.app_dr }}</span>
                                             </h3>
                                             <h3
-                                                class="digit-blue sub-total font-12 d-inline-flex"
+                                                class="digit-blue sub-total font-12 d-flex"
                                                 *ngIf="isLedgerAccountAllowsMultiCurrency"
                                             >
                                                 <amount-field
@@ -2584,7 +2575,10 @@
                                                 }}
                                             </span>
                                         </h3>
-                                        <h3 class="digit-blue d-flex" *ngIf="isLedgerAccountAllowsMultiCurrency">
+                                        <h3
+                                            class="digit-blue font-12 d-flex"
+                                            *ngIf="isLedgerAccountAllowsMultiCurrency"
+                                        >
                                             <span
                                                 class="d-flex"
                                                 [matTooltip]="
@@ -2701,6 +2695,21 @@
                             [showRangeLabelOnInput]="false"
                             [dateFieldPosition]="dateFieldPosition"
                         ></app-datepicker-wrapper>
+                    </div>
+                </div>
+            </ng-template>
+
+            <ng-template #entryConfirmModal>
+                <div class="modal-dialog modal-md">
+                    <div class="modal-content">
+                        <confirm-modal
+                            [title]="commonLocaleData?.app_confirm"
+                            [body]="duplicateEntryConfirmationMessage"
+                            [permanentlyDeleteMessage]="' '"
+                            (cancelCallBack)="cancelMergeEntry()"
+                            (successCallBack)="confirmMergeEntry()"
+                        >
+                        </confirm-modal>
                     </div>
                 </div>
             </ng-template>

@@ -59,6 +59,7 @@
                                 (selectedRowInput)="selectedRowInput($event)"
                                 (reportDates)="reportDates($event)"
                                 (reloadReportList)="getPettyCashPendingReports($event)"
+                                (reloadRejectReportList)="getPettyCashRejectedReports($event)"
                             ></app-pending-list>
                             <div class="main-edit-expense" *ngIf="isSelectedRow">
                                 <div class="left-expense">
@@ -85,7 +86,7 @@
                     </div>
                 </mat-tab>
                 <mat-tab [label]="localeData?.rejected">
-                    <div class="container-fluid mr-b15" *ngIf="!isSelectedRow">
+                    <div class="container-fluid mr-b15">
                         <div class="row">
                             <div class="col-sm-6">
                                 <div class="d-flex mr-t1">

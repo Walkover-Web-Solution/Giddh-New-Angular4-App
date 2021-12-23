@@ -17,7 +17,8 @@ export enum VoucherTypeEnum {
     'estimate' = 'estimate',
     'generateEstimate' = 'estimates',
     'cash' = 'cash',
-    'receipt' = 'receipt'
+    'receipt' = 'receipt',
+    'payment' = 'payment'
 }
 
 export enum ActionTypeAfterVoucherGenerateOrUpdate {
@@ -107,13 +108,13 @@ export class GstDetailsClass {
     public state?: StateCode;
     public panNumber?: any;
     public countryName?: string;
-
     /*Keeping both as API team is too confused to Map one variable type
     *thus kept both whichever is needed on run time we can send that in request mapping.
     * */
     public stateCode?: string;
     public stateName?: string;
     public pincode?: string;
+    public taxNumber?: string;
 
     constructor() {
         this.address = [];
@@ -177,6 +178,7 @@ export class AccountDetailsClass {
                     : attrs.addresses[0].stateCode;
                 this.billingDetails.state.name = attrs.addresses[0].stateName;
                 this.billingDetails.gstNumber = attrs.addresses[0].gstNumber;
+                this.billingDetails.taxNumber = attrs.addresses[0].gstNumber;
                 this.billingDetails.pincode = attrs.addresses[0].pincode;
                 this.billingDetails.panNumber = '';
                 // set shipping
@@ -187,6 +189,7 @@ export class AccountDetailsClass {
                     : attrs.addresses[0].stateCode;
                 this.shippingDetails.state.name = attrs.addresses[0].stateName;
                 this.shippingDetails.gstNumber = attrs.addresses[0].gstNumber;
+                this.shippingDetails.taxNumber = attrs.addresses[0].gstNumber;
                 this.shippingDetails.pincode = attrs.addresses[0].pincode;
                 this.shippingDetails.panNumber = '';
             }
@@ -237,6 +240,7 @@ export class SalesTransactionItemClass extends ICommonItemOfTransaction {
     public maxQuantity?: number;
     public purchaseOrderItemMapping?: { uniqueName: string; entryUniqueName: any; };
     public showCodeType: string;
+    public highPrecisionAmount?: number;
 
     constructor() {
         super();
@@ -327,7 +331,7 @@ export class SalesEntryClass {
     public isNewEntryInUpdateMode?: boolean;
     public isOtherTaxApplicable: boolean = false;
     public otherTaxSum: number;
-    public otherTaxType: 'tcs' | 'tds';
+    public otherTaxType: 'tcs' | 'tds' | undefined;
     public cessSum: number;
     public otherTaxModal: SalesOtherTaxesModal;
     public tcsCalculationMethod: SalesOtherTaxesCalculationMethodEnum;
@@ -385,14 +389,7 @@ export class OtherSalesItemClass {
     public message2?: string;
     public slogan?: any;
 
-    constructor() {
-        this.shippingDate = null;
-        this.shippedVia = null;
-        this.trackingNumber = null;
-        this.customField1 = null;
-        this.customField2 = null;
-        this.customField3 = null;
-    }
+    constructor() { }
 }
 
 /**
@@ -482,6 +479,7 @@ export class VoucherDetailsClass {
     public balance?: any;
     public deposit?: any;
     public balanceDue?: number;
+    public convertedBalanceDue?: number;
     public balanceStatus?: string;
     public totalAsWords: string;
     public grandTotal: number;
@@ -573,6 +571,7 @@ export class VoucherClass {
     public attachedFileName?: string;
     public attachedFiles?: Array<string>;
     public purchaseOrderDetails?: any;
+    public deposit?: any;
 
     constructor() {
         this.accountDetails = new AccountDetailsClass();
@@ -688,5 +687,62 @@ export class DiscountMulticurrency {
         this.discountValue = ledgerDiscountClass.discountValue;
         this.name = ledgerDiscountClass.name;
         this.particular = ledgerDiscountClass.particular;
+    }
+}
+
+export class PaymentReceiptTransaction {
+    account: PaymentReceiptAccount;
+    amount: PaymentReceiptAmount;
+
+    constructor() {
+        this.account = new PaymentReceiptAccount();
+        this.amount = new PaymentReceiptAmount();
+    }
+}
+
+export class PaymentReceiptAccount {
+    uniqueName: string;
+    name: string;
+
+    constructor() {
+        this.uniqueName = "";
+        this.name = "";
+    }
+}
+
+export class PaymentReceiptAmount {
+    amountForAccount: number;
+}
+
+export class PaymentReceiptEntry {
+    transactions: PaymentReceiptTransaction[];
+    date: any;
+    chequeNumber: string;
+    chequeClearanceDate: any;
+    taxes: TaxControlData[] = [];
+
+    constructor() {
+        this.transactions = [new PaymentReceiptTransaction()];
+        this.taxes = [];
+    }
+}
+
+export class PaymentReceipt {
+    account: AccountDetailsClass;
+    updateAccountDetails: boolean;
+    entries: PaymentReceiptEntry[];
+    date: any;
+    type: string;
+    exchangeRate: number;
+    attachedFiles: any[];
+    subVoucher: any;
+    uniqueName?: any;
+    templateDetails?: TemplateDetailsClass;
+
+    constructor() {
+        this.account = new AccountDetailsClass();
+        this.entries = [new PaymentReceiptEntry()];
+        this.templateDetails = new TemplateDetailsClass();
+        this.date = "";
     }
 }

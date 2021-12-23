@@ -10,13 +10,15 @@ export class InvoiceReceiptFilter extends InvoiceFilterClassForInvoicePreview {
 }
 
 export interface ReciptDeleteRequest {
-    invoiceNumber: string;
+    invoiceNumber?: string;
     voucherType: string;
+    uniqueName?: string;
 }
 
 export class ReceiptVoucherDetailsRequest {
-    public invoiceNumber: string;
+    public invoiceNumber?: string;
     public voucherType: string;
+    public uniqueName?: string;
 }
 
 export interface ReceiptAccount {
@@ -142,7 +144,7 @@ export interface Transaction {
     category: string;
     taxableValue: number;
     date?: any;
-    isStockTxn?: string;
+    isStockTxn?: boolean;
     stockDetails?: string;
     rate?: number;
 }
@@ -168,6 +170,7 @@ export interface Voucher {
     accountDetails: AccountDetails;
     templateDetails: TemplateDetails;
     entries: Entry[];
+    deposit?: any;
 }
 
 export interface ReciptRequest {
@@ -177,9 +180,23 @@ export interface ReciptRequest {
 }
 
 export interface DownloadVoucherRequest {
-    voucherNumber: string[];
+    voucherNumber?: string[];
     voucherType: string;
+    uniqueName?: string;
+    typeOfInvoice?: string[];
 }
 class CurrencyClass {
     public code: string;
+}
+
+/** Voucher request modal */
+export class VoucherRequest {
+    public number: string;
+    public type: string;
+    public uniqueName: string;
+    constructor(voucherNumber: string, type: string, uniqueName?: string) {
+        this.number = voucherNumber ?? '';
+        this.type = type ?? '';
+        this.uniqueName = uniqueName;
+    }
 }

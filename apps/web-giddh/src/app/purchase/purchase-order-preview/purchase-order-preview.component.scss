@@ -37,7 +37,7 @@
 .invoice-sidebar {
     background-color: $white;
     padding: 0;
-    height: calc(100vh - 60px);
+    height: calc(100vh - 130px);
 }
 
 .d-flex {
@@ -835,7 +835,7 @@ strong {
     width: 60%;
     height: 1px;
     margin: 0px 0 auto auto;
-    border-bottom: 1px solid $very-light-gray;
+    border-bottom: 1px solid $gainsboro;
 }
 
 .green-row {
