@@ -333,7 +333,7 @@ i.icon-options:hover {
 
 .search-field input:focus {
     background-color: $white !important;
-    border-color: $midnight-express !important;
+    border-color: var(--common-primary-blue-border) !important;
 }
 
 span.input-addon {

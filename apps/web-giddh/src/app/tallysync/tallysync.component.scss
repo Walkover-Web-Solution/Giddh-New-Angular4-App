@@ -2,7 +2,7 @@
 .btn-default {
     background: $white;
     border-color: $chetwode-blue;
-    color: $midnight-express;
+    color: var(--common-primary-blue-border);
 }
 .btn-default.active {
     background: $chetwode-blue;

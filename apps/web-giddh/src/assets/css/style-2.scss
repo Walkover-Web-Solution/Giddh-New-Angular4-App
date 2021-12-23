@@ -692,7 +692,7 @@ ul.sub-list {
 .tab-integration .nav-tabs > li.active a {
     background: var(--rectangular-tab-primary-background-color) !important;
     box-shadow: 0 6px 7px var(--rectangular-tab-box-shadow-color);
-    border: 1px solid $midnight-express !important;
+    border: 1px solid var(--common-primary-blue-border) !important;
     color: $night-rider !important;
     border-radius: 3px;
 }
@@ -1473,7 +1473,7 @@ header .navbar {
 .show > .btn-primary.dropdown-toggle {
     background: $white !important;
     border-color: $gainsboro !important;
-    color: $midnight-express !important;
+    color: var(--common-primary-blue-border) !important;
 }
 .btn-primary:hover,
 .btn-primary:disabled,
@@ -1515,7 +1515,7 @@ fieldset[disabled] .btn-primary:hover {
 .btn-default {
     background: $white !important;
     border-color: $gainsboro !important;
-    color: $midnight-express !important;
+    color: var(--common-primary-blue-border) !important;
 }
 .btn-default:hover,
 .btn-default:disabled,
