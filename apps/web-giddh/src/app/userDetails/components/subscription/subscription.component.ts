@@ -49,18 +49,6 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
     @ViewChild(MatAccordion) accordion: MatAccordion;
     /** This will use for move company in to another company  */
     @ViewChild("moveCompany", { static: false }) public moveCompany: any;
-    /** This will change the search bar width dynamically */
-    public menuOneWidth: Number = 4;
-    public menuTwoWidth: Number = 12;
-    /** This will change the rowspan of main content and plan list dynamically */
-    public sideBarBoxLength: Number = 15;
-    public sideBarBoxWidth: Number = 4;
-    public mainContentWidth: Number = 12;
-    /** This will change the height of plan list dynamically */
-    public rowLength: Number = 180;
-    /** This will change the length of overall summary box dynamically */
-    public overallSummaryTopRow: Number = 6;
-    public overallSummaryBottomRow: Number = 4;
     /* This will hold list of subscriptions */
     public subscriptions: SubscriptionsUser[] = [];
     /** Observable to listen for subscriptions */
@@ -159,40 +147,6 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
         /** This will use for image format */
         this.imgPath = (isElectron || isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
 
-        /** This will use for responsive */
-        this.breakpointObserver.observe([
-            '(min-width: 768px)',
-            '(min-width: 1024px)',
-            '(min-width: 1536px)'
-        ]).subscribe((state: BreakpointState) => {
-            if (state.breakpoints['(min-width: 768px)']) {
-                this.rowLength = 120;
-                this.sideBarBoxWidth = 5;
-                this.mainContentWidth = 11;
-                this.menuOneWidth = 5;
-                this.menuTwoWidth = 11;
-            } else if (state.breakpoints['(min-width: 1024px)']) {
-                this.rowLength = 120;
-                this.sideBarBoxLength = 15;
-                this.overallSummaryTopRow = 5;
-                this.overallSummaryBottomRow = 3;
-                this.sideBarBoxWidth = 4;
-                this.mainContentWidth = 12;
-                this.menuOneWidth = 4;
-                this.menuTwoWidth = 12;
-            } else if (state.breakpoints['(min-width: 1536px)']) {
-                this.rowLength = 150;
-                this.sideBarBoxLength = 15;
-                this.overallSummaryTopRow = 6;
-                this.overallSummaryBottomRow = 4;
-                this.sideBarBoxWidth = 4;
-                this.mainContentWidth = 12;
-                this.menuOneWidth = 4;
-                this.menuTwoWidth = 12;
-            }
-        });
-
-        this.translationComplete();
     }
 
     ngOnChanges(): void {

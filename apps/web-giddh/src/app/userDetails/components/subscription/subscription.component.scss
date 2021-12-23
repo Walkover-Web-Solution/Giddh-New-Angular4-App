@@ -3,8 +3,8 @@
     position: absolute;
     z-index: 9;
     top: 4px;
-    left: 31.5%;
-    width: 67.3%;
+    left: 23.3%;
+    width: 75.9%;
     button {
         float: right;
         font-weight: bold;
@@ -612,6 +612,7 @@
 }
 .main-content-condition {
     text-align: center;
+    margin-bottom: 270px;
 }
 .mat-expansion-panel:not(.mat-expanded) .mat-expansion-panel-header:hover {
     background: rgba(102, 140, 255, 0.1);
@@ -666,31 +667,36 @@
     .sidebar {
         .sidebar-box {
             .side-bar-items {
+                justify-content: flex-start;
+                padding-left: 16px;
+                padding-top: 18px;
                 .plan-timeline {
                     position: relative;
                     top: 5px;
                 }
                 .side-bar-head {
-                    font-size: 12px;
+                    font-size: 9.5px;
                     img {
                         height: 2px;
                         width: auto;
-                        margin: 0px 3px;
+                        margin: 0px 2px;
                     }
                     span {
-                        font-size: 12px;
+                        font-size: 9.5px;
                     }
                 }
                 .side-bar-list {
                     line-height: 1rem;
                     .date {
                         position: absolute;
-                        top: 0px;
-                        left: 28px;
+                        top: 91px;
+                        left: 23px;
+                        font-size: 11.1px;
                     }
                     img {
                         width: 15px;
-                        margin-right: 0.3rem;
+                        margin-right: 0.2rem;
+                        margin-top: 0.1rem;
                     }
                     .warning {
                         font-size: 11px;
@@ -698,6 +704,13 @@
                     .side-bar-list-title {
                         display: none;
                         width: 73px;
+                    }
+                    span {
+                        margin-right: 2px;
+                    }
+                    p {
+                        font-size: 12px;
+                        padding-top: 0.1rem;
                     }
                 }
             }
@@ -761,6 +774,9 @@
             }
         }
         .expand-button {
+            top: 26.5%;
+            left: 60%;
+            width: 40%;
             button {
                 top: -28px;
                 border-bottom: none;
@@ -768,6 +784,9 @@
                 padding-right: 0 !important;
                 height: 21px;
                 transform: translate(-9px, 0px);
+            }
+            :nth-child(2) {
+                margin-right: -10px !important;
             }
         }
     }
@@ -791,6 +810,21 @@
 }
 
 @media screen and (min-width: 768px) and (orientation: portrait) {
+    .responsive-grid-title-left {
+        float: left !important;
+        width: 39% !important;
+        margin-top: 20px;
+    }
+    .responsive-grid-title-left-top {
+        float: left !important;
+        width: 39% !important;
+        height: 60px !important;
+    }
+    .responsive-grid-title-right {
+        height: 60px !important;
+        margin-left: 14%;
+        width: 63% !important;
+    }
     * {
         font-size: 12px;
     }
@@ -819,15 +853,17 @@
         .menu-two-list-items {
             mat-select {
                 font-size: 10px;
-                height: 18px;
-                width: 3.2rem;
+                height: 23px;
+                width: 3.8rem;
                 margin-left: 0.2rem;
+                margin-bottom: 3px;
+                padding-top: 6px;
             }
             .transaction-select {
                 width: 4.2rem !important;
             }
             span {
-                font-size: 10px;
+                font-size: 11px;
             }
         }
         .transaction-box {
@@ -862,7 +898,7 @@
                     .date {
                         font-size: 12px;
                         position: absolute;
-                        top: 84px;
+                        top: 100px;
                         left: 43px;
                     }
                     img {
