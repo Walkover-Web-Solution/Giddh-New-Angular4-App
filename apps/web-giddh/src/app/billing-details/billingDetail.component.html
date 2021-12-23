@@ -237,7 +237,7 @@
                     <div class="whole-renewal">
                         <div class="renewal-heading">
                             <h3
-                                class="renwal-details"
+                                class="renewal-details"
                                 [ngClass]="{
                                     'skeleton-common-class': showLoader,
                                     'renewal-details-content': showLoader
@@ -326,8 +326,11 @@
                                 {{ localeData?.net_payable_amount }}
                             </h3>
                             <h2
-                                class="renwal-amount"
-                                [ngClass]="{ 'skeleton-common-class': showLoader, 'renwal-amount-content': showLoader }"
+                                class="renewal-amount"
+                                [ngClass]="{
+                                    'skeleton-common-class': showLoader,
+                                    'renewal-amount-content': showLoader
+                                }"
                             >
                                 <div class="amount-field-content">
                                     <amount-field

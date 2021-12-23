@@ -649,7 +649,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof BillingDetailComponent
      */
     public resetValueIfOptionNotSelected(field: string): void {
-        this.store.pipe(select(s => s.general.states), takeUntil(this.destroyed$)).subscribe(res => {
+        this.store.pipe(select(s => s.general.states), take(1)).subscribe(res => {
             Object.keys(res.stateList).forEach(key => {
                 if (res.stateList[key].code === this.createNewCompany.addresses[0].stateCode) {
                     setTimeout(() => {
