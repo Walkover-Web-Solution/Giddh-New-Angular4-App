@@ -153,8 +153,12 @@
             }
             .year {
                 font-size: 14px;
-                margin-left: -3px;
+                margin-left: 3px;
                 text-transform: lowercase;
+            }
+            .amount-field-content {
+                float: left;
+                font-weight: bold;
             }
             .renewal-list {
                 padding-left: 14px;
@@ -162,7 +166,7 @@
             }
             .renewal-card {
                 float: left;
-                width: 80%;
+                width: 100%;
             }
             .renewal-off {
                 color: $gray;
@@ -213,7 +217,8 @@
             }
             .including-tax {
                 font-size: 13px;
-                font-weight: lighter;
+                font-weight: 300;
+                margin-left: 5px;
             }
             .pay-now {
                 margin-top: 11px;
