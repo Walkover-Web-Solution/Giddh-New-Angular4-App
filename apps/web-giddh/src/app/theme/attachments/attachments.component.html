@@ -10,8 +10,9 @@
                 aria-hidden="true"
                 class="cursor-pointer"
                 [attr.aria-label]="commonLocaleData?.app_back"
+                #close
                 mat-button
-                (click)="closeDialog()"
+                [mat-dialog-close]="refreshAfterClose"
                 ><i class="icon-left"></i> {{ commonLocaleData?.app_back }}</span
             >
         </div>
