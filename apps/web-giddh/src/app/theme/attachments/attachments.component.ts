@@ -14,7 +14,7 @@ import { GeneralService } from "../../services/general.service";
 import { ToasterService } from "../../services/toaster.service";
 import { AppState } from "../../store";
 import { saveAs } from 'file-saver';
-import { MatDialog, MatDialogRef } from "@angular/material/dialog";
+import { MatDialog } from "@angular/material/dialog";
 import { LedgerService } from "../../services/ledger.service";
 import { ConfirmModalComponent } from "../new-confirm-modal/confirm-modal.component";
 import { InvoiceSetting } from "../../models/interfaces/invoice.setting.interface";
@@ -35,6 +35,10 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
     @Input() public isPettyCash: boolean = false;
     /** fileinput element ref for clear value after remove attachment **/
     @ViewChild('fileInputUpdate', { static: false }) public fileInputElement: ElementRef;
+    /** Instance of close modal icon */
+    @ViewChild('close', { static: true }) public closeModal: ElementRef;
+    /** Instance of PDF container iframe */
+    @ViewChild('pdfContainer', { static: false }) pdfContainer: ElementRef;
     /** Subject to release subscriptions */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /* This will hold local JSON data */
@@ -73,6 +77,8 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
     public isMobileView: boolean = false;
     /** Holds images folder path */
     public imgPath: string = "";
+    /** True if needs to refresh entry */
+    public refreshAfterClose: boolean = false;
 
     constructor(
         private commonService: CommonService,
@@ -87,7 +93,6 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
         private ledgerService: LedgerService,
         private invoiceAction: InvoiceActions,
         private invoiceBulkUpdateService: InvoiceBulkUpdateService,
-        private dialogRef: MatDialogRef<any>,
         private breakpointObserver: BreakpointObserver
     ) {
         this.sessionKey$ = this.store.pipe(select(state => state.session.user.session.id), takeUntil(this.destroyed$));
@@ -161,7 +166,7 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
         };
 
         this.commonService.downloadFile(getRequest, "ALL").pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
+            if (response?.status === "success") {
                 if (response.body?.attachments?.length > 0) {
                     this.attachments = response.body?.attachments;
 
@@ -201,7 +206,7 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
             } else {
                 this.isLoading = false;
                 this.changeDetectionRef.detectChanges();
-                this.toaster.errorToast(this.commonLocaleData?.app_something_went_wrong);
+                this.toaster.errorToast(response?.message ?? this.commonLocaleData?.app_something_went_wrong);
             }
         }, (error => {
             this.isLoading = false;
@@ -378,13 +383,12 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
      */
     public showDeleteAttachedFileModal(index: number): void {
         let dialogRef = this.dialog.open(ConfirmModalComponent, {
-            width: '630px',
+            width: '40%',
             data: {
                 title: this.commonLocaleData?.app_delete,
                 body: this.localeData?.confirm_delete_file,
                 ok: this.commonLocaleData?.app_yes,
-                cancel: this.commonLocaleData?.app_no,
-                permanentlyDeleteMessage: this.localeData?.delete_entries_content
+                cancel: this.commonLocaleData?.app_no
             }
         });
 
@@ -394,12 +398,13 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
                     if (response?.status === 'success') {
                         let updatedAttachments = this.attachments.filter(attachment => attachment.uniqueName !== this.attachments[index]?.uniqueName);
                         this.attachments = updatedAttachments;
+                        this.refreshAfterClose = true;
 
                         if (this.fileInputElement && this.fileInputElement.nativeElement) {
                             this.fileInputElement.nativeElement.value = '';
                         }
                         this.toaster.showSnackBar("success", this.localeData?.remove_file);
-
+                        this.previewFileAfterDelete();
                         this.changeDetectionRef.detectChanges();
                     } else {
                         this.toaster.showSnackBar("error", response?.message)
@@ -422,7 +427,7 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
         }
 
         let dialogRef = this.dialog.open(ConfirmModalComponent, {
-            width: '630px',
+            width: '40%',
             data: {
                 title: this.commonLocaleData?.app_delete,
                 body: messageBody,
@@ -443,12 +448,14 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
                     if (response) {
                         if (response.status === "success") {
                             this.toaster.showSnackBar("success", response.body);
+                            this.voucherPdf = null;
+                            this.refreshAfterClose = true;
+
+                            this.previewFileAfterDelete();
+                            this.changeDetectionRef.detectChanges();
 
                             if (autoDeleteEntries) {
-                                this.dialogRef.close(true);
-                            } else {
-                                this.voucherPdf = null;
-                                this.changeDetectionRef.detectChanges();
+                                this.closeModal?.nativeElement?.click();
                             }
                         } else {
                             this.toaster.showSnackBar("error", response.message);
@@ -581,16 +588,25 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * This will close the dialog
+     * Shows preview of another available file after delete, else closes the modal
      *
+     * @private
      * @memberof AttachmentsComponent
      */
-    public closeDialog(): void {
-        this.dialog?.closeAll();
+    private previewFileAfterDelete(): void {
+        if (this.voucherPdf) {
+            this.showVoucherPreview();
+        } else {
+            if (this.attachments?.length > 0) {
+                this.showFilePreview(this.attachments[0]);
+            } else {
+                this.closeModal?.nativeElement?.click();
+            }
+        }
     }
 
-    // @HostListener("window:afterprint", [])
-    // public onWindowAfterPrint() {
-    //     console.log('... afterprint');
-    // }
+    @HostListener("window:afterprint", [])
+    public onWindowAfterPrint() {
+        console.log('... afterprint');
+    }
 }
