@@ -503,6 +503,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
                 });
                 this.filteredBillingStates = cloneDeep(this.states);
                 this.statesSource$ = observableOf(this.states);
+                this.showLoader = false;
             } else {
                 // initialize new StatesRequest();
                 let statesRequest = new StatesRequest();

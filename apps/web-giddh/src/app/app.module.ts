@@ -30,7 +30,6 @@ import { AppComponent } from './app.component';
 import { IS_ELECTRON_WA } from './app.constant';
 import { APP_RESOLVER_PROVIDERS } from './app.resolver';
 import { ROUTES } from './app.routes';
-import { BillingDetailComponent } from './billing-details/billingDetail.component';
 import { BrowserDetectComponent } from './browser-support/browserDetect.component';
 import { DecoratorsModule } from './decorators/decorators.module';
 import { DummyComponent } from './dummy.component';
@@ -56,14 +55,6 @@ import { QuicklinkModule, QuicklinkStrategy } from 'ngx-quicklink';
 import { DownloadComponent } from './download/download.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { SnackBarModule } from './theme/snackbar/snackbar.module';
-import {MatCardModule} from '@angular/material/card'; 
-import {MatCheckboxModule} from '@angular/material/checkbox';
-import {MatFormFieldModule} from '@angular/material/form-field'; 
-import {MatInputModule} from '@angular/material/input'; 
-import {MatAutocompleteModule} from '@angular/material/autocomplete'; 
-import {MatSelectModule} from '@angular/material/select'; 
-import {MatButtonModule} from '@angular/material/button'; 
-import { AmountFieldComponentModule } from './shared/amount-field/amount-field.module';
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -98,7 +89,6 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         PublicPageHandlerComponent,
         TokenVerifyComponent,
         DummyComponent,
-        BillingDetailComponent,
         NewUserComponent,
         BrowserDetectComponent,
         OnboardingComponent,
@@ -149,14 +139,6 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         QuicklinkModule,
         MatSnackBarModule,
         SnackBarModule,
-        MatCardModule,
-        MatCheckboxModule,
-        MatFormFieldModule,
-        MatInputModule,
-        MatAutocompleteModule,
-        MatSelectModule,
-        MatButtonModule,
-        AmountFieldComponentModule,
         ...CONDITIONAL_IMPORTS
     ],
     /**
