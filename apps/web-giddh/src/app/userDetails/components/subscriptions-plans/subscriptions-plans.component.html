@@ -63,13 +63,32 @@
             <div class="grid-title-list list-grid-title" *ngFor="let plan of inputData">
                 <i class="icon-tick"></i>
             </div>
-        </div>
-        <div class="grid-list-div list-grid">
-            <div class="grid-title-left">
-                <span class="inner-name mat-table-sticky">{{ localeData?.subscription?.desktop_mobile_app }}</span>
-            </div>
-            <div class="grid-title-list list-grid-title" *ngFor="let plan of inputData">
-                <i class="icon-tick"></i>
+            <div class="grid-list-div list-grid bottom-grid-list-div">
+                <div class="grid-title-left">
+                    <a class="sub-plan-feature mat-table-sticky" (click)="openDialog()" href="javascript:void(0)">{{
+                        localeData?.subscription?.check_all_features
+                    }}</a>
+                </div>
+                <div class="grid-title-list bottom-buy-button" *ngFor="let plan of inputData">
+                    <button
+                        (click)="buyPlanClicked(plan)"
+                        class="all-feature-button"
+                        mat-raised-button
+                        color="primary"
+                        *ngIf="plan?.uniqueName === activeCompany?.subscription?.planDetails?.uniqueName"
+                    >
+                        {{ localeData?.subscription?.renew }}
+                    </button>
+                    <button
+                        (click)="buyPlanClicked(plan)"
+                        class="all-feature-button"
+                        mat-raised-button
+                        color="primary"
+                        *ngIf="plan?.uniqueName !== activeCompany?.subscription?.planDetails?.uniqueName"
+                    >
+                        {{ localeData?.subscription?.buy_plan }}
+                    </button>
+                </div>
             </div>
         </div>
         <div class="grid-list-div list-grid">

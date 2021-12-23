@@ -1,8 +1,4 @@
 import { NavigationEnd, NavigationStart, Router, RouteConfigLoadEnd, RouteConfigLoadStart } from '@angular/router';
-import { isCordova } from '@giddh-workspaces/utils';
-/**
- * Angular 2 decorators and services
- */
 import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 
 import { Store, select } from '@ngrx/store';
@@ -57,7 +53,6 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
     ) {
         this.isProdMode = PRODUCTION_ENV;
         this.isElectron = isElectron;
-        this.isCordova = isCordova();
 
         this.store.pipe(select(s => s.session), takeUntil(this.destroyed$)).subscribe(ss => {
             if (ss.user && ss.user.session && ss.user.session.id) {

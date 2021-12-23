@@ -89,7 +89,10 @@
     .grid-list-div {
         display: inline-flex;
         float: left;
-        height: 60px;
+        height: 47px;
+    }
+    .bottom-grid-list-div {
+        height: 64px !important;
     }
     .sub-plan-name {
         float: left;
@@ -138,7 +141,7 @@
         line-height: 3.5 !important;
     }
     .grid-title-list.bottom-buy-button {
-        line-height: 3.5 !important;
+        line-height: 4.8 !important;
     }
     .grid-title-list:nth-child(even) {
         background-color: $solitude-light;
@@ -148,6 +151,7 @@
         border-bottom: 1px solid $default-border-bottom;
         width: 205px;
         font-weight: bold;
+        font-size: 13px;
     }
     .all-feature-button {
         margin-right: 0 !important;
@@ -163,6 +167,7 @@
         border-bottom: 1px solid $default-border-bottom;
         width: 205px;
         font-weight: bold;
+        font-size: 13px;
     }
 }
 .height-auto {
