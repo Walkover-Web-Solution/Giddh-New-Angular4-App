@@ -269,6 +269,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public voucherApiVersion: 1 | 2;
     /** True if user itself checked the generate voucher  */
     public manualGenerateVoucherChecked: boolean = false;
+    /** Selected entry details */
+    public selectedItem: any;
 
     constructor(
         private accountService: AccountService,
@@ -2255,5 +2257,25 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 this.downloadAttachedFile(this.vm.selectedLedger.attachedFile, event);
             }
         }
+    }
+
+    /**
+     * Shows the attachments popup
+     *
+     * @param {TemplateRef<any>} templateRef
+     * @memberof LedgerComponent
+     */
+     public openAttachmentsDialog(templateRef: TemplateRef<any>): void {
+        this.selectedItem = this.vm.selectedLedger;
+        let dialogRef = this.dialog.open(templateRef, {
+            width: '70%',
+            height: '650px'
+        });
+
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            if (response) {
+                this.store.dispatch(this.ledgerAction.setTxnForEdit(this.vm.selectedLedger.uniqueName));
+            }
+        });
     }
 }
