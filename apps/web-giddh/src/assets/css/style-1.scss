@@ -2421,6 +2421,7 @@ form#groupDetailForm {
                     padding: 0 !important;
                     border-top: 0 !important;
                     width: 100% !important;
+                    background-color: var(--popup-background-color);
                 }
             }
             .mat-form-field-underline {
@@ -2489,9 +2490,14 @@ giddh-datepicker {
 .mat-expansion-panel {
     .mat-expansion-panel-header {
         padding: 0 15px !important;
+        background-color: var(--tab-primary-background-color);
+        &:hover {
+            background-color: var(--tab-primary-background-color) !important;
+        }
     }
     .mat-expansion-panel-body {
         padding: 0 0px 0px !important;
+        background-color: var(--tab-primary-background-color);
     }
     sh-select {
         .chip {

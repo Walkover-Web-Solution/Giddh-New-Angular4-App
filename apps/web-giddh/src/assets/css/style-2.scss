@@ -110,6 +110,10 @@ $custom-typography: mat-typography-config(
         }
     }
 }
+.mat-calendar-body-cell-content {
+    color: var(--datepicker-secondary-date-color);
+}
+
 @media (max-width: 768px) {
     .text-left-sm {
         text-align: left !important;
@@ -2548,6 +2552,11 @@ a.btn.btn-xs.btn-link.pull-right {
     background: var(--primary-header-background-color) !important;
     color: $white;
 }
+
+.modal-body {
+    background-color: var(--popup-background-color) !important;
+}
+
 .close-modal {
     position: absolute;
     top: 50%;
