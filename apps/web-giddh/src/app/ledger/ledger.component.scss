@@ -501,7 +501,7 @@ sh-select:focus {
     padding-bottom: 20px;
 }
 .stat-block:first-child {
-    border-bottom: 8px solid $midnight-express;
+    border-bottom: 8px solid var(--common-primary-blue-border);
 }
 .stat-block:nth-child(2) {
     border-bottom: 8px solid $jacksons-purple;
