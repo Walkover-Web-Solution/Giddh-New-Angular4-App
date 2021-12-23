@@ -8,7 +8,7 @@
     <div *ngIf="localeData?.welcome_to_giddh" id="main" class="welcome-outer">
         <div class="main-heading-billing">
             <div class="row display-line">
-                <div class="col-sm-1" [ngClass]="{ 'skelton-common-class': showLoader }">
+                <div class="col-sm-1" [ngClass]="{ 'skeleton-common-class': showLoader }">
                     <div class="back-btnn">
                         <button class="btn btn-default back-button" (click)="backToSubscriptions()" *ngIf="!showLoader">
                             {{ commonLocaleData?.app_back }}
@@ -16,7 +16,7 @@
                     </div>
                 </div>
                 <div class="col-sm-11">
-                    <h2 class="giddh-heading" [ngClass]="{ 'skelton-common-class': showLoader }">
+                    <h2 class="giddh-heading" [ngClass]="{ 'skeleton-common-class': showLoader }">
                         {{ localeData?.welcome_to_giddh }}
                     </h2>
                 </div>
@@ -28,13 +28,13 @@
                     <div class="user-details">
                         <p
                             class="user-title"
-                            [ngClass]="{ 'skelton-common-class': showLoader, 'user-title-content': showLoader }"
+                            [ngClass]="{ 'skeleton-common-class': showLoader, 'user-title-content': showLoader }"
                         >
                             {{ getHelloUserText() }}
                         </p>
                         <p
                             class="user-content"
-                            [ngClass]="{ 'skelton-common-class': showLoader, 'user-content-part': showLoader }"
+                            [ngClass]="{ 'skeleton-common-class': showLoader, 'user-content-part': showLoader }"
                         >
                             {{ localeData?.check_details_note }}
                         </p>
@@ -44,7 +44,7 @@
         </div>
         <div class="billing-details">
             <div class="col-md-2 billing-name-content">
-                <h3 class="billing-name" [ngClass]="{ 'skelton-common-class': showLoader }">
+                <h3 class="billing-name" [ngClass]="{ 'skeleton-common-class': showLoader }">
                     {{ localeData?.billing_details }}
                 </h3>
             </div>
@@ -54,13 +54,13 @@
                         <form name="form" #billingForm="ngForm" novalidate="" autocomplete="off">
                             <div class="form-group">
                                 <mat-form-field appearance="fill" class="mat-input">
-                                    <label [ngClass]="{ 'form-label': showLoader, 'skelton-common-class': showLoader }"
+                                    <label [ngClass]="{ 'form-label': showLoader, 'skeleton-common-class': showLoader }"
                                         >{{ localeData?.billing_name }}
                                         <span [ngClass]="{ 'red-text-content': showLoader }" class="red-text"
                                             >*</span
                                         ></label
                                     >
-                                    <ng-container *ngTemplateOutlet="skeltonLoader"></ng-container>
+                                    <ng-container *ngTemplateOutlet="skeletonLoader"></ng-container>
                                     <input
                                         type="text"
                                         required
@@ -75,13 +75,13 @@
                             </div>
                             <div class="form-group">
                                 <mat-form-field appearance="fill" class="mat-input">
-                                    <label [ngClass]="{ 'form-label': showLoader, 'skelton-common-class': showLoader }"
+                                    <label [ngClass]="{ 'form-label': showLoader, 'skeleton-common-class': showLoader }"
                                         >{{ commonLocaleData?.app_email_id }}
                                         <span [ngClass]="{ 'red-text-content': showLoader }" class="red-text"
                                             >*</span
                                         ></label
                                     >
-                                    <ng-container *ngTemplateOutlet="skeltonLoader"></ng-container>
+                                    <ng-container *ngTemplateOutlet="skeletonLoader"></ng-container>
                                     <input
                                         type="email"
                                         required
@@ -97,10 +97,10 @@
                             <div class="form-group">
                                 <mat-form-field appearance="fill" class="mat-input">
                                     <label
-                                        [ngClass]="{ 'form-label': showLoader, 'skelton-common-class': showLoader }"
+                                        [ngClass]="{ 'form-label': showLoader, 'skeleton-common-class': showLoader }"
                                         >{{ commonLocaleData?.app_mobile_number }}</label
                                     >
-                                    <ng-container *ngTemplateOutlet="skeltonLoader"></ng-container>
+                                    <ng-container *ngTemplateOutlet="skeletonLoader"></ng-container>
                                     <input
                                         type="text"
                                         id="contactNo"
@@ -113,58 +113,36 @@
                                     />
                                 </mat-form-field>
                             </div>
-                            <div class="form-group">
-                                <mat-form-field
-                                    appearance="fill"
-                                    class="mat-field-select width-100 only-bottom-border mat-input"
-                                >
-                                    <label [ngClass]="{ 'form-label': showLoader, 'skelton-common-class': showLoader }"
-                                        >{{ commonLocaleData?.app_country }}
-                                        <span [ngClass]="{ 'red-text-content': showLoader }" class="red-text"
-                                            >*</span
-                                        ></label
-                                    >
-                                    <ng-container *ngTemplateOutlet="skeltonLoader"></ng-container>
-                                    <input
-                                        type="text"
-                                        name="country"
-                                        required
-                                        [formControl]="searchCountry"
+                            <!-- <div class="form-group">
+                                <mat-form-field appearance="fill"
+                                    class="mat-field-select width-100 only-bottom-border mat-input">
+                                    <label
+                                        [ngClass]="{ 'form-label': showLoader, 'skeleton-common-class': showLoader }">{{ commonLocaleData?.app_country }}
+                                        <span [ngClass]="{ 'red-text-content': showLoader }"
+                                            class="red-text">*</span></label>
+                                    <ng-container *ngTemplateOutlet="skeletonLoader"></ng-container>
+                                    <input type="text" name="country" required [formControl]="searchCountry"
                                         [placeholder]="commonLocaleData?.app_country"
-                                        [ngClass]="{ 'form-field': showLoader }"
-                                        class="no-border pd-l1 mat-input-field"
-                                        matInput
-                                        [matAutocomplete]="billingCountryAuto"
-                                        autocomplete="off"
+                                        [ngClass]="{ 'form-field': showLoader }" class="no-border pd-l1 mat-input-field"
+                                        matInput [matAutocomplete]="billingCountryAuto" autocomplete="off"
                                         (optionSelected)="selectCountry(searchCountry.value)"
-                                        (blur)="resetValueIfOptionNotSelected('billingCountry')"
-                                    />
-                                    <mat-autocomplete
-                                        #billingCountryAuto="matAutocomplete"
-                                        [displayWith]="displayLabel"
-                                    >
-                                        <mat-option
-                                            (onSelectionChange)="onSelectChangeCountry($event)"
-                                            *ngFor="let country of countrySource"
-                                            [value]="country"
-                                            >{{ country?.label }}
+                                        (blur)="resetValueIfOptionNotSelected('billingCountry')" />
+                                    <mat-autocomplete #billingCountryAuto="matAutocomplete"
+                                        [displayWith]="displayLabel">
+                                        <mat-option (onSelectionChange)="onSelectChangeCountry($event)"
+                                            *ngFor="let country of countrySource" [value]="country">{{ country?.label }}
                                         </mat-option>
                                     </mat-autocomplete>
                                 </mat-form-field>
-                            </div>
+                            </div> -->
                             <div class="form-group" *ngIf="formFields['taxName'] !== undefined">
                                 <mat-form-field appearance="fill" class="mat-input">
                                     <label
-                                        [ngClass]="{ 'form-label': showLoader, 'skelton-common-class': showLoader }"
-                                        *ngIf="showGstinNo"
+                                        [ngClass]="{ 'form-label': showLoader, 'skeleton-common-class': showLoader }"
+                                        *ngIf="showGstinNo || showTrnNo"
                                         >{{ formFields["taxName"].label }}</label
                                     >
-                                    <label
-                                        [ngClass]="{ 'form-label': showLoader, 'skelton-common-class': showLoader }"
-                                        *ngIf="showTaxNo"
-                                        >{{ localeData?.tax_number }}</label
-                                    >
-                                    <ng-container *ngTemplateOutlet="skeltonLoader"></ng-container>
+                                    <ng-container *ngTemplateOutlet="skeletonLoader"></ng-container>
                                     <input
                                         [ngClass]="{ 'form-field': showLoader }"
                                         type="text"
@@ -188,13 +166,13 @@
                                     appearance="fill"
                                     class="mat-field-select width-100 only-bottom-border mat-input"
                                 >
-                                    <label [ngClass]="{ 'form-label': showLoader, 'skelton-common-class': showLoader }"
+                                    <label [ngClass]="{ 'form-label': showLoader, 'skeleton-common-class': showLoader }"
                                         >{{ commonLocaleData?.app_state }}
                                         <span [ngClass]="{ 'red-text-content': showLoader }" class="red-text"
                                             >*</span
                                         ></label
                                     >
-                                    <ng-container *ngTemplateOutlet="skeltonLoader"></ng-container>
+                                    <ng-container *ngTemplateOutlet="skeletonLoader"></ng-container>
                                     <input
                                         type="text"
                                         [placeholder]="commonLocaleData?.app_state"
@@ -215,35 +193,29 @@
                                 </mat-form-field>
                             </div>
                             <!-- static pincode start -->
-                            <div class="form-group">
+                            <!-- <div class="form-group">
                                 <mat-form-field appearance="fill" class="mat-input">
-                                    <label
-                                        [ngClass]="{ 'form-label': showLoader, 'skelton-common-class': showLoader }"
-                                        for="pinCodeNum"
-                                        >{{ localeData?.pincode }}
-                                        <span class="red-text" [ngClass]="{ 'red-text-content': showLoader }"
-                                            >*</span
-                                        ></label
-                                    >
-                                    <ng-container *ngTemplateOutlet="skeltonLoader"></ng-container>
-                                    <input
-                                        type="text"
-                                        [ngClass]="{ 'form-field': showLoader }"
-                                        class="form-control"
-                                        name="pinCodeNum"
-                                        matInput
-                                    />
+                                    <label [ngClass]="{ 'form-label': showLoader, 'skeleton-common-class': showLoader }"
+                                        for="pinCodeNum">{{ localeData?.pincode }}
+                                        <span class="red-text"
+                                            [ngClass]="{ 'red-text-content': showLoader }">*</span></label>
+                                    <ng-container *ngTemplateOutlet="skeletonLoader"></ng-container>
+                                    <input type="text" [ngClass]="{ 'form-field': showLoader }" class="form-control"
+                                        name="pinCodeNum" matInput />
                                 </mat-form-field>
-                            </div>
+                            </div> -->
                             <!-- static pincode end -->
                             <div class="form-group">
                                 <mat-form-field appearance="fill" class="mat-input">
                                     <label
-                                        [ngClass]="{ 'form-label': showLoader, 'skelton-common-class': showLoader }"
+                                        [ngClass]="{ 'form-label': showLoader, 'skeleton-common-class': showLoader }"
                                         >{{ commonLocaleData?.app_address }}</label
                                     >
                                     <div
-                                        [ngClass]="{ 'form-text-area': showLoader, 'skelton-common-class': showLoader }"
+                                        [ngClass]="{
+                                            'form-text-area': showLoader,
+                                            'skeleton-common-class': showLoader
+                                        }"
                                     ></div>
                                     <textarea
                                         class="form-control"
@@ -267,7 +239,7 @@
                             <h3
                                 class="renwal-details"
                                 [ngClass]="{
-                                    'skelton-common-class': showLoader,
+                                    'skeleton-common-class': showLoader,
                                     'renewal-details-content': showLoader
                                 }"
                             >
@@ -278,14 +250,14 @@
                             <mat-card class="renewal-card">
                                 <mat-card-subtitle
                                     class="renewal-card-subtitle"
-                                    [ngClass]="{ 'skelton-common-class': showLoader }"
+                                    [ngClass]="{ 'skeleton-common-class': showLoader }"
                                 >
                                     {{ selectedPlans?.planDetails?.name }}
                                     <!-- <span class="current-plan-details"> {{ localeData?.current_plan }} </span> -->
                                 </mat-card-subtitle>
                                 <mat-card-title
                                     class="renewal-card-title"
-                                    [ngClass]="{ 'skelton-common-class': showLoader }"
+                                    [ngClass]="{ 'skeleton-common-class': showLoader }"
                                 >
                                     ₹{{ selectedPlans?.planDetails?.amount | number }}
                                     <span class="year"
@@ -296,22 +268,22 @@
                                 <!-- <p class="renewal-off">₹15000 <span class="discount-off">20% off</span></p> -->
                                 <mat-card-content class="renewal-card-content">
                                     <ul class="renewal-list" [ngClass]="{ 'renewal-list-content': showLoader }">
-                                        <li class="features" [ngClass]="{ 'skelton-common-class': showLoader }">
+                                        <li class="features" [ngClass]="{ 'skeleton-common-class': showLoader }">
                                             {{ selectedPlans?.planDetails?.transactionLimit | number }}
                                             {{ localeData?.transactions }}
                                         </li>
-                                        <li class="features" [ngClass]="{ 'skelton-common-class': showLoader }">
+                                        <li class="features" [ngClass]="{ 'skeleton-common-class': showLoader }">
                                             {{ selectedPlans?.planDetails?.companiesLimit | number }}
                                             {{ localeData?.companies }}
                                         </li>
                                         <!-- <li class="features">10 hrs<span class="hrs-underline"> Muneem Consultant</span></li> -->
-                                        <li class="features" [ngClass]="{ 'skelton-common-class': showLoader }">
+                                        <li class="features" [ngClass]="{ 'skeleton-common-class': showLoader }">
                                             {{ localeData?.unlimited_users }}
                                         </li>
-                                        <li class="features" [ngClass]="{ 'skelton-common-class': showLoader }">
+                                        <li class="features" [ngClass]="{ 'skeleton-common-class': showLoader }">
                                             {{ localeData?.unlimited_contacts }}
                                         </li>
-                                        <li class="features" [ngClass]="{ 'skelton-common-class': showLoader }">
+                                        <li class="features" [ngClass]="{ 'skeleton-common-class': showLoader }">
                                             {{ localeData?.desktop_mobile_app }}
                                         </li>
                                     </ul>
@@ -322,7 +294,7 @@
                             <div
                                 class="form-group"
                                 [ngClass]="{
-                                    'skelton-common-class': showLoader,
+                                    'skeleton-common-class': showLoader,
                                     'renewal-subscription-extra': showLoader
                                 }"
                             >
@@ -342,18 +314,24 @@
                         <div class="renewal-payable">
                             <h3
                                 class="new-payable"
-                                [ngClass]="{ 'skelton-common-class': showLoader, 'new-payable-content': showLoader }"
+                                [ngClass]="{ 'skeleton-common-class': showLoader, 'new-payable-content': showLoader }"
                             >
                                 {{ localeData?.net_payable_amount }}
                             </h3>
                             <h2
                                 class="renwal-amount"
-                                [ngClass]="{ 'skelton-common-class': showLoader, 'renwal-amount-content': showLoader }"
+                                [ngClass]="{ 'skeleton-common-class': showLoader, 'renwal-amount-content': showLoader }"
                             >
-                                ₹{{
-                                    selectedPlans?.planDetails?.amount + selectedPlans?.planDetails?.amount * 0.18
-                                        | number
-                                }}
+                                <amount-field
+                                    [amount]="
+                                        selectedPlans?.planDetails?.amount +
+                                        selectedPlans?.planDetails?.amount * taxPercentage
+                                    "
+                                    [currencySymbol]="'₹'"
+                                    [currencyCode]="'INR'"
+                                >
+                                </amount-field>
+
                                 <span class="including-tax" [ngClass]="{ 'including-text-content': showLoader }">{{
                                     localeData?.including_tax
                                 }}</span>
@@ -361,7 +339,7 @@
 
                             <div class="form-group" [ngClass]="{ 'form-group-div': showLoader }">
                                 <div
-                                    [ngClass]="{ 'form-group-button': showLoader, 'skelton-common-class': showLoader }"
+                                    [ngClass]="{ 'form-group-button': showLoader, 'skeleton-common-class': showLoader }"
                                 ></div>
                                 <button
                                     class="pay-now"
@@ -380,7 +358,7 @@
             </div>
         </div>
     </div>
-    <ng-template #skeltonLoader>
-        <div [ngClass]="{ 'form-div': showLoader, 'skelton-common-class': showLoader }"></div>
+    <ng-template #skeletonLoader>
+        <div [ngClass]="{ 'form-div': showLoader, 'skeleton-common-class': showLoader }"></div>
     </ng-template>
 </ng-container>

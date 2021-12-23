@@ -1,6 +1,6 @@
 import { CommonModule, DecimalPipe } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { UserDetailsRoutingModule } from './userDetails.routing.module';
 import { UserDetailsComponent } from './userDetails.component';
 import { TabsModule } from 'ngx-bootstrap/tabs';
@@ -19,7 +19,6 @@ import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { CompanyDetailsSidebarComponent } from './components/company-details-sidebar/company-details-sidebar.component';
 import { MoveCompanyComponent } from './components/move-company/move-company.component';
 import { AllFeaturesComponent } from './components/all-features/all-features.component';
-import { AddCompanyComponent } from './components/add-company/add-company.component';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { NoDataModule } from '../shared/no-data/no-data.module';
 import { SubscriptionComponent } from './components/subscription/subscription.component';
@@ -39,7 +38,6 @@ import { AddOnsComponent } from './components/add-ons/add-ons.component';
 import {MatSliderModule} from '@angular/material/slider';
 import { MatCardModule } from '@angular/material/card';
 import { SafePipeModule } from '../shared/helpers/pipes/safePipe/safePipe.module';
-import {MatIconModule} from '@angular/material/icon';
 import { GiddhPageLoaderModule } from '../shared/giddh-page-loader/giddh-page-loader.module';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
@@ -56,7 +54,6 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         CompanyDetailsSidebarComponent,
         MoveCompanyComponent,
         AllFeaturesComponent,
-        AddCompanyComponent,
         SubscriptionComponent,
         AddOnsComponent
     ],
@@ -93,7 +90,6 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         MatSliderModule,
         MatCardModule,
         SafePipeModule,
-        MatIconModule,
         GiddhPageLoaderModule
     ],
     providers: [
