@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, Input, OnDestroy, ChangeDetectorRef, ChangeDetectionStrategy } from "@angular/core";
+import { Component, OnInit, ViewChild, Input, OnDestroy, ChangeDetectorRef, ChangeDetectionStrategy, OnChanges } from "@angular/core";
 import { BreakpointObserver, BreakpointState } from "@angular/cdk/layout";
 import { MatAccordion } from "@angular/material/expansion";
 import { MatDialog } from "@angular/material/dialog";
@@ -40,7 +40,7 @@ const MONTHLY_DATA: MonthlyData[] = [
     styleUrls: ['./subscription.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SubscriptionComponent implements OnInit, OnDestroy {
+export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
     /** This will hold local JSON data */
     @Input() public localeData: any = {};
     /** This will hold common JSON data */
@@ -190,33 +190,14 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
                 this.menuOneWidth = 4;
                 this.menuTwoWidth = 12;
             }
-        })
+        });
+
+        this.translationComplete();
     }
 
-    /**
-   * Callback for translation response complete
-   *
-   * @param {*} event
-   * @memberof SubscriptionComponent
-   */
-    public translationComplete(event: any): void {
-        if (event) {
-            this.expiringList = [
-                { name: this.localeData?.expiring_list?.seven_days, value: 7 },
-                { name: this.localeData?.expiring_list?.fifteen_days, value: 15 },
-                { name: this.localeData?.expiring_list?.one_month, value: 31 },
-                { name: this.localeData?.expiring_list?.six_months, value: 180 },
-                { name: this.localeData?.expiring_list?.one_year, value: 365 }
-            ];
-            this.transactionBalanceList = [
-                { name: this.localeData?.transaction_balance_list?.less_than_1k, value: 1000 },
-                { name: this.localeData?.transaction_balance_list?.less_than_5k, value: 5000 },
-                { name: this.localeData?.transaction_balance_list?.less_than_10k, value: 10000 },
-                { name: this.localeData?.transaction_balance_list?.less_than_50k, value: 50000 }
-            ];
-        }
+    ngOnChanges(): void {
+        this.translationComplete();
     }
-
     /**
      * This function will use for get subscribed companies 
      *
@@ -403,5 +384,27 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
      */
     public patchProfile(obj): void {
         this.store.dispatch(this.settingsProfileActions.PatchProfile(obj));
+    }
+
+    /**
+     * Callback for translation response complete
+     *
+     * @param {*} event
+     * @memberof SubscriptionComponent
+     */
+    public translationComplete(): void {
+        this.expiringList = [
+            { name: this.localeData?.expiring_list?.seven_days, value: 7 },
+            { name: this.localeData?.expiring_list?.fifteen_days, value: 15 },
+            { name: this.localeData?.expiring_list?.one_month, value: 31 },
+            { name: this.localeData?.expiring_list?.six_months, value: 180 },
+            { name: this.localeData?.expiring_list?.one_year, value: 365 }
+        ];
+        this.transactionBalanceList = [
+            { name: this.localeData?.transaction_balance_list?.less_than_1k, value: 1000 },
+            { name: this.localeData?.transaction_balance_list?.less_than_5k, value: 5000 },
+            { name: this.localeData?.transaction_balance_list?.less_than_10k, value: 10000 },
+            { name: this.localeData?.transaction_balance_list?.less_than_50k, value: 50000 }
+        ];
     }
 }

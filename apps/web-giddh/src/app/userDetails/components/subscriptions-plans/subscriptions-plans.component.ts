@@ -171,7 +171,7 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
      *
      * @memberof SubscriptionsPlansComponent
      */
-     public openDialog(): void {
+    public openDialog(): void {
         this.dialog.open(AllFeaturesComponent, {
             panelClass: 'custom-modalbox',
             height: '40%',
@@ -214,24 +214,6 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
         });
     }
 
-    public choosePlan(plan: CreateCompanyUsersPlan) {
-        this.selectNewPlan = true;
-        let activationKey = this.licenceKey.value;
-        if (activationKey) {
-            this.SubscriptionRequestObj.licenceKey = activationKey;
-        } else {
-            this.SubscriptionRequestObj.licenceKey = "";
-        }
-        this.SubscriptionRequestObj.userUniqueName = this.logedInUser.uniqueName;
-        if (plan.subscriptionId) { // bought plan
-            this.SubscriptionRequestObj.subscriptionId = plan.subscriptionId;
-            this.patchProfile({ subscriptionRequest: this.SubscriptionRequestObj, callNewPlanApi: true });
-        } else if (!plan.subscriptionId) { // free plan
-            this.SubscriptionRequestObj.planUniqueName = plan.planDetails.uniqueName;
-            this.patchProfile({ subscriptionRequest: this.SubscriptionRequestObj, callNewPlanApi: true });
-        }
-    }
-
     public createCompanyViaActivationKey() {
         let activationKey = this.licenceKey.value;
         this.SubscriptionRequestObj.userUniqueName = this.logedInUser.uniqueName;
@@ -256,15 +238,6 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
         if (!this.showPlans) {
             this.showPlans = type;
         }
-    }
-
-    /**
-     * This function smooth scroller for all plans section
-     * @param {string} type
-     * @memberof SubscriptionsPlansComponent
-     */
-    public navigate(element: HTMLElement): void {
-        element.scrollIntoView({ behavior: 'smooth' });
     }
 
     /**

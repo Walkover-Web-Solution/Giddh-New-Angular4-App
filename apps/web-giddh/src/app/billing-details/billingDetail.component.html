@@ -259,12 +259,17 @@
                                     class="renewal-card-title"
                                     [ngClass]="{ 'skeleton-common-class': showLoader }"
                                 >
-                                    ₹{{ selectedPlans?.planDetails?.amount | number }}
+                                    <amount-field
+                                        [amount]="selectedPlans?.planDetails?.amount"
+                                        [currencySymbol]="'₹'"
+                                        [currencyCode]="'INR'"
+                                    >
+                                    </amount-field>
                                     <span class="year"
                                         >/{{ selectedPlans?.planDetails?.duration }}
                                         {{ selectedPlans?.planDetails?.durationUnit }}(s)</span
-                                    ></mat-card-title
-                                >
+                                    >
+                                </mat-card-title>
                                 <!-- <p class="renewal-off">₹15000 <span class="discount-off">20% off</span></p> -->
                                 <mat-card-content class="renewal-card-content">
                                     <ul class="renewal-list" [ngClass]="{ 'renewal-list-content': showLoader }">

@@ -55,7 +55,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         private dbServices: DbService,
         private loadingService: LoaderService,
         private companyActions: CompanyActions,
-        private commonActions: CommonActions,
+        private commonActions: CommonActions
     ) {
         this.isProdMode = PRODUCTION_ENV;
         this.isElectron = isElectron;
@@ -157,7 +157,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
 
         this.store.pipe(select(state => state.session.currentLocale), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                if(this.activeLocale !== response?.value) {
+                if (this.activeLocale !== response?.value) {
                     this.activeLocale = response?.value;
                     this.store.dispatch(this.commonActions.getCommonLocaleData(response.value));
                 }
