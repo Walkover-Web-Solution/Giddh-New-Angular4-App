@@ -97,28 +97,11 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
     /** This will hold the login user */
     public loggedInUser: UserDetails;
     /** This will store the static data in expiry list */
-    public expiringList: any[] = [
-        { name: '7 Days', value: 7 },
-        { name: '15 Days', value: 15 },
-        { name: '1 Month', value: 31 },
-        { name: '6 Months', value: 180 },
-        { name: '1 Year', value: 365 }
-    ];
+    public expiringList: any[] = [];
     /** This will store the static data in transaction balance list  */
-    public transactionBalanceList: any[] = [
-        { name: 'Less than 1,000', value: 1000 },
-        { name: 'Less than 5,000', value: 5000 },
-        { name: 'Less than 10,000', value: 10000 },
-        { name: 'Less than 50,000', value: 50000 }
-    ];
+    public transactionBalanceList: any[] = [];
     /** This will store the static data in transaction balance list  */
-    public subscriptionsDummy: any[] = [
-        { name: 'Oak Plan', remainingTransactions: 1000, totalCompanies: 2, startedAt: '22 Dec,2020', expiry: '6 Jan,2021' },
-        { name: 'Default', remainingTransactions: 5000, totalCompanies: 2, startedAt: '22 Dec,2020', expiry: '6 Jan,2021' },
-        { name: 'Trial', remainingTransactions: 10000, totalCompanies: 1, startedAt: '22 Dec,2020', expiry: '6 Jan,2021' },
-        { name: 'Test Plan', remainingTransactions: 50000, totalCompanies: 3, startedAt: '22 Dec,2020', expiry: '6 Jan,2021' },
-        { name: 'Demo Plan', remainingTransactions: 50000, totalCompanies: 4, startedAt: '22 Dec,2020', expiry: '6 Jan,2021' }
-    ];
+    public subscriptionsDummy: any[] = [1, 2, 3, 4, 5];
     /** This will displays the columns of consumed  */
     public displayedColumns: string[] = ['consumed', 'balance', 'dues'];
     /** This will use for static data for consumed */
@@ -211,6 +194,30 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
     }
 
     /**
+   * Callback for translation response complete
+   *
+   * @param {*} event
+   * @memberof SubscriptionComponent
+   */
+    public translationComplete(event: any): void {
+        if (event) {
+            this.expiringList = [
+                { name: this.localeData?.expiring_list?.seven_days, value: 7 },
+                { name: this.localeData?.expiring_list?.fifteen_days, value: 15 },
+                { name: this.localeData?.expiring_list?.one_month, value: 31 },
+                { name: this.localeData?.expiring_list?.six_months, value: 180 },
+                { name: this.localeData?.expiring_list?.one_year, value: 365 }
+            ];
+            this.transactionBalanceList = [
+                { name: this.localeData?.transaction_balance_list?.less_than_1k, value: 1000 },
+                { name: this.localeData?.transaction_balance_list?.less_than_5k, value: 5000 },
+                { name: this.localeData?.transaction_balance_list?.less_than_10k, value: 10000 },
+                { name: this.localeData?.transaction_balance_list?.less_than_50k, value: 50000 }
+            ];
+        }
+    }
+
+    /**
      * This function will use for get subscribed companies 
      *
      * @memberof SubscriptionComponent
@@ -282,6 +289,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
      * @memberof SubscriptionComponent
      */
     public filterSubscriptions(): void {
+
         let subscriptions = [];
         this.subscriptions = [];
 
@@ -289,7 +297,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
             if (response?.length) {
                 response.forEach(subscription => {
                     subscription.remainingDays = Number(moment(subscription.expiry, GIDDH_DATE_FORMAT).diff(moment(), 'days'));
-                    if(moment(subscription.startedAt, GIDDH_DATE_FORMAT).format("D MMM, y") !== "Invalid date") {
+                    if (moment(subscription.startedAt, GIDDH_DATE_FORMAT).format("D MMM, y") !== "Invalid date") {
                         subscription.startedAt = moment(subscription.startedAt, GIDDH_DATE_FORMAT).format("D MMM, y");
                         subscription.expiry = moment(subscription.expiry, GIDDH_DATE_FORMAT).format("D MMM, y");
                     }
