@@ -259,14 +259,16 @@
                                     class="renewal-card-title"
                                     [ngClass]="{ 'skeleton-common-class': showLoader }"
                                 >
-                                    <amount-field
-                                        [amount]="selectedPlans?.planDetails?.amount"
-                                        [currencySymbol]="'₹'"
-                                        [currencyCode]="'INR'"
-                                    >
-                                    </amount-field>
-                                    <span class="year"
-                                        >/{{ selectedPlans?.planDetails?.duration }}
+                                    <div class="amount-field-content">
+                                        <amount-field
+                                            [amount]="selectedPlans?.planDetails?.amount"
+                                            [currencySymbol]="'₹'"
+                                            [currencyCode]="'INR'"
+                                        >
+                                        </amount-field>
+                                    </div>
+                                    <span class="year">
+                                        /{{ selectedPlans?.planDetails?.duration }}
                                         {{ selectedPlans?.planDetails?.durationUnit }}(s)</span
                                     >
                                 </mat-card-title>
@@ -327,15 +329,17 @@
                                 class="renwal-amount"
                                 [ngClass]="{ 'skeleton-common-class': showLoader, 'renwal-amount-content': showLoader }"
                             >
-                                <amount-field
-                                    [amount]="
-                                        selectedPlans?.planDetails?.amount +
-                                        selectedPlans?.planDetails?.amount * taxPercentage
-                                    "
-                                    [currencySymbol]="'₹'"
-                                    [currencyCode]="'INR'"
-                                >
-                                </amount-field>
+                                <div class="amount-field-content">
+                                    <amount-field
+                                        [amount]="
+                                            selectedPlans?.planDetails?.amount +
+                                            selectedPlans?.planDetails?.amount * taxPercentage
+                                        "
+                                        [currencySymbol]="'₹'"
+                                        [currencyCode]="'INR'"
+                                    >
+                                    </amount-field>
+                                </div>
 
                                 <span class="including-tax" [ngClass]="{ 'including-text-content': showLoader }">{{
                                     localeData?.including_tax

@@ -100,7 +100,7 @@ export const ROUTES: Routes = [
             { path: 'create-group', component: InventoryCreateGroupComponent, canActivate: [NeedsAuthorization] },
             { path: 'onboarding', component: OnboardingComponent, canActivate: [NeedsAuthorization] },
             { path: 'welcome', component: WelcomeComponent, canActivate: [NeedsAuthorization] },
-            { path: 'billing-detail', component: BillingDetailComponent, canActivate: [NeedsAuthorization] },
+            { path: 'billing-detail', loadChildren: () => import('./billing-details/billingDetail.module').then(module => module.BillingDetailModule) },
             { path: 'mobile-home', component: MobileHomeComponent, canActivate: [NeedsAuthorization] },
             { path: 'mobile-home-sidebar', component: MobileHomeSidebarComponent, canActivate: [NeedsAuthorization] },
             { path: 'mobile-search-company', component: MobileSearchCompanyComponent, canActivate: [NeedsAuthorization] },
@@ -112,8 +112,6 @@ export const ROUTES: Routes = [
             { path: 'purchase-management', loadChildren: () => import('./purchase/purchase.module').then(module => module.PurchaseModule), canActivate: [NeedsAuthorization] },
             { path: 'voucher', loadChildren: () => import('./payment-receipt/payment-receipt.module').then(module => module.PaymentReceiptModule), canActivate: [NeedsAuthorization] },
             { path: 'verify-email', loadChildren: () => import('./verify-email/verify-email.module').then(module => module.VerifyEmailModule), canActivate: [NeedsAuthorization] },
-            { path: 'billing-detail', component: BillingDetailComponent },
-            { path: 'billing-detail/buy-plan', component: BillingDetailComponent },
             { path: '**', redirectTo: 'home', pathMatch: 'full' }
         ]
     },
