@@ -227,7 +227,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
             distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe((voucher: any) => {
                 if (voucher) {
                     this.voucherDetails = voucher;
-                    if (voucher && voucher.templateDetails && voucher.templateDetails.templateUniqueName) {
+                    if (voucher?.templateDetails?.templateUniqueName) {
                         this.getInvoiceTemplateDetails(voucher.templateDetails.templateUniqueName)
                     }
                     this.store.dispatch(this.generalActions.setAppTitle('/pages/invoice/preview/' + this.selectedVoucher));
