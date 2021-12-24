@@ -49,7 +49,7 @@
     color: $dark-gray-new;
 }
 .menu-two-list {
-    width: 95%;
+    width: 100%;
     height: inherit;
     display: flex;
     justify-content: space-around;
@@ -79,7 +79,7 @@
     }
 }
 .menu-two-button {
-    width: 21%;
+    width: 14%;
     height: inherit;
     background-color: $dark-fog;
     a {
@@ -513,7 +513,7 @@
         position: absolute;
         width: 21%;
         left: 77%;
-        top: 31.5%;
+        top: 31%;
         z-index: 2;
 
         button {
@@ -623,7 +623,7 @@
         font-size: 14px;
     }
     .menu-one-button {
-        left: 31%;
+        left: 22.5%;
     }
     .menu-two {
         padding-left: 9px;
@@ -689,8 +689,8 @@
                     line-height: 1rem;
                     .date {
                         position: absolute;
-                        top: 91px;
-                        left: 23px;
+                        top: 0px;
+                        left: 26px;
                         font-size: 11.1px;
                     }
                     img {
@@ -774,11 +774,10 @@
             }
         }
         .expand-button {
-            top: 26.5%;
+            top: 30.5%;
             left: 60%;
             width: 40%;
             button {
-                top: -28px;
                 border-bottom: none;
                 padding-left: 0 !important;
                 padding-right: 0 !important;
@@ -810,20 +809,14 @@
 }
 
 @media screen and (min-width: 768px) and (orientation: portrait) {
-    .responsive-grid-title-left {
-        float: left !important;
-        width: 39% !important;
-        margin-top: 20px;
+    .menu-two-list-items {
+        float: left;
+        width: 100%;
+        display: contents;
     }
-    .responsive-grid-title-left-top {
+    .expand-button {
+        top: 35% !important;
         float: left !important;
-        width: 39% !important;
-        height: 60px !important;
-    }
-    .responsive-grid-title-right {
-        height: 60px !important;
-        margin-left: 14%;
-        width: 63% !important;
     }
     * {
         font-size: 12px;
@@ -898,7 +891,7 @@
                     .date {
                         font-size: 12px;
                         position: absolute;
-                        top: 100px;
+                        top: 85px;
                         left: 43px;
                     }
                     img {

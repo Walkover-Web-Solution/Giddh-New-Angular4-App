@@ -5,8 +5,8 @@
                 {{ commonLocaleData?.app_buy_new_plan }}
             </button>
         </div>
-        <mat-grid-list cols="16" rowHeight="40px" gutterSize="0px" class="responsive-grid-list">
-            <mat-grid-tile colspan="4" rowspan="1" class="responsive-grid-title-left-top">
+        <mat-grid-list cols="16" rowHeight="40px" gutterSize="0px">
+            <mat-grid-tile colspan="{{ menuOneWidth }}" rowspan="1">
                 <div class="menu-two" [ngClass]="{ 'skeleton-common-class': showLoader }">
                     <label for="Search-box">
                         <img src="{{ imgPath }}search.png" alt="SearchBar" *ngIf="!showLoader" />
@@ -21,11 +21,15 @@
                     </mat-form-field>
                 </div>
             </mat-grid-tile>
-            <mat-grid-tile colspan="12" class="responsive-grid-title-right">
+            <mat-grid-tile colspan="{{ menuTwoWidth }}">
                 <div class="menu-two-list" [ngClass]="{ 'skeleton-common-class': showLoader }">
                     <div class="menu-two-list-items" *ngIf="!showLoader">
                         <span class="mat-body-1 plan">{{ localeData?.subscription?.plan }}</span>
-                        <mat-form-field appearance="none" floatLabel="never" class="form-select">
+                        <mat-form-field
+                            appearance="none"
+                            floatLabel="never"
+                            class="form-select subscription-form-select"
+                        >
                             <mat-select
                                 [placeholder]="commonLocaleData?.app_select"
                                 (selectionChange)="filterSubscriptions()"
@@ -88,10 +92,10 @@
                     >
                 </div>
             </mat-grid-tile>
-            <mat-grid-tile colspan="4" rowspan="15" class="responsive-grid-title-left">
+            <mat-grid-tile colspan="{{ sideBarBoxWidth }}" rowspan="{{ sideBarBoxLength }}">
                 <div class="sidebar" *ngIf="!showLoader">
                     <ng-container *ngFor="let subscription of subscriptions; let i = index">
-                        <mat-grid-list cols="2" rowHeight="150px" gutterSize="0px" class="sidebar-box">
+                        <mat-grid-list cols="2" rowHeight="{{ rowLength }}" gutterSize="0px" class="sidebar-box">
                             <mat-grid-tile colspan="2">
                                 <div class="side-bar-items" (click)="selectSubscription(subscription)">
                                     <p class="mat-body-2 side-bar-head">
@@ -132,7 +136,7 @@
                 </div>
                 <div class="sidebar-clone" *ngIf="showLoader">
                     <ng-container *ngFor="let subscriptionStatic of subscriptionsDummy">
-                        <mat-grid-list cols="2" rowHeight="150px" gutterSize="0px" class="sidebar-box-clone">
+                        <mat-grid-list cols="2" rowHeight="{{ rowLength }}" gutterSize="0px" class="sidebar-box-clone">
                             <mat-grid-tile colspan="2">
                                 <div class="side-bar-items-clone">
                                     <p
@@ -176,7 +180,7 @@
                 </div>
             </mat-grid-tile>
 
-            <mat-grid-tile colspan="12" rowspan="15">
+            <mat-grid-tile colspan="{{ mainContentWidth }}" rowspan="{{ sideBarBoxLength }}">
                 <div class="main-content" *ngIf="selectedSubscription">
                     <mat-toolbar class="main-content-head">
                         <div class="left-side">
@@ -218,7 +222,7 @@
                     <p class="summary">{{ localeData?.subscription?.overall_summary }}</p>
                     <div class="balance-info">
                         <mat-grid-list cols="2" rowHeight="10px" gutterSize="3px">
-                            <mat-grid-tile colspan="2" rowspan="6">
+                            <mat-grid-tile colspan="2" rowspan="{{ overallSummaryTopRow }}">
                                 <div class="overall-summary-bar-one">
                                     <div class="box item-1">
                                         <div class="box-heading">
@@ -267,7 +271,7 @@
                                     </div>
                                 </div>
                             </mat-grid-tile>
-                            <!-- <mat-grid-tile colspan="2" rowspan="4">
+                            <!-- <mat-grid-tile colspan="2" rowspan="{{ overallSummaryBottomRow }}">
                             <div class="overall-summary-bar-two">
                                 <p>Total dues <span class="tomato">₹5,200 </span> <span class="grey">Settle now</span></p>
                             </div>
@@ -904,7 +908,7 @@
                         {{ localeData?.subscription?.plans }}
                     </p>
                 </div>
-                <div class="main-content-condition" *ngIf="showLoader">
+                <!-- <div class="main-content-condition" *ngIf="showLoader">
                     <p [ngClass]="{ 'skeleton-common-class': showLoader }">
                         {{ localeData?.subscription?.select_plan_summary }} <br />
                         {{ localeData?.subscription?.select_plan_consumptions }}
@@ -914,7 +918,7 @@
                         {{ localeData?.subscription?.you_have_total }} {{ plansList?.length }}
                         {{ localeData?.subscription?.plans }}
                     </p>
-                </div>
+                </div> -->
             </mat-grid-tile>
         </mat-grid-list>
     </div>
