@@ -689,7 +689,7 @@
                     line-height: 1rem;
                     .date {
                         position: absolute;
-                        top: 0px;
+                        top: 0px !important;
                         left: 26px;
                         font-size: 11.1px;
                     }

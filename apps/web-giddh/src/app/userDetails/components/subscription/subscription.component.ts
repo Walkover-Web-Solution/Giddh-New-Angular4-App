@@ -269,8 +269,6 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
      * @memberof SubscriptionComponent
      */
     public selectSubscription(subscription: any): void {
-        console.log('sub', subscription);
-
         this.selectedSubscription = subscription;
     }
 
