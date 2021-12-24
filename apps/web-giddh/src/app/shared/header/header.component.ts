@@ -296,7 +296,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                     this.checkAndRenewUserSession();
                 }
 
-                if(!this.router.url.includes("/pages/settings/taxes") && (this.router.url.includes("/pages/settings") || this.router.url.includes("/pages/user-details") || this.router.url.includes("/pages/invoice/preview/settings/sales"))) {
+                if (!this.router.url.includes("/pages/settings/taxes") && (this.router.url.includes("/pages/settings") || this.router.url.includes("/pages/invoice/preview/settings/sales"))) {
                     this.toggleSidebarPane(true, false);
                 } else {
                     this.toggleSidebarPane(false, false);
@@ -420,7 +420,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                     this.currentBranch = response.find(branch =>
                         (this.generalService.currentBranchUniqueName === branch?.uniqueName)) || {};
 
-                    if(!this.activeCompanyForDb) {
+                    if (!this.activeCompanyForDb) {
                         this.activeCompanyForDb = new CompAidataModel();
                     }
                     this.activeCompanyForDb.name = this.currentBranch ? this.currentBranch.name : '';
@@ -475,7 +475,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.store.pipe(select(state => state.general.openSideMenu), takeUntil(this.destroyed$)).subscribe(response => {
             this.sideBarStateChange(response);
 
-            if(response) {
+            if (response) {
                 this.expandSidebar(true);
             } else {
                 this.collapseSidebar(true);
@@ -618,7 +618,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         }
 
         this.store.pipe(select(state => state.session.currentLocale), takeUntil(this.destroyed$)).subscribe(response => {
-            if(this.activeLocale && this.activeLocale !== response?.value) {
+            if (this.activeLocale && this.activeLocale !== response?.value) {
                 this.localeService.getLocale('header', response?.value).subscribe(response => {
                     this.localeData = response;
                 });
@@ -754,9 +754,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                             financialYearEnds: moment(response.financialYears[response.financialYears.length - 1]?.financialYearEnds, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT)
                         };
 
-                        if(!this.isTodaysDateSelected) {
+                        if (!this.isTodaysDateSelected) {
                             response.financialYears.forEach(key => {
-                                if(this.selectedDateRange?.endDate >= moment(key.financialYearStarts, GIDDH_DATE_FORMAT) && this.selectedDateRange?.endDate <= moment(key.financialYearEnds, GIDDH_DATE_FORMAT)) {
+                                if (this.selectedDateRange?.endDate >= moment(key.financialYearStarts, GIDDH_DATE_FORMAT) && this.selectedDateRange?.endDate <= moment(key.financialYearEnds, GIDDH_DATE_FORMAT)) {
                                     activeFinancialYear = {
                                         uniqueName: key?.uniqueName,
                                         isLocked: key?.isLocked,
@@ -767,7 +767,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                             });
                         }
 
-                        if(this.selectedCompanyDetails) {
+                        if (this.selectedCompanyDetails) {
                             this.selectedCompanyDetails.activeFinancialYear = activeFinancialYear;
                             this.store.dispatch(this.commonActions.setActiveFinancialYear(this.selectedCompanyDetails));
                         }
@@ -802,7 +802,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      */
     public toggleHelpSupportPane(show: boolean): void {
         setTimeout(() => {
-            if(show) {
+            if (show) {
                 this.asideSettingMenuState = 'out';
                 document.querySelector('body')?.classList?.remove('aside-setting');
             }
@@ -823,14 +823,14 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public toggleSidebarPane(show: boolean, isMobileSidebar: boolean): void {
         setTimeout(() => {
             this.isMobileSidebar = isMobileSidebar;
-            if(show) {
+            if (show) {
                 this.asideHelpSupportMenuState = 'out';
             }
             this.asideSettingMenuState = (show) ? 'in' : 'out';
             this.asideInventorySidebarMenuState = (show && this.asideInventorySidebarMenuState === 'out') ? 'in' : 'out';
             this.toggleBodyClass();
 
-            if(this.asideSettingMenuState === "in") {
+            if (this.asideSettingMenuState === "in") {
                 document.querySelector('body')?.classList?.add('aside-setting');
             } else {
                 document.querySelector('body')?.classList?.remove('aside-setting');
@@ -1048,7 +1048,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         let validElement = true;
 
         excludeElements.forEach(className => {
-            if(elementClass.indexOf(className) > -1) {
+            if (elementClass.indexOf(className) > -1) {
                 validElement = false;
             }
         });
@@ -1429,10 +1429,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 document.querySelector('body').classList.remove('mobile-setting-sidebar');
             }
 
-            if(document.getElementsByClassName("gst-sidebar-open")?.length > 0 || document.getElementsByClassName("setting-sidebar-open")?.length > 0) {
+            if (document.getElementsByClassName("gst-sidebar-open")?.length > 0 || document.getElementsByClassName("setting-sidebar-open")?.length > 0) {
                 this.collapseSidebar(true);
             } else {
-                if(this.sideMenu.isopen) {
+                if (this.sideMenu.isopen) {
                     this.sideMenu.isExpanded = true;
                     this.expandSidebar(true);
                 }
@@ -1447,7 +1447,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     * @memberof HeaderComponent
     */
     public expandSidebar(forceExpand: boolean = false): void {
-        if(forceExpand) {
+        if (forceExpand) {
             this.sideBarStateChange(true);
             this.sidebarForcelyExpanded = true;
         }
@@ -1461,25 +1461,25 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     * @memberof HeaderComponent
     */
     public collapseSidebar(forceCollapse: boolean = false, closeOnHover: boolean = false): void {
-        if(closeOnHover && this.sidebarForcelyExpanded && (this.router.url.includes("/pages/settings") || this.router.url.includes("/pages/user-details"))) {
+        if (closeOnHover && this.sidebarForcelyExpanded && (this.router.url.includes("/pages/settings") || this.router.url.includes("/pages/user-details"))) {
             return;
         }
 
-        if(closeOnHover && this.isSidebarExpanded && (document.getElementsByClassName("gst-sidebar-open")?.length > 0 || document.getElementsByClassName("setting-sidebar-open")?.length > 0)) {
+        if (closeOnHover && this.isSidebarExpanded && (document.getElementsByClassName("gst-sidebar-open")?.length > 0 || document.getElementsByClassName("setting-sidebar-open")?.length > 0)) {
             forceCollapse = true;
         }
 
-        if(forceCollapse) {
+        if (forceCollapse) {
             this.sideMenu.isExpanded = false;
         } else {
-            if(!this.sideMenu.isopen) {
+            if (!this.sideMenu.isopen) {
                 this.sideMenu.isExpanded = false;
             } else {
                 this.sideMenu.isExpanded = true;
             }
         }
 
-        if(!this.sideMenu.isExpanded || forceCollapse) {
+        if (!this.sideMenu.isExpanded || forceCollapse) {
             this.sidebarForcelyExpanded = false;
             this.isSidebarExpanded = false;
             this.generalService.collapseSidebar();
@@ -1765,24 +1765,24 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             this.currentPageUrl?.indexOf('pages/invoice/ewaybill') > -1);
     }
 
-   /**
-    * Opens the GST side menu in responsive mode
-    *
-    * @memberof HeaderComponent
-    */
-   public openGstSideMenu(): void {
+    /**
+     * Opens the GST side menu in responsive mode
+     *
+     * @memberof HeaderComponent
+     */
+    public openGstSideMenu(): void {
         this.isGstSideMenuOpened = !this.isGstSideMenuOpened;
         this.store.dispatch(this._generalActions.openGstSideMenu(this.isGstSideMenuOpened));
     }
 
-     /**
-     * This toggle's settings sidebar
-     *
-     * @param {boolean} isMobileSidebar
-     * @memberof HeaderComponent
-     */
-      public toggleSidebar(isMobileSidebar: boolean): void {
-        if(this.asideSettingMenuState === "in") {
+    /**
+    * This toggle's settings sidebar
+    *
+    * @param {boolean} isMobileSidebar
+    * @memberof HeaderComponent
+    */
+    public toggleSidebar(isMobileSidebar: boolean): void {
+        if (this.asideSettingMenuState === "in") {
             this.toggleSidebarPane(false, isMobileSidebar);
         } else {
             this.toggleSidebarPane(true, isMobileSidebar);
