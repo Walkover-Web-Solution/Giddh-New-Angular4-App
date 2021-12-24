@@ -2261,7 +2261,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * Shows the attachments popup
      *
      * @param {TemplateRef<any>} templateRef
-     * @memberof LedgerComponent
+     * @memberof UpdateLedgerEntryPanelComponent
      */
      public openAttachmentsDialog(templateRef: TemplateRef<any>): void {
         let dialogRef = this.dialog.open(templateRef, {
