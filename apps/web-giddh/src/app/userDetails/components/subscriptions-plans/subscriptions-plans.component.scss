@@ -81,7 +81,7 @@
         position: sticky;
         background-color: $white;
         padding-top: 0px;
-        line-height: 3.5;
+        line-height: 3;
     }
     .top-plan-div {
         height: 142px;
@@ -168,6 +168,11 @@
         width: 205px;
         font-weight: bold;
         font-size: 13px;
+    }
+    .bottom-grid-list-div {
+        .grid-title-left {
+            line-height: 3.8 !important;
+        }
     }
 }
 .height-auto {
@@ -768,12 +773,12 @@
         width: 69% !important;
     }
     .plan-table {
-        height: 508px;
+        height: 412px;
         margin-bottom: 15px;
     }
     .grid-title-left {
         width: 268px !important;
-        padding-top: 25px !important;
+        padding-top: 0 !important;
     }
     .grid-title-list-changes {
         width: 220px !important;

@@ -7,7 +7,7 @@ import { select, Store } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
 import { SubscriptionsUser, UserDetails } from "../../../models/api-models/Subscriptions";
 import { Observable, ReplaySubject } from "rxjs";
-import { take, takeUntil } from "rxjs/operators";
+import { takeUntil } from "rxjs/operators";
 import { SubscriptionsService } from "../../../services/subscriptions.service";
 import { uniqBy } from "../../../lodash-optimized";
 import * as moment from "moment";
@@ -49,6 +49,18 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
     @ViewChild(MatAccordion) accordion: MatAccordion;
     /** This will use for move company in to another company  */
     @ViewChild("moveCompany", { static: false }) public moveCompany: any;
+    /** This will change the search bar width dynamically */
+    public menuOneWidth: number = 4;
+    public menuTwoWidth: number = 12;
+    /** This will change the rowspan of main content and plan list dynamically */
+    public sideBarBoxLength: number = 15;
+    public sideBarBoxWidth: number = 4;
+    public mainContentWidth: number = 12;
+    /** This will change the height of plan list dynamically */
+    public rowLength: number = 150;
+    /** This will change the length of overall summary box dynamically */
+    public overallSummaryTopRow: number = 6;
+    public overallSummaryBottomRow: number = 4;
     /* This will hold list of subscriptions */
     public subscriptions: SubscriptionsUser[] = [];
     /** Observable to listen for subscriptions */
@@ -96,6 +108,8 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
     public dataSource = MONTHLY_DATA;
     /** This will use for expand collapse for companies */
     public isExpand: boolean = false;
+    /** This will use for active company */
+    public activeCompany: any = {};
 
     constructor(
         public dialog: MatDialog,
@@ -146,6 +160,46 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
 
         /** This will use for image format */
         this.imgPath = (isElectron || isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+
+        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if (activeCompany) {
+                this.activeCompany = activeCompany;
+            }
+        });
+
+        /** This will use for responsive */
+        this.breakpointObserver.observe([
+            '(min-width: 768px)',
+            '(min-width: 1024px)',
+            '(min-width: 1536px)'
+        ]).subscribe((state: BreakpointState) => {
+            if (state.breakpoints['(min-width: 1536px)']) {
+                this.rowLength = 150;
+                this.sideBarBoxLength = 15;
+                this.overallSummaryTopRow = 6;
+                this.overallSummaryBottomRow = 4;
+                this.sideBarBoxWidth = 4;
+                this.mainContentWidth = 12;
+                this.menuOneWidth = 4;
+                this.menuTwoWidth = 12;
+            } else
+                if (state.breakpoints['(min-width: 768px)']) {
+                    this.rowLength = 120;
+                    this.sideBarBoxWidth = 5;
+                    this.mainContentWidth = 11;
+                    this.menuOneWidth = 5;
+                    this.menuTwoWidth = 11;
+                } else if (state.breakpoints['(min-width: 1024px)']) {
+                    this.rowLength = 120;
+                    this.sideBarBoxLength = 15;
+                    this.overallSummaryTopRow = 5;
+                    this.overallSummaryBottomRow = 3;
+                    this.sideBarBoxWidth = 4;
+                    this.mainContentWidth = 12;
+                    this.menuOneWidth = 2;
+                    this.menuTwoWidth = 14;
+                }
+        });
 
     }
 
@@ -252,8 +306,19 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
                 });
 
                 this.plansList = uniqBy(response.map(subscription => { return { name: subscription.planDetails?.name, uniqueName: subscription.planDetails?.uniqueName } }), "uniqueName");
-
                 this.subscriptions = subscriptions;
+                let loop = 0;
+                let activeCompanyIndex = -1;
+                this.subscriptions.forEach(res => {
+                    if (res.subscriptionId === this.activeCompany?.subscription?.subscriptionId) {
+                        activeCompanyIndex = loop;
+                    }
+                    loop++;
+                });
+                this.subscriptions = this.generalService.changeElementPositionInArray(this.subscriptions, activeCompanyIndex, 0);
+                if (!this.showLoader) {
+                    this.selectSubscription(this.subscriptions[0]);
+                }
                 this.changeDetectionRef.detectChanges();
             }
         });
@@ -315,7 +380,6 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
                 companyTotalTransactions: this.seletedUserPlans.companyTotalTransactions,
                 totalTransactions: this.seletedUserPlans.totalTransactions
             };
-
             this.route.navigate(['pages', 'billing-detail', 'buy-plan']);
             this.store.dispatch(this.companyActions.selectedPlan(this.subscriptionPlan));
         } else {
@@ -328,6 +392,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
                 this.patchProfile({ subscriptionRequest: this.subscriptionRequestObj, callNewPlanApi: true });
             }
         }
+        this.changeDetectionRef.detectChanges();
     }
 
     /**
