@@ -567,9 +567,6 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
 
     public onSelectInvoice(invoice: ProformaItem) {
         let allItems: InvoicePreviewDetailsVm[] = cloneDeep(this.itemsListForDetails);
-        let newIndex = allItems.findIndex(f => f.voucherNumber === (this.voucherType === 'proformas' ? invoice.proformaNumber : invoice.estimateNumber));
-        let removedItem = allItems.splice(newIndex, 1);
-        allItems = [...removedItem, ...allItems];
         this.itemsListForDetails = allItems;
 
         setTimeout(() => {
