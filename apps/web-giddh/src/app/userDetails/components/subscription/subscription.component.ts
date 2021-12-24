@@ -7,7 +7,7 @@ import { select, Store } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
 import { SubscriptionsUser, UserDetails } from "../../../models/api-models/Subscriptions";
 import { Observable, ReplaySubject } from "rxjs";
-import { take, takeUntil } from "rxjs/operators";
+import { takeUntil } from "rxjs/operators";
 import { SubscriptionsService } from "../../../services/subscriptions.service";
 import { uniqBy } from "../../../lodash-optimized";
 import * as moment from "moment";
@@ -50,17 +50,17 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
     /** This will use for move company in to another company  */
     @ViewChild("moveCompany", { static: false }) public moveCompany: any;
     /** This will change the search bar width dynamically */
-    public menuOneWidth: Number = 4;
-    public menuTwoWidth: Number = 12;
+    public menuOneWidth: number = 4;
+    public menuTwoWidth: number = 12;
     /** This will change the rowspan of main content and plan list dynamically */
-    public sideBarBoxLength: Number = 15;
-    public sideBarBoxWidth: Number = 4;
-    public mainContentWidth: Number = 12;
+    public sideBarBoxLength: number = 15;
+    public sideBarBoxWidth: number = 4;
+    public mainContentWidth: number = 12;
     /** This will change the height of plan list dynamically */
-    public rowLength: Number = 150;
+    public rowLength: number = 150;
     /** This will change the length of overall summary box dynamically */
-    public overallSummaryTopRow: Number = 6;
-    public overallSummaryBottomRow: Number = 4;
+    public overallSummaryTopRow: number = 6;
+    public overallSummaryBottomRow: number = 4;
     /* This will hold list of subscriptions */
     public subscriptions: SubscriptionsUser[] = [];
     /** Observable to listen for subscriptions */
@@ -167,7 +167,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
             }
         });
 
-        // /** This will use for responsive */
+        /** This will use for responsive */
         this.breakpointObserver.observe([
             '(min-width: 768px)',
             '(min-width: 1024px)',
