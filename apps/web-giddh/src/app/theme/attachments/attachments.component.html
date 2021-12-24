@@ -37,7 +37,9 @@
                         >
                         <span
                             class="cursor-pointer font-14"
-                            [ngClass]="{ 'active-file': voucherPdf?.uniqueName === previewedFile?.uniqueName }"
+                            [ngClass]="{
+                                'active-file': !isMobileView && voucherPdf?.uniqueName === previewedFile?.uniqueName
+                            }"
                             (click)="showVoucherPreview()"
                             >{{ voucherPdf?.name }}</span
                         >
@@ -57,7 +59,10 @@
                                 >
                                 <span
                                     class="file-name cursor-pointer font-14"
-                                    [ngClass]="{ 'active-file': attachment?.uniqueName === previewedFile?.uniqueName }"
+                                    [ngClass]="{
+                                        'active-file':
+                                            !isMobileView && attachment?.uniqueName === previewedFile?.uniqueName
+                                    }"
                                     (click)="showFilePreview(attachment)"
                                     >{{ attachment?.name }}</span
                                 >
