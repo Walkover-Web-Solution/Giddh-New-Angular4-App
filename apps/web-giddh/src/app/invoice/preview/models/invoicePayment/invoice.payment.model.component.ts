@@ -174,6 +174,7 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
     public resetFrom() {
         this.paymentActionFormObj = new InvoicePaymentRequest();
         this.paymentActionFormObj.paymentDate = moment().toDate();
+        this.paymentActionFormObj.uniqueName = this.selectedInvoiceForPayment?.uniqueName;
 
         if (this.allShSelectComponents) {
             this.allShSelectComponents.forEach(sh => {
@@ -190,6 +191,10 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
     }
 
     public ngOnChanges(c: SimpleChanges) {
+        if(this.selectedInvoiceForPayment?.uniqueName) {
+            this.paymentActionFormObj.uniqueName = this.selectedInvoiceForPayment?.uniqueName;
+        }
+
         if (c.selectedInvoiceForPayment.currentValue && c.selectedInvoiceForPayment.currentValue !== c.selectedInvoiceForPayment.previousValue) {
             let paymentModeChanges: IOption[] = [];
             this.originalPaymentMode.forEach(payMode => {
