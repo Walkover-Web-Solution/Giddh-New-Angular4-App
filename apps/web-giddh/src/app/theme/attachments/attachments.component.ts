@@ -1,10 +1,10 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Input, OnDestroy, OnInit, ViewChild } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { DomSanitizer } from "@angular/platform-browser";
 import { select, Store } from "@ngrx/store";
 import { UploaderOptions, UploadInput, UploadOutput } from "ngx-uploader";
 import { Observable, ReplaySubject } from "rxjs";
 import { take, takeUntil } from "rxjs/operators";
-import { LedgerActions } from "../../actions/ledger/ledger.actions";
+// import { LedgerActions } from "../../actions/ledger/ledger.actions";
 import { SettingsBranchActions } from "../../actions/settings/branch/settings.branch.action";
 import { Configuration, FILE_ATTACHMENT_TYPE } from "../../app.constant";
 import { cloneDeep } from "../../lodash-optimized";
@@ -21,6 +21,7 @@ import { InvoiceSetting } from "../../models/interfaces/invoice.setting.interfac
 import { InvoiceActions } from "../../actions/invoice/invoice.actions";
 import { InvoiceBulkUpdateService } from "../../services/invoice.bulkupdate.service";
 import { BreakpointObserver } from "@angular/cdk/layout";
+import * as printJS from 'print-js';
 
 @Component({
     selector: "attachments",
@@ -87,7 +88,7 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
         private toaster: ToasterService,
         private settingsBranchAction: SettingsBranchActions,
         private store: Store<AppState>,
-        private ledgerAction: LedgerActions,
+        //private ledgerAction: LedgerActions,
         private changeDetectionRef: ChangeDetectorRef,
         private dialog: MatDialog,
         private ledgerService: LedgerService,
@@ -96,12 +97,6 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
         private breakpointObserver: BreakpointObserver
     ) {
         this.sessionKey$ = this.store.pipe(select(state => state.session.user.session.id), takeUntil(this.destroyed$));
-
-        this.breakpointObserver.observe([
-            '(max-width: 767px)'
-        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
-            this.isMobileView = result.matches;
-        });
     }
 
     /**
@@ -139,6 +134,21 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
         // set file upload options
         this.fileUploadOptions = { concurrency: 0 };
 
+        this.breakpointObserver.observe([
+            '(max-width: 767px)'
+        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
+            this.isMobileView = result.matches;
+            this.changeDetectionRef.detectChanges();
+
+            if (!this.isMobileView && !this.previewedFile) {
+                if (this.voucherPdf?.type) {
+                    this.showVoucherPreview();
+                } else if (this.attachments?.length > 0) {
+                    this.showFilePreview(this.attachments[0]);
+                }
+            }
+        });
+
         this.getFiles();
     }
 
@@ -160,8 +170,8 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
      */
     private getFiles(): void {
         let getRequest = {
-            voucherType: this.selectedItem.voucherGeneratedType,
-            entryUniqueName: (this.selectedItem.voucherUniqueName) ? undefined : this.selectedItem.entryUniqueName,
+            voucherType: (this.selectedItem.voucherGeneratedType) ? this.selectedItem.voucherGeneratedType : undefined,
+            entryUniqueName: this.selectedItem.voucherUniqueName ?? this.selectedItem.entryUniqueName ?? this.selectedItem.uniqueName,
             uniqueName: (this.selectedItem.voucherUniqueName) ? this.selectedItem.voucherUniqueName : undefined
         };
 
@@ -249,8 +259,8 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
      * @memberof AttachmentsComponent
      */
     public showVoucherPreview(): void {
+        this.previewedFile = cloneDeep(this.voucherPdf);
         if (!this.isMobileView) {
-            this.previewedFile = cloneDeep(this.voucherPdf);
             const file = new Blob([this.voucherPdf?.src], { type: 'application/pdf' });
             let pdfFileURL = URL.createObjectURL(file);
             this.previewedFile.src = this.domSanitizer.bypassSecurityTrustResourceUrl(pdfFileURL);
@@ -404,8 +414,9 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
                             this.fileInputElement.nativeElement.value = '';
                         }
                         this.toaster.showSnackBar("success", this.localeData?.remove_file);
-                        this.previewFileAfterDelete();
                         this.changeDetectionRef.detectChanges();
+
+                        this.previewFileAfterDelete();
                     } else {
                         this.toaster.showSnackBar("error", response?.message)
                     }
@@ -500,91 +511,59 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
             return;
         }
 
-        const windowWidth = window.innerWidth
-            || document.documentElement.clientWidth
-            || document.body.clientWidth
-            || 0;
-        const left = (windowWidth / 2) - 450;
-        const printWindow = window.open('', '', `left=${left},top=0,width=900,height=900`);
-        let pdfFiles = [];
-        let hasAttachments: boolean = false;
+        let filesToPrint = [];
 
         if (this.voucherPdf?.isChecked) {
-            const file = new Blob([this.voucherPdf?.src], { type: 'application/pdf' });
-            let pdfFileURL = URL.createObjectURL(file);
-            pdfFiles.push(encodeURI(pdfFileURL));
+            filesToPrint.push({ file: this.voucherPdf?.encodedData, type: "pdf" });
         }
 
         if (isAttachmentSelected?.length > 0) {
             isAttachmentSelected.forEach(attachment => {
-                if (attachment?.type === "image") {
-                    let file = new Image();
-                    file.src = attachment.originalSrc;
-                    printWindow.document.write(file.outerHTML);
-                    hasAttachments = true;
-                } else if (attachment?.type === "pdf") {
-                    const file = new Blob([attachment?.originalSrc], { type: 'application/pdf' });
-                    let pdfFileURL = URL.createObjectURL(file);
-                    pdfFiles.push(encodeURI(pdfFileURL));
+                if (attachment?.type !== "unsupported") {
+                    if (attachment?.type === "image") {
+                        filesToPrint.push({ file: `data:image/${attachment?.type};base64,` + attachment?.encodedData, type: attachment?.type });
+                    } else {
+                        filesToPrint.push({ file: attachment?.encodedData, type: attachment?.type });
+                    }
                 }
             });
-            printWindow.document.close();
         }
 
         if (!isAttachmentSelected?.length && !this.voucherPdf?.isChecked && this.previewedFile?.type !== "unsupported") {
             if (this.previewedFile?.type === "image") {
-                let file = new Image();
-                file.src = this.previewedFile.originalSrc;
-                printWindow.document.write(file.outerHTML);
-                hasAttachments = true;
-            } else if (this.previewedFile?.type === "pdf") {
-                const file = new Blob([this.previewedFile?.originalSrc], { type: 'application/pdf' });
-                let pdfFileURL = URL.createObjectURL(file);
-                pdfFiles.push(encodeURI(pdfFileURL));
+                filesToPrint.push({ file: `data:image/${this.previewedFile?.type};base64,` + this.previewedFile?.encodedData, type: this.previewedFile?.type });
+            } else {
+                filesToPrint.push({ file: this.previewedFile?.encodedData, type: this.previewedFile?.type });
             }
         }
 
-        setTimeout(() => {
-            if (hasAttachments) {
-                printWindow.focus();
-                printWindow.print();
-            }
-
-            if (pdfFiles?.length > 0) {
-                this.printPdfFiles(printWindow, pdfFiles);
-            } else {
-                printWindow.close();
-            }
-        }, 50);
+        if (filesToPrint?.length > 0) {
+            this.processPrintQueue(filesToPrint, 0);
+        }
     }
 
     /**
-     * Prints pdf files
+     * Processes the print queue
      *
      * @private
-     * @param {*} printWindow
-     * @param {*} pdfFiles
+     * @param {*} files
+     * @param {number} index
      * @memberof AttachmentsComponent
      */
-    private printPdfFiles(printWindow: any, pdfFiles: any): void {
-        let html = "";
-        pdfFiles.forEach(pdf => {
-            html += "<iframe class='frames' src='" + pdf + "' style='display:none;'></iframe>";
-        });
-
-        printWindow.document.write(html);
-        printWindow.document.close();
-        printWindow.focus();
-
-        let iframes = printWindow.document.getElementsByClassName("frames");
-        for (let loop = 0; loop < iframes?.length; loop++) {
-            iframes[loop].onload = () => {
+    private processPrintQueue(files: any, index: number): void {
+        printJS({
+            printable: files[index]?.file, type: files[index]?.type, base64: true, documentTitle: "",
+            onPrintDialogClose: () => {
                 setTimeout(() => {
-                    iframes[loop].focus();
-                    iframes[loop].contentWindow.print();
-                }, 1);
+                    if (files[index + 1]) {
+                        this.processPrintQueue(files, index + 1);
+                    }
+                }, 100);
+            },
+            onError: (error) => {
+                this.toaster.showSnackBar("error", this.commonLocaleData?.app_something_went_wrong);
             }
-        }
+        });
     }
 
     /**
@@ -603,10 +582,5 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
                 this.closeModal?.nativeElement?.click();
             }
         }
-    }
-
-    @HostListener("window:afterprint", [])
-    public onWindowAfterPrint() {
-        console.log('... afterprint');
     }
 }
