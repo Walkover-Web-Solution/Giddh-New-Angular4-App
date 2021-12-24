@@ -29,12 +29,14 @@
                                         <i
                                             class="icon-branch-icon pull-right"
                                             *ngIf="!option.isCompany"
-                                            tooltip="{{ commonLocaleData?.app_branch }}"
+                                            matTooltip="{{ commonLocaleData?.app_branch }}"
+                                            matTooltipPosition="above"
                                         ></i>
                                         <i
                                             class="icon-company-profile pull-right"
                                             *ngIf="option.isCompany"
-                                            tooltip="{{ commonLocaleData?.app_company }}"
+                                            matTooltip="{{ commonLocaleData?.app_company }}"
+                                            matTooltipPosition="above"
                                         ></i>
                                     </span>
                                     <span class="entity-details">
@@ -101,7 +103,8 @@
                         <i
                             aria-hidden="true"
                             class="icon-refresh"
-                            tooltip="{{ commonLocaleData?.app_reset_filter }}"
+                            matTooltip="{{ commonLocaleData?.app_reset_filter }}"
+                            matTooltipPosition="bottom"
                         ></i>
                     </button>
                 </span>

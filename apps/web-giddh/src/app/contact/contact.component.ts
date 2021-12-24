@@ -584,6 +584,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     }
 
     public ngOnDestroy() {
+        localStorage.removeItem(this.localStorageKeysForFilters[this.activeTab === "vendor" ? "vendor" : "customer"]);
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
