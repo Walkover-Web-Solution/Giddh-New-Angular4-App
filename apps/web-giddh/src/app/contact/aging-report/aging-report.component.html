@@ -27,14 +27,16 @@
                                 <a href="javascript:void(0)" class="list-item d-flex">
                                     <span class="entity-icon">
                                         <i
-                                            class="icon-branch-icon pull-right"
+                                            class="icon-branch-icon"
                                             *ngIf="!option.isCompany"
-                                            tooltip="{{ commonLocaleData?.app_branch }}"
+                                            matTooltip="{{ commonLocaleData?.app_branch }}"
+                                            matTooltipPosition="above"
                                         ></i>
                                         <i
-                                            class="icon-company-profile pull-right"
+                                            class="icon-company-profile"
                                             *ngIf="option.isCompany"
-                                            tooltip="{{ commonLocaleData?.app_company }}"
+                                            matTooltip="{{ commonLocaleData?.app_company }}"
+                                            matTooltipPosition="above"
                                         ></i>
                                     </span>
                                     <span class="entity-details">
@@ -101,7 +103,8 @@
                         <i
                             aria-hidden="true"
                             class="icon-refresh"
-                            tooltip="{{ commonLocaleData?.app_reset_filter }}"
+                            matTooltip="{{ commonLocaleData?.app_reset_filter }}"
+                            matTooltipPosition="below"
                         ></i>
                     </button>
                 </span>
