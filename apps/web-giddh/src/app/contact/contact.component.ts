@@ -1706,6 +1706,9 @@ export class ContactComponent implements OnInit, OnDestroy {
             this.translationComplete(true);
         } else if (event?.tab?.textLabel === this.localeData?.vendor) {
             this.tabSelected("vendor");
+            this.availableColumnsCount = [];
+            this.showFieldFilter = {};
+            this.translationComplete(true);
         } else if (event?.tab?.textLabel === this.localeData?.aging_report) {
             this.tabSelected("aging-report");
         }
