@@ -1710,7 +1710,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     }
 
     /**
-     *This function will use for reset columns
+     * This function will use for reset columns
      *
      * @memberof ContactComponent
      */
