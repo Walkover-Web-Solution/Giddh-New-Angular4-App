@@ -94,7 +94,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     @Output() public processPaymentEvent: EventEmitter<InvoicePaymentRequest> = new EventEmitter();
     @Output() public refreshDataAfterVoucherUpdate: EventEmitter<boolean> = new EventEmitter();
     /** Event emmiter when advance receipt action selected */
-    @Output() public onOpenAdvanceReceiptModal: EventEmitter<boolean> = new EventEmitter();
+    @Output() public onOpenAdvanceReceiptModal: EventEmitter<any> = new EventEmitter();
     modalRef: BsModalRef;
     public filteredData: InvoicePreviewDetailsVm[] = [];
     public showEditMode: boolean = false;
@@ -755,7 +755,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
      */
     public openInvoiceAdvanceReceiptModal(): void {
         if (this.onOpenAdvanceReceiptModal) {
-            this.onOpenAdvanceReceiptModal.emit(true);
+            this.onOpenAdvanceReceiptModal.emit(this.selectedItem);
         }
     }
 
