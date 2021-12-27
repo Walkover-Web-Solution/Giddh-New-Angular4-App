@@ -1606,7 +1606,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     public toggleSearch(fieldName: string): void {
         if (fieldName === "name") {
             this.showNameSearch = true;
-        }    
+        }
     }
 
     /**
@@ -1701,16 +1701,22 @@ export class ContactComponent implements OnInit, OnDestroy {
     public tabChange(event: any): void {
         if (event?.tab?.textLabel === this.localeData?.customer) {
             this.tabSelected("customer");
-            this.availableColumnsCount = [];
-            this.showFieldFilter = {};
-            this.translationComplete(true);
+            this.resetColumns();
         } else if (event?.tab?.textLabel === this.localeData?.vendor) {
             this.tabSelected("vendor");
-            this.availableColumnsCount = [];
-            this.showFieldFilter = {};
-            this.translationComplete(true);
         } else if (event?.tab?.textLabel === this.localeData?.aging_report) {
             this.tabSelected("aging-report");
         }
+    }
+
+    /**
+     *This function will use for reset columns
+     *
+     * @memberof ContactComponent
+     */
+    public resetColumns(): void {
+        this.availableColumnsCount = [];
+        this.showFieldFilter = {};
+        this.translationComplete(true);
     }
 }
