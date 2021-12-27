@@ -184,6 +184,7 @@ th.mat-header-cell:first-of-type {
     }
     .mat-table tbody > tr > td:first-child {
         padding-left: 18px !important;
+        cursor: pointer;
     }
     .mat-flat-button {
         padding: 0px 11px;
@@ -213,7 +214,6 @@ th.mat-header-cell:first-of-type {
         font-weight: 600;
     }
 }
-
 // responsive
 @media (min-width: 769px) {
     .on-mobile-view > .top-aging-table-top {

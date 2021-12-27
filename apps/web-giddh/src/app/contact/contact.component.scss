@@ -385,16 +385,15 @@ span.input-addon {
 }
 
 button.btn.btn-filter {
-    background: $whisper-color;
-    border: 1px solid $whisper-color;
+    background: #eaeaea;
+    border: 1px solid #eaeaea;
     font-size: 14px;
-    color: $midnight-blue;
-    display: inline-flex;
+    color: #1a237e;
+    display: block;
     justify-content: space-between;
-    align-items: center;
-    padding: 4px 10px;
-    width: 11%;
-    transform: translateX(-31px);
+    width: 140px !important;
+    margin: 0 auto !important;
+    margin-right: 0 !important;
 }
 
 button.btn.btn-filter span.icon-cross {
@@ -404,6 +403,10 @@ button.btn.btn-filter span.icon-cross {
 .customer-form-inline {
     display: flex !important;
     justify-content: space-between !important;
+    .button-content {
+        float: left;
+        width: 21%;
+    }
 }
 
 .customer-footer-box {
