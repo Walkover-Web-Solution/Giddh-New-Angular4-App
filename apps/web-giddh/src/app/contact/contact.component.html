@@ -117,14 +117,16 @@
                                 </form>
                             </div>
                             <!-- Invoice filter section ends -->
-                            <button
-                                mat-raised-button
-                                class="btn btn-group btn-filter desktop-button-filter"
-                                *ngIf="selectedCheckedContacts?.length > 0"
-                                (click)="clearSelectedContacts()"
-                            >
-                                <span class="icon-cross"></span> {{ commonLocaleData?.app_clear_selected }}
-                            </button>
+                            <div class="button-content">
+                                <button
+                                    mat-raised-button
+                                    class="btn btn-group btn-filter desktop-button-filter"
+                                    *ngIf="selectedCheckedContacts?.length > 0"
+                                    (click)="clearSelectedContacts()"
+                                >
+                                    <span class="icon-cross"></span> {{ commonLocaleData?.app_clear_selected }}
+                                </button>
+                            </div>
 
                             <div class="pd-t1-md d-flex justify-content-between">
                                 <!-- On company class will show only if we are on company mode and branches length will be less than equal 2 -->

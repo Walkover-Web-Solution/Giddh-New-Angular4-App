@@ -1,5 +1,8 @@
 <div class="container-fluid">
-    <div class="top-bar aging-top-bar d-flex justify-content-between">
+    <div
+        class="top-bar aging-top-bar d-flex justify-content-between"
+        [hidden]="!(dueAmountReportData$ | async)?.results?.length"
+    >
         <div class="aging-form-inline">
             <div class="btn-group pull-left on-desktop-view">
                 <button mat-flat-button class="btn-sky-blue" (click)="creteNewCustomerEvent.emit(true)">
