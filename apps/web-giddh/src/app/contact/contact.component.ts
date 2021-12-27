@@ -500,7 +500,6 @@ export class ContactComponent implements OnInit, OnDestroy {
         }
 
         if (isElectron) {
-            let ipcRenderer = (window as any).require("electron").ipcRenderer;
             url = location.origin + location.pathname + `#./pages/${part}/${accUniqueName}`;
         } else {
             (window as any).open(url);
@@ -1434,11 +1433,13 @@ export class ContactComponent implements OnInit, OnDestroy {
         for (let key of field) {
             if (key?.uniqueName) {
                 let index = Object.keys(this.showFieldFilter).length;
-                this.showFieldFilter[key.uniqueName] = {
-                    visibility: false,
-                    displayName: key.key,
-                };
-                this.availableColumnsCount.push({ key: index, value: key.uniqueName });
+                if (!this.showFieldFilter[key.uniqueName]) {
+                    this.showFieldFilter[key.uniqueName] = {
+                        visibility: false,
+                        displayName: key.key,
+                    };
+                    this.availableColumnsCount.push({ key: index, value: key.uniqueName });
+                }
             }
         }
         this.setDisplayColumns();
@@ -1700,6 +1701,9 @@ export class ContactComponent implements OnInit, OnDestroy {
     public tabChange(event: any): void {
         if (event?.tab?.textLabel === this.localeData?.customer) {
             this.tabSelected("customer");
+            this.availableColumnsCount = [];
+            this.showFieldFilter = {};
+            this.translationComplete(true);
         } else if (event?.tab?.textLabel === this.localeData?.vendor) {
             this.tabSelected("vendor");
         } else if (event?.tab?.textLabel === this.localeData?.aging_report) {
