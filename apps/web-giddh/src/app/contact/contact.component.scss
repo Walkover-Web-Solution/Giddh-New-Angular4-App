@@ -355,6 +355,8 @@ span.input-addon {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    float: left;
+    width: 200px;
 }
 
 .customer-name .icon-ellipse {
