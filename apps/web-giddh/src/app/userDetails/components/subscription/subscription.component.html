@@ -15,7 +15,7 @@
                         <input
                             matInput
                             class="search-bar"
-                            [placeholder]="localeData?.subscription?.search_companies"
+                            [placeholder]="localeData?.subscription?.search_plans_id"
                             [formControl]="searchSubscription"
                         />
                     </mat-form-field>
@@ -88,8 +88,12 @@
                     >
                 </div>
             </mat-grid-tile>
-            <mat-grid-tile colspan="4" rowspan="15" class="responsive-grid-title-left">
-                <div class="sidebar" *ngIf="!showLoader">
+            <mat-grid-tile [colspan]="sideBarBoxWidth" [rowspan]="sideBarBoxLength">
+                <div
+                    class="subscritption-sidebar"
+                    *ngIf="!showLoader"
+                    [ngClass]="{ 'border-none': !selectedSubscription }"
+                >
                     <ng-container *ngFor="let subscription of subscriptions; let i = index">
                         <mat-grid-list cols="2" rowHeight="150px" gutterSize="0px" class="sidebar-box">
                             <mat-grid-tile colspan="2">
@@ -120,7 +124,7 @@
                                     <div class="side-bar-list plan-timeline">
                                         <img src="{{ imgPath }}plan_timeline.png" alt="plan_timeline" />
                                         <p class="mat-subheading-4 side-bar-list-title">
-                                            {{ localeData?.subscription?.plan_timeline }}
+                                            {{ localeData?.subscription?.timeline }}
                                         </p>
                                         <span>:</span>
                                         <p class="date">{{ subscription?.startedAt }} - {{ subscription?.expiry }}</p>
@@ -300,8 +304,9 @@
                             <input matInput class="search-bar" placeholder="Search month" />
                         </mat-form-field>
                     </div> -->
-                    <mat-tab-group>
-                        <!-- <mat-tab label="Monthly">
+                    <div class="main-tabs-content">
+                        <mat-tab-group>
+                            <!-- <mat-tab label="Monthly">
                         <mat-accordion multi="true">
                             <mat-expansion-panel hideToggle>
                                 <mat-expansion-panel-header>
@@ -843,57 +848,60 @@
                                 </table>
                             </mat-expansion-panel>
                         </mat-accordion>
-                    </mat-tab> -->
-                        <mat-tab [label]="localeData?.subscription?.companies">
-                            <mat-accordion class="companies" multi>
-                                <ng-container
-                                    *ngFor="
-                                        let company of selectedSubscription?.companiesWithTransactions;
-                                        let i = index
-                                    "
-                                >
-                                    <mat-expansion-panel
-                                        hideToggle
-                                        class="companies-expansion-panel"
-                                        [expanded]="panelOpenState"
+                    </mat-tab>  -->
+                            <mat-tab [label]="localeData?.subscription?.companies">
+                                <mat-accordion class="companies" multi>
+                                    <ng-container
+                                        *ngFor="
+                                            let company of selectedSubscription?.companiesWithTransactions;
+                                            let i = index
+                                        "
                                     >
-                                        <mat-expansion-panel-header class="companies-expansion-header-mat">
-                                            <mat-panel-title>
-                                                {{ company?.name }}
-                                                <a
-                                                    (click)="openModalMove(company, $event)"
-                                                    href="javascript:void(0);"
-                                                    >{{ localeData?.subscription?.move_company }}</a
-                                                >
-                                            </mat-panel-title>
-                                        </mat-expansion-panel-header>
-                                        <div class="companies-container">
-                                            <div class="companies-container-items">
-                                                <p>
-                                                    <img
-                                                        src="{{ imgPath }}transaction.png"
-                                                        [alt]="commonLocaleData?.subscription?.app_transactions"
-                                                    />
-                                                    {{ company?.transactions }}
-                                                    {{ localeData?.subscription?.transaction_used }}
-                                                </p>
-                                            </div>
-                                            <!-- <div class="companies-container-items">
+                                        <mat-expansion-panel
+                                            hideToggle
+                                            class="companies-expansion-panel"
+                                            [expanded]="panelOpenState"
+                                        >
+                                            <mat-expansion-panel-header class="companies-expansion-header-mat">
+                                                <mat-panel-title>
+                                                    {{ company?.name }}
+                                                    <a
+                                                        (click)="openModalMove(company, $event)"
+                                                        href="javascript:void(0);"
+                                                        >{{ localeData?.subscription?.move_company }}</a
+                                                    >
+                                                </mat-panel-title>
+                                            </mat-expansion-panel-header>
+                                            <div class="companies-container">
+                                                <div class="companies-container-items">
+                                                    <p>
+                                                        <img
+                                                            src="{{ imgPath }}transaction.png"
+                                                            [alt]="commonLocaleData?.subscription?.app_transactions"
+                                                        />
+                                                        {{ company?.transactions }}
+                                                        {{ localeData?.subscription?.transaction_used }}
+                                                    </p>
+                                                </div>
+                                                <!-- <div class="companies-container-items">
                                             <p><img src="{{ imgPath }}branch.png" alt="Transaction" /> 6 branches active</p>
                                         </div>
                                         <div class="companies-container-items">
                                             <p><img src="{{ imgPath }}warehouse.png" alt="Transaction" /> 6 warehouse active</p>
                                         </div> -->
-                                        </div>
-                                    </mat-expansion-panel>
-                                    <mat-divider *ngIf="i < selectedSubscription?.companiesWithTransactions?.length">
-                                    </mat-divider>
-                                </ng-container>
-                            </mat-accordion>
-                        </mat-tab>
-                    </mat-tab-group>
+                                            </div>
+                                        </mat-expansion-panel>
+                                        <mat-divider
+                                            *ngIf="i < selectedSubscription?.companiesWithTransactions?.length"
+                                        >
+                                        </mat-divider>
+                                    </ng-container>
+                                </mat-accordion>
+                            </mat-tab>
+                        </mat-tab-group>
+                    </div>
                 </div>
-                <div class="main-content-condition" *ngIf="!selectedSubscription && plansList?.length && !showLoader">
+                <!-- <div class="main-content-condition" *ngIf="!selectedSubscription && plansList?.length && !showLoader">
                     <p class="main-content-para">
                         {{ localeData?.subscription?.select_plan_summary }} <br />
                         {{ localeData?.subscription?.select_plan_consumptions }}
@@ -903,8 +911,8 @@
                         {{ localeData?.subscription?.you_have_total }} {{ plansList?.length }}
                         {{ localeData?.subscription?.plans }}
                     </p>
-                </div>
-                <div class="main-content-condition" *ngIf="showLoader">
+                </div> -->
+                <!-- <div class="main-content-condition" *ngIf="showLoader">
                     <p [ngClass]="{ 'skeleton-common-class': showLoader }">
                         {{ localeData?.subscription?.select_plan_summary }} <br />
                         {{ localeData?.subscription?.select_plan_consumptions }}
@@ -920,21 +928,24 @@
     </div>
 </div>
 <!-- </ng-container> -->
-<subscriptions-plans
-    *ngIf="isPlanShow && localeData?.subscription"
-    [subscriptions]="subscriptions"
-    (isSubscriptionPlanShow)="isSubscriptionPlanShow($event)"
-    [localeData]="localeData"
-    [commonLocaleData]="commonLocaleData"
-></subscriptions-plans>
-<!-- MoveCompany Modal -->
-<ng-template #moveCompany>
-    <move-company
-        (moveCompany)="addOrMoveCompanyCallback($event)"
-        [subscriptions]="subscriptions"
-        [moveSelectedCompany]="selectedCompany"
-        [localeData]="localeData"
-        [commonLocaleData]="commonLocaleData"
-    >
-    </move-company>
-</ng-template>
+                <subscriptions-plans
+                    *ngIf="isPlanShow && localeData?.subscription"
+                    [subscriptions]="subscriptions"
+                    (isSubscriptionPlanShow)="isSubscriptionPlanShow($event)"
+                    [localeData]="localeData"
+                    [commonLocaleData]="commonLocaleData"
+                ></subscriptions-plans>
+                <!-- MoveCompany Modal -->
+                <ng-template #moveCompany>
+                    <move-company
+                        (moveCompany)="addOrMoveCompanyCallback($event)"
+                        [subscriptions]="subscriptions"
+                        [moveSelectedCompany]="selectedCompany"
+                        [localeData]="localeData"
+                        [commonLocaleData]="commonLocaleData"
+                    >
+                    </move-company>
+                </ng-template> </mat-grid-tile
+        ></mat-grid-list>
+    </div>
+</div>

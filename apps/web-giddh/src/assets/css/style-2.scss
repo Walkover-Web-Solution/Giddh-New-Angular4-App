@@ -9020,3 +9020,64 @@ input[type="checkbox"].cdk-visually-hidden::after {
         left: 100%;
     }
 }
+.table-header-fix {
+    position: sticky;
+    top: 0;
+    background-color: $white;
+    z-index: 100;
+}
+
+.custom-mat-tabs {
+    .mat-tab-label {
+        padding: 0 20px !important;
+        min-width: 100px !important;
+    }
+
+    .mat-ink-bar {
+        height: 3px !important;
+    }
+
+    .mat-tab-header {
+        display: none;
+    }
+}
+.main-tabs-content {
+    .mat-tab-label.mat-tab-label-active {
+        background-color: $cloud;
+        color: $slate;
+    }
+    .mat-ink-bar {
+        background-color: transparent !important;
+    }
+}
+@media screen and (max-width: 768px) {
+    .custom-mat-tabs {
+        .mat-tab-header {
+            display: block !important;
+        }
+    }
+    .subscription-form-select {
+        float: left !important;
+        width: 128px !important;
+        height: 38px !important;
+
+        .mat-form-field-wrapper {
+            height: 100% !important;
+            padding-bottom: 0 !important;
+        }
+        .mat-form-field-flex {
+            float: left !important;
+            width: 100% !important;
+            height: 39px !important;
+        }
+        .mat-form-field-infix {
+            padding-top: 0 !important;
+            padding-bottom: 0 !important;
+            margin-top: 0 !important;
+        }
+        .mat-select {
+            margin-top: 0 !important;
+            z-index: 9991 !important;
+        }
+    }
+}
