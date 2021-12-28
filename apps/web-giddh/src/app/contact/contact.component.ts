@@ -1714,7 +1714,7 @@ export class ContactComponent implements OnInit, OnDestroy {
      *
      * @memberof ContactComponent
      */
-    public resetColumns(): void {
+    private resetColumns(): void {
         this.availableColumnsCount = [];
         this.showFieldFilter = {};
         this.translationComplete(true);
