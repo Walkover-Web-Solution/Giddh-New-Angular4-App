@@ -132,8 +132,8 @@
         "transaction_used": "transaction used",
         "expiring_within": "Expiring within",
         "expires": "Expires",
-        "timeline":"Timeline",
-        "search_plans_id":"Search Plan and Sub Id"
+        "timeline": "Timeline",
+        "search_plans": "Search Plan and Companies"
     },
     "expiring_list":{
         "seven_days":"7 Days",

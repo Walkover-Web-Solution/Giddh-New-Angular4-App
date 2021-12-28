@@ -125,6 +125,9 @@
     .sidebar-box {
         mat-grid-tile {
             border-bottom: 1px solid $dark-fog;
+            &.active {
+                background: $solitude-light;
+            }
         }
 
         .side-bar-head {
@@ -146,7 +149,7 @@
         }
 
         :hover {
-            background: rgba(102, 140, 255, 0.1);
+            background: $solitude-light;
         }
 
         .side-bar-items {
@@ -718,7 +721,7 @@
 }
 
 .mat-expansion-panel:not(.mat-expanded) .mat-expansion-panel-header:hover {
-    background: rgba(102, 140, 255, 0.1);
+    background: $solitude-light;
 }
 @media screen and (max-width: 1024px) and (orientation: landscape) {
     * {

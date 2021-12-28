@@ -15,7 +15,7 @@
                         <input
                             matInput
                             class="search-bar"
-                            [placeholder]="localeData?.subscription?.search_plans_id"
+                            [placeholder]="localeData?.subscription?.search_plans"
                             [formControl]="searchSubscription"
                         />
                     </mat-form-field>
@@ -95,8 +95,13 @@
                     [ngClass]="{ 'border-none': !selectedSubscription }"
                 >
                     <ng-container *ngFor="let subscription of subscriptions; let i = index">
-                        <mat-grid-list cols="2" rowHeight="150px" gutterSize="0px" class="sidebar-box">
-                            <mat-grid-tile colspan="2">
+                        <mat-grid-list cols="2" [rowHeight]="rowLength" gutterSize="0px" class="sidebar-box">
+                            <mat-grid-tile
+                                colspan="2"
+                                [ngClass]="{
+                                    'active': selectedSubscription?.subscriptionId === subscription?.subscriptionId
+                                }"
+                            >
                                 <div class="side-bar-items" (click)="selectSubscription(subscription)">
                                     <p class="mat-body-2 side-bar-head">
                                         {{ subscription?.planDetails?.name
@@ -868,7 +873,7 @@
                                                     <a
                                                         (click)="openModalMove(company, $event)"
                                                         href="javascript:void(0);"
-                                                        >{{ localeData?.subscription?.move_company }}</a
+                                                        >{{ localeData?.subscription?.move }}</a
                                                     >
                                                 </mat-panel-title>
                                             </mat-expansion-panel-header>
