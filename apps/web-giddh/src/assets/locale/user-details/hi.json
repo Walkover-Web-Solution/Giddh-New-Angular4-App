@@ -131,7 +131,9 @@
 		"search_companies": "कंपनियों को खोजें",
 		"transaction_used": "इस्तेमाल किया लेनदेन",
 		"expiring_within": "के भीतर समाप्त हो रहा है",
-		"expires": "समय-सीमा समाप्त"
+		"expires": "समय-सीमा समाप्त",
+		"timeline":"समयरेखा",
+		"search_plans_id":"खोज योजनाएं और उप आईडी"
 	},
 	"expiring_list": {
 		"seven_days": "7 दिन",
