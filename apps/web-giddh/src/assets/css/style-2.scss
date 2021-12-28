@@ -30,19 +30,19 @@ $custom-typography: mat-typography-config(
     text-transform: capitalize;
     border-right: none !important;
     border-left: none !important;
-    background-color: var(--body-background-color);
+    background-color: var(--color-body-background);
 }
 .basic > thead > tr > th {
-    color: var(--table-heading-primary-color);
-    border-right: 1px solid $gainsboro;
+    color: var(--color-table-primary-heading);
+    border-right: 1px solid var(--color-gainsboro);
     padding: 15px 11px !important;
     font-weight: 400;
-    border-bottom: 1px solid $gainsboro;
+    border-bottom: 1px solid var(--color-gainsboro);
     font-family: opensans-semibold;
     font-size: 14px;
 }
 .basic {
-    background: var(--common-background-color-for-all-components);
+    background: var(--color-common-primary-background-for-all-components);
 }
 
 .overflow-x-hidden {
@@ -134,7 +134,7 @@ $custom-typography: mat-typography-config(
     }
 }
 .mat-calendar-body-cell-content {
-    color: var(--datepicker-secondary-date-color);
+    color: var(--color-datepicker-secondary-date);
 }
 
 @media (max-width: 768px) {
@@ -144,7 +144,7 @@ $custom-typography: mat-typography-config(
     .on-mobile-view tbody tr,
     .on-mobile-view tbody .mat-row {
         box-shadow: 0 0px 5px rgba(0, 0, 0, 0.1);
-        background: $white;
+        background: var(--color-white);
         border-bottom: none;
         cursor: pointer;
         display: block !important;
@@ -321,8 +321,10 @@ body {
 }
 
 .border-bottom {
-    border-bottom: 1px solid $gainsboro;
-} /* start MDB tweaks */
+    border-bottom: 1px solid var(--color-gainsboro);
+}
+
+/* start MDB tweaks */
 .caret {
     display: inline-block;
     width: 0;
@@ -374,7 +376,7 @@ input {
     display: block;
     overflow: hidden;
     cursor: pointer;
-    border: 1px solid $chetwode-blue;
+    border: 1px solid var(--color-chetwode-blue);
     border-radius: 30px;
 }
 .toggle-inner {
@@ -392,10 +394,10 @@ input {
     padding: 0;
     line-height: 15px;
     font-size: 12px;
-    color: $white;
+    color: var(--color-white);
     font-weight: bold;
     box-sizing: border-box;
-    background: $white-smoke;
+    background: var(--color-white-smoke);
 }
 .toggle-inner:before {
     content: "";
@@ -415,8 +417,8 @@ input {
     right: 28px;
     border-radius: 30px;
     transition: all 0.3s ease-in 0s;
-    background-color: $chetwode-blue;
-    border-color: $chetwode-blue;
+    background-color: var(--color-chetwode-blue);
+    border-color: var(--color-chetwode-blue);
 }
 .toggle-checkbox:checked + .toggle-label .toggle-inner {
     margin-left: 0;
@@ -432,7 +434,7 @@ input {
 }
 .cube1,
 .cube2 {
-    background-color: $midnight-blue;
+    background-color: var(--color-midnight-blue);
     width: 15px;
     height: 15px;
     position: absolute;
@@ -498,7 +500,7 @@ input {
     position: absolute;
     right: 7px;
     top: 16px;
-    border-top: 5px solid $nobel;
+    border-top: 5px solid var(--color-nobel);
     border-right: 5px solid transparent;
     border-left: 5px solid transparent;
     border-bottom: 5px solid transparent;
@@ -506,17 +508,17 @@ input {
 .invoice-control .nav.nav-tabs {
     margin-bottom: 15px;
     padding: 0 0px 0 15px !important;
-    background-color: var(--tab-primary-background-color);
+    background-color: var(--color-tab-primary-background);
     z-index: 9;
     position: relative;
     top: -4px;
-    border-color: $gainsboro !important;
+    border-color: var(--color-gainsboro) !important;
 }
 .invoice-control .invoice-nav.navbar-nav > li > a:hover {
-    color: $white;
+    color: var(--color-white);
 }
 .invoice-control .invoice-nav.navbar-nav > li > a.active {
-    background-color: $white;
+    background-color: var(--color-white);
 }
 
 .navbar {
@@ -532,7 +534,7 @@ input {
     margin-right: 35px !important;
     margin-left: 0 !important;
     font-size: 14px;
-    color: var(--tab-secondary-text-color) !important;
+    color: var(--color-tab-secondary-text) !important;
     border-width: 0px 0 4px 0 !important;
     height: 41px;
 }
@@ -541,11 +543,11 @@ input {
     background-color: transparent !important;
 }
 .invoice-control .nav-tabs > li.active > a {
-    border-bottom: 4px solid $deep-sky-blue !important;
-    color: var(--tab-secondary-text-color) !important;
+    border-bottom: 4px solid var(--color-deep-sky-blue) !important;
+    color: var(--color-tab-secondary-text) !important;
 }
 .other-account-entry .header {
-    border: 1px solid $red !important;
+    border: 1px solid var(--color-danger) !important;
     display: block;
     overflow: hidden;
 }
@@ -562,7 +564,7 @@ input {
     padding: 15px;
 }
 .white-box {
-    background: $white;
+    background: var(--color-white);
     padding: 20px;
     box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1);
     margin-bottom: 15px;
@@ -577,7 +579,7 @@ input {
 }
 .company-list button.btn-link {
     font-size: 13px;
-    color: $chetwode-blue !important;
+    color: var(--color-chetwode-blue) !important;
     display: block;
     padding: 7px 10px;
     display: block;
@@ -585,8 +587,8 @@ input {
     text-align: left;
 }
 .company-list button.btn-link:hover {
-    color: $chetwode-blue;
-    background: $lavender-light;
+    color: var(--color-chetwode-blue);
+    background: var(--color-common--primary-light-background);
     text-decoration: none;
 }
 .nav-left-bar .sub-list {
@@ -606,13 +608,13 @@ ul.sub-list {
     float: right;
     padding-top: 4px;
     transform: rotate(270deg);
-    border: 2px solid $gray;
+    border: 2px solid var(--color-gray);
     padding: 3px;
     border-radius: 50%;
     justify-content: center;
     align-items: center;
     display: flex;
-    color: $gray;
+    color: var(--color-gray);
 }
 .sub-list li a {
     font-size: 13px;
@@ -621,7 +623,7 @@ ul.sub-list {
     padding-right: 40px;
 }
 .company-list .input-group {
-    border-bottom: 1px solid $gainsboro;
+    border-bottom: 1px solid var(--color-gainsboro);
     display: flex;
     align-items: center;
 }
@@ -633,8 +635,8 @@ ul.sub-list {
     border-radius: 0px;
     border: 0px;
     font-size: 14px;
-    color: $night-rider;
-    border-left: 1px solid $gainsboro !important;
+    color: var(--color-night-rider);
+    border-left: 1px solid var(--color-gainsboro) !important;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -675,7 +677,7 @@ ul.sub-list {
 .tab-integration .nav-tabs > li > a {
     width: 120px;
     height: 120px !important;
-    background: $white;
+    background: var(--color-white);
     display: flex;
     flex-direction: column;
     vertical-align: middle;
@@ -690,10 +692,10 @@ ul.sub-list {
 }
 
 .tab-integration .nav-tabs > li.active a {
-    background: var(--rectangular-tab-primary-background-color) !important;
-    box-shadow: 0 6px 7px var(--rectangular-tab-box-shadow-color);
-    border: 1px solid var(--common-primary-blue-border) !important;
-    color: $night-rider !important;
+    background: var(--color-rectangular-tab-primary-background) !important;
+    box-shadow: 0 6px 7px var(--color-rectangular-tab-box-shadow);
+    border: 1px solid var(--color-common-primary-blue-border) !important;
+    color: var(--color-night-rider) !important;
     border-radius: 3px;
 }
 .tab-integration .nav-tabs > li.active a span {
@@ -701,7 +703,7 @@ ul.sub-list {
 }
 .tab-integration .nav-tabs > li > a > span {
     font-size: 30px;
-    color: var(--rectangular-tab-inactive-icon-primary-color);
+    color: var(--color-rectangular-tab-inactive-primary-icon);
     opacity: 0.4;
     margin-bottom: 6px;
 }
@@ -711,14 +713,14 @@ ul.sub-list {
 
 .customer-footer-box .number-total {
     font-size: 26px;
-    color: $chetwode-blue;
+    color: var(--color-chetwode-blue);
 }
 .customer-footer-box h5 {
     font-size: 18px;
     margin-bottom: 0;
 }
 .customer-right {
-    background: $white;
+    background: var(--color-white);
     padding: 0 15px;
     float: right;
 }
@@ -727,7 +729,7 @@ ul.sub-list {
 }
 .customer-right table tr td {
     padding: 15px;
-    color: $gray;
+    color: var(--color-gray);
 }
 .customer-right table tr td h3 {
     font-size: 18px;
@@ -743,7 +745,7 @@ ul.sub-list {
     background: none;
     border: 0;
     font-size: 14px;
-    color: var(--master-page-tab-secondary-color) !important;
+    color: var(--color-master-page-secondary-tab) !important;
     position: relative;
     padding-bottom: 7px;
     padding-left: 0;
@@ -760,8 +762,7 @@ ul.sub-list {
     left: 0;
     width: 100%;
     padding: 10px 0px 0 43px !important;
-    border-bottom: 1px solid $gainsboro;
-
+    border-bottom: 1px solid var(--color-gainsboro);
     li {
         a {
             padding: 0 !important;
@@ -771,15 +772,15 @@ ul.sub-list {
 }
 
 .custom-tabs .nav.nav-tabs > li a:hover {
-    color: var(--master-page-text-primary-hover-color) !important;
+    color: var(--color-master-page-primary-text-hover) !important;
 }
 .custom-tabs .nav.nav-tabs > li.active a {
-    color: var(--master-page-tab-primary-color) !important;
+    color: var(--color-master-page-primary-tab) !important;
 }
 .custom-tabs .nav.nav-tabs {
-    border-bottom: 1px solid $gainsboro;
+    border-bottom: 1px solid var(--color-gainsboro);
     padding: 10px 0px 0 43px !important;
-    background-color: var(--tab-secondary-background-color);
+    background-color: var(--color-tab-secondary-background);
     z-index: 9;
     position: relative;
 }
@@ -787,28 +788,28 @@ ul.sub-list {
     display: none !important;
 }
 .btn-sky-blue {
-    background: var(--secondary-button-background-color);
-    border: 1px solid var(--secondary-button-background-color);
-    color: $white;
+    background: var(--color-secondary-button-background);
+    border: 1px solid var(--color-secondary-button-background);
+    color: var(--color-white);
 }
 .btn-sky-blue:hover,
 .btn-sky-blue:focus {
-    background: var(--secondary-button-background-color-hover) !important;
-    border-color: var(--secondary-button-background-color-hover);
-    color: $white;
+    background: var(--color-secondary-button-background-hover) !important;
+    border-color: var(--color-secondary-button-background-hover);
+    color: var(--color-white);
 }
 .btn-light-gray {
-    background: $lavender;
-    border-color: $lavender;
-    color: $midnight-blue;
+    background: var(--color-lavender);
+    border-color: var(--color-lavender);
+    color: var(--color-midnight-blue);
 }
 .btn-light-gray:hover {
-    background: $deep-sky-blue;
-    border-color: $deep-sky-blue;
-    color: $white;
+    background: var(--color-deep-sky-blue);
+    border-color: var(--color-deep-sky-blue);
+    color: var(--color-white);
 }
 .top-aging-table-top {
-    background: $whisper-color;
+    background: var(--color-whisper-color);
     position: relative;
 }
 .italic {
@@ -816,14 +817,14 @@ ul.sub-list {
 }
 .aging-table-top td {
     border: 0px solid !important;
-    background: $white !important;
+    background: var(--color-white) !important;
 }
 .aging-table-top .top-aging-table-top {
     background: rgba(49, 58, 151, 0.15) !important;
 }
 .aging-table-top .top-aging-table-top strong,
 .aging-table-top .top-aging-table-top span .date-range-picker {
-    color: $nero;
+    color: var(--color-nero);
 }
 .aging-table-top .top-aging-table-top span .date-range-picker {
     font-family: opensans-semibold;
@@ -832,18 +833,26 @@ ul.sub-list {
 .aging-table {
     border: 0px;
     margin-bottom: 0px;
-    background: $white !important;
+    background: var(--color-white) !important;
 }
 .aging-table > tbody > tr:hover td .aging-checkbox {
     opacity: 1;
     visibility: visible;
 }
 .top-aging-table-top1 {
-    padding: 5px 15px;
+    background: var(--color-white);
+    position: absolute;
+    left: 0;
+    right: 0;
+    border: 1px solid var(--color-gainsboro);
+    padding: 20px;
+    box-shadow: 0 0 19px rgba(0, 0, 0, 0.2);
+    top: 75px;
+    z-index: 1;
 }
 .top-aging-table-top1 p {
     font-size: 12px;
-    color: $nobel;
+    color: var(--color-nobel);
     font-style: italic;
     margin-bottom: 7px;
     text-align: left;
@@ -853,7 +862,7 @@ ul.sub-list {
     display: flex;
 }
 .top-aging-table-box > span {
-    color: $nobel;
+    color: var(--color-nobel);
     margin-right: 5px;
     display: inline-block;
 }
@@ -863,11 +872,11 @@ ul.sub-list {
 .top-aging-table-box input {
     width: 43px !important;
     height: 26px;
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--color-gainsboro);
     padding: 5px;
     text-align: center;
     font-weight: bold;
-    color: $gray;
+    color: var(--color-gray);
 }
 .normal {
     font-weight: normal !important;
@@ -885,19 +894,19 @@ ul.sub-list {
     font-size: 14px;
 }
 .basic > thead > tr > th .fa-sort {
-    color: $dim-gray;
+    color: var(--color-dim-gray);
     float: right;
     margin-top: 5px;
 }
 .pagination > li > a {
-    background: $white !important;
-    color: $nero !important;
-    border: 1px solid $midnight-blue !important;
+    background: var(--color-white) !important;
+    color: var(--color-nero) !important;
+    border: 1px solid var(--color-midnight-blue) !important;
 }
 .pagination > li.active > a {
-    color: var(--pagination-active-button-color) !important;
-    background: var(--pagination-background-color) !important;
-    border: 1px solid var(--pagination-background-color) !important;
+    color: var(--color-pagination-active-button) !important;
+    background: var(--color-pagination-background) !important;
+    border: 1px solid var(--color-pagination-background) !important;
 }
 .table-checkbox {
     position: absolute;
@@ -933,10 +942,10 @@ ul.sub-list {
     text-transform: lowercase !important;
 }
 .text-gray {
-    color: $nobel;
+    color: var(--color-nobel);
 }
 .advance-search .input-group-addon {
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--color-gainsboro);
     background: none;
     border-left: 0 !important;
     border-radius: 5px;
@@ -950,7 +959,7 @@ ul.sub-list {
         line-height: 15px;
 
         small {
-            color: $silver;
+            color: var(--color-silver);
         }
     }
 }
@@ -977,7 +986,7 @@ ul.sub-list {
     width: 0;
     height: 0;
     border: 5px solid transparent;
-    border-top-color: $gainsboro;
+    border-top-color: var(--color-gainsboro);
 }
 .select-style select {
     width: 100%;
@@ -986,9 +995,9 @@ ul.sub-list {
     -moz-appearance: none;
     appearance: none;
     padding: 7px 22px 7px 7px;
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--color-gainsboro);
     border-radius: 2px;
-    background: $white;
+    background: var(--color-white);
     font-size: 14px;
     cursor: pointer;
 }
@@ -1009,28 +1018,28 @@ ul.sub-list {
 }
 
 .btn-green {
-    background: var(--secondary-button-background-color);
-    color: $white;
+    background: var(--color-secondary-button-background);
+    color: var(--color-white);
 }
 .btn-green:hover {
-    color: $white;
-    background: var(--secondary-button-background-color-hover);
+    color: var(--color-white);
+    background: var(--color-secondary-button-background-hover);
 }
 
 .choose-size label {
     font-weight: bold;
     display: inline-block;
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--color-gainsboro);
     border-radius: 50%;
     width: 30px !important;
     text-align: center;
     height: 30px !important;
     line-height: 30px !important;
     margin-right: 5px;
-    color: $gray;
+    color: var(--color-gray);
 }
 .choose-size input:checked + label {
-    background: $whisper-color;
+    background: var(--color-whisper-color);
     clear: both;
 }
 .choose-size input:disabled + label {
@@ -1056,10 +1065,10 @@ ul.sub-list {
     white-space: nowrap;
 }
 .text-purple {
-    color: $chetwode-blue;
+    color: var(--color-chetwode-blue);
 }
 .text-light {
-    color: $nobel !important;
+    color: var(--color-nobel) !important;
 }
 .list-middle li {
     vertical-align: middle;
@@ -1083,14 +1092,14 @@ modal-container.modal {
         .modal-content {
             height: 100%;
             overflow: scroll;
-            background-color: $alice-blue-light;
+            background-color: var(--color-alice-blue-light);
         }
     }
 }
 .table-modal thead tr th {
     font-family: "opensans-regular" !important;
     font-family: cursive;
-    border-right: 1px solid $gainsboro;
+    border-right: 1px solid var(--color-gainsboro);
 }
 .modal-455 {
     max-width: 455px;
@@ -1126,8 +1135,8 @@ modal-container.modal {
     margin-right: 7px;
 }
 .list-icon-group input:checked + label {
-    background-color: $white;
-    box-shadow: 2px 2px 5px $gainsboro;
+    background-color: var(--color-white);
+    box-shadow: 2px 2px 5px var(--color-gainsboro);
 }
 .modal-consolidated-details {
     width: 75%;
@@ -1162,44 +1171,44 @@ modal-container.modal {
     border: 0px !important;
     font-weight: normal;
     font-size: 14px;
-    color: var(--table-content-quinary-color);
+    color: var(--color-table-quinary-content);
 }
 .table-no-border tr th {
-    color: $nobel;
+    color: var(--color-nobel);
 }
 
 .price-input {
-    border: 1px solid $gainsboro !important;
+    border: 1px solid var(--color-gainsboro) !important;
     font-size: 14px !important;
-    background: $white !important;
+    background: var(--color-white) !important;
     padding: 1px 2px !important;
     display: inline-block;
     max-width: 90px !important;
     min-width: 70px;
 }
 .input-search .input-group-addon {
-    background: $white;
+    background: var(--color-white);
     border-right: 0px;
-    border-color: $gainsboro;
-    color: $dim-gray;
+    border-color: var(--color-gainsboro);
+    color: var(--color-dim-gray);
     font-size: 12px;
     padding-top: 10px;
     padding-right: 0px;
     border-radius: 2px 0px 0px 2px;
 }
 .input-search .form-control {
-    background: $white;
+    background: var(--color-white);
     border-radius: 0px 2px 2px 0px !important;
     border-left: 0px;
-    border-color: $gainsboro;
+    border-color: var(--color-gainsboro);
 }
 .btn-filter {
-    background: $white;
-    border: 1px solid $gainsboro;
+    background: var(--color-white);
+    border: 1px solid var(--color-gainsboro);
     font-size: 16px;
     padding: 4px 8px;
     line-height: initial !important;
-    color: $nobel;
+    color: var(--color-nobel);
     border-radius: 2px;
 }
 .btn-filter .icon-options {
@@ -1213,13 +1222,13 @@ modal-container.modal {
     margin-right: 5px;
 }
 .dot-warning {
-    background: $grandis;
+    background: var(--color-dot-warning);
 }
 .dot-primary {
-    background: $cornflower-blue;
+    background: var(--color-primary-dot-primary);
 }
 .dot-success {
-    background: $success-green;
+    background: var(--color-success-enable);
 }
 .pd-t85 {
     padding-top: 85px !important;
@@ -1243,13 +1252,13 @@ modal-container.modal {
     justify-content: center;
 }
 .color-primary {
-    color: $deep-sky-blue;
+    color: var(--color-deep-sky-blue);
 }
 .justify-content-between {
     justify-content: space-between;
 }
 .text-blue {
-    color: var(--common-senary-text-color);
+    color: var(--color-common-senary-text);
 }
 .all-features-modal {
     margin: 0 auto !important;
@@ -1276,7 +1285,7 @@ modal-container.modal {
         font-size: 13px;
         top: 11px;
         left: 10px;
-        color: var(--sidebar-search-bar-text-color);
+        color: var(--color-sidebar-search-bar-text);
     }
 
     .form-control {
@@ -1313,23 +1322,23 @@ modal-container.modal {
     top: 0;
     z-index: 9;
     font-size: 17px;
-    color: $gray;
+    color: var(--color-gray);
     height: 36px;
     width: 36px;
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    color: $gray;
+    color: var(--color-gray);
 }
 .custom-datepicker input {
-    background: var(--sidebar-search-bar-background-color) !important;
+    background: var(--color-sidebar-search-bar-background) !important;
     font-size: 14px;
     position: relative;
     width: 230px !important;
     max-width: 230px;
     display: block;
     padding-left: 30px !important;
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--color-gainsboro);
     height: 36px;
     border-radius: 5px;
 }
@@ -1351,27 +1360,27 @@ modal-container.modal {
 }
 
 .sh-select-border .menu .scrollable-content > .item {
-    border-bottom: 1px solid $gainsboro;
+    border-bottom: 1px solid var(--color-gainsboro);
     height: initial !important;
 }
 /* my css end */
 /*input*/
 .form-control {
-    background: var(--sidebar-search-bar-background-color) !important;
-    border: 1px solid $gainsboro;
+    background: var(--color-sidebar-search-bar-background) !important;
+    border: 1px solid var(--color-gainsboro);
     border-radius: 5px !important;
     padding: 6px !important;
     outline: 0;
-    color: var(--sidebar-search-bar-text-color) !important;
+    color: var(--color-sidebar-search-bar-text) !important;
     box-shadow: none;
     font-size: 14px !important;
 }
 .form-control.mat-select-disabled {
-    background: $whisper-light !important;
+    background: var(--color-whisper-light) !important;
 }
 
 input {
-    color: var(--popup-list-input-text-color) !important;
+    color: var(--color-popup-list-input-text) !important;
 }
 .form-control::-webkit-input-placeholder,
 input::-webkit-input-placeholder,
@@ -1383,13 +1392,13 @@ input::-moz-placeholder,
 input:-ms-input-placeholder,
 .form-control:-moz-placeholder,
 input:-moz-placeholder {
-    color: $nobel !important;
+    color: var(--color-nobel) !important;
     font-size: 14px;
     font-weight: 400 !important;
 }
 .form-control:focus {
     outline: none;
-    border-color: var(--active-search-bar-border-color) !important;
+    border-color: var(--color-active-search-bar-border) !important;
     box-shadow: none;
 }
 .p-0 {
@@ -1402,10 +1411,10 @@ input:-moz-placeholder {
     padding-right: 0 !important;
 }
 .sidebar {
-    background: $whisper;
+    background: var(--color-whisper);
 }
 .company-name ul li > span {
-    color: $night-rider !important;
+    color: var(--color-night-rider) !important;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
@@ -1417,7 +1426,7 @@ input:-moz-placeholder {
     display: inline-flex;
     width: 28px;
     height: 28px;
-    background-color: $chetwode-blue;
+    background-color: var(--color-chetwode-blue);
     text-align: center;
     border-radius: 50%;
     justify-content: center;
@@ -1426,40 +1435,39 @@ input:-moz-placeholder {
     margin-right: 15px;
     float: left;
     letter-spacing: -1px;
-    color: $white !important;
+    color: var(--color-white) !important;
 }
 .company-name .company-text .fyear {
     font-size: 12px;
 }
 
 header .navbar {
-    background-color: $alice-blue-light;
-    border-bottom: 1px solid $gainsboro;
+    background-color: var(--color-alice-blue-light);
+    border-bottom: 1px solid var(--color-gainsboro);
     padding: 3px 0;
 }
 .thead-background1 th {
-    background: $white;
-    color: $matterhorn;
+    background: var(--color-white);
+    color: var(--color-matterhorn);
     padding: 11px !important;
     font-weight: 400;
 }
 .accountName {
-    color: $cinnabar-orange;
+    color: var(--color-cinnabar-orange);
     text-transform: capitalize;
 }
 .icomoon-ico {
-    color: $gray;
+    color: var(--color-gray);
 }
 .ledg-head {
     width: 100%;
 } /*btn*/
 .btn-pink {
-    background: $deep-sky-blue;
-    border: 1px solid $deep-sky-blue;
-    color: $white;
-
+    background: var(--color-deep-sky-blue);
+    border: 1px solid var(--color-deep-sky-blue);
+    color: var(--color-white);
     &:hover {
-        color: $white;
+        color: var(--color-white);
     }
 }
 .dropdown-toggle.btn-pink {
@@ -1471,9 +1479,9 @@ header .navbar {
 .btn-primary:not(:disabled):not(.disabled).active,
 .btn-primary:not(:disabled):not(.disabled):active,
 .show > .btn-primary.dropdown-toggle {
-    background: $white !important;
-    border-color: $gainsboro !important;
-    color: var(--common-primary-blue-border) !important;
+    background: var(--color-white) !important;
+    border-color: var(--color-gainsboro) !important;
+    color: var(--color-common-primary-blue-border) !important;
 }
 .btn-primary:hover,
 .btn-primary:disabled,
@@ -1483,9 +1491,9 @@ header .navbar {
 .btn-primary:active:hover,
 .open > .dropdown-toggle.btn-primary:focus,
 .btn-primary:not(:disabled):not(.disabled):active {
-    background: var(--popup-list-hover-color) !important;
-    color: $white !important;
-    border-color: var(--popup-list-hover-color) !important;
+    background: var(--color-popup-list-hover) !important;
+    color: var(--color-white) !important;
+    border-color: var(--color-popup-list-hover) !important;
 }
 .btn-primary.disabled.focus,
 .btn-primary.disabled:focus,
@@ -1496,9 +1504,9 @@ header .navbar {
 fieldset[disabled] .btn-primary.focus,
 fieldset[disabled] .btn-primary:focus,
 fieldset[disabled] .btn-primary:hover {
-    background: var(--secondary-button-background-color-hover) !important;
-    color: $white !important;
-    border-color: var(--secondary-button-background-color-hover) !important;
+    background: var(--color-secondary-button-background-hover) !important;
+    color: var(--color-white) !important;
+    border-color: var(--color-secondary-button-background-hover) !important;
 }
 .btn {
     padding: 7px 10px;
@@ -1513,9 +1521,9 @@ fieldset[disabled] .btn-primary:hover {
     line-height: 1.3333333;
 }
 .btn-default {
-    background: $white !important;
-    border-color: $gainsboro !important;
-    color: var(--common-primary-blue-border) !important;
+    background: var(--color-white) !important;
+    border-color: var(--color-gainsboro) !important;
+    color: var(--color-common-primary-blue-border) !important;
 }
 .btn-default:hover,
 .btn-default:disabled,
@@ -1526,34 +1534,33 @@ fieldset[disabled] .btn-primary:hover {
 .btn-default:active:focus,
 .open > .dropdown-toggle.btn-default,
 .btn-default:not(:disabled):not(.disabled):active {
-    background: var(--secondary-button-background-color-hover) !important;
-    color: $white !important;
-    border-color: var(--secondary-button-background-color-hover) !important;
+    background: var(--color-secondary-button-background-hover) !important;
+    color: var(--color-white) !important;
+    border-color: var(--color-secondary-button-background-hover) !important;
 }
 .success-btn {
     font-size: 14px;
-    background: $success-green;
-    color: $white;
-
+    background: var(--color-success-enable);
+    color: var(--color-white);
     &:hover {
-        color: $white;
+        color: var(--color-white);
     }
 }
 .btn-round {
     border-radius: 90px;
 }
 #actionPane .btn-default {
-    background: $whisper !important;
-    color: $night-rider !important;
-    border-color: $whisper !important;
+    background: var(--color-whisper) !important;
+    color: var(--color-night-rider) !important;
+    border-color: var(--color-whisper) !important;
     border-radius: 5px !important;
 } /*btn end*/
 .ledger-main .form-control {
-    background: var(--table-input-background-color) !important;
+    background: var(--color-table-input-background) !important;
 }
 .ledger-header thead th {
-    background: $white;
-    border-right: 1px solid $gainsboro;
+    background: var(--color-white);
+    border-right: 1px solid var(--color-gainsboro);
 }
 .compound-entry td,
 .compound-entry td .form-control {
@@ -1563,7 +1570,7 @@ fieldset[disabled] .btn-primary:hover {
     padding: 0;
 }
 .ledger-container table tr.bg3 th {
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--color-gainsboro);
     border-left: 0;
 }
 
@@ -1577,11 +1584,11 @@ fieldset[disabled] .btn-primary:hover {
 .load-more {
     padding: 8px 10px;
     display: block;
-    background: $gray-95;
+    background: var(--color-gray-95);
     margin: 20px 0px;
 }
 #ledger {
-    border-top: 1px solid $gainsboro;
+    border-top: 1px solid var(--color-gainsboro);
 }
 .daterangepicker.ltr .ranges {
     float: right;
@@ -1594,7 +1601,7 @@ fieldset[disabled] .btn-primary:hover {
     font-size: 12px;
     height: 33px;
     border: 0px;
-    color: $night-rider;
+    color: var(--color-night-rider);
     padding: 3px !important;
     text-align: center;
 }
@@ -1606,11 +1613,11 @@ fieldset[disabled] .btn-primary:hover {
     border-radius: 2px;
 }
 .btn-gray {
-    background: $dark-gray;
-    color: $white;
+    background: var(--color-dark-gray);
+    color: var(--color-white);
 }
 .btn-gray:hover {
-    color: $white;
+    color: var(--color-white);
 }
 .p-t-5 {
     padding-right: 5px;
@@ -1619,17 +1626,17 @@ fieldset[disabled] .btn-primary:hover {
     padding-left: 10px;
 }
 .danger-btn {
-    color: $white;
+    color: var(--color-white);
     text-shadow: none;
     background-image: none;
     padding: 12px 25px;
     border-radius: 3px;
     outline: 0;
     box-shadow: none;
-    border: 1px solid $cinnabar-orange;
+    border: 1px solid var(--color-cinnabar-orange);
 }
 #companyList {
-    background: $white;
+    background: var(--color-white);
     padding-bottom: 0;
     padding: 0;
 }
@@ -1640,16 +1647,16 @@ fieldset[disabled] .btn-primary:hover {
     color: var(--dark-blue01) !important;
 }
 .selected-company a.text-ellipsis {
-    color: $chetwode-blue;
+    color: var(--color-chetwode-blue);
 }
 #companyList li.selected-company a:focus {
-    background-color: $chetwode-blue;
+    background-color: var(--color-chetwode-blue);
 }
 #companyList li.selected-company a:hover span {
-    color: $chetwode-blue !important;
+    color: var(--color-chetwode-blue) !important;
 }
 #companyList li.selected-company a:focus span {
-    color: $white !important;
+    color: var(--color-white) !important;
 }
 .company-name .icon-dots-three-vertical {
     font-size: 18px;
@@ -1658,7 +1665,7 @@ fieldset[disabled] .btn-primary:hover {
     bottom: 0;
     transform: translateY(-50%);
     right: 16px;
-    color: $white;
+    color: var(--color-white);
 }
 
 p.table-email {
@@ -1720,7 +1727,7 @@ input[type="checkbox"]:before {
     z-index: 1;
     width: 8px;
     height: 5px;
-    border: 1.5px solid $white;
+    border: 1.5px solid var(--color-white);
     border-top-style: none;
     border-right-style: none;
 }
@@ -1730,17 +1737,17 @@ input[type="checkbox"]:after {
     position: absolute;
     top: 0;
     left: 0;
-    border: 1px solid $grey-chateau;
+    border: 1px solid var(--color-checkbox-after-border);
     width: 14px;
     height: 14px;
-    background: $white;
+    background: var(--color-white);
     cursor: pointer;
     visibility: visible;
 }
 
 input[type="checkbox"]:checked:after {
-    background-color: $faux-cornflower-blue;
-    border-color: $faux-cornflower-blue;
+    background-color: var(--color-checkbox-checked-after-background);
+    border-color: var(--color-checkbox-checked-after-background);
 }
 .tab-pane .list-inline > li {
     padding-left: 0;
@@ -1770,33 +1777,33 @@ input[type="checkbox"]:checked:after {
     line-height: 0 !important;
 }
 .btn-success-green {
-    background-color: $success-green !important;
-    color: $white !important;
-    border: 1px solid $success-green !important;
+    background-color: var(--color-success-enable) !important;
+    color: var(--color-white) !important;
+    border: 1px solid var(--color-success-enable) !important;
 }
 .btn-success-outline {
-    border: 1px solid $light-sea-green !important;
-    color: $light-sea-green !important;
+    border: 1px solid var(--color-light-sea-green) !important;
+    color: var(--color-light-sea-green) !important;
 }
 .btn-success-outline:hover {
-    color: $white !important;
-    background: $light-sea-green !important;
+    color: var(--color-white) !important;
+    background: var(--color-light-sea-green) !important;
 }
 
 .btn-danger-outline {
-    border: 1px solid $red !important;
-    color: $red !important;
+    border: 1px solid var(--color-danger) !important;
+    color: var(--color-danger) !important;
 }
 
 .btn-danger-outline:hover {
-    color: $white !important;
-    background: $red !important;
+    color: var(--color-white) !important;
+    background: var(--color-danger) !important;
 }
 
 .btn-success {
-    background: $light-sea-green !important;
-    color: $white !important;
-    border: 1px solid $light-sea-green !important;
+    background: var(--color-light-sea-green) !important;
+    color: var(--color-white) !important;
+    border: 1px solid var(--color-light-sea-green) !important;
 }
 .btn-success:hover,
 .btn-success:active:focus,
@@ -1805,22 +1812,22 @@ input[type="checkbox"]:checked:after {
 .btn-success:not(:disabled):not(.disabled):active,
 .btn-success:not(:disabled):not(.disabled).active,
 .show > .btn-success.dropdown-toggle {
-    background: $teal !important;
-    color: $white !important;
-    border: 1px solid $teal !important;
+    background: var(--color-btn-success-dropdown-toggle) !important;
+    color: var(--color-white) !important;
+    border: 1px solid var(--color-btn-success-dropdown-toggle) !important;
     box-shadow: none;
 }
 .btn-success:disabled,
 .btn-success:disabled:hover {
     color: rgba(255, 255, 255, 0.51) !important;
-    border: 1px solid $success-green-disable !important;
-    background: $success-green-disable !important;
+    border: 1px solid var(--color-success-disable) !important;
+    background: var(--color-success-disable) !important;
 }
 
 .btn-warning {
-    color: $white !important;
-    background-color: $warning !important;
-    border-color: $warning !important;
+    color: var(--color-white) !important;
+    background-color: var(--color-warning) !important;
+    border-color: var(--color-warning) !important;
 }
 
 .btn-warning:not(:disabled):not(.disabled):active:focus,
@@ -1834,17 +1841,17 @@ input[type="checkbox"]:checked:after {
     opacity: 0.5;
 }
 .btn-danger {
-    background: $whisper !important;
-    color: $red !important;
-    border-color: $whisper !important;
+    background: var(--color-whisper) !important;
+    color: var(--color-danger) !important;
+    border-color: var(--color-whisper) !important;
 }
 .btn-danger:hover,
 .btn-danger:active,
 .btn-danger:focus,
 .btn-danger:active:focus {
-    background: $gainsboro !important;
-    color: $red !important;
-    border-color: $gainsboro !important;
+    background: var(--color-gainsboro) !important;
+    color: var(--color-danger) !important;
+    border-color: var(--color-gainsboro) !important;
     outline: none !important;
 }
 .btn-danger:disabled,
@@ -1852,30 +1859,30 @@ input[type="checkbox"]:checked:after {
 .btn-danger:active:focus,
 .btn-danger:active:hover,
 .btn-danger:focus {
-    background: $whisper !important;
-    color: $red !important;
-    border-color: $whisper !important;
+    background: var(--color-whisper) !important;
+    color: var(--color-danger) !important;
+    border-color: var(--color-whisper) !important;
 }
 .btn-cancel {
-    background: $whisper;
-    color: $dark-gray;
-    border-color: $whisper;
+    background: var(--color-whisper);
+    color: var(--color-dark-gray);
+    border-color: var(--color-whisper);
 }
 .btn-cancel:hover,
 .btn-cancel:active,
 .btn-cancel:focus,
 .btn-cancel:active:focus {
-    background: $gainsboro;
-    color: $dark-gray;
-    border-color: $gainsboro;
+    background: var(--color-gainsboro);
+    color: var(--color-dark-gray);
+    border-color: var(--color-gainsboro);
     outline: none;
     box-shadow: none;
 }
 .btn-cancel:disabled,
 .btn-cancel:disabled:hover {
-    background: $whisper;
-    color: $dark-gray;
-    border-color: $whisper;
+    background: var(--color-whisper);
+    color: var(--color-dark-gray);
+    border-color: var(--color-whisper);
     opacity: 0.5;
 }
 .sm-btn {
@@ -1888,7 +1895,7 @@ input[type="checkbox"]:checked:after {
     transform: translateY(-50%);
 }
 .thumbnail.active {
-    background: $white;
+    background: var(--color-white);
     box-shadow: 0 5px 34px 0 rgba(211, 95, 41, 0.18);
 }
 .thumbnail {
@@ -1896,8 +1903,8 @@ input[type="checkbox"]:checked:after {
     float: left;
     overflow: hidden;
     padding: 0;
-    background: $white;
-    border-color: $skin-tone !important;
+    background: var(--color-white);
+    border-color: var(--color-primary-thumbnail-border) !important;
 }
 .thumbnail:hover {
     box-shadow: 0 5px 34px 0 rgba(58, 58, 58, 0.18);
@@ -1905,13 +1912,13 @@ input[type="checkbox"]:checked:after {
 }
 .thumbnail .caption {
     padding: 20px 7px;
-    color: $night-rider;
+    color: var(--color-night-rider);
     overflow: hidden;
     text-align: center;
 }
 .switch.wide.checked small {
     left: 31px;
-    background: $white;
+    background: var(--color-white);
 }
 .switch.wide {
     width: 62px;
@@ -1921,10 +1928,10 @@ input[type="checkbox"]:checked:after {
     border: 0;
     border-radius: 48px;
     top: 0;
-    background: $white-smoke;
+    background: var(--color-white-smoke);
 }
 .switch.checked {
-    background: $success-green;
+    background: var(--color-success-enable);
     border: 0;
 }
 .switch.checked small {
@@ -2020,13 +2027,13 @@ input[type="checkbox"]:checked:after {
     display: none;
 }
 .text-green {
-    color: $success-green;
+    color: var(--color-success-enable);
 }
 .text-light {
-    color: $very-light-gray;
+    color: var(--color-very-light-gray);
 }
 .text-light-2 {
-    color: $nobel;
+    color: var(--color-secondary-login-box-body-text);
 }
 .align-item-center {
     display: flex;
@@ -2050,7 +2057,7 @@ input[type="checkbox"]:checked:after {
 .mandatory-asterisk {
     font-size: 14px;
     top: 0;
-    color: $red;
+    color: var(--color-danger);
 }
 .md-btn {
     padding: 10px 16px;
@@ -2094,34 +2101,34 @@ input[type="checkbox"]:checked:after {
 }
 .daterangepicker td.active,
 .daterangepicker td.active:hover {
-    background-color: $chetwode-blue !important;
+    background-color: var(--color-chetwode-blue) !important;
     border-color: transparent;
-    color: $white;
+    color: var(--color-white);
 }
 .daterangepicker td.in-range {
-    background-color: $lavender-light !important;
+    background-color: var(--color-common--primary-light-background) !important;
     border-color: transparent;
-    color: $black;
+    color: var(--color-black);
     border-radius: 0;
 }
 .daterangepicker.dropdown-menu {
     box-shadow: 0 3px 28px 0 rgba(0, 0, 0, 0.14);
-    color: $dark-gray;
-    border: 1px solid $gainsboro;
+    color: var(--color-dark-gray);
+    border: 1px solid var(--color-gainsboro);
     z-index: 9999 !important;
 }
 .daterangepicker .input-mini.active {
-    border: 1px solid $skin-tone;
+    border: 1px solid var(--color-primary-daterangepicker-input-mini-active-border);
     border-radius: 4px;
 }
 .ranges li {
-    color: $davy-grey !important;
+    color: var(--color-davy-grey) !important;
 }
 .ranges li.active,
 .ranges li:hover {
-    background: $chetwode-blue !important;
-    border: 1px solid $chetwode-blue !important;
-    color: $white !important;
+    background: var(--color-chetwode-blue) !important;
+    border: 1px solid var(--color-chetwode-blue) !important;
+    color: var(--color-white) !important;
 }
 .download-invoice-ledger {
     padding-left: 15px;
@@ -2133,7 +2140,7 @@ input[type="checkbox"]:checked:after {
     border-top-width: 0;
     top: 1px;
     border-right: 15px solid transparent;
-    border-bottom: 15px solid $white;
+    border-bottom: 15px solid var(--color-white);
     border-left: 15px solid transparent;
     left: -15px;
     z-index: 9;
@@ -2164,23 +2171,23 @@ button:focus {
     text-align: right;
 } /*placeholder webkit css*/
 #accountSearch::-webkit-input-placeholder {
-    color: $white;
+    color: var(--color-white);
 }
 #accountSearch::-webkit-input-placeholder {
     /* Chrome/Opera/Safari */
-    color: $white;
+    color: var(--color-white);
 }
 #accountSearch::-moz-placeholder {
     /* Firefox 19+ */
-    color: $white;
+    color: var(--color-white);
 }
 #accountSearch:-ms-input-placeholder {
     /* IE 10+ */
-    color: $white;
+    color: var(--color-white);
 }
 #accountSearch:-moz-placeholder {
     /* Firefox 18- */
-    color: $white;
+    color: var(--color-white);
 }
 
 input[type="number"]::-webkit-outer-spin-button,
@@ -2191,17 +2198,17 @@ input[type="number"]::-webkit-inner-spin-button {
 .navbar-right .dropdown-menu,
 .pull-right > .dropdown-menu {
     top: 54px;
-    border-color: $gainsboro;
+    border-color: var(--color-gainsboro);
 }
 .ledger-main .form-control:focus {
-    border: 1px solid $deep-sky-blue !important;
+    border: 1px solid var(--color-deep-sky-blue) !important;
     border-radius: 0 !important;
     box-shadow: none;
 }
 .active.end-date.in-range.available,
 .daterangepicker td.start-date {
-    background: $chetwode-blue !important;
-    color: $white;
+    background: var(--color-chetwode-blue) !important;
+    color: var(--color-white);
     border-radius: 2px;
 }
 .dateblock {
@@ -2215,8 +2222,8 @@ input[type="number"]::-webkit-inner-spin-button {
     background: none !important;
 }
 .upload-btn {
-    background: $floral-white;
-    border: 1px solid $floral-white;
+    background: var(--color-upload-btn-background);
+    border: 1px solid var(--color-upload-btn-background);
     padding: 6px;
     border-radius: 2px;
     float: right;
@@ -2236,7 +2243,7 @@ input[type="number"]::-webkit-inner-spin-button {
 footer {
     padding: 10px 20px;
     text-align: center;
-    color: $gray;
+    color: var(--color-gray);
     font-size: 17px;
     margin-top: 20px;
     width: 100%;
@@ -2249,14 +2256,14 @@ footer > div {
 
 footer > div > a {
     margin: 0 22px;
-    color: $gray;
+    color: var(--color-gray);
     padding: 0;
     font-size: 16px;
 }
 
 footer > div > a:hover {
     text-decoration: none;
-    color: $white;
+    color: var(--color-white);
 }
 
 footer > div > a:first-child {
@@ -2283,25 +2290,25 @@ footer > div > a:last-child {
     border-radius: 0px !important;
 }
 .form-theme {
-    background: $solitude;
+    background: var(--color-solitude);
     padding: 20px;
-    border: 1px solid $solitude;
+    border: 1px solid var(--color-solitude);
 }
 .form-theme .form-control {
-    background: $white !important;
+    background: var(--color-white) !important;
 }
 .form-theme .form-control[disabled],
 .form-theme .form-control[readonly],
 .form-theme fieldset[disabled] .form-control {
-    background-color: $whisper-light !important;
+    background-color: var(--color-whisper-light) !important;
 }
 .btn-default-focus {
     box-shadow: none !important;
 }
 .form-title {
     padding: 12px 20px;
-    background: $davy-grey;
-    color: $white;
+    background: var(--color-davy-grey);
+    color: var(--color-white);
 }
 .form-title label {
     font-weight: 400;
@@ -2318,10 +2325,10 @@ a.btn.btn-xs.btn-link.pull-right {
     top: -4px;
 }
 .add-row {
-    color: $success-green;
+    color: var(--color-success-enable);
 }
 .delete {
-    color: $bitter-sweet;
+    color: var(--color-delete);
 }
 .action a + a {
     margin-left: 5px;
@@ -2334,10 +2341,10 @@ a.btn.btn-xs.btn-link.pull-right {
     width: 100%;
     float: left;
     border: 0;
-    border-right: 1px solid $gainsboro;
+    border-right: 1px solid var(--color-gainsboro);
 }
 .list-inline label {
-    color: $dark-gray;
+    color: var(--color-dark-gray);
 }
 .report-info {
     text-transform: capitalize;
@@ -2370,11 +2377,11 @@ a.btn.btn-xs.btn-link.pull-right {
     left: 0;
 }
 .today.weekend.off.active.end-date.in-range.available {
-    background: $white !important;
-    color: $nobel;
+    background: var(--color-white) !important;
+    color: var(--color-nobel);
 }
 .fileName {
-    color: $primary;
+    color: var(--color-primary);
     text-align: right;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -2387,7 +2394,7 @@ a.btn.btn-xs.btn-link.pull-right {
     font-weight: 400;
 }
 .blue {
-    color: $primary;
+    color: var(--color-primary);
 }
 .map-txn-container table tr td {
     width: 25%;
@@ -2396,27 +2403,27 @@ a.btn.btn-xs.btn-link.pull-right {
     max-width: 700px;
 }
 .pop-panel .form-control {
-    background: $floral-white;
-    border-color: $gainsboro;
+    background: var(--color-pop-panel-form-control-background);
+    border-color: var(--color-gainsboro);
 }
 .pop-panel label {
-    color: $nero;
+    color: var(--color-nero);
 }
 .in-words {
-    color: $nero;
+    color: var(--color-nero);
     text-align: right;
     text-transform: capitalize;
 }
 .bd-rt {
-    border-color: $gainsboro;
+    border-color: var(--color-gainsboro);
 }
 .popover.bottom > .arrow {
     right: 13%;
     left: auto;
-    border-bottom-color: $white;
+    border-bottom-color: var(--color-white);
 }
 .default-color {
-    color: $nero;
+    color: var(--color-nero);
 }
 .max-width-50 {
     max-width: 50px;
@@ -2440,7 +2447,7 @@ a.btn.btn-xs.btn-link.pull-right {
     background-size: 10px !important;
     background-position: 96% !important;
     background-repeat: no-repeat !important;
-    background-color: $white !important;
+    background-color: var(--color-white) !important;
     padding-right: 24px !important;
 }
 .aside-pane.sales-aside-tax-pane .multi-select input.form-control {
@@ -2448,7 +2455,7 @@ a.btn.btn-xs.btn-link.pull-right {
     background-size: 12px !important;
     background-position: 94% !important;
     background-repeat: no-repeat !important;
-    background-color: $white !important;
+    background-color: var(--color-white) !important;
     padding-right: 32px !important;
 }
 #tax-control-multi-select.multi-select input.form-control[readonly] {
@@ -2482,7 +2489,7 @@ a.btn.btn-xs.btn-link.pull-right {
     content: " ";
     margin-left: 2px;
     vertical-align: middle;
-    border-top: 5px dashed $black;
+    border-top: 5px dashed var(--color-black);
     border-right: 5px solid transparent;
     border-left: 5px solid transparent;
     top: 50%;
@@ -2525,21 +2532,21 @@ a.btn.btn-xs.btn-link.pull-right {
     margin-left: -1px !important;
 }
 .light-gray {
-    color: $dark-gray;
+    color: var(--color-dark-gray);
 }
 .shared-list li {
     list-style: none !important;
-    color: $dark-gray;
+    color: var(--color-dark-gray);
     font-size: 16px !important;
     padding: 5px 0 2px 0 !important;
-    border-bottom: 1px solid $gainsboro !important;
+    border-bottom: 1px solid var(--color-gainsboro) !important;
 }
 .shared-list select {
     background: none !important;
     border: 0;
     padding: 0 !important;
     height: auto !important;
-    color: $dark-gray !important;
+    color: var(--color-dark-gray) !important;
 }
 .shared-list select:focus {
     border: 0 !important;
@@ -2552,7 +2559,7 @@ a.btn.btn-xs.btn-link.pull-right {
 }
 .dashed {
     border-style: dashed;
-    border-color: $gainsboro;
+    border-color: var(--color-gainsboro);
 }
 .input-group button {
     margin-left: -2px;
@@ -2562,15 +2569,15 @@ a.btn.btn-xs.btn-link.pull-right {
 }
 .modal-header {
     position: relative;
-    background: var(--primary-header-background-color) !important;
-    color: $white;
+    background: var(--color-primary-header-background) !important;
+    color: var(--color-white);
     height: 65px;
     display: flex;
     align-items: center;
 }
 
 .modal-body {
-    background-color: var(--popup-background-color) !important;
+    background-color: var(--color-popup-background) !important;
 }
 
 .close-modal {
@@ -2578,7 +2585,7 @@ a.btn.btn-xs.btn-link.pull-right {
     top: 50%;
     transform: translateY(-50%);
     right: 15px;
-    color: $white;
+    color: var(--color-white);
     opacity: 1;
     text-shadow: none;
     cursor: pointer;
@@ -2587,7 +2594,7 @@ a.btn.btn-xs.btn-link.pull-right {
     font-size: 14px;
 }
 .modal-title.bg {
-    color: $white !important;
+    color: var(--color-white) !important;
 }
 .modal-title {
     font-size: 18px !important;
@@ -2605,13 +2612,13 @@ a.btn.btn-xs.btn-link.pull-right {
     position: absolute;
     right: 4px;
     font-size: 16px;
-    color: $matterhorn;
+    color: var(--color-matterhorn);
     top: 50%;
     transform: translateY(-50%);
     cursor: pointer;
 }
 .ledger-panel .bd-rb {
-    border-bottom: 1px solid $gainsboro;
+    border-bottom: 1px solid var(--color-gainsboro);
 }
 .pop-panel .ui-select-toggle {
     min-width: 100px !important;
@@ -2654,11 +2661,11 @@ select.form-control {
     border-radius: 0;
 }
 .isFsStock {
-    color: $nobel;
+    color: var(--color-nobel);
 }
 .link-stock-table {
-    border-top: 1px solid $gainsboro;
-    border-left: 1px solid $gainsboro;
+    border-top: 1px solid var(--color-gainsboro);
+    border-left: 1px solid var(--color-gainsboro);
 }
 .link-stock-table > tbody > tr > td {
     padding: 10px 15px;
@@ -2673,7 +2680,7 @@ select.form-control {
     width: 10px;
     height: 2px;
     display: inline-block;
-    background-color: $gainsboro;
+    background-color: var(--color-gainsboro);
     position: absolute;
     top: 50%;
     left: 0;
@@ -2695,7 +2702,7 @@ select.form-control {
     transform: rotate(180deg);
 }
 .modal-header > h3 {
-    color: $white;
+    color: var(--color-white);
     font-size: 18px;
 }
 .no-result-template {
@@ -2706,13 +2713,13 @@ select.form-control {
     min-width: 160px;
     font-size: 14px;
     text-align: left;
-    background-color: $white;
+    background-color: var(--color-white);
     background-clip: padding-box;
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--color-gainsboro);
     border: 1px solid rgba(0, 0, 0, 0.15);
     border-radius: 4px;
-    -webkit-box-shadow: 0 6px 12px $black-russian;
-    box-shadow: 0 6px 12px $black-russian;
+    -webkit-box-shadow: 0 6px 12px var(--color-black-russian);
+    box-shadow: 0 6px 12px var(--color-black-russian);
     z-index: 1001;
 }
 .grp-list {
@@ -2721,7 +2728,7 @@ select.form-control {
     overflow-y: auto;
     height: 100%;
     padding-bottom: 60px;
-    background-color: var(--master-page-left-sidebar-secondary-background-color);
+    background-color: var(--color-master-page-left-sidebar-secondary-background);
 }
 .grp-list li,
 .new-btn-ul li {
@@ -2733,7 +2740,7 @@ select.form-control {
     display: block;
     font-size: 14px;
     font-weight: 500;
-    color: $gray;
+    color: var(--color-gray);
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
@@ -2745,7 +2752,7 @@ select.form-control {
 .col-wrapper {
     width: 255px;
     float: left;
-    border-right: 1px solid $gainsboro;
+    border-right: 1px solid var(--color-gainsboro);
     min-height: 100%;
     height: 100%;
     position: relative;
@@ -2771,7 +2778,7 @@ select.form-control {
 }
 
 form label {
-    color: var(--master-page-input-label-color);
+    color: var(--color-master-page-input-label);
     font-weight: normal;
     padding-bottom: 0;
     font-size: 14px;
@@ -2787,21 +2794,21 @@ label {
 }
 #getGroupModal .bd-rl,
 #getGroupModal .bd-rr {
-    border-color: $gainsboro;
+    border-color: var(--color-gainsboro);
 }
 #getGroupModal .detailed label {
     font-size: 14px;
-    color: $gray;
+    color: var(--color-gray);
 }
 .btn-add {
     display: inline-block !important;
 }
 .btn-add:hover,
 .btn-add:focus {
-    color: $white !important;
+    color: var(--color-white) !important;
 }
 .ledger-panel .bd-rb {
-    border-bottom: 1px solid $gainsboro;
+    border-bottom: 1px solid var(--color-gainsboro);
 }
 .pop-panel .ui-select-toggle {
     min-width: 100px !important;
@@ -2821,7 +2828,7 @@ label {
     vertical-align: middle;
 }
 .col-wrapper:nth-child(1) {
-    background: $gray-95;
+    background: var(--color-gray-95);
     position: fixed;
     height: calc(100% - 58px);
     min-height: 0;
@@ -2836,7 +2843,7 @@ label {
     padding: 8px 15px !important;
 }
 .col-wrapper:nth-child(1) .isParent {
-    background: $whisper !important;
+    background: var(--color-whisper) !important;
 }
 .col-wrapper:last-child ul li a.isParent {
     background: none;
@@ -2849,30 +2856,30 @@ label {
     white-space: nowrap;
 }
 .isAcc {
-    color: var(--master-page-input-label-color) !important;
+    color: var(--color-master-page-input-label) !important;
 }
 .isParent {
-    background: $white-smoke;
+    background: var(--color-white-smoke);
 }
 .isActive {
-    color: $white !important;
-    background: var(--master-page-text-primary-hover-color);
-    border-color: var(--master-page-text-primary-hover-color);
+    color: var(--color-white) !important;
+    background: var(--color-master-page-primary-text-hover);
+    border-color: var(--color-master-page-primary-text-hover);
 }
 .isActive:hover {
-    color: $white !important;
-    background: var(--master-page-text-secondary-hover-color);
-    border-color: var(--master-page-text-secondary-hover-color);
+    color: var(--color-white) !important;
+    background: var(--color-master-page-text-secondary-hover);
+    border-color: var(--color-master-page-text-secondary-hover);
 }
 .isParent.isActive {
-    color: $white !important;
-    background: $deep-sky-blue !important;
-    border-color: $deep-sky-blue;
+    color: var(--color-white) !important;
+    background: var(--color-deep-sky-blue) !important;
+    border-color: var(--color-deep-sky-blue);
 }
 .isParent.isActive:hover {
-    color: $white !important;
-    background: $deep-sky-blue-hover !important;
-    border-color: $deep-sky-blue-hover;
+    color: var(--color-white) !important;
+    background: var(--color-deep-sky-blue-hover) !important;
+    border-color: var(--color-deep-sky-blue-hover);
 }
 .primary-color {
     color: var(--dark-blue01) !important;
@@ -2898,49 +2905,49 @@ label {
     width: calc(100% - 15px);
 }
 .form-control::-webkit-input-placeholder {
-    color: $nobel;
+    color: var(--color-nobel);
 }
 .form-control::-webkit-input-placeholder {
     /* Chrome/Opera/Safari */
-    color: $nobel;
+    color: var(--color-nobel);
 }
 .form-control::-moz-placeholder {
     /* Firefox 19+ */
-    color: $nobel;
+    color: var(--color-nobel);
 }
 .form-control:-ms-input-placeholder {
     /* IE 10+ */
-    color: $nobel;
+    color: var(--color-nobel);
 }
 .form-control:-moz-placeholder {
     /* Firefox 18- */
-    color: $nobel;
+    color: var(--color-nobel);
 }
 
 label {
     font-weight: normal;
-    color: var(--company-profile-input-label-color);
+    color: var(--color-company-profile-input-label);
 }
 .horizontal-form label {
     margin-bottom: 4px;
 }
 #getGroupModal .bd-rl,
 #getGroupModal .bd-rr {
-    border-color: var(--master-page-main-content-primary-background-color);
+    border-color: var(--color-master-page-main-content-primary-background);
 }
 #getGroupModal .detailed label {
     font-size: 14px;
-    color: $gray;
+    color: var(--color-gray);
 }
 .btn-add {
     display: inline-block !important;
 }
 .btn-add:hover,
 .btn-add:focus {
-    color: $white !important;
+    color: var(--color-white) !important;
 }
 .ledger-panel .bd-rb {
-    border-bottom: 1px solid $gainsboro;
+    border-bottom: 1px solid var(--color-gainsboro);
 }
 .pop-panel .ui-select-toggle {
     min-width: 100px !important;
@@ -2962,9 +2969,9 @@ label {
 .tax-bullet {
     display: inline-block;
     padding: 4px 8px;
-    color: $gray;
+    color: var(--color-gray);
     border-radius: 3px;
-    background: $whisper-color;
+    background: var(--color-whisper-color);
     margin: 0px 0 4px 4px;
 }
 .share-grp {
@@ -2990,16 +2997,16 @@ label {
 }
 .accmerge li a {
     padding: 4px 8px;
-    color: $gray;
-    background: $whisper-color;
+    color: var(--color-gray);
+    background: var(--color-whisper-color);
     float: left;
     border-radius: 2px;
 }
 .accmerge li a.isActive {
-    color: $gray;
+    color: var(--color-gray);
 }
 .accmerge li > a > span {
-    color: $nobel;
+    color: var(--color-nobel);
     padding-left: 20px;
     font-weight: 500;
     float: right;
@@ -3009,10 +3016,10 @@ label {
     opacity: 0.6;
 }
 .accmerge li > a.isActive > span {
-    color: $white;
+    color: var(--color-white);
 }
 #getGroupModal hr {
-    border-color: $gainsboro;
+    border-color: var(--color-gainsboro);
 }
 .breadcrumb {
     padding: 0;
@@ -3024,13 +3031,13 @@ label {
     padding-left: 4px;
     content: ">";
     font-size: 13px;
-    color: $gray;
+    color: var(--color-gray);
 }
 .breadcrumb > .active > a {
-    color: var(--master-page-text-primary-hover-color);
+    color: var(--color-master-page-primary-text-hover);
 }
 .breadcrumb a {
-    color: $gray;
+    color: var(--color-gray);
 }
 .load-bar-wrap {
     z-index: 99999 !important;
@@ -3040,7 +3047,7 @@ label {
 }
 .new-btn {
     position: absolute;
-    background: var(--master-page-main-content-primary-background-color);
+    background: var(--color-master-page-main-content-primary-background);
     top: 0;
     padding: 4px 0;
     width: 100%;
@@ -3053,13 +3060,13 @@ label {
     right: 2px;
     z-index: 9;
     top: 8px;
-    color: $gray;
+    color: var(--color-gray);
 }
 #getGroupModal .search-loading {
     position: absolute;
     height: 100%;
     z-index: 99;
-    background: var(--master-page-main-content-secondary-background-color);
+    background: var(--color-master-page-main-content-secondary-background);
     width: 100%;
     left: 0;
     display: table;
@@ -3077,7 +3084,7 @@ label {
     position: absolute;
     top: 22px;
     right: 8px;
-    color: $gray;
+    color: var(--color-gray);
 }
 .gst {
     margin-top: 15px;
@@ -3098,7 +3105,7 @@ label {
 }
 #manufacture .form-theme tbody tr td {
     padding: 7px 0;
-    color: $davy-grey;
+    color: var(--color-davy-grey);
 }
 #manufacture select showGiddhDatepicker {
     border-radius: 0;
@@ -3116,21 +3123,21 @@ label {
     right: 8px;
 }
 #manufacture .bd-rt {
-    border-color: $gainsboro;
+    border-color: var(--color-gainsboro);
 }
 #manufacture thead th {
     font-weight: normal;
 }
 #manufacture .source thead {
-    border-bottom: 1px solid $gainsboro;
+    border-bottom: 1px solid var(--color-gainsboro);
 }
 #manufacture .source .link-stock {
     height: auto;
-    color: $dark-gray;
+    color: var(--color-dark-gray);
 }
 #manufacture .source .link-stock thead th,
 #manufacture .source .link-stock tfoot tr th {
-    color: $night-rider;
+    color: var(--color-night-rider);
     font-weight: 100;
 }
 #manufacture .source table thead th,
@@ -3154,7 +3161,7 @@ label {
     width: 10px;
     height: 2px;
     display: inline-block;
-    background-color: $gainsboro;
+    background-color: var(--color-gainsboro);
     position: absolute;
     top: 50%;
     left: 0;
@@ -3168,7 +3175,7 @@ label {
     position: absolute;
     top: 20px;
     width: 2px;
-    background: $gainsboro-light;
+    background: var(--color-manufacture-source-tbody-tr-td-nth-child1-before-background);
     left: -2px;
 }
 #manufacture .source tbody tr:nth-last-child(3) td:before {
@@ -3203,10 +3210,10 @@ label {
 }
 .companyGst .gst {
     padding-bottom: 20px;
-    border-bottom: 1px solid $gainsboro;
+    border-bottom: 1px solid var(--color-gainsboro);
 }
 .grey-color {
-    color: $gray;
+    color: var(--color-gray);
 }
 .grp-col::-webkit-scrollbar {
     width: 2em;
@@ -3214,12 +3221,12 @@ label {
     margin-left: 255px;
 }
 .grp-col::-webkit-scrollbar-track {
-    background: $whisper-light;
+    background: var(--color-whisper-light);
     margin-left: 255px;
 }
 .grp-col::-webkit-scrollbar-thumb {
-    background-color: $nobel;
-    outline: 1px solid $gray;
+    background-color: var(--color-nobel);
+    outline: 1px solid var(--color-gray);
     margin-left: 255px;
 }
 .no-result h1 {
@@ -3231,12 +3238,12 @@ label {
     margin-left: 255px;
 }
 .grp-col::-webkit-scrollbar-track {
-    background: $white-smoke;
+    background: var(--color-white-smoke);
     margin-left: 255px;
 }
 .grp-col::-webkit-scrollbar-thumb {
-    background-color: $nobel;
-    outline: 1px solid $gray;
+    background-color: var(--color-nobel);
+    outline: 1px solid var(--color-gray);
     margin-left: 255px;
 }
 .height100 {
@@ -3248,7 +3255,7 @@ label {
 }
 .col-wrapper:first-child .grp-list {
     padding-top: 10px;
-    background-color: var(--master-page-left-sidebar-primary-background-color);
+    background-color: var(--color-master-page-left-sidebar-primary-background);
 }
 .d-inline-block {
     display: inline-block !important;
@@ -3291,17 +3298,17 @@ label {
 .pagination > .active > span,
 .pagination > .active > span:focus,
 .pagination > .active > span:hover {
-    color: $white;
+    color: var(--color-white);
 }
 .pagination > li > a:focus,
 .pagination > li > a:hover,
 .pagination > li > span:focus,
 .pagination > li > span:hover {
-    background-color: var(--pagination--button-hover-background-color) !important;
-    border-color: var(--pagination--button-hover-background-color);
+    background-color: var(--color-pagination--button-hover-background) !important;
+    border-color: var(--color-pagination--button-hover-background);
 }
 #manufacture .section-title {
-    color: $dark-gray;
+    color: var(--color-dark-gray);
     font-size: 20px;
     line-height: 34px;
     vertical-align: middle;
@@ -3310,7 +3317,7 @@ label {
     border-radius: 0px !important;
     padding: 6px !important;
     outline: 0;
-    color: $dark-gray;
+    color: var(--color-dark-gray);
     font-size: 14px;
     box-shadow: none;
 }
@@ -3321,7 +3328,7 @@ label {
     line-height: inherit !important;
 }
 .select2-container--default .select2-results__option--highlighted[aria-selected] {
-    background-color: $night-rider !important;
+    background-color: var(--color-night-rider) !important;
 }
 .select2-results__option[aria-selected] {
     font-size: 14px;
@@ -3351,7 +3358,7 @@ label {
     right: 0;
 }
 .add-new-role-modal .dropdown-menu li label {
-    color: $gray;
+    color: var(--color-gray);
     font-weight: normal;
 }
 #single-role .panel {
@@ -3359,13 +3366,13 @@ label {
     margin-bottom: 40px;
 }
 #single-role .panel-heading {
-    background: $very-light-gray;
-    color: $white;
+    background: var(--color-very-light-gray);
+    color: var(--color-white);
     border-radius: 0;
 }
 #single-role tbody tr td:first-child,
 #single-role thead tr th:first-child {
-    border-right: 1px solid $gainsboro;
+    border-right: 1px solid var(--color-gainsboro);
 }
 #single-role .lead {
     font-size: 22px;
@@ -3375,23 +3382,23 @@ label {
     text-transform: capitalize;
 }
 #single-role .panel-body {
-    background: $white-smoke;
+    background: var(--color-white-smoke);
 }
 #single-role .panel-body tbody tr:nth-child(1) td {
-    background: $white;
+    background: var(--color-white);
     border-right: 0;
 }
 #single-role .panel-body label {
     font-size: 14px;
     text-transform: capitalize;
-    color: $gray;
+    color: var(--color-gray);
 }
 #single-role table {
     margin-bottom: 0;
 } /*************************************************** Dashboard CSS  ****************************************************/
 #dashboard .panel-default {
-    color: $matterhorn;
-    border-color: $gainsboro;
+    color: var(--color-matterhorn);
+    border-color: var(--color-gainsboro);
 }
 #dashboard .panel-default > .panel-heading {
     background-color: transparent;
@@ -3402,7 +3409,7 @@ label {
 }
 #dashboard .panel-heading i {
     position: relative;
-    color: $gray;
+    color: var(--color-gray);
     padding: 8px 10px;
 } /*************************************************** input CSS  ****************************************************/
 .radio-theme {
@@ -3416,10 +3423,10 @@ label {
     position: absolute;
     width: 18px;
     height: 18px;
-    background: $white;
+    background: var(--color-white);
     top: 0;
     right: 0;
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--color-gainsboro);
     border-radius: 50%;
 }
 .radio-theme:checked:after {
@@ -3427,14 +3434,14 @@ label {
     position: absolute;
     width: 8px;
     height: 8px;
-    background: $chetwode-blue;
+    background: var(--color-chetwode-blue);
     left: 5px;
     bottom: 5px;
     border-radius: 50%;
     text-align: center;
 }
 .radio-theme:checked:before {
-    border: 1px solid $chetwode-blue;
+    border: 1px solid var(--color-chetwode-blue);
 }
 .dropdown-container .dropdown-menu {
     display: block;
@@ -3453,10 +3460,10 @@ label {
     border-radius: 0px !important;
 }
 .ledger-row td .select2-container--default .select2-results__option--highlighted[aria-selected] a {
-    color: $white !important;
+    color: var(--color-white) !important;
 }
 .ledger-row td .select2-results ul li a {
-    color: $night-rider;
+    color: var(--color-night-rider);
 }
 .ledger-row td .select2-container .select2-selection {
     background: transparent !important;
@@ -3464,15 +3471,15 @@ label {
     cursor: text;
 }
 .ledger-row td .select2-container .select2-search__field {
-    background: $floral-white !important;
+    background: var(--color-ledger-row-td-select2-container-select2-search__field-background) !important;
 }
 .dropdown-container .dropdown-menu li label span:not(.mat-checkbox-inner-container) {
     max-width: calc(100% - 22px);
-    color: $night-rider;
+    color: var(--color-night-rider);
 }
 
 .dropdown-container .dropdown-menu li label span.mat-checkbox-inner-container {
-    color: $night-rider;
+    color: var(--color-night-rider);
     width: 38px;
 }
 .dropdown-container .dropdown-menu {
@@ -3487,7 +3494,7 @@ label {
     display: block;
 }
 .sticky-footer {
-    background: $matterhorn;
+    background: var(--color-matterhorn);
     width: 100%;
     position: fixed;
     bottom: 0;
@@ -3500,16 +3507,16 @@ label {
     border-radius: 5px;
     border: 0;
     box-shadow: none;
-    background: $whisper-color;
+    background: var(--color-whisper-color);
 }
 #customInvoice .template-editor .btn-group-lg > .btn:focus {
     outline: 0;
 }
 #customInvoice .template-editor .btn-group-lg > .btn:hover {
-    background: $white;
+    background: var(--color-white);
 }
 #customInvoice {
-    background: $solitude;
+    background: var(--color-solitude);
     height: calc(100vh - 70px);
 }
 .panel-body {
@@ -3526,8 +3533,8 @@ label {
 #customInvoice .template-editor .form-control,
 #customInvoice .template-editor .table > tbody > tr > td .form-control {
     margin: 7px 0;
-    background: $white;
-    border-color: $gainsboro;
+    background: var(--color-white);
+    border-color: var(--color-gainsboro);
     border-radius: 2px;
 }
 #customInvoice .template-editor h3 {
@@ -3591,7 +3598,7 @@ label {
     width: 50px;
     height: 50px;
     float: left;
-    background: $white url("../images/designTool.svg") no-repeat;
+    background: var(--color-white) url("../images/designTool.svg") no-repeat;
     background-size: 65px;
 }
 .ico-template {
@@ -3619,12 +3626,12 @@ label {
     position: relative;
 }
 .template-view li img {
-    background: $white;
+    background: var(--color-white);
     height: 100%;
     width: 100%;
     object-fit: contain;
     border-radius: 4px;
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--color-gainsboro);
 }
 .logo-preview {
     float: left;
@@ -3634,7 +3641,7 @@ label {
     width: 100px;
     height: 100px;
     float: left;
-    background: $white;
+    background: var(--color-white);
     object-fit: contain;
 }
 .logo-tool ul {
@@ -3644,17 +3651,17 @@ label {
     font-weight: bold;
     list-style: none;
     display: inline-block;
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--color-gainsboro);
     border-radius: 50%;
     width: 30px;
     text-align: center;
     height: 30px;
     line-height: 30px;
-    color: $silver;
+    color: var(--color-silver);
 }
 .logo-tool ul li:hover {
-    border-color: $dark-gray;
-    color: $dark-gray;
+    border-color: var(--color-dark-gray);
+    color: var(--color-dark-gray);
 }
 .swatch-preview span {
     border-radius: 50%;
@@ -3684,12 +3691,12 @@ label {
     border-radius: 8px;
 }
 .scroll-auto::-webkit-scrollbar-track {
-    background: $gainsboro-light;
+    background: var(--color-scroll-auto-webkit-scrollbar-track-background);
     border-radius: 8px;
 }
 .scroll-auto::-webkit-scrollbar-thumb {
-    background-color: $gainsboro;
-    outline: 1px solid $gray;
+    background-color: var(--color-gainsboro);
+    outline: 1px solid var(--color-gray);
     border-radius: 8px;
 }
 [hidden] {
@@ -3698,8 +3705,8 @@ label {
 .form-control[disabled],
 .form-control[readonly],
 fieldset[disabled] .form-control {
-    color: var(--datepicker-title-text-color) !important;
-    background-color: var(--datepicker-title-background-color) !important;
+    color: var(--color-datepicker-title-text) !important;
+    background-color: var(--color-datepicker-title-background) !important;
 }
 
 input[type="checkbox"][disabled] {
@@ -3712,21 +3719,21 @@ input[type="checkbox"][disabled] {
 .top-bar {
     padding-top: 10px !important;
     padding-bottom: 15px !important;
-    border-bottom: 0px solid $white;
+    border-bottom: 0px solid var(--color-white);
 }
 .section-head {
     padding-bottom: 10px;
     font-family: "opensans-semibold";
     font-size: 110%;
-    color: var(--common-quaternary-text-color);
+    color: var(--color-common-quaternary-text);
 }
 .ico-btn .btn-xs {
     padding: 1px 5px;
     font-size: 12px;
     line-height: 1.5;
     border-radius: 3px;
-    background: $whisper-light;
-    border: 1px solid $gainsboro;
+    background: var(--color-whisper-light);
+    border: 1px solid var(--color-gainsboro);
 }
 .dashboard-filter label {
     padding-right: 8px;
@@ -3737,13 +3744,13 @@ input[type="checkbox"][disabled] {
     padding: 8px;
 }
 .input-group-btn .btn-default {
-    background: $whisper-light;
-    border: 1px solid $gainsboro;
-    color: $charcoal;
+    background: var(--color-whisper-light);
+    border: 1px solid var(--color-gainsboro);
+    color: var(--color-charcoal);
 }
 .input-group-btn .btn-default:hover {
-    background: $whisper-light;
-    border: 1px solid $gainsboro;
+    background: var(--color-whisper-light);
+    border: 1px solid var(--color-gainsboro);
     box-shadow: none;
     outline: 0;
 }
@@ -3753,7 +3760,7 @@ input[type="checkbox"][disabled] {
 }
 .subHead {
     font-size: 105%;
-    color: var(--common-quinary-text-color);
+    color: var(--color-common-quinary-text);
     padding-bottom: 10px;
 }
 .bank-account .subHead button {
@@ -3775,8 +3782,8 @@ datepicker-inner .well table tbody tr td .btn-default {
 }
 
 datepicker-inner .well table tbody tr td .btn-default:hover {
-    background: $chetwode-blue !important;
-    color: $white !important;
+    background: var(--color-chetwode-blue) !important;
+    color: var(--color-white) !important;
     text-decoration: none;
     border-radius: 3px;
 }
@@ -3786,23 +3793,23 @@ datepicker-inner .well table tbody tr td .btn-default:hover span {
 }
 
 datepicker-inner .well table tbody tr td .btn-default:hover .text-success {
-    color: $white;
+    color: var(--color-white);
 }
 
 datepicker-inner .well table tbody tr td button.btn.btn-default.btn-info .text-success {
-    color: $green !important;
+    color: var(--color-secondary-success) !important;
 }
 
 datepicker-inner .well table tbody tr td button.btn.btn-default.btn-info:hover .text-success,
 datepicker-inner .well table tbody tr td button.btn.btn-default.btn-link:hover .text-success {
-    color: $white !important;
+    color: var(--color-white) !important;
 }
 .dropdown-menu.month-picker li a:hover {
     color: initial !important;
 }
 
 datepicker-inner .well {
-    background-color: $white;
+    background-color: var(--color-white);
     border: none !important;
     box-shadow: none;
     margin: 0;
@@ -3813,7 +3820,7 @@ datepicker-inner .well table button.btn.btn-default.btn-sm {
     line-height: 1;
     background-color: transparent !important;
     font-size: 20px;
-    color: $night-rider !important;
+    color: var(--color-night-rider) !important;
     box-shadow: none !important;
 }
 
@@ -3831,7 +3838,7 @@ datepicker-inner .well table tbody .btn:active {
 
 datepicker-inner .well table tbody .btn.active .text-info,
 datepicker-inner .well table tbody .btn:active .text-info {
-    color: $white !important;
+    color: var(--color-white) !important;
 }
 
 datepicker-inner .well table thead tr th .btn-secondary,
@@ -3848,7 +3855,7 @@ datepicker-inner .well table thead tr:nth-child(2) {
 
 datepicker-inner .well table tbody .btn-info .text-muted,
 datepicker-inner .well table tbody .btn-default.active {
-    color: $white;
+    color: var(--color-white);
 }
 .my-dropdown-menu datepicker-inner .well {
     border: 0;
@@ -3857,7 +3864,7 @@ datepicker-inner .well table tbody .btn-default.active {
     padding: 1px 5px !important;
 }
 .calendar-dropdown {
-    border-color: $gainsboro;
+    border-color: var(--color-gainsboro);
     margin-top: 1px;
     border-radius: 2px;
 }
@@ -3880,7 +3887,7 @@ input[type="checkbox"][disabled]:after {
     cursor: not-allowed;
 }
 .form-bg {
-    background: var(--master-page-main-content-primary-background-color);
+    background: var(--color-master-page-main-content-primary-background);
 }
 .toggle-btn i {
     margin-right: 9px;
@@ -3889,11 +3896,11 @@ input[type="checkbox"][disabled]:after {
     top: 2px;
 }
 .toggle-btn label {
-    color: $chetwode-blue;
+    color: var(--color-chetwode-blue);
     font-size: 16px;
 }
 .table-container {
-    background: $white;
+    background: var(--color-white);
 }
 .table-container section div .group {
     font-family: "opensans-regular";
@@ -3902,22 +3909,22 @@ input[type="checkbox"][disabled]:after {
 .welcome-header h2 {
     font-size: 26px;
     font-family: "opensans-regular";
-    color: $davy-grey;
+    color: var(--color-davy-grey);
 }
 .table-container section div:last-child {
     border-right: 0;
 }
 .success {
-    color: $success-green;
+    color: var(--color-success-enable);
 }
 .danger {
-    color: $red;
+    color: var(--color-danger);
 }
 .table-container thead tr th:first-child {
-    border-left: 6px solid $gainsboro;
+    border-left: 6px solid var(--color-gainsboro);
 }
 .table-container .account {
-    background: $solitude;
+    background: var(--color-solitude);
 }
 .table-container > div > section > .tb-pl-bs-grid-row > div:nth-child(1) {
     padding-left: 7px !important;
@@ -3926,9 +3933,9 @@ input[type="checkbox"][disabled]:after {
     border-right: 0;
 }
 .active-toggle-btn {
-    color: $white !important;
-    background-color: $chetwode-blue !important;
-    border-color: $chetwode-blue !important;
+    color: var(--color-white) !important;
+    background-color: var(--color-chetwode-blue) !important;
+    border-color: var(--color-chetwode-blue) !important;
 }
 .input-group-addon input[type="radio"] {
     position: relative;
@@ -3938,21 +3945,21 @@ input[type="checkbox"][disabled]:after {
     position: absolute;
     width: 18px;
     height: 18px;
-    background: $white;
+    background: var(--color-white);
     top: -1px;
     right: -2px;
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--color-gainsboro);
     border-radius: 50%;
 }
 .input-group-addon input[type="radio"]:checked:before {
-    border-color: $chetwode-blue;
+    border-color: var(--color-chetwode-blue);
 }
 .input-group-addon input[type="radio"]:checked:after {
     content: " ";
     position: absolute;
     width: 10px;
     height: 10px;
-    background: $chetwode-blue;
+    background: var(--color-chetwode-blue);
     left: 0;
     top: 3px;
     border-radius: 50%;
@@ -3985,7 +3992,7 @@ input[type="checkbox"][disabled]:after {
 }
 #verifyMobile .phoneNum ng-select > div > div.single > div.toggle {
     line-height: 46px;
-    color: $matterhorn;
+    color: var(--color-matterhorn);
     height: 44px;
 }
 #verifyMobile .phoneNum select-dropdown > div .options ul li {
@@ -4028,27 +4035,27 @@ ng-select .select-drop i {
 }
 
 virtual-scroll .scrollable-content .item > a {
-    color: var(--dropdown-list-color);
+    color: var(--color-dropdown-list);
     padding: 10px;
     display: table-cell;
     vertical-align: middle;
     height: 100%;
     color: var();
-    background-color: var(--dropdown-primary-background-color);
+    background-color: var(--color-dropdown-primary-background);
 }
 
 virtual-scroll .scrollable-content .item:hover > a {
-    color: var(--dropdown-list-color) !important;
+    color: var(--color-dropdown-list) !important;
 }
 
 virtual-scroll .scrollable-content .item > a .item-unique,
 virtual-scroll .scrollable-content .item > a .item-stock {
-    color: $moody-blue;
+    color: var(--color-primary-virtual-scroll-scrollable-content-item-a-item-stock);
     text-transform: none !important;
 }
 
 .customer-invoice-form virtual-scroll .scrollable-content .item > a {
-    color: var(--common-primary-text-color);
+    color: var(--color-common-primary-text);
     padding: 3px 10px;
     display: flex;
     vertical-align: middle;
@@ -4068,7 +4075,7 @@ virtual-scroll .scrollable-content .item > a {
 }
 
 virtual-scroll .scrollable-content .item.selected > a {
-    color: $chetwode-blue !important;
+    color: var(--color-chetwode-blue) !important;
 }
 
 virtual-scroll .scrollable-content .item:hover .item,
@@ -4087,9 +4094,9 @@ table input[type="number"] {
     padding-right: 25px !important;
 }
 .btn-link {
-    color: var(--master-page-input-clear-text-color) !important;
+    color: var(--color-master-page-input-clear-text) !important;
     &:hover {
-        color: var(--master-page-input-clear-text-color) !important;
+        color: var(--color-master-page-input-clear-text) !important;
     }
 }
 
@@ -4097,13 +4104,13 @@ typeahead-container .dropdown-menu li.active > a,
 typeahead-container .dropdown-menu li:hover > a,
 typeahead-container .dropdown-menu > .active > a:hover,
 typeahead-container .dropdown-menu li.active > a > a:hover {
-    background-color: $solitude;
+    background-color: var(--color-solitude);
 }
 .has-item {
     padding-right: 24px;
 }
 .modal-header > .close {
-    color: $white;
+    color: var(--color-white);
     opacity: 1 !important;
     font-weight: 100;
     text-shadow: none;
@@ -4114,19 +4121,19 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
     min-width: auto !important;
 } /**new modal design**/
 .welcome-header {
-    background: $white url("../images/Welcome.png") no-repeat center center;
+    background: var(--color-white) url("../images/Welcome.png") no-repeat center center;
     text-align: center;
     position: relative;
 }
 .welcome-header h1 {
     font-size: 30px;
     font-family: "opensans-regular";
-    color: $midnight-blue;
+    color: var(--color-midnight-blue);
 }
 .welcome-header:after {
     position: absolute !important;
     width: 98%;
-    background: $silver;
+    background: var(--color-silver);
     height: 1px;
     margin: 0 auto;
     padding: 0;
@@ -4149,7 +4156,7 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
 .welcome-header h2 {
     font-size: 26px;
     font-family: "opensans-regular";
-    color: $davy-grey;
+    color: var(--color-davy-grey);
     position: relative;
 }
 .welcome-header h2:after {
@@ -4165,25 +4172,25 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
     background: url("../images/Schedule.png") right 100px no-repeat;
 } /**end new modal design**/
 .col-wrapper .btn-link {
-    color: var(--master-page-text-secondary-hover-color) !important;
+    color: var(--color-master-page-text-secondary-hover) !important;
 }
 .form-group sup {
     font-size: 14px;
     top: 0;
-    color: $red;
+    color: var(--color-danger);
 }
 .btn-share,
 .btn-share:hover,
 .btn-share:focus {
-    background: $deep-sky-blue;
-    color: $white;
+    background: var(--color-deep-sky-blue);
+    color: var(--color-white);
 }
 .entry-modal {
     width: 100%;
 }
 .square-switch {
     width: 100%;
-    background: $white;
+    background: var(--color-white);
     height: 34px;
     line-height: 32px;
     margin: 0;
@@ -4195,9 +4202,9 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
     position: relative;
     transition: all 0.3s ease;
     width: 100%;
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--color-gainsboro);
     border-radius: 5px;
-    color: $dark-gray;
+    color: var(--color-dark-gray);
     padding: 0 7px;
     height: 34px;
 }
@@ -4205,15 +4212,15 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
     height: 34px;
 }
 .square-switch input[type="checkbox"]:checked ~ label {
-    background: $light-green;
-    color: $white;
+    background: var(--color-primary-square-switch-input-checked-label);
+    color: var(--color-white);
 }
 .square-switch > input[type="checkbox"] {
     display: none;
 }
 .square-switch input[type="checkbox"] ~ label::after {
     content: " ";
-    background: $very-light-gray;
+    background: var(--color-very-light-gray);
     position: absolute;
     height: 34px;
     width: 28px;
@@ -4231,15 +4238,15 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
 }
 .user-list {
     padding: 15px 0;
-    border-bottom: 1px solid $gainsboro;
+    border-bottom: 1px solid var(--color-gainsboro);
     overflow: hidden;
 }
 .permission-list .permission:last-child .form-group {
     margin-bottom: 0 !important;
 }
 .option-box {
-    background: var(--dropdown-secondary-background-color);
-    border-bottom: 1px solid $gainsboro;
+    background: var(--color-dropdown-secondary-background);
+    border-bottom: 1px solid var(--color-gainsboro);
     margin-bottom: 10px;
 }
 .dashboard-filter input[type="radio"] {
@@ -4254,24 +4261,24 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
 .ledg-head table td[class*="col-"],
 .ledg-head table td .select2-container {
     padding: 8px !important;
-    border-bottom: 1px solid $gainsboro;
-    border-right: 1px solid $gainsboro;
+    border-bottom: 1px solid var(--color-gainsboro);
+    border-right: 1px solid var(--color-gainsboro);
     font-size: 13px;
-    color: var(--common-secondary-text-color);
+    color: var(--color-common-secondary-text);
     text-overflow: ellipsis;
     white-space: nowrap;
 }
 .ledger-row:hover {
-    background-color: var(--table-row-hover-secondary-background-color);
+    background-color: var(--color-table-row-hover-secondary-background);
 }
 .ledg-head table td.pd-r25 {
     padding-right: 25px !important;
 }
 .ledg-head.entry-popup table td[class*="col-"] {
-    border-bottom: 1px solid $gainsboro;
-    border-right: 1px solid $gainsboro;
+    border-bottom: 1px solid var(--color-gainsboro);
+    border-right: 1px solid var(--color-gainsboro);
     font-size: 13px;
-    color: $matterhorn;
+    color: var(--color-matterhorn);
     text-overflow: ellipsis;
     white-space: nowrap;
     position: relative;
@@ -4293,8 +4300,8 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
 }
 .ledger-stat {
     padding: 50px 0;
-    background: $white;
-    color: $gray;
+    background: var(--color-white);
+    color: var(--color-gray);
     font-size: 18px;
     margin: 100px 0;
 }
@@ -4324,10 +4331,10 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
     width: 50%;
     left: 25%;
     bottom: 100px;
-    background: $white;
+    background: var(--color-white);
     padding: 5px;
     font-size: 12px;
-    color: var(--common-primary-text-color);
+    color: var(--color-common-primary-text);
 }
 #pagination {
     margin: 0 auto;
@@ -4343,21 +4350,21 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
     font-weight: 400;
 }
 .thead-background1 th {
-    background: $solitude;
-    color: $matterhorn;
-    border-right: 1px solid $gainsboro;
+    background: var(--color-solitude);
+    color: var(--color-matterhorn);
+    border-right: 1px solid var(--color-gainsboro);
     padding: 11px !important;
     font-weight: 400;
-    border-bottom: 1px solid $gainsboro;
+    border-bottom: 1px solid var(--color-gainsboro);
 }
 .ledger-book {
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--color-gainsboro);
     clear: both;
     position: relative;
-    background: $white;
+    background: var(--color-white);
     float: left;
     width: 100%;
-    background: $white;
+    background: var(--color-white);
 }
 .table-amount label {
     font-size: 12px;
@@ -4389,8 +4396,8 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
 } /* ======================================= INVENTORY CSS ===================================== */
 .form-header {
     padding: 20px 15px;
-    background: var(--primary-header-background-color);
-    color: $white;
+    background: var(--color-primary-header-background);
+    color: var(--color-white);
     border-bottom: 1px solid;
 }
 .form-header h3 {
@@ -4398,17 +4405,17 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
     font-family: "opensans-semibold";
 }
 .form-body {
-    background: $white;
+    background: var(--color-white);
 }
 .no-hover:hover td {
-    background: $white !important;
+    background: var(--color-white) !important;
 }
 .universal-date .btn-link {
-    color: $gray-95 !important;
+    color: var(--color-gray-95) !important;
     padding-top: 3px;
     padding-left: 0px;
     padding-right: 0px;
-    border-bottom: 1px solid $gray-95;
+    border-bottom: 1px solid var(--color-gray-95);
     padding-bottom: 0;
     border-radius: 0;
     margin-right: 0;
@@ -4434,22 +4441,22 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
     width: 100% !important;
 } /* left bar menu */
 .form-body .toggle-btn label {
-    color: $gray;
+    color: var(--color-gray);
 }
 .user-dropdown-header {
     width: 270px;
     right: 4px;
     padding: 0px;
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--color-gainsboro);
     left: -15px !important;
 }
 .user-dropdown-header > li > a {
     font-size: 13px;
     padding: 6px 15px !important;
-    color: $night-rider;
+    color: var(--color-night-rider);
 }
 .user-circle {
-    background: $chetwode-blue;
+    background: var(--color-chetwode-blue);
     border-radius: 100%;
     margin-right: 10px;
     width: 30px;
@@ -4457,7 +4464,7 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
     display: inline-block;
     text-align: center;
     line-height: 30px;
-    color: $white;
+    color: var(--color-white);
     font-size: 14px;
     border: 1px solid var(--dark-blue);
     text-transform: uppercase;
@@ -4469,13 +4476,13 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
 .long-code-details figure ul li {
     list-style: none;
     padding: 12px 0;
-    border-bottom: 1px solid $gainsboro;
+    border-bottom: 1px solid var(--color-gainsboro);
 }
 .long-code-details figure ul li:last-child {
     border-bottom: 0;
 }
 .long-code-details figure ul {
-    background: $solitude;
+    background: var(--color-solitude);
     margin-bottom: 10px;
 }
 .long-code-details figure ul li h2 {
@@ -4499,16 +4506,16 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
         height: 1px;
         margin: 9px 0;
         overflow: hidden;
-        background-color: $whisper-color;
+        background-color: var(--color-whisper-color);
     }
 
     > li {
         > a {
             padding: 4px 10px;
-            color: var(--dropdown-list-color);
+            color: var(--color-dropdown-list);
             display: block;
             line-height: 1.4;
-            background-color: var(--dropdown-primary-background-color);
+            background-color: var(--color-dropdown-primary-background);
         }
     }
 } /* ==================================================Branch
@@ -4564,7 +4571,7 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
     position: absolute;
     top: 2px;
     right: -48px;
-    background: $whisper-light;
+    background: var(--color-whisper-light);
     border-radius: 100%;
     padding: 7px 7px;
     text-transform: uppercase;
@@ -4575,7 +4582,7 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
     position: absolute;
     height: 41px;
     width: 2px;
-    background: $whisper-color;
+    background: var(--color-whisper-color);
     top: 29px;
     left: 19px;
     z-index: -1;
@@ -4588,12 +4595,12 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
     position: absolute;
     height: 2px;
     width: 30px;
-    background: $whisper-color;
+    background: var(--color-whisper-color);
     top: 68px;
     left: -10px;
 }
 .dropdown-option li a:hover {
-    background: $solitude;
+    background: var(--color-solitude);
 }
 .text-link,
 .text-link:focus {
@@ -4603,17 +4610,17 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
     margin-top: 12px;
 }
 .tbpl-dropdown > li {
-    border-bottom: 1px solid $gainsboro;
+    border-bottom: 1px solid var(--color-gainsboro);
 }
 .tbpl-dropdown > li:last-child {
     border-bottom: 0;
 }
 .tbpl-dropdown > li:hover a {
-    background: $solitude;
+    background: var(--color-solitude);
 }
 .tbpl-dropdown .caret {
     transform: rotate(180deg);
-    border-top: 7px dashed $gainsboro;
+    border-top: 7px dashed var(--color-gainsboro);
     border-right: 7px solid transparent;
     border-left: 7px solid transparent;
     position: absolute;
@@ -4644,7 +4651,7 @@ GST filing
 }
 .tax-engine .column.list-column {
     display: block;
-    border-right: 1px solid $gainsboro;
+    border-right: 1px solid var(--color-gainsboro);
 }
 .tax-engine .column {
     height: 100%;
@@ -4662,7 +4669,7 @@ GST filing
 }
 .tax-engine .list-filter {
     padding: 15px !important;
-    border-bottom: 1px solid $gainsboro !important;
+    border-bottom: 1px solid var(--color-gainsboro) !important;
     height: 80px;
 }
 .tax-engine .transactions-list .list-filter .btn-toolbar {
@@ -4737,11 +4744,11 @@ perfect-scrollbar > .ps > .ps-overlay {
 }
 .cmp:hover,
 .user-dropdown-header > li a:hover .user-name-wrap small {
-    color: $dark-gray;
+    color: var(--color-dark-gray);
 }
 .user-dropdown-header > li a:hover {
-    color: $chetwode-blue;
-    background: $lavender;
+    color: var(--color-chetwode-blue);
+    background: var(--color-lavender);
 }
 .hamburger-menu button,
 .hamburger-menu button:hover,
@@ -4759,7 +4766,7 @@ perfect-scrollbar > .ps > .ps-overlay {
     font-size: 20px;
     text-transform: capitalize;
     width: auto;
-    color: $midnight-blue;
+    color: var(--color-midnight-blue);
     font-family: "opensans-semibold";
     vertical-align: middle;
 }
@@ -4801,7 +4808,7 @@ perfect-scrollbar > .ps > .ps-overlay {
 .tax-engine .dropdown-menu li .help-text,
 .tax-engine .modal-header .help-text,
 .tax-engine .text-muted {
-    color: $gray;
+    color: var(--color-gray);
 }
 .space {
     margin-top: 10px;
@@ -4817,7 +4824,7 @@ perfect-scrollbar > .ps > .ps-overlay {
 }
 .tax-engine .nav-tabs > li a {
     font-size: 15px;
-    color: $davy-grey;
+    color: var(--color-davy-grey);
     margin-right: 0;
     height: 100%;
     padding: 14px 40px;
@@ -4841,7 +4848,7 @@ perfect-scrollbar > .ps > .ps-overlay {
 .tax-engine hr {
     margin-top: 20px;
     margin-bottom: 20px;
-    border-top: 1px solid $gainsboro;
+    border-top: 1px solid var(--color-gainsboro);
 }
 .tax-engine .transactions-overview .gstr-transactions-summary {
     padding: 15px 15px;
@@ -4855,7 +4862,7 @@ perfect-scrollbar > .ps > .ps-overlay {
     text-transform: uppercase;
 }
 .tax-engine .transactions-overview .gstr-transactions-summary .transactions-table {
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--color-gainsboro);
 }
 .tax-engine .table.transactions-table,
 .tax-engine .transactions-list .zi-table.table-scroll {
@@ -4871,10 +4878,10 @@ perfect-scrollbar > .ps > .ps-overlay {
 .tax-engine .table.transactions-table thead:first-child tr:first-child th {
     padding: 16px 12px;
     font-size: 14px;
-    border-bottom: 1px solid $whisper;
+    border-bottom: 1px solid var(--color-whisper);
 }
 .tax-engine .table thead:first-child tr:first-child th {
-    border-top: 1px solid $gainsboro;
+    border-top: 1px solid var(--color-gainsboro);
 }
 .tax-engine .gstr-transactions-summary .table > thead > tr > th {
     padding: 10px;
@@ -4882,7 +4889,7 @@ perfect-scrollbar > .ps > .ps-overlay {
     font-weight: 600;
 }
 .tax-engine .table thead:first-child tr:first-child th {
-    border-top: 1px solid $gainsboro;
+    border-top: 1px solid var(--color-gainsboro);
 }
 .tax-engine .table caption + thead tr:first-child td,
 .tax-engine .table caption + thead tr:first-child th,
@@ -4893,8 +4900,8 @@ perfect-scrollbar > .ps > .ps-overlay {
     border-top: 0;
 }
 .tax-engine .table thead > tr > th {
-    border-bottom: 1px solid $gainsboro;
-    color: $gray;
+    border-bottom: 1px solid var(--color-gainsboro);
+    color: var(--color-gray);
 }
 .tax-engine .table.transactions-table tbody > tr > td {
     max-width: 160px;
@@ -4904,7 +4911,7 @@ perfect-scrollbar > .ps > .ps-overlay {
 }
 .table-striped > tbody > tr:nth-child(even) > td,
 .table-striped > tbody > tr:nth-child(odd) > th {
-    background-color: $gray-95;
+    background-color: var(--color-gray-95);
 }
 .tax-engine .table tbody > tr > td,
 .tax-engine .table tbody > tr > th,
@@ -4915,18 +4922,18 @@ perfect-scrollbar > .ps > .ps-overlay {
     padding: 8px;
     line-height: 1.42857143;
     vertical-align: top;
-    border-top: 1px solid $gainsboro;
+    border-top: 1px solid var(--color-gainsboro);
 }
 .tax-engine .table.transactions-summary-table > tbody > tr:not(.secondary-row) + tr.secondary-row > td {
-    border-top: 1px solid $gainsboro;
+    border-top: 1px solid var(--color-gainsboro);
 }
 .tax-engine .table.transactions-summary-table > tbody > tr.secondary-row > td:nth-child(1) {
     padding-left: 50px;
 }
 .tax-engine .table.transactions-summary-table > tbody > tr.secondary-row > td {
     border: none;
-    background-color: $white;
-    border-right: 1px solid $gainsboro;
+    background-color: var(--color-white);
+    border-right: 1px solid var(--color-gainsboro);
     font-size: 13px;
     padding: 13px;
 }
@@ -4962,7 +4969,7 @@ perfect-scrollbar > .ps > .ps-overlay {
 }
 .tax-engine .sub-filter-nav-band > ul > li.active > a,
 .tax-engine .sub-filter-nav-bandnew ul > li.active > a {
-    color: $night-rider;
+    color: var(--color-night-rider);
     font-weight: 600;
 }
 .tax-engine .gstr-transactions-summary .gstr-summary-title {
@@ -5004,7 +5011,7 @@ perfect-scrollbar > .ps > .ps-overlay {
     display: block;
 }
 .tax-engine .transactions-list .filter-band {
-    background-color: $gray-95;
+    background-color: var(--color-gray-95);
     padding: 20px;
     height: 66px;
 }
@@ -5043,8 +5050,8 @@ perfect-scrollbar > .ps > .ps-overlay {
 .tax-engine .transactions-list .filter-band .btn,
 .tax-engine .transactions-list .filter-band .btn:focus,
 .tax-engine .transactions-list .filter-band .btn:hover {
-    color: $primary !important;
-    border-color: $primary !important;
+    color: var(--color-primary) !important;
+    border-color: var(--color-primary) !important;
     background-color: transparent !important;
     box-shadow: none !important;
 }
@@ -5056,7 +5063,7 @@ perfect-scrollbar > .ps > .ps-overlay {
 .tax-engine .transactions-list .filter-band .btn .caret,
 .tax-engine .transactions-list .filter-band .btn:focus .caret,
 .tax-engine .transactions-list .filter-band .btn:hover .caret {
-    border-top-color: $primary !important;
+    border-top-color: var(--color-primary) !important;
 }
 .tax-engine .caret {
     display: inline-block;
@@ -5064,7 +5071,7 @@ perfect-scrollbar > .ps > .ps-overlay {
     height: 0;
     margin-left: 2px;
     vertical-align: middle;
-    border-top: 4px solid $black;
+    border-top: 4px solid var(--color-black);
     border-right: 4px solid transparent;
     border-left: 4px solid transparent;
     border-bottom: 0 dotted;
@@ -5086,8 +5093,8 @@ perfect-scrollbar > .ps > .ps-overlay {
     font-size: 14px;
 }
 .tax-engine .transactions-overview .transaction-info:hover {
-    border: 1px solid $gainsboro;
-    box-shadow: 0 0 20px 3px $gray-95;
+    border: 1px solid var(--color-gainsboro);
+    box-shadow: 0 0 20px 3px var(--color-gray-95);
 }
 .tax-engine .transactions-overview .transaction-info {
     padding: 10px 15px;
@@ -5122,13 +5129,13 @@ perfect-scrollbar > .ps > .ps-overlay {
     font-style: italic;
     padding: 14px 25px;
     font-size: 13px;
-    color: $curious-blue;
+    color: var(--color-curious-blue);
 }
 .tax-engine .sub-filter-nav-band > ul > li .count {
-    color: $red;
+    color: var(--color-danger);
 }
 .tax-engine .sub-filter-nav-band > ul > li.active > a {
-    color: $night-rider;
+    color: var(--color-night-rider);
     font-weight: 600;
     border: 0;
 }
@@ -5136,14 +5143,14 @@ perfect-scrollbar > .ps > .ps-overlay {
     float: right;
 }
 .tax-engine .table.reconciliations-table {
-    border-bottom: 1px solid $gainsboro;
+    border-bottom: 1px solid var(--color-gainsboro);
 }
 .tax-engine .table-fixed,
 .daybook-table .mat-table {
     table-layout: fixed;
 }
 .zi-table {
-    border-bottom: 1px solid $whisper-light;
+    border-bottom: 1px solid var(--color-whisper-light);
     table-layout: fixed;
 }
 .tax-engine .table.reconciliations-table tbody > tr > td:first-child,
@@ -5151,7 +5158,7 @@ perfect-scrollbar > .ps > .ps-overlay {
     padding: 13px 13px 13px 20px;
 }
 .tax-engine .table thead:first-child tr:first-child th {
-    border-top: 1px solid $gainsboro;
+    border-top: 1px solid var(--color-gainsboro);
 }
 .list-column.expanded-list-column .zi-table tr td:first-of-type,
 .list-column.expanded-list-column .zi-table tr th:first-of-type {
@@ -5170,7 +5177,7 @@ perfect-scrollbar > .ps > .ps-overlay {
     padding: 13px;
 }
 .zi-table.table-hover tbody tr:hover td {
-    background-color: $whisper-color;
+    background-color: var(--color-whisper-color);
     cursor: pointer;
 }
 .tax-engine .table tbody > tr > td,
@@ -5182,7 +5189,7 @@ perfect-scrollbar > .ps > .ps-overlay {
     padding: 8px;
     line-height: 1.42857143;
     vertical-align: top;
-    border-top: 1px solid $whisper-light;
+    border-top: 1px solid var(--color-whisper-light);
 }
 .tax-engine .details .details-info,
 .warehouses > li div,
@@ -5193,7 +5200,7 @@ perfect-scrollbar > .ps > .ps-overlay {
     font-size: 11px;
 }
 .tax-engine .table.reconciliations-table tbody > tr > td.primary-details {
-    border-right: 1px solid $gainsboro;
+    border-right: 1px solid var(--color-gainsboro);
 }
 .tax-engine .table.reconciliations-table .actions-dropdown {
     position: relative;
@@ -5201,51 +5208,51 @@ perfect-scrollbar > .ps > .ps-overlay {
     padding-top: 7px;
 }
 .tax-engine .table.reconciliations-table tbody > tr:hover .actions-dropdown-btn {
-    border: 1px solid $primary;
+    border: 1px solid var(--color-primary);
 }
 .tax-engine .table.reconciliations-table .actions-dropdown-btn,
 .tax-engine .table.reconciliations-table tbody > tr:hover .reconcile-row-action {
-    color: $primary;
+    color: var(--color-primary);
 }
 .tax-engine .table.reconciliations-table .unrecognized-value {
-    color: $red;
+    color: var(--color-danger);
 }
 .tax-engine .reconciliation-accepted {
-    color: $bright-green;
+    color: var(--color-primary-tax-engine-reconciliation-accepted);
 }
 .zi-table.table thead > tr > th {
-    color: $muzli;
-    background: $white;
+    color: var(--color-primary-zi-table-table-thead-tr-th);
+    background: var(--color-white);
     font-weight: 700;
     font-size: 14px;
     text-transform: capitalize;
     -webkit-font-smoothing: antialiased;
-    border-top: 1px solid $gainsboro;
-    border-bottom: 1px solid $gainsboro;
+    border-top: 1px solid var(--color-gainsboro);
+    border-bottom: 1px solid var(--color-gainsboro);
 }
 .transactions-overview {
-    background: $white;
+    background: var(--color-white);
 }
 .tax-engine .sub-filter-nav-band > ul > li.active > a .count {
-    color: $gray;
+    color: var(--color-gray);
 }
 .tax-engine .table-striped > tbody > tr:nth-child(odd) > td,
 .tax-engine .table-striped > tbody > tr:nth-child(odd) > th {
-    background-color: $gray-95;
+    background-color: var(--color-gray-95);
 }
 .tax-engine .table-striped > tbody > tr:nth-child(even) > td,
 .tax-engine .table-striped > tbody > tr:nth-child(even) > th {
-    background-color: $white;
+    background-color: var(--color-white);
 }
 .tax-engine .sub-filter-nav-band .nav-tabs > li.active > a::before {
     content: none;
 }
 .tax-engine {
-    background: $white;
+    background: var(--color-white);
 }
 .tax-engine .header-band {
     width: 100%;
-    border-bottom: 1px solid $gainsboro;
+    border-bottom: 1px solid var(--color-gainsboro);
     padding: 5px 0;
     margin-bottom: 15px;
 }
@@ -5256,12 +5263,12 @@ perfect-scrollbar > .ps > .ps-overlay {
     max-width: 275px;
 }
 .tax-engine .return-sel {
-    background-color: $gray-95;
+    background-color: var(--color-gray-95);
     border-radius: 18px;
     padding: 5px 15px;
     cursor: pointer;
     display: inline-block;
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--color-gainsboro);
 }
 .tax-engine svg.icon.filing-step-icon {
     width: 80px;
@@ -5269,7 +5276,7 @@ perfect-scrollbar > .ps > .ps-overlay {
     margin-right: 5px;
 }
 .push-gstin .nav.nav-tabs {
-    background: $white;
+    background: var(--color-white);
 }
 .push-gstin .nav.nav-tabs > li > a:hover,
 .push-gstin .nav.nav-tabs > li > a {
@@ -5277,7 +5284,7 @@ perfect-scrollbar > .ps > .ps-overlay {
 }
 .tax-engine .gstr-transactions-summary .table > tbody > tr.row-hover:hover {
     cursor: pointer;
-    background-color: $whisper-color;
+    background-color: var(--color-whisper-color);
 }
 .tax-engine .table.transactions-summary-table > tbody > tr.secondary-row:hover > td {
     background-color: transparent;
@@ -5301,10 +5308,10 @@ app-header {
     right: 10px;
 }
 .invalid-inp {
-    border: 2px solid $red;
+    border: 2px solid var(--color-danger);
 }
 .text-danger {
-    color: $red;
+    color: var(--color-danger);
 }
 #ngb-typeahead-1 {
     max-height: 200px;
@@ -5317,10 +5324,10 @@ app-header {
     margin-left: 0px !important;
 }
 .error-box {
-    border: 2px solid $red !important;
+    border: 2px solid var(--color-danger) !important;
 }
 .text-warning {
-    color: $bright-yellow;
+    color: var(--color-primary-text-warning);
 }
 .heightVH-100 {
     height: 100vh;
@@ -5343,16 +5350,16 @@ app-header {
     background-color: transparent;
     border: none;
     display: block;
-    border-bottom: 1px solid $gainsboro;
+    border-bottom: 1px solid var(--color-gainsboro);
     width: 100%;
     text-align: left;
     padding: 6px;
 }
 #form-place .dropdown-menu .dropdown-item:hover {
-    background-color: $solitude;
+    background-color: var(--color-solitude);
 } /* sticky footer css merged */
 .sticky-footer.sticky-footer-sale-amount {
-    background: $white;
+    background: var(--color-white);
     padding: 10px;
     box-shadow: 0 0px 6px rgba(0, 0, 0, 0.16);
     text-align: right !important;
@@ -5370,11 +5377,11 @@ app-header {
 }
 .sticky-footer-sale-amount .totalSale h3 {
     font-size: 20px;
-    color: $gray;
+    color: var(--color-gray);
     padding-right: 13px;
 }
 .sticky-footer-sale-amount h2 {
-    color: $night-rider;
+    color: var(--color-night-rider);
     font-size: 32px;
     margin-top: 3px;
 } /* my css */
@@ -5412,10 +5419,10 @@ app-header {
     padding-bottom: 260px;
 }
 .selection-none *::selection {
-    background: $white;
+    background: var(--color-white);
 }
 .selection-none-header *::selection {
-    background: $chablis;
+    background: var(--color-primary-selection-none-header-selection);
 }
 .word-break {
     word-break: break-all;
@@ -5471,7 +5478,7 @@ section.ledger-stat.sticky-footer.sticky-footer-sale-amount {
 
 div#getGroupModal {
     height: 100vh;
-    background-color: var(--common-background-color-for-all-components);
+    background-color: var(--color-common-primary-background-for-all-components);
 }
 .template-view li .beta-img {
     position: absolute;
@@ -5524,7 +5531,7 @@ div#getGroupModal {
 .invoice-footer {
     display: flex;
     padding: 20px 15px;
-    background: $white;
+    background: var(--color-white);
     margin-top: 60px;
     position: fixed;
     width: 100%;
@@ -5537,7 +5544,7 @@ div#getGroupModal {
     left: 240px;
     display: flex;
     padding: 20px 15px;
-    background: $white;
+    background: var(--color-white);
     margin-top: 60px;
     position: fixed;
     width: 100%;
@@ -5552,7 +5559,7 @@ ul#dropdown-nested li {
 }
 
 ul#dropdown-nested li a {
-    color: $night-rider;
+    color: var(--color-night-rider);
 }
 
 ul#dropdown-nested li:hover .dropdown-menu {
@@ -5563,7 +5570,7 @@ ul#dropdown-nested li:hover .dropdown-menu {
 }
 
 ul#dropdown-nested .dropdown-menu li .dropdown-item {
-    color: $night-rider;
+    color: var(--color-night-rider);
 }
 
 ul#dropdown-nested li:hover a,
@@ -5597,7 +5604,7 @@ ul#dropdown-nested .dropdown-menu li:hover .dropdown-item {
     width: 0px;
     height: 0px;
     display: block;
-    border-top: 5px solid $gainsboro;
+    border-top: 5px solid var(--color-gainsboro);
     border-bottom: 5px solid transparent;
     border-right: 5px solid transparent;
     border-left: 5px solid transparent;
@@ -5606,7 +5613,7 @@ ul#dropdown-nested .dropdown-menu li:hover .dropdown-item {
     right: 10px;
 }
 .welcome-header hr {
-    border-top-color: $silver;
+    border-top-color: var(--color-silver);
 }
 .btn-group-voucher-type label {
     padding-bottom: 0 !important;
@@ -5615,7 +5622,7 @@ ul#dropdown-nested .dropdown-menu li:hover .dropdown-item {
 .welcome-container .select-box .custom-select input.form-control.selected-val.cp,
 .welcome-container .select-box input,
 .welcome-container .select-box textarea {
-    color: $night-rider;
+    color: var(--color-night-rider);
 }
 .welcome-container input::placeholder {
     color: rgba(0, 0, 0, 0.4) !important;
@@ -5624,25 +5631,25 @@ ul#dropdown-nested .dropdown-menu li:hover .dropdown-item {
     color: rgba(0, 0, 0, 0.4);
 }
 .aging-page .icon-pointer .fa.fa-long-arrow-up {
-    color: $dim-gray;
+    color: var(--color-dim-gray);
 }
 .icon-pointer .fa.fa-long-arrow-up {
-    color: $dim-gray;
+    color: var(--color-dim-gray);
 }
 
 span.red-text {
-    color: $red;
+    color: var(--color-danger);
 }
 #invoice-setting .nav > li > a:focus,
 #invoice-setting .nav > li > a:hover {
-    background: var(--rectangular-tab-primary-background-color) !important;
+    background: var(--color-rectangular-tab-primary-background) !important;
     border: 1px solid rgba(26, 35, 126, 0.4) !important;
 }
 #groupDetailForm .btn {
     width: auto;
 }
 .welcome-header hr {
-    border-top-color: $silver;
+    border-top-color: var(--color-silver);
 }
 .no-select {
     -moz-user-select: none;
@@ -5657,8 +5664,8 @@ span.red-text {
     white-space: nowrap !important;
 }
 .icon-btn .btn-xs {
-    border: 1px solid $gainsboro;
-    background-color: $whisper-light;
+    border: 1px solid var(--color-gainsboro);
+    background-color: var(--color-whisper-light);
 }
 .modal.fade.open-popup.in.show {
     overflow-x: hidden;
@@ -5675,13 +5682,14 @@ span.red-text {
 }
 .add-company-detail .add-mailer form {
     padding-bottom: 60px;
+    background-color: var(--color-primary-add-company-detail-add-mailer-form-background);
 }
 .main-company-name .tooltip-inner {
     white-space: normal;
     word-break: initial;
 }
 .hamburger-menu i.icon-bar {
-    color: $midnight-blue;
+    color: var(--color-midnight-blue);
 }
 .page-count span {
     font-size: 14px;
@@ -5695,7 +5703,7 @@ span.red-text {
     border-bottom: none;
 }
 .total-sales-tabs .nav-tabs li a {
-    color: $charcoal;
+    color: var(--color-charcoal);
     font-size: 16px;
     padding: 0 5px;
     position: relative;
@@ -5705,7 +5713,7 @@ span.red-text {
     content: "";
     height: 15px;
     width: 1px;
-    background-color: $charcoal;
+    background-color: var(--color-charcoal);
     right: 0;
     top: 5px;
 }
@@ -5744,26 +5752,26 @@ span.red-text {
     }
 }
 .ratio-chart-block:first-child span.pie-text_center {
-    color: $primary;
+    color: var(--color-primary);
 }
 .ratio-chart-block:nth-child(2) span.pie-text_center {
-    color: $vivid-orange;
+    color: var(--color-ratio-chart-block-nth-child2-span-pie-text_center);
 }
 .ratio-chart-block:nth-child(3) span.pie-text_center {
-    color: $violet-red;
+    color: var(--color-ratio-chart-block-nth-child3-span-pie-text_center);
 }
 .ratio-chart-block:nth-child(4) span.pie-text_center {
-    color: $java;
+    color: var(--color-ratio-chart-block-nth-child4-span-pie-text_center);
 }
 .dashboard-container input[type="checkbox"]:checked:after {
-    background-color: $chetwode-blue;
-    border: 1px solid $chetwode-blue;
+    background-color: var(--color-chetwode-blue);
+    border: 1px solid var(--color-chetwode-blue);
 }
 .dashboard-container input[type="checkbox"]:checked:before {
-    border-color: $white;
+    border-color: var(--color-white);
 }
 .dashboard-container input[type="checkbox"]:after {
-    border: 1px solid $nobel;
+    border: 1px solid var(--color-nobel);
 }
 .table-custom-invoice ul.dropdown-menu {
     min-width: 160px !important;
@@ -5779,7 +5787,7 @@ ul.dropdown-menu p.lead.pd {
 }
 .nav-tabs > li.active > a,
 .invoice-control .nav-tabs > li.active > a {
-    border-bottom: 4px solid var(--tab-primary-selected-tab-bottom-border-color) !important;
+    border-bottom: 4px solid var(--color-tab-primary-selected-tab-bottom-border) !important;
     font-family: "opensans-semibold";
     background-color: inherit;
 }
@@ -5787,8 +5795,8 @@ ul.dropdown-menu p.lead.pd {
     border-color: 0px solid transparent !important;
 }
 .dropdown-menu > li > a:hover {
-    color: var(--dropdown-list-hover-text-color) !important;
-    background: var(--dropdown-list-hover-background-color) !important;
+    color: var(--color-dropdown-list-hover-text) !important;
+    background: var(--color-dropdown-list-hover-background) !important;
 }
 .debit-blank-row td .form-control,
 .credit-blank-row td .form-control {
@@ -5815,39 +5823,39 @@ ul.dropdown-menu p.lead.pd {
 #invoice-setting ul.nav.nav-tabs a {
     border-bottom: 1px solid rgba(26, 35, 126, 0.4) !important;
     font-family: "opensans-regular";
-    color: var(--rectangular-tab-inactive-icon-primary-color) !important;
+    color: var(--color-rectangular-tab-inactive-primary-icon) !important;
     margin-right: 0 !important;
     margin-left: 0 !important;
     border-radius: 4px;
-    background-color: var(--rectangular-tab-primary-background-color);
+    background-color: var(--color-rectangular-tab-primary-background);
 }
 #invoice-setting ul.nav-tabs > li {
     margin-right: 35px;
 }
 #invoice-setting .nav > li > a.active {
-    border: 1px solid var(--rectangular-tab-active-primary-border-color) !important;
-    border-bottom-color: var(--rectangular-tab-active-primary-border-color) !important;
-    color: var(--rectangular-tab-active-primary-text-color) !important;
-    background-color: var(--rectangular-tab-primary-background-color) !important;
+    border: 1px solid var(--color-rectangular-tab-active-primary-border) !important;
+    border-bottom-color: var(--color-rectangular-tab-active-primary-border) !important;
+    color: var(--color-rectangular-tab-active-primary-text) !important;
+    background-color: var(--color-rectangular-tab-primary-background) !important;
 }
 #invoice-setting .nav > li > a.active span {
-    color: var(--rectangular-tab-active-primary-text-color);
+    color: var(--color-rectangular-tab-active-primary-text);
 }
 .aging-table th .table-checkbox {
     top: 16px;
 }
 .btn-lg.btn-primary {
     min-width: 155px;
-    background: $white;
-    color: $chetwode-blue;
+    background: var(--color-white);
+    color: var(--color-chetwode-blue);
     box-shadow: none;
 }
 .btn-lg.btn-primary:hover {
-    background: $chetwode-blue;
-    color: $white;
-    box-shadow: 0px 4px 4px -3px $wistful;
+    background: var(--color-chetwode-blue);
+    color: var(--color-white);
+    box-shadow: 0px 4px 4px -3px var(--color-wistful);
     border-radius: 0px;
-    border-color: $chetwode-blue !important;
+    border-color: var(--color-chetwode-blue) !important;
 }
 .aside-panel-ledger button.btn.btn-lg.btn-primary {
     min-width: 150px;
@@ -5856,7 +5864,7 @@ ul.dropdown-menu p.lead.pd {
 .setting-page ul.nav.nav-tabs {
     margin-bottom: 15px;
     padding: 0 0px 0 15px !important;
-    background-color: var(--tab-secondary-background-color);
+    background-color: var(--color-tab-secondary-background);
     z-index: 9;
     position: relative;
     top: -2px;
@@ -5870,7 +5878,7 @@ ul.dropdown-menu p.lead.pd {
     left: 0;
     width: 100%;
     padding: 10px 0px 0 15px !important;
-    border-bottom: 1px solid $gainsboro;
+    border-bottom: 1px solid var(--color-gainsboro);
 }
 .gstr-tabs-head .nav.nav-tabs {
     position: relative !important;
@@ -5881,10 +5889,10 @@ ul.dropdown-menu p.lead.pd {
     margin-right: 25px;
     padding-bottom: 7px;
     font-size: 14px;
-    color: var(--tab-tertiary-text-color) !important;
+    color: var(--color-tab-tertiary-text) !important;
 }
 .setting-page .nav > li > a:hover {
-    color: var(--tab-tertiary-text-color-hover) !important;
+    color: var(--color-tab-tertiary-text-hover) !important;
 }
 #tab-integration .nav-tabs {
     padding: 40px;
@@ -5895,7 +5903,7 @@ ul.dropdown-menu p.lead.pd {
     padding-top: 0 !important;
 }
 .setting-page .nav > li > a.active {
-    color: var(--tab-secondary-text-color) !important;
+    color: var(--color-tab-secondary-text) !important;
 }
 #tab-integration .nav-tabs > li {
     margin-right: 0;
@@ -5904,45 +5912,45 @@ ul.dropdown-menu p.lead.pd {
     border-bottom: 1px solid rgba(26, 35, 126, 0.4) !important;
     font-size: 18px;
     border-radius: 4px;
-    background-color: var(--rectangular-tab-primary-background-color);
+    background-color: var(--color-rectangular-tab-primary-background);
 }
 #tab-integration .nav-tabs > li a:hover {
-    background-color: var(--rectangular-tab-primary-background-color) !important;
+    background-color: var(--color-rectangular-tab-primary-background) !important;
 }
 #tab-integration .nav-tabs > li a.active {
-    border: 1px solid var(--rectangular-tab-active-primary-border-color) !important;
+    border: 1px solid var(--color-rectangular-tab-active-primary-border) !important;
     font-family: "opensans-regular";
-    color: var(--rectangular-tab-active-primary-text-color) !important;
-    border-color: var(--rectangular-tab-active-primary-border-color) !important;
-    background-color: var(--rectangular-tab-primary-background-color);
+    color: var(--color-rectangular-tab-active-primary-text) !important;
+    border-color: var(--color-rectangular-tab-active-primary-border) !important;
+    background-color: var(--color-rectangular-tab-primary-background);
 }
 #tab-integration .nav-tabs > li a.active span {
-    color: var(--rectangular-tab-active-primary-text-color);
+    color: var(--color-rectangular-tab-active-primary-text);
 }
 .input-group-addon {
     padding: 5px 12px;
-    color: $davy-grey;
+    color: var(--color-davy-grey);
     text-align: center;
-    background-color: $whisper-light;
-    border: 1px solid $gainsboro;
+    background-color: var(--color-whisper-light);
+    border: 1px solid var(--color-gainsboro);
     border-radius: 5px;
     border-left: none !important;
 }
 .date-advance-search .icon-calender {
     height: 36px !important;
     border-right: none !important;
-    color: $nobel !important;
+    color: var(--color-nobel) !important;
     cursor: pointer;
 }
 .date-advance-search .input-group input.form-control {
-    border-color: $gainsboro !important;
+    border-color: var(--color-gainsboro) !important;
 }
 
 table.basic td {
-    color: var(--table-content-primary-color);
+    color: var(--color-table-primary-content);
 }
 .invoice-table td > a {
-    color: var(--table-content-primary-color);
+    color: var(--color-table-primary-content);
 }
 
 button.btn.btn-filter {
@@ -5988,7 +5996,7 @@ button.btn.btn-filter {
     line-height: initial;
 }
 .icon-sort-asc:hover {
-    color: $deep-sky-blue !important;
+    color: var(--color-deep-sky-blue) !important;
 }
 .amount-arrow .icon-sort-asc {
     float: right !important;
@@ -5998,7 +6006,7 @@ button.btn.btn-filter {
     min-width: 190px !important;
 }
 .td-search-box div i.icon-search {
-    color: var(--table-heading-secondary-color) !important;
+    color: var(--color-table-secondary-heading) !important;
     font-size: 16px;
 }
 .mobileCode .menu {
@@ -6007,11 +6015,11 @@ button.btn.btn-filter {
 .form-group sup {
     font-size: 14px;
     top: 0;
-    color: $red;
+    color: var(--color-danger);
 }
 .aside-pane-form #asidePaneFormTabs ul.nav.nav-tabs {
     padding: 0 !important;
-    background-color: var(--tab-primary-background-color) !important;
+    background-color: var(--color-tab-primary-background) !important;
 }
 .aside-pane-form #asidePaneFormTabs .nav > li > a {
     padding-bottom: 10px !important;
@@ -6034,10 +6042,10 @@ button.btn.btn-filter {
     z-index: 9999;
 }
 .select2-ledger .menu .item:hover {
-    background: var(--dropdown-list-hover-background-color) !important;
+    background: var(--color-dropdown-list-hover-background) !important;
 }
 .select2-ledger .menu .item:hover a {
-    color: $chetwode-blue;
+    color: var(--color-chetwode-blue);
 }
 
 button.ladda-button,
@@ -6054,17 +6062,17 @@ button.ladda-button .ladda-label {
     border: 0;
     border-radius: 0;
     background: transparent;
-    color: $white;
+    color: var(--color-white);
 }
 .ng-select-wrap.select-list.select-group .below {
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--color-gainsboro);
     height: 36px;
     align-items: center;
     display: flex;
 }
 .ng-select-wrap.select-list ng-select .below {
     width: 100% !important;
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--color-gainsboro);
     height: 36px;
     display: flex;
     align-items: center;
@@ -6122,37 +6130,37 @@ highcharts-chart {
     transform: translate(0) !important;
 }
 .aside-panel-ledger .btn-lg:hover {
-    background-color: $chetwode-blue !important;
-    border-color: $chetwode-blue !important;
-    color: $white !important;
+    background-color: var(--color-chetwode-blue) !important;
+    border-color: var(--color-chetwode-blue) !important;
+    color: var(--color-white) !important;
 }
 .daterangepicker td.active,
 .daterangepicker td.active:hover {
-    background-color: $chetwode-blue !important;
+    background-color: var(--color-chetwode-blue) !important;
 }
 .theme-green .bs-datepicker-head {
-    background-color: var(--datepicker-header-color);
+    background-color: var(--color-datepicker-header);
 }
 .theme-green .bs-datepicker-body table td span.selected,
 .theme-green .bs-datepicker-body table td.selected span,
 .theme-green .bs-datepicker-body table td span[class*="select-"]:after,
 .theme-green .bs-datepicker-body table td[class*="select-"] span:after {
-    background-color: $chetwode-blue;
+    background-color: var(--color-chetwode-blue);
 }
 .bs-datepicker-body table.days td.active:not(.select-start):before,
 .bs-datepicker-body table.days td.in-range:not(.select-start):before,
 .bs-datepicker-body table.days span.active:not(.select-start):before,
 .bs-datepicker-body table.days span.in-range:not(.select-start):before {
-    background: $lavender-light;
+    background: var(--color-common--primary-light-background);
 }
 .theme-green .bs-datepicker-body table td.week span {
-    color: $chetwode-blue;
+    color: var(--color-chetwode-blue);
 }
 .mobileNumberWidth .menu {
     min-width: 90px !important;
 }
 #asidePaneFormTabs.custom-tabs .nav.nav-tabs {
-    border-bottom: 1px solid $gainsboro;
+    border-bottom: 1px solid var(--color-gainsboro);
     padding: 0 0px 0 0 !important;
     background-color: transparent;
     z-index: 9;
@@ -6197,11 +6205,11 @@ highcharts-chart {
 }
 .create-acc-form li.highlighted.selected,
 .create-acc-form li.highlighted {
-    background-color: var(--dropdown-list-hover-background-color) !important;
+    background-color: var(--color-dropdown-list-hover-background) !important;
 }
 .create-acc-form li.highlighted.selected .account-list-item,
 .create-acc-form li.highlighted .account-list-item {
-    color: var(--dropdown-list-hover-text-color) !important;
+    color: var(--color-dropdown-list-hover-text) !important;
 }
 
 button {
@@ -6209,7 +6217,7 @@ button {
 }
 .aside-pane-form label {
     font-size: 14px;
-    color: var(--common-primary-text-color);
+    color: var(--color-common-primary-text);
 }
 .tax-engine .header-info .dropdown-menu > li > a:hover {
     color: inherit !important;
@@ -6252,8 +6260,8 @@ input.checkbox-custom[type="checkbox"] {
 .checkbox-custom + .checkbox-custom-label:before,
 .radio-custom + .radio-custom-label:before {
     content: "";
-    background: $white;
-    border: 1px solid $gainsboro;
+    background: var(--color-white);
+    border: 1px solid var(--color-gainsboro);
     display: inline-block;
     vertical-align: middle;
     width: 18px;
@@ -6272,7 +6280,7 @@ input.checkbox-custom[type="checkbox"] {
     z-index: 1;
     width: 12px;
     height: 7px;
-    border: 2px solid $white;
+    border: 2px solid var(--color-white);
     border-top-style: none;
     border-right-style: none;
     transition: transform 0.4s cubic-bezier(0.45, 1.8, 0.5, 0.75);
@@ -6281,20 +6289,20 @@ input.checkbox-custom[type="checkbox"] {
     transform: rotate(-45deg) scale(1, 1);
 }
 .checkbox-custom:checked + .checkbox-custom-label:before {
-    background: $chetwode-blue;
-    border: 2px solid $chetwode-blue;
+    background: var(--color-chetwode-blue);
+    border: 2px solid var(--color-chetwode-blue);
 }
 .radio-custom + .radio-custom-label:before {
     border-radius: 50%;
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--color-gainsboro);
 }
 .radio-custom:checked + :before {
-    background: $chetwode-blue;
-    border: 1px solid $chetwode-blue;
-    box-shadow: inset 0px 0px 0px 4px $white;
+    background: var(--color-chetwode-blue);
+    border: 1px solid var(--color-chetwode-blue);
+    box-shadow: inset 0px 0px 0px 4px var(--color-white);
 }
 .checkbox-custom:focus + .checkbox-custom-label:before {
-    border: 1px solid $chetwode-blue;
+    border: 1px solid var(--color-chetwode-blue);
 } /* radio & checkbox new CSS end */
 .modal-invoice-preview .modal-body {
     padding: 0;
@@ -6338,7 +6346,7 @@ input.checkbox-custom[type="checkbox"] {
     border: none !important;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
     position: relative;
-    background-color: var(--popup-background-color);
+    background-color: var(--color-popup-background);
     background-clip: padding-box;
     border-radius: 6px;
     outline: 0;
@@ -6402,7 +6410,7 @@ ngx-daterangepicker-material {
 
     .edit-date-modal {
         h5 {
-            color: $gray;
+            color: var(--color-gray);
             font-size: 13px;
         }
 
@@ -6412,14 +6420,14 @@ ngx-daterangepicker-material {
             justify-content: space-between;
             padding-top: 30px;
             padding-bottom: 20px;
-            border-bottom: 1px solid $gainsboro;
+            border-bottom: 1px solid var(--color-gainsboro);
             margin-bottom: 15px;
 
             span {
                 padding: 5px 10px;
 
                 i {
-                    color: $gray;
+                    color: var(--color-gray);
                 }
             }
 
@@ -6435,18 +6443,18 @@ ngx-daterangepicker-material {
 
                 label {
                     position: absolute;
-                    background-color: $white;
+                    background-color: var(--color-white);
                     padding: 0 5px;
                     top: -6px;
                     left: 9px;
                     font-size: 12px;
-                    color: $gray;
+                    color: var(--color-gray);
                 }
 
                 input {
                     width: 130px;
                     height: 51px;
-                    border: 1px solid $gainsboro;
+                    border: 1px solid var(--color-gainsboro);
                     border-radius: 3px;
                     padding: 0 15px;
                     font-size: 14px;
@@ -6460,7 +6468,7 @@ ngx-daterangepicker-material {
             margin-top: 10px;
 
             a {
-                color: $deep-sky-blue;
+                color: var(--color-deep-sky-blue);
                 padding: 10px 10px;
                 display: inline-block;
             }
@@ -6487,7 +6495,7 @@ ngx-daterangepicker-material {
     position: absolute !important;
 }
 .HW_badge {
-    background: $red;
+    background: var(--color-danger);
     width: 14px !important;
     height: 14px !important;
     line-height: 14px !important;
@@ -6513,7 +6521,7 @@ span#HW_badge_cont:nth-child(3) {
 }
 
 .mobile-home {
-    background-color: $lavender;
+    background-color: var(--color-lavender);
 
     .fixed-padding,
     .padding-top-fixed,
@@ -6522,11 +6530,11 @@ span#HW_badge_cont:nth-child(3) {
     }
 
     #content-wrapper {
-        background-color: $lavender;
+        background-color: var(--color-lavender);
     }
 }
 .icon-home-icon {
-    color: $white;
+    color: var(--color-white);
 }
 
 .remove-header-lower-layer {
@@ -6577,7 +6585,7 @@ span#HW_badge_cont:nth-child(3) {
             a {
                 span {
                     i {
-                        color: var(--right-sidebar-icon-color);
+                        color: var(--color-right-sidebar-icon);
                         margin-right: 10px;
                         font-size: 22px;
                     }
@@ -6588,7 +6596,7 @@ span#HW_badge_cont:nth-child(3) {
                 a {
                     span {
                         i {
-                            color: $white;
+                            color: var(--color-white);
                         }
                     }
                 }
@@ -6599,7 +6607,7 @@ span#HW_badge_cont:nth-child(3) {
             a {
                 span {
                     i {
-                        color: $white;
+                        color: var(--color-white);
                     }
                 }
             }
@@ -6612,7 +6620,7 @@ span#HW_badge_cont:nth-child(3) {
             sh-select {
                 .header {
                     input.form-control {
-                        background-color: $white !important;
+                        background-color: var(--color-white) !important;
                         height: 28px !important;
                         padding-right: 15px !important;
                     }
@@ -6675,7 +6683,7 @@ span#HW_badge_cont:nth-child(3) {
 .select-border-bottom {
     .form-control {
         border: none;
-        border-bottom: 1px solid $gainsboro;
+        border-bottom: 1px solid var(--color-gainsboro);
         width: 100%;
     }
 }
@@ -6733,7 +6741,7 @@ span#HW_badge_cont:nth-child(3) {
     .card {
         margin-bottom: 20px;
         min-height: 426px;
-        background-color: var(--common-background-color-for-all-components);
+        background-color: var(--color-common-primary-background-for-all-components);
     }
 }
 
@@ -6746,13 +6754,13 @@ span#HW_badge_cont:nth-child(3) {
 
 .open > .dropdown-menu {
     display: block;
-    background-color: var(--dropdown-primary-background-color);
+    background-color: var(--color-dropdown-primary-background);
 }
 
 .daterangepicker.dropdown-menu {
     box-shadow: 0 3px 28px 0 rgba(0, 0, 0, 0.14);
-    color: $dim-gray;
-    border: 1px solid $gainsboro;
+    color: var(--color-dim-gray);
+    border: 1px solid var(--color-gainsboro);
     z-index: 9999 !important;
 }
 
@@ -6814,7 +6822,7 @@ span#HW_badge_cont:nth-child(3) {
         width: 268px;
         font-family: inherit;
         border-radius: 4px;
-        box-shadow: 0 3px 6px $black-russian;
+        box-shadow: 0 3px 6px var(--color-black-russian);
         top: 20% !important;
 
         .popover-arrow {
@@ -6862,11 +6870,11 @@ span#HW_badge_cont:nth-child(3) {
             display: flex;
 
             &:hover:after {
-                color: $rich-blue;
+                color: var(--color-rich-blue);
             }
 
             .icon-favorite-selected {
-                color: $rich-blue;
+                color: var(--color-rich-blue);
             }
         }
     }
@@ -6877,13 +6885,13 @@ span#HW_badge_cont:nth-child(3) {
             .nav-item {
                 .nav-link {
                     font-size: 16px !important;
-                    color: var(--tab-primary-text-color) !important;
+                    color: var(--color-tab-primary-text) !important;
                 }
             }
 
             .active {
                 > .nav-link {
-                    color: var(--tab-primary-text-color) !important;
+                    color: var(--color-tab-primary-text) !important;
                 }
             }
         }
@@ -6921,14 +6929,14 @@ span#HW_badge_cont:nth-child(3) {
 
 .table-amount[disabled] {
     input {
-        background-color: $whisper-light !important;
+        background-color: var(--color-whisper-light) !important;
     }
 }
 
 .max-character-label {
     padding-left: 6px;
     font-size: 11px;
-    color: $gray;
+    color: var(--color-gray);
 }
 
 .max-character-value {
@@ -6938,11 +6946,11 @@ span#HW_badge_cont:nth-child(3) {
 #update-ledger-voucher-type-default.disabled-ledger,
 #update-ledger-assign-tag.disabled-ledger {
     .sh-select-disabled {
-        background-color: $whisper-light !important;
+        background-color: var(--color-whisper-light) !important;
 
         input.selected-val.form-control,
         input[disabled] {
-            background-color: $whisper-light !important;
+            background-color: var(--color-whisper-light) !important;
         }
     }
 }
@@ -7026,7 +7034,7 @@ button#more-btn-inventory,
 }
 
 .inventory-dashboard .box {
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--color-gainsboro);
     border-radius: 2px;
 }
 
@@ -7058,7 +7066,7 @@ giddh-datepicker {
 
     .mat-form-field-appearance-fill .mat-form-field-flex {
         height: 36px;
-        background-color: $white;
+        background-color: var(--color-white);
         padding: 0;
     }
 
@@ -7100,7 +7108,7 @@ giddh-datepicker {
     }
 
     .mat-focused .mat-form-field-flex {
-        border: 1px solid $chetwode-blue !important;
+        border: 1px solid var(--color-chetwode-blue) !important;
     }
 
     .mat-form-field-underline {
@@ -7108,7 +7116,7 @@ giddh-datepicker {
     }
 
     .mat-calendar-body-selected {
-        background-color: $midnight-blue;
+        background-color: var(--color-midnight-blue);
     }
 
     .giddh-limit {
@@ -7154,7 +7162,7 @@ giddh-datepicker {
 }
 giddh-datepicker {
     .mat-form-field-appearance-fill .mat-form-field-flex {
-        border: 1px solid $gainsboro !important;
+        border: 1px solid var(--color-gainsboro) !important;
         border-radius: 5px !important;
     }
 }
@@ -7170,9 +7178,9 @@ giddh-datepicker {
 } /*material datepicker css end*/
 .master-custom-tabs.custom-tabs {
     .nav-tabs {
-        border-bottom: 1px solid $gainsboro;
+        border-bottom: 1px solid var(--color-gainsboro);
         padding: 0 0 0 15px !important;
-        background-color: var(--master-page-tab-background-color);
+        background-color: var(--color-master-page-tab-background);
         z-index: 9;
         position: relative !important;
         top: 0;
@@ -7194,15 +7202,15 @@ giddh-datepicker {
 
     li.active {
         a {
-            border-bottom: 4px solid $midnight-blue !important;
-            color: $midnight-blue !important;
+            border-bottom: 4px solid var(--color-midnight-blue) !important;
+            color: var(--color-midnight-blue) !important;
         }
     }
 
     li {
         a {
             &:hover {
-                color: $midnight-blue !important;
+                color: var(--color-midnight-blue) !important;
             }
         }
     }
@@ -7223,12 +7231,12 @@ giddh-datepicker {
 }
 
 .change-address-dropdown a {
-    color: $deep-sky-blue;
+    color: var(--color-deep-sky-blue);
     font-size: 12px;
 }
 
 .change-address-dropdown li {
-    border-bottom: 1px solid $very-light-gray;
+    border-bottom: 1px solid var(--color-very-light-gray);
     padding-bottom: 4px;
 }
 
@@ -7242,14 +7250,14 @@ giddh-datepicker {
 
 .more-add-button {
     .icon-undo {
-        border: 1px solid $midnight-blue;
+        border: 1px solid var(--color-midnight-blue);
         width: 34px;
         height: 34px;
         display: flex;
         justify-content: center;
         align-items: center;
         border-radius: 40px;
-        color: $midnight-blue;
+        color: var(--color-midnight-blue);
     }
 }
 
@@ -7274,7 +7282,7 @@ giddh-datepicker {
     }
 
     input {
-        border: 1px solid $whisper-light;
+        border: 1px solid var(--color-whisper-light);
         height: 36px !important;
     }
 
@@ -7555,8 +7563,8 @@ body.update-scroll-hidden {
 
                     &.active {
                         a {
-                            color: $midnight-blue !important;
-                            border-bottom: 2px solid $midnight-blue !important;
+                            color: var(--color-midnight-blue) !important;
+                            border-bottom: 2px solid var(--color-midnight-blue) !important;
                         }
                     }
 
@@ -7572,7 +7580,7 @@ body.update-scroll-hidden {
                     a {
                         min-width: 110px;
                         font-family: "opensans-regular";
-                        color: $grey-chateau !important;
+                        color: var(--color-nav-tabs-anchor) !important;
                         padding-top: 5px !important;
                         padding-left: 20px !important;
                         height: 30px;
@@ -7584,7 +7592,7 @@ body.update-scroll-hidden {
                 &.icon-company {
                     &.active {
                         &::before {
-                            color: $midnight-blue;
+                            color: var(--color-midnight-blue);
                         }
                     }
 
@@ -7592,14 +7600,14 @@ body.update-scroll-hidden {
                         position: absolute !important;
                         left: 20px !important;
                         top: 5px;
-                        color: $grey-chateau;
+                        color: var(--color-nav-item-icon-company-icon-branch1-before);
                     }
                 }
 
                 &.icon-branch1 {
                     &.active {
                         &::before {
-                            color: $midnight-blue;
+                            color: var(--color-midnight-blue);
                         }
                     }
 
@@ -7607,7 +7615,7 @@ body.update-scroll-hidden {
                         position: absolute !important;
                         left: 20px !important;
                         top: 5px;
-                        color: $grey-chateau;
+                        color: var(--color-nav-item-icon-company-icon-branch1-before);
                     }
                 }
             }
@@ -7883,7 +7891,7 @@ body.update-scroll-hidden {
     }
     .grp-list {
         padding: 0px;
-        background: $solitude;
+        background: var(--color-solitude);
         width: 100%;
         display: block;
     }
@@ -7900,7 +7908,7 @@ body.update-scroll-hidden {
     .left-account-operation {
         height: initial !important;
         width: 100%;
-        background: $white;
+        background: var(--color-white);
     }
     .users-last-list > li {
         display: inline-block;
@@ -7918,8 +7926,8 @@ body.update-scroll-hidden {
     }
     .stock-lists {
         position: absolute;
-        box-shadow: 0 3px 6px $very-light-gray;
-        background: $white;
+        box-shadow: 0 3px 6px var(--color-very-light-gray);
+        background: var(--color-white);
         min-width: 200px;
         display: inline-block;
         z-index: 9;
@@ -7973,7 +7981,7 @@ body.update-scroll-hidden {
     .bulk-create-table sh-select input,
     .bulk-create-table .mat-form-field-wrapper input,
     .bulk-create-table .mat-form-field-appearance-fill .mat-form-field-flex {
-        border: 1px solid $gainsboro !important;
+        border: 1px solid var(--color-gainsboro) !important;
         padding: 0 11px !important;
     }
 }
@@ -8011,7 +8019,7 @@ body.update-scroll-hidden {
     .bulk-create-table sh-select input,
     .bulk-create-table .mat-form-field-wrapper input,
     .bulk-create-table .mat-form-field-appearance-fill .mat-form-field-flex {
-        border: 1px solid $gainsboro !important;
+        border: 1px solid var(--color-gainsboro) !important;
         padding: 0 11px !important;
     }
     .bulk-create-table .mat-form-field-wrapper input {
@@ -8131,10 +8139,10 @@ body.update-scroll-hidden {
     }
     .tax-engine .table-striped > tbody > tr:nth-child(odd) > td,
     .tax-engine .table-striped > tbody > tr:nth-child(odd) > th {
-        background-color: $white;
+        background-color: var(--color-white);
     }
     .tax-engine .table-striped > tbody > tr:nth-of-type(odd) {
-        background-color: $white;
+        background-color: var(--color-white);
     }
     .modal-header {
         padding: 12px 15px !important;
@@ -8268,7 +8276,7 @@ body.update-scroll-hidden {
         &:after {
             position: absolute;
             content: "";
-            background-color: $black;
+            background-color: var(--color-black);
             width: 100%;
             height: 100vh;
             z-index: 999;
@@ -8464,18 +8472,18 @@ body.update-scroll-hidden {
         border-right: none;
     }
     header .navbar {
-        background-color: $midnight-blue !important;
+        background-color: var(--color-midnight-blue) !important;
         border-bottom: none !important;
     }
     header .hamburger-menu h4 {
-        color: $white;
+        color: var(--color-white);
         font-size: 14px;
         white-space: normal;
         word-break: break-word;
         width: 100%;
     }
     header .hamburger-menu i.icon-bar {
-        color: $white;
+        color: var(--color-white);
     }
     .dropdown-width ul.dropdown-menu.pd {
         min-width: 150px !important;
@@ -8521,7 +8529,7 @@ body.update-scroll-hidden {
         display: none;
     }
     .card-table tbody tr {
-        border-bottom: 1px solid $gainsboro;
+        border-bottom: 1px solid var(--color-gainsboro);
     }
     .card-table,
     .card-table tbody,
@@ -8649,7 +8657,7 @@ body.update-scroll-hidden {
     }
     .tax-engine .list-filter {
         padding: 15px !important;
-        border-bottom: 1px solid $gainsboro !important;
+        border-bottom: 1px solid var(--color-gainsboro) !important;
         height: auto;
     }
     .list-style ul.list-inline.list-middle.download-drop-down {
@@ -8663,7 +8671,7 @@ body.update-scroll-hidden {
         display: block;
     }
     .c-text span.c-name {
-        color: $white !important;
+        color: var(--color-white) !important;
     }
     .user-dropdown-header {
         left: 0px !important;
@@ -8860,7 +8868,7 @@ body.update-scroll-hidden {
         overflow-x: hidden;
     }
     #companyList {
-        background: $white;
+        background: var(--color-white);
         padding-bottom: 4px;
         left: 0px;
         top: 30px;
@@ -8997,7 +9005,7 @@ body.update-scroll-hidden {
     }
     .grp-list {
         padding: 10px 0px !important;
-        background: $solitude;
+        background: var(--color-solitude);
         width: 100%;
         display: block;
     }
@@ -9029,10 +9037,10 @@ body.update-scroll-hidden {
         padding: 4px 15px !important;
     }
     .bgWhiteMo {
-        background-color: $white;
+        background-color: var(--color-white);
     }
     .breadcrumbs {
-        border-top: 1px solid $gainsboro;
+        border-top: 1px solid var(--color-gainsboro);
     }
     #getGroupModal #middleBody {
         height: 100%;
@@ -9048,15 +9056,15 @@ body.update-scroll-hidden {
         position: relative;
     }
     .grp-list:nth-child(2) {
-        background-color: $white;
+        background-color: var(--color-white);
     }
     .col-wrapper.left-account-operation:nth-child(3),
     .col-wrapper.left-account-operation:nth-child(2),
     .col-wrapper.left-account-operation:nth-child(4) {
-        border-top: 1px solid $gainsboro;
+        border-top: 1px solid var(--color-gainsboro);
     }
     .manage-account-popup.modal {
-        background-color: $solitude;
+        background-color: var(--color-solitude);
         opacity: 1;
     }
     .manage-account-popup .modal-content.full-screen-modal {
@@ -9167,7 +9175,7 @@ body.update-scroll-hidden {
                     border-bottom: none;
                     padding: 12px 0 0;
                     margin-bottom: 0;
-                    border-right: 1px solid $gainsboro;
+                    border-right: 1px solid var(--color-gainsboro);
                     margin-right: 15px;
                     p {
                         font-size: 20px;
@@ -9331,11 +9339,11 @@ body.prevent-body-scroll {
 }
 
 *::-webkit-scrollbar-track {
-    background: $white-smoke;
+    background: var(--color-white-smoke);
 }
 
 *::-webkit-scrollbar-thumb {
-    background: $nobel;
+    background: var(--color-nobel);
     border-radius: 5px;
     min-height: 60px;
 }
@@ -9344,7 +9352,7 @@ body.prevent-body-scroll {
 }
 
 .sky-blue-bg {
-    background-color: $light-sky-blue;
+    background-color: var(--color-primary-sky-blue-bg-background);
 }
 
 .giddh-no-permissions {
@@ -9352,8 +9360,8 @@ body.prevent-body-scroll {
 } /** Angular material datepicker **/
 .mat-calendar-header {
     padding: 2px 8px 2px 8px !important;
-    background-color: var(--table-datepicker-header-background-color);
-    color: $white;
+    background-color: var(--color-table-datepicker-header-background);
+    color: var(--color-white);
 }
 
 .mat-calendar-controls {
@@ -9361,13 +9369,13 @@ body.prevent-body-scroll {
 }
 
 .mat-calendar-arrow {
-    border-top-color: $white !important;
+    border-top-color: var(--color-white) !important;
 }
 
 .mat-datepicker-toggle,
 .mat-datepicker-content .mat-calendar-next-button,
 .mat-datepicker-content .mat-calendar-previous-button {
-    color: $white !important;
+    color: var(--color-white) !important;
 }
 
 .mat-calendar-content {
@@ -9383,7 +9391,7 @@ body.prevent-body-scroll {
 }
 
 .mat-calendar-table-header th {
-    color: var(--table-datepicker-content-color);
+    color: var(--color-table-datepicker-content);
     padding: 10px 0 10px 0 !important;
 }
 
@@ -9393,7 +9401,7 @@ body.prevent-body-scroll {
 
 .mat-datepicker-content .mat-calendar {
     height: 320px !important;
-    background-color: var(--table-datepicker-body-background-color);
+    background-color: var(--color-table-datepicker-body-background);
 }
 
 mat-year-view table tr td.mat-calendar-body-label {

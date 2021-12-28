@@ -1,7 +1,54 @@
-@import "../../assets/css/color.scss";
-#main {
-    position: relative;
-    float: left;
+.welcome-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 64px;
+}
+
+.your-account span {
+    display: block;
+    font-size: 14px;
+    color: var(--color-nobel);
+    margin-bottom: 5px;
+}
+
+.your-account p {
+    color: var(--color-common-primary-text);
+    font-size: 14px;
+}
+
+.your-account p.success-text {
+    color: var(--color-success-enable) !important;
+}
+
+.welcome-msg {
+    padding: 25px 15px 0;
+    margin-bottom: 30px;
+}
+
+.billing-details {
+    padding: 25px 15px;
+}
+
+.billing-details h3 {
+    font-size: 20px;
+    font-weight: 500;
+    font-family: "opensans-regular";
+    color: var(--color-common-primary-text);
+    margin-bottom: 20px;
+}
+
+.billing-details form label {
+    color: var(--color-common-primary-text);
+    font-size: 14px;
+}
+
+.billing-details .form-group {
+    margin-bottom: 25px;
+}
+
+.billing-details form {
+    max-width: 300px;
     width: 100%;
     .main-heading-billing {
         padding: 52px 0px 0px 16px;
@@ -67,7 +114,7 @@
             color: $gray;
         }
         .billing-wrapper {
-            border-right: 1px solid $gainsboro;
+            border-right: 1px solid var(--color-gainsboro);
             height: 100%;
             .form-label {
                 height: 16px;

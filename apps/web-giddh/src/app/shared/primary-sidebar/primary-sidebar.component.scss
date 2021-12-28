@@ -1,14 +1,12 @@
-@import "../../../assets/css/color.scss";
-
 @mixin highlight-color($bgColor, $color) {
     background-color: $bgColor !important;
     color: $color !important;
 }
 .primary-sidebar {
     padding-top: 0 !important;
-    background-color: var(--sidebar-background-color);
+    background-color: var(--color-sidebar-background);
     .company-branch-block {
-        background-color: var(--sidebar-company-background-color);
+        background-color: var(--color-sidebar-company-background);
         ul.branch-connection {
             padding: 14px 0;
         }
@@ -19,7 +17,7 @@
             span.outer-span {
                 width: 12px;
                 height: calc(100% - 54px);
-                border: 2px solid $grey-chateau;
+                border: 2px solid var(--color-primary-sidebar-branch-connection-outer-span-background);
                 max-height: 100%;
                 min-height: 33px;
                 display: block;
@@ -34,7 +32,7 @@
                     width: 7px;
                     height: 7px;
                     display: block;
-                    background-color: $grey-chateau;
+                    background-color: var(--color-primary-sidebar-branch-connection-outer-span-background);
                     border-radius: 50%;
                     content: "";
                     left: -4px;
@@ -44,7 +42,7 @@
                     width: 7px;
                     height: 7px;
                     display: block;
-                    background-color: $grey-chateau;
+                    background-color: var(--color-primary-sidebar-branch-connection-outer-span-background);
                     border-radius: 50%;
                     content: "";
                     bottom: -4px;
@@ -56,27 +54,27 @@
             .icon-down-new {
                 position: relative;
                 right: 5px;
-                color: var(--sidebar-content-text-color);
+                color: var(--color-sidebar-content-text);
             }
             .icon-cross {
                 display: flex;
                 font-size: 12px;
-                color: var(--sidebar-content-text-color);
+                color: var(--color-sidebar-content-text);
             }
             .head-nav {
-                background: $white-smoke;
-                border-bottom: 10px solid $gainsboro;
+                background: var(--color-white-smoke);
+                border-bottom: 10px solid var(--color-gainsboro);
                 margin-bottom: 0;
             }
         }
         h3 {
             font-family: "opensans-semibold";
-            color: $omiod;
+            color: var(--color-primary-sidebar-company-branch-block-h3);
             .company-alice {
                 width: 30px;
                 height: 30px;
                 min-width: 30px;
-                border: 1px solid var(--sidebar-content-text-color);
+                border: 1px solid var(--color-sidebar-content-text);
                 padding: 15px;
                 border-radius: 50px;
                 display: inline-flex;
@@ -85,7 +83,7 @@
                 white-space: nowrap;
                 letter-spacing: -2px;
                 font-size: 13px !important;
-                color: var(--sidebar-content-text-color);
+                color: var(--color-sidebar-content-text);
             }
             .company-full-name {
                 white-space: normal;
@@ -101,7 +99,7 @@
                     width: 150px;
                     overflow: hidden;
                     text-overflow: ellipsis;
-                    color: var(--sidebar-content-text-color);
+                    color: var(--color-sidebar-content-text);
                 }
                 .branch-ellipsis {
                     white-space: nowrap;
@@ -121,7 +119,7 @@
         .current-branch-name {
             li {
                 a {
-                    color: $trout;
+                    color: var(--color-primary-sidebar-current-branch-name-anchor);
                 }
             }
             .branch-alice {
@@ -139,7 +137,7 @@
         .company-branch-nav {
             height: calc(100vh - 110px);
             box-shadow: none;
-            background-color: var(--sidebar-background-color);
+            background-color: var(--color-sidebar-background);
             border: none;
             margin: 0;
             padding: 0;
@@ -150,27 +148,27 @@
     .search-box {
         .input-group-text {
             padding: 8px !important;
-            border: 1px solid var(--sidebar-search-bar-background-color);
-            color: var(--sidebar-search-bar-text-color);
-            background-color: var(--sidebar-search-bar-background-color);
+            border: 1px solid var(--color-sidebar-search-bar-background);
+            color: var(--color-sidebar-search-bar-text);
+            background-color: var(--color-sidebar-search-bar-background);
         }
         input {
             border-left: none;
             padding-left: 0 !important;
             border-right: none !important;
-            background-color: var(--sidebar-search-bar-background-color) !important;
+            background-color: var(--color-sidebar-search-bar-background) !important;
             border-top-left-radius: 0px !important;
             border-bottom-left-radius: 0px !important;
             border-top-right-radius: 0px !important;
             border-bottom-right-radius: 0px !important;
-            border: 1px solid var(--sidebar-search-bar-background-color);
+            border: 1px solid var(--color-sidebar-search-bar-background);
             &:focus {
-                border-color: $gainsboro !important;
+                border-color: var(--color-gainsboro) !important;
             }
         }
         .input-group-append {
             font-size: 12px;
-            color: var(--sidebar-search-bar-text-color);
+            color: var(--color-sidebar-search-bar-text);
             right: 10px;
             top: 0;
             padding: 0 5px;
@@ -178,8 +176,8 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: var(--sidebar-search-bar-background-color);
-            border: 1px solid var(--sidebar-search-bar-background-color);
+            background-color: var(--color-sidebar-search-bar-background);
+            border: 1px solid var(--color-sidebar-search-bar-background);
             border-radius: 5px;
             border-left: none;
             border-top-left-radius: 0px !important;
@@ -201,15 +199,15 @@
                 display: block;
                 i {
                     font-size: 18px;
-                    color: $grey-chateau;
+                    color: var(--color-primary-sidebar-account-collapse-i);
                 }
             }
             .left-fixed-header > li a.active {
-                @include highlight-color(var(--sidebar-background-color), var(--sidebar-anchor-text-color-hover));
+                @include highlight-color(var(--color-sidebar-background), var(--color-sidebar-anchor-text-hover));
             }
         }
         p {
-            color: var(--sidebar-list-head-color);
+            color: var(--color-sidebar-list-head);
             font-family: "opensans-semibold";
         }
         ul {
@@ -221,15 +219,15 @@
                 white-space: nowrap;
                 position: relative;
                 a {
-                    color: var(--sidebar-anchor-text-color);
+                    color: var(--color-sidebar-anchor-text);
                     line-height: 16px;
                     &.show-more {
-                        color: $midnight-blue;
+                        color: var(--color-common-senary-text);
                         text-decoration: underline;
                         font-size: 12px;
                     }
                     &:hover {
-                        color: var(--sidebar-anchor-text-color-hover);
+                        color: var(--color-sidebar-anchor-text-hover);
                     }
                 }
             }
@@ -245,8 +243,8 @@
                 display: flex;
                 justify-content: space-between;
                 line-height: 20px;
-                color: var(--sidebar-list-head-color);
-                // background-color: var(--body-background-color);
+                color: var(--color-sidebar-list-head);
+                // background-color: var(--color-body-background);
                 span {
                     .icon-arrow-down {
                         transform: rotate(0deg);
@@ -277,20 +275,20 @@
                         }
                     }
                     a {
-                        color: var(--sidebar-anchor-text-color);
+                        color: var(--color-sidebar-anchor-text);
                         font-family: "opensans-semibold";
                         width: 100%;
                         display: flex;
                         justify-content: space-between;
                         align-items: center;
                         &:hover {
-                            color: var(--sidebar-anchor-text-color-hover);
+                            color: var(--color-sidebar-anchor-text-hover);
                         }
                         &.dropdown-toggle {
                             padding: 0 20px;
                         }
                         &.active {
-                            color: var(--sidebar-anchor-text-color-hover) !important;
+                            color: var(--color-sidebar-anchor-text-hover) !important;
                             background-color: transparent;
                         }
                         &:first-child {
@@ -326,7 +324,7 @@
                             transform: rotate(-85deg);
                         }
                         a {
-                            color: $trout;
+                            color: var(--color-primary-sidebar-menu-item-wrapper-list-anchor);
                             align-items: center;
                             display: flex;
                             font-family: "opensans-regular";
@@ -349,7 +347,7 @@
                             padding: 0;
                             margin-bottom: 0 !important;
                             a {
-                                color: var(--sidebar-anchor-text-color);
+                                color: var(--color-sidebar-anchor-text);
                                 align-items: center;
                                 display: flex;
                                 font-family: "opensans-regular";
@@ -363,21 +361,21 @@
                                 }
                                 &.active {
                                     @include highlight-color(
-                                        var(--sidebar-anchor-text-color-hover),
-                                        var(--sidebar-menu-list-items-color)
+                                        var(--color-sidebar-anchor-text-hover),
+                                        var(--color-sidebar-menu-list-items)
                                     );
                                 }
                             }
                             &:hover {
                                 a {
                                     @include highlight-color(
-                                        var(--sidebar-anchor-text-color-hover),
-                                        var(--sidebar-menu-list-items-color)
+                                        var(--color-sidebar-anchor-text-hover),
+                                        var(--color-sidebar-menu-list-items)
                                     );
                                     &.active {
                                         @include highlight-color(
-                                            var(--sidebar-anchor-text-color-hover),
-                                            var(--sidebar-menu-list-items-color)
+                                            var(--color-sidebar-anchor-text-hover),
+                                            var(--color-sidebar-menu-list-items)
                                         );
                                     }
                                 }
@@ -392,9 +390,9 @@
         i {
             width: 20px;
             height: 20px;
-            background-color: $white;
+            background-color: var(--color-white);
             border-radius: 50%;
-            border: 1px solid $gainsboro;
+            border: 1px solid var(--color-gainsboro);
             transform: rotate(90deg);
             position: absolute;
             top: 70px;
@@ -489,8 +487,8 @@
             position: absolute !important;
             left: 60px !important;
             z-index: 9999999 !important;
-            background-color: $white !important;
-            border: 1px solid $cornflower !important;
+            background-color: var(--color-white) !important;
+            border: 1px solid var(--color-primary-sidebar-account-dropdown-collapse) !important;
             border-radius: 0;
             width: 180px;
             top: 0px !important;
@@ -552,7 +550,7 @@
                     &:after {
                         position: absolute;
                         content: "";
-                        background-color: var(--body-background-color);
+                        background-color: var(--color-body-background);
                         width: 100%;
                         height: 100%;
                         left: 40px;
@@ -575,7 +573,10 @@
                             align-items: center;
                             &:hover,
                             &.active {
-                                @include highlight-color($cornflower, $white);
+                                @include highlight-color(
+                                    var(--color-primary-sidebar-menu-item-anchor-active-hover-highlight),
+                                    var(--color-white)
+                                );
                             }
                             a.dropdown-toggle {
                                 padding: 0 10px;
@@ -609,8 +610,8 @@
                             position: absolute !important;
                             left: 60px !important;
                             z-index: 9999999 !important;
-                            background-color: $white !important;
-                            border: 1px solid $cornflower !important;
+                            background-color: var(--color-white) !important;
+                            border: 1px solid var(--color-primary-sidebar-menu-item-wrapper-sub-menu-border) !important;
                             border-radius: 0;
                             width: 180px;
                             top: 0px !important;
@@ -661,14 +662,14 @@
                         span {
                             i {
                                 font-size: 20px;
-                                color: $trout;
+                                color: var(--color-primary-sidebar-account-dropdown-i);
                                 transform: none;
                             }
                         }
                         i {
                             font-size: 14px;
                             display: inline-flex;
-                            color: $trout;
+                            color: var(--color-primary-sidebar-account-dropdown-i);
                             width: 14px;
                             height: 14px;
                             justify-content: center;
@@ -684,7 +685,7 @@
                 &:after {
                     position: absolute;
                     content: "";
-                    background-color: var(--body-background-color);
+                    background-color: var(--color-body-background);
                     width: 100%;
                     height: 100%;
                     left: 40px;

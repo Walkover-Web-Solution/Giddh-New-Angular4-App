@@ -1,10 +1,8 @@
-@import "../../../assets/css/color.scss";
-
 select-dropdown {
     font-size: 14px;
     > div {
-        background-color: var(--dropdown-primary-background-color);
-        border: 1px solid $gainsboro;
+        background-color: var(--color-dropdown-primary-background);
+        border: 1px solid var(--color-gainsboro);
         border-top: none;
         box-sizing: border-box;
         position: absolute;
@@ -13,11 +11,11 @@ select-dropdown {
             padding: 3px;
             width: 100%;
             input {
-                border: 1px solid $gainsboro;
+                border: 1px solid var(--color-gainsboro);
                 box-sizing: border-box;
                 padding: 6px;
                 width: 100%;
-                background-color: var(--dropdown-primary-background-color);
+                background-color: var(--color-dropdown-primary-background);
             }
         }
         .options {
@@ -39,19 +37,19 @@ select-dropdown {
         }
     }
     .selected {
-        background-color: var(--dropdown-list-hover-background-color) !important;
+        background-color: var(--color-dropdown-list-hover-background) !important;
         &.highlighted {
-            background-color: $lavender !important;
-            color: $chetwode-blue !important;
+            background-color: var(--color-lavender) !important;
+            color: var(--color-chetwode-blue) !important;
         }
     }
     .highlighted {
-        background-color: $lavender !important;
-        color: $chetwode-blue !important;
+        background-color: var(--color-lavender) !important;
+        color: var(--color-chetwode-blue) !important;
     }
     .disabled {
-        background-color: $white;
-        color: $nobel;
+        background-color: var(--color-white);
+        color: var(--color-nobel);
         cursor: default;
         pointer-events: none;
     }
