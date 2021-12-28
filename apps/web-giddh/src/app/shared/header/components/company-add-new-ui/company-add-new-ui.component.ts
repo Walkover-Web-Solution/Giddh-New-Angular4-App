@@ -124,7 +124,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
         this.getCountry();
         this.getCallingCodes();
 
-        this.imgPath = (isElectron || isCordova) ? '' : AppUrl + APP_FOLDER + '';
+        this.imgPath = isElectron ? '' : AppUrl + APP_FOLDER + '';
         this.logedInuser = this._generalService.user;
         if (this._generalService.createNewCompany) {
             this.company = this._generalService.createNewCompany;
@@ -291,12 +291,6 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
         this.closeCompanyModal.emit();
         if (isElectron) {
             this.store.dispatch(this._loginAction.ClearSession());
-        } else if (isCordova) {
-            (window as any).plugins.googleplus.logout(
-                (msg) => {
-                    this.store.dispatch(this._loginAction.ClearSession());
-                }
-            );
         } else {
             this.isLoggedInWithSocialAccount$.subscribe((val) => {
                 if (val) {

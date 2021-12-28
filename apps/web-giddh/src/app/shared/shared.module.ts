@@ -72,7 +72,7 @@ import { CustomFieldsModule } from './header/components/custom-fields/custom-fie
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: true
 };
-const SOCIAL_CONFIG = (isElectron || isCordova) ? null : new AuthServiceConfig([
+const SOCIAL_CONFIG = isElectron ? null : new AuthServiceConfig([
     {
         id: GoogleLoginProvider.PROVIDER_ID,
         provider: new GoogleLoginProvider(GOOGLE_CLIENT_ID)
