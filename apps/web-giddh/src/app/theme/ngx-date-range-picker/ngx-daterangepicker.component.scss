@@ -2,7 +2,6 @@
 *  variables
 */
 
-@import "../../../assets/css/color.scss";
 $md-drppicker-color: inherit !default;
 $md-drppicker-bg-color: #fff !default;
 $md-drppicker-cell-color: $md-drppicker-color !default;
@@ -11,7 +10,7 @@ $md-drppicker-cell-bg-color: $md-drppicker-bg-color !default;
 $md-drppicker-cell-hover-color: $md-drppicker-color !default;
 $md-drppicker-cell-hover-border-color: $md-drppicker-cell-border-color !default;
 $md-drppicker-cell-hover-bg-color: #eee !default;
-$md-drppicker-in-range-color: #1c1c1c !default;
+$md-drppicker-in-range-color: var(--color-common-primary-text) !default;
 $md-drppicker-in-range-border-color: transparent !default;
 $md-drppicker-in-range-bg-color: #dde2e4 !default;
 $md-drppicker-active-color: #fff !default;
@@ -44,7 +43,7 @@ $md-drppicker-control-active-border-color: #08c !default;
 $md-drppicker-control-active-border-radius: $md-drppicker-control-border-radius !default;
 $md-drppicker-control-disabled-color: #ccc !default;
 // Select
-$select-border: 1px solid $white-smoke !default;
+$select-border: 1px solid var(--color-white-smoke) !default;
 $select-background: rgba(255, 255, 255, 0.9) !default;
 $select-padding: 5px !default;
 $select-radius: 2px !default;
@@ -56,14 +55,14 @@ $input-height: 3rem !default;
 
 .md-drppicker {
     font-family: Roboto, sans-serif;
-    color: var(--datepicker-month-name-color);
+    color: var(--color-datepicker-month-name);
     background-color: $md-drppicker-bg-color;
     border-radius: 4px;
     width: $md-drppicker-width;
     display: flex;
     margin-top: 0;
     font-size: 14px;
-    background-color: var(--datepicker-background-color);
+    background-color: var(--color-datepicker-background);
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.16), 0 2px 8px 0 rgba(0, 0, 0, 0.12);
     &.double {
         width: 100%;
@@ -212,10 +211,10 @@ $input-height: 3rem !default;
         /* new calendar */
     }
     .calendar-table {
-        border: $md-drppicker-calendar-border-size solid var(--datepicker-background-color);
+        border: $md-drppicker-calendar-border-size solid var(--color-datepicker-background);
         padding: $md-drppicker-calendar-margin;
         border-radius: $md-drppicker-calendar-border-radius;
-        background-color: var(--datepicker-background-color);
+        background-color: var(--color-datepicker-background);
     }
 
     table,
@@ -227,13 +226,13 @@ $input-height: 3rem !default;
 
     th,
     .th-div {
-        color: $opium;
+        color: var(--color-primary-datepicker-md-drppicker-th-div);
     }
     th.month.drp-animate,
     .month.drp-animate {
         font-size: 12px;
         text-align: left;
-        color: $nero;
+        color: var(--color-nero);
         font-weight: 600;
         .year-name {
             padding-left: 5px;
@@ -297,7 +296,7 @@ $input-height: 3rem !default;
 
         &.week {
             font-size: 80%;
-            color: $very-light-gray;
+            color: var(--color-very-light-gray);
         }
     }
 
@@ -361,14 +360,14 @@ $input-height: 3rem !default;
 
         &.week {
             font-size: 80%;
-            color: $very-light-gray;
+            color: var(--color-very-light-gray);
         }
     }
     td,
     .td-div {
-        color: var(--datepicker-date-color);
+        color: var(--color-datepicker-date);
         margin: 0em 0;
-        background-color: var(--datepicker-background-color) !important;
+        background-color: var(--color-datepicker-background) !important;
         &.off {
             &,
             &.in-range,
@@ -381,27 +380,27 @@ $input-height: 3rem !default;
         }
         &.in-range-start.activatedDate.in-range,
         &.in-range-end.activatedDate.in-range {
-            color: $white !important;
+            color: var(--color-white) !important;
         }
         &.in-range-start,
         &.in-range-end {
             span {
-                background-color: $midnight-blue !important;
+                background-color: var(--color-datepicker-selected-month) !important;
                 border-radius: 50%;
-                color: $white !important;
-                border-color: $midnight-blue;
+                color: var(--color-white) !important;
+                border-color: var(--color-datepicker-selected-month);
             }
             &:hover {
                 span {
-                    background-color: $white-smoke !important;
-                    color: $nero !important;
-                    border-color: $gray;
+                    background-color: var(--color-datepicker-rightside-list-secondary-text-hover) !important;
+                    color: var(--color-common-primary-text) !important;
+                    border-color: var(--color-gray);
                 }
             }
         }
         // Date Range
         &.in-range {
-            background-color: $hawkes-blue;
+            background-color: var(--color-primary-datepicker-in-range-background);
             border-color: $md-drppicker-in-range-border-color;
             color: $md-drppicker-in-range-color;
             // TODO: Should this be static or should it be parameterized?
@@ -411,7 +410,7 @@ $input-height: 3rem !default;
         }
         &.in-range::before {
             content: "";
-            background-color: $quartz !important;
+            background-color: var(--color-datepicker-selected-date-range-background) !important;
             width: 100%;
             height: 100%;
             left: 0px;
@@ -421,7 +420,7 @@ $input-height: 3rem !default;
         }
         &.in-range.end-date::before {
             content: "";
-            background-color: $quartz !important;
+            background-color: var(--color-datepicker-selected-date-range-background) !important;
             width: 84%;
             height: 100%;
             left: 0px;
@@ -432,7 +431,7 @@ $input-height: 3rem !default;
         }
         &.start-date::before {
             content: "";
-            background-color: $quartz !important;
+            background-color: var(--color-datepicker-selected-date-range-background) !important;
             width: 100%;
             height: 100%;
             left: 0;
@@ -503,7 +502,7 @@ $input-height: 3rem !default;
     td,
     option {
         &.disabled {
-            color: $nobel;
+            color: var(--color-nobel);
             cursor: not-allowed;
             text-decoration: line-through;
         }
@@ -513,7 +512,7 @@ $input-height: 3rem !default;
     .td-div,
     option {
         &.disabled {
-            color: $nobel;
+            color: var(--color-nobel);
             cursor: not-allowed;
             text-decoration: line-through;
         }
@@ -524,7 +523,7 @@ $input-height: 3rem !default;
     .td-div,
     option {
         &.disabled {
-            color: $nobel;
+            color: var(--color-nobel);
             cursor: not-allowed;
             text-decoration: line-through;
         }
@@ -553,8 +552,8 @@ $input-height: 3rem !default;
         &.ampm-select {
             width: 50px;
             margin: 0 auto;
-            background: $whisper-light;
-            border: 1px solid $whisper-light;
+            background: var(--color-whisper-light);
+            border: 1px solid var(--color-whisper-light);
             padding: 2px;
             outline: 0;
             font-size: 12px;
@@ -589,7 +588,7 @@ $input-height: 3rem !default;
         position: relative;
     }
     .calendar-time select.disabled {
-        color: $very-light-gray;
+        color: var(--color-very-light-gray);
         cursor: not-allowed;
     }
     .label-input {
@@ -632,7 +631,7 @@ $input-height: 3rem !default;
     /* ranges */
     .show-ranges {
         .drp-calendar.left {
-            border-left: 1px solid $gainsboro;
+            border-left: 1px solid var(--color-gainsboro);
         }
     }
     .ranges {
@@ -641,8 +640,8 @@ $input-height: 3rem !default;
         margin: 0;
         display: flex;
         flex-direction: column;
-        border-left: 1px solid $gainsboro;
-        background-color: var(--datepicker-background-color);
+        border-left: 1px solid var(--color-gainsboro);
+        background-color: var(--color-datepicker-background);
         height: 490px !important;
         .range-container {
             ul {
@@ -654,7 +653,7 @@ $input-height: 3rem !default;
                 flex-direction: column;
                 li {
                     position: relative;
-                    border-bottom: 1px solid $gainsboro;
+                    border-bottom: 1px solid var(--color-gainsboro);
                     button {
                         padding: 12px 10px;
                         width: 100%;
@@ -663,7 +662,8 @@ $input-height: 3rem !default;
                         text-align: left;
                         cursor: pointer;
                         font-size: 14px;
-                        color: var(--datepicker-rightside-list-text-color);
+                        color: var(--color-datepicker-rightside-list-text);
+                        background-color: var(--color-dropdown-primary-background);
                         border-left: 3px solid transparent !important;
                         .available.prev {
                             transform: rotate(180deg);
@@ -672,8 +672,8 @@ $input-height: 3rem !default;
                             position: absolute;
                             z-index: 1017;
                             min-width: 96px;
-                            background-color: $white;
-                            box-shadow: 0px 2px 8px $moody-blue;
+                            background-color: var(--color-white);
+                            box-shadow: 0px 2px 8px var(--color-primary-datepicker-drop-down-box-shadow);
                             left: 28px;
                             top: -3px;
                             border-radius: 2px;
@@ -689,14 +689,14 @@ $input-height: 3rem !default;
                             background-position-y: center;
                             border-radius: 50%;
                             &:active {
-                                background-color: $wistful;
+                                background-color: var(--color-wistful);
                             }
                         }
                         &.active {
-                            background-color: var(--datepicker-rightside-list-secondary-color-text-hover) !important;
-                            border-left: 3px solid var(--datepicker-selected-month-color) !important;
+                            background-color: var(--color-datepicker-rightside-list-secondary-text-hover) !important;
+                            border-left: 3px solid var(--color-datepicker-selected-month) !important;
                             font-family: "opensans-semibold";
-                            color: var(--datepicker-selected-month-color);
+                            color: var(--color-datepicker-selected-month);
                         }
                         &[disabled] {
                             opacity: 0.3;
@@ -710,7 +710,7 @@ $input-height: 3rem !default;
                     }
                 }
                 li:hover {
-                    background-color: var(--datepicker-rightside-list-primary-color-text-hover);
+                    background-color: var(--color-datepicker-rightside-list-primary-text-hover);
                 }
             }
             ul.range-list {
@@ -775,7 +775,7 @@ $input-height: 3rem !default;
         text-align: center;
         margin: 0;
         padding-right: 0;
-        background-color: var(--datepicker-background-color);
+        background-color: var(--color-datepicker-background);
         padding-top: 20px;
         padding-bottom: 20px;
         z-index: 999 !important;
@@ -800,17 +800,17 @@ $input-height: 3rem !default;
         font-size: 14px;
     }
     .btn.btn-danger {
-        background: $whisper-color;
-        color: $scarlet;
-        border: 1px solid $whisper-color;
+        background: var(--color-whisper-color);
+        color: var(--color-primary-datepicker-btn-btn-danger);
+        border: 1px solid var(--color-whisper-color);
         margin-right: 10px;
         &:hover,
         &:active,
         &:focus,
         &:active:focus {
-            background: $gainsboro;
-            color: $scarlet;
-            border-color: $gainsboro;
+            background: var(--color-gainsboro);
+            color: var(--color-primary-datepicker-btn-btn-danger-hover-active-focus);
+            border-color: var(--color-gainsboro);
             outline: none;
             box-shadow: none;
         }
@@ -819,16 +819,16 @@ $input-height: 3rem !default;
         }
     }
     .btn.btn-success {
-        background: $light-sea-green;
-        color: $white;
-        border: 1px solid $light-sea-green;
+        background: var(--color-light-sea-green);
+        color: var(--color-white);
+        border: 1px solid var(--color-light-sea-green);
         &:hover,
         &:active,
         &:focus,
         &:active:focus {
-            background: $teal;
-            color: $white;
-            border: 1px solid $teal;
+            background: var(--color-primary-datepicker-btn-success-hover-active-focus);
+            color: var(--color-white);
+            border: 1px solid var(--color-primary-datepicker-btn-success-hover-active-focus);
         }
         &:disabled {
             opacity: 0.5;
@@ -836,9 +836,9 @@ $input-height: 3rem !default;
     }
     .clear {
         box-shadow: none;
-        background-color: $white !important;
+        background-color: var(--color-white) !important;
         svg {
-            color: $red;
+            color: var(--color-danger);
             fill: currentColor;
         }
     }
@@ -857,10 +857,10 @@ $input-height: 3rem !default;
     display: none;
 }
 .md-drppicker td.in-range.in-range-start.in-range-end span {
-    background-color: $portage !important;
+    background-color: var(--color-primary-datepicker-in-range-end-date-background) !important;
     border-radius: 50%;
-    color: $nero !important;
-    border-color: $gray;
+    color: var(--color-nero) !important;
+    border-color: var(--color-gray);
 }
 td.in-range.in-range-start.in-range-hovered.in-range-end::before {
     border: none !important;
@@ -880,10 +880,10 @@ td.in-range.in-range-start.in-range-hovered.in-range-end::before {
     display: none;
 }
 .md-drppicker .td-div.in-range.in-range-start.in-range-end span {
-    background-color: $quartz !important;
+    background-color: var(--color-datepicker-selected-date-background) !important;
     border-radius: 50%;
-    color: $nero !important;
-    border-color: $gray;
+    color: var(--color-common-primary-text) !important;
+    border-color: var(--color-gray);
 }
 .td-div.in-range.in-range-start.in-range-hovered.in-range-end::before {
     border: none !important;
@@ -895,7 +895,7 @@ td.in-range.in-range-start.in-range-hovered.in-range-end::before {
     position: absolute;
     top: 34px;
     left: 0;
-    color: $red !important;
+    color: var(--color-danger) !important;
 }
 .mb-3 {
     margin-bottom: 30px;
@@ -904,7 +904,7 @@ td.in-range.in-range-start.in-range-hovered.in-range-end::before {
     position: relative;
 }
 .ranges-perfect-scrollbar {
-    border-right: 1px solid $gainsboro;
+    border-right: 1px solid var(--color-gainsboro);
 }
 .ranges-perfect-scrollbar .ps__rail-x {
     display: none;
@@ -1047,8 +1047,8 @@ td span {
 }
 
 td:hover span {
-    background-color: $white-smoke;
-    border: 1px solid $gray;
+    background-color: var(--color-white-smoke);
+    border: 1px solid var(--color-gray);
 }
 
 /* new calendar */
@@ -1056,8 +1056,8 @@ td:hover span {
     border: 1px solid transparent;
 }
 .td-div:hover span {
-    background-color: $white-smoke;
-    border: 1px solid $gray;
+    background-color: var(--color-white-smoke);
+    border: 1px solid var(--color-gray);
 }
 /* new calendar */
 
@@ -1070,28 +1070,28 @@ td:hover span {
 
 .md-drppicker td.start-date.active {
     span {
-        background-color: $midnight-blue !important;
-        color: $white !important;
-        border-color: $midnight-blue !important;
+        background-color: var(--color-datepicker-selected-month) !important;
+        color: var(--color-white) !important;
+        border-color: var(--color-datepicker-selected-month) !important;
     }
 }
 
 /* new calendar */
 .md-drppicker .td-div.start-date.active {
     span {
-        background-color: $midnight-blue !important;
-        color: $white !important;
-        border-color: $midnight-blue !important;
+        background-color: var(--color-datepicker-selected-month) !important;
+        color: var(--color-white) !important;
+        border-color: var(--color-datepicker-selected-month) !important;
     }
 }
 /* new calendar */
 
 .md-drppicker td.end-date.active {
-    background-color: $white !important;
+    background-color: var(--color-white) !important;
 
     span {
-        background-color: $portage !important;
-        color: $nero !important;
+        background-color: var(--color-primary-datepicker-in-range-end-date-background) !important;
+        color: var(--color-common-primary-text) !important;
     }
 
     .available:hover {
@@ -1099,8 +1099,8 @@ td:hover span {
     }
     &:hover {
         span {
-            background-color: $white-smoke !important;
-            border-color: $gray !important;
+            background-color: var(--color-white-smoke) !important;
+            border-color: var(--color-gray) !important;
         }
     }
 }
@@ -1146,7 +1146,7 @@ td span {
 
 .d-container {
     width: 100%;
-    background-color: $white;
+    background-color: var(--color-white);
     z-index: 100;
     // overflow-x: hidden;
     // overflow-y: auto;
@@ -1176,7 +1176,7 @@ td span {
         font-style: normal;
         &:hover {
             border-radius: 50px;
-            background-color: $whisper-color;
+            background-color: var(--color-whisper-color);
             cursor: pointer;
         }
     }
@@ -1231,27 +1231,27 @@ td span {
 }
 
 .activatedDate {
-    background-color: $hawkes-blue;
+    background-color: var(--color-primary-datepicker-activatedDate);
 }
 
 .activatedDate span {
-    color: $nero !important;
+    color: var(--color-nero) !important;
     background-color: transparent !important;
 }
 
 .activatedDate.in-range.in-range-start span {
-    color: $nero;
+    color: var(--color-nero);
 }
 .activatedDate:hover {
     span {
-        background-color: $white-smoke !important;
-        border-color: $gray !important;
+        background-color: var(--color-white-smoke) !important;
+        border-color: var(--color-gray) !important;
     }
 }
 
 .btn-angle-down {
     position: relative;
-    background-color: $gainsboro-light;
+    background-color: var(--color-primary-datepicker-btn-angle-down);
 }
 
 .angle-down {
@@ -1263,7 +1263,7 @@ td span {
 
 .sub-ranges-cal {
     position: static;
-    background-color: $white;
+    background-color: var(--color-white);
     right: 0;
     top: 0;
     z-index: 9999;
@@ -1274,9 +1274,9 @@ td span {
     border-left: none;
     li {
         &:hover {
-            background-color: $lavender !important;
+            background-color: var(--color-lavender) !important;
             button {
-                color: $jacksons-purple !important;
+                color: var(--color-dropdown-list-senary) !important;
             }
         }
     }
@@ -1349,7 +1349,7 @@ td span {
                 position: sticky;
                 top: 0;
                 z-index: 1;
-                background-color: var(--datepicker-background-color);
+                background-color: var(--color-datepicker-background);
                 .sticky-header {
                     width: calc(100% - 3px) !important;
                     th.days-td {
@@ -1374,7 +1374,7 @@ td span {
                     .available {
                         width: 30px !important;
                         height: 30px;
-                        background-color: $gainsboro !important;
+                        background-color: var(--color-gainsboro) !important;
                         border-radius: 50px;
                         padding: 0 15px;
                     }
@@ -1393,7 +1393,7 @@ td span {
                         width: 50%;
                         display: flex;
                         padding-bottom: 6px;
-                        border-bottom: 3px solid $quartz;
+                        border-bottom: 3px solid var(--color-datepicker-selected-date-range-background);
                         input {
                             width: 98px;
                             height: auto;
@@ -1401,8 +1401,8 @@ td span {
                             padding: 0;
                             border: none;
                             border-bottom: none;
-                            color: var(--datepicker-unselected-month-color);
-                            background-color: var(--datepicker-background-color);
+                            color: var(--color-datepicker-unselected-month);
+                            background-color: var(--color-datepicker-background);
                             &.activeSelectedDate {
                                 border-bottom: none;
                             }
@@ -1415,24 +1415,24 @@ td span {
                             display: flex;
                             align-items: flex-start;
                             align-items: center;
-                            color: var(--datepicker-input-label-color);
+                            color: var(--color-datepicker-input-label);
                             cursor: pointer;
                         }
                         &.focused-date {
-                            border-bottom-color: var(--datepicker-selected-month-color);
+                            border-bottom-color: var(--color-datepicker-selected-month);
                             cursor: pointer;
                             input {
-                                color: var(--datepicker-selected-month-color);
+                                color: var(--color-datepicker-selected-month);
                                 cursor: pointer;
                             }
                         }
                     }
 
                     .activeSelectedDate {
-                        border-bottom-color: $primary !important;
+                        border-bottom-color: var(--color-primary) !important;
                         box-shadow: none !important;
                         &.invalid-date-input {
-                            border-bottom-color: $red !important;
+                            border-bottom-color: var(--color-danger) !important;
                             box-shadow: none !important;
                         }
                     }
@@ -1477,7 +1477,7 @@ td span {
 }
 
 .days-upto-select {
-    border-top: 1px solid $gainsboro;
+    border-top: 1px solid var(--color-gainsboro);
     ul {
         list-style: none;
         margin: 0 auto;
@@ -1493,13 +1493,13 @@ td span {
                 text-align: left;
                 cursor: pointer;
                 font-size: 12px;
-                color: var(--datepicker-rightside-list-text-color);
+                color: var(--color-datepicker-rightside-list-text);
                 .drop-down {
                     position: absolute;
                     z-index: 1017;
                     min-width: 96px;
-                    background-color: $white;
-                    box-shadow: 0px 2px 8px $moody-blue;
+                    background-color: var(--color-white);
+                    box-shadow: 0px 2px 8px var(--color-primary-datepicker-drop-down-box-shadow);
                     left: 28px;
                     top: -3px;
                     border-radius: 2px;
@@ -1515,12 +1515,12 @@ td span {
                     background-position-y: center;
                     border-radius: 50%;
                     &:active {
-                        background-color: $wistful;
+                        background-color: var(--color-wistful);
                     }
                 }
                 &.active {
-                    background-color: $whisper-color !important;
-                    border-left: 3px solid $speech-blue !important;
+                    background-color: var(--color-whisper-color) !important;
+                    border-left: 3px solid var(--color-datepicker-mat-select-arrow-active) !important;
                 }
                 &[disabled] {
                     opacity: 0.3;
@@ -1536,17 +1536,18 @@ td span {
                 font-size: 12px;
                 margin-bottom: 0;
                 border: none;
-                border-bottom: 1px solid $gainsboro;
+                border-bottom: 1px solid var(--color-gainsboro);
+                color: var(--color-common-septenary-text);
                 background-color: transparent;
                 &:focus {
-                    border-bottom-color: $midnight-blue !important;
-                    box-shadow: 0 1px 0 0 $midnight-blue !important;
+                    border-bottom-color: var(--color-common-senary-text) !important;
+                    box-shadow: 0 1px 0 0 var(--color-common-senary-text) !important;
                     outline: none;
                 }
             }
         }
         li:hover {
-            background-color: var(--datepicker-rightside-list-secondary-color-text-hover);
+            background-color: var(--color-datepicker-rightside-list-secondary-text-hover);
         }
     }
 }
@@ -1562,8 +1563,8 @@ td span {
 .in-range-hovered {
     &::before {
         content: "";
-        border-bottom: 1px dashed $gray;
-        border-top: 1px dashed $gray;
+        border-bottom: 1px dashed var(--color-gray);
+        border-top: 1px dashed var(--color-gray);
         width: 100%;
         height: 100%;
         left: 0px;
@@ -1591,7 +1592,7 @@ cdk-virtual-scroll-viewport::-webkit-scrollbar-track {
 
 /* Handle */
 cdk-virtual-scroll-viewport::-webkit-scrollbar-thumb {
-    background: $nobel;
+    background: var(--color-nobel);
     border-radius: 10px;
 }
 .calendar-d-flex {
@@ -1646,7 +1647,7 @@ cdk-virtual-scroll-viewport::-webkit-scrollbar-thumb {
                     box-shadow: 0 0 6px rgba(0, 0, 0, 0.3);
                     position: fixed;
                     width: 100%;
-                    background-color: $white;
+                    background-color: var(--color-white);
                     z-index: 1;
                     img {
                         padding-right: 20px;
@@ -1660,7 +1661,7 @@ cdk-virtual-scroll-viewport::-webkit-scrollbar-thumb {
                         }
                         button {
                             padding: 12px 10px;
-                            border-bottom: 1px solid $gainsboro;
+                            border-bottom: 1px solid var(--color-gainsboro);
                             font-size: 14px;
                         }
                     }
@@ -1715,7 +1716,7 @@ cdk-virtual-scroll-viewport::-webkit-scrollbar-thumb {
             top: 0;
             width: 100%;
             left: 0;
-            background-color: $white;
+            background-color: var(--color-white);
             z-index: 1;
             min-width: 100%;
             padding-top: 0;
@@ -1727,7 +1728,7 @@ cdk-virtual-scroll-viewport::-webkit-scrollbar-thumb {
                 .calender-body {
                     .upper-part {
                         top: 88px;
-                        background-color: $white !important;
+                        background-color: var(--color-white) !important;
                         z-index: 99;
                         padding-top: 15px;
                         .sticky-header {
@@ -1777,7 +1778,7 @@ cdk-virtual-scroll-viewport::-webkit-scrollbar-thumb {
                 box-shadow: 0 2px 3px rgba(0, 0, 0, 0.2);
                 z-index: 2;
                 padding-top: 10px;
-                background-color: $white;
+                background-color: var(--color-white);
                 z-index: 991;
                 .close-save-btn {
                     display: flex;
@@ -1785,7 +1786,7 @@ cdk-virtual-scroll-viewport::-webkit-scrollbar-thumb {
                     justify-content: space-between;
                     width: 100%;
                     a {
-                        color: $deep-sky-blue;
+                        color: var(--color-deep-sky-blue);
                         padding-right: 15px;
                         font-size: 14px;
                     }
@@ -1808,7 +1809,7 @@ cdk-virtual-scroll-viewport::-webkit-scrollbar-thumb {
                     font-size: 12px;
                     display: block;
                     padding-bottom: 2px;
-                    color: $gray;
+                    color: var(--color-gray);
                     padding-left: 50px;
                 }
                 .custom-edit-block {
@@ -1817,7 +1818,7 @@ cdk-virtual-scroll-viewport::-webkit-scrollbar-thumb {
                     align-items: center;
                     .custom-date-range {
                         font-size: 18px;
-                        color: $nero;
+                        color: var(--color-nero);
                         padding-left: 50px;
                     }
                     .edit-dates {
@@ -1878,7 +1879,7 @@ cdk-virtual-scroll-viewport::-webkit-scrollbar-thumb {
         position: absolute !important;
         bottom: 0 !important;
         right: 0 !important;
-        background-color: $white !important;
+        background-color: var(--color-white) !important;
         z-index: 99999 !important;
         width: 100% !important;
         margin: 0 !important;
@@ -1955,7 +1956,7 @@ cdk-virtual-scroll-viewport::-webkit-scrollbar-thumb {
                 top: 0;
                 position: static;
                 border: none;
-                border-bottom: 1px solid $gainsboro;
+                border-bottom: 1px solid var(--color-gainsboro);
                 border-radius: 0;
             }
             .financial-year-dropdown {

@@ -1,8 +1,7 @@
-@import "../../../../../assets/css/color.scss";
 .list-item:focus,
 .list-item:focus .list-item {
-    color: $white !important;
-    background: var(--master-page-sidebar-active-list-color);
+    color: var(--color-white) !important;
+    background: var(--color-master-page-sidebar-active-list);
 }
 
 .virtual-group-list {

@@ -1,5 +1,3 @@
-@import "../../../assets/css/color.scss";
-
 :host {
     position: fixed;
     left: auto;
@@ -20,7 +18,7 @@
     border: 0;
     border-radius: 0;
     background: 0 0;
-    color: $white;
+    color: var(--color-white);
 }
 
 :host .container-fluid {
@@ -32,12 +30,12 @@
 }
 .form-header {
     padding: 20px 15px;
-    background: $midnight-blue;
-    color: $white;
+    background: var(--color-midnight-blue);
+    color: var(--color-white);
 }
 .aside-pane-form {
-    background-color: $white;
-    box-shadow: 0px 3px 6px $black-russian;
+    background-color: var(--color-white);
+    box-shadow: 0px 3px 6px var(--color-black-russian);
     padding: 15px 15px;
     height: calc(100vh - 90px);
     overflow: auto;

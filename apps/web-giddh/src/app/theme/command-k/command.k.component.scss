@@ -1,12 +1,10 @@
-@import "../../../assets/css/color.scss";
-
 :host {
     .search-wrapper {
         padding: 1.25rem 2rem 1.25rem 4.2rem;
         display: flex;
         flex-direction: row;
         align-items: center;
-        background-color: var(--popup-background-color);
+        background-color: var(--color-popup-background);
         flex-wrap: wrap !important;
         width: 100% !important;
         max-width: 580px;
@@ -17,7 +15,7 @@
             font-weight: normal;
             line-height: initial;
             width: 95%;
-            background-color: var(--popup-background-color);
+            background-color: var(--color-popup-background);
         }
         .icon-search-icon {
             position: absolute;
@@ -25,7 +23,7 @@
             right: 0;
             width: 4.2rem;
             text-align: center;
-            color: $gray;
+            color: var(--color-gray);
         }
     }
     .vR {
@@ -57,7 +55,7 @@
 }
 
 .universal-data-list-wrapper {
-    background-color: var(--popup-background-color);
+    background-color: var(--color-popup-background);
     overflow: auto;
     display: none;
     box-sizing: border-box;
@@ -113,7 +111,7 @@
                 min-height: auto;
             }
             .item-icon {
-                color: $nobel;
+                color: var(--color-nobel);
                 font-size: 14px;
                 .icon-account {
                     font-size: 11px;
@@ -125,7 +123,7 @@
             .item-details {
                 position: relative;
                 font-size: 14px;
-                color: var(--popup-list-head-text-color);
+                color: var(--color-popup-list-head-text);
                 text-transform: capitalize;
                 margin-left: 25px;
                 padding: 5px 0;
@@ -141,10 +139,10 @@
                 }
                 small {
                     font-size: 12px;
-                    color: $gray;
+                    color: var(--color-gray);
                 }
                 .command-hover-text {
-                    color: $white;
+                    color: var(--color-white);
                     right: 0;
                     text-transform: initial;
                     width: 25%;
@@ -158,15 +156,15 @@
             }
             // hover effect
             &.selected {
-                background-color: var(--popup-list-hover-color);
+                background-color: var(--color-popup-list-hover);
                 .item-details {
-                    color: $white;
+                    color: var(--color-white);
                     small {
-                        color: $white;
+                        color: var(--color-white);
                     }
                 }
                 .item-icon {
-                    color: $white;
+                    color: var(--color-white);
                 }
             }
         }
@@ -183,13 +181,13 @@
     padding: 10px;
     font-size: 20px;
     cursor: pointer;
-    color: var(--popup-list-input-text-color);
+    color: var(--color-popup-list-input-text);
 }
 
 ::ng-deep {
     .jumper-results {
         .block {
-            color: var(--popup-list-input-text-color);
+            color: var(--color-popup-list-input-text);
         }
     }
 }

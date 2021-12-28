@@ -1,5 +1,3 @@
-@import "../../../assets/css/color.scss";
-
 .form-horizontal .control-label {
     text-align: left;
 }
@@ -14,15 +12,15 @@
 
 .custom-multi-select {
     li {
-        background: $white-smoke;
-        color: $white;
+        background: var(--color-white-smoke);
+        color: var(--color-white);
         margin: 4px;
         padding: 2px 10px;
         font-size: 14px;
         border-radius: 3px;
         cursor: pointer;
         a {
-            color: $gray;
+            color: var(--color-gray);
         }
     }
 }
@@ -42,8 +40,8 @@
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    border-right: 1px solid $gainsboro;
-    color: $nobel;
+    border-right: 1px solid var(--color-gainsboro);
+    color: var(--color-nobel);
     left: 0;
 }
 .input-group-date-range-picker input.form-control {
@@ -56,10 +54,10 @@
     font-size: 14px;
 }
 .branch-card {
-    background-color: var(--common-background-color-for-all-components);
+    background-color: var(--color-common-primary-background-for-all-components);
     margin-bottom: 15px;
     font-size: 14px;
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--color-gainsboro);
 }
 .card-basic-details span:first-child {
     width: 60px;
@@ -69,22 +67,22 @@
 }
 .card-basic-details .clearfix {
     margin-bottom: 10px;
-    color: $nero;
+    color: var(--color-nero);
 }
 .clearfix {
     .icon-favorite-selected {
-        color: $rich-blue;
+        color: var(--color-rich-blue);
     }
     .icon-branch-icon,
     .icon-company-HO {
         padding: 4px 5px 0 0;
-        color: var(--common-senary-text-color);
+        color: var(--color-common-senary-text);
         font-size: 12px;
     }
 }
 .card-basic-details h2 {
     font-size: 16px;
-    color: var(--common-senary-text-color);
+    color: var(--color-common-senary-text);
     font-family: "opensans-bold";
     margin-bottom: 12px;
     white-space: normal;
@@ -95,15 +93,15 @@
 }
 .card-basic-details {
     padding: 20px;
-    border-bottom: 1px solid $gainsboro;
+    border-bottom: 1px solid var(--color-gainsboro);
 }
 .branch-sales-details {
-    border-top: 1px solid $gainsboro;
+    border-top: 1px solid var(--color-gainsboro);
     padding-top: 20px;
     label {
         font-family: "opensans-semibold";
         margin-bottom: 10px;
-        color: $night-rider;
+        color: var(--color-night-rider);
     }
     .total-amount {
         width: 70%;
@@ -111,7 +109,7 @@
 }
 
 .unlink a {
-    color: $chetwode-blue !important;
+    color: var(--color-chetwode-blue) !important;
     cursor: pointer;
 }
 
@@ -129,7 +127,7 @@
     cursor: pointer;
 }
 .card-basic-details a#button-basic {
-    color: $gray;
+    color: var(--color-gray);
     font-size: 20px;
     width: 32px;
     height: 32px;
@@ -146,7 +144,7 @@
 }
 .btn-link {
     border-width: 0px !important;
-    background: $white !important;
+    background: var(--color-white) !important;
 }
 
 .modal-width {
@@ -170,21 +168,21 @@
     display: flex;
     flex-direction: row;
     .clear-filter-btn {
-        color: $midnight-blue;
+        color: var(--color-midnight-blue);
         font-size: 14px;
-        border: 1px solid $midnight-blue;
+        border: 1px solid var(--color-midnight-blue);
         border-radius: 20px;
         padding: 0 12px;
         width: 150px !important;
         display: flex;
         align-items: center;
         justify-content: center;
-        background-color: $white;
+        background-color: var(--color-white);
         i {
             font-size: 12px;
             padding-right: 8px;
             top: 0;
-            color: $midnight-blue;
+            color: var(--color-midnight-blue);
         }
     }
 }
@@ -195,14 +193,14 @@
     align-items: center;
     font-size: 18px;
     border-radius: 5px;
-    background: $white;
+    background: var(--color-white);
     margin-right: 15px;
 
     li {
         padding-top: 5px;
         &:hover {
-            background-color: $lavender;
-            color: $jacksons-purple;
+            background-color: var(--color-lavender);
+            color: var(--color-jacksons-purple);
         }
     }
 }
@@ -212,7 +210,7 @@
 }
 
 .active-status {
-    color: $light-green;
+    color: var(--color-primary-branch-active-status);
 }
 
 .status-bullet {
@@ -223,7 +221,7 @@
 }
 
 .parent-branch {
-    color: $gray;
+    color: var(--color-gray);
 }
 
 .star-radio {
@@ -244,8 +242,8 @@
         &:before {
             content: "\2605";
             position: absolute;
-            border-color: $chetwode-blue;
-            color: $chetwode-blue;
+            border-color: var(--color-chetwode-blue);
+            color: var(--color-chetwode-blue);
         }
     }
 }
@@ -256,7 +254,7 @@
 
 .icon-advance-search {
     font-size: 18px;
-    color: $gray;
+    color: var(--color-gray);
 }
 
 .more-btn {
@@ -271,8 +269,8 @@
         padding: 5px;
         cursor: default;
         &:hover {
-            background-color: $lavender;
-            color: $jacksons-purple;
+            background-color: var(--color-lavender);
+            color: var(--color-jacksons-purple);
         }
     }
 }
@@ -290,9 +288,9 @@
 .btn-primary.active,
 .btn-primary:active,
 .open > .dropdown-toggle.btn-primary {
-    color: $night-rider;
-    background-color: $lavender;
-    border-color: $lavender;
+    color: var(--color-night-rider);
+    background-color: var(--color-lavender);
+    border-color: var(--color-lavender);
     box-shadow: none !important;
 }
 

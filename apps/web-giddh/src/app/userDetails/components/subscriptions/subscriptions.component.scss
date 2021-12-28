@@ -1,5 +1,3 @@
-@import "../../../../assets/css/color.scss";
-
 .transaction-list .box {
     height: 400px;
     overflow-y: auto;
@@ -27,21 +25,21 @@
     position: absolute;
     right: 0;
     top: -60px;
-    background: $lavender;
+    background: var(--color-lavender);
     font-size: 14px;
     padding: 12px;
     border-radius: 3px;
-    border: 1px solid $red;
+    border: 1px solid var(--color-danger);
 }
 .subscription-dropdown {
     display: block;
     clear: both;
 }
 .subscription-dropdown .btn {
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--color-gainsboro);
     width: 342px;
     text-align: left;
-    background: $white;
+    background: var(--color-white);
 }
 .subscription-dropdown .btn .caret {
     margin-top: 9px;
@@ -59,9 +57,9 @@
     font-size: 14px;
     text-align: left;
     list-style: none;
-    background-color: var(--dropdown-primary-background-color);
+    background-color: var(--color-dropdown-primary-background);
     background-clip: padding-box;
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--color-gainsboro);
     border: 1px solid rgba(0, 0, 0, 0.15);
     border-radius: 4px;
     -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
@@ -77,16 +75,16 @@
 }
 .subscription-dropdown .dropdown-menu li {
     padding: 5px 4px;
-    border-bottom: 1px solid $gainsboro;
+    border-bottom: 1px solid var(--color-gainsboro);
     transition: 0.5s all ease;
 }
 .subscription-dropdown .dropdown-menu li.active {
-    background: $lavender;
+    background: var(--color-lavender);
 }
 .subscription-dropdown .dropdown-menu li.active a,
 .subscription-dropdown .dropdown-menu li.active a strong {
     background: none;
-    color: $chetwode-blue;
+    color: var(--color-chetwode-blue);
 }
 .subscription-dropdown li a {
     display: block;
@@ -96,7 +94,7 @@
 }
 .subscription-dropdown li:hover a,
 .subscription-dropdown li:hover {
-    background: $gray-95;
+    background: var(--color-gray-95);
 }
 .subscription-dropdown .dropdown-menu li a span {
     position: absolute;
@@ -109,18 +107,18 @@
     height: auto !important;
 }
 .subscription-table {
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--color-gainsboro);
 }
 .custom-dropdown .dropdown-toggle {
     background: no-repeat;
     border: 0px;
     font-size: 20px;
     padding: 0px;
-    color: $nobel;
+    color: var(--color-nobel);
     line-height: 14px;
 }
 .associated-companies-li {
-    border-bottom: 1px solid $gainsboro;
+    border-bottom: 1px solid var(--color-gainsboro);
     list-style-type: none;
     position: relative;
     display: flex;
@@ -128,7 +126,7 @@
     justify-content: space-between;
 }
 .associated-companies-li > a {
-    color: var(--common-primary-text-color);
+    color: var(--color-common-primary-text);
     font-size: 14px;
     padding: 12px 20px;
     display: flex;
@@ -142,7 +140,7 @@
     min-width: 20px;
 }
 .associated-companies-li > a:hover {
-    color: var(--common-primary-text-color-hover);
+    color: var(--color-common-primary-text-hover);
 }
 .associated-company-name {
     flex-direction: column;
@@ -158,10 +156,10 @@
     }
 }
 .box-border {
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--color-gainsboro);
 }
 .active {
-    color: $light-green;
+    color: var(--color-primary-subscription-active);
     font-size: 14px;
 }
 .green-dot,
@@ -171,31 +169,31 @@
     height: 9px;
     display: inline-block;
     border-radius: 40px;
-    background-color: $light-green;
+    background-color: var(--color-primary-subscription-green-red-orange-dot-background);
 }
 .red-dot {
-    background-color: $red;
+    background-color: var(--color-danger);
 }
 .orange-dot {
-    background-color: $orange;
+    background-color: var(color-orange);
 }
 .basic > tbody > tr td:first-child,
 .basic > thead > tr th:first-child {
-    border-left: 0px solid $gainsboro !important;
+    border-left: 0px solid var(--color-gainsboro) !important;
 }
 .basic > tbody > tr td:last-child,
 .basic > thead > tr th:last-child {
-    border-right: 0px solid $gainsboro !important;
+    border-right: 0px solid var(--color-gainsboro) !important;
 }
 .table-subscription {
-    border-right: 1px solid $gainsboro;
-    border-left: 1px solid $gainsboro;
-    border-bottom: 1px solid $gainsboro;
+    border-right: 1px solid var(--color-gainsboro);
+    border-left: 1px solid var(--color-gainsboro);
+    border-bottom: 1px solid var(--color-gainsboro);
     min-height: 360px;
     overflow-y: auto;
 }
 .left-div {
-    border-left: 1px solid $gainsboro;
+    border-left: 1px solid var(--color-gainsboro);
     padding-left: 0px;
     padding-bottom: 60px;
     padding-right: 0;
@@ -208,7 +206,7 @@
 .giddh-table tbody {
     tr:last-child {
         td {
-            border-bottom: 0px solid $gainsboro !important;
+            border-bottom: 0px solid var(--color-gainsboro) !important;
         }
     }
 }
@@ -227,7 +225,7 @@
     max-height: 600px;
 }
 .plan-row {
-    color: $nero;
+    color: var(--color-nero);
 }
 .btn-group.custom-dropdown {
     line-height: 14px;
@@ -243,7 +241,7 @@
     }
 }
 .trial-plan-section {
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--color-gainsboro);
 }
 
 .plan-row-wrapper {
@@ -336,7 +334,7 @@
             margin-top: 10px;
             overflow: hidden;
             .associated-company-heading {
-                background-color: $gainsboro;
+                background-color: var(--color-gainsboro);
                 padding: 5px 5px;
                 margin-top: 15px;
             }
