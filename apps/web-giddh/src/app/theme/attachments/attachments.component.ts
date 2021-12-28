@@ -462,8 +462,8 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
                             this.voucherPdf = null;
                             this.refreshAfterClose = true;
 
-                            this.previewFileAfterDelete();
                             this.changeDetectionRef.detectChanges();
+                            this.previewFileAfterDelete();
 
                             if (autoDeleteEntries) {
                                 this.closeModal?.nativeElement?.click();
