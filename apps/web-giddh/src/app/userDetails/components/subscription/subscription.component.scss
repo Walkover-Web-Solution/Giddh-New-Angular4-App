@@ -723,6 +723,23 @@
 .mat-expansion-panel:not(.mat-expanded) .mat-expansion-panel-header:hover {
     background: $solitude-light;
 }
+
+.main-content-subscription {
+    float: left;
+    width: 100%;
+
+    .full-subscription-wrapper {
+        float: left;
+        width: 100%;
+    }
+
+    .no-data {
+        margin-top: 19% !important;
+        position: absolute;
+        width: 100%;
+    }
+}
+
 @media screen and (max-width: 1024px) and (orientation: landscape) {
     * {
         font-size: 14px;
