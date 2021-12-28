@@ -117,14 +117,16 @@
                                 </form>
                             </div>
                             <!-- Invoice filter section ends -->
-                            <button
-                                mat-raised-button
-                                class="btn btn-group btn-filter desktop-button-filter"
-                                *ngIf="selectedCheckedContacts?.length > 0"
-                                (click)="clearSelectedContacts()"
-                            >
-                                <span class="icon-cross"></span> {{ commonLocaleData?.app_clear_selected }}
-                            </button>
+                            <div class="button-content">
+                                <button
+                                    mat-raised-button
+                                    class="btn btn-group btn-filter desktop-button-filter"
+                                    *ngIf="selectedCheckedContacts?.length > 0"
+                                    (click)="clearSelectedContacts()"
+                                >
+                                    <span class="icon-cross"></span> {{ commonLocaleData?.app_clear_selected }}
+                                </button>
+                            </div>
 
                             <div class="pd-t1-md d-flex justify-content-between">
                                 <!-- On company class will show only if we are on company mode and branches length will be less than equal 2 -->
@@ -564,7 +566,7 @@
     </div>
 
     <ng-template #mainTable>
-        <div class="mobile-card-wrapper table-responsive vendor-page">
+        <div class="mobile-card-wrapper table-responsive vendor-page all-table">
             <ng-container *ngIf="activeTab === 'customer'">
                 <table
                     mat-table
@@ -618,7 +620,7 @@
                             class="position-relative word-wrap"
                             [attr.data-title]="localeData?.customer"
                         >
-                            <div class="customer-name-filed">
+                            <div class="customer-name-filed cursor-pointer" (dblclick)="trigger?.openMenu()">
                                 <div class="select-single-checkbox-wrapper">
                                     <mat-checkbox
                                         color="primary"
@@ -637,6 +639,7 @@
                                     id="edit-model-basic"
                                     class="table-menu-first-td"
                                     [matMenuTriggerFor]="editModelBasic"
+                                    #trigger="matMenuTrigger"
                                 >
                                     <span class="icon-dots-three-vertical"></span>
                                 </button>
@@ -966,7 +969,7 @@
                             class="position-relative word-wrap"
                             [attr.data-title]="commonLocaleData?.app_vendor_name"
                         >
-                            <div class="vendor-name-field">
+                            <div class="vendor-name-field cursor-pointer" (dblclick)="trigger?.openMenu()">
                                 <div class="select-single-checkbox-wrapper">
                                     <mat-checkbox
                                         [ngClass]="{ 'visible-check-box': selectedCheckedContacts.length }"
@@ -984,6 +987,7 @@
                                     id="edit-model-basic2"
                                     class="table-menu-first-td"
                                     [matMenuTriggerFor]="dropdownBasic2"
+                                    #trigger="matMenuTrigger"
                                 >
                                     <span class="icon-dots-three-vertical"></span>
                                 </button>
