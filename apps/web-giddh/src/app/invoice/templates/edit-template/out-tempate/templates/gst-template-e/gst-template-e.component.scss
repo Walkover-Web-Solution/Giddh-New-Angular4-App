@@ -1,11 +1,10 @@
-@import "../../../../../../../assets/css/color.scss";
 strong,
 .strong {
     font-weight: bold;
 }
 body {
     font-size: 12px;
-    background: $white;
+    background: var(--color-white);
 }
 #template-header {
     width: auto;
@@ -27,12 +26,12 @@ body {
 }
 /* NOTE:  comment padding, max-width, border in #royal css for java */
 .seperator {
-    border-top: 1px solid $nobel;
+    border-top: 1px solid var(--color-nobel);
 }
 #royal {
     font: 12px/1 "Open Sans", sans-serif;
     overflow: auto;
-    background: $white;
+    background: var(--color-white);
     border: 1px solid #bfbfbf;
     max-width: 8.3in;
     width: 100%;
@@ -75,7 +74,7 @@ body {
     display: flex;
     align-items: center;
     padding: 5px 10px;
-    border-bottom: 1px solid $cinnabar-orange;
+    border-bottom: 1px solid var(--color-cinnabar-orange);
     float: right;
 }
 #royal .total-amount h2 {
@@ -162,7 +161,7 @@ tfoot.table-details tr th {
 
 #royal .item thead tr th {
     padding: 20px 8px 4px;
-    border-bottom: 1px solid $nobel;
+    border-bottom: 1px solid var(--color-nobel);
     line-height: 1.2rem;
 }
 
@@ -171,7 +170,7 @@ tfoot.table-details tr th {
 }
 
 #royal .item tfoot tr:last-child th {
-    /*border-top: 1px solid $nobel;*/
+    /*border-top: 1px solid var(--color-nobel);*/
     padding: 6px;
     line-height: 1.2rem;
     vertical-align: middle;
@@ -190,7 +189,7 @@ tfoot.table-details tr th {
 }
 
 #royal .bd-rb {
-    border-bottom: 1px solid$nobel;
+    border-bottom: 1px solidvar(--color-nobel);
     margin-bottom: 10px;
 }
 
@@ -211,7 +210,7 @@ tfoot.table-details tr th {
 
 #royal .subfooter hr {
     width: 100%;
-    border-bottom: 1px solid $very-light-gray;
+    border-bottom: 1px solid var(--color-very-light-gray);
     margin: 3px 0;
     border-top: 0 !important;
 }
@@ -241,7 +240,7 @@ tfoot.table-details tr th {
     line-height: 20px;
     padding: 15px;
     margin: 8px 0 0;
-    background: $white;
+    background: var(--color-white);
     width: auto;
 }
 
@@ -282,14 +281,14 @@ tfoot.table-details tr th {
 #royal .tax-table tbody tr td,
 #royal .tax-table tfoot tr th {
     padding: 6px;
-    border-right: 1px solid $nobel;
-    border-bottom: 1px solid $nobel;
+    border-right: 1px solid var(--color-nobel);
+    border-bottom: 1px solid var(--color-nobel);
 }
 
 #royal .tax-table thead tr th:last-child,
 #royal .tax-table tbody tr td:last-child,
 #royal .tax-table tfoot tr th:last-child {
-    border-right: 0px solid $nobel;
+    border-right: 0px solid var(--color-nobel);
 }
 
 table.tax-table.item {
@@ -336,7 +335,7 @@ table.tax-table.item {
     padding: 4px;
     height: 15px;
     z-index: 1;
-    background: $white;
+    background: var(--color-white);
     width: 20px;
 }
 
@@ -359,7 +358,7 @@ img {
 }
 #royal footer p {
     font-size: 10px;
-    color: $nero;
+    color: var(--color-nero);
 }
 #royal .tax-table.item tfoot tr th {
     border-bottom: 1px solid #666666;
@@ -375,13 +374,13 @@ img {
 }
 .warehouse-table {
     width: 100%;
-    border-bottom: 1px solid $gray;
+    border-bottom: 1px solid var(--color-gray);
     padding-bottom: 5px;
     padding-right: 0px;
     padding-left: 0px;
 }
 header.bottom-border {
-    border-bottom: 1px solid $gray;
+    border-bottom: 1px solid var(--color-gray);
 }
 .warehouse-table tbody tr td {
     padding: 4px 0px 1px 0px;
@@ -395,7 +394,7 @@ header.bottom-border {
     padding-left: 0px !important;
 }
 .date-text {
-    color: $zambezi;
+    color: var(--color-zambezi);
 }
 
 .qr-image img {

@@ -1,5 +1,3 @@
-@import "../../../assets/css/color.scss";
-
 .dropdown-menu > li > a {
     padding: 2px 10px;
 }
@@ -68,21 +66,21 @@
 
 .search-field input {
     width: 235px;
-    background-color: $whisper !important;
-    border-color: $whisper !important;
+    background-color: var(--color-whisper) !important;
+    border-color: var(--color-whisper) !important;
 }
 
 .search-field input:focus {
-    background-color: $white !important;
-    border-color: var(--common-primary-blue-border) !important;
+    background-color: var(--color-white) !important;
+    border-color: var(--color-common-primary-blue-border) !important;
 }
 
 span.input-addon {
     position: absolute;
     right: 0px;
     padding: 4px 9px;
-    background-color: $chetwode-blue;
-    color: $white;
+    background-color: var(--color-chetwode-blue);
+    color: var(--color-white);
     font-size: 18px;
     border-radius: 5px;
     top: 0;
@@ -90,7 +88,7 @@ span.input-addon {
 
 tr.aging-table-top td {
     padding: 8px 0;
-    background-color: var(--common-background-color-for-all-components) !important;
+    background-color: var(--color-common-primary-background-for-all-components) !important;
 }
 
 .refresh-btn {
@@ -99,8 +97,8 @@ tr.aging-table-top td {
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    background-color: $white;
-    border: 1px solid $gainsboro;
+    background-color: var(--color-white);
+    border: 1px solid var(--color-gainsboro);
     margin-left: 10px !important;
 }
 
@@ -122,9 +120,9 @@ tr.aging-table-top td {
         min-width: 100%;
         padding: 11px;
         padding-right: 40px;
-        color: $nero;
+        color: var(--color-nero);
         border: none;
-        background-color: $gray-95;
+        background-color: var(--color-gray-95);
         border-radius: 5px;
     }
 }
@@ -222,9 +220,9 @@ th.mat-header-cell:first-of-type {
 }
 ::ng-deep {
     .btn-sky-blue {
-        color: var(--secondary-button-text-color);
-        background-color: var(--secondary-button-background-color);
-        border-color: var(--secondary-button-background-color);
+        color: var(--color-secondary-button-text);
+        background-color: var(--color-secondary-button-background);
+        border-color: var(--color-secondary-button-background);
     }
 }
 
@@ -294,7 +292,7 @@ th.mat-header-cell:first-of-type {
             display: flex;
 
             i {
-                color: $gray;
+                color: var(--color-gray);
             }
         }
     }
@@ -321,7 +319,7 @@ th.mat-header-cell:first-of-type {
         display: flex !important;
 
         a {
-            color: $gray;
+            color: var(--color-gray);
         }
 
         .max-width-250 {

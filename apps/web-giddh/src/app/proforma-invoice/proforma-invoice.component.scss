@@ -2,7 +2,6 @@
 $themeClr: #fe5f00;
 $greyClr: #6d6d6d;
 // mixins
-@import "../../assets/css/color.scss";
 
 /**
 # margin mixin pass direction and number
@@ -71,7 +70,7 @@ $greyClr: #6d6d6d;
 
 // common class for extend
 .white-bg {
-    background-color: $white;
+    background-color: var(--color-white);
 }
 
 .cp {
@@ -134,12 +133,12 @@ $greyClr: #6d6d6d;
         right: 0;
         bottom: 0;
         padding: 0 1em;
-        color: $very-light-gray;
+        color: var(--color-very-light-gray);
         pointer-events: none;
     }
     /* Transition */
     &:hover::after {
-        color: $gray;
+        color: var(--color-silver);
     }
     &::after {
         -webkit-transition: 0.25s all ease;
@@ -221,7 +220,7 @@ $greyClr: #6d6d6d;
     position: relative;
     float: left;
     @include padBth(20px, 0);
-    @include bgClr(var(--primary-footer-background-color));
+    @include bgClr(var(--color-primary-footer-background));
 }
 
 .dropup {
@@ -229,7 +228,7 @@ $greyClr: #6d6d6d;
         li {
             a {
                 &:hover {
-                    background: $solitude;
+                    background: var(--color-solitude);
                 }
             }
         }
@@ -301,7 +300,7 @@ a[type="button"] {
 
 .list-item {
     font-size: 14px;
-    border-bottom: 1px solid $gainsboro;
+    border-bottom: 1px solid var(--color-gainsboro);
     display: flex !important;
 }
 
@@ -374,12 +373,12 @@ ng-select.splSales {
 }
 
 .billing-address {
-    background: var(--common-background-color-for-all-components);
-    border: 1px solid $gainsboro;
+    background: var(--color-common-primary-background-for-all-components);
+    border: 1px solid var(--color-gainsboro);
     padding: 5px;
     padding-bottom: 10px;
     &.disabled {
-        background: $whisper-light;
+        background: var(--color-whisper-light);
     }
     textarea {
         border: none;
@@ -400,12 +399,12 @@ textarea:focus {
 
 .input-custom {
     border: none;
-    border-bottom: 1px solid $gainsboro;
+    border-bottom: 1px solid var(--color-gainsboro);
 }
 
 .balance-due {
     display: block;
-    color: $dark-gray;
+    color: var(--color-dark-gray);
     line-height: 1.2rem;
     font-size: 14px;
     font-weight: 500;
@@ -426,7 +425,7 @@ textarea:focus {
     > thead {
         > tr {
             > th {
-                border: 1px solid $gainsboro !important;
+                border: 1px solid var(--color-gainsboro) !important;
                 padding: 10px 8px;
                 white-space: nowrap;
                 text-align: right;
@@ -455,7 +454,7 @@ textarea:focus {
     > tbody {
         > tr {
             > td {
-                border: 1px solid $gainsboro !important;
+                border: 1px solid var(--color-gainsboro) !important;
                 padding: 10px 8px;
                 white-space: nowrap;
                 position: relative;
@@ -468,7 +467,7 @@ textarea:focus {
                     width: 100px;
                 }
                 &.error-box.item-tax {
-                    border: 2px solid $red !important;
+                    border: 2px solid var(--color-danger) !important;
                 }
             }
         }
@@ -493,7 +492,7 @@ textarea:focus {
 }
 
 .disabled {
-    background: $whisper-light;
+    background: var(--color-whisper-light);
     pointer-events: none;
     opacity: 0.7;
 }
@@ -516,19 +515,19 @@ textarea:focus {
     top: 50%;
     left: inherit;
     width: 282px;
-    background: var(--common-secondary-background-color-for-all-components);
+    background: var(--color-common-secondary-background-for-all-components);
     display: block;
 }
 
 #deposit-dropdown .caret,
 #deposit-dropdown-normal .caret {
-    border-top: 7px dashed $gainsboro;
+    border-top: 7px dashed var(--color-gainsboro);
     border-right: 7px solid transparent;
     border-left: 7px solid transparent;
     right: -15px;
     position: absolute;
     top: 47%;
-    background: $solitude;
+    background: var(--color-solitude);
     transform: rotate(-90deg) translateY(-50%);
 }
 
@@ -580,25 +579,25 @@ textarea:focus {
     background: rgba(112, 112, 112, 0.92);
     bottom: 0;
     width: 100%;
-    color: $white;
+    color: var(--color-white);
     padding: 10px;
     text-align: center;
 }
 
 .modal-invoice-footer .btn {
-    background: $dim-gray;
+    background: var(--color-dim-gray);
     font-size: 12px;
     border-radius: 90px;
     padding: 1px 6px;
     vertical-align: middle;
     margin-right: 0px;
     transition: 0.5s all ease;
-    color: $white;
+    color: var(--color-white);
 }
 
 .modal-invoice-footer .btn:hover {
-    background: $success-green;
-    color: $white;
+    background: var(--color-success-enable);
+    color: var(--color-white);
 }
 
 .sales-invoice-modal .modal-body perfect-scrollbar {
@@ -610,8 +609,8 @@ textarea:focus {
 }
 
 .modal-invoice-footer ul > li > input:checked + label {
-    background: $success-green;
-    color: $white;
+    background: var(--color-success-enable);
+    color: var(--color-white);
 }
 
 // my css
@@ -620,12 +619,12 @@ textarea:focus {
 }
 
 .other-options {
-    color: $dim-gray;
+    color: var(--color-dim-gray);
     padding-top: 5px;
 }
 
 .other-options a {
-    color: $primary;
+    color: var(--color-primary);
     font-size: 12px;
 }
 
@@ -648,7 +647,7 @@ form label {
     border: none !important;
     padding-right: 2px !important;
     background-color: transparent !important;
-    border-bottom: 1px solid $gainsboro !important;
+    border-bottom: 1px solid var(--color-gainsboro) !important;
     height: 28px;
 }
 
@@ -675,7 +674,7 @@ input.form-control.selected-val.cp.bottom-border-only.ng-star-inserted {
 
 .billing-address-full p {
     font-size: 14px;
-    color: $dark-gray;
+    color: var(--color-dark-gray);
     margin-bottom: 5px;
 }
 
@@ -688,7 +687,7 @@ input.form-control.selected-val.cp.bottom-border-only.ng-star-inserted {
 }
 
 .change-label {
-    color: $primary;
+    color: var(--color-primary);
 }
 
 .wrap-invoice-number-details .form-group {
@@ -700,7 +699,7 @@ input.form-control.selected-val.cp.bottom-border-only.ng-star-inserted {
 }
 
 .bg-white {
-    background-color: var(--common-background-color-for-all-components);
+    background-color: var(--color-common-primary-background-for-all-components);
     margin: 0 0;
 }
 
@@ -715,7 +714,7 @@ input.form-control.selected-val.cp.bottom-border-only.ng-star-inserted {
 }
 
 .description textarea {
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--color-gainsboro);
     width: 100%;
     min-height: 55px;
     margin-top: 10px;
@@ -723,8 +722,8 @@ input.form-control.selected-val.cp.bottom-border-only.ng-star-inserted {
 
 .sales-invoice-table table input[disabled] {
     cursor: default;
-    background-color: $whisper-light;
-    border: 1px solid $gainsboro;
+    background-color: var(--color-whisper-light);
+    border: 1px solid var(--color-gainsboro);
     padding: 5px;
     width: 100%;
     // max-width: 150px;
@@ -741,7 +740,7 @@ input[type="text"] {
 }
 
 a.copy-invoice {
-    color: $cornflower-blue;
+    color: var(--color-primary-performa-invoice-a-copy-invoice);
     margin-left: 10px;
 }
 
@@ -762,7 +761,7 @@ a.copy-invoice img {
     padding: 0;
 }
 .shipping-address textarea {
-    border-bottom: 1px solid $gainsboro !important;
+    border-bottom: 1px solid var(--color-gainsboro) !important;
 }
 
 .mb-0 {
@@ -813,7 +812,7 @@ a.copy-invoice img {
 .add-bulk-items {
     font-size: 12px;
     padding-bottom: 0;
-    color: $primary;
+    color: var(--color-primary);
 }
 
 .other-detail-table th,
@@ -867,8 +866,8 @@ span.edit-icon {
 
 .hsn-code-dropdown {
     position: absolute;
-    background-color: $white;
-    border: 1px solid $gainsboro;
+    background-color: var(--color-white);
+    border: 1px solid var(--color-gainsboro);
     border-radius: 3px;
     width: 100%;
     min-width: 250px;
@@ -889,18 +888,18 @@ span.edit-icon {
     width: 100%;
     padding: 5px;
     max-width: 100%;
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--color-gainsboro);
 }
 
 .hsn-code-dropdown input::placeholder,
 .hsn-code-dropdown input::-webkit-input-placeholder {
-    color: $silver;
+    color: var(--color-silver);
 }
 
 .hsn-code-dropdown a {
     display: inline-block;
     text-align: center;
-    color: $very-light-gray;
+    color: var(--color-very-light-gray);
     padding: 5px 8px;
     font-size: 16px;
 }
@@ -911,8 +910,8 @@ span.edit-icon {
 
 .hsn-code-dropdown button.btn.btn-sm.btn-success-green,
 .bulk-item-btn-group button.btn.btn-sm.btn-success-green {
-    background-color: $success-green;
-    color: $white;
+    background-color: var(--color-success-enable);
+    color: var(--color-white);
 }
 
 .template-footer {
@@ -923,19 +922,19 @@ span.edit-icon {
 }
 
 .update-text {
-    color: $primary;
+    color: var(--color-primary);
     padding: 0 5px;
 }
 
 .select-account-label {
     font-size: 14px;
-    color: $silver;
+    color: var(--color-silver);
     padding-bottom: 3px;
 }
 
 .btn-group .dropdown-toggle {
     margin-right: 0;
-    color: var(--table-content-quinary-color);
+    color: var(--color-table-quinary-content);
 }
 
 .wrap-customer {
@@ -1012,9 +1011,9 @@ section.static-invoice-table {
 
 .customer-invoice-table.bg-white {
     margin-top: 10px;
-    border-bottom: 1px solid $gainsboro;
+    border-bottom: 1px solid var(--color-gainsboro);
     margin-bottom: 20px;
-    background-color: var(--common-background-color-for-all-components) !important;
+    background-color: var(--color-common-primary-background-for-all-components) !important;
 }
 
 // .customer-invoice-table section.form-inline {
@@ -1031,13 +1030,13 @@ section.static-invoice-table {
 
 // new table css
 section.new-table {
-    background-color: $whisper;
+    background-color: var(--color-whisper);
     margin-bottom: 30px;
     margin: 0 15px 30px;
 }
 
 .new-table .thead {
-    border-right: 1px solid $gainsboro;
+    border-right: 1px solid var(--color-gainsboro);
     padding: 8px 10px;
 }
 
@@ -1067,7 +1066,7 @@ section.new-table {
 
 .tax-in-currency {
     margin-bottom: 7px;
-    color: $nobel !important;
+    color: var(--color-nobel) !important;
     white-space: initial;
 }
 
@@ -1076,7 +1075,7 @@ section.new-table {
 }
 
 .add-bulk-button {
-    color: $silver;
+    color: var(--color-silver);
 }
 
 .textarea-height {
@@ -1097,7 +1096,7 @@ section.new-table {
 .card-invoice-table-wrapper {
     max-width: 400px;
     width: 100%;
-    background-color: $white;
+    background-color: var(--color-white);
     margin: 20px 0;
     border-radius: 3px;
     box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
@@ -1115,7 +1114,7 @@ section.new-table {
 }
 
 .single-card-row p {
-    color: $dark-gray;
+    color: var(--color-dark-gray);
     font-size: 14px;
 }
 
@@ -1128,7 +1127,7 @@ section.new-table {
     position: absolute;
     right: 15px;
     top: 11px;
-    color: $red;
+    color: var(--color-danger);
     font-size: 18px;
 }
 
@@ -1162,7 +1161,7 @@ section.new-table {
     max-width: 400px;
     margin: 20px 0;
     box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
-    background-color: $white;
+    background-color: var(--color-white);
     padding: 15px 20px;
     border-radius: 3px;
 }
@@ -1185,16 +1184,16 @@ section.new-table {
     position: absolute;
     top: 13px;
     right: 40px;
-    color: $primary;
+    color: var(--color-primary);
 }
 
 .sales-country-label {
     margin-bottom: 0;
     vertical-align: middle;
     line-height: 2.4;
-    border-bottom: 1px solid $gainsboro;
+    border-bottom: 1px solid var(--color-gainsboro);
     padding-left: 6px;
-    border-bottom-color: $gainsboro;
+    border-bottom-color: var(--color-gainsboro);
 }
 
 .loader-class {
@@ -1217,7 +1216,7 @@ section.new-table {
 }
 
 .add-bulk-item-modal .single-product-wrapper h5 {
-    color: $night-rider;
+    color: var(--color-night-rider);
     font-size: 14px;
 }
 
@@ -1241,8 +1240,8 @@ section.new-table {
 }
 
 .add-bulk-item-modal .right-content hr {
-    color: $black;
-    border-color: $gainsboro;
+    color: var(--color-black);
+    border-color: var(--color-very-light-gray);
     margin: 10px -15px;
     margin-left: -15px;
 }
@@ -1273,8 +1272,8 @@ section.new-table {
 }
 
 .add-bulk-item-modal .input-group .input-group-btn .btn {
-    background: $white;
-    border-left: 1px solid $gainsboro;
+    background: var(--color-white);
+    border-left: 1px solid var(--color-gainsboro);
 }
 
 .add-bulk-item-modal .btn {
@@ -1282,7 +1281,7 @@ section.new-table {
 }
 
 .add-bulk-item-modal .input-group-btn .fa {
-    color: $silver;
+    color: var(--color-silver);
 }
 
 .add-bulk-item-modal .single-selected-stock {
@@ -1290,13 +1289,13 @@ section.new-table {
 }
 
 .add-bulk-item-modal .left-content {
-    border-right: 1px solid $gainsboro;
+    border-right: 1px solid var(--color-gainsboro);
     padding-right: 15px;
 }
 
 .add-bulk-item-modal .modal-title {
     font-size: 22px !important;
-    color: $white;
+    color: var(--color-white);
 }
 
 .table-custom-invoice .sales-tax .dropdown-menu-right li label {
@@ -1315,7 +1314,7 @@ section.new-table {
     position: absolute;
     top: 60px;
     z-index: 10;
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--color-gainsboro);
 }
 
 .gst-treatment-header > span {
@@ -1323,7 +1322,7 @@ section.new-table {
 }
 
 .aqua-color a {
-    color: $deep-sky-blue;
+    color: var(--color-deep-sky-blue);
     font-size: 12px;
 }
 
@@ -1379,7 +1378,7 @@ table.table.table-custom-invoice.basic,
     top: 132px;
     opacity: 0.6;
     z-index: 98;
-    background: var(--common-tertiary-background-color-for-all-components);
+    background: var(--color-common-tertiary-background-for-all-components);
 }
 
 .cash-invoice-input {
@@ -1411,7 +1410,7 @@ table.table.table-custom-invoice.basic,
 }
 
 .differ-currency {
-    color: $nobel;
+    color: var(--color-nobel);
     font-size: 14px;
     text-align: right;
     bottom: 3px;
@@ -1433,7 +1432,7 @@ table.table.table-custom-invoice.basic,
 
 .switch-currency {
     font-size: 14px;
-    color: $night-rider;
+    color: var(--color-night-rider);
     max-width: 1000px;
     text-align: right;
     margin-bottom: 10px;
@@ -1486,7 +1485,7 @@ label.sales-country-label {
 
 .tax-in-currency span.icon-rupees {
     font-size: 11px;
-    color: $nobel;
+    color: var(--color-nobel);
 }
 
 .thead-sales-invoice {
@@ -1546,7 +1545,7 @@ label.sales-country-label {
     transform: translateY(-40px);
     width: 20px;
     height: 20px;
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--color-gainsboro);
     border-radius: 50%;
     text-align: center;
 }
@@ -1587,7 +1586,7 @@ strong {
 }
 
 .item-total input.other-taxes-checkbox[type="checkbox"]:focus:after {
-    border-color: $chetwode-blue !important;
+    border-color: var(--color-chetwode-blue) !important;
 }
 
 .add-line-bulk-item a:focus {
@@ -1604,7 +1603,7 @@ span.eligible-ITC {
     padding-top: 5px;
     display: inline-block;
     span {
-        color: $deep-sky-blue;
+        color: var(--color-deep-sky-blue);
         font-size: 10px;
     }
 }
@@ -1631,11 +1630,11 @@ span.eligible-ITC {
     span:first-child {
         font-size: 25px;
         vertical-align: middle;
-        color: $gray;
+        color: var(--color-gray);
     }
     .label {
         vertical-align: middle;
-        color: $gray;
+        color: var(--color-gray);
         font-size: 13px;
     }
 }
@@ -1787,8 +1786,8 @@ span.eligible-ITC {
         margin-bottom: 0;
     }
     .show-in-mobile {
-        background: $white;
-        border-top: 1px solid $gainsboro;
+        background: var(--color-white);
+        border-top: 1px solid var(--color-gainsboro);
         padding-right: 15px;
         padding-left: 15px;
     }
@@ -1803,8 +1802,8 @@ span.eligible-ITC {
     }
     .other-taxes-input {
         width: 99px;
-        background-color: $whisper-light;
-        border: 1px solid $gainsboro;
+        background-color: var(--color-whisper-light);
+        border: 1px solid var(--color-gainsboro);
         padding: 3px;
         font-size: 13px;
     }

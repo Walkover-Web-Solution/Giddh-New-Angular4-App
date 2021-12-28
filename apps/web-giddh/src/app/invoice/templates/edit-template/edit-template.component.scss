@@ -1,16 +1,15 @@
-@import "../../../../assets/css/color.scss";
 .template-grid {
     max-width: 255px;
     width: 100%;
     padding: 20px;
     min-height: 250px;
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--color-gainsboro);
     float: left;
     border-radius: 4px;
     margin: 5px 15px 15px 0;
     position: relative;
-    color: var(--common-primary-text-color);
-    background: var(--common-background-color-for-all-components);
+    color: var(--color-common-primary-text);
+    background: var(--color-common-primary-background-for-all-components);
 }
 
 .template-grid h3 {
@@ -29,41 +28,35 @@
     padding: 15px 0 0;
 }
 
-.primary-color {
-    overflow-y: hidden;
-    white-space: nowrap;
-}
-
-@import "../../../../../../web-giddh/src/assets/css/color.scss";
 .btn-warning {
-    color: $white;
-    background-color: $bright-yellow;
-    border-color: $bright-yellow;
+    color: var(--color-white);
+    background-color: var(--color-primary-edit-template-btn-warning);
+    border-color: var(--color-primary-edit-template-btn-warning);
 }
 
 .more-btn-dropdown {
-    border: 1px solid $gainsboro !important;
+    border: 1px solid var(--color-gainsboro) !important;
     box-shadow: none !important;
     border-radius: 5px !important;
     font-size: 14px;
     padding: 5px 10px;
-    background: var(--dropdown-primary-background-color) !important;
+    background: var(--color-dropdown-primary-background) !important;
     width: 160px;
     text-align: left;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    color: var(--dropdown-list-tertiary-color);
+    color: var(--color-dropdown-list-tertiary);
 }
 
 .dropdown-menu > li > a:hover {
-    color: $chetwode-blue;
-    background: $whisper;
+    color: var(--color-chetwode-blue);
+    background: var(--color-whisper);
 }
 .badge {
-    background: $whisper-color !important;
-    color: $charcoal !important;
+    background: var(--color-whisper-color) !important;
+    color: var(--color-charcoal) !important;
     font-family: opensans-regular;
     border: none !important;
     font-weight: 400 !important;
@@ -71,14 +64,14 @@
     border-radius: 50px;
 }
 .badge.btn-success:hover {
-    background: $gainsboro-light !important;
-    color: $charcoal !important;
+    background: var(--color-primary-edit-template-badge-btn-success-hover) !important;
+    color: var(--color-charcoal) !important;
 }
 .badge.btn-sky-blue,
 .badge.btn-sky-blue:hover {
-    background: var(--quaternary-button-background-color) !important;
+    background: var(--color-quaternary-button-background) !important;
     border: none !important;
-    color: $white !important;
+    color: var(--color-white) !important;
 }
 .template-grid-container {
     padding: 0 15px;
@@ -98,7 +91,7 @@
 
 @media (max-width: 414px) {
     .template-grid {
-        background: $gray-95;
+        background: var(--color-gray-95);
         max-width: 100%;
     }
 }

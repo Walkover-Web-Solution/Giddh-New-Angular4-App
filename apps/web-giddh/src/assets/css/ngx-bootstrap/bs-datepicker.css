@@ -3,8 +3,8 @@
     display: flex;
     align-items: stretch;
     flex-flow: row wrap;
-    background: var(--datepicker-background-color);
-    box-shadow: 0 0 10px 0 var(--datepicker-box-shadow-color);
+    background: var(--color-datepicker-background);
+    box-shadow: 0 0 10px 0 var(--color-datepicker-box-shadow);
     position: relative;
     z-index: 1;
     /* button */
@@ -317,7 +317,7 @@
 }
 .bs-datepicker-container {
     padding: 15px;
-    background-color: var(--datepicker-background-color);
+    background-color: var(--color-datepicker-background);
 }
 .bs-datepicker-custom-range {
     padding: 15px;

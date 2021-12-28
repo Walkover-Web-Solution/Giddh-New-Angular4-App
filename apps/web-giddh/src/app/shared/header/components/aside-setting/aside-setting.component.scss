@@ -1,4 +1,3 @@
-@import "../../../../../assets/css/color.scss";
 :host {
     position: fixed;
     left: auto;
@@ -14,7 +13,7 @@
         content: "";
         width: 12px;
         height: 12px;
-        background-color: $alice-blue;
+        background-color: var(--color-primary-aside-host-after-background);
         top: -6px;
         right: 65px;
         z-index: 1;
@@ -26,7 +25,7 @@
     top: 0;
     bottom: 0;
     min-height: 100vh;
-    background: $white;
+    background: var(--color-white);
     width: 240px;
     left: auto;
     right: 0;
@@ -56,12 +55,12 @@
     width: 100%;
 }
 .aside-header {
-    background-color: $white;
+    background-color: var(--color-white);
     padding: 20px 10px;
 }
 .aside-pane {
     padding: 0;
-    background-color: var(--body-background-color);
+    background-color: var(--color-body-background);
     .aside-help-header {
         display: flex;
         justify-content: space-between;
@@ -77,8 +76,8 @@
     }
 }
 .aside-pane-form {
-    background-color: $white;
-    box-shadow: 0px 3px 6px $black-russian;
+    background-color: var(--color-white);
+    box-shadow: 0px 3px 6px var(--color-black-russian);
     padding: 15px 15px;
     height: calc(100vh - 90px);
     overflow: auto;
@@ -102,7 +101,7 @@
                     margin-right: 12px;
                 }
                 span {
-                    color: var(--sidebar-content-text-color);
+                    color: var(--color-sidebar-content-text);
                     &:first-child {
                         line-height: 1.6;
                         height: 20px;
@@ -119,38 +118,38 @@
                 }
             }
             &:hover {
-                background-color: var(--sidebar-anchor-text-color-hover);
+                background-color: var(--color-sidebar-anchor-text-hover);
                 a {
                     span {
-                        color: $white !important;
+                        color: var(--color-white) !important;
                         i {
-                            color: $white !important;
+                            color: var(--color-white) !important;
                         }
                     }
                     span {
-                        color: $white !important;
+                        color: var(--color-white) !important;
                     }
                 }
             }
         }
         .active-link {
-            background-color: var(--sidebar-anchor-text-color-hover);
+            background-color: var(--color-sidebar-anchor-text-hover);
             a {
                 span {
-                    color: $white !important;
+                    color: var(--color-white) !important;
                     i {
-                        color: $white !important;
+                        color: var(--color-white) !important;
                     }
                 }
                 span {
-                    color: $white !important;
+                    color: var(--color-white) !important;
                 }
             }
         }
     }
 }
 .setting-items ul li:hover a span i {
-    color: $nero !important;
+    color: var(--color-nero) !important;
 }
 
 :host.setting-sidebar {
@@ -158,7 +157,7 @@
     top: 57px;
     bottom: 0;
     min-height: 100vh;
-    background: $white;
+    background: var(--color-white);
     width: 240px;
     left: auto;
     right: 0;
@@ -168,7 +167,7 @@
         display: none;
     }
     .aside-pane {
-        background: $white;
+        background: var(--color-white);
         overflow: initial;
         z-index: unset;
         .aside-help-header {
@@ -185,7 +184,7 @@
                 width: 15px;
             }
             a {
-                color: $cornflower-blue;
+                color: var(--color-primary-aside-pane-back-to-main-slider);
                 span {
                     display: flex;
                     align-items: center;
@@ -215,7 +214,7 @@
 ::ng-deep {
     .back-to-main-slider {
         .ng-star-inserted {
-            color: var(--right-sidebar-back-color);
+            color: var(--color-right-sidebar-back);
         }
     }
 }
@@ -233,18 +232,18 @@
         top: 0;
         bottom: 0;
         min-height: 100vh;
-        background: $white;
+        background: var(--color-white);
         width: 240px;
         left: auto;
         right: 0;
         z-index: 999999;
         width: 270px;
         .back-to-main-slider {
-            background-color: $midnight-blue;
+            background-color: var(--color-midnight-blue);
             a {
                 display: flex;
                 align-items: center;
-                color: $white !important;
+                color: var(--color-white) !important;
                 span {
                     display: flex;
                     align-items: center;
@@ -265,7 +264,7 @@
                     left: 5%;
                     bottom: -16px;
                     height: 1px;
-                    background-color: $gainsboro;
+                    background-color: var(--color-gainsboro);
                 }
             }
         }
@@ -277,7 +276,7 @@
                             padding: 10px 15px !important;
                             span {
                                 i {
-                                    color: $gray;
+                                    color: var(--color-gray);
                                     margin-right: 10px;
                                     font-size: 14px;
                                 }

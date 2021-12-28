@@ -1,6 +1,5 @@
-@import "../../../../assets/css/color.scss";
 .company-list {
-    color: $dark-gray;
+    color: var(--color-dark-gray);
     list-style-type: none;
 }
 :host {
@@ -23,7 +22,7 @@
     border: 0;
     border-radius: 0;
     background: 0 0;
-    color: $white;
+    color: var(--color-white);
 }
 
 :host .container-fluid {
@@ -43,18 +42,18 @@
     flex-wrap: wrap;
 
     span {
-        border: 1px solid $solitude;
+        border: 1px solid var(--color-solitude);
         padding: 5px 8px;
         margin: 10px 10px 12px 0px;
-        background-color: $solitude;
+        background-color: var(--color-solitude);
     }
 }
 .input-group {
     width: 100%;
 }
 .aside-pane-form {
-    background-color: var(--common-background-color-for-all-components);
-    box-shadow: 0px 3px 6px var(--right-side-popup-box-shadow-color);
+    background-color: var(--color-common-primary-background-for-all-components);
+    box-shadow: 0px 3px 6px var(--color-right-side-popup-box-shadow);
     padding: 15px 15px;
     height: calc(100vh - 90px);
     overflow: auto;
@@ -64,25 +63,25 @@
 }
 .activily-list {
     list-style-type: none;
-    color: $dark-gray;
+    color: var(--color-dark-gray);
     font-size: 14px;
 
     li {
         padding-bottom: 25px;
-        border-left: 1px dashed $dark-gray;
+        border-left: 1px dashed var(--color-dark-gray);
         padding-left: 12px;
         position: relative;
         line-height: 10px;
         &:after {
             width: 9px;
             height: 9px;
-            background: $white;
+            background: var(--color-white);
             content: "";
             display: block;
             position: absolute;
             left: -5px;
             top: 0px;
-            border: 1px solid $dark-gray;
+            border: 1px solid var(--color-dark-gray);
             border-radius: 90px;
         }
         &:last-child {
