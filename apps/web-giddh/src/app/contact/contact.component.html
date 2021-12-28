@@ -569,6 +569,7 @@
         <div class="mobile-card-wrapper table-responsive vendor-page all-table">
             <ng-container *ngIf="activeTab === 'customer'">
                 <table
+                    *ngIf="sundryDebtorsAccounts?.length"
                     mat-table
                     [dataSource]="sundryDebtorsAccounts"
                     class="w-100"
@@ -917,6 +918,7 @@
 
             <ng-container *ngIf="activeTab === 'vendor'">
                 <table
+                    *ngIf="sundryCreditorsAccounts?.length"
                     mat-table
                     [dataSource]="sundryCreditorsAccounts"
                     class="w-100"
