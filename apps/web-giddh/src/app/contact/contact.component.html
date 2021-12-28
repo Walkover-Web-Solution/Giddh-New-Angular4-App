@@ -620,7 +620,7 @@
                             class="position-relative word-wrap"
                             [attr.data-title]="localeData?.customer"
                         >
-                            <div class="customer-name-filed">
+                            <div class="customer-name-filed cursor-pointer" (dblclick)="trigger?.openMenu()">
                                 <div class="select-single-checkbox-wrapper">
                                     <mat-checkbox
                                         color="primary"
@@ -639,6 +639,7 @@
                                     id="edit-model-basic"
                                     class="table-menu-first-td"
                                     [matMenuTriggerFor]="editModelBasic"
+                                    #trigger="matMenuTrigger"
                                 >
                                     <span class="icon-dots-three-vertical"></span>
                                 </button>
@@ -968,7 +969,7 @@
                             class="position-relative word-wrap"
                             [attr.data-title]="commonLocaleData?.app_vendor_name"
                         >
-                            <div class="vendor-name-field">
+                            <div class="vendor-name-field cursor-pointer" (dblclick)="trigger?.openMenu()">
                                 <div class="select-single-checkbox-wrapper">
                                     <mat-checkbox
                                         [ngClass]="{ 'visible-check-box': selectedCheckedContacts.length }"
@@ -986,6 +987,7 @@
                                     id="edit-model-basic2"
                                     class="table-menu-first-td"
                                     [matMenuTriggerFor]="dropdownBasic2"
+                                    #trigger="matMenuTrigger"
                                 >
                                     <span class="icon-dots-three-vertical"></span>
                                 </button>
