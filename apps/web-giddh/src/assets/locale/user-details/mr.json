@@ -133,7 +133,7 @@
         "expiring_within":"आत कालबाह्य होत आहे",
 		"expires":"कालबाह्य",
 		"timeline":"टाइमलाइन",
-		"search_plans_id":"शोध योजना आणि उप आयडी"
+		"search_plans":"शोध योजना आणि कंपन्या"
 	},
 	"expiring_list":{
         "seven_days":"7 दिवस",

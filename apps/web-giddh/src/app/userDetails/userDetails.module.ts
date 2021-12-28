@@ -90,7 +90,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         MatSliderModule,
         MatCardModule,
         SafePipeModule,
-        GiddhPageLoaderModule
+        GiddhPageLoaderModule,
+        NoDataModule
     ],
     providers: [
 
