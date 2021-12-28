@@ -9,7 +9,7 @@ import { SubscriptionsUser, UserDetails } from "../../../models/api-models/Subsc
 import { Observable, ReplaySubject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { SubscriptionsService } from "../../../services/subscriptions.service";
-import { uniqBy } from "../../../lodash-optimized";
+import { cloneDeep, uniqBy } from "../../../lodash-optimized";
 import * as moment from "moment";
 import { GIDDH_DATE_FORMAT } from "../../../shared/helpers/defaultDateFormat";
 import { FormControl } from "@angular/forms";
@@ -278,34 +278,30 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
      * @memberof SubscriptionComponent
      */
     public filterSubscriptions(): void {
-
         let subscriptions = [];
         this.subscriptions = [];
-
-
 
         this.subscriptions$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.length) {
                 response.forEach(subscription => {
-                    subscription.remainingDays = Number(moment(subscription.expiry, GIDDH_DATE_FORMAT).diff(moment(), 'days'));
-                    if (moment(subscription.startedAt, GIDDH_DATE_FORMAT).format("D MMM, y") !== "Invalid date") {
-                        subscription.startedAt = moment(subscription.startedAt, GIDDH_DATE_FORMAT).format("D MMM, y");
-                        subscription.expiry = moment(subscription.expiry, GIDDH_DATE_FORMAT).format("D MMM, y");
-                    }
-                    
+                    let subscriptionDetails = cloneDeep(subscription);
+
+                    subscriptionDetails.remainingDays = Number(moment(subscriptionDetails.expiry, GIDDH_DATE_FORMAT).diff(moment(), 'days'));
+                    subscriptionDetails.startedAt = moment(subscriptionDetails.startedAt, GIDDH_DATE_FORMAT).format("D MMM, y");
+                    subscriptionDetails.expiry = moment(subscriptionDetails.expiry, GIDDH_DATE_FORMAT).format("D MMM, y");
+
                     let flag = true;
                     if (
-                        (this.searchSubscription?.value && subscription?.planDetails?.name?.toLowerCase()?.indexOf(this.searchSubscription?.value?.toLowerCase()) === -1) ||
-                        (this.filters?.plan && subscription?.planDetails?.uniqueName !== this.filters?.plan) ||
-                        (this.filters?.expiration && (subscription?.remainingDays < 0 || subscription?.remainingDays > this.filters?.expiration)) ||
-                        (this.filters?.transactionBalance && (subscription?.remainingTransactions < 0 || subscription?.remainingTransactions > this.filters?.transactionBalance))
+                        (this.searchSubscription?.value && (subscriptionDetails?.subscriptionId?.toLowerCase()?.indexOf(this.searchSubscription?.value?.toLowerCase()) === -1 && !(subscriptionDetails?.companiesWithTransactions?.filter(company => company?.name?.toLowerCase() === this.searchSubscription?.value?.toLowerCase())?.length))) ||
+                        (this.filters?.plan && subscriptionDetails?.planDetails?.uniqueName !== this.filters?.plan) ||
+                        (this.filters?.expiration && (subscriptionDetails?.remainingDays < 0 || subscriptionDetails?.remainingDays > this.filters?.expiration)) ||
+                        (this.filters?.transactionBalance && (subscriptionDetails?.remainingTransactions < 0 || subscriptionDetails?.remainingTransactions > this.filters?.transactionBalance))
                     ) {
                         flag = false;
                     }
                     if (flag) {
-                        subscriptions.push(subscription);
-                     }
-                         this.changeDetectionRef.detectChanges();
+                        subscriptions.push(subscriptionDetails);
+                    }
                 });
 
                 this.plansList = uniqBy(response.map(subscription => { return { name: subscription.planDetails?.name, uniqueName: subscription.planDetails?.uniqueName } }), "uniqueName");
@@ -320,14 +316,14 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
                         loop++;
                     });
                     this.subscriptions = this.generalService.changeElementPositionInArray(this.subscriptions, activeCompanyIndex, 0);
-                    console.log('subscriptions', this.subscriptions);
+                    this.subscriptions = uniqBy(this.subscriptions, "subscriptionId");
                 }
 
                 if (!this.showLoader) {
-                    this.selectSubscription(this.subscriptions[0]);
+                    this.selectSubscription((this.subscriptions?.length) ? this.subscriptions[0] : null);
                 }
                 this.changeDetectionRef.detectChanges();
-              }
+            }
         });
     }
 
@@ -337,7 +333,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
      * @memberof SubscriptionComponent
      */
     public clearFilters(): void {
-        this.searchSubscription = new FormControl();
+        this.searchSubscription.setValue('');
         this.filters.plan = '';
         this.filters.expiration = '';
         this.filters.transactionBalance = '';
@@ -408,7 +404,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
      * @param {*} obj
      * @memberof SubscriptionComponent
      */
-    public patchProfile(obj): void {
+    public patchProfile(obj: any): void {
         this.store.dispatch(this.settingsProfileActions.PatchProfile(obj));
     }
 
