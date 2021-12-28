@@ -232,7 +232,7 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
      * @memberof AttachmentsComponent
      */
     public showFilePreview(attachment: any): void {
-        this.previewedFile = attachment;
+        this.previewedFile = cloneDeep(attachment);
         if (!this.isMobileView) {
             if (attachment?.type === "pdf") {
                 const file = new Blob([attachment?.src], { type: 'application/pdf' });
