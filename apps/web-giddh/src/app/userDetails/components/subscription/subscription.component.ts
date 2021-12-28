@@ -249,6 +249,8 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
         let subscriptions = [];
         this.subscriptions = [];
 
+
+
         this.subscriptions$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.length) {
                 response.forEach(subscription => {
@@ -257,7 +259,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
                         subscription.startedAt = moment(subscription.startedAt, GIDDH_DATE_FORMAT).format("D MMM, y");
                         subscription.expiry = moment(subscription.expiry, GIDDH_DATE_FORMAT).format("D MMM, y");
                     }
-
+                    
                     let flag = true;
                     if (
                         (this.searchSubscription?.value && subscription?.planDetails?.name?.toLowerCase()?.indexOf(this.searchSubscription?.value?.toLowerCase()) === -1) ||
@@ -269,14 +271,29 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
                     }
                     if (flag) {
                         subscriptions.push(subscription);
-                    }
+                     }
+                         this.changeDetectionRef.detectChanges();
                 });
 
                 this.plansList = uniqBy(response.map(subscription => { return { name: subscription.planDetails?.name, uniqueName: subscription.planDetails?.uniqueName } }), "uniqueName");
+                if (subscriptions?.length > 0) {
+                    this.subscriptions = subscriptions;
+                    let loop = 0;
+                    let activeCompanyIndex = -1;
+                    this.subscriptions.forEach(res => {
+                        if (res.subscriptionId === this.activeCompany?.subscription?.subscriptionId) {
+                            activeCompanyIndex = loop;
+                        }
+                        loop++;
+                    });
+                    this.subscriptions = this.generalService.changeElementPositionInArray(this.subscriptions, activeCompanyIndex, 0);
+                }
 
-                this.subscriptions = subscriptions;
+                if (!this.showLoader) {
+                    this.selectSubscription(this.subscriptions[0]);
+                }
                 this.changeDetectionRef.detectChanges();
-            }
+              }
         });
     }
 
