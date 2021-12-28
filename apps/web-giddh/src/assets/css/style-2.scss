@@ -1457,7 +1457,7 @@ modal-container.modal {
 
 .form-control {
     background: $white !important;
-    border: 1px solid $gainsboro !important;
+    border: 1px solid $gainsboro;
     border-radius: 5px !important;
     padding: 6px !important;
     outline: 0;
