@@ -4,22 +4,15 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { LoaderService } from "../loader/loader.service";
 import { GeneralService } from "./general.service";
-import { UserAgent } from "@ionic-native/user-agent/ngx";
-import { isCordova } from "@giddh-workspaces/utils";
 
 @Injectable()
 export class HttpWrapperService {
     constructor(
         private http: HttpClient,
         private loaderService: LoaderService,
-        private generalService: GeneralService,
-        private userAgent: UserAgent
+        private generalService: GeneralService
     ) {
-        if (isCordova()) {
-            this.userAgent.set('Mozilla/5.0 (Linux; U; Android 2.2) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1')
-                .then((res: any) => console.log(res))
-                .catch((error: any) => console.error(error));
-        }
+        
     }
 
     public get = (

@@ -15,9 +15,6 @@ import {
     SimpleChanges,
     ViewChild,
 } from '@angular/core';
-import { isAndroidCordova, isIOSCordova } from '@giddh-workspaces/utils';
-import { FileChooser } from '@ionic-native/file-chooser/ngx';
-import { IOSFilePicker } from '@ionic-native/file-picker/ngx';
 import { FileTransfer } from '@ionic-native/file-transfer/ngx';
 import { select, Store } from '@ngrx/store';
 import { ResizedEvent } from 'angular-resize-event';
@@ -726,34 +723,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     }
 
     public onUploadOutput(): void {
-        if (isAndroidCordova()) {
-            const fc = new FileChooser();
-            fc.open()
-                .then(uri => {
-                    this.uploadFile(uri);
-                })
-                .catch(e => {
-                    if (e !== 'User canceled.') {
-                        this._toasty.errorToast(this.commonLocaleData?.app_something_went_wrong);
-                    }
-                    this.isFileUploading = false;
-                });
-        } else if (isIOSCordova()) {
-            const filePicker = new IOSFilePicker();
-            filePicker.pickFile()
-                .then(uri => {
-                    this.uploadFile(uri);
-                })
-                .catch(err => {
-                    if (err !== 'canceled') {
-                        this._toasty.errorToast(this.commonLocaleData?.app_something_went_wrong);
-                    }
-                    this.isFileUploading = false;
-                });
-        } else {
-            // web
-            this.webFileInput?.nativeElement.click();
-        }
+        this.webFileInput?.nativeElement.click();
     }
 
     private uploadFile(uri) {
