@@ -13,6 +13,6 @@ export class AddOnsComponent{
 
     public ngOnInit(): void{
         /** This will use for image format */
-        this.imgPath = (isElectron || isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
     }
 }
