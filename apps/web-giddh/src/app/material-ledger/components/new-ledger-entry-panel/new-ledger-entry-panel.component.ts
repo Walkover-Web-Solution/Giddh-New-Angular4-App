@@ -16,7 +16,6 @@ import {
     TemplateRef,
     ViewChild,
 } from '@angular/core';
-import { FileTransfer } from '@ionic-native/file-transfer/ngx';
 import { select, Store } from '@ngrx/store';
 import { ResizedEvent } from 'angular-resize-event';
 import {
@@ -730,37 +729,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
     public onUploadOutput(): void {
         this.webFileInput?.nativeElement.click();
-    }
-
-    private uploadFile(uri) {
-        let sessionKey = null;
-        let companyUniqueName = null;
-        this.sessionKey$.pipe(take(1)).subscribe(a => sessionKey = a);
-        const transfer = new FileTransfer();
-        const fileTransfer = transfer.create();
-        const options = {
-            fileKey: 'file',
-            headers: {
-                'Session-Id': sessionKey
-            }
-        };
-        const httpUrl = Configuration.ApiUrl + LEDGER_API.UPLOAD_FILE.replace(':companyUniqueName', companyUniqueName);
-        fileTransfer.upload(uri, httpUrl, options)
-            .then((data) => {
-                if (data && data.response) {
-                    const result = JSON.parse(data.response);
-                    this.isFileUploading = false;
-                    this.blankLedger.attachedFile = result.body?.uniqueName;
-                    this.blankLedger.attachedFileName = result.body?.uniqueName;
-                    this.toaster.showSnackBar("success", this.localeData?.file_uploaded);
-                }
-            }, (err) => {
-                // show toaster
-                this.isFileUploading = false;
-                this.blankLedger.attachedFile = '';
-                this.blankLedger.attachedFileName = '';
-                this.toaster.showSnackBar("error", err.body.message);
-            });
     }
 
     public onWebUpload(output: UploadOutput) {
