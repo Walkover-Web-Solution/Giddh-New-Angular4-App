@@ -17,8 +17,7 @@ import { select, Store } from "@ngrx/store";
 import { IOption } from "apps/web-giddh/src/app/theme/ng-virtual-select/sh-options.interface";
 import { saveAs } from "file-saver";
 import * as moment from "moment/moment";
-import { BsDropdownDirective } from "ngx-bootstrap/dropdown";
-import { BsModalRef, BsModalService, ModalDirective, ModalOptions } from "ngx-bootstrap/modal";
+import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
 import { PaginationComponent } from "ngx-bootstrap/pagination";
 import { BehaviorSubject, combineLatest, Observable, of as observableOf, ReplaySubject, Subject } from "rxjs";
 import { debounceTime, distinctUntilChanged, filter, take, takeUntil } from "rxjs/operators";
@@ -58,6 +57,7 @@ import { MatCheckboxChange } from "@angular/material/checkbox/checkbox";
 import { MatTableModule } from "@angular/material/table";
 import { MatTabChangeEvent } from "@angular/material/tabs";
 import { MatDialog } from "@angular/material/dialog";
+import { MatMenuTrigger } from "@angular/material/menu";
 
 @Component({
     selector: "contact-detail",
@@ -109,12 +109,6 @@ export class ContactComponent implements OnInit, OnDestroy {
     public allSelectionModel: boolean = false;
     public localStorageKeysForFilters = { customer: "customerFilterStorageV2", vendor: "vendorFilterStorageV2" };
     public isMobileScreen: boolean = false;
-    public modalConfig: ModalOptions = {
-        animated: true,
-        keyboard: true,
-        backdrop: "static",
-        ignoreBackdropClick: true,
-    };
     public isICICIIntegrated: boolean = false;
     public selectedWhileHovering: string;
     public searchLoader$: Observable<boolean>;
@@ -130,14 +124,11 @@ export class ContactComponent implements OnInit, OnDestroy {
     public updateCommentIdx: number = null;
     public searchStr$ = new Subject<string>();
     public searchStr: string = "";
-    @ViewChild("filterDropDownList") public filterDropDownList: BsDropdownDirective;
+    @ViewChild(MatMenuTrigger) trigger: MatMenuTrigger;
     @ViewChild("paginationChild", { static: true }) public paginationChild: ElementViewContainerRef;
-    // @ViewChild("staticTabs", { static: true }) public staticTabs: TabsetComponent;
     @ViewChild("staticTabs", { static: true }) public staticTabs: MatTableModule;
     @Output() selectedTabChange: EventEmitter<MatTabChangeEvent>;
-    // @ViewChild("mailModal", { static: false }) public mailModal: ModalDirective;
     @ViewChild("messageBox", { static: false }) public messageBox: ElementRef;
-    @ViewChild("advanceSearch", { static: true }) public advanceSearch: ModalDirective;
     @ViewChild("datepickerTemplate", { static: true }) public datepickerTemplate: ElementRef;
     public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     public universalDate$: Observable<any>;
@@ -254,14 +245,33 @@ export class ContactComponent implements OnInit, OnDestroy {
     /** True if we should select all checkbox */
     public showSelectAll: boolean = false;
 
-    constructor(public dialog: MatDialog, private store: Store<AppState>, private router: Router, private companyServices: CompanyService, private commonActions: CommonActions, private toaster: ToasterService,
-        private contactService: ContactService, private settingsIntegrationActions: SettingsIntegrationActions, private companyActions: CompanyActions, private componentFactoryResolver: ComponentFactoryResolver,
-        private groupWithAccountsAction: GroupWithAccountsAction, private cdRef: ChangeDetectorRef, private generalService: GeneralService, private route: ActivatedRoute, private generalAction: GeneralActions,
-        private breakPointObservar: BreakpointObserver, private modalService: BsModalService, private settingsProfileActions: SettingsProfileActions, private groupService: GroupService,
-        private settingsBranchAction: SettingsBranchActions, public currencyPipe: GiddhCurrencyPipe, private lightbox: Lightbox) {
-        this.searchLoader$ = this.store.pipe(select(p => p.search.searchLoader), takeUntil(this.destroyed$));
+    constructor(
+        public dialog: MatDialog, 
+        private store: Store<AppState>, 
+        private router: Router, 
+        private companyServices: CompanyService, 
+        private commonActions: CommonActions, 
+        private toaster: ToasterService,
+        private contactService: ContactService, 
+        private settingsIntegrationActions: SettingsIntegrationActions, 
+        private companyActions: CompanyActions, 
+        private componentFactoryResolver: ComponentFactoryResolver,
+        private groupWithAccountsAction: GroupWithAccountsAction, 
+        private cdRef: ChangeDetectorRef, 
+        private generalService: GeneralService, 
+        private route: ActivatedRoute, 
+        private generalAction: GeneralActions,
+        private breakPointObservar: BreakpointObserver, 
+        private modalService: BsModalService, 
+        private settingsProfileActions: SettingsProfileActions, 
+        private groupService: GroupService,
+        private settingsBranchAction: SettingsBranchActions, 
+        public currencyPipe: GiddhCurrencyPipe,
+        private lightbox: Lightbox) {
+
+        this.searchLoader$ = this.store.pipe(select(state => state.search.searchLoader), takeUntil(this.destroyed$));
         this.dueAmountReportRequest = new DueAmountReportQueryRequest();
-        this.createAccountIsSuccess$ = this.store.pipe(select(s => s.groupwithaccounts.createAccountIsSuccess), takeUntil(this.destroyed$));
+        this.createAccountIsSuccess$ = this.store.pipe(select(state => state.groupwithaccounts.createAccountIsSuccess), takeUntil(this.destroyed$));
 
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
         this.store.pipe(select(s => s.agingreport.data), takeUntil(this.destroyed$)).subscribe((data) => {
@@ -651,12 +661,6 @@ export class ContactComponent implements OnInit, OnDestroy {
         }
     }
 
-    public hideListItems() {
-        if (this.filterDropDownList) {
-            this.filterDropDownList.hide();
-        }
-    }
-
     /**
      * Update Comment
      *
@@ -966,10 +970,6 @@ export class ContactComponent implements OnInit, OnDestroy {
             }
 
         }
-    }
-
-    public toggleAdvanceSearchPopup() {
-        this.advanceSearch.toggle();
     }
 
     public selectAccount(ev: MatCheckboxChange, item: any) {
