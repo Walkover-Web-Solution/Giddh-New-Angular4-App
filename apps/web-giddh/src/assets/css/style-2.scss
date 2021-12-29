@@ -9362,13 +9362,16 @@ input[type="checkbox"].cdk-visually-hidden::after {
         display: none;
     }
 }
-.main-tabs-content {
-    .mat-tab-label.mat-tab-label-active {
-        background-color: $cloud;
-        color: $slate;
-    }
-    .mat-ink-bar {
-        background-color: transparent !important;
+.main-content-subscription {
+    .main-tabs-content {
+        .mat-tab-label.mat-tab-label-active {
+            background-color: $cloud;
+            color: $slate;
+        }
+
+        .mat-ink-bar {
+            background-color: transparent !important;
+        }
     }
 }
 .companies {
@@ -9386,7 +9389,7 @@ input[type="checkbox"].cdk-visually-hidden::after {
             display: block !important;
         }
     }
-    .form-select {
+    .select-subscription {
         float: left;
         width: 100% !important;
 

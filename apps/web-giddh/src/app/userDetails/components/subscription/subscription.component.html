@@ -28,7 +28,7 @@
                         <mat-form-field
                             appearance="none"
                             floatLabel="never"
-                            class="form-select subscription-form-select"
+                            class="select-subscription subscription-form-select"
                         >
                             <mat-select
                                 [placeholder]="commonLocaleData?.app_select"
@@ -44,7 +44,7 @@
                     </div>
                     <div class="menu-two-list-items" *ngIf="!showLoader">
                         <span class="mat-body-1 expiring-within">{{ localeData?.subscription?.expiring_within }}</span>
-                        <mat-form-field appearance="none" floatLabel="never" class="form-select">
+                        <mat-form-field appearance="none" floatLabel="never" class="select-subscription">
                             <mat-select
                                 [placeholder]="commonLocaleData?.app_select"
                                 [(ngModel)]="filters.expiration"
@@ -61,7 +61,7 @@
                         <span class="mat-body-1 transaction-balance">{{
                             localeData?.subscription?.transaction_balance
                         }}</span>
-                        <mat-form-field appearance="none" floatLabel="never" class="form-select">
+                        <mat-form-field appearance="none" floatLabel="never" class="select-subscription">
                             <mat-select
                                 [placeholder]="commonLocaleData?.app_select"
                                 class="transaction-select"
@@ -94,9 +94,9 @@
             </mat-grid-tile>
 
             <div class="full-subscription-wrapper">
-                <mat-grid-tile [colspan]="sideBarBoxWidth" [rowspan]="sideBarBoxLength" class="ipad-responsive-sidbar">
+                <mat-grid-tile [colspan]="sideBarBoxWidth" [rowspan]="sideBarBoxLength" class="ipad-responsive-sidebar">
                     <div
-                        class="subscritption-sidebar"
+                        class="subscription-sidebar"
                         *ngIf="!showLoader"
                         [ngClass]="{ 'border-none': !selectedSubscription }"
                     >
@@ -195,7 +195,11 @@
                     </div>
                 </mat-grid-tile>
 
-                <mat-grid-tile [colspan]="mainContentWidth" [rowspan]="sideBarBoxLength" class="ipad-responsive-sidbar">
+                <mat-grid-tile
+                    [colspan]="mainContentWidth"
+                    [rowspan]="sideBarBoxLength"
+                    class="ipad-responsive-sidebar"
+                >
                     <div class="main-content" *ngIf="selectedSubscription">
                         <mat-toolbar class="main-content-head">
                             <div class="left-side">
@@ -917,28 +921,6 @@
                             </mat-tab-group>
                         </div>
                     </div>
-                    <!-- <div class="main-content-condition" *ngIf="!selectedSubscription && plansList?.length && !showLoader">
-                    <p class="main-content-para">
-                        {{ localeData?.subscription?.select_plan_summary }} <br />
-                        {{ localeData?.subscription?.select_plan_consumptions }}
-                    </p>
-                    <br /><br />
-                    <p class="main-content-para">
-                        {{ localeData?.subscription?.you_have_total }} {{ plansList?.length }}
-                        {{ localeData?.subscription?.plans }}
-                    </p>
-                </div> -->
-                    <!-- <div class="main-content-condition" *ngIf="showLoader">
-                    <p [ngClass]="{ 'skeleton-common-class': showLoader }">
-                        {{ localeData?.subscription?.select_plan_summary }} <br />
-                        {{ localeData?.subscription?.select_plan_consumptions }}
-                    </p>
-                    <br /><br />
-                    <p [ngClass]="{ 'skeleton-common-class': showLoader }">
-                        {{ localeData?.subscription?.you_have_total }} {{ plansList?.length }}
-                        {{ localeData?.subscription?.plans }}
-                    </p>
-                </div> -->
                 </mat-grid-tile>
             </div>
             <div class="no-data" *ngIf="!subscriptions?.length && !showLoader">
