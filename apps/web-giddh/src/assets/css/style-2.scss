@@ -9076,25 +9076,55 @@ input[type="checkbox"].cdk-visually-hidden::after {
             display: block !important;
         }
     }
-    .subscription-form-select {
-        float: left !important;
-        width: 128px !important;
-        height: 38px !important;
+    .form-select {
+        float: left;
+        width: 100% !important;
 
         .mat-form-field-wrapper {
             height: 100% !important;
             padding-bottom: 0 !important;
         }
+
         .mat-form-field-flex {
             float: left !important;
             width: 100% !important;
-            height: 39px !important;
         }
+
         .mat-form-field-infix {
             padding-top: 0 !important;
             padding-bottom: 0 !important;
             margin-top: 0 !important;
+            border: none !important;
         }
+
+        .mat-select {
+            margin-top: 0 !important;
+            z-index: 9991 !important;
+        }
+    }
+
+    .subscription-form-select {
+        float: left !important;
+        width: 100% !important;
+        height: 29px !important;
+
+        .mat-form-field-wrapper {
+            height: 100% !important;
+            padding-bottom: 0 !important;
+        }
+
+        .mat-form-field-flex {
+            float: left !important;
+            width: 100% !important;
+        }
+
+        .mat-form-field-infix {
+            padding-top: 0 !important;
+            padding-bottom: 0 !important;
+            margin-top: 0 !important;
+            border: none !important;
+        }
+
         .mat-select {
             margin-top: 0 !important;
             z-index: 9991 !important;
