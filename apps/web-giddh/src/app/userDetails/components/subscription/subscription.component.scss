@@ -125,6 +125,7 @@
     .sidebar-box {
         mat-grid-tile {
             border-bottom: 1px solid $dark-fog;
+
             &.active {
                 background: $solitude-light;
             }
@@ -732,27 +733,19 @@
         float: left;
         width: 100%;
     }
+}
 
-    .no-data {
-        margin-top: 19% !important;
-        position: absolute;
-        width: 100%;
-    }
+.no-data {
+    margin-top: 19% !important;
+    position: absolute;
+    width: 100%;
 }
 
 @media screen and (max-width: 1024px) and (orientation: landscape) {
-    * {
-        font-size: 14px;
-    }
-
     .no-data {
-        margin-top: 0% !important;
+        margin-top: 11% !important;
         position: absolute;
         width: 100%;
-
-        h1 {
-            font-size: 24px !important;
-        }
     }
 
     .menu-one-button {
@@ -821,11 +814,13 @@
 
                 .side-bar-head {
                     font-size: 13.5px;
+
                     img {
                         height: 2px;
                         width: auto;
                         margin: 0px 2px;
                     }
+
                     span {
                         font-size: 13.5px;
                     }
@@ -977,29 +972,40 @@
 }
 
 @media screen and (min-width: 768px) and (orientation: portrait) {
+    .full-subscription-wrapper {
+        .ipad-responsive-sidbar {
+            margin-top: 22px !important;
+        }
+    }
+
+    .ipad-responsive {
+        height: 62px !important;
+    }
+
     .menu-two-list-items {
         float: left;
-        width: 100%;
-        display: contents;
+        width: 129px !important;
+        height: 57px !important;
+        margin-right: 7px;
+    }
+
+    .menu-two {
+        .form-field {
+            .search-bar {
+                font-size: 12px !important;
+            }
+        }
     }
 
     .no-data {
-        margin-top: 0% !important;
+        margin-top: 11% !important;
         position: absolute;
         width: 100%;
-
-        h1 {
-            font-size: 24px !important;
-        }
     }
 
     .expand-button {
         top: 35% !important;
         float: left !important;
-    }
-
-    * {
-        font-size: 12px;
     }
 
     .menu-one-button {
@@ -1008,7 +1014,7 @@
 
     .menu-two {
         img {
-            margin-top: 5px;
+            margin-top: 0px;
             height: 18px;
         }
     }
@@ -1027,24 +1033,26 @@
     }
 
     .menu-two-list {
-        width: 95%;
+        width: 100%;
 
         .menu-two-list-items {
             mat-select {
                 font-size: 10px;
-                height: 23px;
-                width: 3.8rem;
+                width: 100%;
                 margin-left: 0.2rem;
                 margin-bottom: 3px;
-                padding-top: 6px;
+                padding-top: 8px;
             }
 
             .transaction-select {
-                width: 4.2rem !important;
+                width: 100% !important;
             }
 
             span {
-                font-size: 11px;
+                font-size: 12px;
+                float: left;
+                width: 100%;
+                text-align: left;
             }
         }
 
@@ -1060,7 +1068,7 @@
         a {
             position: relative;
             left: 7px;
-            font-size: 9px;
+            font-size: 11px;
         }
     }
 
@@ -1156,7 +1164,7 @@
 
             .right-side {
                 p {
-                    font-size: 9px;
+                    font-size: 10px;
                 }
 
                 .right-side-btn {
