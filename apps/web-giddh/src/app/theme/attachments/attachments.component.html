@@ -43,7 +43,9 @@
                             (click)="showVoucherPreview()"
                             >{{ voucherPdf?.name }}</span
                         >
-                        <a class="cursor-pointer" (click)="showDeleteVoucherModal(i)"><i class="icon-trash"></i></a>
+                        <a class="cursor-pointer" *ngIf="!isCompany" (click)="showDeleteVoucherModal(i)"
+                            ><i class="icon-trash"></i
+                        ></a>
                     </div>
                 </ng-container>
                 <ng-container *ngIf="attachments?.length > 0">
@@ -66,7 +68,7 @@
                                     (click)="showFilePreview(attachment)"
                                     >{{ attachment?.name }}</span
                                 >
-                                <a class="cursor-pointer" (click)="showDeleteAttachedFileModal(i)"
+                                <a class="cursor-pointer" *ngIf="!isCompany" (click)="showDeleteAttachedFileModal(i)"
                                     ><i class="icon-trash"></i
                                 ></a>
                             </mat-list-item>
