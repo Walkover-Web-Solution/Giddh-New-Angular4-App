@@ -93,6 +93,9 @@
     }
     .bottom-grid-list-div {
         height: 64px !important;
+        .sub-plan-feature {
+            text-decoration: underline;
+        }
     }
     .sub-plan-name {
         float: left;
@@ -172,7 +175,6 @@
     .bottom-grid-list-div {
         .grid-title-left {
             line-height: 3.8 !important;
-            text-decoration: underline;
         }
     }
 }

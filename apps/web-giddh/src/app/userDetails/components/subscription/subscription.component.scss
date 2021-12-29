@@ -1,18 +1,15 @@
 @import "../../../../assets/css/color.scss";
-
 .menu-one-button {
     position: absolute;
     z-index: 9;
     top: 4px;
     left: 23.3%;
     width: 75.9%;
-
     button {
         float: right;
         font-weight: bold;
     }
 }
-
 .menu-two {
     height: inherit;
     background-color: $dark-fog;
@@ -22,13 +19,11 @@
     justify-content: flex-start;
     padding-left: 15px;
     align-items: center;
-
     img {
         cursor: pointer;
         height: 21px;
         width: auto;
     }
-
     input {
         margin: 0px 0px 0px 0.5rem;
         border: none;
@@ -36,28 +31,23 @@
         width: 240px;
         background-color: $dark-fog;
     }
-
     .menu-two-list {
         width: 66.8%;
         height: inherit;
     }
-
     .form-field {
         width: 240px;
         position: relative;
         top: 5px;
-
         .search-bar {
             font-weight: 500;
             color: $omiod;
         }
     }
 }
-
 .main-content-para {
     color: $dark-gray-new;
 }
-
 .menu-two-list {
     width: 100%;
     height: inherit;
@@ -65,12 +55,10 @@
     justify-content: space-around;
     align-items: center;
     background-color: $dark-fog;
-
     .menu-two-list-items {
-        .form-select {
+        .select-subscription {
             width: 5rem;
         }
-
         mat-select {
             background: $gray-95;
             width: 7.5rem;
@@ -81,23 +69,19 @@
             font-size: 14px;
             padding: 5px 0px 0px 5px;
         }
-
         .transaction-select {
             width: 11rem !important;
         }
-
         span {
             display: inline-block;
             color: $black-pearl;
         }
     }
 }
-
 .menu-two-button {
     width: 14%;
     height: inherit;
     background-color: $dark-fog;
-
     a {
         text-decoration: underline;
         font-weight: bold;
@@ -111,8 +95,7 @@
         cursor: pointer;
     }
 }
-
-.subscritption-sidebar {
+.subscription-sidebar {
     min-width: 100%;
     overflow: auto;
     height: 100%;
@@ -121,21 +104,17 @@
     border-right: 2px solid $default-border-bottom;
     position: relative;
     padding: 0;
-
     .sidebar-box {
         mat-grid-tile {
             border-bottom: 1px solid $dark-fog;
-
             &.active {
                 background: $solitude-light;
             }
         }
-
         .side-bar-head {
             color: $midnight-blue;
             font-size: 13px;
             font-weight: 600;
-
             img {
                 position: relative;
                 bottom: 2px;
@@ -143,16 +122,13 @@
                 height: auto;
                 margin: 0px 5px;
             }
-
             span {
                 color: $omiod;
             }
         }
-
         :hover {
             background: $solitude-light;
         }
-
         .side-bar-items {
             display: flex;
             justify-content: center;
@@ -162,39 +138,32 @@
             position: absolute;
             cursor: pointer;
             padding-left: 11px;
-
             :hover {
                 background: none;
             }
-
             .side-bar-list {
                 display: flex;
                 align-items: center;
                 font-size: 14px;
                 line-height: 1.7rem;
-
                 img {
                     width: 18px;
                     height: auto;
                     margin-right: 0.4rem;
                 }
-
                 .side-bar-list-title {
                     width: 95px;
                     height: inherit;
                     color: $omiod;
                 }
-
                 .warning {
                     color: $orange-new;
                     font-weight: 600;
                     font-size: 12.5px;
                 }
-
                 span {
                     margin-right: 5px;
                 }
-
                 .date {
                     font-size: 14px;
                 }
@@ -202,7 +171,6 @@
         }
     }
 }
-
 .sidebar-clone {
     min-width: 100%;
     overflow: hidden;
@@ -212,19 +180,16 @@
     border-right: 2px solid $default-border-bottom;
     position: relative;
     padding: 0;
-
     .sidebar-box-clone {
         mat-grid-tile {
             border-bottom: 1px solid $dark-fog;
         }
-
         .side-bar-head-clone {
             color: $midnight-blue;
             font-size: 13px;
             font-weight: 600;
             margin-top: 5px;
             margin-bottom: 5px;
-
             img {
                 position: relative;
                 bottom: 2px;
@@ -232,12 +197,10 @@
                 height: auto;
                 margin: 0px 5px;
             }
-
             span {
                 color: $omiod;
             }
         }
-
         .side-bar-items-clone {
             display: flex;
             justify-content: center;
@@ -245,7 +208,6 @@
             width: 100%;
             height: inherit;
             position: absolute;
-
             .side-bar-list-clone-1 {
                 display: flex;
                 align-items: center;
@@ -253,20 +215,17 @@
                 line-height: 30px;
                 margin-top: 5px;
                 margin-bottom: 5px;
-
                 img {
                     width: 18px;
                     height: auto;
                     margin-right: 0.4rem;
                 }
-
                 .side-bar-list-title-clone {
                     width: 95px;
                     height: inherit;
                     color: $omiod;
                 }
             }
-
             .side-bar-list-clone-2 {
                 display: flex;
                 align-items: center;
@@ -274,20 +233,17 @@
                 line-height: 25px;
                 margin-top: 5px;
                 margin-bottom: 5px;
-
                 img {
                     width: 18px;
                     height: auto;
                     margin-right: 0.4rem;
                 }
-
                 .side-bar-list-title-clone {
                     width: 95px;
                     height: inherit;
                     color: $omiod;
                 }
             }
-
             .side-bar-list-clone-3 {
                 display: flex;
                 align-items: center;
@@ -295,13 +251,11 @@
                 line-height: 20px;
                 margin-top: 5px;
                 margin-bottom: 5px;
-
                 img {
                     width: 18px;
                     height: auto;
                     margin-right: 0.4rem;
                 }
-
                 .side-bar-list-title-clone {
                     width: 95px;
                     height: inherit;
@@ -311,12 +265,10 @@
         }
     }
 }
-
 .main-content {
     width: 100%;
     height: inherit;
     color: $lighted-gray;
-
     .consumed-transaction,
     .consumed-branch,
     .consumed-warehouse,
@@ -327,85 +279,69 @@
         height: auto;
         position: absolute;
     }
-
     .consumed-transaction {
         top: 90px;
         left: 26px;
     }
-
     .consumed-branch {
         top: 137px;
         left: 26px;
     }
-
     .consumed-warehouse {
         top: 183px;
         left: 25px;
     }
-
     .added-transaction {
         top: 264px;
         left: 26px;
     }
-
     .added-branch {
         top: 312px;
         left: 26px;
     }
-
     .added-warehouse {
         top: 358px;
         left: 25px;
     }
-
     .added-row,
     .added-balance,
     .added-charges {
         background-color: $fog-green;
     }
-
     table {
         width: 97%;
         box-shadow: none;
         margin: 0px 13px;
     }
-
     ::ng-deep {
         .cdk-header-row {
             background-color: $default-border-bottom;
         }
-
         .mat-header-row {
             height: 30px !important;
         }
-
         .mat-header-cell {
             color: $black-pearl !important;
             padding: 4px 10px !important;
             font-size: 13px !important;
             letter-spacing: -0.4px;
         }
-
         th.mat-header-cell:last-of-type,
         td.mat-cell:last-of-type {
             text-align: right;
         }
-
         th.mat-header-cell:first-of-type,
         td.mat-cell:first-of-type {
             width: 49%;
             padding-left: 45px !important;
             color: $black-pearl !important;
         }
-
         .mat-table tbody tr:hover td {
             background-color: none !important;
         }
-
         td.mat-cell:last-of-type {
             color: $red !important;
         }
-
         .mat-table tbody > tr > td {
             color: $black-pearl !important;
             background-color: $gray-95;
@@ -413,21 +349,18 @@
             padding-bottom: 7px !important;
         }
     }
-
     .main-content-head {
         display: flex;
         justify-content: space-between;
         align-items: center;
         margin-top: 6px;
         background-color: $white;
-
         .left-side {
             p {
                 font-size: 12px;
                 font-weight: 600;
                 line-height: 19px;
                 color: $black-pearl;
-
                 span {
                     font-size: 16px;
                     font-weight: 700;
@@ -435,22 +368,18 @@
                 }
             }
         }
-
         .right-side {
             display: flex;
             align-items: center;
-
             p {
                 font-size: 12px;
                 font-weight: bold;
                 color: $grey-chateau;
                 line-height: 19px;
-
                 span {
                     color: $red;
                 }
             }
-
             .right-side-btn {
                 margin: 0px 9px;
                 font-weight: 700;
@@ -458,26 +387,21 @@
             }
         }
     }
-
     .summary {
         margin-top: 2px;
         font-size: 12px;
         margin-left: 16px;
         font-weight: 600;
     }
-
     .balance-info {
         margin: 5px 17px 0px 17px;
-
         mat-grid-tile {
             background-color: $cream-orange;
-
             .overall-summary-bar-one {
                 background: $white;
                 width: 100%;
                 height: inherit;
                 display: flex;
-
                 .box {
                     width: 25%;
                     background: $cream-orange;
@@ -489,14 +413,12 @@
                     padding: 0;
                     font-size: 12px;
                     font-weight: bold;
-
                     p {
                         span {
                             color: $black-pearl;
                             font-size: 15px;
                             margin-left: 3px;
                         }
-
                         img {
                             height: 3px;
                             width: auto;
@@ -505,18 +427,15 @@
                             bottom: 2px;
                             margin: 0px 6px;
                         }
-
                         .balance {
                             color: $red;
                         }
                     }
-
                     .box-heading {
                         .set-height {
                             height: 15px;
                             width: auto;
                         }
-
                         span {
                             margin-left: 3px;
                             position: relative;
@@ -525,39 +444,32 @@
                             font-size: 12px;
                         }
                     }
-
                     img {
                         height: 19px;
                         width: auto;
                     }
-
                     p {
                         margin-top: 7px;
                     }
                 }
-
                 .item-1,
                 .item-2,
                 .item-3 {
                     margin-right: 3px;
                 }
             }
-
             .overall-summary-bar-two {
                 width: 100%;
                 display: flex;
                 justify-content: flex-end;
                 margin-right: 23px;
-
                 p {
                     font-size: 14px;
-
                     .tomato {
                         color: $red;
                         font-weight: 700;
                         margin: 0px 3px;
                     }
-
                     .grey {
                         color: $midnight-blue;
                         font-weight: 700;
@@ -567,25 +479,20 @@
             }
         }
     }
-
     mat-tab-group {
         margin: 0px 17px;
         margin-top: 10px;
         height: 22rem;
-
         .companies-expansion-panel {
             mat-expansion-panel-header:not([aria-expanded="false"]) {
                 background-color: $dark-fog;
-
                 a {
                     display: block;
                     font-size: 0.7rem;
                     text-decoration: underline;
                 }
             }
-
             position: relative;
-
             a {
                 position: absolute;
                 right: 1rem;
@@ -594,7 +501,6 @@
                 font-size: 0.9rem;
                 top: 11px;
             }
-
             :hover {
                 a {
                     display: block;
@@ -602,14 +508,12 @@
             }
         }
     }
-
     .expand-button {
         position: absolute;
         width: 21%;
         left: 77%;
         top: 31%;
         z-index: 2;
-
         button {
             float: right;
             padding: 0px;
@@ -620,7 +524,6 @@
             height: 25px;
         }
     }
-
     .main-content-search-box {
         height: 7%;
         width: 29%;
@@ -628,19 +531,16 @@
         z-index: 2;
         padding-left: 0;
         transform: translate(252px, 12px);
-
         input {
             width: 50%;
         }
     }
-
     .companies-container {
         height: 3rem;
         width: 100%;
         display: flex;
         justify-content: space-between;
         padding: 0px 1rem;
-
         .companies-container-items {
             background-color: $white;
             width: 20%;
@@ -649,11 +549,9 @@
             height: 79%;
             display: flex;
             align-items: center;
-
             p {
                 padding-left: 1rem;
                 color: $black-pearl;
-
                 img {
                     height: 1.2rem;
                     padding-right: 8px;
@@ -662,16 +560,13 @@
         }
     }
 }
-
 ::ng-deep {
     .mat-select-arrow {
         color: $omiod;
     }
-
     .mat-select-placeholder {
         color: $omiod;
     }
-
     #mat-select-0-panel,
     #mat-select-2-panel,
     #mat-select-4-panel {
@@ -679,98 +574,76 @@
         top: 43px;
         left: 12px;
     }
-
     .mat-tab-labels {
         background-color: $dark-fog;
-
         .mat-tab-label {
             min-width: 110px;
         }
-
         .mat-tab-label-content {
             color: $omiod;
             font-weight: 700;
         }
     }
-
     mat-expansion-panel-header {
         height: 45px !important;
-
         mat-panel-title {
             font-size: 14px;
             padding-left: 15px;
             color: $black-pearl !important;
         }
     }
-
     .companies .mat-expanded {
         background-color: $dark-fog;
     }
-
     .mat-expansion-panel-spacing {
         margin: 0 !important;
     }
-
     mat-accordion .mat-expanded {
         background-color: $gray-95;
     }
 }
-
 .main-content-condition {
     text-align: center;
     margin-bottom: 270px;
 }
-
 .mat-expansion-panel:not(.mat-expanded) .mat-expansion-panel-header:hover {
     background: $solitude-light;
 }
-
 .main-content-subscription {
     float: left;
     width: 100%;
-
     .full-subscription-wrapper {
         float: left;
         width: 100%;
     }
 }
-
 .no-data {
-    margin-top: 19% !important;
+    top: 19% !important;
     position: absolute;
     width: 100%;
 }
-
 @media screen and (max-width: 1024px) and (orientation: landscape) {
     .no-data {
-        margin-top: 11% !important;
-        position: absolute;
-        width: 100%;
+        top: 11% !important;
     }
-
     .menu-one-button {
         left: 22.5%;
     }
-
     .menu-two {
         padding-left: 9px;
-
         .form-field {
             .search-bar {
                 font-size: 13.5px;
             }
         }
-
         img {
             margin-top: 5px;
             height: 18px;
             transform: translate(5px, -1px);
         }
     }
-
     .menu-two-list {
         width: 95%;
-
         .menu-two-list-items {
             mat-select {
                 font-size: 12px;
@@ -778,83 +651,67 @@
                 width: 5.2rem;
                 margin-left: 0.2rem;
             }
-
             .transaction-select {
                 width: 4.2rem !important;
             }
         }
-
         .transaction-box {
             position: relative;
             right: 10px;
         }
     }
-
     .menu-two-button {
         width: 5%;
-
         a {
             position: relative;
             left: 7px;
             font-size: 13px;
         }
     }
-
-    .subscritption-sidebar {
+    .subscription-sidebar {
         .sidebar-box {
             .side-bar-items {
                 justify-content: flex-start;
                 padding-left: 16px;
                 padding-top: 18px;
-
                 .plan-timeline {
                     position: relative;
                     top: 5px;
                 }
-
                 .side-bar-head {
                     font-size: 13.5px;
-
                     img {
                         height: 2px;
                         width: auto;
                         margin: 0px 2px;
                     }
-
                     span {
                         font-size: 13.5px;
                     }
                 }
-
                 .side-bar-list {
                     line-height: 1rem;
-
                     .date {
                         position: absolute;
                         top: 0px !important;
                         left: 26px;
                         font-size: 11.1px;
                     }
-
                     img {
                         width: 15px;
                         margin-right: 0.2rem;
                         margin-top: 0.1rem;
                     }
-
                     .warning {
                         font-size: 11px;
                     }
-
                     .side-bar-list-title {
                         display: none;
                         width: 73px;
                     }
-
                     span {
                         margin-right: 2px;
                     }
-
                     p {
                         font-size: 12px;
                         padding-top: 0.1rem;
@@ -863,31 +720,26 @@
             }
         }
     }
-
     .main-content {
         .main-content-head {
             .left-side {
                 p {
                     font-size: 10.5px;
-
                     span {
                         font-size: 13px;
                     }
                 }
             }
-
             .right-side {
                 p {
                     font-size: 10px;
                 }
-
                 .right-side-btn {
                     height: 34px;
                     width: 105px;
                 }
             }
         }
-
         .balance-info {
             mat-grid-tile {
                 .overall-summary-bar-one {
@@ -897,10 +749,8 @@
                                 font-size: 13.5px;
                             }
                         }
-
                         p {
                             font-size: 13px;
-
                             img {
                                 margin: 0px 3px;
                             }
@@ -909,19 +759,16 @@
                 }
             }
         }
-
         .main-content-search-box {
             width: 20%;
             transform: translate(210px, 11px);
             height: 6%;
         }
-
         .accordion-search-box {
             img {
                 height: 17px;
                 transform: translateY(-2px);
             }
-
             .form-field {
                 .search-bar {
                     font-size: 14.5px;
@@ -930,12 +777,10 @@
                 }
             }
         }
-
         .expand-button {
             top: 30.5%;
             left: 60%;
             width: 40%;
-
             button {
                 border-bottom: none;
                 padding-left: 0 !important;
@@ -943,26 +788,22 @@
                 height: 21px;
                 transform: translate(-9px, 0px);
             }
-
             :nth-child(2) {
                 margin-right: -10px !important;
             }
         }
     }
-
     ::ng-deep {
         .mat-tab-labels {
             .mat-tab-label {
                 min-width: 94px;
                 height: 38px;
                 padding: 0;
-
                 .mat-tab-label-content {
                     font-weight: 100;
                 }
             }
         }
-
         .expand-button {
             span {
                 text-decoration: underline;
@@ -970,25 +811,21 @@
         }
     }
 }
-
 @media screen and (min-width: 768px) and (orientation: portrait) {
     .full-subscription-wrapper {
-        .ipad-responsive-sidbar {
+        .ipad-responsive-sidebar {
             margin-top: 22px !important;
         }
     }
-
     .ipad-responsive {
         height: 62px !important;
     }
-
     .menu-two-list-items {
         float: left;
         width: 129px !important;
         height: 57px !important;
         margin-right: 7px;
     }
-
     .menu-two {
         .form-field {
             .search-bar {
@@ -996,45 +833,37 @@
             }
         }
     }
-
     .no-data {
-        margin-top: 11% !important;
+        top: 11% !important;
         position: absolute;
         width: 100%;
     }
-
     .expand-button {
         top: 35% !important;
         float: left !important;
     }
-
     .menu-one-button {
         width: 74.3%;
     }
-
     .menu-two {
         img {
             margin-top: 0px;
             height: 18px;
         }
     }
-
     .accordion-search-box {
         img {
             position: relative;
             left: 5px;
         }
-
         .form-field {
             .search-bar {
                 font-size: 13px;
             }
         }
     }
-
     .menu-two-list {
         width: 100%;
-
         .menu-two-list-items {
             mat-select {
                 font-size: 10px;
@@ -1043,11 +872,9 @@
                 margin-bottom: 3px;
                 padding-top: 8px;
             }
-
             .transaction-select {
                 width: 100% !important;
             }
-
             span {
                 font-size: 12px;
                 float: left;
@@ -1055,59 +882,48 @@
                 text-align: left;
             }
         }
-
         .transaction-box {
             position: relative;
             right: 10px;
         }
     }
-
     .menu-two-button {
         width: 5%;
-
         a {
             position: relative;
             left: 7px;
             font-size: 11px;
         }
     }
-
-    .subscritption-sidebar {
+    .subscription-sidebar {
         .sidebar-box {
             .side-bar-items {
                 .side-bar-head {
                     font-size: 10px;
-
                     img {
                         height: 2px;
                         width: auto;
                         margin: 0px 3px;
                     }
-
                     span {
                         font-size: 10px;
                     }
                 }
-
                 .side-bar-list {
                     line-height: 1.4rem;
-
                     .date {
                         font-size: 12px;
                         position: absolute;
                         top: 85px;
                         left: 43px;
                     }
-
                     img {
                         width: 14px;
                         margin-right: 0.3rem;
                     }
-
                     .warning {
                         font-size: 9px;
                     }
-
                     .side-bar-list-title {
                         width: 73px;
                         display: none;
@@ -1116,7 +932,6 @@
             }
         }
     }
-
     .main-content {
         .consumed-transaction,
         .consumed-branch,
@@ -1126,53 +941,42 @@
         .added-warehouse {
             width: 16px;
         }
-
         .consumed-transaction {
             top: 86px;
         }
-
         .consumed-branch {
             top: 120px;
         }
-
         .consumed-warehouse {
             top: 153px;
         }
-
         .added-transaction {
             top: 221px;
         }
-
         .added-branch {
             top: 256px;
         }
-
         .added-warehouse {
             top: 289px;
         }
-
         .main-content-head {
             .left-side {
                 p {
                     font-size: 11px;
-
                     span {
                         font-size: 13px;
                     }
                 }
             }
-
             .right-side {
                 p {
                     font-size: 10px;
                 }
-
                 .right-side-btn {
                     padding: 0px 10px;
                 }
             }
         }
-
         .balance-info {
             mat-grid-tile {
                 .overall-summary-bar-one {
@@ -1180,14 +984,11 @@
                         img {
                             height: 15px;
                         }
-
                         p {
                             font-size: 9px;
-
                             img {
                                 margin: 0px 3px;
                             }
-
                             span {
                                 font-size: 13px;
                                 margin-left: 1px;
@@ -1195,7 +996,6 @@
                         }
                     }
                 }
-
                 .overall-summary-bar-two {
                     p {
                         font-size: 12px;
@@ -1203,12 +1003,10 @@
                 }
             }
         }
-
         .main-content-search-box {
             width: 25%;
             transform: translate(184px, 10px);
         }
-
         .expand-button {
             button {
                 border-bottom: none;
@@ -1218,13 +1016,11 @@
                 font-size: 13px;
             }
         }
-
         .companies-container {
             .companies-container-items {
                 p {
                     padding-left: 0.2rem;
                     font-size: 9.5px;
-
                     img {
                         height: 1rem;
                         padding-right: 1px;
@@ -1233,7 +1029,6 @@
             }
         }
     }
-
     ::ng-deep {
         .mat-tab-labels {
             .mat-tab-label {
@@ -1241,7 +1036,6 @@
                 padding: 0px 10px;
             }
         }
-
         #mat-select-0-panel,
         #mat-select-2-panel,
         #mat-select-4-panel {
