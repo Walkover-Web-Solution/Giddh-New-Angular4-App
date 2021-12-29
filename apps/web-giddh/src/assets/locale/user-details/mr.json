@@ -131,7 +131,9 @@
 		"search_companies": "शोध कंपन्या",
 		"transaction_used":"व्यवहार वापरले",
         "expiring_within":"आत कालबाह्य होत आहे",
-		"expires":"कालबाह्य"
+		"expires":"कालबाह्य",
+		"timeline":"टाइमलाइन",
+		"search_plans":"शोध योजना आणि कंपन्या"
 	},
 	"expiring_list":{
         "seven_days":"7 दिवस",

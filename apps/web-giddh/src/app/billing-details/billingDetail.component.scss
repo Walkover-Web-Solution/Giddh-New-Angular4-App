@@ -8,8 +8,19 @@
         float: left;
         width: 100%;
         .back-button {
-            background-color: $skeleton-loading-gradient !important;
             margin-top: 4%;
+            background-color: $very-light-gray !important;
+            border-color: $gainsboro;
+            color: $night-rider;
+            font-family: "opensans-semibold" !important;
+            margin-bottom: 15px !important;
+            padding-left: 12px !important;
+            padding-right: 18px !important;
+            height: 37px;
+            .back-left {
+                font-size: 21px;
+                float: left;
+            }
         }
         .giddh-heading {
             font-size: 37px;
@@ -262,6 +273,14 @@
     }
 }
 @media screen and (min-width: 768px) and (orientation: portrait) {
+    #main {
+        .main-heading-billing {
+            .back-button {
+                width: 90px;
+                height: 40px;
+            }
+        }
+    }
     .left-side {
         float: left !important;
         width: 100% !important;
@@ -315,6 +334,14 @@
     }
 } /* Landscape */
 @media screen and (max-width: 1024px) and (orientation: landscape) {
+    #main {
+        .main-heading-billing {
+            .back-button {
+                width: 90px;
+                height: 40px;
+            }
+        }
+    }
     .left-side {
         float: left !important;
         width: 100% !important;

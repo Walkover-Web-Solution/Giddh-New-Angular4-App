@@ -8,6 +8,7 @@ import { SubscriptionRequest } from '../../../models/api-models/Company';
 import { SettingsProfileService } from '../../../services/settings.profile.service';
 import { takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
+import { FormControl } from '@angular/forms';
 
 @Component({
     selector: 'move-company',
@@ -19,6 +20,10 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
     @Output() public moveCompany = new EventEmitter<boolean>();
     @Input() public subscriptions: SubscriptionsUser[] = [];
     @Input() public moveSelectedCompany: any;
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
     public availablePlans: any[] = [];
     public availablePlansOption: IOption[] = [];
     public selectedPlan: any;
@@ -30,10 +35,8 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
     };
     /** Subject to release subscription memory */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    /* This will hold local JSON data */
-    @Input() public localeData: any = {};
-    /* This will hold common JSON data */
-    @Input() public commonLocaleData: any = {};
+    /** Control for the MatSelect filter keyword */
+    public searchPlan: FormControl = new FormControl();
 
     constructor(private store: Store<AppState>, private settingsProfileActions: SettingsProfileActions, private settingsProfileService: SettingsProfileService) {
 
