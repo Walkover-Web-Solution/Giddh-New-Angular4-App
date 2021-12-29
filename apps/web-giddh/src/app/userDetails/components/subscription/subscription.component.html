@@ -5,8 +5,8 @@
                 {{ commonLocaleData?.app_buy_new_plan }}
             </button>
         </div>
-        <mat-grid-list cols="16" rowHeight="40px" gutterSize="0px" class="responsive-grid-list">
-            <mat-grid-tile colspan="4" rowspan="1" class="responsive-grid-title-left-top">
+        <mat-grid-list cols="16" rowHeight="40px" gutterSize="0px">
+            <mat-grid-tile [colspan]="menuOneWidth" rowspan="1" class="ipad-responsive">
                 <div class="menu-two" [ngClass]="{ 'skeleton-common-class': showLoader }">
                     <label for="Search-box">
                         <img src="{{ imgPath }}search.png" alt="SearchBar" *ngIf="!showLoader" />
@@ -21,7 +21,7 @@
                     </mat-form-field>
                 </div>
             </mat-grid-tile>
-            <mat-grid-tile colspan="12" class="responsive-grid-title-right">
+            <mat-grid-tile [colspan]="menuTwoWidth" class="ipad-responsive">
                 <div class="menu-two-list" [ngClass]="{ 'skeleton-common-class': showLoader }">
                     <div class="menu-two-list-items" *ngIf="!showLoader">
                         <span class="mat-body-1 plan">{{ localeData?.subscription?.plan }}</span>
@@ -90,7 +90,7 @@
             </mat-grid-tile>
 
             <div class="full-subscription-wrapper">
-                <mat-grid-tile [colspan]="sideBarBoxWidth" [rowspan]="sideBarBoxLength">
+                <mat-grid-tile [colspan]="sideBarBoxWidth" [rowspan]="sideBarBoxLength" class="ipad-responsive-sidbar">
                     <div
                         class="subscritption-sidebar"
                         *ngIf="!showLoader"
@@ -191,7 +191,7 @@
                     </div>
                 </mat-grid-tile>
 
-                <mat-grid-tile [colspan]="mainContentWidth" [rowspan]="sideBarBoxLength">
+                <mat-grid-tile [colspan]="mainContentWidth" [rowspan]="sideBarBoxLength" class="ipad-responsive-sidbar">
                     <div class="main-content" *ngIf="selectedSubscription">
                         <mat-toolbar class="main-content-head">
                             <div class="left-side">
