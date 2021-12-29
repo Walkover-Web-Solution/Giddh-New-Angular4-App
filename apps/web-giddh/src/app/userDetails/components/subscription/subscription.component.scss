@@ -1004,6 +1004,16 @@
         }
     }
 
+    .no-data {
+        margin-top: 0% !important;
+        position: absolute;
+        width: 100%;
+
+        h1 {
+            font-size: 24px !important;
+        }
+    }
+
     .expand-button {
         top: 35% !important;
         float: left !important;
