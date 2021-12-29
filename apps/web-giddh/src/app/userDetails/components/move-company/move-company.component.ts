@@ -35,7 +35,7 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
     };
     /** Subject to release subscription memory */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    /** control for the MatSelect filter keyword */
+    /** Control for the MatSelect filter keyword */
     public searchPlan: FormControl = new FormControl();
 
     constructor(private store: Store<AppState>, private settingsProfileActions: SettingsProfileActions, private settingsProfileService: SettingsProfileService) {
