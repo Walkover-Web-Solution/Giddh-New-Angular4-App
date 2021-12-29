@@ -745,6 +745,16 @@
         font-size: 14px;
     }
 
+    .no-data {
+        margin-top: 0% !important;
+        position: absolute;
+        width: 100%;
+
+        h1 {
+            font-size: 24px !important;
+        }
+    }
+
     .menu-one-button {
         left: 31%;
     }
@@ -810,16 +820,14 @@
                 }
 
                 .side-bar-head {
-                    font-size: 9.5px;
-
+                    font-size: 13.5px;
                     img {
                         height: 2px;
                         width: auto;
                         margin: 0px 2px;
                     }
-
                     span {
-                        font-size: 9.5px;
+                        font-size: 13.5px;
                     }
                 }
 
@@ -976,6 +984,16 @@
         margin-top: 20px;
     }
 
+    .no-data {
+        margin-top: 0% !important;
+        position: absolute;
+        width: 100%;
+
+        h1 {
+            font-size: 24px !important;
+        }
+    }
+
     .expand-button {
         top: 35% !important;
         float: left !important;
@@ -993,7 +1011,7 @@
     }
 
     .menu-one-button {
-        width: 66.3%;
+        width: 74.3%;
     }
 
     .menu-two {

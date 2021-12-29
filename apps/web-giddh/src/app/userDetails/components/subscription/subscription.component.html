@@ -937,7 +937,7 @@
                 </div> -->
                 </mat-grid-tile>
             </div>
-            <div class="no-data" *ngIf="!subscriptions.length">
+            <div class="no-data" *ngIf="!subscriptions?.length && !showLoader">
                 <no-data [secondaryMessageClass]="'p-0'"></no-data>
             </div>
         </mat-grid-list>
