@@ -172,6 +172,7 @@
     .bottom-grid-list-div {
         .grid-title-left {
             line-height: 3.8 !important;
+            text-decoration: underline;
         }
     }
 }
@@ -752,6 +753,14 @@
     .welcome-msg {
         float: left;
         width: 100%;
+        .btn-cancel {
+            height: 37px;
+            width: 80px;
+
+            .back-left {
+                margin-top: 0% !important;
+            }
+        }
     }
     .renewal-data {
         float: left;
@@ -783,10 +792,19 @@
     .plan-table {
         height: 412px;
         margin-bottom: 15px;
+        .bottom-grid-list-div {
+            .grid-title-left {
+                line-height: 4.9 !important;
+                a {
+                    font-weight: 700;
+                }
+            }
+        }
     }
     .grid-title-left {
         width: 268px !important;
         padding-top: 0 !important;
+        line-height: 3.5 !important;
     }
     .grid-title-list-changes {
         width: 220px !important;
@@ -833,6 +851,13 @@
     .welcome-msg {
         float: left;
         width: 100%;
+        .btn-cancel {
+            height: 37px;
+            width: 80px;
+            .back-left {
+                margin-top: 0% !important;
+            }
+        }
     }
     .renewal-data {
         float: left;
@@ -860,11 +885,20 @@
         width: 20% !important;
     }
     .plan-table {
-        height: 530px;
+        height: 414px;
+        .bottom-grid-list-div {
+            .grid-title-left {
+                line-height: 1.5 !important;
+                a {
+                    font-weight: 700;
+                }
+            }
+        }
     }
     .grid-title-left {
         width: 319px !important;
         padding-top: 22px !important;
+        line-height: 0 !important;
     }
     .grid-title-list-changes {
         width: 305px !important;
