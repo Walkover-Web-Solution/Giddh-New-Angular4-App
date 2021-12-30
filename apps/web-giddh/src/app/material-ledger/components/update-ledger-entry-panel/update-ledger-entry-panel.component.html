@@ -302,10 +302,19 @@
                                                 (click)="openAttachmentsDialog(attachments)"
                                                 [matTooltipPosition]="'left'"
                                                 [containerClass]="'col-xs-3'"
-                                                [matTooltip]="localeData?.download_file"
+                                                [matTooltip]="
+                                                    vm.selectedLedger.attachedFile?.length > 0 &&
+                                                    vm.selectedLedger.voucherNumber?.length > 0
+                                                        ? vm.selectedLedger.voucherNumber +
+                                                          ', ' +
+                                                          vm.selectedLedger.attachedFileName
+                                                        : vm.selectedLedger.attachedFile?.length > 0
+                                                        ? vm.selectedLedger.attachedFileName
+                                                        : vm.selectedLedger.voucherNumber
+                                                "
                                                 matTooltipClass="tooltip-black"
                                             >
-                                                <i class="icon-attachment pull-left"></i>
+                                                <i class="icon-download-circle pull-left"></i>
                                             </span>
                                         </td>
 
@@ -619,10 +628,19 @@
                                                 (click)="openAttachmentsDialog(attachments)"
                                                 [matTooltipPosition]="'left'"
                                                 [containerClass]="'col-xs-3'"
-                                                [matTooltip]="localeData?.download_file"
+                                                [matTooltip]="
+                                                    vm.selectedLedger.attachedFile?.length > 0 &&
+                                                    vm.selectedLedger.voucherNumber?.length > 0
+                                                        ? vm.selectedLedger.voucherNumber +
+                                                          ', ' +
+                                                          vm.selectedLedger.attachedFileName
+                                                        : vm.selectedLedger.attachedFile?.length > 0
+                                                        ? vm.selectedLedger.attachedFileName
+                                                        : vm.selectedLedger.voucherNumber
+                                                "
                                                 matTooltipClass="tooltip-black"
                                             >
-                                                <i class="icon-attachment pull-left"></i>
+                                                <i class="icon-download-circle pull-left"></i>
                                             </span>
                                         </td>
 
