@@ -156,13 +156,13 @@ export class TrialBalanceGridComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof TrialBalanceGridComponent
      */
     public toggleGroupVisibility(group: Array<ChildGroup>, isVisible: boolean): void {
-        for (let groupIndex = 0; groupIndex < group.length; groupIndex++) {
+        for (let groupIndex = 0; groupIndex < group?.length; groupIndex++) {
             const currentGroup: ChildGroup = group[groupIndex];
             if (currentGroup.isIncludedInSearch) {
                 currentGroup.isCreated = isVisible;
                 currentGroup.isVisible = isVisible;
                 currentGroup.isOpen = isVisible;
-                for (let accountIndex = 0; accountIndex < currentGroup.accounts.length; accountIndex++) {
+                for (let accountIndex = 0; accountIndex < currentGroup.accounts?.length; accountIndex++) {
                     const currentAccount: Account = currentGroup.accounts[accountIndex];
                     if (currentAccount.isIncludedInSearch) {
                         currentAccount.isCreated = isVisible;
