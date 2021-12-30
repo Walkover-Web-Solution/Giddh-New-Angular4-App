@@ -244,6 +244,8 @@ export class ContactComponent implements OnInit, OnDestroy {
     public availableColumnsCount: any[] = [];
     /** True if we should select all checkbox */
     public showSelectAll: boolean = false;
+    /** True if custom fields finished loading */
+    public customFieldsLoaded: boolean = false;
 
     constructor(
         public dialog: MatDialog, 
@@ -446,7 +448,6 @@ export class ContactComponent implements OnInit, OnDestroy {
         ).subscribe(searchedText => {
             this.searchStr$.next(searchedText);
         });
-
 
         this.store.pipe(select(state => state.company), takeUntil(this.destroyed$)).subscribe(response => {
             this.isIciciAccountPendingForApproval = false;
@@ -1420,6 +1421,8 @@ export class ContactComponent implements OnInit, OnDestroy {
             } else {
                 this.toaster.showSnackBar("error", response.message);
             }
+            this.customFieldsLoaded = true;
+            this.cdRef.detectChanges();
         });
     }
 
@@ -1438,11 +1441,17 @@ export class ContactComponent implements OnInit, OnDestroy {
                         visibility: false,
                         displayName: key.key,
                     };
+                }
+
+                let isColumnAvailable = this.availableColumnsCount.filter(column => column.value === key.uniqueName);
+                if(!isColumnAvailable?.length) {
                     this.availableColumnsCount.push({ key: index, value: key.uniqueName });
                 }
             }
         }
         this.setDisplayColumns();
+
+        this.selectAll = Object.keys(this.showFieldFilter).every(filterName => this.showFieldFilter[filterName].visibility);
     }
 
     /**

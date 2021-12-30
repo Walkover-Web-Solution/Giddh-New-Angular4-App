@@ -8243,7 +8243,11 @@ giddh-datepicker {
 .cdk-overlay-connected-position-bounding-box {
     z-index: 9999;
 }
-
+.cmd-k {
+    .cdk-overlay-container {
+        z-index: 999 !important;
+    }
+}
 giddh-datepicker {
     .mat-form-field-appearance-fill .mat-form-field-flex {
         border: 1px solid $gainsboro !important;
