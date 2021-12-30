@@ -1299,7 +1299,7 @@
                                                             "
                                                             (click)="openAttachmentsDialog(attachments, transactions)"
                                                         >
-                                                            <i class="icon-attachment pull-left"></i>
+                                                            <i class="icon-download-circle pull-left"></i>
                                                         </span>
                                                     </span>
                                                 </div>
@@ -1560,11 +1560,17 @@
                                                 (txn.attachedFileUniqueName || txn.voucherGenerated)
                                             "
                                             (click)="openAttachmentsDialog(attachments, txn)"
-                                            [matTooltip]="localeData?.download_file"
+                                            [matTooltip]="
+                                                txn.attachedFileUniqueName && txn.voucherGenerated
+                                                    ? txn.voucherNumber + ', ' + txn.attachedFileName
+                                                    : txn.attachedFileUniqueName
+                                                    ? txn.attachedFileName
+                                                    : txn.voucherNumber
+                                            "
                                             [matTooltipPosition]="'right'"
                                             matTooltipClass="tooltip-black"
                                         >
-                                            <i class="icon-attachment pull-left"></i>
+                                            <i class="icon-download-circle pull-left"></i>
                                         </span>
                                     </div>
                                 </mat-grid-tile>
@@ -1979,11 +1985,17 @@
                                                 (txn.attachedFileUniqueName || txn.voucherGenerated)
                                             "
                                             (click)="openAttachmentsDialog(attachments, txn)"
-                                            [matTooltip]="localeData?.download_file"
+                                            [matTooltip]="
+                                                txn.attachedFileUniqueName && txn.voucherGenerated
+                                                    ? txn.voucherNumber + ', ' + txn.attachedFileName
+                                                    : txn.attachedFileUniqueName
+                                                    ? txn.attachedFileName
+                                                    : txn.voucherNumber
+                                            "
                                             [matTooltipPosition]="'right'"
                                             matTooltipClass="tooltip-black"
                                         >
-                                            <i class="icon-attachment pull-left"></i>
+                                            <i class="icon-download-circle pull-left"></i>
                                         </span>
                                     </div>
                                 </mat-grid-tile>
