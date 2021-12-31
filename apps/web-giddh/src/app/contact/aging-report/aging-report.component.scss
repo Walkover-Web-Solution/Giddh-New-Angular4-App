@@ -182,9 +182,12 @@ th.mat-header-cell:first-of-type {
     .mat-header-cell .icon-pointer {
         margin-left: 0px;
     }
-    .mat-table tbody > tr > td:first-child {
-        padding-left: 18px !important;
-        cursor: pointer;
+    .mat-table tbody {
+        tr {
+            td:first-child {
+                padding-left: 18px;
+            }
+        }
     }
     .mat-flat-button {
         padding: 0px 11px;
@@ -228,11 +231,33 @@ th.mat-header-cell:first-of-type {
     .table-aging-report span.justify-content-end {
         justify-content: flex-start !important;
     }
+    .main-table {
+        tbody {
+            tr {
+                td:first-child {
+                    min-width: 242px !important;
+                }
+            }
+        }
+    }
+}
+@media (max-width: 1024px) {
+    .main-table {
+        th {
+            .mat-header-cell:first-of-type {
+                min-width: 242px !important;
+            }
+        }
+    }
 }
 
 @media (max-width: 767px) {
     span.input-addon {
         top: 0;
+    }
+    .main-table {
+        margin-top: 0;
+        float: left;
     }
     .pagination-wrapper {
         margin-bottom: 0px;
@@ -356,7 +381,7 @@ th.mat-header-cell:first-of-type {
         .table-responsive {
             max-height: calc(100vh - 295px);
             overflow-y: auto;
-            min-height: 200px;
+            min-height: auto !important;
         }
     }
 }

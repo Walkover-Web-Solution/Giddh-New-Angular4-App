@@ -658,6 +658,10 @@ button.btn.btn-filter span.icon-cross {
     span.input-addon {
         top: 0;
     }
+    .contact-ipad-responsive {
+        float: left;
+        width: auto;
+    }
     .btn-group.plus-btn {
         float: none;
         width: 100%;
@@ -794,6 +798,10 @@ button.btn.btn-filter span.icon-cross {
     }
     .on-desktop-view.btn-group {
         display: block;
+    }
+    .contact-ipad-responsive {
+        float: left;
+        width: auto;
     }
 }
 

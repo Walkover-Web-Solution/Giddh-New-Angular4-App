@@ -1356,14 +1356,19 @@
                             <button
                                 mat-raised-button
                                 *ngIf="isGetAllIntegratedBankInProgress"
-                                class="btn-small btn-light min-width-137"
+                                class="btn-small btn-light min-width-137 contact-ipad-responsive"
                             >
                                 {{ commonLocaleData?.app_loading }}
                             </button>
                             <button
                                 mat-raised-button
                                 *ngIf="!isGetAllIntegratedBankInProgress && isIciciAccountPendingForApproval"
-                                class="btn-small btn-light min-width-137 pending-approval-button"
+                                class="
+                                    btn-small btn-light
+                                    min-width-137
+                                    pending-approval-button
+                                    contact-ipad-responsive
+                                "
                                 (click)="showIntegrationProcess()"
                             >
                                 {{ localeData?.pending_approval }}
@@ -1371,7 +1376,7 @@
                             <button
                                 mat-raised-button
                                 *ngIf="!isICICIIntegrated && !isGetAllIntegratedBankInProgress"
-                                class="btn-small btn-light min-width-137"
+                                class="btn-small btn-light min-width-137 contact-ipad-responsive"
                                 [routerLink]="['/pages/settings/integration/payment']"
                             >
                                 {{ localeData?.connect_icici_bank }}
@@ -1386,7 +1391,7 @@
                                 <button
                                     mat-raised-button
                                     *ngIf="account?.bankPaymentDetails && account?.country?.code === 'IN'"
-                                    class="btn-small btn-success min-width-137"
+                                    class="btn-small btn-success min-width-137 contact-ipad-responsive"
                                     (click)="openBulkPaymentModal(account)"
                                 >
                                     {{ commonLocaleData?.app_pay_now }}
@@ -1394,7 +1399,7 @@
                                 <button
                                     mat-raised-button
                                     *ngIf="!account?.bankPaymentDetails"
-                                    class="btn-small btn-light min-width-137"
+                                    class="btn-small btn-light min-width-137 contact-ipad-responsive"
                                     (click)="updateCustomerAcc('vendor', account)"
                                 >
                                     {{ commonLocaleData?.app_add_bank_details }}

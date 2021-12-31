@@ -7600,14 +7600,8 @@ body.update-scroll-hidden {
         flex: 100% !important;
     }
     .main-table {
-        tbody {
-            tr {
-                td {
-                    &:first-child {
-                        min-width: 242px !important;
-                    }
-                }
-            }
+        tbody > tr > td:first-child {
+            min-width: 242px !important;
         }
     }
     .users-last-list {
@@ -8092,6 +8086,26 @@ body.update-scroll-hidden {
 }
 
 @media (max-width: 767px) {
+    .customer-form-inline {
+        float: left;
+        width: 100%;
+        bottom: 34%;
+        .search-field {
+            margin-top: 2px;
+        }
+        .btn-sky-blue {
+            margin-bottom: 11px;
+        }
+    }
+    .top-content {
+        .count-box {
+            min-width: auto !important;
+        }
+    }
+    .top-aging-table-top {
+        float: left;
+        width: 100%;
+    }
     .mobile-setting-sidebar {
         overflow-y: hidden;
     }
@@ -9004,6 +9018,11 @@ body.update-scroll-hidden {
 @media (min-width: 768px) {
     .invoice-modal-content .modal-dialog {
         margin: 70px auto;
+    }
+    .top-content {
+        .count-box {
+            min-width: auto !important;
+        }
     }
     .edit-modal.modal-small {
         display: none;
