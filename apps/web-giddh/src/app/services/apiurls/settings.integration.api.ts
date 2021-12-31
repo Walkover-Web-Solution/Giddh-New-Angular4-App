@@ -20,5 +20,11 @@ export const SETTINGS_INTEGRATION_API = {
     UPDATE_PAYOR_ACCOUNT: 'v2/company/:companyUniqueName/bank/:bankAccountUniqueName/payor/:urn',
     UPDATE_ACCOUNT: 'v2/company/:companyUniqueName/bank/:bankAccountUniqueName',
     GET_PAYOR_REGISTRATION_STATUS: 'v2/company/:companyUniqueName/bank/:bankAccountUniqueName/payor/:urn/status',
-    GET_BANK_ACCOUNT_PAYORS: 'v2/company/:companyUniqueName/bank/:bankAccountUniqueName/payor?amount=:amount',
+    GET_BANK_ACCOUNT_PAYORS: 'v2/company/:companyUniqueName/bank/:bankAccountUniqueName/payor?amount=:amount'
 };
+
+export const SETTINGS_INTEGRATION_COMMUNICATION_API = {
+    GET_PLATFORMS: COMMON + '/communication',
+    VERIFY_PLATFORM: COMMON + '/communication/platform/verify',
+    DELETE_PLATFORM: COMMON + '/communication/platform/:platformUniqueName',
+}

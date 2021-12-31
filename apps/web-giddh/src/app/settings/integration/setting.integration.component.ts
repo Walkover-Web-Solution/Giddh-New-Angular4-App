@@ -6,17 +6,9 @@ import { FormArray, FormBuilder, FormGroup, NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AppState } from '../../store';
 import { SettingsIntegrationActions } from '../../actions/settings/settings.integration.action';
-import {
-    AmazonSellerClass,
-    CashfreeClass,
-    EmailKeyClass,
-    PaymentClass,
-    RazorPayClass,
-    SmsKeyClass
-} from '../../models/api-models/SettingsIntegraion';
+import { AmazonSellerClass, CashfreeClass, EmailKeyClass, PaymentClass, RazorPayClass, SmsKeyClass } from '../../models/api-models/SettingsIntegraion';
 import { ToasterService } from '../../services/toaster.service';
 import { IOption } from '../../theme/ng-select/option.interface';
-//import { TabsetComponent, TabDirective } from "ngx-bootstrap/tabs";
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { CompanyActions } from "../../actions/company.actions";
 import { ShSelectComponent } from '../../theme/ng-virtual-select/sh-select.component';
@@ -24,7 +16,6 @@ import { Configuration, SELECT_ALL_RECORDS } from "../../app.constant";
 import { AuthenticationService } from "../../services/authentication.service";
 import { IForceClear } from '../../models/api-models/Sales';
 import { EcommerceService } from '../../services/ecommerce.service';
-import { forIn } from '../../lodash-optimized';
 import { GeneralService } from '../../services/general.service';
 import { ShareRequestForm } from '../../models/api-models/Permission';
 import { SettingsPermissionActions } from '../../actions/settings/permissions/settings.permissions.action';
@@ -33,10 +24,10 @@ import { ACCOUNT_REGISTERED_STATUS, SettingsIntegrationTab, UNLIMITED_LIMIT } fr
 import { SearchService } from '../../services/search.service';
 import { SalesService } from '../../services/sales.service';
 import { cloneDeep, find, isEmpty } from '../../lodash-optimized';
+import { ConfirmModalComponent } from '../../theme/confirm-modal/confirm-modal.component';
+import { MatDialog } from '@angular/material/dialog';
 
-export declare const gapi: any;
-
-export interface table1{
+export interface table1 {
     activeTriggers: string;
     type: string;
     content: string;
@@ -62,19 +53,19 @@ const TABLE1_ELEMENT_DATA: table1[] = [
 ];
 
 const TABLE2_ELEMENT_DATA: table2[] = [
-    { triggers: 'On-Board', type: 'Email', content: 'Hello user, Welcome to Giddh. Please setup your account by providing your company details', text: '',icon: 'copy.svg', button: 'Activate' },
+    { triggers: 'On-Board', type: 'Email', content: 'Hello user, Welcome to Giddh. Please setup your account by providing your company details', text: '', icon: 'copy.svg', button: 'Activate' },
     { triggers: 'Invoice Generation', type: 'SMS', content: 'Hello user, Welcome to Giddh. Please setup your account by providing your company details', text: '', icon: 'copy.svg', button: 'Activate' },
-    { triggers: 'Dues', type: 'Voice', content: 'Hello user, Welcome to Giddh. Please setup your account by providing your company details', text: '',icon: 'copy.svg', button: 'Activate' },
-    { triggers: 'Dues', type: 'Voice', content: 'Hello user, Welcome to Giddh. Please setup your account by providing your company details', text: '',icon: 'copy.svg', button: 'Activate' },
-    { triggers: 'Dues', type: 'Voice', content: 'Hello user, Welcome to Giddh. Please setup your account by providing your company details', text: '',icon: 'copy.svg', button: 'Activate' },
+    { triggers: 'Dues', type: 'Voice', content: 'Hello user, Welcome to Giddh. Please setup your account by providing your company details', text: '', icon: 'copy.svg', button: 'Activate' },
+    { triggers: 'Dues', type: 'Voice', content: 'Hello user, Welcome to Giddh. Please setup your account by providing your company details', text: '', icon: 'copy.svg', button: 'Activate' },
+    { triggers: 'Dues', type: 'Voice', content: 'Hello user, Welcome to Giddh. Please setup your account by providing your company details', text: '', icon: 'copy.svg', button: 'Activate' },
 ];
 
 const TABLE3_ELEMENT_DATA: table2[] = [
-    { triggers: 'On-Board', type: 'Email', content: 'Hello user, Welcome to Giddh. Please setup your account by providing your company details', text: '',icon: 'copy.svg', button: 'Activate' },
+    { triggers: 'On-Board', type: 'Email', content: 'Hello user, Welcome to Giddh. Please setup your account by providing your company details', text: '', icon: 'copy.svg', button: 'Activate' },
     { triggers: 'Invoice Generation', type: 'SMS', content: 'Hello user, Welcome to Giddh. Please setup your account by providing your company details', text: '', icon: 'copy.svg', button: 'Activate' },
-    { triggers: 'Dues', type: 'Voice', content: 'Hello user, Welcome to Giddh. Please setup your account by providing your company details', text: '',icon: 'copy.svg', button: 'Activate' },
-    { triggers: 'Dues', type: 'Voice', content: 'Hello user, Welcome to Giddh. Please setup your account by providing your company details', text: '',icon: 'copy.svg', button: 'Activate' },
-    { triggers: 'Dues', type: 'Voice', content: 'Hello user, Welcome to Giddh. Please setup your account by providing your company details', text: '',icon: 'copy.svg', button: 'Activate' },
+    { triggers: 'Dues', type: 'Voice', content: 'Hello user, Welcome to Giddh. Please setup your account by providing your company details', text: '', icon: 'copy.svg', button: 'Activate' },
+    { triggers: 'Dues', type: 'Voice', content: 'Hello user, Welcome to Giddh. Please setup your account by providing your company details', text: '', icon: 'copy.svg', button: 'Activate' },
+    { triggers: 'Dues', type: 'Voice', content: 'Hello user, Welcome to Giddh. Please setup your account by providing your company details', text: '', icon: 'copy.svg', button: 'Activate' },
 ];
 
 @Component({
@@ -84,7 +75,7 @@ const TABLE3_ELEMENT_DATA: table2[] = [
 })
 export class SettingIntegrationComponent implements OnInit, AfterViewInit {
 
-    displayedtable1Columns: string[] = ['activeTriggers', 'type', 'content', 'createdOn', 'copy' ,'edit', 'delete'];
+    displayedtable1Columns: string[] = ['activeTriggers', 'type', 'content', 'createdOn', 'copy', 'edit', 'delete'];
     table1 = TABLE1_ELEMENT_DATA;
 
     displayedtable2Columns: string[] = ['triggers', 'type', 'content', 'icon', 'button'];
@@ -116,8 +107,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     private gmailAuthCodeStaticUrl: string = 'https://accounts.google.com/o/oauth2/auth?redirect_uri=:redirect_url&response_type=code&client_id=:client_id&scope=https://www.googleapis.com/auth/gmail.send&approval_prompt=force&access_type=offline';
     private isSellerAdded: Observable<boolean> = observableOf(false);
     private isSellerUpdate: Observable<boolean> = observableOf(false);
-    /** user who is logged in currently */
-    private loggedInUserEmail: string;
     /** Input mast for number format */
     public inputMaskFormat: string = '';
     /** To check company country */
@@ -194,6 +183,17 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public activeCompany: any;
     /** Holds image path */
     public imgPath: string = '';
+    /** Holds communication platforms */
+    public communicationPlatforms: any = {};
+    /** Communication platform auth model  */
+    public communicationPlatformAuthModel: any = {
+        platform: "",
+        authFields: []
+    };
+    /** True if communication platform get api in progress */
+    public isCommunicationPlatformsLoading: boolean = true;
+    /** True if communication platform verification api in progress */
+    public isCommunicationPlatformVerificationInProcess: boolean = false;
 
     constructor(
         private router: Router,
@@ -208,7 +208,8 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         private generalService: GeneralService,
         private settingsIntegrationService: SettingsIntegrationService,
         private searchService: SearchService,
-        private salesService: SalesService
+        private salesService: SalesService,
+        private dialog: MatDialog
     ) {
         this.gmailAuthCodeStaticUrl = this.gmailAuthCodeStaticUrl?.replace(':redirect_url', this.getRedirectUrl(AppUrl))?.replace(':client_id', GOOGLE_CLIENT_ID);
         this.gmailAuthCodeUrl$ = observableOf(this.gmailAuthCodeStaticUrl);
@@ -219,13 +220,13 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         this.store.pipe(select(s => s.session.user), take(1)).subscribe(result => {
             if (result && result.user) {
                 this.generalService.user = result.user;
-                this.loggedInUserEmail = result.user.email;
             }
         });
     }
 
     public ngOnInit() {
         this.imgPath = (isElectron || isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+        this.getCommunicationPlatforms();
         //logic to switch to payment tab if coming from vedor tabs add payment
         if (this.selectedTabParent !== undefined && this.selectedTabParent !== null) {
             this.selectTab(this.selectedTabParent);
@@ -1066,6 +1067,94 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
 
             if (!payor.isConnected && response?.body?.message) {
                 this.toasty.errorToast(response?.body?.message);
+            }
+        });
+    }
+
+    /**
+     * Get platforms and fields for integration
+     *
+     * @private
+     * @memberof SettingIntegrationComponent
+     */
+    private getCommunicationPlatforms(): void {
+        this.communicationPlatforms = [];
+        this.isCommunicationPlatformsLoading = true;
+        this.settingsIntegrationService.getCommunicationPlatforms().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.status === "success") {
+                if (response?.body?.platforms?.length > 0) {
+                    response.body.platforms.forEach(platform => {
+                        this.communicationPlatforms[platform.name] = [];
+                        this.communicationPlatforms[platform.name].name = platform.name;
+                        this.communicationPlatforms[platform.name].uniqueName = platform.uniqueName;
+
+                        let fields = [];
+                        platform.fields.forEach(pt => {
+                            fields[pt.field] = pt;
+                        });
+
+                        this.communicationPlatforms[platform.name].fields = fields;
+                        this.communicationPlatforms[platform.name].isConnected = (this.communicationPlatforms[platform.name]['fields']?.auth_key?.value);
+                    });
+                }
+                this.isCommunicationPlatformsLoading = false;
+            } else {
+                this.toasty.showSnackBar("error", response?.message);
+                this.isCommunicationPlatformsLoading = false;
+            }
+        });
+    }
+
+    /**
+     * Verifies the integration with communication platform
+     *
+     * @param {string} platform
+     * @memberof SettingIntegrationComponent
+     */
+    public verifyCommunicationPlatform(platform: string): void {
+        this.isCommunicationPlatformVerificationInProcess = true;
+        this.communicationPlatformAuthModel.platform = platform;
+        this.communicationPlatformAuthModel.authFields.push({
+            name: "authKey",
+            value: this.communicationPlatforms?.MSG91?.fields?.auth_key?.value
+        });
+
+        this.settingsIntegrationService.verifyCommunicationPlatform(this.communicationPlatformAuthModel).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.status === "success") {
+                this.toasty.showSnackBar("success", platform + " platform has been verified successfully.");
+            } else {
+                this.toasty.showSnackBar("error", response?.message);
+            }
+            this.isCommunicationPlatformVerificationInProcess = false;
+        });
+    }
+
+    /**
+     * Deletes the integration with communication platform
+     *
+     * @param {string} platform
+     * @memberof SettingIntegrationComponent
+     */
+    public deleteCommunicationPlatform(platform: string): void {
+        let dialogRef = this.dialog.open(ConfirmModalComponent, {
+            width: '40%',
+            data: {
+                title: this.commonLocaleData?.app_delete,
+                body: this.localeData?.confirm_delete_file,
+                ok: this.commonLocaleData?.app_yes,
+                cancel: this.commonLocaleData?.app_no
+            }
+        });
+
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            if (response) {
+                this.settingsIntegrationService.deleteCommunicationPlatform(platform).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                    if(response?.status === "success") {
+                        this.toasty.showSnackBar("success", response?.message);
+                    } else {
+                        this.toasty.showSnackBar("error", response?.message);
+                    }
+                });
             }
         });
     }
