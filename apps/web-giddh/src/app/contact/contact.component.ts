@@ -1661,7 +1661,9 @@ export class ContactComponent implements OnInit, OnDestroy {
             this.toaster.showSnackBar("info", message);
         }
         if (this.selectedAccountsList?.length || this.selectedAccForPayment) {
-            this.dialog.open(this.bulkPaymentModalRef);
+            this.dialog.open(this.bulkPaymentModalRef ,{
+                width: '60%'
+            });
         }
     }
 
