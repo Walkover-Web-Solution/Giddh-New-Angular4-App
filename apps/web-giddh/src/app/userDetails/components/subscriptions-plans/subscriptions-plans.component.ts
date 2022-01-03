@@ -173,7 +173,6 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
      */
      public openDialog(): void {
         this.dialog.open(AllFeaturesComponent, {
-            panelClass: 'custom-all-features',
             height:'40%',
             width:'60%'
         });
