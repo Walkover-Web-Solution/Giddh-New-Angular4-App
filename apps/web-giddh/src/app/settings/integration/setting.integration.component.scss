@@ -141,25 +141,22 @@
             .smaller-font {
                 font-size: 12px;
             }
-            .activeTriggers-width {
+            .active-trigger-title-width {
                 width: 4%;
             }
-            .content-width {
-                width: 8%;
-            }
-            .type-width {
+            .channel-width {
                 width: 3%;
             }
-            .createdOn-width {
-                width: 7.5%;
+            .args-mapping-width {
+                width: 5.5%;
+            }
+            .created-at-width {
+                width: 3%;
             }
             .icons-left {
-                width: 0.5%;
+                width: 1.5%;
             }
-            .icons-right {
-                width: 2%;
-            }
-            .icon-hideShow {
+            .icon-visibility {
                 visibility: hidden;
             }
             .active-trigger-search {
@@ -187,7 +184,7 @@
             box-shadow: none;
 
             .mat-cell {
-                .hideShow {
+                .visibility {
                     display: none;
                 }
                 .hide {
@@ -416,10 +413,10 @@
     .mat-table tbody .mat-row:hover td {
         background-color: rgb(231, 235, 246) !important;
     }
-    .mat-table tbody .mat-row:hover .mat-cell .hideShow {
+    .mat-table tbody .mat-row:hover .mat-cell .visibility {
         display: block !important;
     }
-    .mat-table tbody .mat-row:hover .mat-cell .icon-hideShow {
+    .mat-table tbody .mat-row:hover .mat-cell .icon-visibility {
         visibility: visible !important;
     }
 }

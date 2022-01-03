@@ -118,5 +118,15 @@
         "get_instant_overdraft": "Get Instant Overdraft",
         "duration_error": "Please select duration for given amount",
         "required_field_error": "Please fill all required fields"
+    },
+    "communication": {
+        "integrate_now": "Integrate now",
+        "delete_platform": "Do you want to delete the integration?",
+        "edit_platform": "Edit Account",
+        "remove_platform": "Remove Account",
+        "verify_integration": "Verify",
+        "create_new_trigger": "+ Create New Trigger",
+        "delete_trigger": "Do you want to delete the trigger?",
+        "active_triggers": "Active Triggers"
     }
 }

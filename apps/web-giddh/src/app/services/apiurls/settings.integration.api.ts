@@ -24,7 +24,9 @@ export const SETTINGS_INTEGRATION_API = {
 };
 
 export const SETTINGS_INTEGRATION_COMMUNICATION_API = {
-    GET_PLATFORMS: COMMON + '/communication',
-    VERIFY_PLATFORM: COMMON + '/communication/platform/verify',
-    DELETE_PLATFORM: COMMON + '/communication/platform/:platformUniqueName',
+    GET_PLATFORMS: COMMON + 'communication',
+    VERIFY_PLATFORM: COMMON + 'communication/platform/verify',
+    DELETE_PLATFORM: COMMON + 'communication/platform/:platformUniqueName',
+    GET_TRIGGERS: COMMON + 'communication/trigger',
+    DELETE_TRIGGER: COMMON + 'communication/trigger/:triggerUniqueName'
 }

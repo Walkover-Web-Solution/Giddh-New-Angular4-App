@@ -51,20 +51,18 @@
                 <!-- Page-1 to Page-3 -->
                 <div class="msg91-container">
                     <div class="menu" *ngIf="communicationPlatforms?.MSG91?.isConnected">
-                        <button
-                            mat-icon-button
-                            disableRipple
-                            [matMenuTriggerFor]="beforeMenu"
-                            aria-label="Example icon-button with a menu"
-                        >
+                        <button mat-icon-button disableRipple [matMenuTriggerFor]="beforeMenu">
                             <mat-icon>more_vert</mat-icon>
                         </button>
                         <mat-menu #beforeMenu="matMenu" xPosition="before">
-                            <button mat-menu-item>
-                                <span>Edit Account</span>
+                            <button mat-menu-item (click)="editCommunicationPlatform = 'MSG91'">
+                                <span>{{ localeData?.communication?.edit_platform }}</span>
                             </button>
-                            <button mat-menu-item>
-                                <span>Remove Account</span>
+                            <button
+                                mat-menu-item
+                                (click)="deleteCommunicationPlatform(communicationPlatforms?.MSG91?.uniqueName)"
+                            >
+                                <span>{{ localeData?.communication?.remove_platform }}</span>
                             </button>
                         </mat-menu>
                     </div>
@@ -85,10 +83,10 @@
                         <img src="{{ imgPath }}say.PNG" alt="" />
                     </div>
                     <div class="integrate" *ngIf="!communicationPlatforms?.MSG91?.isConnected">
-                        <p>Integrate now</p>
+                        <p>{{ localeData?.communication?.integrate_now }}</p>
                     </div>
                 </div>
-                <div class="form" *ngIf="!isCommunicationPlatformsLoading">
+                <div class="form" *ngIf="!isCommunicationPlatformsLoading && editCommunicationPlatform === 'MSG91'">
                     <div class="input-field">
                         <p class="label">
                             {{ communicationPlatforms?.MSG91?.fields?.auth_key?.label
@@ -115,39 +113,65 @@
                         [disabled]="isCommunicationPlatformVerificationInProcess"
                         (click)="verifyCommunicationPlatform('MSG91')"
                     >
-                        Verify
+                        {{ localeData?.communication?.verify_integration }}
                     </button>
                 </div>
 
-                <!-- Page-3 to Page-5 -->
-                <!-- <div class="msg91-container">
-                    <div class="menu">
-                        <button mat-icon-button disableRipple [matMenuTriggerFor]="beforeMenu"
-                            aria-label="Example icon-button with a menu">
-                            <mat-icon>more_vert</mat-icon>
-                        </button>
-                        <mat-menu #beforeMenu="matMenu" xPosition="before">
-                            <button mat-menu-item>
-                                <span>Remove Account</span>
-                            </button>
-                        </mat-menu>
-                    </div>
+                <ng-container *ngIf="!editCommunicationPlatform">
+                    <button class="new-trigger" mat-flat-button color="primary">
+                        {{ localeData?.communication?.create_new_trigger }}
+                    </button>
+                </ng-container>
 
-                    <div class="image">
-                        <img src="{{ imgPath }}msgOne-color.png" class="logo" alt="">
-                        <img src="{{ imgPath }}msgTwo-color.png" class="msg" alt="">
-                    </div>
-                    <div class="integrate mini-icons">
-                        <img src="{{ imgPath }}Bmsg.PNG" alt="">
-                        <img src="{{ imgPath }}p.PNG" alt="">
-                        <img src="{{ imgPath }}wApp.PNG" alt="">
-                        <img src="{{ imgPath }}msg.PNG" alt="">
-                        <img src="{{ imgPath }}9109.PNG" alt="">
-                        <img src="{{ imgPath }}say.PNG" alt="">
-                    </div>
+                <!-- Page-3 to Page-5 -->
+                <div class="table-one" *ngIf="!isActiveTriggersLoading">
+                    <table mat-table [dataSource]="activeTriggersDataSource" class="mat-elevation-z8">
+                        <ng-container matColumnDef="title">
+                            <th class="active-trigger-title-width" mat-header-cell *matHeaderCellDef>
+                                <img
+                                    class="active-trigger-search"
+                                    src="{{ imgPath }}active-trigger-search.svg"
+                                    alt=""
+                                />
+                                Active Triggers
+                            </th>
+                            <td mat-cell *matCellDef="let element">{{ element.title }}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="channel">
+                            <th class="channel-width" mat-header-cell *matHeaderCellDef>Type</th>
+                            <td mat-cell *matCellDef="let element">{{ element.channel }}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="argsMapping">
+                            <th class="args-mapping-width" mat-header-cell *matHeaderCellDef>Fields Mapping</th>
+                            <td mat-cell *matCellDef="let element">{{ element.argsMapping }}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="createdAt">
+                            <th class="created-at-width" mat-header-cell *matHeaderCellDef>Created At</th>
+                            <td mat-cell *matCellDef="let element">
+                                {{ element.createdAt | date: "EEEE, d MMM, yy, h:mm a" }}
+                            </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="action">
+                            <th class="icons-left" mat-header-cell *matHeaderCellDef>&nbsp;</th>
+                            <td mat-cell *matCellDef="let element">
+                                <img class="icon-visibility cursor-pointer" src="{{ imgPath }}copy.svg" alt="" />
+                                <img class="mr-l2 icon-visibility cursor-pointer" src="{{ imgPath }}edit.svg" alt="" />
+                                <a href="javascript:;" (click)="deleteTrigger(element.uniqueName)"
+                                    ><img class="mr-l2 icon-visibility" src="{{ imgPath }}delete.svg"
+                                /></a>
+                            </td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="activeTriggersColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: activeTriggersColumns"></tr>
+                    </table>
                 </div>
 
-                <button class="new-trigger" mat-flat-button color="primary">+ Create New Trigger</button>
+                <!-- 
 
                 <div class="main-content">
                     <p>Giddh Suggested Trigger</p>

@@ -24,17 +24,16 @@ import { ACCOUNT_REGISTERED_STATUS, SettingsIntegrationTab, UNLIMITED_LIMIT } fr
 import { SearchService } from '../../services/search.service';
 import { SalesService } from '../../services/sales.service';
 import { cloneDeep, find, isEmpty } from '../../lodash-optimized';
-import { ConfirmModalComponent } from '../../theme/confirm-modal/confirm-modal.component';
 import { MatDialog } from '@angular/material/dialog';
+import { ConfirmModalComponent } from '../../theme/new-confirm-modal/confirm-modal.component';
 
-export interface table1 {
-    activeTriggers: string;
-    type: string;
-    content: string;
-    createdOn: any;
-    copy: string;
-    edit: string;
-    delete: string;
+export interface ActiveTriggers {
+    title: string;
+    channel: string;
+    createdAt: string;
+    uniqueName: string;
+    argsMapping: string;
+    isActive: boolean;
 }
 
 export interface table2 {
@@ -45,12 +44,6 @@ export interface table2 {
     icon: string;
     button: string;
 }
-
-const TABLE1_ELEMENT_DATA: table1[] = [
-    { activeTriggers: 'On-Board', type: 'Email', content: 'Hello user, Welcome to Giddh. Please setup your account by providing your company details', createdOn: 'Saturday, 12 Oct, 21 9:35 AM', copy: 'copy.svg', edit: 'edit.svg', delete: 'delete.svg' },
-    { activeTriggers: 'Invoice Generation', type: 'SMS', content: 'Hello user, Welcome to Giddh. Please setup your account by providing your company details', createdOn: 'Saturday, 12 Oct, 21 9:35 AM', copy: 'copy.svg', edit: 'edit.svg', delete: 'delete.svg' },
-    { activeTriggers: 'Dues', type: 'Voice', content: 'Hello user, Welcome to Giddh. Please setup your account by providing your company details', createdOn: 'Saturday, 12 Oct, 21 9:35 AM', copy: 'copy.svg', edit: 'edit.svg', delete: 'delete.svg' }
-];
 
 const TABLE2_ELEMENT_DATA: table2[] = [
     { triggers: 'On-Board', type: 'Email', content: 'Hello user, Welcome to Giddh. Please setup your account by providing your company details', text: '', icon: 'copy.svg', button: 'Activate' },
@@ -74,9 +67,11 @@ const TABLE3_ELEMENT_DATA: table2[] = [
     styleUrls: ['./setting.integration.component.scss']
 })
 export class SettingIntegrationComponent implements OnInit, AfterViewInit {
-
-    displayedtable1Columns: string[] = ['activeTriggers', 'type', 'content', 'createdOn', 'copy', 'edit', 'delete'];
-    table1 = TABLE1_ELEMENT_DATA;
+    /** Active trigger columns */
+    public activeTriggersColumns: string[] = ['title', 'channel', 'argsMapping', 'createdAt', 'action'];
+    /** Data source for active triggers list */
+    public activeTriggersDataSource: ActiveTriggers[] = [];
+    public isActiveTriggersLoading: boolean = false;
 
     displayedtable2Columns: string[] = ['triggers', 'type', 'content', 'icon', 'button'];
     table2 = TABLE2_ELEMENT_DATA;
@@ -194,6 +189,8 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public isCommunicationPlatformsLoading: boolean = true;
     /** True if communication platform verification api in progress */
     public isCommunicationPlatformVerificationInProcess: boolean = false;
+    /** Holds the communication platform which is in edit mode */
+    public editCommunicationPlatform: string = "";
 
     constructor(
         private router: Router,
@@ -1080,6 +1077,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     private getCommunicationPlatforms(): void {
         this.communicationPlatforms = [];
         this.isCommunicationPlatformsLoading = true;
+        this.editCommunicationPlatform = "";
         this.settingsIntegrationService.getCommunicationPlatforms().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success") {
                 if (response?.body?.platforms?.length > 0) {
@@ -1096,6 +1094,10 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                         this.communicationPlatforms[platform.name].fields = fields;
                         this.communicationPlatforms[platform.name].isConnected = (this.communicationPlatforms[platform.name]['fields']?.auth_key?.value);
                     });
+                }
+
+                if (this.communicationPlatforms['MSG91'].isConnected) {
+                    this.getTriggers();
                 }
                 this.isCommunicationPlatformsLoading = false;
             } else {
@@ -1122,6 +1124,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         this.settingsIntegrationService.verifyCommunicationPlatform(this.communicationPlatformAuthModel).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success") {
                 this.toasty.showSnackBar("success", platform + " platform has been verified successfully.");
+                this.getCommunicationPlatforms();
             } else {
                 this.toasty.showSnackBar("error", response?.message);
             }
@@ -1132,15 +1135,15 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     /**
      * Deletes the integration with communication platform
      *
-     * @param {string} platform
+     * @param {string} platformUniqueName
      * @memberof SettingIntegrationComponent
      */
-    public deleteCommunicationPlatform(platform: string): void {
+    public deleteCommunicationPlatform(platformUniqueName: string): void {
         let dialogRef = this.dialog.open(ConfirmModalComponent, {
             width: '40%',
             data: {
                 title: this.commonLocaleData?.app_delete,
-                body: this.localeData?.confirm_delete_file,
+                body: this.localeData?.communication?.delete_platform,
                 ok: this.commonLocaleData?.app_yes,
                 cancel: this.commonLocaleData?.app_no
             }
@@ -1148,9 +1151,71 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
 
         dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
             if (response) {
-                this.settingsIntegrationService.deleteCommunicationPlatform(platform).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-                    if(response?.status === "success") {
-                        this.toasty.showSnackBar("success", response?.message);
+                this.settingsIntegrationService.deleteCommunicationPlatform(platformUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                    if (response?.status === "success") {
+                        this.toasty.showSnackBar("success", response?.body);
+                        this.getCommunicationPlatforms();
+                    } else {
+                        this.toasty.showSnackBar("error", response?.message);
+                    }
+                });
+            }
+        });
+    }
+
+    /**
+     * Gets the list of triggers
+     *
+     * @memberof SettingIntegrationComponent
+     */
+    public getTriggers(): void {
+        this.isActiveTriggersLoading = true;
+        this.activeTriggersDataSource = [];
+        this.settingsIntegrationService.getTriggersList().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.status === "success") {
+                if (response?.body?.length > 0) {
+                    response?.body?.forEach(trigger => {
+                        const argsMapping = [];
+                        if(trigger.argsMapping?.length > 0) {
+                            trigger.argsMapping.forEach(arg => {
+                                argsMapping.push(arg.name + " -> " + arg.value);
+                            });
+                        }
+
+                        this.activeTriggersDataSource.push({ title: trigger.title, channel: trigger.communicationChannel, createdAt: trigger.createdAt, uniqueName: trigger.uniqueName, argsMapping: argsMapping?.join(", "), isActive: trigger.isActive });
+                    });
+                    this.isActiveTriggersLoading = false;
+                }
+            } else {
+                this.toasty.showSnackBar("error", response?.body);
+                this.isActiveTriggersLoading = false;
+            }
+        });
+    }
+
+    /**
+     * Deletes the trigger
+     *
+     * @param {string} triggerUniqueName
+     * @memberof SettingIntegrationComponent
+     */
+    public deleteTrigger(triggerUniqueName: string): void {
+        let dialogRef = this.dialog.open(ConfirmModalComponent, {
+            width: '40%',
+            data: {
+                title: this.commonLocaleData?.app_delete,
+                body: this.localeData?.communication?.delete_trigger,
+                ok: this.commonLocaleData?.app_yes,
+                cancel: this.commonLocaleData?.app_no
+            }
+        });
+
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            if (response) {
+                this.settingsIntegrationService.deleteTrigger(triggerUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                    if (response?.status === "success") {
+                        this.toasty.showSnackBar("success", response?.body);
+                        this.getTriggers();
                     } else {
                         this.toasty.showSnackBar("error", response?.message);
                     }

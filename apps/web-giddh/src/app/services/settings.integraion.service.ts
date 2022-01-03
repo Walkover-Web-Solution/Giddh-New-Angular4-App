@@ -496,7 +496,37 @@ export class SettingsIntegrationService {
      */
     public deleteCommunicationPlatform(platform: string): Observable<BaseResponse<string, string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.delete(this.config.apiUrl + SETTINGS_INTEGRATION_COMMUNICATION_API.DELETE_PLATFORM.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':platform', platform)).pipe(map((res) => {
+        return this.http.delete(this.config.apiUrl + SETTINGS_INTEGRATION_COMMUNICATION_API.DELETE_PLATFORM.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':platformUniqueName', platform)).pipe(map((res) => {
+            let data: BaseResponse<string, string> = res;
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e)));
+    }
+
+    /**
+     * Gets the list of triggers
+     *
+     * @returns {Observable<BaseResponse<any, any>>}
+     * @memberof SettingsIntegrationService
+     */
+    public getTriggersList(): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+
+        return this.http.get(this.config.apiUrl + SETTINGS_INTEGRATION_COMMUNICATION_API.GET_TRIGGERS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
+            let data: BaseResponse<any, any> = res;
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e)));
+    }
+
+    /**
+     * Deletes the trigger
+     *
+     * @param {string} triggerUniqueName
+     * @returns {Observable<BaseResponse<string, string>>}
+     * @memberof SettingsIntegrationService
+     */
+    public deleteTrigger(triggerUniqueName: string): Observable<BaseResponse<string, string>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.delete(this.config.apiUrl + SETTINGS_INTEGRATION_COMMUNICATION_API.DELETE_TRIGGER.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':triggerUniqueName', triggerUniqueName)).pipe(map((res) => {
             let data: BaseResponse<string, string> = res;
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e)));
