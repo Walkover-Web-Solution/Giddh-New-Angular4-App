@@ -3,7 +3,10 @@
     padding-left: 0;
     padding-right: 0;
 }
-
+.all-payment-side {
+    margin: 0 !important;
+    height: 312px !important;
+}
 :host .aside-pane {
     max-width: 760px;
     width: 100%;
