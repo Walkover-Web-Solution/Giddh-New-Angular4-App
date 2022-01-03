@@ -173,12 +173,11 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
      */
      public openDialog(): void {
         this.dialog.open(AllFeaturesComponent, {
-            panelClass: 'custom-modalbox',
-            height: '40%',
-            width: '60%'
+            panelClass: 'custom-all-features',
+            height:'40%',
+            width:'60%'
         });
     }
-
 
     /**
      * This will take the user back to last page
