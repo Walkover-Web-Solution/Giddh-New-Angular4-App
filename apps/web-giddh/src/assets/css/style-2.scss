@@ -7553,6 +7553,17 @@ body.update-scroll-hidden {
     }
 }
 @media (max-width: 1024px) {
+    .main-table {
+        tbody {
+            tr {
+                td {
+                    &:first-child {
+                        min-width: 242px !important;
+                    }
+                }
+            }
+        }
+    }
     .users-last-list {
         .cdk-virtual-scroll-content-wrapper {
             position: relative;
@@ -8035,6 +8046,26 @@ body.update-scroll-hidden {
 }
 
 @media (max-width: 767px) {
+    .customer-form-inline {
+        float: left;
+        width: 100%;
+        bottom: 34%;
+        .search-field {
+            margin-top: 2px;
+        }
+        .btn-sky-blue {
+            margin-bottom: 11px;
+        }
+    }
+    .top-content {
+        .count-box {
+            min-width: auto !important;
+        }
+    }
+    .top-aging-table-top {
+        float: left;
+        width: 100%;
+    }
     .mobile-setting-sidebar {
         overflow-y: hidden;
     }
@@ -8948,6 +8979,11 @@ body.update-scroll-hidden {
     .invoice-modal-content .modal-dialog {
         margin: 70px auto;
     }
+    .top-content {
+        .count-box {
+            min-width: auto !important;
+        }
+    }
     .edit-modal.modal-small {
         display: none;
     }
@@ -9388,9 +9424,15 @@ input[type="checkbox"].cdk-visually-hidden::after {
     }
 }
 @media screen and (max-width: 768px) {
-    .custom-mat-tabs {
-        .mat-tab-header {
-            display: block !important;
+    .ipad-responsive-modal {
+        .pull-right {
+            .mat-raised-button {
+                width: 100%;
+                padding-left: 0.7rem !important;
+                box-shadow: none !important;
+                margin-right: 0 !important;
+                margin-left: 11px !important;
+            }
         }
     }
     .select-subscription {
