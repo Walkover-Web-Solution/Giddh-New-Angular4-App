@@ -7554,8 +7554,14 @@ body.update-scroll-hidden {
 }
 @media (max-width: 1024px) {
     .main-table {
-        tbody > tr > td:first-child {
-            min-width: 242px !important;
+        tbody {
+            tr {
+                td {
+                    &:first-child {
+                        min-width: 242px !important;
+                    }
+                }
+            }
         }
     }
     .users-last-list {
