@@ -51,10 +51,7 @@ export class InvoiceTemplatesService {
             let data: BaseResponse<any, string> = res;
             data.queryString = { templateUniqueName };
             return data;
-        }), catchError((e) => {
-            let object = this.errorHandler.HandleCatch<any, string>(e);
-            return object.pipe(map(p => p.body));
-        }));
+        }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, templateUniqueName)));
     }
 
     public saveTemplates(model: any): Observable<BaseResponse<string, string>> {

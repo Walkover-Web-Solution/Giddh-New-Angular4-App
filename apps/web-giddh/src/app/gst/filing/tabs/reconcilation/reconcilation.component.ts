@@ -68,7 +68,7 @@ export class ReconcileComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
-        this.imgPath = (isElectron || isCordova) ? 'assets/images/gst/' : AppUrl + APP_FOLDER + 'assets/images/gst/';
+        this.imgPath = isElectron ? 'assets/images/gst/' : AppUrl + APP_FOLDER + 'assets/images/gst/';
         this.fireGstReconcileRequest(GstReconcileActionsEnum.notfoundonportal);
     }
 

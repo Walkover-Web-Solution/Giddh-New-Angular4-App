@@ -53,7 +53,6 @@ import { VatService } from './vat.service';
 import { CommandKService } from './commandk.service';
 import { PurchaseRecordService } from './purchase-record.service';
 import { InvoiceBulkUpdateService } from './invoice.bulkupdate.service';
-import { UserAgent } from "@ionic-native/user-agent/ngx";
 import { EcommerceService } from './ecommerce.service';
 import { ReverseChargeService } from './reversecharge.service';
 import { CashFlowStatementService } from './cashflowstatement.service';
@@ -78,7 +77,6 @@ export class ServiceModule {
                 PermissionDataService,
                 LoaderService,
                 GiddhErrorHandler,
-                UserAgent,
                 HttpWrapperService,
                 AuthenticationService,
                 ToasterService,

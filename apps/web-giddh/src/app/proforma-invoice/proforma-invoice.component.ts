@@ -194,9 +194,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     /** Template reference for each entry */
     @ViewChild('entry', { read: TemplateRef, static: false }) template: TemplateRef<any>;
     /** Billing state field instance */
-    @ViewChild('statesBilling', {static: true}) statesBilling: SalesShSelectComponent;
+    @ViewChild('statesBilling', { static: false }) statesBilling: SalesShSelectComponent;
     /** Billing state field instance */
-    @ViewChild('statesShipping', {static: true}) statesShipping: SalesShSelectComponent;
+    @ViewChild('statesShipping', { static: false }) statesShipping: SalesShSelectComponent;
     public showAdvanceReceiptAdjust: boolean = false;
 
     @Output() public cancelVoucherUpdate: EventEmitter<boolean> = new EventEmitter<boolean>();
@@ -989,6 +989,14 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     value: o.uniqueName
                 };
                 this.onSelectCustomer(item);
+            }
+
+            if(o) {
+                if(this.invFormData?.accountDetails?.currency?.code) {
+                    this.loadBankCashAccounts(this.invFormData?.accountDetails?.currency?.code);
+                } else {
+                    this.loadBankCashAccounts("");
+                }
             }
         });
 
@@ -1933,10 +1941,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         }
     }
 
-    public getAllFlattenAc() {
-        // call to get flatten account from store
-    }
-
     public assignAccountDetailsValuesInForm(data: AccountResponseV2) {
         this.accountAddressList = data.addresses;
         this.customerCountryName = data.country.countryName;
@@ -1970,6 +1974,14 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             }
             // auto fill all the details
             this.invFormData.accountDetails = new AccountDetailsClass(data);
+
+            if (this.invFormData.accountDetails.billingDetails?.gstNumber) {
+                this.getStateCode('billingDetails', this.statesBilling);
+                this.autoFillShippingDetails();
+            }
+            if (this.invFormData.accountDetails.shippingDetails?.gstNumber) {
+                this.getStateCode('shippingDetails', this.statesShipping);
+            }
 
             setTimeout(() => {
                 if (this.customerBillingAddress && this.customerBillingAddress.nativeElement) {
@@ -2083,7 +2095,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     invalidTax = invalidTax?.replace("[FIELD_NAME]", fieldName);
                     this._toasty.errorToast(invalidTax);
                 } else {
-                    let invalidTax = this.localeData?.invalid_tax_field;
+                    let invalidTax = this.localeData?.invalid_tax;
                     invalidTax = invalidTax?.replace("[TAX_NAME]", this.formFields['taxName']?.label);
                     this._toasty.errorToast(invalidTax);
                 }

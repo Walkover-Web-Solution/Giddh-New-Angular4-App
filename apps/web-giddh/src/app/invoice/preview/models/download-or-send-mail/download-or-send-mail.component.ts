@@ -41,7 +41,6 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
     public smsTabActive: boolean = false;
     public isSendSmsEnabled: boolean = false;
     public isElectron = isElectron;
-    public isCordova = isCordova;
     public voucherRequest = null;
     public voucherDetailsInProcess$: Observable<boolean> = of(true);
     public accountUniqueName: string = '';
@@ -141,7 +140,7 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
         this.store.pipe(select(p => p.receipt.voucher), takeUntil(this.destroyed$)).subscribe((o: any) => {
             if (o && o.voucherDetails) {
                 this.accountUniqueName = o.accountDetails.uniqueName;
-                this.store.dispatch(this._invoiceActions.GetTemplateDetailsOfInvoice(o.templateDetails.templateUniqueName));
+                this.store.dispatch(this._invoiceActions.GetTemplateDetailsOfInvoice(o.templateDetails?.templateUniqueName));
             }
         });
     }

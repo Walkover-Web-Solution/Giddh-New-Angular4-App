@@ -108,7 +108,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public userName: string;
     public userEmail: string;
     public isElectron: boolean = isElectron;
-    public isCordova: boolean = isCordova;
     public isTodaysDateSelected: boolean = false;
     public isDateRangeSelected: boolean = false;
     public userFullName: string;
@@ -477,15 +476,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             this.isIpadScreen = result?.breakpoints['(max-width: 768px)'];
         });
 
-        this.generalService.invokeEvent.pipe(takeUntil(this.destroyed$)).subscribe((value) => {
-            if (value === 'logoutCordova') {
-                this.zone.run(() => {
-                    this.router.navigate(['login']);
-                    this.changeDetection.detectChanges();
-                });
-            }
-        });
-
         //this.sideBarStateChange(true);
         this.store.pipe(select(state => state.general.openSideMenu), takeUntil(this.destroyed$)).subscribe(response => {
             this.sideBarStateChange(response);
@@ -579,7 +569,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         });
         // endregion
 
-        this.imgPath = (isElectron || isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
 
         // Observes when screen resolution is 1440 or less close navigation bar for few pages...
         this._breakpointObserver

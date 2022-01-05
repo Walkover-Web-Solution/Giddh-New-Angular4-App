@@ -1653,6 +1653,17 @@ input[type="checkbox"]:checked:after {
     color: $white !important;
     background: $light-sea-green !important;
 }
+
+.btn-danger-outline {
+    border: 1px solid $red !important;
+    color: $red !important;
+}
+
+.btn-danger-outline:hover {
+    color: $white !important;
+    background: $red !important;
+}
+
 .btn-success {
     background: $light-sea-green !important;
     color: $white !important;
@@ -3872,6 +3883,7 @@ virtual-scroll .scrollable-content .item:hover > a {
 virtual-scroll .scrollable-content .item > a .item-unique,
 virtual-scroll .scrollable-content .item > a .item-stock {
     color: $moody-blue;
+    text-transform: none !important;
 }
 .customer-invoice-form virtual-scroll .scrollable-content .item > a {
     color: $nero;
