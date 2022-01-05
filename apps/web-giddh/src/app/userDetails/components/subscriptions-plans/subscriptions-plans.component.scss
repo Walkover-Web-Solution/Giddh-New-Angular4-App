@@ -1176,3 +1176,24 @@
         }
     }
 }
+@media screen and (min-width: 1280px) and (orientation: landscape) {
+    .btn-cancel {
+        width: 82px !important;
+    }
+    .extra-addons-content {
+        width: 31% !important;
+    }
+}
+@media screen and (max-width: 1194px) and (orientation: portrait) {
+    .btn-cancel {
+        width: 77px !important;
+        .back-left {
+            margin-top: 0% !important;
+        }
+    }
+}
+@media screen and (max-width: 1194px) and (orientation: landscape) {
+    .btn-cancel {
+        width: 82px !important;
+    }
+}
