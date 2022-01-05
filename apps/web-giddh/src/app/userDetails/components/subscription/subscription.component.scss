@@ -830,7 +830,7 @@
     .menu-two {
         .form-field {
             .search-bar {
-                font-size: 12px !important;
+                font-size: 10px !important;
             }
         }
     }
@@ -1051,5 +1051,10 @@
             top: 31px;
             left: 12px;
         }
+    }
+}
+@media screen and (max-width: 1280px) and (orientation: landscape) {
+    .menu-two-button {
+        width: 20% !important;
     }
 }
