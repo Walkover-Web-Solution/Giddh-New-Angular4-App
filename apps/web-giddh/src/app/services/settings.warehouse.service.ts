@@ -132,7 +132,7 @@ export class SettingsWarehouseService {
      * @param {*} model
      * @param {string} warehouseUniqueName
      * @returns {Observable<BaseResponse<any, any>>}
-     * @memberof SettingsBranchService
+     * @memberof SettingsWarehouseService
      */
      public updateWarehouseStatus(model: any, warehouseUniqueName: string): Observable<BaseResponse<any, any>> {
         const companyUniqueName = this.generalService.companyUniqueName;
