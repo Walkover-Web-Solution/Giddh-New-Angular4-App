@@ -13,5 +13,11 @@
     "warehouse_name": "Warehouse Name",
     "addresses": "Address/es",
     "select_address": "Select Address",
-    "add_address": "+Add Address"
+    "add_address": "+Add Address",
+    "warehouse_archived": "Warehouse has been archived successfully",
+    "warehouse_unarchived": "Warehouse has been unarchived successfully",
+    "confirm_archive_title": "Are you sure you want to archive?",
+    "confirm_archive_content": "It will enable \"View Only\" mode.",
+    "confirm_unarchive_title": "Are you sure you want to unarchive?",
+    "confirm_unarchive_content": "It will enable all features once again."
 }

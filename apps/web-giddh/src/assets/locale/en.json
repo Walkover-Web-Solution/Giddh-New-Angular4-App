@@ -658,5 +658,9 @@
         "monthly": "Monthly",
         "unlimited": "Unlimited"
     },
-    "app_create_custom_field": "Create Custom Fields"
+    "app_create_custom_field": "Create Custom Fields",
+    "app_archive": "Archive",
+    "app_unarchive": "Unarchive",
+    "app_archived": "Archived",
+    "app_unarchived": "Active"
 }
