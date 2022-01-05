@@ -662,5 +662,9 @@
     "app_voucher_unavailable": "There is no voucher for adjustment.",
     "app_reference_invoice": "Reference Invoice",
     "app_create_custom_field": "Create Custom Fields",
-    "app_validation": "Validation"
+    "app_validation": "Validation",
+    "app_archive": "Archive",
+    "app_unarchive": "Unarchive",
+    "app_archived": "Archived",
+    "app_unarchived": "Active"
 }

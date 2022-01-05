@@ -57,6 +57,35 @@
 }
 .warehouse-options {
     text-align: right;
+    .warehouse-status {
+        float: left;
+        margin-right: -8px;
+
+        &.warehouse-active {
+            color: $light-green;
+            span {
+                background-color: $light-green;
+                width: 8px;
+                height: 8px;
+                float: left;
+                border-radius: 5px;
+                margin-top: 8px;
+                margin-right: 4px;
+            }
+        }
+        &.warehouse-archived {
+            color: $red;
+            span {
+                background-color: $red;
+                width: 8px;
+                height: 8px;
+                float: left;
+                border-radius: 5px;
+                margin-top: 8px;
+                margin-right: 4px;
+            }
+        }
+    }
 }
 .warehouse-options {
     .warehouse-options {
