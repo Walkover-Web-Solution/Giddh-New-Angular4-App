@@ -393,3 +393,16 @@
         }
     }
 }
+@media screen and (min-width: 1280px) and (orientation: landscape) {
+    .back-btnn {
+        float: left;
+        width: 101px !important;
+    }
+    #main {
+        .main-heading-billing {
+            .giddh-heading {
+                width: 43% !important;
+            }
+        }
+    }
+}
