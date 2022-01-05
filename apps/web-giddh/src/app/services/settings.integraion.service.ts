@@ -490,13 +490,13 @@ export class SettingsIntegrationService {
     /**
      * Deletes the integration with communication platform
      *
-     * @param {string} platform
+     * @param {string} platformUniqueName
      * @returns {Observable<BaseResponse<string, string>>}
      * @memberof SettingsIntegrationService
      */
-    public deleteCommunicationPlatform(platform: string): Observable<BaseResponse<string, string>> {
+    public deleteCommunicationPlatform(platformUniqueName: string): Observable<BaseResponse<string, string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.delete(this.config.apiUrl + SETTINGS_INTEGRATION_COMMUNICATION_API.DELETE_PLATFORM.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':platformUniqueName', platform)).pipe(map((res) => {
+        return this.http.delete(this.config.apiUrl + SETTINGS_INTEGRATION_COMMUNICATION_API.DELETE_PLATFORM.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':platformUniqueName', platformUniqueName)).pipe(map((res) => {
             let data: BaseResponse<string, string> = res;
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e)));
@@ -528,6 +528,22 @@ export class SettingsIntegrationService {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.delete(this.config.apiUrl + SETTINGS_INTEGRATION_COMMUNICATION_API.DELETE_TRIGGER.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':triggerUniqueName', triggerUniqueName)).pipe(map((res) => {
             let data: BaseResponse<string, string> = res;
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e)));
+    }
+
+    /**
+     * Gets the trigger form
+     *
+     * @param {string} platform
+     * @returns {Observable<BaseResponse<any, any>>}
+     * @memberof SettingsIntegrationService
+     */
+    public getTriggerForm(platform: string): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+
+        return this.http.get(this.config.apiUrl + SETTINGS_INTEGRATION_COMMUNICATION_API.GET_TRIGGER_FORM.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':platform', platform)).pipe(map((res) => {
+            let data: BaseResponse<any, any> = res;
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e)));
     }

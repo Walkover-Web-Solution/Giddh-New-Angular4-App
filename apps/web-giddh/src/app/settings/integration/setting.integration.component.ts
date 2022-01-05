@@ -191,6 +191,8 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public isCommunicationPlatformVerificationInProcess: boolean = false;
     /** Holds the communication platform which is in edit mode */
     public editCommunicationPlatform: string = "";
+    /** True if need to show trigger form */
+    public showTriggerForm: boolean = false;
 
     constructor(
         private router: Router,
@@ -1098,6 +1100,8 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
 
                 if (this.communicationPlatforms['MSG91'].isConnected) {
                     this.getTriggers();
+                } else {
+                    this.editCommunicationPlatform = "MSG91";
                 }
                 this.isCommunicationPlatformsLoading = false;
             } else {
@@ -1184,8 +1188,8 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
 
                         this.activeTriggersDataSource.push({ title: trigger.title, channel: trigger.communicationChannel, createdAt: trigger.createdAt, uniqueName: trigger.uniqueName, argsMapping: argsMapping?.join(", "), isActive: trigger.isActive });
                     });
-                    this.isActiveTriggersLoading = false;
                 }
+                this.isActiveTriggersLoading = false;
             } else {
                 this.toasty.showSnackBar("error", response?.body);
                 this.isActiveTriggersLoading = false;
@@ -1222,5 +1226,14 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                 });
             }
         });
+    }
+
+    public toggleTriggerForm(triggerUniqueName?: string): void {
+        if(this.showTriggerForm) {
+            this.showTriggerForm = false;
+            return;
+        }
+
+        this.showTriggerForm = true;
     }
 }

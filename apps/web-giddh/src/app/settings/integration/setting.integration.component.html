@@ -49,7 +49,7 @@
 
             <mat-tab label="Communication">
                 <!-- Page-1 to Page-3 -->
-                <div class="msg91-container">
+                <div class="msg91-container" *ngIf="!showTriggerForm">
                     <div class="menu" *ngIf="communicationPlatforms?.MSG91?.isConnected">
                         <button mat-icon-button disableRipple [matMenuTriggerFor]="beforeMenu">
                             <mat-icon>more_vert</mat-icon>
@@ -118,100 +118,70 @@
                 </div>
 
                 <ng-container *ngIf="!editCommunicationPlatform">
-                    <button class="new-trigger" mat-flat-button color="primary">
+                    <button
+                        class="new-trigger"
+                        mat-flat-button
+                        color="primary"
+                        *ngIf="!showTriggerForm"
+                        (click)="toggleTriggerForm()"
+                    >
                         {{ localeData?.communication?.create_new_trigger }}
                     </button>
+
+                    <!-- Page-3 to Page-5 -->
+                    <div class="table-one" *ngIf="!isActiveTriggersLoading && !showTriggerForm">
+                        <table mat-table [dataSource]="activeTriggersDataSource" class="mat-elevation-z8">
+                            <ng-container matColumnDef="title">
+                                <th class="active-trigger-title-width" mat-header-cell *matHeaderCellDef>
+                                    <!-- <img
+                                        class="active-trigger-search"
+                                        src="{{ imgPath }}active-trigger-search.svg"
+                                        alt=""
+                                    /> -->
+                                    Active Triggers
+                                </th>
+                                <td mat-cell *matCellDef="let element">{{ element.title }}</td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="channel">
+                                <th class="channel-width" mat-header-cell *matHeaderCellDef>Type</th>
+                                <td mat-cell *matCellDef="let element">{{ element.channel }}</td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="argsMapping">
+                                <th class="args-mapping-width" mat-header-cell *matHeaderCellDef>Fields Mapping</th>
+                                <td mat-cell *matCellDef="let element">{{ element.argsMapping }}</td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="createdAt">
+                                <th class="created-at-width" mat-header-cell *matHeaderCellDef>Created At</th>
+                                <td mat-cell *matCellDef="let element">
+                                    {{ element.createdAt | date: "EEEE, d MMM, yy, h:mm a" }}
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="action">
+                                <th class="icons-left" mat-header-cell *matHeaderCellDef>&nbsp;</th>
+                                <td mat-cell *matCellDef="let element">
+                                    <img class="icon-visibility cursor-pointer" src="{{ imgPath }}copy.svg" alt="" />
+                                    <img
+                                        class="mr-l2 icon-visibility cursor-pointer"
+                                        src="{{ imgPath }}edit.svg"
+                                        alt=""
+                                    />
+                                    <a href="javascript:;" (click)="deleteTrigger(element.uniqueName)"
+                                        ><img class="mr-l2 icon-visibility" src="{{ imgPath }}delete.svg"
+                                    /></a>
+                                </td>
+                            </ng-container>
+
+                            <tr mat-header-row *matHeaderRowDef="activeTriggersColumns"></tr>
+                            <tr mat-row *matRowDef="let row; columns: activeTriggersColumns"></tr>
+                        </table>
+                    </div>
                 </ng-container>
-
-                <!-- Page-3 to Page-5 -->
-                <div class="table-one" *ngIf="!isActiveTriggersLoading">
-                    <table mat-table [dataSource]="activeTriggersDataSource" class="mat-elevation-z8">
-                        <ng-container matColumnDef="title">
-                            <th class="active-trigger-title-width" mat-header-cell *matHeaderCellDef>
-                                <img
-                                    class="active-trigger-search"
-                                    src="{{ imgPath }}active-trigger-search.svg"
-                                    alt=""
-                                />
-                                Active Triggers
-                            </th>
-                            <td mat-cell *matCellDef="let element">{{ element.title }}</td>
-                        </ng-container>
-
-                        <ng-container matColumnDef="channel">
-                            <th class="channel-width" mat-header-cell *matHeaderCellDef>Type</th>
-                            <td mat-cell *matCellDef="let element">{{ element.channel }}</td>
-                        </ng-container>
-
-                        <ng-container matColumnDef="argsMapping">
-                            <th class="args-mapping-width" mat-header-cell *matHeaderCellDef>Fields Mapping</th>
-                            <td mat-cell *matCellDef="let element">{{ element.argsMapping }}</td>
-                        </ng-container>
-
-                        <ng-container matColumnDef="createdAt">
-                            <th class="created-at-width" mat-header-cell *matHeaderCellDef>Created At</th>
-                            <td mat-cell *matCellDef="let element">
-                                {{ element.createdAt | date: "EEEE, d MMM, yy, h:mm a" }}
-                            </td>
-                        </ng-container>
-
-                        <ng-container matColumnDef="action">
-                            <th class="icons-left" mat-header-cell *matHeaderCellDef>&nbsp;</th>
-                            <td mat-cell *matCellDef="let element">
-                                <img class="icon-visibility cursor-pointer" src="{{ imgPath }}copy.svg" alt="" />
-                                <img class="mr-l2 icon-visibility cursor-pointer" src="{{ imgPath }}edit.svg" alt="" />
-                                <a href="javascript:;" (click)="deleteTrigger(element.uniqueName)"
-                                    ><img class="mr-l2 icon-visibility" src="{{ imgPath }}delete.svg"
-                                /></a>
-                            </td>
-                        </ng-container>
-
-                        <tr mat-header-row *matHeaderRowDef="activeTriggersColumns"></tr>
-                        <tr mat-row *matRowDef="let row; columns: activeTriggersColumns"></tr>
-                    </table>
-                </div>
-
-                <!-- 
-
-                <div class="main-content">
-                    <p>Giddh Suggested Trigger</p>
-
-                    <table mat-table [dataSource]="table2" class="mat-elevation-z8">
-
-                        <ng-container matColumnDef="triggers">
-                            <th mat-header-cell *matHeaderCellDef> Triggers </th>
-                            <td class="triggers-content" mat-cell *matCellDef="let element"> {{element.triggers}} </td>
-                        </ng-container>
-
-                        <ng-container matColumnDef="type">
-                            <th class="type-column" mat-header-cell *matHeaderCellDef> Type </th>
-                            <td mat-cell *matCellDef="let element"> {{element.type}} </td>
-                        </ng-container>
-
-                        <ng-container matColumnDef="content">
-                            <th mat-header-cell *matHeaderCellDef> content </th>
-                            <td class="content-text" mat-cell *matCellDef="let element"> {{element.content}} </td>
-                        </ng-container>
-
-                        <ng-container matColumnDef="icon">
-                            <th mat-header-cell *matHeaderCellDef> </th>
-                            <td class="icon-container" mat-cell *matCellDef="let element"><img class="hideShow right-side" src="{{imgPath}}{{element.icon}}" alt=""> </td>
-                        </ng-container>
-
-                        <ng-container matColumnDef="button">
-                            <th mat-header-cell *matHeaderCellDef> </th>
-                            <td mat-cell *matCellDef="let element"> <button class="hideShow small-button" mat-flat-button color="primary">{{element.button}}</button> </td>
-                        </ng-container>
-
-                        <tr mat-header-row *matHeaderRowDef="displayedtable2Columns"></tr>
-                        <tr mat-row *matRowDef="let row; columns: displayedtable2Columns;"></tr>
-                    </table>
-
-
-                </div> -->
-
                 <!-- Page-6 to Page-9 -->
-                <!-- <div class="trigger-form">
+                <div class="trigger-form" *ngIf="!editCommunicationPlatform && showTriggerForm">
                     <div class="trigger-form-left-side">
                         <div class="create-trigger-head">
                             <img class="return" src="{{ imgPath }}return.svg" alt="" />
@@ -320,6 +290,43 @@
                             <button mat-flat-button color="primary" class="preview-button">Send Me Preview Mail</button>
                         </div>
                     </div>
+                </div>
+                <!-- 
+                <div class="main-content">
+                    <p>Giddh Suggested Trigger</p>
+
+                    <table mat-table [dataSource]="table2" class="mat-elevation-z8">
+
+                        <ng-container matColumnDef="triggers">
+                            <th mat-header-cell *matHeaderCellDef> Triggers </th>
+                            <td class="triggers-content" mat-cell *matCellDef="let element"> {{element.triggers}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="type">
+                            <th class="type-column" mat-header-cell *matHeaderCellDef> Type </th>
+                            <td mat-cell *matCellDef="let element"> {{element.type}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="content">
+                            <th mat-header-cell *matHeaderCellDef> content </th>
+                            <td class="content-text" mat-cell *matCellDef="let element"> {{element.content}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="icon">
+                            <th mat-header-cell *matHeaderCellDef> </th>
+                            <td class="icon-container" mat-cell *matCellDef="let element"><img class="hideShow right-side" src="{{imgPath}}{{element.icon}}" alt=""> </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="button">
+                            <th mat-header-cell *matHeaderCellDef> </th>
+                            <td mat-cell *matCellDef="let element"> <button class="hideShow small-button" mat-flat-button color="primary">{{element.button}}</button> </td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="displayedtable2Columns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedtable2Columns;"></tr>
+                    </table>
+
+
                 </div> -->
 
                 <!-- Page 10 -->
