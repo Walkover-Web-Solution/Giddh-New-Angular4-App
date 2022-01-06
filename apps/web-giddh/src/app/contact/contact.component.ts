@@ -9,6 +9,7 @@ import {
     OnDestroy,
     OnInit,
     Output,
+    Renderer2,
     TemplateRef,
     ViewChild,
 } from "@angular/core";
@@ -247,31 +248,12 @@ export class ContactComponent implements OnInit, OnDestroy {
     /** True if custom fields finished loading */
     public customFieldsLoaded: boolean = false;
 
-    constructor(
-        public dialog: MatDialog, 
-        private store: Store<AppState>, 
-        private router: Router, 
-        private companyServices: CompanyService, 
-        private commonActions: CommonActions, 
-        private toaster: ToasterService,
-        private contactService: ContactService, 
-        private settingsIntegrationActions: SettingsIntegrationActions, 
-        private companyActions: CompanyActions, 
-        private componentFactoryResolver: ComponentFactoryResolver,
-        private groupWithAccountsAction: GroupWithAccountsAction, 
-        private cdRef: ChangeDetectorRef, 
-        private generalService: GeneralService, 
-        private route: ActivatedRoute, 
-        private generalAction: GeneralActions,
-        private breakPointObservar: BreakpointObserver, 
-        private modalService: BsModalService, 
-        private settingsProfileActions: SettingsProfileActions, 
-        private groupService: GroupService,
-        private settingsBranchAction: SettingsBranchActions, 
-        public currencyPipe: GiddhCurrencyPipe,
-        private lightbox: Lightbox) {
-
-        this.searchLoader$ = this.store.pipe(select(state => state.search.searchLoader), takeUntil(this.destroyed$));
+    constructor(public dialog: MatDialog, private store: Store<AppState>, private router: Router, private companyServices: CompanyService, private commonActions: CommonActions, private toaster: ToasterService,
+        private contactService: ContactService, private settingsIntegrationActions: SettingsIntegrationActions, private companyActions: CompanyActions, private componentFactoryResolver: ComponentFactoryResolver,
+        private groupWithAccountsAction: GroupWithAccountsAction, private cdRef: ChangeDetectorRef, private generalService: GeneralService, private route: ActivatedRoute, private generalAction: GeneralActions,
+        private breakPointObservar: BreakpointObserver, private modalService: BsModalService, private settingsProfileActions: SettingsProfileActions, private groupService: GroupService,
+        private settingsBranchAction: SettingsBranchActions, public currencyPipe: GiddhCurrencyPipe, private lightbox: Lightbox ,private renderer: Renderer2) {
+        this.searchLoader$ = this.store.pipe(select(p => p.search.searchLoader), takeUntil(this.destroyed$));
         this.dueAmountReportRequest = new DueAmountReportQueryRequest();
         this.createAccountIsSuccess$ = this.store.pipe(select(state => state.groupwithaccounts.createAccountIsSuccess), takeUntil(this.destroyed$));
 
@@ -296,7 +278,8 @@ export class ContactComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
-        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+        this.renderer.addClass(document.body, 'contact-body');
+        this.imgPath = isElectron ? "assets/images/" : AppUrl + APP_FOLDER + "assets/images/";
         this.store.dispatch(this.companyActions.getAllRegistrations());
         this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
         this.currentOrganizationType = this.generalService.currentOrganizationType;
@@ -594,6 +577,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     }
 
     public ngOnDestroy() {
+        this.renderer.removeClass(document.body, 'contact-body');
         localStorage.removeItem(this.localStorageKeysForFilters[this.activeTab === "vendor" ? "vendor" : "customer"]);
         this.destroyed$.next(true);
         this.destroyed$.complete();
