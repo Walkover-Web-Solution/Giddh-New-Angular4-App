@@ -245,6 +245,8 @@ export class ContactComponent implements OnInit, OnDestroy {
     public availableColumnsCount: any[] = [];
     /** True if we should select all checkbox */
     public showSelectAll: boolean = false;
+    /** True if custom fields finished loading */
+    public customFieldsLoaded: boolean = false;
 
     constructor(public dialog: MatDialog, private store: Store<AppState>, private router: Router, private companyServices: CompanyService, private commonActions: CommonActions, private toaster: ToasterService,
         private contactService: ContactService, private settingsIntegrationActions: SettingsIntegrationActions, private companyActions: CompanyActions, private componentFactoryResolver: ComponentFactoryResolver,
@@ -1403,6 +1405,7 @@ export class ContactComponent implements OnInit, OnDestroy {
             } else {
                 this.toaster.showSnackBar("error", response.message);
             }
+            this.customFieldsLoaded = true;
             this.cdRef.detectChanges();
         });
     }
