@@ -47,6 +47,7 @@ import { ShareLedgerComponent } from './components/share-ledger/share-ledger.com
 import { ConfirmModalComponent } from '../theme/new-confirm-modal/confirm-modal.component';
 import { GenerateVoucherConfirmationModalComponent } from './components/generate-voucher-confirm-modal/generate-voucher-confirm-modal.component';
 import { CommonService } from '../services/common.service';
+import { AdjustmentUtilityService } from '../shared/advance-receipt-adjustment/services/adjustment-utility.service';
 
 @Component({
     selector: 'ledger',
@@ -269,7 +270,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
         private settingsBranchAction: SettingsBranchActions,
         private zone: NgZone,
         public dialog: MatDialog,
-        private commonService: CommonService
+        private commonService: CommonService,
+        private adjustmentUtilityService: AdjustmentUtilityService
     ) {
 
         this.lc = new LedgerVM();
@@ -945,10 +947,20 @@ export class LedgerComponent implements OnInit, OnDestroy {
      */
     public getInvoiceListsForCreditNote(voucherType: string): void {
         if (voucherType && this.selectedTxnAccUniqueName && this.accountUniquename) {
-            const request = {
-                accountUniqueNames: [this.selectedTxnAccUniqueName, this.accountUniquename],
-                voucherType
-            };
+            let request;
+
+            if (this.voucherApiVersion === 2) {
+                request = {
+                    accountUniqueName: this.selectedTxnAccUniqueName,
+                    voucherType
+                };
+            } else {
+                request = {
+                    accountUniqueNames: [this.selectedTxnAccUniqueName, this.accountUniquename],
+                    voucherType
+                };
+            }
+
             let date;
             if (this.lc && this.lc.blankLedger && this.lc.blankLedger.entryDate) {
                 if (typeof this.lc.blankLedger.entryDate === 'string') {
@@ -1289,6 +1301,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
             if (blankTransactionObj.otherTaxType === 'tds') {
                 delete blankTransactionObj['tcsCalculationMethod'];
             }
+
+            if(this.voucherApiVersion === 2) {
+                blankTransactionObj = this.adjustmentUtilityService.getAdjustmentObject(blankTransactionObj);
+            }
+            
             this.store.dispatch(this.ledgerActions.CreateBlankLedger(cloneDeep(blankTransactionObj), this.lc.accountUnq));
         } else {
             this.toaster.showSnackBar("error", this.localeData?.transaction_required, this.commonLocaleData?.app_error);

@@ -115,6 +115,7 @@ import { AccountsAction } from '../actions/accounts.actions';
 import { VoucherTypeToNamePipe } from '../shared/header/pipe/voucherTypeToNamePipe/voucherTypeToNamePipe.pipe';
 import { Location, TitleCasePipe } from '@angular/common';
 import { VoucherForm } from '../models/api-models/Voucher';
+import { AdjustmentUtilityService } from '../shared/advance-receipt-adjustment/services/adjustment-utility.service';
 
 /** Type of search: customer and item (product/service) search */
 const SEARCH_TYPE = {
@@ -670,7 +671,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         private accountActions: AccountsAction,
         private voucherTypeToNamePipe: VoucherTypeToNamePipe,
         private titleCasePipe: TitleCasePipe,
-        private location: Location
+        private location: Location,
+        private adjustmentUtilityService: AdjustmentUtilityService
     ) {
         this.advanceReceiptAdjustmentData = new VoucherAdjustments();
         this.advanceReceiptAdjustmentData.adjustments = [];
@@ -1212,6 +1214,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 /** results[1] :- get voucher details response */
                 if (results[0]) {
                     let obj;
+
+                    if(this.voucherApiVersion === 2) {
+                        results[0] = this.adjustmentUtilityService.getVoucherAdjustmentObject(results[0]);
+                    }
 
                     if (this.isLastInvoiceCopied) {
                         obj = {
@@ -1842,10 +1848,20 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      */
     public getInvoiceListsForCreditNote(voucherDate?: string): void {
         if (this.invFormData && this.invFormData.voucherDetails && this.invFormData.voucherDetails.customerUniquename) {
-            let request = {
-                accountUniqueNames: [this.invFormData.voucherDetails.customerUniquename, 'sales'],
-                voucherType: this.isCreditNote ? VoucherTypeEnum.creditNote : VoucherTypeEnum.debitNote
+            let request;
+            
+            if (this.voucherApiVersion === 2) {
+                request = {
+                    accountUniqueName: this.invFormData.voucherDetails.customerUniquename,
+                    voucherType: this.isCreditNote ? VoucherTypeEnum.creditNote : VoucherTypeEnum.debitNote
+                }
+            } else {
+                request = {
+                    accountUniqueNames: [this.invFormData.voucherDetails.customerUniquename, 'sales'],
+                    voucherType: this.isCreditNote ? VoucherTypeEnum.creditNote : VoucherTypeEnum.debitNote
+                }
             }
+
             let date;
             if (voucherDate) {
                 date = voucherDate;
@@ -2527,6 +2543,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     requestObject.voucherAdjustments = this.advanceReceiptAdjustmentData;
                 }
 
+                if(this.voucherApiVersion === 2) {
+                    requestObject = this.adjustmentUtilityService.getAdjustmentObjectVoucherModule(requestObject);
+                }
             }
         } else {
             let purchaseOrders = [];
@@ -4062,6 +4081,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         }
                     }
                     requestObject.voucherAdjustments = this.advanceReceiptAdjustmentData;
+                    if(this.voucherApiVersion === 2) {
+                        requestObject = this.adjustmentUtilityService.getAdjustmentObjectVoucherModule(requestObject);
+                    }
                 }
                 let updatedData = <GenericRequestForGenerateSCD>this.updateData(requestObject, requestObject.voucher);
                 if (this.voucherApiVersion === 2) {
@@ -4112,6 +4134,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 }
                 if (this.advanceReceiptAdjustmentData) {
                     requestObject.voucherAdjustments = this.advanceReceiptAdjustmentData;
+                }
+                if(this.voucherApiVersion === 2) {
+                    requestObject = this.adjustmentUtilityService.getAdjustmentObjectVoucherModule(requestObject);
                 }
                 this.generatePurchaseRecord(requestObject);
             } else {
@@ -5975,9 +6000,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 };
                 apiCallObservable = this.salesService.getAllAdvanceReceiptVoucher(requestObject);
             } else {
-                const accountUniqueName = (this.voucherApiVersion === 2 && this.selectedVoucherType === VoucherTypeEnum.purchase) ? "purchases" : this.selectedVoucherType;
                 const requestObject = {
-                    accountUniqueNames: [accountUniqueName, customerUniqueName],
+                    accountUniqueName: customerUniqueName,
                     voucherType: this.selectedVoucherType
                 }
                 apiCallObservable = this.salesService.getInvoiceList(requestObject, voucherDate);
