@@ -15,7 +15,6 @@ import { LoaderService } from './loader/loader.service';
 import { CompanyActions } from './actions/company.actions';
 import { OrganizationType } from './models/user-login-state';
 import { CommonActions } from './actions/common.actions';
-
 /**
  * App Component
  * Top Level Component
@@ -137,7 +136,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
 
         this.store.pipe(select(state => state.session.currentLocale), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                if(this.activeLocale !== response?.value) {
+                if (this.activeLocale !== response?.value) {
                     this.activeLocale = response?.value;
                     this.store.dispatch(this.commonActions.getCommonLocaleData(response.value));
                 }

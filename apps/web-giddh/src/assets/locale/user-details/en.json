@@ -51,7 +51,7 @@
     },
     "subscription": {
         "tab_heading": "Subscription",
-        "days_remaining": " days remaining",
+        "days_remaining": " days left",
         "search_subscribed_plan": "Search Subscribed Plan",
         "subscription_id": "Subscription ID",
         "subscribed_on": "Subscribed On",
@@ -112,7 +112,40 @@
         "see_all_free_plans": "See all FREE Plans",
         "activation_key": "Activation Key",
         "activation_key_note": "You will get the activation key from resellers.",
-        "enter_activation_key": "Enter activation key",
-        "activate": "Activate"
+        "enter_activation_key":"Enter activation key",
+        "activate": "Activate",
+        "transaction_balance":"Transactions Balance",
+        "left": "Left",
+        "plan_timeline": "Plan Timeline",
+        "overall_summary": "Overall Summary",
+        "select_plan_summary": "Select a plan to see its",
+        "select_plan_consumptions": "Overall comsumption and balance summary",
+        "you_have_total": "You have total",
+        "plans": "plans",
+        "benefits": "Benefits",
+        "renew": "Renew",
+        "buy_plan": "Buy Now",
+        "redeem": "Redeem",
+        "extra_addons": "* Extra Add-ons",
+        "per_transaction": "0.10 per transaction",
+        "search_companies": "Search companies",
+        "transaction_used": "transaction used",
+        "expiring_within": "Expiring within",
+        "expires": "Expires",
+        "timeline": "Timeline",
+        "search_plans": "Search subscription and companies"
+    },
+    "expiring_list":{
+        "seven_days":"7 Days",
+        "fifteen_days":"15 Days",
+        "one_month":"1 Month",
+        "six_months":"6 Months",
+        "one_year":"1 Year"
+    },
+    "transaction_balance_list":{
+        "less_than_1k":"Less than 1,000",
+        "less_than_5k":"Less than 5,000",
+        "less_than_10k":"Less than 10,000",
+        "less_than_50k":"Less than 50,000"
     }
 }

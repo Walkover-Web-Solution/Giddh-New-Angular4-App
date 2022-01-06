@@ -39,5 +39,15 @@
 	"total_companies": "कुल कंपनियां",
 	"transaction_limit": "लेनदेन सीमा",
 	"subscription_renewal": "सदस्यता नवीनीकरण",
-	"invalid_email_error": "मान्य ईमेल आईडी दर्ज करें"
+	"invalid_email_error": "मान्य ईमेल आईडी दर्ज करें",
+	"type_your_address": "अपना पता टाइप करें",
+	"including_tax":"टैक्स सहित (18% जीएसटी)",
+	"renewal_plan_details":"नवीनीकरण योजना विवरण",
+	"net_payable_amount":"शुद्ध देय राशि",
+	"plan_timeline":" योजना समयरेखा ",
+	"transactions": "लेनदेन",
+	"companies": "कंपनिया",
+	"unlimited_users": "असीमित उपयोगकर्ता",
+	"unlimited_contacts": "असीमित ग्राहक/विक्रेता",
+	"desktop_mobile_app": "डेस्कटॉप/मोबाइल ऐप"
 }
