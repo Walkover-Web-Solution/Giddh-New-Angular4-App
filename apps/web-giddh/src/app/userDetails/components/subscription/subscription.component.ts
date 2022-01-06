@@ -83,8 +83,6 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
     public imgPath: string = '';
     /** This will filter the dropdowns of expiry and transaction balance in subscription list */
     public filters: any = { plan: '', expiration: '', transactionBalance: '' };
-    /** This will stores the seleceted user plans */
-    public seletedUserPlans: SubscriptionsUser;
     /** This will stores the subscription plans  */
     public subscriptionPlan: CreateCompanyUsersPlan;
     /** This will send the subscription object for buy and renew plan */
@@ -159,7 +157,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
         });
 
         /** This will use for image format */
-        this.imgPath = (isElectron || isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
 
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
@@ -358,40 +356,39 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
      * @memberof SubscriptionComponent
      */
     public renewPlan(): void {
-        if (this.seletedUserPlans && this.seletedUserPlans.planDetails && this.seletedUserPlans.planDetails.amount > 0) {
-
+        if (this.selectedSubscription?.planDetails?.amount > 0) {
             this.subscriptionPlan = {
-                companies: this.seletedUserPlans.companies,
-                totalCompanies: this.seletedUserPlans.totalCompanies,
+                companies: this.selectedSubscription.companies,
+                totalCompanies: this.selectedSubscription.totalCompanies,
                 userDetails: {
-                    name: this.seletedUserPlans.userDetails?.name,
-                    uniqueName: this.seletedUserPlans.userDetails?.uniqueName,
-                    email: this.seletedUserPlans.userDetails?.email,
-                    signUpOn: this.seletedUserPlans.userDetails?.signUpOn,
-                    mobileno: this.seletedUserPlans.userDetails?.mobileno
+                    name: this.selectedSubscription.userDetails?.name,
+                    uniqueName: this.selectedSubscription.userDetails?.uniqueName,
+                    email: this.selectedSubscription.userDetails?.email,
+                    signUpOn: this.selectedSubscription.userDetails?.signUpOn,
+                    mobileno: this.selectedSubscription.userDetails?.mobileno
                 },
-                additionalTransactions: this.seletedUserPlans.additionalTransactions,
-                createdAt: this.seletedUserPlans.createdAt,
-                planDetails: this.seletedUserPlans.planDetails,
-                additionalCharges: this.seletedUserPlans.additionalCharges,
-                status: this.seletedUserPlans.status,
-                subscriptionId: this.seletedUserPlans.subscriptionId,
-                balance: this.seletedUserPlans.balance,
-                expiry: this.seletedUserPlans.expiry,
-                startedAt: this.seletedUserPlans.startedAt,
-                companiesWithTransactions: this.seletedUserPlans.companiesWithTransactions,
-                companyTotalTransactions: this.seletedUserPlans.companyTotalTransactions,
-                totalTransactions: this.seletedUserPlans.totalTransactions
+                additionalTransactions: this.selectedSubscription.additionalTransactions,
+                createdAt: this.selectedSubscription.createdAt,
+                planDetails: this.selectedSubscription.planDetails,
+                additionalCharges: this.selectedSubscription.additionalCharges,
+                status: this.selectedSubscription.status,
+                subscriptionId: this.selectedSubscription.subscriptionId,
+                balance: this.selectedSubscription.balance,
+                expiry: this.selectedSubscription.expiry,
+                startedAt: this.selectedSubscription.startedAt,
+                companiesWithTransactions: this.selectedSubscription.companiesWithTransactions,
+                companyTotalTransactions: this.selectedSubscription.companyTotalTransactions,
+                totalTransactions: this.selectedSubscription.totalTransactions
             };
             this.route.navigate(['pages', 'billing-detail', 'buy-plan']);
             this.store.dispatch(this.companyActions.selectedPlan(this.subscriptionPlan));
         } else {
             this.subscriptionRequestObj.userUniqueName = this.loggedInUser.uniqueName;
-            if (this.seletedUserPlans?.subscriptionId) {
-                this.subscriptionRequestObj.subscriptionId = this.seletedUserPlans?.subscriptionId;
+            if (this.selectedSubscription?.subscriptionId) {
+                this.subscriptionRequestObj.subscriptionId = this.selectedSubscription?.subscriptionId;
                 this.patchProfile({ subscriptionRequest: this.subscriptionRequestObj, callNewPlanApi: true });
-            } else if (!this.seletedUserPlans?.subscriptionId) {
-                this.subscriptionRequestObj.planUniqueName = this.seletedUserPlans?.planDetails?.uniqueName;
+            } else if (!this.selectedSubscription?.subscriptionId) {
+                this.subscriptionRequestObj.planUniqueName = this.selectedSubscription?.planDetails?.uniqueName;
                 this.patchProfile({ subscriptionRequest: this.subscriptionRequestObj, callNewPlanApi: true });
             }
         }

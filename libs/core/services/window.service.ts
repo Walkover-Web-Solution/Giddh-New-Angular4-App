@@ -1,8 +1,5 @@
-// angular
-import { Injectable, Inject, ViewContainerRef } from '@angular/core';
-
-// app
-import { isObject, isNativeScript } from '@giddh-workspaces/utils';
+import { Injectable, Inject } from '@angular/core';
+import { isObject } from '@giddh-workspaces/utils';
 import { XPlatWindow } from '../models';
 import { PlatformWindowToken } from './tokens';
 
@@ -47,7 +44,7 @@ export class WindowService {
         return new Promise((resolve, reject) => {
             const result: any = (<any>this._platformWindow).confirm(
                 msg,
-                isNativeScript() ? action : undefined
+                undefined
             );
             if (isObject(result) && result.then) {
                 result.then(resolve, reject);

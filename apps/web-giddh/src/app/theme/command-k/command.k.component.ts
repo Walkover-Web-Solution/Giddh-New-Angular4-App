@@ -99,6 +99,7 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
         });
 
         this.searchSubject.next("");
+        document.querySelector("body")?.classList?.add("cmd-k");
     }
 
     /**
@@ -132,6 +133,7 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
      * @memberof CommandKComponent
      */
     public ngOnDestroy(): void {
+        document.querySelector("body")?.classList?.remove("cmd-k");
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }

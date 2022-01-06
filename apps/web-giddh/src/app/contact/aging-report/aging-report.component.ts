@@ -388,7 +388,9 @@ export class AgingReportComponent implements OnInit, OnDestroy {
      * @memberof AgingReportComponent
      */
     public showAdvanceSearchPopup(): void {
-        this.dialog.open(this.advanceSearchTemplate);
+        this.dialog.open(this.advanceSearchTemplate, {
+            width: '630px',
+        });
     }
 
     /**

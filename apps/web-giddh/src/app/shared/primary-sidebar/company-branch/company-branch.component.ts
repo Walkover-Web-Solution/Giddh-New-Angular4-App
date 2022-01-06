@@ -123,7 +123,8 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
 
                 this.currentCompanyBranches$.subscribe(response => {
                     if (response && response.length) {
-                        this.branchList = response.sort(this.generalService.sortBranches);
+                        let unarchivedBranches = response.filter(branch => !branch.isArchived);
+                        this.branchList = unarchivedBranches?.sort(this.generalService.sortBranches);
                         this.currentCompanyBranches = this.branchList;
                         if(this.companyBranches) {
                             this.companyBranches.branches = this.branchList;
@@ -256,12 +257,6 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
         localStorage.removeItem('isNewArchitecture');
         if (isElectron) {
             this.store.dispatch(this.loginAction.ClearSession());
-        } else if (isCordova) {
-            (window as any).plugins.googleplus.logout(
-                (msg) => {
-                    this.store.dispatch(this.loginAction.ClearSession());
-                }
-            );
         } else {
             // check if logged in via social accounts
             this.isLoggedInWithSocialAccount$.subscribe((val) => {

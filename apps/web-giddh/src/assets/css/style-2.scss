@@ -47,6 +47,61 @@ $custom-typography: mat-typography-config(
 .overflow-x-hidden {
     overflow-x: hidden;
 }
+@media screen and (max-width: 1366px) and (orientation: portrait) {
+    .subscription-form-select {
+        float: left !important;
+        width: 100% !important;
+        height: 29px !important;
+
+        .mat-form-field-wrapper {
+            height: 100% !important;
+            padding-bottom: 0 !important;
+        }
+
+        .mat-form-field-flex {
+            float: left !important;
+            width: 100% !important;
+        }
+
+        .mat-form-field-infix {
+            padding-top: 0 !important;
+            padding-bottom: 0 !important;
+            margin-top: 0 !important;
+            border: none !important;
+        }
+
+        .mat-select {
+            margin-top: 0 !important;
+            z-index: 9991 !important;
+        }
+    }
+    .select-subscription {
+        float: left;
+        width: 100% !important;
+
+        .mat-form-field-wrapper {
+            height: 100% !important;
+            padding-bottom: 0 !important;
+        }
+
+        .mat-form-field-flex {
+            float: left !important;
+            width: 100% !important;
+        }
+
+        .mat-form-field-infix {
+            padding-top: 0 !important;
+            padding-bottom: 0 !important;
+            margin-top: 0 !important;
+            border: none !important;
+        }
+
+        .mat-select {
+            margin-top: 0 !important;
+            z-index: 9991 !important;
+        }
+    }
+}
 @media (max-width: 768px) {
     .text-left-sm {
         text-align: left !important;
@@ -7034,7 +7089,11 @@ giddh-datepicker {
 .cdk-overlay-connected-position-bounding-box {
     z-index: 9999;
 }
-
+.cmd-k {
+    .cdk-overlay-container {
+        z-index: 999 !important;
+    }
+}
 giddh-datepicker {
     .mat-form-field-appearance-fill .mat-form-field-flex {
         border: 1px solid $gainsboro !important;
@@ -7550,8 +7609,14 @@ body.update-scroll-hidden {
 }
 @media (max-width: 1024px) {
     .main-table {
-        tbody > tr > td:first-child {
-            min-width: 242px !important;
+        tbody {
+            tr {
+                td {
+                    &:first-child {
+                        min-width: 242px !important;
+                    }
+                }
+            }
         }
     }
     .users-last-list {

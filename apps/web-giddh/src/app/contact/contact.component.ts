@@ -18,8 +18,7 @@ import { select, Store } from "@ngrx/store";
 import { IOption } from "apps/web-giddh/src/app/theme/ng-virtual-select/sh-options.interface";
 import { saveAs } from "file-saver";
 import * as moment from "moment/moment";
-import { BsDropdownDirective } from "ngx-bootstrap/dropdown";
-import { BsModalRef, BsModalService, ModalDirective, ModalOptions } from "ngx-bootstrap/modal";
+import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
 import { PaginationComponent } from "ngx-bootstrap/pagination";
 import { BehaviorSubject, combineLatest, Observable, of as observableOf, ReplaySubject, Subject } from "rxjs";
 import { debounceTime, distinctUntilChanged, filter, take, takeUntil } from "rxjs/operators";
@@ -59,6 +58,7 @@ import { MatCheckboxChange } from "@angular/material/checkbox/checkbox";
 import { MatTableModule } from "@angular/material/table";
 import { MatTabChangeEvent } from "@angular/material/tabs";
 import { MatDialog } from "@angular/material/dialog";
+import { MatMenuTrigger } from "@angular/material/menu";
 
 @Component({
     selector: "contact-detail",
@@ -110,12 +110,6 @@ export class ContactComponent implements OnInit, OnDestroy {
     public allSelectionModel: boolean = false;
     public localStorageKeysForFilters = { customer: "customerFilterStorageV2", vendor: "vendorFilterStorageV2" };
     public isMobileScreen: boolean = false;
-    public modalConfig: ModalOptions = {
-        animated: true,
-        keyboard: true,
-        backdrop: "static",
-        ignoreBackdropClick: true,
-    };
     public isICICIIntegrated: boolean = false;
     public selectedWhileHovering: string;
     public searchLoader$: Observable<boolean>;
@@ -131,14 +125,11 @@ export class ContactComponent implements OnInit, OnDestroy {
     public updateCommentIdx: number = null;
     public searchStr$ = new Subject<string>();
     public searchStr: string = "";
-    @ViewChild("filterDropDownList") public filterDropDownList: BsDropdownDirective;
+    @ViewChild(MatMenuTrigger) trigger: MatMenuTrigger;
     @ViewChild("paginationChild", { static: true }) public paginationChild: ElementViewContainerRef;
-    // @ViewChild("staticTabs", { static: true }) public staticTabs: TabsetComponent;
     @ViewChild("staticTabs", { static: true }) public staticTabs: MatTableModule;
     @Output() selectedTabChange: EventEmitter<MatTabChangeEvent>;
-    // @ViewChild("mailModal", { static: false }) public mailModal: ModalDirective;
     @ViewChild("messageBox", { static: false }) public messageBox: ElementRef;
-    @ViewChild("advanceSearch", { static: true }) public advanceSearch: ModalDirective;
     @ViewChild("datepickerTemplate", { static: true }) public datepickerTemplate: ElementRef;
     public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     public universalDate$: Observable<any>;
@@ -262,7 +253,7 @@ export class ContactComponent implements OnInit, OnDestroy {
         private settingsBranchAction: SettingsBranchActions, public currencyPipe: GiddhCurrencyPipe, private lightbox: Lightbox ,private renderer: Renderer2) {
         this.searchLoader$ = this.store.pipe(select(p => p.search.searchLoader), takeUntil(this.destroyed$));
         this.dueAmountReportRequest = new DueAmountReportQueryRequest();
-        this.createAccountIsSuccess$ = this.store.pipe(select(s => s.groupwithaccounts.createAccountIsSuccess), takeUntil(this.destroyed$));
+        this.createAccountIsSuccess$ = this.store.pipe(select(state => state.groupwithaccounts.createAccountIsSuccess), takeUntil(this.destroyed$));
 
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
         this.store.pipe(select(s => s.agingreport.data), takeUntil(this.destroyed$)).subscribe((data) => {
@@ -439,7 +430,6 @@ export class ContactComponent implements OnInit, OnDestroy {
             this.searchStr$.next(searchedText);
         });
 
-
         this.store.pipe(select(state => state.company), takeUntil(this.destroyed$)).subscribe(response => {
             this.isIciciAccountPendingForApproval = false;
             this.isGetAllIntegratedBankInProgress = response?.isGetAllIntegratedBankInProgress;
@@ -502,7 +492,6 @@ export class ContactComponent implements OnInit, OnDestroy {
         }
 
         if (isElectron) {
-            let ipcRenderer = (window as any).require("electron").ipcRenderer;
             url = location.origin + location.pathname + `#./pages/${part}/${accUniqueName}`;
         } else {
             (window as any).open(url);
@@ -652,12 +641,6 @@ export class ContactComponent implements OnInit, OnDestroy {
             this.checkboxInfo.selectedPage = event.page;
             this.allSelectionModel = this.checkboxInfo[this.checkboxInfo.selectedPage] ? true : false;
             this.getAccounts(this.fromDate, this.toDate, event.page, "true", PAGINATION_LIMIT, this.searchStr, this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
-        }
-    }
-
-    public hideListItems() {
-        if (this.filterDropDownList) {
-            this.filterDropDownList.hide();
         }
     }
 
@@ -970,10 +953,6 @@ export class ContactComponent implements OnInit, OnDestroy {
             }
 
         }
-    }
-
-    public toggleAdvanceSearchPopup() {
-        this.advanceSearch.toggle();
     }
 
     public selectAccount(ev: MatCheckboxChange, item: any) {
@@ -1424,6 +1403,8 @@ export class ContactComponent implements OnInit, OnDestroy {
             } else {
                 this.toaster.showSnackBar("error", response.message);
             }
+            this.customFieldsLoaded = true;
+            this.cdRef.detectChanges();
         });
     }
 
@@ -1437,14 +1418,22 @@ export class ContactComponent implements OnInit, OnDestroy {
         for (let key of field) {
             if (key?.uniqueName) {
                 let index = Object.keys(this.showFieldFilter).length;
-                this.showFieldFilter[key.uniqueName] = {
-                    visibility: false,
-                    displayName: key.key,
-                };
-                this.availableColumnsCount.push({ key: index, value: key.uniqueName });
+                if (!this.showFieldFilter[key.uniqueName]) {
+                    this.showFieldFilter[key.uniqueName] = {
+                        visibility: false,
+                        displayName: key.key,
+                    };
+                }
+
+                let isColumnAvailable = this.availableColumnsCount.filter(column => column.value === key.uniqueName);
+                if(!isColumnAvailable?.length) {
+                    this.availableColumnsCount.push({ key: index, value: key.uniqueName });
+                }
             }
         }
         this.setDisplayColumns();
+
+        this.selectAll = Object.keys(this.showFieldFilter).every(filterName => this.showFieldFilter[filterName].visibility);
     }
 
     /**
@@ -1608,7 +1597,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     public toggleSearch(fieldName: string): void {
         if (fieldName === "name") {
             this.showNameSearch = true;
-        }    
+        }
     }
 
     /**
@@ -1654,7 +1643,9 @@ export class ContactComponent implements OnInit, OnDestroy {
             this.toaster.showSnackBar("info", message);
         }
         if (this.selectedAccountsList?.length || this.selectedAccForPayment) {
-            this.dialog.open(this.bulkPaymentModalRef);
+            this.dialog.open(this.bulkPaymentModalRef ,{
+                width: '60%'
+            });
         }
     }
 
@@ -1703,10 +1694,22 @@ export class ContactComponent implements OnInit, OnDestroy {
     public tabChange(event: any): void {
         if (event?.tab?.textLabel === this.localeData?.customer) {
             this.tabSelected("customer");
+            this.resetColumns();
         } else if (event?.tab?.textLabel === this.localeData?.vendor) {
             this.tabSelected("vendor");
         } else if (event?.tab?.textLabel === this.localeData?.aging_report) {
             this.tabSelected("aging-report");
         }
+    }
+
+    /**
+     * This function will use for reset columns
+     *
+     * @memberof ContactComponent
+     */
+    private resetColumns(): void {
+        this.availableColumnsCount = [];
+        this.showFieldFilter = {};
+        this.translationComplete(true);
     }
 }

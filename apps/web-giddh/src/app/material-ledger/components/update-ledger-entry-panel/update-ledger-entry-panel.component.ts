@@ -2264,12 +2264,15 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @memberof UpdateLedgerEntryPanelComponent
      */
      public openAttachmentsDialog(templateRef: TemplateRef<any>): void {
+        document.querySelector(".cdk-global-overlay-wrapper")?.classList?.add("double-popup-zindex");
+        
         let dialogRef = this.dialog.open(templateRef, {
             width: '70%',
             height: '650px'
         });
 
         dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            document.querySelector(".cdk-global-overlay-wrapper")?.classList?.remove("double-popup-zindex");
             if (response) {
                 this.store.dispatch(this.ledgerAction.getLedgerTrxDetails(this.accountUniqueName, this.entryUniqueName));
             }

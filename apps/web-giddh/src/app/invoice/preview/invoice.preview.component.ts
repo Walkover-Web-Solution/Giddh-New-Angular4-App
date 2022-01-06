@@ -1477,9 +1477,14 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
      * @param {*} event emmiter event
      * @memberof InvoicePreviewComponent
      */
-    public openAdvanceReceiptModal(event): void {
+    public openAdvanceReceiptModal(event: any): void {
         if (event) {
-            this.onPerformAdjustPaymentAction(this.selectedInvoice);
+            const selectedVoucher = this.voucherData.items?.filter(voucher => voucher.uniqueName === event.uniqueName);
+            if (selectedVoucher?.length > 0) {
+                this.onPerformAdjustPaymentAction(selectedVoucher[0]);
+            } else {
+                this.onPerformAdjustPaymentAction(this.selectedInvoice);
+            }
         }
     }
 

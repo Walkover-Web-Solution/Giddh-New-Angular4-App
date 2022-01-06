@@ -22,6 +22,7 @@ import { InvoiceActions } from "../../actions/invoice/invoice.actions";
 import { InvoiceBulkUpdateService } from "../../services/invoice.bulkupdate.service";
 import { BreakpointObserver } from "@angular/cdk/layout";
 import * as printJS from 'print-js';
+import { OrganizationType } from "../../models/user-login-state";
 
 @Component({
     selector: "attachments",
@@ -54,8 +55,6 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
     public voucherPdf: any;
     /** Stores the current organization type */
     public currentOrganizationType: string;
-    /** Stores the current branches */
-    public branches: Array<any>;
     /** Upload input */
     public uploadInput: EventEmitter<UploadInput>;
     /** File upload options */
@@ -66,8 +65,6 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
     public activeCompany: any = {};
     /** Holds session key observable */
     public sessionKey$: Observable<string>;
-    /** True/false if file is selected to enable/disable buttons */
-    public filesSelected: boolean = false;
     /** Holds invoice settings */
     public invoiceSettings: any;
     /** True/false for select all checkbox */
@@ -80,6 +77,8 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
     public imgPath: string = "";
     /** True if needs to refresh entry */
     public refreshAfterClose: boolean = false;
+    /** True if is company */
+    public isCompany: boolean = false;
 
     constructor(
         private commonService: CommonService,
@@ -105,11 +104,11 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
      * @memberof AttachmentsComponent
      */
     public ngOnInit(): void {
-        this.imgPath = (isElectron || isCordova) ? "assets/images/" : AppUrl + APP_FOLDER + "assets/images/";
+        this.imgPath = isElectron ? "assets/images/" : AppUrl + APP_FOLDER + "assets/images/";
         this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                this.branches = response;
+                this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && response.length > 1;
             } else {
                 this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '' }));
             }
@@ -232,7 +231,7 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
      * @memberof AttachmentsComponent
      */
     public showFilePreview(attachment: any): void {
-        this.previewedFile = attachment;
+        this.previewedFile = cloneDeep(attachment);
         if (!this.isMobileView) {
             if (attachment?.type === "pdf") {
                 const file = new Blob([attachment?.src], { type: 'application/pdf' });
@@ -330,15 +329,9 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
      */
     public selectAttachment(event: any, attachment: any): void {
         attachment.isChecked = event?.checked;
-        this.filesSelected = false;
-
-        let isAttachmentSelected = this.attachments?.filter(attachment => attachment.isChecked);
-        if (isAttachmentSelected?.length > 0 || this.voucherPdf?.isChecked) {
-            this.filesSelected = true;
-        }
 
         let allAttachmentSelected = this.attachments?.filter(attachment => !attachment.isChecked);
-        if (!allAttachmentSelected?.length && this.voucherPdf?.isChecked) {
+        if ((!this.attachments?.length || (this.attachments?.length && !allAttachmentSelected?.length)) && (!this.voucherPdf?.type || this.voucherPdf?.isChecked)) {
             this.selectAll = true;
         } else {
             this.selectAll = false;
@@ -462,8 +455,8 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
                             this.voucherPdf = null;
                             this.refreshAfterClose = true;
 
-                            this.previewFileAfterDelete();
                             this.changeDetectionRef.detectChanges();
+                            this.previewFileAfterDelete();
 
                             if (autoDeleteEntries) {
                                 this.closeModal?.nativeElement?.click();
@@ -493,7 +486,6 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
             this.voucherPdf.isChecked = event?.checked;
         }
 
-        this.filesSelected = event?.checked;
         this.changeDetectionRef.detectChanges();
     }
 
