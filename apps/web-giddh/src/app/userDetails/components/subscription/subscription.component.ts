@@ -146,10 +146,16 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
         this.imgPath = (isElectron || isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
 
     }
-
-    ngOnChanges(): void {
+    
+    /**
+     * This function will be use for callback for translation response complete on changes
+     *
+     * @memberof SubscriptionComponent
+     */
+    public ngOnChanges(): void {
         this.translationComplete();
     }
+
     /**
      * This function will use for get subscribed companies 
      *
