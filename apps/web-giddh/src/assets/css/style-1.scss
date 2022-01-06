@@ -2166,6 +2166,19 @@ form#groupDetailForm {
     }
 }
 @media screen and (max-width: 768px) {
+    .contact-body {
+        .mat-table {
+            tbody {
+                tr:not(.plan-row-columns) {
+                    &:hover {
+                        td {
+                            background: transparent !important;
+                        }
+                    }
+                }
+            }
+        }
+    }
     .table-container.trial-balance {
         .table-responsive {
             display: table;

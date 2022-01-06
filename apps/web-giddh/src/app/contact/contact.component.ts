@@ -9,6 +9,7 @@ import {
     OnDestroy,
     OnInit,
     Output,
+    Renderer2,
     TemplateRef,
     ViewChild,
 } from "@angular/core";
@@ -269,7 +270,8 @@ export class ContactComponent implements OnInit, OnDestroy {
         private groupService: GroupService,
         private settingsBranchAction: SettingsBranchActions, 
         public currencyPipe: GiddhCurrencyPipe,
-        private lightbox: Lightbox) {
+        private lightbox: Lightbox,
+        private renderer: Renderer2) {
 
         this.searchLoader$ = this.store.pipe(select(state => state.search.searchLoader), takeUntil(this.destroyed$));
         this.dueAmountReportRequest = new DueAmountReportQueryRequest();
@@ -296,6 +298,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
+        this.renderer.addClass(document.body, 'contact-body');
         this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         this.store.dispatch(this.companyActions.getAllRegistrations());
         this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
@@ -594,6 +597,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     }
 
     public ngOnDestroy() {
+        this.renderer.removeClass(document.body, 'contact-body');
         localStorage.removeItem(this.localStorageKeysForFilters[this.activeTab === "vendor" ? "vendor" : "customer"]);
         this.destroyed$.next(true);
         this.destroyed$.complete();
