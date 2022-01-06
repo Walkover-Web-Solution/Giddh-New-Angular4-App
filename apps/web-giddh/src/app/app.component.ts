@@ -1,7 +1,4 @@
 import { NavigationEnd, NavigationStart, Router, RouteConfigLoadEnd, RouteConfigLoadStart } from '@angular/router';
-/**
- * Angular 2 decorators and services
- */
 import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 
 import { Store, select } from '@ngrx/store';
@@ -20,11 +17,6 @@ import { LoaderService } from './loader/loader.service';
 import { CompanyActions } from './actions/company.actions';
 import { OrganizationType } from './models/user-login-state';
 import { CommonActions } from './actions/common.actions';
-
-/**
- * App Component
- * Top Level Component
- */
 @Component({
     selector: 'app-component',
     encapsulation: ViewEncapsulation.None,
