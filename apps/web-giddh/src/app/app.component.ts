@@ -15,6 +15,10 @@ import { LoaderService } from './loader/loader.service';
 import { CompanyActions } from './actions/company.actions';
 import { OrganizationType } from './models/user-login-state';
 import { CommonActions } from './actions/common.actions';
+/**
+ * App Component
+ * Top Level Component
+ */
 @Component({
     selector: 'app-component',
     encapsulation: ViewEncapsulation.None,
