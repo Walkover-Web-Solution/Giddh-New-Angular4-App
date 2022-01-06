@@ -153,6 +153,7 @@ a[vr-item]:focus {
     right: 0;
     top: 110px;
 }
+
 @media screen and (-webkit-min-device-pixel-ratio: 0) {
     .left-fixed-header li {
         display: grid;
@@ -1035,18 +1036,6 @@ aside-setting {
             i {
                 font-size: 22px !important;
             }
-        }
-    }
-    .fixed-padding {
-        #primary-new-header {
-            z-index: 99999 !important;
-        }
-    }
-}
-@media (max-width: 1024px) {
-    .fixed-padding {
-        #primary-new-header {
-            z-index: 99999 !important;
         }
     }
 }
