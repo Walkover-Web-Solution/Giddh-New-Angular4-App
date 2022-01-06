@@ -1,6 +1,5 @@
 import { NavigationEnd, NavigationStart, Router, RouteConfigLoadEnd, RouteConfigLoadStart } from '@angular/router';
 import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
-
 import { Store, select } from '@ngrx/store';
 import { AppState } from './store/roots';
 import { GeneralService } from './services/general.service';
@@ -8,7 +7,6 @@ import { pick } from './lodash-optimized';
 import { VersionCheckService } from './version-check.service';
 import { ReplaySubject } from 'rxjs';
 import { BreakpointObserver } from '@angular/cdk/layout';
-
 import { DbService } from './services/db.service';
 import { reassignNavigationalArray } from './models/defaultMenus'
 import { Configuration } from "./app.constant";
