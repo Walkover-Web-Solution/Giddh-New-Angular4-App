@@ -351,15 +351,11 @@
             <div class="modal-content">
                 <confirm-modal
                     *ngIf="statusModal?.isShown"
-                    [title]="
+                    [title]="commonLocaleData?.app_confirmation"
+                    [body]="
                         branchStatusToUpdate?.isArchived
                             ? localeData?.confirm_unarchive_title
                             : localeData?.confirm_archive_title
-                    "
-                    [body]="
-                        branchStatusToUpdate?.isArchived
-                            ? localeData?.confirm_unarchive_content
-                            : localeData?.confirm_archive_content
                     "
                     [permanentlyDeleteMessage]="' '"
                     (cancelCallBack)="branchStatusToUpdate = ''; statusModal?.hide()"

@@ -123,7 +123,7 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
 
                 this.currentCompanyBranches$.subscribe(response => {
                     if (response && response.length) {
-                        let unarchivedBranches = response.filter(branch => !branch.isArchived);
+                        let unarchivedBranches = response.filter(branch => branch.isArchived === false);
                         this.branchList = unarchivedBranches?.sort(this.generalService.sortBranches);
                         this.currentCompanyBranches = this.branchList;
                         if(this.companyBranches) {
@@ -289,7 +289,8 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
             let branchFilterRequest: BranchFilterRequest = { from: '', to: '', companyUniqueName: company?.uniqueName };
             this.settingsBranchService.GetAllBranches(branchFilterRequest).subscribe(response => {
                 if (response?.status === "success") {
-                    this.branchList = response.body.sort(this.generalService.sortBranches);
+                    let unarchivedBranches = response?.body?.filter(branch => branch.isArchived === false);
+                    this.branchList = unarchivedBranches?.sort(this.generalService.sortBranches);
                     company.branches = this.branchList;
                     this.companyBranches = company;
                     this.companyBranches.branchCount = this.branchList?.length;
