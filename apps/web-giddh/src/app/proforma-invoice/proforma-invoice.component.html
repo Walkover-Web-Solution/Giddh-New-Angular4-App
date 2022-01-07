@@ -3310,7 +3310,7 @@
                                                     <ul>
                                                         <ng-container
                                                             *ngIf="
-                                                                isSalesInvoice &&
+                                                                (isSalesInvoice || isPurchaseInvoice) &&
                                                                 (isAccountHaveAdvanceReceipts ||
                                                                     isInvoiceAdjustedWithAdvanceReceipts)
                                                             "
