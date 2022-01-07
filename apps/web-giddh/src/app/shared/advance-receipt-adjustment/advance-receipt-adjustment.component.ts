@@ -14,6 +14,7 @@ import { cloneDeep } from '../../lodash-optimized';
 import { AdjustedVoucherType, SubVoucher } from '../../app.constant';
 import { giddhRoundOff } from '../helpers/helperFunctions';
 import { GeneralService } from '../../services/general.service';
+import { AdjustmentUtilityService } from './services/adjustment-utility.service';
 
 /** Toast message when no advance receipt is found */
 const NO_ADVANCE_RECEIPT_FOUND = 'There is no advanced receipt for adjustment.';
@@ -105,7 +106,9 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
         private store: Store<AppState>,
         private salesService: SalesService,
         private toaster: ToasterService,
-        private generalService: GeneralService) {
+        private generalService: GeneralService,
+        private adjustmentUtilityService: AdjustmentUtilityService
+    ) {
 
     }
 
@@ -158,22 +161,43 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
             let requestObject;
             if (typeof customerUniqueName === 'string') {
                 // New entry is created from ledger
-                requestObject = {
-                    accountUniqueNames: [customerUniqueName, this.invoiceFormDetails.activeAccountUniqueName ?? voucherType],
-                    voucherType,
-                    subVoucher: this.adjustedVoucherType === AdjustedVoucherType.AdvanceReceipt ? SubVoucher.AdvanceReceipt : undefined
+                if(this.voucherApiVersion === 2) {
+                    requestObject = {
+                        accountUniqueName: customerUniqueName,
+                        voucherType,
+                        subVoucher: this.adjustedVoucherType === AdjustedVoucherType.AdvanceReceipt ? SubVoucher.AdvanceReceipt : undefined
+                    }
+                } else {
+                    requestObject = {
+                        accountUniqueNames: [customerUniqueName, this.invoiceFormDetails.activeAccountUniqueName ?? voucherType],
+                        voucherType,
+                        subVoucher: this.adjustedVoucherType === AdjustedVoucherType.AdvanceReceipt ? SubVoucher.AdvanceReceipt : undefined
+                    }
                 }
             } else {
                 // A ledger entry is updated
-                requestObject = {
-                    accountUniqueNames: [...customerUniqueName, this.invoiceFormDetails.activeAccountUniqueName ?? voucherType],
-                    voucherType,
-                    subVoucher: this.adjustedVoucherType === AdjustedVoucherType.AdvanceReceipt ? SubVoucher.AdvanceReceipt : undefined
+                if(this.voucherApiVersion === 2) {
+                    requestObject = {
+                        accountUniqueName: customerUniqueName,
+                        voucherType,
+                        subVoucher: this.adjustedVoucherType === AdjustedVoucherType.AdvanceReceipt ? SubVoucher.AdvanceReceipt : undefined
+                    }
+                } else {
+                    requestObject = {
+                        accountUniqueNames: [...customerUniqueName, this.invoiceFormDetails.activeAccountUniqueName ?? voucherType],
+                        voucherType,
+                        subVoucher: this.adjustedVoucherType === AdjustedVoucherType.AdvanceReceipt ? SubVoucher.AdvanceReceipt : undefined
+                    }
                 }
             }
             this.salesService.getInvoiceList(requestObject, this.invoiceFormDetails.voucherDetails.voucherDate).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
                 if (response && response.body) {
-                    const results = (response.body.results || response.body.items);
+                    let results = (response.body.results || response.body.items);
+
+                    if(this.voucherApiVersion === 2) {
+                        results = this.adjustmentUtilityService.formatAdjustmentsObject(results);
+                    }
+
                     this.allAdvanceReceiptResponse = results?.map(result => ({ ...result, adjustmentAmount: { amountForAccount: result.balanceDue?.amountForAccount, amountForCompany: result.balanceDue?.amountForCompany } }));
                     this.adjustVoucherOptions = [];
                     if (this.allAdvanceReceiptResponse && this.allAdvanceReceiptResponse.length) {
@@ -321,7 +345,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
                 apiCallObservable = this.salesService.getAllAdvanceReceiptVoucher(requestObject);
             } else {
                 const requestObject = {
-                    accountUniqueNames: [this.adjustedVoucherType, this.getAllAdvanceReceiptsRequest.accountUniqueName],
+                    accountUniqueName: this.getAllAdvanceReceiptsRequest.accountUniqueName,
                     voucherType: this.adjustedVoucherType
                 }
                 apiCallObservable = this.salesService.getInvoiceList(requestObject, this.getAllAdvanceReceiptsRequest.invoiceDate);
@@ -341,6 +365,11 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
                         });
                     }
                     this.allAdvanceReceiptResponse = (res.body.items?.length) ? res.body.items : (res.body.results?.length) ? res.body.results : res.body;
+
+                    if(this.voucherApiVersion === 2) {
+                        this.allAdvanceReceiptResponse = this.adjustmentUtilityService.formatAdjustmentsObject(this.allAdvanceReceiptResponse);
+                    }
+
                     if (this.allAdvanceReceiptResponse?.length) {
                         if (this.allAdvanceReceiptResponse && this.allAdvanceReceiptResponse.length) {
                             this.allAdvanceReceiptResponse.forEach(item => {

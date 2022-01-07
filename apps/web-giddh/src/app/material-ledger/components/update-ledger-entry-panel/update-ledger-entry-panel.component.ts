@@ -60,6 +60,7 @@ import { ConfirmModalComponent } from '../../../theme/new-confirm-modal/confirm-
 import { SettingsTagService } from '../../../services/settings.tag.service';
 import { MatAccordion } from '@angular/material/expansion';
 import { CommonService } from '../../../services/common.service';
+import { AdjustmentUtilityService } from '../../../shared/advance-receipt-adjustment/services/adjustment-utility.service';
 
 /** Info message to be displayed during adjustment if the voucher is not generated */
 const ADJUSTMENT_INFO_MESSAGE = 'Voucher should be generated in order to make adjustments';
@@ -285,7 +286,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         private warehouseActions: WarehouseActions,
         private changeDetectorRef: ChangeDetectorRef,
         public dialog: MatDialog,
-        private commonService: CommonService
+        private commonService: CommonService,
+        private adjustmentUtilityService: AdjustmentUtilityService
     ) {
 
         this.vm = new UpdateLedgerVm();
@@ -901,6 +903,11 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         if (this.isAdvanceReceipt) {
             requestObj.voucherType = 'rcpt';
         }
+
+        if(this.voucherApiVersion === 2) {
+            requestObj = this.adjustmentUtilityService.getAdjustmentObject(requestObj);
+        }
+
         // if no petty cash mode then do normal update ledger request
         if (!this.isPettyCash) {
             requestObj['handleNetworkDisconnection'] = true;
@@ -1980,6 +1987,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         // insure we have account details, if we are normal ledger mode and not petty cash mode ( special case for others entry in petty cash )
         if (this.isPettyCash && this.accountUniqueName && resp[1].status !== 'success') {
             return;
+        }
+
+        if(this.voucherApiVersion === 2) {
+            resp[0] = this.adjustmentUtilityService.getVoucherAdjustmentObject(resp[0]);
         }
 
         if (updateBaseAccountParticular) {
