@@ -8101,9 +8101,6 @@ body.update-scroll-hidden {
 }
 
 @media (max-width: 767px) {
-    .contact-body .mat-cell:last-child {
-        padding: 5px 10px 5px 50% !important;
-    }
     .customer-form-inline {
         float: left;
         width: 100%;
@@ -9482,9 +9479,6 @@ input[type="checkbox"].cdk-visually-hidden::after {
     }
 }
 @media screen and (max-width: 768px) {
-    .contact-body .mat-cell:last-child {
-        padding: 5px 10px 5px 50% !important;
-    }
     .ipad-responsive-modal {
         .pull-right {
             .mat-raised-button {
