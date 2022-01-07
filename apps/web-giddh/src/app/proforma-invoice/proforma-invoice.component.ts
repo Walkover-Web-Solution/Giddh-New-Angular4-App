@@ -2569,6 +2569,38 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 purchaseOrders: purchaseOrders,
                 company: this.purchaseBillCompany
             } as PurchaseRecordRequest;
+
+            /** Advance receipts adjustment */
+            if (this.advanceReceiptAdjustmentData && this.advanceReceiptAdjustmentData.adjustments) {
+                if (this.advanceReceiptAdjustmentData.adjustments.length) {
+                    const adjustments = cloneDeep(this.advanceReceiptAdjustmentData.adjustments);
+                    if (adjustments) {
+                        adjustments.forEach(adjustment => {
+                            if (adjustment.balanceDue !== undefined) {
+                                delete adjustment.balanceDue;
+                            }
+                        });
+                        requestObject.voucherAdjustments = {
+                            adjustments
+                        };
+
+                        if (requestObject.voucherAdjustments && requestObject.voucherAdjustments.adjustments && requestObject.voucherAdjustments.adjustments.length > 0) {
+                            requestObject.voucherAdjustments.adjustments.map(item => {
+                                if (item && item.voucherDate) {
+                                    item.voucherDate = item.voucherDate.replace(/\//g, '-');
+                                }
+                            });
+                        }
+                    }
+                } else {
+                    this.advanceReceiptAdjustmentData.adjustments = [];
+                    requestObject.voucherAdjustments = this.advanceReceiptAdjustmentData;
+                }
+
+                if (this.voucherApiVersion === 2) {
+                    requestObject = this.adjustmentUtilityService.getAdjustmentObjectVoucherModule(requestObject);
+                }
+            }
         }
 
         if (this.isProformaInvoice || this.isEstimateInvoice) {
