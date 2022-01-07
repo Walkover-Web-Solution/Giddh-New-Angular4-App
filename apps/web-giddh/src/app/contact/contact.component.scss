@@ -1,5 +1,14 @@
 @import "../../assets/css/color.scss";
 
+@mixin all-table {
+    td {
+        .mat-cell {
+            &:last-child {
+                padding: 5px 10px 5px 50% !important;
+            }
+        }
+    }
+}
 .dropdown-menu {
     > li {
         > a {
@@ -583,15 +592,7 @@ button.btn.btn-filter span.icon-cross {
 }
 
 @media (max-width: 768px) {
-    .all-table {
-        td {
-            .mat-cell {
-                &:last-child {
-                    padding: 5px 10px 5px 50% !important;
-                }
-            }
-        }
-    }
+    @include all-table;
     button.btn.btn-filter {
         margin-left: auto;
         display: flex;
@@ -656,15 +657,7 @@ button.btn.btn-filter span.icon-cross {
 }
 
 @media (max-width: 767px) {
-    .all-table {
-        td {
-            .mat-cell {
-                &:last-child {
-                    padding: 5px 10px 5px 50% !important;
-                }
-            }
-        }
-    }
+    @include all-table;
     span.input-addon {
         top: 0;
     }
