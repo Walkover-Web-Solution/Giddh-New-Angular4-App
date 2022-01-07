@@ -37,7 +37,7 @@ export class AdjustmentUtilityService {
      * @returns {*}
      * @memberof AdjustmentUtilityService
      */
-    public formatAdjustmentsObject(adjustments): any {
+    public formatAdjustmentsObject(adjustments: any): any {
         adjustments?.map(adjustment => {
             adjustment.adjustmentAmount = adjustment.amount;
             adjustment.balanceDue = adjustment.unadjustedAmount;
