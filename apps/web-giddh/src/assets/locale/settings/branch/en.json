@@ -34,8 +34,6 @@
     "address_created": "Address created successfully",
     "branch_archived": "Branch has been archived successfully",
     "branch_unarchived": "Branch has been unarchived successfully",
-    "confirm_archive_title": "Are you sure you want to archive?",
-    "confirm_archive_content": "It will enable \"View Only\" mode.",
-    "confirm_unarchive_title": "Are you sure you want to unarchive?",
-    "confirm_unarchive_content": "It will enable all features once again."
+    "confirm_archive_title": "Are you sure you want to archive the branch?",
+    "confirm_unarchive_title": "Are you sure you want to unarchive the branch?"
 }
