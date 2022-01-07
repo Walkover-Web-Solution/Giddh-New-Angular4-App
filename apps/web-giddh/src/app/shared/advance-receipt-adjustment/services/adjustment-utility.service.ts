@@ -57,7 +57,18 @@ export class AdjustmentUtilityService {
      * @memberof AdjustmentUtilityService
      */
     public getAdjustmentObject(data: any): any {
-        if (data?.transactions?.length > 0) {
+        if (data?.voucherAdjustments?.adjustments?.length > 0) {
+            data.voucherAdjustments.adjustments.map(adjustment => {
+                adjustment.amount = adjustment.adjustmentAmount;
+                adjustment.unadjustedAmount = adjustment.balanceDue;
+                delete adjustment.adjustmentAmount;
+                delete adjustment.balanceDue;
+                return adjustment;
+            });
+
+            data.transactions[0].adjustments = data.voucherAdjustments.adjustments;
+            delete data.voucherAdjustments;
+        } else if (data?.transactions?.length > 0) {
             data?.transactions?.forEach(transaction => {
                 if (transaction?.voucherAdjustments?.adjustments?.length > 0) {
                     transaction.voucherAdjustments.adjustments.map(adjustment => {

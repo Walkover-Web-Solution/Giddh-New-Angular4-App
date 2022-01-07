@@ -1090,10 +1090,20 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @memberof UpdateLedgerEntryPanelComponent
      */
     public getInvoiceListsForCreditNote(): void {
-        const request = {
-            accountUniqueNames: [this.vm.selectedLedger?.particular?.uniqueName, this.vm.selectedLedger?.transactions[0]?.particular?.uniqueName],
-            voucherType: this.vm.selectedLedger?.voucher?.shortCode
+        let request;
+
+        if (this.voucherApiVersion === 2) {
+            request = {
+                accountUniqueName: this.vm.selectedLedger?.particular?.uniqueName,
+                voucherType: this.vm.selectedLedger?.voucher?.shortCode
+            };
+        } else {
+            request = {
+                accountUniqueNames: [this.vm.selectedLedger?.particular?.uniqueName, this.vm.selectedLedger?.transactions[0]?.particular?.uniqueName],
+                voucherType: this.vm.selectedLedger?.voucher?.shortCode
+            };
         }
+
         let date;
         if (typeof this.vm.selectedLedger.entryDate === 'string') {
             date = this.vm.selectedLedger.entryDate;
