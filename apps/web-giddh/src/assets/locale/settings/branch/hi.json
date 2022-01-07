@@ -34,8 +34,6 @@
 	"address_created": "पता सफलतापूर्वक बनाया गया",
     "branch_archived": "शाखा सफलतापूर्वक संग्रहित कर ली गई है",
     "branch_unarchived": "शाखा को सफलतापूर्वक अनारक्षित कर दिया गया है",
-    "confirm_archive_title": "क्या आप वाकई संग्रह करना चाहते हैं?",
-    "confirm_archive_content": "यह \"केवल देखें\" मोड को सक्षम करेगा।",
-    "confirm_unarchive_title": "क्या आप वाकई संग्रह को हटाना चाहते हैं?",
-    "confirm_unarchive_content": "यह सभी सुविधाओं को एक बार फिर से सक्षम कर देगा।"
+    "confirm_archive_title": "क्या आप वाकई शाखा को संग्रहित करना चाहते हैं?",
+    "confirm_unarchive_title": "क्या आप वाकई शाखा को अनारक्षित करना चाहते हैं?"
 }
