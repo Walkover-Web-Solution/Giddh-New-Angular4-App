@@ -178,7 +178,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
                 // A ledger entry is updated
                 if(this.voucherApiVersion === 2) {
                     requestObject = {
-                        accountUniqueName: customerUniqueName,
+                        accountUniqueName: customerUniqueName[1],
                         voucherType,
                         subVoucher: this.adjustedVoucherType === AdjustedVoucherType.AdvanceReceipt ? SubVoucher.AdvanceReceipt : undefined
                     }
