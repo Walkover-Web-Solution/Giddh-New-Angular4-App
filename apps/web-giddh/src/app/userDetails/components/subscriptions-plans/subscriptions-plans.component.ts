@@ -187,7 +187,13 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
         this.isSubscriptionPlanShow.emit(true);
         this.router.navigate(['/pages', 'user-details', 'subscription']);
     }
-
+    
+    /**
+     * This function will be use for buy plan
+     *
+     * @param {*} plan
+     * @memberof SubscriptionsPlansComponent
+     */
     public buyPlanClicked(plan: any) {
         let activationKey = this.licenceKey.value;
         if (activationKey) {
@@ -195,9 +201,14 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
         } else {
             this.SubscriptionRequestObj.licenceKey = "";
         }
+        if(this.allSubscriptions[plan.uniqueName].planDetails.amount <= 0){
+            this.SubscriptionRequestObj.planUniqueName = plan.uniqueName;
+            this.SubscriptionRequestObj.userUniqueName = this.logedInUser.uniqueName;
+            this.patchProfile({ subscriptionRequest: this.SubscriptionRequestObj, callNewPlanApi: true });
+        } else {
         this.router.navigate(['pages', 'billing-detail', 'buy-plan']);
+        } 
         this.store.dispatch(this.companyActions.selectedPlan(this.allSubscriptions[plan.uniqueName]));
-
     }
 
     public patchProfile(obj) {
