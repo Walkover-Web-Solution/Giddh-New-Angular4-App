@@ -47,6 +47,13 @@ $custom-typography: mat-typography-config(
 .overflow-x-hidden {
     overflow-x: hidden;
 }
+.move-select {
+    .menu {
+        position: fixed !important;
+        float: left !important;
+        width: 18.2% !important;
+    }
+}
 @media screen and (max-width: 1366px) and (orientation: portrait) {
     .subscription-form-select {
         float: left !important;
@@ -7608,6 +7615,16 @@ body.update-scroll-hidden {
     }
 }
 @media (max-width: 1024px) {
+    .move-select {
+        .menu {
+            width: 36% !important;
+        }
+    }
+    .move-wrapper {
+        float: left;
+        max-width: 100% !important;
+        flex: 100% !important;
+    }
     .main-table {
         tbody {
             tr {
@@ -9479,6 +9496,16 @@ input[type="checkbox"].cdk-visually-hidden::after {
     }
 }
 @media screen and (max-width: 768px) {
+    .move-select {
+        .menu {
+            width: 36% !important;
+        }
+    }
+    .move-wrapper {
+        float: left;
+        max-width: 100% !important;
+        flex: 100% !important;
+    }
     .ipad-responsive-modal {
         .pull-right {
             .mat-raised-button {
