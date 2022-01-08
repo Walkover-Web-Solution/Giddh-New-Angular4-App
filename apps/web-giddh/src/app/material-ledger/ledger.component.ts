@@ -942,23 +942,29 @@ export class LedgerComponent implements OnInit, OnDestroy {
     /**
      * Get Invoice list for credit note
      *
-     * @param {any} voucher Selected voucher
+     * @param {any} current transaction and voucher type
      * @memberof LedgerComponent
      */
-    public getInvoiceListsForCreditNote(voucherType: string): void {
+    public getInvoiceListsForCreditNote(event: any): void {
+        const voucherType = (event) ? event[1] : "";
         if (voucherType && this.selectedTxnAccUniqueName && this.accountUniquename) {
             let request;
 
+            let activeAccount = null;
+            this.lc.activeAccount$.pipe(take(1)).subscribe(account => activeAccount = account);
+
             if (this.voucherApiVersion === 2) {
-                request = {
-                    accountUniqueName: this.selectedTxnAccUniqueName,
-                    voucherType
-                };
+                request = this.adjustmentUtilityService.getInvoiceListRequest({ particularAccount: event[0]?.selectedAccount, voucherType: voucherType, ledgerAccount: activeAccount });
             } else {
                 request = {
                     accountUniqueNames: [this.selectedTxnAccUniqueName, this.accountUniquename],
                     voucherType
                 };
+            }
+
+            // don't call api if it's invalid case
+            if (!request) {
+                return;
             }
 
             let date;
@@ -972,7 +978,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             this.invoiceList = [];
             this.ledgerService.getInvoiceListsForCreditNote(request, date).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
                 if (response && response.body && response.body.results) {
-                    response.body.results.forEach(invoice => this.invoiceList.push({ label: invoice?.voucherNumber ? invoice.voucherNumber : '-', value: invoice?.uniqueName, additional: invoice }))
+                    response.body.results.forEach(invoice => this.invoiceList.push({ label: invoice?.voucherNumber ? invoice.voucherNumber : '-', value: invoice?.uniqueName, additional: invoice })) 
                 }
             });
         }
