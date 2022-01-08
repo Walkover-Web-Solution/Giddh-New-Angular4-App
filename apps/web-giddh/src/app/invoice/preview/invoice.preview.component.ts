@@ -1455,7 +1455,9 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                 item.voucherNumber = item.voucherNumber === '-' ? '' : item.voucherNumber;
             });
         }
-        this.salesService.adjustAnInvoiceWithAdvanceReceipts(this.advanceReceiptAdjustmentData, this.changeStatusInvoiceUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        const apiCallObservable = (this.voucherApiVersion === 2) ? this.salesService.adjustAnInvoiceWithAdvanceReceipts(this.advanceReceiptAdjustmentData.adjustments, this.changeStatusInvoiceUniqueName) : this.salesService.adjustAnInvoiceWithAdvanceReceipts(this.advanceReceiptAdjustmentData, this.changeStatusInvoiceUniqueName);
+    
+        apiCallObservable.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 if (response.status === 'success') {
                     this._toaster.successToast(response.body);
