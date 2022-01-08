@@ -2387,10 +2387,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     this.advanceReceiptAdjustmentData.adjustments = [];
                     requestObject.voucherAdjustments = this.advanceReceiptAdjustmentData;
                 }
-
-                if(this.voucherApiVersion === 2) {
-                    requestObject = this.adjustmentUtilityService.getAdjustmentObjectVoucherModule(requestObject);
-                }
             }
         } else {
             let purchaseOrders = [];
@@ -2440,10 +2436,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 } else {
                     this.advanceReceiptAdjustmentData.adjustments = [];
                     requestObject.voucherAdjustments = this.advanceReceiptAdjustmentData;
-                }
-
-                if (this.voucherApiVersion === 2) {
-                    requestObject = this.adjustmentUtilityService.getAdjustmentObjectVoucherModule(requestObject);
                 }
             }
         }
@@ -2497,6 +2489,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 }
                 if (this.voucherApiVersion === 2 && !this.isPurchaseInvoice) {
                     updatedData = this.proformaInvoiceUtilityService.getVoucherRequestObjectForInvoice(updatedData);
+                }
+
+                if(this.voucherApiVersion === 2) {
+                    updatedData = this.adjustmentUtilityService.getAdjustmentObjectVoucherModule(updatedData);
                 }
             }
             if (this.isPurchaseInvoice) {

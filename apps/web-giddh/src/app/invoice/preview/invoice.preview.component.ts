@@ -1507,7 +1507,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                 apiCallObservable = this.salesService.getAllAdvanceReceiptVoucher(requestObject);
             } else {
                 const requestObject = {
-                    accountUniqueNames: [this.selectedVoucher, customerUniqueName],
+                    accountUniqueName: customerUniqueName,
                     voucherType: this.selectedVoucher
                 }
                 apiCallObservable = this.salesService.getInvoiceList(requestObject, voucherDate);
