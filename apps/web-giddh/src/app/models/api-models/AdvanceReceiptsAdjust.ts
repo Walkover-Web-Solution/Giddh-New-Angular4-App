@@ -31,6 +31,8 @@ export class Adjustment {
     voucherType?: string;
     subVoucher?: string;
     linkingAdjustment?: boolean;
+    amount?: DueAmount;
+    unadjustedAmount?: DueAmount;
 
     constructor() {
         this.voucherNumber = '';
