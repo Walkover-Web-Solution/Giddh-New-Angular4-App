@@ -1095,15 +1095,16 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         let request;
 
         if (this.voucherApiVersion === 2) {
-            request = {
-                accountUniqueName: this.vm.selectedLedger?.particular?.uniqueName,
-                voucherType: this.vm.selectedLedger?.voucher?.shortCode
-            };
+            request = this.adjustmentUtilityService.getInvoiceListRequest({ particularAccount: this.vm.selectedLedger?.particular, voucherType: this.vm.selectedLedger?.voucher?.shortCode, ledgerAccount: this.activeAccount });
         } else {
             request = {
                 accountUniqueNames: [this.vm.selectedLedger?.particular?.uniqueName, this.vm.selectedLedger?.transactions[0]?.particular?.uniqueName],
                 voucherType: this.vm.selectedLedger?.voucher?.shortCode
             };
+        }
+
+        if (!request) {
+            return;
         }
 
         let date;

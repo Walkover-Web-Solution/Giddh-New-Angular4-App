@@ -1620,7 +1620,12 @@
                                                             name="ledgDate"
                                                             [(ngModel)]="lc.blankLedger.entryDate"
                                                             [placeholder]="lc.formatPlaceholder"
-                                                            (dateSelected)="getInvoiceListsForCreditNote(true)"
+                                                            (dateSelected)="
+                                                                getInvoiceListsForCreditNote([
+                                                                    {},
+                                                                    lc.blankLedger.voucherType
+                                                                ])
+                                                            "
                                                             (datepickerState)="datepickerState($event)"
                                                         ></giddh-datepicker>
                                                     </div>
