@@ -756,11 +756,16 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
             let convertedTotalAmount: number = 0;
             this.adjustVoucherForm.adjustments.forEach(item => {
                 if (item && item.adjustmentAmount && item.adjustmentAmount.amountForAccount) {
-                    totalAmount += Number(item.adjustmentAmount.amountForAccount);
-                    convertedTotalAmount += item.adjustmentAmount.amountForCompany;
+                    if ((this.adjustedVoucherType === AdjustedVoucherType.SalesInvoice && item.voucherType === AdjustedVoucherType.DebitNote) || (this.adjustedVoucherType === AdjustedVoucherType.PurchaseInvoice && item.voucherType === AdjustedVoucherType.CreditNote)) {
+                        totalAmount -= Number(item.adjustmentAmount.amountForAccount);
+                        convertedTotalAmount -= item.adjustmentAmount.amountForCompany;
+                    } else {
+                        totalAmount += Number(item.adjustmentAmount.amountForAccount);
+                        convertedTotalAmount += item.adjustmentAmount.amountForCompany;
+                    }
                 }
             });
-            // this.adjustPayment.balanceDue = Number(this.adjustPayment.grandTotal.) - Number(totalAmount);
+            
             this.adjustPayment.totalAdjustedAmount = Number(totalAmount);
             this.adjustPayment.convertedTotalAdjustedAmount = Number(convertedTotalAmount);
             this.exceedDueAmount = this.getBalanceDue();

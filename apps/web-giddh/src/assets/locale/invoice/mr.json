@@ -174,5 +174,6 @@
     "exchange_gain_loss_label": "[BASE_CURRENCY] मध्ये: [AMOUNT]<br />एक्सचेंज [PROFIT_TYPE]: ",
     "works_for_single_entry": "केवळ एकल प्रवेशासाठी कार्य करते.",
     "uploaded_purchase_bill": "बिल अपलोड केले",
-    "auto_generated_purchase_bill": "गिद्ध ऑटो वयुत्पन्न बिल"
+    "auto_generated_purchase_bill": "गिद्ध ऑटो वयुत्पन्न बिल",
+    "amount_adjusted": "रक्कम यशस्वीरित्या समायोजित केली"
 }

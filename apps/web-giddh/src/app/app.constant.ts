@@ -263,6 +263,7 @@ export enum AdjustedVoucherType {
     Sales = 'sal', // used in ledger
     SalesInvoice = 'sales', // used in invoice preview module
     Purchase = 'pur',
+    PurchaseInvoice = 'purchase',
     CreditNote = 'credit note',
     DebitNote = 'debit note',
     Payment = 'pay',
