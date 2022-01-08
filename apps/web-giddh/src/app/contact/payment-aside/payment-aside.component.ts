@@ -165,7 +165,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
     }
 
     public ngOnInit() {
-        this.imgPath = (isElectron || isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         this.initializeNewForm();
         // get all registered account
         this.store.pipe((select(c => c.session.companyUniqueName)), take(2)).subscribe(s => this.companyUniqueName = s);

@@ -316,13 +316,8 @@ export class LoginActions {
         .pipe(
             ofType(LoginActions.LogOut),
             map((action: CustomActions) => {
-                if (PRODUCTION_ENV && !(isElectron || isCordova)) {
+                if (PRODUCTION_ENV && !isElectron) {
                     window.location.href = 'https://stage.giddh.com/login/';
-                } else if (isCordova) {
-                    this.zone.run(() => {
-                        this._generalService.invokeEvent.next('logoutCordova');
-                        this._router.navigate(['login']);
-                    });
                 } else if (isElectron) {
                     this._router.navigate(['/login']);
                     window.location.reload();

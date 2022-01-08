@@ -43,7 +43,7 @@ export class OnboardingComponent implements OnInit, AfterViewInit, OnDestroy {
 
     public ngOnInit() {
         this.supportTeamNumber = SUPPORT_TEAM_NUMBERS[Math.floor(Math.random() * SUPPORT_TEAM_NUMBERS.length)];
-        this.imgPath = (isElectron || isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         let companyUniqueName = null;
         this.store.pipe(select(c => c.session.companyUniqueName), take(1)).subscribe(s => companyUniqueName = s);
         let stateDetailsRequest = new StateDetailsRequest();

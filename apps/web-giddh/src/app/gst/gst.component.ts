@@ -175,7 +175,7 @@ export class GstComponent implements OnInit, OnDestroy {
                 this.store.dispatch(this.gstAction.SetSelectedPeriod(this.currentPeriod));
             }
         });
-        this.imgPath = (isElectron || isCordova) ? 'assets/images/gst/' : AppUrl + APP_FOLDER + 'assets/images/gst/';
+        this.imgPath = isElectron ? 'assets/images/gst/' : AppUrl + APP_FOLDER + 'assets/images/gst/';
         this.store.pipe(select(appState => appState.gstR.activeCompanyGst), takeUntil(this.destroyed$)).subscribe(response => {
             if (response && this.activeCompanyGstNumber !== response) {
                 this.activeCompanyGstNumber = response;
