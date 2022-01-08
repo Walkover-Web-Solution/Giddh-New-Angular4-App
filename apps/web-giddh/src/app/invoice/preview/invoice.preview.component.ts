@@ -1453,6 +1453,13 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             this.advanceReceiptAdjustmentData.adjustments.map(item => {
                 item.voucherDate = (item.voucherDate.toString().includes('/')) ? item.voucherDate.trim().replace(/\//g, '-') : item.voucherDate;
                 item.voucherNumber = item.voucherNumber === '-' ? '' : item.voucherNumber;
+
+                if(this.voucherApiVersion === 2) {
+                    item.amount = item.adjustmentAmount;
+                    item.unadjustedAmount = item.balanceDue;
+                    delete item.adjustmentAmount;
+                    delete item.balanceDue;
+                }
             });
         }
         const apiCallObservable = (this.voucherApiVersion === 2) ? this.salesService.adjustAnInvoiceWithAdvanceReceipts(this.advanceReceiptAdjustmentData.adjustments, this.changeStatusInvoiceUniqueName) : this.salesService.adjustAnInvoiceWithAdvanceReceipts(this.advanceReceiptAdjustmentData, this.changeStatusInvoiceUniqueName);
@@ -1460,7 +1467,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         apiCallObservable.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 if (response.status === 'success') {
-                    this._toaster.successToast(response.body);
+                    this._toaster.successToast(this.localeData?.amount_adjusted);
                     this.changeStatusInvoiceUniqueName = ''
                     this.closeAdvanceReceiptModal();
                     this.getVoucher(this.isUniversalDateApplicable);
