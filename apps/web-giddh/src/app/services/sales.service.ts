@@ -125,12 +125,12 @@ export class SalesService {
     /**
      * API call to adjust an invoice with advance receipts
      *
-     * @param {VoucherAdjustments} model Adjust advance receipts request model
+     * @param {*} model Adjust advance receipts request model
      * @param {string} invoiceUniqueName Invoice unique name which need to adjust
      * @returns {Observable<BaseResponse<any, any>>}
      * @memberof SalesService
      */
-    public adjustAnInvoiceWithAdvanceReceipts(model: VoucherAdjustments, invoiceUniqueName: string): Observable<BaseResponse<any, any>> {
+    public adjustAnInvoiceWithAdvanceReceipts(model: any, invoiceUniqueName: string): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let url;
         
