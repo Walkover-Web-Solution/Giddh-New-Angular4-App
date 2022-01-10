@@ -1,5 +1,14 @@
 @import "../../assets/css/color.scss";
 
+@mixin all-table {
+    td {
+        .mat-cell {
+            &:last-child {
+                padding: 5px 10px 5px 50% !important;
+            }
+        }
+    }
+}
 .dropdown-menu {
     > li {
         > a {
@@ -512,21 +521,13 @@ button.btn.btn-filter span.icon-cross {
 }
 
 .all-table {
-    th.mat-header-cell:first-of-type {
-        width: 595px;
-        padding-left: 5px !important;
-    }
-    th.mat-header-cell:last-of-type,
-    td.mat-cell:last-of-type,
-    td.mat-footer-cell:last-of-type {
-        padding-left: 20px !important;
-    }
-
     .mat-header-cell {
-        padding: 0px 6px !important;
-        height: 51.5px;
+        &:first-of-type {
+            width: 595px;
+            padding-left: 5px !important;
+        }
     }
-    tr.mat-header-row {
+    .mat-header-row {
         border-bottom: 1.5px solid $link-water;
     }
     .icon-search:before {
@@ -591,6 +592,7 @@ button.btn.btn-filter span.icon-cross {
 }
 
 @media (max-width: 768px) {
+    @include all-table;
     button.btn.btn-filter {
         margin-left: auto;
         display: flex;
@@ -655,6 +657,7 @@ button.btn.btn-filter span.icon-cross {
 }
 
 @media (max-width: 767px) {
+    @include all-table;
     span.input-addon {
         top: 0;
     }
