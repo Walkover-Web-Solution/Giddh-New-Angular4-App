@@ -41,7 +41,6 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
     public smsTabActive: boolean = false;
     public isSendSmsEnabled: boolean = false;
     public isElectron = isElectron;
-    public isCordova = isCordova;
     public voucherRequest = null;
     public voucherDetailsInProcess$: Observable<boolean> = of(true);
     public accountUniqueName: string = '';

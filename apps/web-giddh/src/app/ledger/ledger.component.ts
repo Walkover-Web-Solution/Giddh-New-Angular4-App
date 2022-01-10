@@ -497,7 +497,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         // reset redirect state from login action
         this.store.dispatch(this._loginActions.ResetRedirectToledger());
 
-        this.imgPath = (isElectron || isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.breakPointObservar.observe([
             '(max-width: 991px)'

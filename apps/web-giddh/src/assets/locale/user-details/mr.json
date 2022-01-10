@@ -113,6 +113,39 @@
 		"activation_key": "सक्रियण की",
 		"activation_key_note": "आपणास पुनर्विक्रेत्यांकडून सक्रियकरण की मिळेल.",
 		"enter_activation_key": "सक्रियकरण की प्रविष्ट करा",
-		"activate": "सक्रिय करा"
-	}
+		"activate": "सक्रिय करा",
+		"transaction_balance": "व्यवहार शिल्लक",
+		"left": "बाकी",
+		"plan_timeline": " योजना टाइमलाइन ",
+		"overall_summary": "एकूण सारांश",
+		"select_plan_summary": " पाहण्यासाठी योजना निवडा ",
+		"select_plan_consumptions": "एकूण उपभोग आणि शिल्लक सारांश ",
+		"you_have_total": "तुमच्याकडे एकूण आहे ",
+		"plans": "योजना",
+		"benefits": "फायदे",
+		"renew": "नूतनीकरण करा",
+		"buy_plan": "आता खरेदी करा",
+		"redeem": "रिडीम करा",
+		"extra_addons": "* अतिरिक्त ऍड-ऑन",
+		"per_transaction": "0.10 प्रति व्यवहार",
+		"search_companies": "शोध कंपन्या",
+		"transaction_used":"व्यवहार वापरले",
+        "expiring_within":"आत कालबाह्य होत आहे",
+		"expires":"कालबाह्य",
+		"timeline":"टाइमलाइन",
+		"search_plans":"सदस्यता आणि कंपन्या शोधा"
+	},
+	"expiring_list":{
+        "seven_days":"7 दिवस",
+        "fifteen_days":"15 दिवस",
+        "one_month":"1 महिना",
+        "six_months":"6 महिने",
+        "one_year":"1 वर्ष"
+    },
+    "transaction_balance_list":{
+        "less_than_1k":"1,000 पेक्षा कमी",
+        "less_than_5k":"5,000 पेक्षा कमी",
+        "less_than_10k":"10,000 पेक्षा कमी",
+        "less_than_50k":"50,000 पेक्षा कमी"
+    }
 }

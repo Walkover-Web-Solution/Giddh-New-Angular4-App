@@ -22,7 +22,6 @@ import {
 import { IOption } from "../theme/ng-virtual-select/sh-options.interface";
 import { DOCUMENT } from "@angular/common";
 import { userLoginStateEnum } from "../models/user-login-state";
-import { isCordova } from "@giddh-workspaces/utils";
 import { GeneralService } from "../services/general.service";
 import { contriesWithCodes } from "../shared/helpers/countryWithCodes";
 
@@ -88,7 +87,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         @Inject(DOCUMENT) private document: Document,
         private _generalService: GeneralService
     ) {
-        this.urlPath = (isElectron || isCordova()) ? "" : AppUrl + APP_FOLDER;
+        this.urlPath = isElectron ? "" : AppUrl + APP_FOLDER;
         this.isLoginWithEmailInProcess$ = this.store.pipe(select(state => {
             return state.login.isLoginWithEmailInProcess;
         }), takeUntil(this.destroyed$));
@@ -177,7 +176,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.setCountryCode({ value: "India", label: "India" });
 
         // get user object when google auth is complete
-        if (!(Configuration.isElectron || Configuration.isCordova)) {
+        if (!Configuration.isElectron) {
             this.authService.authState.pipe(takeUntil(this.destroyed$)).subscribe((user: SocialUser) => {
                 this.isSocialLogoutAttempted$.pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                     if (!res && user) {
@@ -323,24 +322,6 @@ export class LoginComponent implements OnInit, OnDestroy {
                     this.store.dispatch(this.loginAction.signupWithGoogle(arg.access_token));
                 });
             }
-
-        } else if (isCordova()) {
-
-            (window as any).plugins.googleplus.login(
-                {
-                    'scopes': 'email', // optional, space-separated list of scopes, If not included or empty, defaults to `profile` and `email`.
-                    'webClientId': GOOGLE_CLIENT_ID,
-                    'offline': true // optional, but requires the webClientId - if set to true the plugin will also return a serverAuthCode, which can be used to grant offline access to a non-Google server
-                },
-                (obj) => {
-                    this.store.dispatch(this.loginAction.signupWithGoogle(obj.accessToken));
-                    // console.log((JSON.stringify(obj))); // do something useful instead of alerting
-                },
-                (msg) => {
-                    console.log(('error: ' + msg));
-                }
-            );
-
         } else {
             //  web social authentication
             this.store.dispatch(this.loginAction.resetSocialLogoutAttempt());
@@ -349,7 +330,6 @@ export class LoginComponent implements OnInit, OnDestroy {
             }
         }
     }
-
 
     public ngOnDestroy() {
         this.document.body.classList.add("unresponsive");
