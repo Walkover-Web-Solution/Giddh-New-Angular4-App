@@ -38,11 +38,9 @@ export class AdjustmentUtilityService {
      * @memberof AdjustmentUtilityService
      */
     public formatAdjustmentsObject(adjustments: any): any {
-        adjustments?.map(adjustment => {
+        adjustments = adjustments?.map(adjustment => {
             adjustment.adjustmentAmount = adjustment.amount;
             adjustment.balanceDue = adjustment.unadjustedAmount;
-            delete adjustment.amount;
-            delete adjustment.unadjustedAmount;
             return adjustment;
         });
 
@@ -136,15 +134,39 @@ export class AdjustmentUtilityService {
             }
         }
 
-        const isSalesLedger = data?.ledgerAccount?.parentGroups?.some(account => salesParentGroups.includes(account?.uniqueName));
-        const isPurchaseLedger = data?.ledgerAccount?.parentGroups?.some(account => purchaseParentGroups.includes(account?.uniqueName));
-        const isDebtorCreditorLedger = data?.ledgerAccount?.parentGroups?.some(account => debtorCreditorParentGroups.includes(account?.uniqueName));
-        const isCashBankLedger = data?.ledgerAccount?.parentGroups?.some(account => cashBankParentGroups.includes(account?.uniqueName));
+        let isSalesLedger = false;
+        let isPurchaseLedger = false;
+        let isDebtorCreditorLedger = false;
+        let isCashBankLedger = false;
 
-        const isSalesAccount = data?.particularAccount?.parentGroups?.some(accountUniqueName => salesParentGroups.includes(accountUniqueName));
-        const isPurchaseAccount = data?.particularAccount?.parentGroups?.some(accountUniqueName => purchaseParentGroups.includes(accountUniqueName));
-        const isDebtorCreditorAccount = data?.particularAccount?.parentGroups?.some(accountUniqueName => debtorCreditorParentGroups.includes(accountUniqueName));
-        const isCashBankAccount = data?.particularAccount?.parentGroups?.some(accountUniqueName => cashBankParentGroups.includes(accountUniqueName));
+        data?.ledgerAccount?.parentGroups?.forEach(group => {
+            if (salesParentGroups.includes(group?.uniqueName)) {
+                isSalesLedger = true;
+            } else if (purchaseParentGroups.includes(group?.uniqueName)) {
+                isPurchaseLedger = true;
+            } else if (debtorCreditorParentGroups.includes(group?.uniqueName)) {
+                isDebtorCreditorLedger = true;
+            } else if (cashBankParentGroups.includes(group?.uniqueName)) {
+                isCashBankLedger = true;
+            }
+        });
+
+        let isSalesAccount = false;
+        let isPurchaseAccount = false;
+        let isDebtorCreditorAccount = false;
+        let isCashBankAccount = false;
+
+        data?.particularAccount?.parentGroups?.forEach(groupUniqueName => {
+            if (salesParentGroups.includes(groupUniqueName)) {
+                isSalesAccount = true;
+            } else if (purchaseParentGroups.includes(groupUniqueName)) {
+                isPurchaseAccount = true;
+            } else if (debtorCreditorParentGroups.includes(groupUniqueName)) {
+                isDebtorCreditorAccount = true;
+            } else if (cashBankParentGroups.includes(groupUniqueName)) {
+                isCashBankAccount = true;
+            }
+        });
 
         let request = {
             accountUniqueName: undefined,
