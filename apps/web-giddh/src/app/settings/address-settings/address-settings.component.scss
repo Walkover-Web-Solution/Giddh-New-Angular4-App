@@ -9,12 +9,12 @@
             .action-icon {
                 display: flex;
                 align-items: center;
-                border: 1px solid var(--color-gainsboro);
+                border: 1px solid var(--color-iron);
                 a {
                     width: 34px;
                     font-size: 18px;
-                    color: var(--color-gray);
-                    border-right: 1px solid var(--color-gainsboro);
+                    color: var(--color-abbey);
+                    border-right: 1px solid var(--color-iron);
                     display: flex;
                     align-items: center;
                     justify-content: center;
@@ -51,9 +51,9 @@
         display: flex;
         align-items: center;
         .clear-filter-btn {
-            color: var(--color-midnight-blue);
+            color: var(--color-giddh-blue);
             font-size: 14px;
-            border: 1px solid var(--color-midnight-blue);
+            border: 1px solid var(--color-giddh-blue);
             border-radius: 20px;
             padding: 0 15px;
             height: 40px;
@@ -66,7 +66,7 @@
                 font-size: 12px;
                 padding-right: 8px;
                 top: 0;
-                color: var(--color-midnight-blue);
+                color: var(--color-giddh-blue);
             }
         }
     }
@@ -79,7 +79,7 @@
         display: flex;
     }
     i {
-        color: var(--color-gray);
+        color: var(--color-abbey);
         margin-right: 5px;
         margin-top: 4px;
         float: left;
@@ -170,7 +170,7 @@
 /* branch profile */
 .branch-profile-address-content {
     background-color: var(--color-white);
-    border: 1px solid var(--color-gainsboro);
+    border: 1px solid var(--color-iron);
     padding: 15px;
     margin-bottom: 15px;
     .single-branch-detail {
@@ -179,23 +179,23 @@
             font-size: 16px;
             font-family: "opensans-bold";
             margin-bottom: 10px;
-            color: var(--color-midnight-blue);
+            color: var(--color-giddh-blue);
             i {
                 margin-right: 10px;
             }
         }
         label {
-            color: var(--color-gray);
+            color: var(--color-abbey);
             line-height: 2.3;
         }
         .set-default {
             .selected-defualt {
                 i {
-                    color: var(--color-chetwode-blue);
+                    color: var(--color-blue);
                 }
             }
             .icon-unlink {
-                color: var(--color-gray);
+                color: var(--color-abbey);
             }
         }
     }

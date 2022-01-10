@@ -1,5 +1,5 @@
 .search-company-page {
-    background-color: var(--color-alice-blue-light);
+    background-color: var(--color-wild-sand);
     padding: 15px;
     .search-company-field {
         .input-group {
@@ -8,7 +8,7 @@
             padding: 0 15px;
             display: flex;
             align-items: center;
-            border: 1px solid var(--color-gainsboro);
+            border: 1px solid var(--color-iron);
             .input-group-addon {
                 background-color: transparent;
                 border-radius: 0;
@@ -16,7 +16,7 @@
                 line-height: 1.2;
                 height: auto;
                 padding-right: 5px;
-                color: var(--color-gray);
+                color: var(--color-abbey);
                 border: none;
                 padding: 0;
                 padding-right: 25px;
@@ -32,7 +32,7 @@
                 padding-left: 0;
                 line-height: 1.2;
                 height: auto;
-                color: var(--color-gray);
+                color: var(--color-abbey);
                 border: none;
                 padding: 0;
                 padding-right: 0;
@@ -47,7 +47,7 @@
                     right: 0;
                     top: 0;
                     z-index: 3;
-                    color: var(--color-gray);
+                    color: var(--color-abbey);
                 }
             }
             .wrap-group-account-input {
@@ -63,7 +63,7 @@
                     background-color: transparent;
                     display: inline-block;
                     &:focus {
-                        border-color: var(--color-gainsboro);
+                        border-color: var(--color-iron);
                     }
                 }
             }
@@ -79,13 +79,13 @@
                 font-size: 14px;
                 a {
                     padding: 10px 0;
-                    color: var(--color-nero);
+                    color: var(--color-shark);
                     font-family: "opensans-semibold";
                     display: flex;
                     white-space: normal;
                     word-break: break-word;
                     &:hover {
-                        color: var(--color-deep-sky-blue);
+                        color: var(--color-blue);
                     }
                 }
             }

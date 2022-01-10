@@ -12,7 +12,7 @@
 
 .custom-multi-select {
     li {
-        background: var(--color-white-smoke);
+        background: var(--color-wild-sand);
         color: var(--color-white);
         margin: 4px;
         padding: 2px 10px;
@@ -20,7 +20,7 @@
         border-radius: 3px;
         cursor: pointer;
         a {
-            color: var(--color-gray);
+            color: var(--color-abbey);
         }
     }
 }
@@ -40,8 +40,8 @@
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    border-right: 1px solid var(--color-gainsboro);
-    color: var(--color-nobel);
+    border-right: 1px solid var(--color-iron);
+    color: var(--color-manatee);
     left: 0;
 }
 .input-group-date-range-picker input.form-control {
@@ -57,18 +57,18 @@
     background-color: var(--color-common-primary-background-for-all-components);
     margin-bottom: 15px;
     font-size: 14px;
-    border: 1px solid var(--color-gainsboro);
+    border: 1px solid var(--color-iron);
 }
 .card-basic-details span:nth-child(2) {
     width: 83%;
 }
 .card-basic-details .clearfix {
     margin-bottom: 10px;
-    color: var(--color-nero);
+    color: var(--color-shark);
 }
 .clearfix {
     .icon-favorite-selected {
-        color: var(--color-rich-blue);
+        color: var(--color-blue);
     }
     .icon-branch-icon,
     .icon-company-HO {
@@ -90,15 +90,15 @@
 }
 .card-basic-details {
     padding: 20px;
-    border-bottom: 1px solid var(--color-gainsboro);
+    border-bottom: 1px solid var(--color-iron);
 }
 .branch-sales-details {
-    border-top: 1px solid var(--color-gainsboro);
+    border-top: 1px solid var(--color-iron);
     padding-top: 20px;
     label {
         font-family: "opensans-semibold";
         margin-bottom: 10px;
-        color: var(--color-night-rider);
+        color: var(--color-shark);
     }
     .total-amount {
         width: 70%;
@@ -106,7 +106,7 @@
 }
 
 .unlink a {
-    color: var(--color-chetwode-blue) !important;
+    color: var(--color-blue) !important;
     cursor: pointer;
 }
 
@@ -124,7 +124,7 @@
     cursor: pointer;
 }
 .card-basic-details a#button-basic {
-    color: var(--color-gray);
+    color: var(--color-abbey);
     font-size: 16px;
     width: 32px;
     height: 32px;
@@ -165,9 +165,9 @@
     display: flex;
     flex-direction: row;
     .clear-filter-btn {
-        color: var(--color-midnight-blue);
+        color: var(--color-giddh-blue);
         font-size: 14px;
-        border: 1px solid var(--color-midnight-blue);
+        border: 1px solid var(--color-giddh-blue);
         border-radius: 20px;
         padding: 0 12px;
         width: 150px !important;
@@ -179,7 +179,7 @@
             font-size: 12px;
             padding-right: 8px;
             top: 0;
-            color: var(--color-midnight-blue);
+            color: var(--color-giddh-blue);
         }
     }
 }
@@ -196,8 +196,8 @@
     li {
         padding-top: 5px;
         &:hover {
-            background-color: var(--color-lavender);
-            color: var(--color-jacksons-purple);
+            background-color: var(--color-porcelain);
+            color: var(--color-giddh-blue);
         }
     }
 }
@@ -218,7 +218,7 @@
 }
 
 .parent-branch {
-    color: var(--color-gray);
+    color: var(--color-abbey);
 }
 
 .star-radio {
@@ -239,8 +239,8 @@
         &:before {
             content: "\2605";
             position: absolute;
-            border-color: var(--color-chetwode-blue);
-            color: var(--color-chetwode-blue);
+            border-color: var(--color-blue);
+            color: var(--color-blue);
         }
     }
 }
@@ -251,7 +251,7 @@
 
 .icon-advance-search {
     font-size: 18px;
-    color: var(--color-gray);
+    color: var(--color-abbey);
 }
 
 .more-btn {
@@ -266,8 +266,8 @@
         padding: 5px;
         cursor: default;
         &:hover {
-            background-color: var(--color-lavender);
-            color: var(--color-jacksons-purple);
+            background-color: var(--color-porcelain);
+            color: var(--color-giddh-blue);
         }
     }
 }
@@ -285,9 +285,9 @@
 .btn-primary.active,
 .btn-primary:active,
 .open > .dropdown-toggle.btn-primary {
-    color: var(--color-night-rider);
-    background-color: var(--color-lavender);
-    border-color: var(--color-lavender);
+    color: var(--color-shark);
+    background-color: var(--color-porcelain);
+    border-color: var(--color-porcelain);
     box-shadow: none !important;
 }
 

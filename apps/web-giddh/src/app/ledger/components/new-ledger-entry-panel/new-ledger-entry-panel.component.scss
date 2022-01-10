@@ -8,11 +8,11 @@
                     span:first-child {
                         font-size: 25px;
                         vertical-align: middle;
-                        color: var(--color-gray);
+                        color: var(--color-abbey);
                     }
                     .label {
                         vertical-align: middle;
-                        color: var(--color-gray);
+                        color: var(--color-abbey);
                         font-size: 13px;
                     }
                 }
@@ -22,7 +22,7 @@
 }
 
 .ledger-panel table tbody tr td a {
-    color: var(--color-night-rider);
+    color: var(--color-shark);
 }
 .item-padding {
     padding: 0 4px;
@@ -35,7 +35,7 @@
 
 .amount-total {
     font-size: 12px;
-    color: var(--color-nobel);
+    color: var(--color-manatee);
     padding-left: 5px;
 }
 
@@ -75,7 +75,7 @@ span.eligible-ITC {
     padding-top: 5px;
     display: inline-block;
     span {
-        color: var(--color-deep-sky-blue);
+        color: var(--color-blue);
         font-size: 10px;
     }
 }
@@ -95,7 +95,7 @@ span.eligible-ITC {
 }
 .advance-receipt-edit {
     i {
-        color: var(--color-deep-sky-blue);
+        color: var(--color-blue);
     }
 }
 #ledger-unit {
@@ -109,7 +109,7 @@ span.eligible-ITC {
 }
 .collapse-icons {
     font-size: 10px;
-    border: 1px solid var(--color-black);
+    border: 1px solid var(--color-shark);
     padding: 2px;
 }
 @media only screen and (max-width: 767px) {
@@ -166,7 +166,7 @@ span.eligible-ITC {
     }
 }
 .sh-template {
-    border-bottom: 1px solid var(--color-gainsboro);
+    border-bottom: 1px solid var(--color-iron);
 }
 
 /* Rotate animation for spinner in uploading file */

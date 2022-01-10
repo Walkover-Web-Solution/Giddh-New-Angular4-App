@@ -1,5 +1,5 @@
 .bd-rt {
-    border-color: var(--color-gainsboro);
+    border-color: var(--color-iron);
 }
 
 .flex-fill {
@@ -21,7 +21,7 @@
 
 .td-search-box div i {
     margin-top: 1px;
-    color: var(--color-wild-blue-yonder);
+    color: var(--color-blue);
     padding-right: 8px;
     cursor: pointer;
     display: flex;
@@ -41,9 +41,9 @@
     min-width: 100%;
     padding: 11px;
     padding-right: 40px;
-    color: var(--color-nero);
+    color: var(--color-shark);
     border: none;
-    background-color: var(--color-white-smoke);
+    background-color: var(--color-wild-sand);
 }
 
 .td-search-box .input-container i {
@@ -53,7 +53,7 @@
 }
 
 .basic > thead > tr > th {
-    border-right: 1px solid var(--color-gainsboro);
+    border-right: 1px solid var(--color-iron);
 }
 
 .icon-pointer .glyphicon {
@@ -61,12 +61,12 @@
 }
 
 .td-search-box div i:hover {
-    color: var(--color-nobel);
+    color: var(--color-manatee);
 }
 
 .dropdown-menu > li > a:hover {
-    color: var(--color-chetwode-blue);
-    background: var(--color-whisper);
+    color: var(--color-blue);
+    background: var(--color-porcelain);
 }
 .stock-input {
     background-color: transparent !important;
@@ -80,15 +80,15 @@
     color: var(--color-white);
 }
 .inventory-stock-table input.form-control.stock-input {
-    color: var(--color-nero);
+    color: var(--color-shark);
     text-align: left;
 }
 .table-border input.form-control.stock-input {
-    color: var(--color-nero);
+    color: var(--color-shark);
     text-align: left;
 }
 .footer-tr td {
-    background-color: var(--color-whisper);
+    background-color: var(--color-porcelain);
 }
 .total-footer {
     background-color: var(--color-white);
@@ -96,7 +96,7 @@
     .foot-item {
         padding: 41px;
         h2 {
-            color: var(--color-wistful);
+            color: var(--color-manatee);
             font-size: 20px;
             margin-bottom: 10px;
         }
@@ -107,11 +107,11 @@
 }
 
 .journal-voucher {
-    color: var(--color-silver);
+    color: var(--color-manatee);
 }
 
 .purchase {
-    color: var(--color-primary);
+    color: var(--color-blue);
 }
 .sales {
     color: var(--color-success-enable);
@@ -152,7 +152,7 @@
 }
 .btn-group-voucher-type {
     width: 100%;
-    color: var(--color-nero) !important;
+    color: var(--color-shark) !important;
     white-space: nowrap;
     min-width: 140px;
     max-width: 140px;
@@ -162,7 +162,7 @@
     button {
         text-align: left;
         width: 100%;
-        color: var(--color-nero);
+        color: var(--color-shark);
         margin-right: 0;
         &:focus,
         &:hover {
@@ -180,7 +180,7 @@
     border-radius: 0px;
     padding: 0px;
     input[type="checkbox"]:after {
-        border: 1px solid var(--color-gainsboro);
+        border: 1px solid var(--color-iron);
         width: 15px;
         height: 15px;
         top: 2px;
@@ -194,7 +194,7 @@
         border-right-style: none;
     }
     li {
-        color: var(--color-night-rider);
+        color: var(--color-shark);
         padding: 3px 7px !important;
         font-size: 12px;
     }
@@ -204,7 +204,7 @@
     }
 }
 button[aria-expanded="true"] i {
-    color: var(--color-dim-gray);
+    color: var(--color-manatee);
 }
 /* voucher type DDL */
 
@@ -212,7 +212,7 @@ button[aria-expanded="true"] i {
     text-transform: capitalize;
 }
 .table-border {
-    border: 1px solid var(--color-gainsboro);
+    border: 1px solid var(--color-iron);
 }
 .border-none {
     border: none !important;
@@ -227,10 +227,10 @@ button[aria-expanded="true"] i {
 .icon-pointer .icon-sort-asc {
     line-height: 20px;
     width: 15px;
-    color: var(--color-wild-blue-yonder);
+    color: var(--color-blue);
 }
 .icon-pointer .active-text-color {
-    color: var(--color-deep-sky-blue);
+    color: var(--color-blue);
 }
 .sticky-footer-sale-amount {
     .inner-content-footer {
@@ -246,7 +246,7 @@ button[aria-expanded="true"] i {
         }
         .operators {
             font-size: 39px;
-            color: var(--color-wistful);
+            color: var(--color-manatee);
         }
         h2 {
             font-size: 18px;
@@ -266,13 +266,13 @@ button[aria-expanded="true"] i {
     width: 100% !important;
 }
 .text-purple {
-    color: var(--color-chetwode-blue);
+    color: var(--color-blue);
 }
 .bg-white {
     background: var(--color-white);
 }
 .btn-link-2 {
-    color: var(--color-primary);
+    color: var(--color-blue);
 }
 .mr-b100 {
     margin-bottom: 100px;
@@ -286,9 +286,9 @@ button[aria-expanded="true"] i {
     align-items: center;
     font-size: 18px;
     margin-left: 10px;
-    border: 1px solid var(--color-gainsboro);
+    border: 1px solid var(--color-iron);
     border-radius: 5px;
-    color: var(--color-midnight-blue);
+    color: var(--color-giddh-blue);
     background: var(--color-white);
     .icon-advance-filter {
         padding: 10px;
@@ -302,10 +302,10 @@ button[aria-expanded="true"] i {
     cursor: pointer;
 }
 button.btn.btn-filter {
-    background: var(--color-whisper);
-    border: 1px solid var(--color-gainsboro);
+    background: var(--color-porcelain);
+    border: 1px solid var(--color-iron);
     font-size: 14px;
-    color: var(--color-midnight-blue);
+    color: var(--color-giddh-blue);
     display: inline-flex;
     justify-content: space-between;
     align-items: center;
@@ -327,7 +327,7 @@ button.btn.btn-filter {
     display: table;
 }
 .icon-btn {
-    border: 1px solid var(--color-gainsboro);
+    border: 1px solid var(--color-iron);
     border-radius: 5px;
     height: 36px;
     width: 36px;
@@ -342,7 +342,7 @@ button.btn.btn-filter {
         tr {
             &:last-child {
                 td {
-                    border-bottom: 1px solid var(--color-gainsboro);
+                    border-bottom: 1px solid var(--color-iron);
                 }
             }
         }

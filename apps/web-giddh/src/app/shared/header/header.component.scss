@@ -19,7 +19,7 @@
 }
 
 .account-search .input-group-addon {
-    color: var(--color-charcoal);
+    color: var(--color-shark);
     font-size: 12px;
     padding-right: 0px;
     background-color: transparent;
@@ -42,26 +42,26 @@
 }
 
 .account-search .form-control:focus {
-    border-color: var(--color-gainsboro) !important;
+    border-color: var(--color-iron) !important;
     color: var(--color-primary-header-account-search-form-control-focus);
 }
 
 .account-search {
     position: relative;
     height: 36px;
-    border-color: var(--color-gainsboro);
+    border-color: var(--color-iron);
     border-radius: 20px 20px 20px 20px !important;
-    border: 1px solid var(--color-gainsboro);
+    border: 1px solid var(--color-iron);
     margin: 10px 0px 5px 0px;
 }
 
 .account-search:hover:after {
-    color: var(--color-rich-blue);
+    color: var(--color-blue);
     cursor: pointer;
 }
 
 a[vr-item]:focus {
-    background-color: var(--color-vivid-blue);
+    background-color: var(--color-blue);
     color: var(--color-white);
     cursor: pointer;
 }
@@ -75,7 +75,7 @@ a[vr-item]:focus {
     right: 10px;
     font-size: 12px;
     line-height: 36px;
-    color: var(--color-charcoal);
+    color: var(--color-shark);
 }
 
 .account-search .form-control:after {
@@ -88,28 +88,28 @@ a[vr-item]:focus {
 }
 
 .account-search .form-control::-webkit-input-placeholder {
-    color: var(--color-charcoal);
+    color: var(--color-shark);
     font-size: 12px;
     position: relative;
     top: -2px;
 }
 
 .account-search .form-control::-moz-placeholder {
-    color: var(--color-charcoal);
+    color: var(--color-shark);
     font-size: 12px;
     position: relative;
     top: -2px;
 }
 
 .account-search .form-control:-ms-input-placeholder {
-    color: var(--color-charcoal);
+    color: var(--color-shark);
     font-size: 12px;
     position: relative;
     top: -2px;
 }
 
 .account-search .form-control:-moz-placeholder {
-    color: var(--color-charcoal);
+    color: var(--color-shark);
     font-size: 12px;
     position: relative;
     top: -2px;
@@ -120,7 +120,7 @@ a[vr-item]:focus {
 .account-search .form-control::-moz-placeholder,
 .account-search .form-control:-ms-input-placeholder,
 .account-search .form-control:-moz-placeholder {
-    color: var(--color-charcoal) !important;
+    color: var(--color-shark) !important;
 }
 
 .left-fixed-header li:hover {
@@ -161,7 +161,7 @@ a[vr-item]:focus {
 .left-fixed-header > li > a {
     display: block;
     padding: 7px 15px;
-    color: var(--color-nero);
+    color: var(--color-shark);
     position: relative;
 }
 
@@ -176,20 +176,20 @@ a[vr-item]:focus {
 }
 
 .left-fixed-header > li > a:hover {
-    color: var(--color-nero);
+    color: var(--color-shark);
 }
 .left-fixed-header > li > a:hover .label > span,
 .left-fixed-header > li > a:hover .label {
-    color: var(--color-deep-sky-blue);
+    color: var(--color-blue);
 }
 
 .left-fixed-header > li a.active {
-    background: var(--color-lavender);
+    background: var(--color-porcelain);
 }
 
 .left-fixed-header > li > a.active .label,
 .left-fixed-header > li > a.active .label > span {
-    color: var(--color-nero);
+    color: var(--color-shark);
 }
 
 .left-fixed-header > li > a .label {
@@ -198,7 +198,7 @@ a[vr-item]:focus {
     vertical-align: middle;
     padding-left: 0px;
     text-align: left;
-    color: var(--color-nero);
+    color: var(--color-shark);
     letter-spacing: 0.6px;
     font-weight: normal;
     font-family: "opensans-semibold";
@@ -219,7 +219,7 @@ a[vr-item]:focus {
 }
 
 .left-fixed-header .divider {
-    border-bottom: 1px solid var(--color-night-rider);
+    border-bottom: 1px solid var(--color-shark);
     padding: 4px 0;
     height: 0;
     margin-bottom: 4px;
@@ -252,7 +252,7 @@ a[vr-item]:focus {
 }
 
 .left-fixed-header h6 {
-    color: var(--color-midnight-blue);
+    color: var(--color-giddh-blue);
     font-size: 16px;
     padding-left: 15px;
     padding-right: 15px;
@@ -265,7 +265,7 @@ a[vr-item]:focus {
 .left-fixed-header > h6 > i {
     float: right;
     font-size: 10px;
-    background: var(--color-midnight-blue);
+    background: var(--color-giddh-blue);
     display: inline-block;
     width: 15px;
     height: 15px;
@@ -287,13 +287,13 @@ a[vr-item]:focus {
     text-align: center;
     line-height: 15.9px;
     border-radius: 2px;
-    color: var(--color-nobel);
+    color: var(--color-manatee);
     margin-top: 1px;
 }
 
 .left-fixed-header > h6 > i:hover {
     color: var(--color-white);
-    background: var(--color-rich-blue);
+    background: var(--color-blue);
 }
 
 .nav-tabs {
@@ -310,7 +310,7 @@ a[vr-item]:focus {
 
 .left-sub-menu ul > li > a {
     font-size: 14px;
-    color: var(--color-dim-gray);
+    color: var(--color-manatee);
     display: block;
     clear: both;
     padding: 6px 15px;
@@ -318,7 +318,7 @@ a[vr-item]:focus {
 }
 
 .left-sub-menu ul > li > a:hover {
-    color: var(--color-deep-sky-blue);
+    color: var(--color-blue);
 }
 
 .left-sub-menu ul {
@@ -353,7 +353,7 @@ a[vr-item]:focus {
     vertical-align: middle;
     text-align: right;
     position: relative;
-    color: var(--color-dim-gray);
+    color: var(--color-manatee);
     top: 6px;
 }
 
@@ -518,14 +518,14 @@ span.icon-support.dropdown-toggle {
 }
 
 .other a {
-    color: var(--color-night-rider);
+    color: var(--color-shark);
     text-transform: uppercase;
 }
 .show-more-opt {
     font-size: 14px;
     padding: 0 15px;
     font-family: "opensans-semibold";
-    color: var(--color-deep-sky-blue);
+    color: var(--color-blue);
 }
 
 // top header css
@@ -534,7 +534,7 @@ span.icon-support.dropdown-toggle {
 }
 
 .primary-header {
-    background-color: var(--color-midnight-blue);
+    background-color: var(--color-giddh-blue);
     min-height: 60px;
     position: fixed;
     width: 100%;
@@ -598,7 +598,7 @@ ul.sub-list {
 }
 
 .nav-left-bar .company-name .company-text span {
-    color: var(--color-nero);
+    color: var(--color-shark);
     word-break: break-all;
 }
 
@@ -615,7 +615,7 @@ ul.sub-list {
 
 .nav-left-bar .company-name .branch-unique-name {
     font-size: 12px;
-    color: var(--color-deep-sky-blue) !important;
+    color: var(--color-blue) !important;
     padding: 0 0 3px 0;
 }
 
@@ -644,7 +644,7 @@ ul.sub-list {
     right: 30px;
     background: none;
     border: 0px;
-    color: var(--color-nero);
+    color: var(--color-shark);
     cursor: pointer;
     font-size: 20px;
     z-index: 9999;
@@ -653,8 +653,8 @@ ul.sub-list {
     transition: 2s linear;
 }
 .head-nav {
-    background: var(--color-white-smoke);
-    border-bottom: 1px solid var(--color-whisper-color);
+    background: var(--color-wild-sand);
+    border-bottom: 1px solid var(--color-porcelain);
     margin-bottom: 5px;
 }
 .ledger-page {
@@ -674,23 +674,24 @@ ul.sub-list {
 }
 .show-more-module a {
     font-size: 14px;
-    color: var(--color-deep-sky-blue) !important;
+    color: var(--color-blue) !important;
     font-family: "opensans-semibold";
 }
 /*notification css*/
 .white-row {
-    background-color: var(--color-white);
+    background-color: var(--color-primary-header-notification-background);
     padding: 10px 15px;
     margin-bottom: 10px;
     font-size: 16px;
     box-shadow: 1px 1px 3px var(--color-black-russian);
     margin-top: 10px;
+    color: var(--color-primary-header-notification-text);
     p {
         font-family: "opensans-semibold";
         font-size: 14px;
     }
     .click-here {
-        color: var(--color-chetwode-blue);
+        color: var(--color-blue);
         cursor: pointer;
     }
 
@@ -700,7 +701,7 @@ ul.sub-list {
         margin-right: 10px;
     }
     span.icon-info-icon {
-        color: var(--color-nobel);
+        color: var(--color-manatee);
         font-size: 18px;
         margin-right: 10px;
     }
@@ -731,12 +732,12 @@ ul.sub-list {
 }
 .name-year {
     font-size: 12px !important;
-    color: var(--color-deep-sky-blue) !important;
+    color: var(--color-blue) !important;
 }
 .company-name {
     ul.dropdown-menu.user-dropdown-header {
         left: 0 !important;
-        color: var(--color-night-rider);
+        color: var(--color-shark);
         .company-name-finance-year {
             .text-ellipsis {
                 white-space: normal;
@@ -745,19 +746,19 @@ ul.sub-list {
     }
 }
 .create-company-btn {
-    border-top: 1px solid var(--color-gainsboro);
+    border-top: 1px solid var(--color-iron);
 }
 .user-dropdown-header:after {
     position: absolute;
     content: "";
     height: 20px;
     width: 20px;
-    background-color: var(--color-whisper);
+    background-color: var(--color-porcelain);
     top: -9px;
     z-index: -1;
     transform: rotate(45deg);
     left: 15px;
-    border: 1px solid var(--color-gainsboro);
+    border: 1px solid var(--color-iron);
 }
 .switch-branch-wrapper {
     .btn-group {
@@ -767,8 +768,8 @@ ul.sub-list {
             display: flex;
             padding: 15px;
             font-family: "opensans-bold";
-            color: var(--color-nero);
-            border-bottom: 1px solid var(--color-gainsboro);
+            color: var(--color-shark);
+            border-bottom: 1px solid var(--color-iron);
             width: 100%;
             align-items: center;
             justify-content: space-between;
@@ -779,13 +780,13 @@ ul.sub-list {
                 float: right;
                 padding-top: 4px;
                 transform: rotate(270deg);
-                border: 2px solid var(--color-gray);
+                border: 2px solid var(--color-abbey);
                 padding: 3px;
                 border-radius: 50%;
                 justify-content: center;
                 align-items: center;
                 display: flex;
-                color: var(--color-gray);
+                color: var(--color-abbey);
             }
         }
         .dropdown-menu {
@@ -794,7 +795,7 @@ ul.sub-list {
             top: 17px !important;
             transform: translateY(0px);
             bottom: auto;
-            border: 1px solid var(--color-gainsboro);
+            border: 1px solid var(--color-iron);
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
             min-width: 270px;
             max-width: 270px;
@@ -811,17 +812,17 @@ ul.sub-list {
                     display: flex;
                     align-items: center;
                     justify-content: space-between;
-                    color: var(--color-nero) !important;
+                    color: var(--color-shark) !important;
                     cursor: pointer;
                     &.dropdown-item.active-branch {
-                        color: var(--color-chetwode-blue);
+                        color: var(--color-blue);
                         font-weight: bold;
                     }
                     &.company-create {
-                        color: var(--color-chetwode-blue) !important;
+                        color: var(--color-blue) !important;
                     }
                     &:hover {
-                        color: var(--color-chetwode-blue) !important;
+                        color: var(--color-blue) !important;
                     }
                 }
                 span {
@@ -842,7 +843,7 @@ ul.sub-list {
                 }
             }
             .go-to-company {
-                color: var(--color-deep-sky-blue);
+                color: var(--color-blue);
                 &.company-label {
                     flex-direction: column;
                     justify-content: flex-start;
@@ -850,7 +851,7 @@ ul.sub-list {
                 }
             }
             .company-create {
-                color: var(--color-chetwode-blue);
+                color: var(--color-blue);
             }
             div {
                 input {
@@ -886,7 +887,7 @@ ul.sub-list {
 }
 #primary-new-header.primary-main-header {
     padding-left: 15px;
-    border-bottom: 1px solid var(--color-gainsboro);
+    border-bottom: 1px solid var(--color-iron);
     position: fixed;
     width: 100%;
     top: 0;
@@ -914,7 +915,7 @@ ul.sub-list {
         .icon-plus,
         i,
         .btn-link {
-            color: var(--color-white) !important;
+            color: var(--color-primary-header-icons) !important;
             position: static !important;
         }
         .notification {
@@ -961,7 +962,7 @@ ul.sub-list {
             }
             &.disable-icon {
                 i {
-                    color: var(--color-gainsboro) !important;
+                    color: var(--color-iron) !important;
                     cursor: no-drop;
                 }
             }
@@ -1078,7 +1079,7 @@ aside-setting {
     .fixed-padding {
         padding-top: 90px;
         #primary-new-header.primary-main-header {
-            background-color: var(--color-midnight-blue);
+            background-color: var(--color-giddh-blue);
             position: fixed;
             top: 0;
             width: 100%;
@@ -1219,7 +1220,7 @@ aside-setting {
         top: 14px;
         color: var(--color-white);
         right: -35px;
-        background-color: var(--color-midnight-blue);
+        background-color: var(--color-giddh-blue);
         width: 35px;
         height: 35px;
         text-align: center;
@@ -1237,7 +1238,7 @@ aside-setting {
         background-color: var(--color-white);
         -webkit-background-clip: padding-box;
         background-clip: padding-box;
-        border: 1px solid var(--color-gainsboro);
+        border: 1px solid var(--color-iron);
         border: 1px solid rgba(0, 0, 0, 0.15);
         border-radius: 4px;
         box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);

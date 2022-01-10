@@ -8,7 +8,7 @@
             width: 230px !important;
             position: relative;
             height: 36px !important;
-            border: 1px solid var(--color-gainsboro);
+            border: 1px solid var(--color-iron);
             background-color: var(--color-white);
             &:before {
                 position: absolute;
@@ -16,7 +16,7 @@
                 display: block;
                 height: 36px;
                 width: 1px;
-                background-color: var(--color-gainsboro);
+                background-color: var(--color-iron);
                 left: 37px !important;
                 z-index: 100;
                 top: 0;
@@ -51,13 +51,13 @@
         align-items: center;
         font-size: 18px;
         margin-left: 10px;
-        border: 1px solid var(--color-gainsboro);
+        border: 1px solid var(--color-iron);
         border-radius: 5px;
-        color: var(--color-gray);
+        color: var(--color-abbey);
         background: var(--color-white);
-        color: var(--color-gray);
+        color: var(--color-abbey);
         &:hover {
-            background: var(--color-whisper-color);
+            background: var(--color-porcelain);
         }
     }
 }
@@ -88,13 +88,13 @@
             .action-icon {
                 display: flex;
                 align-items: center;
-                border: 1px solid var(--color-gainsboro);
+                border: 1px solid var(--color-iron);
                 border-radius: 5px;
                 a {
                     width: 30px;
                     font-size: 18px;
-                    color: var(--color-gray);
-                    border-right: 1px solid var(--color-gainsboro);
+                    color: var(--color-abbey);
+                    border-right: 1px solid var(--color-iron);
                     border-radius: 5px;
                     display: flex;
                     align-items: center;
@@ -154,7 +154,7 @@
                 z-index: 2;
                 right: 0;
                 top: 0;
-                color: var(--color-gray);
+                color: var(--color-abbey);
             }
         }
     }
@@ -165,7 +165,7 @@
         }
     }
     p {
-        color: var(--color-dark-gray);
+        color: var(--color-abbey);
         font-size: 14px;
     }
     .btn-group {
@@ -223,7 +223,7 @@
     .download-purchase-order {
         width: 30px;
         height: 30px;
-        border: 1px solid var(--color-gainsboro);
+        border: 1px solid var(--color-iron);
         display: flex;
         align-items: center;
         justify-content: center;

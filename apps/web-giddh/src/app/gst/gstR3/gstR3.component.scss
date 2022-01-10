@@ -3,7 +3,7 @@
 }
 
 a {
-    color: var(--color-curious-blue);
+    color: var(--color-blue);
     text-decoration: none;
 }
 
@@ -25,7 +25,7 @@ svg.icon.icon-lg {
 .tax-engine .gstr3b-sel {
     display: inline-block;
     padding: 4px 4px 4px 8px;
-    border: 1px solid var(--color-gainsboro);
+    border: 1px solid var(--color-iron);
     border-radius: 2px;
     background: var(--color-white);
 }
@@ -46,7 +46,7 @@ svg.icon.icon-sm {
 }
 
 .text-primary {
-    color: var(--color-curious-blue);
+    color: var(--color-blue);
 }
 
 .caret {
@@ -55,7 +55,7 @@ svg.icon.icon-sm {
     height: 0;
     margin-left: 2px;
     vertical-align: middle;
-    border-top: 4px solid var(--color-black);
+    border-top: 4px solid var(--color-shark);
     border-right: 4px solid transparent;
     border-left: 4px solid transparent;
     border-bottom: 0 dotted;
@@ -111,7 +111,7 @@ input.gsc-input {
 }
 
 .tax-engine .gstr3b-header .sel-tab {
-    border: 1px solid var(--color-gainsboro);
+    border: 1px solid var(--color-iron);
     border-radius: 25px;
     overflow: hidden;
     padding: 0;
@@ -136,11 +136,11 @@ input.gsc-input {
 }
 
 .tax-engine .gstr3b-header .sel-tab .active {
-    background-color: var(--color-chetwode-blue);
+    background-color: var(--color-blue);
 }
 
 .tax-engine .gstr3b-header .sel-tab li:before {
-    border-left: 23px solid var(--color-gainsboro);
+    border-left: 23px solid var(--color-iron);
     top: 42%;
     margin-top: -22px;
     margin-left: 1px;
@@ -148,7 +148,7 @@ input.gsc-input {
 }
 
 .tax-engine .gstr3b-header .sel-tab .active:after {
-    border-left: 23px solid var(--color-chetwode-blue);
+    border-left: 23px solid var(--color-blue);
 }
 
 .tax-engine .gstr3b-header .sel-tab li:after {
@@ -183,7 +183,7 @@ svg.icon.icon-xxlg {
 
 .tax-engine .gstr3b-header .sel-tab li a {
     padding: 0 10px;
-    color: var(--color-night-rider);
+    color: var(--color-shark);
 }
 
 svg.icon.icon-xxlg {
@@ -252,7 +252,7 @@ address {
 
 .btn-link:focus,
 .btn-link:hover {
-    color: var(--color-curious-blue);
+    color: var(--color-blue);
     background-color: transparent;
     text-decoration: none;
 }
@@ -263,7 +263,7 @@ table {
 }
 
 .gstr-3b-report tr:hover {
-    background-color: var(--color-gray-95);
+    background-color: var(--color-wild-sand);
 }
 
 .tax-engine .summary-content .gstr-3b-report.table > tbody > tr > td {
@@ -274,13 +274,13 @@ table {
 
 .gstr3-subheading,
 .vat-summary thead > tr {
-    background-color: var(--color-gray-95);
+    background-color: var(--color-wild-sand);
 }
 
 .dropdown-menu li .help-text,
 .modal-header .help-text,
 .text-muted {
-    color: var(--color-gray);
+    color: var(--color-abbey);
 }
 
 *,
@@ -339,13 +339,13 @@ h6 {
 
 .modal-header {
     padding: 20px;
-    border-bottom: 1px solid var(--color-gainsboro);
+    border-bottom: 1px solid var(--color-iron);
     min-height: 21.43px;
-    background-color: var(--color-gray-95);
+    background-color: var(--color-wild-sand);
 }
 
 .highlight-info {
-    background-color: var(--color-solitude);
+    background-color: var(--color-wild-sand);
 }
 
 .alert {
@@ -420,7 +420,7 @@ fieldset[disabled] .btn-primary:hover .btn-primary[disabled],
 }
 
 .tax-engine .gstr3-points .point {
-    background-color: var(--color-primary);
+    background-color: var(--color-blue);
     color: var(--color-white);
     width: 22px;
     height: 22px;
@@ -446,19 +446,19 @@ tax-engine .caret-right {
 }
 
 .tax-engine .gstr3-points a .caret-right {
-    color: var(--color-silver);
+    color: var(--color-manatee);
 }
 
 .gstr3-filing-procedure > div {
     width: 900px;
     margin: 30px auto 0;
-    box-shadow: 1px 1px 11px var(--color-very-light-gray);
+    box-shadow: 1px 1px 11px var(--color-iron);
     border-radius: 3px;
     padding: 20px 50px 10px;
 }
 
 .tax-engine .gstr3-points {
-    border-left: 1px dashed var(--color-gainsboro);
+    border-left: 1px dashed var(--color-iron);
     padding-left: 41px;
 }
 
@@ -470,22 +470,22 @@ dropdown-menu-right {
 
 .successful-file-detail h3,
 .gst-return-date h3 {
-    color: var(--color-night-rider) !important;
+    color: var(--color-shark) !important;
     font-size: 24px !important;
     margin: 20px 0 7px !important;
 }
 
 .btn-2 {
     background: var(--color-white);
-    color: var(--color-chetwode-blue);
+    color: var(--color-blue);
     border: 0px;
     border-radius: 4px;
-    border: 1px solid var(--color-chetwode-blue);
+    border: 1px solid var(--color-blue);
 }
 
 .btn-2:hover {
     color: var(--color-white);
-    background: var(--color-chetwode-blue);
+    background: var(--color-blue);
 }
 
 .file-your-return {
@@ -532,13 +532,13 @@ ul#dropdown-menu {
 }
 
 .bg-thead {
-    background-color: var(--color-whisper);
-    color: var(--color-black);
+    background-color: var(--color-porcelain);
+    color: var(--color-shark);
 }
 
 .bg-thead-dark {
-    background: var(--color-alice-blue-light);
-    color: var(--color-black);
+    background: var(--color-wild-sand);
+    color: var(--color-shark);
 }
 
 .pointer-none {

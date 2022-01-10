@@ -14,15 +14,15 @@
 
 #email-template {
     background-color: var(--color-white);
-    border: 1px solid var(--color-gainsboro);
+    border: 1px solid var(--color-iron);
 }
 
 #email-template .form-control {
     min-height: 45px;
     border: 0;
     border-radius: 0 !important;
-    color: var(--color-black);
-    border-bottom: 1px solid var(--color-gainsboro);
+    color: var(--color-shark);
+    border-bottom: 1px solid var(--color-iron);
     background: transparent !important;
 }
 
@@ -32,7 +32,7 @@
     text-align: left;
     border: 0;
     border-radius: 0;
-    border-bottom: 1px solid var(--color-gainsboro);
+    border-bottom: 1px solid var(--color-iron);
 }
 
 #email-body {

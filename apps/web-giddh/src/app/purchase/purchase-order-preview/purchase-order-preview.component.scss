@@ -49,30 +49,30 @@
 .invoice-sidebar .invoice-number-date {
     font-size: 12px;
     .order-number {
-        color: var(--color-primary);
+        color: var(--color-blue);
     }
     .order-date {
-        color: var(--color-dark-gray);
+        color: var(--color-abbey);
     }
 }
 .invoice-sidebar .invoice-holder-name p {
-    color: var(--color-night-rider);
+    color: var(--color-shark);
     font-size: 14px;
     margin-top: 3px;
 }
 
 .invoice-sidebar .single-invoice-detail {
     padding: 10px 15px;
-    border-bottom: 1px solid var(--color-gainsboro);
+    border-bottom: 1px solid var(--color-iron);
     list-style: none;
 }
 
 .invoice-sidebar .single-invoice-detail:hover {
-    background-color: var(--color-white-smoke);
+    background-color: var(--color-wild-sand);
 }
 
 .invoice-sidebar .single-invoice-detail.activeItem {
-    background-color: var(--color-white-smoke);
+    background-color: var(--color-wild-sand);
 }
 
 .invoice-sidebar .single-invoice-detail:last-child {
@@ -117,7 +117,7 @@
 }
 
 .invoice-detail-header .edit-change-status .edit-link {
-    color: var(--color-primary);
+    color: var(--color-blue);
     padding-right: 10px;
     font-size: 16px;
 }
@@ -129,11 +129,11 @@
 .invoice-detail-header .edit-change-status .edit-action-btn-groups {
     display: flex;
     background-color: var(--color-white);
-    border: 1px solid var(--color-gainsboro);
+    border: 1px solid var(--color-iron);
     margin-right: 10px;
     border-radius: 5px;
     span {
-        border-left: 1px solid var(--color-gainsboro);
+        border-left: 1px solid var(--color-iron);
         padding: 5px;
         display: flex;
         justify-content: center;
@@ -144,13 +144,13 @@
             border-left: none;
         }
         a {
-            color: var(--color-dark-gray);
+            color: var(--color-abbey);
             display: block;
             text-align: center;
         }
     }
     .disabled {
-        background: var(--color-gainsboro) !important;
+        background: var(--color-iron) !important;
         cursor: not-allowed;
         a {
             cursor: not-allowed;
@@ -202,8 +202,8 @@ span.close-modal.cp.pull-right {
     align-items: center;
     height: 34px;
     width: 34px;
-    background-color: var(--color-gainsboro);
-    border: 1px solid var(--color-gainsboro);
+    background-color: var(--color-iron);
+    border: 1px solid var(--color-iron);
     border-radius: 5px;
     position: static;
     transform: inherit;
@@ -228,13 +228,13 @@ span.close-modal.cp.pull-right {
 }
 
 .dropdown-menu > li > a:hover {
-    color: var(--color-chetwode-blue);
-    background: var(--color-whisper-color);
+    color: var(--color-blue);
+    background: var(--color-porcelain);
 }
 
 .invoice-search-box input {
     flex: 1;
-    border: 1px solid var(--color-gainsboro);
+    border: 1px solid var(--color-iron);
     border-radius: 5px;
     height: 37px;
     padding: 0 30px;
@@ -270,8 +270,8 @@ span.close-modal.cp.pull-right {
         justify-content: space-between;
         height: 54px;
         background-color: var(--color-white);
-        border-top: 1px solid var(--color-gainsboro);
-        border-bottom: 1px solid var(--color-gainsboro);
+        border-top: 1px solid var(--color-iron);
+        border-bottom: 1px solid var(--color-iron);
         align-items: center;
         span {
             padding: 10px;
@@ -283,8 +283,8 @@ span.close-modal.cp.pull-right {
         span.close-modal {
             height: 32px;
             width: 32px;
-            background-color: var(--color-very-light-gray);
-            border: 1px solid var(--color-gainsboro);
+            background-color: var(--color-iron);
+            border: 1px solid var(--color-iron);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -310,15 +310,15 @@ span.close-modal.cp.pull-right {
     top: 40px;
     z-index: 10;
     right: 0;
-    border: 1px solid var(--color-gainsboro);
+    border: 1px solid var(--color-iron);
     .send-email-modal-wrapper {
         background-color: var(--color-white);
         box-shadow: 0 0 6px rgba(0, 0, 0, 0.2);
         height: 200px;
         .send-email-modal-header {
-            background-color: var(--color-whisper-color);
+            background-color: var(--color-porcelain);
             padding: 8px 10px;
-            border-bottom: 1px solid var(--color-gainsboro);
+            border-bottom: 1px solid var(--color-iron);
             span {
                 width: unset;
             }
@@ -336,7 +336,7 @@ span.close-modal.cp.pull-right {
         color: var(--color-white);
     }
     .aqua-color a {
-        color: var(--color-deep-sky-blue);
+        color: var(--color-blue);
         font-size: 12px;
     }
 }
@@ -362,7 +362,7 @@ span.close-modal.cp.pull-right {
 }
 
 .dashed-border {
-    border: 2px dashed var(--color-gainsboro);
+    border: 2px dashed var(--color-iron);
 }
 
 #csv-upload-input {
@@ -383,10 +383,10 @@ span.close-modal.cp.pull-right {
 .file-upload-panel {
     width: 100%;
     text-align: left;
-    border: 1px solid var(--color-gainsboro);
+    border: 1px solid var(--color-iron);
     padding: 8px;
     border-radius: 4px;
-    color: var(--color-very-light-gray);
+    color: var(--color-iron);
 }
 
 .file-input-wrapper img {
@@ -443,12 +443,12 @@ p {
 
 /* Track */
 #default::-webkit-scrollbar-track {
-    background: var(--color-white-smoke);
+    background: var(--color-wild-sand);
 }
 
 /* Handle */
 #default::-webkit-scrollbar-thumb {
-    background: var(--color-nobel);
+    background: var(--color-manatee);
     border-radius: 20px;
 }
 #default body {
@@ -495,7 +495,7 @@ p {
     border: 0;
     padding: 0;
     text-align: left;
-    color: var(--color-nero);
+    color: var(--color-shark);
 }
 
 .hidden-label {
@@ -579,12 +579,12 @@ p {
     position: relative;
     padding: 8px 7px;
     line-height: 1.2rem;
-    background-color: var(--color-white-smoke);
+    background-color: var(--color-wild-sand);
     font-size: 12px;
 }
 #default table.item tfoot tr th {
     padding-right: 7px;
-    border-top: 1px solid var(--color-light-gray);
+    border-top: 1px solid var(--color-iron);
 }
 /* tcs */
 .tcs hr {
@@ -602,7 +602,7 @@ p {
 .tcs table th {
     border-radius: 0;
     padding: 5px;
-    border: 1px solid var(--color-light-gray);
+    border: 1px solid var(--color-iron);
     vertical-align: top;
     text-align: right;
 }
@@ -641,13 +641,13 @@ p {
 #default table.item td {
     border-radius: 0;
     padding: 7px;
-    border-top: 1px solid var(--color-light-gray);
+    border-top: 1px solid var(--color-iron);
     line-height: 1.2rem;
     vertical-align: top;
 }
 
 #default table.item td p {
-    color: var(--color-zambezi);
+    color: var(--color-abbey);
 }
 
 #default table.balance {
@@ -672,7 +672,7 @@ p {
 }
 
 #default aside h1 {
-    border-color: var(--color-nobel);
+    border-color: var(--color-manatee);
     border-bottom-style: solid;
 }
 
@@ -699,7 +699,7 @@ p {
 
 #default .subfooter hr {
     width: 100%;
-    border-bottom: 1px solid var(--color-gainsboro);
+    border-bottom: 1px solid var(--color-iron);
     margin: 3px 0;
 }
 
@@ -798,7 +798,7 @@ strong {
     right: 0;
     pointer-events: none;
     background: rgba(204, 204, 204, 0.5);
-    border: 1px dashed var(--color-gray);
+    border: 1px dashed var(--color-abbey);
 }
 
 .edit-template {
@@ -834,7 +834,7 @@ strong {
     width: 60%;
     height: 1px;
     margin: 0px 0 auto auto;
-    border-bottom: 1px solid var(--color-very-light-gray);
+    border-bottom: 1px solid var(--color-iron);
 }
 
 .green-row {
@@ -842,7 +842,7 @@ strong {
     padding: 6px 16px;
 }
 .tax-table p {
-    color: var(--color-zambezi);
+    color: var(--color-abbey);
 }
 
 .tax-table tfoot th {
@@ -856,7 +856,7 @@ strong {
 .tax-table tbody tr td,
 .tax-table tfoot tr th {
     padding: 6px;
-    border-right: 1px solid var(--color-light-gray);
+    border-right: 1px solid var(--color-iron);
 }
 
 .tax-table thead tr th:last-child,
@@ -869,14 +869,14 @@ table.tax-table.item {
     padding-top: 0px !important;
 }
 .tax-table.item tfoot tr th {
-    border-bottom: 1px solid var(--color-light-gray);
+    border-bottom: 1px solid var(--color-iron);
 }
 .tax-table tbody tr td {
     border-top: 0px solid;
 }
 .warehouse-table {
     width: 100%;
-    border-bottom: 1px solid var(--color-light-gray);
+    border-bottom: 1px solid var(--color-iron);
     margin-bottom: 10px;
     padding-bottom: 5px;
     padding-right: 0px;
@@ -926,7 +926,7 @@ table.tax-table.item {
 .wrap-edit-history-btn {
     .history-btn {
         i.icon-history-icon {
-            color: var(--color-gray);
+            color: var(--color-abbey);
         }
         &:hover {
             i.icon-history-icon {
@@ -1058,6 +1058,6 @@ table.tax-table.item {
     top: 0px;
     width: 200px;
     height: 4px;
-    background-color: var(--color-chetwode-blue);
+    background-color: var(--color-blue);
     animation: loading 2s linear infinite;
 }

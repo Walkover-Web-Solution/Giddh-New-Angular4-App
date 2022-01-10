@@ -16,7 +16,7 @@
         > label {
             width: 30px;
             height: 30px;
-            border: 2px solid var(--color-gainsboro);
+            border: 2px solid var(--color-iron);
             border-radius: 100%;
             transition: background-color 1s;
             background-color: var(--color-white);
@@ -61,7 +61,7 @@
 .upload-icon {
     font-size: 62px;
     float: none;
-    color: var(--color-whisper);
+    color: var(--color-porcelain);
 }
 
 .sample-file-btn {
@@ -70,7 +70,7 @@
 }
 
 .dashed-border {
-    border: 2px dashed var(--color-gainsboro);
+    border: 2px dashed var(--color-iron);
 }
 
 .import-type {
@@ -88,8 +88,8 @@
     align-items: center;
     justify-content: flex-end;
     margin: 0 15px;
-    border: 1px solid var(--color-gainsboro);
-    background: var(--color-gray-95);
+    border: 1px solid var(--color-iron);
+    background: var(--color-wild-sand);
     padding: 15px;
     cursor: pointer;
     transition: all 0.3s ease;

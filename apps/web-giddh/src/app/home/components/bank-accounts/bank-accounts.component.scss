@@ -5,13 +5,13 @@ p.bank-name {
 }
 
 p.bank-balance {
-    color: var(--color-dark-gray);
+    color: var(--color-abbey);
     font-size: 14px;
     display: flex;
     justify-content: space-between;
 }
 .single-bank-detail {
-    border-bottom: 1px solid var(--color-gainsboro);
+    border-bottom: 1px solid var(--color-iron);
     padding-bottom: 10px;
     margin-bottom: 10px;
 }
@@ -35,7 +35,7 @@ a.connect-bank {
     flex-direction: column;
 }
 p {
-    color: var(--color-dark-gray);
+    color: var(--color-abbey);
 }
 .add-bank-details a.connect-bank {
     padding-top: 5px;

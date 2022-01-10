@@ -57,7 +57,7 @@ table {
 }
 
 .basic > thead > tr > th {
-    border-right: 1px solid var(--color-gainsboro);
+    border-right: 1px solid var(--color-iron);
 }
 
 .icon-pointer .glyphicon {
@@ -65,8 +65,8 @@ table {
 }
 
 .dropdown-menu > li > a:hover {
-    color: var(--color-chetwode-blue);
-    background: var(--color-whisper);
+    color: var(--color-blue);
+    background: var(--color-porcelain);
 }
 
 .dropdown-menu {
@@ -90,7 +90,7 @@ table {
     resize: vertical;
     margin-top: 7px;
     width: 100%;
-    border-color: var(--color-gainsboro);
+    border-color: var(--color-iron);
     border-radius: 2px;
     padding: 7px;
 }
@@ -136,7 +136,7 @@ table {
 }
 
 .input-group input.form-control:focus {
-    border-color: var(--color-chetwode-blue);
+    border-color: var(--color-blue);
 }
 
 .icon-calender {
@@ -147,7 +147,7 @@ table {
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    border-right: 1px solid var(--color-chetwode-blue);
+    border-right: 1px solid var(--color-blue);
 }
 
 .input-wrapper {
@@ -163,17 +163,17 @@ table {
     display: block;
     height: 36px;
     width: 1px;
-    background-color: var(--color-gainsboro);
+    background-color: var(--color-iron);
     left: 37px !important;
     z-index: 100;
     top: 0;
 }
 
 button.btn.btn-filter {
-    background: var(--color-whisper-color);
-    border: 1px solid var(--color-whisper-color);
+    background: var(--color-porcelain);
+    border: 1px solid var(--color-porcelain);
     font-size: 14px;
-    color: var(--color-midnight-blue);
+    color: var(--color-giddh-blue);
     display: inline-flex;
     justify-content: space-between;
     align-items: center;
@@ -201,8 +201,8 @@ button.btn.btn-filter span.icon-cross {
         justify-content: space-between;
         height: 54px;
         background-color: var(--color-white);
-        border-top: 1px solid var(--color-gainsboro);
-        border-bottom: 1px solid var(--color-gainsboro);
+        border-top: 1px solid var(--color-iron);
+        border-bottom: 1px solid var(--color-iron);
         align-items: center;
         span {
             padding: 10px;
@@ -214,8 +214,8 @@ button.btn.btn-filter span.icon-cross {
         span.close-modal {
             height: 32px;
             width: 32px;
-            background-color: var(--color-very-light-gray);
-            border: 1px solid var(--color-gainsboro);
+            background-color: var(--color-iron);
+            border: 1px solid var(--color-iron);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -235,8 +235,8 @@ span.close-modal.cp.pull-right {
     align-items: center;
     height: 34px;
     width: 34px;
-    background-color: var(--color-very-light-gray);
-    border: 1px solid var(--color-gainsboro);
+    background-color: var(--color-iron);
+    border: 1px solid var(--color-iron);
     border-radius: 5px;
     margin-right: 8px;
     position: static;
@@ -353,7 +353,7 @@ span.close-modal.cp.pull-right {
         }
     }
     .pending-table.on-mobile-view tr td .table.nested-table tr:first-child td {
-        border-right: 1px solid var(--color-gainsboro) !important;
+        border-right: 1px solid var(--color-iron) !important;
     }
     .pending-table.on-mobile-view tr td .table.nested-table tr td:last-child {
         border-bottom: none !important;

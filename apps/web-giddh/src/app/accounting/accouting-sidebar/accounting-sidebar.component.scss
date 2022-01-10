@@ -2,12 +2,12 @@
     background: none !important;
     border: 0 !important;
     font-size: 16px;
-    color: var(--color-night-rider);
+    color: var(--color-shark);
 }
 
 .sidebar-menu {
     min-height: 100vh;
-    background: var(--color-nero);
+    background: var(--color-shark);
     color: var(--color-white);
     float: right;
     position: relative;
@@ -29,19 +29,19 @@
 }
 
 .menu-list li a:hover {
-    background: var(--color-night-rider);
+    background: var(--color-shark);
 }
 
 .menu-list li a.isHidden {
-    color: var(--color-matterhorn);
+    color: var(--color-abbey);
 }
 
 .active-child {
-    background: var(--color-night-rider);
+    background: var(--color-shark);
     padding-left: 20px;
 }
 .active-parent {
-    background: var(--color-night-rider);
+    background: var(--color-shark);
 }
 .active-child > span {
     margin-right: 2px;

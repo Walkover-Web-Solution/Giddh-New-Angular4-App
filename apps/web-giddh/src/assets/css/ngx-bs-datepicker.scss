@@ -13,8 +13,8 @@
 }
 .daterangepicker {
     box-shadow: 0 3px 28px 0 rgba(0, 0, 0, 0.14);
-    color: var(--color-dark-gray);
-    border: 1px solid var(--color-gainsboro);
+    color: var(--color-abbey);
+    border: 1px solid var(--color-iron);
     z-index: 999 !important;
 }
 .drp-selected {
@@ -56,17 +56,17 @@
     border: 1px solid var(--color-light-sea-green) !important;
 }
 .daterangepicker th.month {
-    color: var(--color-nobel);
+    color: var(--color-manatee);
 }
 .daterangepicker th {
-    color: var(--color-dark-gray);
+    color: var(--color-abbey);
 }
 th.prev.available span {
     width: 10px;
     height: 10px;
-    border-left: 2px solid var(--color-dark-gray);
+    border-left: 2px solid var(--color-abbey);
     display: flex;
-    border-bottom: 2px solid var(--color-dark-gray);
+    border-bottom: 2px solid var(--color-abbey);
     transform: rotate(45deg);
     text-align: center;
     justify-content: center;
@@ -76,9 +76,9 @@ th.prev.available span {
 th.next.available span {
     width: 10px;
     height: 10px;
-    border-left: 2px solid var(--color-dark-gray);
+    border-left: 2px solid var(--color-abbey);
     display: flex;
-    border-bottom: 2px solid var(--color-dark-gray);
+    border-bottom: 2px solid var(--color-abbey);
     transform: rotate(225deg);
     text-align: center;
     justify-content: center;

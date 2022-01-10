@@ -13,18 +13,18 @@
 .upload-file ul li .upload-img {
     width: 120px;
     height: 120px;
-    background: var(--color-very-light-gray);
+    background: var(--color-iron);
     display: flex;
     align-items: center;
     overflow: hidden;
     justify-content: center;
     font-size: 48px;
     cursor: pointer;
-    color: var(--color-nobel);
+    color: var(--color-manatee);
 }
 
 .upload-file ul li .upload-img > a {
-    color: var(--color-nobel);
+    color: var(--color-manatee);
     display: block;
     width: 100%;
     height: 100%;
@@ -55,12 +55,12 @@
     top: 0;
     right: -29px;
     z-index: 99;
-    background: var(--color-very-light-gray);
+    background: var(--color-iron);
     width: 30px;
     height: 30px;
     text-align: center;
     line-height: 30px;
-    color: var(--color-dark-gray);
+    color: var(--color-abbey);
     border-radius: 3px;
     cursor: pointer;
 }
@@ -81,7 +81,7 @@ span.close-modal.cp.pull-right {
     width: 36px;
     padding: 10px;
     background-color: var(--color-primary-expense-details-span-close-modal-cp-pull-right-background);
-    border: 1px solid var(--color-gainsboro);
+    border: 1px solid var(--color-iron);
     border-radius: 5px;
     position: static;
     transform: inherit;
@@ -115,7 +115,7 @@ span.close-modal.cp.pull-right {
 }
 
 .list-item {
-    border-bottom: 1px solid var(--color-gainsboro);
+    border-bottom: 1px solid var(--color-iron);
 }
 .entry-against {
     &.error-box {

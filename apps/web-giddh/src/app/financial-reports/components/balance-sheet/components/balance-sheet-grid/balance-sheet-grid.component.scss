@@ -1,7 +1,7 @@
 .bs-table-grid {
     th {
         border: none !important;
-        border-bottom: 1px solid var(--color-gainsboro) !important;
+        border-bottom: 1px solid var(--color-iron) !important;
         padding: 13px 8px 14px 0 !important;
         &:first-child {
             padding: 0 !important;
@@ -10,7 +10,7 @@
             position: relative;
             z-index: 1;
             font-size: 13px;
-            color: var(--color-gray);
+            color: var(--color-abbey);
             padding-right: 8px;
             cursor: pointer;
             display: flex;

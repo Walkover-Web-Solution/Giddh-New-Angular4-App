@@ -129,7 +129,7 @@ body.unresponsive {
 
 .giddh-spinner {
     animation: rotate 1.5s infinite linear;
-    background: var(--color-nero) none repeat scroll 0 0;
+    background: var(--color-shark) none repeat scroll 0 0;
     border: 7px solid var(--color-cinnabar-orange);
     border-radius: 50%;
     box-shadow: 0 -10px 0 14px var(--color-white) inset;
@@ -154,15 +154,15 @@ body.unresponsive {
 }
 
 .btn-login.btn-default {
-    color: var(--color-night-rider);
+    color: var(--color-shark);
     background-color: var(--color-white);
-    border-color: var(--color-very-light-gray);
+    border-color: var(--color-iron);
 }
 
 .btn-login.btn-default:hover {
-    color: var(--color-black) !important;
+    color: var(--color-shark) !important;
     background-color: var(--color-white);
-    border-color: var(--color-very-light-gray);
+    border-color: var(--color-iron);
     box-shadow: none;
 }
 
@@ -189,7 +189,7 @@ button.close {
 }
 
 .email {
-    background: var(--color-deep-sky-blue-hover);
+    background: var(--color-blue);
 }
 
 /************* end login page *************/
@@ -246,7 +246,7 @@ h1 {
 }
 
 .login_box {
-    background: var(--color-solitude) url("/assets/images/banner-grid-design.png") repeat;
+    background: var(--color-wild-sand) url("/assets/images/banner-grid-design.png") repeat;
     padding: 20px 70px;
 }
 
@@ -262,7 +262,7 @@ h1 {
 }
 
 small {
-    color: var(--color-night-rider);
+    color: var(--color-shark);
 }
 
 .form-wrapper form {
@@ -329,13 +329,13 @@ small {
 
 .login-option,
 .login-option a {
-    color: var(--color-primary);
+    color: var(--color-blue);
     margin-top: 55px;
     font-weight: 500;
 }
 
 .login-option a {
-    border-bottom: 2px dotted var(--color-primary);
+    border-bottom: 2px dotted var(--color-blue);
 }
 
 .slide-content h1 {
@@ -481,7 +481,7 @@ small {
     font-size: 20px;
 }
 .btn-outline-primary {
-    background-color: var(--color-deep-sky-blue);
+    background-color: var(--color-blue);
     border-radius: 3px;
     min-width: 160px;
     border-radius: 5px;
@@ -491,7 +491,7 @@ small {
 }
 .btn-outline-primary:hover,
 .btn-outline-primary:focus {
-    background-color: var(--color-deep-sky-blue-hover);
+    background-color: var(--color-blue);
     box-shadow: none;
     outline: none;
 }
@@ -504,15 +504,15 @@ small {
     font-size: 14px;
 }
 .btn-secondary {
-    background-color: var(--color-primary-button-background);
-    color: var(--common-primary-dark-blue-color);
-    border: 1px solid var(--common-primary-dark-blue-color);
     border-radius: 5px;
+    color: var(--color-secondary-button-text);
+    border: 1px solid var(--color-primary-button-background);
+    background-color: var(--color-primary-button-background);
 }
 .btn-secondary:hover {
     color: var(--color-secondary-button-text) !important;
-    background-color: var(--color-secondary-button-background-hover);
     border-color: var(--color-secondary-button-background-hover);
+    background-color: var(--color-secondary-button-background-hover);
 }
 
 .loader-main {

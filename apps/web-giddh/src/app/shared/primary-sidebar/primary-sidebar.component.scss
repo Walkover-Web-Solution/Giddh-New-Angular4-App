@@ -62,8 +62,8 @@
                 color: var(--color-sidebar-content-text);
             }
             .head-nav {
-                background: var(--color-white-smoke);
-                border-bottom: 10px solid var(--color-gainsboro);
+                background: var(--color-wild-sand);
+                border-bottom: 10px solid var(--color-iron);
                 margin-bottom: 0;
             }
         }
@@ -148,22 +148,22 @@
     .search-box {
         .input-group-text {
             padding: 8px !important;
-            border: 1px solid var(--color-sidebar-search-bar-background);
+            border: 1px solid var(--color-sidebar-primary-search-bar-background);
             color: var(--color-sidebar-search-bar-text);
-            background-color: var(--color-sidebar-search-bar-background);
+            background-color: var(--color-sidebar-primary-search-bar-background);
         }
         input {
             border-left: none;
             padding-left: 0 !important;
             border-right: none !important;
-            background-color: var(--color-sidebar-search-bar-background) !important;
+            background-color: var(--color-sidebar-primary-search-bar-background) !important;
             border-top-left-radius: 0px !important;
             border-bottom-left-radius: 0px !important;
             border-top-right-radius: 0px !important;
             border-bottom-right-radius: 0px !important;
-            border: 1px solid var(--color-sidebar-search-bar-background);
+            border: 1px solid var(--color-sidebar-primary-search-bar-background);
             &:focus {
-                border-color: var(--color-gainsboro) !important;
+                border-color: var(--color-iron) !important;
             }
         }
         .input-group-append {
@@ -176,8 +176,8 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: var(--color-sidebar-search-bar-background);
-            border: 1px solid var(--color-sidebar-search-bar-background);
+            background-color: var(--color-sidebar-primary-search-bar-background);
+            border: 1px solid var(--color-sidebar-primary-search-bar-background);
             border-radius: 5px;
             border-left: none;
             border-top-left-radius: 0px !important;
@@ -219,10 +219,10 @@
                 white-space: nowrap;
                 position: relative;
                 a {
-                    color: var(--color-sidebar-anchor-text);
+                    color: var(--color-sidebar-primary-anchor-text);
                     line-height: 16px;
                     &.show-more {
-                        color: var(--color-common-senary-text);
+                        color: var(--color-primary-sidebar-show-more);
                         text-decoration: underline;
                         font-size: 12px;
                     }
@@ -275,7 +275,7 @@
                         }
                     }
                     a {
-                        color: var(--color-sidebar-anchor-text);
+                        color: var(--color-sidebar-secondary-anchor-text);
                         font-family: "opensans-semibold";
                         width: 100%;
                         display: flex;
@@ -347,7 +347,7 @@
                             padding: 0;
                             margin-bottom: 0 !important;
                             a {
-                                color: var(--color-sidebar-anchor-text);
+                                color: var(--color-sidebar-primary-anchor-text);
                                 align-items: center;
                                 display: flex;
                                 font-family: "opensans-regular";
@@ -392,7 +392,7 @@
             height: 20px;
             background-color: var(--color-white);
             border-radius: 50%;
-            border: 1px solid var(--color-gainsboro);
+            border: 1px solid var(--color-iron);
             transform: rotate(90deg);
             position: absolute;
             top: 70px;

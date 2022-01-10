@@ -6,7 +6,7 @@
     position: absolute;
     right: 12px;
     font-size: 11px;
-    color: var(--color-gray);
+    color: var(--color-abbey);
     top: 13px;
 }
 
@@ -14,7 +14,7 @@
     font-size: 11px;
     position: absolute;
     right: 10px;
-    color: var(--color-dim-gray);
+    color: var(--color-manatee);
     cursor: pointer;
     top: 12px;
 }
@@ -22,7 +22,7 @@
 .icon-pointer {
     cursor: pointer;
     .active-text-color {
-        color: var(--color-wild-blue-yonder) !important;
+        color: var(--color-blue) !important;
     }
 }
 .icon-sort-asc {
@@ -32,14 +32,14 @@
     margin-left: 6px;
 }
 .icon-sort-asc.active-text-color {
-    color: var(--color-wild-blue-yonder) !important;
+    color: var(--color-blue) !important;
 }
 .td-search-box {
     div {
         display: flex;
         i {
             margin-top: 1px;
-            color: var(--color-wild-blue-yonder);
+            color: var(--color-blue);
             padding-right: 8px;
             cursor: pointer;
             display: flex;
@@ -54,9 +54,9 @@
     min-width: 100%;
     padding: 11px;
     padding-right: 40px;
-    color: var(--color-nero);
+    color: var(--color-shark);
     border: none;
-    background-color: var(--color-gray-95);
+    background-color: var(--color-wild-sand);
 }
 .td-search-box {
     position: relative;

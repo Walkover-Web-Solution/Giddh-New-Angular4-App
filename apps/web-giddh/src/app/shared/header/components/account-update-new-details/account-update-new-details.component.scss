@@ -1,6 +1,6 @@
 .form-header {
     padding: 20px 15px;
-    background: var(--color-midnight-blue);
+    background: var(--color-giddh-blue);
     color: var(--color-white);
 }
 
@@ -16,7 +16,7 @@
 .aside-pane-container {
     padding: 15px;
     font-size: 14px;
-    color: var(--color-nero);
+    color: var(--color-shark);
 }
 
 .aside-pane-form label {
@@ -46,7 +46,7 @@ span.dr-label {
 }
 
 .cr-dr-account span.active {
-    background-color: var(--color-chetwode-blue);
+    background-color: var(--color-blue);
     color: var(--color-white);
 }
 
@@ -63,15 +63,15 @@ span.dr-label {
     margin-bottom: 20px;
     .input-group {
         .input-group-addon {
-            border-left: 1px solid var(--color-gainsboro) !important;
+            border-left: 1px solid var(--color-iron) !important;
             border-radius: 5px;
         }
         input {
-            border-left: 1px solid var(--color-gainsboro) !important;
+            border-left: 1px solid var(--color-iron) !important;
             border-radius: 5px;
             border-right: none;
             &:focus {
-                border-left: 1px solid var(--color-chetwode-blue) !important;
+                border-left: 1px solid var(--color-blue) !important;
             }
         }
     }
@@ -84,7 +84,7 @@ form.gstin-form {
 .add-address-default {
     display: flex;
     justify-content: space-between;
-    background-color: var(--color-gainsboro);
+    background-color: var(--color-iron);
     padding: 6px 10px;
     align-items: center;
     margin: 20px 0;
@@ -100,7 +100,7 @@ form.gstin-form {
 }
 .add-address-default h3 {
     font-size: 16px;
-    color: var(--color-nero);
+    color: var(--color-shark);
 }
 
 .contact-form,
@@ -127,7 +127,7 @@ form.gstin-form {
 
 .move-to-group {
     .list-item {
-        border-bottom: 1px solid var(--color-gainsboro);
+        border-bottom: 1px solid var(--color-iron);
     }
 }
 .name-of-field {

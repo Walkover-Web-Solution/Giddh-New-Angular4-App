@@ -1,5 +1,5 @@
 .custom-file {
-    border: 1px dashed var(--color-gainsboro);
+    border: 1px dashed var(--color-iron);
     border-radius: 2px;
     background: var(--color-white);
     width: 100px;
@@ -21,14 +21,14 @@
     }
     .icon-plus {
         font-size: 40px;
-        color: var(--color-whisper-color);
+        color: var(--color-porcelain);
     }
 }
 
 .unique-name,
 .country-name,
 .parent-name {
-    color: var(--color-dark-gray);
+    color: var(--color-abbey);
     .country-info {
         display: inherit;
         .country-flag {
@@ -47,7 +47,7 @@
     }
 }
 .img-size {
-    color: var(--color-gray);
+    color: var(--color-abbey);
 }
 .container-fluid {
     padding-left: 0;

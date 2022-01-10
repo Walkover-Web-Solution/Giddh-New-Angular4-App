@@ -1,11 +1,11 @@
 .stock-items .active {
-    background-color: var(--color-lavender);
+    background-color: var(--color-porcelain);
 }
 .stock-items .active a .span {
-    color: var(--color-jacksons-purple) !important;
+    color: var(--color-giddh-blue) !important;
 }
 .span {
-    color: var(--color-black);
+    color: var(--color-shark);
     font-size: 14px;
 }
 .in-list {
@@ -21,11 +21,11 @@
     line-height: 14px !important;
 }
 .stock-items .active .btn-link .fa {
-    color: var(--color-jacksons-purple);
+    color: var(--color-giddh-blue);
 }
 .stock-items > li .in-list:hover {
-    background-color: var(--color-lavender);
+    background-color: var(--color-porcelain);
 }
 .stock-items > li .in-list:hover a > span {
-    color: var(--color-chetwode-blue) !important;
+    color: var(--color-blue) !important;
 }
