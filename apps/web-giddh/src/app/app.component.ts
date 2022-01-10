@@ -40,8 +40,6 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
     private newVersionAvailableForWebApp: boolean = false;
     /** This holds the active locale */
     public activeLocale: string = "";
-    /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
-    public isCompany: boolean;
 
     constructor(private store: Store<AppState>,
         private router: Router,
@@ -113,7 +111,18 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             });
         }
 
-        this.isCompany = this._generalService.currentOrganizationType !== OrganizationType.Branch;
+        this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                let isCompany = this._generalService.currentOrganizationType !== OrganizationType.Branch && response?.length > 1;
+                if(isCompany) {
+                    document.querySelector("body")?.classList?.remove("dark-theme");
+                    document.querySelector("body")?.classList?.add("default-theme");
+                } else {
+                    document.querySelector("body")?.classList?.remove("default-theme");
+                    document.querySelector("body")?.classList?.add("dark-theme");
+                }
+            }
+        });
     }
 
     public sidebarStatusChange(event) {
