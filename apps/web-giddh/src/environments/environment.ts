@@ -12,7 +12,6 @@ export const environment: Environment = {
     AppUrl: 'https://beta.giddh.com/',
     ApiUrl: 'https://api.giddh.com/',
     isElectron: false,
-    isCordova: false,
     APP_FOLDER: '',
     showDevModule: true,
 
