@@ -53,6 +53,7 @@ import { SalesService } from '../../services/sales.service';
 import { GeneralService } from '../../services/general.service';
 import { OrganizationType } from '../../models/user-login-state';
 import { CommonActions } from '../../actions/common.actions';
+import { AdjustmentUtilityService } from '../../shared/advance-receipt-adjustment/services/adjustment-utility.service';
 
 /** Multi currency modules includes Cash/Sales Invoice and CR/DR note */
 const MULTI_CURRENCY_MODULES = [VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote, VoucherTypeEnum.purchase];
@@ -167,7 +168,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     /** To check is advance receipts modal in update mode */
     public isUpdateMode = false;
     /** selected invoice adjust advance receipts data */
-    public advanceReceiptAdjustmentData: VoucherAdjustments;
+    public advanceReceiptAdjustmentData: any;
     /** Observable to get observable store data of voucher */
     public voucherDetails$: Observable<any>;
     /** selected invoice details data  */
@@ -255,7 +256,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         private salesService: SalesService,
         private modalService: BsModalService,
         private generalService: GeneralService,
-        private commonActions: CommonActions
+        private commonActions: CommonActions,
+        private adjustmentUtilityService: AdjustmentUtilityService
     ) {
         this.advanceReceiptAdjustmentData = null;
         this.invoiceSearchRequest.page = 1;
@@ -500,6 +502,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                     this.advanceReceiptAdjustmentData = response.advanceReceiptAdjustment;
                 } else if (response.voucherAdjustments) {
                     this.advanceReceiptAdjustmentData = response.voucherAdjustments;
+                } else if (response.adjustments) {
+                    this.advanceReceiptAdjustmentData = { adjustments: this.adjustmentUtilityService.formatAdjustmentsObject(response.adjustments) };
                 }
                 if (response.taxTotal) {
                     if (response.taxTotal.taxBreakdown) {
