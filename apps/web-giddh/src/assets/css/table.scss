@@ -1,7 +1,7 @@
 .giddh-table {
     background: #fff;
     font-family: "opensans-semibold";
-    border: 1px solid var(--color-gainsboro);
+    border: 1px solid var(--color-iron);
     width: 100%;
     max-width: 100%;
     border-collapse: collapse;
@@ -15,7 +15,7 @@
         border-right: none;
         background: var(--color-table-heading-primary-background);
         padding: 15px 11px;
-        border-bottom: 1px solid var(--color-gainsboro);
+        border-bottom: 1px solid var(--color-iron);
         font-family: "opensans-semibold";
     }
     thead > tr > th {
@@ -36,7 +36,7 @@
         }
     }
     thead > .register-table-th > th {
-        color: var(--color-black) !important;
+        color: var(--color-shark) !important;
         border-bottom: none !important;
         background: var(--color-table-primary-giddh-table-thead-register-table-th-th-background);
         font-size: 16px;
@@ -91,10 +91,10 @@
         white-space: nowrap;
     }
     tbody tr:hover td {
-        background: var(--color-table-row-hover-primary-background);
+        background: var(--color-table-row-hover-primary-background) !important;
     }
     tbody tr:last-child td {
-        border-bottom: 1px solid var(--color-gainsboro) !important;
+        border-bottom: 1px solid var(--color-iron) !important;
     }
     tbody tr:last-child .status-mobile {
         border-bottom: none !important;
@@ -107,7 +107,7 @@
         font-size: 16px !important;
     }
     .icon-pointer .active-text-color {
-        color: var(--color-deep-sky-blue);
+        color: var(--color-blue);
         opacity: 1;
     }
     .td-search-box {
@@ -122,7 +122,7 @@
         }
         div i {
             margin-top: 1px;
-            color: var(--color-midnight-blue);
+            color: var(--color-giddh-blue);
             padding-right: 8px;
             cursor: pointer;
             display: flex;
@@ -135,7 +135,7 @@
             min-width: 100%;
             padding: 11px;
             padding-right: 40px;
-            color: var(--color-nero);
+            color: var(--color-shark);
             border: none;
             background-color: var(--color-table-searchbar-background) !important;
             border-radius: 5px;
@@ -264,7 +264,7 @@
         }
 
         tbody .td-mobile-head:before {
-            color: var(--color-black) !important;
+            color: var(--color-shark) !important;
             font-weight: 600 !important;
         }
 

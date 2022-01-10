@@ -2,13 +2,13 @@
     display: flex;
     justify-content: space-between;
     background-color: var(--color-white);
-    border-bottom: 1px solid var(--color-silver);
+    border-bottom: 1px solid var(--color-manatee);
     font-size: 18px;
     font-family: "opensans-bold";
     padding-top: 10px;
     padding-bottom: 10px;
     align-items: center;
-    color: var(--color-midnight-blue);
+    color: var(--color-giddh-blue);
 }
 section.receipt-note {
     background-color: var(--color-white);
@@ -16,8 +16,8 @@ section.receipt-note {
 .receipt-note-radio-btn {
     padding-top: 15px;
     padding-bottom: 15px;
-    color: var(--color-nero);
-    border-bottom: 1px solid var(--color-silver);
+    color: var(--color-shark);
+    border-bottom: 1px solid var(--color-manatee);
 }
 .receipt-note-content {
     font-size: 14px;
@@ -29,11 +29,11 @@ section.receipt-note {
 .multiple-products label {
     vertical-align: middle;
     line-height: 2.5;
-    color: var(--color-nero);
+    color: var(--color-shark);
 }
 #table-receipt th,
 #table-receipt td {
-    border-left: 1px solid var(--color-gainsboro) !important;
+    border-left: 1px solid var(--color-iron) !important;
 }
 #table-receipt td {
     vertical-align: top !important;
@@ -46,10 +46,10 @@ section.receipt-note {
     width: 200px;
 }
 button.btn.btn-filter {
-    background: var(--color-whisper);
-    border: 1px solid var(--color-whisper);
+    background: var(--color-porcelain);
+    border: 1px solid var(--color-porcelain);
     font-size: 14px;
-    color: var(--color-midnight-blue);
+    color: var(--color-giddh-blue);
     display: -webkit-inline-box;
     display: inline-flex;
     -webkit-box-pack: justify;
@@ -82,20 +82,20 @@ tfoot td .table-sec.form-group {
     right: -60%;
     top: 9px;
     font-size: 12px;
-    color: var(--color-primary);
+    color: var(--color-blue);
     z-index: 9;
 }
 .sender-details,
 .sender-receivers,
 .multiple-receivers {
     font-size: 12px;
-    color: var(--color-primary);
+    color: var(--color-blue);
     margin-top: 7px;
     cursor: pointer;
 }
 .right-total-amount {
     text-align: right;
-    color: var(--color-nero);
+    color: var(--color-shark);
 }
 
 .right-total-amount h3 {
@@ -106,27 +106,27 @@ tfoot td .table-sec.form-group {
     padding-bottom: 60px;
 }
 .multiple-products-wrapper table thead {
-    border-top: 1px solid var(--color-gainsboro);
+    border-top: 1px solid var(--color-iron);
 }
 .multiple-products-wrapper table tbody {
-    border-bottom: 1px solid var(--color-gainsboro);
+    border-bottom: 1px solid var(--color-iron);
 }
 #actionPane {
-    background-color: var(--color-very-light-gray);
+    background-color: var(--color-iron);
     padding: 20px 0;
 }
 .btn-success-text {
-    background-color: var(--color-whisper);
+    background-color: var(--color-porcelain);
     color: var(--color-success-enable);
 }
 .btn-danger:hover {
-    background-color: var(--color-whisper);
+    background-color: var(--color-porcelain);
 }
 
 .hsn-code-dropdown {
     position: absolute;
     background-color: var(--color-white);
-    border: 1px solid var(--color-gainsboro);
+    border: 1px solid var(--color-iron);
     border-radius: 3px;
     width: 100%;
     max-width: 250px;
@@ -148,18 +148,18 @@ tfoot td .table-sec.form-group {
 .hsn-code-dropdown input {
     width: 100%;
     padding: 5px;
-    border: 1px solid var(--color-gainsboro);
+    border: 1px solid var(--color-iron);
 }
 
 .hsn-code-dropdown input::placeholder,
 .hsn-code-dropdown input::-webkit-input-placeholder {
-    color: var(--color-silver);
+    color: var(--color-manatee);
 }
 
 .hsn-code-dropdown a {
     display: inline-block;
     text-align: center;
-    color: var(--color-very-light-gray);
+    color: var(--color-iron);
     padding: 5px 8px;
     font-size: 16px;
 }
@@ -196,14 +196,14 @@ tfoot td .table-sec.form-group {
     display: block;
     height: 36px;
     width: 1px;
-    background-color: var(--color-gainsboro);
+    background-color: var(--color-iron);
     left: 37px !important;
     z-index: 100;
     top: 0;
 }
 .branch-transfer-report .input-group input.form-control {
     padding-left: 35px !important;
-    border-color: var(--color-gainsboro);
+    border-color: var(--color-iron);
     background-image: url("../../../../assets/images/calender-icon.svg") !important;
     background-size: 17px !important;
     background-position: 9px 8px !important;
@@ -214,13 +214,13 @@ tfoot td .table-sec.form-group {
     cursor: default;
 }
 .branch-transfer-report .input-group input.form-control:focus {
-    border-color: var(--color-gainsboro) !important;
+    border-color: var(--color-iron) !important;
 }
 .branch-transfer-report .btn-group.show {
     display: inline !important;
 }
 .branch-transfer-report .btn-group a {
-    color: var(--color-night-rider);
+    color: var(--color-shark);
 }
 .branch-transfer-report ul#dropdown-basic {
     right: 0 !important;
@@ -263,9 +263,9 @@ tfoot td .table-sec.form-group {
     min-width: 100%;
     padding: 11px;
     padding-right: 0;
-    color: var(--color-nero);
+    color: var(--color-shark);
     border: none;
-    background-color: var(--color-gray-95);
+    background-color: var(--color-wild-sand);
 }
 
 .advance-icon {
@@ -286,8 +286,8 @@ tfoot td .table-sec.form-group {
     transform: translateY(16px);
 }
 .trash-icon-delete a {
-    color: var(--color-nobel);
-    border: 1px solid var(--color-gainsboro);
+    color: var(--color-manatee);
+    border: 1px solid var(--color-iron);
     border-radius: 50%;
     text-align: center;
     width: 20px;
@@ -307,14 +307,14 @@ tfoot td .table-sec.form-group {
     color: var(--color-white);
 }
 .transfer-type-checked:before {
-    border: 1px solid var(--color-chetwode-blue);
+    border: 1px solid var(--color-blue);
 }
 .transfer-type-checked:after {
     content: " ";
     position: absolute;
     width: 8px;
     height: 8px;
-    background: var(--color-chetwode-blue);
+    background: var(--color-blue);
     left: 5px;
     bottom: 5px;
     border-radius: 50%;
@@ -378,10 +378,10 @@ tfoot td .table-sec.form-group {
     z-index: 9991;
 }
 .icon-pointer.active-text-color {
-    color: var(--color-deep-sky-blue);
+    color: var(--color-blue);
 }
 .close-receipt {
-    color: var(--color-dark-gray);
+    color: var(--color-abbey);
     font-size: 24px;
 }
 .form-control[readonly] {
@@ -393,7 +393,7 @@ tfoot td .table-sec.form-group {
     padding-left: 0;
 }
 .placeholder-for-table {
-    color: var(--color-very-light-gray);
+    color: var(--color-iron);
 }
 .transportation-details {
     max-width: 1160px;
@@ -419,7 +419,7 @@ tfoot td .table-sec.form-group {
         top: 1px;
         transform: translateY(16px);
         font-size: 18px;
-        color: var(--color-gray);
+        color: var(--color-abbey);
         &.change-position {
             right: -55px;
         }

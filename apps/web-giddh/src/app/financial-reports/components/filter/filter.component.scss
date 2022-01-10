@@ -2,7 +2,7 @@
     background-color: var(--color-white) !important;
     text-decoration: none;
     text-align: left;
-    border: 1px solid var(--color-gainsboro);
+    border: 1px solid var(--color-iron);
     vertical-align: middle;
     height: 36px;
     font-size: 14px;
@@ -20,7 +20,7 @@
     display: block;
     height: 36px;
     width: 1px;
-    background-color: var(--color-gainsboro);
+    background-color: var(--color-iron);
     left: 37px !important;
     z-index: 100;
     top: 0;
@@ -38,8 +38,8 @@
     align-items: center;
     background-color: var(--color-white);
     font-size: 18px;
-    color: var(--color-midnight-blue) !important;
-    border: 1px solid var(--color-gainsboro);
+    color: var(--color-giddh-blue) !important;
+    border: 1px solid var(--color-iron);
     border-radius: 5px;
 }
 .download-data-icon {
@@ -54,8 +54,8 @@
         align-items: center;
         background-color: var(--color-white);
         font-size: 16px;
-        color: var(--color-midnight-blue) !important;
-        border: 1px solid var(--color-gainsboro);
+        color: var(--color-giddh-blue) !important;
+        border: 1px solid var(--color-iron);
         border-radius: 5px;
     }
 }
@@ -67,7 +67,7 @@
     position: absolute;
     left: 152px;
     font-size: 9px;
-    color: var(--color-very-light-gray);
+    color: var(--color-iron);
     top: 14px;
 }
 .company-branch-dropdown {
@@ -89,10 +89,10 @@
             align-items: center;
             display: flex;
             &:hover:after {
-                color: var(--color-rich-blue);
+                color: var(--color-blue);
             }
             .icon-favorite-selected {
-                color: var(--color-rich-blue);
+                color: var(--color-blue);
             }
         }
     }
@@ -106,7 +106,7 @@
     justify-content: center;
     align-items: center;
     height: 36px !important;
-    border-right: 1px solid var(--color-gainsboro) !important;
+    border-right: 1px solid var(--color-iron) !important;
     cursor: pointer;
 }
 @media (max-width: 1099px) and (min-width: 1019px) {
@@ -169,8 +169,8 @@
             align-items: center;
             background-color: var(--color-white);
             font-size: 16px;
-            color: var(--color-midnight-blue) !important;
-            border: 1px solid var(--color-gainsboro);
+            color: var(--color-giddh-blue) !important;
+            border: 1px solid var(--color-iron);
         }
     }
     .list-inline > li {

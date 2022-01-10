@@ -63,10 +63,10 @@
             align-items: center;
             display: flex;
             &:hover:after {
-                color: var(--color-rich-blue);
+                color: var(--color-blue);
             }
             .icon-favorite-selected {
-                color: var(--color-rich-blue);
+                color: var(--color-blue);
             }
         }
     }
@@ -104,12 +104,12 @@
             .action-icon {
                 display: flex;
                 align-items: center;
-                border: 1px solid var(--color-gainsboro);
+                border: 1px solid var(--color-iron);
                 a {
                     width: 34px;
                     font-size: 18px;
-                    color: var(--color-gray);
-                    border-right: 1px solid var(--color-gainsboro);
+                    color: var(--color-abbey);
+                    border-right: 1px solid var(--color-iron);
                     display: flex;
                     align-items: center;
                     justify-content: center;

@@ -1,8 +1,8 @@
 .backup-data {
     padding: 10px 0px;
-    border-bottom: 1px solid var(--color-gainsboro);
+    border-bottom: 1px solid var(--color-iron);
     font-weight: 500;
-    color: var(--color-black);
+    color: var(--color-shark);
 }
 .main-container-import-export {
     height: 70vh;
@@ -18,7 +18,7 @@
     padding: 40px 67px;
     margin: 0 15px;
     border-radius: 2px;
-    border: 1px solid var(--color-gainsboro);
+    border: 1px solid var(--color-iron);
     background: var(--color-primary-company-import-export-card-background);
     width: 50%;
     text-align: center;
@@ -27,13 +27,13 @@
 .import-export-icon {
     width: 90px;
     height: 90px;
-    background: var(--color-whisper-color);
+    background: var(--color-porcelain);
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: 90px;
     font-size: 34px;
-    color: var(--color-dark-gray);
+    color: var(--color-abbey);
     margin: 0 auto 20px;
 }
 

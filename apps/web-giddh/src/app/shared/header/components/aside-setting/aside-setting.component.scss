@@ -149,7 +149,7 @@
     }
 }
 .setting-items ul li:hover a span i {
-    color: var(--color-nero) !important;
+    color: var(--color-shark) !important;
 }
 
 :host.setting-sidebar {
@@ -239,7 +239,7 @@
         z-index: 999999;
         width: 270px;
         .back-to-main-slider {
-            background-color: var(--color-midnight-blue);
+            background-color: var(--color-giddh-blue);
             a {
                 display: flex;
                 align-items: center;
@@ -264,7 +264,7 @@
                     left: 5%;
                     bottom: -16px;
                     height: 1px;
-                    background-color: var(--color-gainsboro);
+                    background-color: var(--color-iron);
                 }
             }
         }
@@ -276,7 +276,7 @@
                             padding: 10px 15px !important;
                             span {
                                 i {
-                                    color: var(--color-gray);
+                                    color: var(--color-abbey);
                                     margin-right: 10px;
                                     font-size: 14px;
                                 }

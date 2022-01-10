@@ -2,18 +2,18 @@
     max-width: 280px;
     width: 100%;
     background-color: var(--color-white);
-    color: var(--color-nero);
+    color: var(--color-shark);
     height: 100vh;
     letter-spacing: 0;
     .sidebar-header {
-        background-color: var(--color-midnight-blue);
+        background-color: var(--color-giddh-blue);
         color: var(--color-white);
         padding: 15px;
         position: relative;
         .company-name-alice {
             width: 45px;
             height: 45px;
-            background: var(--color-chetwode-blue);
+            background: var(--color-blue);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -51,12 +51,12 @@
             li {
                 a {
                     padding: 10px 15px;
-                    color: var(--color-nero);
+                    color: var(--color-shark);
                     font-family: "opensans-semibold";
                     display: flex;
                     font-size: 14px;
                     &:hover {
-                        background-color: var(--color-lavender);
+                        background-color: var(--color-porcelain);
                     }
                 }
             }

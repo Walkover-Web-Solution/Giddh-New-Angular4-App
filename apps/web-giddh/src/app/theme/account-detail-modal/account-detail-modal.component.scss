@@ -8,7 +8,7 @@
     background: var(--color-white);
     width: 50%;
     padding: 1px;
-    box-shadow: 1px 0 9px var(--color-gray);
+    box-shadow: 1px 0 9px var(--color-abbey);
 }
 
 .account-detail-modal-header-div {
@@ -25,7 +25,7 @@
     border-right: 0;
     padding: 11px 10px 10px 10px;
     width: 100%;
-    background: var(--color-lavender);
+    background: var(--color-porcelain);
     white-space: initial;
 }
 
@@ -40,7 +40,7 @@
 }
 
 .custom-detail h4 {
-    color: var(--color-gray);
+    color: var(--color-abbey);
     margin-top: 7px;
     font-size: 14px !important;
     font-family: "opensans-regular" !important;
@@ -48,7 +48,7 @@
 
 .height-82px {
     padding: 10px 10px 15px 10px;
-    border-top: 1px solid var(--color-gainsboro);
+    border-top: 1px solid var(--color-iron);
 }
 
 ul.list-unstyled li {
@@ -56,7 +56,7 @@ ul.list-unstyled li {
 }
 
 ul.list-unstyled li a {
-    color: var(--color-black);
+    color: var(--color-shark);
 }
 
 .p-modal-tooltip {
@@ -65,7 +65,7 @@ ul.list-unstyled li a {
     background-color: var(--color-white);
     z-index: 1000;
     width: 257px;
-    border: 1px solid var(--color-gainsboro);
+    border: 1px solid var(--color-iron);
     border-radius: 4px;
     box-shadow: 0 7px 24px var(--color-black-russian);
 }
@@ -78,7 +78,7 @@ ul.list-unstyled li a {
 .li-link {
     margin-top: 15px !important;
     a:hover {
-        color: var(--color-jacksons-purple) !important;
+        color: var(--color-giddh-blue) !important;
     }
 }
 ul.pills {

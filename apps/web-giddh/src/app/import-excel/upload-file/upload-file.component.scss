@@ -21,7 +21,7 @@
 .upload-icon {
     font-size: 62px;
     float: none;
-    color: var(--color-whisper-light);
+    color: var(--color-porcelain);
 }
 
 .sample-file-btn {
@@ -30,7 +30,7 @@
 }
 
 .dashed-border {
-    border: 2px dashed var(--color-gainsboro);
+    border: 2px dashed var(--color-iron);
 }
 
 .import-type {
@@ -48,8 +48,8 @@
     align-items: center;
     justify-content: flex-end;
     margin: 0 15px;
-    border: 1px solid var(--color-gainsboro);
-    background: var(--color-gray-95);
+    border: 1px solid var(--color-iron);
+    background: var(--color-wild-sand);
     padding: 15px;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -91,7 +91,7 @@
     background: var(--color-white);
     text-align: left;
     position: absolute;
-    border: 1px solid var(--color-light-gray);
+    border: 1px solid var(--color-iron);
     border-radius: 2px !important;
     padding: 6px 12px !important;
     outline: 0;
@@ -105,10 +105,10 @@
 .file-upload-panel {
     width: 100%;
     text-align: left;
-    border: 1px solid var(--color-gainsboro);
+    border: 1px solid var(--color-iron);
     padding: 8px;
     border-radius: 4px;
-    color: var(--color-very-light-gray);
+    color: var(--color-iron);
 }
 .linked-entities {
     .list-item {
@@ -126,10 +126,10 @@
             align-items: center;
             display: flex;
             &:hover:after {
-                color: var(--color-rich-blue);
+                color: var(--color-blue);
             }
             .icon-favorite-selected {
-                color: var(--color-rich-blue);
+                color: var(--color-blue);
             }
         }
     }

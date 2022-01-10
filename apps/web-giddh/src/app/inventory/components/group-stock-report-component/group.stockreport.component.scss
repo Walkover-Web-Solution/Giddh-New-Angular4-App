@@ -1,5 +1,5 @@
 .bd-rt {
-    border-color: var(--color-gainsboro);
+    border-color: var(--color-iron);
 }
 
 :host ::ng-deep .fb-1-container {
@@ -74,7 +74,7 @@ table {
 
 .td-search-box div i {
     margin-top: 1px;
-    color: var(--color-wild-blue-yonder);
+    color: var(--color-blue);
     padding-right: 8px;
     cursor: pointer;
     display: flex;
@@ -95,9 +95,9 @@ table {
     min-width: 100%;
     padding: 11px;
     padding-right: 40px;
-    color: var(--color-nero);
+    color: var(--color-shark);
     border: none;
-    background-color: var(--color-white-smoke);
+    background-color: var(--color-wild-sand);
 }
 
 .td-search-box .input-container i {
@@ -112,7 +112,7 @@ table {
 }
 
 .basic > thead > tr > th {
-    border-right: 1px solid var(--color-gainsboro);
+    border-right: 1px solid var(--color-iron);
 }
 
 .icon-pointer .glyphicon {
@@ -120,12 +120,12 @@ table {
 }
 
 .td-search-box div i:hover {
-    color: var(--color-nobel);
+    color: var(--color-manatee);
 }
 
 .dropdown-menu > li > a:hover {
-    color: var(--color-chetwode-blue);
-    background: var(--color-whisper);
+    color: var(--color-blue);
+    background: var(--color-porcelain);
 }
 
 .stock-input {
@@ -141,7 +141,7 @@ table {
 }
 
 .footer-tr td {
-    background-color: var(--color-whisper);
+    background-color: var(--color-porcelain);
 }
 
 .total-footer {
@@ -150,7 +150,7 @@ table {
     .foot-item {
         padding: 41px;
         h2 {
-            color: var(--color-wistful);
+            color: var(--color-manatee);
             font-size: 20px;
             margin-bottom: 10px;
         }
@@ -200,11 +200,11 @@ table {
 .icon-pointer .icon-sort-asc {
     line-height: 20px;
     width: 15px;
-    color: var(--color-wild-blue-yonder);
+    color: var(--color-blue);
 }
 
 .icon-pointer .active-text-color {
-    color: var(--color-deep-sky-blue);
+    color: var(--color-blue);
 }
 
 .sticky-footer-sale-amount {
@@ -226,7 +226,7 @@ table {
         }
         .operators {
             font-size: 39px;
-            color: var(--color-wistful);
+            color: var(--color-manatee);
         }
         h2 {
             font-size: 18px;
@@ -264,11 +264,11 @@ table {
 }
 
 .text-purple {
-    color: var(--color-chetwode-blue);
+    color: var(--color-blue);
 }
 
 .btn-link-2 {
-    color: var(--color-vivid-blue);
+    color: var(--color-blue);
 }
 
 .mr-b100 {
@@ -295,9 +295,9 @@ td.border-right-none {
     justify-content: center;
     align-items: center;
     font-size: 18px;
-    border: 1px solid var(--color-gainsboro);
+    border: 1px solid var(--color-iron);
     border-radius: 5px;
-    color: var(--color-midnight-blue);
+    color: var(--color-giddh-blue);
     background: var(--color-white);
 }
 
@@ -314,10 +314,10 @@ td.border-right-none {
 }
 
 button.btn.btn-filter {
-    background: var(--color-whisper);
-    border: 1px solid var(--color-gainsboro);
+    background: var(--color-porcelain);
+    border: 1px solid var(--color-iron);
     font-size: 14px;
-    color: var(--color-midnight-blue);
+    color: var(--color-giddh-blue);
     display: inline-flex;
     justify-content: space-between;
     align-items: center;
@@ -329,7 +329,7 @@ button.btn.btn-filter {
 }
 
 .inventory-stock-table input.form-control.stock-input {
-    color: var(--color-nero);
+    color: var(--color-shark);
     text-align: left;
 }
 
@@ -345,7 +345,7 @@ button.btn.btn-filter {
     text-transform: none;
 }
 .icon-btn {
-    border: 1px solid var(--color-gainsboro);
+    border: 1px solid var(--color-iron);
     border-radius: 5px;
     height: 36px;
     width: 36px;
@@ -432,8 +432,8 @@ button.btn.btn-filter {
         text-align: end !important;
         margin-bottom: 0 !important;
         a {
-            background: var(--color-deep-sky-blue);
-            border: 1px solid var(--color-deep-sky-blue);
+            background: var(--color-blue);
+            border: 1px solid var(--color-blue);
             color: var(--color-white);
             border-radius: 5px;
             font-size: 14px;
@@ -443,9 +443,9 @@ button.btn.btn-filter {
     }
 }
 .input-group-addon {
-    border: 1px solid var(--color-gainsboro);
+    border: 1px solid var(--color-iron);
     border-left: 0;
-    background-color: var(--color-whisper-light);
+    background-color: var(--color-porcelain);
 }
 
 @media (max-width: 767px) {

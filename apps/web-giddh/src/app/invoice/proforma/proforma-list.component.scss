@@ -11,7 +11,7 @@
 }
 
 .basic > thead > tr > th {
-    border-right: 1px solid var(--color-gainsboro);
+    border-right: 1px solid var(--color-iron);
 }
 
 .flex-fill {
@@ -33,7 +33,7 @@
 
 .td-search-box div i {
     margin-top: 1px;
-    color: var(--color-wild-blue-yonder);
+    color: var(--color-blue);
     padding-right: 8px;
     cursor: pointer;
     display: flex;
@@ -42,7 +42,7 @@
 }
 
 .td-search-box div i:hover {
-    color: var(--color-deep-sky-blue);
+    color: var(--color-blue);
 }
 
 .td-search-box {
@@ -54,9 +54,9 @@
     min-width: 100%;
     padding: 11px;
     padding-right: 40px;
-    color: var(--color-nero);
+    color: var(--color-shark);
     border: none;
-    background-color: var(--color-gray-95);
+    background-color: var(--color-wild-sand);
     border-radius: 5px;
 }
 
@@ -73,8 +73,8 @@
 }
 
 .dropdown-menu > li > a:hover {
-    color: var(--color-chetwode-blue);
-    background: var(--color-whisper);
+    color: var(--color-blue);
+    background: var(--color-porcelain);
 }
 
 .dropdown-menu {
@@ -91,10 +91,10 @@
     left: -114px;
     background-color: var(--color-white);
     width: 131px;
-    box-shadow: 0px 4px 7px var(--color-silver);
+    box-shadow: 0px 4px 7px var(--color-manatee);
     border-radius: 3px;
     z-index: 100;
-    border: 1px solid var(--color-gainsboro);
+    border: 1px solid var(--color-iron);
 }
 
 .click-dropdown {
@@ -110,7 +110,7 @@
 }
 
 .click-dropdown ul li:hover {
-    background-color: var(--color-gainsboro);
+    background-color: var(--color-iron);
 }
 
 .click-dropdown ul li:hover a {
@@ -118,7 +118,7 @@
 }
 
 .click-dropdown ul li a {
-    color: var(--color-black);
+    color: var(--color-shark);
 }
 
 .invoice-table tr:hover .dropdown-btn {
@@ -132,12 +132,12 @@
 
 .icon-pointer {
     cursor: pointer;
-    color: var(--color-wild-blue-yonder);
+    color: var(--color-blue);
     margin-left: 6px;
 }
 
 .icon-pointer .active-text-color {
-    color: var(--color-deep-sky-blue);
+    color: var(--color-blue);
 }
 .date-advance-search {
     justify-content: space-between;
@@ -153,14 +153,14 @@ ul.select-action-dropdown {
     list-style: none;
 }
 .select-action-dropdown a {
-    color: var(--color-night-rider);
+    color: var(--color-shark);
     font-size: 14px;
     padding: 5px 10px;
     display: block;
 }
 .select-action-dropdown a:hover {
-    color: var(--color-chetwode-blue) !important;
-    background: var(--color-lavender) !important;
+    color: var(--color-blue) !important;
+    background: var(--color-porcelain) !important;
 }
 .dropdown-toggle.more-btn-dropdown {
     width: 91px;
@@ -177,7 +177,7 @@ ul.select-action-dropdown {
 }
 .input-group input.form-control {
     padding-left: 35px !important;
-    border-color: var(--color-chetwode-blue);
+    border-color: var(--color-blue);
     background-image: url("../../../assets/images/calender-icon.svg") !important;
     background-size: 17px !important;
     background-position: 9px 8px !important;
@@ -189,7 +189,7 @@ ul.select-action-dropdown {
     width: 100%;
 }
 .input-group input.form-control:focus {
-    border-color: var(--color-chetwode-blue);
+    border-color: var(--color-blue);
 }
 .icon-calender {
     position: absolute;
@@ -199,7 +199,7 @@ ul.select-action-dropdown {
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    border-right: 1px solid var(--color-chetwode-blue);
+    border-right: 1px solid var(--color-blue);
 }
 .search-icon-block {
     width: 36px;
@@ -209,9 +209,9 @@ ul.select-action-dropdown {
     align-items: center;
     font-size: 18px;
     margin-left: 10px;
-    border: 1px solid var(--color-gainsboro);
+    border: 1px solid var(--color-iron);
     border-radius: 5px;
-    color: var(--color-gray);
+    color: var(--color-abbey);
     background: var(--color-white);
     align-items: center;
     justify-content: center;
@@ -229,10 +229,10 @@ ul.select-action-dropdown {
     display: none;
 }
 button.btn.btn-filter {
-    background: var(--color-whisper);
-    border: 1px solid var(--color-gainsboro);
+    background: var(--color-porcelain);
+    border: 1px solid var(--color-iron);
     font-size: 14px;
-    color: var(--color-midnight-blue);
+    color: var(--color-giddh-blue);
     display: inline-flex;
     justify-content: space-between;
     align-items: center;
@@ -242,13 +242,13 @@ button.btn.btn-filter span.icon-cross {
     margin-right: 5px;
 }
 .icon-ellipse.select-action a {
-    color: var(--color-night-rider);
+    color: var(--color-shark);
 }
 .invoice-table th .d-flex {
     align-items: center;
 }
 a.btn-link-2 {
-    color: var(--color-nero);
+    color: var(--color-shark);
 }
 .input-wrapper {
     display: block !important;
@@ -262,7 +262,7 @@ a.btn-link-2 {
     display: block;
     height: 36px;
     width: 1px;
-    background-color: var(--color-gainsboro);
+    background-color: var(--color-iron);
     left: 37px !important;
     z-index: 100;
     top: 0;
@@ -369,7 +369,7 @@ span.icon-advance-filter {
 @media (max-width: 420px) {
     .small-loading {
         padding-left: 0;
-        color: var(--color-night-rider);
+        color: var(--color-shark);
         font-size: 12px;
         position: relative;
         top: 2px;

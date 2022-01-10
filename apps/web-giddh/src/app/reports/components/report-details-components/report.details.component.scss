@@ -28,7 +28,7 @@
 .btn.dropdown-toggle {
     width: 100%;
     text-align: left;
-    border: 1px solid var(--color-gainsboro);
+    border: 1px solid var(--color-iron);
     padding-left: 7px !important;
     background: var(--color-white);
 }
@@ -36,7 +36,7 @@
     position: absolute;
     right: 10px;
     top: 14px;
-    color: var(--color-dim-gray);
+    color: var(--color-manatee);
     border-right: 6px solid transparent;
     border-left: 6px solid transparent;
     border-top: 6px dashed;
@@ -63,7 +63,7 @@ ul#dropdown-nested li .caret {
     border-right: 6px solid transparent;
     border-left: 6px solid transparent;
     border-top: 6px dashed;
-    color: var(--color-dim-gray);
+    color: var(--color-manatee);
 }
 .sales-register-menu {
     min-width: 100%;
@@ -94,13 +94,13 @@ ul#dropdown-nested li .caret {
     left: 0;
     width: 100%;
     padding: 7px 0px 10px 36px !important;
-    border-bottom: 1px solid var(--color-gainsboro);
+    border-bottom: 1px solid var(--color-iron);
     .nav-report {
         li {
             font-family: "opensans-semibold";
             font-size: 20px;
             a {
-                color: var(--color-midnight-blue);
+                color: var(--color-giddh-blue);
             }
         }
     }

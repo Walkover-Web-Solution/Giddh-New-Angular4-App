@@ -1,5 +1,5 @@
 .bg-wrap {
-    background: var(--color-gray-95);
+    background: var(--color-wild-sand);
 }
 
 .entry-table thead th {
@@ -22,11 +22,11 @@
 }
 
 .entry-table tbody tr td .form-control.focus:focus {
-    background: var(--color-very-light-gray) !important;
+    background: var(--color-iron) !important;
 }
 
 .active-row {
-    background: var(--color-whisper);
+    background: var(--color-porcelain);
 }
 
 .confirmation-box {
@@ -57,15 +57,15 @@
 }
 
 .appearance-none {
-    background: var(--color-whisper) !important;
+    background: var(--color-porcelain) !important;
     border: 0 !important;
     font-size: 16px;
-    color: var(--color-night-rider);
+    color: var(--color-shark);
 }
 
 .sidebar-menu {
     min-height: 100vh;
-    background: var(--color-nero);
+    background: var(--color-shark);
     color: var(--color-white);
     float: right;
     position: relative;
@@ -86,7 +86,7 @@
 }
 
 .menu-list li a.isHidden {
-    color: var(--color-matterhorn);
+    color: var(--color-abbey);
 }
 
 .sidebar-list {
@@ -98,7 +98,7 @@
     padding: 0 !important;
     border: 0;
     z-index: 0;
-    border-left: 1px solid var(--color-gainsboro);
+    border-left: 1px solid var(--color-iron);
 }
 
 .sidebar-list h3 {
@@ -109,7 +109,7 @@ input[name="entryDate"] {
     background: transparent !important;
     border: 0;
     padding: 0 !important;
-    color: var(--color-night-rider);
+    color: var(--color-shark);
     height: auto;
     width: 100px;
     font-size: 16px;
@@ -122,7 +122,7 @@ textarea[name="narration"] {
 
 input[name="entryDate"]:focus,
 textarea[name="narration"]:focus {
-    background: var(--color-whisper) !important;
+    background: var(--color-porcelain) !important;
 }
 
 :host ::ng-deep .menu {

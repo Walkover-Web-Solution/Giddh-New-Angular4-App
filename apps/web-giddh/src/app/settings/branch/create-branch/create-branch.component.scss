@@ -1,12 +1,12 @@
 .create-branch-page {
     .create-branch-under {
-        border-bottom: 1px solid var(--color-gainsboro);
+        border-bottom: 1px solid var(--color-iron);
         .branch-under-company {
             .heading {
                 font-size: 14px;
             }
             p {
-                color: var(--color-black);
+                color: var(--color-shark);
             }
             .branch-company-name {
                 .label-wrapper {
@@ -17,11 +17,11 @@
                         width: 24px;
                     }
                     label {
-                        color: var(--color-dark-gray);
+                        color: var(--color-abbey);
                         min-width: 200px;
                     }
                     span {
-                        color: var(--color-dark-gray);
+                        color: var(--color-abbey);
                         display: block;
                     }
                 }
@@ -43,7 +43,7 @@
             font-size: 14px;
             display: flex;
             align-items: center;
-            color: var(--color-nero);
+            color: var(--color-shark);
             margin-bottom: 15px;
             label {
                 min-width: 200px;
@@ -69,10 +69,10 @@
                         align-items: center;
                         display: flex;
                         &:hover:after {
-                            color: var(--color-rich-blue);
+                            color: var(--color-blue);
                         }
                         .icon-favorite-selected {
-                            color: var(--color-rich-blue);
+                            color: var(--color-blue);
                         }
                     }
                 }
@@ -99,7 +99,7 @@
     }
 }
 .footer-btn {
-    background-color: var(--color-whisper-color);
+    background-color: var(--color-porcelain);
     padding: 15px;
 }
 .address-dropdown sales-sh-select::ng-deep .menu {

@@ -43,7 +43,7 @@ $md-drppicker-control-active-border-color: #08c !default;
 $md-drppicker-control-active-border-radius: $md-drppicker-control-border-radius !default;
 $md-drppicker-control-disabled-color: #ccc !default;
 // Select
-$select-border: 1px solid var(--color-white-smoke) !default;
+$select-border: 1px solid var(--color-wild-sand) !default;
 $select-background: rgba(255, 255, 255, 0.9) !default;
 $select-padding: 5px !default;
 $select-radius: 2px !default;
@@ -232,7 +232,7 @@ $input-height: 3rem !default;
     .month.drp-animate {
         font-size: 12px;
         text-align: left;
-        color: var(--color-nero);
+        color: var(--color-shark);
         font-weight: 600;
         .year-name {
             padding-left: 5px;
@@ -296,7 +296,7 @@ $input-height: 3rem !default;
 
         &.week {
             font-size: 80%;
-            color: var(--color-very-light-gray);
+            color: var(--color-iron);
         }
     }
 
@@ -360,7 +360,7 @@ $input-height: 3rem !default;
 
         &.week {
             font-size: 80%;
-            color: var(--color-very-light-gray);
+            color: var(--color-iron);
         }
     }
     td,
@@ -385,16 +385,16 @@ $input-height: 3rem !default;
         &.in-range-start,
         &.in-range-end {
             span {
-                background-color: var(--color-datepicker-selected-month) !important;
+                background-color: var(--color-primary-datepicker-input-bottom-border) !important;
                 border-radius: 50%;
                 color: var(--color-white) !important;
-                border-color: var(--color-datepicker-selected-month);
+                border-color: var(--color-primary-datepicker-input-bottom-border);
             }
             &:hover {
                 span {
                     background-color: var(--color-datepicker-rightside-list-secondary-text-hover) !important;
                     color: var(--color-common-primary-text) !important;
-                    border-color: var(--color-gray);
+                    border-color: var(--color-abbey);
                 }
             }
         }
@@ -502,7 +502,7 @@ $input-height: 3rem !default;
     td,
     option {
         &.disabled {
-            color: var(--color-nobel);
+            color: var(--color-manatee);
             cursor: not-allowed;
             text-decoration: line-through;
         }
@@ -512,7 +512,7 @@ $input-height: 3rem !default;
     .td-div,
     option {
         &.disabled {
-            color: var(--color-nobel);
+            color: var(--color-manatee);
             cursor: not-allowed;
             text-decoration: line-through;
         }
@@ -523,7 +523,7 @@ $input-height: 3rem !default;
     .td-div,
     option {
         &.disabled {
-            color: var(--color-nobel);
+            color: var(--color-manatee);
             cursor: not-allowed;
             text-decoration: line-through;
         }
@@ -552,8 +552,8 @@ $input-height: 3rem !default;
         &.ampm-select {
             width: 50px;
             margin: 0 auto;
-            background: var(--color-whisper-light);
-            border: 1px solid var(--color-whisper-light);
+            background: var(--color-porcelain);
+            border: 1px solid var(--color-porcelain);
             padding: 2px;
             outline: 0;
             font-size: 12px;
@@ -588,7 +588,7 @@ $input-height: 3rem !default;
         position: relative;
     }
     .calendar-time select.disabled {
-        color: var(--color-very-light-gray);
+        color: var(--color-iron);
         cursor: not-allowed;
     }
     .label-input {
@@ -631,7 +631,7 @@ $input-height: 3rem !default;
     /* ranges */
     .show-ranges {
         .drp-calendar.left {
-            border-left: 1px solid var(--color-gainsboro);
+            border-left: 1px solid var(--color-iron);
         }
     }
     .ranges {
@@ -640,7 +640,7 @@ $input-height: 3rem !default;
         margin: 0;
         display: flex;
         flex-direction: column;
-        border-left: 1px solid var(--color-gainsboro);
+        border-left: 1px solid var(--color-iron);
         background-color: var(--color-datepicker-background);
         height: 490px !important;
         .range-container {
@@ -653,7 +653,7 @@ $input-height: 3rem !default;
                 flex-direction: column;
                 li {
                     position: relative;
-                    border-bottom: 1px solid var(--color-gainsboro);
+                    border-bottom: 1px solid var(--color-iron);
                     button {
                         padding: 12px 10px;
                         width: 100%;
@@ -689,14 +689,14 @@ $input-height: 3rem !default;
                             background-position-y: center;
                             border-radius: 50%;
                             &:active {
-                                background-color: var(--color-wistful);
+                                background-color: var(--color-manatee);
                             }
                         }
                         &.active {
                             background-color: var(--color-datepicker-rightside-list-secondary-text-hover) !important;
-                            border-left: 3px solid var(--color-datepicker-selected-month) !important;
+                            border-left: 3px solid var(--color-primary-datepicker-input-bottom-border) !important;
                             font-family: "opensans-semibold";
-                            color: var(--color-datepicker-selected-month);
+                            color: var(--color-primary-datepicker-input-bottom-border);
                         }
                         &[disabled] {
                             opacity: 0.3;
@@ -800,17 +800,17 @@ $input-height: 3rem !default;
         font-size: 14px;
     }
     .btn.btn-danger {
-        background: var(--color-whisper-color);
+        background: var(--color-porcelain);
         color: var(--color-primary-datepicker-btn-btn-danger);
-        border: 1px solid var(--color-whisper-color);
+        border: 1px solid var(--color-porcelain);
         margin-right: 10px;
         &:hover,
         &:active,
         &:focus,
         &:active:focus {
-            background: var(--color-gainsboro);
+            background: var(--color-primary-cancel-button-background-hover);
             color: var(--color-primary-datepicker-btn-btn-danger-hover-active-focus);
-            border-color: var(--color-gainsboro);
+            border-color: var(--color-iron);
             outline: none;
             box-shadow: none;
         }
@@ -819,15 +819,15 @@ $input-height: 3rem !default;
         }
     }
     .btn.btn-success {
-        background: var(--color-light-sea-green);
-        color: var(--color-white);
-        border: 1px solid var(--color-light-sea-green);
+        background: var(--color-secondary-button-background);
+        color: var(--color-secondary-button-text);
+        border: 1px solid var(--color-secondary-button-background);
         &:hover,
         &:active,
         &:focus,
         &:active:focus {
             background: var(--color-primary-datepicker-btn-success-hover-active-focus);
-            color: var(--color-white);
+            color: var(--color-secondary-button-text);
             border: 1px solid var(--color-primary-datepicker-btn-success-hover-active-focus);
         }
         &:disabled {
@@ -859,8 +859,8 @@ $input-height: 3rem !default;
 .md-drppicker td.in-range.in-range-start.in-range-end span {
     background-color: var(--color-primary-datepicker-in-range-end-date-background) !important;
     border-radius: 50%;
-    color: var(--color-nero) !important;
-    border-color: var(--color-gray);
+    color: var(--color-shark) !important;
+    border-color: var(--color-abbey);
 }
 td.in-range.in-range-start.in-range-hovered.in-range-end::before {
     border: none !important;
@@ -883,7 +883,7 @@ td.in-range.in-range-start.in-range-hovered.in-range-end::before {
     background-color: var(--color-datepicker-selected-date-background) !important;
     border-radius: 50%;
     color: var(--color-common-primary-text) !important;
-    border-color: var(--color-gray);
+    border-color: var(--color-abbey);
 }
 .td-div.in-range.in-range-start.in-range-hovered.in-range-end::before {
     border: none !important;
@@ -904,7 +904,7 @@ td.in-range.in-range-start.in-range-hovered.in-range-end::before {
     position: relative;
 }
 .ranges-perfect-scrollbar {
-    border-right: 1px solid var(--color-gainsboro);
+    border-right: 1px solid var(--color-iron);
 }
 .ranges-perfect-scrollbar .ps__rail-x {
     display: none;
@@ -1047,8 +1047,8 @@ td span {
 }
 
 td:hover span {
-    background-color: var(--color-white-smoke);
-    border: 1px solid var(--color-gray);
+    background-color: var(--color-wild-sand);
+    border: 1px solid var(--color-abbey);
 }
 
 /* new calendar */
@@ -1056,8 +1056,8 @@ td:hover span {
     border: 1px solid transparent;
 }
 .td-div:hover span {
-    background-color: var(--color-white-smoke);
-    border: 1px solid var(--color-gray);
+    background-color: var(--color-primary-datepicker-unselected-date-hover);
+    border: 1px solid var(--color-abbey);
 }
 /* new calendar */
 
@@ -1070,18 +1070,18 @@ td:hover span {
 
 .md-drppicker td.start-date.active {
     span {
-        background-color: var(--color-datepicker-selected-month) !important;
+        background-color: var(--color-primary-datepicker-input-bottom-border) !important;
         color: var(--color-white) !important;
-        border-color: var(--color-datepicker-selected-month) !important;
+        border-color: var(--color-primary-datepicker-input-bottom-border) !important;
     }
 }
 
 /* new calendar */
 .md-drppicker .td-div.start-date.active {
     span {
-        background-color: var(--color-datepicker-selected-month) !important;
+        background-color: var(--color-primary-datepicker-input-bottom-border) !important;
         color: var(--color-white) !important;
-        border-color: var(--color-datepicker-selected-month) !important;
+        border-color: var(--color-primary-datepicker-input-bottom-border) !important;
     }
 }
 /* new calendar */
@@ -1100,8 +1100,8 @@ td:hover span {
     }
     &:hover {
         span {
-            background-color: var(--color-white-smoke) !important;
-            border-color: var(--color-gray) !important;
+            background-color: var(--color-wild-sand) !important;
+            border-color: var(--color-abbey) !important;
         }
     }
 }
@@ -1177,7 +1177,7 @@ td span {
         font-style: normal;
         &:hover {
             border-radius: 50px;
-            background-color: var(--color-whisper-color);
+            background-color: var(--color-porcelain);
             cursor: pointer;
         }
     }
@@ -1236,17 +1236,17 @@ td span {
 }
 
 .activatedDate span {
-    color: var(--color-nero) !important;
+    color: var(--color-shark) !important;
     background-color: transparent !important;
 }
 
 .activatedDate.in-range.in-range-start span {
-    color: var(--color-nero);
+    color: var(--color-shark);
 }
 .activatedDate:hover {
     span {
-        background-color: var(--color-white-smoke) !important;
-        border-color: var(--color-gray) !important;
+        background-color: var(--color-wild-sand) !important;
+        border-color: var(--color-abbey) !important;
     }
 }
 
@@ -1275,9 +1275,9 @@ td span {
     border-left: none;
     li {
         &:hover {
-            background-color: var(--color-lavender) !important;
+            background-color: var(--color-porcelain) !important;
             button {
-                color: var(--color-dropdown-list-senary) !important;
+                color: var(--color-primary-datepicker-dropdown-color-hover) !important;
             }
         }
     }
@@ -1375,7 +1375,7 @@ td span {
                     .available {
                         width: 30px !important;
                         height: 30px;
-                        background-color: var(--color-gainsboro) !important;
+                        background-color: var(--color-iron) !important;
                         border-radius: 50px;
                         padding: 0 15px;
                     }
@@ -1420,17 +1420,17 @@ td span {
                             cursor: pointer;
                         }
                         &.focused-date {
-                            border-bottom-color: var(--color-datepicker-selected-month);
+                            border-bottom-color: var(--color-primary-datepicker-input-bottom-border);
                             cursor: pointer;
                             input {
-                                color: var(--color-datepicker-selected-month);
+                                color: var(--color-primary-datepicker-input-bottom-border);
                                 cursor: pointer;
                             }
                         }
                     }
 
                     .activeSelectedDate {
-                        border-bottom-color: var(--color-primary) !important;
+                        border-bottom-color: var(--color-blue) !important;
                         box-shadow: none !important;
                         &.invalid-date-input {
                             border-bottom-color: var(--color-danger) !important;
@@ -1478,7 +1478,7 @@ td span {
 }
 
 .days-upto-select {
-    border-top: 1px solid var(--color-gainsboro);
+    border-top: 1px solid var(--color-iron);
     ul {
         list-style: none;
         margin: 0 auto;
@@ -1516,11 +1516,11 @@ td span {
                     background-position-y: center;
                     border-radius: 50%;
                     &:active {
-                        background-color: var(--color-wistful);
+                        background-color: var(--color-manatee);
                     }
                 }
                 &.active {
-                    background-color: var(--color-whisper-color) !important;
+                    background-color: var(--color-porcelain) !important;
                     border-left: 3px solid var(--color-datepicker-mat-select-arrow-active) !important;
                 }
                 &[disabled] {
@@ -1537,12 +1537,12 @@ td span {
                 font-size: 12px;
                 margin-bottom: 0;
                 border: none;
-                border-bottom: 1px solid var(--color-gainsboro);
-                color: var(--color-common-septenary-text);
+                border-bottom: 1px solid var(--color-iron);
+                color: var(--color-primary-datepicker-dropdown-input);
                 background-color: transparent;
                 &:focus {
-                    border-bottom-color: var(--color-common-senary-text) !important;
-                    box-shadow: 0 1px 0 0 var(--color-common-senary-text) !important;
+                    border-bottom-color: var(--color-primary-datepicker-dropdown-color-active) !important;
+                    box-shadow: 0 1px 0 0 var(--color-primary-datepicker-dropdown-color-active) !important;
                     outline: none;
                 }
             }
@@ -1564,8 +1564,8 @@ td span {
 .in-range-hovered {
     &::before {
         content: "";
-        border-bottom: 1px dashed var(--color-gray);
-        border-top: 1px dashed var(--color-gray);
+        border-bottom: 1px dashed var(--color-abbey);
+        border-top: 1px dashed var(--color-abbey);
         width: 100%;
         height: 100%;
         left: 0px;
@@ -1593,7 +1593,7 @@ cdk-virtual-scroll-viewport::-webkit-scrollbar-track {
 
 /* Handle */
 cdk-virtual-scroll-viewport::-webkit-scrollbar-thumb {
-    background: var(--color-nobel);
+    background: var(--color-manatee);
     border-radius: 10px;
 }
 .calendar-d-flex {
@@ -1662,7 +1662,7 @@ cdk-virtual-scroll-viewport::-webkit-scrollbar-thumb {
                         }
                         button {
                             padding: 12px 10px;
-                            border-bottom: 1px solid var(--color-gainsboro);
+                            border-bottom: 1px solid var(--color-iron);
                             font-size: 14px;
                         }
                     }
@@ -1787,7 +1787,7 @@ cdk-virtual-scroll-viewport::-webkit-scrollbar-thumb {
                     justify-content: space-between;
                     width: 100%;
                     a {
-                        color: var(--color-deep-sky-blue);
+                        color: var(--color-blue);
                         padding-right: 15px;
                         font-size: 14px;
                     }
@@ -1810,7 +1810,7 @@ cdk-virtual-scroll-viewport::-webkit-scrollbar-thumb {
                     font-size: 12px;
                     display: block;
                     padding-bottom: 2px;
-                    color: var(--color-gray);
+                    color: var(--color-abbey);
                     padding-left: 50px;
                 }
                 .custom-edit-block {
@@ -1819,7 +1819,7 @@ cdk-virtual-scroll-viewport::-webkit-scrollbar-thumb {
                     align-items: center;
                     .custom-date-range {
                         font-size: 18px;
-                        color: var(--color-nero);
+                        color: var(--color-shark);
                         padding-left: 50px;
                     }
                     .edit-dates {
@@ -1957,7 +1957,7 @@ cdk-virtual-scroll-viewport::-webkit-scrollbar-thumb {
                 top: 0;
                 position: static;
                 border: none;
-                border-bottom: 1px solid var(--color-gainsboro);
+                border-bottom: 1px solid var(--color-iron);
                 border-radius: 0;
             }
             .financial-year-dropdown {

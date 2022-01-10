@@ -55,7 +55,7 @@
 
 .custom-dropdown > li > a:focus,
 .custom-dropdown > li > a:hover {
-    background: var(--color-gainsboro) !important;
+    background: var(--color-iron) !important;
 }
 
 .custom-dropdown .caret {
@@ -75,7 +75,7 @@
     opacity: 0;
     visibility: hidden;
     transition: 0.5s all ease-in;
-    border: 1px solid var(--color-light-gray);
+    border: 1px solid var(--color-iron);
 }
 .permission-main .transactions-popup {
     right: 20px;
@@ -87,11 +87,11 @@
     visibility: visible;
 }
 i.icon-add {
-    color: var(--color-gray);
+    color: var(--color-abbey);
     font-size: 18px;
 }
 i.icon-cross {
-    color: var(--color-gray);
+    color: var(--color-abbey);
 }
 .permission-row .col-xs-12,
 .permission-row .col-sm-6,

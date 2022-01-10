@@ -8,15 +8,15 @@
 }
 
 .swatch ul li:nth-child(1) {
-    background: var(--color-silver);
+    background: var(--color-manatee);
 }
 
 .swatch ul li:nth-child(2) {
-    background: var(--color-dark-gray);
+    background: var(--color-abbey);
 }
 
 .swatch ul li:nth-child(3) {
-    background: var(--color-black);
+    background: var(--color-shark);
 }
 
 .swatch ul li:nth-child(4) {
@@ -28,7 +28,7 @@
 }
 
 .swatch ul li:nth-child(6) {
-    background: var(--color-charcoal);
+    background: var(--color-shark);
 }
 
 .swatch ul li:nth-child(7) {
@@ -86,7 +86,7 @@
     text-align: center;
     height: 100px;
     vertical-align: middle;
-    border: 4px dashed var(--color-nobel);
+    border: 4px dashed var(--color-manatee);
     cursor: pointer;
 }
 

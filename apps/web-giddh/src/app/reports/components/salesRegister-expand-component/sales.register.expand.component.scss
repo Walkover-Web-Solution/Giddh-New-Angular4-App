@@ -19,7 +19,7 @@
 
 .td-search-box div i {
     margin-top: 1px;
-    color: var(--color-wild-blue-yonder);
+    color: var(--color-blue);
     padding-right: 8px;
     cursor: pointer;
     display: flex;
@@ -36,9 +36,9 @@
     min-width: 100%;
     padding: 11px;
     padding-right: 40px;
-    color: var(--color-nero);
+    color: var(--color-shark);
     border: none;
-    background-color: var(--color-gray-95);
+    background-color: var(--color-wild-sand);
     border-radius: 5px;
 }
 
@@ -47,7 +47,7 @@
     background-color: var(--color-white);
     z-index: 1000;
     width: 257px;
-    border: 1px solid var(--color-gainsboro);
+    border: 1px solid var(--color-iron);
     border-radius: 4px;
     box-shadow: 0 7px 24px var(--color-black-russian);
 }
@@ -75,7 +75,7 @@
 }
 
 .custom-detail h4 {
-    color: var(--color-gray);
+    color: var(--color-abbey);
     margin-top: 7px;
     font-size: 14px !important;
     font-family: "opensans-regular" !important;
@@ -83,11 +83,11 @@
 
 .height-82px {
     padding: 10px 10px 15px 10px;
-    border-top: 1px solid var(--color-gainsboro);
+    border-top: 1px solid var(--color-iron);
 }
 
 ul.list-unstyled li a {
-    color: var(--color-black);
+    color: var(--color-shark);
 }
 
 .li-link {
@@ -95,7 +95,7 @@ ul.list-unstyled li a {
 }
 
 .btn-group > a {
-    color: var(--color-night-rider);
+    color: var(--color-shark);
 }
 
 .ac-detail,
@@ -111,7 +111,7 @@ ul.list-unstyled li a {
 }
 
 .text-purple {
-    color: var(--color-chetwode-blue) !important;
+    color: var(--color-blue) !important;
 }
 
 .responsive {
@@ -170,7 +170,7 @@ ul#dropdown-nested li .caret {
 }
 
 .custom-month-select li:hover a.dropdown-item {
-    background-color: var(--color-whisper);
+    background-color: var(--color-porcelain);
 }
 
 .custom-month-select button.btn {
@@ -205,11 +205,11 @@ table th {
 }
 .icon-pointer {
     cursor: pointer;
-    color: var(--color-wild-blue-yonder);
+    color: var(--color-blue);
     margin-left: 6px;
 }
 .icon-pointer .active-text-color {
-    color: var(--color-deep-sky-blue);
+    color: var(--color-blue);
 }
 .table-middle th .d-flex {
     align-items: center;
@@ -227,11 +227,11 @@ table th {
     align-items: center;
     background-color: var(--color-white);
     font-size: 18px;
-    color: var(--color-midnight-blue);
-    border: 1px solid var(--color-gainsboro);
+    color: var(--color-giddh-blue);
+    border: 1px solid var(--color-iron);
     border-radius: 5px;
     &:hover {
-        background: var(--color-chetwode-blue);
+        background: var(--color-blue);
         color: var(--color-white);
     }
 }
@@ -239,17 +239,17 @@ table th {
     .icon-options {
         width: 36px;
         height: 36px;
-        border: 1px solid var(--color-gainsboro);
+        border: 1px solid var(--color-iron);
         border-radius: 5px;
         background-color: var(--color-white);
-        color: var(--color-midnight-blue);
+        color: var(--color-giddh-blue);
         font-size: 20px;
         position: relative;
         padding: 7px;
         &:hover {
-            background: var(--color-chetwode-blue);
+            background: var(--color-blue);
             color: var(--color-white);
-            border-color: var(--color-chetwode-blue);
+            border-color: var(--color-blue);
         }
     }
     .btn-group.d-flex.open.show {
@@ -258,10 +258,10 @@ table th {
 }
 
 .verticle-align-top a {
-    color: var(--color-chetwode-blue);
+    color: var(--color-blue);
 
     &:hover {
-        color: var(--color-deep-sky-blue);
+        color: var(--color-blue);
     }
 }
 
@@ -276,19 +276,19 @@ table th {
     left: 0;
     width: 100%;
     padding: 7px 0px 10px 36px !important;
-    border-bottom: 1px solid var(--color-gainsboro);
+    border-bottom: 1px solid var(--color-iron);
     .nav-report {
         li {
             font-family: "opensans-semibold";
             font-size: 20px;
             a {
-                color: var(--color-midnight-blue);
+                color: var(--color-giddh-blue);
             }
         }
     }
     .custom-month-select {
         font-family: "opensans-semibold";
-        color: var(--color-midnight-blue);
+        color: var(--color-giddh-blue);
         .btn {
             font-size: 19px;
             padding: 0;

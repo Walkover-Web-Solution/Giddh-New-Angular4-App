@@ -4,11 +4,11 @@
 }
 .ratio-analysis-panel-body h1 {
     font-size: 14px;
-    color: var(--color-nero);
+    color: var(--color-shark);
 }
 
 .ratio-analysis-panel-body small {
-    color: var(--color-dark-gray);
+    color: var(--color-abbey);
     font-size: 14px;
 }
 .ratio-chart-block {
@@ -25,7 +25,7 @@
         &:after {
             position: absolute;
             content: "";
-            border-bottom: 1px solid var(--color-gainsboro);
+            border-bottom: 1px solid var(--color-iron);
             bottom: 0;
             height: 1px;
             width: 90%;

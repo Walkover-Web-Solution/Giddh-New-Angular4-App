@@ -7,7 +7,7 @@
 
 .welcome-container {
     hr {
-        background: var(--color-gray);
+        background: var(--color-abbey);
     }
     form {
         flex: 0;
@@ -34,7 +34,7 @@
 
 .welcome-container form label {
     font-size: 14px;
-    color: var(--color-nero);
+    color: var(--color-shark);
 }
 
 .box {
@@ -53,16 +53,16 @@
 }
 
 .welcome-outer hr {
-    border: 0.5px solid var(--color-gray);
+    border: 0.5px solid var(--color-abbey);
 }
 
 .skip {
-    color: var(--color-deep-sky-blue-hover);
+    color: var(--color-blue);
     margin-left: 16px;
 }
 
 .btn-default:hover {
-    background: var(--color-whisper);
+    background: var(--color-porcelain);
 }
 
 ::ng-deep sh-select .header.open > input[type="text"],
@@ -78,14 +78,14 @@
 }
 
 .addCmpnyAddrs p {
-    color: var(--color-deep-sky-blue-hover);
+    color: var(--color-blue);
     font-size: 12px;
 }
 
 .change-preference,
 .taxation-not-supported {
     font-size: 14px;
-    color: var(--color-gray);
+    color: var(--color-abbey);
 }
 
 .welcome-container .btn-sky-blue {
@@ -93,18 +93,18 @@
 }
 
 .btn-default {
-    background: var(--color-very-light-gray);
-    color: var(--color-night-rider);
+    background: var(--color-iron);
+    color: var(--color-shark);
 }
 .welcome-container p.welcome-title {
     font-size: 14px;
-    color: var(--color-nobel);
+    color: var(--color-manatee);
     margin-top: 25px;
 }
 .form-control[disabled],
 .form-control[readonly],
 fieldset[disabled] {
-    color: var(--color-gray) !important;
+    color: var(--color-abbey) !important;
 }
 .welcome-container sup {
     top: 0;
@@ -116,11 +116,11 @@ fieldset[disabled] {
     top: 38px;
     z-index: 9;
     cursor: pointer;
-    color: var(--color-deep-sky-blue);
+    color: var(--color-blue);
 }
 .custom-multi-select {
     li {
-        background: var(--color-white-smoke);
+        background: var(--color-wild-sand);
         color: var(--color-white);
         margin: 4px;
         padding: 2px 10px;
@@ -129,7 +129,7 @@ fieldset[disabled] {
         cursor: pointer;
         display: inline-block;
         a {
-            color: var(--color-gray);
+            color: var(--color-abbey);
         }
     }
 }

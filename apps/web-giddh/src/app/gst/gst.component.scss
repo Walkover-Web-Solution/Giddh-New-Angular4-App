@@ -1,7 +1,7 @@
 .return-body .main-wrapper {
     background-color: var(--color-gst-primary-background-color);
     padding: 0;
-    border-right: 1px solid var(--color-gainsboro);
+    border-right: 1px solid var(--color-iron);
 }
 
 .return-content {
@@ -10,7 +10,7 @@
 }
 
 .btn-primary {
-    border-color: var(--color-chetwode-blue) !important;
+    border-color: var(--color-blue) !important;
 }
 .btn-primary.disabled,
 .btn-primary.disabled.active,
@@ -35,8 +35,8 @@ fieldset[disabled] .btn-primary:hover .btn-primary[disabled],
 .open .dropdown-toggle.btn-primary,
 .receipt-wrapper .doc-checkbox:checked,
 .doc-actions {
-    border-color: var(--color-chetwode-blue) !important;
-    background: var(--color-chetwode-blue);
+    border-color: var(--color-blue) !important;
+    background: var(--color-blue);
     color: var(--color-white);
 }
 
@@ -92,7 +92,7 @@ svg.icon.icon-xxlg-md {
 }
 
 .text-muted {
-    color: var(--color-gray);
+    color: var(--color-abbey);
 }
 
 .return-content .content-graph {
@@ -120,7 +120,7 @@ svg.icon.gstr-icon {
 
 .return-content .line {
     margin: 5px 18px;
-    border-bottom: 1px solid var(--color-gainsboro);
+    border-bottom: 1px solid var(--color-iron);
 }
 
 .return-content .line::before {
@@ -129,7 +129,7 @@ svg.icon.gstr-icon {
     width: 9px;
     height: 9px;
     border-radius: 5px;
-    background-color: var(--color-whisper-light);
+    background-color: var(--color-porcelain);
     position: relative;
     top: 5px;
     right: 19px;
@@ -166,7 +166,7 @@ svg.icon {
 }
 
 .text-overdue {
-    color: var(--color-chetwode-blue);
+    color: var(--color-blue);
     margin: 20px 0px 0px;
     i {
         padding: 0 4%;
@@ -189,9 +189,9 @@ svg.icon.icon-xxlg-md {
 }
 
 .btn-default {
-    color: var(--color-night-rider);
-    background-color: var(--color-gray-95);
-    border-color: var(--color-gainsboro);
+    color: var(--color-shark);
+    background-color: var(--color-wild-sand);
+    border-color: var(--color-iron);
 }
 
 .return-body .notification {
@@ -225,13 +225,13 @@ svg.icon.icon-xxlg-md {
 }
 
 .label-default {
-    background-color: var(--color-nobel);
+    background-color: var(--color-manatee);
 }
 
 hr {
     margin-top: 20px;
     margin-bottom: 20px;
-    border-top: 1px solid var(--color-gainsboro);
+    border-top: 1px solid var(--color-iron);
 }
 
 .filing-due-date {
@@ -240,7 +240,7 @@ hr {
 
 .filing-due-date .return-details {
     margin-top: 10px;
-    border: 1px solid var(--color-gainsboro);
+    border: 1px solid var(--color-iron);
     border-radius: 4px;
 }
 
@@ -276,7 +276,7 @@ hr {
 
 .return-body .notification .notify-title {
     font-size: 13px;
-    color: var(--color-nobel);
+    color: var(--color-manatee);
 }
 
 .return-body .notification .activity-graph {
@@ -295,14 +295,14 @@ hr {
     left: 4px;
     bottom: 5px;
     height: 75%;
-    border-left: 1px solid var(--color-whisper);
+    border-left: 1px solid var(--color-porcelain);
 }
 
 .return-body .notification .activity-graph .notify-circle {
     width: 9px;
     height: 9px;
     border-radius: 50%;
-    background-color: var(--color-primary);
+    background-color: var(--color-blue);
     display: inline-block;
     margin-right: 15px;
     margin-top: 4px;
@@ -321,12 +321,12 @@ hr {
 
 .notify label.font-xs.text-muted strong {
     font-weight: 600;
-    color: var(--color-gray) !important;
+    color: var(--color-abbey) !important;
 }
 
 .font-normal {
     font-size: 13px;
-    color: var(--color-gray);
+    color: var(--color-abbey);
 }
 
 .return-body .notification .faq-list {
@@ -335,7 +335,7 @@ hr {
 
 .return-body .notification .faq-list li {
     padding: 6px 10px;
-    color: var(--color-curious-blue);
+    color: var(--color-blue);
     font-size: 13px;
 }
 
@@ -346,10 +346,10 @@ hr {
 #c-tab ::ng-deep .nav-tabs > li.active > a,
 .nav-tabs > li.active > a:focus,
 .nav-tabs > li.active > a:hover {
-    color: var(--color-zambezi);
+    color: var(--color-abbey);
     cursor: default;
     background-color: var(--color-white);
-    border: 2px solid var(--color-gainsboro);
+    border: 2px solid var(--color-iron);
     border-right: 0 !important;
     border-left: 0 !important;
     border-top: 0 !important;
@@ -388,8 +388,8 @@ hr {
 }
 
 .dropdown-menu > li > a:hover {
-    color: var(--color-chetwode-blue);
-    background: var(--color-whisper);
+    color: var(--color-blue);
+    background: var(--color-porcelain);
 }
 
 .month-picker {
@@ -414,14 +414,14 @@ hr {
     z-index: 989;
 }
 ::ng-deep #monthPicker button.btn.btn-default.btn-info {
-    background: var(--color-chetwode-blue) !important;
+    background: var(--color-blue) !important;
     color: var(--color-white) !important;
     text-decoration: none;
     border-radius: 3px;
 }
 
 ::ng-deep #monthPicker .btn-info > .text-success {
-    color: var(--color-primary) !important;
+    color: var(--color-blue) !important;
 }
 ::ng-deep #monthPicker .btn-default.btn-info > .text-success {
     color: inherit !important;
@@ -458,7 +458,7 @@ hr {
     top: 0px;
     width: 200px;
     height: 4px;
-    background-color: var(--color-chetwode-blue);
+    background-color: var(--color-blue);
     animation: loading 2s linear infinite;
 }
 

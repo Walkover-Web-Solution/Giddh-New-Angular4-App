@@ -22,20 +22,20 @@
     word-break: break-word;
     height: auto !important;
     &:hover {
-        background: var(--color-lavender);
+        background: var(--color-porcelain);
     }
 }
 .item.selected {
-    color: var(--color-chetwode-blue) !important;
-    background: var(--color-lavender) !important;
+    color: var(--color-blue) !important;
+    background: var(--color-porcelain) !important;
 }
 
 .item.hilighted {
-    color: var(--color-chetwode-blue) !important;
-    background: var(--color-lavender) !important;
+    color: var(--color-blue) !important;
+    background: var(--color-porcelain) !important;
 }
 .item.hilighted a {
-    color: var(--color-chetwode-blue) !important;
+    color: var(--color-blue) !important;
 }
 
 .item > a {
@@ -43,7 +43,7 @@
 }
 
 .no-result-link > a {
-    color: var(--color-deep-sky-blue-hover) !important;
+    color: var(--color-blue) !important;
 }
 
 #noresult:hover {

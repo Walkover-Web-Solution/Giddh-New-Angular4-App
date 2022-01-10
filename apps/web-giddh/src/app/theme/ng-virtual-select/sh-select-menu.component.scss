@@ -26,16 +26,16 @@
     }
 }
 .item:hover a {
-    color: var(--color-chetwode-blue) !important;
+    color: var(--color-blue) !important;
 }
 
 .item.selected {
-    color: var(--color-chetwode-blue) !important;
-    background: var(--color-lavender) !important;
+    color: var(--color-blue) !important;
+    background: var(--color-porcelain) !important;
 }
 .item.hilighted {
-    color: var(--color-chetwode-blue) !important;
-    background: var(--color-lavender) !important;
+    color: var(--color-blue) !important;
+    background: var(--color-porcelain) !important;
 }
 .item.hilighted a {
     color: var(--color-dropdown-list-hover-text) !important;
@@ -51,7 +51,7 @@
 }
 
 .no-result-link > a {
-    color: var(--color-deep-sky-blue-hover) !important;
+    color: var(--color-blue) !important;
 }
 
 #noresult:hover {
@@ -67,7 +67,7 @@
 .disabled a,
 .disabled a .item {
     cursor: not-allowed !important;
-    color: var(--color-gray) !important;
+    color: var(--color-abbey) !important;
 }
 @media (max-width: 767px) {
     .menu {

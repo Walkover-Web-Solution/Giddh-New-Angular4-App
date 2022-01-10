@@ -11,9 +11,9 @@
     justify-content: center;
     align-items: center;
     font-size: 18px;
-    border: 1px solid var(--color-gainsboro);
+    border: 1px solid var(--color-iron);
     border-radius: 5px;
-    color: var(--color-gray);
+    color: var(--color-abbey);
     background: var(--color-white);
     align-items: center;
     justify-content: center;
@@ -24,7 +24,7 @@
 
 .td-search-box div i {
     margin-top: 0px;
-    color: var(--color-wild-blue-yonder);
+    color: var(--color-blue);
     padding-right: 8px;
     cursor: pointer;
     padding-left: 0px;
@@ -41,7 +41,7 @@
     padding: 11px;
     padding-right: 40px;
     border: none;
-    background-color: var(--color-gray-95);
+    background-color: var(--color-wild-sand);
     border-radius: 5px;
 }
 
@@ -56,15 +56,15 @@
 }
 
 .list-item {
-    border-bottom: 1px solid var(--color-gainsboro) !important;
+    border-bottom: 1px solid var(--color-iron) !important;
 }
 
 .active-text-color {
-    color: var(--color-deep-sky-blue) !important;
+    color: var(--color-blue) !important;
 }
 
 .basic > thead > tr > th {
-    border-right: 1px solid var(--color-gainsboro);
+    border-right: 1px solid var(--color-iron);
 }
 .icon-pointer {
     margin-left: 6px;
@@ -75,7 +75,7 @@
 }
 
 .td-search-box div i:hover {
-    color: var(--color-deep-sky-blue);
+    color: var(--color-blue);
 }
 
 .check-image img {
@@ -92,13 +92,13 @@
     }
 }
 .icon-sort-asc {
-    color: var(--color-wild-blue-yonder);
+    color: var(--color-blue);
 }
 .table-bordered .d-flex {
     align-items: center;
 }
 .btn-link-2 {
-    color: var(--color-nero);
+    color: var(--color-shark);
 }
 
 .search-invoice-filed {

@@ -25,7 +25,7 @@
 }
 .creditors-detail {
     padding: 10px;
-    background-color: var(--color-alice-blue-light);
+    background-color: var(--color-wild-sand);
     line-height: 1.6;
 }
 .creditors-detail > p {
@@ -50,7 +50,7 @@ form label {
     width: 100%;
     text-align: left;
     background-color: transparent;
-    border: 1px solid var(--color-gainsboro);
+    border: 1px solid var(--color-iron);
 }
 .account-details .btn-group {
     width: 230px;
@@ -106,7 +106,7 @@ form label {
     }
 }
 .selected-bank-details {
-    border-top: 1px solid var(--color-gainsboro);
+    border-top: 1px solid var(--color-iron);
     padding-top: 25px;
     margin-top: 5px;
     .account-holder-name {
@@ -127,7 +127,7 @@ form label {
         }
     }
     .bank-details-wrapper {
-        border: 1px solid var(--color-gainsboro);
+        border: 1px solid var(--color-iron);
         border-radius: 2px;
         margin-top: 3px;
         display: flex;
@@ -135,9 +135,9 @@ form label {
             width: 100%;
             max-width: 450px;
             font-size: 14px;
-            background-color: var(--color-whisper-color);
+            background-color: var(--color-porcelain);
             padding: 10px;
-            border-right: 1px solid var(--color-gainsboro);
+            border-right: 1px solid var(--color-iron);
             .label-value-data {
                 display: flex;
                 align-items: center;

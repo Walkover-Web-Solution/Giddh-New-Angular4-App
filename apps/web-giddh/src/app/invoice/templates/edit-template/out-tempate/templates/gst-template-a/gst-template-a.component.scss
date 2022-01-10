@@ -1,7 +1,7 @@
 * {
     border: 0;
     box-sizing: content-box;
-    color: var(--color-nero);
+    color: var(--color-shark);
     font-family: inherit;
     font-style: inherit;
     font-weight: inherit;
@@ -117,7 +117,7 @@ p {
     border: 0;
     padding: 0;
     text-align: left;
-    color: var(--color-nero);
+    color: var(--color-shark);
 }
 
 .hidden-label {
@@ -220,7 +220,7 @@ header img {
 }
 #default table.item tfoot tr th {
     padding-right: 7px;
-    border-top: 1px solid var(--color-light-gray);
+    border-top: 1px solid var(--color-iron);
 }
 /* tcs */
 .tcs hr {
@@ -238,7 +238,7 @@ header img {
 .tcs table th {
     border-radius: 0;
     padding: 5px;
-    border: 1px solid var(--color-light-gray);
+    border: 1px solid var(--color-iron);
     vertical-align: top;
     text-align: right;
 }
@@ -282,13 +282,13 @@ header img {
 #default table.item td {
     border-radius: 0;
     padding: 7px;
-    border-top: 1px solid var(--color-light-gray);
+    border-top: 1px solid var(--color-iron);
     line-height: 1.2rem;
     vertical-align: top;
 }
 
 #default table.item td p {
-    color: var(--color-zambezi);
+    color: var(--color-abbey);
 }
 
 #default table.balance {
@@ -496,7 +496,7 @@ strong {
     padding: 6px 16px;
 }
 .tax-table p {
-    color: var(--color-zambezi);
+    color: var(--color-abbey);
 }
 
 .tax-table tfoot th {
@@ -515,7 +515,7 @@ strong {
 .tax-table tbody tr td,
 .tax-table tfoot tr th {
     padding: 6px;
-    border-right: 1px solid var(--color-light-gray);
+    border-right: 1px solid var(--color-iron);
 }
 
 .tax-table thead tr th:last-child,
@@ -528,14 +528,14 @@ table.tax-table.item {
     padding-top: 0px !important;
 }
 .tax-table.item tfoot tr th {
-    border-bottom: 1px solid var(--color-light-gray);
+    border-bottom: 1px solid var(--color-iron);
 }
 .tax-table tbody tr td {
     border-top: 0px solid;
 }
 .warehouse-table {
     width: 100%;
-    border-bottom: 1px solid var(--color-light-gray);
+    border-bottom: 1px solid var(--color-iron);
     margin-bottom: 10px;
     padding-bottom: 5px;
     padding-right: 0px;
