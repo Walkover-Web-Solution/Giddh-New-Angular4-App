@@ -4,9 +4,9 @@
         flex-direction: row;
     }
     .clear-filter-btn {
-        color: var(--color-midnight-blue);
+        color: var(--color-giddh-blue);
         font-size: 14px;
-        border: 1px solid var(--color-midnight-blue);
+        border: 1px solid var(--color-giddh-blue);
         border-radius: 20px;
         padding: 0 15px;
         width: 150px !important;
@@ -18,7 +18,7 @@
             font-size: 12px;
             padding-right: 8px;
             top: 0;
-            color: var(--color-midnight-blue);
+            color: var(--color-giddh-blue);
         }
     }
 }
@@ -42,7 +42,7 @@
     margin-bottom: 10px;
 }
 .create-warehouse p span {
-    color: var(--color-chetwode-blue);
+    color: var(--color-blue);
 }
 .create-warehouse img {
     margin-bottom: 20px;
@@ -51,7 +51,7 @@
     background-color: var(--color-common-primary-background-for-all-components);
     padding: 15px;
     margin-bottom: 15px;
-    border: 1px solid var(--color-gainsboro);
+    border: 1px solid var(--color-iron);
 }
 .warehouse-options {
     text-align: right;
@@ -66,7 +66,7 @@
     .btn-group .btn {
         background-color: transparent;
         padding: 0;
-        color: var(--color-gray);
+        color: var(--color-abbey);
         margin-right: 0;
         font-size: 20px;
         position: relative;
@@ -97,7 +97,7 @@
     color: var(--color-common-senary-text);
 }
 span.set-as-default {
-    background-color: var(--color-gainsboro);
+    background-color: var(--color-iron);
     padding: 5px 10px;
     font-size: 14px;
     border-radius: 13px;
@@ -110,7 +110,7 @@ span.set-as-default {
 .warehouse-details label {
     font-family: "opensans-semibold";
     width: 70px;
-    color: var(--color-gray);
+    color: var(--color-abbey);
     &.cursor-pointer,
     &.pin-label {
         width: auto;
@@ -126,15 +126,15 @@ span.set-as-default {
     display: flex;
     flex-direction: column;
     .icon-favorite-selected {
-        color: var(--color-rich-blue);
+        color: var(--color-blue);
     }
 }
 .gray-text {
-    color: var(--color-gray);
+    color: var(--color-abbey);
     font-size: 12px;
 }
 .set-as-default i.icon-favorite-selected {
-    color: var(--color-chetwode-blue);
+    color: var(--color-blue);
 }
 .create-new-warehouse-btn {
     justify-content: center;
@@ -173,9 +173,9 @@ span.set-as-default {
         list-style: none;
         li {
             margin-bottom: 12px;
-            color: var(--color-nero);
+            color: var(--color-shark);
             i {
-                color: var(--color-gray);
+                color: var(--color-abbey);
             }
         }
     }

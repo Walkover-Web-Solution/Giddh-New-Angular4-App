@@ -25,7 +25,7 @@
     position: absolute;
     right: 0;
     top: -60px;
-    background: var(--color-lavender);
+    background: var(--color-porcelain);
     font-size: 14px;
     padding: 12px;
     border-radius: 3px;
@@ -36,7 +36,7 @@
     clear: both;
 }
 .subscription-dropdown .btn {
-    border: 1px solid var(--color-gainsboro);
+    border: 1px solid var(--color-iron);
     width: 342px;
     text-align: left;
     background: var(--color-white);
@@ -59,7 +59,7 @@
     list-style: none;
     background-color: var(--color-dropdown-primary-background);
     background-clip: padding-box;
-    border: 1px solid var(--color-gainsboro);
+    border: 1px solid var(--color-iron);
     border: 1px solid rgba(0, 0, 0, 0.15);
     border-radius: 4px;
     -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
@@ -75,16 +75,16 @@
 }
 .subscription-dropdown .dropdown-menu li {
     padding: 5px 4px;
-    border-bottom: 1px solid var(--color-gainsboro);
+    border-bottom: 1px solid var(--color-iron);
     transition: 0.5s all ease;
 }
 .subscription-dropdown .dropdown-menu li.active {
-    background: var(--color-lavender);
+    background: var(--color-porcelain);
 }
 .subscription-dropdown .dropdown-menu li.active a,
 .subscription-dropdown .dropdown-menu li.active a strong {
     background: none;
-    color: var(--color-chetwode-blue);
+    color: var(--color-blue);
 }
 .subscription-dropdown li a {
     display: block;
@@ -94,7 +94,7 @@
 }
 .subscription-dropdown li:hover a,
 .subscription-dropdown li:hover {
-    background: var(--color-gray-95);
+    background: var(--color-wild-sand);
 }
 .subscription-dropdown .dropdown-menu li a span {
     position: absolute;
@@ -107,18 +107,18 @@
     height: auto !important;
 }
 .subscription-table {
-    border: 1px solid var(--color-gainsboro);
+    border: 1px solid var(--color-iron);
 }
 .custom-dropdown .dropdown-toggle {
     background: no-repeat;
     border: 0px;
     font-size: 20px;
     padding: 0px;
-    color: var(--color-nobel);
+    color: var(--color-manatee);
     line-height: 14px;
 }
 .associated-companies-li {
-    border-bottom: 1px solid var(--color-gainsboro);
+    border-bottom: 1px solid var(--color-iron);
     list-style-type: none;
     position: relative;
     display: flex;
@@ -156,7 +156,7 @@
     }
 }
 .box-border {
-    border: 1px solid var(--color-gainsboro);
+    border: 1px solid var(--color-iron);
 }
 .active {
     color: var(--color-primary-subscription-active);
@@ -179,21 +179,21 @@
 }
 .basic > tbody > tr td:first-child,
 .basic > thead > tr th:first-child {
-    border-left: 0px solid var(--color-gainsboro) !important;
+    border-left: 0px solid var(--color-iron) !important;
 }
 .basic > tbody > tr td:last-child,
 .basic > thead > tr th:last-child {
-    border-right: 0px solid var(--color-gainsboro) !important;
+    border-right: 0px solid var(--color-iron) !important;
 }
 .table-subscription {
-    border-right: 1px solid var(--color-gainsboro);
-    border-left: 1px solid var(--color-gainsboro);
-    border-bottom: 1px solid var(--color-gainsboro);
+    border-right: 1px solid var(--color-iron);
+    border-left: 1px solid var(--color-iron);
+    border-bottom: 1px solid var(--color-iron);
     min-height: 360px;
     overflow-y: auto;
 }
 .left-div {
-    border-left: 1px solid var(--color-gainsboro);
+    border-left: 1px solid var(--color-iron);
     padding-left: 0px;
     padding-bottom: 60px;
     padding-right: 0;
@@ -206,7 +206,7 @@
 .giddh-table tbody {
     tr:last-child {
         td {
-            border-bottom: 0px solid var(--color-gainsboro) !important;
+            border-bottom: 0px solid var(--color-iron) !important;
         }
     }
 }
@@ -225,7 +225,7 @@
     max-height: 600px;
 }
 .plan-row {
-    color: var(--color-nero);
+    color: var(--color-shark);
 }
 .btn-group.custom-dropdown {
     line-height: 14px;
@@ -241,7 +241,7 @@
     }
 }
 .trial-plan-section {
-    border: 1px solid var(--color-gainsboro);
+    border: 1px solid var(--color-iron);
 }
 
 .plan-row-wrapper {
@@ -334,7 +334,7 @@
             margin-top: 10px;
             overflow: hidden;
             .associated-company-heading {
-                background-color: var(--color-gainsboro);
+                background-color: var(--color-iron);
                 padding: 5px 5px;
                 margin-top: 15px;
             }

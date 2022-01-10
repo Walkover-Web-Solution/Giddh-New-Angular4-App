@@ -1,7 +1,7 @@
 .receipt-entry-content {
     .receipt-entry-top-detail {
         text-align: center;
-        border-bottom: 1px solid var(--color-gainsboro);
+        border-bottom: 1px solid var(--color-iron);
         margin-bottom: 15px;
         padding: 0 0 15px;
         h5 {
@@ -59,7 +59,7 @@
                     position: absolute;
                     right: 5px;
                     top: 12px;
-                    color: var(--color-nero);
+                    color: var(--color-shark);
                 }
             }
             .to-cr-field {
@@ -68,12 +68,12 @@
             }
             .delete-row {
                 display: flex;
-                color: var(--color-nero);
+                color: var(--color-shark);
                 min-width: 18px;
                 max-width: 18px;
                 i.icon-cross {
                     font-size: 14px;
-                    color: var(--color-nero);
+                    color: var(--color-shark);
                     line-height: 2;
                 }
             }

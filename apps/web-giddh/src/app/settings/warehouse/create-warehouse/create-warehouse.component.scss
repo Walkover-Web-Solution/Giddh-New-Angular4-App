@@ -1,21 +1,21 @@
 /* create warehouse css starts */
 .create-warehouse-page {
     .create-warehouse-under {
-        border-bottom: 1px solid var(--color-gainsboro);
+        border-bottom: 1px solid var(--color-iron);
         .warehouse-under-company {
             p {
-                color: var(--color-black);
+                color: var(--color-shark);
             }
             .warehouse-company-name {
                 .label-wrapper {
                     display: flex;
                     font-size: 14px;
                     label {
-                        color: var(--color-dark-gray);
+                        color: var(--color-abbey);
                         min-width: 200px;
                     }
                     span {
-                        color: var(--color-dark-gray);
+                        color: var(--color-abbey);
                         display: block;
                     }
                     img {
@@ -40,7 +40,7 @@
             font-size: 14px;
             display: flex;
             align-items: center;
-            color: var(--color-nero);
+            color: var(--color-shark);
             margin-bottom: 15px;
             label {
                 min-width: 200px;
@@ -66,10 +66,10 @@
                         align-items: center;
                         display: flex;
                         &:hover:after {
-                            color: var(--color-rich-blue);
+                            color: var(--color-blue);
                         }
                         .icon-favorite-selected {
-                            color: var(--color-rich-blue);
+                            color: var(--color-blue);
                         }
                     }
                 }
@@ -96,7 +96,7 @@
     }
 }
 .footer-btn {
-    background-color: var(--color-whisper-color);
+    background-color: var(--color-porcelain);
     padding: 15px;
 }
 .linked-entities {
@@ -115,10 +115,10 @@
             align-items: center;
             display: flex;
             &:hover:after {
-                color: var(--color-rich-blue);
+                color: var(--color-blue);
             }
             .icon-favorite-selected {
-                color: var(--color-rich-blue);
+                color: var(--color-blue);
             }
         }
     }

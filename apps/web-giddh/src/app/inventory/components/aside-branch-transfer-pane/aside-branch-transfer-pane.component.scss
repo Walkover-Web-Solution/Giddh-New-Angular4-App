@@ -85,7 +85,7 @@
 }
 
 :host.in #back:hover {
-    color: var(--color-midnight-blue);
+    color: var(--color-giddh-blue);
     background-color: var(--color-white);
     border-color: var(--color-white);
 }
@@ -93,16 +93,16 @@
 .btn-lg {
     min-width: 155px;
     background: var(--color-white);
-    color: var(--color-chetwode-blue);
+    color: var(--color-blue);
     box-shadow: none;
 }
 
 .btn-lg:hover {
-    background: var(--color-whisper);
-    color: var(--color-chetwode-blue);
-    box-shadow: 0px 4px 4px -3px var(--color-wistful);
+    background: var(--color-porcelain);
+    color: var(--color-blue);
+    box-shadow: 0px 4px 4px -3px var(--color-manatee);
     border-radius: 0px;
-    border-color: var(--color-chetwode-blue);
+    border-color: var(--color-blue);
 }
 .pad-10-5 {
     padding: 10px 5px;

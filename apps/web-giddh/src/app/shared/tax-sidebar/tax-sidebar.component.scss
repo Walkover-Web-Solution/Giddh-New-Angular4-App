@@ -29,14 +29,14 @@
                             margin-bottom: 4px;
                             span {
                                 i {
-                                    color: var(--color-gray);
+                                    color: var(--color-abbey);
                                     margin-right: 10px;
                                     font-size: 20px;
                                 }
                             }
                             &.disabled {
                                 span {
-                                    color: var(--color-gray) !important;
+                                    color: var(--color-abbey) !important;
                                 }
                             }
                             &.active {
@@ -70,7 +70,7 @@
                     background-color: transparent;
                     span {
                         i {
-                            color: var(--color-gray) !important;
+                            color: var(--color-abbey) !important;
                         }
                     }
                 }
@@ -105,7 +105,7 @@
                 background-color: var(--color-primary-tax-sidebar-list-hover);
                 span {
                     i {
-                        color: var(--color-nero) !important;
+                        color: var(--color-shark) !important;
                     }
                 }
             }

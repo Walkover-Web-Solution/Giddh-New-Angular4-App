@@ -26,12 +26,12 @@
 }
 
 .bar:nth-child(1) {
-    background-color: var(--color-black);
+    background-color: var(--color-shark);
     animation: loading 3s linear infinite;
 }
 
 .bar:nth-child(2) {
-    background-color: var(--color-primary);
+    background-color: var(--color-blue);
     animation: loading 3s linear 1s infinite;
 }
 

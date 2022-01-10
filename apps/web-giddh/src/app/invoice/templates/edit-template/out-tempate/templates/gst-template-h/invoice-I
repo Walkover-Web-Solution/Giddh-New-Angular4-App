@@ -5,7 +5,7 @@
 * {
   border: 0;
   box-sizing: content-box;
-  color: var(--color-nero);
+  color: var(--color-shark);
   font-family: inherit;
   font-size: 10px;
   font-style: inherit;
@@ -113,7 +113,7 @@
   border: 0;
   padding: 0;
   text-align: left;
-  color: var(--color-nero);
+  color: var(--color-shark);
 }
 
 .hidden-label {

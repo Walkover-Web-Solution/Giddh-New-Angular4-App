@@ -26,7 +26,7 @@ body {
 }
 /* NOTE:  comment padding, max-width, border in #royal css for java */
 .seperator {
-    border-top: 1px solid var(--color-nobel);
+    border-top: 1px solid var(--color-manatee);
 }
 #royal {
     font: 12px/1 "Open Sans", sans-serif;
@@ -161,7 +161,7 @@ tfoot.table-details tr th {
 
 #royal .item thead tr th {
     padding: 20px 8px 4px;
-    border-bottom: 1px solid var(--color-nobel);
+    border-bottom: 1px solid var(--color-manatee);
     line-height: 1.2rem;
 }
 
@@ -170,7 +170,7 @@ tfoot.table-details tr th {
 }
 
 #royal .item tfoot tr:last-child th {
-    /*border-top: 1px solid var(--color-nobel);*/
+    /*border-top: 1px solid var(--color-manatee);*/
     padding: 6px;
     line-height: 1.2rem;
     vertical-align: middle;
@@ -189,7 +189,7 @@ tfoot.table-details tr th {
 }
 
 #royal .bd-rb {
-    border-bottom: 1px solidvar(--color-nobel);
+    border-bottom: 1px solidvar(--color-manatee);
     margin-bottom: 10px;
 }
 
@@ -210,7 +210,7 @@ tfoot.table-details tr th {
 
 #royal .subfooter hr {
     width: 100%;
-    border-bottom: 1px solid var(--color-very-light-gray);
+    border-bottom: 1px solid var(--color-iron);
     margin: 3px 0;
     border-top: 0 !important;
 }
@@ -281,14 +281,14 @@ tfoot.table-details tr th {
 #royal .tax-table tbody tr td,
 #royal .tax-table tfoot tr th {
     padding: 6px;
-    border-right: 1px solid var(--color-nobel);
-    border-bottom: 1px solid var(--color-nobel);
+    border-right: 1px solid var(--color-manatee);
+    border-bottom: 1px solid var(--color-manatee);
 }
 
 #royal .tax-table thead tr th:last-child,
 #royal .tax-table tbody tr td:last-child,
 #royal .tax-table tfoot tr th:last-child {
-    border-right: 0px solid var(--color-nobel);
+    border-right: 0px solid var(--color-manatee);
 }
 
 table.tax-table.item {
@@ -358,7 +358,7 @@ img {
 }
 #royal footer p {
     font-size: 10px;
-    color: var(--color-nero);
+    color: var(--color-shark);
 }
 #royal .tax-table.item tfoot tr th {
     border-bottom: 1px solid #666666;
@@ -374,13 +374,13 @@ img {
 }
 .warehouse-table {
     width: 100%;
-    border-bottom: 1px solid var(--color-gray);
+    border-bottom: 1px solid var(--color-abbey);
     padding-bottom: 5px;
     padding-right: 0px;
     padding-left: 0px;
 }
 header.bottom-border {
-    border-bottom: 1px solid var(--color-gray);
+    border-bottom: 1px solid var(--color-abbey);
 }
 .warehouse-table tbody tr td {
     padding: 4px 0px 1px 0px;
@@ -394,7 +394,7 @@ header.bottom-border {
     padding-left: 0px !important;
 }
 .date-text {
-    color: var(--color-zambezi);
+    color: var(--color-abbey);
 }
 
 .qr-image img {

@@ -26,23 +26,23 @@
 }
 
 .item.selected {
-    color: var(--color-chetwode-blue) !important;
-    background: var(--color-lavender) !important;
+    color: var(--color-blue) !important;
+    background: var(--color-porcelain) !important;
 }
 
 .item.hilighted {
-    color: var(--color-chetwode-blue) !important;
-    background: var(--color-lavender) !important;
+    color: var(--color-blue) !important;
+    background: var(--color-porcelain) !important;
 }
 .item.hilighted > a {
-    color: var(--color-chetwode-blue) !important;
+    color: var(--color-blue) !important;
 }
 .item > a {
     padding: 2px 10px;
 }
 
 .no-result-link > a {
-    color: var(--color-deep-sky-blue-hover) !important;
+    color: var(--color-blue) !important;
 }
 
 #noresult:hover {
@@ -50,7 +50,7 @@
 }
 
 .list-item {
-    border-bottom: 1px solid var(--color-gainsboro);
+    border-bottom: 1px solid var(--color-iron);
 }
 
 :host ::ng-deep .total-padding {

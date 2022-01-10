@@ -172,15 +172,15 @@ body.unresponsive {
 }
 
 .btn-login.btn-default {
-    color: var(--color-night-rider);
+    color: var(--color-shark);
     background-color: var(--color-white);
-    border-color: var(--color-gainsboro);
+    border-color: var(--color-iron);
 }
 
 .btn-login.btn-default:hover {
-    color: var(--color-black) !important;
+    color: var(--color-shark) !important;
     background-color: var(--color-white);
-    border-color: var(--color-gainsboro);
+    border-color: var(--color-iron);
     box-shadow: none;
 }
 
@@ -207,7 +207,7 @@ button.close {
 }
 
 .email {
-    background: var(--color-deep-sky-blue-hover);
+    background: var(--color-blue);
 }
 
 /************* end login page *************/
@@ -264,7 +264,7 @@ h1 {
 }
 
 small {
-    color: var(--color-night-rider);
+    color: var(--color-shark);
 }
 
 /* social-login */
@@ -327,13 +327,13 @@ small {
 
 .login-option,
 .login-option a {
-    color: var(--color-primary);
+    color: var(--color-blue);
     margin-top: 55px;
     font-weight: 500;
 }
 
 .login-option a {
-    border-bottom: 2px dotted var(--color-primary);
+    border-bottom: 2px dotted var(--color-blue);
 }
 
 .slide-content h1 {
@@ -428,7 +428,7 @@ small {
     bottom: -38px;
     border-radius: 0;
     padding: 4px;
-    border: 1px solid var(--color-gainsboro);
+    border: 1px solid var(--color-iron);
 }
 
 .hint:before {
@@ -439,7 +439,7 @@ small {
     position: absolute;
     border-top: 8px solid transparent;
     border-bottom: 8px solid transparent;
-    border-left: 8px solid var(--color-gainsboro);
+    border-left: 8px solid var(--color-iron);
     left: 6px;
     top: -12px;
     transform: rotate(-90deg);
@@ -499,7 +499,7 @@ small {
     font-size: 20px;
 }
 .btn-outline-primary {
-    background-color: var(--color-deep-sky-blue);
+    background-color: var(--color-blue);
     border-radius: 3px;
     min-width: 160px;
     border-radius: 5px;
@@ -509,7 +509,7 @@ small {
 }
 .btn-outline-primary:hover,
 .btn-outline-primary:focus {
-    background-color: var(--color-deep-sky-blue-hover);
+    background-color: var(--color-blue);
     box-shadow: none;
     outline: none;
 }
@@ -525,7 +525,7 @@ small {
 .btn-secondary {
     background-color: var(--color-primary-button-background);
     color: var(--color-senary-button-text);
-    border: 1px solid var(--color-senary-button-text);
+    border: 1px solid var(--color-primary-button-background);
     border-radius: 5px;
 }
 .btn-secondary:hover {

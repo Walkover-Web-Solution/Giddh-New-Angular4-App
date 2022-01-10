@@ -1,5 +1,5 @@
 .select-plan-block .your-account span {
-    color: var(--color-wistful);
+    color: var(--color-manatee);
     font-size: 14px;
     padding: 4px 0;
     display: inline-block;
@@ -7,7 +7,7 @@
 .select-plan-block {
     padding-bottom: 40px;
     background-color: var(--color-white);
-    border: 1px solid var(--color-gainsboro);
+    border: 1px solid var(--color-iron);
     height: 97%;
 }
 .welcome-msg {
@@ -17,7 +17,7 @@
     position: fixed;
     bottom: 30px;
     width: 100%;
-    color: var(--color-dark-gray);
+    color: var(--color-abbey);
     padding: 10px;
 }
 .height-auto {
@@ -29,16 +29,16 @@
 .payment-log-list {
     list-style-type: none;
     font-size: 14px;
-    color: var(--color-dark-gray);
+    color: var(--color-abbey);
 }
 .payment-log-list {
     list-style-type: none;
     font-size: 14px;
-    color: var(--color-dark-gray);
+    color: var(--color-abbey);
 }
 .payment-log-list > li {
     padding: 0px 0 20px 10px;
-    border-left: 1px dashed var(--color-dark-gray);
+    border-left: 1px dashed var(--color-abbey);
     position: relative;
     line-height: 10px;
 }
@@ -49,14 +49,14 @@
     position: relative;
     width: 10px;
     height: 10px;
-    background: var(--color-lavender);
+    background: var(--color-porcelain);
     content: "";
     display: block;
     position: absolute;
     left: -5px;
     top: 0px;
     border-radius: 90px;
-    border: 1px solid var(--color-dark-gray);
+    border: 1px solid var(--color-abbey);
 }
 .account-aside-menu-state {
     position: fixed;
@@ -108,7 +108,7 @@
     background: var(--color-upgrade-plan-secondary-background);
     padding: 30px 15px 15px 30px;
     box-shadow: 0px 3px 6px var(--color-black-russian);
-    border: 1px solid var(--color-gainsboro);
+    border: 1px solid var(--color-iron);
     transition: 0.5s all ease;
 }
 .inner-your-account:hover,
@@ -121,7 +121,7 @@
     content: "";
     display: block;
     width: 100%;
-    border: 1px solid var(--color-gainsboro);
+    border: 1px solid var(--color-iron);
     height: 100%;
     position: absolute;
     z-index: 1;
@@ -182,7 +182,7 @@
     visibility: hidden;
     transition: 0.5s all ease-in;
     .close {
-        color: var(--color-nero);
+        color: var(--color-shark);
         opacity: 1;
         font-size: 16px;
         position: absolute;
@@ -250,12 +250,12 @@
     margin-top: 10px;
 }
 .see-all-features .inner-your-account {
-    border-color: var(--color-midnight-blue);
+    border-color: var(--color-giddh-blue);
     margin-bottom: 20px;
 }
 .btn-group .close {
     font-size: 16px;
-    color: var(--color-gray);
+    color: var(--color-abbey);
     opacity: 1;
 }
 .inner-close {
@@ -263,7 +263,7 @@
     right: 10px;
     top: 10px;
     font-size: 16px;
-    color: var(--color-nero);
+    color: var(--color-shark);
 }
 .btn-green:focus {
     color: var(--color-white);
@@ -274,15 +274,15 @@
 .activation-key-wrapper {
     padding-left: 70px;
     background-color: var(--color-upgrade-plan-primary-background);
-    border: 1px solid var(--color-gainsboro);
+    border: 1px solid var(--color-iron);
 }
 .all-plans {
-    border: 1px solid var(--color-gainsboro);
+    border: 1px solid var(--color-iron);
 }
 .btn-cancel {
-    background: var(--color-very-light-gray);
-    border-color: var(--color-gainsboro);
-    color: var(--color-night-rider);
+    background: var(--color-iron);
+    border-color: var(--color-iron);
+    color: var(--color-shark);
     font-family: "opensans-semibold" !important;
     margin-bottom: 15px !important;
 }
@@ -409,8 +409,8 @@
         width: 100%;
     }
     .main-row-plans::-webkit-scrollbar-thumb {
-        background-color: var(--color-gainsboro);
-        outline: 1px solid var(--color-gray);
+        background-color: var(--color-iron);
+        outline: 1px solid var(--color-abbey);
         border-radius: 20px;
     }
     .single-plan-for-company {

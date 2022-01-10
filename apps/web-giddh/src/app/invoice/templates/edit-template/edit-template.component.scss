@@ -3,7 +3,7 @@
     width: 100%;
     padding: 20px;
     min-height: 250px;
-    border: 1px solid var(--color-gainsboro);
+    border: 1px solid var(--color-iron);
     float: left;
     border-radius: 4px;
     margin: 5px 15px 15px 0;
@@ -35,7 +35,7 @@
 }
 
 .more-btn-dropdown {
-    border: 1px solid var(--color-gainsboro) !important;
+    border: 1px solid var(--color-iron) !important;
     box-shadow: none !important;
     border-radius: 5px !important;
     font-size: 14px;
@@ -51,12 +51,12 @@
 }
 
 .dropdown-menu > li > a:hover {
-    color: var(--color-chetwode-blue);
-    background: var(--color-whisper);
+    color: var(--color-blue);
+    background: var(--color-porcelain);
 }
 .badge {
-    background: var(--color-whisper-color) !important;
-    color: var(--color-charcoal) !important;
+    background: var(--color-porcelain) !important;
+    color: var(--color-shark) !important;
     font-family: opensans-regular;
     border: none !important;
     font-weight: 400 !important;
@@ -65,7 +65,7 @@
 }
 .badge.btn-success:hover {
     background: var(--color-primary-edit-template-badge-btn-success-hover) !important;
-    color: var(--color-charcoal) !important;
+    color: var(--color-shark) !important;
 }
 .badge.btn-sky-blue,
 .badge.btn-sky-blue:hover {
@@ -91,7 +91,7 @@
 
 @media (max-width: 414px) {
     .template-grid {
-        background: var(--color-gray-95);
+        background: var(--color-wild-sand);
         max-width: 100%;
     }
 }

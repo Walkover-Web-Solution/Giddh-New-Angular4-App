@@ -11,7 +11,7 @@
 }
 
 .basic > thead > tr > th {
-    border-right: 1px solid var(--color-gainsboro);
+    border-right: 1px solid var(--color-iron);
 }
 
 .flex-fill {
@@ -41,7 +41,7 @@
 
 .td-search-box div i {
     margin-top: 1px;
-    color: var(--color-wild-blue-yonder);
+    color: var(--color-blue);
     padding-right: 8px;
     cursor: pointer;
     display: flex;
@@ -50,7 +50,7 @@
 }
 
 .td-search-box div i:hover {
-    color: var(--color-deep-sky-blue);
+    color: var(--color-blue);
 }
 
 .td-search-box {
@@ -62,9 +62,9 @@
     min-width: 100%;
     padding: 11px;
     padding-right: 40px;
-    color: var(--color-nero);
+    color: var(--color-shark);
     border: none;
-    background-color: var(--color-gray-95);
+    background-color: var(--color-wild-sand);
     border-radius: 5px;
 }
 
@@ -76,16 +76,16 @@
 
 .icon-pointer .glyphicon {
     cursor: pointer;
-    color: var(--color-wild-blue-yonder);
+    color: var(--color-blue);
 }
 
 .icon-pointer .glyphicon:hover {
-    color: var(--color-deep-sky-blue);
+    color: var(--color-blue);
 }
 
 .dropdown-menu > li > a:hover {
-    color: var(--color-chetwode-blue) !important;
-    background: var(--color-lavender) !important;
+    color: var(--color-blue) !important;
+    background: var(--color-porcelain) !important;
 }
 
 .dropdown-menu {
@@ -106,10 +106,10 @@
     left: -114px;
     background-color: var(--color-white);
     width: 131px;
-    box-shadow: 0px 4px 7px var(--color-silver);
+    box-shadow: 0px 4px 7px var(--color-manatee);
     border-radius: 3px;
     z-index: 100;
-    border: 1px solid var(--color-gainsboro);
+    border: 1px solid var(--color-iron);
 }
 
 .click-dropdown {
@@ -124,7 +124,7 @@
 }
 
 .click-dropdown ul li:hover {
-    background-color: var(--color-gainsboro);
+    background-color: var(--color-iron);
 }
 
 .click-dropdown ul li:hover a {
@@ -132,7 +132,7 @@
 }
 
 .click-dropdown ul li a {
-    color: var(--color-black);
+    color: var(--color-shark);
 }
 
 .invoice-table tr:hover .dropdown-btn {
@@ -188,7 +188,7 @@
 }
 
 td.card-header.clearfix {
-    background-color: var(--color-whisper);
+    background-color: var(--color-porcelain);
     padding: 10px !important;
 }
 
@@ -198,10 +198,10 @@ td.card-header.clearfix {
 }
 
 .card #invoice-td {
-    border-bottom: 1px solid var(--color-gainsboro) !important;
+    border-bottom: 1px solid var(--color-iron) !important;
     padding-bottom: 20px !important;
-    background-color: var(--color-white-smoke);
-    border-top: 1px solid var(--color-gainsboro) !important;
+    background-color: var(--color-wild-sand);
+    border-top: 1px solid var(--color-iron) !important;
     padding-top: 10px !important;
 }
 
@@ -235,7 +235,7 @@ td.card-header.clearfix {
 
 .card .more-button .more-btn-wrapper {
     margin-right: 0;
-    border-top: 1px solid var(--color-gainsboro);
+    border-top: 1px solid var(--color-iron);
     padding-top: 8px;
 }
 
@@ -268,12 +268,12 @@ td.card-header.clearfix {
 
 .icon-pointer {
     cursor: pointer;
-    color: var(--color-wild-blue-yonder);
+    color: var(--color-blue);
     margin-left: 6px;
 }
 
 .icon-pointer .active-text-color {
-    color: var(--color-deep-sky-blue);
+    color: var(--color-blue);
 }
 
 .dropdown-btn-new {
@@ -312,7 +312,7 @@ ul.select-action-dropdown {
 
 .input-group input.form-control {
     padding-left: 35px !important;
-    border-color: var(--color-chetwode-blue);
+    border-color: var(--color-blue);
     background-image: url("../../../assets/images/calender-icon.svg") !important;
     background-size: 17px !important;
     background-position: 9px 8px !important;
@@ -325,7 +325,7 @@ ul.select-action-dropdown {
 }
 
 .input-group input.form-control:focus {
-    border-color: var(--color-gainsboro);
+    border-color: var(--color-iron);
 }
 
 .icon-calender {
@@ -336,7 +336,7 @@ ul.select-action-dropdown {
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    border-right: 1px solid var(--color-gainsboro);
+    border-right: 1px solid var(--color-iron);
     color: var(--color-datepicker-date-icon) !important;
 }
 
@@ -358,9 +358,9 @@ ul.select-action-dropdown {
     align-items: center;
     font-size: 18px;
     margin-left: 10px;
-    border: 1px solid var(--color-gainsboro);
+    border: 1px solid var(--color-iron);
     border-radius: 5px;
-    color: var(--color-gray);
+    color: var(--color-abbey);
     background: var(--color-white);
 }
 
@@ -389,10 +389,10 @@ button.btn.btn-default.ladda-button {
 }
 .clear-filter {
     button.btn.btn-filter {
-        background: var(--color-whisper);
-        border: 1px solid var(--color-whisper);
+        background: var(--color-porcelain);
+        border: 1px solid var(--color-porcelain);
         font-size: 14px;
-        color: var(--color-midnight-blue);
+        color: var(--color-giddh-blue);
         display: inline-flex;
         justify-content: space-between;
         align-items: center;
@@ -425,7 +425,7 @@ button.btn.btn-default.ladda-button {
     display: block;
     height: 36px;
     width: 1px;
-    background-color: var(--color-gainsboro);
+    background-color: var(--color-iron);
     left: 37px !important;
     z-index: 100;
     top: 0;
@@ -440,7 +440,7 @@ div.remove-capitalize {
 }
 
 span.icon-export-icon {
-    color: var(--color-gray);
+    color: var(--color-abbey);
 }
 
 .giddh-table {
@@ -449,14 +449,14 @@ span.icon-export-icon {
             .action-icon {
                 display: flex;
                 align-items: center;
-                border: 1px solid var(--color-gainsboro);
+                border: 1px solid var(--color-iron);
                 border-radius: 5px;
                 display: none;
                 a {
                     width: 30px;
                     font-size: 20px;
-                    color: var(--color-gray);
-                    border-right: 1px solid var(--color-gainsboro);
+                    color: var(--color-abbey);
+                    border-right: 1px solid var(--color-iron);
                     border-radius: 5px;
                     display: flex;
                     align-items: center;
@@ -502,7 +502,7 @@ span.icon-export-icon {
 
 .giddh-table {
     border-right: 1px solid var(--color-invoice-preview-giddh-table-border-right);
-    border-bottom: 1px solid var(--color-gainsboro) !important;
+    border-bottom: 1px solid var(--color-iron) !important;
     tbody {
         tr {
             &:hover {
@@ -657,7 +657,7 @@ span.icon-export-icon {
         bottom: 120px;
         z-index: 99;
         line-height: 0;
-        background-color: var(--color-vivid-blue);
+        background-color: var(--color-blue);
         color: var(--color-white);
         box-shadow: 0px 0px 18px rgba(0, 0, 0, 0.3) !important;
         display: block;
@@ -784,7 +784,7 @@ span.icon-export-icon {
 @media (max-width: 420px) {
     .small-loading {
         padding-left: 0;
-        color: var(--color-night-rider);
+        color: var(--color-shark);
         font-size: 12px;
         position: relative;
         top: 2px;

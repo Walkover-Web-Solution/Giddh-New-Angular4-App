@@ -18,7 +18,7 @@
         > label {
             width: 30px;
             height: 30px;
-            border: 2px solid var(--color-gainsboro);
+            border: 2px solid var(--color-iron);
             border-radius: 100%;
             transition: background-color 1s;
             background-color: var(--color-white);
@@ -39,7 +39,7 @@
 .steps-wizard:before {
     content: " ";
     position: absolute;
-    border-top: 2px solid var(--color-gainsboro);
+    border-top: 2px solid var(--color-iron);
     right: 0;
     left: 0;
     top: 40%;

@@ -21,7 +21,7 @@ html,
 body {
     height: 100%;
     font-family: "opensans-regular";
-    color: var(--color-nero);
+    color: var(--color-shark);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     font-size: 14px;
@@ -172,13 +172,13 @@ aside-menu-account .container-fluid {
 /*header nav links override*/
 
 .navbar-inverse .navbar-nav > li > a {
-    color: var(--color-night-rider);
+    color: var(--color-shark);
     line-height: 24px;
 }
 
 .navbar-inverse .navbar-nav > li > a:hover,
 .navbar-inverse .navbar-nav > li > a:focus {
-    color: var(--color-night-rider) !important;
+    color: var(--color-shark) !important;
 }
 
 .navbar-inverse .navbar-text {
@@ -517,11 +517,11 @@ aside-menu-account .container-fluid {
 }
 
 .border-bottom {
-    border-bottom-color: var(--color-gainsboro);
+    border-bottom-color: var(--color-iron);
 }
 
 .bdr {
-    border: 1px solid var(--color-gainsboro) !important;
+    border: 1px solid var(--color-iron) !important;
     border-radius: 5px;
 }
 
@@ -535,23 +535,23 @@ aside-menu-account .container-fluid {
     border-right: none;
 }
 .bd-rt {
-    border-top: 1px solid var(--color-gainsboro);
+    border-top: 1px solid var(--color-iron);
 }
 
 .bd-rb {
-    border-bottom: 1px solid var(--color-gainsboro) !important;
+    border-bottom: 1px solid var(--color-iron) !important;
 }
 
 .bd-rl {
-    border-left: 1px solid var(--color-gainsboro);
+    border-left: 1px solid var(--color-iron);
 }
 
 .bd-rr {
-    border-right: 1px solid var(--color-gainsboro) !important;
+    border-right: 1px solid var(--color-iron) !important;
 }
 
 .dark-grey-bg {
-    background: var(--color-davy-grey) !important;
+    background: var(--color-abbey) !important;
 }
 
 .bdr-radius-50 {
@@ -571,7 +571,7 @@ aside-menu-account .container-fluid {
 }
 
 .black-color {
-    color: var(--color-black);
+    color: var(--color-shark);
 }
 
 .white-bg {
@@ -623,7 +623,7 @@ aside-menu-account .container-fluid {
 
 .company-list li h3 {
     padding: 4px 0 2px;
-    color: var(--color-night-rider);
+    color: var(--color-shark);
     font-size: 14px;
 }
 
@@ -649,7 +649,7 @@ aside-menu-account .container-fluid {
 }
 
 .total-details-box {
-    border: 1px solid var(--color-gainsboro);
+    border: 1px solid var(--color-iron);
     border-radius: 5px;
     padding: 14px 30px;
     width: 100%;
@@ -938,7 +938,7 @@ aside-menu-account .container-fluid {
 }
 
 .ledger-table.table tfoot td {
-    border-bottom: 1px solid var(--color-gainsboro);
+    border-bottom: 1px solid var(--color-iron);
 }
 
 .ledger-top-header-left span,
@@ -988,7 +988,7 @@ aside-menu-account .container-fluid {
 /*breadcrumb style*/
 
 .breadcrumb > .active > a {
-    color: var(--color-dark-gray);
+    color: var(--color-abbey);
 }
 
 /*helpers*/
@@ -1056,22 +1056,22 @@ aside-menu-account .container-fluid {
 
 .tb-head th:nth-child(3) th {
     border: none;
-    border-top: 1px solid var(--color-night-rider);
+    border-top: 1px solid var(--color-shark);
 }
 
 .tb-head th:nth-child(3) th:first-child {
-    border-right: 1px solid var(--color-night-rider);
+    border-right: 1px solid var(--color-shark);
 }
 
 .tb-pl-bs-data {
     height: 60vh !important;
     font-size: 31px !important;
-    color: var(--color-silver) !important;
+    color: var(--color-manatee) !important;
 }
 
 .new-icon-img {
     img {
-        border: 1px solid var(--color-gainsboro);
+        border: 1px solid var(--color-iron);
         background: var(--color-white);
         padding: 5px;
         border-radius: 5px;
@@ -1248,7 +1248,7 @@ aside-menu-account .container-fluid {
 }
 
 .table-container div.row {
-    border-bottom: 1px solid var(--color-whisper-color);
+    border-bottom: 1px solid var(--color-porcelain);
 }
 
 .table-container .isHidden {
@@ -1256,11 +1256,11 @@ aside-menu-account .container-fluid {
 }
 
 .profit-loss.table-container > div > section {
-    border-left: 1px solid var(--color-whisper-color);
+    border-left: 1px solid var(--color-porcelain);
 }
 
 .trial-balance.table-container > div > section {
-    border-left: 7px solid var(--color-whisper-color);
+    border-left: 7px solid var(--color-porcelain);
 }
 
 .table-container > div > section.assets,
@@ -1287,7 +1287,7 @@ aside-menu-account .container-fluid {
     text-align: center;
     margin-top: 150px;
     font-size: 36px;
-    color: var(--color-nobel);
+    color: var(--color-manatee);
 }
 
 .no-data > img {
@@ -1296,7 +1296,7 @@ aside-menu-account .container-fluid {
 
 .no-data p {
     font-size: 14px;
-    color: var(--color-davy-grey);
+    color: var(--color-abbey);
     margin-top: 20px;
 }
 
@@ -1375,7 +1375,7 @@ table:focus {
     margin: 7px;
     transition: all 0.5s ease-in-out;
     padding: 10px;
-    border: 1px solid var(--color-gainsboro);
+    border: 1px solid var(--color-iron);
     word-break: break-all;
     color: var(--color-common-primary-text);
 }
@@ -1392,7 +1392,7 @@ table:focus {
     padding-bottom: 5px;
     padding-right: 45px;
     margin-bottom: 5px;
-    border-bottom: 1px solid var(--color-primary);
+    border-bottom: 1px solid var(--color-blue);
     text-overflow: ellipsis;
     max-width: 325px;
     white-space: nowrap;
@@ -1401,11 +1401,11 @@ table:focus {
 
 .account-card > .balances > span.title {
     display: block;
-    color: var(--color-night-rider);
+    color: var(--color-shark);
 }
 
 .account-card > .balance {
-    color: var(--color-night-rider);
+    color: var(--color-shark);
     font-size: 18px;
     padding-bottom: 10px;
     line-height: normal;
@@ -1446,7 +1446,7 @@ table:focus {
 .linked-accounts {
     width: 100%;
     padding: 10px;
-    border: 1px solid var(--color-whisper-color);
+    border: 1px solid var(--color-porcelain);
     margin-bottom: 20px;
     background: var(--color-white);
     position: relative;
@@ -1454,11 +1454,11 @@ table:focus {
 }
 
 .linked-accounts:nth-child(odd) {
-    background: var(--color-gray-95);
+    background: var(--color-wild-sand);
 }
 
 .linked-accounts:nth-child(odd) > .title {
-    border-bottom: 2px solid var(--color-curious-blue);
+    border-bottom: 2px solid var(--color-blue);
 }
 
 .linked-accounts > .title {
@@ -1497,7 +1497,7 @@ table:focus {
     position: relative;
     margin: 0 10px 15px 0;
     padding: 10px;
-    color: var(--color-davy-grey);
+    color: var(--color-abbey);
     background: var(--color-white);
     border-radius: 2px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
@@ -1524,8 +1524,8 @@ table:focus {
 }
 
 .audit-log .border-top-btm {
-    border-bottom: 1px solid var(--color-gainsboro);
-    border-top: 1px solid var(--color-gainsboro);
+    border-bottom: 1px solid var(--color-iron);
+    border-top: 1px solid var(--color-iron);
     padding: 5px;
 }
 
@@ -1569,7 +1569,7 @@ table:focus {
         float: none;
         width: auto;
         margin-top: 0;
-        background-color: var(--color-black);
+        background-color: var(--color-shark);
         box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
     }
 
@@ -1636,7 +1636,7 @@ table td.nopad {
 
 .inner-table thead tr,
 .inner-table tbody tr {
-    border-bottom: 1px solid var(--color-white-smoke);
+    border-bottom: 1px solid var(--color-wild-sand);
     text-align: center;
 }
 
@@ -1646,7 +1646,7 @@ table td.nopad {
 
 .inner-table tbody td,
 .inner-table thead th {
-    border-right: 1px solid var(--color-white-smoke);
+    border-right: 1px solid var(--color-wild-sand);
 }
 
 .inner-table tbody td:last-child,
@@ -1668,11 +1668,11 @@ table td.nopad {
 }
 
 .table-striped .selected-for-inv {
-    background-color: var(--color-very-light-gray) !important;
+    background-color: var(--color-iron) !important;
 }
 
 .table-bordered > tbody > tr.selected-for-inv > td {
-    border-color: var(--color-silver);
+    border-color: var(--color-manatee);
 }
 
 /*Invoice*/
@@ -1686,16 +1686,16 @@ ul.pills {
 ul.pills li {
     line-height: 16px;
     font-size: 12px;
-    background: var(--color-davy-grey);
+    background: var(--color-abbey);
     border-radius: 5px;
     overflow: hidden;
     margin-right: 5px;
     padding: 5px 10px;
     cursor: pointer;
-    background-color: var(--color-solitude);
-    color: var(--color-night-rider);
+    background-color: var(--color-chips-primary-background);
+    color: var(--color-shark);
     display: inline-block;
-    border: 1px solid var(--color-gainsboro);
+    border: 1px solid var(--color-iron);
 }
 
 .ledger-table td > input {
@@ -1739,13 +1739,13 @@ ul.pills li {
 }
 
 .thead-background1 th {
-    background: var(--color-davy-grey);
+    background: var(--color-abbey);
     color: var(--color-white);
 }
 
 .thead-background1 th,
 .thead-background1 td {
-    background: var(--color-whisper);
+    background: var(--color-porcelain);
 }
 
 .white {
@@ -1765,7 +1765,7 @@ ul.pills li {
 
 .add-entry-row .ledger-row td,
 .add-entry-row .ledger-row td input {
-    background: var(--color-davy-grey);
+    background: var(--color-abbey);
     color: var(--color-white);
 }
 
@@ -1781,7 +1781,7 @@ ul.pills li {
     font-family: "opensans-regular";
     font-size: 100%;
     font-size: 14px;
-    border: 1px solid var(--color-gainsboro);
+    border: 1px solid var(--color-iron);
     z-index: 100;
 }
 
@@ -1871,7 +1871,7 @@ ul.pills li {
 }
 
 .sub_nav_menu ul li:not(.divider):hover {
-    background: var(--color-primary);
+    background: var(--color-blue);
 }
 
 .sub_nav_menu li i.glyphicon-trash {
@@ -1883,7 +1883,7 @@ ul.pills li {
 
 /* tax section on manage groups and accounts*/
 .download-invoice-ledger > i {
-    color: var(--color-gray);
+    color: var(--color-abbey);
 }
 
 .pos-abs {
@@ -1946,7 +1946,7 @@ ul.pills li {
 }
 
 .shadow {
-    box-shadow: var(--color-black) 0px 0px 14px -4px;
+    box-shadow: var(--color-shark) 0px 0px 14px -4px;
 }
 
 /*giddh loader*/
@@ -2030,29 +2030,29 @@ ul.pills li {
 .sidebar {
     width: 320px;
     height: 100%;
-    border-right: 1px solid var(--color-whisper-color);
-    border-left: 1px solid var(--color-whisper-color);
+    border-right: 1px solid var(--color-porcelain);
+    border-left: 1px solid var(--color-porcelain);
     padding: 10px;
 }
 
 .stock-grp-list > li > a {
-    color: var(--color-dark-gray);
+    color: var(--color-abbey);
 }
 
 .sub-grp > li > a {
     text-transform: uppercase;
-    color: var(--color-dark-gray);
+    color: var(--color-abbey);
     font-weight: 400;
 }
 
 .stock-items > li > a {
     text-transform: capitalize;
-    color: var(--color-nobel);
+    color: var(--color-manatee);
 }
 
 .stock-items > li > a:hover,
 .sub-grp > li > a:hover {
-    color: var(--color-dark-gray);
+    color: var(--color-abbey);
 }
 
 .stock-grp.list {
@@ -2062,7 +2062,7 @@ ul.pills li {
 
 .stock-grp-list li > i {
     top: 3px;
-    color: var(--color-dark-gray);
+    color: var(--color-abbey);
     float: right;
 }
 
@@ -2074,7 +2074,7 @@ ul.pills li {
 
 .stock-grp-list > li {
     padding: 6px 0 6px 15px;
-    border-bottom: 1px solid var(--color-whisper-color);
+    border-bottom: 1px solid var(--color-porcelain);
 }
 
 .parent-group > .stock-grp-list > li {
@@ -2107,7 +2107,7 @@ ul.pills li {
     font-size: 10px;
     right: calc(50% + 10px);
     top: 22px;
-    color: var(--color-nobel);
+    color: var(--color-manatee);
 }
 
 .tour-backdrop {
@@ -2191,7 +2191,7 @@ ul.pills li {
     list-style: none;
     background-color: var(--color-white);
     background-clip: padding-box;
-    border: 1px solid var(--color-gainsboro);
+    border: 1px solid var(--color-iron);
     border: 1px solid rgba(0, 0, 0, 0.15);
     border-radius: 4px;
     -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
@@ -2236,7 +2236,7 @@ ul.pills li {
 }
 
 .modal-dialog.gray .modal-content {
-    background: var(--color-solitude);
+    background: var(--color-wild-sand);
     border-radius: 0;
 }
 
@@ -2253,7 +2253,7 @@ ul.pills li {
 
 .modal-liquid.modal-dialog .modal-content .modal-header,
 .modal-liquid.modal-dialog .modal-content .modal-body {
-    background: var(--color-solitude);
+    background: var(--color-wild-sand);
 }
 
 /*box styles  on settings integration page*/
@@ -2276,7 +2276,7 @@ ul.pills li {
 .select2-parent .select2-container--default .select2-selection--single {
     border-radius: 0;
     background-color: var(--color-white);
-    border: 1px solid var(--color-gainsboro);
+    border: 1px solid var(--color-iron);
 }
 
 .select2-parent .select2-container .select2-selection--single {
@@ -2285,7 +2285,7 @@ ul.pills li {
 
 .select2-parent .select2-container--default .select2-selection--single .select2-selection__rendered {
     line-height: 32px;
-    color: var(--color-dark-gray);
+    color: var(--color-abbey);
     font-size: 14px;
     padding-left: 0;
 }
@@ -2313,7 +2313,7 @@ ul.pills li {
 .dropdown-menu > li > a > a,
 .dropdown-menu > li > a > a:focus,
 .dropdown-menu > li > a > a:hover {
-    color: var(--color-black);
+    color: var(--color-shark);
     background-color: var(--color-white);
 }
 
@@ -2322,7 +2322,7 @@ ul.pills li {
     background: transparent;
 }
 .navbar-inverse .navbar-nav > .open > a {
-    background-color: var(--color-nero);
+    background-color: var(--color-shark);
     border-color: transparent;
 }
 
@@ -2349,7 +2349,7 @@ strong {
 
 .navbar-inverse .btn-link:focus,
 .navbar-inverse .btn-link:hover {
-    color: var(--color-night-rider);
+    color: var(--color-shark);
 }
 
 b,
@@ -2359,7 +2359,7 @@ strong {
 }
 
 .select2-parent .select2-container--default .select2-selection--single .select2-selection__arrow b {
-    border-color: var(--color-matterhorn) transparent transparent transparent !important;
+    border-color: var(--color-abbey) transparent transparent transparent !important;
     border-width: 6px 5px 0 5px;
     margin-left: -8px;
     margin-top: -3px;
@@ -2416,7 +2416,7 @@ bs-datepicker-container {
     border-top: none;
     margin: 0;
     padding: 12px 16px 12px 20px;
-    color: var(--color-gray);
+    color: var(--color-abbey);
     font-size: 12px;
     border-bottom-left-radius: 8px;
     border-bottom-right-radius: 8px;
@@ -2430,12 +2430,12 @@ perfect-scrollbar.ps-show-active > .ps.ps--active-y > .ps-overlay:not(.ps-at-bot
 
 .sub-menu-nav li > a {
     padding: 5px 12px;
-    color: var(--color-night-rider);
+    color: var(--color-shark);
     display: block;
 }
 
 .sub-menu-nav li > a:hover {
-    background: var(--color-vivid-blue);
+    background: var(--color-blue);
 }
 
 .no-dbl-click-select {
@@ -2451,18 +2451,18 @@ perfect-scrollbar.ps-show-active > .ps.ps--active-y > .ps-overlay:not(.ps-at-bot
 
 .custom-item:hover,
 .discount-item:hover {
-    background-color: var(--color-lavender) !important;
-    color: var(--color-chetwode-blue) !important;
+    background-color: var(--color-porcelain) !important;
+    color: var(--color-blue) !important;
     &:hover {
         .pull-left.text-ellipsis {
-            color: var(--color-chetwode-blue) !important;
+            color: var(--color-blue) !important;
         }
     }
 }
 
 .or-line::before {
     content: " ";
-    border-bottom: 1px solid var(--color-dim-gray);
+    border-bottom: 1px solid var(--color-manatee);
     display: inline-block;
     width: 57px;
     margin-right: 13px;
@@ -2470,7 +2470,7 @@ perfect-scrollbar.ps-show-active > .ps.ps--active-y > .ps-overlay:not(.ps-at-bot
 
 .or-line::after {
     content: "";
-    border-bottom: 1px solid var(--color-dim-gray);
+    border-bottom: 1px solid var(--color-manatee);
     display: inline-block;
     width: 57px;
     margin-left: 13px;
@@ -2479,7 +2479,7 @@ perfect-scrollbar.ps-show-active > .ps.ps--active-y > .ps-overlay:not(.ps-at-bot
 .or-line {
     display: flex;
     align-items: center;
-    color: var(--color-dim-gray);
+    color: var(--color-manatee);
     margin-bottom: 10px;
 }
 
@@ -2680,13 +2680,13 @@ form#groupDetailForm {
     }
     .ledger-book .h-table tbody .ledger-row {
         width: 100%;
-        border-bottom: 1px solid var(--color-gainsboro);
+        border-bottom: 1px solid var(--color-iron);
     }
     bs-daterangepicker-container,
     bs-datepicker-container {
         overflow-y: auto;
         height: auto;
-        box-shadow: 0 0 10px 0 var(--color-wistful);
+        box-shadow: 0 0 10px 0 var(--color-manatee);
         top: 50% !important;
         left: 50% !important;
         transform: translate(-50%, -50%) !important;
@@ -2718,7 +2718,7 @@ form#groupDetailForm {
 }
 
 .tooltip-inner {
-    background: var(--color-black) !important;
+    background: var(--color-shark) !important;
 }
 
 /**
@@ -2730,7 +2730,7 @@ form#groupDetailForm {
     z-index: 5;
     height: 100vh;
     color: var(--color-right-sidebar-settings);
-    background-color: var(--color-common-secondary-background-for-all-components);
+    background-color: var(--color-primary-right-side-popup-body-background) !important;
 }
 .aside-pane {
     max-width: 760px;
@@ -2931,7 +2931,7 @@ giddh-datepicker {
             .mat-form-field-wrapper {
                 .mat-form-field-flex {
                     .mat-form-field-infix {
-                        border: 1px solid var(--color-gainsboro) !important;
+                        border: 1px solid var(--color-iron) !important;
                         border-radius: 20px;
                         width: 100%;
                     }
@@ -2941,7 +2941,7 @@ giddh-datepicker {
     }
 }
 .mat-field-border {
-    border: 1px solid var(--color-gainsboro) !important;
+    border: 1px solid var(--color-iron) !important;
 }
 .mat-grid-tile.select2-parent.select2-ledger .mat-grid-tile-content {
     padding-left: 0px !important;
@@ -3009,7 +3009,7 @@ update-ledger-entry-panel .ledger-main .mat-form-field {
     }
 }
 .mat-header-cell {
-    color: var(--color-midnight-blue) !important;
+    color: var(--color-giddh-blue) !important;
     font-family: "opensans-semibold";
     font-size: 14px !important;
 }
@@ -3051,11 +3051,11 @@ update-ledger-entry-panel .ledger-main .mat-form-field {
 .daybook-table {
     tr.mat-row,
     tr.mat-footer-row {
-        border-top: 1px solid var(--color-gainsboro);
+        border-top: 1px solid var(--color-iron);
     }
     td.mat-cell {
         border-bottom-width: 0px !important;
-        border-top: 1px solid var(--color-gainsboro);
+        border-top: 1px solid var(--color-iron);
     }
     .nested-table {
         > tbody {
@@ -3091,7 +3091,7 @@ td.mat-footer-cell {
     word-break: break-word;
     white-space: nowrap;
     border-bottom-width: 1px;
-    border-bottom-color: var(--color-gainsboro) !important;
+    border-bottom-color: var(--color-iron) !important;
 }
 .mat-header-row,
 .mat-row {
@@ -3147,7 +3147,7 @@ td.mat-footer-cell {
 .petty-cash {
     .mat-tab-group {
         .mat-tab-header {
-            background: var(--color-alice-blue-light) !important;
+            background: var(--color-wild-sand) !important;
             .mat-tab-label-container {
                 padding-left: 15px !important;
                 background-color: var(--color-tab-primary-background);
@@ -3206,7 +3206,7 @@ td.mat-footer-cell {
 }
 
 .tooltip-black {
-    background: var(--color-black) !important;
+    background: var(--color-shark) !important;
     color: var(--color-white);
     font-size: 12px !important;
 }

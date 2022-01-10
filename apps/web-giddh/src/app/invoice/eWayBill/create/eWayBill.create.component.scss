@@ -1,5 +1,5 @@
 .right-penal {
-    border-left: 1px solid var(--color-silver);
+    border-left: 1px solid var(--color-manatee);
     position: fixed;
     right: 0;
     bottom: 0;
@@ -15,17 +15,17 @@
         padding: 15px;
         h2 {
             font-size: 14px;
-            color: var(--color-primary);
+            color: var(--color-blue);
         }
         label {
-            color: var(--color-dark-gray);
+            color: var(--color-abbey);
             font-size: 12px;
             width: 20%;
             font-weight: 800;
         }
         span {
             font-size: 12px;
-            color: var(--color-night-rider);
+            color: var(--color-shark);
         }
     }
 }
@@ -78,7 +78,7 @@
 
 .list-icon-group input:checked + label {
     background-color: var(--color-white);
-    box-shadow: 2px 2px 5px var(--color-gainsboro);
+    box-shadow: 2px 2px 5px var(--color-iron);
 }
 
 .select-style {
@@ -122,7 +122,7 @@
 }
 
 .bg-gray {
-    background: var(--color-alice-blue-light);
+    background: var(--color-wild-sand);
 }
 
 .aside-right .list-icon-group label {
@@ -146,21 +146,21 @@
 
 .table-modal tbody td {
     border-top: 0px solid !important;
-    border-right: 1px solid var(--color-gainsboro);
+    border-right: 1px solid var(--color-iron);
 }
 
 .table-modal thead th {
-    border-right: 1px solid var(--color-gainsboro) !important;
+    border-right: 1px solid var(--color-iron) !important;
 }
 
 .table-modal {
-    border-bottom: 1px solid var(--color-gainsboro) !important;
+    border-bottom: 1px solid var(--color-iron) !important;
 }
 
 .table-modal tbody tr td button {
     background: none;
     border: 0px;
-    color: var(--color-whisper);
+    color: var(--color-porcelain);
     font-size: 16px;
     padding: 2px;
     margin-right: 3px;
@@ -168,7 +168,7 @@
 }
 
 .table-modal tbody tr td .icon-edit {
-    border-bottom: 2px solid var(--color-gainsboro);
+    border-bottom: 2px solid var(--color-iron);
 }
 
 .aside-overlay.out {

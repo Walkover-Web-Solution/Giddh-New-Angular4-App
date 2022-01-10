@@ -5,21 +5,21 @@
         .input-group-text {
             padding: 8px !important;
             color: var(--color-sidebar-search-bar-text);
-            background-color: var(--color-sidebar-search-bar-background);
-            border: 2px solid var(--color-sidebar-search-bar-background);
+            background-color: var(--color-sidebar-primary-search-bar-background);
+            border: 2px solid var(--color-sidebar-primary-search-bar-background);
         }
         input {
             border-left: none;
             // border: none;
             padding-left: 0 !important;
-            background-color: var(--color-sidebar-search-bar-background) !important;
-            border: 2px solid var(--color-sidebar-search-bar-background);
+            background-color: var(--color-sidebar-primary-search-bar-background) !important;
+            border: 2px solid var(--color-sidebar-primary-search-bar-background);
             border-top-left-radius: 0px !important;
             border-bottom-left-radius: 0px !important;
             border-top-right-radius: 5px !important;
             border-bottom-right-radius: 5px !important;
             &:focus {
-                border-color: var(--color-gainsboro) !important;
+                border-color: var(--color-iron) !important;
             }
         }
         .input-group-append {
@@ -32,8 +32,8 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: var(--color-gray-95);
-            border: 1px solid var(--color-gainsboro);
+            background-color: var(--color-wild-sand);
+            border: 1px solid var(--color-iron);
             border-radius: 5px;
             border-left: none;
             border-top-left-radius: 0px !important;
@@ -251,7 +251,7 @@
                         }
                     }
                     p.show-more-branches {
-                        color: var(--color-midnight-blue);
+                        color: var(--color-giddh-blue);
                         padding: 10px 0;
                         text-decoration: underline;
                     }
@@ -322,7 +322,7 @@
         bottom: 0;
         width: 240px;
         left: 0;
-        border-top: 1px solid var(--color-gainsboro);
+        border-top: 1px solid var(--color-iron);
         z-index: 991;
         background-color: var(--color-sidebar-footer-logout-section-background);
         .profile-name {

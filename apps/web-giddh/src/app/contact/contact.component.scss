@@ -43,7 +43,7 @@
 
 .icon-pointer.icon-class-search {
     top: 30%;
-    color: var(--color-dim-gray);
+    color: var(--color-manatee);
 }
 
 .icon-pointer .d-block.font-xxs.glyphicon.glyphicon-triangle-top {
@@ -65,7 +65,7 @@
     background: var(--color-white);
     width: 50%;
     padding: 1px;
-    box-shadow: 1px 0 9px var(--color-gray);
+    box-shadow: 1px 0 9px var(--color-abbey);
 }
 
 .account-detail-modal-header-div {
@@ -83,7 +83,7 @@
     padding: 11px 10px 10px 10px;
     width: 100%;
     color: var(--color-dropdown-list-icon);
-    background: var(--color-dropdown-secondary-background);
+    background: var(--color-dropdown-terniary-background);
 }
 
 .account-detail-custom-title {
@@ -97,14 +97,14 @@
 }
 
 .custom-detail h4 {
-    color: var(--color-dark-gray);
+    color: var(--color-abbey);
     margin-top: 7px;
     font-size: 14px !important;
     font-family: opensans-regular !important;
 }
 
 ul.list-unstyled li a {
-    color: var(--color-dropdown-list-quinary);
+    color: var(--color-dropdown-list-quaternary);
 }
 
 .p-modal-tooltip {
@@ -184,7 +184,7 @@ td.position-relative.word-wrap.customer-name.vendor-customer-name.cursor-pointer
 
 tr:last-child td.position-relative.word-wrap.customer-name.cursor-pointer,
 tr:last-child td.position-relative.word-wrap.vendor-customer-name.cursor-pointer {
-    border-bottom: 1px solid var(--color-gainsboro) !important;
+    border-bottom: 1px solid var(--color-iron) !important;
 }
 
 .position-relative.word-wrap {
@@ -249,25 +249,25 @@ tr.aging-table-top td {
 }
 
 .more-button li:hover {
-    background-color: var(--color-lavender);
-    color: var(--color-jacksons-purple);
+    background-color: var(--color-porcelain);
+    color: var(--color-giddh-blue);
 }
 
 .btn-primary.active,
 .btn-primary:active,
 .open > .dropdown-toggle.btn-primary {
-    color: var(--color-night-rider);
-    background-color: var(--color-lavender);
-    border-color: var(--color-lavender);
+    color: var(--color-shark);
+    background-color: var(--color-porcelain);
+    border-color: var(--color-porcelain);
     box-shadow: none !important;
 }
 
 i.icon-options {
     width: 36px;
     height: 36px;
-    border: 1px solid var(--color-gainsboro);
+    border: 1px solid var(--color-iron);
     background-color: var(--color-white);
-    color: var(--color-midnight-blue);
+    color: var(--color-giddh-blue);
     font-size: 20px;
     padding: 0;
     display: flex;
@@ -278,7 +278,7 @@ i.icon-options {
 
 i.icon-options:hover {
     background: var(--color-filter-background-hover);
-    color: var(--color-white);
+    color: var(--color-filter-text-hover);
     border-color: var(--color-filter-background-hover);
 }
 
@@ -289,8 +289,8 @@ i.icon-options:hover {
 
 .search-field input {
     width: 235px;
-    background-color: var(--color-whisper) !important;
-    border-color: var(--color-whisper) !important;
+    background-color: var(--color-porcelain) !important;
+    border-color: var(--color-porcelain) !important;
 }
 
 .search-field input:focus {
@@ -301,7 +301,7 @@ span.input-addon {
     position: absolute;
     right: 0px;
     padding: 4px 9px;
-    background-color: var(--color-chetwode-blue);
+    background-color: var(--color-blue);
     color: var(--color-white);
     font-size: 18px;
     border-radius: 5px;
@@ -351,10 +351,10 @@ span.input-addon {
 }
 
 button.btn.btn-filter {
-    background: var(--color-whisper-color);
-    border: 1px solid var(--color-whisper-color);
+    background: var(--color-porcelain);
+    border: 1px solid var(--color-porcelain);
     font-size: 14px;
-    color: var(--color-midnight-blue);
+    color: var(--color-giddh-blue);
     display: inline-flex;
     justify-content: space-between;
     align-items: center;
@@ -395,9 +395,9 @@ button.btn.btn-filter span.icon-cross {
         min-width: 100%;
         padding: 11px;
         padding-right: 40px;
-        color: var(--color-nero);
+        color: var(--color-shark);
         border: none;
-        background-color: var(--color-gray-95);
+        background-color: var(--color-wild-sand);
     }
 }
 
@@ -407,7 +407,7 @@ button.btn.btn-filter span.icon-cross {
     font-size: 12px !important;
     letter-spacing: 1px;
     strong {
-        color: var(--color-midnight-blue) !important;
+        color: var(--color-giddh-blue) !important;
         font-size: 16px;
     }
 }

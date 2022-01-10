@@ -2,11 +2,11 @@
     box-shadow: none;
 
     .running {
-        color: var(--color-deep-sky-blue-hover);
+        color: var(--color-blue);
     }
 
     .panel-heading {
-        background: var(--color-whisper);
+        background: var(--color-porcelain);
     }
 
     .panel-footer {
@@ -15,7 +15,7 @@
     }
 
     .panel-body {
-        color: var(--color-gray);
+        color: var(--color-abbey);
         background: transparent;
         padding: 15px 0px 0px 0px;
 
@@ -23,12 +23,12 @@
             box-shadow: none;
             height: 5px;
             margin-bottom: 0px;
-            border: var(--color-gainsboro) 1px solid;
+            border: var(--color-iron) 1px solid;
         }
 
         .progress-bar {
-            background: var(--color-silver);
-            border: 1px solid var(--color-silver);
+            background: var(--color-manatee);
+            border: 1px solid var(--color-manatee);
             box-shadow: none;
         }
 
