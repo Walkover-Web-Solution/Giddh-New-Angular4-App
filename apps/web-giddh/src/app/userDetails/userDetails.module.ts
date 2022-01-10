@@ -11,7 +11,6 @@ import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar/lib/perfe
 import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/decimalDigits.module';
 import { SharedModule } from "../shared/shared.module";
 import { ElementViewChildModule } from "../shared/helpers/directives/elementViewChild/elementViewChild.module";
-import { SubscriptionsComponent } from './components/subscriptions/subscriptions.component';
 import { UserDetailsPipe } from './userDetails.pipe';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
@@ -20,9 +19,26 @@ import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { CompanyDetailsSidebarComponent } from './components/company-details-sidebar/company-details-sidebar.component';
 import { MoveCompanyComponent } from './components/move-company/move-company.component';
 import { AllFeaturesComponent } from './components/all-features/all-features.component';
-import { AddCompanyComponent } from './components/add-company/add-company.component';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { NoDataModule } from '../shared/no-data/no-data.module';
+import { SubscriptionComponent } from './components/subscription/subscription.component';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatSelectModule } from '@angular/material/select';
+import { MatButtonModule } from '@angular/material/button';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatTableModule } from '@angular/material/table';
+import { MatDialogModule } from '@angular/material/dialog';
+import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
+import { AddOnsComponent } from './components/add-ons/add-ons.component';
+import { MatSliderModule } from '@angular/material/slider';
+import { MatCardModule } from '@angular/material/card';
+import { SafePipeModule } from '../shared/helpers/pipes/safePipe/safePipe.module';
+import { GiddhPageLoaderModule } from '../shared/giddh-page-loader/giddh-page-loader.module';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: true
@@ -33,13 +49,13 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     declarations: [
         // Components / Directives/ Pipes
         UserDetailsComponent,
-        SubscriptionsComponent,
         UserDetailsPipe,
         SubscriptionsPlansComponent,
         CompanyDetailsSidebarComponent,
         MoveCompanyComponent,
         AllFeaturesComponent,
-        AddCompanyComponent
+        SubscriptionComponent,
+        AddOnsComponent
     ],
     exports: [],
     imports: [
@@ -58,15 +74,34 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         BsDropdownModule.forRoot(),
         TooltipModule.forRoot(),
         ScrollingModule,
+        NoDataModule,
+        MatToolbarModule,
+        MatSelectModule,
+        MatButtonModule,
+        MatGridListModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatTabsModule,
+        MatExpansionModule,
+        MatDividerModule,
+        MatTableModule,
+        MatDialogModule,
+        ShSelectModule,
+        MatSliderModule,
+        MatCardModule,
+        SafePipeModule,
+        GiddhPageLoaderModule,
         NoDataModule
     ],
     providers: [
+
         {
             provide: PERFECT_SCROLLBAR_CONFIG,
             useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG
         },
         DecimalPipe
     ]
+
 })
 export class UserDetailsModule {
 

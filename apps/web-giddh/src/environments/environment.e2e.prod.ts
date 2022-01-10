@@ -11,7 +11,6 @@ export const environment: Environment = {
     AppUrl: '',
     ApiUrl: '',
     isElectron: false,
-    isCordova: false,
     APP_FOLDER: '',
     /** Angular debug tools in the dev console
      * https://github.com/angular/angular/blob/86405345b781a9dc2438c0fbe3e9409245647019/TOOLS_JS.md

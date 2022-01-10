@@ -139,7 +139,7 @@ export class TrialBalanceExportPdfComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
-        this.imgPath = (isElectron || isCordova) ? 'assets/images/pdf-icon.svg' : AppUrl + APP_FOLDER + 'assets/images/pdf-icon.svg';
+        this.imgPath = isElectron ? 'assets/images/pdf-icon.svg' : AppUrl + APP_FOLDER + 'assets/images/pdf-icon.svg';
     }
 
     public ngOnDestroy() {

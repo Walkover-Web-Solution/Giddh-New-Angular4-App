@@ -7,6 +7,7 @@
     <div class="setting-page user-detail-page relative" id="setting-tab" *ngIf="!isCreateAndSwitchCompanyInProcess">
         <hamburger-menu *ngIf="localeData?.auth_key" [pageHeading]="getPageHeading()"></hamburger-menu>
         <!-- start of tab set -->
+
         <tabset #staticTabs>
             <!-- start auth tab tab -->
             <tab
@@ -273,11 +274,7 @@
                 [id]="activeTab == 'subscription' ? 'giddh-page-heading' : ''"
             >
                 <div class="wrap-tab-content-pd-15">
-                    <subscriptions
-                        [activeTab]="activeTab"
-                        [localeData]="localeData"
-                        [commonLocaleData]="commonLocaleData"
-                    ></subscriptions>
+                    <subscription [localeData]="localeData" [commonLocaleData]="commonLocaleData"></subscription>
                 </div>
             </tab>
         </tabset>
