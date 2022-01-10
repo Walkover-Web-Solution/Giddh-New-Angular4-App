@@ -119,15 +119,6 @@ export class MobileHomeSidebarComponent implements OnInit, OnDestroy {
         this.closeMobileSidebar.emit(true);
         if (isElectron) {
             this.store.dispatch(this.loginAction.ClearSession());
-        } else if (isCordova) {
-            (window as any).plugins.googleplus.logout(
-                (success) => {
-                    this.store.dispatch(this.loginAction.ClearSession());
-                },
-                (error) => {
-                    this.store.dispatch(this.loginAction.ClearSession());
-                }
-            );
         } else {
             // check if logged in via social accounts
             this.isLoggedInWithSocialAccount$.subscribe((val) => {
