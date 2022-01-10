@@ -388,7 +388,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
 
             this.sanitizedPdfFileUrl = null;
             this.commonService.downloadFile(getRequest, "ALL").pipe(takeUntil(this.destroyed$)).subscribe(result => {
-                if (result) {
+                if (result?.body) {
                     /** Creating voucher pdf start */
                     this.selectedItem.blob = this._generalService.base64ToBlob(result.body.data, 'application/pdf', 512);
                     const file = new Blob([this.selectedItem.blob], { type: 'application/pdf' });
@@ -432,7 +432,6 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                         }
                     }
                     /** Creating attachment finish */
-
                 } else {
                     this.isVoucherDownloadError = true;
                     this.pdfPreviewHasError = true;
