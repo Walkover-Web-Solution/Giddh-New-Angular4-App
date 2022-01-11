@@ -32,7 +32,7 @@ import { SettingsWarehouseService } from '../../../services/settings.warehouse.s
 import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
 import { InvoiceSetting } from '../../../models/interfaces/invoice.setting.interface';
 import { OrganizationType } from '../../../models/user-login-state';
-import { cloneDeep, isEmpty } from '../../../lodash-optimized';
+import { clone, cloneDeep, isEmpty } from '../../../lodash-optimized';
 
 @Component({
     selector: 'new-branch-transfer',
@@ -1189,6 +1189,26 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                     });
                 }
 
+                if (this.isUpdateMode) {
+                    let tempBranches = [];
+                    this.branches?.forEach(branch => {
+                        if (!branch?.additional?.isArchived || (branch?.additional?.isArchived && (this.branchExists(branch?.value, this.branchTransfer.destinations) || this.branchExists(branch?.value, this.branchTransfer.sources)))) {
+                            tempBranches.push(branch);
+                        }
+                    });
+
+                    this.branches = cloneDeep(tempBranches);
+                } else {
+                    let tempBranches = [];
+                    this.branches?.forEach(branch => {
+                        if (!branch?.additional?.isArchived) {
+                            tempBranches.push(branch);
+                        }
+                    });
+
+                    this.branches = cloneDeep(tempBranches);
+                }
+
                 this.branchTransfer.entity = response.body.entity;
                 this.branchTransfer.transferType = "products"; // MULTIPLE PRODUCTS VIEW SHOULD SHOW IN CASE OF EDIT
                 this.branchTransfer.transporterDetails = response.body.transporterDetails;
@@ -1509,5 +1529,19 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                 this.inventorySettings = settings.companyInventorySettings;
             }
         });
+    }
+
+    /**
+     * Checks if branch exists
+     *
+     * @private
+     * @param {string} branchUniqueName
+     * @param {*} branches
+     * @returns {boolean}
+     * @memberof NewBranchTransferAddComponent
+     */
+    private branchExists(branchUniqueName: string, branches: any): boolean {
+        const branchExists = branches?.filter(branch => branch?.uniqueName === branchUniqueName);
+        return (branchExists?.length);
     }
 }
