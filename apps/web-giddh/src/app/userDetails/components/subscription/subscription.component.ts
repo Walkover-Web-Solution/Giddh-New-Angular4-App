@@ -218,6 +218,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
             if (res && res.status === "success") {
                 if (!res.body || !res.body[0]) {
                     this.isPlanShow = true;
+                    this.changeDetectionRef.detectChanges();
                 } else {
                     this.store.dispatch(this.subscriptionsActions.SubscribedCompaniesResponse(res));
                 }
