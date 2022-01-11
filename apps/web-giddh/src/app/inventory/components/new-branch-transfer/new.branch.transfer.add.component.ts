@@ -1050,6 +1050,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
             } else {
                 product.hsnNumber = "";
             }
+            delete product.variant;
         });
 
         if (this.editBranchTransferUniqueName) {
