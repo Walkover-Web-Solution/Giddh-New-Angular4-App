@@ -310,9 +310,23 @@ export class ContactComponent implements OnInit, OnDestroy {
 
             if (params) {
                 if ((params["type"] && params["type"].indexOf("customer") > -1) || (queryParams && queryParams.tab && queryParams.tab === "customer")) {
-                    this.setActiveTab("customer");
+                    const activeTab = this.activeTab;
+                    if (activeTab !== "customer") {
+                        this.setActiveTab("customer");
+                    }
+                    if (activeTab === "vendor" && this.localeData?.page_heading) {
+                        this.availableColumnsCount = [];
+                        this.translationComplete(true);
+                    }
                 } else if ((params["type"] && params["type"].indexOf("vendor") > -1) || (queryParams && queryParams.tab && queryParams.tab === "vendor")) {
-                    this.setActiveTab("vendor");
+                    const activeTab = this.activeTab;
+                    if (activeTab !== "vendor") {
+                        this.setActiveTab("vendor");
+                    }
+                    if (activeTab === "customer" && this.localeData?.page_heading) {
+                        this.availableColumnsCount = [];
+                        this.translationComplete(true);
+                    }
                 } else {
                     this.setActiveTab("aging-report");
                 }
