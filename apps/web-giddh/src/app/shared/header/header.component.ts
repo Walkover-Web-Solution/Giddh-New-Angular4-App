@@ -295,9 +295,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                     this.checkAndRenewUserSession();
                 }
 
-                if(this.router.url.includes("/pages/settings/taxes") || this.router.url.includes("/pages/settings") || this.router.url.includes("/pages/user-details") || this.router.url.includes("/pages/invoice/preview/settings/sales")) {
-                    this.toggleSidebarPane(false, false);
-                }
+                this.toggleSidebarPane(false, false);
             }
             if (event instanceof NavigationStart) {
                 this.navigationEnd = false;
