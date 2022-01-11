@@ -5,6 +5,7 @@
 }
 .all-payment-side {
     margin: 0 !important;
+    padding: 0 !important;
     height: 312px !important;
 }
 :host .aside-pane {
@@ -182,6 +183,9 @@ form label {
 }
 .align-items-center {
     align-items: center;
+}
+.modal-header {
+    height: 63px !important;
 }
 @media (max-width: 1100px) {
     .payment-top-form {
