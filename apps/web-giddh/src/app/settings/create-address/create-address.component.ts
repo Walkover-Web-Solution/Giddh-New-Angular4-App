@@ -74,6 +74,7 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         if (this.addressConfiguration) {
             if (this.addressConfiguration.type === SettingsAsideFormType.CreateAddress || this.addressConfiguration.type === SettingsAsideFormType.CreateBranchAddress) {
+                this.addressConfiguration.linkedEntities = this.addressConfiguration.linkedEntities?.filter(address => !address.isArchived);
                 const taxValidatorPatterns = this.addressConfiguration.tax.name ? this.addressConfiguration.tax.validation : [];
                 this.addressForm = this.formBuilder.group({
                     name: ['', [Validators.required, Validators.maxLength(100)]],
