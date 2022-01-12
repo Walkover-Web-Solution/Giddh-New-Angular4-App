@@ -9,12 +9,17 @@
             }
             .input-group-text {
                 border: none;
+                background-color: var(--color-primary-all-items-input-group-input-background);
             }
             input {
                 height: 50px;
-                background-color: var(--color-primary-all-items-input-group-input-background) !important;
-                border: none;
                 font-size: 16px;
+                border: none;
+                border-top-left-radius: 0px !important;
+                border-bottom-left-radius: 0px !important;
+                position: relative;
+                left: 1px;
+                background-color: var(--color-primary-all-items-input-group-input-background) !important;
             }
         }
     }
@@ -55,7 +60,7 @@
                         background-color: var(--color-primary-all-items-page-single-menu-items-hover-active);
                         h4,
                         p {
-                            color: var(--color-white);
+                            color: var(--color-primary-all-in-one-menu-text);
                         }
                     }
                 }
