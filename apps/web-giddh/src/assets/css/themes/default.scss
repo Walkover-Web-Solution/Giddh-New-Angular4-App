@@ -65,6 +65,7 @@ body.default-theme {
     --color-upgrade-plan-primary: #668cff;
     --color-upgrade-plan-primary-background: #e7e9eb;
     --color-upgrade-plan-secondary-background: #ffffff;
+    --color-upgrade-plan-tertiary-background: #e7e9eb;
     --color-upgrade-plan-card-primary-background-hover: #e7e9eb;
     --color-upgrade-plan-card-primary-border-hover: #1a237e;
     --color-csv-or-excel-file-card-text: #668cff;
@@ -79,10 +80,16 @@ body.default-theme {
     --color-tertiary-button-background: transparent;
     --color-tertiary-button-background-hover: #1a237e0f;
     --color-quaternary-button-background: #1a237e;
-    --color-quinary-button-background: #668cff26;
+    --color-quinary-button-background: #668cff;
     --color-senary-button-text: #ffffff;
     --color-senary-button-background: #1a237e;
     --color-senary-button-background-hover: #1a237e;
+    --color-septenary-button-text: #212528;
+    --color-octonary-button-text: #9b9b9e;
+    --color-nonary-button-text: #ffffff;
+    --color-nonary-button-background: #36b283;
+    --color-nonary-button-background-hover: #36b283;
+    --color-denary-button-background: #f5f5f5;
     --color-primary-filter-button-text: #ffffff;
     --color-primary-cancel-button-background-hover: #9b9b9e;
 
@@ -99,6 +106,7 @@ body.default-theme {
     --color-dropdown-secondary-background: #e7e9eb;
     --color-dropdown-terniary-background: #e7e9eb;
     --color-dropdown-list-hover-background: #e7e9eb;
+    --color-dropdown-secondary-list-hover-background: #f5f5f5;
     --color-dropdown-list-box-shadow: #cbcfd2;
     --color-dropdown-primary-bar-border: #1a237e;
 
@@ -133,6 +141,7 @@ body.default-theme {
     --color-datepicker-unselected-month: #212528;
     --color-datepicker-background: #ffffff;
     --color-main-content-datepicker: #212528;
+    --color-primary-head-datepicker-text: #212528;
     --color-datepicker-box-shadow: #aaaaaa;
     --color-datepicker-selected-date-background: #668cff26;
     --color-datepicker-selected-date-range-background: #668cff26;
@@ -164,6 +173,9 @@ body.default-theme {
     // Aside Setting and Aside Help Support Color Variables
     --color-primary-aside-host-after-background: #f5f5f5;
     --color-primary-aside-help-support-aside-header-pane-background: #f5f5f5;
+
+    // All In One Menu Color Variables
+    --color-primary-all-in-one-menu-text: #212528;
 
     // Aside Menu Create Tax Color Variables
     --color-aside-menu-create-tax-custom-tags-span-background: #cbcfd2;
@@ -280,8 +292,8 @@ body.default-theme {
     --color-primary-company-branch-digit-blue: #668cff;
 
     // Popup Color Variables
-    --color-popup-list-input-text: #212528;
     --color-popup-list-head-text: #ffffff;
+    --color-popup-list-input-text: #212528;
     --color-popup-list-hover: #668cff;
     --color-popup-background: #ffffff;
     --color-popup-secondary-background: #e58a0026;
@@ -424,6 +436,10 @@ body.default-theme {
     // Total Overdues Chat Color Variables
     --color-primary-total-overdues-chart-vendor-due-text: #e54556;
 
+    // Tooltip Color Variables
+    --color-primary-tooltip-text: #ffffff;
+    --color-primary-tooltip-background: #505159;
+
     // Right Sidebar Color Variables
     --color-right-sidebar-back: #007bff;
     --color-right-sidebar-icon: #505159;
@@ -434,12 +450,15 @@ body.default-theme {
     --color-table-primary-heading: #212528;
     --color-table-secondary-heading: #1a237e;
     --color-table-tertiary-heading: #212528;
+    --color-table-quaternary-heading: #f5f5f5;
     --color-table-primary-content: #212528;
     --color-table-secondary-content: #9b9b9e;
     --color-table-tertiary-content: #212528;
     --color-table-quaternary-content: #505159;
     --color-table-quinary-content: #212529;
     --color-table-senary-content: #212528;
+    --color-table-senary-content: #212528;
+    --color-table-septenary-content: #212528;
     --color-table-row-hover-primary-background: #668cff26;
     --color-table-row-hover-secondary-background: #668cff26;
     --color-table-heading-primary-background: #ffffff;

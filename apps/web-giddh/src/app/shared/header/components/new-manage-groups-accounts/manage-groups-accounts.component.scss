@@ -7,13 +7,13 @@
 }
 
 .close {
-    color: var(--color-white) !important;
+    color: var(--color-primary-right-side-popup-header-text) !important;
     opacity: 1 !important;
     text-shadow: none !important;
     font-size: 30px !important;
     line-height: 36px;
     &:hover {
-        color: var(--color-white) !important;
+        color: var(--color-primary-right-side-popup-header-text) !important;
     }
 }
 

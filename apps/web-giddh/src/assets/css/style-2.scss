@@ -1001,10 +1001,10 @@ ul.sub-list {
 
 .btn-green {
     background: var(--color-secondary-button-background);
-    color: var(--color-white);
+    color: var(--color-septenary-button-text);
 }
 .btn-green:hover {
-    color: var(--color-white);
+    color: var(--color-septenary-button-text);
     background: var(--color-secondary-button-background-hover);
 }
 
@@ -1476,9 +1476,9 @@ header .navbar {
 .btn-primary:active:hover,
 .open > .dropdown-toggle.btn-primary:focus,
 .btn-primary:not(:disabled):not(.disabled):active {
-    background: var(--color-popup-list-hover) !important;
-    color: var(--color-primary-filter-button-text) !important;
-    border-color: var(--color-primary-filter-button-text) !important;
+    background: var(--color-secondary-button-background) !important;
+    color: var(--color-secondary-button-text) !important;
+    border-color: var(--color-secondary-button-background) !important;
 }
 .btn-primary.disabled.focus,
 .btn-primary.disabled:focus,
@@ -1490,7 +1490,7 @@ fieldset[disabled] .btn-primary.focus,
 fieldset[disabled] .btn-primary:focus,
 fieldset[disabled] .btn-primary:hover {
     background: var(--color-secondary-button-background-hover) !important;
-    color: var(--color-white) !important;
+    color: var(--color-secondary-button-text) !important;
     border-color: var(--color-secondary-button-background-hover) !important;
 }
 .btn {
@@ -1498,6 +1498,7 @@ fieldset[disabled] .btn-primary:hover {
     border-radius: 5px !important;
     font-size: 14px;
     margin-right: 15px;
+    color: var(--color-septenary-button-text) !important;
 }
 .btn-group-lg > .btn,
 .btn.btn-lg {
@@ -1520,7 +1521,7 @@ fieldset[disabled] .btn-primary:hover {
 .open > .dropdown-toggle.btn-default,
 .btn-default:not(:disabled):not(.disabled):active {
     background: var(--color-secondary-button-background-hover) !important;
-    color: var(--color-white) !important;
+    color: var(--color-secondary-button-text) !important;
     border-color: var(--color-secondary-button-background-hover) !important;
 }
 .success-btn {
@@ -1786,9 +1787,9 @@ input[type="checkbox"]:checked:after {
 }
 
 .btn-success {
-    background: var(--color-light-sea-green) !important;
-    color: var(--color-secondary-button-text) !important;
-    border: 1px solid var(--color-light-sea-green) !important;
+    background: var(--color-nonary-button-background) !important;
+    color: var(--color-nonary-button-text) !important;
+    border: 1px solid var(--color-nonary-button-background) !important;
 }
 .btn-success:hover,
 .btn-success:active:focus,
@@ -1797,9 +1798,9 @@ input[type="checkbox"]:checked:after {
 .btn-success:not(:disabled):not(.disabled):active,
 .btn-success:not(:disabled):not(.disabled).active,
 .show > .btn-success.dropdown-toggle {
-    background: var(--color-btn-success-dropdown-toggle) !important;
-    color: var(--color-secondary-button-text) !important;
-    border: 1px solid var(--color-btn-success-dropdown-toggle) !important;
+    background: var(--color-nonary-button-background-hover) !important;
+    color: var(--color-nonary-button-text) !important;
+    border: 1px solid var(--color-nonary-button-background-hover) !important;
     box-shadow: none;
 }
 .btn-success:disabled,
@@ -1850,7 +1851,7 @@ input[type="checkbox"]:checked:after {
 }
 .btn-cancel {
     background: var(--color-porcelain);
-    color: var(--color-abbey);
+    color: var(--color-octonary-button-text);
     border-color: var(--color-porcelain);
 }
 .btn-cancel:hover,
@@ -1858,7 +1859,7 @@ input[type="checkbox"]:checked:after {
 .btn-cancel:focus,
 .btn-cancel:active:focus {
     background: var(--color-iron);
-    color: var(--color-abbey);
+    color: var(--color-octonary-button-text);
     border-color: var(--color-iron);
     outline: none;
     box-shadow: none;
@@ -2567,7 +2568,7 @@ a.btn.btn-xs.btn-link.pull-right {
     top: 50%;
     transform: translateY(-50%);
     right: 15px;
-    color: var(--color-white);
+    color: var(--color-popup-list-head-text);
     opacity: 1;
     text-shadow: none;
     cursor: pointer;
@@ -2580,6 +2581,7 @@ a.btn.btn-xs.btn-link.pull-right {
 }
 .modal-title {
     font-size: 18px !important;
+    color: var(--color-popup-list-head-text);
 }
 .radio {
     position: relative;
@@ -2844,14 +2846,14 @@ label {
     background: var(--color-wild-sand);
 }
 .isActive {
-    color: var(--color-master-page-sidebar-active-list-text) !important;
-    background: var(--color-master-page-sidebar-active-list-background);
-    border-color: var(--color-master-page-sidebar-active-list-background);
+    color: var(--color-secondary-button-text) !important;
+    background: var(--color-secondary-button-background);
+    border-color: var(--color-secondary-button-background);
 }
 .isActive:hover {
-    color: var(--color-white) !important;
-    background: var(--color-master-page-text-secondary-hover);
-    border-color: var(--color-master-page-text-secondary-hover);
+    color: var(--color-secondary-button-text) !important;
+    background: var(--color-secondary-button-background-hover);
+    border-color: var(--color-secondary-button-background-hover);
 }
 .isParent.isActive {
     color: var(--color-white) !important;
@@ -3714,6 +3716,7 @@ input[type="checkbox"][disabled] {
     font-size: 12px;
     line-height: 1.5;
     border-radius: 3px;
+    color: var(--color-septenary-button-text);
     background: var(--color-porcelain);
     border: 1px solid var(--color-iron);
 }
@@ -4332,7 +4335,7 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
     font-weight: 400;
 }
 .thead-background1 th {
-    background: var(--color-wild-sand);
+    background: var(--color-table-quaternary-heading);
     color: var(--color-abbey);
     border-right: 1px solid var(--color-iron);
     padding: 11px !important;
@@ -5644,6 +5647,9 @@ span.red-text {
 }
 .header-tooltip .tooltip-inner {
     word-break: break-word !important;
+}
+.tooltip-inner {
+    background-color: var(--color-primary-tooltip-background) !important;
 }
 .icon-btn .tooltip-inner {
     white-space: nowrap !important;
@@ -7062,6 +7068,9 @@ giddh-datepicker {
         padding: 0;
         margin: 0;
         border: 0;
+        ::placeholder {
+            color: var(--color-datepicker-input-label);
+        }
     }
 
     .mat-form-field-appearance-fill .mat-form-field-flex {
@@ -9380,7 +9389,7 @@ body.prevent-body-scroll {
 
 .mat-datepicker-content .mat-calendar {
     height: 320px !important;
-    background-color: var(--color-table-datepicker-body-background);
+    background-color: var(--color-table-body-primary-background);
 }
 
 mat-year-view table tr td.mat-calendar-body-label {
