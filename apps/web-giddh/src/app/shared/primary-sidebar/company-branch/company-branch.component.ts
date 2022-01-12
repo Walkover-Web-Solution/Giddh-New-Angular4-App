@@ -254,12 +254,6 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
         localStorage.removeItem('isNewArchitecture');
         if (isElectron) {
             this.store.dispatch(this.loginAction.ClearSession());
-        } else if (isCordova) {
-            (window as any).plugins.googleplus.logout(
-                (msg) => {
-                    this.store.dispatch(this.loginAction.ClearSession());
-                }
-            );
         } else {
             // check if logged in via social accounts
             this.isLoggedInWithSocialAccount$.subscribe((val) => {
