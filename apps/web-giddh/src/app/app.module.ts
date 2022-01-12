@@ -30,7 +30,6 @@ import { AppComponent } from './app.component';
 import { IS_ELECTRON_WA } from './app.constant';
 import { APP_RESOLVER_PROVIDERS } from './app.resolver';
 import { ROUTES } from './app.routes';
-import { BillingDetailComponent } from './billing-details/billingDetail.component';
 import { BrowserDetectComponent } from './browser-support/browserDetect.component';
 import { DecoratorsModule } from './decorators/decorators.module';
 import { DummyComponent } from './dummy.component';
@@ -90,7 +89,6 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         PublicPageHandlerComponent,
         TokenVerifyComponent,
         DummyComponent,
-        BillingDetailComponent,
         NewUserComponent,
         BrowserDetectComponent,
         OnboardingComponent,
@@ -130,7 +128,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         DecoratorsModule.forRoot(),
         ShSelectModule,
         ToastrModule.forRoot({ preventDuplicates: true, maxOpened: 3 }),
-        StoreModule.forRoot(reducers, { metaReducers, runtimeChecks: {strictStateImmutability: false, strictActionImmutability: false} }),
+        StoreModule.forRoot(reducers, { metaReducers, runtimeChecks: { strictStateImmutability: false, strictActionImmutability: false } }),
         PerfectScrollbarModule,
         RouterModule.forRoot(ROUTES, {
             useHash: IS_ELECTRON_WA,
