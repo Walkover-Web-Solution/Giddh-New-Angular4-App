@@ -64,6 +64,7 @@ body.dark-theme {
     --color-upgrade-plan-primary: #36b283;
     --color-upgrade-plan-primary-background: #212528;
     --color-upgrade-plan-secondary-background: #212528;
+    --color-upgrade-plan-tertiary-background: #668cff26;
     --color-upgrade-plan-card-primary-background-hover: #668cff26;
     --color-upgrade-plan-card-primary-border-hover: #36b283;
     --color-csv-or-excel-file-card-text: #36b283;
@@ -73,7 +74,7 @@ body.dark-theme {
     --color-primary-button-background: #f5f5f5;
     --color-secondary-button-text: #f5f5f5;
     --color-secondary-button-background: #668cff;
-    --color-secondary-button-background-hover: #668cff;
+    --color-secondary-button-background-hover: #668cff26;
     --color-tertiary-button-text: #f5f5f5;
     --color-tertiary-button-background: transparent;
     --color-tertiary-button-background-hover: #e7e9eb30;
@@ -81,7 +82,13 @@ body.dark-theme {
     --color-quinary-button-background: #212528;
     --color-senary-button-text: #f5f5f5;
     --color-senary-button-background: #36b283;
-    --color-senary-button-background-hover: #36b283;
+    --color-senary-button-background-hover: #36b28326;
+    --color-septenary-button-text: #f5f5f5;
+    --color-octonary-button-text: #f5f5f5;
+    --color-nonary-button-text: #f5f5f5;
+    --color-nonary-button-background: #36b283;
+    --color-nonary-button-background-hover: #36b28326;
+    --color-denary-button-background: #212528;
     --color-primary-filter-button-text: #f5f5f5;
     --color-primary-cancel-button-background-hover: #668cff26;
 
@@ -95,9 +102,10 @@ body.dark-theme {
     --color-dropdown-list-icon: #212528;
     --color-dropdown-list-hover-text: #f5f5f5;
     --color-dropdown-primary-background: #212528;
-    --color-dropdown-secondary-background: #f5f5f5;
+    --color-dropdown-secondary-background: #212528;
     --color-dropdown-terniary-background: #668cff;
     --color-dropdown-list-hover-background: #668cff26;
+    --color-dropdown-secondary-list-hover-background: #668cff26;
     --color-dropdown-list-box-shadow: #212528;
     --color-dropdown-primary-bar-border: #668cff;
 
@@ -133,6 +141,7 @@ body.dark-theme {
     --color-datepicker-unselected-month: #f5f5f5;
     --color-datepicker-background: #212528;
     --color-main-content-datepicker: #9b9b9e;
+    --color-primary-head-datepicker-text: #f5f5f5;
     --color-datepicker-box-shadow: #212528;
     --color-datepicker-selected-date-background: #668cff;
     --color-datepicker-selected-date-range-background: #668cff26;
@@ -164,6 +173,9 @@ body.dark-theme {
     // Aside Setting and Aside Help Support Color Variables
     --color-primary-aside-host-after-background: #f5f5f5;
     --color-primary-aside-help-support-aside-header-pane-background: #f5f5f5;
+
+    // All In One Menu Color Variables
+    --color-primary-all-in-one-menu-text: #f5f5f5;
 
     // Aside Menu Create Tax Color Variables
     --color-aside-menu-create-tax-custom-tags-span-background: #9b9b9e;
@@ -280,8 +292,8 @@ body.dark-theme {
     --color-primary-company-branch-digit-blue: #668cff;
 
     // Popup Color Variables
-    --color-popup-list-input-text: #cbcfd2;
     --color-popup-list-head-text: #f5f5f5;
+    --color-popup-list-input-text: #cbcfd2;
     --color-popup-list-hover: #668cff26;
     --color-popup-background: #212528;
     --color-popup-secondary-background: #212528;
@@ -424,6 +436,10 @@ body.dark-theme {
     // Total Overdues Chat Color Variables
     --color-primary-total-overdues-chart-vendor-due-text: #e54556;
 
+    // Tooltip Color Variables
+    --color-primary-tooltip-text: #f5f5f5;
+    --color-primary-tooltip-background: #9b9b9e;
+
     // Right Sidebar Color Variables
     --color-right-sidebar-back: #f5f5f5;
     --color-right-sidebar-icon: #f5f5f5;
@@ -434,12 +450,14 @@ body.dark-theme {
     --color-table-primary-heading: #212528;
     --color-table-secondary-heading: #668cff;
     --color-table-tertiary-heading: #f5f5f5;
+    --color-table-quaternary-heading: #212528;
     --color-table-primary-content: #cbcfd2;
     --color-table-secondary-content: #212528;
     --color-table-tertiary-content: #9b9b9e;
     --color-table-quaternary-content: #9b9b9e;
     --color-table-quinary-content: #f5f5f5;
     --color-table-senary-content: #f5f5f5;
+    --color-table-septenary-content: #f5f5f5;
     --color-table-row-hover-primary-background: #668cff26;
     --color-table-row-hover-secondary-background: #668cff26;
     --color-table-heading-primary-background: #212528;
@@ -448,7 +466,7 @@ body.dark-theme {
     --color-table-datepicker-header-background: #36b283;
     --color-table-datepicker-body-background: #f5f5f5;
     --color-table-input-background: #668cff26;
-    --color-table-searchbar-background: #f5f5f5;
+    --color-table-searchbar-background: #303840;
     --color-table-primary-header-bar-border: #9b9b9e;
     --color-table-primary-content-bar-border: #668cff26;
     --color-table-primary-giddh-table-thead-register-table-th-th-background: #e58a0026;

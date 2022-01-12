@@ -1896,7 +1896,7 @@ ul.pills li {
 /*box styles  on settings integration page*/
 .box {
     padding: 15px;
-    background-color: var(--color-common-primary-background-for-all-components);
+    // background-color: var(--color-common-primary-background-for-all-components);
 }
 #setting-tab .nav > li > a {
     color: var(--color-tab-secondary-text);
@@ -2345,7 +2345,7 @@ form#groupDetailForm {
     font-size: 12px !important;
 }
 .tooltip-inner {
-    background: var(--color-shark) !important;
+    background: var(--color-primary-tooltip-background) !important;
 }
 /** aside pane styles */
 .aside-pane {
@@ -2404,6 +2404,11 @@ form#groupDetailForm {
 /* material css for ledger */
 .mat-dialog-container {
     padding: 0px !important;
+    color: var(--color-table-septenary-content) !important;
+    background-color: var(--color-popup-background) !important;
+    .modal-footer {
+        background-color: var(--color-popup-background);
+    }
 }
 .mat-dialog-title {
     margin-bottom: 0px !important;
@@ -2499,9 +2504,12 @@ giddh-datepicker {
 .mat-expansion-panel {
     .mat-expansion-panel-header {
         padding: 0 15px !important;
-        background-color: var(--color-tab-primary-background);
+        background-color: var(--color-tab-primary-background) !important;
         &:hover {
             background-color: var(--color-tab-primary-background) !important;
+        }
+        .mat-expansion-panel-header-title {
+            color: var(--color-tab-secondary-text) !important;
         }
     }
     .mat-expansion-panel-body {
@@ -2756,7 +2764,13 @@ td.mat-footer-cell {
     .mat-checkbox-layout {
         .mat-checkbox-label {
             font-size: 14px !important;
+            color: var(--color-common-primary-text) !important;
         }
+    }
+}
+.mat-checkbox-disabled {
+    .mat-checkbox-label {
+        color: var(--color-common-primary-text) !important;
     }
 }
 .petty-cash {
@@ -2818,8 +2832,8 @@ td.mat-footer-cell {
     }
 }
 .tooltip-black {
-    background: var(--color-shark) !important;
-    color: var(--color-white);
+    background: var(--color-primary-tooltip-background) !important;
+    color: var(--color-primary-tooltip-text);
     font-size: 12px !important;
 }
 .mat-button-focus-overlay {
