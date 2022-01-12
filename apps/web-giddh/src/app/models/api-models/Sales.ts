@@ -160,6 +160,9 @@ export class AccountDetailsClass {
             if (attrs.currencySymbol) {
                 this.currencySymbol = attrs.currencySymbol;
             }
+            if (attrs.currency) {
+                this.currencyCode = attrs.currency;
+            }
             Object.assign(this, pick(attrs, ['name', 'uniqueName', 'email', 'attentionTo']));
             this.contactNumber = attrs.mobileNo || '';
             this.mobileNumber = attrs.mobileNo || '';
