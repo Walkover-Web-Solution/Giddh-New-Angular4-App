@@ -155,8 +155,13 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
             this.isMultiCurrencyAccount = this.invoiceFormDetails?.accountDetails?.currencyCode !== this.companyCurrency;
         }
         if (!this.isVoucherModule) {
-            const voucherType =
+            let voucherType =
                 (this.adjustedVoucherType === AdjustedVoucherType.AdvanceReceipt || this.adjustedVoucherType === AdjustedVoucherType.Receipt) ? 'receipt' : this.adjustedVoucherType;
+
+            if(this.voucherApiVersion === 2 && voucherType === AdjustedVoucherType.Sales) {
+                voucherType = AdjustedVoucherType.SalesInvoice;
+            }
+
             const customerUniqueName = this.invoiceFormDetails.voucherDetails.customerUniquename;
             let requestObject;
             if (typeof customerUniqueName === 'string') {
