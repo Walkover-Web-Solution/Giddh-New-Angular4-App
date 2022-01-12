@@ -1,5 +1,6 @@
 @charset "utf-8";
 @import "~@angular/material/theming";
+@import "./color.scss";
 @import "../css/giddh-common.scss";
 @import "@angular/material/prebuilt-themes/indigo-pink.css";
 $custom-typography: mat-typography-config(
