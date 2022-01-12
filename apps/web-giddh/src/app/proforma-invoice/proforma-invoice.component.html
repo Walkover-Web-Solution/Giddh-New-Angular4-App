@@ -3274,7 +3274,16 @@
                                             !(isPendingVoucherType && isCashInvoice)
                                         "
                                     >
-                                        <div class="table-cell deposit-section">
+                                        <div
+                                            class="table-cell deposit-section"
+                                            *ngIf="
+                                                ((isSalesInvoice || isPurchaseInvoice || isCreditNote || isDebitNote) &&
+                                                    (isAccountHaveAdvanceReceipts ||
+                                                        isInvoiceAdjustedWithAdvanceReceipts)) ||
+                                                (!isUpdateMode &&
+                                                    (isSalesInvoice || currentVoucherFormDetails?.depositAllowed))
+                                            "
+                                        >
                                             <div class="btn-group">
                                                 <div
                                                     (click)="clickedInside($event)"
