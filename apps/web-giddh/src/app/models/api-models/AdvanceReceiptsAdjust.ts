@@ -33,6 +33,7 @@ export class Adjustment {
     linkingAdjustment?: boolean;
     amount?: DueAmount;
     unadjustedAmount?: DueAmount;
+    currency?: { symbol: string; code: string; };
 
     constructor() {
         this.voucherNumber = '';
