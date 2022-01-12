@@ -2517,7 +2517,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 }
             }
             /** Advance receipts adjustment for sales invoice*/
-            if (this.isSalesInvoice && this.advanceReceiptAdjustmentData && this.advanceReceiptAdjustmentData.adjustments) {
+            if ((this.isSalesInvoice || this.isCreditNote || this.isDebitNote) && this.advanceReceiptAdjustmentData && this.advanceReceiptAdjustmentData.adjustments) {
                 if (this.advanceReceiptAdjustmentData.adjustments.length) {
                     const adjustments = cloneDeep(this.advanceReceiptAdjustmentData.adjustments);
                     if (adjustments) {
@@ -2596,7 +2596,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         }
 
         if (this.isProformaInvoice || this.isEstimateInvoice) {
-
             if (this.depositAmount && this.depositAmount > 0) {
                 requestObject.paymentAction = {
                     action: 'paid',
@@ -4222,6 +4221,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 this.location?.back();
             }
         } else {
+            this.advanceReceiptAdjustmentData = this.adjustmentUtilityService.getVoucherAdjustmentObject(this.advanceReceiptAdjustmentData);
             this.startLoader(false);
             this._toasty.errorToast(response.message, response.code);
         }

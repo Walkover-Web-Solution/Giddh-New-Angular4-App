@@ -1065,7 +1065,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         if (this.vm.selectedLedger?.voucherAdjustments && !this.vm.selectedLedger?.voucherAdjustments?.adjustments) {
             this.vm.selectedLedger.voucherAdjustments.adjustments = [];
         }
-        if ((this.isAdjustAdvanceReceiptSelected || this.isAdjustReceiptSelected || this.isAdjustVoucherSelected) && this.vm.selectedLedger?.voucherAdjustments && (!this.vm.selectedLedger?.voucherAdjustments?.adjustments?.length || isUpdateMode)) {
+        if ((this.isAdjustAdvanceReceiptSelected || this.isAdjustReceiptSelected || this.isAdjustVoucherSelected) && (!this.vm.selectedLedger?.voucherAdjustments?.adjustments?.length || isUpdateMode)) {
             this.prepareAdjustVoucherConfiguration();
             this.openAdjustPaymentModal();
         }

@@ -3294,7 +3294,13 @@
                                         class="table-row"
                                         *ngIf="
                                             !hideDepositSection &&
-                                            (isSalesInvoice || currentVoucherFormDetails?.depositAllowed) &&
+                                            (isSalesInvoice ||
+                                                currentVoucherFormDetails?.depositAllowed ||
+                                                (voucherApiVersion === 2 &&
+                                                    (isSalesInvoice ||
+                                                        isPurchaseInvoice ||
+                                                        isCreditNote ||
+                                                        isDebitNote))) &&
                                             !(isPendingVoucherType && isCashInvoice)
                                         "
                                     >
@@ -3309,7 +3315,10 @@
                                                     <ul>
                                                         <ng-container
                                                             *ngIf="
-                                                                (isSalesInvoice || isPurchaseInvoice) &&
+                                                                (isSalesInvoice ||
+                                                                    isPurchaseInvoice ||
+                                                                    isCreditNote ||
+                                                                    isDebitNote) &&
                                                                 (isAccountHaveAdvanceReceipts ||
                                                                     isInvoiceAdjustedWithAdvanceReceipts)
                                                             "
@@ -3407,7 +3416,13 @@
                                                             </li>
                                                         </ng-container>
 
-                                                        <ng-container *ngIf="!isUpdateMode">
+                                                        <ng-container
+                                                            *ngIf="
+                                                                !isUpdateMode &&
+                                                                (isSalesInvoice ||
+                                                                    currentVoucherFormDetails?.depositAllowed)
+                                                            "
+                                                        >
                                                             <li role="menuitem" class="mr-t1">
                                                                 <div class="clearfix payment-mode">
                                                                     <sh-select
