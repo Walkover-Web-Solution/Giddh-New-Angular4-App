@@ -37,6 +37,7 @@ export interface PaymentAdvanceSearchModel {
 export const PAYMENT_REPORT_FILTERS = {
     PAYMENT_FILTER: 'payment',
     CUSTOMER_FILTER: 'customerName',
+    VENDOR_FILTER: 'vendorName',
     PAYMENT_MODE_FILTER: 'paymentMode',
     INVOICE_FILTER: 'invoiceNumber'
 }

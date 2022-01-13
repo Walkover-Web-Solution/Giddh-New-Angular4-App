@@ -45,9 +45,9 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
     /** Parent of invoice number search bar */
     @ViewChild('invoiceNumberParent', { static: false }) public invoiceNumberParent: ElementRef;
     /** Advance search modal instance */
-    @ViewChild('paymentSearchFilterModal', { static: true }) public paymentSearchFilterModal: ElementViewContainerRef;
+    @ViewChild('paymentSearchFilterModal', { static: false }) public paymentSearchFilterModal: ElementViewContainerRef;
     /** Container of Advance search modal instance */
-    @ViewChild('paymentSearchModalContainer', { static: true }) public paymentSearchModalContainer: ModalDirective;
+    @ViewChild('paymentSearchModalContainer', { static: false }) public paymentSearchModalContainer: ModalDirective;
     /** Instance of receipt confirmation modal */
     @ViewChild('paymentConfirmationModel', { static: false }) public paymentConfirmationModel: ModalDirective;
     /** Moment method */
@@ -320,7 +320,7 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
                 }
                 this.showPaymentSearchBar = openFilter;
                 break;
-            case PAYMENT_REPORT_FILTERS.CUSTOMER_FILTER:
+            case PAYMENT_REPORT_FILTERS.VENDOR_FILTER:
                 if (event && this.childOf(event.target, this.vendorNameParent?.nativeElement)) {
                     return;
                 }
@@ -649,9 +649,9 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
      * @memberof PaymentReportComponent
      */
     public previewVoucher(payment: any): void {
-        if (this.voucherApiVersion === 2) {
-            this.router.navigate(['/pages/voucher/payment/preview/' + payment.uniqueName + '/' + payment.account?.uniqueName]);
-        }
+        // if (this.voucherApiVersion === 2) {
+        //     this.router.navigate(['/pages/voucher/payment/preview/' + payment.uniqueName + '/' + payment.account?.uniqueName]);
+        // }
     }
 
     /**

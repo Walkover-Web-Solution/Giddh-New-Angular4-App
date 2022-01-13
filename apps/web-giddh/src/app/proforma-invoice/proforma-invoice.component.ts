@@ -855,6 +855,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 if (this.isCashInvoice || this.currentVoucherFormDetails?.depositAllowed) {
                     this.loadBankCashAccounts('');
                 }
+            } else if (params['voucherType']) {
+                this.selectedVoucherType = params['voucherType'];
             }
 
             if (params['invoiceType'] && params['accUniqueName']) {
