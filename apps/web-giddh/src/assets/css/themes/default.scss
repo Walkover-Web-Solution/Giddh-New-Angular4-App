@@ -184,6 +184,13 @@ body.default-theme {
     --color-primary-subscription-plans-selected-background: #668cff26;
     --color-primary-subscription-active: #36b283;
     --color-primary-subscription-green-red-orange-dot-background: #36b283;
+    --color-primary-tab-header-text: #505159;
+    --color-primary-subscription-search-placeholder-text: #505159;
+    --color-primary-subscription-dropdown-text: #212528;
+    --color-primary-subscription-dropdown-background: #cbcfd2;
+    --color-secondary-subscription-dropdown-background: #ffffff;
+    --color-secondary-subscription-dropdown-background-hover: #e7e9eb;
+    --color-primary-subscription-left-sidebar-box-background: #668cff26;
 
     // Proforma Invoice Color Variables
     --color-primary-performa-invoice-a-copy-invoice: #668cff;
@@ -419,6 +426,9 @@ body.default-theme {
     --color-gst-primary-return-content-return-filed: #36b283;
     --color-gst-primary-c-tab-nav-tabs-active-hover-focus-border-bottom: #1a237e;
     --color-gst-primary-filing-due-date-return-details-table-tbody-tr-td-first-child-before: #668cff;
+    --color-gst-primary-table-text: #212528;
+    --color-gst-primary-table-background: #f5f5f5;
+    --color-gst-secondary-table-background: #ffffff;
 
     // GSTR3 Color Variables
     --color-primary-tax-engine-summary-gstr-3b-report-table-tbody-thead-td-border: #9b9b9e;
@@ -582,4 +592,32 @@ body.default-theme {
     --color-black-russian: #cbcfd2;
     --color-cinnabar-orange: #e54556;
     --color-orange: #e58a00;
+
+    --color-green: #36b283;
+    --color-very-light-gray: #cbcfd2;
+    --color-midnight-blue: #1a237e;
+    --color-gainsboro: #cbcfd2;
+    --color-gray: #9b9b9e;
+    --color-red: #e54556;
+    --color-night-rider: #212528;
+    --color-black: #212528;
+    --color-black-pearl: #212528;
+    --color-russian-black: #212528;
+    --color-solitude-light: #668cff26;
+    --color-grey-chateau: #9b9b9e;
+    --color-cornflower: #668cff;
+    --color-omiod: #505159;
+    --color-fog-green: #36b28326;
+    --color-dark-fog: #e7e9eb;
+    --color-orange-new: #e58a00;
+    --color-default-border-bottom: #cbcfd2;
+    --color-cloud: #cbcfd2;
+    --color-skeleton-loading-gradient: #cbcfd2;
+    --color-dark-gray-new: #9b9b9e;
+    --color-slate: #505159;
+    --color-skeleton-loading-gradient-bg: #e7e9eb;
+    --color-skeleton-loading-linear: #cbcfd2;
+    --color-skeleton-loading-gradient-inner: #f5f5f5;
+    --color-lighted-gray: #505159;
+    --color-cream-orange: #e58a0026;
 }
