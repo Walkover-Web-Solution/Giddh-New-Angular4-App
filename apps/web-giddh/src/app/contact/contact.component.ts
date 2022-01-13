@@ -1662,7 +1662,8 @@ export class ContactComponent implements OnInit, OnDestroy {
         }
         if (this.selectedAccountsList?.length || this.selectedAccForPayment) {
             this.dialog.open(this.bulkPaymentModalRef ,{
-                width: '55%'
+                width: '980px',
+                panelClass:'contact-modal'
             });
         }
     }

@@ -7579,10 +7579,20 @@ body.update-scroll-hidden {
         display: none;
     }
 }
-
+.contact-body {
+    .contact-modal {
+        height: 366px !important;
+        .mat-dialog-container {
+            float: left !important;
+            width: 100% !important;
+            overflow: hidden;
+        }
+    }
+}
 .cdk-overlay-pane {
     height: auto !important;
-} /* responsive  starts here*/
+}
+/* responsive  starts here*/
 @media (max-width: 1440px) {
     .font-xxlarge {
         font-size: 20px;
@@ -8086,6 +8096,9 @@ body.update-scroll-hidden {
 }
 
 @media (max-width: 767px) {
+    .contact-body .contact-modal {
+        margin-top: 23%;
+    }
     .customer-form-inline {
         float: left;
         width: 100%;
