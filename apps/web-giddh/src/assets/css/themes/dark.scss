@@ -184,6 +184,13 @@ body.dark-theme {
     --color-primary-subscription-plans-selected-background: #668cff26;
     --color-primary-subscription-active: #36b283;
     --color-primary-subscription-green-red-orange-dot-background: #36b283;
+    --color-primary-tab-header-text: #212528;
+    --color-primary-subscription-search-placeholder-text: #cbcfd2;
+    --color-primary-subscription-dropdown-text: #cbcfd2;
+    --color-primary-subscription-dropdown-background: #ba91f226;
+    --color-secondary-subscription-dropdown-background: #212528;
+    --color-secondary-subscription-dropdown-background-hover: #668cff26;
+    --color-primary-subscription-left-sidebar-box-background: #36b28326;
 
     // Proforma Invoice Color Variables
     --color-primary-performa-invoice-a-copy-invoice: #668cff;
@@ -387,9 +394,9 @@ body.dark-theme {
     --color-sidebar-list-background-hover: #668cff26;
 
     // Tax Sidebar Color Variables
-    --color-primary-tax-sidebar-text: #212528;
-    --color-primary-tax-sidebar-list-active: #36b283;
-    --color-primary-tax-sidebar-list-hover: #212528;
+    --color-primary-tax-sidebar-text: #f5f5f5;
+    --color-primary-tax-sidebar-list-active: #668cff;
+    --color-primary-tax-sidebar-list-hover: #668cff26;
     --color-primary-tax-sidebar-gst-menu-items-ul: #9b9b9e;
 
     // MF Report Color Variables
@@ -413,12 +420,15 @@ body.dark-theme {
     --color-grid-row-tb-pl-custom-header-background: #9b9b9e;
 
     // GST Color Variables
-    --color-gst-primary-background-color: #f5f5f5;
+    --color-gst-primary-background-color: #212528;
     --color-gst-primary-doc-actions: #e54556;
     --color-gst-primary-return-body-notification-faq-list-li-a-hover: #668cff;
     --color-gst-primary-return-content-return-filed: #36b283;
     --color-gst-primary-c-tab-nav-tabs-active-hover-focus-border-bottom: #668cff;
     --color-gst-primary-filing-due-date-return-details-table-tbody-tr-td-first-child-before: #668cff;
+    --color-gst-primary-table-text: #f5f5f5;
+    --color-gst-primary-table-background: #668cff26;
+    --color-gst-secondary-table-background: #212528;
 
     // GSTR3 Color Variables
     --color-primary-tax-engine-summary-gstr-3b-report-table-tbody-thead-td-border: #cbcfd2;
@@ -581,4 +591,32 @@ body.dark-theme {
     --color-black-russian: #212528;
     --color-cinnabar-orange: #e54556;
     --color-orange: #e58a00;
+
+    --color-green: #36b283;
+    --color-very-light-gray: #9b9b9e;
+    --color-midnight-blue: #668cff;
+    --color-gainsboro: #9b9b9e;
+    --color-gray: #cbcfd2;
+    --color-red: #e54556;
+    --color-night-rider: #f5f5f5;
+    --color-black: #f5f5f5;
+    --color-black-pearl: #f5f5f5;
+    --color-russian-black: #f5f5f5;
+    --color-solitude-light: #668cff26;
+    --color-grey-chateau: #cbcfd2;
+    --color-cornflower: #668cff;
+    --color-omiod: #9b9b9e;
+    --color-fog-green: #36b28326;
+    --color-dark-fog: #668cff26;
+    --color-orange-new: #e58a00;
+    --color-default-border-bottom: #9b9b9e;
+    --color-cloud: #9b9b9e;
+    --color-skeleton-loading-gradient: #9b9b9e;
+    --color-dark-gray-new: #cbcfd2;
+    --color-slate: #9b9b9e;
+    --color-skeleton-loading-gradient-bg: #668cff26;
+    --color-skeleton-loading-linear: #9b9b9e;
+    --color-skeleton-loading-gradient-inner: #212528;
+    --color-lighted-gray: #9b9b9e;
+    --color-cream-orange: #e58a0026;
 }
