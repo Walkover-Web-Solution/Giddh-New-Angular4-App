@@ -201,7 +201,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
 
     }
 
-    ngOnChanges(): void {
+    public ngOnChanges(): void {
         this.translationComplete();
     }
     /**
@@ -277,10 +277,10 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
      * @memberof SubscriptionComponent
      */
     public filterSubscriptions(): void {
-        let subscriptions = [];
-        this.subscriptions = [];
-
         this.subscriptions$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            let subscriptions = [];
+            this.subscriptions = [];
+            
             if (response?.length) {
                 response.forEach(subscription => {
                     let subscriptionDetails = cloneDeep(subscription);
