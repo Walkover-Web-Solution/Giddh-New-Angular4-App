@@ -186,7 +186,11 @@
                                         autocomplete="off"
                                         (blur)="resetValueIfOptionNotSelected('billingState')"
                                     />
-                                    <mat-autocomplete #billingStateAuto="matAutocomplete" [displayWith]="displayLabel">
+                                    <mat-autocomplete
+                                        #billingStateAuto="matAutocomplete"
+                                        [displayWith]="displayLabel"
+                                        (optionSelected)="onStateChange($event)"
+                                    >
                                         <mat-option *ngFor="let state of companyStatesSource" [value]="state">
                                             {{ state.label }}
                                         </mat-option>
