@@ -45,9 +45,9 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
     /** Parent of invoice number search bar */
     @ViewChild('invoiceNumberParent', { static: false }) public invoiceNumberParent: ElementRef;
     /** Advance search modal instance */
-    @ViewChild('receiptAdvanceSearchFilterModal', { static: true }) public receiptAdvanceSearchFilterModal: ElementViewContainerRef;
+    @ViewChild('receiptAdvanceSearchFilterModal', { static: false }) public receiptAdvanceSearchFilterModal: ElementViewContainerRef;
     /** Container of Advance search modal instance */
-    @ViewChild('receiptAdvanceSearchModalContainer', { static: true }) public receiptAdvanceSearchModalContainer: ModalDirective;
+    @ViewChild('receiptAdvanceSearchModalContainer', { static: false }) public receiptAdvanceSearchModalContainer: ModalDirective;
     /** Instance of receipt confirmation modal */
     @ViewChild('receiptConfirmationModel', { static: false }) public receiptConfirmationModel: ModalDirective;
     /** Moment method */
@@ -704,9 +704,9 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
      * @memberof AdvanceReceiptReportComponent
      */
     public previewVoucher(receipt: any): void {
-        if (this.voucherApiVersion === 2) {
-            this.router.navigate(['/pages/voucher/receipt/preview/' + receipt.uniqueName + '/' + receipt.account?.uniqueName]);
-        }
+        // if (this.voucherApiVersion === 2) {
+        //     this.router.navigate(['/pages/voucher/receipt/preview/' + receipt.uniqueName + '/' + receipt.account?.uniqueName]);
+        // }
     }
 
     /**
