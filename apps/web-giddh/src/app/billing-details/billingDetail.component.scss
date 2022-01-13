@@ -1,4 +1,3 @@
-@import "../../assets/css/color.scss";
 #main {
     position: relative;
     float: left;
@@ -9,9 +8,9 @@
         width: 100%;
         .back-button {
             margin-top: 4%;
-            background-color: $very-light-gray !important;
-            border-color: $gainsboro;
-            color: $night-rider;
+            background-color: var(--color-very-light-gray) !important;
+            border-color: var(--color-gainsboro);
+            color: var(--color-night-rider);
             font-family: "opensans-semibold" !important;
             margin-bottom: 15px !important;
             padding-left: 12px !important;
@@ -64,10 +63,10 @@
         .billing-name {
             font-size: 20px;
             font-weight: 700;
-            color: $gray;
+            color: var(--color-gray);
         }
         .billing-wrapper {
-            border-right: 1px solid $gainsboro;
+            border-right: 1px solid var(--color-gainsboro);
             height: 100%;
             .form-label {
                 height: 16px;
@@ -80,7 +79,7 @@
                 float: left;
                 width: 100%;
                 height: 37px;
-                border: 1px solid $skeleton-loading-gradient-bg;
+                border: 1px solid var(--color-skeleton-loading-gradient-bg);
                 color: black !important;
             }
         }
@@ -88,15 +87,15 @@
             float: left;
             width: 100%;
             label {
-                color: $dark-gray-new;
+                color: var(--color-dark-gray-new);
                 float: left;
                 width: 100%;
             }
         }
 
         .form-control {
-            background: $white !important;
-            border: 1px solid $gainsboro !important;
+            background: var(--color-white) !important;
+            border: 1px solid var(--color-gainsboro) !important;
             border-radius: 2px !important;
             padding: 6px !important;
         }
@@ -111,10 +110,10 @@
             height: 39px;
         }
         .red-text {
-            color: $gray !important;
+            color: var(--color-gray) !important;
         }
         .billing-details form label {
-            color: $dark-gray-new;
+            color: var(--color-dark-gray-new);
             font-size: 15px;
             font-weight: 400;
         }
@@ -142,7 +141,7 @@
                 margin-bottom: 13px;
             }
             .renewal-details {
-                color: $gray;
+                color: var(--color-gray);
             }
             .renewal-data {
                 padding-left: 4px;
@@ -153,7 +152,7 @@
                 padding-top: 0px;
             }
             .renewal-card-subtitle {
-                color: $gray;
+                color: var(--color-gray);
                 font-size: 16px;
                 font-weight: bold;
                 margin-bottom: 0px !important;
@@ -180,18 +179,18 @@
                 width: 100%;
             }
             .renewal-off {
-                color: $gray;
+                color: var(--color-gray);
                 font-size: 12px;
                 font-weight: 600;
                 padding-left: 4px;
             }
             .discount-off {
-                color: $green;
+                color: var(--color-green);
                 font-weight: bold;
             }
             .features {
                 line-height: 1.7;
-                color: $gray;
+                color: var(--color-gray);
                 margin-bottom: 3px;
             }
             .renewal-payable {
@@ -237,8 +236,8 @@
                 font-weight: bolder;
                 height: 38px;
                 font-size: 17px;
-                background-color: $midnight-blue;
-                color: $white;
+                background-color: var(--color-midnight-blue);
+                color: var(--color-white);
             }
         }
     }
@@ -247,7 +246,7 @@
         width: 100%;
         padding-top: 12px;
         padding-bottom: 13px;
-        color: $gray;
+        color: var(--color-gray);
         font-size: 14px;
         padding-left: 5px;
         .renewal-subscription-extra {

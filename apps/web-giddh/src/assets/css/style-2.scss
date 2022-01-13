@@ -1,6 +1,5 @@
 @charset "utf-8";
 @import "~@angular/material/theming";
-@import "./color.scss";
 @import "../css/giddh-common.scss";
 @import "@angular/material/prebuilt-themes/indigo-pink.css";
 $custom-typography: mat-typography-config(
@@ -1312,6 +1311,10 @@ modal-container.modal {
 }
 .form-control.mat-select-disabled {
     background: var(--color-porcelain) !important;
+}
+
+.mat-select-value {
+    color: var(--color-primary-subscription-dropdown-text);
 }
 
 input {
@@ -5101,6 +5104,7 @@ perfect-scrollbar > .ps > .ps-overlay {
     line-height: 1.42857143;
     vertical-align: top;
     border-top: 1px solid var(--color-porcelain);
+    color: var(--color-gst-primary-table-text);
 }
 .tax-engine .details .details-info,
 .warehouses > li div,
@@ -5149,11 +5153,11 @@ perfect-scrollbar > .ps > .ps-overlay {
 }
 .tax-engine .table-striped > tbody > tr:nth-child(odd) > td,
 .tax-engine .table-striped > tbody > tr:nth-child(odd) > th {
-    background-color: var(--color-wild-sand);
+    background-color: var(--color-gst-primary-table-background);
 }
 .tax-engine .table-striped > tbody > tr:nth-child(even) > td,
 .tax-engine .table-striped > tbody > tr:nth-child(even) > th {
-    background-color: var(--color-white);
+    background-color: var(--color-gst-secondary-table-background);
 }
 .tax-engine .sub-filter-nav-band .nav-tabs > li.active > a::before {
     content: none;
@@ -9075,15 +9079,15 @@ input[type="checkbox"].cdk-visually-hidden::after {
 }
 .back-btnn {
     .btn-default {
-        color: $russian-black !important;
+        color: var(--color-russian-black) !important;
     }
     .btn-default:hover {
-        color: $russian-black !important;
-        border-color: $skeleton-loading-gradient !important;
+        color: var(--color-russian-black) !important;
+        border-color: var(--color-skeleton-loading-gradient) !important;
     }
     .btn-default:not(:disabled):not(.disabled):active {
-        color: $russian-black !important;
-        border-color: $skeleton-loading-gradient !important;
+        color: var(--color-russian-black) !important;
+        border-color: var(--color-skeleton-loading-gradient) !important;
     }
 }
 .custom-modalbox {
@@ -9092,7 +9096,7 @@ input[type="checkbox"].cdk-visually-hidden::after {
 }
 .activation-key {
     .mat-input-element {
-        border: 1px solid $skeleton-loading-gradient !important;
+        border: 1px solid var(--color-skeleton-loading-gradient) !important;
     }
 }
 .susbcription-plan-amount {
@@ -9130,7 +9134,7 @@ input[type="checkbox"].cdk-visually-hidden::after {
     }
 } /** Skeleton Effects  **/
 .skeleton-common-class {
-    background: $skeleton-loading-gradient-bg;
+    background: var(--color-skeleton-loading-gradient-bg);
     color: transparent !important;
     position: relative;
     overflow: hidden !important;
@@ -9139,9 +9143,9 @@ input[type="checkbox"].cdk-visually-hidden::after {
         height: 100%;
         background: linear-gradient(
             to right,
-            $skeleton-loading-gradient 62%,
-            $skeleton-loading-linear 50%,
-            $skeleton-loading-gradient-inner 100%
+            var(--color-skeleton-loading-gradient) 62%,
+            var(--color-skeleton-loading-linear) 50%,
+            var(--color-skeleton-loading-gradient-inner) 100%
         );
         animation-name: gradient-animation;
         animation-duration: 1s;
@@ -9165,7 +9169,7 @@ input[type="checkbox"].cdk-visually-hidden::after {
 .table-header-fix {
     position: sticky;
     top: 0;
-    background-color: $white;
+    background-color: var(--color-white);
     z-index: 100;
 }
 
@@ -9186,8 +9190,8 @@ input[type="checkbox"].cdk-visually-hidden::after {
 .main-content-subscription {
     .main-tabs-content {
         .mat-tab-label.mat-tab-label-active {
-            background-color: $cloud;
-            color: $slate;
+            background-color: var(--color-cloud);
+            color: var(--color-slate);
         }
 
         .mat-ink-bar {
