@@ -316,6 +316,7 @@ export class ContactComponent implements OnInit, OnDestroy {
                     }
                     if (activeTab === "vendor" && this.localeData?.page_heading) {
                         this.availableColumnsCount = [];
+                        this.searchedName.reset();
                         this.translationComplete(true);
                     }
                 } else if ((params["type"] && params["type"].indexOf("vendor") > -1) || (queryParams && queryParams.tab && queryParams.tab === "vendor")) {
@@ -325,6 +326,7 @@ export class ContactComponent implements OnInit, OnDestroy {
                     }
                     if (activeTab === "customer" && this.localeData?.page_heading) {
                         this.availableColumnsCount = [];
+                        this.searchedName.reset();
                         this.translationComplete(true);
                     }
                 } else {
