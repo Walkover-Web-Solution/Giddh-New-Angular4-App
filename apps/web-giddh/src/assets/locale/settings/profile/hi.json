@@ -41,5 +41,7 @@
 	"number_system_label": "संख्या प्रणाली",
 	"inventory_type": "इन्वेंटरी प्रकार",
 	"language": "भाषा",
-	"select_language": "भाषा का चयन करें"
+	"select_language": "भाषा का चयन करें",
+    "theme": "थीम",
+    "select_theme": "थीम का चयन करें"
 }
