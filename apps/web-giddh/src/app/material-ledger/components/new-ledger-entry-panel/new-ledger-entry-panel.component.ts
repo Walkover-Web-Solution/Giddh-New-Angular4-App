@@ -240,6 +240,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public voucherApiVersion: 1 | 2;
     /** True if user itself checked the generate voucher  */
     public manualGenerateVoucherChecked: boolean = false;
+    /** Holds input to get invoice list request params */
+    public invoiceListRequestParams: any = {};
 
     constructor(private store: Store<AppState>,
         private cdRef: ChangeDetectorRef,
@@ -1482,6 +1484,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      * @memberof NewLedgerEntryPanelComponent
      */
     private openAdjustPaymentModal(): void {
+        if (this.voucherApiVersion === 2) {
+            this.invoiceListRequestParams = { particularAccount: this.currentTxn?.selectedAccount, voucherType: this.blankLedger.voucherType, ledgerAccount: this.activeAccount };
+        }
         this.adjustmentDialogRef = this.dialog.open(this.adjustPaymentModal, {
             width: '980px',
             panelClass: 'container-modal-class'
