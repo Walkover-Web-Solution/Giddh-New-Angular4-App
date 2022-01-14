@@ -90,6 +90,7 @@ export interface SessionState {
     companyUser: any;
     commonLocaleData: any;
     currentLocale: any;
+    activeTheme: any;
 }
 
 /**
@@ -151,7 +152,8 @@ const sessionInitialState: SessionState = {
     activeCompany: null,
     companyUser: null,
     commonLocaleData: null,
-    currentLocale: null
+    currentLocale: null,
+    activeTheme: null
 };
 
 export function AuthenticationReducer(state: AuthenticationState = initialState, action: CustomActions): AuthenticationState {
@@ -789,7 +791,11 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
                 activeCompany: null
             });
         }
-
+        case CommonActions.SET_ACTIVE_THEME: {
+            return Object.assign({}, state, {
+                activeTheme: action.payload
+            });
+        }
         default:
             return state;
     }
