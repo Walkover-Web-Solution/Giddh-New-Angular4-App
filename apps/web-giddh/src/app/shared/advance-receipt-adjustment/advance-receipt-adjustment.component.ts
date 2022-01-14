@@ -88,7 +88,8 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
     @Input() public isVoucherModule: boolean;
     /** Stores the voucher eligible for adjustment */
     @Input() public voucherForAdjustment: Array<Adjustment>;
-
+    /** Holds input to get invoice list request params */
+    @Input() public invoiceListRequestParams: any;
     /** Close modal event emitter */
     @Output() public closeModelEvent: EventEmitter<{ adjustVoucherData: VoucherAdjustments, adjustPaymentData: AdjustAdvancePaymentModal }> = new EventEmitter();
     /** Submit modal event emitter */
@@ -159,8 +160,16 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
             let voucherType =
                 (this.adjustedVoucherType === AdjustedVoucherType.AdvanceReceipt || this.adjustedVoucherType === AdjustedVoucherType.Receipt) ? 'receipt' : this.adjustedVoucherType;
 
-            if (this.voucherApiVersion === 2 && voucherType === AdjustedVoucherType.Sales) {
-                voucherType = AdjustedVoucherType.SalesInvoice;
+            if (this.voucherApiVersion === 2) {
+                if (voucherType === AdjustedVoucherType.Sales) {
+                    voucherType = AdjustedVoucherType.SalesInvoice;
+                } else if (voucherType === AdjustedVoucherType.Purchase) {
+                    voucherType = AdjustedVoucherType.PurchaseInvoice;
+                }
+
+                if (this.invoiceListRequestParams) {
+                    this.invoiceListRequestParams.voucherType = voucherType;
+                }
             }
 
             const customerUniqueName = this.invoiceFormDetails.voucherDetails.customerUniquename;
@@ -168,10 +177,17 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
             if (typeof customerUniqueName === 'string') {
                 // New entry is created from ledger
                 if (this.voucherApiVersion === 2) {
-                    requestObject = {
-                        accountUniqueName: customerUniqueName,
-                        voucherType,
-                        subVoucher: this.adjustedVoucherType === AdjustedVoucherType.AdvanceReceipt ? SubVoucher.AdvanceReceipt : undefined
+                    if (!this.invoiceListRequestParams) {
+                        requestObject = {
+                            accountUniqueName: customerUniqueName,
+                            voucherType,
+                            subVoucher: this.adjustedVoucherType === AdjustedVoucherType.AdvanceReceipt ? SubVoucher.AdvanceReceipt : undefined
+                        }
+                    } else {
+                        requestObject = this.adjustmentUtilityService.getInvoiceListRequest(this.invoiceListRequestParams);
+                        if (requestObject && this.adjustedVoucherType === AdjustedVoucherType.AdvanceReceipt) {
+                            requestObject.subVoucher = SubVoucher.AdvanceReceipt;
+                        }
                     }
                 } else {
                     requestObject = {
@@ -183,10 +199,17 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
             } else {
                 // A ledger entry is updated
                 if (this.voucherApiVersion === 2) {
-                    requestObject = {
-                        accountUniqueName: customerUniqueName[customerUniqueName?.length-1],
-                        voucherType,
-                        subVoucher: this.adjustedVoucherType === AdjustedVoucherType.AdvanceReceipt ? SubVoucher.AdvanceReceipt : undefined
+                    if (!this.invoiceListRequestParams) {
+                        requestObject = {
+                            accountUniqueName: customerUniqueName[customerUniqueName?.length - 1],
+                            voucherType,
+                            subVoucher: this.adjustedVoucherType === AdjustedVoucherType.AdvanceReceipt ? SubVoucher.AdvanceReceipt : undefined
+                        }
+                    } else {
+                        requestObject = this.adjustmentUtilityService.getInvoiceListRequest(this.invoiceListRequestParams);
+                        if (requestObject && this.adjustedVoucherType === AdjustedVoucherType.AdvanceReceipt) {
+                            requestObject.subVoucher = SubVoucher.AdvanceReceipt;
+                        }
                     }
                 } else {
                     requestObject = {
@@ -196,6 +219,11 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
                     }
                 }
             }
+
+            if (!requestObject) {
+                return;
+            }
+
             this.salesService.getInvoiceList(requestObject, this.invoiceFormDetails.voucherDetails.voucherDate).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
                 if (response && response.body) {
                     let results = (response.body.results || response.body.items);
