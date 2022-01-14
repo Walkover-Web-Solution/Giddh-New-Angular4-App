@@ -638,7 +638,8 @@
         "internet_error": "Please check your internet connection.",
         "internet_disconnected": "Internet disconnected",
         "warehouse_created": "New warehouse created successfully.",
-        "warehouse_updated": "Warehouse updated successfully."
+        "warehouse_updated": "Warehouse updated successfully.",
+        "voucher_saved": "Voucher generated successfully"
     },
     "app_supported_languages": {
         "english": "English",
@@ -658,5 +659,12 @@
         "monthly": "Monthly",
         "unlimited": "Unlimited"
     },
-    "app_create_custom_field": "Create Custom Fields"
+    "app_voucher_unavailable": "There is no voucher for adjustment.",
+    "app_reference_invoice": "Reference Invoice",
+    "app_create_custom_field": "Create Custom Fields",
+    "app_validation": "Validation",
+    "app_archive": "Archive",
+    "app_unarchive": "Unarchive",
+    "app_archived": "Archived",
+    "app_unarchived": "Active"
 }

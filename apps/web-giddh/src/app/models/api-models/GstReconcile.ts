@@ -154,6 +154,8 @@ export class GstTransactionSummary {
     public voucherType: string;
     public supplyType: string;
     public account: INameUniqueName;
+    public voucherUniqueName?: string;
+    public uniqueName?: string;
 }
 
 export class GstOverViewResult {

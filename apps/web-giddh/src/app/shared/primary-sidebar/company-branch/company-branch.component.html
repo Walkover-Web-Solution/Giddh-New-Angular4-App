@@ -75,7 +75,7 @@
                                 id="button-basic"
                                 class="dropdown-toggle d-flex align-items-center"
                                 aria-controls="dropdown-basic"
-                                (click)="getCompanyBranches(company); showAllBranches(company)"
+                                (click)="getCompanyBranches(company, true); showAllBranches(company)"
                             >
                                 <i class="icon-company mr-2"></i>
                                 <span class="company-name-right">{{ company?.name }}</span>
@@ -137,8 +137,8 @@
                                 <a
                                     class="d-flex align-items-center head-branch"
                                     href="javascript:;"
-                                    (keydown.enter)="changeCompany(companyBranches.uniqueName, '', false)"
-                                    (click)="changeCompany(companyBranches.uniqueName, '', false)"
+                                    (keydown.enter)="changeCompany(companyBranches, '', false)"
+                                    (click)="changeCompany(companyBranches, '', false)"
                                 >
                                     <i class="icon-head-branch mr-2"></i>
                                     <span class="d-flex flex-column">
@@ -154,7 +154,7 @@
                                     class="d-flex align-items-center"
                                     [ngClass]="{ 'active': branch?.uniqueName === currentBranchUniqueName }"
                                     href="javascript:;"
-                                    (click)="changeBranch(companyBranches.uniqueName, branch?.uniqueName, $event)"
+                                    (click)="changeBranch(companyBranches, branch?.uniqueName, $event)"
                                     [tooltip]="branch?.alias"
                                     placement="top"
                                 >

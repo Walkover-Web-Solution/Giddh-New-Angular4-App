@@ -61,9 +61,6 @@
     font-size: 14px;
     border: 1px solid $gainsboro;
 }
-.card-basic-details span:first-child {
-    width: 60px;
-}
 .card-basic-details span:nth-child(2) {
     width: 83%;
 }
@@ -130,7 +127,7 @@
 }
 .card-basic-details a#button-basic {
     color: $gray;
-    font-size: 20px;
+    font-size: 16px;
     width: 32px;
     height: 32px;
     display: inline-block;
@@ -306,6 +303,37 @@
 
 .right-card-section {
     margin-top: -15px;
+
+    .branch-status {
+        float: left;
+        margin-top: 17px;
+        margin-right: -18px;
+
+        &.branch-active {
+            color: $light-green;
+            span {
+                background-color: $light-green;
+                width: 8px;
+                height: 8px;
+                float: left;
+                border-radius: 5px;
+                margin-top: 8px;
+                margin-right: 4px;
+            }
+        }
+        &.branch-archived {
+            color: $red;
+            span {
+                background-color: $red;
+                width: 8px;
+                height: 8px;
+                float: left;
+                border-radius: 5px;
+                margin-top: 8px;
+                margin-right: 4px;
+            }
+        }
+    }
 }
 .branch-vector {
     text-align: right;
@@ -343,17 +371,12 @@
         }
         .search-field {
             margin-right: 0;
-            .search-branch-box {
-                max-width: 180px;
-            }
             .clear-filter-btn {
-                width: 122px !important;
-                padding: 0 12px;
+                padding: 0 8px;
             }
         }
     }
     .input-group-date-range-picker {
-        width: 100%;
         .form-group {
             margin-bottom: 0;
         }

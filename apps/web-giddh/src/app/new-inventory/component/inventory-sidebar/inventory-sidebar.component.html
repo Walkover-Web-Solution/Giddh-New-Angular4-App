@@ -1,0 +1,48 @@
+<div class="aside-pane" (clickOutside)="closeAsidePaneIfMobile($event)" asideInventorySidebarMenuState>
+    <div class="help-aside-body">
+        <div class="back-to-main-slider">
+            <a href="javascript:;">
+                <span (click)="goToPreviousPage()">
+                    <i class="icon-back-arrow"></i>
+                    Back
+                </span>
+            </a>
+        </div>
+        <div class="inventory-items">
+            <ul class="mb-3">
+                <li>
+                    <a class="d-block clearfix">
+                        <!-- <span [innerHTML]="tab.icon"></span>
+                        <span>{{tab.label}}</span> -->
+                        <span><i class="icon-item-product"></i></span>
+                        <span>Items/Products</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="d-block clearfix" [routerLink]="['/pages/new-inventory/create-new-inventory']">
+                        <span><i class="icon-fixed-assets"></i></span>
+                        <span>Fixed Assets</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="d-block clearfix">
+                        <span><i class="icon-inventory-dashboard"></i></span>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="d-block clearfix">
+                        <span><i class="icon-branch"></i></span>
+                        <span>Branch Transfer</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="d-block clearfix">
+                        <span><i class="icon-warehouse"></i></span>
+                        <span>Warehouse</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>

@@ -250,7 +250,7 @@ export class InvoiceUiDataService {
                         };
                 }
                 if (!selectedTemplate.sections['table'].data['showDescriptionInRows']) {
-                    selectedTemplate.sections['table'].data['showDescriptionInRows'] = defaultTemplate ? 
+                    selectedTemplate.sections['table'].data['showDescriptionInRows'] = defaultTemplate ?
                         defaultTemplate.sections['table'].data['showDescriptionInRows'] : {
                             label: '',
                             display: false,

@@ -127,6 +127,7 @@ export class LedgerResponse {
     public voucherAdjustments?: VoucherAdjustments;
     public unitRates?: Array<any>;
     public entryVoucherTotals?: any;
+    public voucherUniqueName?: string;
 }
 
 /** Model adjusted amounts for invoices */
@@ -164,8 +165,9 @@ export class MailLedgerRequest {
  * its response will be success message in body
  */
 export class DownloadLedgerRequest {
-    public invoiceNumber: string[];
+    public invoiceNumber?: string[];
     public voucherType: string;
+    public uniqueName?: string;
 }
 
 export interface DownloadLedgerAttachmentResponse {

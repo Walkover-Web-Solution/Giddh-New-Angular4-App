@@ -79,18 +79,25 @@ export class InvoiceService {
     * url: '/company/:companyUniqueName/invoices/bulk-generate?combined=:combined'
     */
 
-    public GenerateBulkInvoice(reqObj: { combined: boolean }, model: GenerateBulkInvoiceRequest[], requestedFrom?: string): Observable<BaseResponse<any, GenerateBulkInvoiceRequest[]>> {
+    public GenerateBulkInvoice(reqObj: { combined: boolean }, model: any, requestedFrom?: string): Observable<BaseResponse<any, any[]>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         // create url
-        let url = this.config.apiUrl + INVOICE_API.GENERATE_BULK_INVOICE + '=' + reqObj.combined;
-        return this.http.post(url.replace(':companyUniqueName', this.companyUniqueName).replace(':accountuniquename', encodeURIComponent(model[0].accountUniqueName)), model).pipe(
+        let url;
+        if (this.generalService.voucherApiVersion === 2) {
+            url = this.config.apiUrl + INVOICE_API_2.GENERATE_BULK_INVOICE + '=' + reqObj.combined;
+            url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
+        } else {
+            url = this.config.apiUrl + INVOICE_API.GENERATE_BULK_INVOICE + '=' + reqObj.combined;
+            url = url.replace(':accountuniquename', encodeURIComponent(model[0].accountUniqueName));
+        }
+        return this.http.post(url.replace(':companyUniqueName', this.companyUniqueName), model).pipe(
             map((res) => {
-                let data: BaseResponse<any, GenerateBulkInvoiceRequest[]> = res;
+                let data: BaseResponse<any, any[]> = res;
                 data.request = model;
                 data.queryString = { reqObj, requestedFrom };
                 return data;
             }),
-            catchError((e) => this.errorHandler.HandleCatch<any, GenerateBulkInvoiceRequest[]>(e, reqObj, model)));
+            catchError((e) => this.errorHandler.HandleCatch<any, any[]>(e, reqObj, model)));
     }
 
     /**
@@ -132,7 +139,20 @@ export class InvoiceService {
 
     public PreviewInvoice(accountUniqueName: string, model: PreviewInvoiceRequest): Observable<BaseResponse<PreviewInvoiceResponseClass, PreviewInvoiceRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.post(this.config.apiUrl + INVOICE_API_2.PREVIEW_VOUCHERS.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)), model).pipe(
+        let url = this.config.apiUrl;
+
+        if(this.generalService.voucherApiVersion === 2) {
+            url = url + INVOICE_API_2.PREVIEW_VOUCHERS_V4;
+        } else {
+            url = url + INVOICE_API_2.PREVIEW_VOUCHERS;
+        }
+
+        url = url.replace(':companyUniqueName', this.companyUniqueName)
+            .replace(':accountUniqueName', encodeURIComponent(accountUniqueName));
+        if (this.generalService.voucherApiVersion === 2) {
+            url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
+        }
+        return this.http.post(url, model).pipe(
             map((res) => {
                 let data: BaseResponse<PreviewInvoiceResponseClass, PreviewInvoiceRequest> = res;
                 data.request = model;
@@ -202,7 +222,11 @@ export class InvoiceService {
      */
     public PerformActionOnInvoice(invoiceUniqueName: string, action: { action: string, amount?: number }): Observable<BaseResponse<string, string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.post(this.config.apiUrl + INVOICE_API.ACTION_ON_INVOICE.replace(':companyUniqueName', this.companyUniqueName).replace(':invoiceUniqueName', invoiceUniqueName), action).pipe(
+        let url = this.config.apiUrl + INVOICE_API.ACTION_ON_INVOICE.replace(':companyUniqueName', this.companyUniqueName).replace(':invoiceUniqueName', invoiceUniqueName);
+        if (this.generalService.voucherApiVersion === 2) {
+            url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
+        }
+        return this.http.post(url, action).pipe(
             map((res) => {
                 let data: BaseResponse<string, string> = res;
                 data.request = invoiceUniqueName;
@@ -375,8 +399,14 @@ export class InvoiceService {
     */
     public DownloadInvoice(accountUniqueName: string, dataToSend: { voucherNumber: string[], typeOfInvoice?: string[], voucherType?: string }): Observable<any> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.post(this.config.apiUrl + INVOICE_API_2.DOWNLOAD_INVOICE.replace(':companyUniqueName', this.companyUniqueName)
-            .replace(':accountUniqueName', encodeURIComponent(accountUniqueName)), dataToSend, { responseType: 'blob' }).pipe(map((res) => {
+        let url = this.config.apiUrl + INVOICE_API_2.DOWNLOAD_INVOICE.replace(':companyUniqueName', this.companyUniqueName)
+        .replace(':accountUniqueName', encodeURIComponent(accountUniqueName));
+
+        if (this.generalService.voucherApiVersion === 2) {
+            url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
+        }
+
+        return this.http.post(url, dataToSend, { responseType: 'blob' }).pipe(map((res) => {
                 return res;
             }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
     }
@@ -388,7 +418,12 @@ export class InvoiceService {
     */
     public SendInvoiceOnMail(accountUniqueName: string, dataToSend: { emailId: string[], voucherNumber: string[], typeOfInvoice: string[], voucherType?: string }): Observable<BaseResponse<string, string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.post(this.config.apiUrl + INVOICE_API_2.SEND_INVOICE_ON_MAIL.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)), dataToSend).pipe(map((res) => {
+        let url = this.config.apiUrl + INVOICE_API_2.SEND_INVOICE_ON_MAIL.replace(':companyUniqueName', this.companyUniqueName)
+            .replace(':accountUniqueName', encodeURIComponent(accountUniqueName));
+        if (this.generalService.voucherApiVersion === 2) {
+            url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
+        }
+        return this.http.post(url, dataToSend).pipe(map((res) => {
             let data: BaseResponse<string, string> = res;
             data.queryString = { accountUniqueName, dataToSend };
             return data;
@@ -677,7 +712,38 @@ export class InvoiceService {
     }
 
     /**
-     * This will verify the email
+     * Handler for cancellation of E-invoice for voucher version 2
+     *
+     * @param {*} requestObject
+     * @param {*} postObject
+     * @returns {Observable<BaseResponse<any, any>>}
+     * @memberof InvoiceService
+     */
+    public cancelEInvoiceV2(requestObject: any, postObject: any): Observable<BaseResponse<any, any>> {
+        let contextPath = `${this.config.apiUrl}${(requestObject.voucherType === VoucherTypeEnum.creditNote || requestObject.voucherType === VoucherTypeEnum.debitNote) ?
+            INVOICE_API.CANCEL_CN_DN_E_INVOICE_API : INVOICE_API_2.CANCEL_E_INVOICE}`;
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        contextPath = contextPath.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName));
+        if (requestObject.accountUniqueName) {
+            contextPath = contextPath.replace(':accountUniqueName', encodeURIComponent(requestObject.accountUniqueName));
+            delete requestObject.accountUniqueName;
+        }
+        Object.keys(requestObject).forEach((key, index) => {
+            const delimiter = index === 0 ? '?' : '&'
+            if (requestObject[key] !== undefined) {
+                contextPath += `${delimiter}${key}=${encodeURIComponent(requestObject[key])}`
+            }
+        });
+
+        if (this.generalService.voucherApiVersion === 2) {
+            contextPath = this.generalService.addVoucherVersion(contextPath, this.generalService.voucherApiVersion);
+        }
+
+        return this.http.post(contextPath, postObject).pipe(
+            catchError((error) => this.errorHandler.HandleCatch<string, any>(error)));
+    }
+
+    /* This will verify the email
      *
      * @param {*} params
      * @returns {Observable<BaseResponse<any, string>>}

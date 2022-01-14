@@ -356,7 +356,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     /**
-     *This function will use for on select state change 
+     * This function will use for on select state change 
      *
      * @param {*} event
      * @memberof BillingDetailComponent

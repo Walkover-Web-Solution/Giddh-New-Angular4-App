@@ -118,7 +118,16 @@ span.eligible-ITC {
 #saveLedger {
     margin-right: 0 !important;
 }
-
+.delete-attachment {
+    background-color: $gainsboro-light;
+    border: 1px solid $gainsboro;
+    border-radius: 5px;
+    margin-left: 7px;
+    padding: 0px 4px 2px 4px;
+    img {
+        width: 14px;
+    }
+}
 @media only screen and (max-width: 767px) {
     .ledger-panel .btn {
         margin-bottom: 13px;
@@ -197,7 +206,6 @@ span.eligible-ITC {
         transform: rotate(360deg);
     }
 }
-
 @media (max-width: 1075px) {
     .icon-box {
         padding: 10px 0px 0 0px;
