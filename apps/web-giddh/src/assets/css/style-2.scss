@@ -1327,7 +1327,7 @@ modal-container.modal {
 } /* my css end */ /*input*/
 .form-control {
     background: $white !important;
-    border: 1px solid $gainsboro;
+    border: 1px solid $gainsboro !important;
     border-radius: 5px !important;
     padding: 6px !important;
     outline: 0;
@@ -7581,7 +7581,7 @@ body.update-scroll-hidden {
 }
 .contact-body {
     .contact-modal {
-        height: 366px !important;
+        height: 375px !important;
         .mat-dialog-container {
             float: left !important;
             width: 100% !important;
