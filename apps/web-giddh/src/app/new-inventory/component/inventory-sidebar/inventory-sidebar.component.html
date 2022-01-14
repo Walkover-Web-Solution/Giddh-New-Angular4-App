@@ -11,7 +11,7 @@
         <div class="inventory-items">
             <ul class="mb-3">
                 <li>
-                    <a class="d-block clearfix">
+                    <a class="d-block clearfix" [routerLink]="['inventory-dashboard']" [routerLinkActive]="['active']">
                         <span><i class="icon-inventory-dashboard"></i></span>
                         <span>Dashboard</span>
                     </a>
@@ -36,11 +36,41 @@
                     <ng-container>
                         <ul class="inventory-sub-bar">
                             <li>
-                                <a href="javascript:void(0);"> Group Wise </a>
-                                <a href="javascript:void(0);"> Item Wise </a>
-                                <a href="javascript:void(0);"> Combo </a>
-                                <a href="javascript:void(0);"> Transactions </a>
-                                <a href="javascript:void(0);"> Custom Fields </a>
+                                <a
+                                    href="javascript:void(0);"
+                                    [routerLink]="['stock-group/list-group']"
+                                    [routerLinkActive]="['active']"
+                                >
+                                    Group Wise
+                                </a>
+                                <a
+                                    href="javascript:void(0);"
+                                    [routerLink]="['inventory-product-service-list']"
+                                    [routerLinkActive]="['active']"
+                                >
+                                    Item Wise
+                                </a>
+                                <a
+                                    href="javascript:void(0);"
+                                    [routerLink]="['inventory-combo-list']"
+                                    [routerLinkActive]="['active']"
+                                >
+                                    Combo
+                                </a>
+                                <a
+                                    href="javascript:void(0);"
+                                    [routerLink]="['inventory-transaction-list']"
+                                    [routerLinkActive]="['active']"
+                                >
+                                    Transactions
+                                </a>
+                                <a
+                                    href="javascript:void(0);"
+                                    [routerLink]="['inventory-custom-field']"
+                                    [routerLinkActive]="['active']"
+                                >
+                                    Custom Fields
+                                </a>
                             </li>
                         </ul>
                     </ng-container>

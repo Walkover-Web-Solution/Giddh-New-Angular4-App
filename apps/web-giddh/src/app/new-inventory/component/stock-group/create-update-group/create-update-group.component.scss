@@ -1,9 +1,9 @@
 @import "../../../../../assets/css/color.scss";
 
 .create-group-page {
-    padding-top: 15px;
     .image-group {
         padding-top: 35px;
+
         .group-vector {
             position: absolute;
             right: 15px;
@@ -11,11 +11,26 @@
         }
     }
 }
+
+.new-inventory-page-header {
+    padding: 0 15px 15px;
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid $gainsboro;
+    align-items: center;
+
+    .inventory-header-right {
+        display: flex;
+    }
+}
+
 :host::ng-deep .nav.nav-tabs {
     position: static !important;
     padding-left: 0 !important;
     margin-bottom: 15px;
 }
+
 .create-group-footer {
     background-color: $whisper-color;
     height: 60px;
@@ -23,7 +38,28 @@
     display: flex;
     justify-content: flex-start;
     align-items: center;
+
     .footer-wrapper {
         padding: 15px;
     }
+}
+
+.page-title-inventory {
+    font-weight: bold;
+    color: $midnight-blue;
+    font-size: 16px;
+}
+
+.add-image button img {
+    height: 87px;
+    width: 87px;
+    object-fit: contain;
+    transform: scale(1.2);
+}
+.add-image button {
+    padding: 0;
+    margin: 0 !important;
+    height: auto;
+    border: 2px dashed $gainsboro;
+    overflow: hidden;
 }

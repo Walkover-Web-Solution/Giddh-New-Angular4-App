@@ -1,4 +1,7 @@
 @import "../../../../assets/css/color.scss";
+.inventory-transaction-list {
+    min-height: calc(100vh - 340px);
+}
 .custom-datepicker {
     margin-bottom: 0;
     input {
