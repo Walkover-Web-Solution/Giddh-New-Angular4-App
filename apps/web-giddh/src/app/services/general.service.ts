@@ -926,4 +926,17 @@ export class GeneralService {
         document.querySelector('.primary-sidebar')?.classList?.add('sidebar-collapse');
         document.querySelector('.nav-left-bar')?.classList?.add('width-60');
     }
+
+    /**
+     * This will return available themes
+     *
+     * @returns {*}
+     * @memberof GeneralService
+     */
+    public getAvailableThemes(): any {
+        return [
+            { label: 'Default', value: 'default-theme' },
+            { label: 'Dark', value: 'dark-theme' }
+        ];
+    }
 }
