@@ -121,13 +121,13 @@
                 background-color: var(--color-sidebar-anchor-text-hover);
                 a {
                     span {
-                        color: var(--color-white) !important;
+                        color: var(--color-primary-sidebar-list-hover-active-text) !important;
                         i {
-                            color: var(--color-white) !important;
+                            color: var(--color-primary-sidebar-list-hover-active-text) !important;
                         }
                     }
                     span {
-                        color: var(--color-white) !important;
+                        color: var(--color-primary-sidebar-list-hover-active-text) !important;
                     }
                 }
             }
@@ -149,7 +149,7 @@
     }
 }
 .setting-items ul li:hover a span i {
-    color: var(--color-shark) !important;
+    color: var(--color-primary-sidebar-list-hover-active-text) !important;
 }
 
 :host.setting-sidebar {

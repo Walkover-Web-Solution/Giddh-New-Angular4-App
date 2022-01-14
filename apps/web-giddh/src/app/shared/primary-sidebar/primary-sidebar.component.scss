@@ -366,7 +366,7 @@
                                 &.active {
                                     @include highlight-color(
                                         var(--color-sidebar-anchor-text-hover),
-                                        var(--color-sidebar-menu-list-items)
+                                        var(--color-primary-sidebar-list-hover-active-text)
                                     );
                                 }
                             }
@@ -374,12 +374,12 @@
                                 a {
                                     @include highlight-color(
                                         var(--color-sidebar-anchor-text-hover),
-                                        var(--color-sidebar-menu-list-items)
+                                        var(--color-primary-sidebar-list-hover-active-text)
                                     );
                                     &.active {
                                         @include highlight-color(
                                             var(--color-sidebar-anchor-text-hover),
-                                            var(--color-sidebar-menu-list-items)
+                                            var(--color-primary-sidebar-list-hover-active-text)
                                         );
                                     }
                                 }

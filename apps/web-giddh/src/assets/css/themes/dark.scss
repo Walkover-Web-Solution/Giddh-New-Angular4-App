@@ -16,6 +16,7 @@ body.dark-theme {
     --color-common-secondary-background-for-all-components: #f5f5f5;
     --color-common-tertiary-background-for-all-components: #f5f5f5;
     --color-common-quaternary-background-for-all-components: #668cff26;
+    --color-common-quinary-background-for-all-components: #668cff26;
 
     // Signup Login Page Color Components
     --color-primary-login-page-background: #212528;
@@ -284,13 +285,14 @@ body.dark-theme {
     --color-primary-company-branch-digit-orange: #e58a00;
     --color-primary-company-branch-company-list-btn-group-active-hover: #e58a0026;
     --color-primary-company-branch-branch-list-active-hover: #e58a0026;
+    --color-secondary-company-branch-branch-list-active-hover: #668cff26;
     --color-primary-company-branch-company-list-btn-group-open-background: #668cff26;
     --color-primary-company-branch-company-list-btn-group-open-span-active: #668cff26;
     --color-primary-company-branch-wrap-company-refresh-small-background: #668cff26;
     --color-primary-company-branch-company-list-li-hover-span-background: #668cff26;
     --color-primary-company-branch-dropdown-menu-anchor-hover: #9b9b9e;
     --color-primary-company-branch-company-branches-list: #9b9b9e;
-    --color-primary-company-branch-branch-list-anchor: #9b9b9e;
+    --color-primary-company-branch-branch-list-anchor: #f5f5f5;
     --color-primary-company-branch-icon-reload: #9b9b9e;
     --color-primary-company-branch-btn-group-dropdown-toggle-span: #9b9b9e;
     --color-primary-company-branch-wrap-company-refresh-small: #9b9b9e;
@@ -392,6 +394,7 @@ body.dark-theme {
     --color-sidebar-create-company-list-text: #f5f5f5;
     --color-sidebar-create-company-list-background: #668cff26;
     --color-sidebar-list-background-hover: #668cff26;
+    --color-primary-sidebar-list-hover-active-text: #f5f5f5;
 
     // Tax Sidebar Color Variables
     --color-primary-tax-sidebar-text: #f5f5f5;

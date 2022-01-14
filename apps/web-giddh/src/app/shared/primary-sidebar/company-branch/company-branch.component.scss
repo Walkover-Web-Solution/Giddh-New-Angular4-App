@@ -289,7 +289,7 @@
                         word-break: break-all;
                         &.active {
                             color: var(--color-primary-company-branch-branch-list-anchor) !important;
-                            background-color: var(--color-primary-company-branch-branch-list-active-hover) !important;
+                            background-color: var(--color-secondary-company-branch-branch-list-active-hover) !important;
                         }
                         &:hover {
                             background-color: initial !important;
@@ -304,7 +304,7 @@
                     }
                     &:hover {
                         a {
-                            background-color: var(--color-primary-company-branch-branch-list-active-hover) !important;
+                            background-color: var(--color-secondary-company-branch-branch-list-active-hover) !important;
                         }
                     }
                     .branch-alias,

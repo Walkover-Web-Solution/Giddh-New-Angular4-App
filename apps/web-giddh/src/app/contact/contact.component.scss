@@ -311,6 +311,11 @@ span.input-addon {
 
 .aging-table .btn-small {
     min-width: 140px;
+    color: var(--color-septenary-button-text);
+    background-color: var(--color-denary-button-background);
+    &:hover {
+        color: var(--color-septenary-button-text);
+    }
 }
 
 .aging-table thead tr th {
