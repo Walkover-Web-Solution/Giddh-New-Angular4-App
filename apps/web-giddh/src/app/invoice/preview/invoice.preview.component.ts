@@ -31,9 +31,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { InvoiceReceiptFilter, ReceiptItem, ReciptResponse } from 'apps/web-giddh/src/app/models/api-models/recipt';
 import { InvoiceReceiptActions } from 'apps/web-giddh/src/app/actions/invoice/receipt/receipt.actions';
 import { CompanyResponse, ValidateInvoice } from 'apps/web-giddh/src/app/models/api-models/Company';
-import { CompanyActions } from 'apps/web-giddh/src/app/actions/company.actions';
 import { InvoiceAdvanceSearchComponent } from './models/advanceSearch/invoiceAdvanceSearch.component';
-import { BulkExportModal } from './models/bulk-export-modal/bulk-export.component';
 import { ToasterService } from '../../services/toaster.service';
 import { InvoiceSetting } from '../../models/interfaces/invoice.setting.interface';
 import { VoucherTypeEnum, VoucherClass } from '../../models/api-models/Sales';
@@ -54,6 +52,7 @@ import { GeneralService } from '../../services/general.service';
 import { OrganizationType } from '../../models/user-login-state';
 import { CommonActions } from '../../actions/common.actions';
 import { AdjustmentUtilityService } from '../../shared/advance-receipt-adjustment/services/adjustment-utility.service';
+import { GeneralActions } from '../../actions/general/general.actions';
 
 /** Multi currency modules includes Cash/Sales Invoice and CR/DR note */
 const MULTI_CURRENCY_MODULES = [VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote, VoucherTypeEnum.purchase];
@@ -243,7 +242,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         private _invoiceService: InvoiceService,
         private _toaster: ToasterService,
         private _activatedRoute: ActivatedRoute,
-        private companyActions: CompanyActions,
+        private generalActions: GeneralActions,
         private invoiceReceiptActions: InvoiceReceiptActions,
         private cdr: ChangeDetectorRef,
         private _breakPointObservar: BreakpointObserver,
@@ -1248,6 +1247,12 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         } else {
             this.getVouchersList(this.isUniversalDateApplicable);
         }
+
+        setTimeout(() => {
+            if(!document.getElementsByClassName("sidebar-collapse")?.length) {
+                this.store.dispatch(this.generalActions.openSideMenu(true));
+            }
+        }, 200);
     }
 
     public ngOnDestroy() {
