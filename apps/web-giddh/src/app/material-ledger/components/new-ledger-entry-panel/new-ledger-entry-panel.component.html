@@ -1064,6 +1064,7 @@
                 [adjustedVoucherType]="blankLedger.voucherType"
                 [invoiceFormDetails]="adjustVoucherConfiguration"
                 [advanceReceiptAdjustmentUpdatedData]="currentTxn?.voucherAdjustments"
+                [invoiceListRequestParams]="invoiceListRequestParams"
                 (closeModelEvent)="closeAdjustmentModal($event)"
                 (submitClicked)="getAdjustedPaymentData($event)"
             >
