@@ -5,6 +5,11 @@
     position: relative;
     top: 3px;
 }
+
+.white-normal {
+    white-space: normal !important;
+}
+
 @media screen and (max-width: 767px) {
     .filter-band {
         height: auto !important;

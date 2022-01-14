@@ -1,4 +1,14 @@
 @import "../../assets/css/color.scss";
+
+@mixin all-table {
+    td {
+        .mat-cell {
+            &:last-child {
+                padding: 5px 10px 5px 50% !important;
+            }
+        }
+    }
+}
 .dropdown-menu {
     > li {
         > a {
@@ -6,6 +16,7 @@
             white-space: normal;
             display: flex;
             word-break: break-word;
+
             > input {
                 padding-right: 14px;
             }
@@ -82,8 +93,9 @@
 .account-detail-custom-header {
     border-right: 0;
     padding: 11px 10px 10px 10px;
-    width: 100%;
     background: $lavender;
+    width: 260px;
+    margin-top: -8px;
 }
 
 .account-detail-custom-title {
@@ -123,9 +135,11 @@ ul.list-unstyled li a {
     min-width: 0px !important;
     min-height: 0px !important;
 }
+
 .dropdown-menu-right {
     z-index: 2;
 }
+
 .model-position {
     float: right;
     right: -234px;
@@ -136,9 +150,11 @@ ul.list-unstyled li a {
         padding: 7px 10px;
         display: block;
     }
+
     &:first-child {
         margin-top: 0 !important;
     }
+
     a:hover {
         color: $chetwode-blue !important;
         background-color: $lavender;
@@ -156,6 +172,7 @@ td.comment-field {
 .date-range-picker {
     width: 225px !important;
 }
+
 //  my css
 .aging-table tbody tr:first-child td {
     border-top: none;
@@ -181,21 +198,33 @@ td.position-relative.word-wrap.customer-name.vendor-customer-name.cursor-pointer
     border-right: none;
 }
 
+.checkbox-left-side-in-table {
+    visibility: hidden;
+}
+
 tr:last-child td.position-relative.word-wrap.customer-name.cursor-pointer,
 tr:last-child td.position-relative.word-wrap.vendor-customer-name.cursor-pointer {
     border-bottom: 1px solid $gainsboro !important;
 }
 
 .position-relative.word-wrap {
-    .icon-dots-three-vertical {
+    .table-menu-first-td {
         font-size: 14px;
         vertical-align: middle;
         display: none;
         color: $omiod;
+        position: absolute;
+        right: 0;
     }
-    &:hover .icon-dots-three-vertical {
-        display: block;
-        line-height: 1;
+
+    &:hover {
+        .table-menu-first-td {
+            display: block;
+            line-height: 1;
+        }
+        .checkbox-left-side-in-table {
+            visibility: visible;
+        }
     }
 }
 
@@ -207,15 +236,18 @@ tr.aging-table-top td {
 .aging-table {
     max-width: 100%;
     width: 100%;
-    -moz-transform: translate(1px, 0);
+    transform: translate(1px, 0);
+
     th,
     td {
         &:first-child {
             min-width: 250px;
         }
     }
+
     .text-lowercase.word-wrap {
         color: $grey-chateau !important;
+
         div {
             line-height: 14px;
         }
@@ -240,6 +272,7 @@ tr.aging-table-top td {
 .more-button {
     .dropdown-menu {
         top: auto !important;
+
         li {
             padding: 0px 15px;
             cursor: default;
@@ -273,6 +306,9 @@ i.icon-options {
     justify-content: center;
     align-items: center;
     border-radius: 5px;
+    position: absolute;
+    right: 3px;
+    bottom: 2px;
 }
 
 i.icon-options:hover {
@@ -296,6 +332,7 @@ i.icon-options:hover {
     background-color: $white !important;
     border-color: $midnight-express !important;
 }
+
 span.input-addon {
     position: absolute;
     right: 0px;
@@ -317,31 +354,40 @@ span.input-addon {
     position: relative;
     padding-right: 10px !important;
 }
+
 .comment-field {
     min-width: 170px;
 }
+
 .customer-name-filed,
 .vendor-name-field {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    float: left;
+    width: 200px;
 }
+
 .customer-name .icon-ellipse {
     height: 14px;
     width: 14px;
 }
+
 .icon-ellipse.open.show {
     display: inline-block !important;
 }
+
 .due-as-on {
     display: flex;
     justify-content: center;
     align-items: center;
+
     strong {
         width: 80px;
         padding-left: 10px;
     }
 }
+
 .form-control[readonly] {
     background-color: inherit !important;
     display: inline-block !important;
@@ -354,12 +400,17 @@ button.btn.btn-filter {
     border: 1px solid $whisper-color;
     font-size: 14px;
     color: $midnight-blue;
-    display: inline-flex;
+    display: block;
     justify-content: space-between;
-    align-items: center;
-    padding: 4px 10px;
+    width: 140px !important;
+    margin: 0 auto !important;
+    margin-right: 0 !important;
+    box-shadow: none !important;
+    height: 40px;
 }
-
+.btn-small {
+    box-shadow: none !important;
+}
 button.btn.btn-filter span.icon-cross {
     margin-right: 5px;
 }
@@ -367,15 +418,21 @@ button.btn.btn-filter span.icon-cross {
 .customer-form-inline {
     display: flex !important;
     justify-content: space-between !important;
+    .button-content {
+        float: left;
+        width: 21%;
+    }
 }
 
 .customer-footer-box {
     display: none !important;
 }
+
 .customer-form-inline {
     display: flex;
     justify-content: space-between;
 }
+
 .linked-entities {
     width: 200px;
 }
@@ -388,6 +445,7 @@ button.btn.btn-filter span.icon-cross {
         height: 28px;
     }
 }
+
 .input-container {
     input {
         height: 36px;
@@ -405,20 +463,104 @@ button.btn.btn-filter span.icon-cross {
     font-weight: 400 !important;
     font-size: 12px !important;
     letter-spacing: 1px;
+
     strong {
         color: $midnight-blue !important;
         font-size: 16px;
     }
 }
+
+.mat-raised-button {
+    margin-right: 0px !important;
+}
+
+.email-dialog-box {
+    width: 630px !important;
+}
+
+.icon-search,
+.icon-sort-asc {
+    font-size: 16px !important;
+}
+
+.mat-icon-button {
+    width: 25px;
+    i {
+        line-height: 20px;
+    }
+}
+
+.top-bar {
+    height: 62px;
+    margin-bottom: 4px;
+}
+
+.custom-datepicker input {
+    height: 36px;
+}
+
+.customer-form-inline {
+    align-items: center;
+    width: 100.25%;
+    position: relative;
+    bottom: 2px;
+}
+
+.pending-approval-button {
+    background-color: #f8f9fa;
+    width: 140px;
+    height: 37px;
+}
+
+.pending-approval-button:hover {
+    background-color: #e2e6ea;
+}
+
+.send-email {
+    width: 17.5%;
+}
+
+.all-table {
+    .mat-header-cell {
+        &:first-of-type {
+            width: 595px;
+            padding-left: 5px !important;
+        }
+    }
+    .mat-header-row {
+        border-bottom: 1.5px solid $link-water;
+    }
+    .icon-search:before {
+        position: relative;
+        bottom: 2px;
+    }
+    .mat-vendor-name {
+        padding-left: 28px !important;
+    }
+    .mat-customer-name {
+        padding-left: 10px !important;
+        .mat-checkbox {
+            transform: translateX(-3px);
+        }
+        span:nth-child(2) {
+            position: relative;
+            right: 0px;
+            left: 3px;
+        }
+    }
+}
+
 /*responsive*/
 @media (max-width: 1024px) {
     .customer-form-inline {
         position: relative;
         display: flex;
         align-items: initial;
+
         .wrap-search-entity {
             display: flex;
         }
+
         .linked-entities {
             margin-bottom: 0;
         }
@@ -438,6 +580,7 @@ button.btn.btn-filter span.icon-cross {
     }
     .customer-footer-box {
         display: flex;
+
         .mobile-button-filter {
             display: flex !important;
             margin-right: 0;
@@ -447,7 +590,9 @@ button.btn.btn-filter span.icon-cross {
         display: none !important;
     }
 }
+
 @media (max-width: 768px) {
+    @include all-table;
     button.btn.btn-filter {
         margin-left: auto;
         display: flex;
@@ -512,8 +657,13 @@ button.btn.btn-filter span.icon-cross {
 }
 
 @media (max-width: 767px) {
+    @include all-table;
     span.input-addon {
         top: 0;
+    }
+    .contact-ipad-responsive {
+        float: left;
+        width: auto;
     }
     .btn-group.plus-btn {
         float: none;
@@ -553,14 +703,17 @@ button.btn.btn-filter span.icon-cross {
         display: block !important;
         margin-left: 0px;
         margin-right: 0 !important;
+
         &.on-company {
             width: 100%;
             margin-left: 0;
             margin-bottom: 0;
         }
+
         .form-group {
             vertical-align: bottom !important;
             margin-bottom: 5px;
+
             input {
                 width: 100%;
             }
@@ -575,19 +728,23 @@ button.btn.btn-filter span.icon-cross {
     .customer-form-inline {
         .wrap-search-entity {
             flex-direction: column;
+
             .dis {
                 position: absolute;
                 left: 0;
                 top: 0;
             }
+
             .linked-entities {
                 width: 100%;
                 margin-bottom: 15px;
                 margin-right: 0 !important;
             }
+
             .header-left {
                 margin-left: 0px;
                 margin-top: 10px;
+
                 &.on-company {
                     margin-left: 0px;
                 }
@@ -597,6 +754,7 @@ button.btn.btn-filter span.icon-cross {
     .customer-footer-box + .btn-group {
         float: none !important;
         width: 100%;
+
         button {
             width: 100%;
         }
@@ -643,6 +801,10 @@ button.btn.btn-filter span.icon-cross {
     .on-desktop-view.btn-group {
         display: block;
     }
+    .contact-ipad-responsive {
+        float: left;
+        width: auto;
+    }
 }
 
 .td-search-box div {
@@ -662,13 +824,16 @@ button.btn.btn-filter span.icon-cross {
     padding: 0px !important;
     position: relative;
 }
+
 .td-search-box .input-container {
     position: relative;
 }
+
 .td-search-box .input-container input {
     min-height: 36px;
     width: 100%;
     border: 0px;
+    border-radius: 5px;
 }
 
 .td-search-box .input-container i {
@@ -678,11 +843,88 @@ button.btn.btn-filter span.icon-cross {
 }
 
 .negative-balance {
-    color: $red;
+    color: $red !important;
 }
 
 @media (min-width: 769px) {
     .mobile-card-wrapper {
         max-height: calc(100vh - 295px);
     }
+}
+
+.icon-calender {
+    position: absolute;
+    z-index: 9;
+    height: 32px;
+    width: 36px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    height: 36px !important;
+    cursor: pointer;
+}
+
+.visible-check-box {
+    visibility: visible !important;
+}
+
+::ng-deep.search-table {
+    background-color: $white-smoke !important;
+    position: relative;
+    right: 8px;
+}
+
+:hover.menu-table-item {
+    color: $chetwode-blue;
+}
+
+::ng-deep.mail-model-container {
+    width: 590px;
+}
+
+@media screen and (max-width: 768px) {
+    .mail-model-container {
+        width: 100% !important;
+    }
+}
+
+.close-btn-in-mat-model {
+    position: absolute;
+    right: 9px;
+    top: 9px;
+    font-size: 25px;
+}
+.min-width-230 {
+    min-width: 230px;
+}
+.arrow-icon {
+    right: -3px;
+    width: 30px;
+    height: 30px;
+    border: 2px solid rgb(217, 217, 217);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.arrow-icon:hover {
+    color: white;
+    background-color: rgb(91, 100, 201);
+}
+.select-all-checkbox-wrapper {
+    align-items: center;
+    padding-left: 25px;
+    .mat-checkbox {
+        left: 12px;
+    }
+}
+.select-single-checkbox-wrapper {
+    display: flex;
+    align-items: center;
+}
+.mat-chip-wrapper {
+    border: unset;
+    margin-top: 20px;
+}
+.min-width-137 {
+    min-width: 137px;
 }

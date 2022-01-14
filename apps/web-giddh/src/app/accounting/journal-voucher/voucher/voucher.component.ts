@@ -15,6 +15,7 @@ import {
     SimpleChanges,
     ViewChild,
     ViewChildren,
+    ChangeDetectorRef,
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -251,16 +252,19 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         private _ledgerActions: LedgerActions,
         private store: Store<AppState>,
         private _keyboardService: KeyboardService,
-        private _toaster: ToasterService, private router: Router,
+        private _toaster: ToasterService, 
+        private router: Router,
         private tallyModuleService: TallyModuleService,
         private componentFactoryResolver: ComponentFactoryResolver,
         private inventoryService: InventoryService,
-        private fb: FormBuilder, public bsConfig: BsDatepickerConfig,
+        private fb: FormBuilder, 
+        public bsConfig: BsDatepickerConfig,
         private salesAction: SalesActions,
         private modalService: BsModalService,
         private salesService: SalesService,
         private searchService: SearchService,
-        private companyActions: CompanyActions) {
+        private companyActions: CompanyActions,
+        private changeDetectionRef: ChangeDetectorRef) {
 
         this.universalDate$ = this.store.pipe(select(sessionStore => sessionStore.session.applicationDate), takeUntil(this.destroyed$));
 
@@ -783,19 +787,19 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         const foundContraEntry: boolean = this.validateForContraEntry(data);
         const foundSalesAndBankEntry: boolean = this.validateForSalesAndPurchaseEntry(data);
 
-        if (foundContraEntry && data.voucherType !== 'Contra') {
+        if (foundContraEntry && data.voucherType !== VOUCHERS.CONTRA) {
             let message = this.localeData?.contra_entry_notallowed;
             message = message?.replace("[VOUCHER_TYPE]", data.voucherType);
             this._toaster.errorToast(message, this.commonLocaleData?.app_error);
             return setTimeout(() => this.narrationBox?.nativeElement?.focus(), 500);
         }
-        if (!foundContraEntry && data.voucherType === 'Contra') {
+        if (!foundContraEntry && data.voucherType === VOUCHERS.CONTRA) {
             this._toaster.errorToast(this.localeData?.contra_entry_error, this.commonLocaleData?.app_error);
             return setTimeout(() => this.narrationBox?.nativeElement?.focus(), 500);
         }
 
         // This suggestion was given by Sandeep
-        if (foundSalesAndBankEntry && data.voucherType === 'Journal') {
+        if (foundSalesAndBankEntry && data.voucherType === VOUCHERS.JOURNAL) {
             this._toaster.errorToast(this.localeData?.sales_purchase_entry_error, this.commonLocaleData?.app_error);
             return setTimeout(() => this.narrationBox?.nativeElement?.focus(), 500);
         }
@@ -920,8 +924,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     }
 
     public validatePaymentAndReceipt(data) {
-        if (data.voucherType === 'Payment' || data.voucherType === 'Receipt') {
-            const byOrTo = data.voucherType === 'Payment' ? 'to' : 'by';
+        if (data.voucherType === VOUCHERS.PAYMENT || data.voucherType === VOUCHERS.RECEIPT) {
+            const byOrTo = data.voucherType === VOUCHERS.PAYMENT ? 'to' : 'by';
             const toAccounts = data.transactions.filter((acc) => acc.type === byOrTo);
             const AccountOfCashOrBank = toAccounts.filter((acc) => {
                 const indexOfCashOrBank = acc.selectedAccount.parentGroups.findIndex((pg) => pg.uniqueName === 'cash' || pg.uniqueName === 'bankaccounts');
@@ -1169,21 +1173,10 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         //  }
     }
 
-    /**
-     * hideListItems
-     */
-    public hideListItems() {
-        // this.showLedgerAccountList = false;
-        // this.showStockList = false;
-    }
-
     public dateEntered() {
-        const date = moment(this.journalDate, GIDDH_DATE_FORMAT);
-        if (moment(date).format('dddd') !== 'Invalid date') {
-            this.displayDay = moment(date).format('dddd');
-        } else {
-            this.displayDay = '';
-        }
+        const date = moment(this.journalDate, GIDDH_DATE_FORMAT).format("dddd");
+        this.displayDay = (date !== 'Invalid date') ? date : '';
+        this.changeDetectionRef.detectChanges();
     }
 
     /**

@@ -16,6 +16,7 @@
     "to": "सेवा",
     "to_balance_bf": "शेष राशि बी / एफ के लिए",
     "download_file": "फ़ाइल डाउनलोड करें",
+    "download_files": "फ़ाइलें डाउनलोड करें",
     "to_select_accounts": "खातों का चयन करें",
     "by_select_accounts": "खातों का चयन करें",
     "new_account": "नया खाता",
@@ -197,7 +198,7 @@
     "others": "अन्य",
     "choose_file": "फाइलें चुनें",
     "remove_file": "सफलतापूर्वक मिटाया गया",
-    "delete_bank_transactions": "Delete Bank Transactions",
-    "delete_bank_transactions_title": "Do you want to delete the selected bank transaction(s)?",
-    "reload_bank_transactions": "Reload bank transactions"
+    "delete_bank_transactions": "बैंक लेनदेन हटाएं",
+    "delete_bank_transactions_title": "क्या आप चयनित बैंक लेनदेन को हटाना चाहते हैं?",
+    "reload_bank_transactions": "बैंक लेनदेन पुनः लोड करें"
 }

@@ -16,6 +16,7 @@
     "to": "करण्यासाठी",
     "to_balance_bf": "शिल्लक करण्यासाठी बी / एफ",
     "download_file": "फाईल डाउनलोड करा",
+    "download_files": "फायली डाउनलोड करा",
     "to_select_accounts": "खाती निवडण्यासाठी",
     "by_select_accounts": "सिलेक्ट अकाउंट्सद्वारे",
     "new_account": "नवीन खाते",
@@ -197,7 +198,7 @@
     "others": "इतर",
     "choose_file": "फाईल निवडा",
     "remove_file": "यशस्वीरित्या हटविला",
-    "delete_bank_transactions": "Delete Bank Transactions",
-    "delete_bank_transactions_title": "Do you want to delete the selected bank transaction(s)?",
-    "reload_bank_transactions": "Reload bank transactions"
+    "delete_bank_transactions": "बँक व्यवहार हटवा",
+    "delete_bank_transactions_title": "तुम्हाला निवडलेले बँक व्यवहार (डिलिट) हटवायचे आहेत का?",
+    "reload_bank_transactions": "बँक व्यवहार रीलोड करा"
 }

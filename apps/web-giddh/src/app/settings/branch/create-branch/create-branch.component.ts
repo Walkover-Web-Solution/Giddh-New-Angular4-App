@@ -116,7 +116,7 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
                     }
                 }
                 this.branchForm.get('name')?.patchValue(this.companyDetails.name);
-                if (!this.addressConfiguration.stateList.length) {
+                if (!this.addressConfiguration?.stateList?.length) {
                     this.loadStates(this.companyDetails.country.countryCode.toUpperCase());
                     this.loadTaxDetails(this.companyDetails.country.countryCode.toUpperCase());
                 }
@@ -127,7 +127,7 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
         this.loadAddresses('GET', { count: 0 });
         this.store.dispatch(this.generalActions.setAppTitle('/pages/settings/branch'));
 
-        this.imgPath = (isElectron || isCordova) ? 'assets/images/branch-image.svg' : AppUrl + APP_FOLDER + 'assets/images/branch-image.svg';
+        this.imgPath = isElectron ? 'assets/images/branch-image.svg' : AppUrl + APP_FOLDER + 'assets/images/branch-image.svg';
     }
 
     /**

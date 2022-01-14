@@ -110,7 +110,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public userName: string;
     public userEmail: string;
     public isElectron: boolean = isElectron;
-    public isCordova: boolean = isCordova;
     public isTodaysDateSelected: boolean = false;
     public isDateRangeSelected: boolean = false;
     public userFullName: string;
@@ -296,11 +295,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                     this.checkAndRenewUserSession();
                 }
 
-                if(!this.router.url.includes("/pages/settings/taxes") && (this.router.url.includes("/pages/settings") || this.router.url.includes("/pages/user-details") || this.router.url.includes("/pages/invoice/preview/settings/sales"))) {
-                    this.toggleSidebarPane(true, false);
-                } else {
-                    this.toggleSidebarPane(false, false);
-                }
+                this.toggleSidebarPane(false, false);
             }
             if (event instanceof NavigationStart) {
                 this.navigationEnd = false;
@@ -346,7 +341,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 if (this.generalService.currentBranchUniqueName) {
                     this.currentCompanyBranches$.pipe(take(1)).subscribe(response => {
                         if (response) {
-                            this.currentBranch = response.find(branch => (branch.uniqueName === this.generalService.currentBranchUniqueName));
+                            this.currentBranch = response.find(branch => (branch?.uniqueName === this.generalService.currentBranchUniqueName));
                             if (!this.activeCompanyForDb) {
                                 this.activeCompanyForDb = new CompAidataModel();
                             }
@@ -368,7 +363,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         });
 
         this.store.pipe(select((state: AppState) => state.session.companies), takeUntil(this.destroyed$)).subscribe(companies => {
-            if (!companies || companies.length === 0) {
+            if (!companies || companies?.length === 0) {
                 return;
             }
 
@@ -376,7 +371,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             this.companyList = orderedCompanies;
             this.companyListForFilter = orderedCompanies;
             this.companies$ = observableOf(orderedCompanies);
-            this.store.dispatch(this.companyActions.setTotalNumberofCompanies(this.companyList.length));
+            this.store.dispatch(this.companyActions.setTotalNumberofCompanies(this.companyList?.length));
         });
 
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(selectedCmp => {
@@ -418,7 +413,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 this.currentCompanyBranches = response;
                 if (this.generalService.currentBranchUniqueName) {
                     this.currentBranch = response.find(branch =>
-                        (this.generalService.currentBranchUniqueName === branch.uniqueName)) || {};
+                        (this.generalService.currentBranchUniqueName === branch?.uniqueName)) || {};
+
+                    if (!this.activeCompanyForDb) {
+                        this.activeCompanyForDb = new CompAidataModel();
+                    }
                     this.activeCompanyForDb.name = this.currentBranch ? this.currentBranch.name : '';
                     this.activeCompanyForDb.uniqueName = this.currentBranch ? this.currentBranch.uniqueName : ''
                 } else {
@@ -444,7 +443,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 this.store.pipe(select(appStore => appStore.settings.branches), take(1)).subscribe(data => {
                     branches = data || [];
                 });
-                reassignNavigationalArray(this.isMobileSite, this.generalService.currentOrganizationType === OrganizationType.Company && branches.length > 1, response);
+                reassignNavigationalArray(this.isMobileSite, this.generalService.currentOrganizationType === OrganizationType.Company && branches?.length > 1, response);
                 this.apiMenuItems = response;
                 this.changeDetection.detectChanges();
             }
@@ -459,19 +458,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             this.isIpadScreen = result?.breakpoints['(max-width: 768px)'];
         });
 
-        this.generalService.invokeEvent.pipe(takeUntil(this.destroyed$)).subscribe((value) => {
-            if (value === 'logoutCordova') {
-                this.zone.run(() => {
-                    this.router.navigate(['login']);
-                    this.changeDetection.detectChanges();
-                });
-            }
-        });
-
+        //this.sideBarStateChange(true);
         this.store.pipe(select(state => state.general.openSideMenu), takeUntil(this.destroyed$)).subscribe(response => {
             this.sideBarStateChange(response);
 
-            if(response) {
+            if (response) {
                 this.expandSidebar(true);
             } else {
                 this.collapseSidebar(true);
@@ -535,7 +526,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                     if (!page.additional) {
                         return;
                     }
-                    return (page.uniqueName.substring(7, page.uniqueName.length).indexOf(lastState.replace(tempParams, '')) > -1
+                    return (page?.uniqueName.substring(7, page?.uniqueName?.length).indexOf(lastState.replace(tempParams, '')) > -1
                         && page.additional.tabIndex === Number(queryParams.tabindex));
                 });
 
@@ -560,7 +551,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         });
         // endregion
 
-        this.imgPath = (isElectron || isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
 
         // Observes when screen resolution is 1440 or less close navigation bar for few pages...
         this._breakpointObserver
@@ -582,9 +573,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             if (menu) {
                 let menuItem: IUlist = NAVIGATION_ITEM_LIST.find(item => {
                     if (menu.additional && item.additional) {
-                        return item.uniqueName.toLowerCase() === menu.uniqueName.toLowerCase() && item.additional.tabIndex === menu.additional.tabIndex;
+                        return item?.uniqueName.toLowerCase() === menu.uniqueName.toLowerCase() && item.additional.tabIndex === menu.additional.tabIndex;
                     }
-                    return item.uniqueName.toLocaleLowerCase() === menu.uniqueName.toLowerCase();
+                    return item?.uniqueName.toLocaleLowerCase() === menu.uniqueName.toLowerCase();
                 });
                 if (menuItem) {
                     this.doEntryInDb('menus', menuItem);
@@ -614,7 +605,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         }
 
         this.store.pipe(select(state => state.session.currentLocale), takeUntil(this.destroyed$)).subscribe(response => {
-            if(this.activeLocale && this.activeLocale !== response?.value) {
+            if (this.activeLocale && this.activeLocale !== response?.value) {
                 this.localeService.getLocale('header', response?.value).subscribe(response => {
                     this.localeData = response;
                 });
@@ -750,20 +741,20 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                             financialYearEnds: moment(response.financialYears[response.financialYears.length - 1]?.financialYearEnds, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT)
                         };
 
-                        if(!this.isTodaysDateSelected) {
+                        if (!this.isTodaysDateSelected) {
                             response.financialYears.forEach(key => {
-                                if(this.selectedDateRange?.endDate >= moment(key.financialYearStarts, GIDDH_DATE_FORMAT) && this.selectedDateRange?.endDate <= moment(key.financialYearEnds, GIDDH_DATE_FORMAT)) {
+                                if (this.selectedDateRange?.endDate >= moment(key.financialYearStarts, GIDDH_DATE_FORMAT) && this.selectedDateRange?.endDate <= moment(key.financialYearEnds, GIDDH_DATE_FORMAT)) {
                                     activeFinancialYear = {
-                                        uniqueName: key.uniqueName,
-                                        isLocked: key.isLocked,
-                                        financialYearStarts: moment(key.financialYearStarts, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT),
-                                        financialYearEnds: moment(key.financialYearEnds, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT)
+                                        uniqueName: key?.uniqueName,
+                                        isLocked: key?.isLocked,
+                                        financialYearStarts: moment(key?.financialYearStarts, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT),
+                                        financialYearEnds: moment(key?.financialYearEnds, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT)
                                     };
                                 }
                             });
                         }
 
-                        if(this.selectedCompanyDetails) {
+                        if (this.selectedCompanyDetails) {
                             this.selectedCompanyDetails.activeFinancialYear = activeFinancialYear;
                             this.store.dispatch(this.commonActions.setActiveFinancialYear(this.selectedCompanyDetails));
                         }
@@ -784,9 +775,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      */
     public toggleBodyClass(): void {
         if (this.asideHelpSupportMenuState === 'in') {
-            document.querySelector('body').classList.add('fixed');
+            document.querySelector('body')?.classList?.add('fixed');
         } else {
-            document.querySelector('body').classList.remove('fixed');
+            document.querySelector('body')?.classList?.remove('fixed');
         }
     }
 
@@ -798,9 +789,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      */
     public toggleHelpSupportPane(show: boolean): void {
         setTimeout(() => {
-            if(show) {
+            if (show) {
                 this.asideSettingMenuState = 'out';
-                document.querySelector('body').classList.remove('aside-setting');
+                document.querySelector('body')?.classList?.remove('aside-setting');
             }
             this.asideInventorySidebarMenuState = 'out'
             document.querySelector('body').classList.remove('mobile-setting-sidebar');
@@ -819,17 +810,17 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public toggleSidebarPane(show: boolean, isMobileSidebar: boolean): void {
         setTimeout(() => {
             this.isMobileSidebar = isMobileSidebar;
-            if(show) {
+            if (show) {
                 this.asideHelpSupportMenuState = 'out';
             }
             this.asideSettingMenuState = (show) ? 'in' : 'out';
             this.asideInventorySidebarMenuState = (show && this.asideInventorySidebarMenuState === 'out') ? 'in' : 'out';
             this.toggleBodyClass();
 
-            if(this.asideSettingMenuState === "in") {
-                document.querySelector('body').classList.add('aside-setting');
+            if (this.asideSettingMenuState === "in") {
+                document.querySelector('body')?.classList?.add('aside-setting');
             } else {
-                document.querySelector('body').classList.remove('aside-setting');
+                document.querySelector('body')?.classList?.remove('aside-setting');
             }
 
             if (this.asideSettingMenuState === "in" && this.asideInventorySidebarMenuState === "in") {
@@ -849,7 +840,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         setTimeout(() => {
             if (this.asideHelpSupportMenuState === "in") {
                 this.asideHelpSupportMenuState = 'out';
-                document.querySelector('body').classList.remove('fixed');
+                document.querySelector('body')?.classList?.remove('fixed');
             }
         }, 50);
     }
@@ -888,10 +879,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         let o: IUlist = find(NAVIGATION_ITEM_LIST, (item) => {
             if (queryParamsObj) {
                 if (item.additional) {
-                    return item.uniqueName.toLowerCase() === pageName.toLowerCase() && item.additional.tabIndex === queryParamsObj.tabIndex;
+                    return item?.uniqueName.toLowerCase() === pageName.toLowerCase() && item.additional.tabIndex === queryParamsObj.tabIndex;
                 }
             } else {
-                return item.uniqueName.toLocaleLowerCase() === pageName.toLowerCase();
+                return item?.uniqueName.toLocaleLowerCase() === pageName.toLowerCase();
             }
         });
         if (o) {
@@ -931,15 +922,15 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         if (!this.activeCompanyForDb) {
             return;
         }
-        if (!this.activeCompanyForDb.uniqueName) {
+        if (!this.activeCompanyForDb?.uniqueName) {
             return;
         }
         if (dbResult) {
             // slice menus
             if (window.innerWidth > 1440 && window.innerHeight > 717) {
-                this.accountItemsFromIndexDB = (dbResult && dbResult.aidata) ? slice(dbResult.aidata.accounts, 0, 7) : [];
+                this.accountItemsFromIndexDB = (dbResult && dbResult?.aidata) ? slice(dbResult.aidata.accounts, 0, 7) : [];
             } else {
-                this.accountItemsFromIndexDB = (dbResult && dbResult.aidata) ? slice(dbResult.aidata.accounts, 0, 5) : [];
+                this.accountItemsFromIndexDB = (dbResult && dbResult?.aidata) ? slice(dbResult.aidata.accounts, 0, 5) : [];
             }
         } else {
             // slice default menus and account on small screen
@@ -1044,7 +1035,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         let validElement = true;
 
         excludeElements.forEach(className => {
-            if(elementClass.indexOf(className) > -1) {
+            if (elementClass.indexOf(className) > -1) {
                 validElement = false;
             }
         });
@@ -1087,10 +1078,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.companies$?.pipe(take(1)).subscribe(cmps => companies = cmps);
 
         this.companyListForFilter = companies?.filter((cmp) => {
-            if (!cmp.alias) {
-                return cmp.name.toLowerCase().includes(ev.toLowerCase());
+            if (!cmp?.alias) {
+                return cmp?.name.toLowerCase().includes(ev.toLowerCase());
             } else {
-                return cmp.name.toLowerCase().includes(ev.toLowerCase()) || cmp.alias.toLowerCase().includes(ev.toLowerCase());
+                return cmp?.name.toLowerCase().includes(ev.toLowerCase()) || cmp?.alias.toLowerCase().includes(ev.toLowerCase());
             }
         });
     }
@@ -1107,11 +1098,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             branches = response || [];
         });
         if (branchName) {
-            this.currentCompanyBranches = branches.filter(branch => {
-                if (!branch.alias) {
-                    return branch.name.toLowerCase().includes(branchName.toLowerCase());
+            this.currentCompanyBranches = branches?.filter(branch => {
+                if (!branch?.alias) {
+                    return branch?.name.toLowerCase().includes(branchName.toLowerCase());
                 } else {
-                    return branch.alias.toLowerCase().includes(branchName.toLowerCase());
+                    return branch?.alias.toLowerCase().includes(branchName.toLowerCase());
                 }
             });
         } else {
@@ -1219,17 +1210,17 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             this.isLedgerAccSelected = false;
         } else if (entity === 'accounts') {
             this.isLedgerAccSelected = true;
-            this.selectedLedgerName = item.uniqueName;
+            this.selectedLedgerName = item?.uniqueName;
         }
 
-        if (this.activeCompanyForDb && this.activeCompanyForDb.uniqueName) {
+        if (this.activeCompanyForDb?.uniqueName) {
             let isSmallScreen: boolean = !(window.innerWidth > 1440 && window.innerHeight > 717);
             let branches = [];
             this.store.pipe(select(appStore => appStore.settings.branches), take(1)).subscribe(response => {
                 branches = response || [];
             });
             this._dbService.addItem(this.activeCompanyForDb.uniqueName, entity, item, fromInvalidState, isSmallScreen,
-                this.currentOrganizationType === OrganizationType.Company && branches.length > 1).then((res) => {
+                this.currentOrganizationType === OrganizationType.Company && branches?.length > 1).then((res) => {
                     this.findListFromDb(res);
                 }, (err: any) => {
                     console.log('%c Error: %c ' + err + '', 'background: #c00; color: #ccc', 'color: #333');
@@ -1304,7 +1295,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             this.store.dispatch(this._generalActions.setPageTitle(currentPageObj));
         } else {
             NAVIGATION_ITEM_LIST.find((page) => {
-                if (page.uniqueName === decodeURI(currentUrl)) {
+                if (page?.uniqueName === decodeURI(currentUrl)) {
                     this.setCurrentPageTitle(page);
                     return true;
                 }
@@ -1314,9 +1305,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     public setCurrentPageTitle(menu) {
         let currentPageObj = new CurrentPage();
-        currentPageObj.name = menu.name;
-        currentPageObj.url = menu.uniqueName;
-        currentPageObj.additional = menu.additional;
+        currentPageObj.name = menu?.name;
+        currentPageObj.url = menu?.uniqueName;
+        currentPageObj.additional = menu?.additional;
         this.store.dispatch(this._generalActions.setPageTitle(currentPageObj));
     }
 
@@ -1394,11 +1385,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.toggleHelpSupportPane(false);
 
         setTimeout(() => {
-            if (document.getElementsByClassName("setting-data") && document.getElementsByClassName("setting-data").length > 0) {
+            if (document.getElementsByClassName("setting-data") && document.getElementsByClassName("setting-data")?.length > 0) {
                 document.querySelector('body').classList.add('on-setting-page');
                 document.querySelector('body').classList.remove('page-has-tabs');
                 document.querySelector('body').classList.remove('on-user-page');
-            } else if (document.getElementsByClassName("user-detail-page") && document.getElementsByClassName("user-detail-page").length > 0
+            } else if (document.getElementsByClassName("user-detail-page") && document.getElementsByClassName("user-detail-page")?.length > 0
             ) {
                 document.querySelector('body').classList.add('on-user-page');
                 document.querySelector('body').classList.remove('page-has-tabs');
@@ -1425,10 +1416,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 document.querySelector('body').classList.remove('mobile-setting-sidebar');
             }
 
-            if(document.getElementsByClassName("gst-sidebar-open")?.length > 0 || document.getElementsByClassName("setting-sidebar-open")?.length > 0) {
+            if (document.getElementsByClassName("gst-sidebar-open")?.length > 0 || document.getElementsByClassName("setting-sidebar-open")?.length > 0) {
                 this.collapseSidebar(true);
             } else {
-                if(this.sideMenu.isopen) {
+                if (this.sideMenu.isopen) {
                     this.sideMenu.isExpanded = true;
                     this.expandSidebar(true);
                 }
@@ -1443,7 +1434,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     * @memberof HeaderComponent
     */
     public expandSidebar(forceExpand: boolean = false): void {
-        if(forceExpand) {
+        if (forceExpand) {
             this.sideBarStateChange(true);
             this.sidebarForcelyExpanded = true;
         }
@@ -1457,25 +1448,25 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     * @memberof HeaderComponent
     */
     public collapseSidebar(forceCollapse: boolean = false, closeOnHover: boolean = false): void {
-        if(closeOnHover && this.sidebarForcelyExpanded && (this.router.url.includes("/pages/settings") || this.router.url.includes("/pages/user-details"))) {
+        if (closeOnHover && this.sidebarForcelyExpanded && (this.router.url.includes("/pages/settings") || this.router.url.includes("/pages/user-details"))) {
             return;
         }
 
-        if(closeOnHover && this.isSidebarExpanded && (document.getElementsByClassName("gst-sidebar-open")?.length > 0 || document.getElementsByClassName("setting-sidebar-open")?.length > 0)) {
+        if (closeOnHover && this.isSidebarExpanded && (document.getElementsByClassName("gst-sidebar-open")?.length > 0 || document.getElementsByClassName("setting-sidebar-open")?.length > 0)) {
             forceCollapse = true;
         }
 
-        if(forceCollapse) {
+        if (forceCollapse) {
             this.sideMenu.isExpanded = false;
         } else {
-            if(!this.sideMenu.isopen) {
+            if (!this.sideMenu.isopen) {
                 this.sideMenu.isExpanded = false;
             } else {
                 this.sideMenu.isExpanded = true;
             }
         }
 
-        if(!this.sideMenu.isExpanded || forceCollapse) {
+        if (!this.sideMenu.isExpanded || forceCollapse) {
             this.sidebarForcelyExpanded = false;
             this.isSidebarExpanded = false;
             this.generalService.collapseSidebar();
@@ -1761,24 +1752,24 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             this.currentPageUrl?.indexOf('pages/invoice/ewaybill') > -1);
     }
 
-   /**
-    * Opens the GST side menu in responsive mode
-    *
-    * @memberof HeaderComponent
-    */
-   public openGstSideMenu(): void {
+    /**
+     * Opens the GST side menu in responsive mode
+     *
+     * @memberof HeaderComponent
+     */
+    public openGstSideMenu(): void {
         this.isGstSideMenuOpened = !this.isGstSideMenuOpened;
         this.store.dispatch(this._generalActions.openGstSideMenu(this.isGstSideMenuOpened));
     }
 
-     /**
-     * This toggle's settings sidebar
-     *
-     * @param {boolean} isMobileSidebar
-     * @memberof HeaderComponent
-     */
-      public toggleSidebar(isMobileSidebar: boolean): void {
-        if(this.asideSettingMenuState === "in") {
+    /**
+    * This toggle's settings sidebar
+    *
+    * @param {boolean} isMobileSidebar
+    * @memberof HeaderComponent
+    */
+    public toggleSidebar(isMobileSidebar: boolean): void {
+        if (this.asideSettingMenuState === "in") {
             this.toggleSidebarPane(false, isMobileSidebar);
         } else {
             this.toggleSidebarPane(true, isMobileSidebar);

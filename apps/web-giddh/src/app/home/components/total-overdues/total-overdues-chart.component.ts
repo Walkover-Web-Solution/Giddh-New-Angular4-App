@@ -18,26 +18,25 @@ import { cloneDeep } from '../../../lodash-optimized';
     templateUrl: 'total-overdues-chart.component.html',
     styleUrls: ['../../home.component.scss', './total-overdues-chart.component.scss'],
 })
-
 export class TotalOverduesChartComponent implements OnInit, OnDestroy {
     @ViewChild('datepickerTemplate', { static: true }) public datepickerTemplate: ElementRef;
-    /* This will store if device is mobile or not */
+    /** This will store if device is mobile or not */
     public isMobileScreen: boolean = false;
-    /* This will store modal reference */
+    /** This will store modal reference */
     public modalRef: BsModalRef;
-    /* This will store selected date range to use in api */
+    /** This will store selected date range to use in api */
     public selectedDateRange: any;
-    /* This will store selected date range to show on UI */
+    /** This will store selected date range to show on UI */
     public selectedDateRangeUi: any;
-    /* This will store available date ranges */
+    /** This will store available date ranges */
     public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
-    /* This will store the x/y position of the field to show datepicker under it */
+    /** This will store the x/y position of the field to show datepicker under it */
     public dateFieldPosition: any = { x: 0, y: 0 };
-    /* Selected range label */
+    /** Selected range label */
     public selectedRangeLabel: any = "";
-    /* Selected from date */
+    /** Selected from date */
     public fromDate: string;
-    /* Selected to date */
+    /** Selected to date */
     public toDate: string;
     @Input() public refresh: boolean = false;
     public imgPath: string = '';
@@ -57,20 +56,20 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
     public dataFound: boolean = false;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public toRequest: any = { from: '', to: '', refresh: false };
-    /* This will hold local JSON data */
+    /** This will hold local JSON data */
     public localeData: any = {};
-    /* This will hold common JSON data */
+    /** This will hold common JSON data */
     public commonLocaleData: any = {};
-    /* this will store active company data */
+    /** this will store active company data */
     public activeCompany: any = {};
 
-    constructor(private store: Store<AppState>, private _dashboardService: DashboardService, public currencyPipe: GiddhCurrencyPipe, private cdRef: ChangeDetectorRef, private modalService: BsModalService, private generalService: GeneralService) {
+    constructor(private store: Store<AppState>, private dashboardService: DashboardService, public currencyPipe: GiddhCurrencyPipe, private cdRef: ChangeDetectorRef, private modalService: BsModalService, private generalService: GeneralService) {
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
         // img path
-        this.imgPath = (isElectron || isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
 
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
@@ -236,7 +235,7 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
      * @memberof TotalOverduesChartComponent
      */
     public getTotalOverduesData(group: string): void {
-        this._dashboardService.getClosingBalance(group, this.toRequest.from, this.toRequest.to, this.toRequest.refresh).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.dashboardService.getClosingBalance(group, this.toRequest.from, this.toRequest.to, this.toRequest.refresh).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.status === 'success' && response.body && response.body[0]) {
                 this.dataFound = true;
 
@@ -280,11 +279,11 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
     }
 
     /**
-       * Call back function for date/range selection in datepicker
-       *
-       * @param {*} value
-       * @memberof TotalOverduesChartComponent
-       */
+     * Call back function for date/range selection in datepicker
+     *
+     * @param {*} value
+     * @memberof TotalOverduesChartComponent
+     */
     public dateSelectedCallback(value?: any): void {
         if (value && value.event === "cancel") {
             this.hideGiddhDatepicker();

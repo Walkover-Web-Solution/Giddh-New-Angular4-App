@@ -130,6 +130,12 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
                 }, 200);
             }
         });
+
+        this.store.pipe(select(state => state.groupwithaccounts.activeTab), takeUntil(this.destroyed$)).subscribe(activeTab => {
+            if(activeTab !== null && activeTab !== undefined) {
+                this.staticTabs.tabs[activeTab].active = true;
+            }
+        });
     }
 
     public ngAfterViewChecked() {

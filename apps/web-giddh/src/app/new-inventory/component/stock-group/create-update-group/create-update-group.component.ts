@@ -76,7 +76,7 @@ export class InventoryCreateUpdateGroupComponent implements OnInit, OnDestroy {
      * @memberof InventoryCreateUpdateGroupComponent
      */
     public ngOnInit(): void {
-        this.imgPath = (isElectron || isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         this.getParentGroups();
     }
 

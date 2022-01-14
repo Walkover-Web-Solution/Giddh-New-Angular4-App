@@ -28,12 +28,10 @@ export const ROUTES: Routes = [
     { path: 'app-login-success', component: AppLoginSuccessComponent, pathMatch: 'full' },
     { path: 'token-verify', component: TokenVerifyComponent },
     { path: 'login', loadChildren: () => import('./login/login.module').then(module => module.LoginModule), canActivate: [BrowserSupported, UserAuthenticated] },
-
     { path: 'signup', loadChildren: () => import('./signup/signup.module').then(module => module.SignupModule) },
     { path: 'inventory', redirectTo: 'pages/inventory', pathMatch: 'full' },
     { path: 'inventory-in-out', redirectTo: 'pages/inventory-in-out', pathMatch: 'full' },
     { path: 'home', redirectTo: 'pages/home', pathMatch: 'full' },
-
     { path: 'search', redirectTo: 'pages/search', pathMatch: 'full' },
     { path: 'permissions', redirectTo: 'pages/permissions', pathMatch: 'full' },
     { path: 'settings', redirectTo: 'pages/settings', pathMatch: 'full' },
@@ -64,8 +62,6 @@ export const ROUTES: Routes = [
     { path: 'reports', redirectTo: 'pages/reports', pathMatch: 'full' },
     { path: 'proforma-invoice', redirectTo: 'pages/proforma-invoice' },
     { path: 'mobile-home', redirectTo: 'pages/mobile-home', pathMatch: 'full' },
-    { path: 'billing-detail', component: BillingDetailComponent },
-    { path: 'billing-detail/buy-plan', component: BillingDetailComponent },
     {
         path: 'pages', component: PageComponent, canActivate: [NeedsAuthentication],
         children: [
@@ -104,16 +100,18 @@ export const ROUTES: Routes = [
             { path: 'create-group', component: InventoryCreateUpdateGroupComponent, canActivate: [NeedsAuthorization] },
             { path: 'onboarding', component: OnboardingComponent, canActivate: [NeedsAuthorization] },
             { path: 'welcome', component: WelcomeComponent, canActivate: [NeedsAuthorization] },
-            { path: 'billing-detail', component: BillingDetailComponent, canActivate: [NeedsAuthorization] },
+            { path: 'billing-detail', loadChildren: () => import('./billing-details/billingDetail.module').then(module => module.BillingDetailModule) },
             { path: 'mobile-home', component: MobileHomeComponent, canActivate: [NeedsAuthorization] },
             { path: 'mobile-home-sidebar', component: MobileHomeSidebarComponent, canActivate: [NeedsAuthorization] },
             { path: 'mobile-search-company', component: MobileSearchCompanyComponent, canActivate: [NeedsAuthorization] },
             { path: 'mobile-search-branch', component: MobileSearchBranchComponent, canActivate: [NeedsAuthorization] },
             { path: 'giddh-all-items', loadChildren: () => import('./all-items/all-item.module').then(module => module.AllItemModule), canActivate: [NeedsAuthorization] },
-            // { path: 'tallysync', loadChildren: () => import('./tallysync/tallysync.module').then(module => module.TallysyncModule), canActivate: [NeedsAuthorization] },
+            { path: 'tallysync', loadChildren: () => import('./tallysync/tallysync.module').then(module => module.TallysyncModule), canActivate: [NeedsAuthorization] },
             { path: 'expenses-manager', loadChildren: () => import('./expenses/expenses.module').then(module => module.ExpensesModule), canActivate: [NeedsAuthorization] },
             { path: 'vat-report', loadChildren: () => import('./vat-report/vatReport.module').then(module => module.VatReportModule), canActivate: [NeedsAuthorization] },
             { path: 'purchase-management', loadChildren: () => import('./purchase/purchase.module').then(module => module.PurchaseModule), canActivate: [NeedsAuthorization] },
+            { path: 'voucher', loadChildren: () => import('./payment-receipt/payment-receipt.module').then(module => module.PaymentReceiptModule), canActivate: [NeedsAuthorization] },
+            { path: 'verify-email', loadChildren: () => import('./verify-email/verify-email.module').then(module => module.VerifyEmailModule), canActivate: [NeedsAuthorization] },
             { path: '**', redirectTo: 'home', pathMatch: 'full' }
         ]
     },

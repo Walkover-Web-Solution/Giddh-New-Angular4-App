@@ -60,6 +60,7 @@ export class GroupWithAccountsAction {
 
     public static OPEN_ADD_AND_MANAGE_FROM_OUTSIDE = 'OPEN_ADD_AND_MANAGE_FROM_OUTSIDE';
     public static HIDE_ADD_AND_MANAGE_FROM_OUTSIDE = 'HIDE_ADD_AND_MANAGE_FROM_OUTSIDE';
+    public static UPDATE_ACTIVE_TAB_ADD_AND_MANAGE = 'UPDATE_ACTIVE_TAB_ADD_AND_MANAGE';
 
     public ApplyGroupTax$: Observable<Action> = createEffect(() => this.action$
         .pipe(
@@ -573,6 +574,20 @@ export class GroupWithAccountsAction {
     public moveGroupComplete() {
         return {
             type: GroupWithAccountsAction.MOVE_GROUP_COMPLETE
+        };
+    }
+
+    /**
+     * This will update which tab should be active in master
+     *
+     * @param {number} value
+     * @returns
+     * @memberof GroupWithAccountsAction
+     */
+    public updateActiveTabOpenAddAndManage(value: number) {
+        return {
+            type: GroupWithAccountsAction.UPDATE_ACTIVE_TAB_ADD_AND_MANAGE,
+            payload: value
         };
     }
 }

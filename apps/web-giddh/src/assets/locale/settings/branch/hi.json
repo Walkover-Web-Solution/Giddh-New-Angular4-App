@@ -31,5 +31,9 @@
 	"select_addresses": "पते का चयन करें",
 	"add_address": "पता जोड़ें",
 	"branch_created": "शाखा सफलतापूर्वक बनाई गई",
-	"address_created": "पता सफलतापूर्वक बनाया गया"
+	"address_created": "पता सफलतापूर्वक बनाया गया",
+    "branch_archived": "शाखा सफलतापूर्वक संग्रहित कर ली गई है",
+    "branch_unarchived": "शाखा को सफलतापूर्वक अनारक्षित कर दिया गया है",
+    "confirm_archive_title": "क्या आप वाकई शाखा को संग्रहित करना चाहते हैं?",
+    "confirm_unarchive_title": "क्या आप वाकई शाखा को अनारक्षित करना चाहते हैं?"
 }

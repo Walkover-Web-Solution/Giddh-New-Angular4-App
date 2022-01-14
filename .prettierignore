@@ -106,7 +106,6 @@ xplat
 *.json
 apps/electron-giddh
 apps/web-giddh-e2e
-apps/giddh-cordova
 magic.html
 *.js
 *.css

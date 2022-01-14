@@ -4,22 +4,15 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { LoaderService } from "../loader/loader.service";
 import { GeneralService } from "./general.service";
-import { UserAgent } from "@ionic-native/user-agent/ngx";
-import { isCordova } from "@giddh-workspaces/utils";
 
 @Injectable()
 export class HttpWrapperService {
     constructor(
-        private _http: HttpClient,
-        private _loaderService: LoaderService,
-        private _generalService: GeneralService,
-        private userAgent: UserAgent
+        private http: HttpClient,
+        private loaderService: LoaderService,
+        private generalService: GeneralService
     ) {
-        if (isCordova()) {
-            this.userAgent.set('Mozilla/5.0 (Linux; U; Android 2.2) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1')
-                .then((res: any) => console.log(res))
-                .catch((error: any) => console.error(error));
-        }
+        
     }
 
     public get = (
@@ -29,7 +22,7 @@ export class HttpWrapperService {
     ): Observable<any> => {
         options = this.prepareOptions(options);
         options.params = params;
-        return this._http.get(url, options).pipe(
+        return this.http.get(url, options).pipe(
             tap(res => {
                 //
             }),
@@ -40,7 +33,7 @@ export class HttpWrapperService {
     };
     public post = (url: string, body: any, options?: any): Observable<any> => {
         options = this.prepareOptions(options);
-        return this._http.post(url, body, options).pipe(
+        return this.http.post(url, body, options).pipe(
             tap(res => {
                 //
             }),
@@ -51,7 +44,7 @@ export class HttpWrapperService {
     };
     public put = (url: string, body: any, options?: any): Observable<any> => {
         options = this.prepareOptions(options);
-        return this._http.put(url, body, options).pipe(
+        return this.http.put(url, body, options).pipe(
             tap(res => {
                 //
             }),
@@ -67,7 +60,7 @@ export class HttpWrapperService {
     ): Observable<any> => {
         options = this.prepareOptions(options);
         options.search = this.objectToParams(params);
-        return this._http.delete(url, options).pipe(
+        return this.http.delete(url, options).pipe(
             tap(res => {
                 //
             }),
@@ -79,13 +72,13 @@ export class HttpWrapperService {
 
     public deleteWithBody = (url: string, request: any): Observable<any> => {
         let options = { headers: {}, body: {} };
-        options.headers["Session-Id"] = this._generalService.sessionId;
+        options.headers["Session-Id"] = this.generalService.sessionId;
         options.headers["Content-Type"] = "application/json";
         options.headers["Accept"] = "application/json";
         options.headers = new HttpHeaders(options.headers);
         options.body = request;
         this.showLoader();
-        return this._http.delete(url, options).pipe(
+        return this.http.delete(url, options).pipe(
             tap(res => {
                 //
             }),
@@ -97,7 +90,7 @@ export class HttpWrapperService {
 
     public patch = (url: string, body: any, options?: any): Observable<any> => {
         options = this.prepareOptions(options);
-        return this._http.patch(url, body, options).pipe(
+        return this.http.patch(url, body, options).pipe(
             tap(res => {
                 //
             }),
@@ -115,7 +108,7 @@ export class HttpWrapperService {
         } else {
             this.showLoader();
         }
-        let sessionId = this._generalService.sessionId;
+        let sessionId = this.generalService.sessionId;
         options = options || {};
 
         if (!options.headers) {
@@ -163,10 +156,10 @@ export class HttpWrapperService {
     }
 
     private showLoader(): void {
-        this._loaderService.show();
+        this.loaderService.show();
     }
 
     private hideLoader(): void {
-        this._loaderService.hide();
+        this.loaderService.hide();
     }
 }

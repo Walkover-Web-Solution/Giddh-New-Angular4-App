@@ -70,19 +70,19 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
     public isMobileScreen: boolean = true;
     public apiPostmanDocUrl: String = API_POSTMAN_DOC_URL;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    /* This will hold local JSON data */
+    /** This will hold local JSON data */
     public localeData: any = {};
-    /* This will hold common JSON data */
+    /** This will hold common JSON data */
     public commonLocaleData: any = {};
 
     constructor(private store: Store<AppState>,
-        private _toasty: ToasterService,
-        private _loginService: AuthenticationService,
+        private toasty: ToasterService,
+        private loginService: AuthenticationService,
         private loginAction: LoginActions,
         private companyActions: CompanyActions,
         private router: Router,
-        private _sessionAction: SessionActions,
-        public _route: ActivatedRoute,
+        private sessionAction: SessionActions,
+        private route: ActivatedRoute,
         private breakPointObservar: BreakpointObserver,
         private generalActions: GeneralActions, private settingsProfileActions: SettingsProfileActions) {
         this.contactNo$ = this.store.pipe(select(s => {
@@ -127,7 +127,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
             document.querySelector('body').classList.remove('tabs-page');
         }
 
-        this._route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
+        this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             if (params['type'] && this.activeTab !== params['type']) {
                 this.setStateDetails(params['type']);
                 this.activeTab = params['type'];
@@ -137,7 +137,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
             }
         });
 
-        this._route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe(params => {
+        this.route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             if (params && params.tabIndex) {
                 if (params && params.tabIndex == "0") {
                     this.activeTab = "auth-key";
@@ -163,11 +163,11 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
         });
         this.authenticateTwoWay$.subscribe(s => this.twoWayAuth = s);
         this.store.dispatch(this.loginAction.FetchUserDetails());
-        this._loginService.GetAuthKey().pipe(takeUntil(this.destroyed$)).subscribe(a => {
+        this.loginService.GetAuthKey().pipe(takeUntil(this.destroyed$)).subscribe(a => {
             if (a.status === 'success') {
                 this.userAuthKey = a.body.authKey;
             } else {
-                this._toasty.errorToast(a.message, a.status);
+                this.toasty.errorToast(a.message, a.status);
             }
         });
         this.store.pipe(select(s => s.subscriptions.companies), takeUntil(this.destroyed$))
@@ -201,7 +201,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
                     return session;
                 });
             } else {
-                this.store.dispatch(this._sessionAction.getAllSession());
+                this.store.dispatch(this.sessionAction.getAllSession());
             }
         });
         this.isUpdateCompanyInProgress$.pipe(takeUntil(this.destroyed$)).subscribe(inProcess => {
@@ -215,7 +215,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
      * @memberof UserDetailsComponent
      */
     public ngAfterViewInit(): void {
-        this._route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((val) => {
+        this.route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((val) => {
             if (val && val.tab && val.tabIndex) {
                 this.selectTab(val.tabIndex);
             }
@@ -227,6 +227,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
             });
         }
     }
+
     public addNumber(no: string) {
         this.oneTimePassword = '';
         const mobileRegex = /^[0-9]{1,10}$/;
@@ -236,7 +237,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
             request.mobileNumber = this.phoneNumber;
             this.store.dispatch(this.loginAction.AddNewMobileNo(request));
         } else {
-            this._toasty.errorToast(this.localeData?.mobile_number?.mobile_number_validation_error);
+            this.toasty.errorToast(this.localeData?.mobile_number?.mobile_number_validation_error);
         }
     }
 
@@ -249,21 +250,21 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     public changeTwoWayAuth() {
-        this._loginService.SetSettings({ authenticateTwoWay: this.twoWayAuth }).pipe(takeUntil(this.destroyed$)).subscribe(res => {
+        this.loginService.SetSettings({ authenticateTwoWay: this.twoWayAuth }).pipe(takeUntil(this.destroyed$)).subscribe(res => {
             if (res.status === 'success') {
-                this._toasty.successToast(res.body);
+                this.toasty.successToast(res.body);
             } else {
-                this._toasty.errorToast(res.message);
+                this.toasty.errorToast(res.message);
             }
         });
     }
 
     public regenerateKey() {
-        this._loginService.RegenerateAuthKey().pipe(takeUntil(this.destroyed$)).subscribe(a => {
+        this.loginService.RegenerateAuthKey().pipe(takeUntil(this.destroyed$)).subscribe(a => {
             if (a.status === 'success') {
                 this.userAuthKey = a.body.authKey;
             } else {
-                this._toasty.errorToast(a.message, a.status);
+                this.toasty.errorToast(a.message, a.status);
             }
         });
     }
@@ -292,11 +293,11 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
             sessionId,
             sessionIndex
         };
-        this.store.dispatch(this._sessionAction.deleteSession(requestPayload));
+        this.store.dispatch(this.sessionAction.deleteSession(requestPayload));
     }
 
     public clearAllSession() {
-        this.store.dispatch(this._sessionAction.deleteAllSession());
+        this.store.dispatch(this.sessionAction.deleteAllSession());
     }
 
     /**
@@ -334,7 +335,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
      * @param {boolean} event
      * @memberof UserDetailsComponent
      */
-      public getPageHeading(): string {
+    public getPageHeading(): string {
         let pageHeading = "";
 
         if (this.isMobileScreen) {

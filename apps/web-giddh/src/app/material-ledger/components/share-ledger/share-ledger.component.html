@@ -5,7 +5,7 @@
     (commonLocaleData)="commonLocaleData = $event"
 >
     <div id="share-modal">
-        <div id="share-modal" ng-if="ledgerCtrl.toggleShare">
+        <div id="share-modal">
             <div class="modal-header flex-row-reverse">
                 <span
                     aria-hidden="true"
@@ -59,12 +59,12 @@
                                         <ul class="shared-list">
                                             <li *ngFor="let val of activeAccountSharedWith" class="clearfix">
                                                 <span class="pull-left">
-                                                    <small class="user-email">{{ val.emailId }}</small>
+                                                    <small class="user-email">{{ val?.emailId }}</small>
                                                 </span>
                                                 <span>
                                                     <span class="delete-icon pull-right">
                                                         <i
-                                                            (click)="unShareAccount(val.uniqueName)"
+                                                            (click)="unShareAccount(val?.uniqueName)"
                                                             class="icon-cross"
                                                             aria-hidden="true"
                                                         ></i>

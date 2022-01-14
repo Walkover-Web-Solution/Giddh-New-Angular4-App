@@ -118,7 +118,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
             } else {
                 let companyCountry;
                 this.activeCompany$.pipe(take(1)).subscribe((response: any) => {
-                    companyCountry = response.countryV2?.alpha2CountryCode;
+                    companyCountry = response?.countryV2?.alpha2CountryCode;
                 });
                 if (companyCountry === 'IN') {
                     const requestObject = {
@@ -372,7 +372,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
      */
     public selectLinkAccount(data) {
         let arrOfAcc = cloneDeep(this.accountList);
-        if (data.value) {
+        if (data.value && this.accountToSend) {
             let result = arrOfAcc.filter((obj) => obj?.uniqueName === data.value);
             this.accountToSend.name = result[0].name;
             this.accountToSend.uniqueName = result[0]?.uniqueName;

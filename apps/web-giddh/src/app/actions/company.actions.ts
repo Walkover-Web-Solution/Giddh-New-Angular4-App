@@ -72,7 +72,7 @@ export class CompanyActions {
     public static SET_COMPANY_BRANCH = 'SET_COMPANY_BRANCH';
 
     public static SET_ACTIVE_COMPANY_DATA = 'SET_ACTIVE_COMPANY_DATA';
-
+    public static RESET_ACTIVE_COMPANY_DATA = 'ResetActiveCompanyData';
     public static GET_COMPANY_USER = 'GET_COMPANY_USER';
     public static GET_COMPANY_USER_RESPONSE = 'GET_COMPANY_USER_RESPONSE';
 
@@ -223,12 +223,12 @@ export class CompanyActions {
             ofType(CompanyActions.REFRESH_COMPANIES_RESPONSE),
             map((action: CustomActions) => {
                 let response: BaseResponse<CompanyResponse[], string> = action.payload;
-                if (response.status === 'error') {
+                if (response?.status === 'error') {
                     this._toasty.errorToast(response.message, response.code);
                     return { type: 'EmptyAction' };
                 }
                 // check if user have companies
-                if (response.body.length) {
+                if (response?.body?.length) {
                     let activeCompanyName = null;
                     let totalCompany = 0;
                     this.store.pipe(select(s => s.session.companyUniqueName), take(1)).subscribe(a => activeCompanyName = a);
@@ -683,6 +683,20 @@ export class CompanyActions {
         return {
             type: CompanyActions.GET_COMPANY_USER_RESPONSE,
             payload: value
+        };
+    }
+
+    /**
+     * This will reset the active company data in store
+     *
+     * @param {*} data
+     * @returns {CustomActions}
+     * @memberof CompanyActions
+     */
+    public resetActiveCompanyData(): CustomActions {
+        return {
+            type: CompanyActions.RESET_ACTIVE_COMPANY_DATA,
+            payload: null
         };
     }
 }

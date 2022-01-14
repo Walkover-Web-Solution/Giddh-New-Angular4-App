@@ -386,7 +386,7 @@
                                     class="row"
                                     *ngIf="
                                         l &&
-                                        addAccountForm.get('addresses')['controls'].length > 3 &&
+                                        addAccountForm.get('addresses')['controls']?.length > 3 &&
                                         !moreGstDetailsVisible
                                     "
                                 >
@@ -395,7 +395,7 @@
                                         class="text-left col-6 cursor-pointer"
                                         (click)="showMoreGst()"
                                         >{{ commonLocaleData?.app_show_all }} ({{
-                                            addAccountForm.get("addresses")["controls"].length
+                                            addAccountForm.get("addresses")["controls"]?.length
                                         }})</a
                                     >
                                     <a
@@ -670,6 +670,7 @@
             </tab>
 
             <tab *ngIf="isDebtorCreditor" [heading]="localeData?.tabs?.custom">
+                <giddh-page-loader [cssClass]="'mt-0 mb-0'" *ngIf="isCustomFieldLoading"></giddh-page-loader>
                 <ng-container formArrayName="customFields">
                     <ng-container
                         *ngFor="let item of companyCustomFields; let index = index; let first = first; let last = last"
@@ -748,6 +749,7 @@
                     >{{ commonLocaleData?.app_create_custom_field }}</a
                 >
             </tab>
+
             <div class="row">
                 <div class="col-sm-12 mt-5">
                     <div class="button-group">

@@ -3,7 +3,6 @@ import * as moment from 'moment';
 export const Configuration = {
     AppUrl,
     ApiUrl,
-    isCordova,
     isElectron,
     APP_FOLDER
 };
@@ -39,7 +38,6 @@ export const DEFAULT_TOASTER_OPTIONS_WITH_HTML = {
 };
 
 export const DEFAULT_SERVER_ERROR_MSG = 'Something went wrong! Please try again.';
-export let IS_CORDOVA_WA = isCordova;
 export let IS_ELECTRON_WA = isElectron;
 export let APP_URL_WA = AppUrl;
 export let APP_FOLDER_WA = APP_FOLDER;
@@ -244,7 +242,7 @@ export const REMOVE_TRAILING_ZERO_REGEX = /^([\d,' ]*)$|^([\d,' ]*)\.0*$|^([\d,'
 /* This plan unique name will be used as a default plan while creating new company/branch */
 export let DEFAULT_SIGNUP_TRIAL_PLAN = "";
 
-if (PRODUCTION_ENV || isElectron || isCordova) {
+if (PRODUCTION_ENV || isElectron) {
     DEFAULT_SIGNUP_TRIAL_PLAN = "e6v1566224240273";
 } else {
     DEFAULT_SIGNUP_TRIAL_PLAN = "xoh1591185630174";
@@ -252,7 +250,7 @@ if (PRODUCTION_ENV || isElectron || isCordova) {
 
 export let DEFAULT_POPULAR_PLAN = "";
 
-if (PRODUCTION_ENV || isElectron || isCordova) {
+if (PRODUCTION_ENV || isElectron) {
     DEFAULT_POPULAR_PLAN = "Oak";
 } else {
     DEFAULT_POPULAR_PLAN = "Popular Plan";
@@ -265,6 +263,7 @@ export enum AdjustedVoucherType {
     Sales = 'sal', // used in ledger
     SalesInvoice = 'sales', // used in invoice preview module
     Purchase = 'pur',
+    PurchaseInvoice = 'purchase',
     CreditNote = 'credit note',
     DebitNote = 'debit note',
     Payment = 'pay',
@@ -333,7 +332,7 @@ export const GIDDH_VOUCHER_FORM = [
     {
         type: "sales",
         advanceReceiptAllowed: false,
-        rcmAllowed: false,
+        rcmAllowed: true,
         depositAllowed: true,
         taxesAllowed: true,
         quantityAllowed: true,
@@ -348,7 +347,7 @@ export const GIDDH_VOUCHER_FORM = [
         type: "cash",
         advanceReceiptAllowed: false,
         rcmAllowed: false,
-        depositAllowed: true,
+        depositAllowed: false,
         taxesAllowed: true,
         quantityAllowed: true,
         rateAllowed: true,
@@ -403,7 +402,7 @@ export const GIDDH_VOUCHER_FORM = [
     {
         type: "credit note",
         advanceReceiptAllowed: false,
-        rcmAllowed: false,
+        rcmAllowed: true,
         depositAllowed: false,
         taxesAllowed: true,
         quantityAllowed: true,
@@ -417,7 +416,7 @@ export const GIDDH_VOUCHER_FORM = [
     {
         type: "debit note",
         advanceReceiptAllowed: false,
-        rcmAllowed: false,
+        rcmAllowed: true,
         depositAllowed: false,
         taxesAllowed: true,
         quantityAllowed: true,

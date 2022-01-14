@@ -45,14 +45,14 @@
                                                 id="ledger-unit"
                                                 class="form-control"
                                                 [disabled]="shouldShowAdvanceReceiptMandatoryFields ? 'disabled' : null"
-                                                (change)="unitChanged($event.target.value)"
-                                                [value]="currentTxn?.inventory.unit.code"
+                                                (change)="unitChanged($event?.target?.value)"
+                                                [value]="currentTxn?.inventory?.unit?.code"
                                             >
                                                 <mat-option
-                                                    *ngFor="let item of currentTxn.unitRate"
-                                                    [value]="item.code"
+                                                    *ngFor="let item of currentTxn?.unitRate"
+                                                    [value]="item?.code"
                                                 >
-                                                    {{ item.stockUnitCode }}
+                                                    {{ item?.stockUnitCode }}
                                                 </mat-option>
                                             </mat-select>
                                         </td>
@@ -257,8 +257,8 @@
                                 [applicableTaxes]="
                                     taxListForStock?.length
                                         ? taxListForStock
-                                        : currentTxn.selectedAccount?.applicableTaxes
-                                        ? currentTxn.selectedAccount?.applicableTaxes
+                                        : currentTxn?.selectedAccount?.applicableTaxes
+                                        ? currentTxn?.selectedAccount?.applicableTaxes
                                         : currentAccountApplicableTaxes?.length
                                         ? currentAccountApplicableTaxes
                                         : []
@@ -347,7 +347,7 @@
                 </div>
             </div>
             <div class="col-md-8" [ngClass]="{ 'offset-md-4': !currentTxn?.selectedAccount?.stock }">
-                <div class="text-right mr-b1" *ngIf="currentTxn.selectedAccount && showTaxationDiscountBox">
+                <div class="text-right mr-b1" *ngIf="currentTxn?.selectedAccount && showTaxationDiscountBox">
                     <ng-container *ngIf="isTcsTdsApplicable">
                         <mat-checkbox
                             color="primary"
@@ -395,9 +395,9 @@
         <div
             [class.words-inline]="shouldShowRcmTaxableAmount || shouldShowItcSection"
             class="pd-b1 in-words"
-            *ngIf="currentTxn.total"
+            *ngIf="currentTxn?.total"
         >
-            {{ currentTxn.total | myNumberToWordsPipe | lowercase }}
+            {{ currentTxn?.total | myNumberToWordsPipe | lowercase }}
         </div>
         <ng-container *ngIf="shouldShowRcmTaxableAmount">
             <div class="taxable-amount-section mr-1">
@@ -535,7 +535,7 @@
                                             >
                                                 <ng-template #optionTemplate let-option="option">
                                                     <a href="javascript:void(0)" class="list-item sh-template">
-                                                        <div class="item">{{ option.label }}</div>
+                                                        <div class="item">{{ option?.label }}</div>
                                                         <div class="item-unique">
                                                             ({{ localeData?.dated }}:
                                                             {{ option.additional?.voucherDate }})
@@ -810,17 +810,15 @@
                             class="pull-left"
                             name="generateInvoice"
                             [disabled]="
-                                ((isAdvanceReceipt ||
-                                    isAdjustReceiptSelected ||
-                                    isAdjustVoucherSelected ||
-                                    blankLedger.voucherType === 'credit note' ||
-                                    blankLedger.voucherType === 'debit note') &&
-                                    blankLedger.generateInvoice) ||
+                                isAdvanceReceipt ||
+                                currentTxn?.voucherAdjustments?.adjustments?.length ||
+                                currentTxn?.invoiceLinkingRequest?.linkedInvoices?.length ||
                                 isReadOnly
                                     ? 'disabled'
                                     : null
                             "
                             [(ngModel)]="blankLedger.generateInvoice"
+                            (change)="manualGenerateVoucherChecked = $event?.checked"
                             >{{ commonLocaleData?.app_generate_voucher }}</mat-checkbox
                         >
                     </label>
@@ -922,11 +920,14 @@
                             {{ localeData?.attach_file }}</label
                         >
                     </label>
-                    <div class="file_attached clearfix text-right pd-r15" *ngIf="blankLedger?.attachedFile?.length > 0">
+                    <div
+                        class="file_attached clearfix text-right pd-r15 d-inline-block"
+                        *ngIf="blankLedger?.attachedFile?.length > 0"
+                    >
                         <span>{{ blankLedger.attachedFileName }}</span>
-                        <button mat-button class="remove cp text-danger pl-1" (click)="showDeleteAttachedFileModal()">
-                            ({{ commonLocaleData?.app_remove | lowercase }})
-                        </button>
+                        <span class="delete-attachment cursor-pointer">
+                            <img (click)="showDeleteAttachedFileModal()" src="assets/images/multiply.svg" />
+                        </span>
                     </div>
                 </div>
             </div>
@@ -1060,7 +1061,7 @@
             <advance-receipt-adjustment-component
                 [adjustedVoucherType]="blankLedger.voucherType"
                 [invoiceFormDetails]="adjustVoucherConfiguration"
-                [advanceReceiptAdjustmentUpdatedData]="currentTxn.voucherAdjustments"
+                [advanceReceiptAdjustmentUpdatedData]="currentTxn?.voucherAdjustments"
                 (closeModelEvent)="closeAdjustmentModal($event)"
                 (submitClicked)="getAdjustedPaymentData($event)"
             >

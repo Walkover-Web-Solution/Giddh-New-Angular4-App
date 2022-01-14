@@ -71,9 +71,9 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this.imgPath = (isElectron || isCordova) ? 'assets/icon/' : AppUrl + APP_FOLDER + 'assets/icon/';
+        this.imgPath = isElectron ? 'assets/icon/' : AppUrl + APP_FOLDER + 'assets/icon/';
         this.getDetailedPurchaseRequestFilter.page = 1;
-        this.getDetailedPurchaseRequestFilter.count = 50;
+        this.getDetailedPurchaseRequestFilter.count = this.paginationLimit;
         this.getDetailedPurchaseRequestFilter.q = '';
         this.store.pipe(select(appState => appState.company), takeUntil(this.destroyed$)).subscribe((companyData: CurrentCompanyState) => {
             if (companyData) {
@@ -96,7 +96,7 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
                 _.map(this.PurchaseRegisteDetailedItems.items, (obj: any) => {
                     obj.date = this.getDateToDMY(obj.date);
                 });
-                if (this.voucherNumberInput.value) {
+                if (this.voucherNumberInput?.value) {
                     setTimeout(() => {
                         this.invoiceSearch?.nativeElement.focus();
                     }, 200);
@@ -106,7 +106,7 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
 
         });
 
-        this.voucherNumberInput.valueChanges.pipe(
+        this.voucherNumberInput?.valueChanges?.pipe(
             debounceTime(700),
             distinctUntilChanged(),
             takeUntil(this.destroyed$)

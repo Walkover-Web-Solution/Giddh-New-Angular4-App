@@ -198,14 +198,13 @@
                                 >
                                     <img (click)="showGiddhDatepicker($event)" src="{{ imgPath }}calender-icon.svg" />
                                 </div>
-                                <span class="input-wrapper ipad-view-datepicker">
+                                <span class="input-wrapper ipad-view-datepicker" (click)="showGiddhDatepicker($event)">
                                     <mat-form-field appearance="fill">
                                         <input
                                             matInput
                                             id="giddh-datepicker-ipad-view"
                                             type="text"
                                             name="selectedDateRange"
-                                            (click)="showGiddhDatepicker($event)"
                                             [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
                                             class="giddh-datepicker date-range-picker"
                                         />
@@ -336,7 +335,7 @@
                                                     </span>
                                                     <span class="entity-details">
                                                         <div class="item giddh-limit single-line-clamp">
-                                                            {{ option.label || "-" }}
+                                                            {{ option?.label || "-" }}
                                                         </div>
                                                         <div class="item-unique giddh-limit single-line-clamp">
                                                             {{ option.name || "-" }}
@@ -354,7 +353,10 @@
                             class="col-lg-4 col-md-12 col-sm-12 col-xs-12 text-center date-range-options"
                             *ngIf="!isMobileScreen"
                         >
-                            <div class="advance-search-by-date date-advance-search">
+                            <div
+                                class="advance-search-by-date date-advance-search"
+                                (click)="showGiddhDatepicker($event)"
+                            >
                                 <span class="input-wrapper">
                                     <mat-form-field appearance="fill">
                                         <input
@@ -362,7 +364,6 @@
                                             id="giddh-datepicker"
                                             type="text"
                                             name="selectedDateRange"
-                                            (click)="showGiddhDatepicker($event)"
                                             [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
                                             class="giddh-datepicker date-range-picker"
                                         />
@@ -416,7 +417,7 @@
                                                         </span>
                                                         <span class="entity-details">
                                                             <div class="item giddh-limit single-line-clamp">
-                                                                {{ option.label || "-" }}
+                                                                {{ option?.label || "-" }}
                                                             </div>
                                                             <div class="item-unique giddh-limit single-line-clamp">
                                                                 {{ option.name || "-" }}
@@ -701,10 +702,7 @@
                                                                             currentCompanyBranches?.length > 2
                                                                         "
                                                                         [enableDynamicSearch]="true"
-                                                                        (selected)="
-                                                                            selectAccount($event, txn);
-                                                                            showBankLedgerPopup(txn, item)
-                                                                        "
+                                                                        (selected)="selectAccount($event, txn)"
                                                                         [placeholder]="
                                                                             commonLocaleData?.app_select_accounts
                                                                         "
@@ -727,7 +725,7 @@
                                                                                     class="list-item"
                                                                                 >
                                                                                     <div class="item">
-                                                                                        {{ option.label }}
+                                                                                        {{ option?.label }}
                                                                                     </div>
                                                                                     <div class="item-unique">
                                                                                         {{
@@ -745,7 +743,7 @@
                                                                                     class="list-item"
                                                                                 >
                                                                                     <div class="item">
-                                                                                        {{ option.label }}
+                                                                                        {{ option?.label }}
                                                                                     </div>
                                                                                     <div class="item-unique">
                                                                                         {{
@@ -948,10 +946,7 @@
                                                                             currentOrganizationType === 'COMPANY' &&
                                                                             currentCompanyBranches?.length > 2
                                                                         "
-                                                                        (selected)="
-                                                                            selectAccount($event, txn);
-                                                                            showBankLedgerPopup(txn, item)
-                                                                        "
+                                                                        (selected)="selectAccount($event, txn)"
                                                                         [isPaginationEnabled]="true"
                                                                         (scrollEnd)="handleScrollEnd()"
                                                                         (dynamicSearchedQuery)="
@@ -991,7 +986,7 @@
                                                                                     class="list-item"
                                                                                 >
                                                                                     <div class="item">
-                                                                                        {{ option.label }}
+                                                                                        {{ option?.label }}
                                                                                     </div>
                                                                                     <div class="item-unique">
                                                                                         {{
@@ -1009,7 +1004,7 @@
                                                                                     class="list-item"
                                                                                 >
                                                                                     <div class="item">
-                                                                                        {{ option.label }}
+                                                                                        {{ option?.label }}
                                                                                     </div>
                                                                                     <div class="item-unique">
                                                                                         {{
@@ -1278,20 +1273,31 @@
                                                         }}</span>
                                                         <span
                                                             class="download-invoice-ledger d-flex"
-                                                            *ngIf="transactions.attachedFileUniqueName"
-                                                            (click)="
-                                                                downloadAttachedFile(
-                                                                    transactions.attachedFileUniqueName,
-                                                                    $event
-                                                                )
+                                                            *ngIf="
+                                                                voucherApiVersion !== 2 &&
+                                                                transactions.attachedFileUniqueName
                                                             "
+                                                            (click)="downloadFiles(transactions, 'ATTACHMENT', $event)"
                                                         >
-                                                            <i class="icon-download-circle pull-left"></i>
+                                                            <i class="icon-attachment pull-left"></i>
                                                         </span>
                                                         <span
                                                             class="download-invoice-ledger d-flex"
-                                                            *ngIf="transactions.voucherGenerated"
-                                                            (click)="downloadInvoice(transactions, $event)"
+                                                            *ngIf="
+                                                                voucherApiVersion !== 2 && transactions.voucherGenerated
+                                                            "
+                                                            (click)="downloadFiles(transactions, 'VOUCHER', $event)"
+                                                        >
+                                                            <i class="icon-download-new pull-left"></i>
+                                                        </span>
+                                                        <span
+                                                            class="download-invoice-ledger d-flex cursor-pointer"
+                                                            *ngIf="
+                                                                voucherApiVersion === 2 &&
+                                                                (transactions.attachedFileUniqueName ||
+                                                                    transactions.voucherGenerated)
+                                                            "
+                                                            (click)="openAttachmentsDialog(attachments, transactions)"
                                                         >
                                                             <i class="icon-download-circle pull-left"></i>
                                                         </span>
@@ -1521,18 +1527,18 @@
 
                                         <span
                                             class="download-invoice-ledger d-flex"
-                                            *ngIf="txn.attachedFileUniqueName"
-                                            (click)="downloadAttachedFile(txn.attachedFileUniqueName, $event)"
+                                            *ngIf="voucherApiVersion !== 2 && txn.attachedFileUniqueName"
+                                            (click)="downloadFiles(txn, 'ATTACHMENT', $event)"
                                             [matTooltip]="localeData?.download_file + ' : ' + txn.attachedFileName"
                                             [matTooltipPosition]="'right'"
                                             matTooltipClass="tooltip-black"
                                         >
-                                            <i class="icon-download-circle pull-left"></i>
+                                            <i class="icon-attachment pull-left"></i>
                                         </span>
                                         <span
                                             class="download-invoice-ledger d-flex"
-                                            *ngIf="txn.voucherGenerated"
-                                            (click)="downloadInvoice(txn, $event)"
+                                            *ngIf="voucherApiVersion !== 2 && txn.voucherGenerated"
+                                            (click)="downloadFiles(txn, 'VOUCHER', $event)"
                                             [matTooltip]="
                                                 commonLocaleData?.app_download +
                                                 ' ' +
@@ -1541,6 +1547,25 @@
                                                     : commonLocaleData?.app_voucher) +
                                                 ' : ' +
                                                 txn.voucherNumber
+                                            "
+                                            [matTooltipPosition]="'right'"
+                                            matTooltipClass="tooltip-black"
+                                        >
+                                            <i class="icon-download-new pull-left"></i>
+                                        </span>
+                                        <span
+                                            class="download-invoice-ledger d-flex cursor-pointer"
+                                            *ngIf="
+                                                voucherApiVersion === 2 &&
+                                                (txn.attachedFileUniqueName || txn.voucherGenerated)
+                                            "
+                                            (click)="openAttachmentsDialog(attachments, txn)"
+                                            [matTooltip]="
+                                                txn.attachedFileUniqueName && txn.voucherGenerated
+                                                    ? txn.voucherNumber + ', ' + txn.attachedFileName
+                                                    : txn.attachedFileUniqueName
+                                                    ? txn.attachedFileName
+                                                    : txn.voucherNumber
                                             "
                                             [matTooltipPosition]="'right'"
                                             matTooltipClass="tooltip-black"
@@ -1595,7 +1620,12 @@
                                                             name="ledgDate"
                                                             [(ngModel)]="lc.blankLedger.entryDate"
                                                             [placeholder]="lc.formatPlaceholder"
-                                                            (dateSelected)="getInvoiceListsForCreditNote(true)"
+                                                            (dateSelected)="
+                                                                getInvoiceListsForCreditNote([
+                                                                    {},
+                                                                    lc.blankLedger.voucherType
+                                                                ])
+                                                            "
                                                             (datepickerState)="datepickerState($event)"
                                                         ></giddh-datepicker>
                                                     </div>
@@ -1647,7 +1677,7 @@
                                                             <ng-template #optionTemplate let-option="option">
                                                                 <ng-container *ngIf="!option.additional?.stock">
                                                                     <a href="javascript:void(0)" class="list-item">
-                                                                        <div class="item">{{ option.label }}</div>
+                                                                        <div class="item">{{ option?.label }}</div>
                                                                         <div class="item-unique">
                                                                             {{ option.additional?.uniqueName }}
                                                                         </div>
@@ -1655,13 +1685,13 @@
                                                                 </ng-container>
                                                                 <ng-container *ngIf="option.additional?.stock">
                                                                     <a href="javascript:void(0)" class="list-item">
-                                                                        <div class="item">{{ option.label }}</div>
+                                                                        <div class="item">{{ option?.label }}</div>
                                                                         <div class="item-unique">
                                                                             {{ option.additional?.uniqueName }}
                                                                         </div>
                                                                         <div class="item-stock">
                                                                             {{ commonLocaleData?.app_stock }}:
-                                                                            {{ option.additional?.stock.name }}
+                                                                            {{ option.additional?.stock.uniqueName }}
                                                                         </div>
                                                                     </a>
                                                                 </ng-container>
@@ -1927,18 +1957,18 @@
                                         </div>
                                         <span
                                             class="download-invoice-ledger d-flex"
-                                            *ngIf="txn.attachedFileUniqueName"
-                                            (click)="downloadAttachedFile(txn.attachedFileUniqueName, $event)"
+                                            *ngIf="voucherApiVersion !== 2 && txn.attachedFileUniqueName"
+                                            (click)="downloadFiles(txn, 'ATTACHMENT', $event)"
                                             [matTooltip]="localeData?.download_file + ' : ' + txn.attachedFileName"
                                             [matTooltipPosition]="'right'"
                                             matTooltipClass="tooltip-black"
                                         >
-                                            <i class="icon-download-circle pull-left"></i>
+                                            <i class="icon-attachment pull-left"></i>
                                         </span>
                                         <span
                                             class="download-invoice-ledger d-flex"
-                                            *ngIf="txn.voucherGenerated"
-                                            (click)="downloadInvoice(txn, $event)"
+                                            *ngIf="voucherApiVersion !== 2 && txn.voucherGenerated"
+                                            (click)="downloadFiles(txn, 'VOUCHER', $event)"
                                             [matTooltip]="
                                                 commonLocaleData?.app_download +
                                                 ' ' +
@@ -1947,6 +1977,25 @@
                                                     : commonLocaleData?.app_voucher) +
                                                 ' : ' +
                                                 txn.voucherNumber
+                                            "
+                                            [matTooltipPosition]="'right'"
+                                            matTooltipClass="tooltip-black"
+                                        >
+                                            <i class="icon-download-new pull-left"></i>
+                                        </span>
+                                        <span
+                                            class="download-invoice-ledger d-flex cursor-pointer"
+                                            *ngIf="
+                                                voucherApiVersion === 2 &&
+                                                (txn.attachedFileUniqueName || txn.voucherGenerated)
+                                            "
+                                            (click)="openAttachmentsDialog(attachments, txn)"
+                                            [matTooltip]="
+                                                txn.attachedFileUniqueName && txn.voucherGenerated
+                                                    ? txn.voucherNumber + ', ' + txn.attachedFileName
+                                                    : txn.attachedFileUniqueName
+                                                    ? txn.attachedFileName
+                                                    : txn.voucherNumber
                                             "
                                             [matTooltipPosition]="'right'"
                                             matTooltipClass="tooltip-black"
@@ -2047,7 +2096,7 @@
                                                             <ng-template #optionTemplate let-option="option">
                                                                 <ng-container *ngIf="!option.additional?.stock">
                                                                     <a href="javascript:void(0)" class="list-item">
-                                                                        <div class="item">{{ option.label }}</div>
+                                                                        <div class="item">{{ option?.label }}</div>
                                                                         <div class="item-unique">
                                                                             {{ option.additional?.uniqueName }}
                                                                         </div>
@@ -2055,13 +2104,13 @@
                                                                 </ng-container>
                                                                 <ng-container *ngIf="option.additional?.stock">
                                                                     <a href="javascript:void(0)" class="list-item">
-                                                                        <div class="item">{{ option.label }}</div>
+                                                                        <div class="item">{{ option?.label }}</div>
                                                                         <div class="item-unique">
                                                                             {{ option.additional?.uniqueName }}
                                                                         </div>
                                                                         <div class="item-stock">
                                                                             {{ commonLocaleData?.app_stock }}:
-                                                                            {{ option.additional?.stock.name }}
+                                                                            {{ option.additional?.stock.uniqueName }}
                                                                         </div>
                                                                     </a>
                                                                 </ng-container>
@@ -2438,7 +2487,10 @@
                                 <div class="ledger-state-box">
                                     <h1>{{ localeData?.net_total }}</h1>
                                     <div class="d-flex justify-content-between">
-                                        <div *ngIf="ledgerTxnBalance?.creditTotal > ledgerTxnBalance?.debitTotal">
+                                        <div
+                                            class="d-flex flex-column justify-content-between"
+                                            *ngIf="ledgerTxnBalance?.creditTotal > ledgerTxnBalance?.debitTotal"
+                                        >
                                             <h3 class="digit-blue d-flex">
                                                 <amount-field
                                                     [amount]="
@@ -2452,7 +2504,7 @@
                                                 <span class="text-capitalize">{{ commonLocaleData?.app_cr }}</span>
                                             </h3>
                                             <h3
-                                                class="digit-blue sub-total font-12 d-inline-flex"
+                                                class="digit-blue sub-total font-12 d-flex"
                                                 *ngIf="isLedgerAccountAllowsMultiCurrency"
                                             >
                                                 <amount-field
@@ -2470,7 +2522,10 @@
                                         </div>
                                     </div>
                                     <div class="d-flex justify-content-between">
-                                        <div *ngIf="ledgerTxnBalance?.creditTotal < ledgerTxnBalance?.debitTotal">
+                                        <div
+                                            class="d-flex flex-column justify-content-between"
+                                            *ngIf="ledgerTxnBalance?.creditTotal < ledgerTxnBalance?.debitTotal"
+                                        >
                                             <h3 class="digit-blue d-inline-flex">
                                                 <amount-field
                                                     [amount]="
@@ -2484,7 +2539,7 @@
                                                 <span class="text-capitalize">{{ commonLocaleData?.app_dr }}</span>
                                             </h3>
                                             <h3
-                                                class="digit-blue sub-total font-12 d-inline-flex"
+                                                class="digit-blue sub-total font-12 d-flex"
                                                 *ngIf="isLedgerAccountAllowsMultiCurrency"
                                             >
                                                 <amount-field
@@ -2579,7 +2634,10 @@
                                                 }}
                                             </span>
                                         </h3>
-                                        <h3 class="digit-blue d-flex" *ngIf="isLedgerAccountAllowsMultiCurrency">
+                                        <h3
+                                            class="digit-blue font-12 d-flex"
+                                            *ngIf="isLedgerAccountAllowsMultiCurrency"
+                                        >
                                             <span
                                                 class="d-flex"
                                                 [matTooltip]="
@@ -2713,6 +2771,10 @@
                         </confirm-modal>
                     </div>
                 </div>
+            </ng-template>
+
+            <ng-template #attachments>
+                <attachments [selectedItem]="selectedItem"></attachments>
             </ng-template>
         </ng-container>
     </div>

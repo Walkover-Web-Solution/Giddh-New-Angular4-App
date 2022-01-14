@@ -33,12 +33,15 @@
             <ng-container *ngIf="col.Items">
                 <ul class="grp-list users-last-list">
                     <cdk-virtual-scroll-viewport
-                        class="virtual-group-list"
+                        class="virtual-group-list overflow-x-hidden"
                         [itemSize]="37"
                         [minBufferPx]="400"
                         [maxBufferPx]="800"
                     >
-                        <li *cdkVirtualFor="let item of col.Items; let j = index" class="list-item sidebarTooltip">
+                        <li
+                            *cdkVirtualFor="let item of col.Items; let j = index"
+                            class="list-item sidebarTooltip text-overflow-ellipsis"
+                        >
                             <ng-container *ngIf="item.isGroup">
                                 <a
                                     href="javascript:void(0);"
@@ -63,7 +66,7 @@
                                     tooltip="{{ item.synonyms }}"
                                     placement="bottom"
                                 >
-                                    {{ item.name }}
+                                    {{ item?.name }}
                                 </a>
                             </ng-container>
                             <ng-container *ngIf="!item.isGroup">
@@ -79,7 +82,7 @@
                                     id="acc_{{ item.name }}"
                                     (click)="onAccountClick(item, i)"
                                 >
-                                    {{ item.name }}
+                                    {{ item?.name }}
                                 </a>
                             </ng-container>
                         </li>

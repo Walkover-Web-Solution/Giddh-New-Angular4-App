@@ -386,7 +386,7 @@
                                     class="row"
                                     *ngIf="
                                         l &&
-                                        addAccountForm.get('addresses')['controls'].length > 3 &&
+                                        addAccountForm.get('addresses')['controls']?.length > 3 &&
                                         !moreGstDetailsVisible
                                     "
                                 >
@@ -395,7 +395,7 @@
                                         class="text-left col-6 cursor-pointer"
                                         (click)="showMoreGst()"
                                         >{{ commonLocaleData?.app_show_all }} ({{
-                                            addAccountForm.get("addresses")["controls"].length
+                                            addAccountForm.get("addresses")["controls"]?.length
                                         }})</a
                                     >
                                     <a
@@ -689,6 +689,7 @@
                 </div>
             </tab>
             <tab *ngIf="isDebtorCreditor" [heading]="localeData?.tabs?.custom" (selectTab)="tabChanged('custom')">
+                <giddh-page-loader [cssClass]="'mt-0 mb-0'" *ngIf="isCustomFieldLoading"></giddh-page-loader>
                 <ng-container formArrayName="customFields">
                     <ng-container
                         *ngFor="let item of companyCustomFields; let index = index; let first = first; let last = last"
@@ -702,7 +703,7 @@
                         >
                             <div
                                 class="row mr-b15"
-                                *ngIf="item.uniqueName === customFieldsItem.get('uniqueName').value"
+                                *ngIf="item?.uniqueName === customFieldsItem.get('uniqueName')?.value"
                             >
                                 <div class="col-lg-8">
                                     <div class="name-of-field">
@@ -782,7 +783,7 @@
                     <button
                         (click)="submit()"
                         class="btn btn-primary update-btn-zindex"
-                        [ladda]="createAccountInProcess$ | async"
+                        [ladda]="updateAccountInProcess$ | async"
                         [disabled]="addAccountForm.invalid || !(isGstValid$ | async)"
                     >
                         {{ commonLocaleData?.app_update }}
@@ -878,7 +879,7 @@
                         <ul
                             class="accmerge mr-t1"
                             *ngIf="
-                                (activeAccount$ | async)?.mergedAccounts.split(',').length > 0 &&
+                                (activeAccount$ | async)?.mergedAccounts.split(',')?.length > 0 &&
                                 (activeAccount$ | async)?.mergedAccounts.split(',')[0] !== ''
                             "
                         >
@@ -936,7 +937,7 @@
                             <div class="popover-content">
                                 <label>{{ localeData?.discounts_inherited_from }}:</label>
                                 <ul>
-                                    <li>{{ item.name }}</li>
+                                    <li>{{ item?.name }}</li>
                                 </ul>
                             </div>
                         </ng-template>
@@ -949,7 +950,7 @@
                             >{{ inAppDiscount.name }}
                         </span>
                     </div>
-                    <p *ngIf="!(activeAccount$ | async)?.inheritedDiscounts.length">
+                    <p *ngIf="!(activeAccount$ | async)?.inheritedDiscounts?.length">
                         {{ localeData?.no_inherited_discounts }}
                     </p>
                 </div>
@@ -1000,7 +1001,7 @@
                                         <div class="popover-content">
                                             <label>{{ localeData?.tax_inherited }}:</label>
                                             <ul>
-                                                <li>{{ inTax.name }}</li>
+                                                <li>{{ inTax?.name }}</li>
                                             </ul>
                                         </div>
                                     </div>
@@ -1011,10 +1012,10 @@
                                     [popover]="popTemplate"
                                     placement="right"
                                     triggers="mouseenter:mouseleave"
-                                    >{{ inAppTax.name }}
+                                    >{{ inAppTax?.name }}
                                 </span>
                             </div>
-                            <p *ngIf="!(activeAccountTaxHierarchy$ | async)?.inheritedTaxes.length">
+                            <p *ngIf="!(activeAccountTaxHierarchy$ | async)?.inheritedTaxes?.length">
                                 {{ localeData?.no_inherited_taxes }}
                             </p>
                         </div>
@@ -1036,7 +1037,7 @@
                     <button
                         (click)="submit()"
                         class="btn btn-primary update-btn-zindex"
-                        [ladda]="createAccountInProcess$ | async"
+                        [ladda]="updateAccountInProcess$ | async"
                         [disabled]="addAccountForm.invalid || !(isGstValid$ | async)"
                     >
                         {{ commonLocaleData?.app_update }}

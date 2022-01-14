@@ -13,13 +13,12 @@
                     #dateField
                     name="entryDate"
                     [(ngModel)]="journalDate"
-                    (blur)="dateEntered()"
                     readonly
                     [placeholder]="giddhDateFormat"
                     class="form-control text-right voucher-date-field"
                     (focus)="onDateFieldFocus()"
                     bsDatepicker
-                    (bsValueChange)="handleVoucherDateChange()"
+                    (bsValueChange)="handleVoucherDateChange(); dateEntered()"
                     [bsConfig]="bsConfig"
                 />
             </div>
@@ -40,7 +39,7 @@
                         </tr>
                     </thead>
                     <br />
-                    <tbody (clickOutside)="hideListItems()">
+                    <tbody>
                         <tr
                             *ngFor="let transaction of requestObj.transactions; let i = index; let l = last"
                             [ngClass]="{
@@ -56,7 +55,7 @@
                                     [disabled]="(i === 0 && !isFirstRowDeleted) || requestObj.voucherType === 'Receipt'"
                                     [ngModel]="transaction.type"
                                     (ngModelChange)="selectEntryType(transaction, $event, i)"
-                                    (focus)="selectRow(true, i); hideListItems()"
+                                    (focus)="selectRow(true, i)"
                                     [ngClass]="{ 'focus': isSelectedRow && selectedIdx === i }"
                                     value="{{ transaction.type | lowercase }}"
                                     maxlength="2"
@@ -183,7 +182,7 @@
                                     </div>
                                 </div>
                                 <table
-                                    *ngIf="requestObj.voucherType !== 'Contra' && requestObj.voucherType !== 'Receipt'"
+                                    *ngIf="requestObj.voucherType !== 'contra' && requestObj.voucherType !== 'receipt'"
                                 >
                                     <tbody>
                                         <ng-container *ngIf="transaction.inventory && transaction.inventory.length">
@@ -298,7 +297,7 @@
                                     #amountField1
                                     [mask]="inputMaskFormat"
                                     [(ngModel)]="transaction.amount"
-                                    (focus)="selectRow(true, i); hideListItems()"
+                                    (focus)="selectRow(true, i)"
                                     (keydown.Enter)="addNewEntry(transaction.amount, transaction, i)"
                                     (blur)="addNewEntry(transaction.amount, transaction, i)"
                                     [ngClass]="{ 'focus': isSelectedRow && selectedIdx === i }"
@@ -319,7 +318,7 @@
                                     #amountField2
                                     [mask]="inputMaskFormat"
                                     [(ngModel)]="transaction.amount"
-                                    (focus)="selectRow(true, i); hideListItems()"
+                                    (focus)="selectRow(true, i)"
                                     (keydown.Enter)="addNewEntry(transaction.amount, transaction, i)"
                                     (blur)="
                                         addNewEntry(transaction.amount, transaction, i);
@@ -443,6 +442,7 @@
     <div class="modal-dialog modal-sm">
         <div class="modal-content">
             <form
+                *ngIf="chequeDetailForm"
                 autocomplete="off"
                 novalidate
                 name="chequeDetailForm"

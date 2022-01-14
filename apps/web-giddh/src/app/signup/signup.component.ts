@@ -22,7 +22,6 @@ import {
 import { IOption } from "../theme/ng-virtual-select/sh-options.interface";
 import { DOCUMENT } from "@angular/common";
 import { userLoginStateEnum } from "../models/user-login-state";
-import { GeneralService } from "../services/general.service";
 import { contriesWithCodes } from "../shared/helpers/countryWithCodes";
 
 @Component({
@@ -30,7 +29,6 @@ import { contriesWithCodes } from "../shared/helpers/countryWithCodes";
     templateUrl: "./signup.component.html",
     styleUrls: ["./signup.component.scss"]
 })
-
 export class SignupComponent implements OnInit, OnDestroy {
     public isLoginWithMobileSubmited$: Observable<boolean>;
     @ViewChild("emailVerifyModal", { static: true }) public emailVerifyModal: ModalDirective;
@@ -62,20 +60,17 @@ export class SignupComponent implements OnInit, OnDestroy {
     public retryCount: number = 0;
     public signupVerifyEmail$: Observable<string>;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    /** Used only to refer in the template */
-    public isCordova: boolean = isCordova;
     /** To Observe is google login inprocess */
     public isLoginWithGoogleInProcess$: Observable<boolean>;
 
     // tslint:disable-next-line:no-empty
-    constructor(private _fb: FormBuilder,
+    constructor(private fb: FormBuilder,
         private store: Store<AppState>,
         private loginAction: LoginActions,
         private authService: AuthService,
-        @Inject(DOCUMENT) private document: Document,
-        private _generalService: GeneralService
+        @Inject(DOCUMENT) private document: Document
     ) {
-        this.urlPath = (isElectron || isCordova) ? "" : AppUrl + APP_FOLDER;
+        this.urlPath = isElectron ? "" : AppUrl + APP_FOLDER;
         this.isLoginWithEmailInProcess$ = this.store.pipe(select(state => {
             return state.login.isLoginWithEmailInProcess;
         }), takeUntil(this.destroyed$));
@@ -122,31 +117,31 @@ export class SignupComponent implements OnInit, OnDestroy {
     public ngOnInit() {
         this.document.body.classList.remove("unresponsive");
         this.generateRandomBanner();
-        this.mobileVerifyForm = this._fb.group({
+        this.mobileVerifyForm = this.fb.group({
             country: ["India", [Validators.required]],
             mobileNumber: ["", [Validators.required]],
             otp: ["", [Validators.required]]
         });
 
-        this.emailVerifyForm = this._fb.group({
+        this.emailVerifyForm = this.fb.group({
             email: ["", [Validators.required, Validators.email]],
             token: ["", Validators.required]
         });
-        this.twoWayOthForm = this._fb.group({
+        this.twoWayOthForm = this.fb.group({
             otp: ["", [Validators.required]]
         });
-        this.signUpWithPasswdForm = this._fb.group({
+        this.signUpWithPasswdForm = this.fb.group({
             email: ["", [Validators.required, Validators.email]],
             password: ["", [Validators.required, Validators.minLength(8), Validators.maxLength(20), Validators.pattern("^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$^+=!*()@%&]).{8,20}$")]]
         });
-        this.signupVerifyForm = this._fb.group({
+        this.signupVerifyForm = this.fb.group({
             email: ["", [Validators.required, Validators.email]],
             verificationCode: ["", Validators.required]
         });
         this.setCountryCode({ value: "India", label: "India" });
 
         // get user object when google auth is complete
-        if (!Configuration.isElectron && !Configuration.isCordova) {
+        if (!Configuration.isElectron) {
             this.authService.authState.pipe(takeUntil(this.destroyed$)).subscribe((user: SocialUser) => {
                 this.isSocialLogoutAttempted$.subscribe((res) => {
                     if (!res && user) {
@@ -265,7 +260,6 @@ export class SignupComponent implements OnInit, OnDestroy {
 
     public async signInWithProviders(provider: string) {
         if (Configuration.isElectron) {
-
             const { ipcRenderer } = (window as any).require("electron");
             if (provider === "google") {
                 // google
@@ -273,22 +267,6 @@ export class SignupComponent implements OnInit, OnDestroy {
                     this.store.dispatch(this.loginAction.signupWithGoogle(arg.access_token));
                 });
             }
-
-        } else if (Configuration.isCordova) {
-            (window as any).plugins.googleplus.login(
-                {
-                    'scopes': 'email', // optional, space-separated list of scopes, If not included or empty, defaults to `profile` and `email`.
-                    'webClientId': GOOGLE_CLIENT_ID,
-                    'offline': true // optional, but requires the webClientId - if set to true the plugin will also return a serverAuthCode, which can be used to grant offline access to a non-Google server
-                },
-                (obj) => {
-                    this.store.dispatch(this.loginAction.signupWithGoogle(obj.accessToken));
-                },
-                (msg) => {
-                    console.log(('error: ' + msg));
-                }
-            );
-
         } else {
             //  web social authentication
             this.store.dispatch(this.loginAction.resetSocialLogoutAttempt());
@@ -304,9 +282,11 @@ export class SignupComponent implements OnInit, OnDestroy {
         this.destroyed$.complete();
     }
 
-
     /**
-     * setCountryCode
+     * Sets country code
+     *
+     * @param {IOption} event
+     * @memberof SignupComponent
      */
     public setCountryCode(event: IOption) {
         if (event.value) {
@@ -316,7 +296,9 @@ export class SignupComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * randomBanner
+     * Generates random banner
+     *
+     * @memberof SignupComponent
      */
     public generateRandomBanner() {
         let bannerArr = ["1", "2", "3"];

@@ -40,11 +40,10 @@ export class ReconcileComponent implements OnInit, OnDestroy {
     @Input() public activeCompanyGstNumber: string = '';
     @Input() public selectedGst: string = '';
     @Input() public selectedTab: string = '';
-    /* This will hold local JSON data */
+    /** This will hold local JSON data */
     @Input() public localeData: any = {};
-    /* This will hold common JSON data */
+    /** This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
-
     public gstReconcileInvoiceRequestInProcess$: Observable<boolean>;
     public gstAuthenticated$: Observable<boolean>;
     public gstNotFoundOnGiddhData$: Observable<ReconcileActionState>;
@@ -57,7 +56,7 @@ export class ReconcileComponent implements OnInit, OnDestroy {
 
     constructor(
         private store: Store<AppState>,
-        private _reconcileActions: GstReconcileActions
+        private reconcileActions: GstReconcileActions
     ) {
         this.gstReconcileInvoiceRequestInProcess$ = this.store.pipe(select(s => s.gstReconcile.isGstReconcileInvoiceInProcess), takeUntil(this.destroyed$));
         this.gstAuthenticated$ = this.store.pipe(select(p => p.gstR.gstAuthenticated), takeUntil(this.destroyed$));
@@ -69,8 +68,7 @@ export class ReconcileComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
-        this.imgPath = (isElectron || isCordova) ? 'assets/images/gst/' : AppUrl + APP_FOLDER + 'assets/images/gst/';
-
+        this.imgPath = isElectron ? 'assets/images/gst/' : AppUrl + APP_FOLDER + 'assets/images/gst/';
         this.fireGstReconcileRequest(GstReconcileActionsEnum.notfoundonportal);
     }
 
@@ -94,7 +92,7 @@ export class ReconcileComponent implements OnInit, OnDestroy {
         request.refresh = refresh;
         request.action = action;
         request.gstin = this.activeCompanyGstNumber;
-        this.store.dispatch(this._reconcileActions.GstReconcileInvoiceRequest(request));
+        this.store.dispatch(this.reconcileActions.GstReconcileInvoiceRequest(request));
     }
 
     public ngOnDestroy() {
@@ -138,5 +136,4 @@ export class ReconcileComponent implements OnInit, OnDestroy {
 
         return page;
     }
-
 }

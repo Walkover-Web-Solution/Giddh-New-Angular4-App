@@ -115,7 +115,7 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
                     }
                 }
                 this.warehouseForm.get('name')?.patchValue(this.companyDetails.country.name);
-                if (!this.addressConfiguration.stateList.length) {
+                if (!this.addressConfiguration?.stateList?.length) {
                     this.loadStates(this.companyDetails.country.countryCode.toUpperCase());
                     this.loadTaxDetails(this.companyDetails.country.countryCode.toUpperCase());
                 }
@@ -142,14 +142,14 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
                     }
                 }
                 this.warehouseForm.get('name')?.patchValue(this.companyDetails.country.name);
-                if (!this.addressConfiguration.stateList.length) {
+                if (!this.addressConfiguration?.stateList?.length) {
                     this.loadStates(this.companyDetails.country.countryCode.toUpperCase());
                     this.loadTaxDetails(this.companyDetails.country.countryCode.toUpperCase());
                 }
             }
         });
 
-        this.imgPath = (isElectron || isCordova) ? 'assets/images/warehouse-image.svg' : AppUrl + APP_FOLDER + 'assets/images/warehouse-image.svg';
+        this.imgPath = isElectron ? 'assets/images/warehouse-image.svg' : AppUrl + APP_FOLDER + 'assets/images/warehouse-image.svg';
     }
 
     /**

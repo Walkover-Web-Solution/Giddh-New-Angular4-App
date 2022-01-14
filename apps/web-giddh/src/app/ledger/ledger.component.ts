@@ -501,7 +501,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         // reset redirect state from login action
         this.store.dispatch(this._loginActions.ResetRedirectToledger());
 
-        this.imgPath = (isElectron || isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.breakPointObservar.observe([
             '(max-width: 991px)'
@@ -1737,9 +1737,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     public toggleBodyClass() {
         if (this.asideMenuState === 'in' || this.asideMenuStateForOtherTaxes === 'in') {
-            document.querySelector('body').classList.add('fixed');
+            document.querySelector('body')?.classList?.add('fixed');
         } else {
-            document.querySelector('body').classList.remove('fixed');
+            document.querySelector('body')?.classList?.remove('fixed');
         }
     }
 

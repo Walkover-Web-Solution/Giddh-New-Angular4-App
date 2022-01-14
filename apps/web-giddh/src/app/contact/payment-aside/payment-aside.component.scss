@@ -3,7 +3,11 @@
     padding-left: 0;
     padding-right: 0;
 }
-
+.all-payment-side {
+    margin: 0 !important;
+    padding: 1rem !important;
+    height: 304px;
+}
 :host .aside-pane {
     max-width: 760px;
     width: 100%;
@@ -76,9 +80,7 @@ form label {
 .modal-title {
     color: $white;
 }
-.btn-success {
-    padding: 7px 25px;
-}
+
 .payment-top-form .d-flex {
     flex-wrap: wrap;
 }
@@ -178,6 +180,12 @@ form label {
     z-index: 9;
     right: 8px;
     top: 9px;
+}
+.align-items-center {
+    align-items: center;
+}
+.modal-header {
+    height: 63px !important;
 }
 @media (max-width: 1100px) {
     .payment-top-form {

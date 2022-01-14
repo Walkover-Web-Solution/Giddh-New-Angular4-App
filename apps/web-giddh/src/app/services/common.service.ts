@@ -1,26 +1,24 @@
-import { map } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 import { Inject, Injectable, Optional } from '@angular/core';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { COMMON_API } from './apiurls/common.api';
-import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
-import { UserDetails } from "../models/api-models/loginModels";
-import { CountryRequest, CountryResponse, CurrencyResponse, CallingCodesResponse, OnboardingFormRequest, OnboardingFormResponse } from '../models/api-models/Common';
+import { CountryRequest, CountryResponse, CallingCodesResponse, OnboardingFormRequest, OnboardingFormResponse } from '../models/api-models/Common';
 import { HttpWrapperService } from "./httpWrapper.service";
 import { Observable } from "rxjs";
+import { GeneralService } from './general.service';
+import { GiddhErrorHandler } from './catchManager/catchmanger';
 
 @Injectable()
 export class CommonService {
-    private user: UserDetails;
+    constructor(private http: HttpWrapperService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs, private generalService: GeneralService, private errorHandler: GiddhErrorHandler) {
 
-    constructor(private _http: HttpWrapperService, private _generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
-        this.user = this._generalService.user;
     }
 
     public GetCountry(request: CountryRequest): Observable<BaseResponse<any, any>> {
         let url = this.config.apiUrl + COMMON_API.COUNTRY;
         url = url.replace(':formName', request.formName);
-        return this._http.get(url).pipe(
+        return this.http.get(url).pipe(
             map((res) => {
                 let data: BaseResponse<CountryResponse, any> = res;
                 return data;
@@ -29,7 +27,7 @@ export class CommonService {
 
     public GetCallingCodes(): Observable<BaseResponse<any, any>> {
         let url = this.config.apiUrl + COMMON_API.CALLING_CODES;
-        return this._http.get(url).pipe(
+        return this.http.get(url).pipe(
             map((res) => {
                 let data: BaseResponse<CallingCodesResponse, any> = res;
                 return data;
@@ -40,19 +38,44 @@ export class CommonService {
         let url = this.config.apiUrl + COMMON_API.FORM;
         url = url.replace(':formName', request.formName);
         url = url.replace(':country', request.country);
-        return this._http.get(url).pipe(
+        return this.http.get(url).pipe(
             map((res) => {
                 let data: BaseResponse<OnboardingFormResponse, any> = res;
                 return data;
             }));
     }
-    
+
     public GetPartyType(): Observable<BaseResponse<any, any>> {
         let url = this.config.apiUrl + COMMON_API.PARTY_TYPE;
-        return this._http.get(url).pipe(
+        return this.http.get(url).pipe(
             map((res) => {
                 let data: BaseResponse<any, any> = res;
                 return data;
             }));
+    }
+
+    /**
+     * Download files
+     *
+     * @param {*} model
+     * @param {string} downloadOption
+     * @param {string} [fileType="base64"]
+     * @returns {Observable<any>}
+     * @memberof CommonService
+     */
+    public downloadFile(model: any, downloadOption: string, fileType: string = "base64"): Observable<any> {
+        let url = this.config.apiUrl + COMMON_API.DOWNLOAD_FILE
+            .replace(':fileType', fileType)
+            .replace(':downloadOption', downloadOption)
+            .replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName));
+
+        let responseType = (fileType === "base64") ? {} : { responseType: 'blob' };
+
+        return this.http.post(url, model, responseType).pipe(
+            map((res) => {
+                return res;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<any, string>(e))
+        );
     }
 }

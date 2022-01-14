@@ -15,10 +15,6 @@ import {
     SimpleChanges,
     ViewChild,
 } from '@angular/core';
-import { isAndroidCordova, isIOSCordova } from '@giddh-workspaces/utils';
-import { FileChooser } from '@ionic-native/file-chooser/ngx';
-import { IOSFilePicker } from '@ionic-native/file-picker/ngx';
-import { FileTransfer } from '@ionic-native/file-transfer/ngx';
 import { select, Store } from '@ngrx/store';
 import { ResizedEvent } from 'angular-resize-event';
 import {
@@ -709,7 +705,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             if (transaction.inventory && !transaction.inventory.warehouse) {
                 transaction.inventory.warehouse = { name: '', uniqueName: this.selectedWarehouse };
             }
-            if (transaction.voucherAdjustments && transaction.voucherAdjustments.adjustments && transaction.voucherAdjustments.adjustments.length > 0) {
+            if (transaction?.voucherAdjustments?.adjustments?.length > 0) {
                 transaction.voucherAdjustments.adjustments.forEach((adjustment: any) => {
                     if (adjustment.balanceDue !== undefined) {
                         delete adjustment.balanceDue;
@@ -726,65 +722,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     }
 
     public onUploadOutput(): void {
-        if (isAndroidCordova()) {
-            const fc = new FileChooser();
-            fc.open()
-                .then(uri => {
-                    this.uploadFile(uri);
-                })
-                .catch(e => {
-                    if (e !== 'User canceled.') {
-                        this._toasty.errorToast(this.commonLocaleData?.app_something_went_wrong);
-                    }
-                    this.isFileUploading = false;
-                });
-        } else if (isIOSCordova()) {
-            const filePicker = new IOSFilePicker();
-            filePicker.pickFile()
-                .then(uri => {
-                    this.uploadFile(uri);
-                })
-                .catch(err => {
-                    if (err !== 'canceled') {
-                        this._toasty.errorToast(this.commonLocaleData?.app_something_went_wrong);
-                    }
-                    this.isFileUploading = false;
-                });
-        } else {
-            // web
-            this.webFileInput?.nativeElement.click();
-        }
-    }
-
-    private uploadFile(uri) {
-        let sessionKey = null;
-        let companyUniqueName = null;
-        this.sessionKey$.pipe(take(1)).subscribe(a => sessionKey = a);
-        const transfer = new FileTransfer();
-        const fileTransfer = transfer.create();
-        const options = {
-            fileKey: 'file',
-            headers: {
-                'Session-Id': sessionKey
-            }
-        };
-        const httpUrl = Configuration.ApiUrl + LEDGER_API.UPLOAD_FILE.replace(':companyUniqueName', companyUniqueName);
-        fileTransfer.upload(uri, httpUrl, options)
-            .then((data) => {
-                if (data && data.response) {
-                    const result = JSON.parse(data.response);
-                    this.isFileUploading = false;
-                    this.blankLedger.attachedFile = result.body.uniqueName;
-                    this.blankLedger.attachedFileName = result.body.uniqueName;
-                    this._toasty.successToast(this.localeData?.file_uploaded);
-                }
-            }, (err) => {
-                // show toaster
-                this.isFileUploading = false;
-                this.blankLedger.attachedFile = '';
-                this.blankLedger.attachedFileName = '';
-                this._toasty.errorToast(err.body.message);
-            });
+        this.webFileInput?.nativeElement.click();
     }
 
     public onWebUpload(output: UploadOutput) {
@@ -1068,9 +1006,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
     public toggleBodyClass() {
         if (this.asideMenuStateForOtherTaxes === 'in') {
-            document.querySelector('body').classList.add('fixed');
+            document.querySelector('body')?.classList?.add('fixed');
         } else {
-            document.querySelector('body').classList.remove('fixed');
+            document.querySelector('body')?.classList?.remove('fixed');
         }
     }
 
@@ -1344,7 +1282,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      * @memberof NewLedgerEntryPanelComponent
      */
     public closeAdjustmentModal(event: { adjustVoucherData: VoucherAdjustments, adjustPaymentData: AdjustAdvancePaymentModal }): void {
-        if (!this.currentTxn.voucherAdjustments || (this.currentTxn.voucherAdjustments && this.currentTxn.voucherAdjustments.adjustments && !this.currentTxn.voucherAdjustments.adjustments.length)) {
+        if (!this.currentTxn?.voucherAdjustments || !this.currentTxn?.voucherAdjustments?.adjustments?.length) {
             if (this.currentTxn['subVoucher'] === SubVoucher.AdvanceReceipt) {
                 this.isAdjustAdvanceReceiptSelected = false;
             } else {

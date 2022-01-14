@@ -1,5 +1,5 @@
 {
-    "page_heading": "रिपोर्ट्स > रसीद (beta)",
+    "page_heading": "रिपोर्ट्स > रसीद (बीटा)",
     "receipt_no_label": "रसीद #",
     "receipt_no_placeholder": "रसीद खोजें",
     "customer_name_label": "ग्राहक का नाम",
@@ -20,5 +20,10 @@
         "advance_receipts": "अग्रिम प्राप्तियां"
     },
     "entry_date": "प्रवेश की तिथि",
-    "suppliers_name": "आपूर्तिकर्ता का नाम"
+    "suppliers_name": "आपूर्तिकर्ता का नाम",
+    "new_voucher": "+ नई रसीद",
+    "preview_unavailable": "Preview is not available right now! Please try again...",
+    "delete_voucher": "Do you want to delete the receipt?",
+    "delete_vouchers": "Do you want to delete the voucher(s) / receipt(s)?",
+    "uploaded_bill": "Uploaded Bill"
 }

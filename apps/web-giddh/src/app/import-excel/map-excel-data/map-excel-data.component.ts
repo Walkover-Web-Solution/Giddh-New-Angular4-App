@@ -21,9 +21,7 @@ class MandatoryHeaders {
     styleUrls: ['./map-excel-data.component.scss'],
     templateUrl: './map-excel-data.component.html'
 })
-
 export class MapExcelDataComponent implements OnInit {
-
     public get importData(): ImportExcelResponseData {
         return this._importData;
     }
@@ -38,45 +36,40 @@ export class MapExcelDataComponent implements OnInit {
     }
 
     @Input() public entity: string;
-    /* This will hold local JSON data */
+    /** This will hold local JSON data */
     @Input() public localeData: any = {};
-    /* This will hold common JSON data */
+    /** This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
-
     @Output() public onNext = new EventEmitter<ImportExcelResponseData>();
     @Output() public onBack = new EventEmitter();
     @Input() public dataModel: DataModel[];
     @ViewChildren(ShSelectComponent) public shSelectComponents: ShSelectComponent[];
     public mandatoryHeadersModel: MandatoryHeaders[] = [];
     public mandatoryHeadersCount: number = 0;
-
     public mandatoryGroupModel: MandatoryHeaders[][] = [];
     public mandatoryGroupHeadersCount: number = 0;
-
     public imgPath: string;
     private importRequestData: ImportExcelResponseData;
-
     private _importData: ImportExcelResponseData;
     private _clonedMappings: Mappings;
 
-    constructor(private _toaster: ToasterService) {
-        
+    constructor(private toaster: ToasterService) {
+
     }
 
     public ngOnInit() {
-        this.imgPath = (isElectron || isCordova) ? 'assets/icon/' : AppUrl + APP_FOLDER + 'assets/icon/';
+        this.imgPath = isElectron ? 'assets/icon/' : AppUrl + APP_FOLDER + 'assets/icon/';
     }
 
     public mapExcelData() {
-
         if (this.mandatoryHeadersCount !== this.mandatoryHeadersModel.length) {
-            this._toaster.errorToast(this.localeData?.mandatory_columns_error);
+            this.toaster.errorToast(this.localeData?.mandatory_columns_error);
             return;
         } else {
             // check if group have mandatory fields selected
             if (this.mandatoryGroupModel.length) {
                 if (this.mandatoryGroupHeadersCount !== this.mandatoryGroupModel.length) {
-                    this._toaster.errorToast(this.localeData?.mandatory_columns_error);
+                    this.toaster.errorToast(this.localeData?.mandatory_columns_error);
                     return;
                 }
             }
@@ -85,7 +78,7 @@ export class MapExcelDataComponent implements OnInit {
         this.importRequestData = {
             ...this._importData,
             data: {
-                items: this._importData.data.items
+                items: this._importData?.data?.items
                     .map(p => {
                         p.row = p.row.map((pr, index) => {
                             pr.columnNumber = index.toString();
@@ -196,7 +189,6 @@ export class MapExcelDataComponent implements OnInit {
     }
 
     private prepareDataModel(value: ImportExcelResponseData) {
-
         this.dataModel = value.headers.items.map((field: HeaderItem) => {
             let selectedIndex;
             let allMappedColumnHeader = value.mappings.map(m => m.mappedColumn);

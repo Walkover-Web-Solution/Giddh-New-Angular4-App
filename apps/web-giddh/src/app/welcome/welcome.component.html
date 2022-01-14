@@ -187,7 +187,7 @@
                             >
                                 <div class="clearfix">
                                     <label for="gstinNum" class="d-block"
-                                        >{{ formFields["taxName"].label }}<sup class="text-danger">*</sup></label
+                                        >{{ formFields["taxName"]?.label }}<sup class="text-danger">*</sup></label
                                     >
                                     <input
                                         type="text"
@@ -250,16 +250,16 @@
                                             <span class="select-drop pull-right mr-t1"></span>
                                         </button>
                                         <ul class="dropdown-menu dropdown-menu-2 width-100" role="menu">
-                                            <li *ngIf="taxesList.length == 0">
+                                            <li *ngIf="taxesList?.length == 0">
                                                 {{ commonLocaleData?.app_no_result_found }}
                                             </li>
                                             <li *ngFor="let tax of taxesList">
                                                 <input
                                                     type="checkbox"
                                                     (click)="selectApplicableTaxes(tax, $event)"
-                                                    [checked]="tax.isSelected"
+                                                    [checked]="tax?.isSelected"
                                                 />
-                                                {{ tax.label }}
+                                                {{ tax?.label }}
                                             </li>
                                         </ul>
                                     </div>

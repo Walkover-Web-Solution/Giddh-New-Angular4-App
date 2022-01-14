@@ -134,13 +134,8 @@
                         </td>
                     </ng-container>
                     <ng-container matColumnDef="unit">
-                        <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_unit }}</th>
-                        <td
-                            mat-cell
-                            *matCellDef="let item"
-                            [attr.data-title]="commonLocaleData?.app_unit"
-                            class="text-center"
-                        >
+                        <th mat-header-cell *matHeaderCellDef>{{ localeData?.unit }}</th>
+                        <td mat-cell *matCellDef="let item" [attr.data-title]="localeData?.unit" class="text-center">
                             {{ item.stockUnitCode }}
                         </td>
                     </ng-container>

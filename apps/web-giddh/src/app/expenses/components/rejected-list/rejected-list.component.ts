@@ -193,7 +193,7 @@ export class RejectedListComponent implements OnInit, OnChanges {
             return;
         }
         this.pettycashRequest.page = event.page;
-        this.getPettyCashPendingReports(this.pettycashRequest);
+        this.getPettyCashRejectedReports(this.pettycashRequest);
     }
 
     /**

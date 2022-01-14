@@ -39,5 +39,15 @@
 	"total_companies": "एकूण कंपन्या",
 	"transaction_limit": "व्यवहार मर्यादा",
 	"subscription_renewal": "सदस्यता नूतनीकरण",
-	"invalid_email_error": "वैध ईमेल आयडी प्रविष्ट करा"
+	"invalid_email_error": "वैध ईमेल आयडी प्रविष्ट करा",
+	"type_your_address": "तुमचा पत्ता टाइप करा",
+	"including_tax":"करासह (18% GST)",
+	"renewal_plan_details":"नूतनीकरण योजनेचे तपशील",
+	"net_payable_amount":"निव्वळ देय रक्कम",
+	"plan_timeline":" योजना टाइमलाइन ",
+	"transactions": "व्यवहार",
+	"companies": "कंपन्या",
+	"unlimited_users": "अमर्यादित वापरकर्ते",
+	"unlimited_contacts": "अमर्यादित ग्राहक / विक्रेते",
+	"desktop_mobile_app": "डेस्कटॉप / मोबाइल अ‍ॅप"
 }

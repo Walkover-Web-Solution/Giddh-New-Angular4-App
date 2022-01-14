@@ -986,6 +986,9 @@ aside-setting {
         transform: translate3d(0, 0px, 0px);
         right: 0;
         z-index: 9991;
+        &.z-index-990 {
+            z-index: 990 !important;
+        }
     }
 }
 
@@ -1035,6 +1038,18 @@ aside-setting {
             }
         }
     }
+    .fixed-padding {
+        #primary-new-header {
+            z-index: 99999 !important;
+        }
+    }
+}
+@media (max-width: 1024px) {
+    .fixed-padding {
+        #primary-new-header {
+            z-index: 99999 !important;
+        }
+    }
 }
 @media (max-width: 767px) {
     .setting-sidebar-wrapper {
@@ -1058,7 +1073,7 @@ aside-setting {
             display: flex;
             align-items: flex-start;
             justify-content: space-between;
-            z-index: 9999;
+            z-index: 99999 !important;
             .logo-wrapper {
                 display: none;
             }

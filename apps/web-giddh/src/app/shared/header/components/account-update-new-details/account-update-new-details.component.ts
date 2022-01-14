@@ -203,6 +203,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public activeAccountGroup: IOption[] | INameUniqueName[] = [];
     /** This holds account country name */
     public accountCountryName: string = "";
+    /** True if custom fields api call in progress */
+    public isCustomFieldLoading: boolean = false;
 
     constructor(
         private _fb: FormBuilder,
@@ -268,12 +270,12 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                     let col = acc.parentGroups[0]?.uniqueName;
                     this.isHsnSacEnabledAcc = col === 'revenuefromoperations' || col === 'otherincome' || col === 'operatingcost' || col === 'indirectexpenses';
                     this.isGstEnabledAcc = !this.isHsnSacEnabledAcc;
-                    this.activeAccountGroup = acc.parentGroups.length > 0 ? [{
-                        label: acc.parentGroups[acc.parentGroups.length - 1]?.name,
-                        value: acc.parentGroups[acc.parentGroups.length - 1]?.uniqueName,
-                        additional: acc.parentGroups[acc.parentGroups.length - 1],
+                    this.activeAccountGroup = acc.parentGroups?.length > 0 ? [{
+                        label: acc.parentGroups[acc.parentGroups?.length - 1]?.name,
+                        value: acc.parentGroups[acc.parentGroups?.length - 1]?.uniqueName,
+                        additional: acc.parentGroups[acc.parentGroups?.length - 1],
                     }] : this.flatGroupsOptions;
-                    this.activeGroupUniqueName = acc.parentGroups.length > 0 ? acc.parentGroups[acc.parentGroups.length - 1]?.uniqueName : '';
+                    this.activeGroupUniqueName = acc.parentGroups?.length > 0 ? acc.parentGroups[acc.parentGroups?.length - 1]?.uniqueName : '';
                     this.store.dispatch(this.groupWithAccountsAction.SetActiveGroup(this.activeGroupUniqueName));
 
                     this.store.pipe(select(appStore => appStore.groupwithaccounts.activeGroupUniqueName), take(1)).subscribe(response => {
@@ -339,12 +341,12 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                     }
                 }
                 // render gst details if there's no details add one automatically
-                if (accountDetails.addresses.length > 0) {
+                if (accountDetails?.addresses?.length > 0) {
                     accountDetails.addresses.map(a => {
                         this.renderGstDetails(a, accountDetails.addresses.length);
                     });
                 } else {
-                    if (accountDetails.addresses.length === 0) {
+                    if (accountDetails?.addresses?.length === 0) {
                         this.addBlankGstForm();
                     }
                 }
@@ -449,7 +451,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             if (response) {
                 selectedGroupDetails = response;
                 if (selectedGroupDetails?.parentGroups) {
-                    let parentGroup = selectedGroupDetails.parentGroups.length > 1 ? selectedGroupDetails.parentGroups[1] : { uniqueName: selectedGroupDetails.uniqueName };
+                    let parentGroup = selectedGroupDetails.parentGroups?.length > 1 ? selectedGroupDetails.parentGroups[1] : { uniqueName: selectedGroupDetails?.uniqueName };
                     if (parentGroup) {
                         this.isParentDebtorCreditor(parentGroup.uniqueName);
                     }
@@ -489,7 +491,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
 
                             if (activeAccountTaxHierarchy.inheritedTaxes) {
                                 let inheritedTaxes = flattenDeep(activeAccountTaxHierarchy.inheritedTaxes.map(p => p.applicableTaxes)).map((j: any) => j?.uniqueName);
-                                let allTaxes = applicableTaxes.filter(f => inheritedTaxes.indexOf(f) === -1);
+                                let allTaxes = applicableTaxes?.filter(f => inheritedTaxes.indexOf(f) === -1);
                                 // set value in tax group form
                                 this.taxGroupForm.setValue({ taxes: allTaxes });
                             } else {
@@ -522,8 +524,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 this.discountList = [];
                 Object.keys(response?.body).forEach(key => {
                     this.discountList.push({
-                        label: response?.body[key].name,
-                        value: response?.body[key].uniqueName,
+                        label: response?.body[key]?.name,
+                        value: response?.body[key]?.uniqueName,
                         isSelected: false
                     });
                 });
@@ -543,7 +545,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             this.toggleStateRequired();
         }
         const addresses = this.addAccountForm.get('addresses') as FormArray;
-        if (addresses.controls.length === 0) {
+        if (addresses?.controls?.length === 0) {
             this.addBlankGstForm();
             this.changeDetectorRef.detectChanges();
         }
@@ -655,7 +657,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public addGstDetailsForm(value: string) {         // commented code because we no need GSTIN No. to add new address
         const addresses = this.addAccountForm.get('addresses') as FormArray;
         addresses.push(this.initialGstDetailsForm(null));
-        if (addresses.length > 4) {
+        if (addresses?.length > 4) {
             this.moreGstDetailsVisible = false;
         }
         return;
@@ -668,14 +670,14 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
 
     public addBlankGstForm() {
         const addresses = this.addAccountForm.get('addresses') as FormArray;
-        if (addresses.value.length === 0) {
+        if (addresses?.value?.length === 0) {
             addresses.push(this.initialGstDetailsForm(null));
         }
     }
 
     public renderGstDetails(addressObj: IAccountAddress = null, addressLength: any) {
         const addresses = this.addAccountForm.get('addresses') as FormArray;
-        if (addresses.length < addressLength) {
+        if (addresses?.length < addressLength) {
             addresses.push(this.initialGstDetailsForm(addressObj));
         }
     }
@@ -727,7 +729,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
 
     public showMoreGst() {
         const addresses = this.addAccountForm.get('addresses') as FormArray;
-        this.gstDetailsLength = addresses.controls.length;
+        this.gstDetailsLength = addresses?.controls?.length;
         this.moreGstDetailsVisible = true;
     }
 
@@ -1003,7 +1005,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         let isValid: boolean = false;
 
         if (ele.value?.trim()) {
-            if (this.formFields['taxName']['regex'] !== "" && this.formFields['taxName']['regex'].length > 0) {
+            if (this.formFields['taxName']['regex'] !== "" && this.formFields['taxName']['regex']?.length > 0) {
                 for (let key = 0; key < this.formFields['taxName']['regex'].length; key++) {
                     let regex = new RegExp(this.formFields['taxName']['regex'][key]);
                     if (regex.test(ele.value)) {
@@ -1107,7 +1109,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         let activeAccount: AccountResponseV2 = null;
         this.activeAccount$.pipe(take(1)).subscribe(p => activeAccount = p);
         let finalData: AccountMergeRequest[] = [];
-        if (this.selectedaccountForMerge.length) {
+        if (this.selectedaccountForMerge?.length) {
             this.selectedaccountForMerge.map((acc) => {
                 let obj = new AccountMergeRequest();
                 obj.uniqueName = acc;
@@ -1201,7 +1203,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 if (t) {
                     t.inheritedTaxes.forEach(tt => {
                         tt.applicableTaxes.forEach(ttt => {
-                            data.taxes.push(ttt.uniqueName);
+                            data.taxes.push(ttt?.uniqueName);
                         });
                     });
                 }
@@ -1363,6 +1365,10 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     * @memberof AccountUpdateNewDetailsComponent
     */
     public getCompanyCustomField(): void {
+        if(this.isCustomFieldLoading) {
+            return;
+        }
+        this.isCustomFieldLoading = true;
         this.companyCustomFields = [];
         this.groupService.getCompanyCustomField().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.status === 'success') {
@@ -1371,6 +1377,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             } else {
                 this._toaster.errorToast(response.message);
             }
+            this.isCustomFieldLoading = false;
+            this.changeDetectorRef.detectChanges();
         });
     }
 
@@ -1381,7 +1389,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
      */
     public addBlankCustomFieldForm(): void {
         const customField = this.addAccountForm.get('customFields') as FormArray;
-        if (customField.value.length === 0) {
+        if (customField?.value?.length === 0) {
             customField.push(this.initialCustomFieldDetailsForm(null));
         }
     }
@@ -1395,7 +1403,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
      */
     public renderCustomFieldDetails(obj: any, customFieldLength: any): void {
         const customField = this.addAccountForm.get('customFields') as FormArray;
-        if (customField.length < customFieldLength) {
+        if (customField?.length < customFieldLength) {
             customField.push(this.initialCustomFieldDetailsForm(obj));
         }
     }
@@ -1426,7 +1434,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
      */
     public createDynamicCustomFieldForm(customFieldForm: any): void {
         customFieldForm.forEach(item => {
-            this.renderCustomFieldDetails(item, customFieldForm.length);
+            this.renderCustomFieldDetails(item, customFieldForm?.length);
         });
     }
 
@@ -1487,6 +1495,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                     } else {
                         this.GSTIN_OR_TRN = '';
                     }
+
                     this.taxNamePlaceholder = this.commonLocaleData?.app_enter_tax_name;
                     this.taxNamePlaceholder = this.taxNamePlaceholder.replace("[TAX_NAME]", this.formFields['taxName']?.label || '');
                 }
@@ -1733,13 +1742,13 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     private filterTaxesForDebtorCreditor(taxes?: Array<any>): Array<any> {
         if (this.activeGroupUniqueName === 'sundrydebtors' || this.activeParentGroup === 'sundrydebtors') {
             // Only allow TDS receivable and TCS payable
-            return taxes.filter(tax => ['tdsrc', 'tcspay'].indexOf(tax?.additional?.taxType) > -1);
+            return taxes?.filter(tax => ['tdsrc', 'tcspay'].indexOf(tax?.additional?.taxType) > -1);
         } else if (this.activeGroupUniqueName === 'sundrycreditors' || this.activeParentGroup === 'sundrycreditors') {
             // Only allow TDS payable and TCS receivable
-            return taxes.filter(tax => ['tdspay', 'tcsrc'].indexOf(tax?.additional?.taxType) > -1);
+            return taxes?.filter(tax => ['tdspay', 'tcsrc'].indexOf(tax?.additional?.taxType) > -1);
         } else {
             // Only normal (non-other) taxes
-            return taxes.filter(tax => TCS_TDS_TAXES_TYPES.indexOf(tax?.additional?.taxType) === -1);
+            return taxes?.filter(tax => TCS_TDS_TAXES_TYPES.indexOf(tax?.additional?.taxType) === -1);
         }
     }
 

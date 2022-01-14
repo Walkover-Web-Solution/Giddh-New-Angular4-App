@@ -66,7 +66,6 @@ export class ConnectBankModalComponent implements OnChanges, OnInit, OnDestroy {
     public cancelRequest: boolean = false;
     public needReloadingLinkedAccounts$: Observable<boolean> = of(false);
     public isElectron = isElectron;
-    public isCordova = isCordova;
     public base64StringForModel: SafeResourceUrl = '';
     /** Force clear for drop down */
     public forceClearReactive$: Observable<IForceClear> = of({ status: false });
@@ -264,7 +263,7 @@ export class ConnectBankModalComponent implements OnChanges, OnInit, OnDestroy {
 
     public onSelectProvider() {
         const inputRowControls = this.loginForm.controls['row'] as FormArray;
-        if (inputRowControls.controls.length > 1) {
+        if (inputRowControls?.controls?.length > 1) {
             inputRowControls.controls = inputRowControls.controls.splice(1);
         }
         this.getProviderLoginForm(this.selectedProvider.id);

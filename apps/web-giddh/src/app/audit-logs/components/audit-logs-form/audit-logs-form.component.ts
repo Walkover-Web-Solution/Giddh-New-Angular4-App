@@ -23,23 +23,22 @@ import { AuditLogsSidebarVM } from './Vm';
     templateUrl: './audit-logs-form.component.html',
     styleUrls: ['audit-logs-form.component.scss']
 })
-
 export class AuditLogsFormComponent implements OnInit, OnDestroy {
-    /* This will hold local JSON data */
+    /** This will hold local JSON data */
     @Input() public localeData: any = {};
-    /* This will hold common JSON data */
+    /** This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
     /** Audit log form object */
     public auditLogFormVM: AuditLogsSidebarVM;
     /** Date format type */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
-    /* This will store if device is mobile or not */
+    /** This will store if device is mobile or not */
     public isMobileScreen: boolean = false;
-    /* Moment object */
+    /** Moment object */
     public moment = moment;
-    /* Selected range label */
+    /** Selected range label */
     public selectedRangeLabel: any = "";
-    /* Active company details */
+    /** Active company details */
     public activeCompany: any;
     /** Audit log filter form data */
     public auditLogFilterForm: any[] = [];
@@ -53,7 +52,7 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
     public forceClearGroup$: Observable<IForceClear> = observableOf({ status: false });
     /** To clear user sh-select options   */
     public forceClearUser$: Observable<IForceClear> = observableOf({ status: false });
-    /* Active company unique name */
+    /** Active company unique name */
     public activeCompanyUniqueName$: Observable<string>;
     /** Stores the search results pagination details */
     public accountsSearchResultsPaginationData = {
@@ -190,7 +189,7 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
     public getLogFilters(): void {
         let getAuditLogsRequest: GetAuditLogsRequest = new GetAuditLogsRequest();
         getAuditLogsRequest = cloneDeep(this.prepareAuditLogFormRequest());
-        this.store.dispatch(this.auditLogsActions.getAuditLogs(getAuditLogsRequest, 1));
+        this.store.dispatch(this.auditLogsActions.getAuditLogs(getAuditLogsRequest));
     }
 
     /**

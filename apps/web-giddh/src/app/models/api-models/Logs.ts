@@ -50,6 +50,7 @@ export class GetAuditLogsRequest {
     public entity: string;
     public accountUniqueNames?: string[] = [];
     public groupUniqueNames?: string[] = [];
+    public page: number = 1;
 }
 
 /** Audit log response*/

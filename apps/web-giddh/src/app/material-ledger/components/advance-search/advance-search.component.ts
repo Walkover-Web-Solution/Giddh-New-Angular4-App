@@ -15,6 +15,7 @@ import { API_COUNT_LIMIT, GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.co
 import { SearchService } from '../../../services/search.service';
 import { InventoryService } from '../../../services/inventory.service';
 import { MatAccordion } from '@angular/material/expansion';
+import { cloneDeep } from '../../../lodash-optimized';
 
 @Component({
     selector: 'advance-search-model',
@@ -130,6 +131,8 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
     public isDefaultGroupsLoading: boolean = true;
     /** True if other details should be expanded by default */
     public isExpanded: boolean = false;
+    /** Cloning advance search params to use in case of reset filters */
+    public advanceSearchRequestClone: AdvanceSearchRequest;
 
     constructor(
         private groupService: GroupService,
@@ -208,11 +211,12 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
             }, 500);
         }
 
+        this.advanceSearchRequestClone = cloneDeep(this.advanceSearchRequest);
         this.changeDetectionRef.detectChanges();
     }
 
     public resetAdvanceSearchModal() {
-        this.advanceSearchRequest.dataToSend.bsRangeValue = [moment().toDate(), moment().subtract(30, 'days').toDate()];
+        this.advanceSearchRequest.dataToSend.bsRangeValue = this.advanceSearchRequestClone.dataToSend.bsRangeValue;
         if (this.dropDowns) {
             this.dropDowns.forEach((el) => {
                 el.clear();
@@ -224,6 +228,7 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
         this.bsRangeValue.push(f._d);
         this.bsRangeValue.push(t._d);
         this.advanceSearchRequest.dataToSend = new AdvanceSearchModel();
+        this.advanceSearchRequest.dataToSend.bsRangeValue = this.advanceSearchRequestClone.dataToSend.bsRangeValue;
         this.advanceSearchRequest.page = 1;
         this.setAdvanceSearchForm();
     }
@@ -334,7 +339,7 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
             this.advanceSearchRequest.dataToSend.bsRangeValue = [this.fromDate, this.toDate];
         }
         if (this.advanceSearchRequest.dataToSend && this.advanceSearchRequest.dataToSend.dateOnCheque) {
-            this.advanceSearchRequest.dataToSend.dateOnCheque = moment(this.advanceSearchRequest.dataToSend.dateOnCheque).format(GIDDH_DATE_FORMAT);
+            this.advanceSearchRequest.dataToSend.dateOnCheque = (moment(this.advanceSearchRequest.dataToSend.dateOnCheque).format('dddd') !== 'Invalid date') ? moment(this.advanceSearchRequest.dataToSend.dateOnCheque).format(GIDDH_DATE_FORMAT) : this.advanceSearchRequest.dataToSend.dateOnCheque;
         }
         this.closeModelEvent.emit({ advanceSearchData: this.advanceSearchRequest, isClose: false });
     }
@@ -533,7 +538,7 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
 
         this.modalService.onHidden.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             setTimeout(() => {
-                document.querySelector('body').classList.add('modal-open');
+                document.querySelector('body')?.classList?.add('modal-open');
             }, 500);
         });
     }

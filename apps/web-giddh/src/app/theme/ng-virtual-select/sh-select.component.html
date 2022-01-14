@@ -16,8 +16,8 @@
         <div *ngIf="multiple" [ngClass]="{ 'has-item': selectedValues?.length }" class="bdr bg-white">
             <ng-container *ngIf="selectedValues?.length">
                 <ng-container *ngFor="let sl of selectedValues">
-                    <span class="chip" *ngIf="sl.value !== selectAllRecords">
-                        {{ sl.label }}
+                    <span class="chip" *ngIf="sl?.value !== selectAllRecords">
+                        {{ sl?.label }}
                         <span
                             class="chip-close-btn"
                             (mousedown)="clearSingleSelection($event, sl)"
@@ -70,7 +70,7 @@
                         autocomplete="disabled"
                         type="text"
                         readonly
-                        value="{{ selectedValues[0].label }}"
+                        value="{{ selectedValues[0]?.label }}"
                         class="form-control selected-val cp"
                         [attr.style]="borderConfiguration?.style"
                     />
@@ -91,7 +91,7 @@
         </div>
         <!--endregion-->
     </div>
-    <span class="clear" *ngIf="showClear && selectedValues.length > 0" (click)="$event.stopPropagation(); clear()"
+    <span class="clear" *ngIf="showClear && selectedValues?.length > 0" (click)="$event.stopPropagation(); clear()"
         >&times;</span
     >
     <sh-select-menu

@@ -7,29 +7,27 @@ import { AppState } from 'apps/web-giddh/src/app/store';
     selector: 'balance-sheet-export-xls',
     templateUrl: './export-xls.component.html'
 })
-
 export class BalanceSheetExportXlsComponent implements OnInit {
     @Input() public fy: number;
     @Input() public filters: any = {};
-
     public enableDownload: boolean = true;
     public imgPath: string = '';
     @Output() public plBsExportPdfEvent = new EventEmitter<boolean>();
-    /* This will hold local JSON data */
+    /** This will hold local JSON data */
     public localeData: any = {};
 
     constructor(
         private store: Store<AppState>,
-        private _tbPlActions: TBPlBsActions) {
+        private tbPlActions: TBPlBsActions) {
 
     }
 
     public downloadBsXls() {
         let request = { from: this.filters.from, to: this.filters.to, branchUniqueName: this.filters.branchUniqueName, filename: this.localeData?.xls.balance_sheet.download_filename };
-        this.store.dispatch(this._tbPlActions.DownloadBalanceSheetExcel(request));
+        this.store.dispatch(this.tbPlActions.DownloadBalanceSheetExcel(request));
     }
 
     public ngOnInit() {
-        this.imgPath = (isElectron || isCordova) ? 'assets/images/xls-icon.svg' : AppUrl + APP_FOLDER + 'assets/images/xls-icon.svg';
+        this.imgPath = isElectron ? 'assets/images/xls-icon.svg' : AppUrl + APP_FOLDER + 'assets/images/xls-icon.svg';
     }
 }

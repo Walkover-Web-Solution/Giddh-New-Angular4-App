@@ -1,5 +1,4 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { BreakpointObserver } from '@angular/cdk/layout';
 import { AfterViewInit, Component, ComponentFactoryResolver, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
@@ -17,6 +16,7 @@ import { SettingsProfileActions } from '../../actions/settings/profile/settings.
 import { cloneDeep, each, isEmpty, orderBy } from '../../lodash-optimized';
 import { BranchFilterRequest, CompanyResponse } from '../../models/api-models/Company';
 import { GeneralService } from '../../services/general.service';
+import { SettingsBranchService } from '../../services/settings.branch.service';
 import { SettingsProfileService } from '../../services/settings.profile.service';
 import { ToasterService } from '../../services/toaster.service';
 import { CompanyAddNewUiComponent } from '../../shared/header/components';
@@ -44,8 +44,9 @@ import { SettingsUtilityService } from '../services/settings-utility.service';
         ]),
     ]
 })
-
 export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
+    /** Change status modal instance */
+    @ViewChild('statusModal', { static: true }) public statusModal: ModalDirective;
     @ViewChild('branchModal', { static: false }) public branchModal: ModalDirective;
     @ViewChild('addCompanyModal', { static: false }) public addCompanyModal: ModalDirective;
     @ViewChild('companyadd', { static: false }) public companyadd: ElementViewContainerRef;
@@ -56,7 +57,6 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
         rangeInputFormat: GIDDH_DATE_FORMAT,
         containerClass: 'theme-green myDpClass'
     };
-    public isMobileScreen: boolean = false;
     public dataSyncOption = [];
     public currentBranch: string = null;
     public currentBranchNameAlias: string = null;
@@ -69,7 +69,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
     public selectedBranch: string = null;
     public isBranch: boolean = false;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    public branchViewType: string = 'table';
+    public branchViewType: string = 'card';
     public moment = moment;
     public filters: any[] = [];
     public formFields: any[] = [];
@@ -83,10 +83,8 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
     public unFilteredBranchList: Array<any>;
     /** Stores the branch searcch query */
     public searchBranchQuery: string;
-
     /** Branch search field instance */
     @ViewChild('branchSearch', { static: true }) public branchSearch: ElementRef;
-
     /** Stores the address configuration */
     public addressConfiguration: SettingsAsideConfiguration = {
         type: SettingsAsideFormType.EditBranch,
@@ -96,9 +94,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
     public branchToUpdate: any;
     /** True, if loader is to be displayed */
     public showLoader: boolean;
-
     public imgPath: string = '';
-
     /** Stores the selected branch details */
     private branchDetails: any;
     /* This will hold local JSON data */
@@ -107,6 +103,8 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
     public profileLocaleData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** Holds branch to archive/unarchive */
+    public branchStatusToUpdate: any;
 
     constructor(
         private router: Router,
@@ -118,9 +116,9 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
         private settingsProfileService: SettingsProfileService,
         private commonActions: CommonActions,
         private _generalService: GeneralService,
-        private _breakPointObservar: BreakpointObserver,
         private settingsUtilityService: SettingsUtilityService,
-        private toasterService: ToasterService
+        private toasterService: ToasterService,
+        private settingsBranchService: SettingsBranchService
     ) {
 
     }
@@ -165,7 +163,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
                 each(companies, (cmp) => {
                     each(cmp.userEntityRoles, (company) => {
                         if (company.entity.entity === 'COMPANY' && company.role.uniqueName === 'super_admin') {
-                            if (branches && branches.length) {
+                            if (branches?.length) {
                                 let existIndx = branches.findIndex((b) => b.uniqueName === cmp.uniqueName);
                                 if (existIndx === -1) {
                                     companiesWithSuperAdminRole.push(cmp);
@@ -198,14 +196,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
             this.handleBranchSearch(event.target.value);
         });
 
-        this._breakPointObservar.observe([
-            '(max-width:768px)'
-        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
-            this.isMobileScreen = result.matches;
-            this.changeBranchViewType('card')
-        });
-
-        this.imgPath = (isElectron || isCordova) ? 'assets/images/warehouse-vector.svg' : AppUrl + APP_FOLDER + 'assets/images/warehouse-vector.svg';
+        this.imgPath = isElectron ? 'assets/images/warehouse-vector.svg' : AppUrl + APP_FOLDER + 'assets/images/warehouse-vector.svg';
     }
 
     /**
@@ -368,16 +359,12 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
 
     private isAllCompaniesSelected() {
         this.companies$.pipe(take(1)).subscribe((companies) => {
-            if (companies.length === this.selectedCompaniesUniquename.length) {
+            if (companies?.length === this.selectedCompaniesUniquename?.length) {
                 this.isAllSelected$ = observableOf(true);
             } else {
                 this.isAllSelected$ = observableOf(false);
             }
         });
-    }
-
-    public changeBranchViewType(viewType) {
-        this.branchViewType = viewType;
     }
 
     public setFilterDate(data) {
@@ -580,5 +567,37 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
                 { label: this.localeData?.data_sync_options?.bank, value: 'bank' }
             ];
         }
+    }
+
+    /**
+     * This will show confirmation modal for branch archive/unarchive
+     *
+     * @param {*} branch
+     * @memberof BranchComponent
+     */
+    public confirmStatusUpdate(branch: any): void {
+        this.branchStatusToUpdate = branch;
+        this.statusModal?.show();
+    }
+
+    /**
+     * Updates the branch status
+     *
+     * @memberof BranchComponent
+     */
+    public updateBranchStatus(): void {
+        const isArchived = !this.branchStatusToUpdate?.isArchived;
+        this.settingsBranchService.updateBranchStatus({ isArchived: isArchived }, this.branchStatusToUpdate?.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.status === "success") {
+                let branchFilterRequest = new BranchFilterRequest();
+                branchFilterRequest.from = this.filters['from'];
+                branchFilterRequest.to = this.filters['to'];
+                this.store.dispatch(this.settingsBranchActions.GetALLBranches(branchFilterRequest));
+                this.toasterService.successToast((isArchived) ? this.localeData?.branch_archived : this.localeData?.branch_unarchived);
+            } else {
+                this.toasterService.errorToast(response?.message);
+            }
+            this.statusModal?.hide();
+        });
     }
 }

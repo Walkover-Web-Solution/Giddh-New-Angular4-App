@@ -18,7 +18,6 @@ import { ToasterService } from '../../../services/toaster.service';
     templateUrl: 'revenue-chart.component.html',
     styleUrls: ['revenue-chart.component.scss', '../../home.component.scss']
 })
-
 export class RevenueChartComponent implements OnInit, OnDestroy {
     @Input() public refresh: boolean = false;
     public requestInFlight: boolean = false;
@@ -50,12 +49,12 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
     public previousDateRangePickerValue: Date[] = [];
     /** True if chart changed */
     public chartChanged: boolean = false;
-    /* This will hold local JSON data */
+    /** This will hold local JSON data */
     public localeData: any = {};
-    /* This will hold common JSON data */
+    /** This will hold common JSON data */
     public commonLocaleData: any = {};
 
-    constructor(private store: Store<AppState>, private _homeActions: HomeActions, public currencyPipe: GiddhCurrencyPipe, private _generalService: GeneralService, private dashboardService: DashboardService, private toasterService: ToasterService) {
+    constructor(private store: Store<AppState>, private homeActions: HomeActions, public currencyPipe: GiddhCurrencyPipe, private generalService: GeneralService, private dashboardService: DashboardService, private toasterService: ToasterService) {
         this.getCurrentWeekStartEndDate = this.getWeekStartEndDate(new Date());
         this.getPreviousWeekStartEndDate = this.getWeekStartEndDate(moment(this.getCurrentWeekStartEndDate[0]).subtract(1, 'days'));
 
@@ -99,7 +98,7 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
 
                 this.getRevenueGraphData();
             } else {
-                this.store.dispatch(this._homeActions.getRevenueGraphTypes());
+                this.store.dispatch(this.homeActions.getRevenueGraphTypes());
             }
         });
     }
@@ -283,7 +282,7 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
 
     public showLineChart() {
         this.chartChanged = true;
-        this._generalService.invokeEvent.next("hideallcharts");
+        this.generalService.invokeEvent.next("hideallcharts");
         this.currentData = [];
         this.previousData = [];
         this.summaryData.totalCurrent = 0;
@@ -333,7 +332,7 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
     }
 
     public showColumnChart() {
-        this._generalService.invokeEvent.next("showallcharts");
+        this.generalService.invokeEvent.next("showallcharts");
         this.graphParams.interval = "daily";
         this.chartType = "column";
         this.graphExpanded = false;

@@ -114,7 +114,7 @@ export class ProductServiceListComponent implements OnInit {
 
     public ngOnInit() {
         /* added image path */
-        this.imgPath = (isElectron || isCordova) ? "assets/images/" : AppUrl + APP_FOLDER + "assets/images/";
+        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
     }
 
     // @ViewChild(MatSort) sort: MatSort;

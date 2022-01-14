@@ -12,11 +12,10 @@ import { AppState } from '../../../store/roots';
     templateUrl: './audit-logs-table.component.html',
     styleUrls: ['audit-logs-table.component.scss']
 })
-
 export class AuditLogsTableComponent implements OnInit, OnDestroy {
-    /* This will hold local JSON data */
+    /** This will hold local JSON data */
     @Input() public localeData: any = {};
-    /* This will hold common JSON data */
+    /** This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
     /** To toggle multiple line show/hide for address*/
     public showSingleAddress: boolean = false;
@@ -74,8 +73,8 @@ export class AuditLogsTableComponent implements OnInit, OnDestroy {
     public loadMoreLogs(): void {
         this.store.pipe(select(state => state.auditlog), take(1)).subscribe((response) => {
             let request = cloneDeep(response.auditLogsRequest);
-            let page = response.currentPage + 1;
-            this.store.dispatch(this.auditLogsActions.getAuditLogs(request, page));
+            request.page = response.currentPage + 1;
+            this.store.dispatch(this.auditLogsActions.getAuditLogs(request));
         });
     }
 

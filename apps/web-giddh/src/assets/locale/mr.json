@@ -660,5 +660,10 @@
     },
     "app_voucher_unavailable": "समायोजनासाठी कोणतेही व्हाउचर नाही.",
     "app_reference_invoice": "संदर्भ पावती",
-    "app_create_custom_field": "सानुकूल फील्डस तयार करा"
+    "app_create_custom_field": "सानुकूल फील्डस तयार करा",
+    "app_validation": "प्रमाणीकरण",
+    "app_archive": "संग्रहण",
+    "app_unarchive": "संग्रहण रद्द करा",
+    "app_archived": "संग्रहित",
+    "app_unarchived": "सक्रिय"
 }

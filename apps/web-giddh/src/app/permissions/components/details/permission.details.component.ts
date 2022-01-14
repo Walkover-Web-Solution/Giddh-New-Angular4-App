@@ -52,20 +52,22 @@ export class PermissionDetailsComponent implements OnInit, OnDestroy {
         this.store.pipe(select(p => p.permission), takeUntil(this.destroyed$)).subscribe((permission) => {
             this.allRoles = cloneDeep(permission.roles);
             this.singlePageForFreshStart = find(this.allRoles, function (o: IRoleCommonResponseAndRequest) {
-                return o.uniqueName === 'super_admin';
+                return o?.uniqueName === 'super_admin';
             });
             this.adminPageObj = find(this.allRoles, function (o: IRoleCommonResponseAndRequest) {
-                return o.uniqueName === 'admin';
+                return o?.uniqueName === 'admin';
             });
             this.viewPageObj = find(this.allRoles, function (o: IRoleCommonResponseAndRequest) {
-                return o.uniqueName === 'view';
+                return o?.uniqueName === 'view';
             });
             this.rawDataForAllRoles = cloneDeep(this.singlePageForFreshStart?.scopes[0]?.permissions);
-            this.allRolesOfPage = this.getAllRolesOfPageReady(cloneDeep(this.rawDataForAllRoles));
+            if (this.rawDataForAllRoles) {
+                this.allRolesOfPage = this.getAllRolesOfPageReady(cloneDeep(this.rawDataForAllRoles));
+            }
             this.newRole = permission.newRole;
             this.pageList = permission.pages;
         });
-        
+
         // listener for add update role case
         this.addUpdateRoleInProcess$.subscribe((result: boolean) => {
             if (result) {
@@ -77,7 +79,7 @@ export class PermissionDetailsComponent implements OnInit, OnDestroy {
         if (isEmpty(this.newRole)) {
             this.router.navigate(['/pages/permissions/list']);
         } else if (this.newRole.isUpdateCase) {
-            const roleObj = new NewRoleClass(this.newRole.name, this.setScopeForCurrentRole(), false, this.newRole.uniqueName, this.newRole.isUpdateCase);
+            const roleObj = new NewRoleClass(this.newRole?.name, this.setScopeForCurrentRole(), false, this.newRole?.uniqueName, this.newRole?.isUpdateCase);
             this.roleObj = this.handleShareSituation(roleObj);
         } else {
             this.roleObj = new NewRoleClass(this.newRole.name, this.setScopeForCurrentRole(), this.newRole.isFresh, this.checkForRoleUniqueName());
@@ -157,7 +159,7 @@ export class PermissionDetailsComponent implements OnInit, OnDestroy {
     }
 
     public getAllRolesOfPageReady(arr) {
-        return arr.map((o: Permission) => {
+        return arr?.map((o: Permission) => {
             return o = new NewPermissionObj(o.code, false);
         });
     }
@@ -173,9 +175,9 @@ export class PermissionDetailsComponent implements OnInit, OnDestroy {
     }
 
     public generateUIFromExistedRole() {
-        let pRole: string = this.newRole.uniqueName;
+        let pRole: string = this.newRole?.uniqueName;
         let res = find(this.allRoles, function (o: IRoleCommonResponseAndRequest) {
-            return o.uniqueName === pRole;
+            return o?.uniqueName === pRole;
         });
         if (res) {
             forEach(res.scopes, (obj: Scope) => {
@@ -231,7 +233,7 @@ export class PermissionDetailsComponent implements OnInit, OnDestroy {
         if (this.newRole.isFresh) {
             return null;
         } else {
-            return this.newRole.uniqueName;
+            return this.newRole?.uniqueName;
         }
     }
 

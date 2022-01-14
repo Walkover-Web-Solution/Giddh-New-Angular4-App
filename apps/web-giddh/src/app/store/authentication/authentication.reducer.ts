@@ -666,7 +666,7 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
 
             let companiesList = _.cloneDeep(newState.companies);
 
-            let selectedCompanyIndex = companiesList.findIndex((company) => company.uniqueName === companyInfo.companyUniqueName);
+            let selectedCompanyIndex = companiesList?.findIndex((company) => company.uniqueName === companyInfo.companyUniqueName);
 
             if (selectedCompanyIndex > -1) {
                 companiesList[selectedCompanyIndex].isMultipleCurrency = companyInfo.isMultipleCurrency;
@@ -782,6 +782,11 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
         case CommonActions.SET_ACTIVE_FINANCIAL_YEAR: {
             return Object.assign({}, state, {
                 activeCompany: action.payload
+            });
+        }
+        case CompanyActions.RESET_ACTIVE_COMPANY_DATA: {
+            return Object.assign({}, state, {
+                activeCompany: null
             });
         }
 

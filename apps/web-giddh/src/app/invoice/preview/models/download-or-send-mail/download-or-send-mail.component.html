@@ -6,7 +6,7 @@
 >
     <div class="modal-header clearfix" *ngIf="!isMobileScreen">
         <span *ngIf="showPdfWrap">
-            <button type="button" class="btn btn-md btn-info mr-r1" *ngIf="showEditButton" (click)="goToedit('sales')">
+            <button type="button" class="btn btn-md btn-info mr-r1" *ngIf="showEditButton" (click)="editVoucher()">
                 {{ commonLocaleData?.app_edit }}
             </button>
             <button
@@ -69,7 +69,7 @@
                     <div class="clearfix" [hidden]="smsTabActive">
                         <h3 class="font-16 mr-b05">{{ localeData?.invoice_copy }}</h3>
                         <hr />
-                        <div class="checkbox">
+                        <div class="checkbox" *ngIf="voucherApiVersion === 2">
                             <label
                                 ><input
                                     type="checkbox"

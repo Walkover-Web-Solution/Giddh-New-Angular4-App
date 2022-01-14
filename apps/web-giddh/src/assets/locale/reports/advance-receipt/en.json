@@ -20,5 +20,10 @@
         "advance_receipts": "Advance Receipts"
     },
     "entry_date": "Entry Date",
-    "suppliers_name": "Supplier's Name"
+    "suppliers_name": "Supplier's Name",
+    "new_voucher": "+ New Receipt",
+    "preview_unavailable": "Preview is not available right now! Please try again...",
+    "delete_voucher": "Do you want to delete the receipt?",
+    "delete_vouchers": "Do you want to delete the voucher(s) / receipt(s)?",
+    "uploaded_bill": "Uploaded Bill"
 }

@@ -8,7 +8,7 @@
         (mouseover)="expandSidebar()"
         (mouseout)="collapseSidebar(false, true)"
         class="nav-left-bar"
-        [ngClass]="{ 'open': isSidebarExpanded, 'unvisible': companyList.length === 0 }"
+        [ngClass]="{ 'open': isSidebarExpanded, 'unvisible': companyList?.length === 0 }"
         (clickOutside)="closeSidebarMobile($event)"
     >
         <div class="menu-wrapper">
@@ -33,7 +33,7 @@
         <div
             class="primary-main-header"
             id="primary-new-header"
-            [ngClass]="{ 'open': sideMenu.isopen, 'unvisible': companyList.length === 0 }"
+            [ngClass]="{ 'open': sideMenu.isopen, 'unvisible': companyList?.length === 0 }"
         >
             <div *ngIf="isMobileScreen">
                 <ul class="list-style-none">

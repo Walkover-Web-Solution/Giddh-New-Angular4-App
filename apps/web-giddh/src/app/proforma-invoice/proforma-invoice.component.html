@@ -21,6 +21,21 @@
                             type="button"
                             class="btn more-btn-dropdown dropdown-toggle"
                             aria-controls="dropdown-basic"
+                            *ngIf="!isUpdateMode"
+                        >
+                            <span *ngIf="isCashInvoice; else invoiceTypeDisplayRef">
+                                {{ localeData?.invoice_types?.cash }}
+                            </span>
+
+                            <small *ngIf="invoiceType === 'estimates'"> ({{ commonLocaleData?.app_beta }}) </small>
+                            <span class="caret"></span>
+                        </button>
+                        <button
+                            id="giddh-page-heading-link"
+                            type="button"
+                            class="btn more-btn-dropdown dropdown-toggle"
+                            aria-controls="dropdown-basic"
+                            *ngIf="isUpdateMode"
                         >
                             <span *ngIf="isCashInvoice; else invoiceTypeDisplayRef">
                                 {{ localeData?.invoice_types?.cash }}
@@ -61,7 +76,6 @@
             </div>
         </ng-container>
         <!--endregion-->
-
         <!-- region main form -->
         <div [hidden]="(isUpdateMode && isUpdateDataInProcess) || (isLastInvoiceCopied && isUpdateDataInProcess)">
             <form
@@ -69,7 +83,8 @@
                 novalidate
                 autocomplete="off"
                 [ngClass]="{
-                    'customer-invoice-form': !invFormData.voucherDetails.customerName,
+                    'customer-invoice-form':
+                        !invFormData.voucherDetails.customerName && !invFormData.voucherDetails.customerUniquename,
                     'customer-invoice-form-purchase': isPurchaseInvoice || isCreditNote || isDebitNote,
                     'sales-proforma-estimate': isSalesInvoice || isProformaInvoice || isEstimateInvoice,
                     'for-multi-currency': isMulticurrencyAccount
@@ -195,13 +210,21 @@
                                                                 isUpdateMode &&
                                                                 invoiceType !== 'sales' &&
                                                                 invoiceType !== 'cash' &&
-                                                                invoiceType !== 'purchase'
+                                                                invoiceType !== 'purchase' &&
+                                                                (voucherApiVersion === 1 ||
+                                                                    (voucherApiVersion === 2 &&
+                                                                        invoiceType !== 'debit note' &&
+                                                                        invoiceType !== 'credit note'))
                                                             "
                                                             [fixedValue]="
                                                                 isUpdateMode &&
                                                                 invoiceType !== 'sales' &&
                                                                 invoiceType !== 'cash' &&
-                                                                invoiceType !== 'purchase'
+                                                                invoiceType !== 'purchase' &&
+                                                                (voucherApiVersion === 1 ||
+                                                                    (voucherApiVersion === 2 &&
+                                                                        invoiceType !== 'debit note' &&
+                                                                        invoiceType !== 'credit note'))
                                                                     ? invFormData.voucherDetails.customerName
                                                                     : ''
                                                             "
@@ -248,7 +271,6 @@
                                                             class="form-control cash-invoice-input"
                                                             [(ngModel)]="invFormData.voucherDetails.customerName"
                                                             (change)="handleCustomerChange($event)"
-                                                            (blur)="selectDefaultbank()"
                                                             [readOnly]="
                                                                 isUpdateMode &&
                                                                 invoiceType !== 'sales' &&
@@ -264,8 +286,13 @@
                                                         #copyPreviousEstimate
                                                         *ngIf="
                                                             !isPurchaseInvoice &&
-                                                            !(isPendingVoucherType && isCashInvoice) &&
-                                                            invFormData.voucherDetails.customerName &&
+                                                            ((voucherApiVersion === 2 &&
+                                                                !isPendingVoucherType &&
+                                                                !isCashInvoice) ||
+                                                                (voucherApiVersion !== 2 &&
+                                                                    !(isPendingVoucherType && isCashInvoice))) &&
+                                                            (invFormData.voucherDetails.customerName ||
+                                                                invFormData.voucherDetails.customerUniquename) &&
                                                             lastInvoices.length &&
                                                             !isUpdateMode
                                                         "
@@ -684,7 +711,6 @@
                                                                                 #shippingState
                                                                             >
                                                                                 <sales-sh-select
-                                                                                    [disabled]="autoFillShipping"
                                                                                     [placeholder]="
                                                                                         commonLocaleData?.app_state
                                                                                     "
@@ -1653,7 +1679,10 @@
                                 <!-- for purchase record start -->
                                 <div
                                     class="row mt-1"
-                                    *ngIf="isPurchaseInvoice || currentVoucherFormDetails?.rcmAllowed"
+                                    *ngIf="
+                                        isPurchaseInvoice ||
+                                        (currentVoucherFormDetails?.rcmAllowed && companyCountryName === 'India')
+                                    "
                                 >
                                     <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3" *ngIf="!isMobileView">
                                         <label></label>
@@ -1925,7 +1954,7 @@
                                         </p>
                                         <div class="date-hsn-code">
                                             <div class="row mr-0 ml-0">
-                                                <div class="col-6 col-sm-6 pr-0" *ngIf="entry.entryDate">
+                                                <div class="col-6 col-sm-6 pl-0" *ngIf="entry.entryDate">
                                                     <div class="entry-date">
                                                         <label>{{ localeData?.entry_date }}: </label>
                                                         {{ entry.entryDate | date: "dd-MM-yyyy" }}
@@ -2332,7 +2361,7 @@
                                             <!-- region entry date/ hsncode -->
                                             <div class="date-hsn-code">
                                                 <div class="row mr-0 ml-0">
-                                                    <div class="col-6 col-sm-6 pr-0">
+                                                    <div class="col-6 col-sm-6 pl-0">
                                                         <div class="entry-date">
                                                             <label>{{ localeData?.entry_date }}: </label>
                                                             <span *ngIf="!isUpdateMode">
@@ -2968,6 +2997,13 @@
                                         <span class="text-success"
                                             ><i class="fa fa-check" *ngIf="selectedFileName && !isFileUploading"></i
                                         ></span>
+                                        <span
+                                            class="delete-image"
+                                            (click)="attachmentDeleteConfirmationModel.show(); $event.preventDefault()"
+                                            *ngIf="voucherApiVersion === 2 && selectedFileName && !isFileUploading"
+                                        >
+                                            <img src="assets/images/multiply.svg" />
+                                        </span>
                                         <input
                                             type="file"
                                             name="invoiceFile"
@@ -2976,7 +3012,7 @@
                                             ngFileSelect
                                             [uploadInput]="uploadInput"
                                             (uploadOutput)="onUploadOutput($event)"
-                                            (change)="onFileChange($event.target)"
+                                            (change)="onFileChange($event?.target)"
                                             droppable="true"
                                         />
                                     </label>
@@ -3227,18 +3263,27 @@
                                     <div
                                         class="table-row"
                                         *ngIf="
+                                            !hideDepositSection &&
                                             (isSalesInvoice ||
-                                                isCashInvoice ||
-                                                currentVoucherFormDetails?.depositAllowed) &&
-                                            !(isPendingVoucherType && isCashInvoice) &&
-                                            !(
-                                                !(
-                                                    isAccountHaveAdvanceReceipts || isInvoiceAdjustedWithAdvanceReceipts
-                                                ) && isUpdateMode
-                                            )
+                                                currentVoucherFormDetails?.depositAllowed ||
+                                                (voucherApiVersion === 2 &&
+                                                    (isSalesInvoice ||
+                                                        isPurchaseInvoice ||
+                                                        isCreditNote ||
+                                                        isDebitNote))) &&
+                                            !(isPendingVoucherType && isCashInvoice)
                                         "
                                     >
-                                        <div class="table-cell deposit-section">
+                                        <div
+                                            class="table-cell deposit-section"
+                                            *ngIf="
+                                                ((isSalesInvoice || isPurchaseInvoice || isCreditNote || isDebitNote) &&
+                                                    (isAccountHaveAdvanceReceipts ||
+                                                        isInvoiceAdjustedWithAdvanceReceipts)) ||
+                                                (!isUpdateMode &&
+                                                    (isSalesInvoice || currentVoucherFormDetails?.depositAllowed))
+                                            "
+                                        >
                                             <div class="btn-group">
                                                 <div
                                                     (click)="clickedInside($event)"
@@ -3249,7 +3294,10 @@
                                                     <ul>
                                                         <ng-container
                                                             *ngIf="
-                                                                isSalesInvoice &&
+                                                                (isSalesInvoice ||
+                                                                    isPurchaseInvoice ||
+                                                                    isCreditNote ||
+                                                                    isDebitNote) &&
                                                                 (isAccountHaveAdvanceReceipts ||
                                                                     isInvoiceAdjustedWithAdvanceReceipts)
                                                             "
@@ -3257,7 +3305,10 @@
                                                             <li role="menuitem" class="mr-t1">
                                                                 <div class="clearfix payment-mode deposit-payment-mode">
                                                                     <div class="pull-right balance-due-text">
-                                                                        <div class="clearfix mr-b1 text-left">
+                                                                        <div
+                                                                            class="clearfix mr-b1 text-left"
+                                                                            *ngIf="voucherApiVersion !== 2"
+                                                                        >
                                                                             <span class="p-0 mr-2 d-inline-block">
                                                                                 <input
                                                                                     class="radio-custom cp ml-0"
@@ -3304,11 +3355,8 @@
                                                                             </span>
                                                                         </div>
 
-                                                                        <div class="clearfix">
+                                                                        <div class="clearfix mr-t05">
                                                                             <span class="pull-left">
-                                                                                <p class="text-light mb-0">
-                                                                                    {{ localeData?.advance_receipt }}
-                                                                                </p>
                                                                                 <p class="text-light">
                                                                                     <amount-field
                                                                                         [amount]="
@@ -3329,7 +3377,6 @@
                                                                                                 : false
                                                                                         "
                                                                                     >
-
                                                                                     </amount-field>
                                                                                 </p>
                                                                             </span>
@@ -3349,7 +3396,13 @@
                                                             </li>
                                                         </ng-container>
 
-                                                        <ng-container *ngIf="!isUpdateMode">
+                                                        <ng-container
+                                                            *ngIf="
+                                                                !isUpdateMode &&
+                                                                (isSalesInvoice ||
+                                                                    currentVoucherFormDetails?.depositAllowed)
+                                                            "
+                                                        >
                                                             <li role="menuitem" class="mr-t1">
                                                                 <div class="clearfix payment-mode">
                                                                     <sh-select
@@ -3358,6 +3411,7 @@
                                                                         [options]="bankAccounts$ | async"
                                                                         [(ngModel)]="depositAccountUniqueName"
                                                                         (selected)="onSelectPaymentMode($event)"
+                                                                        (onClear)="onSelectPaymentMode($event, true)"
                                                                         [placeholder]="
                                                                             commonLocaleData?.app_select_account
                                                                         "
@@ -3406,8 +3460,11 @@
                                                             >
                                                                 <input
                                                                     type="text"
-                                                                    (blur)="calculateBalanceDue()"
-                                                                    placeholder="Amount"
+                                                                    (blur)="
+                                                                        calculateBalanceDue();
+                                                                        updateDepositAmount($event.target.value)
+                                                                    "
+                                                                    [placeholder]="commonLocaleData?.app_amount"
                                                                     name="dueAmount"
                                                                     class="
                                                                         form-control
@@ -3420,6 +3477,9 @@
                                                                     [prefix]="depositCurrSymbol"
                                                                     [suffix]="selectedSuffixForCurrency"
                                                                     [mask]="inputMaskFormat"
+                                                                    [attr.required]="
+                                                                        depositAccountUniqueName ? true : false
+                                                                    "
                                                                 />
                                                                 <label class="pull-right">{{
                                                                     commonLocaleData?.app_amount
@@ -4840,9 +4900,8 @@
                                 <div
                                     class="table-row"
                                     *ngIf="
-                                        (isSalesInvoice ||
-                                            isCashInvoice ||
-                                            currentVoucherFormDetails?.depositAllowed) &&
+                                        !hideDepositSection &&
+                                        (isSalesInvoice || currentVoucherFormDetails?.depositAllowed) &&
                                         !isUpdateMode
                                     "
                                 >
@@ -4863,6 +4922,7 @@
                                                                 [options]="bankAccounts$ | async"
                                                                 [(ngModel)]="depositAccountUniqueName"
                                                                 (selected)="onSelectPaymentMode($event)"
+                                                                (onClear)="onSelectPaymentMode($event, true)"
                                                                 [placeholder]="commonLocaleData?.app_select_account"
                                                                 [notFoundLink]="false"
                                                                 [forceClearReactive]="forceClear$ | async"
@@ -4900,7 +4960,10 @@
                                                     >
                                                         <input
                                                             type="text"
-                                                            (blur)="calculateBalanceDue()"
+                                                            (blur)="
+                                                                calculateBalanceDue();
+                                                                updateDepositAmount($event.target.value)
+                                                            "
                                                             [placeholder]="commonLocaleData?.app_amount"
                                                             name="dueAmount"
                                                             class="
@@ -4914,6 +4977,7 @@
                                                             [prefix]="depositCurrSymbol"
                                                             [suffix]="selectedSuffixForCurrency"
                                                             [mask]="inputMaskFormat"
+                                                            [attr.required]="depositAccountUniqueName ? true : false"
                                                         />
                                                         <label class="pull-right pt-1">{{
                                                             commonLocaleData?.app_amount
@@ -5292,7 +5356,8 @@
                         [selectedItem]="{
                             voucherNumber: invoiceNo,
                             uniqueName: accountUniqueName,
-                            account: customerAccount
+                            account: customerAccount,
+                            voucherUniqueName: newVoucherUniqueName
                         }"
                         (cancelEvent)="cancelEmailModal()"
                     ></app-send-email-invoice-component>
@@ -5372,7 +5437,11 @@
                         [voucherType]="invoiceType"
                         [localeData]="localeData"
                         [commonLocaleData]="commonLocaleData"
-                        [selectedItem]="{ voucherNumber: invoiceNo, uniqueName: accountUniqueName }"
+                        [selectedItem]="{
+                            voucherNumber: invoiceNo,
+                            uniqueName: accountUniqueName,
+                            voucherUniqueName: newVoucherUniqueName
+                        }"
                         (cancelEvent)="cancelPrintModal()"
                     ></proforma-print-in-place-component>
                 </ng-container>
@@ -5444,6 +5513,25 @@
                     [configuration]="dateChangeConfiguration"
                     (buttonClicked)="handleDateChangeConfirmation($event)"
                 ></confirmation-modal>
+            </div>
+        </div>
+    </div>
+
+    <div
+        bsModal
+        #attachmentDeleteConfirmationModel="bs-modal"
+        class="modal fade"
+        role="dialog"
+        [config]="{ animated: true, keyboard: false, backdrop: false, ignoreBackdropClick: true }"
+        tabindex="-1"
+    >
+        <div class="modal-dialog modal-md">
+            <div class="modal-content" *ngIf="attachmentDeleteConfirmationModel?.isShown">
+                <confirm-modal
+                    [body]="localeData?.confirm_delete_file"
+                    (successCallBack)="deleteAttachment(); attachmentDeleteConfirmationModel.hide()"
+                    (cancelCallBack)="attachmentDeleteConfirmationModel.hide()"
+                ></confirm-modal>
             </div>
         </div>
     </div>

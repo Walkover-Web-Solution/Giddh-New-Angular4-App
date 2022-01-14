@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store, select } from '@ngrx/store';
 import * as moment from 'moment/moment';
@@ -45,7 +45,8 @@ const filter2 = [
 })
 
 export class MfReportComponent implements OnInit, OnDestroy {
-
+    /** True if component is getting input in some parent component */
+    @Input() public fromParentComponent: boolean = false;
     public mfStockSearchRequest: IMfStockSearchRequest = new MfStockSearchRequestClass();
     public filtersForSearchBy: IOption[] = filter2;
     public filtersForSearchOperation: IOption[] = filter1;
@@ -193,10 +194,10 @@ export class MfReportComponent implements OnInit, OnDestroy {
         this.currentCompanyBranches$.subscribe(response => {
             if (response && response.length) {
                 this.currentCompanyBranches = response.map(branch => ({
-                    label: branch.alias,
-                    value: branch.uniqueName,
-                    name: branch.name,
-                    parentBranch: branch.parentBranch
+                    label: branch?.alias,
+                    value: branch?.uniqueName,
+                    name: branch?.name,
+                    parentBranch: branch?.parentBranch
                 }));
                 this.currentCompanyBranches.unshift({
                     label: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : '',
@@ -204,15 +205,15 @@ export class MfReportComponent implements OnInit, OnDestroy {
                     value: this.activeCompany ? this.activeCompany.uniqueName : '',
                     isCompany: true
                 });
-                this.isCompany = this.currentOrganizationType !== OrganizationType.Branch && this.currentCompanyBranches.length > 2;
+                this.isCompany = this.currentOrganizationType !== OrganizationType.Branch && this.currentCompanyBranches?.length > 2;
                 let currentBranchUniqueName;
-                if (!this.currentBranch.uniqueName) {
+                if (!this.currentBranch?.uniqueName) {
                     // Assign the current branch only when it is not selected. This check is necessary as
                     // opening the branch switcher would reset the current selected branch as this subscription is run everytime
                     // branches are loaded
                     if (this.currentOrganizationType === OrganizationType.Branch) {
                         currentBranchUniqueName = this.generalService.currentBranchUniqueName;
-                        this.currentBranch = cloneDeep(response.find(branch => branch.uniqueName === currentBranchUniqueName)) || this.currentBranch;
+                        this.currentBranch = cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName)) || this.currentBranch;
                     } else {
                         currentBranchUniqueName = this.activeCompany ? this.activeCompany.uniqueName : '';
                         this.currentBranch = {
@@ -264,7 +265,7 @@ export class MfReportComponent implements OnInit, OnDestroy {
     }
 
     public editMFItem(item) {
-        if (item.uniqueName) {
+        if (item?.uniqueName) {
             this.store.dispatch(this.manufacturingActions.SetMFItemUniqueNameInStore(item.uniqueName));
             this.router.navigate(['/pages/manufacturing/edit']);
         }
@@ -310,8 +311,8 @@ export class MfReportComponent implements OnInit, OnDestroy {
      * @memberof MfReportComponent
      */
     public handleBranchChange(selectedEntity: any): void {
-        this.currentBranch.name = selectedEntity.label;
-        this.mfStockSearchRequest.branchUniqueName = selectedEntity.value;
+        this.currentBranch.name = selectedEntity?.label;
+        this.mfStockSearchRequest.branchUniqueName = selectedEntity?.value;
 
         this.forceClearWarehouse$ = observableOf({ status: true });
         this.warehouses = this.allWarehouses[selectedEntity.value];

@@ -123,8 +123,8 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
         this.isProdMode = PRODUCTION_ENV;
         this.getCountry();
         this.getCallingCodes();
-        
-        this.imgPath = (isElectron || isCordova) ? '' : AppUrl + APP_FOLDER + '';
+
+        this.imgPath = isElectron ? '' : AppUrl + APP_FOLDER + '';
         this.logedInuser = this._generalService.user;
         if (this._generalService.createNewCompany) {
             this.company = this._generalService.createNewCompany;
@@ -151,15 +151,15 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
                     prevTab = se;
                 });
                 let stateDetailsRequest = new StateDetailsRequest();
-                stateDetailsRequest.companyUniqueName = this.company.uniqueName;
+                stateDetailsRequest.companyUniqueName = this.company?.uniqueName;
                 stateDetailsRequest.lastState = this.isNewUser ? 'welcome' : 'onboarding';
-                this._generalService.companyUniqueName = this.company.uniqueName;
+                this._generalService.companyUniqueName = this.company?.uniqueName;
                 if (prevTab !== 'user-details') {
                     this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
                 }
                 setTimeout(() => {
                     if (prevTab !== 'user-details') {
-                        this.store.dispatch(this._loginAction.ChangeCompany(this.company.uniqueName));
+                        this.store.dispatch(this._loginAction.ChangeCompany(this.company?.uniqueName));
                         this._route.navigate([this.isNewUser ? 'welcome' : 'onboarding']);
                     }
                     this.closeModal();
@@ -167,7 +167,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
             }
         });
         this.store.pipe(select(p => p.session.companyUniqueName), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(a => {
-            if (a && a !== '' && this.company.uniqueName) {
+            if (a && a !== '' && this.company?.uniqueName) {
                 if (a.includes(this.company.uniqueName.substring(0, 8))) {
                     this.company.name = '';
                     this.company.country = '';
@@ -182,14 +182,14 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
             if (res) {
                 if (res.contactNo.includes('-')) {
                     const contactNumber = res.contactNo.split('-');
-                    if (contactNumber.length > 1) {
+                    if (contactNumber?.length > 1) {
                         res.contactNo = contactNumber[1];
                     }
                 }
                 this.company = res;
             }
         });
-        if (this.createBranch && this.isUpdateMode && this.entityDetails) {
+        if (this.createBranch && this.isUpdateMode && this.entityDetails && this.company) {
             this.company.name = this.entityDetails.name;
             this.company.nameAlias = this.entityDetails.alias;
         }
@@ -291,12 +291,6 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
         this.closeCompanyModal.emit();
         if (isElectron) {
             this.store.dispatch(this._loginAction.ClearSession());
-        } else if (isCordova) {
-            (window as any).plugins.googleplus.logout(
-                (msg) => {
-                    this.store.dispatch(this._loginAction.ClearSession());
-                }
-            );
         } else {
             this.isLoggedInWithSocialAccount$.subscribe((val) => {
                 if (val) {
@@ -319,7 +313,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
     public makeMeCaptialize(companyName: string) {
         if (companyName) {
             companyName = companyName.trim();
-            if (companyName) {
+            if (companyName && this.company) {
                 this.company.name = companyName[0].toUpperCase() + companyName.substr(1, companyName.length);
             } else {
                 this.company.name = '';
@@ -463,8 +457,8 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
      */
     public updateBranch(): void {
         this._companyService.updateBranch({
-            companyUniqueName: this.activeCompanyDetails.uniqueName,
-            branchUniqueName: this.entityDetails.uniqueName,
+            companyUniqueName: this.activeCompanyDetails?.uniqueName,
+            branchUniqueName: this.entityDetails?.uniqueName,
             name: this.company.name,
             alias: this.company.nameAlias
         }).pipe(takeUntil(this.destroyed$)).subscribe(data => {
@@ -482,7 +476,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
      */
     public getWelcomeUserText(): string {
         let text = this.localeData?.welcome_user;
-        text = text?.replace("[USER]", this.logedInuser.name);
+        text = text?.replace("[USER]", this.logedInuser?.name);
         return text;
     }
 }
