@@ -107,6 +107,7 @@ export class NewBranchTransferProduct {
     public uniqueName: any;
     public stockDetails: NewBranchTransferProductStockDetails;
     public description: string;
+    public variant?: any;
 }
 
 export class NewBranchTransferTransportationDetails {
