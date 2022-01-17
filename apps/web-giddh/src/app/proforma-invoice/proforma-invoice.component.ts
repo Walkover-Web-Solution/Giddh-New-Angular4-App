@@ -6032,7 +6032,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             } else {
                 const requestObject = {
                     accountUniqueName: customerUniqueName,
-                    voucherType: this.selectedVoucherType
+                    voucherType: (this.isPurchaseInvoice) ? VoucherTypeEnum.purchase : this.selectedVoucherType
                 }
                 apiCallObservable = this.salesService.getInvoiceList(requestObject, voucherDate);
             }
