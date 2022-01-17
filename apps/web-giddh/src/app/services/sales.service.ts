@@ -184,6 +184,7 @@ export class SalesService {
      *
      * @param {any} model voucher type & account unique name
      * @param {string} date Date in GIDDH_DATE_FORMAT
+     * @param {number} count
      * @returns {Observable<BaseResponse<any, any>>}
      * @memberof LedgerService
      */
