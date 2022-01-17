@@ -39,7 +39,7 @@ form {
                 top: 0;
                 .balance-due {
                     display: block;
-                    color: var(--color-shark);
+                    color: var(--color-nero);
                     line-height: 1.2rem;
                     font-size: 14px;
                     font-weight: 500;
@@ -70,7 +70,7 @@ form {
                     padding-bottom: 10px;
                     width: 100%;
                     &.disabled {
-                        background: var(--color-porcelain);
+                        background: var(--color-dark-fog);
                     }
                     textarea {
                         border: none;
@@ -153,7 +153,7 @@ form {
     .create-purchase-order-table {
         .select-account-label {
             font-size: 14px;
-            color: var(--color-manatee);
+            color: var(--color-gray);
             padding-bottom: 3px;
             display: block;
         }
@@ -360,7 +360,7 @@ ng-select.splSales {
 
 .create-purchase-order-table table input[disabled] {
     cursor: default;
-    background-color: var(--color-porcelain);
+    background-color: var(--color-dark-fog);
     border: 1px solid var(--color-iron);
     padding: 5px;
     width: 100%;
@@ -551,7 +551,7 @@ span.edit-icon {
 
 .select-account-label {
     font-size: 14px;
-    color: var(--color-manatee);
+    color: var(--color-gray);
     padding-bottom: 3px;
 }
 
@@ -639,7 +639,7 @@ section.static-purchase-table {
 
 // new table css
 section.new-table {
-    background-color: var(--color-porcelain);
+    background-color: var(--color-dark-fog);
     margin-bottom: 30px;
     margin: 0 15px 30px;
 }
@@ -787,7 +787,7 @@ table.table.table-custom-invoice.basic {
     transform: translateY(-40px);
     width: 20px;
     height: 20px;
-    border: 1px solid var(--color-manatee);
+    border: 1px solid var(--color-gray);
     border-radius: 50%;
     text-align: center;
 }
@@ -882,7 +882,7 @@ span.eligible-ITC {
 }
 .tax-in-currency {
     margin-bottom: 7px;
-    color: var(--color-manatee) !important;
+    color: var(--color-gray) !important;
     white-space: initial;
 }
 
@@ -1009,7 +1009,7 @@ span.eligible-ITC {
     line-height: 2.4;
     border-bottom: 1px solid var(--color-iron);
     padding-left: 6px;
-    border-bottom-color: rgb(214, 214, 214);
+    border-bottom-color: var(--color-iron);
 }
 
 .loader-class {
@@ -1060,7 +1060,7 @@ ul.change-address-dropdown {
 }
 .switch-currency {
     font-size: 14px;
-    color: var(--color-shark);
+    color: var(--color-nero);
     max-width: 1000px;
     text-align: right;
     margin-bottom: 10px;
@@ -1081,7 +1081,7 @@ ul.change-address-dropdown {
     }
 }
 .differ-currency {
-    color: var(--color-manatee);
+    color: var(--color-gray);
     font-size: 14px;
     text-align: right;
     bottom: 3px;
@@ -1284,7 +1284,7 @@ ul.change-address-dropdown {
     }
     .other-taxes-input {
         width: 99px;
-        background-color: var(--color-porcelain);
+        background-color: var(--color-dark-fog);
         border: 1px solid var(--color-iron);
         padding: 3px;
         font-size: 13px;

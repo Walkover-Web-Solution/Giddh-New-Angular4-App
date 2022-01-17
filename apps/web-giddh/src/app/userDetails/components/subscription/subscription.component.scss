@@ -51,12 +51,12 @@
         top: 5px;
         .search-bar {
             font-weight: 500;
-            color: var(--color-omiod);
+            color: var(--color-abbey);
         }
     }
 }
 .main-content-para {
-    color: var(--color-dark-gray-new);
+    color: var(--color-gray);
 }
 
 .menu-two-list {
@@ -85,7 +85,7 @@
         }
         span {
             display: inline-block;
-            color: var(--color-black-pearl);
+            color: var(--color-nero);
         }
     }
 }
@@ -98,7 +98,7 @@
         text-decoration: underline;
         font-weight: bold;
         font-size: 14px;
-        color: var(--color-grey-chateau);
+        color: var(--color-gray);
         height: inherit;
         display: grid;
         place-items: center;
@@ -113,7 +113,7 @@
     height: 100%;
     background-color: var(--color-white);
     border-left: none;
-    border-right: 2px solid var(--color-default-border-bottom);
+    border-right: 2px solid var(--color-iron);
     position: relative;
     padding: 0;
     .sidebar-box {
@@ -124,7 +124,7 @@
             }
         }
         .side-bar-head {
-            color: var(--color-midnight-blue);
+            color: var(--color-giddh-blue);
             font-size: 13px;
             font-weight: 600;
             img {
@@ -135,7 +135,7 @@
                 margin: 0px 5px;
             }
             span {
-                color: var(--color-omiod);
+                color: var(--color-abbey);
             }
         }
         :hover {
@@ -166,10 +166,10 @@
                 .side-bar-list-title {
                     width: 95px;
                     height: inherit;
-                    color: var(--color-omiod);
+                    color: var(--color-abbey);
                 }
                 .warning {
-                    color: var(--color-orange-new);
+                    color: var(--color-orange);
                     font-weight: 600;
                     font-size: 12.5px;
                 }
@@ -189,7 +189,7 @@
     height: 100%;
     background-color: var(--color-white);
     border-left: none;
-    border-right: 2px solid var(--color-default-border-bottom);
+    border-right: 2px solid var(--color-iron);
     position: relative;
     padding: 0;
     .sidebar-box-clone {
@@ -197,7 +197,7 @@
             border-bottom: 1px solid var(--color-dark-fog);
         }
         .side-bar-head-clone {
-            color: var(--color-midnight-blue);
+            color: var(--color-giddh-blue);
             font-size: 13px;
             font-weight: 600;
             margin-top: 5px;
@@ -210,7 +210,7 @@
                 margin: 0px 5px;
             }
             span {
-                color: var(--color-omiod);
+                color: var(--color-abbey);
             }
         }
         .side-bar-items-clone {
@@ -235,7 +235,7 @@
                 .side-bar-list-title-clone {
                     width: 95px;
                     height: inherit;
-                    color: var(--color-omiod);
+                    color: var(--color-abbey);
                 }
             }
             .side-bar-list-clone-2 {
@@ -253,7 +253,7 @@
                 .side-bar-list-title-clone {
                     width: 95px;
                     height: inherit;
-                    color: var(--color-omiod);
+                    color: var(--color-abbey);
                 }
             }
             .side-bar-list-clone-3 {
@@ -271,7 +271,7 @@
                 .side-bar-list-title-clone {
                     width: 95px;
                     height: inherit;
-                    color: var(--color-omiod);
+                    color: var(--color-abbey);
                 }
             }
         }
@@ -280,7 +280,7 @@
 .main-content {
     width: 100%;
     height: inherit;
-    color: var(--color-lighted-gray);
+    color: var(--color-abbey);
     .consumed-transaction,
     .consumed-branch,
     .consumed-warehouse,
@@ -318,7 +318,7 @@
     .added-row,
     .added-balance,
     .added-charges {
-        background-color: var(--color-fog-green);
+        background-color: var(--color-foam);
     }
     table {
         width: 97%;
@@ -327,13 +327,13 @@
     }
     ::ng-deep {
         .cdk-header-row {
-            background-color: var(--color-default-border-bottom);
+            background-color: var(--color-iron);
         }
         .mat-header-row {
             height: 30px !important;
         }
         .mat-header-cell {
-            color: var(--color-black-pearl) !important;
+            color: var(--color-nero) !important;
             padding: 4px 10px !important;
             font-size: 13px !important;
             letter-spacing: -0.4px;
@@ -346,7 +346,7 @@
         td.mat-cell:first-of-type {
             width: 49%;
             padding-left: 45px !important;
-            color: var(--color-black-pearl) !important;
+            color: var(--color-nero) !important;
         }
         .mat-table tbody tr:hover td {
             background-color: none !important;
@@ -355,7 +355,7 @@
             color: var(--color-red) !important;
         }
         .mat-table tbody > tr > td {
-            color: var(--color-black-pearl) !important;
+            color: var(--color-nero) !important;
             background-color: var(--color-gray);
             padding-top: 7px !important;
             padding-bottom: 7px !important;
@@ -372,11 +372,11 @@
                 font-size: 12px;
                 font-weight: 600;
                 line-height: 19px;
-                color: var(--color-black-pearl);
+                color: var(--color-nero);
                 span {
                     font-size: 16px;
                     font-weight: 700;
-                    color: var(--color-black-pearl);
+                    color: var(--color-nero);
                 }
             }
         }
@@ -386,7 +386,7 @@
             p {
                 font-size: 12px;
                 font-weight: bold;
-                color: var(--color-grey-chateau);
+                color: var(--color-gray);
                 line-height: 19px;
                 span {
                     color: var(--color-red);
@@ -408,7 +408,7 @@
     .balance-info {
         margin: 5px 17px 0px 17px;
         mat-grid-tile {
-            background-color: var(--color-cream-orange);
+            background-color: var(--color-chardon);
             .overall-summary-bar-one {
                 background: var(--color-white);
                 width: 100%;
@@ -416,7 +416,7 @@
                 display: flex;
                 .box {
                     width: 25%;
-                    background: var(--color-cream-orange);
+                    background: var(--color-chardon);
                     flex-grow: 1;
                     display: flex;
                     flex-direction: column;
@@ -427,7 +427,7 @@
                     font-weight: bold;
                     p {
                         span {
-                            color: var(--color-black-pearl);
+                            color: var(--color-nero);
                             font-size: 15px;
                             margin-left: 3px;
                         }
@@ -452,7 +452,7 @@
                             margin-left: 3px;
                             position: relative;
                             top: 2px;
-                            color: var(--color-slate) !important;
+                            color: var(--color-abbey) !important;
                             font-size: 12px;
                         }
                     }
@@ -483,9 +483,9 @@
                         margin: 0px 3px;
                     }
                     .grey {
-                        color: var(--color-midnight-blue);
+                        color: var(--color-giddh-blue);
                         font-weight: 700;
-                        border-bottom: 1px solid var(--color-midnight-blue);
+                        border-bottom: 1px solid var(--color-giddh-blue);
                     }
                 }
             }
@@ -509,7 +509,7 @@
                 position: absolute;
                 right: 1rem;
                 display: none;
-                color: var(--color-cornflower);
+                color: var(--color-blue);
                 font-size: 0.9rem;
                 top: 11px;
             }
@@ -530,7 +530,7 @@
             float: right;
             padding: 0px;
             border-bottom: 1px solid;
-            color: var(--color-midnight-blue);
+            color: var(--color-giddh-blue);
             border-radius: 0;
             padding: 0px;
             height: 25px;
@@ -563,7 +563,7 @@
             align-items: center;
             p {
                 padding-left: 1rem;
-                color: var(--color-black-pearl);
+                color: var(--color-nero);
                 img {
                     height: 1.2rem;
                     padding-right: 8px;
@@ -574,10 +574,10 @@
 }
 ::ng-deep {
     .mat-select-arrow {
-        color: var(--color-omiod);
+        color: var(--color-abbey);
     }
     .mat-select-placeholder {
-        color: var(--color-omiod);
+        color: var(--color-abbey);
     }
     #mat-select-0-panel,
     #mat-select-2-panel,
@@ -602,7 +602,7 @@
         mat-panel-title {
             font-size: 14px;
             padding-left: 15px;
-            color: var(--color-black-pearl) !important;
+            color: var(--color-nero) !important;
         }
     }
     .companies .mat-expanded {

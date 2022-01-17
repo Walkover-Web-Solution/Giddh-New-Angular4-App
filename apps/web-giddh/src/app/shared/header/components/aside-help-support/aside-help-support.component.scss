@@ -66,7 +66,7 @@
             border-bottom: 1px solid var(--color-iron);
             a {
                 display: block;
-                color: var(--color-shark);
+                color: var(--color-nero);
 
                 p {
                     font-size: 14px;
@@ -87,7 +87,7 @@
                     font-family: "opensans-semibold";
                     margin-bottom: 10px;
                     a {
-                        color: var(--color-shark);
+                        color: var(--color-nero);
                         display: flex;
                         padding: 5px 0;
                     }
@@ -109,7 +109,7 @@
                     width: 50%;
                     padding-bottom: 10px;
                     a {
-                        color: var(--color-shark);
+                        color: var(--color-nero);
                         padding-bottom: 15px;
                         font-size: 14px;
                     }
@@ -135,7 +135,7 @@
             line-height: 1.5;
             p {
                 a {
-                    color: var(--color-shark);
+                    color: var(--color-nero);
                 }
             }
         }
@@ -143,7 +143,7 @@
 }
 .aside-pane-form {
     background-color: var(--color-white);
-    box-shadow: 0px 3px 6px var(--color-black-russian);
+    box-shadow: 0px 3px 6px var(--color-iron);
     padding: 15px 15px;
     height: calc(100vh - 90px);
     overflow: auto;

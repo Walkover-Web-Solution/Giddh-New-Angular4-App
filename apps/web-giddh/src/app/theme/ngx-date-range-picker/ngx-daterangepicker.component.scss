@@ -232,7 +232,7 @@ $input-height: 3rem !default;
     .month.drp-animate {
         font-size: 12px;
         text-align: left;
-        color: var(--color-shark);
+        color: var(--color-nero);
         font-weight: 600;
         .year-name {
             padding-left: 5px;
@@ -502,7 +502,7 @@ $input-height: 3rem !default;
     td,
     option {
         &.disabled {
-            color: var(--color-manatee);
+            color: var(--color-gray);
             cursor: not-allowed;
             text-decoration: line-through;
         }
@@ -512,7 +512,7 @@ $input-height: 3rem !default;
     .td-div,
     option {
         &.disabled {
-            color: var(--color-manatee);
+            color: var(--color-gray);
             cursor: not-allowed;
             text-decoration: line-through;
         }
@@ -523,7 +523,7 @@ $input-height: 3rem !default;
     .td-div,
     option {
         &.disabled {
-            color: var(--color-manatee);
+            color: var(--color-gray);
             cursor: not-allowed;
             text-decoration: line-through;
         }
@@ -552,8 +552,8 @@ $input-height: 3rem !default;
         &.ampm-select {
             width: 50px;
             margin: 0 auto;
-            background: var(--color-porcelain);
-            border: 1px solid var(--color-porcelain);
+            background: var(--color-dark-fog);
+            border: 1px solid var(--color-dark-fog);
             padding: 2px;
             outline: 0;
             font-size: 12px;
@@ -689,7 +689,7 @@ $input-height: 3rem !default;
                             background-position-y: center;
                             border-radius: 50%;
                             &:active {
-                                background-color: var(--color-manatee);
+                                background-color: var(--color-gray);
                             }
                         }
                         &.active {
@@ -800,9 +800,9 @@ $input-height: 3rem !default;
         font-size: 14px;
     }
     .btn.btn-danger {
-        background: var(--color-porcelain);
+        background: var(--color-dark-fog);
         color: var(--color-primary-datepicker-btn-btn-danger);
-        border: 1px solid var(--color-porcelain);
+        border: 1px solid var(--color-dark-fog);
         margin-right: 10px;
         &:hover,
         &:active,
@@ -859,7 +859,7 @@ $input-height: 3rem !default;
 .md-drppicker td.in-range.in-range-start.in-range-end span {
     background-color: var(--color-primary-datepicker-in-range-end-date-background) !important;
     border-radius: 50%;
-    color: var(--color-shark) !important;
+    color: var(--color-nero) !important;
     border-color: var(--color-abbey);
 }
 td.in-range.in-range-start.in-range-hovered.in-range-end::before {
@@ -1177,7 +1177,7 @@ td span {
         font-style: normal;
         &:hover {
             border-radius: 50px;
-            background-color: var(--color-porcelain);
+            background-color: var(--color-dark-fog);
             cursor: pointer;
         }
     }
@@ -1236,12 +1236,12 @@ td span {
 }
 
 .activatedDate span {
-    color: var(--color-shark) !important;
+    color: var(--color-nero) !important;
     background-color: transparent !important;
 }
 
 .activatedDate.in-range.in-range-start span {
-    color: var(--color-shark);
+    color: var(--color-nero);
 }
 .activatedDate:hover {
     span {
@@ -1275,7 +1275,7 @@ td span {
     border-left: none;
     li {
         &:hover {
-            background-color: var(--color-porcelain) !important;
+            background-color: var(--color-dark-fog) !important;
             button {
                 color: var(--color-primary-datepicker-dropdown-color-hover) !important;
             }
@@ -1516,11 +1516,11 @@ td span {
                     background-position-y: center;
                     border-radius: 50%;
                     &:active {
-                        background-color: var(--color-manatee);
+                        background-color: var(--color-gray);
                     }
                 }
                 &.active {
-                    background-color: var(--color-porcelain) !important;
+                    background-color: var(--color-dark-fog) !important;
                     border-left: 3px solid var(--color-datepicker-mat-select-arrow-active) !important;
                 }
                 &[disabled] {
@@ -1593,7 +1593,7 @@ cdk-virtual-scroll-viewport::-webkit-scrollbar-track {
 
 /* Handle */
 cdk-virtual-scroll-viewport::-webkit-scrollbar-thumb {
-    background: var(--color-manatee);
+    background: var(--color-gray);
     border-radius: 10px;
 }
 .calendar-d-flex {
@@ -1819,7 +1819,7 @@ cdk-virtual-scroll-viewport::-webkit-scrollbar-thumb {
                     align-items: center;
                     .custom-date-range {
                         font-size: 18px;
-                        color: var(--color-shark);
+                        color: var(--color-nero);
                         padding-left: 50px;
                     }
                     .edit-dates {

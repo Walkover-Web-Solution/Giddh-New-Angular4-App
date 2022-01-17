@@ -17,6 +17,8 @@ body.default-theme {
     --color-common-secondary-background-for-all-components: #f5f5f5;
     --color-common-tertiary-background-for-all-components: #f5f5f5;
     --color-common-quaternary-background-for-all-components: #668cff26;
+    --color-common-quinary-background-for-all-components: #f5f5f5;
+    --color-common-senary-background-for-all-components: #cbcfd2;
 
     // Signup Login Page Color Components
     --color-primary-login-page-background: #1a237e;
@@ -41,6 +43,7 @@ body.default-theme {
     --color-primary-login-signup-linkedin-background: #668cff;
     --color-primary-login-signup-login-box-h1: #212528;
     --color-primary-login-signup-slide-content-btn-white-hover: #212528;
+    --color-primary-login-signup-input-box: #212528;
 
     // Filter Color Variables
     --color-filter-text-hover: #f5f5f5;
@@ -79,6 +82,7 @@ body.default-theme {
     --color-tertiary-button-text: #505159;
     --color-tertiary-button-background: transparent;
     --color-tertiary-button-background-hover: #1a237e0f;
+    --color-quaternary-button-text: #ffffff;
     --color-quaternary-button-background: #1a237e;
     --color-quinary-button-background: #668cff;
     --color-senary-button-text: #ffffff;
@@ -89,6 +93,7 @@ body.default-theme {
     --color-nonary-button-text: #ffffff;
     --color-nonary-button-background: #36b283;
     --color-nonary-button-background-hover: #36b283;
+    --color-denary-button-text: #212528;
     --color-denary-button-background: #f5f5f5;
     --color-primary-filter-button-text: #ffffff;
     --color-primary-cancel-button-background-hover: #9b9b9e;
@@ -110,9 +115,16 @@ body.default-theme {
     --color-dropdown-list-box-shadow: #cbcfd2;
     --color-dropdown-primary-bar-border: #1a237e;
 
+    // Checkbox, Radio Button, Mat-Expansion Panel Down Arrow and Icon Color Variables
+    --color-primary-checkbox-and-expansion-panel-arrow: #212528;
+
+    // Expansion Panel Color Variables
+    --color-primary-expansion-panel-background: #f5f5f5;
+
     // Search Bar Color Variables
     --color-sidebar-search-bar-text: #505159;
     --color-sidebar-primary-search-bar-background: #f5f5f5;
+    --color-sidebar-secondary-search-bar-background: #f5f5f5;
     --color-active-search-bar-border: #668cff;
     --color-company-profile-input-label: #212528;
     --color-discount-search-bar-background: #ffffff;
@@ -283,7 +295,7 @@ body.default-theme {
     --color-primary-company-branch-company-branch-dropdown-total-company-count: #505159;
     --color-primary-company-branch-digit-orange: #e58a00;
     --color-primary-company-branch-company-list-btn-group-active-hover: #e58a0026;
-    --color-primary-company-branch-branch-list-active-hover: #e58a0026;
+    --color-primary-company-branch-branch-list-active-hover: #668cff26;
     --color-primary-company-branch-company-list-btn-group-open-background: #668cff26;
     --color-primary-company-branch-company-list-btn-group-open-span-active: #668cff26;
     --color-primary-company-branch-wrap-company-refresh-small-background: #e7e9eb;
@@ -300,6 +312,7 @@ body.default-theme {
 
     // Popup Color Variables
     --color-popup-list-head-text: #ffffff;
+    --color-popup-body-text: #212528;
     --color-popup-list-input-text: #212528;
     --color-popup-list-hover: #668cff;
     --color-popup-background: #ffffff;
@@ -473,6 +486,7 @@ body.default-theme {
     --color-table-row-hover-secondary-background: #668cff26;
     --color-table-heading-primary-background: #ffffff;
     --color-table-body-primary-background: #ffffff;
+    --color-table-body-secondary-background: #f5f5f5;
     --color-table-datepicker-content: #212528;
     --color-table-datepicker-header-background: #668cff;
     --color-table-datepicker-body-background: #ffffff;
@@ -482,6 +496,7 @@ body.default-theme {
     --color-table-primary-content-bar-border: #e7e9eb;
     --color-table-primary-giddh-table-thead-register-table-th-th-background: #e58a0026;
     --color-table-icon-sort-asc: #505159;
+    --color-table-primary-footer: #f5f5f5;
 
     // Total Details Box above table Color Variables
     --color-total-details-heading: #505159;
@@ -578,46 +593,28 @@ body.default-theme {
     // Common Chat Button Color Variable
     --color-common-chat-button-background: #0fbab8;
 
+    // Common Image Filter Variable
+    --color-image-filter: invert(0);
+
     /************************ COMMON COLORS USED MORE THAN 12 TIMES ************************/
     --color-blue: #668cff;
     --color-giddh-blue: #1a237e;
     --color-wild-sand: #f5f5f5;
-    --color-white: #ffffff;
-    --color-porcelain: #e7e9eb;
-    --color-iron: #cbcfd2;
-    --color-manatee: #9b9b9e;
-    --color-abbey: #505159;
-    --color-shark: #212528;
-    --color-light-sea-green: #36b283;
-    --color-black-russian: #cbcfd2;
-    --color-cinnabar-orange: #e54556;
-    --color-orange: #e58a00;
-
-    --color-green: #36b283;
-    --color-very-light-gray: #cbcfd2;
-    --color-midnight-blue: #1a237e;
-    --color-gainsboro: #cbcfd2;
-    --color-gray: #9b9b9e;
-    --color-red: #e54556;
-    --color-night-rider: #212528;
-    --color-black: #212528;
-    --color-black-pearl: #212528;
-    --color-russian-black: #212528;
-    --color-solitude-light: #668cff26;
-    --color-grey-chateau: #9b9b9e;
-    --color-cornflower: #668cff;
-    --color-omiod: #505159;
-    --color-fog-green: #36b28326;
-    --color-dark-fog: #e7e9eb;
-    --color-orange-new: #e58a00;
-    --color-default-border-bottom: #cbcfd2;
-    --color-cloud: #cbcfd2;
-    --color-skeleton-loading-gradient: #cbcfd2;
-    --color-dark-gray-new: #9b9b9e;
-    --color-slate: #505159;
-    --color-skeleton-loading-gradient-bg: #e7e9eb;
-    --color-skeleton-loading-linear: #cbcfd2;
     --color-skeleton-loading-gradient-inner: #f5f5f5;
-    --color-lighted-gray: #505159;
-    --color-cream-orange: #e58a0026;
+    --color-white: #ffffff;
+    --color-dark-fog: #e7e9eb;
+    --color-lavender: #e7e9eb;
+    --color-iron: #cbcfd2;
+    --color-black-russian: #cbcfd2;
+    --color-gray: #9b9b9e;
+    --color-abbey: #505159;
+    --color-nero: #212528;
+    --color-teal: #36b283;
+    --color-foam: #36b28326;
+    --color-chardon: #e58a0026;
+    --color-red: #e54556;
+    --color-orange: #e58a00;
+    --color-solitude-light: #668cff26;
+    --color-dark-gray: #505159;
+    --color-tutu: #e5455626;
 }

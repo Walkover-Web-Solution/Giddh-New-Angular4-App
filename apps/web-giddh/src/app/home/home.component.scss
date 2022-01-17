@@ -19,7 +19,7 @@
     padding: 9px;
     margin-bottom: 10px;
     font-size: 16px;
-    box-shadow: 1px 1px 3px var(--color-black-russian);
+    box-shadow: 1px 1px 3px var(--color-iron);
 }
 .click-here {
     color: var(--color-blue);
@@ -34,7 +34,7 @@ span.icon-traingle-info {
     margin-right: 10px;
 }
 span.icon-info-icon {
-    color: var(--color-manatee);
+    color: var(--color-gray);
     font-size: 18px;
     margin-right: 10px;
 }
@@ -42,11 +42,11 @@ span.icon-info-icon {
     border: 1px solid var(--color-iron);
 }
 a.dropdown-item {
-    color: var(--color-shark);
+    color: var(--color-nero);
 }
 
 a.dropdown-item:hover {
-    background-color: var(--color-porcelain);
+    background-color: var(--color-dark-fog);
     color: var(--color-blue);
 }
 .dashboard-notification {

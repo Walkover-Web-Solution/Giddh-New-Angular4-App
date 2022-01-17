@@ -1,10 +1,10 @@
 .active-tab {
-    background: var(--color-giddh-blue) !important;
-    color: var(--color-white) !important;
+    color: var(--color-quaternary-button-text) !important;
+    background: var(--color-quaternary-button-background) !important;
 }
 .inactive-tab {
-    background: var(--color-white) !important;
-    color: var(--color-giddh-blue) !important;
+    color: var(--color-primary-button-text) !important;
+    background: var(--color-primary-button-background) !important;
 }
 .content-tab {
     .badge {

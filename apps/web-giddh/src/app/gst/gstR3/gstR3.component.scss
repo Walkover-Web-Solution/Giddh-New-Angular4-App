@@ -55,7 +55,7 @@ svg.icon.icon-sm {
     height: 0;
     margin-left: 2px;
     vertical-align: middle;
-    border-top: 4px solid var(--color-shark);
+    border-top: 4px solid var(--color-nero);
     border-right: 4px solid transparent;
     border-left: 4px solid transparent;
     border-bottom: 0 dotted;
@@ -183,7 +183,7 @@ svg.icon.icon-xxlg {
 
 .tax-engine .gstr3b-header .sel-tab li a {
     padding: 0 10px;
-    color: var(--color-shark);
+    color: var(--color-nero);
 }
 
 svg.icon.icon-xxlg {
@@ -263,7 +263,7 @@ table {
 }
 
 .gstr-3b-report tr:hover {
-    background-color: var(--color-wild-sand);
+    background-color: var(--color-invoice-preview-giddh-table-tbody-tr-background-hover);
 }
 
 .tax-engine .summary-content .gstr-3b-report.table > tbody > tr > td {
@@ -281,6 +281,7 @@ table {
 .modal-header .help-text,
 .text-muted {
     color: var(--color-abbey);
+    background-color: var(--color-table-body-secondary-background);
 }
 
 *,
@@ -392,8 +393,8 @@ fieldset[disabled] .btn-primary:hover .btn-primary[disabled],
 
 .btn-primary {
     color: var(--color-white);
-    background-color: var(--color-cinnabar-orange);
-    border-color: var(--color-cinnabar-orange);
+    background-color: var(--color-red);
+    border-color: var(--color-red);
 }
 
 .btn {
@@ -446,7 +447,7 @@ tax-engine .caret-right {
 }
 
 .tax-engine .gstr3-points a .caret-right {
-    color: var(--color-manatee);
+    color: var(--color-gray);
 }
 
 .gstr3-filing-procedure > div {
@@ -470,7 +471,7 @@ dropdown-menu-right {
 
 .successful-file-detail h3,
 .gst-return-date h3 {
-    color: var(--color-shark) !important;
+    color: var(--color-nero) !important;
     font-size: 24px !important;
     margin: 20px 0 7px !important;
 }
@@ -532,13 +533,13 @@ ul#dropdown-menu {
 }
 
 .bg-thead {
-    background-color: var(--color-porcelain);
-    color: var(--color-shark);
+    background-color: var(--color-dark-fog);
+    color: var(--color-nero);
 }
 
 .bg-thead-dark {
-    background: var(--color-wild-sand);
-    color: var(--color-shark);
+    background: var(--color-table-body-secondary-background);
+    color: var(--color-nero);
 }
 
 .pointer-none {

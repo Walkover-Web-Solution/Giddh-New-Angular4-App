@@ -1,5 +1,5 @@
 .right-penal {
-    border-left: 1px solid var(--color-manatee);
+    border-left: 1px solid var(--color-gray);
     position: fixed;
     right: 0;
     bottom: 0;
@@ -25,7 +25,7 @@
         }
         span {
             font-size: 12px;
-            color: var(--color-shark);
+            color: var(--color-nero);
         }
     }
 }
@@ -160,7 +160,7 @@
 .table-modal tbody tr td button {
     background: none;
     border: 0px;
-    color: var(--color-porcelain);
+    color: var(--color-dark-fog);
     font-size: 16px;
     padding: 2px;
     margin-right: 3px;

@@ -74,17 +74,17 @@ ng-select .select-drop i.fa.fa-caret-up::before {
     background: transparent;
     border: none !important;
     padding: 5px;
-    color: var(--color-manatee);
+    color: var(--color-gray);
 }
 
 .notfound-option.active {
-    background: var(--color-porcelain) !important;
+    background: var(--color-dark-fog) !important;
     padding: 2px 5px !important;
 }
 
 .amount-total {
     font-size: 12px;
-    color: var(--color-manatee);
+    color: var(--color-gray);
 }
 
 .other-tax {
@@ -262,14 +262,14 @@ span.eligible-ITC {
     pointer-events: none;
 }
 #update-ledger-assign-tag.disabled-ledger::ng-deep .sh-select-disabled .bg-white {
-    background-color: var(--color-porcelain) !important;
+    background-color: var(--color-dark-fog) !important;
 }
 #update-ledger-assign-tag.disabled-ledger::ng-deep input,
 #update-ledger-select-warehouse.disabled-ledger::ng-deep input,
 #update-ledger-price-input.disabled-ledger,
 #update-ledger-invoice-voucher-number.disabled-ledger::ng-deep input,
 #update-ledger-invoice-number.disabled-ledger::ng-deep input {
-    background-color: var(--color-porcelain) !important;
+    background-color: var(--color-dark-fog) !important;
 }
 .tourist-scheme-wrapper {
     input[type="checkbox"] {
@@ -277,7 +277,7 @@ span.eligible-ITC {
     }
 }
 p.edit-message {
-    background-color: var(--color-porcelain);
+    background-color: var(--color-dark-fog);
     text-align: center;
     padding: 8px 0;
     border-top: 1px solid var(--color-iron);

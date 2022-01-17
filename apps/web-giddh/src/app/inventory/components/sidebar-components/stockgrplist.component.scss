@@ -28,7 +28,7 @@
 }
 
 .stock-grp-list .active {
-    background-color: var(--color-porcelain);
+    background-color: var(--color-dark-fog);
 }
 
 .item-group {
@@ -51,17 +51,17 @@
 }
 
 stock-list ::ng-deep.in-list a div {
-    color: var(--color-shark) !important;
+    color: var(--color-nero) !important;
 }
 .text-black {
-    color: var(--color-shark);
+    color: var(--color-nero);
 }
 
 .item-group {
     text-transform: unset !important;
 }
 .no-data-box {
-    border-top: 1px solid var(--color-porcelain) !important;
+    border-top: 1px solid var(--color-dark-fog) !important;
 }
 .stock-grp-list li .btn {
     line-height: 14px;
@@ -73,7 +73,7 @@ stock-list ::ng-deep.in-list a div {
                 a {
                     color: var(--color-blue) !important;
                 }
-                background-color: var(--color-porcelain);
+                background-color: var(--color-dark-fog);
             }
             span {
                 .btn {
@@ -89,7 +89,7 @@ stock-list ::ng-deep.in-list a div {
             display: flex;
             align-items: center;
             flex: 1;
-            color: var(--color-shark);
+            color: var(--color-nero);
             i {
                 margin: 0 15px;
                 font-size: 9px;

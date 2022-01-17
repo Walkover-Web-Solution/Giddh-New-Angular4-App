@@ -24,7 +24,7 @@
     max-width: 767px;
     width: 100%;
     margin: 0 auto;
-    background-color: var(--color-porcelain);
+    background-color: var(--color-dark-fog);
     padding: 0;
     .search-field {
         padding: 10px 5px;
@@ -118,7 +118,7 @@
         padding: 15px 0 0;
         border-top: 1px solid var(--color-iron);
         margin: 0 15px 0;
-        color: var(--color-shark);
+        color: var(--color-nero);
         .single-search-group {
             display: flex;
             align-items: center;
@@ -138,7 +138,7 @@
             .group-name {
                 h4 {
                     font-size: 12px;
-                    color: var(--color-shark);
+                    color: var(--color-nero);
                 }
                 p {
                     font-size: 10px;
@@ -160,7 +160,7 @@
     }
 }
 .mobile-home-search {
-    background-color: var(--color-porcelain);
+    background-color: var(--color-dark-fog);
     display: flex;
     align-items: center;
     padding: 0 15px;
@@ -185,7 +185,7 @@
                 letter-spacing: 0;
                 &:hover {
                     color: var(--color-blue) !important;
-                    background: var(--color-porcelain) !important;
+                    background: var(--color-dark-fog) !important;
                 }
             }
         }

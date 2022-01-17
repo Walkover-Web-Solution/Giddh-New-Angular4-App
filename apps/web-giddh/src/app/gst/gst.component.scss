@@ -129,7 +129,7 @@ svg.icon.gstr-icon {
     width: 9px;
     height: 9px;
     border-radius: 5px;
-    background-color: var(--color-porcelain);
+    background-color: var(--color-dark-fog);
     position: relative;
     top: 5px;
     right: 19px;
@@ -189,7 +189,7 @@ svg.icon.icon-xxlg-md {
 }
 
 .btn-default {
-    color: var(--color-shark);
+    color: var(--color-nero);
     background-color: var(--color-wild-sand);
     border-color: var(--color-iron);
 }
@@ -225,7 +225,7 @@ svg.icon.icon-xxlg-md {
 }
 
 .label-default {
-    background-color: var(--color-manatee);
+    background-color: var(--color-gray);
 }
 
 hr {
@@ -276,7 +276,7 @@ hr {
 
 .return-body .notification .notify-title {
     font-size: 13px;
-    color: var(--color-manatee);
+    color: var(--color-gray);
 }
 
 .return-body .notification .activity-graph {
@@ -295,7 +295,7 @@ hr {
     left: 4px;
     bottom: 5px;
     height: 75%;
-    border-left: 1px solid var(--color-porcelain);
+    border-left: 1px solid var(--color-dark-fog);
 }
 
 .return-body .notification .activity-graph .notify-circle {
@@ -389,7 +389,7 @@ hr {
 
 .dropdown-menu > li > a:hover {
     color: var(--color-blue);
-    background: var(--color-porcelain);
+    background: var(--color-dark-fog);
 }
 
 .month-picker {

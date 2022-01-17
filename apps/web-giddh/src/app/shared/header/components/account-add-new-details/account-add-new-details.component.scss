@@ -6,7 +6,7 @@
 
 .aside-pane-form {
     background-color: var(--color-white);
-    box-shadow: 0px 3px 6px var(--color-black-russian);
+    box-shadow: 0px 3px 6px var(--color-iron);
     padding: 15px 15px;
     overflow: auto;
     scroll-behavior: smooth;
@@ -16,7 +16,7 @@
 .aside-pane-container {
     padding: 15px;
     font-size: 14px;
-    color: var(--color-shark);
+    color: var(--color-nero);
 }
 
 .aside-pane-form label {
@@ -126,7 +126,7 @@ form.gstin-form {
 a.btn-remove {
     padding: 3px 10px;
     background-color: var(--color-white);
-    color: var(--color-shark);
+    color: var(--color-nero);
     border: 1px solid var(--color-iron);
 }
 

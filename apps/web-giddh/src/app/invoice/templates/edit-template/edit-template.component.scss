@@ -52,11 +52,11 @@
 
 .dropdown-menu > li > a:hover {
     color: var(--color-blue);
-    background: var(--color-porcelain);
+    background: var(--color-dark-fog);
 }
 .badge {
-    background: var(--color-porcelain) !important;
-    color: var(--color-shark) !important;
+    background: var(--color-dark-fog) !important;
+    color: var(--color-nero) !important;
     font-family: opensans-regular;
     border: none !important;
     font-weight: 400 !important;
@@ -65,7 +65,7 @@
 }
 .badge.btn-success:hover {
     background: var(--color-primary-edit-template-badge-btn-success-hover) !important;
-    color: var(--color-shark) !important;
+    color: var(--color-nero) !important;
 }
 .badge.btn-sky-blue,
 .badge.btn-sky-blue:hover {

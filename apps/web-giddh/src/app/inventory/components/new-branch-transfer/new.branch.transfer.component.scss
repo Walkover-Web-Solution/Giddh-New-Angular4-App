@@ -2,7 +2,7 @@
     display: flex;
     justify-content: space-between;
     background-color: var(--color-white);
-    border-bottom: 1px solid var(--color-manatee);
+    border-bottom: 1px solid var(--color-gray);
     font-size: 18px;
     font-family: "opensans-bold";
     padding-top: 10px;
@@ -16,8 +16,8 @@ section.receipt-note {
 .receipt-note-radio-btn {
     padding-top: 15px;
     padding-bottom: 15px;
-    color: var(--color-shark);
-    border-bottom: 1px solid var(--color-manatee);
+    color: var(--color-nero);
+    border-bottom: 1px solid var(--color-gray);
 }
 .receipt-note-content {
     font-size: 14px;
@@ -29,7 +29,7 @@ section.receipt-note {
 .multiple-products label {
     vertical-align: middle;
     line-height: 2.5;
-    color: var(--color-shark);
+    color: var(--color-nero);
 }
 #table-receipt th,
 #table-receipt td {
@@ -46,8 +46,8 @@ section.receipt-note {
     width: 200px;
 }
 button.btn.btn-filter {
-    background: var(--color-porcelain);
-    border: 1px solid var(--color-porcelain);
+    background: var(--color-dark-fog);
+    border: 1px solid var(--color-dark-fog);
     font-size: 14px;
     color: var(--color-giddh-blue);
     display: -webkit-inline-box;
@@ -95,7 +95,7 @@ tfoot td .table-sec.form-group {
 }
 .right-total-amount {
     text-align: right;
-    color: var(--color-shark);
+    color: var(--color-nero);
 }
 
 .right-total-amount h3 {
@@ -112,15 +112,15 @@ tfoot td .table-sec.form-group {
     border-bottom: 1px solid var(--color-iron);
 }
 #actionPane {
-    background-color: var(--color-iron);
+    background-color: var(--color-common-senary-background-for-all-components);
     padding: 20px 0;
 }
 .btn-success-text {
-    background-color: var(--color-porcelain);
+    background-color: var(--color-dark-fog);
     color: var(--color-success-enable);
 }
 .btn-danger:hover {
-    background-color: var(--color-porcelain);
+    background-color: var(--color-dark-fog);
 }
 
 .hsn-code-dropdown {
@@ -153,7 +153,7 @@ tfoot td .table-sec.form-group {
 
 .hsn-code-dropdown input::placeholder,
 .hsn-code-dropdown input::-webkit-input-placeholder {
-    color: var(--color-manatee);
+    color: var(--color-gray);
 }
 
 .hsn-code-dropdown a {
@@ -220,7 +220,7 @@ tfoot td .table-sec.form-group {
     display: inline !important;
 }
 .branch-transfer-report .btn-group a {
-    color: var(--color-shark);
+    color: var(--color-nero);
 }
 .branch-transfer-report ul#dropdown-basic {
     right: 0 !important;
@@ -263,7 +263,7 @@ tfoot td .table-sec.form-group {
     min-width: 100%;
     padding: 11px;
     padding-right: 0;
-    color: var(--color-shark);
+    color: var(--color-nero);
     border: none;
     background-color: var(--color-wild-sand);
 }
@@ -286,7 +286,7 @@ tfoot td .table-sec.form-group {
     transform: translateY(16px);
 }
 .trash-icon-delete a {
-    color: var(--color-manatee);
+    color: var(--color-gray);
     border: 1px solid var(--color-iron);
     border-radius: 50%;
     text-align: center;

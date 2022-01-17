@@ -66,7 +66,7 @@ table {
 
 .dropdown-menu > li > a:hover {
     color: var(--color-blue);
-    background: var(--color-porcelain);
+    background: var(--color-dark-fog);
 }
 
 .dropdown-menu {
@@ -170,8 +170,8 @@ table {
 }
 
 button.btn.btn-filter {
-    background: var(--color-porcelain);
-    border: 1px solid var(--color-porcelain);
+    background: var(--color-dark-fog);
+    border: 1px solid var(--color-dark-fog);
     font-size: 14px;
     color: var(--color-giddh-blue);
     display: inline-flex;

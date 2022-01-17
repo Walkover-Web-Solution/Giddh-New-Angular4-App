@@ -2,12 +2,12 @@
     background: none !important;
     border: 0 !important;
     font-size: 16px;
-    color: var(--color-shark);
+    color: var(--color-nero);
 }
 
 .sidebar-menu {
     min-height: 100vh;
-    background: var(--color-shark);
+    background: var(--color-nero);
     color: var(--color-white);
     float: right;
     position: relative;
@@ -29,7 +29,7 @@
 }
 
 .menu-list li a:hover {
-    background: var(--color-shark);
+    background: var(--color-nero);
 }
 
 .menu-list li a.isHidden {
@@ -37,11 +37,11 @@
 }
 
 .active-child {
-    background: var(--color-shark);
+    background: var(--color-nero);
     padding-left: 20px;
 }
 .active-parent {
-    background: var(--color-shark);
+    background: var(--color-nero);
 }
 .active-child > span {
     margin-right: 2px;

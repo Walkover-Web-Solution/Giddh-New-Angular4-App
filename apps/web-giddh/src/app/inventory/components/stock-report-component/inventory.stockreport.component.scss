@@ -41,7 +41,7 @@
     min-width: 100%;
     padding: 11px;
     padding-right: 40px;
-    color: var(--color-shark);
+    color: var(--color-nero);
     border: none;
     background-color: var(--color-wild-sand);
 }
@@ -61,12 +61,12 @@
 }
 
 .td-search-box div i:hover {
-    color: var(--color-manatee);
+    color: var(--color-gray);
 }
 
 .dropdown-menu > li > a:hover {
     color: var(--color-blue);
-    background: var(--color-porcelain);
+    background: var(--color-dark-fog);
 }
 .stock-input {
     background-color: transparent !important;
@@ -80,15 +80,15 @@
     color: var(--color-white);
 }
 .inventory-stock-table input.form-control.stock-input {
-    color: var(--color-shark);
+    color: var(--color-nero);
     text-align: left;
 }
 .table-border input.form-control.stock-input {
-    color: var(--color-shark);
+    color: var(--color-nero);
     text-align: left;
 }
 .footer-tr td {
-    background-color: var(--color-porcelain);
+    background-color: var(--color-dark-fog);
 }
 .total-footer {
     background-color: var(--color-white);
@@ -96,7 +96,7 @@
     .foot-item {
         padding: 41px;
         h2 {
-            color: var(--color-manatee);
+            color: var(--color-gray);
             font-size: 20px;
             margin-bottom: 10px;
         }
@@ -107,7 +107,7 @@
 }
 
 .journal-voucher {
-    color: var(--color-manatee);
+    color: var(--color-gray);
 }
 
 .purchase {
@@ -152,7 +152,7 @@
 }
 .btn-group-voucher-type {
     width: 100%;
-    color: var(--color-shark) !important;
+    color: var(--color-nero) !important;
     white-space: nowrap;
     min-width: 140px;
     max-width: 140px;
@@ -162,7 +162,7 @@
     button {
         text-align: left;
         width: 100%;
-        color: var(--color-shark);
+        color: var(--color-nero);
         margin-right: 0;
         &:focus,
         &:hover {
@@ -194,7 +194,7 @@
         border-right-style: none;
     }
     li {
-        color: var(--color-shark);
+        color: var(--color-nero);
         padding: 3px 7px !important;
         font-size: 12px;
     }
@@ -204,7 +204,7 @@
     }
 }
 button[aria-expanded="true"] i {
-    color: var(--color-manatee);
+    color: var(--color-gray);
 }
 /* voucher type DDL */
 
@@ -246,7 +246,7 @@ button[aria-expanded="true"] i {
         }
         .operators {
             font-size: 39px;
-            color: var(--color-manatee);
+            color: var(--color-gray);
         }
         h2 {
             font-size: 18px;
@@ -302,7 +302,7 @@ button[aria-expanded="true"] i {
     cursor: pointer;
 }
 button.btn.btn-filter {
-    background: var(--color-porcelain);
+    background: var(--color-dark-fog);
     border: 1px solid var(--color-iron);
     font-size: 14px;
     color: var(--color-giddh-blue);

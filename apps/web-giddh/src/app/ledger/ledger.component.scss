@@ -61,7 +61,7 @@
 }
 .form-control,
 input {
-    color: var(--color-shark);
+    color: var(--color-nero);
 }
 .notfound-option {
     display: flex;
@@ -73,7 +73,7 @@ input {
     border-bottom: 1px solid var(--color-iron);
     border-right: 1px solid var(--color-iron);
     font-size: 13px;
-    color: var(--color-shark);
+    color: var(--color-nero);
     text-overflow: ellipsis;
     white-space: nowrap;
     display: flex;
@@ -188,7 +188,7 @@ table.ledger-footer-1 td[class*="col-"] {
     background: var(--color-white);
     color: var(--color-abbey);
     font-size: 18px;
-    box-shadow: 0px 2px 6px var(--color-black-russian);
+    box-shadow: 0px 2px 6px var(--color-iron);
 }
 .ledger-stat .row {
     display: flex;
@@ -278,7 +278,7 @@ table.ledger-footer-1 td[class*="col-"] {
 }
 .thead-background1 th {
     background: var(--color-white);
-    color: var(--color-shark);
+    color: var(--color-nero);
     border-right: 1px solid var(--color-iron);
     padding: 15px 11px !important;
     font-weight: 400;
@@ -289,7 +289,7 @@ table.ledger-footer-1 td[class*="col-"] {
 }
 .ledger-main .form-control,
 .ledger-main input {
-    color: var(--color-shark);
+    color: var(--color-nero);
 }
 
 .ledger-book {
@@ -300,7 +300,7 @@ table.ledger-footer-1 td[class*="col-"] {
     width: 100%;
     margin-bottom: 16px;
     background: var(--color-white);
-    box-shadow: 0 0 6px var(--color-black-russian);
+    box-shadow: 0 0 6px var(--color-iron);
 }
 .Width600 {
     position: absolute;
@@ -376,7 +376,7 @@ tr[vr-item]:focus {
     outline: 0;
 }
 sh-select:focus {
-    outline: 1px var(--color-cinnabar-orange) solid;
+    outline: 1px var(--color-red) solid;
 }
 .notfound-option.active {
     background: var(--color-common--primary-light-background) !important;
@@ -384,7 +384,7 @@ sh-select:focus {
 }
 .amount-total {
     font-size: 12px;
-    color: var(--color-manatee);
+    color: var(--color-gray);
     padding-left: 5px;
 }
 .ledger-book .left-col-new,
@@ -478,7 +478,7 @@ sh-select:focus {
     margin-top: 25px;
 }
 .ledger-stat h1 {
-    color: var(--color-shark);
+    color: var(--color-nero);
     font-size: 14px;
     margin-bottom: 10px;
 }
@@ -913,7 +913,7 @@ sh-select:focus {
         margin-bottom: 0;
     }
     .amount-total {
-        background: var(--color-porcelain);
+        background: var(--color-dark-fog);
     }
     .page-count {
         width: 100% !important;
@@ -1050,7 +1050,7 @@ sh-select:focus {
         right: 0px;
         .btn {
             background-color: transparent;
-            color: var(--color-shark);
+            color: var(--color-nero);
             font-size: 18px;
         }
         ul {
@@ -1198,7 +1198,7 @@ sh-select:focus {
     font-size: 16px;
 }
 .account-placeholder {
-    color: var(--color-manatee);
+    color: var(--color-gray);
     padding-left: 12px;
     font-size: 14px;
     min-height: 49px;
@@ -1207,7 +1207,7 @@ sh-select:focus {
     border-bottom: 1px solid var(--color-white);
 }
 .account-placeholder-text {
-    color: var(--color-shark) !important;
+    color: var(--color-nero) !important;
 }
 .capitalize {
     text-transform: capitalize;

@@ -50,7 +50,7 @@
     min-width: 100%;
     padding: 11px;
     padding-right: 40px;
-    color: var(--color-shark);
+    color: var(--color-nero);
     border: none;
     background-color: var(--color-wild-sand);
 }
@@ -71,7 +71,7 @@
 .icon-pointer .glyphicon:hover {
 }
 .td-search-box div i:hover {
-    color: var(--color-manatee);
+    color: var(--color-gray);
 }
 
 /* class name same as what we are getting data */
@@ -95,7 +95,7 @@
     button {
         text-align: left;
         width: 100%;
-        color: var(--color-shark);
+        color: var(--color-nero);
         &:focus,
         &:hover {
             text-decoration: none;
@@ -134,7 +134,7 @@
         border-right-style: none;
     }
     li {
-        color: var(--color-shark);
+        color: var(--color-nero);
         padding: 3px 7px !important;
         font-size: 12px;
     }
@@ -144,7 +144,7 @@
     }
 }
 button[aria-expanded="true"] i {
-    color: var(--color-manatee);
+    color: var(--color-gray);
 }
 .stock-description {
     white-space: normal;
@@ -199,7 +199,7 @@ button[aria-expanded="true"] i {
     cursor: pointer;
 }
 button.btn.btn-filter {
-    background: var(--color-porcelain);
+    background: var(--color-dark-fog);
     border: 1px solid var(--color-iron);
     font-size: 14px;
     color: var(--color-giddh-blue);

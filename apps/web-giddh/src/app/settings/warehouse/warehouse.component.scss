@@ -60,9 +60,9 @@
         margin-right: -8px;
 
         &.warehouse-active {
-            color: $light-green;
+            color: var(--color-teal);
             span {
-                background-color: $light-green;
+                background-color: var(--color-teal);
                 width: 8px;
                 height: 8px;
                 float: left;
@@ -72,9 +72,9 @@
             }
         }
         &.warehouse-archived {
-            color: $red;
+            color: var(--color-red);
             span {
-                background-color: $red;
+                background-color: var(--color-red);
                 width: 8px;
                 height: 8px;
                 float: left;
@@ -202,7 +202,7 @@ span.set-as-default {
         list-style: none;
         li {
             margin-bottom: 12px;
-            color: var(--color-shark);
+            color: var(--color-nero);
             i {
                 color: var(--color-abbey);
             }

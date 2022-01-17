@@ -19,7 +19,7 @@
 }
 
 .account-search .input-group-addon {
-    color: var(--color-shark);
+    color: var(--color-nero);
     font-size: 12px;
     padding-right: 0px;
     background-color: transparent;
@@ -75,7 +75,7 @@ a[vr-item]:focus {
     right: 10px;
     font-size: 12px;
     line-height: 36px;
-    color: var(--color-shark);
+    color: var(--color-nero);
 }
 
 .account-search .form-control:after {
@@ -88,28 +88,28 @@ a[vr-item]:focus {
 }
 
 .account-search .form-control::-webkit-input-placeholder {
-    color: var(--color-shark);
+    color: var(--color-nero);
     font-size: 12px;
     position: relative;
     top: -2px;
 }
 
 .account-search .form-control::-moz-placeholder {
-    color: var(--color-shark);
+    color: var(--color-nero);
     font-size: 12px;
     position: relative;
     top: -2px;
 }
 
 .account-search .form-control:-ms-input-placeholder {
-    color: var(--color-shark);
+    color: var(--color-nero);
     font-size: 12px;
     position: relative;
     top: -2px;
 }
 
 .account-search .form-control:-moz-placeholder {
-    color: var(--color-shark);
+    color: var(--color-nero);
     font-size: 12px;
     position: relative;
     top: -2px;
@@ -120,7 +120,7 @@ a[vr-item]:focus {
 .account-search .form-control::-moz-placeholder,
 .account-search .form-control:-ms-input-placeholder,
 .account-search .form-control:-moz-placeholder {
-    color: var(--color-shark) !important;
+    color: var(--color-nero) !important;
 }
 
 .left-fixed-header li:hover {
@@ -161,7 +161,7 @@ a[vr-item]:focus {
 .left-fixed-header > li > a {
     display: block;
     padding: 7px 15px;
-    color: var(--color-shark);
+    color: var(--color-nero);
     position: relative;
 }
 
@@ -176,7 +176,7 @@ a[vr-item]:focus {
 }
 
 .left-fixed-header > li > a:hover {
-    color: var(--color-shark);
+    color: var(--color-nero);
 }
 .left-fixed-header > li > a:hover .label > span,
 .left-fixed-header > li > a:hover .label {
@@ -184,12 +184,12 @@ a[vr-item]:focus {
 }
 
 .left-fixed-header > li a.active {
-    background: var(--color-porcelain);
+    background: var(--color-dark-fog);
 }
 
 .left-fixed-header > li > a.active .label,
 .left-fixed-header > li > a.active .label > span {
-    color: var(--color-shark);
+    color: var(--color-nero);
 }
 
 .left-fixed-header > li > a .label {
@@ -198,7 +198,7 @@ a[vr-item]:focus {
     vertical-align: middle;
     padding-left: 0px;
     text-align: left;
-    color: var(--color-shark);
+    color: var(--color-nero);
     letter-spacing: 0.6px;
     font-weight: normal;
     font-family: "opensans-semibold";
@@ -219,7 +219,7 @@ a[vr-item]:focus {
 }
 
 .left-fixed-header .divider {
-    border-bottom: 1px solid var(--color-shark);
+    border-bottom: 1px solid var(--color-nero);
     padding: 4px 0;
     height: 0;
     margin-bottom: 4px;
@@ -287,7 +287,7 @@ a[vr-item]:focus {
     text-align: center;
     line-height: 15.9px;
     border-radius: 2px;
-    color: var(--color-manatee);
+    color: var(--color-gray);
     margin-top: 1px;
 }
 
@@ -310,7 +310,7 @@ a[vr-item]:focus {
 
 .left-sub-menu ul > li > a {
     font-size: 14px;
-    color: var(--color-manatee);
+    color: var(--color-gray);
     display: block;
     clear: both;
     padding: 6px 15px;
@@ -338,7 +338,7 @@ a[vr-item]:focus {
     display: block;
     clear: both;
     float: none;
-    box-shadow: 0 0 3px var(--color-black-russian);
+    box-shadow: 0 0 3px var(--color-iron);
     border-radius: 2px;
     padding: 5px 0;
     visibility: hidden;
@@ -353,7 +353,7 @@ a[vr-item]:focus {
     vertical-align: middle;
     text-align: right;
     position: relative;
-    color: var(--color-manatee);
+    color: var(--color-gray);
     top: 6px;
 }
 
@@ -518,7 +518,7 @@ span.icon-support.dropdown-toggle {
 }
 
 .other a {
-    color: var(--color-shark);
+    color: var(--color-nero);
     text-transform: uppercase;
 }
 .show-more-opt {
@@ -598,7 +598,7 @@ ul.sub-list {
 }
 
 .nav-left-bar .company-name .company-text span {
-    color: var(--color-shark);
+    color: var(--color-nero);
     word-break: break-all;
 }
 
@@ -644,7 +644,7 @@ ul.sub-list {
     right: 30px;
     background: none;
     border: 0px;
-    color: var(--color-shark);
+    color: var(--color-nero);
     cursor: pointer;
     font-size: 20px;
     z-index: 9999;
@@ -654,7 +654,7 @@ ul.sub-list {
 }
 .head-nav {
     background: var(--color-wild-sand);
-    border-bottom: 1px solid var(--color-porcelain);
+    border-bottom: 1px solid var(--color-dark-fog);
     margin-bottom: 5px;
 }
 .ledger-page {
@@ -683,7 +683,7 @@ ul.sub-list {
     padding: 10px 15px;
     margin-bottom: 10px;
     font-size: 16px;
-    box-shadow: 1px 1px 3px var(--color-black-russian);
+    box-shadow: 1px 1px 3px var(--color-iron);
     margin-top: 10px;
     color: var(--color-primary-header-notification-text);
     p {
@@ -701,7 +701,7 @@ ul.sub-list {
         margin-right: 10px;
     }
     span.icon-info-icon {
-        color: var(--color-manatee);
+        color: var(--color-gray);
         font-size: 18px;
         margin-right: 10px;
     }
@@ -737,7 +737,7 @@ ul.sub-list {
 .company-name {
     ul.dropdown-menu.user-dropdown-header {
         left: 0 !important;
-        color: var(--color-shark);
+        color: var(--color-nero);
         .company-name-finance-year {
             .text-ellipsis {
                 white-space: normal;
@@ -753,7 +753,7 @@ ul.sub-list {
     content: "";
     height: 20px;
     width: 20px;
-    background-color: var(--color-porcelain);
+    background-color: var(--color-dark-fog);
     top: -9px;
     z-index: -1;
     transform: rotate(45deg);
@@ -768,7 +768,7 @@ ul.sub-list {
             display: flex;
             padding: 15px;
             font-family: "opensans-bold";
-            color: var(--color-shark);
+            color: var(--color-nero);
             border-bottom: 1px solid var(--color-iron);
             width: 100%;
             align-items: center;
@@ -812,7 +812,7 @@ ul.sub-list {
                     display: flex;
                     align-items: center;
                     justify-content: space-between;
-                    color: var(--color-shark) !important;
+                    color: var(--color-nero) !important;
                     cursor: pointer;
                     &.dropdown-item.active-branch {
                         color: var(--color-blue);

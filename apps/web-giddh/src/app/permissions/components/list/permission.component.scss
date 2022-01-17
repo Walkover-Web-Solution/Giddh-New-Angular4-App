@@ -1,6 +1,6 @@
 .role {
-    background: var(--color-porcelain);
-    border: 1px solid var(--color-porcelain);
+    background: var(--color-dark-fog);
+    border: 1px solid var(--color-dark-fog);
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
 }
 
@@ -34,7 +34,7 @@
 }
 
 #single-role thead th {
-    color: var(--color-shark) !important;
+    color: var(--color-nero) !important;
     font-weight: 400;
     text-align: center;
 }
@@ -47,13 +47,13 @@
 }
 
 #single-role tbody tr td:first-child input[type="checkbox"]:checked:after {
-    background: var(--color-cinnabar-orange);
-    border-color: var(--color-cinnabar-orange);
+    background: var(--color-red);
+    border-color: var(--color-red);
 }
 
 .head-name {
     padding: 13px;
-    background: var(--color-cinnabar-orange);
+    background: var(--color-red);
     color: var(--color-white);
     position: relative;
 }
@@ -103,7 +103,7 @@
 
 .role ul li {
     width: 25%;
-    color: var(--color-shark);
+    color: var(--color-nero);
     padding: 6px;
     font-family: "opensans-semibold";
     word-break: break-word;
@@ -115,7 +115,7 @@
 
 .new-box h1 {
     font-size: 2.5rem;
-    color: var(--color-shark);
+    color: var(--color-nero);
 }
 
 .dropdown_select.open > .dropdown-menu {
@@ -131,8 +131,8 @@
 }
 
 #single-role input[type="checkbox"]:checked:after {
-    background: var(--color-cinnabar-orange);
-    border-color: var(--color-cinnabar-orange);
+    background: var(--color-red);
+    border-color: var(--color-red);
 }
 
 #headsList {
@@ -140,7 +140,7 @@
 }
 
 #single-role tbody tr td:nth-child(1n + 2) input[type="checkbox"]:before {
-    border-color: var(--color-shark);
+    border-color: var(--color-nero);
 }
 
 #single-role tbody tr td:nth-child(1n + 2) input[type="checkbox"]:checked:after {
