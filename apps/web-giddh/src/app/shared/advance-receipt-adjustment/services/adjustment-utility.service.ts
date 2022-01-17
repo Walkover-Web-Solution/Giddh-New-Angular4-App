@@ -10,6 +10,7 @@ export class AdjustmentUtilityService {
      * This will convert the new response format for adjustments in old response format
      *
      * @param {*} data
+     * @param {string} adjustedVoucherType
      * @returns {*}
      * @memberof AdjustmentUtilityService
      */
