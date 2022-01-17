@@ -122,7 +122,6 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
     public ngOnInit() {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.adjustVoucherForm = new VoucherAdjustments();
-        console.log(this.adjustedVoucherType);
         this.onClear();
         this.store.pipe(select(prof => prof.settings.profile), takeUntil(this.destroyed$)).subscribe(async (profile) => {
             this.companyCurrency = profile.baseCurrency || 'INR';
