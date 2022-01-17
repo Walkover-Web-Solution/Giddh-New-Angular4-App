@@ -3521,9 +3521,10 @@
                                                                 class="clearfix mr-t1 bigger-dollar"
                                                                 *ngIf="
                                                                     isSalesInvoice ||
-                                                                    isPurchaseInvoice ||
-                                                                    isCreditNote ||
-                                                                    isDebitNote
+                                                                    (voucherApiVersion === 2 &&
+                                                                        (isPurchaseInvoice ||
+                                                                            isCreditNote ||
+                                                                            isDebitNote))
                                                                 "
                                                             >
                                                                 <strong class="pull-right balance-due-text">
