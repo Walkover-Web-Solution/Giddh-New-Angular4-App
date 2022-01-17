@@ -2,6 +2,7 @@
 @import "~@angular/material/theming";
 @import "../css/giddh-common.scss";
 @import "@angular/material/prebuilt-themes/indigo-pink.css";
+@import "../../assets/css/font.scss";
 $custom-typography: mat-typography-config(
     $font-family: "opensans-regular",
 );
@@ -9397,6 +9398,7 @@ input[type="checkbox"].cdk-visually-hidden::after {
 .activation-key {
     .mat-input-element {
         border: 1px solid $skeleton-loading-gradient !important;
+        font-family: $roboto-regular !important;
     }
 }
 .susbcription-plan-amount {
@@ -9490,8 +9492,11 @@ input[type="checkbox"].cdk-visually-hidden::after {
 .main-content-subscription {
     .main-tabs-content {
         .mat-tab-label.mat-tab-label-active {
-            background-color: $cloud;
-            color: $slate;
+            background-color: $tab-bg-color;
+            color: $slate-color;
+            font-family: $roboto-bold !important;
+            font-weight: 700 !important;
+            font-size: 17px;
         }
 
         .mat-ink-bar {
@@ -9506,6 +9511,7 @@ input[type="checkbox"].cdk-visually-hidden::after {
         max-width: 90% !important;
         white-space: nowrap !important;
         display: block !important;
+        font-family: $roboto-regular !important;
     }
 }
 @media screen and (max-width: 768px) {

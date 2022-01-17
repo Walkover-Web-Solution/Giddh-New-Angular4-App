@@ -1,4 +1,5 @@
 @import "../../../../assets/css/color.scss";
+@import "../../../../assets/css/font.scss";
 .select-plan-block .your-account span {
     color: $wistful;
     font-size: 14px;
@@ -66,6 +67,7 @@
         width: 100%;
         float: left;
         height: 100%;
+        font-family: $roboto-regular !important;
     }
     .grid-title-left-top {
         padding-top: 0.8% !important;
@@ -82,6 +84,7 @@
         background-color: $white;
         padding-top: 0px;
         line-height: 3;
+        font-family: $roboto-regular !important;
     }
     .top-plan-div {
         height: 142px;
@@ -95,23 +98,27 @@
         height: 64px !important;
         .sub-plan-feature {
             text-decoration: underline;
+            font-family: $roboto-regular !important;
         }
     }
     .sub-plan-name {
         float: left;
         width: 100%;
         padding-top: 14px;
+        font-family: $roboto-regular !important;
     }
     .sub-plan-amount {
         float: left !important;
         width: 100%;
         font-weight: 700;
         font-size: 25px;
+        font-family: $roboto-bold !important;
     }
     .sub-plan-duration {
         font-weight: normal;
         text-transform: lowercase;
         font-size: 15px;
+        font-family: $roboto-regular !important;
     }
     .grid-title-list-changes:nth-child(even) {
         background-color: $skeleton-loading-gradient-bg !important;
@@ -155,9 +162,11 @@
         width: 205px;
         font-weight: bold;
         font-size: 13px;
+        font-family: $roboto-regular !important;
     }
     .all-feature-button {
         margin-right: 0 !important;
+        font-family: $roboto-bold !important;
     }
     .grid-list {
         border-bottom: 1px solid $default-border-bottom;
@@ -436,10 +445,16 @@
     }
     .text-gray {
         font-size: 17px;
-        font-weight: 700;
+        color: $slate-color;
+        font-family: $roboto-bold !important;
     }
     .footer-plan {
         padding-top: 11px;
+        .activation-key {
+            p {
+                font-family: $roboto-regular !important;
+            }
+        }
     }
     .redeem-details {
         width: 53%;
@@ -466,6 +481,9 @@
     .activation-btn {
         width: 27%;
         height: 55px;
+        button {
+            font-family: $roboto-bold !important;
+        }
     }
     .redeem-button {
         width: 73%;
@@ -479,7 +497,7 @@
     background: $very-light-gray;
     border-color: $gainsboro;
     color: $night-rider;
-    font-family: "opensans-semibold" !important;
+    font-family: $roboto-regular !important;
     margin-bottom: 15px !important;
     padding-left: 12px !important;
     padding-right: 18px !important;
@@ -600,7 +618,7 @@
     width: 24%;
     .extra-addons-value {
         color: $midnight-blue;
-        font-weight: bold;
+        font-family: $roboto-bold !important;
     }
 }
 .plan-table-layout {
@@ -790,6 +808,7 @@
     }
     .extra-addons-content {
         width: 69% !important;
+        font-family: $roboto-light !important;
     }
     .plan-table {
         height: 412px;

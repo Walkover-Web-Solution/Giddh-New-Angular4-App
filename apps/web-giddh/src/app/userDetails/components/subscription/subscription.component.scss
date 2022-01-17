@@ -1,4 +1,5 @@
 @import "../../../../assets/css/color.scss";
+@import "../../../../assets/css/font.scss";
 .menu-one-button {
     position: absolute;
     z-index: 9;
@@ -7,7 +8,7 @@
     width: 75.9%;
     button {
         float: right;
-        font-weight: bold;
+        font-family: $roboto-bold;
     }
 }
 .menu-two {
@@ -21,7 +22,7 @@
     align-items: center;
     img {
         cursor: pointer;
-        height: 21px;
+        height: 18px;
         width: auto;
     }
     input {
@@ -30,6 +31,7 @@
         height: 30px;
         width: 340px;
         background-color: $dark-fog;
+        font-family: $roboto-regular !important;
     }
     .menu-two-list {
         width: 66.8%;
@@ -58,6 +60,7 @@
     .menu-two-list-items {
         .select-subscription {
             width: 5rem;
+            font-family: $roboto-regular !important;
         }
         mat-select {
             background: $gray-95;
@@ -68,6 +71,7 @@
             font-weight: bold;
             font-size: 14px;
             padding: 5px 0px 0px 5px;
+            font-family: $roboto-regular !important;
         }
         .transaction-select {
             width: 11rem !important;
@@ -75,6 +79,7 @@
         span {
             display: inline-block;
             color: $black-pearl;
+            font-family: $roboto-regular !important;
         }
     }
 }
@@ -93,6 +98,7 @@
         float: right;
         margin-right: 13px;
         cursor: pointer;
+        font-family: $roboto-bold !important;
     }
 }
 .subscription-sidebar {
@@ -115,6 +121,7 @@
             color: $midnight-blue;
             font-size: 13px;
             font-weight: 600;
+            font-family: $roboto-regular !important;
             img {
                 position: relative;
                 bottom: 2px;
@@ -123,7 +130,8 @@
                 margin: 0px 5px;
             }
             span {
-                color: $omiod;
+                color: $slate-color;
+                font-family: $roboto-regular;
             }
         }
         :hover {
@@ -154,18 +162,28 @@
                 .side-bar-list-title {
                     width: 95px;
                     height: inherit;
-                    color: $omiod;
+                    color: $slate-color;
+                    font-family: $roboto-regular !important;
                 }
                 .warning {
                     color: $orange-new;
                     font-weight: 600;
                     font-size: 12.5px;
+                    font-family: $roboto-regular !important;
                 }
                 span {
                     margin-right: 5px;
                 }
+                p {
+                    &:last-child {
+                        color: $black;
+                        font-family: $roboto-regular !important;
+                    }
+                }
                 .date {
                     font-size: 14px;
+                    color: $black;
+                    font-family: $roboto-regular !important;
                 }
             }
         }
@@ -223,7 +241,6 @@
                 .side-bar-list-title-clone {
                     width: 95px;
                     height: inherit;
-                    color: $omiod;
                 }
             }
             .side-bar-list-clone-2 {
@@ -357,14 +374,15 @@
         background-color: $white;
         .left-side {
             p {
-                font-size: 12px;
-                font-weight: 600;
+                font-size: 14px;
                 line-height: 19px;
+                font-weight: 600;
                 color: $black-pearl;
+                font-family: $roboto-regular;
                 span {
                     font-size: 16px;
-                    font-weight: 700;
                     color: $black-pearl;
+                    font-family: $roboto-bold;
                 }
             }
         }
@@ -372,26 +390,30 @@
             display: flex;
             align-items: center;
             p {
-                font-size: 12px;
-                font-weight: bold;
+                font-size: 14px;
                 color: $grey-chateau;
                 line-height: 19px;
+                font-family: $roboto-regular !important;
                 span {
                     color: $red;
+                    font-family: $roboto-bold !important;
                 }
             }
             .right-side-btn {
                 margin: 0px 9px;
                 font-weight: 700;
                 margin-right: 0;
+                font-family: $roboto-regular !important;
             }
         }
     }
     .summary {
         margin-top: 2px;
-        font-size: 12px;
+        font-size: 15px;
         margin-left: 16px;
         font-weight: 600;
+        color: $slate-color;
+        font-family: $roboto-regular !important;
     }
     .balance-info {
         margin: 5px 17px 0px 17px;
@@ -418,6 +440,7 @@
                             color: $black-pearl;
                             font-size: 15px;
                             margin-left: 3px;
+                            font-family: $roboto-bold !important;
                         }
                         img {
                             height: 3px;
@@ -442,6 +465,7 @@
                             top: 2px;
                             color: $slate !important;
                             font-size: 12px;
+                            font-family: $roboto-regular !important;
                         }
                     }
                     img {
@@ -490,6 +514,7 @@
                     display: block;
                     font-size: 0.7rem;
                     text-decoration: underline;
+                    font-family: $roboto-regular !important;
                 }
             }
             position: relative;
@@ -504,6 +529,7 @@
             :hover {
                 a {
                     display: block;
+                    font-family: $roboto-regular !important;
                 }
             }
         }
@@ -520,8 +546,9 @@
             border-bottom: 1px solid;
             color: $midnight-blue;
             border-radius: 0;
-            padding: 0px;
-            height: 25px;
+            height: 28px;
+            font-size: 16px;
+            font-family: $roboto-regular !important;
         }
     }
     .main-content-search-box {
@@ -552,6 +579,7 @@
             p {
                 padding-left: 1rem;
                 color: $black-pearl;
+                font-family: $roboto-regular !important;
                 img {
                     height: 1.2rem;
                     padding-right: 8px;
@@ -573,6 +601,7 @@
         position: relative;
         top: 43px;
         left: 12px;
+        font-family: $roboto-regular !important;
     }
     .mat-tab-labels {
         background-color: $dark-fog;
@@ -680,6 +709,7 @@
                 }
                 .side-bar-head {
                     font-size: 13.5px;
+                    font-family: $roboto-bold !important;
                     img {
                         height: 2px;
                         width: auto;
@@ -880,6 +910,7 @@
                 float: left;
                 width: 100%;
                 text-align: left;
+                font-family: $roboto-regular !important;
             }
         }
         .transaction-box {
