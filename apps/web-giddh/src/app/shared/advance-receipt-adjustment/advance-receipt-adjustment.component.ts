@@ -122,6 +122,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
     public ngOnInit() {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.adjustVoucherForm = new VoucherAdjustments();
+        console.log(this.adjustedVoucherType);
         this.onClear();
         this.store.pipe(select(prof => prof.settings.profile), takeUntil(this.destroyed$)).subscribe(async (profile) => {
             this.companyCurrency = profile.baseCurrency || 'INR';
@@ -970,10 +971,10 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
             |  Home currency strengthens   |                Gain                  |                Loss            |
             |______________________________|______________________________________|________________________________|
         */
-        if (this.adjustedVoucherType === AdjustedVoucherType.Sales || this.adjustedVoucherType === AdjustedVoucherType.CreditNote) {
+        if (this.adjustedVoucherType === AdjustedVoucherType.Sales || this.adjustedVoucherType === AdjustedVoucherType.SalesInvoice || this.adjustedVoucherType === AdjustedVoucherType.CreditNote) {
             // Exchange gain if home currency weakens as this is Export goods case (sales) where the due goes positive
             return this.getConvertedBalanceDue() <= 0;
-        } else if (this.adjustedVoucherType === AdjustedVoucherType.Purchase || this.adjustedVoucherType === AdjustedVoucherType.DebitNote) {
+        } else if (this.adjustedVoucherType === AdjustedVoucherType.Purchase || this.adjustedVoucherType === AdjustedVoucherType.PurchaseInvoice || this.adjustedVoucherType === AdjustedVoucherType.DebitNote) {
             // Exchange gain if home currency weakens as this is Import goods case (purchase) where the due goes negative
             return this.getConvertedBalanceDue() >= 0;
         }
