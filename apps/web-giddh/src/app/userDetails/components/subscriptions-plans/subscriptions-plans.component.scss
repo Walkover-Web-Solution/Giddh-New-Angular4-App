@@ -1,5 +1,5 @@
 .select-plan-block .your-account span {
-    color: var(--color-manatee);
+    color: var(--color-gray);
     font-size: 14px;
     padding: 4px 0;
     display: inline-block;
@@ -76,7 +76,7 @@
         width: 370px;
         left: 0px;
         z-index: 1;
-        border-bottom: 1px solid var(--color-default-border-bottom);
+        border-bottom: 1px solid var(--color-iron);
         position: sticky;
         background-color: var(--color-white);
         padding-top: 0px;
@@ -113,10 +113,10 @@
         font-size: 15px;
     }
     .grid-title-list-changes:nth-child(even) {
-        background-color: var(--color-skeleton-loading-gradient-bg) !important;
+        background-color: var(--color-dark-fog) !important;
         height: 70px;
         color: transparent !important;
-        border: 1px solid var(--color-skeleton-loading-gradient-bg);
+        border: 1px solid var(--color-dark-fog);
         margin-top: 5px;
         margin-left: 5px;
     }
@@ -127,10 +127,10 @@
         margin-top: 5px;
     }
     .grid-title-list-changes:nth-child(odd) {
-        background-color: var(--color-skeleton-loading-gradient-bg) !important;
+        background-color: var(--color-dark-fog) !important;
         height: 70px;
         color: transparent !important;
-        border: 1px solid var(--color-skeleton-loading-gradient-bg);
+        border: 1px solid var(--color-dark-fog);
         margin-top: 5px;
         margin-left: 5px;
     }
@@ -147,10 +147,10 @@
     }
     .grid-title-list:nth-child(even) {
         background-color: var(--color-solitude-light);
-        color: var(--color-black) !important;
+        color: var(--color-nero) !important;
         text-align: center;
         line-height: 26px;
-        border-bottom: 1px solid var(--color-default-border-bottom);
+        border-bottom: 1px solid var(--color-iron);
         width: 205px;
         font-weight: bold;
         font-size: 13px;
@@ -159,14 +159,14 @@
         margin-right: 0 !important;
     }
     .grid-list {
-        border-bottom: 1px solid var(--color-default-border-bottom);
+        border-bottom: 1px solid var(--color-iron);
     }
     .grid-title-list:nth-child(odd) {
         background-color: var(--color-white);
-        color: var(--color-black) !important;
+        color: var(--color-nero) !important;
         text-align: center;
         line-height: 26px;
-        border-bottom: 1px solid var(--color-default-border-bottom);
+        border-bottom: 1px solid var(--color-iron);
         width: 205px;
         font-weight: bold;
         font-size: 13px;
@@ -206,7 +206,7 @@
     position: relative;
     width: 10px;
     height: 10px;
-    background: var(--color-porcelain);
+    background: var(--color-dark-fog);
     content: "";
     display: block;
     position: absolute;
@@ -264,7 +264,7 @@
     z-index: 2;
     background: var(--color-upgrade-plan-secondary-background);
     padding: 30px 15px 15px 30px;
-    box-shadow: 0px 3px 6px var(--color-black-russian);
+    box-shadow: 0px 3px 6px var(--color-iron);
     border: 1px solid var(--color-iron);
     transition: 0.5s all ease;
 }
@@ -326,7 +326,7 @@
 .transactions-popup {
     width: 360px;
     background: var(--color-popup-background);
-    box-shadow: 0px 3px 6px var(--color-black-russian);
+    box-shadow: 0px 3px 6px var(--color-iron);
     padding: 15px;
     z-index: 9;
     position: absolute;
@@ -338,7 +338,7 @@
     visibility: hidden;
     transition: 0.5s all ease-in;
     .close {
-        color: var(--color-shark);
+        color: var(--color-nero);
         opacity: 1;
         font-size: 16px;
         position: absolute;
@@ -418,7 +418,7 @@
     right: 10px;
     top: 10px;
     font-size: 16px;
-    color: var(--color-shark);
+    color: var(--color-nero);
 }
 .btn-green:focus {
     color: var(--color-white);
@@ -478,7 +478,7 @@
 .btn-cancel {
     background: var(--color-iron);
     border-color: var(--color-iron);
-    color: var(--color-shark);
+    color: var(--color-nero);
     font-family: "opensans-semibold" !important;
     margin-bottom: 15px !important;
     padding-left: 12px !important;
@@ -570,7 +570,7 @@
     padding-left: 4px;
 }
 .discount-off {
-    color: var(--color-green);
+    color: var(--color-teal);
     font-weight: bold;
 }
 .features {
@@ -599,7 +599,7 @@
     float: left;
     width: 24%;
     .extra-addons-value {
-        color: var(--color-midnight-blue);
+        color: var(--color-giddh-blue);
         font-weight: bold;
     }
 }

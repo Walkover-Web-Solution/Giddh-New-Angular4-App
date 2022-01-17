@@ -22,17 +22,17 @@
     word-break: break-word;
     height: auto !important;
     &:hover {
-        background: var(--color-porcelain);
+        background: var(--color-dark-fog);
     }
 }
 .item.selected {
     color: var(--color-blue) !important;
-    background: var(--color-porcelain) !important;
+    background: var(--color-dark-fog) !important;
 }
 
 .item.hilighted {
     color: var(--color-blue) !important;
-    background: var(--color-porcelain) !important;
+    background: var(--color-dark-fog) !important;
 }
 .item.hilighted a {
     color: var(--color-blue) !important;

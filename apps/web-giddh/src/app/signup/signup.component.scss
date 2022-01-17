@@ -131,8 +131,8 @@ body.unresponsive {
 }
 
 .btn-blue:hover {
-    background: var(--color-senary-button-background-hover);
-    border-color: var(--color-senary-button-background-hover);
+    background: var(--color-senary-button-background);
+    border-color: var(--color-senary-button-background);
     color: var(--color-senary-button-text);
 }
 /*giddh loader*/
@@ -172,13 +172,13 @@ body.unresponsive {
 }
 
 .btn-login.btn-default {
-    color: var(--color-shark);
+    color: var(--color-nero);
     background-color: var(--color-white);
     border-color: var(--color-iron);
 }
 
 .btn-login.btn-default:hover {
-    color: var(--color-shark) !important;
+    color: var(--color-nero) !important;
     background-color: var(--color-white);
     border-color: var(--color-iron);
     box-shadow: none;
@@ -218,6 +218,7 @@ button.close {
 :host ::ng-deep .form-control {
     height: 41px;
     font-size: 16px;
+    color: var(--color-primary-login-signup-input-box) !important;
 }
 
 :host ::ng-deep .clear {
@@ -264,7 +265,7 @@ h1 {
 }
 
 small {
-    color: var(--color-shark);
+    color: var(--color-nero);
 }
 
 /* social-login */
@@ -523,15 +524,15 @@ small {
     }
 }
 .btn-secondary {
-    background-color: var(--color-primary-button-background);
+    background-color: var(--color-secondary-button-background);
     color: var(--color-senary-button-text);
-    border: 1px solid var(--color-primary-button-background);
+    border: 1px solid var(--color-secondary-button-background);
     border-radius: 5px;
 }
 .btn-secondary:hover {
     color: var(--color-senary-button-text) !important;
-    background-color: var(--color-secondary-button-background-hover);
-    border-color: var(--color-secondary-button-background-hover);
+    background-color: var(--color-secondary-button-background);
+    border-color: var(--color-secondary-button-background);
 }
 .forgotStep {
     display: none;

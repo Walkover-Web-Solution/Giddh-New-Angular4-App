@@ -20,7 +20,7 @@
     padding: 12px;
 
     &:hover {
-        background-color: var(--color-porcelain);
+        background-color: var(--color-dark-fog);
         color: var(--color-blue);
     }
 
@@ -36,7 +36,7 @@
 }
 
 .add-bulk-item-modal .single-product-wrapper h5 {
-    color: var(--color-shark);
+    color: var(--color-nero);
     font-size: 14px;
 }
 
@@ -60,7 +60,7 @@
 }
 
 .add-bulk-item-modal .right-content hr {
-    color: var(--color-shark);
+    color: var(--color-nero);
     border-color: var(--color-iron);
     margin: 10px -15px;
     margin-left: -15px;
@@ -102,7 +102,7 @@
 }
 
 .add-bulk-item-modal .input-group-btn .fa {
-    color: var(--color-manatee);
+    color: var(--color-gray);
 }
 
 .add-bulk-item-modal .single-selected-stock {

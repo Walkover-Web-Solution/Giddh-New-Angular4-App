@@ -97,15 +97,15 @@
 }
 
 .btn-lg:hover {
-    background: var(--color-porcelain);
+    background: var(--color-dark-fog);
     color: var(--color-blue);
-    box-shadow: 0px 4px 4px -3px var(--color-manatee);
+    box-shadow: 0px 4px 4px -3px var(--color-gray);
     border-radius: 0px;
     border-color: var(--color-blue);
 }
 .aside-pane-form {
     background-color: var(--color-white);
-    box-shadow: 0 3px 6px var(--color-black-russian);
+    box-shadow: 0 3px 6px var(--color-iron);
     padding: 15px;
     height: calc(100vh - 90px);
     overflow: auto;

@@ -54,7 +54,7 @@
     min-width: 100%;
     padding: 11px;
     padding-right: 40px;
-    color: var(--color-shark);
+    color: var(--color-nero);
     border: none;
     background-color: var(--color-wild-sand);
     border-radius: 5px;
@@ -74,7 +74,7 @@
 
 .dropdown-menu > li > a:hover {
     color: var(--color-blue);
-    background: var(--color-porcelain);
+    background: var(--color-dark-fog);
 }
 
 .dropdown-menu {
@@ -91,7 +91,7 @@
     left: -114px;
     background-color: var(--color-white);
     width: 131px;
-    box-shadow: 0px 4px 7px var(--color-manatee);
+    box-shadow: 0px 4px 7px var(--color-gray);
     border-radius: 3px;
     z-index: 100;
     border: 1px solid var(--color-iron);
@@ -118,7 +118,7 @@
 }
 
 .click-dropdown ul li a {
-    color: var(--color-shark);
+    color: var(--color-nero);
 }
 
 .invoice-table tr:hover .dropdown-btn {
@@ -153,14 +153,14 @@ ul.select-action-dropdown {
     list-style: none;
 }
 .select-action-dropdown a {
-    color: var(--color-shark);
+    color: var(--color-nero);
     font-size: 14px;
     padding: 5px 10px;
     display: block;
 }
 .select-action-dropdown a:hover {
     color: var(--color-blue) !important;
-    background: var(--color-porcelain) !important;
+    background: var(--color-dark-fog) !important;
 }
 .dropdown-toggle.more-btn-dropdown {
     width: 91px;
@@ -229,7 +229,7 @@ ul.select-action-dropdown {
     display: none;
 }
 button.btn.btn-filter {
-    background: var(--color-porcelain);
+    background: var(--color-dark-fog);
     border: 1px solid var(--color-iron);
     font-size: 14px;
     color: var(--color-giddh-blue);
@@ -242,13 +242,13 @@ button.btn.btn-filter span.icon-cross {
     margin-right: 5px;
 }
 .icon-ellipse.select-action a {
-    color: var(--color-shark);
+    color: var(--color-nero);
 }
 .invoice-table th .d-flex {
     align-items: center;
 }
 a.btn-link-2 {
-    color: var(--color-shark);
+    color: var(--color-nero);
 }
 .input-wrapper {
     display: block !important;
@@ -369,7 +369,7 @@ span.icon-advance-filter {
 @media (max-width: 420px) {
     .small-loading {
         padding-left: 0;
-        color: var(--color-shark);
+        color: var(--color-nero);
         font-size: 12px;
         position: relative;
         top: 2px;

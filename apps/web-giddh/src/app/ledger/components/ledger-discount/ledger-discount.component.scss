@@ -1,13 +1,13 @@
 .or-line::before {
     content: " ";
-    border-bottom: 1px solid var(--color-manatee);
+    border-bottom: 1px solid var(--color-gray);
     display: inline-block;
     width: 57px;
     margin-right: 13px;
 }
 .or-line::after {
     content: "";
-    border-bottom: 1px solid var(--color-manatee);
+    border-bottom: 1px solid var(--color-gray);
     display: inline-block;
     width: 57px;
     margin-left: 13px;
@@ -15,7 +15,7 @@
 .or-line {
     display: flex;
     align-items: center;
-    color: var(--color-manatee);
+    color: var(--color-gray);
     margin-bottom: 10px;
 }
 .my-dropdown-menu {

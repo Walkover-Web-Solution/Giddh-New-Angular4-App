@@ -22,7 +22,7 @@
 }
 
 .ledger-panel table tbody tr td a {
-    color: var(--color-shark);
+    color: var(--color-nero);
 }
 .item-padding {
     padding: 0 4px;
@@ -35,7 +35,7 @@
 
 .amount-total {
     font-size: 12px;
-    color: var(--color-manatee);
+    color: var(--color-gray);
     padding-left: 5px;
 }
 
@@ -109,7 +109,7 @@ span.eligible-ITC {
 }
 .collapse-icons {
     font-size: 10px;
-    border: 1px solid var(--color-shark);
+    border: 1px solid var(--color-nero);
     padding: 2px;
 }
 @media only screen and (max-width: 767px) {

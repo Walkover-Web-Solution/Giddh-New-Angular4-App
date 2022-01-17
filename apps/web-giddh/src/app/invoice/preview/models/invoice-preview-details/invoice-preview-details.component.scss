@@ -61,7 +61,7 @@
 }
 
 .invoice-sidebar .invoice-holder-name p {
-    color: var(--color-shark);
+    color: var(--color-nero);
     font-size: 14px;
     margin-top: 3px;
     white-space: normal;
@@ -194,7 +194,7 @@
 .payment-detail p.payment-content {
     font-size: 14px;
     margin-bottom: 5px;
-    color: var(--color-shark);
+    color: var(--color-nero);
 }
 
 .payment-log {
@@ -361,7 +361,7 @@ span.close-modal.cp.pull-right {
 
 .dropdown-menu > li > a:hover {
     color: var(--color-blue);
-    background: var(--color-porcelain);
+    background: var(--color-dark-fog);
 }
 
 .invoice-search-box input {
@@ -466,7 +466,7 @@ span.close-modal.cp.pull-right {
 
 label.labeled {
     border: 1px solid var(--color-iron);
-    color: var(--color-shark);
+    color: var(--color-nero);
     padding: 5px 10px;
     border-radius: 3px;
     margin: 0 10px 0 0;
@@ -532,7 +532,7 @@ label.labeled {
         box-shadow: 0 0 6px rgba(0, 0, 0, 0.2);
         height: 200px;
         .send-email-modal-header {
-            background-color: var(--color-porcelain);
+            background-color: var(--color-dark-fog);
             padding: 8px 10px;
             border-bottom: 1px solid var(--color-iron);
             span {
@@ -702,7 +702,7 @@ p {
 /* Handle */
 
 #default::-webkit-scrollbar-thumb {
-    background: var(--color-manatee);
+    background: var(--color-gray);
     border-radius: 20px;
 }
 #default body {
@@ -750,7 +750,7 @@ p {
     border: 0;
     padding: 0;
     text-align: left;
-    color: var(--color-shark);
+    color: var(--color-nero);
 }
 
 .hidden-label {
@@ -865,7 +865,7 @@ p {
 .tcs hr {
     margin-top: 50px;
     width: 100%;
-    border-bottom: 1px solid var(--color-cinnabar-orange);
+    border-bottom: 1px solid var(--color-red);
 }
 
 .tcs table {
@@ -955,7 +955,7 @@ p {
 }
 
 #default aside h1 {
-    border-color: var(--color-manatee);
+    border-color: var(--color-gray);
     border-bottom-style: solid;
 }
 

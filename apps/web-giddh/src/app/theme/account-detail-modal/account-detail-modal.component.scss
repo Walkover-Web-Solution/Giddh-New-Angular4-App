@@ -25,7 +25,7 @@
     border-right: 0;
     padding: 11px 10px 10px 10px;
     width: 100%;
-    background: var(--color-porcelain);
+    background: var(--color-dark-fog);
     white-space: initial;
 }
 
@@ -56,7 +56,7 @@ ul.list-unstyled li {
 }
 
 ul.list-unstyled li a {
-    color: var(--color-shark);
+    color: var(--color-nero);
 }
 
 .p-modal-tooltip {
@@ -67,7 +67,7 @@ ul.list-unstyled li a {
     width: 257px;
     border: 1px solid var(--color-iron);
     border-radius: 4px;
-    box-shadow: 0 7px 24px var(--color-black-russian);
+    box-shadow: 0 7px 24px var(--color-iron);
 }
 
 .model-position {

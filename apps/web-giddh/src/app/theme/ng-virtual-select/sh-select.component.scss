@@ -58,12 +58,12 @@ i.close.icon.clear:hover::after {
     font-weight: 500;
     line-height: 100%;
     opacity: 0.5;
-    color: var(--color-shark);
+    color: var(--color-nero);
     transform: translateY(-50%);
 }
 
 .sh-select-disabled {
-    background-color: var(--color-porcelain);
+    background-color: var(--color-dark-fog);
     color: var(--color-primary-sh-select-disabled);
     cursor: not-allowed;
     border-radius: 5px;
@@ -92,7 +92,7 @@ i.close.icon.clear:hover::after {
 .chip-close-btn:hover {
     font-weight: 700;
     opacity: 0.5;
-    color: var(--color-shark);
+    color: var(--color-nero);
 }
 
 .header .form-control[readonly] {
@@ -133,14 +133,14 @@ i.close.icon.clear:hover::after {
     border: 0;
 }
 .header .bdr > input[type="text"]::-webkit-input-placeholder {
-    color: var(--color-manatee) !important;
+    color: var(--color-gray) !important;
 }
 .header .bdr > input[type="text"]::-moz-placeholder {
-    color: var(--color-manatee) !important;
+    color: var(--color-gray) !important;
 }
 .header .bdr > input[type="text"]:-ms-input-placeholder {
-    color: var(--color-manatee) !important;
+    color: var(--color-gray) !important;
 }
 .header .bdr > input[type="text"]:-moz-placeholder {
-    color: var(--color-manatee) !important;
+    color: var(--color-gray) !important;
 }

@@ -9,7 +9,7 @@
 }
 
 .filter-list .inner-filter-list .mat-list-item:hover {
-    background: var(--color-porcelain);
+    background: var(--color-dark-fog);
     transition: 0.5s all ease;
 }
 
@@ -23,7 +23,7 @@
 }
 
 .filter-list .inner-filter-list .mat-list-item .right-item i {
-    color: var(--color-manatee);
+    color: var(--color-gray);
     margin-left: 5px;
 }
 
@@ -32,5 +32,5 @@
 }
 
 .filter-list .activeItem {
-    background-color: var(--color-porcelain);
+    background-color: var(--color-dark-fog);
 }

@@ -57,6 +57,7 @@
     width: 73px;
     position: relative;
     right: 1px;
+    border-color: var(--color-solitude-light);
 }
 
 .search-field {
@@ -66,8 +67,8 @@
 
 .search-field input {
     width: 235px;
-    background-color: var(--color-porcelain) !important;
-    border-color: var(--color-porcelain) !important;
+    background-color: var(--color-dark-fog) !important;
+    border-color: var(--color-dark-fog) !important;
 }
 
 .search-field input:focus {
@@ -120,7 +121,7 @@ tr.aging-table-top td {
         min-width: 100%;
         padding: 11px;
         padding-right: 40px;
-        color: var(--color-shark);
+        color: var(--color-nero);
         border: none;
         background-color: var(--color-input-tertiary-background) !important;
         border-radius: 5px;
@@ -165,7 +166,7 @@ th.mat-header-cell:first-of-type {
     .mat-customer-name {
         .icon-pointer {
             .font-xxs {
-                color: $deep-sky-blue !important;
+                color: var(--color-blue) !important;
             }
         }
     }
@@ -408,7 +409,7 @@ th.mat-header-cell:first-of-type {
     justify-content: center;
     align-items: center;
     height: 36px !important;
-    // border-right: 1px solid $gainsboro !important;
+    // border-right: 1px solid var(--color-iron) !important;
     cursor: pointer;
 }
 

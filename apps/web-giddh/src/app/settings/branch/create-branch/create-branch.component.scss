@@ -6,7 +6,7 @@
                 font-size: 14px;
             }
             p {
-                color: var(--color-shark);
+                color: var(--color-nero);
             }
             .branch-company-name {
                 .label-wrapper {
@@ -43,7 +43,7 @@
             font-size: 14px;
             display: flex;
             align-items: center;
-            color: var(--color-shark);
+            color: var(--color-nero);
             margin-bottom: 15px;
             label {
                 min-width: 200px;
@@ -90,7 +90,7 @@
                         padding: 5px;
                         cursor: pointer;
                         &.icon-plus {
-                            color: var(--color-light-sea-green);
+                            color: var(--color-teal);
                         }
                     }
                 }
@@ -99,7 +99,7 @@
     }
 }
 .footer-btn {
-    background-color: var(--color-porcelain);
+    background-color: var(--color-dark-fog);
     padding: 15px;
 }
 .address-dropdown sales-sh-select::ng-deep .menu {

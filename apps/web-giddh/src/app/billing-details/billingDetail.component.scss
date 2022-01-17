@@ -8,9 +8,9 @@
         width: 100%;
         .back-button {
             margin-top: 4%;
-            background-color: var(--color-very-light-gray) !important;
-            border-color: var(--color-gainsboro);
-            color: var(--color-night-rider);
+            background-color: var(--color-iron) !important;
+            border-color: var(--color-iron);
+            color: var(--color-nero);
             font-family: "opensans-semibold" !important;
             margin-bottom: 15px !important;
             padding-left: 12px !important;
@@ -66,7 +66,7 @@
             color: var(--color-gray);
         }
         .billing-wrapper {
-            border-right: 1px solid var(--color-gainsboro);
+            border-right: 1px solid var(--color-iron);
             height: 100%;
             .form-label {
                 height: 16px;
@@ -79,7 +79,7 @@
                 float: left;
                 width: 100%;
                 height: 37px;
-                border: 1px solid var(--color-skeleton-loading-gradient-bg);
+                border: 1px solid var(--color-dark-fog);
                 color: black !important;
             }
         }
@@ -87,7 +87,7 @@
             float: left;
             width: 100%;
             label {
-                color: var(--color-dark-gray-new);
+                color: var(--color-gray);
                 float: left;
                 width: 100%;
             }
@@ -95,7 +95,7 @@
 
         .form-control {
             background: var(--color-white) !important;
-            border: 1px solid var(--color-gainsboro) !important;
+            border: 1px solid var(--color-iron) !important;
             border-radius: 2px !important;
             padding: 6px !important;
         }
@@ -113,7 +113,7 @@
             color: var(--color-gray) !important;
         }
         .billing-details form label {
-            color: var(--color-dark-gray-new);
+            color: var(--color-gray);
             font-size: 15px;
             font-weight: 400;
         }
@@ -185,7 +185,7 @@
                 padding-left: 4px;
             }
             .discount-off {
-                color: var(--color-green);
+                color: var(--color-teal);
                 font-weight: bold;
             }
             .features {
@@ -236,7 +236,7 @@
                 font-weight: bolder;
                 height: 38px;
                 font-size: 17px;
-                background-color: var(--color-midnight-blue);
+                background-color: var(--color-giddh-blue);
                 color: var(--color-white);
             }
         }

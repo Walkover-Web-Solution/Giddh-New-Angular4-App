@@ -13,7 +13,7 @@
     margin-right: 0px !important;
 }
 .dropdown-menu > li > a:hover {
-    background: var(--color-porcelain);
+    background: var(--color-dark-fog);
     cursor: pointer;
 }
 .dropdown-menu > li > a {
@@ -28,13 +28,13 @@ span.caret {
     width: 260px;
 }
 .stock-grp-list > li:hover {
-    background: var(--color-porcelain);
+    background: var(--color-dark-fog);
 }
 .stock-grp-list > li.active {
-    background: var(--color-porcelain);
+    background: var(--color-dark-fog);
 }
 .stock-grp-list > li > a:hover {
-    color: var(--color-shark);
+    color: var(--color-nero);
 }
 :host ::ng-deep .nav-tabs > li {
     width: 50%;
@@ -53,7 +53,7 @@ span.caret {
     color: var(--color-blue);
 }
 .no-data-box {
-    border-top: 1px solid var(--color-porcelain) !important;
+    border-top: 1px solid var(--color-dark-fog) !important;
 }
 
 .text-light-2 {

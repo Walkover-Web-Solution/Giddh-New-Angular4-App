@@ -39,17 +39,17 @@ select-dropdown {
     .selected {
         background-color: var(--color-dropdown-list-hover-background) !important;
         &.highlighted {
-            background-color: var(--color-porcelain) !important;
+            background-color: var(--color-dark-fog) !important;
             color: var(--color-blue) !important;
         }
     }
     .highlighted {
-        background-color: var(--color-porcelain) !important;
+        background-color: var(--color-dark-fog) !important;
         color: var(--color-blue) !important;
     }
     .disabled {
         background-color: var(--color-white);
-        color: var(--color-manatee);
+        color: var(--color-gray);
         cursor: default;
         pointer-events: none;
     }

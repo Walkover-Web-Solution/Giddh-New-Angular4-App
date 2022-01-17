@@ -59,7 +59,7 @@
                     position: absolute;
                     right: 5px;
                     top: 12px;
-                    color: var(--color-shark);
+                    color: var(--color-nero);
                 }
             }
             .to-cr-field {
@@ -68,12 +68,12 @@
             }
             .delete-row {
                 display: flex;
-                color: var(--color-shark);
+                color: var(--color-nero);
                 min-width: 18px;
                 max-width: 18px;
                 i.icon-cross {
                     font-size: 14px;
-                    color: var(--color-shark);
+                    color: var(--color-nero);
                     line-height: 2;
                 }
             }

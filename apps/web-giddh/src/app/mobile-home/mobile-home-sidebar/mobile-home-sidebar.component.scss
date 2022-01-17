@@ -2,7 +2,7 @@
     max-width: 280px;
     width: 100%;
     background-color: var(--color-white);
-    color: var(--color-shark);
+    color: var(--color-nero);
     height: 100vh;
     letter-spacing: 0;
     .sidebar-header {
@@ -51,12 +51,12 @@
             li {
                 a {
                     padding: 10px 15px;
-                    color: var(--color-shark);
+                    color: var(--color-nero);
                     font-family: "opensans-semibold";
                     display: flex;
                     font-size: 14px;
                     &:hover {
-                        background-color: var(--color-porcelain);
+                        background-color: var(--color-dark-fog);
                     }
                 }
             }

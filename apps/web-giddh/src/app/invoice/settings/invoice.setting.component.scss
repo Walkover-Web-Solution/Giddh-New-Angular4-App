@@ -40,7 +40,7 @@
 }
 
 h4 > span {
-    color: var(--color-manatee) !important;
+    color: var(--color-gray) !important;
     font-size: 12px !important;
 }
 
@@ -143,7 +143,7 @@ span.viasocket {
 }
 
 span.viasocket a {
-    color: var(--color-manatee);
+    color: var(--color-gray);
 }
 
 .invoice-lock-date {
@@ -182,10 +182,10 @@ span.viasocket a {
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--color-manatee);
+    color: var(--color-gray);
 }
 .verified-text {
-    color: var(--color-light-sea-green);
+    color: var(--color-teal);
     padding: 6px 10px;
     margin-right: 10px;
     margin-left: 0;

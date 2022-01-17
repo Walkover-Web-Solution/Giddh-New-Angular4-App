@@ -1,13 +1,13 @@
 .invoice-footer {
     h3 {
         font-size: 16px;
-        color: var(--color-manatee);
+        color: var(--color-gray);
         display: inline-block;
         margin-right: 10px;
     }
     h1 {
         font-size: 28px;
-        color: var(--color-shark);
+        color: var(--color-nero);
         display: inline-block;
     }
 }
@@ -36,12 +36,12 @@
     justify-content: center;
     align-items: center;
     border-right: 1px solid var(--color-iron);
-    color: var(--color-manatee);
+    color: var(--color-gray);
     left: 0;
     font-size: 18px;
 }
 .btn-filter {
-    background: var(--color-porcelain);
+    background: var(--color-dark-fog);
     border: 1px solid var(--color-iron);
     font-size: 16px;
     color: var(--color-giddh-blue);

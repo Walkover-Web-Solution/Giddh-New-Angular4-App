@@ -53,7 +53,7 @@
 
 .icon-pointer.icon-class-search {
     top: 30%;
-    color: var(--color-manatee);
+    color: var(--color-gray);
 }
 
 .icon-pointer .d-block.font-xxs.glyphicon.glyphicon-triangle-top {
@@ -91,10 +91,14 @@
 .account-detail-custom-header {
     border-right: 0;
     padding: 11px 10px 10px 10px;
-    color: var(--color-dropdown-list-icon);
-    background: var(--color-dropdown-terniary-background);
+    color: var(--color-dropdown-list);
+    background: var(--color-dropdown-secondary-background);
     width: 260px;
     margin-top: -8px;
+}
+
+button.mat-menu-item {
+    color: var(--color-dropdown-list);
 }
 
 .account-detail-custom-title {
@@ -126,7 +130,7 @@ ul.list-unstyled li a {
     width: 257px;
     border: 1px solid var(--color-primary-contact-p-modal-tooltip-border);
     border-radius: 4px;
-    box-shadow: 0 7px 24px var(--color-black-russian);
+    box-shadow: 0 7px 24px var(--color-iron);
     top: -2px;
 }
 
@@ -279,16 +283,16 @@ tr.aging-table-top td {
 }
 
 .more-button li:hover {
-    background-color: var(--color-porcelain);
+    background-color: var(--color-dark-fog);
     color: var(--color-giddh-blue);
 }
 
 .btn-primary.active,
 .btn-primary:active,
 .open > .dropdown-toggle.btn-primary {
-    color: var(--color-shark);
-    background-color: var(--color-porcelain);
-    border-color: var(--color-porcelain);
+    color: var(--color-nero);
+    background-color: var(--color-dark-fog);
+    border-color: var(--color-dark-fog);
     box-shadow: none !important;
 }
 
@@ -322,8 +326,8 @@ i.icon-options:hover {
 
 .search-field input {
     width: 235px;
-    background-color: var(--color-porcelain) !important;
-    border-color: var(--color-porcelain) !important;
+    background-color: var(--color-dark-fog) !important;
+    border-color: var(--color-dark-fog) !important;
 }
 
 .search-field input:focus {
@@ -394,8 +398,8 @@ span.input-addon {
 }
 
 button.btn.btn-filter {
-    background: var(--color-porcelain);
-    border: 1px solid var(--color-porcelain);
+    background: var(--color-dark-fog);
+    border: 1px solid var(--color-dark-fog);
     font-size: 14px;
     color: var(--color-giddh-blue);
     display: inline-flex;
@@ -450,7 +454,7 @@ button.btn.btn-filter span.icon-cross {
         min-width: 100%;
         padding: 11px;
         padding-right: 40px;
-        color: var(--color-shark);
+        color: var(--color-nero);
         border: none;
         background-color: var(--color-input-tertiary-background) !important;
     }
@@ -526,7 +530,7 @@ button.btn.btn-filter span.icon-cross {
         }
     }
     .mat-header-row {
-        border-bottom: 1.5px solid $link-water;
+        border-bottom: 1.5px solid var(--color-iron);
     }
     .icon-search:before {
         position: relative;
@@ -867,13 +871,14 @@ button.btn.btn-filter span.icon-cross {
 }
 
 ::ng-deep.search-table {
-    background-color: $white-smoke !important;
     position: relative;
     right: 8px;
+    border-color: var(--color-sidebar-primary-search-bar-background);
+    background-color: var(--color-sidebar-primary-search-bar-background) !important;
 }
 
 :hover.menu-table-item {
-    color: $chetwode-blue;
+    color: var(--color-blue);
 }
 
 ::ng-deep.mail-model-container {

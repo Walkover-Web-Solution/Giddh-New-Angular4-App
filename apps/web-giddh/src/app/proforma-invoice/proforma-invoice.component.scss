@@ -138,7 +138,7 @@ $greyClr: #6d6d6d;
     }
     /* Transition */
     &:hover::after {
-        color: var(--color-manatee);
+        color: var(--color-gray);
     }
     &::after {
         -webkit-transition: 0.25s all ease;
@@ -378,7 +378,7 @@ ng-select.splSales {
     padding: 5px;
     padding-bottom: 10px;
     &.disabled {
-        background: var(--color-porcelain);
+        background: var(--color-dark-fog);
     }
     textarea {
         border: none;
@@ -492,7 +492,7 @@ textarea:focus {
 }
 
 .disabled {
-    background: var(--color-porcelain);
+    background: var(--color-dark-fog);
     pointer-events: none;
     opacity: 0.7;
 }
@@ -585,7 +585,7 @@ textarea:focus {
 }
 
 .modal-invoice-footer .btn {
-    background: var(--color-manatee);
+    background: var(--color-gray);
     font-size: 12px;
     border-radius: 90px;
     padding: 1px 6px;
@@ -619,7 +619,7 @@ textarea:focus {
 }
 
 .other-options {
-    color: var(--color-manatee);
+    color: var(--color-gray);
     padding-top: 5px;
 }
 
@@ -722,7 +722,7 @@ input.form-control.selected-val.cp.bottom-border-only.ng-star-inserted {
 
 .sales-invoice-table table input[disabled] {
     cursor: default;
-    background-color: var(--color-porcelain);
+    background-color: var(--color-dark-fog);
     border: 1px solid var(--color-iron);
     padding: 5px;
     width: 100%;
@@ -893,7 +893,7 @@ span.edit-icon {
 
 .hsn-code-dropdown input::placeholder,
 .hsn-code-dropdown input::-webkit-input-placeholder {
-    color: var(--color-manatee);
+    color: var(--color-gray);
 }
 
 .hsn-code-dropdown a {
@@ -928,7 +928,7 @@ span.edit-icon {
 
 .select-account-label {
     font-size: 14px;
-    color: var(--color-manatee);
+    color: var(--color-gray);
     padding-bottom: 3px;
 }
 
@@ -1030,7 +1030,7 @@ section.static-invoice-table {
 
 // new table css
 section.new-table {
-    background-color: var(--color-porcelain);
+    background-color: var(--color-dark-fog);
     margin-bottom: 30px;
     margin: 0 15px 30px;
 }
@@ -1066,7 +1066,7 @@ section.new-table {
 
 .tax-in-currency {
     margin-bottom: 7px;
-    color: var(--color-manatee) !important;
+    color: var(--color-gray) !important;
     white-space: initial;
 }
 
@@ -1075,7 +1075,7 @@ section.new-table {
 }
 
 .add-bulk-button {
-    color: var(--color-manatee);
+    color: var(--color-gray);
 }
 
 .textarea-height {
@@ -1216,7 +1216,7 @@ section.new-table {
 }
 
 .add-bulk-item-modal .single-product-wrapper h5 {
-    color: var(--color-shark);
+    color: var(--color-nero);
     font-size: 14px;
 }
 
@@ -1240,7 +1240,7 @@ section.new-table {
 }
 
 .add-bulk-item-modal .right-content hr {
-    color: var(--color-shark);
+    color: var(--color-nero);
     border-color: var(--color-iron);
     margin: 10px -15px;
     margin-left: -15px;
@@ -1281,7 +1281,7 @@ section.new-table {
 }
 
 .add-bulk-item-modal .input-group-btn .fa {
-    color: var(--color-manatee);
+    color: var(--color-gray);
 }
 
 .add-bulk-item-modal .single-selected-stock {
@@ -1410,7 +1410,7 @@ table.table.table-custom-invoice.basic,
 }
 
 .differ-currency {
-    color: var(--color-manatee);
+    color: var(--color-gray);
     font-size: 14px;
     text-align: right;
     bottom: 3px;
@@ -1432,7 +1432,7 @@ table.table.table-custom-invoice.basic,
 
 .switch-currency {
     font-size: 14px;
-    color: var(--color-shark);
+    color: var(--color-nero);
     max-width: 1000px;
     text-align: right;
     margin-bottom: 10px;
@@ -1485,7 +1485,7 @@ label.sales-country-label {
 
 .tax-in-currency span.icon-rupees {
     font-size: 11px;
-    color: var(--color-manatee);
+    color: var(--color-gray);
 }
 
 .thead-sales-invoice {
@@ -1802,7 +1802,7 @@ span.eligible-ITC {
     }
     .other-taxes-input {
         width: 99px;
-        background-color: var(--color-porcelain);
+        background-color: var(--color-dark-fog);
         border: 1px solid var(--color-iron);
         padding: 3px;
         font-size: 13px;

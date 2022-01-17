@@ -16,6 +16,8 @@ body.dark-theme {
     --color-common-secondary-background-for-all-components: #f5f5f5;
     --color-common-tertiary-background-for-all-components: #f5f5f5;
     --color-common-quaternary-background-for-all-components: #668cff26;
+    --color-common-quinary-background-for-all-components: #212528;
+    --color-common-senary-background-for-all-components: #668cff26;
 
     // Signup Login Page Color Components
     --color-primary-login-page-background: #212528;
@@ -40,6 +42,7 @@ body.dark-theme {
     --color-primary-login-signup-linkedin-background: #668cff;
     --color-primary-login-signup-login-box-h1: #f5f5f5;
     --color-primary-login-signup-slide-content-btn-white-hover: #f5f5f5;
+    --color-primary-login-signup-input-box: #212528;
 
     // Filter Color Variables
     --color-filter-text-hover: #cbcfd2;
@@ -78,6 +81,7 @@ body.dark-theme {
     --color-tertiary-button-text: #f5f5f5;
     --color-tertiary-button-background: transparent;
     --color-tertiary-button-background-hover: #e7e9eb30;
+    --color-quaternary-button-text: #f5f5f5;
     --color-quaternary-button-background: #36b283;
     --color-quinary-button-background: #212528;
     --color-senary-button-text: #f5f5f5;
@@ -88,6 +92,7 @@ body.dark-theme {
     --color-nonary-button-text: #f5f5f5;
     --color-nonary-button-background: #36b283;
     --color-nonary-button-background-hover: #36b28326;
+    --color-denary-button-text: #f5f5f5;
     --color-denary-button-background: #212528;
     --color-primary-filter-button-text: #f5f5f5;
     --color-primary-cancel-button-background-hover: #668cff26;
@@ -108,6 +113,12 @@ body.dark-theme {
     --color-dropdown-secondary-list-hover-background: #668cff26;
     --color-dropdown-list-box-shadow: #212528;
     --color-dropdown-primary-bar-border: #668cff;
+
+    // Checkbox, Radio Button, Mat-Expansion Panel Down Arrow and Icon Color Variables
+    --color-primary-checkbox-and-expansion-panel-arrow: #f5f5f5;
+
+    // Expansion Panel Color Variables
+    --color-primary-expansion-panel-background: #212528;
 
     // Search Bar Color Variables
     --color-sidebar-search-bar-text: #cbcfd2;
@@ -132,7 +143,7 @@ body.dark-theme {
     --color-datepicker-date: #f5f5f5;
     --color-datepicker-secondary-date: #212528;
     --color-datepicker-ternary-date: #f5f5f5;
-    --color-datepicker-date-icon: #212528;
+    --color-datepicker-date-icon: #f5f5f5;
     --color-datepicker-rightside-list-text: #f5f5f5;
     --color-datepicker-rightside-list-primary-text-hover: #212528;
     --color-datepicker-rightside-list-secondary-text-hover: #212528;
@@ -260,7 +271,7 @@ body.dark-theme {
     --color-primary-setting-integration-action-anchor: #cbcfd2;
 
     // Company Import Export Color Variables
-    --color-primary-company-import-export-card-background: #f5f5f5;
+    --color-primary-company-import-export-card-background: #668cff26;
 
     // Expense Details Color Variables
     --color-primary-expense-details-span-close-modal-cp-pull-right-background: #9b9b9e;
@@ -283,7 +294,7 @@ body.dark-theme {
     --color-primary-company-branch-company-branch-dropdown-total-company-count: #9b9b9e;
     --color-primary-company-branch-digit-orange: #e58a00;
     --color-primary-company-branch-company-list-btn-group-active-hover: #e58a0026;
-    --color-primary-company-branch-branch-list-active-hover: #e58a0026;
+    --color-primary-company-branch-branch-list-active-hover: #668cff26;
     --color-primary-company-branch-company-list-btn-group-open-background: #668cff26;
     --color-primary-company-branch-company-list-btn-group-open-span-active: #668cff26;
     --color-primary-company-branch-wrap-company-refresh-small-background: #668cff26;
@@ -300,6 +311,7 @@ body.dark-theme {
 
     // Popup Color Variables
     --color-popup-list-head-text: #f5f5f5;
+    --color-popup-body-text: #f5f5f5;
     --color-popup-list-input-text: #cbcfd2;
     --color-popup-list-hover: #668cff26;
     --color-popup-background: #212528;
@@ -472,6 +484,7 @@ body.dark-theme {
     --color-table-row-hover-secondary-background: #668cff26;
     --color-table-heading-primary-background: #212528;
     --color-table-body-primary-background: #212528;
+    --color-table-body-secondary-background: #212528;
     --color-table-datepicker-content: #212528;
     --color-table-datepicker-header-background: #36b283;
     --color-table-datepicker-body-background: #f5f5f5;
@@ -481,6 +494,7 @@ body.dark-theme {
     --color-table-primary-content-bar-border: #668cff26;
     --color-table-primary-giddh-table-thead-register-table-th-th-background: #e58a0026;
     --color-table-icon-sort-asc: #9b9b9e;
+    --color-table-primary-footer: #668cff26;
 
     // Total Details Box above table Color Variables
     --color-total-details-heading: #9b9b9e;
@@ -577,46 +591,28 @@ body.dark-theme {
     // Common Chat Button Color Variable
     --color-common-chat-button-background: #f5f5f5;
 
+    // Common Image Filter Variable
+    --color-image-filter: invert(1);
+
     /************************ COMMON COLORS USED MORE THAN 12 TIMES ************************/
     --color-blue: #668cff;
     --color-giddh-blue: #668cff;
     --color-wild-sand: #f5f5f5;
-    --color-white: #212528;
-    --color-porcelain: #668cff26;
-    --color-iron: #9b9b9e;
-    --color-manatee: #cbcfd2;
-    --color-abbey: #9b9b9e;
-    --color-shark: #f5f5f5;
-    --color-light-sea-green: #36b283;
-    --color-black-russian: #212528;
-    --color-cinnabar-orange: #e54556;
-    --color-orange: #e58a00;
-
-    --color-green: #36b283;
-    --color-very-light-gray: #9b9b9e;
-    --color-midnight-blue: #668cff;
-    --color-gainsboro: #9b9b9e;
-    --color-gray: #cbcfd2;
-    --color-red: #e54556;
-    --color-night-rider: #f5f5f5;
-    --color-black: #f5f5f5;
-    --color-black-pearl: #f5f5f5;
-    --color-russian-black: #f5f5f5;
-    --color-solitude-light: #668cff26;
-    --color-grey-chateau: #cbcfd2;
-    --color-cornflower: #668cff;
-    --color-omiod: #9b9b9e;
-    --color-fog-green: #36b28326;
-    --color-dark-fog: #668cff26;
-    --color-orange-new: #e58a00;
-    --color-default-border-bottom: #9b9b9e;
-    --color-cloud: #9b9b9e;
-    --color-skeleton-loading-gradient: #9b9b9e;
-    --color-dark-gray-new: #cbcfd2;
-    --color-slate: #9b9b9e;
-    --color-skeleton-loading-gradient-bg: #668cff26;
-    --color-skeleton-loading-linear: #9b9b9e;
     --color-skeleton-loading-gradient-inner: #212528;
-    --color-lighted-gray: #9b9b9e;
-    --color-cream-orange: #e58a0026;
+    --color-white: #212528;
+    --color-dark-fog: #668cff26;
+    --color-lavender: #e7e9eb;
+    --color-iron: #9b9b9e;
+    --color-black-russian: #212528;
+    --color-gray: #cbcfd2;
+    --color-abbey: #9b9b9e;
+    --color-nero: #f5f5f5;
+    --color-teal: #36b283;
+    --color-foam: #36b28326;
+    --color-chardon: #e58a0026;
+    --color-red: #e54556;
+    --color-orange: #e58a00;
+    --color-solitude-light: #668cff26;
+    --color-dark-gray: #9b9b9e;
+    --color-tutu: #e5455626;
 }

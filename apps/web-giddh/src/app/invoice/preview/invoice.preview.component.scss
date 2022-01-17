@@ -62,7 +62,7 @@
     min-width: 100%;
     padding: 11px;
     padding-right: 40px;
-    color: var(--color-shark);
+    color: var(--color-nero);
     border: none;
     background-color: var(--color-wild-sand);
     border-radius: 5px;
@@ -85,7 +85,7 @@
 
 .dropdown-menu > li > a:hover {
     color: var(--color-blue) !important;
-    background: var(--color-porcelain) !important;
+    background: var(--color-dark-fog) !important;
 }
 
 .dropdown-menu {
@@ -110,7 +110,7 @@
     left: -114px;
     background-color: var(--color-white);
     width: 131px;
-    box-shadow: 0px 4px 7px var(--color-manatee);
+    box-shadow: 0px 4px 7px var(--color-gray);
     border-radius: 3px;
     z-index: 100;
     border: 1px solid var(--color-iron);
@@ -136,7 +136,7 @@
 }
 
 .click-dropdown ul li a {
-    color: var(--color-shark);
+    color: var(--color-nero);
 }
 
 .invoice-table tr:hover .dropdown-btn {
@@ -155,9 +155,9 @@
 
 .btn.btn-sky-blue:focus,
 .btn.btn-sky-blue:hover {
-    color: var(--color-white);
     text-decoration: none;
     outline: none !important;
+    color: var(--color-secondary-button-text);
 }
 
 .input-grp-date-range-picker {
@@ -192,7 +192,7 @@
 }
 
 td.card-header.clearfix {
-    background-color: var(--color-porcelain);
+    background-color: var(--color-dark-fog);
     padding: 10px !important;
 }
 
@@ -393,8 +393,8 @@ button.btn.btn-default.ladda-button {
 }
 .clear-filter {
     button.btn.btn-filter {
-        background: var(--color-porcelain);
-        border: 1px solid var(--color-porcelain);
+        background: var(--color-dark-fog);
+        border: 1px solid var(--color-dark-fog);
         font-size: 14px;
         color: var(--color-giddh-blue);
         display: inline-flex;
@@ -785,7 +785,7 @@ span.icon-export-icon {
 @media (max-width: 420px) {
     .small-loading {
         padding-left: 0;
-        color: var(--color-shark);
+        color: var(--color-nero);
         font-size: 12px;
         position: relative;
         top: 2px;

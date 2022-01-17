@@ -129,8 +129,8 @@ body.unresponsive {
 
 .giddh-spinner {
     animation: rotate 1.5s infinite linear;
-    background: var(--color-shark) none repeat scroll 0 0;
-    border: 7px solid var(--color-cinnabar-orange);
+    background: var(--color-nero) none repeat scroll 0 0;
+    border: 7px solid var(--color-red);
     border-radius: 50%;
     box-shadow: 0 -10px 0 14px var(--color-white) inset;
     box-sizing: border-box;
@@ -154,13 +154,13 @@ body.unresponsive {
 }
 
 .btn-login.btn-default {
-    color: var(--color-shark);
+    color: var(--color-nero);
     background-color: var(--color-white);
     border-color: var(--color-iron);
 }
 
 .btn-login.btn-default:hover {
-    color: var(--color-shark) !important;
+    color: var(--color-nero) !important;
     background-color: var(--color-white);
     border-color: var(--color-iron);
     box-shadow: none;
@@ -183,7 +183,7 @@ button.close {
     font-size: 21px;
     font-weight: 700;
     line-height: 1;
-    color: var(--color-cinnabar-orange);
+    color: var(--color-red);
     text-shadow: none;
     opacity: 1;
 }
@@ -200,6 +200,7 @@ button.close {
 :host ::ng-deep .form-control {
     height: 41px;
     font-size: 16px;
+    color: var(--color-primary-login-signup-input-box) !important;
 }
 
 :host ::ng-deep .clear {
@@ -215,7 +216,7 @@ button.close {
 }
 
 .btn-blue:hover {
-    background: var(--color-senary-button-background-hover);
+    background: var(--color-senary-button-background);
     border-color: var(--color-senary-button-background-hover);
     color: var(--color-senary-button-text);
 }
@@ -262,7 +263,7 @@ h1 {
 }
 
 small {
-    color: var(--color-shark);
+    color: var(--color-nero);
 }
 
 .form-wrapper form {
@@ -506,13 +507,13 @@ small {
 .btn-secondary {
     border-radius: 5px;
     color: var(--color-secondary-button-text);
-    border: 1px solid var(--color-primary-button-background);
-    background-color: var(--color-primary-button-background);
+    border: 1px solid var(--color-secondary-button-background);
+    background-color: var(--color-secondary-button-background);
 }
 .btn-secondary:hover {
     color: var(--color-secondary-button-text) !important;
-    border-color: var(--color-secondary-button-background-hover);
-    background-color: var(--color-secondary-button-background-hover);
+    border-color: var(--color-secondary-button-background);
+    background-color: var(--color-secondary-button-background);
 }
 
 .loader-main {

@@ -67,7 +67,7 @@ form label {
 }
 .aside-pane-form {
     background-color: var(--color-white);
-    box-shadow: 0px 3px 6px var(--color-black-russian);
+    box-shadow: 0px 3px 6px var(--color-iron);
     padding: 15px 15px;
     height: calc(100vh - 90px);
     overflow: auto;
@@ -77,7 +77,7 @@ form label {
 }
 /*new css of new payemtndesign*/
 .modal-title {
-    color: var(--color-white);
+    color: var(--color-popup-list-head-text);
 }
 
 .payment-top-form .d-flex {
@@ -101,7 +101,7 @@ form label {
         }
     }
     .otp-success-msg {
-        color: var(--color-light-sea-green);
+        color: var(--color-teal);
         font-size: 14px;
     }
 }
@@ -135,7 +135,7 @@ form label {
             width: 100%;
             max-width: 450px;
             font-size: 14px;
-            background-color: var(--color-porcelain);
+            background-color: var(--color-dark-fog);
             padding: 10px;
             border-right: 1px solid var(--color-iron);
             .label-value-data {

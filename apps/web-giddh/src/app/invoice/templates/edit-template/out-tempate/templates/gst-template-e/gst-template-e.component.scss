@@ -26,7 +26,7 @@ body {
 }
 /* NOTE:  comment padding, max-width, border in #royal css for java */
 .seperator {
-    border-top: 1px solid var(--color-manatee);
+    border-top: 1px solid var(--color-gray);
 }
 #royal {
     font: 12px/1 "Open Sans", sans-serif;
@@ -74,7 +74,7 @@ body {
     display: flex;
     align-items: center;
     padding: 5px 10px;
-    border-bottom: 1px solid var(--color-cinnabar-orange);
+    border-bottom: 1px solid var(--color-red);
     float: right;
 }
 #royal .total-amount h2 {
@@ -161,7 +161,7 @@ tfoot.table-details tr th {
 
 #royal .item thead tr th {
     padding: 20px 8px 4px;
-    border-bottom: 1px solid var(--color-manatee);
+    border-bottom: 1px solid var(--color-gray);
     line-height: 1.2rem;
 }
 
@@ -170,7 +170,7 @@ tfoot.table-details tr th {
 }
 
 #royal .item tfoot tr:last-child th {
-    /*border-top: 1px solid var(--color-manatee);*/
+    /*border-top: 1px solid var(--color-gray);*/
     padding: 6px;
     line-height: 1.2rem;
     vertical-align: middle;
@@ -189,7 +189,7 @@ tfoot.table-details tr th {
 }
 
 #royal .bd-rb {
-    border-bottom: 1px solidvar(--color-manatee);
+    border-bottom: 1px solidvar(--color-gray);
     margin-bottom: 10px;
 }
 
@@ -281,14 +281,14 @@ tfoot.table-details tr th {
 #royal .tax-table tbody tr td,
 #royal .tax-table tfoot tr th {
     padding: 6px;
-    border-right: 1px solid var(--color-manatee);
-    border-bottom: 1px solid var(--color-manatee);
+    border-right: 1px solid var(--color-gray);
+    border-bottom: 1px solid var(--color-gray);
 }
 
 #royal .tax-table thead tr th:last-child,
 #royal .tax-table tbody tr td:last-child,
 #royal .tax-table tfoot tr th:last-child {
-    border-right: 0px solid var(--color-manatee);
+    border-right: 0px solid var(--color-gray);
 }
 
 table.tax-table.item {
@@ -358,7 +358,7 @@ img {
 }
 #royal footer p {
     font-size: 10px;
-    color: var(--color-shark);
+    color: var(--color-nero);
 }
 #royal .tax-table.item tfoot tr th {
     border-bottom: 1px solid #666666;
