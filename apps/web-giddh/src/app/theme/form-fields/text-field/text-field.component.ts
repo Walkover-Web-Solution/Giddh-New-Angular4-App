@@ -1,23 +1,25 @@
-import { ChangeDetectionStrategy, Component, ElementRef, Input, OnChanges, OnDestroy, OnInit, Optional, Self } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input, OnChanges, OnDestroy, OnInit, Optional, Self, SimpleChanges, ViewChild } from "@angular/core";
 import { ControlValueAccessor, NgControl } from "@angular/forms";
 import { MatFormFieldControl } from "@angular/material/form-field";
 import { Subject } from "rxjs";
 
-const noop = () => { };
+const noop = () => {
+};
 
 @Component({
-    selector: 'text-field',
-    styleUrls: ['./text-field.component.scss'],
-    templateUrl: './text-field.component.html',
+    selector: "text-field",
+    styleUrls: ["./text-field.component.scss"],
+    templateUrl: "./text-field.component.html",
     providers: [
         {
             provide: MatFormFieldControl,
-            useExisting: TextFieldComponent
-        }
+            useExisting: TextFieldComponent,
+        },
     ],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TextFieldComponent implements OnInit, OnChanges, OnDestroy, ControlValueAccessor {
+    @ViewChild('textField', {static: false}) public textField: ElementRef;
     @Input() public cssClass: string = "";
     /** Taking placeholder as input */
     @Input() public placeholder: any = "";
@@ -25,10 +27,14 @@ export class TextFieldComponent implements OnInit, OnChanges, OnDestroy, Control
     @Input() public name: any = "";
     /** Taking id as input */
     @Input() public id: any = "";
-    /** True if we need input field with matInput directive */
-    @Input() public useMaterial: boolean = false;
+    @Input() public maxlength: number;
+    @Input() public readonly: boolean;
+    @Input() public type: string = "text";
+    @Input() public showError: boolean = false;
+    /** It will focus in the text field */
+    @Input() public autoFocus: boolean = false;
     /** ngModel of input */
-    public ngModel: any;
+    @Input() public ngModel: any;
     /** Used for change detection */
     public stateChanges = new Subject<void>();
     /** Placeholders for the callbacks which are later provided by the Control Value Accessor */
@@ -37,7 +43,7 @@ export class TextFieldComponent implements OnInit, OnChanges, OnDestroy, Control
 
     constructor(
         @Optional() @Self() public ngControl: NgControl,
-        private elementRef: ElementRef<HTMLElement>
+        private elementRef: ElementRef<HTMLElement>,
     ) {
         if (this.ngControl != null) {
             this.ngControl.valueAccessor = this;
@@ -58,8 +64,12 @@ export class TextFieldComponent implements OnInit, OnChanges, OnDestroy, Control
      *
      * @memberof TextFieldComponent
      */
-    public ngOnChanges(): void {
-
+    public ngOnChanges(changes: SimpleChanges): void {
+        if(this.autoFocus) {
+            setTimeout(() => {
+                this.textField?.nativeElement?.focus();
+            }, 20);
+        }
     }
 
     /**
@@ -139,8 +149,8 @@ export class TextFieldComponent implements OnInit, OnChanges, OnDestroy, Control
      * @memberof TextFieldComponent
      */
     public setDescribedByIds(ids: string[]): void {
-        const controlElement = this.elementRef.nativeElement.querySelector('.text-field-container')!;
-        controlElement.setAttribute('aria-describedby', ids.join(' '));
+        const controlElement = this.elementRef.nativeElement.querySelector(".text-field-container")!;
+        controlElement.setAttribute("aria-describedby", ids.join(" "));
     }
 
     /**
