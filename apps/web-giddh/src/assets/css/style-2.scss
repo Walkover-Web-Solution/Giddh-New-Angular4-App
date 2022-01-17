@@ -1324,10 +1324,12 @@ modal-container.modal {
 .sh-select-border .menu .scrollable-content > .item {
     border-bottom: 1px solid $gainsboro;
     height: initial !important;
-} /* my css end */ /*input*/
+}
+/* my css end */
+/*input*/
 .form-control {
     background: $white !important;
-    border: 1px solid $gainsboro !important;
+    border: 1px solid $gainsboro;
     border-radius: 5px !important;
     padding: 6px !important;
     outline: 0;
