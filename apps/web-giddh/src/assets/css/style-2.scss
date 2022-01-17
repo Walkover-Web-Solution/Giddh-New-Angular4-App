@@ -9399,6 +9399,11 @@ input[type="checkbox"].cdk-visually-hidden::after {
     .mat-input-element {
         border: 1px solid $skeleton-loading-gradient !important;
         font-family: $roboto-regular !important;
+        background-color: $dark-fog !important;
+        &::placeholder {
+            font-family: $roboto-regular !important;
+            color: $slate-color;
+        }
     }
 }
 .susbcription-plan-amount {

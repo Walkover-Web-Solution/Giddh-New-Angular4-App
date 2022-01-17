@@ -1,13 +1,18 @@
 @import "../../../../assets/css/color.scss";
+@import "../../../../assets/css/font.scss";
 .modal-header {
     padding-left: 20px;
     padding-right: 20px;
+}
+.all-header {
+    font-family: $roboto-bold !important;
 }
 .all-features-list {
     margin-bottom: 30px;
     li {
         list-style-type: none;
-        color: $gray;
+        font-family: $roboto-regular !important;
+        color: $slate-color;
         font-size: 12px;
         padding: 3px 0;
         line-height: 20px;
@@ -32,11 +37,11 @@
     }
 }
 .money-back-guarantee {
-    font-size: 12px;
     background-color: $floral-white;
-    color: $cascade;
+    color: $slate-color;
     padding-left: 20px;
     padding-right: 20px;
+    font-family: $roboto-regular !important;
 }
 .all-feature-modal {
     p {
@@ -45,6 +50,9 @@
         i {
             font-size: 21px;
             color: $midnight-blue;
+        }
+        span {
+            font-family: $roboto-bold !important;
         }
     }
     [class*="col-"] {

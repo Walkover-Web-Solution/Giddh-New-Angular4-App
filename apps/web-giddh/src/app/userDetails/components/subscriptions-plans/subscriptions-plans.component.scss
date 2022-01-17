@@ -99,6 +99,7 @@
         .sub-plan-feature {
             text-decoration: underline;
             font-family: $roboto-regular !important;
+            color: $faux-cornflower-blue;
         }
     }
     .sub-plan-name {
@@ -471,6 +472,7 @@
     }
     .redeem-content {
         float: left;
+        padding-left: 0 !important;
         width: 100%;
     }
     .redeem-input {
@@ -479,10 +481,12 @@
         height: 55px;
     }
     .activation-btn {
-        width: 27%;
+        width: 20%;
         height: 55px;
         button {
             font-family: $roboto-bold !important;
+            color: $white;
+            background-color: $reddem-button;
         }
     }
     .redeem-button {

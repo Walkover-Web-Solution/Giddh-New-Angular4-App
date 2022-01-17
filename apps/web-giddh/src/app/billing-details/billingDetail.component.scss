@@ -1,4 +1,5 @@
 @import "../../assets/css/color.scss";
+@import "../../assets/css/font.scss";
 #main {
     position: relative;
     float: left;
@@ -11,8 +12,8 @@
             margin-top: 4%;
             background-color: $very-light-gray !important;
             border-color: $gainsboro;
-            color: $night-rider;
-            font-family: "opensans-semibold" !important;
+            color: $black-pearl;
+            font-family: $roboto-regular !important;
             margin-bottom: 15px !important;
             padding-left: 12px !important;
             padding-right: 18px !important;
@@ -24,10 +25,11 @@
         }
         .giddh-heading {
             font-size: 37px;
-            font-weight: bold;
             float: left;
             width: 30%;
+            font-family: $roboto-bold !important;
             text-align: center;
+            color: $black-pearl;
         }
     }
     .welcome-msg {
@@ -38,11 +40,16 @@
         .user-details {
             padding-top: 20px;
             padding-bottom: 20px;
+            .user-contet {
+                font-family: $roboto-regular !important;
+                color: $black-pearl;
+            }
         }
         .user-title {
             font-size: 19px;
-            font-weight: bold;
             margin-bottom: 4px;
+            font-family: $roboto-bold !important;
+            color: $black-pearl;
         }
         .user-title-content {
             float: left;
@@ -62,9 +69,9 @@
             margin-bottom: 20px;
         }
         .billing-name {
-            font-size: 20px;
-            font-weight: 700;
-            color: $gray;
+            font-size: 18px;
+            color: $slate-color;
+            font-family: $roboto-bold !important;
         }
         .billing-wrapper {
             border-right: 1px solid $gainsboro;
@@ -87,10 +94,12 @@
         .mat-input {
             float: left;
             width: 100%;
+            font-family: $roboto-regular !important;
             label {
-                color: $dark-gray-new;
+                color: $slate-color;
                 float: left;
                 width: 100%;
+                font-family: $roboto-regular !important;
             }
         }
 
@@ -142,7 +151,8 @@
                 margin-bottom: 13px;
             }
             .renewal-details {
-                color: $gray;
+                color: $slate-color;
+                font-family: $roboto-regular !important;
             }
             .renewal-data {
                 padding-left: 4px;
@@ -153,9 +163,9 @@
                 padding-top: 0px;
             }
             .renewal-card-subtitle {
-                color: $gray;
+                color: $slate-color;
                 font-size: 16px;
-                font-weight: bold;
+                font-family: $roboto-regular !important;
                 margin-bottom: 0px !important;
             }
             .form-group-div {
@@ -166,10 +176,11 @@
                 font-size: 14px;
                 margin-left: 3px;
                 text-transform: lowercase;
+                font-family: $roboto-regular !important;
             }
             .amount-field-content {
                 float: left;
-                font-weight: bold;
+                font-family: $roboto-bold !important;
             }
             .renewal-list {
                 padding-left: 14px;
@@ -191,17 +202,20 @@
             }
             .features {
                 line-height: 1.7;
-                color: $gray;
+                color: $slate-color;
                 margin-bottom: 3px;
+                font-family: $roboto-regular !important;
             }
             .renewal-payable {
                 float: left;
                 width: 100%;
+                font-family: $roboto-regular !important;
             }
             .new-payable {
                 font-size: 15px !important;
                 padding-left: 5px;
                 margin-bottom: 7px !important;
+                font-family: $roboto-regular !important;
             }
             .pay-now-content {
                 display: none;
@@ -218,7 +232,7 @@
             .renewal-amount {
                 padding-left: 5px;
                 font-size: 24px;
-                font-weight: bolder;
+                font-family: $roboto-bold !important;
             }
             .renewal-details-content {
                 width: 50%;
@@ -230,15 +244,16 @@
                 font-size: 13px;
                 font-weight: 300;
                 margin-left: 5px;
+                font-family: $roboto-regular !important;
             }
             .pay-now {
                 margin-top: 11px;
                 width: 102px;
-                font-weight: bolder;
                 height: 38px;
                 font-size: 17px;
                 background-color: $midnight-blue;
                 color: $white;
+                font-family: $roboto-bold !important;
             }
         }
     }

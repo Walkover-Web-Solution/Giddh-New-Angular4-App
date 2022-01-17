@@ -42,8 +42,14 @@
         position: relative;
         top: 5px;
         .search-bar {
-            font-weight: 500;
-            color: $omiod;
+            font-weight: 500 !important;
+            color: $slate-color !important;
+            font-family: $roboto-regular !important;
+            &::placeholder {
+                color: $black !important;
+                font-family: $roboto-regular !important;
+                font-size: 14px !important;
+            }
         }
     }
 }
@@ -381,7 +387,7 @@
                 font-family: $roboto-regular;
                 span {
                     font-size: 16px;
-                    color: $black-pearl;
+                    color: $midnight-blue;
                     font-family: $roboto-bold;
                 }
             }
@@ -463,7 +469,7 @@
                             margin-left: 3px;
                             position: relative;
                             top: 2px;
-                            color: $slate !important;
+                            color: $slate-color !important;
                             font-size: 12px;
                             font-family: $roboto-regular !important;
                         }
@@ -518,6 +524,7 @@
                 }
             }
             position: relative;
+            box-shadow: none !important;
             a {
                 position: absolute;
                 right: 1rem;
@@ -549,6 +556,7 @@
             height: 28px;
             font-size: 16px;
             font-family: $roboto-regular !important;
+            margin-top: 1% !important;
         }
     }
     .main-content-search-box {
@@ -709,7 +717,8 @@
                 }
                 .side-bar-head {
                     font-size: 13.5px;
-                    font-family: $roboto-bold !important;
+                    font-family: $roboto-regular !important;
+                    font-weight: 600 !important;
                     img {
                         height: 2px;
                         width: auto;
@@ -831,6 +840,7 @@
                 padding: 0;
                 .mat-tab-label-content {
                     font-weight: 100;
+                    font-size: 14px;
                 }
             }
         }
@@ -859,7 +869,9 @@
     .menu-two {
         .form-field {
             .search-bar {
-                font-size: 10px !important;
+                &::placeholder {
+                    font-size: 10px !important;
+                }
             }
         }
     }
@@ -878,7 +890,7 @@
     .menu-two {
         img {
             margin-top: 0px;
-            height: 18px;
+            height: 15px;
         }
     }
     .accordion-search-box {
@@ -1078,6 +1090,6 @@
 }
 @media screen and (max-width: 1280px) and (orientation: landscape) {
     .menu-two-button {
-        width: 20% !important;
+        width: 17% !important;
     }
 }
