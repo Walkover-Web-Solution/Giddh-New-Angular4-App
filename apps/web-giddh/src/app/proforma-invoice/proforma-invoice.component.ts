@@ -1535,7 +1535,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 }
 
                 if (this.invFormData.voucherDetails.customerUniquename && this.invFormData.voucherDetails.voucherDate && !this.isLastInvoiceCopied) {
-                    this.getAllAdvanceReceipts(this.invFormData.voucherDetails.customerUniquename, moment(this.invFormData.voucherDetails.voucherDate).format(GIDDH_DATE_FORMAT))
+                    this.getAllAdvanceReceipts(this.invFormData.voucherDetails.customerUniquename, this.invFormData.voucherDetails.voucherDate)
                 }
 
                 this.calculateBalanceDue();
@@ -3502,7 +3502,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.invFormData.voucherDetails.customerName = item.label;
             this.getAccountDetails(item.value);
             if (this.invFormData.voucherDetails.customerUniquename && this.invFormData.voucherDetails.voucherDate) {
-                this.getAllAdvanceReceipts(this.invFormData.voucherDetails.customerUniquename, moment(this.invFormData.voucherDetails.voucherDate).format(GIDDH_DATE_FORMAT))
+                this.getAllAdvanceReceipts(this.invFormData.voucherDetails.customerUniquename, this.invFormData.voucherDetails.voucherDate)
             }
             this.isCustomerSelected = true;
             this.invFormData.accountDetails.name = '';
@@ -5167,7 +5167,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         if (selectedDate && modelDate && selectedDate !== modelDate && this.invFormData &&
             this.invFormData.voucherDetails && this.invFormData.voucherDetails.voucherDate &&
             this.invFormData.accountDetails && this.invFormData.accountDetails.uniqueName) {
-            this.getAllAdvanceReceipts(this.invFormData.voucherDetails.customerUniquename, moment(selectedDate).format(GIDDH_DATE_FORMAT));
+            this.getAllAdvanceReceipts(this.invFormData.voucherDetails.customerUniquename, selectedDate);
         }
         if (selectedDate && modelDate && selectedDate !== modelDate && (this.isCreditNote || this.isDebitNote)) {
             this.getInvoiceListsForCreditNote(moment(selectedDate).format(GIDDH_DATE_FORMAT));
@@ -6027,13 +6027,19 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      * @param {*} voucherDate  Voucher Date (GIDDH_DATE_FORMAT) of selected invoice
      * @memberof ProformaInvoiceComponent
      */
-    public getAllAdvanceReceipts(customerUniqueName: string, voucherDate: string): void {
-        if (customerUniqueName && voucherDate) {
+    public getAllAdvanceReceipts(customerUniqueName: string, voucherDate: any): void {
+        let date;
+        if (typeof voucherDate === 'string') {
+            date = voucherDate;
+        } else {
+            date = moment(voucherDate).format(GIDDH_DATE_FORMAT);
+        }
+        if (customerUniqueName && date) {
             let apiCallObservable: Observable<any>;
             if (this.voucherApiVersion !== 2) {
                 const requestObject = {
                     accountUniqueName: customerUniqueName,
-                    invoiceDate: voucherDate
+                    invoiceDate: date
                 };
                 apiCallObservable = this.salesService.getAllAdvanceReceiptVoucher(requestObject);
             } else {
@@ -6041,7 +6047,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     accountUniqueName: customerUniqueName,
                     voucherType: (this.isPurchaseInvoice) ? VoucherTypeEnum.purchase : this.selectedVoucherType
                 }
-                apiCallObservable = this.salesService.getInvoiceList(requestObject, voucherDate);
+                apiCallObservable = this.salesService.getInvoiceList(requestObject, date);
             }
 
             apiCallObservable.pipe(takeUntil(this.destroyed$)).subscribe(res => {

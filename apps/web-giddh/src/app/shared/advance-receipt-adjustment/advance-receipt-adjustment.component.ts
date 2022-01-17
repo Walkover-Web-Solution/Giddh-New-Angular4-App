@@ -225,7 +225,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
                 return;
             }
 
-            this.salesService.getInvoiceList(requestObject, this.invoiceFormDetails.voucherDetails.voucherDate).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+            this.salesService.getInvoiceList(requestObject, this.invoiceFormDetails.voucherDetails.voucherDate, 50).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
                 if (response && response.body) {
                     let results = (response.body.results || response.body.items);
 
@@ -386,7 +386,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
                     accountUniqueName: this.getAllAdvanceReceiptsRequest.accountUniqueName,
                     voucherType: this.adjustedVoucherType
                 }
-                apiCallObservable = this.salesService.getInvoiceList(requestObject, this.getAllAdvanceReceiptsRequest.invoiceDate);
+                apiCallObservable = this.salesService.getInvoiceList(requestObject, this.getAllAdvanceReceiptsRequest.invoiceDate, 50);
             }
 
             apiCallObservable.pipe(takeUntil(this.destroyed$)).subscribe(res => {
