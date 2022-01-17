@@ -886,7 +886,7 @@ export class GeneralService {
      public getCurrentVoucherLabel(voucherCode: string, commonLocaleData: any): string {
         switch(voucherCode) {
             case AdjustedVoucherType.Sales: case AdjustedVoucherType.SalesInvoice: return commonLocaleData?.app_voucher_types.sales;
-            case AdjustedVoucherType.Purchase: return commonLocaleData?.app_voucher_types.purchase;
+            case AdjustedVoucherType.Purchase: case AdjustedVoucherType.PurchaseInvoice: return commonLocaleData?.app_voucher_types.purchase;
             case AdjustedVoucherType.CreditNote: return commonLocaleData?.app_voucher_types.credit_note;
             case AdjustedVoucherType.DebitNote: return commonLocaleData?.app_voucher_types.debit_note;
             case AdjustedVoucherType.Payment: return commonLocaleData?.app_voucher_types.payment;

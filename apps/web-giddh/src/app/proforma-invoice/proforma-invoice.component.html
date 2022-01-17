@@ -3548,7 +3548,12 @@
 
                                                             <li
                                                                 class="clearfix mr-t1 bigger-dollar"
-                                                                *ngIf="isSalesInvoice"
+                                                                *ngIf="
+                                                                    isSalesInvoice ||
+                                                                    isPurchaseInvoice ||
+                                                                    isCreditNote ||
+                                                                    isDebitNote
+                                                                "
                                                             >
                                                                 <strong class="pull-right balance-due-text">
                                                                     <span *ngIf="isMulticurrencyAccount">{{
@@ -3583,7 +3588,7 @@
                                     <!--endregion-->
 
                                     <!-- region balance due for purchase -->
-                                    <div class="table-row" *ngIf="isPurchaseInvoice">
+                                    <div class="table-row" *ngIf="isPurchaseInvoice && voucherApiVersion !== 2">
                                         <div class="table-cell">
                                             <strong
                                                 >{{ localeData?.balance_due }}
