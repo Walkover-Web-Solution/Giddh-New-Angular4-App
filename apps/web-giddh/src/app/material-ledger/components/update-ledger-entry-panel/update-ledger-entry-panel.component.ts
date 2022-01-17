@@ -2000,7 +2000,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         }
 
         if(this.voucherApiVersion === 2) {
-            resp[0] = this.adjustmentUtilityService.getVoucherAdjustmentObject(resp[0]);
+            resp[0] = this.adjustmentUtilityService.getVoucherAdjustmentObject(resp[0], this.vm.selectedLedger.voucherGeneratedType);
         }
 
         if (updateBaseAccountParticular) {
