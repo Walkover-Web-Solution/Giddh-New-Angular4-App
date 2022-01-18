@@ -224,7 +224,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
                 return;
             }
 
-            this.salesService.getInvoiceList(requestObject, this.invoiceFormDetails.voucherDetails.voucherDate).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+            this.salesService.getInvoiceList(requestObject, this.invoiceFormDetails.voucherDetails.voucherDate, 50).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
                 if (response && response.body) {
                     let results = (response.body.results || response.body.items);
 
@@ -385,7 +385,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
                     accountUniqueName: this.getAllAdvanceReceiptsRequest.accountUniqueName,
                     voucherType: this.adjustedVoucherType
                 }
-                apiCallObservable = this.salesService.getInvoiceList(requestObject, this.getAllAdvanceReceiptsRequest.invoiceDate);
+                apiCallObservable = this.salesService.getInvoiceList(requestObject, this.getAllAdvanceReceiptsRequest.invoiceDate, 50);
             }
 
             apiCallObservable.pipe(takeUntil(this.destroyed$)).subscribe(res => {
@@ -970,10 +970,10 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
             |  Home currency strengthens   |                Gain                  |                Loss            |
             |______________________________|______________________________________|________________________________|
         */
-        if (this.adjustedVoucherType === AdjustedVoucherType.Sales || this.adjustedVoucherType === AdjustedVoucherType.CreditNote) {
+        if (this.adjustedVoucherType === AdjustedVoucherType.Sales || this.adjustedVoucherType === AdjustedVoucherType.SalesInvoice || this.adjustedVoucherType === AdjustedVoucherType.CreditNote) {
             // Exchange gain if home currency weakens as this is Export goods case (sales) where the due goes positive
             return this.getConvertedBalanceDue() <= 0;
-        } else if (this.adjustedVoucherType === AdjustedVoucherType.Purchase || this.adjustedVoucherType === AdjustedVoucherType.DebitNote) {
+        } else if (this.adjustedVoucherType === AdjustedVoucherType.Purchase || this.adjustedVoucherType === AdjustedVoucherType.PurchaseInvoice || this.adjustedVoucherType === AdjustedVoucherType.DebitNote) {
             // Exchange gain if home currency weakens as this is Import goods case (purchase) where the due goes negative
             return this.getConvertedBalanceDue() >= 0;
         }
