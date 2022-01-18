@@ -346,10 +346,9 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
      * @memberof SubscriptionComponent
      */
     public isSubscriptionPlanShow(event: any): void {
-        this.subscriptions = [];
         if (event) {
             this.isPlanShow = !event;
-            this.selectSubscription((this.subscriptions?.length) ? this.subscriptions[0] : null);
+            this.selectSubscription(null);
             this.getCompanies();
         }
     }
