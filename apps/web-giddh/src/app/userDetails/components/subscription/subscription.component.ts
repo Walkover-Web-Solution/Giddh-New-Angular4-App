@@ -348,6 +348,8 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
     public isSubscriptionPlanShow(event: any): void {
         if (event) {
             this.isPlanShow = !event;
+            this.selectSubscription(null);
+            this.getCompanies();
         }
     }
 
