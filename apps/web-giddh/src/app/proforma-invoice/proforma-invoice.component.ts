@@ -1329,7 +1329,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
                         this.showGstAndTrnUsingCountryName(this.customerCountryName);
                         if (this.isMulticurrencyAccount) {
-                            this.getCurrencyRate(this.companyCurrency, tempSelectedAcc.currency, moment(this.invFormData.voucherDetails.voucherDate).format(GIDDH_DATE_FORMAT));
+                            this.getCurrencyRate(this.companyCurrency, tempSelectedAcc.currency, this.invFormData.voucherDetails.voucherDate);
                             this.companyCurrencyName = tempSelectedAcc.currency;
                         } else {
                             this.invFormData.accountDetails = new AccountDetailsClass(tempSelectedAcc);
@@ -1632,7 +1632,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
             // get exchange rate when application date is changed
             if (this.isMultiCurrencyModule() && this.isMulticurrencyAccount && date) {
-                this.getCurrencyRate(this.companyCurrency, this.customerCurrencyCode, moment(date).format(GIDDH_DATE_FORMAT));
+                this.getCurrencyRate(this.companyCurrency, this.customerCurrencyCode, date);
             }
 
             this.invFormData.entries.forEach((entry: SalesEntryClass) => {
@@ -1924,8 +1924,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         }
 
         if (item && item.currency && item.currency !== this.companyCurrency) {
-            this.getCurrencyRate(this.companyCurrency, item.currency,
-                moment(this.invFormData.voucherDetails.voucherDate).format(GIDDH_DATE_FORMAT));
+            this.getCurrencyRate(this.companyCurrency, item.currency, this.invFormData.voucherDetails.voucherDate);
         } else {
             this.previousExchangeRate = this.exchangeRate;
             this.originalExchangeRate = 1;
@@ -3613,7 +3612,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     this.isMulticurrencyAccount = event.additional.currency.code !== this.companyCurrency;
                     if (this.isMulticurrencyAccount) {
                         this.getCurrencyRate(this.companyCurrency, event.additional && event.additional.currency ? event.additional.currency.code : '',
-                            moment(this.invFormData.voucherDetails.voucherDate).format(GIDDH_DATE_FORMAT));
+                            this.invFormData.voucherDetails.voucherDate);
                     }
                 }
             }
@@ -5025,8 +5024,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      * @param modelDate: Date ( date that was already selected by user )
      */
     public onVoucherDateChanged(selectedDate, modelDate) {
-        if (this.isMultiCurrencyModule() && this.isMulticurrencyAccount && selectedDate && !moment(selectedDate).isSame(moment(modelDate))) {
-            this.getCurrencyRate(this.companyCurrency, this.customerCurrencyCode, moment(selectedDate).format(GIDDH_DATE_FORMAT));
+        if (this.isMultiCurrencyModule() && this.isMulticurrencyAccount && selectedDate && modelDate && moment(selectedDate).format(GIDDH_DATE_FORMAT) !== modelDate) {
+            this.getCurrencyRate(this.companyCurrency, this.customerCurrencyCode, selectedDate);
         }
         if (selectedDate && modelDate && selectedDate !== modelDate && this.invFormData &&
             this.invFormData.voucherDetails && this.invFormData.voucherDetails.voucherDate &&
@@ -5055,12 +5054,18 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      *
      * @param {*} to Converted to currency symbol
      * @param {*} from Converted from currency symbol
-     * @param {string} [date=moment().format(GIDDH_DATE_FORMAT)] Date on which currency rate is required, default is today's date
+     * @param {string} date on which currency rate is required, default is today's date
      * @memberof ProformaInvoiceComponent
      */
-    public getCurrencyRate(to, from, date = moment().format(GIDDH_DATE_FORMAT)): void {
+    public getCurrencyRate(to, from, date: any): void {
         if (from && to) {
-            this._ledgerService.GetCurrencyRateNewApi(from, to, date).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            let voucherDate;
+            if (typeof date === 'string') {
+                voucherDate = date;
+            } else {
+                voucherDate = moment(date).format(GIDDH_DATE_FORMAT);
+            }
+            this._ledgerService.GetCurrencyRateNewApi(from, to, voucherDate).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 let rate = response.body;
                 if (rate) {
                     this.previousExchangeRate = this.exchangeRate;
