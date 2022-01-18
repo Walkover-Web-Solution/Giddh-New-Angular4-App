@@ -1,4 +1,4 @@
-<div class="modal-header d-flex align-items-center flex-row-reverse">
+<div class="modal-header d-flex align-items-center flex-row-reverse move-header">
     <span aria-hidden="true" class="close" mat-dialog-close>×</span>
     <h3>{{ localeData?.subscription?.move_company }}</h3>
 </div>
@@ -16,6 +16,7 @@
                     >
                     <div class="select-caret position-relative move-select">
                         <sh-select
+                            class="select-move"
                             [placeholder]="localeData?.subscription?.select_plan"
                             name="availablePlans"
                             [options]="availablePlansOption"
@@ -28,6 +29,7 @@
             </div>
             <div class="clearfix">
                 <button
+                    class="move-button"
                     mat-raised-button
                     color="primary"
                     mat-dialog-close

@@ -63,11 +63,10 @@
     white-space: nowrap;
     box-shadow: none !important;
     .inner-name.inner-name-bold {
-        font-weight: 700;
         width: 100%;
         float: left;
         height: 100%;
-        font-family: $roboto-regular !important;
+        font-family: $roboto-medium !important;
     }
     .grid-title-left-top {
         padding-top: 0.8% !important;
@@ -106,12 +105,12 @@
         float: left;
         width: 100%;
         padding-top: 14px;
+        font-weight: 400;
         font-family: $roboto-regular !important;
     }
     .sub-plan-amount {
         float: left !important;
         width: 100%;
-        font-weight: 700;
         font-size: 25px;
         font-family: $roboto-bold !important;
     }
@@ -161,7 +160,6 @@
         line-height: 26px;
         border-bottom: 1px solid $default-border-bottom;
         width: 205px;
-        font-weight: bold;
         font-size: 13px;
         font-family: $roboto-regular !important;
     }
@@ -179,7 +177,6 @@
         line-height: 26px;
         border-bottom: 1px solid $default-border-bottom;
         width: 205px;
-        font-weight: bold;
         font-size: 13px;
     }
     .bottom-grid-list-div {
@@ -622,7 +619,8 @@
     width: 24%;
     .extra-addons-value {
         color: $midnight-blue;
-        font-family: $roboto-bold !important;
+        font-family: $roboto-regular !important;
+        font-weight: 500;
     }
 }
 .plan-table-layout {

@@ -16,15 +16,15 @@
     font-weight: normal;
     text-rendering: optimizeLegibility;
 }
-// @font-face {
-//     font-family: "roboto-medium";
-//     src: url("../fonts/roboto/Medium/Roboto-Medium.ttf") format("truetype"),
-//         url("../fonts/roboto/Medium/Roboto-Medium.woff") format("woff"),
-//         url("../fonts/roboto/Medium/Roboto-Meduim.woff2") format("woff");
-//     font-style: normal;
-//     font-weight: normal;
-//     text-rendering: optimizeLegibility;
-// }
+@font-face {
+    font-family: "roboto-medium";
+    src: url("../fonts/roboto/Medium/Roboto-Medium.ttf") format("truetype"),
+        url("../fonts/roboto/Medium/Roboto-Medium.woff") format("woff"),
+        url("../fonts/roboto/Medium/Roboto-Medium.woff2") format("woff");
+    font-style: normal;
+    font-weight: normal;
+    text-rendering: optimizeLegibility;
+}
 @font-face {
     font-family: "roboto-regular";
     src: url("../fonts/roboto/Regular/Roboto-Regular.ttf") format("truetype"),

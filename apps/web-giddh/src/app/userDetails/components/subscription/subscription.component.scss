@@ -74,10 +74,9 @@
             margin-top: 10px;
             margin-left: 0.5rem;
             height: 26px;
-            font-weight: bold;
             font-size: 14px;
             padding: 5px 0px 0px 5px;
-            font-family: $roboto-regular !important;
+            font-family: $roboto-medium !important;
         }
         .transaction-select {
             width: 11rem !important;
@@ -126,8 +125,7 @@
         .side-bar-head {
             color: $midnight-blue;
             font-size: 13px;
-            font-weight: 600;
-            font-family: $roboto-regular !important;
+            font-family: $roboto-medium !important;
             img {
                 position: relative;
                 bottom: 2px;
@@ -382,13 +380,12 @@
             p {
                 font-size: 14px;
                 line-height: 19px;
-                font-weight: 600;
                 color: $black-pearl;
-                font-family: $roboto-regular;
+                font-family: $roboto-medium !important;
                 span {
                     font-size: 16px;
                     color: $midnight-blue;
-                    font-family: $roboto-bold;
+                    font-weight: 600 !important;
                 }
             }
         }
@@ -399,10 +396,10 @@
                 font-size: 14px;
                 color: $grey-chateau;
                 line-height: 19px;
-                font-family: $roboto-regular !important;
+                font-family: $roboto-medium !important;
                 span {
                     color: $red;
-                    font-family: $roboto-bold !important;
+                    font-family: $roboto-medium !important;
                 }
             }
             .right-side-btn {
@@ -442,6 +439,8 @@
                     font-size: 12px;
                     font-weight: bold;
                     p {
+                        font-family: "roboto-medium" !important;
+                        color: $slate-color;
                         span {
                             color: $black-pearl;
                             font-size: 15px;
@@ -471,7 +470,7 @@
                             top: 2px;
                             color: $slate-color !important;
                             font-size: 12px;
-                            font-family: $roboto-regular !important;
+                            font-family: $roboto-medium !important;
                         }
                     }
                     img {

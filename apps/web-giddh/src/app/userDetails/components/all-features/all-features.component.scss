@@ -41,7 +41,7 @@
     color: $slate-color;
     padding-left: 20px;
     padding-right: 20px;
-    font-family: $roboto-regular !important;
+    font-family: $roboto-medium !important;
 }
 .all-feature-modal {
     p {
@@ -52,7 +52,7 @@
             color: $midnight-blue;
         }
         span {
-            font-family: $roboto-bold !important;
+            font-family: $roboto-medium !important;
         }
     }
     [class*="col-"] {
