@@ -267,16 +267,16 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public ngOnInit() {
         this.voucherTypeList = observableOf([{
             label: this.commonLocaleData?.app_voucher_types.sales,
-            value: 'sal'
+            value: (this.voucherApiVersion === 2) ? VoucherTypeEnum.sales : 'sal'
         }, {
             label: this.commonLocaleData?.app_voucher_types.purchase,
-            value: 'pur'
+            value: (this.voucherApiVersion === 2) ? VoucherTypeEnum.purchase : 'pur'
         }, {
             label: this.commonLocaleData?.app_voucher_types.receipt,
-            value: 'rcpt'
+            value: (this.voucherApiVersion === 2) ? VoucherTypeEnum.receipt : 'rcpt'
         }, {
             label: this.commonLocaleData?.app_voucher_types.payment,
-            value: 'pay'
+            value: (this.voucherApiVersion === 2) ? VoucherTypeEnum.payment : 'pay'
         }, {
             label: this.commonLocaleData?.app_voucher_types.journal,
             value: 'jr'
