@@ -308,6 +308,7 @@ body.default-theme {
     --color-popup-secondary-background: #e58a0026;
     --color-popup-footer-text: #212528;
     --color-popup-footer-background: #f5f5f5;
+    --color-popup-secondary-footer-background: #cbcfd2;
     --color-popup-list-all-features-text: #505159;
 
     // Common Chips Variables
@@ -378,6 +379,9 @@ body.default-theme {
     --color-master-page-main-content-secondary-background: #ffffff;
     --color-master-page-sidebar-active-list-text: #212528;
     --color-master-page-sidebar-active-list-background: #f5f5f5;
+
+    // Checkbox, Radio button Color Variables
+    --color-radio-checkbox-border: #212528;
 
     // Left Sidebar Color Variables
     --color-sidebar-content-text: #212528;
@@ -451,6 +455,7 @@ body.default-theme {
 
     // Tooltip Color Variables
     --color-primary-tooltip-text: #ffffff;
+    --color-secondary-tooltip-text: #212528;
     --color-primary-tooltip-background: #505159;
 
     // Right Sidebar Color Variables
@@ -485,6 +490,7 @@ body.default-theme {
     --color-table-primary-content-bar-border: #e7e9eb;
     --color-table-primary-giddh-table-thead-register-table-th-th-background: #e58a0026;
     --color-table-icon-sort-asc: #505159;
+    --color-table-primary-footer-background: #f5f5f5;
 
     // Total Details Box above table Color Variables
     --color-total-details-heading: #505159;
@@ -577,6 +583,9 @@ body.default-theme {
 
     // Common Leftout Text Color Variables
     --color-common-primary-dark-blue: #1a237e;
+
+    // Image Icons Color Variables
+    --color-image-icon: invert(0);
 
     // Common Chat Button Color Variable
     --color-common-chat-button-background: #0fbab8;

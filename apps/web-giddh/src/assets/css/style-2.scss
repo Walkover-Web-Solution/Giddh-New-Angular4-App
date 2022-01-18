@@ -3391,6 +3391,9 @@ label {
 .ledger-row td .select2-container .select2-search__field {
     background: var(--color-ledger-row-td-select2-container-select2-search__field-background) !important;
 }
+.mat-checkbox-frame {
+    border-color: var(--color-radio-checkbox-border);
+}
 .dropdown-container .dropdown-menu li label span:not(.mat-checkbox-inner-container) {
     max-width: calc(100% - 22px);
     color: var(--color-shark);
@@ -3842,7 +3845,7 @@ input[type="checkbox"][disabled]:after {
     border-left: 6px solid var(--color-iron);
 }
 .table-container .account {
-    background: var(--color-wild-sand);
+    background: var(--color-table-primary-footer-background);
 }
 .table-container > div > section > .tb-pl-bs-grid-row > div:nth-child(1) {
     padding-left: 7px !important;
@@ -4702,6 +4705,7 @@ perfect-scrollbar > .ps > .ps-overlay {
 .tax-engine .icon.gstr-icon {
     width: 42px;
     height: 42px;
+    filter: var(--color-image-icon);
 }
 .tax-engine .transactions-list .list-filter .list-style .nav-top {
     display: inline-block;
@@ -6680,6 +6684,7 @@ span#HW_badge_cont:nth-child(3) {
             display: none;
         }
         .popover-header {
+            color: var(--color-secondary-tooltip-text);
             padding: 15px 15px 0 15px;
             margin-bottom: 0;
             font-size: 14px;

@@ -11,7 +11,7 @@ body.dark-theme {
     --color-common-quinary-text: #f5f5f5;
     --color-common-senary-text: #668cff;
     --color-common-septenary-text: #f5f5f5;
-    --color-common-octonary-text: #36b283;
+    --color-common-octonary-text: #668cff;
     --color-common-primary-background-for-all-components: #212528;
     --color-common-secondary-background-for-all-components: #f5f5f5;
     --color-common-tertiary-background-for-all-components: #f5f5f5;
@@ -68,7 +68,7 @@ body.dark-theme {
     --color-upgrade-plan-tertiary-background: #668cff26;
     --color-upgrade-plan-card-primary-background-hover: #668cff26;
     --color-upgrade-plan-card-primary-border-hover: #36b283;
-    --color-csv-or-excel-file-card-text: #36b283;
+    --color-csv-or-excel-file-card-text: #668cff;
 
     // Button Color Variables
     --color-primary-button-text: #1a237e;
@@ -261,7 +261,7 @@ body.dark-theme {
     --color-primary-setting-integration-action-anchor: #cbcfd2;
 
     // Company Import Export Color Variables
-    --color-primary-company-import-export-card-background: #f5f5f5;
+    --color-primary-company-import-export-card-background: #668cff26;
 
     // Expense Details Color Variables
     --color-primary-expense-details-span-close-modal-cp-pull-right-background: #9b9b9e;
@@ -308,6 +308,7 @@ body.dark-theme {
     --color-popup-secondary-background: #212528;
     --color-popup-footer-text: #f5f5f5;
     --color-popup-footer-background: #212528;
+    --color-popup-secondary-footer-background: #668cff26;
     --color-popup-list-all-features-text: #f5f5f5;
 
     // Common Chips Variables
@@ -378,6 +379,9 @@ body.dark-theme {
     --color-master-page-main-content-secondary-background: #212528;
     --color-master-page-sidebar-active-list-text: #f5f5f5;
     --color-master-page-sidebar-active-list-background: #668cff26;
+
+    // Checkbox, Radio button Color Variables
+    --color-radio-checkbox-border: #f5f5f5;
 
     // Left Sidebar Color Variables
     --color-sidebar-content-text: #f5f5f5;
@@ -451,6 +455,7 @@ body.dark-theme {
 
     // Tooltip Color Variables
     --color-primary-tooltip-text: #f5f5f5;
+    --color-secondary-tooltip-text: #212528;
     --color-primary-tooltip-background: #9b9b9e;
 
     // Right Sidebar Color Variables
@@ -484,6 +489,7 @@ body.dark-theme {
     --color-table-primary-content-bar-border: #668cff26;
     --color-table-primary-giddh-table-thead-register-table-th-th-background: #e58a0026;
     --color-table-icon-sort-asc: #9b9b9e;
+    --color-table-primary-footer-background: #668cff26;
 
     // Total Details Box above table Color Variables
     --color-total-details-heading: #9b9b9e;
@@ -502,7 +508,7 @@ body.dark-theme {
     --color-right-side-popup-box-shadow: #212528;
 
     // Onboarding Contact info color variable
-    --color-onboard-contact-info-text: #212528;
+    --color-onboard-contact-info-text: #cbcfd2;
     --color-primary-onboarding-label-required: #e54556;
     --color-primary-onboarding-btn-sync: #9b9b9e;
     --color-primary-onboarding-btn-sync-background: #36b28326;
@@ -576,6 +582,9 @@ body.dark-theme {
 
     // Common Leftout Text Color Variables
     --color-common-primary-dark-blue: #668cff;
+
+    // Image Icons Color Variables
+    --color-image-icon: invert(1);
 
     // Common Chat Button Color Variable
     --color-common-chat-button-background: #f5f5f5;
