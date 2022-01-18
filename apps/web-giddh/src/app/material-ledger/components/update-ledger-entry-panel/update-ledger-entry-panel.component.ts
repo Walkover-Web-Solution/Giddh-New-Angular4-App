@@ -1907,7 +1907,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 if (!adjustment.voucherNumber) {
                     adjustment.voucherNumber = '-';
                 }
-                adjustment.accountCurrency = adjustment.accountCurrency ?? { symbol: this.activeCompany?.baseCurrencySymbol, code: this.activeCompany?.baseCurrency };
+                adjustment.accountCurrency = adjustment.accountCurrency ?? adjustment.currency ?? { symbol: this.activeCompany?.baseCurrencySymbol, code: this.activeCompany?.baseCurrency };
             });
         }
     }
@@ -1942,16 +1942,16 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         if (event) {
             this.vm.voucherTypeList = [{
                 label: this.commonLocaleData?.app_voucher_types?.sales,
-                value: 'sal'
+                value: (this.voucherApiVersion === 2) ? VoucherTypeEnum.sales : 'sal'
             }, {
                 label: this.commonLocaleData?.app_voucher_types?.purchases,
-                value: 'pur'
+                value: (this.voucherApiVersion === 2) ? VoucherTypeEnum.purchase : 'pur'
             }, {
                 label: this.commonLocaleData?.app_voucher_types?.receipt,
-                value: 'rcpt'
+                value: (this.voucherApiVersion === 2) ? VoucherTypeEnum.receipt : 'rcpt'
             }, {
                 label: this.commonLocaleData?.app_voucher_types?.payment,
-                value: 'pay'
+                value: (this.voucherApiVersion === 2) ? VoucherTypeEnum.payment : 'pay'
             }, {
                 label: this.commonLocaleData?.app_voucher_types?.journal,
                 value: 'jr'
