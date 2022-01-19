@@ -5,11 +5,13 @@
         [type]="type"
         [id]="id"
         [class]="cssClass"
+        [type]="type"
         [placeholder]="placeholder"
         [(ngModel)]="ngModel"
         (input)="handleInput()"
         [maxlength]="maxlength"
         [readonly]="readonly"
         [ngClass]="{ 'error-box': showError }"
+        #textField
     />
 </div>
