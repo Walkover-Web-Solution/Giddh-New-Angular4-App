@@ -15,6 +15,7 @@ import { INameUniqueName } from "../../../../models/api-models/Inventory";
 import { SalesService } from 'apps/web-giddh/src/app/services/sales.service';
 import { SearchService } from 'apps/web-giddh/src/app/services/search.service';
 import { SettingsTagService } from 'apps/web-giddh/src/app/services/settings.tag.service';
+import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 
 @Component({
     selector: 'invoice-payment-model',
@@ -61,6 +62,8 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
     public accountCurrency: any;
     public autoSaveIcon: boolean;
     public paymentModes$: Observable<IOption[]> = observableOf([]);
+    /** Selected payment mode */
+    public selectedPaymentMode: any;
 
     constructor(
         private changeDetectorRef: ChangeDetectorRef,
@@ -68,7 +71,8 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
         private settingsTagService: SettingsTagService,
         private _ledgerService: LedgerService,
         private salesService: SalesService,
-        private searchService: SearchService
+        private searchService: SearchService,
+        private generalService: GeneralService
     ) {
         this.paymentActionFormObj = new InvoicePaymentRequest();
         this.paymentActionFormObj.paymentDate = moment().toDate();
@@ -121,6 +125,23 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
     public onConfirmation(formObj) {
         formObj.paymentDate = moment(formObj.paymentDate).format(GIDDH_DATE_FORMAT);
         formObj.exchangeRate = this.exchangeRate;
+
+        if (this.generalService.voucherApiVersion === 2) {
+            formObj.date = formObj.paymentDate;
+
+            if (this.selectedInvoiceForPayment?.account?.currency?.code === this.selectedPaymentMode?.additional?.currency) {
+                formObj.amountForAccount = formObj.amount;
+            } else {
+                formObj.amountForCompany = formObj.amount;
+            }
+
+            formObj.tagNames = (formObj.tagUniqueName) ? [formObj.tagUniqueName] : [];
+
+            delete formObj.paymentDate;
+            delete formObj.amount;
+            delete formObj.tagUniqueName;
+        }
+
         this.closeModelEvent.emit(formObj);
         this.resetFrom();
     }
@@ -145,6 +166,7 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
 
     public onSelectPaymentMode(event) {
         if (event && event.value) {
+            this.selectedPaymentMode = event;
             this.searchService.loadDetails(event.value).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 if (response && response.body) {
                     const parentGroups = response.body.parentGroups;
@@ -164,6 +186,7 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
             })
             this.paymentActionFormObj.accountUniqueName = event.value;
         } else {
+            this.selectedPaymentMode = null;
             this.paymentActionFormObj.accountUniqueName = '';
             this.isBankSelected = false;
             this.paymentActionFormObj.chequeClearanceDate = '';
@@ -191,7 +214,7 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
     }
 
     public ngOnChanges(c: SimpleChanges) {
-        if(this.selectedInvoiceForPayment?.uniqueName) {
+        if (this.selectedInvoiceForPayment?.uniqueName) {
             this.paymentActionFormObj.uniqueName = this.selectedInvoiceForPayment?.uniqueName;
         }
 
