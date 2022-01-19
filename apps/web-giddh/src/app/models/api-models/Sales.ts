@@ -663,7 +663,7 @@ export class TransactionClassMulticurrency {
 
 export class AmountClassMulticurrency {
     public amountForAccount: number;
-    public amountForCompany: string;
+    public amountForCompany: number;
     public type?: string;
     public accountUniqueName?: string;
 

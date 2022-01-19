@@ -98,7 +98,12 @@
                                 <div
                                     class="show-on-small-screen"
                                     [ngClass]="{ 'pending-sales-balance-due': isPendingSales }"
-                                    *ngIf="isSalesInvoice || isProformaInvoice || isEstimateInvoice"
+                                    *ngIf="
+                                        isSalesInvoice ||
+                                        isProformaInvoice ||
+                                        isEstimateInvoice ||
+                                        (voucherApiVersion === 2 && isPurchaseInvoice)
+                                    "
                                 >
                                     <div class="text-right">
                                         <p class="font-20 b pb-r1">
@@ -839,7 +844,12 @@
                             <!-- region balance due -->
                             <div
                                 class="col-sm-3 col-md-3 balance-due-absolute"
-                                *ngIf="isSalesInvoice || isProformaInvoice || isEstimateInvoice"
+                                *ngIf="
+                                    isSalesInvoice ||
+                                    isProformaInvoice ||
+                                    isEstimateInvoice ||
+                                    (voucherApiVersion === 2 && isPurchaseInvoice)
+                                "
                             >
                                 <div class="text-right">
                                     <p class="font-20 pb-r1">

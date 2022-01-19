@@ -15,6 +15,7 @@ import { AdjustedVoucherType, SubVoucher } from '../../app.constant';
 import { giddhRoundOff } from '../helpers/helperFunctions';
 import { GeneralService } from '../../services/general.service';
 import { AdjustmentUtilityService } from './services/adjustment-utility.service';
+import { VoucherTypeEnum } from '../../models/api-models/Sales';
 
 /** Toast message when no advance receipt is found */
 const NO_ADVANCE_RECEIPT_FOUND = 'There is no advanced receipt for adjustment.';
@@ -165,6 +166,10 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
                     voucherType = AdjustedVoucherType.SalesInvoice;
                 } else if (voucherType === AdjustedVoucherType.Purchase) {
                     voucherType = AdjustedVoucherType.PurchaseInvoice;
+                } else if(voucherType === AdjustedVoucherType.Payment) {
+                    voucherType = VoucherTypeEnum.payment
+                } else if(voucherType === AdjustedVoucherType.Receipt) {
+                    voucherType = VoucherTypeEnum.receipt
                 }
 
                 if (this.invoiceListRequestParams) {
