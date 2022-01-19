@@ -612,6 +612,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public hideDepositSection: boolean = false;
     /** Holds created voucher unique name */
     public newVoucherUniqueName: string = '';
+    /** Selected payment mode */
+    public selectedPaymentMode: any;
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -3616,6 +3618,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     }
                 }
             }
+
+            this.selectedPaymentMode = event;
 
             if (this.isMulticurrencyAccount) {
                 if (this.isCashInvoice) {
@@ -7175,14 +7179,14 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         if (this.excludeTax || this.isRcmEntry) {
             transaction.total = giddhRoundOff((transaction.amount - entry.discountSum), 2);
             if (transaction.isStockTxn) {
-                transaction.convertedTotal = giddhRoundOff((transaction.quantity * transaction.rate * this.exchangeRate) - entry.discountSum, 2);
+                transaction.convertedTotal = giddhRoundOff((transaction.quantity * transaction.rate * this.exchangeRate) - (entry.discountSum * this.exchangeRate), 2);
             } else {
                 transaction.convertedTotal = giddhRoundOff(transaction.total * this.exchangeRate, 2);
             }
         } else {
             transaction.total = giddhRoundOff((transaction.amount - entry.discountSum) + (entry.taxSum + entry.cessSum), 2);
             if (transaction.isStockTxn) {
-                transaction.convertedTotal = giddhRoundOff(((transaction.quantity * transaction.rate * this.exchangeRate) - entry.discountSum) + (entry.taxSum + entry.cessSum), 2);
+                transaction.convertedTotal = giddhRoundOff(((transaction.quantity * transaction.rate * this.exchangeRate) - (entry.discountSum * this.exchangeRate)) + ((entry.taxSum * this.exchangeRate) + (entry.cessSum * this.exchangeRate)), 2);
             } else {
                 transaction.convertedTotal = giddhRoundOff(transaction.total * this.exchangeRate, 2);
             }
@@ -7486,7 +7490,16 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         let deposit = new AmountClassMulticurrency();
         if ((this.userDeposit !== null && this.userDeposit !== undefined) || this.voucherApiVersion !== 2) {
             deposit.accountUniqueName = this.depositAccountUniqueName;
-            deposit.amountForAccount = this.depositAmount;
+
+            if(this.voucherApiVersion === 2) {
+                if(this.selectedPaymentMode?.additional?.currency?.code === this.invFormData?.accountDetails?.currency?.code) {
+                    deposit.amountForAccount = this.depositAmount;
+                } else {
+                    deposit.amountForCompany = this.depositAmount;
+                }
+            } else {
+                deposit.amountForAccount = this.depositAmount;
+            }
         } else {
             if(this.isUpdateMode) {
                 deposit = this.previousDeposit;
