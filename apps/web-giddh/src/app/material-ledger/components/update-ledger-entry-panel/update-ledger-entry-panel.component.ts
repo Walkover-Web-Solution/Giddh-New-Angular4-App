@@ -1942,16 +1942,16 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         if (event) {
             this.vm.voucherTypeList = [{
                 label: this.commonLocaleData?.app_voucher_types?.sales,
-                value: (this.voucherApiVersion === 2) ? VoucherTypeEnum.sales : 'sal'
+                value: 'sal'
             }, {
                 label: this.commonLocaleData?.app_voucher_types?.purchases,
-                value: (this.voucherApiVersion === 2) ? VoucherTypeEnum.purchase : 'pur'
+                value: 'pur'
             }, {
                 label: this.commonLocaleData?.app_voucher_types?.receipt,
-                value: (this.voucherApiVersion === 2) ? VoucherTypeEnum.receipt : 'rcpt'
+                value: 'rcpt'
             }, {
                 label: this.commonLocaleData?.app_voucher_types?.payment,
-                value: (this.voucherApiVersion === 2) ? VoucherTypeEnum.payment : 'pay'
+                value: 'pay'
             }, {
                 label: this.commonLocaleData?.app_voucher_types?.journal,
                 value: 'jr'
