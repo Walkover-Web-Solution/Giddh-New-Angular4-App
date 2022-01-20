@@ -3,20 +3,20 @@ import { ControlValueAccessor, NgControl } from "@angular/forms";
 import { MatFormFieldControl } from "@angular/material/form-field";
 import { Subject } from "rxjs";
 
-const noop = () => {
-};
+const noop = () => { };
 
 @Component({
-    selector: "text-field",
-    styleUrls: ["./text-field.component.scss"],
-    templateUrl: "./text-field.component.html",
+    selector: 'text-field',
+    styleUrls: ['./text-field.component.scss'],
+    templateUrl: './text-field.component.html',
     providers: [
         {
             provide: MatFormFieldControl,
             useExisting: TextFieldComponent,
-        },
+            multi: true
+        }
     ],
-    changeDetection: ChangeDetectionStrategy.OnPush,
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TextFieldComponent implements OnInit, OnChanges, OnDestroy, ControlValueAccessor {
     @ViewChild('textField', {static: false}) public textField: ElementRef;
@@ -34,7 +34,7 @@ export class TextFieldComponent implements OnInit, OnChanges, OnDestroy, Control
     /** It will focus in the text field */
     @Input() public autoFocus: boolean = false;
     /** ngModel of input */
-    @Input() public ngModel: any;
+    public ngModel: any;
     /** Used for change detection */
     public stateChanges = new Subject<void>();
     /** Placeholders for the callbacks which are later provided by the Control Value Accessor */
@@ -44,6 +44,7 @@ export class TextFieldComponent implements OnInit, OnChanges, OnDestroy, Control
     constructor(
         @Optional() @Self() public ngControl: NgControl,
         private elementRef: ElementRef<HTMLElement>,
+        private changeDetectionRef: ChangeDetectorRef
     ) {
         if (this.ngControl != null) {
             this.ngControl.valueAccessor = this;
@@ -120,6 +121,7 @@ export class TextFieldComponent implements OnInit, OnChanges, OnDestroy, Control
      */
     public writeValue(value: any): void {
         this.value = value;
+        this.changeDetectionRef.detectChanges();
     }
 
     /**
@@ -149,8 +151,8 @@ export class TextFieldComponent implements OnInit, OnChanges, OnDestroy, Control
      * @memberof TextFieldComponent
      */
     public setDescribedByIds(ids: string[]): void {
-        const controlElement = this.elementRef.nativeElement.querySelector(".text-field-container")!;
-        controlElement.setAttribute("aria-describedby", ids.join(" "));
+        const controlElement = this.elementRef.nativeElement.querySelector('.text-field-container')!;
+        controlElement.setAttribute('aria-describedby', ids.join(' '));
     }
 
     /**
