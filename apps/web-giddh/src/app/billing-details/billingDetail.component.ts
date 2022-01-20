@@ -126,7 +126,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
     public ngOnInit(): void {
 
         /** This will be use for reset state value if input is empty */
-        this.store.pipe(select(s => s.general.states), take(1)).subscribe(res => {
+        this.store.pipe(select(s => s.general.states), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
                 Object.keys(res.stateList).forEach(key => {
                     if (res.stateList[key]?.code === this.createNewCompany?.addresses[0]?.stateCode) {
