@@ -148,6 +148,8 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     public destinationWarehouseClear$: Observable<IForceClear> = observableOf({ status: false });
     /** Information message to be shown to the user for branch transfer */
     public branchTransferInfoText: string = '';
+    /** True if it's default load */
+    private isDefaultLoad: boolean = false;
 
     constructor(private _router: Router, private store: Store<AppState>, private _generalService: GeneralService, private _inventoryAction: InventoryAction, private commonActions: CommonActions, private inventoryAction: InventoryAction, private _toasty: ToasterService, private _warehouseService: SettingsWarehouseService, private invoiceActions: InvoiceActions, private inventoryService: InventoryService, private _cdRef: ChangeDetectorRef, public bsConfig: BsDatepickerConfig) {
         this.bsConfig.dateInputFormat = GIDDH_DATE_FORMAT;
@@ -181,6 +183,8 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
         if (!this.editBranchTransferUniqueName) {
             this.allowAutoFocusInField = true;
             this.focusDefaultSource();
+        } else {
+            this.isDefaultLoad = true;
         }
         this.isBranch = this._generalService.currentOrganizationType === OrganizationType.Branch;
         this.isCompanyWithSingleBranch = this._generalService.currentOrganizationType === OrganizationType.Company && this.branches && this.branches.length === 1;
@@ -315,7 +319,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     }
 
     public selectCompany(event, type, index): void {
-        if (type) {
+        if (!this.isDefaultLoad && type) {
             if (type === "sources") {
                 if (this.branchTransfer.sources[index]) {
                     this.branchTransfer.sources[index].name = event.label;
@@ -324,9 +328,9 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                         this.branchTransfer.sources[index].warehouse.uniqueName = "";
                         this.branchTransfer.sources[index].warehouse.taxNumber = "";
                         this.branchTransfer.sources[index].warehouse.address = "";
-                        if(!this.branchTransfer.sources[index].warehouse.stockDetails) {
+                        if (!this.branchTransfer.sources[index].warehouse.stockDetails) {
                             this.branchTransfer.sources[index].warehouse.stockDetails = {
-                                stockUnit : null,
+                                stockUnit: null,
                                 amount: null,
                                 rate: null,
                                 quantity: null
@@ -346,9 +350,9 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                         this.branchTransfer.destinations[index].warehouse.taxNumber = "";
                         this.branchTransfer.destinations[index].warehouse.address = "";
 
-                        if(!this.branchTransfer.destinations[index].warehouse.stockDetails) {
+                        if (!this.branchTransfer.destinations[index].warehouse.stockDetails) {
                             this.branchTransfer.destinations[index].warehouse.stockDetails = {
-                                stockUnit : null,
+                                stockUnit: null,
                                 amount: null,
                                 rate: null,
                                 quantity: null
@@ -1055,6 +1059,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
             } else {
                 product.hsnNumber = "";
             }
+            delete product.variant;
         });
 
         if (this.editBranchTransferUniqueName) {
@@ -1260,6 +1265,10 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                 setTimeout(() => {
                     this.allowAutoFocusInField = true;
                 }, 200);
+
+                setTimeout(() => {
+                    this.isDefaultLoad = false;
+                }, 1000);
             } else {
                 this.closeBranchTransferPopup();
                 this._toasty.errorToast(response.message);

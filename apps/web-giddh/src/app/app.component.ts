@@ -137,7 +137,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
 
         this.store.pipe(select(state => state.session.currentLocale), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                if(this.activeLocale !== response?.value) {
+                if (this.activeLocale !== response?.value) {
                     this.activeLocale = response?.value;
                     this.store.dispatch(this.commonActions.getCommonLocaleData(response.value));
                 }
