@@ -341,15 +341,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             }
         });
 
-        this.store.pipe(select(appState => appState.warehouse.warehouses), takeUntil(this.destroyed$)).subscribe((warehouses: any) => {
-            if (warehouses) {
-                const warehouseData = this.settingsUtilityService.getFormattedWarehouseData(warehouses.results);
-                this.warehouses = warehouseData.formattedWarehouses;
-                this.defaultWarehouse = (warehouseData.defaultWareßhouse) ? warehouseData.defaultWarehouse.uniqueName : '';
-            } else {
-                this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: 0 }));
-            }
-        });
         this.store.pipe(select(appState => appState.company), takeUntil(this.destroyed$)).subscribe((companyData: CurrentCompanyState) => {
             if (companyData) {
                 this.isTcsTdsApplicable = companyData.isTcsTdsApplicable;
@@ -2209,6 +2200,19 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         initialAccounts.push(...this.defaultSuggestions);
         this.searchResults = orderBy(uniqBy(initialAccounts, 'value'), 'label');
         this.vm.isInvoiceGeneratedAlready = this.vm.selectedLedger.voucherGenerated;
+
+        this.store.pipe(select(appState => appState.warehouse.warehouses), takeUntil(this.destroyed$)).subscribe((warehouses: any) => {
+            if (warehouses) {
+                if(this.selectedWarehouse) {
+                    warehouses.results = warehouses.results?.filter(warehouse => this.selectedWarehouse === warehouse?.uniqueName ||!warehouse.isArchived);
+                }
+                const warehouseData = this.settingsUtilityService.getFormattedWarehouseData(warehouses.results);
+                this.warehouses = warehouseData.formattedWarehouses;
+                this.defaultWarehouse = (warehouseData.defaultWareßhouse) ? warehouseData.defaultWarehouse.uniqueName : '';
+            } else {
+                this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: 0 }));
+            }
+        });
 
         // check if entry allows to show discount and taxes box
         // first check with opened lager
