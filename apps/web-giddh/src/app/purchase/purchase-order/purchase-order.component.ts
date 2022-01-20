@@ -233,6 +233,7 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
 
         this.store.pipe(select(appState => appState.warehouse.warehouses), filter((warehouses) => !!warehouses), takeUntil(this.destroyed$)).subscribe((warehouses: any) => {
             if (warehouses) {
+                warehouses.results = warehouses.results?.filter(warehouse => !warehouse.isArchived);
                 const warehouseData = this.settingsUtilityService.getFormattedWarehouseData(warehouses.results);
                 if (warehouseData) {
                     this.warehouses = warehouseData.formattedWarehouses;

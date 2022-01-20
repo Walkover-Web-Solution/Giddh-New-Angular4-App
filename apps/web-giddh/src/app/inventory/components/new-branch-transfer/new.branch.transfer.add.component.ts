@@ -33,6 +33,7 @@ import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.co
 import { InvoiceSetting } from '../../../models/interfaces/invoice.setting.interface';
 import { OrganizationType } from '../../../models/user-login-state';
 import { clone, cloneDeep, isEmpty } from '../../../lodash-optimized';
+import { L } from '@angular/cdk/keycodes';
 
 @Component({
     selector: 'new-branch-transfer',
@@ -495,17 +496,21 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                     d.warehouses.forEach(warehouse => {
                         warehouse.taxNumber = warehouse.taxNumber || '';
                     });
-                    branches.push(new LinkedStocksVM(d.name, d.uniqueName, false, d.alias, d.warehouses));
+                    if (this.editBranchTransferUniqueName || !d.isArchived) {
+                        branches.push(new LinkedStocksVM(d.name, d.uniqueName, false, d.alias, d.warehouses, d.isArchived));
+                    }
                     if (d.warehouses.length) {
                         this.senderWarehouses[d.uniqueName] = [];
                         this.destinationWarehouses[d.uniqueName] = [];
                         this.allWarehouses[d.uniqueName] = [];
 
                         d.warehouses.forEach(key => {
-                            this.allWarehouses[d.uniqueName].push(key);
+                            if (this.editBranchTransferUniqueName || !key.isArchived) {
+                                this.allWarehouses[d.uniqueName].push(key);
 
-                            this.senderWarehouses[d.uniqueName].push({ label: key.name, value: key.uniqueName });
-                            this.destinationWarehouses[d.uniqueName].push({ label: key.name, value: key.uniqueName });
+                                this.senderWarehouses[d.uniqueName].push({ label: key.name, value: key.uniqueName });
+                                this.destinationWarehouses[d.uniqueName].push({ label: key.name, value: key.uniqueName });
+                            }
                         });
                     }
                 }
@@ -724,12 +729,12 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     /**
      * Resets the source warehouse in sender and destination dropdowns
      *
-     * @param {*} index Index of the warehouse
+     * @param {number} index Index of the warehouse
      * @param {boolean} [reInitializeWarehouses] True, if the warehouse dropdown needs to be reset (is true only when either sender/receiver
      * warehouses are reset and the left sender/receiver warehouse needs to be reset)
      * @memberof NewBranchTransferAddComponent
      */
-    public resetSourceWarehouses(index, reInitializeWarehouses?: boolean) {
+    public resetSourceWarehouses(index: number, reInitializeWarehouses?: boolean) {
         if (this.branchTransfer.destinations && this.branchTransfer.destinations[index] && this.branchTransfer.destinations[index].warehouse && this.branchTransfer.destinations[index].warehouse.uniqueName !== null) {
             this.senderWarehouses[this.branchTransfer.destinations[index].uniqueName] = [];
             let allowWarehouse = true;
@@ -1163,6 +1168,28 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                 this.branchTransfer.destinations = response.body.destinations;
                 this.branchTransfer.products = response.body.products;
 
+                let allWarehouses = [];
+                if(Object.keys(this.allWarehouses)?.length > 0) {
+                    const usedWarehouses = [];
+                    this.branchTransfer.sources?.forEach(branch => {
+                        usedWarehouses.push(branch?.warehouse?.uniqueName);
+                    });
+                    this.branchTransfer.destinations?.forEach(branch => {
+                        usedWarehouses.push(branch?.warehouse?.uniqueName);
+                    });
+
+                    Object.keys(this.allWarehouses)?.forEach(branch => {
+                        allWarehouses[branch] = [];
+                        this.allWarehouses[branch]?.forEach(warehouse => {
+                            if(!warehouse?.isArchived || usedWarehouses?.includes(warehouse?.uniqueName)) {
+                                allWarehouses[branch].push(warehouse);
+                            }
+                        });
+                    });
+
+                    this.allWarehouses = allWarehouses;
+                }
+
                 this.branchTransfer.sources.forEach(source => {
                     if (source?.warehouse?.address) {
                         const pin = source.warehouse.pincode;
@@ -1189,25 +1216,15 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                     });
                 }
 
-                if (this.isUpdateMode) {
-                    let tempBranches = [];
-                    this.branches?.forEach(branch => {
-                        if (!branch?.additional?.isArchived || (branch?.additional?.isArchived && (this.branchExists(branch?.value, this.branchTransfer.destinations) || this.branchExists(branch?.value, this.branchTransfer.sources)))) {
-                            tempBranches.push(branch);
-                        }
-                    });
+                let tempBranches = [];
+                this.branches?.forEach(branch => {
+                    if (!branch?.additional?.isArchived || (branch?.additional?.isArchived && (this.branchExists(branch?.value, this.branchTransfer.destinations) || this.branchExists(branch?.value, this.branchTransfer.sources)))) {
+                        tempBranches.push(branch);
+                    }
+                });
 
-                    this.branches = cloneDeep(tempBranches);
-                } else {
-                    let tempBranches = [];
-                    this.branches?.forEach(branch => {
-                        if (!branch?.additional?.isArchived) {
-                            tempBranches.push(branch);
-                        }
-                    });
-
-                    this.branches = cloneDeep(tempBranches);
-                }
+                this.branches = cloneDeep(tempBranches);
+                this.branches$ = observableOf(this.branches);
 
                 this.branchTransfer.entity = response.body.entity;
                 this.branchTransfer.transferType = "products"; // MULTIPLE PRODUCTS VIEW SHOULD SHOW IN CASE OF EDIT
