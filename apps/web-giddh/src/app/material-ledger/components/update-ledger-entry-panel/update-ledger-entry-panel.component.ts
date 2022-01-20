@@ -2122,10 +2122,11 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
                         this.store.pipe(select(appState => appState.warehouse.warehouses), takeUntil(this.destroyed$)).subscribe((warehouses: any) => {
                             if (warehouses) {
+                                let warehouseResults = cloneDeep(warehouses.results);
                                 if(this.selectedWarehouse) {
-                                    warehouses.results = warehouses.results?.filter(warehouse => this.selectedWarehouse === warehouse?.uniqueName ||!warehouse.isArchived);
+                                    warehouseResults = warehouseResults?.filter(warehouse => this.selectedWarehouse === warehouse?.uniqueName ||!warehouse.isArchived);
                                 }
-                                const warehouseData = this.settingsUtilityService.getFormattedWarehouseData(warehouses.results);
+                                const warehouseData = this.settingsUtilityService.getFormattedWarehouseData(warehouseResults);
                                 this.warehouses = warehouseData.formattedWarehouses;
                                 this.defaultWarehouse = (warehouseData.defaultWareßhouse) ? warehouseData.defaultWarehouse.uniqueName : '';
                             } else {

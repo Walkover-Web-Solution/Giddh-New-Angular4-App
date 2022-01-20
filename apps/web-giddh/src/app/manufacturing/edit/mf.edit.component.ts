@@ -751,8 +751,9 @@ export class MfEditComponent implements OnInit, OnDestroy {
         this.store.pipe(select(appState => appState.warehouse.warehouses), filter((warehouses) => !!warehouses), takeUntil(this.destroyed$)).subscribe((warehouses: any) => {
             this.warehouses = [];
             if (warehouses && warehouses.results) {
-                warehouses.results = warehouses.results?.filter(warehouse => this.manufacturingDetails?.warehouseUniqueName === warehouse.uniqueName || !warehouse.isArchived);
-                warehouses.results.forEach(warehouse => {
+                let warehouseResults = cloneDeep(warehouses.results);
+                warehouseResults = warehouseResults?.filter(warehouse => this.manufacturingDetails?.warehouseUniqueName === warehouse.uniqueName || !warehouse.isArchived);
+                warehouseResults.forEach(warehouse => {
                     this.warehouses.push({ label: warehouse.name, value: warehouse.uniqueName, additional: warehouse });
                 });
             }
