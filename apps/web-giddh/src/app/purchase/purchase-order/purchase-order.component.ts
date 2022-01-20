@@ -18,6 +18,7 @@ import { SettingsUtilityService } from '../../settings/services/settings-utility
 import { WarehouseActions } from '../../settings/warehouse/action/warehouse.action';
 import { BULK_UPDATE_FIELDS } from '../../shared/helpers/purchaseOrderStatus';
 import { OrganizationType } from '../../models/user-login-state';
+import { cloneDeep } from '../../lodash-optimized';
 
 @Component({
     selector: 'purchase-order',
@@ -233,8 +234,9 @@ export class PurchaseOrderComponent implements OnDestroy {
 
         this.store.pipe(select(appState => appState.warehouse.warehouses), filter((warehouses) => !!warehouses), takeUntil(this.destroyed$)).subscribe((warehouses: any) => {
             if (warehouses) {
-                warehouses.results = warehouses.results?.filter(warehouse => !warehouse.isArchived);
-                const warehouseData = this.settingsUtilityService.getFormattedWarehouseData(warehouses.results);
+                let warehouseResults = cloneDeep(warehouses.results);
+                warehouseResults = warehouseResults?.filter(warehouse => !warehouse.isArchived);
+                const warehouseData = this.settingsUtilityService.getFormattedWarehouseData(warehouseResults);
                 if (warehouseData) {
                     this.warehouses = warehouseData.formattedWarehouses;
                 }
