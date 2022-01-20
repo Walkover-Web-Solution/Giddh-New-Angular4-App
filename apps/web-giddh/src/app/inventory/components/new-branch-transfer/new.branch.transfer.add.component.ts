@@ -32,8 +32,7 @@ import { SettingsWarehouseService } from '../../../services/settings.warehouse.s
 import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
 import { InvoiceSetting } from '../../../models/interfaces/invoice.setting.interface';
 import { OrganizationType } from '../../../models/user-login-state';
-import { clone, cloneDeep, isEmpty } from '../../../lodash-optimized';
-import { L } from '@angular/cdk/keycodes';
+import { cloneDeep, isEmpty } from '../../../lodash-optimized';
 
 @Component({
     selector: 'new-branch-transfer',
