@@ -124,6 +124,18 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     public ngOnInit(): void {
+
+        /** This will be use for reset state value if input is empty */
+        this.store.pipe(select(s => s.general.states), take(1)).subscribe(res => {
+            if (res) {
+                Object.keys(res.stateList).forEach(key => {
+                    if (res.stateList[key]?.code === this.createNewCompany?.addresses[0]?.stateCode) {
+                        this.checkAndResetValue(this.searchBillingStates, res.stateList[key].name);
+                    }
+                });
+            }
+        });
+
         /** This will use for filter states  */
         this.searchBillingStates.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(search => {
             this.filterStates(search);
@@ -349,6 +361,8 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
             if (this.billingDetailsObj) {
                 if (this.billingDetailsObj.stateCode) {
                     this.createNewCompany.userBillingDetails.stateCode = this.billingDetailsObj.stateCode;
+                } else {
+                    return;
                 }
             }
         }
@@ -660,23 +674,18 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof BillingDetailComponent
      */
     public resetValueIfOptionNotSelected(field: string): void {
-        this.store.pipe(select(s => s.general.states), take(1)).subscribe(res => {
-            Object.keys(res.stateList).forEach(key => {
-                if (res.stateList[key]?.code === this.createNewCompany.addresses[0]?.stateCode) {
-                    setTimeout(() => {
-                        switch (field) {
-                            case "billingState":
-                                this.checkAndResetValue(this.searchBillingStates, res.stateList[key].name);
-                                break;
+        setTimeout(() => {
+            switch (field) {
+                case "billingState":
+                    const stateObj = this.companyStatesSource?.filter(state => state.value === this.billingDetailsObj.stateCode);
+                    this.checkAndResetValue(this.searchBillingStates, stateObj[0]?.label);
+                    break;
 
-                            case "billingCountry":
-                                this.checkAndResetValue(this.searchCountry, this.activeCompany.country);
-                                break;
-                        }
-                    }, 200);
-                }
-            });
-        });
+                case "billingCountry":
+                    this.checkAndResetValue(this.searchCountry, this.activeCompany.country);
+                    break;
+            }
+        }, 200);
     }
 
     /**
