@@ -658,5 +658,8 @@
         "monthly": "Monthly",
         "unlimited": "Unlimited"
     },
-    "app_create_custom_field": "Create Custom Fields"
+    "app_voucher_unavailable": "There is no voucher for adjustment.",
+    "app_reference_invoice": "Reference Invoice",
+    "app_create_custom_field": "Create Custom Fields",
+    "app_validation": "Validation"
 }

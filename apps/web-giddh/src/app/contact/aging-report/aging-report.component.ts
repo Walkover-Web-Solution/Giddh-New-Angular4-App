@@ -1,38 +1,58 @@
-import { Component, ComponentFactoryResolver, EventEmitter, OnInit, Output, ViewChild, ChangeDetectorRef, Input, OnDestroy, ElementRef } from '@angular/core';
-import { AgingAdvanceSearchModal, AgingDropDownoptions, ContactAdvanceSearchCommonModal, DueAmountReportQueryRequest, DueAmountReportResponse } from '../../models/api-models/Contact';
-import { select, Store } from '@ngrx/store';
-import { AppState } from '../../store';
-import { AgingReportActions } from '../../actions/aging-report.actions';
-import { cloneDeep, map as lodashMap } from '../../lodash-optimized';
-import { Observable, of, ReplaySubject, Subject } from 'rxjs';
-import { BsDropdownDirective } from 'ngx-bootstrap/dropdown';
-import { PaginationComponent } from 'ngx-bootstrap/pagination';
-import { BsModalRef, BsModalService, ModalOptions } from 'ngx-bootstrap/modal';
-import { ModalDirective } from 'ngx-bootstrap/modal';
-import { ElementViewContainerRef } from '../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
-import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
-import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
-import * as moment from 'moment/moment';
-import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
-import { ContactAdvanceSearchComponent } from '../advanceSearch/contactAdvanceSearch.component';
-import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
-import { GeneralService } from '../../services/general.service';
-import { SettingsBranchActions } from '../../actions/settings/branch/settings.branch.action';
-import { OrganizationType } from '../../models/user-login-state';
-import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../app.constant';
-import { FormControl } from '@angular/forms';
+import {
+    Component,
+    ComponentFactoryResolver,
+    EventEmitter,
+    OnInit,
+    Output,
+    ViewChild,
+    ChangeDetectorRef,
+    Input,
+    OnDestroy,
+    ElementRef,
+    TemplateRef,
+} from "@angular/core";
+import {
+    AgingAdvanceSearchModal,
+    AgingDropDownoptions,
+    ContactAdvanceSearchCommonModal,
+    DueAmountReportQueryRequest,
+    DueAmountReportResponse, Result,
+} from "../../models/api-models/Contact";
+import { Store, select } from "@ngrx/store";
+import { AppState } from "../../store";
+import { AgingReportActions } from "../../actions/aging-report.actions";
+import { cloneDeep, map as lodashMap } from "../../lodash-optimized";
+import { Observable, of, ReplaySubject, Subject } from "rxjs";
+import { BsDropdownDirective } from "ngx-bootstrap/dropdown";
+import { PaginationComponent } from "ngx-bootstrap/pagination";
+import { BsModalRef, BsModalService, ModalOptions } from "ngx-bootstrap/modal";
+import { ModalDirective } from "ngx-bootstrap/modal";
+import { ElementViewContainerRef } from "../../shared/helpers/directives/elementViewChild/element.viewchild.directive";
+import { debounceTime, distinctUntilChanged, take, takeUntil } from "rxjs/operators";
+import { BreakpointObserver, BreakpointState } from "@angular/cdk/layout";
+import * as moment from "moment/moment";
+import { PerfectScrollbarConfigInterface } from "ngx-perfect-scrollbar";
+import { ContactAdvanceSearchComponent } from "../advanceSearch/contactAdvanceSearch.component";
+import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from "../../shared/helpers/defaultDateFormat";
+import { GeneralService } from "../../services/general.service";
+import { SettingsBranchActions } from "../../actions/settings/branch/settings.branch.action";
+import { OrganizationType } from "../../models/user-login-state";
+import { GIDDH_DATE_RANGE_PICKER_RANGES } from "../../app.constant";
+import { FormControl } from "@angular/forms";
+import { MatDialog } from "@angular/material/dialog";
+import { MatTableDataSource } from "@angular/material/table";
 
 @Component({
-    selector: 'aging-report',
-    templateUrl: 'aging-report.component.html',
-    styleUrls: ['aging-report.component.scss']
+    selector: "aging-report",
+    templateUrl: "aging-report.component.html",
+    styleUrls: ["aging-report.component.scss"],
 })
 export class AgingReportComponent implements OnInit, OnDestroy {
     /* This will hold local JSON data */
     @Input() public localeData: any = {};
     /* This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
-    public totalDueSelectedOption: string = '0';
+    public totalDueSelectedOption: string = "0";
     public totalDueAmount: number = 0;
     public includeName: boolean = false;
     public names: any = [];
@@ -45,34 +65,39 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     public totalFutureDueAmounts: number = 0;
     public universalDate$: Observable<any>;
     public moment = moment;
-    public key: string = 'name';
-    public order: string = 'asc';
-    public filter: string = '';
+    public key: string = "name";
+    public order: string = "asc";
+    public filter: string = "";
     public config: PerfectScrollbarConfigInterface = { suppressScrollX: false, suppressScrollY: false };
     public searchStr$ = new Subject<string>();
-    public searchStr: string = '';
+    public searchStr: string = "";
     public isMobileScreen: boolean = false;
     public modalConfig: ModalOptions = {
         animated: true,
         keyboard: true,
-        backdrop: 'static',
-        ignoreBackdropClick: true
+        backdrop: "static",
+        ignoreBackdropClick: true,
     };
     public isAdvanceSearchApplied: boolean = false;
     public agingAdvanceSearchModal: AgingAdvanceSearchModal = new AgingAdvanceSearchModal();
     public commonRequest: ContactAdvanceSearchCommonModal = new ContactAdvanceSearchCommonModal();
-    @ViewChild('advanceSearch', { static: true }) public advanceSearch: ModalDirective;
-    @ViewChild('paginationChild', { static: false }) public paginationChild: ElementViewContainerRef;
-    @ViewChild('filterDropDownList', { static: true }) public filterDropDownList: BsDropdownDirective;
+    // @ViewChild('advanceSearch', { static: true }) public advanceSearch: ModalDirective;
+    @ViewChild("advanceSearch") advanceSearchTemplate: TemplateRef<any>;
+
+    @ViewChild("paginationChild", { static: false }) public paginationChild: ElementViewContainerRef;
+    @ViewChild("filterDropDownList", { static: true }) public filterDropDownList: BsDropdownDirective;
     /** Advance search component instance */
-    @ViewChild('agingReportAdvanceSearch', { read: ContactAdvanceSearchComponent, static: true }) public agingReportAdvanceSearch: ContactAdvanceSearchComponent;
-    @Output() public creteNewCustomerEvent: EventEmitter<boolean> = new EventEmitter()
+    @ViewChild("agingReportAdvanceSearch", {
+        read: ContactAdvanceSearchComponent,
+        static: true,
+    }) public agingReportAdvanceSearch: ContactAdvanceSearchComponent;
+    @Output() public creteNewCustomerEvent: EventEmitter<boolean> = new EventEmitter();
     /** Observable to store the branches of current company */
     public currentCompanyBranches$: Observable<any>;
     /** Stores the branch list of a company */
     public currentCompanyBranches: Array<any>;
     /** Stores the current branch */
-    public currentBranch: any = { name: '', uniqueName: '' };
+    public currentBranch: any = { name: "", uniqueName: "" };
     /** Stores the current company */
     public activeCompany: any;
     /** Stores the current organization type */
@@ -82,7 +107,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     /** Stores the date field position in datepicker */
     public dateFieldPosition: any = { x: 0, y: 0 };
     /** Datepicker reference */
-    @ViewChild('datepickerTemplate', { static: true }) public datepickerTemplate: ElementRef;
+    @ViewChild("datepickerTemplate", { static: true }) public datepickerTemplate: ElementRef;
     /* Selected range label */
     public selectedRangeLabel: any = "";
     /* This will store selected date range to show on UI */
@@ -100,8 +125,13 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** True if due range request is in progress */
     private isDueRangeRequestInProgress: boolean = false;
+    /** List of columns for table */
+    public agingReportDisplayedColumns: string[] = ['customerName', 'parentGroup', 'app_upcoming_due', 'app_days_1', 'app_days_2', 'app_days_3', 'app_days_4', 'app_total_due'];
+    /** Datasource of aging report */
+    public agingReportDataSource = new MatTableDataSource<Result>([]);
 
     constructor(
+        public dialog: MatDialog,
         private store: Store<AppState>,
         private agingReportActions: AgingReportActions,
         private cdr: ChangeDetectorRef,
@@ -120,6 +150,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     public getDueAmountreportData() {
         this.store.pipe(select(s => s.agingreport.data), takeUntil(this.destroyed$)).subscribe((data) => {
             if (data && data.results) {
+                this.agingReportDataSource.data = data.results;
                 this.dueAmountReportRequest.page = data.page;
                 setTimeout(() => this.loadPaginationComponent(data)); // Pagination issue fix
                 this.totalDueAmounts = data.overAllDueAmount;
@@ -172,21 +203,21 @@ export class AgingReportComponent implements OnInit, OnDestroy {
         this.searchStr$.pipe(
             debounceTime(1000),
             distinctUntilChanged(),
-            takeUntil(this.destroyed$)
+            takeUntil(this.destroyed$),
         ).subscribe(term => {
             this.dueAmountReportRequest.q = term;
             this.getDueReport();
         });
 
         this.breakpointObserver
-            .observe(['(max-width: 768px)'])
+            .observe(["(max-width: 768px)"])
             .pipe(takeUntil(this.destroyed$))
             .subscribe((state: BreakpointState) => {
                 this.isMobileScreen = state.matches;
                 this.getDueAmountreportData();
             });
         this.store.pipe(
-            select(appState => appState.session.activeCompany), takeUntil(this.destroyed$)
+            select(appState => appState.session.activeCompany), takeUntil(this.destroyed$),
         ).subscribe(activeCompany => {
             this.activeCompany = activeCompany;
         });
@@ -200,10 +231,10 @@ export class AgingReportComponent implements OnInit, OnDestroy {
                     parentBranch: branch?.parentBranch
                 }));
                 this.currentCompanyBranches.unshift({
-                    label: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : '',
-                    name: this.activeCompany ? this.activeCompany.name : '',
-                    value: this.activeCompany ? this.activeCompany.uniqueName : '',
-                    isCompany: true
+                    label: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : "",
+                    name: this.activeCompany ? this.activeCompany.name : "",
+                    value: this.activeCompany ? this.activeCompany.uniqueName : "",
+                    isCompany: true,
                 });
                 let currentBranchUniqueName;
                 if (!this.currentBranch?.uniqueName) {
@@ -214,26 +245,26 @@ export class AgingReportComponent implements OnInit, OnDestroy {
                         currentBranchUniqueName = this.generalService.currentBranchUniqueName;
                         this.currentBranch = _.cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName)) || this.currentBranch;
                     } else {
-                        currentBranchUniqueName = this.activeCompany ? this.activeCompany.uniqueName : '';
+                        currentBranchUniqueName = this.activeCompany ? this.activeCompany.uniqueName : "";
                         this.currentBranch = {
-                            name: this.activeCompany ? this.activeCompany.name : '',
-                            alias: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : '',
-                            uniqueName: this.activeCompany ? this.activeCompany.uniqueName : '',
+                            name: this.activeCompany ? this.activeCompany.name : "",
+                            alias: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : "",
+                            uniqueName: this.activeCompany ? this.activeCompany.uniqueName : "",
                         };
                     }
-                    this.currentBranch.name = this.currentBranch.name + (this.currentBranch && this.currentBranch.alias ? ` (${this.currentBranch.alias})` : '');
+                    this.currentBranch.name = this.currentBranch.name + (this.currentBranch && this.currentBranch.alias ? ` (${this.currentBranch.alias})` : "");
                 }
             } else {
                 if (this.generalService.companyUniqueName) {
                     // Avoid API call if new user is onboarded
-                    this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '' }));
+                    this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: "", to: "" }));
                 }
             }
         });
         this.searchedName.valueChanges.pipe(
             debounceTime(700),
             distinctUntilChanged(),
-            takeUntil(this.destroyed$)
+            takeUntil(this.destroyed$),
         ).subscribe(searchedText => {
             this.searchStr$.next(searchedText);
         });
@@ -302,27 +333,27 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     public applyAdvanceSearch(request: ContactAdvanceSearchCommonModal) {
         this.commonRequest = request;
         this.agingAdvanceSearchModal.totalDueAmount = request.amount;
-        if (request.category === 'totalDue') {
+        if (request.category === "totalDue") {
             switch (request.amountType) {
-                case 'GreaterThan':
+                case "GreaterThan":
                     this.agingAdvanceSearchModal.totalDueAmountGreaterThan = true;
                     this.agingAdvanceSearchModal.totalDueAmountLessThan = false;
                     this.agingAdvanceSearchModal.totalDueAmountEqualTo = false;
                     this.agingAdvanceSearchModal.totalDueAmountNotEqualTo = false;
                     break;
-                case 'LessThan':
+                case "LessThan":
                     this.agingAdvanceSearchModal.totalDueAmountGreaterThan = false;
                     this.agingAdvanceSearchModal.totalDueAmountLessThan = true;
                     this.agingAdvanceSearchModal.totalDueAmountEqualTo = false;
                     this.agingAdvanceSearchModal.totalDueAmountNotEqualTo = false;
                     break;
-                case 'Exclude':
+                case "Exclude":
                     this.agingAdvanceSearchModal.totalDueAmountGreaterThan = false;
                     this.agingAdvanceSearchModal.totalDueAmountLessThan = false;
                     this.agingAdvanceSearchModal.totalDueAmountEqualTo = false;
                     this.agingAdvanceSearchModal.totalDueAmountNotEqualTo = true;
                     break;
-                case 'Equals':
+                case "Equals":
                     this.agingAdvanceSearchModal.totalDueAmountGreaterThan = false;
                     this.agingAdvanceSearchModal.totalDueAmountLessThan = false;
                     this.agingAdvanceSearchModal.totalDueAmountEqualTo = true;
@@ -337,10 +368,10 @@ export class AgingReportComponent implements OnInit, OnDestroy {
         this.getDueReport();
     }
 
-    public sort(key: string, ord: 'asc' | 'desc' = 'asc') {
-        if (key.includes('range')) {
-            this.dueAmountReportRequest.rangeCol = parseInt(key.replace('range', ''));
-            this.dueAmountReportRequest.sortBy = 'range';
+    public sort(key: string, ord: "asc" | "desc" = "asc") {
+        if (key.includes("range")) {
+            this.dueAmountReportRequest.rangeCol = parseInt(key.replace("range", ""));
+            this.dueAmountReportRequest.sortBy = "range";
         } else {
             this.dueAmountReportRequest.rangeCol = null;
             this.dueAmountReportRequest.sortBy = key;
@@ -353,8 +384,24 @@ export class AgingReportComponent implements OnInit, OnDestroy {
         this.getDueReport();
     }
 
-    public toggleAdvanceSearchPopup() {
-        this.advanceSearch.toggle();
+    /**
+     * Shows advance search popup
+     *
+     * @memberof AgingReportComponent
+     */
+    public showAdvanceSearchPopup(): void {
+        this.dialog.open(this.advanceSearchTemplate, {
+            width: '630px',
+        });
+    }
+
+    /**
+     * Hides the advance search popup
+     *
+     * @memberof AgingReportComponent
+     */
+    public hideAdvanceSearchPopup(): void {
+        this.dialog.closeAll();
     }
 
     /**
@@ -373,13 +420,17 @@ export class AgingReportComponent implements OnInit, OnDestroy {
      * @param {*} element
      * @memberof AgingReportComponent
      */
-     public showGiddhDatepicker(element): void {
+    public showGiddhDatepicker(element): void {
         if (element) {
             this.dateFieldPosition = this.generalService.getPosition(element.target);
         }
         this.modalRef = this.modalService.show(
             this.datepickerTemplate,
-            Object.assign({}, { class: 'modal-xl giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: this.isMobileScreen })
+            Object.assign({}, {
+                class: "modal-xl giddh-datepicker-modal",
+                backdrop: false,
+                ignoreBackdropClick: this.isMobileScreen,
+            }),
         );
     }
 
@@ -388,7 +439,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
      *
      * @memberof AgingReportComponent
      */
-     public hideGiddhDatepicker(): void {
+    public hideGiddhDatepicker(): void {
         this.modalRef.hide();
     }
 
@@ -428,7 +479,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
      * @memberof AgingReportComponent
      */
     public handleClickOutside(event: any, element: any, searchedFieldName: string): void {
-        if (searchedFieldName === 'name') {
+        if (searchedFieldName === "name") {
             if (this.searchedName.value) {
                 return;
             }
@@ -444,16 +495,12 @@ export class AgingReportComponent implements OnInit, OnDestroy {
      * Toogles the search field
      *
      * @param {string} fieldName Field name to toggle
-     * @param {*} el Element reference for focusing
      * @memberof AgingReportComponent
      */
-    public toggleSearch(fieldName: string, el: any): void {
-        if (fieldName === 'name') {
+    public toggleSearch(fieldName: string): void {
+        if (fieldName === "name") {
             this.showNameSearch = true;
         }
-        setTimeout(() => {
-            el.focus();
-        });
     }
 
     /**
@@ -464,10 +511,10 @@ export class AgingReportComponent implements OnInit, OnDestroy {
      * @memberof AgingReportComponent
      */
     public getSearchFieldText(fieldName: string): string {
-        if (fieldName === 'name') {
+        if (fieldName === "name") {
             return this.localeData?.search_name;
         }
-        return '';
+        return "";
     }
 
     /**

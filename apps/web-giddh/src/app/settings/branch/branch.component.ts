@@ -205,7 +205,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
             this.changeBranchViewType('card')
         });
 
-        this.imgPath = (isElectron || isCordova) ? 'assets/images/warehouse-vector.svg' : AppUrl + APP_FOLDER + 'assets/images/warehouse-vector.svg';
+        this.imgPath = isElectron ? 'assets/images/warehouse-vector.svg' : AppUrl + APP_FOLDER + 'assets/images/warehouse-vector.svg';
     }
 
     /**

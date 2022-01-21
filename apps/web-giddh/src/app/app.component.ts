@@ -1,10 +1,5 @@
 import { NavigationEnd, NavigationStart, Router, RouteConfigLoadEnd, RouteConfigLoadStart } from '@angular/router';
-import { isCordova } from '@giddh-workspaces/utils';
-/**
- * Angular 2 decorators and services
- */
 import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
-
 import { Store, select } from '@ngrx/store';
 import { AppState } from './store/roots';
 import { GeneralService } from './services/general.service';
@@ -34,12 +29,10 @@ import { CommonActions } from './actions/common.actions';
     templateUrl: './app.component.html'
 })
 export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
-
     public sideMenu: { isopen: boolean } = { isopen: true };
     public companyMenu: { isopen: boolean } = { isopen: false };
     public isProdMode: boolean = false;
     public isElectron: boolean = false;
-    public isCordova: boolean = false;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public IAmLoaded: boolean = false;
     private newVersionAvailableForWebApp: boolean = false;
@@ -59,7 +52,6 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
     ) {
         this.isProdMode = PRODUCTION_ENV;
         this.isElectron = isElectron;
-        this.isCordova = isCordova();
 
         this.store.pipe(select(s => s.session), takeUntil(this.destroyed$)).subscribe(ss => {
             if (ss.user && ss.user.session && ss.user.session.id) {
@@ -78,11 +70,8 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
 
         if (!(this._generalService.user && this._generalService.sessionId)) {
             if (!window.location.href.includes('login') && !window.location.href.includes('token-verify') && !window.location.href.includes('download')) {
-                if (PRODUCTION_ENV && !(isElectron || this.isCordova)) {
+                if (PRODUCTION_ENV && !isElectron) {
                     window.location.href = 'https://giddh.com/login/';
-                } else if (this.isCordova) {
-                    this._generalService.invokeEvent.next('logoutCordova');
-                    this.router.navigate(['login']);
                 } else {
                     this.router.navigate(['/login']);
                 }
@@ -92,15 +81,6 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         this._generalService.IAmLoaded.pipe(takeUntil(this.destroyed$)).subscribe(s => {
             this.IAmLoaded = s;
         });
-
-        if (isCordova()) {
-            document.addEventListener("deviceready", function () {
-                if ((window as any).StatusBar) {
-                    (window as any).StatusBar.overlaysWebView(false);
-                    (window as any).StatusBar.styleLightContent();
-                }
-            }, false);
-        }
 
         if (Configuration.isElectron) {
             // electronOauth2
@@ -157,7 +137,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
 
         this.store.pipe(select(state => state.session.currentLocale), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                if(this.activeLocale !== response?.value) {
+                if (this.activeLocale !== response?.value) {
                     this.activeLocale = response?.value;
                     this.store.dispatch(this.commonActions.getCommonLocaleData(response.value));
                 }
@@ -172,7 +152,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         this._generalService.IAmLoaded.next(true);
         this._cdr.detectChanges();
         this.router.events.pipe(takeUntil(this.destroyed$)).subscribe((evt) => {
-            if ((evt instanceof NavigationStart) && this.newVersionAvailableForWebApp && !(isElectron || isCordova())) {
+            if ((evt instanceof NavigationStart) && this.newVersionAvailableForWebApp && !isElectron) {
                 // need to save last state
                 const redirectState = this.getLastStateFromUrl(evt.url);
                 localStorage.setItem('lastState', redirectState);
@@ -195,13 +175,13 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         if (location.href.includes('returnUrl')) {
             let tUrl = location.href.split('returnUrl=');
             if (tUrl[1]) {
-                if (!(isElectron || isCordova())) {
+                if (!isElectron) {
                     this.router.navigate(['pages/' + tUrl[1]]);
                 }
             }
         }
 
-        if (!LOCAL_ENV && !(isElectron || isCordova())) {
+        if (!LOCAL_ENV && !isElectron) {
             this._versionCheckService.initVersionCheck(AppUrl + '/version.json');
 
             this._versionCheckService.onVersionChange$.pipe(takeUntil(this.destroyed$)).subscribe((isChanged: boolean) => {

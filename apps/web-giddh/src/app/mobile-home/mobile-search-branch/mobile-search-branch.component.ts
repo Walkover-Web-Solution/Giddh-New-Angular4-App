@@ -119,7 +119,7 @@ export class MobileSearchBranchComponent implements OnInit, OnDestroy {
         this.setOrganizationDetails(OrganizationType.Branch, details);
         this.companyService.getStateDetails(this.generalService.companyUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.body) {
-                if (screen.width <= 767 || isCordova) {
+                if (screen.width <= 767) {
                     window.location.href = '/pages/mobile-home';
                 } else if (isElectron) {
                     this.router.navigate([response.body.lastState]);

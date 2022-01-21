@@ -66,7 +66,6 @@ export class ConnectBankModalComponent implements OnChanges, OnInit, OnDestroy {
     public cancelRequest: boolean = false;
     public needReloadingLinkedAccounts$: Observable<boolean> = of(false);
     public isElectron = isElectron;
-    public isCordova = isCordova;
     public base64StringForModel: SafeResourceUrl = '';
     /** Force clear for drop down */
     public forceClearReactive$: Observable<IForceClear> = of({ status: false });
