@@ -87,7 +87,7 @@
             float: left;
             width: 100%;
             label {
-                color: var(--color-black-pearl);
+                color: var(--color-slate);
                 float: left;
                 width: 100%;
             }
@@ -190,12 +190,15 @@
             }
             .features {
                 line-height: 1.7;
-                color: var(--color-black-pearl);
+                color: var(--color-slate);
                 margin-bottom: 3px;
             }
             .renewal-payable {
                 float: left;
                 width: 100%;
+                .mat-button-disabled {
+                    background-color: var(--color-slate) !important;
+                }
             }
             .new-payable {
                 font-size: 15px !important;
