@@ -580,7 +580,21 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
         if (event && event.additional) {
             product.name = event.additional.name;
             product.stockDetails.stockUnit = event.additional.stockUnit.code;
-            product.stockDetails.rate = event.additional.rate;
+
+            let data = {
+                stockUniqueName: event.value,
+                quantity: 1,
+                stockUnitCode: null,
+                rate: null,
+                amount: null
+            };
+
+            this.inventoryService.GetRateForStoke(event.value, data).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+                if (response.status === 'success') {
+                    product.stockDetails.rate = cloneDeep(response.body.rate);
+                }
+            });
+
             product.stockDetails.quantity = product.stockDetails.quantity || 1;
             product.skuCode = event.additional.skuCode;
 
