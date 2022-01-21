@@ -59,6 +59,20 @@ $custom-typography: mat-typography-config(
         border-top: 0 !important;
     }
 }
+.all-table {
+    .mat-column-contact {
+        text-transform: lowercase;
+    }
+    .contact-header {
+        text-transform: capitalize !important;
+    }
+    td.mat-column-comment {
+        white-space: unset !important;
+    }
+    .comment-header {
+        min-width: 170px !important;
+    }
+}
 @media screen and (max-width: 1366px) and (orientation: portrait) {
     .subscription-form-select {
         float: left !important;
