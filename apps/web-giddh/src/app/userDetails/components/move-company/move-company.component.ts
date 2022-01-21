@@ -37,6 +37,8 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Control for the MatSelect filter keyword */
     public searchPlan: FormControl = new FormControl();
+    /** True if api call in progress */
+    public isLoading: boolean = true;
 
     constructor(private store: Store<AppState>, private settingsProfileActions: SettingsProfileActions, private settingsProfileService: SettingsProfileService) {
 
@@ -102,16 +104,15 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
                     this.subscriptions.forEach(plan => {
                         if (plan.subscriptionId && plan.planDetails?.companiesLimit > plan.totalCompanies && this.moveSelectedCompany?.subscription?.subscriptionId !== plan.subscriptionId && this.availablePlans[plan.planDetails.uniqueName] === undefined && plan.planDetails.countries.includes(this.moveSelectedCompany.country)) {
                             this.availablePlansOption.push({ label: plan.planDetails.name, value: plan.planDetails.uniqueName });
-
                             if (this.availablePlans[plan.planDetails.uniqueName] === undefined) {
                                 this.availablePlans[plan.planDetails.uniqueName] = [];
                             }
-
                             this.availablePlans[plan.planDetails.uniqueName] = plan;
                         }
                     });
                 }
             }
+            this.isLoading = false;
         });
     }
 
