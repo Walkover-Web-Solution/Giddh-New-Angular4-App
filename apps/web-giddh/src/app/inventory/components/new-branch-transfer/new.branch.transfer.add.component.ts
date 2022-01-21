@@ -499,17 +499,21 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                     d.warehouses.forEach(warehouse => {
                         warehouse.taxNumber = warehouse.taxNumber || '';
                     });
-                    branches.push(new LinkedStocksVM(d.name, d.uniqueName, false, d.alias, d.warehouses));
+                    if (this.editBranchTransferUniqueName || !d.isArchived) {
+                        branches.push(new LinkedStocksVM(d.name, d.uniqueName, false, d.alias, d.warehouses, d.isArchived));
+                    }
                     if (d.warehouses.length) {
                         this.senderWarehouses[d.uniqueName] = [];
                         this.destinationWarehouses[d.uniqueName] = [];
                         this.allWarehouses[d.uniqueName] = [];
 
                         d.warehouses.forEach(key => {
-                            this.allWarehouses[d.uniqueName].push(key);
+                            if (this.editBranchTransferUniqueName || !key.isArchived) {
+                                this.allWarehouses[d.uniqueName].push(key);
 
-                            this.senderWarehouses[d.uniqueName].push({ label: key.name, value: key.uniqueName });
-                            this.destinationWarehouses[d.uniqueName].push({ label: key.name, value: key.uniqueName });
+                                this.senderWarehouses[d.uniqueName].push({ label: key.name, value: key.uniqueName });
+                                this.destinationWarehouses[d.uniqueName].push({ label: key.name, value: key.uniqueName });
+                            }
                         });
                     }
                 }
