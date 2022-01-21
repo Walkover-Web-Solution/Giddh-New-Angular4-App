@@ -301,8 +301,10 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         });
 
         this.store.pipe(select(appState => appState.warehouse.warehouses), take(1)).subscribe((warehouses: any) => {
-            if (warehouses) {
-                const warehouseData = this.settingsUtilityService.getFormattedWarehouseData(warehouses.results);
+            if (warehouses?.results) {
+                let warehouseResults = cloneDeep(warehouses.results);
+                warehouseResults = warehouseResults?.filter(warehouse => !warehouse.isArchived);
+                const warehouseData = this.settingsUtilityService.getFormattedWarehouseData(warehouseResults);
                 this.warehouses = warehouseData.formattedWarehouses;
                 this.defaultWarehouse = (warehouseData.defaultWarehouse) ? warehouseData.defaultWarehouse.uniqueName : '';
                 this.selectedWarehouse = String(this.defaultWarehouse);

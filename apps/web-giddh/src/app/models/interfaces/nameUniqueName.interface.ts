@@ -5,4 +5,5 @@ export interface INameUniqueName {
     alias?: string;
     taxNumber?: string;
     currency?: { symbol: string, code: string };
+    isArchived?: any;
 }
