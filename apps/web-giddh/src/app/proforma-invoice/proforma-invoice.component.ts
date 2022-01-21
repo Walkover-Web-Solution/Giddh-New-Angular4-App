@@ -615,6 +615,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public newVoucherUniqueName: string = '';
     /** Selected payment mode */
     public selectedPaymentMode: any;
+    /** True if default load in update mode */
+    private isDefaultLoad: boolean = true;
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -1225,6 +1227,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
                     if(this.voucherApiVersion === 2) {
                         results[0] = this.adjustmentUtilityService.getVoucherAdjustmentObject(results[0], this.selectedVoucherType);
+
+                        this.previousExchangeRate = results[0].exchangeRate;
+                        this.originalExchangeRate = results[0].exchangeRate;
+                        this.exchangeRate = results[0].exchangeRate;
                     }
 
                     if (this.isLastInvoiceCopied) {
@@ -2081,7 +2087,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         }
 
         if (item && item.currency && item.currency !== this.companyCurrency) {
-            this.getCurrencyRate(this.companyCurrency, item.currency, this.invFormData.voucherDetails.voucherDate);
+            if (this.isUpdateMode && !this.isDefaultLoad) {
+                this.getCurrencyRate(this.companyCurrency, item.currency, this.invFormData.voucherDetails.voucherDate);
+            }
         } else {
             this.previousExchangeRate = this.exchangeRate;
             this.originalExchangeRate = 1;
@@ -2092,6 +2100,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         if (this.isSalesInvoice && this.isMulticurrencyAccount) {
             this.bankAccounts$ = observableOf([]);
         }
+        this.isDefaultLoad = false;
     }
 
     /**
