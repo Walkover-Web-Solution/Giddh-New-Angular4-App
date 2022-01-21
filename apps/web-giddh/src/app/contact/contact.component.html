@@ -906,7 +906,7 @@
                         <ng-container [matColumnDef]="column?.uniqueName">
                             <th mat-header-cell *matHeaderCellDef>{{ column?.key }}</th>
                             <td mat-cell *matCellDef="let account" [attr.data-title]="column?.key">
-                                {{ account.column }}
+                                {{ account.customFields[column?.uniqueName]?.value }}
                             </td>
                         </ng-container>
                     </ng-container>
@@ -1343,7 +1343,7 @@
                         <ng-container [matColumnDef]="column?.uniqueName">
                             <th mat-header-cell *matHeaderCellDef>{{ column?.key }}</th>
                             <td mat-cell *matCellDef="let account" [attr.data-title]="column?.key">
-                                {{ account.column }}
+                                {{ account.customFields[column?.uniqueName]?.value }}
                             </td>
                         </ng-container>
                     </ng-container>
