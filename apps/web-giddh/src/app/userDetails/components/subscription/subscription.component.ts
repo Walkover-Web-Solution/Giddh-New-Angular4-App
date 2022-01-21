@@ -201,7 +201,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
 
     }
 
-    ngOnChanges(): void {
+    public ngOnChanges(): void {
         this.translationComplete();
     }
     /**
@@ -218,6 +218,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
             if (res && res.status === "success") {
                 if (!res.body || !res.body[0]) {
                     this.isPlanShow = true;
+                    this.changeDetectionRef.detectChanges();
                 } else {
                     this.store.dispatch(this.subscriptionsActions.SubscribedCompaniesResponse(res));
                 }
@@ -276,10 +277,10 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
      * @memberof SubscriptionComponent
      */
     public filterSubscriptions(): void {
-        let subscriptions = [];
-        this.subscriptions = [];
-
         this.subscriptions$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            let subscriptions = [];
+            this.subscriptions = [];
+            
             if (response?.length) {
                 response.forEach(subscription => {
                     let subscriptionDetails = cloneDeep(subscription);
@@ -290,7 +291,11 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
 
                     let flag = true;
                     if (
-                        (this.searchSubscription?.value && (subscriptionDetails?.subscriptionId?.toLowerCase()?.indexOf(this.searchSubscription?.value?.toLowerCase()) === -1 && !(subscriptionDetails?.companiesWithTransactions?.filter(company => company?.name?.toLowerCase() === this.searchSubscription?.value?.toLowerCase())?.length))) ||
+                        (this.searchSubscription?.value && (subscriptionDetails?.subscriptionId?.toLowerCase()?.indexOf(this.searchSubscription?.value?.toLowerCase()) === -1 && !(subscriptionDetails?.companiesWithTransactions?.filter(company => company?.name?.toLowerCase().indexOf(this.searchSubscription?.value?.toLowerCase()) > -1)?.length)) ||
+                        (this.filters?.plan && subscriptionDetails?.planDetails?.uniqueName !== this.filters?.plan) ||
+                        (this.filters?.expiration && (subscriptionDetails?.remainingDays < 0 || subscriptionDetails?.remainingDays > this.filters?.expiration)) ||
+                        (this.filters?.transactionBalance && (subscriptionDetails?.remainingTransactions < 0 || subscriptionDetails?.remainingTransactions > this.filters?.transactionBalance))
+                    ) ||
                         (this.filters?.plan && subscriptionDetails?.planDetails?.uniqueName !== this.filters?.plan) ||
                         (this.filters?.expiration && (subscriptionDetails?.remainingDays < 0 || subscriptionDetails?.remainingDays > this.filters?.expiration)) ||
                         (this.filters?.transactionBalance && (subscriptionDetails?.remainingTransactions < 0 || subscriptionDetails?.remainingTransactions > this.filters?.transactionBalance))
@@ -347,6 +352,8 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
     public isSubscriptionPlanShow(event: any): void {
         if (event) {
             this.isPlanShow = !event;
+            this.selectSubscription(null);
+            this.getCompanies();
         }
     }
 

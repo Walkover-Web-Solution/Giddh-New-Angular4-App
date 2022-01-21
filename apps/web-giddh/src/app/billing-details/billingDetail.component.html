@@ -68,6 +68,7 @@
                                         class="form-control"
                                         id="name"
                                         name="name"
+                                        [class.error-box]="billingForm?.controls['name']?.errors"
                                         [ngClass]="{ 'form-field': showLoader }"
                                         [(ngModel)]="billingDetailsObj.name"
                                         matInput
@@ -88,6 +89,7 @@
                                         required
                                         name="email"
                                         id="email"
+                                        [class.error-box]="billingForm?.controls['email']?.errors"
                                         [ngClass]="{ 'form-field': showLoader }"
                                         [(ngModel)]="billingDetailsObj.email"
                                         class="form-control"
@@ -185,8 +187,13 @@
                                         [matAutocomplete]="billingStateAuto"
                                         autocomplete="off"
                                         (blur)="resetValueIfOptionNotSelected('billingState')"
+                                        required
                                     />
-                                    <mat-autocomplete #billingStateAuto="matAutocomplete" [displayWith]="displayLabel">
+                                    <mat-autocomplete
+                                        #billingStateAuto="matAutocomplete"
+                                        [displayWith]="displayLabel"
+                                        (optionSelected)="onStateChange($event)"
+                                    >
                                         <mat-option *ngFor="let state of companyStatesSource" [value]="state">
                                             {{ state.label }}
                                         </mat-option>
@@ -360,7 +367,9 @@
                                     color="primary"
                                     [ngClass]="{ 'pay-now-content': showLoader }"
                                     (click)="payWithRazor(billingForm)"
-                                    [disabled]="billingForm.invalid || !isMobileNumberValid"
+                                    [disabled]="
+                                        billingForm.invalid || !isMobileNumberValid || !billingDetailsObj.stateCode
+                                    "
                                 >
                                     {{ commonLocaleData?.app_pay_now }}
                                 </button>
