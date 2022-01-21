@@ -54,6 +54,11 @@ $custom-typography: mat-typography-config(
         width: 18.2% !important;
     }
 }
+.billing-details {
+    .mat-form-field-infix {
+        border-top: 0 !important;
+    }
+}
 @media screen and (max-width: 1366px) and (orientation: portrait) {
     .subscription-form-select {
         float: left !important;
@@ -7599,6 +7604,14 @@ body.update-scroll-hidden {
     .font-xxlarge {
         font-size: 20px;
     }
+    .right-side {
+        .whole-renewal {
+            .amount-field-content {
+                font-size: 21px;
+                margin-top: 1%;
+            }
+        }
+    }
 }
 @media (max-width: 1024px) {
     .move-select {
@@ -9337,7 +9350,7 @@ input[type="checkbox"].cdk-visually-hidden::after {
     .form-group {
         float: left;
         width: 93%;
-        margin-bottom: 0px !important;
+        margin-bottom: 12px !important;
     }
 }
 .back-btnn {
