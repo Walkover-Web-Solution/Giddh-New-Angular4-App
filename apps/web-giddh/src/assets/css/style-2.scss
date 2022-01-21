@@ -11,6 +11,7 @@ $custom-typography: mat-typography-config(
 :focus {
     outline: none !important;
 }
+
 .basic > tbody > tr > td,
 .basic > tbody > tr > th,
 .basic > tfoot > tr > td,
@@ -42,6 +43,7 @@ $custom-typography: mat-typography-config(
 .basic {
     background: $white;
 }
+
 .overflow-x-hidden {
     overflow-x: hidden;
 }
@@ -55,6 +57,20 @@ $custom-typography: mat-typography-config(
 .billing-details {
     .mat-form-field-infix {
         border-top: 0 !important;
+    }
+}
+.all-table {
+    .mat-column-contact {
+        text-transform: lowercase;
+    }
+    .contact-header {
+        text-transform: capitalize !important;
+    }
+    td.mat-column-comment {
+        white-space: unset !important;
+    }
+    .comment-header {
+        min-width: 170px !important;
     }
 }
 @media screen and (max-width: 1366px) and (orientation: portrait) {
@@ -162,20 +178,24 @@ $custom-typography: mat-typography-config(
         white-space: inherit;
         margin-bottom: 14px;
         width: 100%;
+
         &.child-td {
             display: table !important;
             tr {
                 box-shadow: 0 0px 0px rgb(0 0 0 / 10%) !important;
                 border-bottom: 1px solid rgb(0 0 0 / 10%);
             }
+
             tr:last-child {
                 border-bottom: 0px !important;
                 margin-bottom: 0px;
             }
         }
+
         &.hide-td {
             display: none !important;
         }
+
         .justify-content-end {
             justify-content: flex-start !important;
         }
@@ -255,6 +275,7 @@ $custom-typography: mat-typography-config(
         padding: 5px 10px 5px 53% !important;
     }
 }
+
 .table-cell {
     display: table-cell;
 }
@@ -269,6 +290,7 @@ body {
 .modal-header .close {
     cursor: pointer;
 }
+
 [class^="icon-"],
 [class*=" icon-"] {
     /* use !important to prevent issues with browser extensions that change fonts */
@@ -284,9 +306,11 @@ body {
 .middle {
     vertical-align: middle;
 }
+
 .clear-both {
     clear: both;
 }
+
 .border-bottom {
     border-bottom: 1px solid $gainsboro;
 } /* start MDB tweaks */
@@ -300,6 +324,7 @@ body {
     border-right: 4px solid transparent;
     border-left: 4px solid transparent;
 }
+
 .border-none {
     border: none !important;
 } /* end MDB tweaks */
@@ -484,6 +509,7 @@ input {
 .invoice-control .invoice-nav.navbar-nav > li > a.active {
     background-color: $white;
 }
+
 .navbar {
     min-height: auto;
     margin-bottom: 10px;
@@ -558,6 +584,7 @@ input {
     max-height: 305px;
     overflow-y: scroll;
 }
+
 .nav-left-bar .sub-list.all-company-list {
     overflow-y: unset;
 }
@@ -648,9 +675,11 @@ ul.sub-list {
     font-size: 18px;
     border: 1px solid rgba(26, 35, 126, 0.4) !important;
 }
+
 .tab-integration .nav-tabs > li > a:hover {
     border: 1px solid rgba(26, 35, 126, 0.4) !important;
 }
+
 .tab-integration .nav-tabs > li.active a {
     background: $white !important;
     box-shadow: 0 6px 7px $very-light-gray;
@@ -670,6 +699,7 @@ ul.sub-list {
 .tab-integration .nav-tabs > li {
     margin-right: 25px;
 }
+
 .customer-footer-box .number-total {
     font-size: 26px;
     color: $chetwode-blue;
@@ -712,6 +742,7 @@ ul.sub-list {
     border-bottom: 4px solid transparent;
     display: inline-block;
 }
+
 .custom-tabs .nav.nav-tabs,
 .invoice-control .nav.nav-tabs,
 .setting-page ul.nav.nav-tabs {
@@ -721,6 +752,7 @@ ul.sub-list {
     width: 100%;
     padding: 10px 0px 0 43px !important;
     border-bottom: 1px solid $gainsboro;
+
     li {
         a {
             padding: 0 !important;
@@ -728,6 +760,7 @@ ul.sub-list {
         }
     }
 }
+
 .custom-tabs .nav.nav-tabs > li a:hover {
     color: $deep-sky-blue !important;
 }
@@ -797,15 +830,7 @@ ul.sub-list {
     visibility: visible;
 }
 .top-aging-table-top1 {
-    background: $white;
-    position: absolute;
-    left: 0;
-    right: 0;
-    border: 1px solid $gainsboro;
-    padding: 20px;
-    box-shadow: 0 0 19px rgba(0, 0, 0, 0.2);
-    top: 75px;
-    z-index: 1;
+    padding: 5px 15px;
 }
 .top-aging-table-top1 p {
     font-size: 12px;
@@ -816,6 +841,7 @@ ul.sub-list {
 }
 .top-aging-table-box {
     text-align: left;
+    display: flex;
 }
 .top-aging-table-box > span {
     color: $nobel;
@@ -826,16 +852,18 @@ ul.sub-list {
     text-align: left;
 }
 .top-aging-table-box input {
-    width: 30px !important;
+    width: 35px !important;
     height: 26px;
     border: 1px solid $gainsboro;
     padding: 5px;
     text-align: center;
+    font-weight: bold;
     color: $gray;
 }
 .normal {
     font-weight: normal !important;
 }
+
 .unbold {
     font-weight: normal !important;
     font-family: "opensans-regular" !important;
@@ -911,6 +939,7 @@ ul.sub-list {
 .advance-search {
     p {
         line-height: 15px;
+
         small {
             color: $silver;
         }
@@ -961,12 +990,15 @@ ul.sub-list {
 .h-100 {
     height: 100% !important;
 }
+
 .width-100 {
     width: 100% !important;
 }
+
 .width-150 {
     width: 150px;
 }
+
 .btn-green {
     background: $deep-sky-blue;
     color: $white;
@@ -975,6 +1007,7 @@ ul.sub-list {
     color: $white;
     background: $deep-sky-blue-hover;
 }
+
 .choose-size label {
     font-weight: bold;
     display: inline-block;
@@ -1026,6 +1059,7 @@ ul.sub-list {
 modal-container.modal.fade.show {
     opacity: 1;
 }
+
 .modal.fade.giddh-calendar.show + modal-container.modal.fade.show {
     z-index: 999999 !important;
 }
@@ -1036,6 +1070,7 @@ modal-container.modal {
         width: 100%;
         height: 100%;
         max-width: 100% !important;
+
         .modal-content {
             height: 100%;
             overflow: scroll;
@@ -1092,6 +1127,7 @@ modal-container.modal {
     padding-left: 10px;
     padding-bottom: 10px;
 }
+
 .voucher-type.dropdown-menu {
     li {
         label {
@@ -1100,6 +1136,7 @@ modal-container.modal {
         }
     }
 }
+
 .payment-mode sh-select {
     float: right;
     width: 129px;
@@ -1120,6 +1157,7 @@ modal-container.modal {
 .table-no-border tr th {
     color: $nobel;
 }
+
 .price-input {
     border: 1px solid $gainsboro !important;
     font-size: 14px !important;
@@ -1176,10 +1214,12 @@ modal-container.modal {
 .pd-t85 {
     padding-top: 85px !important;
 }
+
 .overlay-cal {
     .modal-body {
         max-width: 1120px !important;
         width: 100% !important;
+
         .calendly-inline-widget object {
             width: 100% !important;
             height: 610px !important;
@@ -1209,6 +1249,7 @@ modal-container.modal {
     height: calc(100vh - 100px);
     max-width: 940px !important;
     width: 100% !important;
+
     .modal-body {
         padding: 15px 20px;
         height: 450px;
@@ -1218,6 +1259,7 @@ modal-container.modal {
 }
 .custom-input-search {
     position: relative;
+
     i {
         position: absolute;
         z-index: 11;
@@ -1226,6 +1268,7 @@ modal-container.modal {
         left: 10px;
         color: $gray;
     }
+
     .form-control {
         padding-left: 30px !important;
     }
@@ -1249,6 +1292,7 @@ modal-container.modal {
 }
 .custom-datepicker {
     position: relative;
+
     .border-radius-2 {
         border-radius: 5px;
     }
@@ -1285,18 +1329,23 @@ modal-container.modal {
 .payment-success-modal {
     transform: translate(0, -0%) !important;
 }
+
 .payment-success-modal {
     .payment-img img {
         width: 80px;
     }
 }
+
 .tooltip-box .tooltip {
     width: 150px;
 }
+
 .sh-select-border .menu .scrollable-content > .item {
     border-bottom: 1px solid $gainsboro;
     height: initial !important;
-} /* my css end */ /*input*/
+}
+/* my css end */
+/*input*/
 .form-control {
     background: $white !important;
     border: 1px solid $gainsboro;
@@ -1398,6 +1447,7 @@ header .navbar {
     background: $deep-sky-blue;
     border: 1px solid $deep-sky-blue;
     color: $white;
+
     &:hover {
         color: $white;
     }
@@ -1474,6 +1524,7 @@ fieldset[disabled] .btn-primary:hover {
     font-size: 14px;
     background: $success-green;
     color: $white;
+
     &:hover {
         color: $white;
     }
@@ -1505,6 +1556,7 @@ fieldset[disabled] .btn-primary:hover {
     border: 1px solid $gainsboro;
     border-left: 0;
 }
+
 .tax-list {
     padding: 10px 0;
 }
@@ -1754,16 +1806,19 @@ input[type="checkbox"]:checked:after {
     border: 1px solid $success-green-disable !important;
     background: $success-green-disable !important;
 }
+
 .btn-warning {
     color: $white !important;
     background-color: $warning !important;
     border-color: $warning !important;
 }
+
 .btn-warning:not(:disabled):not(.disabled):active:focus,
 .btn-warning:not(:disabled):not(.disabled).active:focus,
 .show > .btn-warning.dropdown-toggle:focus {
     box-shadow: none;
 }
+
 .btn-default:disabled,
 .btn-danger:disabled {
     opacity: 0.5;
@@ -1970,6 +2025,7 @@ input[type="checkbox"]:checked:after {
     justify-content: center;
     align-items: center;
 }
+
 .align-items-start {
     align-items: flex-start !important;
 }
@@ -1980,6 +2036,7 @@ input[type="checkbox"]:checked:after {
 .preview-1 iframe {
     height: 1234px !important;
 }
+
 .mandatory-asterisk {
     font-size: 14px;
     top: 0;
@@ -2081,14 +2138,17 @@ input,
 button:focus {
     outline: none !important;
 }
+
 .btn:focus,
 .btn.focus {
     box-shadow: none !important;
 }
+
 .mat-raised-button:focus,
 .mat-raised-button.focus {
     box-shadow: 0px 3px 1px -2px rgb(0 0 0 / 20%), 0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 1px 5px 0px rgb(0 0 0 / 12%) !important;
 }
+
 .Inpt_dwn {
     padding-right: 25px !important;
     text-align: right;
@@ -2354,9 +2414,11 @@ a.btn.btn-xs.btn-link.pull-right {
 .w100 {
     width: 100px;
 }
+
 .w120 {
     width: 120px;
 }
+
 .w125 {
     width: 125px;
 }
@@ -2386,9 +2448,11 @@ a.btn.btn-xs.btn-link.pull-right {
 .item-padding .multi-select input.form-control {
     padding-right: 24px !important;
 }
+
 .card-invoice-table-wrapper .multi-select input.form-control {
     background-position: 98% !important;
 }
+
 .multi-select .caret {
     position: absolute;
     top: 50%;
@@ -2430,9 +2494,11 @@ a.btn.btn-xs.btn-link.pull-right {
     background: none;
     cursor: pointer;
 }
+
 #share-modal .modal-header {
     border-bottom: 0;
 }
+
 .modal-header {
     border-radius: 5px 5px 0 0 !important;
 }
@@ -2538,6 +2604,7 @@ a.btn.btn-xs.btn-link.pull-right {
 .no-btn .rotate180 {
     top: 0;
 }
+
 #inventory-sidebar,
 #inventory-sidebar input {
     font-size: 14px;
@@ -3173,6 +3240,7 @@ label {
     height: auto;
     padding: 0px;
     border: none !important;
+
     select {
         -moz-appearance: none;
         -webkit-appearance: none;
@@ -3180,6 +3248,7 @@ label {
         border-radius: 0;
         padding-right: 22px !important;
     }
+
     .select-drop {
         position: absolute;
         bottom: 16px;
@@ -3380,6 +3449,7 @@ label {
     max-width: calc(100% - 22px);
     color: $night-rider;
 }
+
 .dropdown-container .dropdown-menu li label span.mat-checkbox-inner-container {
     color: $night-rider;
     width: 38px;
@@ -3952,6 +4022,7 @@ virtual-scroll .scrollable-content .item > a .item-stock {
     color: $moody-blue;
     text-transform: none !important;
 }
+
 .customer-invoice-form virtual-scroll .scrollable-content .item > a {
     color: $nero;
     padding: 3px 10px;
@@ -3993,6 +4064,7 @@ table input[type="number"] {
 }
 .btn-link {
     color: $primary !important;
+
     &:hover {
         color: $primary !important;
     }
@@ -4238,9 +4310,11 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
     overflow: hidden;
     text-align: center;
 }
+
 .pagination {
     justify-content: center;
 }
+
 .ledger-panel label {
     font-weight: 400;
 }
@@ -4402,6 +4476,7 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
         overflow: hidden;
         background-color: $whisper-color;
     }
+
     > li {
         > a {
             padding: 4px 10px;
@@ -6064,9 +6139,11 @@ highcharts-chart {
         display: none;
     }
 }
+
 .popover.adjustment-popover {
     margin: 0;
 }
+
 @media (min-width: 564px) {
     #date-range-picker-parent .daterangepicker {
         width: 100%;
@@ -6237,21 +6314,25 @@ input.checkbox-custom[type="checkbox"] {
     .modal-header {
         border-radius: 5px 5px 0 0;
     }
+
     .modal-body {
         text-align: center;
         padding-top: 40px;
         padding-bottom: 40px;
+
         h4 {
             font-size: 22px;
             margin-top: 10px;
             margin-bottom: 20px;
         }
+
         p {
             font-size: 14px;
             margin-bottom: 40px;
         }
     }
 }
+
 #setting-tab > .tab-container > .tab-content {
     padding-top: 55px;
 } /*datepicker common css*/
@@ -6274,11 +6355,13 @@ ngx-daterangepicker-material {
 .edit-modal {
     max-width: 300px;
     margin: 0 auto;
+
     .edit-date-modal {
         h5 {
             color: $gray;
             font-size: 13px;
         }
+
         .modal-date-range {
             display: flex;
             align-items: center;
@@ -6287,20 +6370,25 @@ ngx-daterangepicker-material {
             padding-bottom: 20px;
             border-bottom: 1px solid $gainsboro;
             margin-bottom: 15px;
+
             span {
                 padding: 5px 10px;
+
                 i {
                     color: $gray;
                 }
             }
+
             .modal-inside-heading {
                 display: none;
             }
         }
+
         .start-end-date {
             .start-end-date-d-flex {
                 display: flex;
                 padding-top: 10px;
+
                 label {
                     position: absolute;
                     background-color: $white;
@@ -6310,6 +6398,7 @@ ngx-daterangepicker-material {
                     font-size: 12px;
                     color: $gray;
                 }
+
                 input {
                     width: 130px;
                     height: 51px;
@@ -6320,10 +6409,12 @@ ngx-daterangepicker-material {
                 }
             }
         }
+
         .button-wrapper {
             text-align: right;
             font-size: 14px;
             margin-top: 10px;
+
             a {
                 color: $deep-sky-blue;
                 padding: 10px 10px;
@@ -6357,6 +6448,7 @@ ngx-daterangepicker-material {
     height: 14px !important;
     line-height: 14px !important;
 }
+
 .HW_badge.HW_softHidden {
     display: none !important;
 }
@@ -6375,13 +6467,16 @@ span#HW_badge_cont:nth-child(3) {
 .date-field {
     flex-direction: column;
 }
+
 .mobile-home {
     background-color: $lavender;
+
     .fixed-padding,
     .padding-top-fixed,
     .desktop-header {
         display: none;
     }
+
     #content-wrapper {
         background-color: $lavender;
     }
@@ -6389,21 +6484,26 @@ span#HW_badge_cont:nth-child(3) {
 .icon-home-icon {
     color: $white;
 }
+
 .remove-header-lower-layer {
     .container-fluid.mr-b1 {
         margin-bottom: 0;
+
         .lower-layer-header {
             display: none !important;
         }
+
         .upper-layer-header {
             padding-top: 10px;
             padding-bottom: 5px;
         }
     }
+
     .fixed-padding {
         padding-top: 50px;
     }
 }
+
 .mobile-sidebar-open:after {
     position: absolute;
     content: "";
@@ -6414,6 +6514,7 @@ span#HW_badge_cont:nth-child(3) {
     top: 0;
     z-index: 9;
 }
+
 .HW_badge.HW_softHidden {
     display: none !important;
 }
@@ -6421,9 +6522,11 @@ span#HW_badge_cont:nth-child(3) {
 span#HW_badge_cont:nth-child(3) {
     display: none !important;
 }
+
 .giddh-datepicker {
     cursor: pointer !important;
 }
+
 .setting-items {
     ul {
         li {
@@ -6436,6 +6539,7 @@ span#HW_badge_cont:nth-child(3) {
                     }
                 }
             }
+
             &:hover {
                 a {
                     span {
@@ -6446,6 +6550,7 @@ span#HW_badge_cont:nth-child(3) {
                 }
             }
         }
+
         .active-link {
             a {
                 span {
@@ -6477,11 +6582,13 @@ span#HW_badge_cont:nth-child(3) {
     left: 0 !important;
     display: block !important;
 }
+
 .setting-sidebar-open .nav-left-bar,
 .on-user-page .nav-left-bar,
 .on-setting-page .nav-left-bar {
     display: block;
 }
+
 .menu_open aside-setting.setting-sidebar {
     right: 0 !important;
 }
@@ -6492,21 +6599,26 @@ span#HW_badge_cont:nth-child(3) {
 .setting-sidebar-open .desktop-header {
     padding-left: 0;
 }
+
 .setting-sidebar-open .desktop-header.menu_open {
     padding-right: 240px !important;
 }
+
 .gst-sidebar-open .menu_open {
     padding-left: 300px !important;
 }
+
 .desktop-header.menu_open {
     padding-left: 60px !important;
 }
+
 .setting-sidebar-open {
     &.on-setting-page {
         #content-wrapper {
             padding-left: 60px;
         }
     }
+
     &.on-user-page {
         #content-wrapper {
             padding-left: 60px;
@@ -6523,74 +6635,91 @@ span#HW_badge_cont:nth-child(3) {
         width: 100%;
     }
 }
+
 .preview-lightbox-overlay {
     z-index: 999 !important;
 }
+
 .preview-lightbox {
     img {
         width: 100%;
     }
+
     .close {
         width: 30px;
         height: 30px;
         opacity: 1;
     }
+
     .moday-body {
         padding: 30px 15px;
     }
+
     .header-close-btn {
         display: flex;
         align-items: flex-end;
         justify-content: flex-end;
     }
 }
+
 .estimation-date-modal {
     z-index: 99999;
 }
+
 .giddh-datepicker-modal {
     z-index: 99999;
 }
+
 .purchase-record-confirmation-modal {
     .modal-content {
         box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
     }
 }
+
 .dropdown-toggle::after {
     display: none;
 }
+
 .page-count .pagination {
     justify-content: center;
     margin-top: 15px;
 }
+
 .dashboard-container {
     .card {
         margin-bottom: 20px;
         min-height: 426px;
     }
 }
+
 .daterangepicker td,
 .daterangepicker th {
     font-weight: 400;
     font-size: 14px;
     padding: 4px;
 }
+
 .open > .dropdown-menu {
     display: block;
 }
+
 .daterangepicker.dropdown-menu {
     box-shadow: 0 3px 28px 0 rgba(0, 0, 0, 0.14);
     color: $dim-gray;
     border: 1px solid $gainsboro;
     z-index: 9999 !important;
 }
+
 .manage-group-account-form .button-group .btn {
     margin-right: 15px;
 }
+
 .inventory-page {
     .daterangepicker {
         z-index: 9992 !important;
     }
 }
+
 .new-ledger-text-right ul li {
     ul {
         li {
@@ -6599,11 +6728,13 @@ span#HW_badge_cont:nth-child(3) {
         }
     }
 }
+
 .total-col bs-tooltip-container.tooltip .tooltip-inner {
     min-width: 150px !important;
     width: 150px !important;
     max-width: 150px !important;
 }
+
 .recurring-form {
     sh-select,
     input {
@@ -6611,19 +6742,24 @@ span#HW_badge_cont:nth-child(3) {
         max-width: 170px;
     }
 }
+
 .daterangepicker {
     z-index: 9992 !important;
 }
+
 .sub-branch-option .bs-tooltip-top {
     left: -25px !important;
 }
+
 .switch-branch-wrapper .branch-icon-tooltip .bs-tooltip-top {
     left: 8px !important;
     right: 8px !important;
 }
+
 .sub-branch-option .bs-tooltip-top .arrow::before {
     right: -22px;
 }
+
 #rcw-p91-widget-button {
     z-index: 992;
 }
@@ -6634,9 +6770,11 @@ span#HW_badge_cont:nth-child(3) {
         border-radius: 4px;
         box-shadow: 0 3px 6px $black-russian;
         top: 20% !important;
+
         .popover-arrow {
             display: none;
         }
+
         .popover-header {
             padding: 15px 15px 0 15px;
             margin-bottom: 0;
@@ -6645,34 +6783,42 @@ span#HW_badge_cont:nth-child(3) {
             border-bottom: none;
             font-family: "opensans-semibold";
         }
+
         .popover-body {
             padding: 0 15px 15px 15px;
         }
     }
+
     &.create .popover {
         .popover-body {
             padding: 8px 15px;
         }
     }
 }
+
 .linked-entities {
     .list-item {
         .entity-icon {
             padding: 4px;
         }
+
         .entity-details {
             margin-left: 6px;
             flex: 1;
+
             .item {
                 font-family: "opensans-semibold";
             }
         }
+
         .default-entity {
             align-items: center;
             display: flex;
+
             &:hover:after {
                 color: $rich-blue;
             }
+
             .icon-favorite-selected {
                 color: $rich-blue;
             }
@@ -6688,6 +6834,7 @@ span#HW_badge_cont:nth-child(3) {
                     color: $midnight-blue !important;
                 }
             }
+
             .active {
                 > .nav-link {
                     color: $midnight-blue !important;
@@ -6696,39 +6843,48 @@ span#HW_badge_cont:nth-child(3) {
         }
     }
 }
+
 .customer-form-inline {
     .tooltip-inner {
         white-space: nowrap;
     }
 }
+
 .rcm-entry .popover {
     max-width: 600px;
 }
+
 .update-ledger-overlay .modal-backdrop.show {
     z-index: 991 !important;
 }
+
 .invoice-edit-wrapper {
     .hamburger-menu-icon {
         display: none !important;
     }
+
     .mobile-view-padding {
         padding-left: 10px;
         border-bottom: none !important;
     }
 }
+
 .giddh-calendar.show {
     margin-top: 0;
 }
+
 .table-amount[disabled] {
     input {
         background-color: $whisper-light !important;
     }
 }
+
 .max-character-label {
     padding-left: 6px;
     font-size: 11px;
     color: $gray;
 }
+
 .max-character-value {
     width: auto !important;
     float: none !important;
@@ -6737,42 +6893,51 @@ span#HW_badge_cont:nth-child(3) {
 #update-ledger-assign-tag.disabled-ledger {
     .sh-select-disabled {
         background-color: $whisper-light !important;
+
         input.selected-val.form-control,
         input[disabled] {
             background-color: $whisper-light !important;
         }
     }
 }
+
 .branch-ho-tooltip {
     left: -7px !important;
+
     .arrow {
         left: auto !important;
         right: 7px !important;
     }
 }
+
 .inventory-footer,
 .create-group-footer,
 .stock-group-footer {
     left: 0;
 }
+
 .menu_open .inventory-footer,
 .menu_open .create-group-footer,
 .menu_open .stock-group-footer {
     left: 240px;
     width: 100%;
 }
+
 .bulk-create-table sh-select input,
 .bulk-create-table .mat-form-field-wrapper input,
 .bulk-create-table .mat-form-field-appearance-fill .mat-form-field-flex {
     border: none !important;
     padding: 0 11px !important;
 }
+
 .bulk-create-table .mat-form-field-appearance-fill .mat-form-field-flex {
     padding: 0 !important;
 }
+
 .hide-sub-sidebar .right-side-content {
     padding-left: 0 !important;
 }
+
 .hide-sub-sidebar .sidebar-handle {
     left: 210px !important;
 }
@@ -6788,12 +6953,15 @@ button#more-btn-inventory,
     align-items: center;
     border-radius: 50px !important;
 }
+
 .menu_open .inventory-sidebar {
     left: 0 !important;
 }
+
 .select-linked-accounts sh-select-menu .menu {
     max-height: 250px;
 }
+
 .ratio-chart-block .highcharts-title {
     display: flex;
     justify-content: center;
@@ -6804,11 +6972,13 @@ button#more-btn-inventory,
     font-size: 24px;
     top: 56px !important;
 }
+
 .transaction-list-sh-select input {
     min-height: 49px;
     height: 49px;
     border: 0 none !important;
 }
+
 .inventory-dashboard .box {
     border: 1px solid $gainsboro;
     border-radius: 2px;
@@ -6823,38 +6993,46 @@ giddh-datepicker {
     .recurring-form .mat-form-field {
         max-width: 170px;
     }
+
     .collapse-pane .mat-form-field {
         min-width: 100%;
         max-width: 100%;
     }
+
     .mat-form-field {
         min-width: 170px;
         width: 100%;
         display: inline-block;
     }
+
     .mat-form-field-suffix {
         right: 0;
         position: absolute !important;
     }
+
     .mat-form-field-appearance-fill .mat-form-field-flex {
         height: 36px;
         background-color: $white;
         padding: 0;
     }
+
     .mat-form-field-appearance-fill .mat-form-field-underline::before {
         display: none !important;
         opacity: 0 !important;
     }
+
     .mat-form-field-appearance-fill .mat-form-field-infix {
         padding: 0;
         margin: 0;
         border: 0;
     }
+
     .mat-form-field-appearance-fill .mat-form-field-flex {
         padding: 0 !important;
         display: flex !important;
         align-items: center !important;
     }
+
     .mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-field-prefix .mat-icon-button,
     .mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-field-suffix .mat-icon-button {
         width: 26px;
@@ -6865,22 +7043,28 @@ giddh-datepicker {
         .mat-form-field-ripple {
         opacity: 0 !important;
     }
+
     input.mat-input-element {
         margin-top: 0;
         padding: 9px 6px;
     }
+
     .mat-form-field-wrapper {
         padding-bottom: 0;
     }
+
     .mat-focused .mat-form-field-flex {
         border: 1px solid $chetwode-blue !important;
     }
+
     .mat-form-field-underline {
         display: none !important;
     }
+
     .mat-calendar-body-selected {
         background-color: $midnight-blue;
     }
+
     .giddh-limit {
         &.single-line-clamp {
             display: -webkit-box;
@@ -6889,6 +7073,7 @@ giddh-datepicker {
             overflow: hidden;
         }
     }
+
     .mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-field-prefix .mat-icon-button,
     .mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-field-suffix .mat-icon-button {
         width: 36px !important;
@@ -6906,7 +7091,11 @@ giddh-datepicker {
 .cdk-overlay-connected-position-bounding-box {
     z-index: 9999;
 }
-
+.cmd-k {
+    .cdk-overlay-container {
+        z-index: 999 !important;
+    }
+}
 giddh-datepicker {
     .mat-form-field-appearance-fill .mat-form-field-flex {
         border: 1px solid $gainsboro !important;
@@ -6931,6 +7120,7 @@ giddh-datepicker {
         z-index: 9;
         position: relative !important;
         top: 0;
+
         li {
             a {
                 padding-top: 5px;
@@ -6938,17 +7128,21 @@ giddh-datepicker {
         }
     }
 }
+
 .delete-modal-overlay {
     z-index: 9992; /*for delete custom zIndex modal*/
 }
+
 .custom-tabs.location-data-tabs .nav-tabs {
     background-color: transparent;
+
     li.active {
         a {
             border-bottom: 4px solid $midnight-blue !important;
             color: $midnight-blue !important;
         }
     }
+
     li {
         a {
             &:hover {
@@ -6971,20 +7165,25 @@ giddh-datepicker {
     width: 101%;
     background-color: transparent;
 }
+
 .change-address-dropdown a {
     color: $deep-sky-blue;
     font-size: 12px;
 }
+
 .change-address-dropdown li {
     border-bottom: 1px solid $very-light-gray;
     padding-bottom: 4px;
 }
+
 .change-address-dropdown li:last-child {
     border: none;
 }
+
 .custom-select {
     background-image: none !important;
 }
+
 .more-add-button {
     .icon-undo {
         border: 1px solid $midnight-blue;
@@ -6997,26 +7196,32 @@ giddh-datepicker {
         color: $midnight-blue;
     }
 }
+
 .link-entity-dropdown {
     .list-item.d-flex {
         align-items: center;
+
         .entity-icon {
             padding-right: 5px;
         }
     }
 }
+
 .top-bar.customer-top-bar.vendor-top-bar {
     padding-top: 15px !important;
 }
+
 .wrap-hsn-box {
     .hsn-code-dropdown {
         padding: 20px !important;
         max-width: 250px;
     }
+
     input {
         border: 1px solid $whisper-light;
         height: 36px !important;
     }
+
     .wrap-hsn-sac {
         span {
             display: flex;
@@ -7024,6 +7229,7 @@ giddh-datepicker {
             flex-wrap: wrap;
             flex-direction: row;
             align-items: center;
+
             input[type="radio"] {
                 width: 18px !important;
                 padding: 20px !important;
@@ -7033,41 +7239,50 @@ giddh-datepicker {
         }
     }
 }
+
 .wrap-hsn-sac {
     input {
         width: 18px !important;
         height: 18px !important;
     }
 }
+
 .time-selection,
 .language-selection {
     .menu {
         min-height: 120px !important;
+
         .total-padding {
             min-height: 120px !important;
             height: 120px !important;
         }
     }
 }
+
 #primary-new-header.primary-main-header.open {
     padding-left: 15px !important;
 }
+
 .add-manage-group-acc {
     .modal-header {
         border-radius: 0 !important;
     }
 }
+
 .plan-wrapper {
     padding-left: 60px;
 }
+
 .setting-sidebar-open.on-setting-page .plan-wrapper,
 .setting-sidebar-open.on-user-page .plan-wrapper {
     padding-left: 60px !important;
 }
+
 .setting-sidebar-open.aside-setting.on-setting-page .plan-wrapper,
 .setting-sidebar-open.aside-setting.on-user-page .plan-wrapper {
     padding-right: 240px !important;
 }
+
 .setting-sidebar-open .plan-wrapper,
 .setting-sidebar-open.on-user-page .plan-wrapper {
     padding-right: 0 !important;
@@ -7075,9 +7290,11 @@ giddh-datepicker {
 .plan-wrapper.menu_open {
     padding-left: 240px !important;
 }
+
 .setting-sidebar-open #content-wrapper {
     padding-left: 0;
 }
+
 .share-grp.account-share-modal,
 .group-share-modal {
     .add-mailer {
@@ -7087,23 +7304,28 @@ giddh-datepicker {
                 max-width: 230px;
                 margin-right: 10px;
             }
+
             .selected-permission {
                 margin-left: 0 !important;
             }
+
             .btn-share {
                 width: 110px;
             }
         }
     }
 }
+
 .invoice-modal-content {
     left: 60px !important;
     width: calc(100% - 60px) !important;
     z-index: 99 !important;
 }
+
 .aside-account-create {
     z-index: 991 !important;
 }
+
 .primary-sidebar {
     .giddh-primary-items {
         .main-item {
@@ -7112,6 +7334,7 @@ giddh-datepicker {
             }
         }
     }
+
     &.sidebar-collapse {
         .giddh-primary-items {
             .main-item {
@@ -7122,6 +7345,7 @@ giddh-datepicker {
         }
     }
 }
+
 .gst-sidebar-open {
     .nav-left-bar {
         -moz-transition: all 100ms linear;
@@ -7134,18 +7358,22 @@ giddh-datepicker {
         -ms-transform: translate(-100px, 0px);
         transform: translate3d(-100px, 0px, 0px);
         box-shadow: 0 0 3px rgba(0, 0, 0, 0.2) !important;
+
         &.create-account {
             transform: none;
         }
     }
 }
+
 .gst-sidebar-open {
     .gst-sidebar {
         left: 60px !important;
     }
+
     #content-wrapper {
         padding-left: 300px;
     }
+
     .nav-left-bar {
         display: block;
         z-index: 9991 !important;
@@ -7155,16 +7383,20 @@ giddh-datepicker {
         -ms-transform: translate(0px, 0px);
         transform: translate3d(0px, 0px, 0px);
     }
+
     .plan-wrapper {
         padding-left: 300px !important;
     }
+
     .menu_open {
         .gst-sidebar {
             left: 60px !important;
         }
+
         #content-wrapper {
             padding-left: 240px;
         }
+
         .plan-wrapper {
             padding-left: 60px;
         }
@@ -7174,20 +7406,25 @@ giddh-datepicker {
 body.update-scroll-hidden {
     overflow-y: hidden;
 }
+
 .e-waybill-tabs.custom-tabs .nav-tabs {
     position: static !important;
     padding-left: 15px !important;
 }
+
 .e-waybill-tabs.custom-tabs .nav-tabs {
     position: static !important;
     padding-left: 15px !important;
 }
+
 .sales-register {
     width: calc(100% - 60px) !important;
 }
+
 .menu_open .sales-register {
     width: calc(100% - 240px) !important;
 }
+
 .nav-left-bar {
     &.width-60 {
         .sidebar-collapse {
@@ -7197,6 +7434,7 @@ body.update-scroll-hidden {
         }
     }
 }
+
 .on-setting-page,
 .on-user-page {
     aside-setting {
@@ -7205,15 +7443,18 @@ body.update-scroll-hidden {
                 display: block !important;
                 padding: 0 12px;
             }
+
             h4 {
                 display: none;
             }
         }
+
         &::after {
             display: none;
         }
     }
 }
+
 .on-setting-page,
 .on-user-page {
     aside-setting {
@@ -7222,10 +7463,12 @@ body.update-scroll-hidden {
                 display: block !important;
                 padding: 0 12px;
             }
+
             h4 {
                 display: none;
             }
         }
+
         &::after {
             display: none;
         }
@@ -7236,6 +7479,7 @@ body.update-scroll-hidden {
         padding-right: 0;
     }
 }
+
 .company-branch-dropdown {
     .custom-tabs {
         ul {
@@ -7249,21 +7493,26 @@ body.update-scroll-hidden {
                 display: flex;
                 justify-content: space-between;
                 padding-top: 0 !important;
+
                 li {
                     position: relative;
+
                     &.active {
                         a {
                             color: $midnight-blue !important;
                             border-bottom: 2px solid $midnight-blue !important;
                         }
                     }
+
                     padding-right: 0;
+
                     &.icon-company {
                         &:before {
                             position: absolute;
                             left: 20px;
                         }
                     }
+
                     a {
                         min-width: 110px;
                         font-family: "opensans-regular";
@@ -7274,6 +7523,7 @@ body.update-scroll-hidden {
                     }
                 }
             }
+
             .nav-item {
                 &.icon-company {
                     &.active {
@@ -7281,6 +7531,7 @@ body.update-scroll-hidden {
                             color: $midnight-blue;
                         }
                     }
+
                     &::before {
                         position: absolute !important;
                         left: 20px !important;
@@ -7288,12 +7539,14 @@ body.update-scroll-hidden {
                         color: $grey-chateau;
                     }
                 }
+
                 &.icon-branch1 {
                     &.active {
                         &::before {
                             color: $midnight-blue;
                         }
                     }
+
                     &::before {
                         position: absolute !important;
                         left: 20px !important;
@@ -7304,6 +7557,7 @@ body.update-scroll-hidden {
             }
         }
     }
+
     .company-branch-opt-1 {
         .branch-hide-tab {
             ul.nav.nav-tabs {
@@ -7317,32 +7571,49 @@ body.update-scroll-hidden {
         padding-right: 0;
     }
 }
+
 .manage-account-popup.full-screen-modal {
     z-index: 999999;
 }
+
 .trial-balance-viewport {
     height: 500px;
 }
+
 .gst-sidebar-open {
     .daterangepicker.show-calendar {
         z-index: 99 !important;
     }
 }
+
 .transactions-table.table-striped {
     white-space: nowrap;
 }
+
 .stock-group-parent > ul {
     height: calc(100vh - 320px);
     overflow: auto;
 }
+
 .financial-report-account-detail-container {
     .popover-arrow {
         display: none;
     }
 }
+.contact-body {
+    .contact-modal {
+        height: 375px !important;
+        .mat-dialog-container {
+            float: left !important;
+            width: 100% !important;
+            overflow: hidden;
+        }
+    }
+}
 .cdk-overlay-pane {
     height: auto !important;
-} /* responsive  starts here*/
+}
+/* responsive  starts here*/
 @media (max-width: 1440px) {
     .font-xxlarge {
         font-size: 20px;
@@ -7368,14 +7639,8 @@ body.update-scroll-hidden {
         flex: 100% !important;
     }
     .main-table {
-        tbody {
-            tr {
-                td {
-                    &:first-child {
-                        min-width: 242px !important;
-                    }
-                }
-            }
+        tbody > tr > td:first-child {
+            min-width: 242px !important;
         }
     }
     .users-last-list {
@@ -7444,20 +7709,24 @@ body.update-scroll-hidden {
         width: 100% !important;
     }
 }
+
 @media (max-width: 1191px) and (min-width: 1024px) {
     .recurring-form-wrapper {
         .recurring-form {
             sh-select {
                 div {
                     width: 100%;
+
                     input {
                         min-width: 100%;
                         max-width: 100%;
                     }
                 }
             }
+
             giddh-datepicker {
                 width: 100%;
+
                 .mat-form-field {
                     max-width: 100%;
                     min-width: 100%;
@@ -7476,6 +7745,7 @@ body.update-scroll-hidden {
         .gst-sidebar {
             left: 60px !important;
         }
+
         #content-wrapper {
             padding-left: 300px;
         }
@@ -7488,9 +7758,11 @@ body.update-scroll-hidden {
                 height: auto;
                 padding: 10px 20px;
             }
+
             .filter-row {
                 margin-left: 0 !important;
                 margin-bottom: 5px;
+
                 &.back-button {
                     display: flex;
                 }
@@ -7506,6 +7778,7 @@ body.update-scroll-hidden {
         .reverse-table-report {
             .input-grp-date-range-picker {
                 flex-direction: column !important;
+
                 .clear-filter {
                     width: 50%;
                     margin-left: 0;
@@ -7661,6 +7934,7 @@ body.update-scroll-hidden {
         #content-wrapper {
             padding-right: 0;
             padding-left: 60px;
+
             &.menu_open {
                 padding-right: 0;
                 padding-left: 60px;
@@ -7837,6 +8111,7 @@ body.update-scroll-hidden {
         margin-top: 0 !important;
     }
 }
+
 @media (max-width: 1280px) {
     .multi-select input.form-control {
         padding-right: 18px !important;
@@ -7848,7 +8123,31 @@ body.update-scroll-hidden {
         margin-left: 10px;
     }
 }
+
 @media (max-width: 767px) {
+    .contact-body .contact-modal {
+        margin-top: 23%;
+    }
+    .customer-form-inline {
+        float: left;
+        width: 100%;
+        bottom: 34%;
+        .search-field {
+            margin-top: 2px;
+        }
+        .btn-sky-blue {
+            margin-bottom: 11px;
+        }
+    }
+    .top-content {
+        .count-box {
+            min-width: auto !important;
+        }
+    }
+    .top-aging-table-top {
+        float: left;
+        width: 100%;
+    }
     .mobile-setting-sidebar {
         overflow-y: hidden;
     }
@@ -7858,6 +8157,7 @@ body.update-scroll-hidden {
     .setting-sidebar-open {
         #content-wrapper {
             padding-left: 0 !important;
+
             &.menu_open {
                 padding-left: 0 !important;
             }
@@ -7903,6 +8203,7 @@ body.update-scroll-hidden {
                 left: 0 !important;
             }
         }
+
         .gst-sidebar {
             left: 0 !important;
         }
@@ -7981,12 +8282,14 @@ body.update-scroll-hidden {
     .invoice-control .nav.nav-tabs,
     .setting-page ul.nav.nav-tabs {
         padding: 7px 0px 0 15px !important;
+
         li {
             a {
                 padding: 0 !important;
                 height: 30px;
             }
         }
+
         .rcm-entry .popover {
             max-width: 550px;
         }
@@ -8482,6 +8785,7 @@ body.update-scroll-hidden {
     }
     .daterangepicker.ltr .ranges {
         float: left;
+
         ul {
             li {
                 font-size: 11px;
@@ -8528,6 +8832,7 @@ body.update-scroll-hidden {
         overflow-x: auto;
         white-space: nowrap;
         display: inline-block;
+
         li {
             float: none !important;
         }
@@ -8751,9 +9056,15 @@ body.update-scroll-hidden {
         display: inline-block !important;
     }
 }
+
 @media (min-width: 768px) {
     .invoice-modal-content .modal-dialog {
         margin: 70px auto;
+    }
+    .top-content {
+        .count-box {
+            min-width: auto !important;
+        }
     }
     .edit-modal.modal-small {
         display: none;
@@ -8780,6 +9091,7 @@ body.update-scroll-hidden {
         width: 900px !important;
     }
 }
+
 @media (min-width: 480px) and (max-width: 667px) {
     .edit-modal {
         margin: 0 auto;
@@ -8828,6 +9140,7 @@ body.update-scroll-hidden {
         }
     }
 }
+
 @media (max-width: 1300px) and (min-width: 1024px) {
     .dashboard-container {
         .card {
@@ -8935,6 +9248,7 @@ body.prevent-body-scroll {
         display: none !important;
     }
 }
+
 @media (max-width: 1199px) and (min-width: 992px) {
     .hidden-md {
         display: none !important;
@@ -8945,6 +9259,7 @@ body.prevent-body-scroll {
         min-height: calc(100vh - 420px);
     }
 }
+
 @media (min-height: 300px) and (max-height: 730px) {
     .linked-address sh-select-menu .total-padding {
         height: 257px !important;
@@ -8953,13 +9268,16 @@ body.prevent-body-scroll {
 .modal.fade.giddh-calendar.show {
     z-index: 999999;
 }
+
 *::-webkit-scrollbar {
     width: 10px;
     height: 5px;
 }
+
 *::-webkit-scrollbar-track {
     background: $white-smoke;
 }
+
 *::-webkit-scrollbar-thumb {
     background: $nobel;
     border-radius: 5px;
@@ -8968,9 +9286,11 @@ body.prevent-body-scroll {
 .delete-icon-opacity {
     opacity: 0.5;
 }
+
 .sky-blue-bg {
     background-color: $light-sky-blue;
 }
+
 .giddh-no-permissions {
     display: none !important;
 } /** Angular material datepicker **/
@@ -8979,33 +9299,42 @@ body.prevent-body-scroll {
     background-color: $chetwode-blue;
     color: $white;
 }
+
 .mat-calendar-controls {
     margin: 0% calc(33% / 7 - 16px) !important;
 }
+
 .mat-calendar-arrow {
     border-top-color: $white !important;
 }
+
 .mat-datepicker-toggle,
 .mat-datepicker-content .mat-calendar-next-button,
 .mat-datepicker-content .mat-calendar-previous-button {
     color: $white !important;
 }
+
 .mat-calendar-content {
     padding: 0px 8px 0px 8px !important;
 }
+
 .mat-calendar-body-label {
     visibility: hidden !important;
 }
+
 .mat-calendar-body-label[colspan="7"] {
     display: none !important;
 }
+
 .mat-calendar-table-header th {
     color: $black;
     padding: 10px 0 10px 0 !important;
 }
+
 .mat-calendar-table-header th.mat-calendar-table-header-divider {
     padding: 0px !important;
 }
+
 .mat-datepicker-content .mat-calendar {
     height: 320px !important;
 }
