@@ -509,13 +509,13 @@ button.btn.btn-filter span.icon-cross {
 }
 
 .pending-approval-button {
-    background-color: #f8f9fa;
+    background-color: $color1;
     width: 140px;
     height: 37px;
 }
 
 .pending-approval-button:hover {
-    background-color: #e2e6ea;
+    background-color: $color2;
 }
 
 .all-table {
@@ -900,14 +900,14 @@ button.btn.btn-filter span.icon-cross {
     right: -3px;
     width: 30px;
     height: 30px;
-    border: 2px solid rgb(217, 217, 217);
+    border: 2px solid $gainsboro;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 .arrow-icon:hover {
-    color: white;
-    background-color: rgb(91, 100, 201);
+    color: $white;
+    background-color: $chetwode-blue;
 }
 .select-all-checkbox-wrapper {
     align-items: center;
