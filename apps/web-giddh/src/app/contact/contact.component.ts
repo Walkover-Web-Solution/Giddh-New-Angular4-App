@@ -1169,6 +1169,14 @@ export class ContactComponent implements OnInit, OnDestroy {
                     });
                     this.sundryDebtorsAccounts = cloneDeep(res.body.results);
                     this.sundryDebtorsAccounts = this.sundryDebtorsAccounts.map(element => {
+                        let customFields = [];
+                        element.customFields?.forEach(field => {
+                            customFields[field?.uniqueName] = [];
+                            customFields[field?.uniqueName] = field;
+                        });
+
+                        element.customFields = customFields;
+
                         let indexOfItem = this.selectedCheckedContacts.indexOf(element?.uniqueName);
                         if (indexOfItem === -1) {
                             element.isSelected = false;
@@ -1189,6 +1197,14 @@ export class ContactComponent implements OnInit, OnDestroy {
                     });
                     this.sundryCreditorsAccounts = cloneDeep(res.body.results);
                     this.sundryCreditorsAccounts = this.sundryCreditorsAccounts.map(element => {
+                        let customFields = [];
+                        element.customFields?.forEach(field => {
+                            customFields[field?.uniqueName] = [];
+                            customFields[field?.uniqueName] = field;
+                        });
+
+                        element.customFields = customFields;
+
                         let indexOfItem = this.selectedCheckedContacts.indexOf(element?.uniqueName);
                         if (indexOfItem === -1) {
                             element.isSelected = false;
