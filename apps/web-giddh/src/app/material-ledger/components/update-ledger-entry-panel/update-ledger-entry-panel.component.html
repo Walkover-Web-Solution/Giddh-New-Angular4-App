@@ -1807,7 +1807,8 @@
                                                     isAdjustReceiptSelected ||
                                                     isAdjustVoucherSelected ||
                                                     vm.selectedLedger?.voucherAdjustments?.adjustments?.length ||
-                                                    vm.selectedLedger?.invoiceLinkingRequest?.linkedInvoices?.length
+                                                    vm.selectedLedger?.invoiceLinkingRequest?.linkedInvoices?.length ||
+                                                    vm.selectedLedger?.referenceVoucher?.uniqueName
                                                         ? 'disabled'
                                                         : null
                                                 "

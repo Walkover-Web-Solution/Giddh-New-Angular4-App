@@ -6,6 +6,7 @@ import { INameUniqueName } from '../interfaces/nameUniqueName.interface';
 import { TaxControlData } from '../../theme/tax-control/tax-control.component';
 import * as moment from 'moment';
 import { VoucherAdjustments } from './AdvanceReceiptsAdjust';
+import { ReferenceVoucher } from '../../material-ledger/ledger.vm';
 
 export enum VoucherTypeEnum {
     'sales' = 'sales',
@@ -505,6 +506,7 @@ export class VoucherDetailsClass {
     public currencySymbol: string;
     public currency: Currency;
     public exchangeRate?: number;
+    public referenceVoucher?: ReferenceVoucher;
 
     constructor() {
         this.customerName = null;
