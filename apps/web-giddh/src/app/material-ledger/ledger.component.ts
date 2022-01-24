@@ -977,8 +977,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
             }
             this.invoiceList = [];
             this.ledgerService.getInvoiceListsForCreditNote(request, date).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
-                if (response && response.body && response.body.results) {
-                    response.body.results.forEach(invoice => this.invoiceList.push({ label: invoice?.voucherNumber ? invoice.voucherNumber : '-', value: invoice?.uniqueName, additional: invoice })) 
+                if (response && response.body) {
+                    if (this.voucherApiVersion === 2) {
+                        response.body.items?.forEach(invoice => this.invoiceList.push({ label: invoice?.voucherNumber ? invoice.voucherNumber : '-', value: invoice?.uniqueName, additional: invoice }));
+                    } else {
+                        response.body.results?.forEach(invoice => this.invoiceList.push({ label: invoice?.voucherNumber ? invoice.voucherNumber : '-', value: invoice?.uniqueName, additional: invoice }));
+                    }
                 }
             });
         }

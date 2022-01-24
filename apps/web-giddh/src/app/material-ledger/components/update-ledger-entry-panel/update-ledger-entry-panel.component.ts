@@ -884,7 +884,11 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         delete requestObj['tcsTaxes'];
 
         if (requestObj.voucherType !== VoucherTypeEnum.creditNote && requestObj.voucherType !== VoucherTypeEnum.debitNote) {
-            requestObj.invoiceLinkingRequest = null;
+            if(this.voucherApiVersion === 2) {
+                requestObj.referenceVoucher = null;
+            } else {
+                requestObj.invoiceLinkingRequest = null;
+            }
         }
         if ((this.isAdvanceReceipt && !this.isAdjustAdvanceReceiptSelected) || (this.vm.selectedLedger?.voucher?.shortCode === 'rcpt' && !this.isAdjustReceiptSelected) || !this.isAdjustVoucherSelected) {
             // Clear the voucher adjustments if the adjust advance receipt or adjust receipt is not selected
@@ -1111,7 +1115,13 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     this.forceClear$ = observableOf({ status: true });
                 }
                 let invoiceSelected;
-                const selectedInvoice = (this.vm.selectedLedger && this.vm.selectedLedger.invoiceLinkingRequest && this.vm.selectedLedger.invoiceLinkingRequest.linkedInvoices) ? this.vm.selectedLedger.invoiceLinkingRequest.linkedInvoices[0] : false;
+                let selectedInvoice;
+                if (this.voucherApiVersion === 2) {
+                    selectedInvoice = this.vm.selectedLedger?.referenceVoucher ? this.vm.selectedLedger?.referenceVoucher : false;
+                } else {
+                    selectedInvoice = this.vm.selectedLedger?.invoiceLinkingRequest?.linkedInvoices ? this.vm.selectedLedger.invoiceLinkingRequest.linkedInvoices[0] : false;
+                }
+
                 if (selectedInvoice) {
                     selectedInvoice['voucherDate'] = selectedInvoice['invoiceDate'];
                     invoiceSelected = {
@@ -1176,19 +1186,29 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public creditNoteInvoiceSelected(event: any): void {
         if (event && event.value && event.additional) {
             if (this.vm.selectedLedger) {
-                this.vm.selectedLedger.invoiceLinkingRequest = {
-                    linkedInvoices: [
-                        {
-                            invoiceUniqueName: event.value,
-                            voucherType: event.additional.voucherType
-                        }
-                    ]
+                if (this.voucherApiVersion === 2) {
+                    this.vm.selectedLedger.referenceVoucher = {
+                        uniqueName: event.value
+                    }
+                } else {
+                    this.vm.selectedLedger.invoiceLinkingRequest = {
+                        linkedInvoices: [
+                            {
+                                invoiceUniqueName: event.value,
+                                voucherType: event.additional.voucherType
+                            }
+                        ]
+                    }
                 }
             }
             this.vm.selectedLedger.generateInvoice = true;
         } else {
             if (this.vm.selectedLedger) {
-                this.vm.selectedLedger.invoiceLinkingRequest = null;
+                if (this.voucherApiVersion === 2) {
+                    this.vm.selectedLedger.referenceVoucher = null;
+                } else {
+                    this.vm.selectedLedger.invoiceLinkingRequest = null;
+                }
             }
         }
     }

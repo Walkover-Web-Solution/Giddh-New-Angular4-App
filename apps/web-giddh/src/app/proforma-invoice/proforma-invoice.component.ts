@@ -1739,18 +1739,34 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     }
                     let invoiceSelected;
                     if (this.isUpdateMode) {
-                        const selectedInvoice = this.invFormData.voucherDetails && this.invFormData.voucherDetails.invoiceLinkingRequest ?
-                            this.invFormData.voucherDetails.invoiceLinkingRequest.linkedInvoices[0] : '';
-                        if (selectedInvoice) {
-                            selectedInvoice['voucherDate'] = selectedInvoice['invoiceDate'];
-                            invoiceSelected = {
-                                label: selectedInvoice.invoiceNumber ? selectedInvoice.invoiceNumber : '-',
-                                value: selectedInvoice.invoiceUniqueName,
-                                additional: selectedInvoice
-                            };
-                            const linkedInvoice = this.invoiceList.find(invoice => invoice.value === invoiceSelected.value);
-                            if (!linkedInvoice) {
-                                this.invoiceList.push(invoiceSelected);
+                        if(this.voucherApiVersion === 2) {
+                            const selectedInvoice = this.invFormData.voucherDetails.referenceVoucher;
+                            if (selectedInvoice) {
+                                selectedInvoice['voucherDate'] = selectedInvoice['invoiceDate'];
+                                invoiceSelected = {
+                                    label: selectedInvoice.number ? selectedInvoice.number : '-',
+                                    value: selectedInvoice.uniqueName,
+                                    additional: selectedInvoice
+                                };
+                                const linkedInvoice = this.invoiceList.find(invoice => invoice.value === invoiceSelected.value);
+                                if (!linkedInvoice) {
+                                    this.invoiceList.push(invoiceSelected);
+                                }
+                            }
+                        } else {
+                            const selectedInvoice = this.invFormData.voucherDetails && this.invFormData.voucherDetails.invoiceLinkingRequest ?
+                                this.invFormData.voucherDetails.invoiceLinkingRequest.linkedInvoices[0] : '';
+                            if (selectedInvoice) {
+                                selectedInvoice['voucherDate'] = selectedInvoice['invoiceDate'];
+                                invoiceSelected = {
+                                    label: selectedInvoice.invoiceNumber ? selectedInvoice.invoiceNumber : '-',
+                                    value: selectedInvoice.invoiceUniqueName,
+                                    additional: selectedInvoice
+                                };
+                                const linkedInvoice = this.invoiceList.find(invoice => invoice.value === invoiceSelected.value);
+                                if (!linkedInvoice) {
+                                    this.invoiceList.push(invoiceSelected);
+                                }
                             }
                         }
                     }
@@ -1844,13 +1860,20 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      */
     public creditNoteInvoiceSelected(event: any): void {
         if (event && event.additional && event.value) {
-            this.invFormData.voucherDetails.invoiceLinkingRequest = {
-                linkedInvoices: [
-                    {
-                        invoiceUniqueName: event.value,
-                        voucherType: event.additional.voucherType
-                    }
-                ]
+            if (this.voucherApiVersion === 2) {
+                this.invFormData.voucherDetails.referenceVoucher = {
+                    uniqueName: event.value,
+                    voucherType: event.additional.voucherType
+                }
+            } else {
+                this.invFormData.voucherDetails.invoiceLinkingRequest = {
+                    linkedInvoices: [
+                        {
+                            invoiceUniqueName: event.value,
+                            voucherType: event.additional.voucherType
+                        }
+                    ]
+                }
             }
         }
     }
@@ -2497,10 +2520,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 }
                 if (this.isCreditNote || this.isDebitNote) {
                     updatedData['invoiceNumberAgainstVoucher'] = this.invFormData.voucherDetails.voucherNumber;
-                    updatedData['invoiceLinkingRequest'] = data.voucherDetails.invoiceLinkingRequest;
-                }
-                if (this.isCreditNote) {
-                    updatedData['invoiceLinkingRequest'] = data.voucherDetails.invoiceLinkingRequest;
+                    if(this.voucherApiVersion === 2) {
+                        updatedData['referenceVoucher'] = data.voucherDetails.referenceVoucher;
+                    } else {
+                        updatedData['invoiceLinkingRequest'] = data.voucherDetails.invoiceLinkingRequest;
+                    }
                 }
                 if (this.voucherApiVersion === 2 && !this.isPurchaseInvoice) {
                     updatedData = this.proformaInvoiceUtilityService.getVoucherRequestObjectForInvoice(updatedData);
@@ -3953,16 +3977,28 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 }
                 if (((this.isCreditNote || this.isDebitNote) && this.selectedInvoice) || this.isSalesInvoice) {
                     if (this.isSalesInvoice) {
-                        requestObject['invoiceLinkingRequest'] = cloneDeep(this.invFormData?.voucherDetails?.invoiceLinkingRequest);
+                        if(this.voucherApiVersion === 2) {
+                            requestObject['referenceVoucher'] = cloneDeep(this.invFormData?.voucherDetails?.referenceVoucher);
+                        } else {
+                            requestObject['invoiceLinkingRequest'] = cloneDeep(this.invFormData?.voucherDetails?.invoiceLinkingRequest);
+                        }
                     } else {
                         const selectedLinkedVoucherType = this.invoiceList.find(invoice => invoice.value === this.selectedInvoice);
-                        requestObject['invoiceLinkingRequest'] = {
-                            linkedInvoices: [{
-                                invoiceUniqueName: this.selectedInvoice,
+                        if(this.voucherApiVersion === 2) {
+                            requestObject['referenceVoucher'] = {
+                                uniqueName: this.selectedInvoice,
                                 voucherType: selectedLinkedVoucherType && selectedLinkedVoucherType.additional ?
                                     selectedLinkedVoucherType.additional.voucherType : 'sales'
-                            }]
-                        };
+                            };
+                        } else {
+                            requestObject['invoiceLinkingRequest'] = {
+                                linkedInvoices: [{
+                                    invoiceUniqueName: this.selectedInvoice,
+                                    voucherType: selectedLinkedVoucherType && selectedLinkedVoucherType.additional ?
+                                        selectedLinkedVoucherType.additional.voucherType : 'sales'
+                                }]
+                            };
+                        }
                     }
                 }
 
@@ -4939,7 +4975,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
         //code for voucher details
         voucherDetails.voucherDate = result.date ? result.date : '';
-        voucherDetails.invoiceLinkingRequest = result.invoiceLinkingRequest;
+        if(this.voucherApiVersion === 2) {
+            voucherDetails.referenceVoucher = result.referenceVoucher;
+        } else {
+            voucherDetails.invoiceLinkingRequest = result.invoiceLinkingRequest;
+        }
         if (this.isPendingVoucherType) {
             result.balanceTotal = result.grandTotal;
         } else {
