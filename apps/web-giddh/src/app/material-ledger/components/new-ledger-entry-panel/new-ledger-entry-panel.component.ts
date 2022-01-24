@@ -998,16 +998,23 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public creditNoteInvoiceSelected(event: any): void {
         if (event && event.value && event.additional) {
             if (this.currentTxn) {
-                this.currentTxn.invoiceLinkingRequest = {
-                    linkedInvoices: [
-                        {
-                            invoiceUniqueName: event.value,
-                            voucherType: event.additional.voucherType
-                        }
-                    ]
+                if (this.voucherApiVersion === 2) {
+                    this.currentTxn.referenceVoucher = {
+                        uniqueName: event.value
+                    }
+                    this.selectedInvoiceAmount = event.additional.unadjustedAmount.amountForAccount;
+                } else {
+                    this.currentTxn.invoiceLinkingRequest = {
+                        linkedInvoices: [
+                            {
+                                invoiceUniqueName: event.value,
+                                voucherType: event.additional.voucherType
+                            }
+                        ]
+                    }
+                    this.selectedInvoiceAmount = event.additional.balanceDue.amountForAccount;
                 }
             }
-            this.selectedInvoiceAmount = event.additional.balanceDue.amountForAccount;
             this.blankLedger.generateInvoice = true;
         }
     }
@@ -1021,6 +1028,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         this.forceClear$ = observableOf({ status: true });
         if (this.currentTxn) {
             this.currentTxn.invoiceLinkingRequest = null;
+            this.currentTxn.referenceVoucher = null;
         }
         this.selectedInvoiceForCreditNote = null;
 
