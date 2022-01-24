@@ -221,12 +221,14 @@
     <div [hidden]="!(dueAmountReportData$ | async)?.results?.length && !dueAmountReportRequest?.q">
         <div class="d-flex justify-content-end">
             <mat-menu #agingDropdown="matMenu" class="aging-dropdown-table">
-                <aging-dropdown
-                    [options]="agingDropDownoptions"
-                    *ngIf="setDueRangeOpen$ | async"
-                    [localeData]="localeData"
-                    [commonLocaleData]="commonLocaleData"
-                ></aging-dropdown>
+                <ng-template matMenuContent>
+                    <aging-dropdown
+                        [options]="agingDropDownoptions"
+                        *ngIf="setDueRangeOpen$ | async"
+                        [localeData]="localeData"
+                        [commonLocaleData]="commonLocaleData"
+                    ></aging-dropdown>
+                </ng-template>
             </mat-menu>
         </div>
 
