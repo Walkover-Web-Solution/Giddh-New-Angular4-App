@@ -2087,7 +2087,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         }
 
         if (item && item.currency && item.currency !== this.companyCurrency) {
-            if (this.isUpdateMode && !this.isDefaultLoad) {
+            if (this.isUpdateMode) {
+                if(!this.isDefaultLoad) {
+                    this.getCurrencyRate(this.companyCurrency, item.currency, this.invFormData.voucherDetails.voucherDate);
+                }
+            } else {
                 this.getCurrencyRate(this.companyCurrency, item.currency, this.invFormData.voucherDetails.voucherDate);
             }
         } else {
