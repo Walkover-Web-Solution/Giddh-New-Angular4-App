@@ -47,6 +47,11 @@ export class SettingsUtilityService {
             }
             return { ...warehouse, label: warehouse.name, value: warehouse.uniqueName };
         });
+
+        if(!defaultWarehouse?.uniqueName && formattedWarehouses?.length > 0) {
+            defaultWarehouse = formattedWarehouses[0];
+        }
+
         return { formattedWarehouses, defaultWarehouse };
     }
 

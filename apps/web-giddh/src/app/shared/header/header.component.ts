@@ -339,9 +339,24 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 this.generalService.currentOrganizationType = organization.type;
                 this.currentOrganizationType = organization.type;
                 if (this.generalService.currentBranchUniqueName) {
-                    this.currentCompanyBranches$.pipe(take(1)).subscribe(response => {
+                    this.currentCompanyBranches$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
                         if (response) {
-                            this.currentBranch = response.find(branch => (branch?.uniqueName === this.generalService.currentBranchUniqueName));
+                            const unarchivedBranches = response.filter(branch => !branch.isArchived);
+                            if (!unarchivedBranches?.length) {
+                                const type = OrganizationType.Company;
+                                const organization: Organization = {
+                                    type,
+                                    uniqueName: this.activeCompany ? this.activeCompany.uniqueName : '',
+                                    details: {
+                                        branchDetails: {
+                                            uniqueName: ''
+                                        }
+                                    }
+                                };
+                                this.store.dispatch(this.companyActions.setCompanyBranch(organization));
+                                this.store.dispatch(this.loginAction.ChangeCompany(this.activeCompany?.uniqueName, false));
+                            }
+                            this.currentBranch = response.find(branch => (branch.uniqueName === this.generalService.currentBranchUniqueName));
                             if (!this.activeCompanyForDb) {
                                 this.activeCompanyForDb = new CompAidataModel();
                             }
