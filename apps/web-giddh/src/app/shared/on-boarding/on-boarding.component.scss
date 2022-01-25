@@ -39,14 +39,9 @@ label .required {
 
 .add-company-detail {
     background-color: $alice-blue-light;
+    margin-bottom: 0 !important;
 }
 
-.welcome-select {
-    .select-caret {
-        width: 85px;
-        margin-right: 28px;
-    }
-}
 .welcome-header h1 {
     font-size: 30px;
     font-family: "opensans-regular";
@@ -73,6 +68,13 @@ label .required {
 
 .add-company-detail {
     background-color: $alice-blue-light;
+}
+
+.welcome-select {
+    .select-caret {
+        width: 85px;
+        margin-right: 28px;
+    }
 }
 
 @media (min-width: 768px) {

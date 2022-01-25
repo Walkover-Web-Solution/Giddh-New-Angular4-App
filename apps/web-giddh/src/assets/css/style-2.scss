@@ -54,11 +54,6 @@ $custom-typography: mat-typography-config(
         width: 18.2% !important;
     }
 }
-.billing-details {
-    .mat-form-field-infix {
-        border-top: 0 !important;
-    }
-}
 .all-table {
     .mat-column-contact {
         text-transform: lowercase;
@@ -71,6 +66,11 @@ $custom-typography: mat-typography-config(
     }
     .comment-header {
         min-width: 170px !important;
+    }
+}
+.billing-details {
+    .mat-form-field-infix {
+        border-top: 0 !important;
     }
 }
 @media screen and (max-width: 1366px) and (orientation: portrait) {
@@ -286,7 +286,9 @@ body {
     -webkit-font-smoothing: auto;
     padding: 0 !important;
     margin: 0 !important;
-} /* table css need to removed at last (finish)*/
+}
+
+/* table css need to removed at last (finish)*/
 .modal-header .close {
     cursor: pointer;
 }
@@ -313,7 +315,9 @@ body {
 
 .border-bottom {
     border-bottom: 1px solid $gainsboro;
-} /* start MDB tweaks */
+}
+
+/* start MDB tweaks */
 .caret {
     display: inline-block;
     width: 0;
@@ -643,7 +647,10 @@ ul.sub-list {
 .invoice-preview.table-responsive {
     display: block !important;
     width: 100%;
-} /* file upload css start */
+}
+
+/* file upload css start */
+
 .input-upload .input-group-btn {
     display: inline;
 }
@@ -852,7 +859,7 @@ ul.sub-list {
     text-align: left;
 }
 .top-aging-table-box input {
-    width: 35px !important;
+    width: 43px !important;
     height: 26px;
     border: 1px solid $gainsboro;
     padding: 5px;
@@ -1344,7 +1351,9 @@ modal-container.modal {
     border-bottom: 1px solid $gainsboro;
     height: initial !important;
 }
+
 /* my css end */
+
 /*input*/
 .form-control {
     background: $white !important;
@@ -4485,7 +4494,10 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
             line-height: 1.4;
         }
     }
-} /* ==================================================Branch
+}
+
+/* ==================================================
+    Branch
 ================================================== */
 .branch .box h1 {
     font-size: 18px;
@@ -6059,7 +6071,9 @@ highcharts-chart {
 .invoice-modal-content .app-aside-menu-other-taxes:host {
     top: 60px !important;
 }
-#top0 {
+
+#top0,
+.no-top {
     top: 0 !important;
 }
 #top0 app-aside-menu-other-taxes {
@@ -6455,7 +6469,10 @@ ngx-daterangepicker-material {
 
 span#HW_badge_cont:nth-child(3) {
     display: none;
-} /*notofication css end*/
+}
+
+/*notofication css end*/
+
 .setting-data,
 .setting-sidebar-open .white-row {
     padding-left: 15px !important;
@@ -6624,10 +6641,14 @@ span#HW_badge_cont:nth-child(3) {
             padding-left: 60px;
         }
     }
-} /*flex css start*/
+}
+
+/*flex css start*/
 .flex-column {
     flex-direction: column;
-} /*flex css start*/
+}
+
+/*flex css start*/
 .select-border-bottom {
     .form-control {
         border: none;
@@ -7038,7 +7059,9 @@ giddh-datepicker {
         width: 26px;
         height: 26px;
     }
-    .mat-form-field-appearance-fill:not(.mat-form-field-disabled).mat-form-field-flex:hover
+
+    .mat-form-field-appearance-fill:not(.mat-form-field-disabled)
+        .mat-form-field-flex:hover
         ~ .mat-form-field-underline
         .mat-form-field-ripple {
         opacity: 0 !important;
@@ -9264,7 +9287,10 @@ body.prevent-body-scroll {
     .linked-address sh-select-menu .total-padding {
         height: 257px !important;
     }
-} /*media query for height resolution end*/
+}
+
+/*media query for height resolution end*/
+
 .modal.fade.giddh-calendar.show {
     z-index: 999999;
 }
@@ -9293,7 +9319,9 @@ body.prevent-body-scroll {
 
 .giddh-no-permissions {
     display: none !important;
-} /** Angular material datepicker **/
+}
+
+/** Angular material datepicker **/
 .mat-calendar-header {
     padding: 2px 8px 2px 8px !important;
     background-color: $chetwode-blue;
@@ -9341,7 +9369,9 @@ body.prevent-body-scroll {
 
 mat-year-view table tr td.mat-calendar-body-label {
     display: none !important;
-} /** Angular material datepicker **/
+}
+
+/** Angular material datepicker **/
 
 input[type="checkbox"].cdk-visually-hidden::before,
 input[type="checkbox"].cdk-visually-hidden::after {

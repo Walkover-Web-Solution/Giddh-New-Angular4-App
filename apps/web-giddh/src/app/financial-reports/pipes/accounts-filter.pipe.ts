@@ -15,7 +15,7 @@ export class AccountsFilterPipe implements PipeTransform {
      * @param {boolean} showOnlyVisible True, if only visible accounts should be returned
      * @memberof AccountsFilterPipe
      */
-     transform(accounts: Array<Account>, showOnlyVisible?: boolean): Array<Account> {
+    transform(accounts: Array<Account>, showOnlyVisible?: boolean): Array<Account> {
         if (showOnlyVisible) {
             return accounts.filter(account => account.isVisible);
         }

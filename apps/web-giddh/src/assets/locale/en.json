@@ -638,7 +638,8 @@
         "internet_error": "Please check your internet connection.",
         "internet_disconnected": "Internet disconnected",
         "warehouse_created": "New warehouse created successfully.",
-        "warehouse_updated": "Warehouse updated successfully."
+        "warehouse_updated": "Warehouse updated successfully.",
+        "voucher_saved": "Voucher generated successfully"
     },
     "app_supported_languages": {
         "english": "English",

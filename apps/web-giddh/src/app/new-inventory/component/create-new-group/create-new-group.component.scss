@@ -1,0 +1,181 @@
+@import "../../../../assets/css/color.scss";
+
+:host {
+    position: fixed;
+    left: auto;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    max-width: 760px;
+    z-index: 99999;
+}
+#close {
+    position: absolute;
+    left: auto;
+    right: 10px;
+    z-index: 9999999;
+    background-color: transparent;
+    color: $white;
+    font-size: 17px;
+    top: 18px;
+    margin-right: 0;
+    border: 0;
+    border-radius: 0;
+}
+:host .container-fluid {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+:host .aside-pane {
+    width: 100%;
+    max-width: 760px;
+}
+
+.aside-pane {
+    width: 100%;
+}
+
+.flexy-child {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.flexy-child-1 {
+    flex-grow: 1;
+}
+
+.vertical-align-middle {
+    position: absolute;
+    top: 50%;
+    bottom: 0;
+    left: 0;
+    display: table;
+    width: 100%;
+    right: 0;
+    transform: translateY(-50%);
+    text-align: center;
+    margin: 0 auto;
+}
+.header-create-group {
+    .form-header {
+        display: flex;
+    }
+}
+.create-group-aside-body {
+    padding: 15px 15px 0;
+    .create-group-block {
+        .create-group-top {
+            padding-bottom: 15px;
+            img {
+                width: 80px;
+            }
+        }
+        .bg-white {
+            height: 82vh;
+        }
+        .wrapper-contain {
+            form {
+                max-width: 600px;
+                width: 100%;
+            }
+            .other-group {
+                margin-top: 20px;
+                margin-bottom: 70px;
+            }
+        }
+    }
+}
+.create-new-block {
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: calc(100vh - 65px);
+    .create-product-wrapper {
+        .create-one-item {
+            padding: 15px 0 0;
+            &:hover {
+                background-color: $lavender;
+            }
+            .wrapper-create-item {
+                border-bottom: 1px solid $gainsboro;
+                display: flex;
+                margin: 0 45px 0;
+                padding-bottom: 15px;
+                cursor: pointer;
+                .circle-icon {
+                    width: 80px;
+                    height: 80px;
+                    border: 1px solid $midnight-blue;
+                    background-color: $white;
+                    border-radius: 50%;
+                }
+                .create-item {
+                    max-width: 80%;
+                    margin-left: 15px;
+                    width: 100%;
+                    h4 {
+                        font-size: 16px;
+                        font-family: "opensans-semibold";
+                        margin-bottom: 20px;
+                    }
+                    p {
+                        font-size: 14px;
+                    }
+                }
+            }
+            &:last-child {
+                .wrapper-create-item {
+                    border-bottom: none;
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    :host {
+        max-width: 600px;
+    }
+    :host .aside-pane {
+        max-width: 600px;
+    }
+}
+@media (max-width: 575px) {
+    :host {
+        max-width: 370px;
+    }
+    :host .aside-pane {
+        max-width: 370px;
+    }
+    .create-group-aside-body {
+        .create-group-block {
+            .create-group-top {
+                padding-bottom: 15px;
+                img {
+                    width: 50px;
+                }
+            }
+        }
+    }
+}
+@media (max-width: 375px) {
+    :host {
+        max-width: 310px;
+    }
+    :host .aside-pane {
+        max-width: 310px;
+    }
+}
+@media (max-width: 320px) {
+    :host {
+        max-width: 280px;
+    }
+    :host .aside-pane {
+        max-width: 280px;
+    }
+}

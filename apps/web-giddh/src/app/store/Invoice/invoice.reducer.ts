@@ -119,7 +119,7 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
             });
             return Object.assign({}, state, newState);
         }
-        
+
         case INVOICE_ACTIONS.PREVIEW_INVOICE:
         case INVOICE_ACTIONS.PREVIEW_OF_GENERATED_INVOICE: {
             return { ...state, invoiceData: null, invoiceDataHasError: false };
@@ -232,7 +232,7 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
             }
             return state;
         }
-        
+
         case INVOICE.SETTING.GET_INVOICE_SETTING_RESPONSE: {
             let newState = _.cloneDeep(state);
             let res: BaseResponse<InvoiceSetting, string> = action.payload;
@@ -468,6 +468,11 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
             newState.isInvoiceGenerated = true;
             return Object.assign({}, state, newState);
         }
+        case INVOICE_ACTIONS.RESET_PENDING_DATA:
+            return {
+                ...state,
+                ledgers: null
+            };
         case INVOICE_ACTIONS.GENERATE_BULK_E_INVOICE:
             return {
                 ...state,
@@ -483,11 +488,11 @@ export function InvoiceReducer(state = initialState, action: CustomActions): Inv
                 ...state,
                 isGenerateBulkInvoiceCompleted: false
             }
-        case INVOICE.RECURRING.NO_PERMISSIONS_RECURRING_INVOICE: 
-            return { 
-                ...state, 
-                recurringInvoiceData: { ...state.recurringInvoiceData, recurringInvoices: null }, 
-                hasRecurringVoucherListPermissions: false 
+        case INVOICE.RECURRING.NO_PERMISSIONS_RECURRING_INVOICE:
+            return {
+                ...state,
+                recurringInvoiceData: { ...state.recurringInvoiceData, recurringInvoices: null },
+                hasRecurringVoucherListPermissions: false
             };
         default: {
             return state;

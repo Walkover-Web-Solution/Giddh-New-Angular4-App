@@ -1,0 +1,111 @@
+<div class="profitable-stock-block mr-t15">
+    <div class="box">
+        <div class="profit-stock-head d-flex justify-content-between flex-sm-row flex-column">
+            <h4>Top 5 Profitable Stock</h4>
+            <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
+                <i class="icon-calender calendar-addon bdr-radius-50"></i>
+                <input
+                    type="text"
+                    id="select-date-stock"
+                    name="selectedDateRange"
+                    [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
+                    class="giddh-datepicker date-range-picker bdr-radius-50"
+                    placeholder="Enter Date"
+                />
+            </div>
+        </div>
+        <!-- div will show if no any data on list -->
+        <div class="no-data-contain" hidden>
+            <img src="{{ imgPath }}error.svg" />
+            <p class="text-gray mr-t15">No items were invoiced in this time frame</p>
+        </div>
+        <div class="profitable-stock-container d-flex justify-content-between mr-t15">
+            <div class="table-wrapper">
+                <table class="table giddh-table profit-stock-table on-mobile-view">
+                    <thead>
+                        <th>Stock Name</th>
+                        <th>Sale</th>
+                        <th>Product</th>
+                        <th>Purchase Cost</th>
+                        <th>Tax</th>
+                        <th>Profit</th>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td data-title="Stock Name">
+                                <img
+                                    src="{{ imgPath }}Login-Page-Image.png"
+                                    alt="product image"
+                                    width="40"
+                                    height="40"
+                                />
+                                <span class="ml-1">Polyster Fabric Product</span>
+                            </td>
+                            <td data-title="Sale">₹6,00,000</td>
+                            <td data-title="Product">₹2,00,000</td>
+                            <td data-title="Purchase Cost">₹50,000</td>
+                            <td data-title="Tax">₹3,50,000</td>
+                            <td data-title="Profit">₹3,50,000</td>
+                        </tr>
+                        <tr>
+                            <td data-title="Stock Name">
+                                <img
+                                    src="{{ imgPath }}Login-Page-Image.png"
+                                    alt="product image"
+                                    width="40"
+                                    height="40"
+                                />
+                                <span class="ml-1">Polyster Fabric Product</span>
+                            </td>
+                            <td data-title="Sale">₹6,00,000</td>
+                            <td data-title="Product">₹2,00,000</td>
+                            <td data-title="Purchase Cost">₹50,000</td>
+                            <td data-title="Tax">₹3,50,000</td>
+                            <td data-title="Profit">₹3,50,000</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="star-stock-wrapper pt-5 pb-5">
+                <div class="star-stock-block">
+                    <div class="stack-block-img-content">
+                        <img src="{{ imgPath }}star-product.svg" />
+                        <p>Star Stock</p>
+                    </div>
+                    <div class="about-product-stock mt-4">
+                        <img src="{{ imgPath }}Login-Page-Image.png" width="60" height="60" />
+                        <h4 class="font-14 mt-2 mb-3">Polyster Fabric Product</h4>
+                        <p class="text-gray font-14">
+                            <span>Sale: ₹6,00,000 </span>
+                            <br /><span>Purchase Cost: ₹2,00,000</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- datepicker template -->
+<ng-template #datepickerTemplate>
+    <div class="datepicker-modal">
+        <div class="modal-body">
+            <app-datepicker-wrapper
+                [inputStartDate]="selectedDateRange?.startDate"
+                [inputEndDate]="selectedDateRange?.endDate"
+                [alwaysShowCalendars]="true"
+                [ranges]="datePickerOption"
+                [selectedRangeLabel]="selectedRangeLabel"
+                [showCustomRangeLabel]="true"
+                [showClearButton]="false"
+                [showCancel]="true"
+                [linkedCalendars]="true"
+                [showDropdowns]="true"
+                (rangeClicked)="dateSelectedCallback($event)"
+                (datesUpdated)="dateSelectedCallback($event)"
+                [keepCalendarOpeningWithRange]="false"
+                [showRangeLabelOnInput]="false"
+                [dateFieldPosition]="dateFieldPosition"
+            ></app-datepicker-wrapper>
+        </div>
+    </div>
+</ng-template>

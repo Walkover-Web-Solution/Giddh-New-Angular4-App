@@ -12,7 +12,6 @@ import { ReplaySubject } from 'rxjs';
     styleUrls: ['./aside-menu-other-taxes.scss'],
     host: { 'class': 'app-aside-menu-other-taxes' },
 })
-
 export class AsideMenuOtherTaxes implements OnInit, OnChanges, OnDestroy {
     @Output() public closeModal: EventEmitter<boolean> = new EventEmitter();
     @Input() public otherTaxesModal: SalesOtherTaxesModal;
@@ -21,12 +20,9 @@ export class AsideMenuOtherTaxes implements OnInit, OnChanges, OnDestroy {
     public isDisabledCalMethod: boolean = false;
     public taxesOptions: IOption[] = [];
     public selectedTaxUniqueName: string;
-
     public calculationMethodOptions: IOption[] = [];
-
     /** True if mobile screen */
     public isMobileScreen: boolean;
-
     /** To unsubscribe from subscription */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /* This will hold common JSON data */
@@ -42,7 +38,7 @@ export class AsideMenuOtherTaxes implements OnInit, OnChanges, OnDestroy {
         });
     }
 
-    ngOnInit() {
+    public ngOnInit(): void {
         this.taxesOptions = this.taxes
             ?.filter(f => ['tcsrc', 'tcspay', 'tdsrc', 'tdspay'].includes(f.taxType))
             .map(m => {
@@ -54,11 +50,12 @@ export class AsideMenuOtherTaxes implements OnInit, OnChanges, OnDestroy {
             { label: this.commonLocaleData?.app_on_total_value, value: 'OnTotalAmount' },
         ];
     }
-    public hideListItems() {
+
+    public hideListItems(): void {
         this.saveTaxes();
     }
 
-    ngOnChanges(changes: SimpleChanges): void {
+    public ngOnChanges(changes: SimpleChanges): void {
         if ('otherTaxesModal' in changes && changes.otherTaxesModal.currentValue !== changes.otherTaxesModal.previousValue) {
             this.otherTaxesModal = changes.otherTaxesModal.currentValue;
             if (this.otherTaxesModal.appliedOtherTax) {
@@ -68,21 +65,26 @@ export class AsideMenuOtherTaxes implements OnInit, OnChanges, OnDestroy {
         }
     }
 
-    public applyTax(tax: IOption) {
+    public applyTax(tax: IOption): void {
         if (tax && tax.value) {
             this.otherTaxesModal.appliedOtherTax = { name: tax.label, uniqueName: tax.value };
-            let taxType = this.taxes.find(f => f.uniqueName === tax.value).taxType;
+            let taxType = this.taxes.find(f => f?.uniqueName === tax.value).taxType;
             this.isDisabledCalMethod = ['tdsrc', 'tdspay'].includes(taxType);
+            if (!this.isDisabledCalMethod) {
+                this.otherTaxesModal.tcsCalculationMethod = SalesOtherTaxesCalculationMethodEnum.OnTotalAmount;
+            } else {
+                this.otherTaxesModal.tcsCalculationMethod = SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount;
+            }
         }
     }
 
-    public onClear() {
+    public onClear(): void {
         this.otherTaxesModal.appliedOtherTax = null;
         this.isDisabledCalMethod = false;
         this.otherTaxesModal.tcsCalculationMethod = SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount;
     }
 
-    public saveTaxes() {
+    public saveTaxes(): void {
         this.applyTaxes.emit(this.otherTaxesModal);
     }
 

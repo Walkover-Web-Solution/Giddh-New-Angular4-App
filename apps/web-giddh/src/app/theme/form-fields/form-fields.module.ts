@@ -22,7 +22,8 @@ import { TextFieldComponent } from "./text-field/text-field.component";
         MatCheckboxModule
     ],
     exports: [
-        TextFieldComponent
+        TextFieldComponent,
+        MatFormFieldModule
     ]
 })
 

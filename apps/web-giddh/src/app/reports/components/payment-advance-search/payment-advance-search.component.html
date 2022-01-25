@@ -1,0 +1,83 @@
+<div class="clearfix">
+    <div class="modal-header">
+        <h4 class="modal-title bg pull-left">{{ commonLocaleData?.app_advance_search }}</h4>
+        <button
+            type="button"
+            class="close pull-right"
+            [attr.aria-label]="commonLocaleData?.app_close"
+            (click)="closeModal.emit()"
+        >
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body font-14">
+        <div class="clearfix pd-1">
+            <div class="row">
+                <label class="col-md-3">{{ commonLocaleData?.app_total_amount }}</label>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <sh-select
+                            class="text-left dropdown-arrow"
+                            name="totalAmount"
+                            [(ngModel)]="searchModel.totalAmountFilter.selectedValue"
+                            [placeholder]="commonLocaleData?.app_select"
+                            [notFoundLink]="false"
+                            [multiple]="false"
+                            [ItemHeight]="33"
+                            [options]="searchModel.totalAmountFilter.filterValues"
+                        >
+                        </sh-select>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <input
+                            type="number"
+                            class="form-control"
+                            [(ngModel)]="searchModel.totalAmountFilter.amount"
+                            [placeholder]="commonLocaleData?.app_total_amount"
+                        />
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <label class="col-md-3">{{ localeData?.unused_amount }}</label>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <sh-select
+                            class="text-left dropdown-arrow"
+                            name="unusedAmount"
+                            [(ngModel)]="searchModel.unusedAmountFilter.selectedValue"
+                            [placeholder]="commonLocaleData?.app_select"
+                            [notFoundLink]="false"
+                            [multiple]="false"
+                            [ItemHeight]="33"
+                            [options]="searchModel.unusedAmountFilter.filterValues"
+                        >
+                        </sh-select>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <input
+                            type="number"
+                            class="form-control"
+                            [(ngModel)]="searchModel.unusedAmountFilter.amount"
+                            [placeholder]="localeData?.unused_amount"
+                        />
+                    </div>
+                </div>
+            </div>
+
+            <div class="clearfix mt-4">
+                <button type="button" class="btn btn-success mr-r1" (click)="confirm.emit(searchModel)">
+                    {{ commonLocaleData?.app_search }}
+                </button>
+                <button type="button" class="btn btn-cancel" (click)="cancel.emit()">
+                    {{ commonLocaleData?.app_cancel }}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

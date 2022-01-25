@@ -131,7 +131,7 @@ svg.icon.gstr-icon {
     width: 9px;
     height: 9px;
     border-radius: 5px;
-    background-color: $whisper-light;
+    background-color: $whisper-color;
     position: relative;
     top: 5px;
     right: 19px;
@@ -348,7 +348,7 @@ hr {
 #c-tab ::ng-deep .nav-tabs > li.active > a,
 .nav-tabs > li.active > a:focus,
 .nav-tabs > li.active > a:hover {
-    color: $zambezi;
+    color: $davy-grey;
     cursor: default;
     background-color: $white;
     border: 2px solid $gainsboro;

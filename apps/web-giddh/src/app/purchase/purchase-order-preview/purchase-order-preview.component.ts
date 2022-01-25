@@ -107,7 +107,7 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
         private domSanitizer: DomSanitizer,
         private generalService: GeneralService
     ) {
-        
+
     }
 
     /**
@@ -125,7 +125,7 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
         document.querySelector('body').classList.add('setting-sidebar-open');
         this.getInventorySettings();
         this.store.dispatch(this.invoiceActions.getInvoiceSetting());
-        
+
         this.getPurchaseOrder();
 
         if (this.purchaseOrders && this.purchaseOrders.items) {

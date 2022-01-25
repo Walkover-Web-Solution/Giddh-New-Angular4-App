@@ -56,6 +56,10 @@
     font-family: "opensans-semibold";
     color: $davy-grey;
     padding: 6px 0;
+    outline: none !important;
+    &:focus {
+        outline: none !important;
+    }
 }
 .manufacture-table {
     .bd-rl {

@@ -263,6 +263,7 @@ export enum AdjustedVoucherType {
     Sales = 'sal', // used in ledger
     SalesInvoice = 'sales', // used in invoice preview module
     Purchase = 'pur',
+    PurchaseInvoice = 'purchase',
     CreditNote = 'credit note',
     DebitNote = 'debit note',
     Payment = 'pay',
@@ -320,10 +321,138 @@ export enum EInvoiceStatus {
 
 /** Length of entry description on vouchers */
 export const ENTRY_DESCRIPTION_LENGTH = 300;
-
 export const EMAIL_REGEX_PATTERN = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
 /** This will hold error status code for permission error from API */
 export const UNAUTHORISED = 401;
+export const SELECT_ALL_RECORDS = "selectallrecords";
 /** This will hide the filing feature of GST module  */
 export const SHOW_GST_FILING = false;
-export const SELECT_ALL_RECORDS = "selectallrecords";
+/** Stores the voucher wise form values to toggle fields in voucher module */
+export const GIDDH_VOUCHER_FORM = [
+    {
+        type: "sales",
+        advanceReceiptAllowed: false,
+        rcmAllowed: true,
+        depositAllowed: true,
+        taxesAllowed: true,
+        quantityAllowed: true,
+        rateAllowed: true,
+        discountAllowed: true,
+        addressAllowed: true,
+        otherDetails: true,
+        dueDate: true,
+        attachmentAllowed: false
+    },
+    {
+        type: "cash",
+        advanceReceiptAllowed: false,
+        rcmAllowed: false,
+        depositAllowed: false,
+        taxesAllowed: true,
+        quantityAllowed: true,
+        rateAllowed: true,
+        discountAllowed: true,
+        addressAllowed: true,
+        otherDetails: true,
+        dueDate: true,
+        attachmentAllowed: false
+    },
+    {
+        type: "estimate",
+        advanceReceiptAllowed: false,
+        rcmAllowed: false,
+        depositAllowed: false,
+        taxesAllowed: true,
+        quantityAllowed: true,
+        rateAllowed: true,
+        discountAllowed: true,
+        addressAllowed: true,
+        otherDetails: true,
+        dueDate: true,
+        attachmentAllowed: false
+    },
+    {
+        type: "proformas",
+        advanceReceiptAllowed: false,
+        rcmAllowed: false,
+        depositAllowed: false,
+        taxesAllowed: true,
+        quantityAllowed: true,
+        rateAllowed: true,
+        discountAllowed: true,
+        addressAllowed: true,
+        otherDetails: true,
+        dueDate: true,
+        attachmentAllowed: false
+    },
+    {
+        type: "purchase",
+        advanceReceiptAllowed: false,
+        rcmAllowed: true,
+        depositAllowed: true,
+        taxesAllowed: true,
+        quantityAllowed: true,
+        rateAllowed: true,
+        discountAllowed: true,
+        addressAllowed: true,
+        otherDetails: true,
+        dueDate: true,
+        attachmentAllowed: true
+    },
+    {
+        type: "credit note",
+        advanceReceiptAllowed: false,
+        rcmAllowed: true,
+        depositAllowed: false,
+        taxesAllowed: true,
+        quantityAllowed: true,
+        rateAllowed: true,
+        discountAllowed: true,
+        addressAllowed: true,
+        otherDetails: true,
+        dueDate: false,
+        attachmentAllowed: false
+    },
+    {
+        type: "debit note",
+        advanceReceiptAllowed: false,
+        rcmAllowed: true,
+        depositAllowed: false,
+        taxesAllowed: true,
+        quantityAllowed: true,
+        rateAllowed: true,
+        discountAllowed: true,
+        addressAllowed: true,
+        otherDetails: true,
+        dueDate: false,
+        attachmentAllowed: false
+    },
+    {
+        type: "payment",
+        advanceReceiptAllowed: false,
+        rcmAllowed: false,
+        depositAllowed: false,
+        taxesAllowed: false,
+        quantityAllowed: false,
+        rateAllowed: false,
+        discountAllowed: false,
+        addressAllowed: true,
+        otherDetails: true,
+        dueDate: false,
+        attachmentAllowed: false
+    },
+    {
+        type: "receipt",
+        advanceReceiptAllowed: true,
+        rcmAllowed: false,
+        depositAllowed: false,
+        taxesAllowed: false,
+        quantityAllowed: false,
+        rateAllowed: false,
+        discountAllowed: false,
+        addressAllowed: true,
+        otherDetails: true,
+        dueDate: false,
+        attachmentAllowed: false
+    }
+];

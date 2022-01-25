@@ -44,3 +44,4 @@ module.exports = {
         new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
     ]
 }
+
