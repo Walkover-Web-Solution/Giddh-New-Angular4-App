@@ -26,6 +26,8 @@ export class AgingDropdownComponent implements OnDestroy {
     private isValid: boolean = true;
     /** True if range needs to be updated */
     private updateRange: boolean = false;
+    /** Emit the close event for parent component */
+    @Output() close = new EventEmitter();
 
     constructor(private store: Store<AppState>, private toasty: ToasterService, private agingReportActions: AgingReportActions) {
         this.setDueRangeRequestInFlight$ = this.store.pipe(select(s => s.agingreport.setDueRangeRequestInFlight), takeUntil(this.destroyed$));
@@ -61,7 +63,14 @@ export class AgingDropdownComponent implements OnDestroy {
         this.updateRange = true;
     }
     
+    /**
+     * This will use for click outside on ranges
+     *
+     * @param {*} e
+     * @memberof AgingDropdownComponent
+     */
     public closeAging(e) {
+        this.close.emit();
         if (this.isValid && this.updateRange) {
             this.store.dispatch(this.agingReportActions.CreateDueRange({ range: [this.options.fourth.toString(), this.options.fifth.toString(), this.options.sixth.toString()] }));
         }

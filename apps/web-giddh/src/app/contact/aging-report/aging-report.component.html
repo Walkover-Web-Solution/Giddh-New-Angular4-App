@@ -223,6 +223,7 @@
             <mat-menu #agingDropdown="matMenu" class="aging-dropdown-table">
                 <ng-template matMenuContent>
                     <aging-dropdown
+                        (close)="onCloseMenu()"
                         [options]="agingDropDownoptions"
                         *ngIf="setDueRangeOpen$ | async"
                         [localeData]="localeData"
