@@ -367,7 +367,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         });
 
         this.currentCompanyBranches$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
+            if (response && this.currentOrganizationType === OrganizationType.Branch) {
                 const unarchivedBranches = response.filter(branch => !branch.isArchived);
                 if (!unarchivedBranches?.length) {
                     const type = OrganizationType.Company;
