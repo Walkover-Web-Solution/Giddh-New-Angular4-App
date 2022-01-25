@@ -535,7 +535,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
      * @memberof AgingReportComponent
      */
      public onCloseMenu() {
-        this.menu.closeMenu();
+        this.menu?.closeMenu();
     }
 
 }
