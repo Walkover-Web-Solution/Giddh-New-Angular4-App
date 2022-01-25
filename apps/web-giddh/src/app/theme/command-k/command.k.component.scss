@@ -64,7 +64,6 @@
     position: relative;
     &.isVisible {
         display: block;
-        height: 576px;
     }
     &.isFlying {
         position: absolute;
@@ -102,7 +101,6 @@
     .universal-list-items {
         position: relative;
         overflow: auto;
-        height: 89%;
         &:focus {
             outline: none;
         }
@@ -170,9 +168,6 @@
                     color: $white;
                 }
             }
-        }
-        .command-k-popup-height {
-            height: 100%;
         }
     }
     .jumper-results {

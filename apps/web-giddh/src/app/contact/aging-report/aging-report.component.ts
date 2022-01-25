@@ -26,7 +26,6 @@ import { Observable, of, ReplaySubject, Subject } from "rxjs";
 import { BsDropdownDirective } from "ngx-bootstrap/dropdown";
 import { PaginationComponent } from "ngx-bootstrap/pagination";
 import { BsModalRef, BsModalService, ModalOptions } from "ngx-bootstrap/modal";
-import { ModalDirective } from "ngx-bootstrap/modal";
 import { ElementViewContainerRef } from "../../shared/helpers/directives/elementViewChild/element.viewchild.directive";
 import { debounceTime, distinctUntilChanged, take, takeUntil } from "rxjs/operators";
 import { BreakpointObserver, BreakpointState } from "@angular/cdk/layout";
@@ -41,6 +40,7 @@ import { GIDDH_DATE_RANGE_PICKER_RANGES } from "../../app.constant";
 import { FormControl } from "@angular/forms";
 import { MatDialog } from "@angular/material/dialog";
 import { MatTableDataSource } from "@angular/material/table";
+import { MatMenuTrigger } from "@angular/material/menu";
 
 @Component({
     selector: "aging-report",
@@ -129,6 +129,8 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     public agingReportDisplayedColumns: string[] = ['customerName', 'parentGroup', 'app_upcoming_due', 'app_days_1', 'app_days_2', 'app_days_3', 'app_days_4', 'app_total_due'];
     /** Datasource of aging report */
     public agingReportDataSource = new MatTableDataSource<Result>([]);
+    /** Mat menu instance reference */
+    @ViewChild(MatMenuTrigger) menu: MatMenuTrigger;
 
     constructor(
         public dialog: MatDialog,
@@ -522,8 +524,18 @@ export class AgingReportComponent implements OnInit, OnDestroy {
      *
      * @memberof AgingReportComponent
      */
-    public ngOnDestroy(): void {
+    public ngOnDestroy(): void {      
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
+    
+    /**
+     * This function will use for emit after click outside on component
+     *
+     * @memberof AgingReportComponent
+     */
+     public onCloseMenu() {
+        this.menu.closeMenu();
+    }
+
 }
