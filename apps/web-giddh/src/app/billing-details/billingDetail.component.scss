@@ -88,7 +88,7 @@
             float: left;
             width: 100%;
             label {
-                color: $dark-gray-new;
+                color: $slate-color;
                 float: left;
                 width: 100%;
             }
@@ -96,7 +96,7 @@
 
         .form-control {
             background: $white !important;
-            border: 1px solid $gainsboro !important;
+            border: 1px solid $gainsboro;
             border-radius: 2px !important;
             padding: 6px !important;
         }
@@ -111,7 +111,7 @@
             height: 39px;
         }
         .red-text {
-            color: $gray !important;
+            color: $black-pearl !important;
         }
         .billing-details form label {
             color: $dark-gray-new;
@@ -130,6 +130,7 @@
     }
     .right-side {
         padding-left: 0;
+        padding-right: 0;
         .whole-renewal {
             float: left;
             width: 100%;
@@ -142,7 +143,7 @@
                 margin-bottom: 13px;
             }
             .renewal-details {
-                color: $gray;
+                color: $black-pearl;
             }
             .renewal-data {
                 padding-left: 4px;
@@ -153,7 +154,7 @@
                 padding-top: 0px;
             }
             .renewal-card-subtitle {
-                color: $gray;
+                color: $slate;
                 font-size: 16px;
                 font-weight: bold;
                 margin-bottom: 0px !important;
@@ -180,7 +181,7 @@
                 width: 100%;
             }
             .renewal-off {
-                color: $gray;
+                color: $slate;
                 font-size: 12px;
                 font-weight: 600;
                 padding-left: 4px;
@@ -191,7 +192,7 @@
             }
             .features {
                 line-height: 1.7;
-                color: $gray;
+                color: $slate-color;
                 margin-bottom: 3px;
             }
             .renewal-payable {
@@ -257,6 +258,11 @@
         }
         .renewal-subscription-content {
             display: none;
+        }
+    }
+    .renewal-payable {
+        .mat-button-disabled {
+            background-color: $gray !important;
         }
     }
     .display-line {
