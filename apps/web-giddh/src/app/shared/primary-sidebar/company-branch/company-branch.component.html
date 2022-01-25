@@ -81,8 +81,8 @@
                                 <span class="company-name-right">{{ company?.name }}</span>
                                 <span
                                     class="font-11 text-right branch-count pt-0 pb-0"
-                                    *ngIf="company?.branchCount > 1"
-                                    >{{ company?.branchCount }}</span
+                                    *ngIf="company?.branchCount > 1 && company?.unarchivedBranchCount >= 1"
+                                    >{{ company?.unarchivedBranchCount }}</span
                                 >
                             </span>
                         </li>
@@ -93,14 +93,14 @@
             <tab
                 [heading]="commonLocaleData?.app_branch"
                 (selectTab)="tabChanged('branch')"
-                *ngIf="companyBranches?.branchCount > 1"
+                *ngIf="companyBranches?.branchCount > 1 && companyBranches?.unarchivedBranchCount >= 1"
             >
                 <div class="wrap-company-refresh">
                     <p class="font-12 d-flex justify-content-between mr-t1">
                         <span
                             ><small
                                 >{{
-                                    companyBranches?.branchCount > 1
+                                    companyBranches?.unarchivedBranchCount >= 1
                                         ? branchList?.length
                                         : commonLocaleData?.app_numbers?.zero
                                 }}
@@ -126,7 +126,7 @@
                 </div>
                 <div class="company-list branch-list mt-2">
                     <ul class="list-style-none font-14" *ngIf="!branchRefreshInProcess">
-                        <ng-container *ngIf="companyBranches?.branchCount > 1">
+                        <ng-container *ngIf="companyBranches?.unarchivedBranchCount >= 1">
                             <li
                                 *ngIf="
                                     activeCompany?.uniqueName !== companyBranches?.uniqueName || currentBranchUniqueName
@@ -169,7 +169,7 @@
                                 </a>
                             </li>
                         </ng-container>
-                        <ng-container *ngIf="companyBranches?.branchCount === 1">
+                        <ng-container *ngIf="companyBranches?.unarchivedBranchCount === 0">
                             <li class="wrap-company-refresh">
                                 <span class="d-flex align-items-center">{{ localeData?.no_branches_found }}</span>
                             </li>

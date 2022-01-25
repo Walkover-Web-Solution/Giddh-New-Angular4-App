@@ -5441,7 +5441,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 warehouseResults = warehouseResults?.filter(wh => warehouse?.uniqueName === wh.uniqueName || !wh.isArchived);
                 const warehouseData = this.settingsUtilityService.getFormattedWarehouseData(warehouseResults);
                 this.warehouses = warehouseData.formattedWarehouses;
-                this.defaultWarehouse = (warehouseData.defaultWarehouse) ? warehouseData.defaultWarehouse.uniqueName : '';
+                this.defaultWarehouse = (warehouseData.defaultWarehouse?.uniqueName) ? warehouseData.defaultWarehouse?.uniqueName : '';
 
                 if (this.isPurchaseInvoice && warehouseData && warehouseData.defaultWarehouse && !this.isUpdateMode) {
                     this.autoFillDeliverToWarehouseAddress(warehouseData.defaultWarehouse);
