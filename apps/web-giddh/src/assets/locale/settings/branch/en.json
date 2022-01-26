@@ -35,5 +35,7 @@
     "branch_archived": "Branch has been archived successfully",
     "branch_unarchived": "Branch has been unarchived successfully",
     "confirm_archive_title": "Are you sure you want to archive the branch?",
-    "confirm_unarchive_title": "Are you sure you want to unarchive the branch?"
+    "confirm_unarchive_title": "Are you sure you want to unarchive the branch?",
+    "archive_notallowed": "Last active branch can't be archived.",
+    "archived_default_error": "Archived warehouse can't be set as default."
 }
