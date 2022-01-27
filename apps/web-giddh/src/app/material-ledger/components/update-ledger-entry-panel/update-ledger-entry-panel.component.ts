@@ -1084,7 +1084,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         let request;
 
         if (this.voucherApiVersion === 2) {
-            request = this.adjustmentUtilityService.getInvoiceListRequest({ particularAccount: this.vm.selectedLedger?.particular, voucherType: this.vm.selectedLedger?.voucher?.shortCode, ledgerAccount: this.activeAccount });
+            request = this.adjustmentUtilityService.getInvoiceListRequest({ particularAccount: this.vm.selectedLedger?.transactions[0]?.particular, voucherType: this.vm.selectedLedger?.voucher?.shortCode, ledgerAccount: this.activeAccount });
         } else {
             request = {
                 accountUniqueNames: [this.vm.selectedLedger?.particular?.uniqueName, this.vm.selectedLedger?.transactions[0]?.particular?.uniqueName],
@@ -1105,8 +1105,15 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.invoiceList = [];
         this.ledgerService.getInvoiceListsForCreditNote(request, date).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
             if (response && response.body) {
-                if (response.body.results) {
-                    response.body.results.forEach(invoice => this.invoiceList.push({ label: invoice?.voucherNumber ? invoice.voucherNumber : '-', value: invoice?.uniqueName, additional: invoice }))
+                if (response.body.results || response.body.items) {
+                    let items = [];
+                    if(response.body.results) {
+                        items = response.body.results;
+                    } else if(response.body.items) {
+                        items = response.body.items;
+                    }
+
+                    items?.forEach(invoice => this.invoiceList.push({ label: invoice?.voucherNumber ? invoice.voucherNumber : '-', value: invoice?.uniqueName, additional: invoice }))
                 } else {
                     this.forceClear$ = observableOf({ status: true });
                 }
@@ -2055,8 +2062,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.vm.selectedLedger = resp[0];
         this.originalVoucherAdjustments = cloneDeep(this.vm.selectedLedger?.voucherAdjustments);
         this.formatAdjustments();
-        if (this.vm.selectedLedger && !this.invoiceList?.length && (this.vm.selectedLedger.voucherGeneratedType === VoucherTypeEnum.creditNote ||
-            this.vm.selectedLedger.voucherGeneratedType === VoucherTypeEnum.debitNote)) {
+        const voucherGeneratedType = this.vm.selectedLedger.voucherGeneratedType || this.vm.selectedLedger.voucher.shortCode;
+        if (this.vm.selectedLedger && !this.invoiceList?.length && (voucherGeneratedType === VoucherTypeEnum.creditNote ||
+            voucherGeneratedType === VoucherTypeEnum.debitNote)) {
             this.getInvoiceListsForCreditNote();
         }
 
@@ -2148,8 +2156,16 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     t.amount = this.vm.selectedLedger.actualAmount;
                     // if transaction is stock transaction then also update inventory amount and recalculate inventory rate
                     if (t.inventory) {
-                        t.inventory.amount = this.vm.selectedLedger.actualAmount;
-                        t.inventory.rate = this.vm.selectedLedger.actualRate;
+                        if (this.voucherApiVersion === 2) {
+                            let totalDiscount = 0;
+                            this.vm.selectedLedger.discounts?.forEach(discount => {
+                                totalDiscount += Number(discount?.amount);
+                            });
+                            t.inventory.rate += totalDiscount;
+                        } else {
+                            t.inventory.amount = this.vm.selectedLedger.actualAmount;
+                            t.inventory.rate = this.vm.selectedLedger.actualRate;
+                        }
                     }
                 }
             }
