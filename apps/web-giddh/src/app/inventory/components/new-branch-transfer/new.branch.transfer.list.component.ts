@@ -332,7 +332,7 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
         this.hideBranchTransferModal();
         this.inventoryService.deleteNewBranchTransfer(this.selectedBranchTransfer).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response.status === "success") {
-                this._toasty.successToast(response.message);
+                this._toasty.successToast(response.body);
                 this.getBranchTransferList(false);
             } else {
                 this._toasty.errorToast(response.message);
