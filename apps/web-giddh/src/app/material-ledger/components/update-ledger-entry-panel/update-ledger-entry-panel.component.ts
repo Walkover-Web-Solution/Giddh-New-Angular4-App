@@ -2165,13 +2165,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     t.amount = this.vm.selectedLedger.actualAmount;
                     // if transaction is stock transaction then also update inventory amount and recalculate inventory rate
                     if (t.inventory) {
-                        if (this.voucherApiVersion === 2) {
-                            let totalDiscount = 0;
-                            this.vm.selectedLedger.discounts?.forEach(discount => {
-                                totalDiscount += Number(discount?.amount);
-                            });
-                            t.inventory.rate += totalDiscount;
-                        } else {
+                        if (this.voucherApiVersion !== 2) {
                             t.inventory.amount = this.vm.selectedLedger.actualAmount;
                             t.inventory.rate = this.vm.selectedLedger.actualRate;
                         }
