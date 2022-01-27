@@ -259,6 +259,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
     public voucherDetails$: Observable<VoucherClass | GenericRequestForGenerateSCD>;
     public forceClear$: Observable<IForceClear> = observableOf({ status: false });
+    /** This will clear the selected value in sh-select */
     public forceClearDepositAccount$: Observable<IForceClear> = observableOf({ status: false });
     public calculatedRoundOff: number = 0;
     public selectedVoucherType: string = 'sales';
@@ -6482,7 +6483,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         let isPartyTypeSez = false;
         this.tcsTdsTaxesAccount = [];
         this.accountAssignedApplicableDiscounts = [];
-        if (this.isSalesInvoice || this.isCashInvoice || this.isCreditNote || this.isDebitNote) {
+        if (this.isSalesInvoice || this.isCashInvoice || (this.voucherApiVersion === 2 && (this.isCreditNote || this.isDebitNote))) {
             if (data && data.addresses && data.addresses.length > 0) {
                 data.addresses.forEach(address => {
                     if (address.partyType && address.partyType.toLowerCase() === "sez") {
