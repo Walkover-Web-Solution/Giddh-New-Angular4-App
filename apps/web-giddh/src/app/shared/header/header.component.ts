@@ -366,6 +366,26 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             }
         });
 
+        this.currentCompanyBranches$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response && this.currentOrganizationType === OrganizationType.Branch) {
+                const unarchivedBranches = response.filter(branch => !branch.isArchived);
+                if (!unarchivedBranches?.length) {
+                    const type = OrganizationType.Company;
+                    const organization: Organization = {
+                        type,
+                        uniqueName: this.activeCompany ? this.activeCompany.uniqueName : '',
+                        details: {
+                            branchDetails: {
+                                uniqueName: ''
+                            }
+                        }
+                    };
+                    this.store.dispatch(this.companyActions.setCompanyBranch(organization));
+                    this.store.dispatch(this.loginAction.ChangeCompany(this.activeCompany?.uniqueName, false));
+                }
+            }
+        });
+
         this.store.pipe(select(state => state.settings.updateProfileSuccess), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.getCurrentCompanyData();

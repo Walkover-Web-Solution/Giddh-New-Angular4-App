@@ -13,5 +13,10 @@
 	"warehouse_name": "गोदाम का नाम",
 	"addresses": "पतों",
 	"select_address": "पता चुनें",
-	"add_address": "पता जोड़ें"
+	"add_address": "पता जोड़ें",
+    "warehouse_archived": "वेयरहाउस को सफलतापूर्वक संग्रहित कर लिया गया है",
+    "warehouse_unarchived": "वेयरहाउस को सफलतापूर्वक अनारक्षित कर दिया गया है",
+    "confirm_archive_title": "क्या आप वाकई वेयरहाउस को संग्रहित करना चाहते हैं?",
+    "confirm_unarchive_title": "क्या आप वाकई वेयरहाउस को अनारक्षित करना चाहते हैं?",
+    "archive_notallowed": "डिफ़ॉल्ट वेयरहाउस संग्रहित नहीं किया जा सकता."
 }
