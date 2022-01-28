@@ -102,7 +102,7 @@
                                         isSalesInvoice ||
                                         isProformaInvoice ||
                                         isEstimateInvoice ||
-                                        (voucherApiVersion === 2 && isPurchaseInvoice)
+                                        (voucherApiVersion === 2 && isPurchaseInvoice && !isCashInvoice)
                                     "
                                 >
                                     <div class="text-right">
@@ -845,7 +845,7 @@
                                     isSalesInvoice ||
                                     isProformaInvoice ||
                                     isEstimateInvoice ||
-                                    (voucherApiVersion === 2 && isPurchaseInvoice)
+                                    (voucherApiVersion === 2 && isPurchaseInvoice && !isCashInvoice)
                                 "
                             >
                                 <div class="text-right">

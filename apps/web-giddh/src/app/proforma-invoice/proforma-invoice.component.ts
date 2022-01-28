@@ -832,6 +832,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.route.params.pipe(delay(0), takeUntil(this.destroyed$)).subscribe(async params => {
             this.voucherTypeChanged = false;
             this.copyPurchaseBill = false;
+            this.isDefaultLoad = true;
 
             if (params['invoiceType']) {
                 // Reset voucher due to advance receipt model set voucher in invoice management
@@ -1955,7 +1956,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         }
 
         if (item && item.currency && item.currency !== this.companyCurrency) {
-            if (this.isUpdateMode && !this.isDefaultLoad) {
+            if (this.isUpdateMode) {
+                if(!this.isDefaultLoad) {
+                    this.getCurrencyRate(this.companyCurrency, item.currency, this.invFormData.voucherDetails.voucherDate);
+                }
+            } else {
                 this.getCurrencyRate(this.companyCurrency, item.currency, this.invFormData.voucherDetails.voucherDate);
             }
         } else {
@@ -3659,7 +3664,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     this.invFormData.accountDetails.currencySymbol = event.additional.currency.symbol || this.baseCurrencySymbol;
                     this.depositCurrSymbol = this.invFormData.accountDetails.currencySymbol;
                 }
-                if (this.isSalesInvoice) {
+                if (this.isSalesInvoice || (this.voucherApiVersion === 2 && this.isPurchaseInvoice)) {
                     this.depositCurrSymbol = event.additional && event.additional.currency.symbol || this.baseCurrencySymbol;
                 }
             } else {
@@ -5077,7 +5082,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      * @param modelDate: Date ( date that was already selected by user )
      */
     public onVoucherDateChanged(selectedDate, modelDate) {
-        if (this.isMultiCurrencyModule() && this.isMulticurrencyAccount && selectedDate && modelDate && moment(selectedDate).format(GIDDH_DATE_FORMAT) !== modelDate) {
+        if (this.isMultiCurrencyModule() && this.isMulticurrencyAccount && selectedDate && this.voucherDateBeforeUpdate && moment(selectedDate).format(GIDDH_DATE_FORMAT) !== moment(this.voucherDateBeforeUpdate).format(GIDDH_DATE_FORMAT)) {
             this.getCurrencyRate(this.companyCurrency, this.customerCurrencyCode, selectedDate);
         }
         if (selectedDate && modelDate && selectedDate !== modelDate && this.invFormData &&
@@ -5503,7 +5508,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 warehouseResults = warehouseResults?.filter(wh => warehouse?.uniqueName === wh.uniqueName || !wh.isArchived);
                 const warehouseData = this.settingsUtilityService.getFormattedWarehouseData(warehouseResults);
                 this.warehouses = warehouseData.formattedWarehouses;
-                this.defaultWarehouse = (warehouseData.defaultWarehouse) ? warehouseData.defaultWarehouse.uniqueName : '';
+                this.defaultWarehouse = (warehouseData.defaultWarehouse?.uniqueName) ? warehouseData.defaultWarehouse?.uniqueName : '';
 
                 if (this.isPurchaseInvoice && warehouseData && warehouseData.defaultWarehouse && !this.isUpdateMode) {
                     this.autoFillDeliverToWarehouseAddress(warehouseData.defaultWarehouse);

@@ -740,12 +740,12 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     /**
      * Resets the source warehouse in sender and destination dropdowns
      *
-     * @param {*} index Index of the warehouse
+     * @param {number} index Index of the warehouse
      * @param {boolean} [reInitializeWarehouses] True, if the warehouse dropdown needs to be reset (is true only when either sender/receiver
      * warehouses are reset and the left sender/receiver warehouse needs to be reset)
      * @memberof NewBranchTransferAddComponent
      */
-    public resetSourceWarehouses(index, reInitializeWarehouses?: boolean) {
+    public resetSourceWarehouses(index: number, reInitializeWarehouses?: boolean) {
         if (this.branchTransfer.destinations && this.branchTransfer.destinations[index] && this.branchTransfer.destinations[index].warehouse && this.branchTransfer.destinations[index].warehouse.uniqueName !== null) {
             this.senderWarehouses[this.branchTransfer.destinations[index].uniqueName] = [];
             let allowWarehouse = true;
@@ -1182,6 +1182,28 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                 this.branchTransfer.destinations = response.body.destinations;
                 this.branchTransfer.products = response.body.products;
 
+                let allWarehouses = [];
+                if(Object.keys(this.allWarehouses)?.length > 0) {
+                    const usedWarehouses = [];
+                    this.branchTransfer.sources?.forEach(branch => {
+                        usedWarehouses.push(branch?.warehouse?.uniqueName);
+                    });
+                    this.branchTransfer.destinations?.forEach(branch => {
+                        usedWarehouses.push(branch?.warehouse?.uniqueName);
+                    });
+
+                    Object.keys(this.allWarehouses)?.forEach(branch => {
+                        allWarehouses[branch] = [];
+                        this.allWarehouses[branch]?.forEach(warehouse => {
+                            if(!warehouse?.isArchived || usedWarehouses?.includes(warehouse?.uniqueName)) {
+                                allWarehouses[branch].push(warehouse);
+                            }
+                        });
+                    });
+
+                    this.allWarehouses = allWarehouses;
+                }
+
                 this.branchTransfer.sources.forEach(source => {
                     if (source?.warehouse?.address) {
                         const pin = source.warehouse.pincode;
@@ -1207,6 +1229,16 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                         }
                     });
                 }
+
+                let tempBranches = [];
+                this.branches?.forEach(branch => {
+                    if (!branch?.additional?.isArchived || (branch?.additional?.isArchived && (this.branchExists(branch?.value, this.branchTransfer.destinations) || this.branchExists(branch?.value, this.branchTransfer.sources)))) {
+                        tempBranches.push(branch);
+                    }
+                });
+
+                this.branches = cloneDeep(tempBranches);
+                this.branches$ = observableOf(this.branches);
 
                 this.branchTransfer.entity = response.body.entity;
                 this.branchTransfer.transferType = "products"; // MULTIPLE PRODUCTS VIEW SHOULD SHOW IN CASE OF EDIT
@@ -1532,5 +1564,19 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                 this.inventorySettings = settings.companyInventorySettings;
             }
         });
+    }
+
+    /**
+     * Checks if branch exists
+     *
+     * @private
+     * @param {string} branchUniqueName
+     * @param {*} branches
+     * @returns {boolean}
+     * @memberof NewBranchTransferAddComponent
+     */
+    private branchExists(branchUniqueName: string, branches: any): boolean {
+        const branchExists = branches?.filter(branch => branch?.uniqueName === branchUniqueName);
+        return (branchExists?.length);
     }
 }
