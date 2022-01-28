@@ -210,15 +210,15 @@ button.close {
 }
 
 .btn-blue {
-    background: var(--color-senary-button-background);
     color: var(--color-senary-button-text);
     border-color: var(--color-senary-button-background);
+    background: var(--color-senary-button-background);
 }
 
 .btn-blue:hover {
-    background: var(--color-senary-button-background);
-    border-color: var(--color-senary-button-background-hover);
     color: var(--color-senary-button-text);
+    border-color: var(--color-senary-button-background-hover);
+    background: var(--color-senary-button-background-hover);
 }
 
 strong {
@@ -318,7 +318,6 @@ small {
     position: absolute;
     width: 40px;
     left: 0;
-    background: var(--color-primary-google-box-background);
     line-height: 38px;
     vertical-align: middle;
 }
@@ -476,6 +475,9 @@ small {
     padding: 30px;
     border-radius: 0;
     background-color: var(--color-primary-login-box-body-background) !important;
+    border: 2px solid var(--color-primary-login-signup-body-border);
+    border-bottom-right-radius: 7px;
+    border-bottom-left-radius: 7px;
 }
 .accounting-space h4 {
     color: var(--color-primary-login-box-body-text);
@@ -512,8 +514,8 @@ small {
 }
 .btn-secondary:hover {
     color: var(--color-secondary-button-text) !important;
-    border-color: var(--color-secondary-button-background);
-    background-color: var(--color-secondary-button-background);
+    border-color: var(--color-secondary-button-background-hover);
+    background-color: var(--color-secondary-button-background-hover);
 }
 
 .loader-main {

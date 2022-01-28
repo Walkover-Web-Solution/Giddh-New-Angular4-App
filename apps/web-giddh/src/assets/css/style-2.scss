@@ -513,7 +513,7 @@ input {
     margin-right: 35px !important;
     margin-left: 0 !important;
     font-size: 14px;
-    color: var(--color-tab-secondary-text) !important;
+    color: var(--color-tab-primary-inactive) !important;
     border-width: 0px 0 4px 0 !important;
     height: 41px;
 }
@@ -521,9 +521,12 @@ input {
     border-color: transparent !important;
     background-color: transparent !important;
 }
+// .nav.nav-tabs > li a {
+//     color: red !important;
+// }
 .invoice-control .nav-tabs > li.active > a {
     border-bottom: 4px solid var(--color-blue) !important;
-    color: var(--color-tab-secondary-text) !important;
+    color: var(--color-tab-primary-active) !important;
 }
 .other-account-entry .header {
     border: 1px solid var(--color-danger) !important;
@@ -727,7 +730,7 @@ ul.sub-list {
     background: none;
     border: 0;
     font-size: 14px;
-    color: var(--color-master-page-secondary-tab) !important;
+    color: var(--color-tab-primary-inactive) !important;
     position: relative;
     padding-bottom: 7px;
     padding-left: 0;
@@ -754,10 +757,10 @@ ul.sub-list {
 }
 
 .custom-tabs .nav.nav-tabs > li a:hover {
-    color: var(--color-master-page-primary-text-hover) !important;
+    color: var(--color-tab-tertiary-text-hover) !important;
 }
 .custom-tabs .nav.nav-tabs > li.active a {
-    color: var(--color-master-page-primary-tab) !important;
+    color: var(--color-tab-primary-active) !important;
 }
 .custom-tabs .nav.nav-tabs {
     border-bottom: 1px solid var(--color-iron);
@@ -1146,6 +1149,7 @@ modal-container.modal {
     min-width: 73px;
     margin-right: 2px;
     width: 95px;
+    color: var(--color-secondary-button-text);
 }
 .table-no-border tr th,
 .table-no-border tr td {
@@ -1352,7 +1356,7 @@ modal-container.modal {
 
 .form-control {
     background: var(--color-sidebar-primary-search-bar-background) !important;
-    border: 1px solid var(--color-dropdown-primary-bar-border);
+    border: 1px solid var(--color-primary-input-bar-border);
     border-radius: 5px !important;
     padding: 6px !important;
     outline: 0;
@@ -4029,7 +4033,7 @@ virtual-scroll .scrollable-content .item > a {
     display: table-cell;
     vertical-align: middle;
     height: 100%;
-    color: var();
+    color: var(--color-dropdown-list);
     background-color: var(--color-dropdown-primary-background);
 }
 
@@ -5888,7 +5892,7 @@ ul.dropdown-menu p.lead.pd {
     margin-right: 25px;
     padding-bottom: 7px;
     font-size: 14px;
-    color: var(--color-tab-tertiary-text) !important;
+    color: var(--color-tab-primary-inactive) !important;
 }
 .setting-page .nav > li > a:hover {
     color: var(--color-tab-tertiary-text-hover) !important;
@@ -5902,7 +5906,7 @@ ul.dropdown-menu p.lead.pd {
     padding-top: 0 !important;
 }
 .setting-page .nav > li > a.active {
-    color: var(--color-tab-secondary-text) !important;
+    color: var(--color-tab-primary-active) !important;
 }
 #tab-integration .nav-tabs > li {
     margin-right: 0;
