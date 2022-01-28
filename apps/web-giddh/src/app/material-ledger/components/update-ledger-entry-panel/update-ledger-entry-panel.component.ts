@@ -1088,7 +1088,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         let request;
 
         if (this.voucherApiVersion === 2) {
-            request = this.adjustmentUtilityService.getInvoiceListRequest({ particularAccount: this.vm.selectedLedger?.transactions[0]?.particular, voucherType: this.vm.selectedLedger?.voucher?.shortCode, ledgerAccount: this.activeAccount });
+            let particularAccount = (this.vm.selectedLedger?.transactions[0]?.particular?.uniqueName === this.activeAccount?.uniqueName) ? this.vm.selectedLedger?.particular : this.vm.selectedLedger?.transactions[0]?.particular;
+
+            request = this.adjustmentUtilityService.getInvoiceListRequest({ particularAccount: particularAccount, voucherType: this.vm.selectedLedger?.voucher?.shortCode, ledgerAccount: this.activeAccount });
         } else {
             request = {
                 accountUniqueNames: [this.vm.selectedLedger?.particular?.uniqueName, this.vm.selectedLedger?.transactions[0]?.particular?.uniqueName],
@@ -1148,8 +1150,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     if (!linkedInvoice) {
                         this.invoiceList.push(invoiceSelected);
                     }
-
-                    console.log(this.invoiceList);
                 }
                 this.invoiceList = _.uniqBy(this.invoiceList, 'value');
                 this.selectedInvoice = (invoiceSelected) ? invoiceSelected.value : '';
