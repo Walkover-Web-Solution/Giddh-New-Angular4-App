@@ -42,6 +42,8 @@ body.default-theme {
     --color-primary-login-signup-linkedin-background: #668cff;
     --color-primary-login-signup-login-box-h1: #212528;
     --color-primary-login-signup-slide-content-btn-white-hover: #212528;
+    --color-primary-login-signup-input-box: #212528;
+    --color-primary-login-signup-body-border: #ffffff;
 
     // Filter Color Variables
     --color-filter-text-hover: #f5f5f5;
@@ -123,7 +125,9 @@ body.default-theme {
 
     // Input Bar Variables
     --color-primary-input-bar-text: #212528;
+    --color-primary-input-bar-border: #cbcfd2;
     --color-primary-input-bar-background: #f5f5f5;
+    --color-secondary-input-bar-button: #9b9b9e;
 
     // Datepicker Color Variables
     --color-datepicker-title-text: #9b9b9e;
@@ -302,7 +306,10 @@ body.default-theme {
 
     // Popup Color Variables
     --color-popup-list-head-text: #ffffff;
+    --color-popup-secondary-list-head-text: #212528;
+    --color-popup-body-text: #212528;
     --color-popup-list-input-text: #212528;
+    --color-popup-list-input-text-hover: #ffffff;
     --color-popup-list-hover: #668cff;
     --color-popup-background: #ffffff;
     --color-popup-secondary-background: #e58a0026;
@@ -315,13 +322,15 @@ body.default-theme {
     --color-chips-primary-background: #f5f5f5;
 
     // Tabs Color Variables
-    --color-tab-primary-background: #ffffff;
     --color-tab-primary-text: #1a237e;
     --color-tab-secondary-text: #212528;
     --color-tab-tertiary-text: #212528;
     --color-tab-tertiary-text-hover: #668cff;
-    --color-tab-primary-selected-tab-bottom-border: #668cff;
+    --color-tab-primary-selected-tab-bottom-border: #1a237e;
+    --color-tab-primary-background: #ffffff;
     --color-tab-secondary-background: #f5f5f5;
+    --color-tab-primary-active: #1a237e;
+    --color-tab-primary-inactive: #505159;
 
     // Rectangular Tabs Color Variables
     --color-rectangular-tab-active-primary-text: #668cff;
@@ -369,7 +378,7 @@ body.default-theme {
     --color-master-page-tab-background: #f5f5f5;
     --color-master-page-primary-tab: #212528;
     --color-master-page-secondary-tab: #212528;
-    --color-master-page-primary-text-hover: #10a9f4;
+    --color-master-page-primary-text-hover: #668cff;
     --color-master-page-text-secondary-hover: #668cff;
     --color-master-page-sidebar-active-list: #668cff;
     --color-master-page-input-label: #212528;
@@ -399,6 +408,7 @@ body.default-theme {
     --color-sidebar-create-company-list-background: #f0f4ff;
     --color-sidebar-list-background-hover: #668cff26;
     --color-primary-sidebar-list-hover-active-text: #ffffff;
+    --color-sidebar-primary-box-shadow: #00000033;
 
     // Tax Sidebar Color Variables
     --color-primary-tax-sidebar-text: #505159;
@@ -491,6 +501,8 @@ body.default-theme {
     --color-table-primary-giddh-table-thead-register-table-th-th-background: #e58a0026;
     --color-table-icon-sort-asc: #505159;
     --color-table-primary-footer-background: #f5f5f5;
+    --color-table-primary-footer: #f5f5f5;
+    --color-table-primary-border-bottom: #ffffff;
 
     // Total Details Box above table Color Variables
     --color-total-details-heading: #505159;

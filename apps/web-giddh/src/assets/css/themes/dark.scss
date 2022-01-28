@@ -21,7 +21,7 @@ body.dark-theme {
     // Signup Login Page Color Components
     --color-primary-login-page-background: #212528;
     --color-primary-login-box-header-background: #1a237e;
-    --color-primary-login-box-body-background: #f5f5f5;
+    --color-primary-login-box-body-background: #212528;
     --color-primary-login-box-body-text: #668cff;
     --color-secondary-login-box-body-text: #9b9b9e;
     --color-tertiary-login-box-body-text: #f5f5f5;
@@ -41,6 +41,8 @@ body.dark-theme {
     --color-primary-login-signup-linkedin-background: #668cff;
     --color-primary-login-signup-login-box-h1: #f5f5f5;
     --color-primary-login-signup-slide-content-btn-white-hover: #f5f5f5;
+    --color-primary-login-signup-input-box: #f5f5f5;
+    --color-primary-login-signup-body-border: #1a237e;
 
     // Filter Color Variables
     --color-filter-text-hover: #cbcfd2;
@@ -112,18 +114,20 @@ body.dark-theme {
 
     // Search Bar Color Variables
     --color-sidebar-search-bar-text: #cbcfd2;
-    --color-sidebar-primary-search-bar-background: #ba91f226;
+    --color-sidebar-primary-search-bar-background: #668cff26;
     --color-sidebar-secondary-search-bar-background: #212528;
     --color-active-search-bar-border: #668cff;
     --color-company-profile-input-label: #f5f5f5;
-    --color-discount-search-bar-background: #303840;
-    --color-input-primary-background: #303840;
-    --color-input-secondary-background: #303840;
-    --color-input-tertiary-background: #303840;
+    --color-discount-search-bar-background: #212528;
+    --color-input-primary-background: #668cff26;
+    --color-input-secondary-background: #668cff26;
+    --color-input-tertiary-background: #668cff26;
 
     // Input Bar Variables
     --color-primary-input-bar-text: #f5f5f5;
+    --color-primary-input-bar-border: #9b9b9e;
     --color-primary-input-bar-background: #668cff26;
+    --color-secondary-input-bar-button: #cbcfd2;
 
     // Datepicker Color Variables
     --color-datepicker-title-text: #212528;
@@ -188,7 +192,7 @@ body.dark-theme {
     --color-primary-tab-header-text: #212528;
     --color-primary-subscription-search-placeholder-text: #cbcfd2;
     --color-primary-subscription-dropdown-text: #cbcfd2;
-    --color-primary-subscription-dropdown-background: #ba91f226;
+    --color-primary-subscription-dropdown-background: #668cff26;
     --color-secondary-subscription-dropdown-background: #212528;
     --color-secondary-subscription-dropdown-background-hover: #668cff26;
     --color-primary-subscription-left-sidebar-box-background: #36b28326;
@@ -302,7 +306,10 @@ body.dark-theme {
 
     // Popup Color Variables
     --color-popup-list-head-text: #f5f5f5;
+    --color-popup-secondary-list-head-text: #f5f5f5;
+    --color-popup-body-text: #f5f5f5;
     --color-popup-list-input-text: #cbcfd2;
+    --color-popup-list-input-text-hover: #f5f5f5;
     --color-popup-list-hover: #668cff26;
     --color-popup-background: #212528;
     --color-popup-secondary-background: #212528;
@@ -315,13 +322,15 @@ body.dark-theme {
     --color-chips-primary-background: #668cff26;
 
     // Tabs Color Variables
-    --color-tab-primary-background: #212528;
     --color-tab-primary-text: #f5f5f5;
     --color-tab-secondary-text: #f5f5f5;
     --color-tab-tertiary-text: #f5f5f5;
     --color-tab-tertiary-text-hover: #668cff;
-    --color-tab-primary-selected-tab-bottom-border: #1a237e;
+    --color-tab-primary-selected-tab-bottom-border: #668cff;
+    --color-tab-primary-background: #212528;
     --color-tab-secondary-background: #212528;
+    --color-tab-primary-active: #668cff;
+    --color-tab-primary-inactive: #9b9b9e;
 
     // Rectangular Tabs Color Variables
     --color-rectangular-tab-active-primary-text: #668cff;
@@ -399,6 +408,7 @@ body.dark-theme {
     --color-sidebar-create-company-list-background: #668cff26;
     --color-sidebar-list-background-hover: #668cff26;
     --color-primary-sidebar-list-hover-active-text: #f5f5f5;
+    --color-sidebar-primary-box-shadow: #00000080;
 
     // Tax Sidebar Color Variables
     --color-primary-tax-sidebar-text: #f5f5f5;
@@ -484,12 +494,14 @@ body.dark-theme {
     --color-table-datepicker-header-background: #36b283;
     --color-table-datepicker-body-background: #f5f5f5;
     --color-table-input-background: #668cff26;
-    --color-table-searchbar-background: #303840;
+    --color-table-searchbar-background: #668cff26;
     --color-table-primary-header-bar-border: #9b9b9e;
     --color-table-primary-content-bar-border: #668cff26;
     --color-table-primary-giddh-table-thead-register-table-th-th-background: #e58a0026;
     --color-table-icon-sort-asc: #9b9b9e;
     --color-table-primary-footer-background: #668cff26;
+    --color-table-primary-footer: #668cff26;
+    --color-table-primary-border-bottom: #f5f5f5;
 
     // Total Details Box above table Color Variables
     --color-total-details-heading: #9b9b9e;
