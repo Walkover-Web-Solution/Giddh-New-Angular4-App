@@ -1,5 +1,12 @@
 @import "../../../assets/css/color.scss";
 
+@mixin custom-datepicker {
+    input {
+        width: 100% !important;
+        max-width: 100%;
+    }
+}
+
 .mf-stock-search-request-form .col-xs-1 {
     width: 11.33333333%;
 }
@@ -45,8 +52,6 @@
 }
 .custom-datepicker {
     input {
-        width: 100% !important;
-        max-width: 100%;
         padding-left: 40px !important;
         text-align: left;
     }
@@ -220,9 +225,11 @@
     .mf-report-head {
         margin-top: 15px;
     }
+    @include custom-datepicker();
 }
 
 @media (max-width: 768px) {
+    @include custom-datepicker();
     .material-data {
         display: flex;
         width: 100%;
