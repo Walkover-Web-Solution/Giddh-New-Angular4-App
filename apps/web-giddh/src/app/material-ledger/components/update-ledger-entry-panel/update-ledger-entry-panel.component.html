@@ -1374,7 +1374,9 @@
                                         </div>
                                         <div
                                             *ngIf="
-                                                item.voucherType === 'receipt' && item.subVoucher === 'ADVANCE_RECEIPT'
+                                                item.voucherType === 'receipt' &&
+                                                item.subVoucher === 'ADVANCE_RECEIPT' &&
+                                                voucherApiVersion !== 2
                                             "
                                         >
                                             <div class="form-group tax-width">

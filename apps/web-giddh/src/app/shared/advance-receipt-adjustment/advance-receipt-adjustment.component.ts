@@ -255,10 +255,13 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
                     } else {
                         // Vouchers for new adjustment not found fill the suggestions with already adjusted vouchers
                         this.pushExistingAdjustments();
-                        if (this.isVoucherModule) {
-                            this.toaster.warningToast(NO_ADVANCE_RECEIPT_FOUND);
-                        } else {
-                            this.toaster.warningToast(this.commonLocaleData?.app_voucher_unavailable);
+
+                        if (!this.adjustVoucherForm?.adjustments?.length) {
+                            if (this.isVoucherModule) {
+                                this.toaster.warningToast(NO_ADVANCE_RECEIPT_FOUND);
+                            } else {
+                                this.toaster.warningToast(this.commonLocaleData?.app_voucher_unavailable);
+                            }
                         }
                     }
                 }
@@ -282,7 +285,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
                     });
                     this.assignCurrencyInAdjustVoucherForm();
                 } else {
-                    if (this.isVoucherModule) {
+                    if (!this.adjustVoucherForm?.adjustments?.length && this.isVoucherModule) {
                         this.toaster.warningToast(NO_ADVANCE_RECEIPT_FOUND);
                     }
                 }
@@ -426,7 +429,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
                                 }
                             });
                         } else {
-                            if (this.isVoucherModule) {
+                            if (!this.adjustVoucherForm?.adjustments?.length && this.isVoucherModule) {
                                 this.toaster.warningToast(NO_ADVANCE_RECEIPT_FOUND);
                             }
                         }
