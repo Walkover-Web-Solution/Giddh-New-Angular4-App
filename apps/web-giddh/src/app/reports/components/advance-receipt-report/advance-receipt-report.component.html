@@ -490,7 +490,7 @@
                                         "
                                         [currencySymbol]="
                                             voucherApiVersion === 2
-                                                ? receipt?.companyCurrencySymbol
+                                                ? receipt?.accountCurrencySymbol
                                                 : receipt?.totalAmount?.symbol
                                         "
                                         [currencyCode]="activeCompany?.baseCurrency"
@@ -503,12 +503,12 @@
                                     <amount-field
                                         [amount]="
                                             voucherApiVersion === 2
-                                                ? receipt?.balanceDue?.amountForCompany
+                                                ? receipt?.balanceDue?.amountForAccount
                                                 : receipt?.unusedAmount?.amount
                                         "
                                         [currencySymbol]="
                                             voucherApiVersion === 2
-                                                ? receipt?.balanceDue?.amountForCompany
+                                                ? receipt?.accountCurrencySymbol
                                                 : receipt?.unusedAmount?.symbol
                                         "
                                         [currencyCode]="activeCompany?.baseCurrency"

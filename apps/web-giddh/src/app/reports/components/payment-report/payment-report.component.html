@@ -406,7 +406,7 @@
                                         "
                                         [currencySymbol]="
                                             voucherApiVersion === 2
-                                                ? payment?.companyCurrencySymbol
+                                                ? payment?.accountCurrencySymbol
                                                 : payment?.totalAmount?.symbol
                                         "
                                         [currencyCode]="activeCompany.baseCurrency"
@@ -419,12 +419,12 @@
                                     <amount-field
                                         [amount]="
                                             voucherApiVersion === 2
-                                                ? payment?.balanceDue?.amountForCompany
+                                                ? payment?.balanceDue?.amountForAccount
                                                 : payment?.unusedAmount?.amount
                                         "
                                         [currencySymbol]="
                                             voucherApiVersion === 2
-                                                ? payment?.balanceDue?.amountForCompany
+                                                ? payment?.accountCurrencySymbol
                                                 : payment?.unusedAmount?.symbol
                                         "
                                         [currencyCode]="activeCompany.baseCurrency"
