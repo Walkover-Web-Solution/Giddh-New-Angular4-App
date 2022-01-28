@@ -1130,16 +1130,26 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 }
 
                 if (selectedInvoice) {
-                    selectedInvoice['voucherDate'] = selectedInvoice['invoiceDate'];
-                    invoiceSelected = {
-                        label: selectedInvoice.invoiceNumber ? selectedInvoice.invoiceNumber : '-',
-                        value: selectedInvoice.invoiceUniqueName,
-                        additional: selectedInvoice
-                    };
+                    selectedInvoice['voucherDate'] = (this.voucherApiVersion === 2) ? selectedInvoice['date'] : selectedInvoice['invoiceDate'];
+                    if(this.voucherApiVersion === 2) {
+                        invoiceSelected = {
+                            label: selectedInvoice.number ? selectedInvoice.number : '-',
+                            value: selectedInvoice.uniqueName,
+                            additional: selectedInvoice
+                        };
+                    } else {
+                        invoiceSelected = {
+                            label: selectedInvoice.invoiceNumber ? selectedInvoice.invoiceNumber : '-',
+                            value: selectedInvoice.invoiceUniqueName,
+                            additional: selectedInvoice
+                        };
+                    }
                     const linkedInvoice = this.invoiceList.find(invoice => invoice.value === invoiceSelected.value);
                     if (!linkedInvoice) {
                         this.invoiceList.push(invoiceSelected);
                     }
+
+                    console.log(this.invoiceList);
                 }
                 this.invoiceList = _.uniqBy(this.invoiceList, 'value');
                 this.selectedInvoice = (invoiceSelected) ? invoiceSelected.value : '';
