@@ -545,7 +545,11 @@
                                                             <span class="d-inline-flex">
                                                                 <amount-field
                                                                     [amount]="
-                                                                        option.additional?.balanceDue.amountForAccount
+                                                                        voucherApiVersion === 2
+                                                                            ? option.additional?.unadjustedAmount
+                                                                                  ?.amountForAccount
+                                                                            : option.additional?.balanceDue
+                                                                                  ?.amountForAccount
                                                                     "
                                                                     [currencySymbol]="false"
                                                                     [currencyCode]="false"
@@ -813,6 +817,7 @@
                                 isAdvanceReceipt ||
                                 currentTxn?.voucherAdjustments?.adjustments?.length ||
                                 currentTxn?.invoiceLinkingRequest?.linkedInvoices?.length ||
+                                currentTxn?.referenceVoucher?.uniqueName ||
                                 isReadOnly
                                     ? 'disabled'
                                     : null

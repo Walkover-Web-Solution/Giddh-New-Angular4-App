@@ -22,7 +22,7 @@ export class AdjustmentUtilityService {
             let totalAdjustmentAmount = 0;
             let totalAdjustmentCompanyAmount = 0;
             data.voucherAdjustments?.adjustments?.forEach(adjustment => {
-                if ((adjustedVoucherType === AdjustedVoucherType.SalesInvoice && adjustment.voucherType === AdjustedVoucherType.DebitNote) || (adjustedVoucherType === AdjustedVoucherType.PurchaseInvoice && adjustment.voucherType === AdjustedVoucherType.CreditNote)) {
+                if (((adjustedVoucherType === AdjustedVoucherType.SalesInvoice || adjustedVoucherType === AdjustedVoucherType.Sales) && adjustment.voucherType === AdjustedVoucherType.DebitNote) || ((adjustedVoucherType === AdjustedVoucherType.PurchaseInvoice || adjustedVoucherType === AdjustedVoucherType.Purchase) && adjustment.voucherType === AdjustedVoucherType.CreditNote)) {
                     totalAdjustmentAmount -= Number(adjustment.adjustmentAmount ? adjustment.adjustmentAmount.amountForAccount : 0);
                     totalAdjustmentCompanyAmount -= Number(adjustment.adjustmentAmount ? adjustment.adjustmentAmount.amountForCompany : 0);
                 } else {

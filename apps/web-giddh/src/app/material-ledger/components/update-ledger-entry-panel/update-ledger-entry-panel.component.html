@@ -1374,7 +1374,9 @@
                                         </div>
                                         <div
                                             *ngIf="
-                                                item.voucherType === 'receipt' && item.subVoucher === 'ADVANCE_RECEIPT'
+                                                item.voucherType === 'receipt' &&
+                                                item.subVoucher === 'ADVANCE_RECEIPT' &&
+                                                voucherApiVersion !== 2
                                             "
                                         >
                                             <div class="form-group tax-width">
@@ -1548,8 +1550,12 @@
                                                                     <span class="d-inline-flex">
                                                                         <amount-field
                                                                             [amount]="
-                                                                                option.additional?.balanceDue
-                                                                                    ?.amountForAccount
+                                                                                voucherApiVersion === 2
+                                                                                    ? option.additional
+                                                                                          ?.unadjustedAmount
+                                                                                          ?.amountForAccount
+                                                                                    : option.additional?.balanceDue
+                                                                                          ?.amountForAccount
                                                                             "
                                                                         >
                                                                         </amount-field>
@@ -1803,7 +1809,8 @@
                                                     isAdjustReceiptSelected ||
                                                     isAdjustVoucherSelected ||
                                                     vm.selectedLedger?.voucherAdjustments?.adjustments?.length ||
-                                                    vm.selectedLedger?.invoiceLinkingRequest?.linkedInvoices?.length
+                                                    vm.selectedLedger?.invoiceLinkingRequest?.linkedInvoices?.length ||
+                                                    vm.selectedLedger?.referenceVoucher?.uniqueName
                                                         ? 'disabled'
                                                         : null
                                                 "
