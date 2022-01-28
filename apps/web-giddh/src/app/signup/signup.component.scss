@@ -125,15 +125,15 @@ body.unresponsive {
     transform: scale(1.1);
 }
 .btn-blue {
-    background: var(--color-senary-button-background);
     color: var(--color-senary-button-text);
     border-color: var(--color-senary-button-background);
+    background: var(--color-senary-button-background);
 }
 
 .btn-blue:hover {
-    background: var(--color-senary-button-background);
-    border-color: var(--color-senary-button-background);
     color: var(--color-senary-button-text);
+    border-color: var(--color-senary-button-background-hover);
+    background: var(--color-senary-button-background-hover);
 }
 /*giddh loader*/
 
@@ -316,7 +316,6 @@ small {
     position: absolute;
     width: 40px;
     left: 0;
-    background: var(--color-primary-signup-ico-google-background);
     line-height: 38px;
     vertical-align: middle;
 }
@@ -494,6 +493,9 @@ small {
     padding: 30px;
     border-radius: 0;
     background-color: var(--color-primary-login-box-body-background) !important;
+    border: 2px solid var(--color-primary-login-signup-body-border);
+    border-bottom-right-radius: 7px;
+    border-bottom-left-radius: 7px;
 }
 .accounting-space h4 {
     color: var(--color-primary-login-box-body-text);
@@ -524,15 +526,15 @@ small {
     }
 }
 .btn-secondary {
-    background-color: var(--color-secondary-button-background);
-    color: var(--color-senary-button-text);
-    border: 1px solid var(--color-secondary-button-background);
     border-radius: 5px;
+    color: var(--color-senary-button-text);
+    background-color: var(--color-secondary-button-background);
+    border: 1px solid var(--color-secondary-button-background);
 }
 .btn-secondary:hover {
     color: var(--color-senary-button-text) !important;
-    background-color: var(--color-secondary-button-background);
-    border-color: var(--color-secondary-button-background);
+    background-color: var(--color-secondary-button-background-hover);
+    border-color: var(--color-secondary-button-background-hover);
 }
 .forgotStep {
     display: none;

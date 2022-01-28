@@ -123,7 +123,7 @@
             .item-details {
                 position: relative;
                 font-size: 14px;
-                color: var(--color-popup-list-head-text);
+                color: var(--color-popup-secondary-list-head-text);
                 text-transform: capitalize;
                 margin-left: 25px;
                 padding: 5px 0;
@@ -158,13 +158,13 @@
             &.selected {
                 background-color: var(--color-popup-list-hover);
                 .item-details {
-                    color: var(--color-popup-list-input-text);
+                    color: var(--color-popup-list-input-text-hover);
                     small {
-                        color: var(--color-popup-list-input-text);
+                        color: var(--color-popup-list-input-text-hover);
                     }
                 }
                 .item-icon {
-                    color: var(--color-popup-list-input-text);
+                    color: var(--color-popup-list-input-text-hover);
                 }
             }
         }
