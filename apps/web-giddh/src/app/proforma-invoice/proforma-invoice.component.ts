@@ -1295,6 +1295,13 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                                 this.companyCurrencyName = results[0].account.currency.code;
                             }
                             obj = cloneDeep(convertedRes1) as VoucherClass;
+
+                            if (this.isPendingVoucherType) {
+                                obj.accountDetails.currency = results[0].account?.currency;
+                                obj.accountDetails.currencySymbol = results[0].account?.currency?.symbol;
+                                obj.accountDetails.currencyCode = results[0].account?.currency?.code;
+                            }
+
                             this.selectedAccountDetails$.pipe(take(1)).subscribe(acc => {
                                 if (acc) {
                                     obj.accountDetails.currencySymbol = acc.currencySymbol ?? this.baseCurrencySymbol;
@@ -6092,6 +6099,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      * @memberof ProformaInvoiceComponent
      */
     public getAllAdvanceReceipts(customerUniqueName: string, voucherDate: any): void {
+        if (this.isPendingVoucherType) {
+            return;
+        }
+
         let date;
         if (typeof voucherDate === 'string') {
             date = voucherDate;
@@ -6454,6 +6465,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.userDeposit = null;
 
         this.salesService.getAccountsWithCurrency('cash, bankaccounts', `${customerCurrency}, ${this.companyCurrency}`).pipe(takeUntil(this.destroyed$)).subscribe(data => {
+
             this.bankAccounts$ = observableOf(this.updateBankAccountObject(data));
         });
     }
