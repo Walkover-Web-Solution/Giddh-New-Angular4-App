@@ -2111,7 +2111,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         }
 
         // divide actual amount with exchangeRate because currently we are getting actualAmount in company currency
-        this.vm.selectedLedger.actualAmount = giddhRoundOff(this.vm.selectedLedger.actualAmount / this.vm.selectedLedger.exchangeRate, this.vm.giddhBalanceDecimalPlaces);
+        //this.vm.selectedLedger.actualAmount = giddhRoundOff(this.vm.selectedLedger.actualAmount / this.vm.selectedLedger.exchangeRate, this.vm.giddhBalanceDecimalPlaces);
 
         // other taxes assigning process
         let companyTaxes: TaxResponse[] = [];
@@ -2156,7 +2156,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                      */
                     t.amount = this.vm.selectedLedger.actualAmount;
                     // if transaction is stock transaction then also update inventory amount and recalculate inventory rate
-                    if (t.inventory && this.voucherApiVersion !== 2) {
+                    if (t.inventory) {
                         t.inventory.amount = this.vm.selectedLedger.actualAmount;
                         t.inventory.rate = this.vm.selectedLedger.actualRate;
                     }
