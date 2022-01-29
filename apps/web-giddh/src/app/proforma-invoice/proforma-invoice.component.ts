@@ -5055,6 +5055,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         voucherDetails.subTotal = result.subTotal?.amountForAccount;
         voucherDetails.taxesTotal = result.taxTotal?.cumulativeAmountForAccount ?? result.taxTotal?.amountForAccount ?? 0;
         voucherDetails.totalAsWords = (result.totalAsWords) ? result.totalAsWords.amountForAccount : '';
+        voucherDetails.gainLoss = result.gainLoss;
 
         voucherClassConversion.voucherDetails = voucherDetails;
         voucherClassConversion.templateDetails = (result.templateDetails) ? result.templateDetails : new TemplateDetailsClass();
