@@ -507,6 +507,7 @@ export class VoucherDetailsClass {
     public currency: Currency;
     public exchangeRate?: number;
     public referenceVoucher?: ReferenceVoucher;
+    public gainLoss?: number;
 
     constructor() {
         this.customerName = null;
