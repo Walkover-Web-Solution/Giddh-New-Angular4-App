@@ -287,7 +287,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         private changeDetectorRef: ChangeDetectorRef,
         public dialog: MatDialog,
         private commonService: CommonService,
-        private adjustmentUtilityService: AdjustmentUtilityService,
+        private adjustmentUtilityService: AdjustmentUtilityService
     ) {
 
         this.vm = new UpdateLedgerVm();
