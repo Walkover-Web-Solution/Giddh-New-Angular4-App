@@ -271,7 +271,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         private zone: NgZone,
         public dialog: MatDialog,
         private commonService: CommonService,
-        private adjustmentUtilityService: AdjustmentUtilityService,
+        private adjustmentUtilityService: AdjustmentUtilityService
     ) {
 
         this.lc = new LedgerVM();
