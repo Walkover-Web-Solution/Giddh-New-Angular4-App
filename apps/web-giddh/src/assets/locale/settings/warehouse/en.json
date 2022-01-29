@@ -13,5 +13,10 @@
     "warehouse_name": "Warehouse Name",
     "addresses": "Address/es",
     "select_address": "Select Address",
-    "add_address": "+Add Address"
+    "add_address": "+Add Address",
+    "warehouse_archived": "Warehouse has been archived successfully",
+    "warehouse_unarchived": "Warehouse has been unarchived successfully",
+    "confirm_archive_title": "Are you sure you want to archive the warehouse?",
+    "confirm_unarchive_title": "Are you sure you want to unarchive the warehouse?",
+    "archive_notallowed": "Default warehouse can't be archived."
 }
