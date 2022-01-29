@@ -1418,6 +1418,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         this.invFormData.voucherDetails.exchangeRate = item.exchangeRate ?? 1;
         this.invFormData.accountDetails.currencyCode = item.account?.currency?.code ?? this.baseCurrency ?? '';
         this.invFormData.accountDetails.currencySymbol = item.accountCurrencySymbol ?? this.baseCurrencySymbol ?? '';
+        this.invFormData.voucherDetails.gainLoss = item.gainLoss;
         this.changeStatusInvoiceUniqueName = item.uniqueName;
         this.selectedPerformAdjustPaymentAction = true;
         // To clear receipts voucher store

@@ -256,7 +256,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
                         // Vouchers for new adjustment not found fill the suggestions with already adjusted vouchers
                         this.pushExistingAdjustments();
 
-                        if (!this.adjustVoucherForm?.adjustments?.length) {
+                        if (!this.adjustVoucherForm?.adjustments?.length || !this.adjustVoucherForm?.adjustments[0]?.uniqueName) {
                             if (this.isVoucherModule) {
                                 this.toaster.warningToast(NO_ADVANCE_RECEIPT_FOUND);
                             } else {
@@ -285,7 +285,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
                     });
                     this.assignCurrencyInAdjustVoucherForm();
                 } else {
-                    if (!this.adjustVoucherForm?.adjustments?.length && this.isVoucherModule) {
+                    if ((!this.adjustVoucherForm?.adjustments?.length || !this.adjustVoucherForm?.adjustments[0]?.uniqueName) && this.isVoucherModule) {
                         this.toaster.warningToast(NO_ADVANCE_RECEIPT_FOUND);
                     }
                 }
@@ -429,7 +429,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
                                 }
                             });
                         } else {
-                            if (!this.adjustVoucherForm?.adjustments?.length && this.isVoucherModule) {
+                            if ((!this.adjustVoucherForm?.adjustments?.length || !this.adjustVoucherForm?.adjustments[0]?.uniqueName) && this.isVoucherModule) {
                                 this.toaster.warningToast(NO_ADVANCE_RECEIPT_FOUND);
                             }
                         }
@@ -958,7 +958,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
     public getExchangeGainLossText(): string {
         const isProfit = this.isExchangeProfitable();
         const profitType = isProfit ? this.commonLocaleData?.app_exchange_gain : this.commonLocaleData?.app_exchange_loss;
-        const text = `${this.localeData?.exchange_gain_loss_label?.replace('[PROFIT_TYPE]', profitType)} ${this.baseCurrencySymbol}${Math.abs(this.getConvertedBalanceDue())}`;
+        const text = `${this.localeData?.exchange_gain_loss_label?.replace('[PROFIT_TYPE]', profitType)} ${this.baseCurrencySymbol}${Math.abs(this.invoiceFormDetails?.voucherDetails?.gainLoss)}`;
         return text;
     }
 
@@ -980,10 +980,10 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
         */
         if (this.adjustedVoucherType === AdjustedVoucherType.Sales || this.adjustedVoucherType === AdjustedVoucherType.SalesInvoice || this.adjustedVoucherType === AdjustedVoucherType.CreditNote) {
             // Exchange gain if home currency weakens as this is Export goods case (sales) where the due goes positive
-            return this.getConvertedBalanceDue() <= 0;
+            return this.invoiceFormDetails?.voucherDetails?.gainLoss <= 0;
         } else if (this.adjustedVoucherType === AdjustedVoucherType.Purchase || this.adjustedVoucherType === AdjustedVoucherType.PurchaseInvoice || this.adjustedVoucherType === AdjustedVoucherType.DebitNote) {
             // Exchange gain if home currency weakens as this is Import goods case (purchase) where the due goes negative
-            return this.getConvertedBalanceDue() >= 0;
+            return this.invoiceFormDetails?.voucherDetails?.gainLoss >= 0;
         }
     }
 

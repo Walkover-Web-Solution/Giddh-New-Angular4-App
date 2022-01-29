@@ -109,6 +109,7 @@
                                 enableVoucherAdjustmentMultiCurrency &&
                                 getBalanceDue() === 0 &&
                                 getConvertedBalanceDue() !== 0 &&
+                                invoiceFormDetails?.voucherDetails?.gainLoss &&
                                 adjustedVoucherType !== 'rcpt' &&
                                 adjustedVoucherType !== 'advance-receipt' &&
                                 adjustedVoucherType !== 'jr' &&
