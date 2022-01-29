@@ -73,6 +73,10 @@ $custom-typography: mat-typography-config(
         min-width: 170px !important;
     }
 }
+.branch-profle-wrapper {
+    float: left !important;
+    width: 50% !important;
+}
 @media screen and (max-width: 1366px) and (orientation: portrait) {
     .subscription-form-select {
         float: left !important;
