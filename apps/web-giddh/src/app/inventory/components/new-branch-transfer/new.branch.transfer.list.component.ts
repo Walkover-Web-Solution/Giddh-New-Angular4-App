@@ -335,7 +335,7 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
                 this._toasty.successToast(response.body);
                 this.getBranchTransferList(false);
             } else {
-                this._toasty.errorToast(response.body);
+                this._toasty.errorToast(response.message);
             }
         });
     }
