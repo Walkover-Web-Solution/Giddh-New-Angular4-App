@@ -9,6 +9,7 @@ import {
     OnDestroy,
     OnInit,
     Output,
+    Renderer2,
     SimpleChanges,
     TemplateRef,
     ViewChild
@@ -289,7 +290,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         private changeDetectorRef: ChangeDetectorRef,
         public dialog: MatDialog,
         private commonService: CommonService,
-        private adjustmentUtilityService: AdjustmentUtilityService
+        private adjustmentUtilityService: AdjustmentUtilityService,
+        private renderer: Renderer2
     ) {
 
         this.vm = new UpdateLedgerVm();

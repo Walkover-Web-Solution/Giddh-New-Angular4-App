@@ -1,5 +1,5 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, EventEmitter, NgZone, OnDestroy, OnInit, QueryList, TemplateRef, ViewChild, ViewChildren } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, EventEmitter, NgZone, OnDestroy, OnInit, QueryList, Renderer2, TemplateRef, ViewChild, ViewChildren } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { LoginActions } from 'apps/web-giddh/src/app/actions/login.action';
@@ -271,7 +271,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
         private zone: NgZone,
         public dialog: MatDialog,
         private commonService: CommonService,
-        private adjustmentUtilityService: AdjustmentUtilityService
+        private adjustmentUtilityService: AdjustmentUtilityService,
+        private renderer: Renderer2
     ) {
 
         this.lc = new LedgerVM();
