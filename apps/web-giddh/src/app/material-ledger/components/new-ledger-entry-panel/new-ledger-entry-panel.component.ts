@@ -242,6 +242,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public manualGenerateVoucherChecked: boolean = false;
     /** Holds input to get invoice list request params */
     public invoiceListRequestParams: any = {};
+    /** Round off amount */
+    public calculatedRoundOff: number = 0;
 
     constructor(private store: Store<AppState>,
         private cdRef: ChangeDetectorRef,
@@ -698,6 +700,14 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         } else {
             this.blankLedger.compoundTotal = giddhRoundOff((creditTotal - debitTotal), this.giddhBalanceDecimalPlaces);
         }
+
+        if (this.voucherApiVersion === 2 && (this.blankLedger.voucherType === "sal" || this.blankLedger.voucherType === "pur")) {
+            this.calculatedRoundOff = Number(Math.round(this.blankLedger.compoundTotal) - this.blankLedger.compoundTotal);
+            this.blankLedger.compoundTotal = Number(((this.blankLedger.compoundTotal) + this.calculatedRoundOff).toFixed(2));
+        } else {
+            this.calculatedRoundOff = 0;
+        }
+
         this.blankLedger.convertedCompoundTotal = this.calculateConversionRate(this.blankLedger.compoundTotal);
     }
 
@@ -1471,12 +1481,12 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 voucherDate: this.blankLedger.entryDate,
                 tcsTotal: 0,
                 tdsTotal: 0,
-                balanceDue: this.currentTxn.total,
-                grandTotal: this.currentTxn.total,
+                balanceDue: this.blankLedger.compoundTotal,
+                grandTotal: this.blankLedger.compoundTotal,
                 customerName: this.currentTxn.selectedAccount ? this.currentTxn.selectedAccount.name : '',
                 customerUniquename: this.currentTxn.selectedAccount ? this.currentTxn.selectedAccount.uniqueName : '',
-                totalTaxableValue: this.currentTxn.total,
-                subTotal: this.currentTxn.total,
+                totalTaxableValue: this.blankLedger.compoundTotal,
+                subTotal: this.blankLedger.compoundTotal,
                 exchangeRate: this.blankLedger.exchangeRate ?? 1
             },
             accountDetails: {

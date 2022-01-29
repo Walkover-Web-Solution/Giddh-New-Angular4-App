@@ -734,6 +734,31 @@
 
         <table class="width-100 mr-t05">
             <tbody>
+                <tr *ngIf="calculatedRoundOff">
+                    <td class="text-right">
+                        <span class="primary-color">
+                            {{ commonLocaleData?.app_round_off }}:
+                            <span class="d-inline-flex">
+                                <span class="d-inline-flex">
+                                    <amount-field
+                                        [amount]="calculatedRoundOff"
+                                        [currencySymbol]="
+                                            selectedCurrency === 0
+                                                ? baseCurrencyDetails?.symbol
+                                                : foreignCurrencyDetails?.symbol
+                                        "
+                                        [currencyCode]="
+                                            selectedCurrency === 0
+                                                ? baseCurrencyDetails?.code
+                                                : foreignCurrencyDetails?.code
+                                        "
+                                    >
+                                    </amount-field>
+                                </span>
+                            </span>
+                        </span>
+                    </td>
+                </tr>
                 <tr>
                     <td class="text-right">
                         <span class="primary-color">

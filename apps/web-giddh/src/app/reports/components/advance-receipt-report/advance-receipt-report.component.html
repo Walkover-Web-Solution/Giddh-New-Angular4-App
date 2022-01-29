@@ -462,24 +462,46 @@
                             <td class="entry-date" [attr.data-title]="localeData?.entry_date">
                                 {{ voucherApiVersion === 2 ? receipt?.voucherDate : receipt?.date }}
                             </td>
-                            <td [attr.data-title]="localeData?.suppliers_name">{{ receipt?.type }}</td>
+                            <td [attr.data-title]="localeData?.suppliers_name">
+                                {{ voucherApiVersion === 2 ? receipt?.receiptType : receipt?.type }}
+                            </td>
                             <td width="13%" class="text-break" [attr.data-title]="commonLocaleData?.app_voucher_type">
                                 {{ voucherApiVersion === 2 ? receipt?.account?.name : receipt?.baseAccountName }}
                             </td>
                             <td [attr.data-title]="localeData?.payment_mode_label">
-                                <div *ngFor="let paymentMode of receipt?.particularNames?.split(',')">
-                                    {{ paymentMode }}
-                                </div>
+                                <ng-container *ngIf="voucherApiVersion !== 2">
+                                    <div *ngFor="let paymentMode of receipt?.particularNames?.split(',')">
+                                        {{ paymentMode }}
+                                    </div>
+                                </ng-container>
+                                <ng-container *ngIf="voucherApiVersion === 2">
+                                    {{ receipt?.paymentMode?.name }}
+                                </ng-container>
                             </td>
                             <td
                                 width="13%"
                                 class="text-break"
-                                *ngIf="receipt?.invoices"
+                                *ngIf="receipt?.invoices || receipt?.adjustments?.length"
                                 [attr.data-title]="localeData?.invoice_no_label"
                             >
-                                <div *ngFor="let invoice of receipt?.invoices?.split(',')">{{ invoice }}</div>
+                                <ng-container *ngIf="voucherApiVersion !== 2">
+                                    <div *ngFor="let invoice of receipt?.invoices?.split(',')">{{ invoice }}</div>
+                                </ng-container>
+                                <ng-container *ngIf="voucherApiVersion === 2">
+                                    <ng-container *ngIf="receipt.adjustments?.length > 0">
+                                        <ng-container *ngFor="let adjustment of receipt.adjustments">
+                                            {{ adjustment?.voucherNumber }}<br />
+                                        </ng-container>
+                                    </ng-container>
+                                    <ng-container *ngIf="!receipt.adjustments?.length"> - </ng-container>
+                                </ng-container>
                             </td>
-                            <td [attr.data-title]="localeData?.invoice_no_label" *ngIf="!receipt?.invoices">-</td>
+                            <td
+                                [attr.data-title]="localeData?.invoice_no_label"
+                                *ngIf="!receipt?.invoices && !receipt?.adjustments?.length"
+                            >
+                                -
+                            </td>
                             <td [attr.data-title]="commonLocaleData?.app_total_amount">
                                 <span class="d-inline-flex">
                                     <amount-field
