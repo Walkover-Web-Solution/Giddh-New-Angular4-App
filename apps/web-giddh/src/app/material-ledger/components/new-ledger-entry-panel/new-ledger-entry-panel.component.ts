@@ -261,6 +261,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     }
 
     public ngOnInit() {
+        document.querySelector('body').classList.add('ledger-body');
         this.voucherTypeList = observableOf([{
             label: this.commonLocaleData?.app_voucher_types.sales,
             value: 'sal'
@@ -813,6 +814,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     }
 
     public ngOnDestroy(): void {
+        document.querySelector('body').classList.remove('ledger-body');
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
