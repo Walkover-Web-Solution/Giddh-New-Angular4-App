@@ -9,7 +9,6 @@ import {
     OnDestroy,
     OnInit,
     Output,
-    Renderer2,
     SimpleChanges,
     TemplateRef,
     ViewChild
@@ -289,7 +288,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         public dialog: MatDialog,
         private commonService: CommonService,
         private adjustmentUtilityService: AdjustmentUtilityService,
-        private renderer: Renderer2
     ) {
 
         this.vm = new UpdateLedgerVm();
@@ -309,7 +307,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     }
 
     public ngOnInit() {
-        this.renderer.addClass(document.body, 'ledger-body');
+        document.querySelector('body').classList.add('ledger-body');
         if(this.searchResultsPaginationPage) {
             this.searchResultsPaginationData.page = this.searchResultsPaginationPage;
         }
@@ -932,7 +930,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @memberof UpdateLedgerEntryPanelComponent
      */
     public ngOnDestroy(): void {
-        this.renderer.removeClass(document.body, 'ledger-body');
+        document.querySelector('body').classList.remove('ledger-body');
         this.vm.resetVM();
         this.destroyed$.next(true);
         this.destroyed$.complete();
