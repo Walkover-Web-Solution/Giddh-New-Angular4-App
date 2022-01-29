@@ -7109,6 +7109,16 @@ giddh-datepicker {
         align-items: center;
     }
 }
+
+.custom-ledger-body {
+    .cdk-overlay-container {
+        z-index: 1000 !important;
+    }
+    .cdk-global-overlay-wrapper {
+        z-index: 1000 !important;
+    }
+}
+
 .cdk-overlay-container,
 .cdk-global-overlay-wrapper {
     z-index: 9999;
