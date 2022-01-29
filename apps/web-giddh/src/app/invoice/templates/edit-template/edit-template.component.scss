@@ -3,7 +3,7 @@
     width: 100%;
     padding: 20px;
     min-height: 250px;
-    border: 1px solid var(--color-iron);
+    border: 1px solid var(--color-common-secondary-border);
     float: left;
     border-radius: 4px;
     margin: 5px 15px 15px 0;
@@ -35,7 +35,7 @@
 }
 
 .more-btn-dropdown {
-    border: 1px solid var(--color-iron) !important;
+    border: 1px solid var(--color-secondary-input-bar-border) !important;
     box-shadow: none !important;
     border-radius: 5px !important;
     font-size: 14px;

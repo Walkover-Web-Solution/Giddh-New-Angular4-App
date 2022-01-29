@@ -111,6 +111,9 @@ button.mat-menu-item {
 .account-detail-padding {
     padding: 1px;
     text-transform: none !important;
+    img {
+        filter: var(--color-image-filter);
+    }
 }
 
 .custom-detail h4 {
@@ -301,9 +304,9 @@ tr.aging-table-top td {
 i.icon-options {
     width: 36px;
     height: 36px;
-    border: 1px solid var(--color-iron);
+    border: 1px solid var(--color-secondary-input-bar-border);
     background-color: var(--color-white);
-    color: var(--color-giddh-blue);
+    color: var(--color-primary-input-bar-text);
     font-size: 20px;
     padding: 0;
     display: flex;
@@ -528,7 +531,7 @@ button.btn.btn-filter span.icon-cross {
         }
     }
     .mat-header-row {
-        border-bottom: 1.5px solid var(--color-iron);
+        border-bottom: 1.5px solid var(--color-table-primary-content-bar-border);
     }
     .icon-search:before {
         position: relative;

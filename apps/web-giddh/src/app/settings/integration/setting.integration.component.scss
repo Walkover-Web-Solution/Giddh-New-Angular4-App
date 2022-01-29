@@ -199,6 +199,7 @@
     word-break: break-word;
     color: var(--color-common-septenary-text);
     background-color: var(--color-input-tertiary-background);
+    border: 1px solid var(--color-primary-input-bar-border);
 }
 .payment-updates {
     width: 90%;
@@ -248,8 +249,8 @@
     margin-left: 10px;
 }
 .btn-light-blue {
-    background-color: var(--color-quinary-button-background);
     color: var(--color-common-senary-text);
+    background-color: var(--color-primary-basic-button-opacity);
 }
 .modal {
     .account-modal {

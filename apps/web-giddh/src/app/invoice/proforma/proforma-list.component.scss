@@ -224,13 +224,15 @@ ul.select-action-dropdown {
     border-radius: 5px;
     align-items: center;
     justify-content: center;
+    color: var(--color-primary-filter-button-text) !important;
+    border-color: var(--color-common-secondary-border) !important;
 }
 .search-icon-block {
     display: none;
 }
 button.btn.btn-filter {
     background: var(--color-dark-fog);
-    border: 1px solid var(--color-iron);
+    border: 1px solid var(--color-common-secondary-border);
     font-size: 14px;
     color: var(--color-giddh-blue);
     display: inline-flex;

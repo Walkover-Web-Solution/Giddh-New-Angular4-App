@@ -1,10 +1,10 @@
 .wrap-transaction-map {
-    border: 1px solid var(--color-iron);
+    border: 1px solid var(--color-common-primary-border);
     border-bottom: none !important;
     .ledger-book {
         box-shadow: none;
         .left-col-new {
-            border-right: 1px solid var(--color-iron);
+            border-right: 1px solid var(--color-common-primary-border);
         }
         .checkbox-span {
             height: 49px;
@@ -206,7 +206,7 @@ table.ledger-footer-1 td[class*="col-"] {
     background: var(--color-common-primary-background-for-all-components);
     color: var(--color-abbey);
     font-size: 18px;
-    box-shadow: 0px 2px 6px var(--color-iron);
+    box-shadow: 0px 2px 6px var(--color-primary-ledger-box-shadow);
 }
 .ledger-stat .row {
     display: flex;
@@ -309,14 +309,14 @@ table.ledger-footer-1 td[class*="col-"] {
 }
 
 .ledger-book {
-    border: 0px solid var(--color-iron);
+    border: 0px solid var(--color-common-primary-border);
     clear: both;
     position: relative;
     float: left;
     width: 100%;
     margin-bottom: 16px;
     background: var(--color-common-primary-background-for-all-components);
-    box-shadow: 0 0 6px var(--color-iron);
+    box-shadow: 0 0 6px var(--color-primary-ledger-box-shadow);
 }
 .Width600 {
     position: absolute;
@@ -422,7 +422,7 @@ sh-select:focus {
     width: 36px;
     min-width: 36px;
     height: 36px;
-    border: 1px solid var(--color-iron);
+    border: 1px solid var(--color-secondary-input-bar-border);
     padding: 3px;
     display: flex;
     justify-content: center;
@@ -459,7 +459,7 @@ sh-select:focus {
 }
 
 .ledger-book .ledger-footer-1 .total-col .border-top {
-    border-top: 1px solid var(--color-iron) !important;
+    border-top: 1px solid var(--color-table-primary-header-bar-border) !important;
 }
 .ledger-book .ledger-footer-1 .total-col .bd-rt {
     border: none;
@@ -474,7 +474,7 @@ sh-select:focus {
     content: "";
     height: 1px;
     width: 32%;
-    background-color: var(--color-iron);
+    background-color: var(--color-secondary-input-bar-border);
     left: -32%;
     top: 17px;
 }
@@ -483,7 +483,7 @@ sh-select:focus {
     content: "";
     height: 1px;
     width: 32%;
-    background-color: var(--color-iron);
+    background-color: var(--color-secondary-input-bar-border);
     right: -32%;
     top: 17px;
 }
@@ -532,7 +532,7 @@ sh-select:focus {
     margin-right: 8px;
     border-radius: 5px;
     background-color: var(--color-white);
-    border: 1px solid var(--color-iron);
+    border: 1px solid var(--color-secondary-input-bar-border);
     padding: 5px;
     width: 36px;
     height: 36px;
@@ -807,7 +807,7 @@ a#reload-bank-transaction i.icon-refresh {
     font-size: 18px !important;
 }
 input#ledger-search {
-    border: 1px solid var(--color-iron);
+    border: 1px solid var(--color-secondary-input-bar-border);
     padding-left: 27px !important;
     background-color: var(--color-sidebar-primary-search-bar-background) !important;
 }
@@ -837,7 +837,7 @@ input#ledger-search {
     top: 55px;
     z-index: 1;
     background-color: var(--color-common-primary-background-for-all-components);
-    border-bottom: 1px solid var(--color-iron);
+    border-bottom: 1px solid var(--color-table-primary-header-bar-border);
 }
 .show-if-ledger-open {
     height: 300px;
