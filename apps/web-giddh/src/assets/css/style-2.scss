@@ -31,18 +31,22 @@ $custom-typography: mat-typography-config(
     border-right: none !important;
     border-left: none !important;
     background-color: var(--color-body-background);
+    border-color: var(--color-table-primary-content-bar-border);
 }
 .basic > thead > tr > th {
-    color: var(--color-table-tertiary-heading);
-    border-right: 1px solid var(--color-iron);
+    color: var(--color-table-tertiary-heading) !important;
+    border-right: 1px solid var(--color-table-primary-content-bar-border);
     padding: 15px 11px !important;
     font-weight: 400;
-    border-bottom: 1px solid var(--color-iron);
+    border-bottom: 1px solid var(--color-table-primary-content-bar-border);
     font-family: opensans-semibold;
     font-size: 14px;
 }
 .basic {
     background: var(--color-common-primary-background-for-all-components);
+}
+.table-bordered {
+    border-color: var(--color-table-primary-content-bar-border);
 }
 
 .overflow-x-hidden {
@@ -491,7 +495,7 @@ input {
     z-index: 9;
     position: relative;
     top: -4px;
-    border-color: var(--color-iron) !important;
+    border-color: var(--color-tab-primary-border-bottom) !important;
 }
 .invoice-control .invoice-nav.navbar-nav > li > a:hover {
     color: var(--color-white);
@@ -1324,7 +1328,7 @@ modal-container.modal {
     max-width: 230px;
     display: block;
     padding-left: 30px !important;
-    border: 1px solid var(--color-iron);
+    border: 1px solid var(--color-secondary-input-bar-border);
     height: 36px;
     border-radius: 5px;
 }
@@ -1473,8 +1477,8 @@ header .navbar {
 .btn-primary:not(:disabled):not(.disabled):active,
 .show > .btn-primary.dropdown-toggle {
     background: var(--color-white) !important;
-    border-color: var(--color-iron) !important;
-    color: var(--color-common-primary-blue-border) !important;
+    border-color: var(--color-common-secondary-border) !important;
+    color: var(--color-primary-basic-button-text) !important;
 }
 .btn-primary:hover,
 .btn-primary:disabled,
@@ -1516,7 +1520,7 @@ fieldset[disabled] .btn-primary:hover {
 }
 .btn-default {
     background: var(--color-white) !important;
-    border-color: var(--color-iron) !important;
+    border-color: var(--color-secondary-input-bar-border) !important;
     color: var(--color-common-primary-blue-border) !important;
 }
 .btn-default:hover,
@@ -1595,7 +1599,7 @@ fieldset[disabled] .btn-primary:hover {
     font-size: 12px;
     height: 33px;
     border: 0px;
-    color: var(--color-nero) !important;
+    color: var(--color-datepicker-title-text) !important;
     padding: 3px !important;
     text-align: center;
 }
@@ -2409,7 +2413,7 @@ a.btn.btn-xs.btn-link.pull-right {
     text-transform: capitalize;
 }
 .bd-rt {
-    border-color: var(--color-iron);
+    border-color: var(--color-common-primary-border);
 }
 .popover.bottom > .arrow {
     right: 13%;
@@ -4268,8 +4272,8 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
     padding-right: 25px !important;
 }
 .ledg-head.entry-popup table td[class*="col-"] {
-    border-bottom: 1px solid var(--color-iron);
-    border-right: 1px solid var(--color-iron);
+    border-bottom: 1px solid var(--color-common-primary-border);
+    border-right: 1px solid var(--color-common-primary-border);
     font-size: 13px;
     color: var(--color-abbey);
     text-overflow: ellipsis;
@@ -4345,16 +4349,15 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
 .thead-background1 th {
     background: var(--color-table-quaternary-heading);
     color: var(--color-abbey);
-    border-right: 1px solid var(--color-iron);
+    border-right: 1px solid var(--color-common-primary-border);
     padding: 11px !important;
     font-weight: 400;
-    border-bottom: 1px solid var(--color-iron);
+    border-bottom: 1px solid var(--color-common-primary-border);
 }
 .ledger-book {
-    border: 1px solid var(--color-iron);
+    border: 1px solid var(--color-common-primary-border);
     clear: both;
     position: relative;
-    background: var(--color-white);
     float: left;
     width: 100%;
     background: var(--color-white);
@@ -5668,6 +5671,7 @@ span.red-text {
 }
 .icon-btn .btn-xs {
     border: 1px solid var(--color-iron);
+    color: var(--color-primary-input-bar-text);
     background-color: var(--color-dark-fog);
 }
 .modal.fade.open-popup.in.show {
@@ -5881,7 +5885,7 @@ ul.dropdown-menu p.lead.pd {
     left: 0;
     width: 100%;
     padding: 10px 0px 0 15px !important;
-    border-bottom: 1px solid var(--color-iron);
+    border-bottom: 1px solid var(--color-tab-primary-border-bottom) !important;
 }
 .gstr-tabs-head .nav.nav-tabs {
     position: relative !important;
@@ -5942,7 +5946,7 @@ ul.dropdown-menu p.lead.pd {
 .date-advance-search .icon-calender {
     height: 36px !important;
     border-right: none !important;
-    color: var(--color-gray) !important;
+    color: var(--color-datepicker-date-icon) !important;
     cursor: pointer;
 }
 .date-advance-search .input-group input.form-control {
@@ -9557,6 +9561,9 @@ input[type="checkbox"].cdk-visually-hidden::after {
             background-color: transparent !important;
         }
     }
+}
+.mat-expansion-panel {
+    background-color: var(--color-common-quinary-background-for-all-components);
 }
 .companies {
     .mat-expansion-panel-header-title {

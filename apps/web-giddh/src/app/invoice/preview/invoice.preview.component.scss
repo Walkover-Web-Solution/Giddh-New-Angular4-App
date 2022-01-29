@@ -352,6 +352,8 @@ ul.select-action-dropdown {
     align-items: center;
     font-size: 14px;
     margin-right: 10px;
+    color: var(--color-primary-filter-button-text);
+    border-color: var(--color-secondary-input-bar-border) !important;
 }
 
 .search-icon-block {

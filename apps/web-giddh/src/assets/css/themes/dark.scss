@@ -60,6 +60,7 @@ body.dark-theme {
     --color-primary-header-icons: #f5f5f5;
     --color-primary-header-notification-text: #f5f5f5;
     --color-primary-header-notification-background: #212528;
+    --color-primary-header-border-bottom: #212528;
 
     // Card Color Variables
     --color-account-card-primary-text: #f5f5f5;
@@ -95,7 +96,9 @@ body.dark-theme {
     --color-nonary-button-background-hover: #36b28326;
     --color-denary-button-text: #f5f5f5;
     --color-denary-button-background: #212528;
-    --color-primary-filter-button-text: #f5f5f5;
+    --color-primary-basic-button-opacity: #668cff26;
+    --color-primary-filter-button-text: #9b9b9e;
+    --color-primary-basic-button-text: #9b9b9e;
     --color-primary-cancel-button-background-hover: #668cff26;
 
     // Dropdown Color Variables
@@ -133,20 +136,21 @@ body.dark-theme {
     --color-input-tertiary-background: #668cff26;
 
     // Input Bar Variables
-    --color-primary-input-bar-text: #f5f5f5;
-    --color-primary-input-bar-border: #9b9b9e;
+    --color-primary-input-bar-text: #9b9b9e;
+    --color-primary-input-bar-border: #505159;
+    --color-secondary-input-bar-border: #505159;
     --color-primary-input-bar-background: #668cff26;
     --color-secondary-input-bar-button: #cbcfd2;
 
     // Datepicker Color Variables
-    --color-datepicker-title-text: #212528;
+    --color-datepicker-title-text: #9b9b9e;
     --color-datepicker-title-background: #f5f5f5;
     --color-datepicker-header: #668cff;
     --color-datepicker-month-name: #f5f5f5;
     --color-datepicker-date: #f5f5f5;
     --color-datepicker-secondary-date: #212528;
     --color-datepicker-ternary-date: #f5f5f5;
-    --color-datepicker-date-icon: #f5f5f5;
+    --color-datepicker-date-icon: #9b9b9e;
     --color-datepicker-rightside-list-text: #f5f5f5;
     --color-datepicker-rightside-list-primary-text-hover: #212528;
     --color-datepicker-rightside-list-secondary-text-hover: #212528;
@@ -155,7 +159,7 @@ body.dark-theme {
     --color-datepicker-unselected-month: #f5f5f5;
     --color-datepicker-background: #212528;
     --color-main-content-datepicker: #9b9b9e;
-    --color-primary-head-datepicker-text: #f5f5f5;
+    --color-primary-head-datepicker-text: #9b9b9e;
     --color-datepicker-box-shadow: #212528;
     --color-datepicker-selected-date-background: #668cff;
     --color-datepicker-selected-date-range-background: #668cff26;
@@ -338,6 +342,7 @@ body.dark-theme {
     --color-tab-secondary-background: #212528;
     --color-tab-primary-active: #668cff;
     --color-tab-primary-inactive: #9b9b9e;
+    --color-tab-primary-border-bottom: #505159;
 
     // Rectangular Tabs Color Variables
     --color-rectangular-tab-active-primary-text: #668cff;
@@ -362,7 +367,8 @@ body.dark-theme {
 
     // Ledger Heading Color Variable
     --color-ledger-heading: #668cff;
-    --color-ledger-grid-border-color: #9b9b9e;
+    --color-ledger-grid-border-color: #668cff26;
+    --color-primary-ledger-box-shadow: #00000080;
     --color-primary-ledger-stat-block-border: #668cff26;
 
     // Invoice Preview Details Color Variables
@@ -498,7 +504,7 @@ body.dark-theme {
     --color-table-datepicker-body-background: #f5f5f5;
     --color-table-input-background: #668cff26;
     --color-table-searchbar-background: #668cff26;
-    --color-table-primary-header-bar-border: #9b9b9e;
+    --color-table-primary-header-bar-border: #668cff26;
     --color-table-primary-content-bar-border: #668cff26;
     --color-table-primary-giddh-table-thead-register-table-th-th-background: #e58a0026;
     --color-table-icon-sort-asc: #9b9b9e;
@@ -514,6 +520,7 @@ body.dark-theme {
     --color-total-details-tertiary-content: #668cff;
     --color-total-details-tertiary-background: #668cff26;
     --color-total-details-quaternary-background: #505159;
+    --color-total-details-primary-border: #505159;
 
     // Right Side Popup Color Variables
     --color-primary-right-side-popup-header-text: #f5f5f5;
@@ -542,6 +549,8 @@ body.dark-theme {
     --color-success-disable: #36b28326;
     --color-main-content-background: #212528;
     --color-btn-success-dropdown-toggle: #36b283;
+    --color-common-primary-border: #668cff26;
+    --color-common-secondary-border: #505159;
 
     // Toast Color Variables
     --color-red-toast: #e54556;
@@ -596,9 +605,6 @@ body.dark-theme {
 
     // Common Leftout Text Color Variables
     --color-common-primary-dark-blue: #668cff;
-
-    // Common Chat Button Color Variable
-    --color-common-chat-button-background: #f5f5f5;
 
     // Common Image Filter Variable
     --color-image-filter: invert(1);

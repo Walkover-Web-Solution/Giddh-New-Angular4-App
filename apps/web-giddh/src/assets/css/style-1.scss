@@ -432,10 +432,10 @@ aside-menu-account .container-fluid {
     margin-right: 15px !important;
 }
 .border-bottom {
-    border-bottom-color: var(--color-iron);
+    border-bottom-color: var(--color-ledger-grid-border-color);
 }
 .bdr {
-    border: 1px solid var(--color-iron) !important;
+    border: 1px solid var(--color-ledger-grid-border-color) !important;
     border-radius: 5px;
 }
 .border-none {
@@ -448,16 +448,16 @@ aside-menu-account .container-fluid {
     border-right: none;
 }
 .bd-rt {
-    border-top: 1px solid var(--color-iron);
+    border-top: 1px solid var(--color-common-primary-border);
 }
 .bd-rb {
-    border-bottom: 1px solid var(--color-iron) !important;
+    border-bottom: 1px solid var(--color-common-primary-border) !important;
 }
 .bd-rl {
-    border-left: 1px solid var(--color-iron);
+    border-left: 1px solid var(--color-common-primary-border);
 }
 .bd-rr {
-    border-right: 1px solid var(--color-iron) !important;
+    border-right: 1px solid var(--color-common-primary-border) !important;
 }
 .dark-grey-bg {
     background: var(--color-abbey) !important;
@@ -536,7 +536,7 @@ aside-menu-account .container-fluid {
     opacity: 1;
 }
 .total-details-box {
-    border: 1px solid var(--color-iron);
+    border: 1px solid var(--color-total-details-primary-border);
     border-radius: 5px;
     padding: 14px 30px;
     width: 100%;
@@ -888,7 +888,7 @@ aside-menu-account .container-fluid {
 }
 .new-icon-img {
     img {
-        border: 1px solid var(--color-secondary-input-bar-button);
+        border: 1px solid var(--color-secondary-input-bar-border);
         background: var(--color-white);
         padding: 5px;
         border-radius: 5px;
@@ -2554,7 +2554,7 @@ giddh-datepicker {
             .mat-form-field-wrapper {
                 .mat-form-field-flex {
                     .mat-form-field-infix {
-                        border: 1px solid var(--color-iron) !important;
+                        border: 1px solid var(--color-secondary-input-bar-border) !important;
                         border-radius: 20px;
                         width: 100%;
                     }
@@ -2719,7 +2719,7 @@ td.mat-footer-cell {
     word-break: break-word;
     white-space: nowrap;
     border-bottom-width: 1px;
-    border-bottom-color: var(--color-iron) !important;
+    border-bottom-color: var(--color-table-primary-content-bar-border) !important;
 }
 .mat-header-row,
 .mat-row {
