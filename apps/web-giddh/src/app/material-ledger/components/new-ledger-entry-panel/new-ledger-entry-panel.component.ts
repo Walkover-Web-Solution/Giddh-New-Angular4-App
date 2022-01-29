@@ -12,7 +12,6 @@ import {
     OnDestroy,
     OnInit,
     Output,
-    Renderer2,
     SimpleChanges,
     TemplateRef,
     ViewChild,
@@ -255,7 +254,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         private toaster: ToasterService,
         public dialog: MatDialog,
         private settingsTagService: SettingsTagService,
-        private renderer: Renderer2
     ) {
         this.companyTaxesList$ = this.store.pipe(select(p => p.company && p.company.taxes), takeUntil(this.destroyed$));
         this.sessionKey$ = this.store.pipe(select(p => p.session.user.session.id), takeUntil(this.destroyed$));
