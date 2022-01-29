@@ -496,7 +496,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
-        this.renderer.addClass(document.body, 'custom-ledger-body');
+        this.renderer.addClass(document.body, 'ledger-body');
         this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: 0 }));
         // get company taxes
         this.store.dispatch(this.companyActions.getTax());
@@ -1391,7 +1391,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     public ngOnDestroy(): void {
-        this.renderer.removeClass(document.body, 'custom-ledger-body');
+        this.renderer.removeClass(document.body, 'ledger-body');
         this.store.dispatch(this.ledgerActions.ResetLedger());
         this.destroyed$.next(true);
         this.destroyed$.complete();
