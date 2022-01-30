@@ -54,6 +54,7 @@ export interface ReceiptItem {
     gainLoss?: number;
     exchangeRate?: number;
     referenceVoucher?: ReferenceVoucher;
+    adjustments?: any;
 }
 
 export interface ReciptResponse {

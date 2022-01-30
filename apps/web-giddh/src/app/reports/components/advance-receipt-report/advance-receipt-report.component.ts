@@ -207,9 +207,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
             }
             this.fetchReceiptsData();
         });
-        this.store.pipe(
-            select(state => state.session.activeCompany), takeUntil(this.destroyed$)
-        ).subscribe(activeCompany => {
+        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             this.activeCompany = activeCompany;
         });
         this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
@@ -549,13 +547,22 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
      * @memberof AdvanceReceiptReportComponent
      */
     private fetchSummary(): Observable<BaseResponse<any, AdvanceReceiptSummaryRequest>> {
-        const requestObject: AdvanceReceiptSummaryRequest = {
-            companyUniqueName: this.activeCompanyUniqueName,
-            from: this.fromDate,
-            to: this.toDate,
-            branchUniqueName: this.currentBranch.uniqueName
-        };
-        return this.receiptService.fetchSummary(requestObject);
+        if (this.voucherApiVersion === 2) {
+            const requestObj = {
+                from: this.fromDate,
+                to: this.toDate,
+                q: this.searchQueryParams.q
+            };
+            return this.receiptService.getAllReceiptBalanceDue(requestObj, "receipt");
+        } else {
+            const requestObject: AdvanceReceiptSummaryRequest = {
+                companyUniqueName: this.activeCompanyUniqueName,
+                from: this.fromDate,
+                to: this.toDate,
+                branchUniqueName: this.currentBranch.uniqueName
+            };
+            return this.receiptService.fetchSummary(requestObject);
+        }
     }
 
     /**

@@ -139,8 +139,16 @@
                             <div>
                                 <span class="d-inline-flex number-total">
                                     <amount-field
-                                        [amount]="paymentsSummaryData?.total?.amount"
-                                        [currencySymbol]="paymentsSummaryData?.total?.symbol"
+                                        [amount]="
+                                            voucherApiVersion === 2
+                                                ? paymentsSummaryData?.grandTotal
+                                                : paymentsSummaryData?.total?.amount
+                                        "
+                                        [currencySymbol]="
+                                            voucherApiVersion === 2
+                                                ? activeCompany?.baseCurrencySymbol
+                                                : paymentsSummaryData?.total?.symbol
+                                        "
                                         [currencyCode]="activeCompany.baseCurrency"
                                     >
                                     </amount-field>
@@ -154,8 +162,16 @@
                             <div>
                                 <span class="d-inline-flex number-total">
                                     <amount-field
-                                        [amount]="paymentsSummaryData?.unUsed?.amount"
-                                        [currencySymbol]="paymentsSummaryData?.unUsed?.symbol"
+                                        [amount]="
+                                            voucherApiVersion === 2
+                                                ? paymentsSummaryData?.totalDue
+                                                : paymentsSummaryData?.unUsed?.amount
+                                        "
+                                        [currencySymbol]="
+                                            voucherApiVersion === 2
+                                                ? activeCompany?.baseCurrencySymbol
+                                                : paymentsSummaryData?.unUsed?.symbol
+                                        "
                                         [currencyCode]="activeCompany.baseCurrency"
                                     >
                                     </amount-field>
