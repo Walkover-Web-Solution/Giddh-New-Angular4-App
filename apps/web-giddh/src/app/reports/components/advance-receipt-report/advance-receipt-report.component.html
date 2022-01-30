@@ -140,8 +140,16 @@
                             <div>
                                 <span class="number-total d-inline-flex">
                                     <amount-field
-                                        [amount]="receiptsSummaryData?.advance?.amount"
-                                        [currencySymbol]="receiptsSummaryData?.advance?.symbol"
+                                        [amount]="
+                                            voucherApiVersion === 2
+                                                ? receiptsSummaryData?.advanceReceiptTotal
+                                                : receiptsSummaryData?.advance?.amount
+                                        "
+                                        [currencySymbol]="
+                                            voucherApiVersion === 2
+                                                ? activeCompany?.baseCurrencySymbol
+                                                : receiptsSummaryData?.advance?.symbol
+                                        "
                                         [currencyCode]="activeCompany?.baseCurrency"
                                     >
                                     </amount-field>
@@ -155,8 +163,16 @@
                             <div>
                                 <span class="d-inline-flex number-total">
                                     <amount-field
-                                        [amount]="receiptsSummaryData?.normal?.amount"
-                                        [currencySymbol]="receiptsSummaryData?.normal?.symbol"
+                                        [amount]="
+                                            voucherApiVersion === 2
+                                                ? receiptsSummaryData?.normalReceiptTotal
+                                                : receiptsSummaryData?.normal?.amount
+                                        "
+                                        [currencySymbol]="
+                                            voucherApiVersion === 2
+                                                ? activeCompany?.baseCurrencySymbol
+                                                : receiptsSummaryData?.normal?.symbol
+                                        "
                                         [currencyCode]="activeCompany?.baseCurrency"
                                     >
                                     </amount-field>
@@ -170,8 +186,16 @@
                             <div>
                                 <span class="d-inline-flex number-total">
                                     <amount-field
-                                        [amount]="receiptsSummaryData?.total?.amount"
-                                        [currencySymbol]="receiptsSummaryData?.total?.symbol"
+                                        [amount]="
+                                            voucherApiVersion === 2
+                                                ? receiptsSummaryData?.grandTotal
+                                                : receiptsSummaryData?.total?.amount
+                                        "
+                                        [currencySymbol]="
+                                            voucherApiVersion === 2
+                                                ? activeCompany?.baseCurrencySymbol
+                                                : receiptsSummaryData?.total?.symbol
+                                        "
                                         [currencyCode]="activeCompany?.baseCurrency"
                                     >
                                     </amount-field>
@@ -185,8 +209,16 @@
                             <div>
                                 <span class="d-inline-flex number-total">
                                     <amount-field
-                                        [amount]="receiptsSummaryData?.unUsed?.amount"
-                                        [currencySymbol]="receiptsSummaryData?.unUsed?.symbol"
+                                        [amount]="
+                                            voucherApiVersion === 2
+                                                ? receiptsSummaryData?.totalDue
+                                                : receiptsSummaryData?.unUsed?.amount
+                                        "
+                                        [currencySymbol]="
+                                            voucherApiVersion === 2
+                                                ? activeCompany?.baseCurrencySymbol
+                                                : receiptsSummaryData?.unUsed?.symbol
+                                        "
                                         [currencyCode]="activeCompany?.baseCurrency"
                                     >
                                     </amount-field>

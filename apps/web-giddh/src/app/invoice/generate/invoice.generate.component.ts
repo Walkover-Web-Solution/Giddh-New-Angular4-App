@@ -135,7 +135,9 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
     /* this will store active company data */
     public activeCompany: any = {};
     /** Stores the voucher API version of company */
-    private voucherApiVersion: 1 | 2; 
+    private voucherApiVersion: 1 | 2;
+    /** True if voucher generate in process */
+    public generateVoucherInProcess: boolean = false;
 
     constructor(
         private store: Store<AppState>,
@@ -378,6 +380,8 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     public previewInvoice() {
+        this.generateVoucherInProcess = false;
+
         let model;
         
         if (this.voucherApiVersion === 2) {
@@ -407,7 +411,8 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
         }
         
         if (res?.account?.uniqueName) {
-            this.store.dispatch(this.invoiceActions.PreviewInvoice(res.account.uniqueName, model));
+            this.generateVoucherInProcess = true;
+            this.store.dispatch(this.invoiceActions.PreviewInvoice(res.account?.uniqueName, model));
         }
 
         this.toggleBodyClass();
@@ -419,6 +424,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof InvoiceGenerateComponent
      */
     public closeModel(): void {
+        this.generateVoucherInProcess = false;
         this.showEditMode = false;
         this.getLedgersOfInvoice();
         this.selectedItem = null;
