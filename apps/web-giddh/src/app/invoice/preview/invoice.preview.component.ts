@@ -1423,15 +1423,23 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         this.invFormData.accountDetails.currencySymbol = item.accountCurrencySymbol ?? this.baseCurrencySymbol ?? '';
         this.invFormData.voucherDetails.gainLoss = item.gainLoss;
         this.changeStatusInvoiceUniqueName = item.uniqueName;
-        this.selectedPerformAdjustPaymentAction = true;
-        // To clear receipts voucher store
-        this.store.dispatch(this.invoiceReceiptActions.ResetVoucherDetails());
-        // To get re-assign receipts voucher store
-        this.store.dispatch(this.invoiceReceiptActions.getVoucherDetailsV4(customerUniqueName, {
-            invoiceNumber: item.voucherNumber,
-            voucherType: VoucherTypeEnum.sales,
-            uniqueName: item.uniqueName
-        }));
+
+        if (this.voucherApiVersion === 2) {
+            this.updateNewAccountInVoucher(item.account);
+            this.advanceReceiptAdjustmentData = { adjustments: this.adjustmentUtilityService.formatAdjustmentsObject(item.adjustments) };
+            this.showAdvanceReceiptAdjust = true;
+            this.adjustPaymentModal.show();
+        } else {
+            this.selectedPerformAdjustPaymentAction = true;
+            // To clear receipts voucher store
+            this.store.dispatch(this.invoiceReceiptActions.ResetVoucherDetails());
+            // To get re-assign receipts voucher store
+            this.store.dispatch(this.invoiceReceiptActions.getVoucherDetailsV4(customerUniqueName, {
+                invoiceNumber: item.voucherNumber,
+                voucherType: VoucherTypeEnum.sales,
+                uniqueName: item.uniqueName
+            }));
+        }
     }
 
     /**
