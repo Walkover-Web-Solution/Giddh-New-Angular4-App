@@ -95,6 +95,7 @@
                                         {{ localeData?.generate_compound }}
                                     </button>
                                     <button
+                                        type="button"
                                         *ngIf="!isCompany && !isMobileView"
                                         placement="top"
                                         [tooltip]="localeData?.works_for_single_entry"
@@ -212,7 +213,7 @@
                             </tr>
                         </thead>
                         <tbody
-                            *ngIf="!(getLedgerDataInProcess$ | async)"
+                            *ngIf="!(getLedgerDataInProcess$ | async) && !generateVoucherInProcess"
                             (clickOutside)="hoveredItemForAction = ''; clickedHoveredItemForAction = ''"
                             (mouseleave)="hoveredItemForAction = ''; clickedHoveredItemForAction = ''"
                         >
@@ -363,7 +364,11 @@
                         </tbody>
 
                         <tbody
-                            *ngIf="(isGetAllRequestInProcess$ | async) || (getLedgerDataInProcess$ | async)"
+                            *ngIf="
+                                (isGetAllRequestInProcess$ | async) ||
+                                (getLedgerDataInProcess$ | async) ||
+                                generateVoucherInProcess
+                            "
                             id="centerAlign"
                         >
                             <tr>
@@ -378,7 +383,9 @@
 
             <div
                 *ngIf="ledgersData?.totalItems > 20"
-                [hidden]="(isGetAllRequestInProcess$ | async) || (getLedgerDataInProcess$ | async)"
+                [hidden]="
+                    (isGetAllRequestInProcess$ | async) || (getLedgerDataInProcess$ | async) || generateVoucherInProcess
+                "
                 class="pagination-wrapper"
             >
                 <div class="text-center">
