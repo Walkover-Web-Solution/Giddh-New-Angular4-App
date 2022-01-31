@@ -34,7 +34,7 @@ $custom-typography: mat-typography-config(
     border-color: var(--color-table-primary-content-bar-border);
 }
 .basic > thead > tr > th {
-    color: var(--color-table-tertiary-heading) !important;
+    color: var(--color-table-secondary-heading) !important;
     border-right: 1px solid var(--color-table-primary-content-bar-border);
     padding: 15px 11px !important;
     font-weight: 400;
@@ -364,7 +364,12 @@ input {
 }
 .v-align-middle {
     vertical-align: middle;
-} /* switch on off end */
+}
+// Mat Divider
+.mat-divider {
+    border-top-color: var(--color-primary-mat-divider);
+}
+/* switch on off end */
 .toggle {
     position: relative;
     width: 40px;
@@ -1553,10 +1558,11 @@ fieldset[disabled] .btn-primary:hover {
 }
 .success-btn {
     font-size: 14px;
-    background: var(--color-success-enable);
-    color: var(--color-white);
+    background-color: var(--color-success-enable);
+    color: var(--color-secondary-button-text);
     &:hover {
-        color: var(--color-white);
+        color: var(--color-secondary-button-text);
+        background-color: var(--color-secondary-button-background-hover);
     }
 }
 .btn-round {
@@ -1838,7 +1844,7 @@ input[type="checkbox"]:checked:after {
 }
 
 .btn-warning {
-    color: var(--color-white) !important;
+    color: var(--color-secondary-button-text) !important;
     background-color: var(--color-warning) !important;
     border-color: var(--color-warning) !important;
 }
@@ -9367,11 +9373,11 @@ body.prevent-body-scroll {
 }
 
 *::-webkit-scrollbar-track {
-    background: var(--color-wild-sand);
+    background: var(--color-scrollbar-primary-track-background);
 }
 
 *::-webkit-scrollbar-thumb {
-    background: var(--color-gray);
+    background: var(--color-scrollbar-primary-thumb-background);
     border-radius: 5px;
     min-height: 60px;
 }
