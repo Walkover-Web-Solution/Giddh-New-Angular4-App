@@ -534,7 +534,11 @@
                             >
                                 -
                             </td>
-                            <td [attr.data-title]="commonLocaleData?.app_total_amount">
+                            <td
+                                [attr.data-title]="commonLocaleData?.app_total_amount"
+                                [tooltip]="grandTotalPopupTemplate"
+                                container="body"
+                            >
                                 <span class="d-inline-flex">
                                     <amount-field
                                         [amount]="
@@ -551,8 +555,15 @@
                                     >
                                     </amount-field>
                                 </span>
+                                <ng-template #grandTotalPopupTemplate
+                                    ><span [innerHTML]="receipt.grandTotalTooltipText"></span>
+                                </ng-template>
                             </td>
-                            <td [attr.data-title]="localeData?.unused_amount">
+                            <td
+                                [attr.data-title]="localeData?.unused_amount"
+                                [tooltip]="balanceDuePopupTemplate"
+                                container="body"
+                            >
                                 <span class="d-inline-flex">
                                     <amount-field
                                         [amount]="
@@ -569,6 +580,9 @@
                                     >
                                     </amount-field>
                                 </span>
+                                <ng-template #balanceDuePopupTemplate
+                                    ><span [innerHTML]="receipt.balanceDueTooltipText"></span>
+                                </ng-template>
                             </td>
                         </tr>
                     </tbody>
