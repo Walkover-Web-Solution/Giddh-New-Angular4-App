@@ -10,6 +10,7 @@ import { OrganizationType } from '../models/user-login-state';
 import { AllItems } from '../shared/helpers/allItems';
 import { Router } from '@angular/router';
 import { AdjustedVoucherType } from '../app.constant';
+import { VoucherTypeEnum } from '../models/api-models/Sales';
 
 @Injectable()
 export class GeneralService {
@@ -940,5 +941,70 @@ export class GeneralService {
     public addVoucherVersion(url: string, voucherVersion: number): string {
         const delimiter = url.includes('?') ? '&' : '?';
         return url.concat(`${delimiter}voucherVersion=${voucherVersion}`);
+    }
+
+    /**
+     * This will remove special characters and spaces from amount
+     *
+     * @param {string} amount
+     * @returns {string}
+     * @memberof GeneralService
+     */
+    public removeSpecialCharactersFromAmount(amount: any): string {
+        amount = amount.toString();
+        return amount?.replace(/,/g, "")?.replace(/ /g, "")?.replace(/'/g, "").trim();
+    }
+
+    /**
+     * Adds tooltip text for grand total and total due amount
+     * to item supplied (for Cash/Sales Invoice and CR/DR note)
+     *
+     * @private
+     * @param {ReceiptItem} item Receipt item received from service
+     * @returns {*} Modified item with tooltup text for grand total and total due amount
+     * @memberof GeneralService
+     */
+    public addToolTipText(selectedVoucher: any, baseCurrency: string, item: any, localeData: any, commonLocaleData: any): any {
+        try {
+            let balanceDueAmountForCompany, balanceDueAmountForAccount, grandTotalAmountForCompany,
+                grandTotalAmountForAccount;
+
+            if (item && item.totalBalance && item.totalBalance.amountForCompany !== undefined && item.totalBalance.amountForAccount !== undefined) {
+                balanceDueAmountForCompany = Number(item.totalBalance.amountForCompany) || 0;
+                balanceDueAmountForAccount = Number(item.totalBalance.amountForAccount) || 0;
+            }
+            if ([VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote, VoucherTypeEnum.purchase, VoucherTypeEnum.receipt, VoucherTypeEnum.payment].indexOf(selectedVoucher) > -1 && item.grandTotal) {
+                grandTotalAmountForCompany = Number(item.grandTotal.amountForCompany) || 0;
+                grandTotalAmountForAccount = Number(item.grandTotal.amountForAccount) || 0;
+            }
+
+            let grandTotalConversionRate = 0, balanceDueAmountConversionRate = 0;
+            if (this.voucherApiVersion === 2) {
+                grandTotalConversionRate = item.exchangeRate;
+            } else if (grandTotalAmountForCompany && grandTotalAmountForAccount) {
+                grandTotalConversionRate = +((grandTotalAmountForCompany / grandTotalAmountForAccount) || 0).toFixed(2);
+            }
+            if (balanceDueAmountForCompany && balanceDueAmountForAccount) {
+                balanceDueAmountConversionRate = +((balanceDueAmountForCompany / balanceDueAmountForAccount) || 0).toFixed(2);
+                item.exchangeRate = balanceDueAmountConversionRate;
+            }
+            let text = localeData?.currency_conversion;
+            let grandTotalTooltipText = text?.replace("[BASE_CURRENCY]", baseCurrency)?.replace("[AMOUNT]", grandTotalAmountForCompany)?.replace("[CONVERSION_RATE]", grandTotalConversionRate);
+            let balanceDueTooltipText;
+            if (enableVoucherAdjustmentMultiCurrency && item.gainLoss) {
+                const gainLossText = localeData?.exchange_gain_loss_label?.
+                    replace("[BASE_CURRENCY]", baseCurrency)?.
+                    replace("[AMOUNT]", balanceDueAmountForCompany)?.
+                    replace('[PROFIT_TYPE]', item.gainLoss > 0 ? commonLocaleData?.app_exchange_gain : commonLocaleData?.app_exchange_loss);
+                balanceDueTooltipText = `${gainLossText}: ${Math.abs(item.gainLoss)}`;
+            } else {
+                balanceDueTooltipText = text?.replace("[BASE_CURRENCY]", baseCurrency)?.replace("[AMOUNT]", balanceDueAmountForCompany)?.replace("[CONVERSION_RATE]", balanceDueAmountConversionRate);
+            }
+
+            item['grandTotalTooltipText'] = grandTotalTooltipText;
+            item['balanceDueTooltipText'] = balanceDueTooltipText;
+        } catch (error) {
+        }
+        return item;
     }
 }
