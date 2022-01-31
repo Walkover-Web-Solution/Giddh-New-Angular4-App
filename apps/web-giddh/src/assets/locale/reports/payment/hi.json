@@ -19,5 +19,6 @@
     "preview_unavailable": "पूर्वावलोकन अभी उपलब्ध नहीं है! कृपया पुन: प्रयास करें...",
     "delete_voucher": "क्या आप भुगतान हटाना चाहते हैं?",
     "delete_vouchers": "क्या आप वाउचर/भुगतान हटाना चाहते हैं?",
-    "uploaded_bill": "अपलोड किया गया बिल"
+    "uploaded_bill": "अपलोड किया गया बिल",
+    "currency_conversion": "[BASE_CURRENCY] में: [AMOUNT] <br /> (रूपांतरण दर: [CONVERSION_RATE]) "
 }
