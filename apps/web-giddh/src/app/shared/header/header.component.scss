@@ -152,7 +152,6 @@ a[vr-item]:focus {
     right: 0;
     top: 110px;
 }
-
 @media screen and (-webkit-min-device-pixel-ratio: 0) {
     .left-fixed-header li {
         display: grid;
@@ -1047,6 +1046,18 @@ aside-setting {
             }
         }
     }
+    .fixed-padding {
+        #primary-new-header {
+            z-index: 99999 !important;
+        }
+    }
+}
+@media (max-width: 1024px) {
+    .fixed-padding {
+        #primary-new-header {
+            z-index: 99999 !important;
+        }
+    }
 }
 @media (max-width: 767px) {
     .setting-sidebar-wrapper {
@@ -1077,7 +1088,7 @@ aside-setting {
             display: flex;
             align-items: flex-start;
             justify-content: space-between;
-            z-index: 9999;
+            z-index: 99999 !important;
             .logo-wrapper {
                 display: none;
             }

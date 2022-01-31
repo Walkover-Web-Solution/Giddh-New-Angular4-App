@@ -263,6 +263,10 @@ aside-menu-account .container-fluid {
 .pd-l1 {
     padding-left: 10px !important;
 }
+.pd-l14 {
+    padding-left: 14px !important;
+}
+
 .pd-r1 {
     padding-right: 10px !important;
 }
@@ -354,6 +358,10 @@ aside-menu-account .container-fluid {
     margin-top: 10px !important;
     color: var(--color-common-primary-text) !important;
 }
+.mr-t15 {
+    margin-top: 15px !important;
+}
+
 .mr-b1 {
     margin-bottom: 10px !important;
 }
@@ -1265,6 +1273,27 @@ table:focus {
 .navbar-right.navbar-nav > li > a {
     border-right: 0;
 }
+.all-table {
+    .mat-header-cell {
+        padding: 0px 6px !important;
+        height: 51.5px;
+        &:last-child {
+            padding-left: 20px !important;
+        }
+    }
+    tbody {
+        td {
+            &:last-child {
+                padding-left: 20px !important;
+            }
+        }
+    }
+    .mat-footer-cell {
+        &:last-child {
+            padding-left: 20px !important;
+        }
+    }
+}
 @media only screen and (max-width: 1440px) {
     body.unresponsive {
         width: 100%;
@@ -2171,6 +2200,26 @@ form#groupDetailForm {
     }
 }
 @media screen and (max-width: 768px) {
+    .contact-body {
+        .all-table {
+            td {
+                &:last-child {
+                    padding: 5px 10px 5px 50% !important;
+                }
+            }
+        }
+        .mat-table {
+            tbody {
+                tr:not(.plan-row-columns) {
+                    &:hover {
+                        td {
+                            background: transparent !important;
+                        }
+                    }
+                }
+            }
+        }
+    }
     .table-container.trial-balance {
         .table-responsive {
             display: table;
@@ -2214,6 +2263,26 @@ form#groupDetailForm {
     }
 }
 @media only screen and (max-width: 767px) {
+    .contact-body {
+        .all-table {
+            td {
+                &:last-child {
+                    padding: 5px 10px 5px 50% !important;
+                }
+            }
+        }
+        .mat-table {
+            tbody {
+                tr:not(.plan-row-columns) {
+                    &:hover {
+                        td {
+                            background: transparent !important;
+                        }
+                    }
+                }
+            }
+        }
+    }
     .mobile-header {
         display: block;
         position: fixed !important;
