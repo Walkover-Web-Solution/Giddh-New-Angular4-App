@@ -595,7 +595,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
                     if(isSeleted) {
                         receipt.isSelected = true;
                     }
-                    receipt = this.addToolTiptext(receipt);
+                    receipt = this.generalService.addToolTipText("receipt", this.baseCurrency, receipt, this.localeData, this.commonLocaleData);
                 });
 
                 this.changeDetectorRef.detectChanges();
@@ -604,59 +604,6 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
                 this.toastService.errorToast(response.message, response.code);
             }
         }
-    }
-
-    /**
-     * Adds tooltip text for grand total and total due amount
-     * to item supplied (for Cash/Sales Invoice and CR/DR note)
-     *
-     * @private
-     * @param {ReceiptItem} item Receipt item received from service
-     * @returns {*} Modified item with tooltup text for grand total and total due amount
-     * @memberof AdvanceReceiptReportComponent
-     */
-    private addToolTiptext(item: any): any {
-        try {
-            let balanceDueAmountForCompany, balanceDueAmountForAccount, grandTotalAmountForCompany,
-                grandTotalAmountForAccount;
-
-            if (item && item.totalBalance && item.totalBalance.amountForCompany !== undefined && item.totalBalance.amountForAccount !== undefined) {
-                balanceDueAmountForCompany = Number(item.totalBalance.amountForCompany) || 0;
-                balanceDueAmountForAccount = Number(item.totalBalance.amountForAccount) || 0;
-            }
-            if (item.grandTotal) {
-                grandTotalAmountForCompany = Number(item.grandTotal.amountForCompany) || 0;
-                grandTotalAmountForAccount = Number(item.grandTotal.amountForAccount) || 0;
-            }
-
-            let grandTotalConversionRate = 0, balanceDueAmountConversionRate = 0;
-            if (this.voucherApiVersion === 2) {
-                grandTotalConversionRate = item.exchangeRate;
-            } else if (grandTotalAmountForCompany && grandTotalAmountForAccount) {
-                grandTotalConversionRate = +((grandTotalAmountForCompany / grandTotalAmountForAccount) || 0).toFixed(2);
-            }
-            if (balanceDueAmountForCompany && balanceDueAmountForAccount) {
-                balanceDueAmountConversionRate = +((balanceDueAmountForCompany / balanceDueAmountForAccount) || 0).toFixed(2);
-                item.exchangeRate = balanceDueAmountConversionRate;
-            }
-            let text = this.localeData?.currency_conversion;
-            let grandTotalTooltipText = text?.replace("[BASE_CURRENCY]", this.baseCurrency)?.replace("[AMOUNT]", grandTotalAmountForCompany)?.replace("[CONVERSION_RATE]", grandTotalConversionRate);
-            let balanceDueTooltipText;
-            if (enableVoucherAdjustmentMultiCurrency && item.gainLoss) {
-                const gainLossText = this.localeData?.exchange_gain_loss_label?.
-                    replace("[BASE_CURRENCY]", this.baseCurrency)?.
-                    replace("[AMOUNT]", balanceDueAmountForCompany)?.
-                    replace('[PROFIT_TYPE]', item.gainLoss > 0 ? this.commonLocaleData?.app_exchange_gain : this.commonLocaleData?.app_exchange_loss);
-                balanceDueTooltipText = `${gainLossText}: ${Math.abs(item.gainLoss)}`;
-            } else {
-                balanceDueTooltipText = text?.replace("[BASE_CURRENCY]", this.baseCurrency)?.replace("[AMOUNT]", balanceDueAmountForCompany)?.replace("[CONVERSION_RATE]", balanceDueAmountConversionRate);
-            }
-
-            item['grandTotalTooltipText'] = grandTotalTooltipText;
-            item['balanceDueTooltipText'] = balanceDueTooltipText;
-        } catch (error) {
-        }
-        return item;
     }
 
     /**
