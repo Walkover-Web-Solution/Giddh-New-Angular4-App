@@ -1338,7 +1338,11 @@
                                     *ngIf="selectedVoucher === 'credit note' || selectedVoucher === 'debit note'"
                                 >
                                     {{
-                                        item.invoiceLinkingRequest?.linkedInvoices?.length
+                                        voucherApiVersion === 2
+                                            ? item.referenceVoucher
+                                                ? item.referenceVoucher.number
+                                                : "-"
+                                            : item.invoiceLinkingRequest?.linkedInvoices?.length
                                             ? item.invoiceLinkingRequest?.linkedInvoices[0].invoiceNumber
                                             : "-"
                                     }}

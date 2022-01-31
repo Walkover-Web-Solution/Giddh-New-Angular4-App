@@ -1,4 +1,5 @@
 import { Injectable } from "@angular/core";
+import { AdjustedVoucherType } from "../../../app.constant";
 
 @Injectable({
     providedIn: 'any'
@@ -9,10 +10,11 @@ export class AdjustmentUtilityService {
      * This will convert the new response format for adjustments in old response format
      *
      * @param {*} data
+     * @param {string} adjustedVoucherType
      * @returns {*}
      * @memberof AdjustmentUtilityService
      */
-    public getVoucherAdjustmentObject(data: any): any {
+    public getVoucherAdjustmentObject(data: any, adjustedVoucherType: string): any {
         if (data?.adjustments?.length > 0) {
             data.voucherAdjustments = { adjustments: this.formatAdjustmentsObject(data.adjustments) };
             delete data.adjustments;
@@ -20,8 +22,13 @@ export class AdjustmentUtilityService {
             let totalAdjustmentAmount = 0;
             let totalAdjustmentCompanyAmount = 0;
             data.voucherAdjustments?.adjustments?.forEach(adjustment => {
-                totalAdjustmentAmount += Number(adjustment.adjustmentAmount ? adjustment.adjustmentAmount.amountForAccount : 0);
-                totalAdjustmentCompanyAmount += Number(adjustment.adjustmentAmount ? adjustment.adjustmentAmount.amountForCompany : 0);
+                if (((adjustedVoucherType === AdjustedVoucherType.SalesInvoice || adjustedVoucherType === AdjustedVoucherType.Sales) && adjustment.voucherType === AdjustedVoucherType.DebitNote) || ((adjustedVoucherType === AdjustedVoucherType.PurchaseInvoice || adjustedVoucherType === AdjustedVoucherType.Purchase) && adjustment.voucherType === AdjustedVoucherType.CreditNote)) {
+                    totalAdjustmentAmount -= Number(adjustment.adjustmentAmount ? adjustment.adjustmentAmount.amountForAccount : 0);
+                    totalAdjustmentCompanyAmount -= Number(adjustment.adjustmentAmount ? adjustment.adjustmentAmount.amountForCompany : 0);
+                } else {
+                    totalAdjustmentAmount += Number(adjustment.adjustmentAmount ? adjustment.adjustmentAmount.amountForAccount : 0);
+                    totalAdjustmentCompanyAmount += Number(adjustment.adjustmentAmount ? adjustment.adjustmentAmount.amountForCompany : 0);
+                }
             });
 
             data.voucherAdjustments.totalAdjustmentAmount = totalAdjustmentAmount;

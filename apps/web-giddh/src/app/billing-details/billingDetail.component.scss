@@ -129,6 +129,7 @@
     }
     .right-side {
         padding-left: 0;
+        padding-right: 0;
         .whole-renewal {
             float: left;
             width: 100%;
@@ -259,6 +260,11 @@
         }
         .renewal-subscription-content {
             display: none;
+        }
+    }
+    .renewal-payable {
+        .mat-button-disabled {
+            background-color: $gray !important;
         }
     }
     .display-line {

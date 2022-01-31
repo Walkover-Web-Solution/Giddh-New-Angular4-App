@@ -22,8 +22,10 @@
     "entry_date": "प्रवेश की तिथि",
     "suppliers_name": "आपूर्तिकर्ता का नाम",
     "new_voucher": "+ नई रसीद",
-    "preview_unavailable": "Preview is not available right now! Please try again...",
-    "delete_voucher": "Do you want to delete the receipt?",
-    "delete_vouchers": "Do you want to delete the voucher(s) / receipt(s)?",
-    "uploaded_bill": "Uploaded Bill"
+    "preview_unavailable": "पूर्वावलोकन अभी उपलब्ध नहीं है! कृपया पुन: प्रयास करें...",
+    "delete_voucher": "क्या आप रसीद मिटाना चाहते हैं?",
+    "delete_vouchers": "क्या आप वाउचर/रसीदों को हटाना चाहते हैं?",
+    "uploaded_bill": "अपलोड किया गया बिल",
+    "currency_conversion": "[BASE_CURRENCY] में: [AMOUNT] <br /> (रूपांतरण दर: [CONVERSION_RATE]) ",
+    "exchange_gain_loss_label": "[BASE_CURRENCY] में: [AMOUNT] <br /> विनिमय [PROFIT_TYPE]: "
 }

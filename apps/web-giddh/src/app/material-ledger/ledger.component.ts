@@ -495,6 +495,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
+        document.querySelector('body').classList.add('ledger-body');
         this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: 0 }));
         // get company taxes
         this.store.dispatch(this.companyActions.getTax());
@@ -977,8 +978,15 @@ export class LedgerComponent implements OnInit, OnDestroy {
             }
             this.invoiceList = [];
             this.ledgerService.getInvoiceListsForCreditNote(request, date).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
-                if (response && response.body && response.body.results) {
-                    response.body.results.forEach(invoice => this.invoiceList.push({ label: invoice?.voucherNumber ? invoice.voucherNumber : '-', value: invoice?.uniqueName, additional: invoice })) 
+                if (response && response.body) {
+                    let items = [];
+                    if(response.body.results) {
+                        items = response.body.results;
+                    } else if(response.body.items) {
+                        items = response.body.items;
+                    }
+
+                    items?.forEach(invoice => this.invoiceList.push({ label: invoice?.voucherNumber ? invoice.voucherNumber : '-', value: invoice?.uniqueName, additional: invoice }));
                 }
             });
         }
@@ -1382,6 +1390,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     public ngOnDestroy(): void {
+        document.querySelector('body').classList.remove('ledger-body');
         this.store.dispatch(this.ledgerActions.ResetLedger());
         this.destroyed$.next(true);
         this.destroyed$.complete();

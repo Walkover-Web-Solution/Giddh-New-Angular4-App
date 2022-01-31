@@ -128,7 +128,8 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
                         this.currentCompanyBranches = this.branchList;
                         if(this.companyBranches) {
                             this.companyBranches.branches = this.branchList;
-                            this.companyBranches.branchCount = this.branchList?.length
+                            this.companyBranches.branchCount = response?.length
+                            this.companyBranches.unarchivedBranchCount = this.branchList?.length;
                         }
                         this.changeDetectorRef.detectChanges();
                     }
@@ -293,7 +294,8 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
                     this.branchList = unarchivedBranches?.sort(this.generalService.sortBranches);
                     company.branches = this.branchList;
                     this.companyBranches = company;
-                    this.companyBranches.branchCount = this.branchList?.length;
+                    this.companyBranches.branchCount = response?.body?.length;
+                    this.companyBranches.unarchivedBranchCount = this.branchList?.length;
                     this.branchRefreshInProcess = false;
 
                     if (this.searchBranch) {
@@ -310,6 +312,7 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
                     company.branches = this.branchList;
                     this.companyBranches = company;
                     this.companyBranches.branchCount = this.branchList?.length;
+                    this.companyBranches.unarchivedBranchCount = this.branchList?.length;
                     this.branchRefreshInProcess = false;
 
                     this.changeDetectorRef.detectChanges();
@@ -353,8 +356,12 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
         this.filterBranchList(this.searchBranch);
 
         if(tabName === "company") {
+            const unarchivedBranchCount = this.companyBranches?.unarchivedBranchCount;
+            const branchCount = this.companyBranches?.branchCount;
+
             this.companyBranches = this.activeCompany;
-            this.companyBranches.branchCount = this.currentCompanyBranches?.length;
+            this.companyBranches.branchCount = branchCount;
+            this.companyBranches.unarchivedBranchCount = unarchivedBranchCount;
             this.companyBranches.branches = this.currentCompanyBranches;
             this.branchList = this.currentCompanyBranches;
             this.changeDetectorRef.detectChanges();

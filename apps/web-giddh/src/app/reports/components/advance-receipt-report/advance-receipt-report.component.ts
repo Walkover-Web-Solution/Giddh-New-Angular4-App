@@ -165,6 +165,8 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
     public hoveredReceiptUniqueName: string = "";
     /** True if table is hovered */
     public hoveredReceiptTable: boolean = false;
+    /** Holds currency */
+    public baseCurrency: string = '';
 
     /** @ignore */
     constructor(
@@ -188,6 +190,12 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
                 this.previewVoucherParams = {};
             }
         });
+
+        this.store.pipe(select(s => s.settings.profile), takeUntil(this.destroyed$)).subscribe(profile => {
+            if (profile) {
+                this.baseCurrency = profile.baseCurrency;
+            }
+        });
     }
 
     /** Subscribe to universal date and set header title */
@@ -207,9 +215,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
             }
             this.fetchReceiptsData();
         });
-        this.store.pipe(
-            select(state => state.session.activeCompany), takeUntil(this.destroyed$)
-        ).subscribe(activeCompany => {
+        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             this.activeCompany = activeCompany;
         });
         this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
@@ -549,13 +555,22 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
      * @memberof AdvanceReceiptReportComponent
      */
     private fetchSummary(): Observable<BaseResponse<any, AdvanceReceiptSummaryRequest>> {
-        const requestObject: AdvanceReceiptSummaryRequest = {
-            companyUniqueName: this.activeCompanyUniqueName,
-            from: this.fromDate,
-            to: this.toDate,
-            branchUniqueName: this.currentBranch.uniqueName
-        };
-        return this.receiptService.fetchSummary(requestObject);
+        if (this.voucherApiVersion === 2) {
+            const requestObj = {
+                from: this.fromDate,
+                to: this.toDate,
+                q: this.searchQueryParams.q
+            };
+            return this.receiptService.getAllReceiptBalanceDue(requestObj, "receipt");
+        } else {
+            const requestObject: AdvanceReceiptSummaryRequest = {
+                companyUniqueName: this.activeCompanyUniqueName,
+                from: this.fromDate,
+                to: this.toDate,
+                branchUniqueName: this.currentBranch.uniqueName
+            };
+            return this.receiptService.fetchSummary(requestObject);
+        }
     }
 
     /**
@@ -580,8 +595,9 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
                     if(isSeleted) {
                         receipt.isSelected = true;
                     }
+                    receipt = this.generalService.addToolTipText("receipt", this.baseCurrency, receipt, this.localeData, this.commonLocaleData);
                 });
-                
+
                 this.changeDetectorRef.detectChanges();
                 return response.body;
             } else {
