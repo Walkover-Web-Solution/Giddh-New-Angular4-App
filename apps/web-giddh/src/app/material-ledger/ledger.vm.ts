@@ -426,6 +426,7 @@ export class ReferenceVoucher {
     public uniqueName: string;
     public number?: any;
     public voucherType?: string;
+    public date?: string;
 }
 
 export class TransactionVM {

@@ -1346,63 +1346,6 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     /**
-     * Adds tooltip text for grand total and total due amount
-     * to item supplied (for Cash/Sales Invoice and CR/DR note)
-     *
-     * @private
-     * @param {ReceiptItem} item Receipt item received from service
-     * @returns {*} Modified item with tooltup text for grand total and total due amount
-     * @memberof InvoicePreviewComponent
-     */
-    private addToolTiptext(item: ReceiptItem): any {
-        try {
-            let balanceDueAmountForCompany, balanceDueAmountForAccount, grandTotalAmountForCompany,
-                grandTotalAmountForAccount;
-
-            if (this.selectedVoucher === VoucherTypeEnum.sales && item && item.totalBalance && item.totalBalance.amountForCompany !== undefined && item.totalBalance.amountForAccount !== undefined) {
-                balanceDueAmountForCompany = Number(item.totalBalance.amountForCompany) || 0;
-                balanceDueAmountForAccount = Number(item.totalBalance.amountForAccount) || 0;
-            }
-            if (MULTI_CURRENCY_MODULES.indexOf(this.selectedVoucher) > -1 &&
-                item.grandTotal) {
-                grandTotalAmountForCompany = Number(item.grandTotal.amountForCompany) || 0;
-                grandTotalAmountForAccount = Number(item.grandTotal.amountForAccount) || 0;
-            }
-
-            let grandTotalConversionRate = 0, balanceDueAmountConversionRate = 0;
-            if (this.voucherApiVersion === 2) {
-                grandTotalConversionRate = item.exchangeRate;
-            } else if (grandTotalAmountForCompany && grandTotalAmountForAccount) {
-                grandTotalConversionRate = +((grandTotalAmountForCompany / grandTotalAmountForAccount) || 0).toFixed(2);
-            }
-            if (balanceDueAmountForCompany && balanceDueAmountForAccount) {
-                balanceDueAmountConversionRate = +((balanceDueAmountForCompany / balanceDueAmountForAccount) || 0).toFixed(2);
-                item.exchangeRate = balanceDueAmountConversionRate;
-            }
-            let text = this.localeData?.currency_conversion;
-            let grandTotalTooltipText = text?.replace("[BASE_CURRENCY]", this.baseCurrency)?.replace("[AMOUNT]", grandTotalAmountForCompany)?.replace("[CONVERSION_RATE]", grandTotalConversionRate);
-            let balanceDueTooltipText;
-            if (enableVoucherAdjustmentMultiCurrency && item.gainLoss) {
-                const gainLossText = this.localeData?.exchange_gain_loss_label?.
-                    replace("[BASE_CURRENCY]", this.baseCurrency)?.
-                    replace("[AMOUNT]", balanceDueAmountForCompany)?.
-                    replace('[PROFIT_TYPE]', item.gainLoss > 0 ? this.commonLocaleData?.app_exchange_gain : this.commonLocaleData?.app_exchange_loss);
-                balanceDueTooltipText = `${gainLossText}: ${Math.abs(item.gainLoss)}`;
-            } else {
-                balanceDueTooltipText = text?.replace("[BASE_CURRENCY]", this.baseCurrency)?.replace("[AMOUNT]", balanceDueAmountForCompany)?.replace("[CONVERSION_RATE]", balanceDueAmountConversionRate);
-            }
-
-            item['grandTotalTooltipText'] = grandTotalTooltipText;
-            item['balanceDueTooltipText'] = balanceDueTooltipText;
-            if (this.gstEInvoiceEnable) {
-                item.eInvoiceStatusTooltip = this.getEInvoiceTooltipText(item);
-            }
-        } catch (error) {
-        }
-        return item;
-    }
-
-    /**
      * To adjust invoice with advance receipts
      *
      * @param {ReceiptItem} item invoice details object
@@ -1832,7 +1775,11 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                             }
                             if (MULTI_CURRENCY_MODULES.indexOf(this.selectedVoucher) > -1) {
                                 // For CR/DR note and Cash/Sales invoice
-                                item = this.addToolTiptext(item);
+                                item = this.generalService.addToolTipText(this.selectedVoucher, this.baseCurrency, item, this.localeData, this.commonLocaleData);
+                                
+                                if (this.gstEInvoiceEnable) {
+                                    item.eInvoiceStatusTooltip = this.getEInvoiceTooltipText(item);
+                                }
                             }
 
                             item.isSelected = this.generalService.checkIfValueExistsInArray(this.selectedInvoices, item.uniqueName);

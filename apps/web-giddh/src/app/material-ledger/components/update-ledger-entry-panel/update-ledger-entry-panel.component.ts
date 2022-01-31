@@ -270,6 +270,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public voucherApiVersion: 1 | 2;
     /** True if user itself checked the generate voucher  */
     public manualGenerateVoucherChecked: boolean = false;
+    /** Holds input to get invoice list request params */
+    public invoiceListRequestParams: any = {};
 
     constructor(
         private accountService: AccountService,
@@ -904,6 +906,12 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             requestObj = this.adjustmentUtilityService.getAdjustmentObject(requestObj);
         }
 
+        if(requestObj.referenceVoucher) {
+            delete requestObj.referenceVoucher.number;
+            delete requestObj.referenceVoucher.date;
+            delete requestObj.referenceVoucher.voucherType;
+        }
+
         // if no petty cash mode then do normal update ledger request
         if (!this.isPettyCash) {
             requestObj['handleNetworkDisconnection'] = true;
@@ -1134,7 +1142,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 }
 
                 if (selectedInvoice) {
-                    selectedInvoice['voucherDate'] = (this.voucherApiVersion === 2) ? selectedInvoice['date'] : selectedInvoice['invoiceDate'];
                     if(this.voucherApiVersion === 2) {
                         invoiceSelected = {
                             label: selectedInvoice.number ? selectedInvoice.number : '-',
@@ -1142,6 +1149,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                             additional: selectedInvoice
                         };
                     } else {
+                        selectedInvoice['voucherDate'] = selectedInvoice['invoiceDate'];
                         invoiceSelected = {
                             label: selectedInvoice.invoiceNumber ? selectedInvoice.invoiceNumber : '-',
                             value: selectedInvoice.invoiceUniqueName,
@@ -1871,6 +1879,11 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @memberof UpdateLedgerEntryPanelComponent
      */
     private openAdjustPaymentModal(): void {
+        if (this.voucherApiVersion === 2) {
+            let particularAccount = (this.vm.selectedLedger?.transactions[0]?.particular?.uniqueName === this.activeAccount?.uniqueName) ? this.vm.selectedLedger?.particular : this.vm.selectedLedger?.transactions[0]?.particular;
+
+            this.invoiceListRequestParams = { particularAccount: particularAccount, voucherType: this.vm.selectedLedger?.voucher?.name, ledgerAccount: this.activeAccount };
+        }
         this.adjustmentDialogRef = this.dialog.open(this.adjustPaymentModal, {
             width: '980px',
             panelClass: 'container-modal-class'

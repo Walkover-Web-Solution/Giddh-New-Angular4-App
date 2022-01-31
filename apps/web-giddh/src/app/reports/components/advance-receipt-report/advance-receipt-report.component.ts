@@ -165,6 +165,8 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
     public hoveredReceiptUniqueName: string = "";
     /** True if table is hovered */
     public hoveredReceiptTable: boolean = false;
+    /** Holds currency */
+    public baseCurrency: string = '';
 
     /** @ignore */
     constructor(
@@ -186,6 +188,12 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
                 this.previewVoucherParams = params;
             } else {
                 this.previewVoucherParams = {};
+            }
+        });
+
+        this.store.pipe(select(s => s.settings.profile), takeUntil(this.destroyed$)).subscribe(profile => {
+            if (profile) {
+                this.baseCurrency = profile.baseCurrency;
             }
         });
     }
@@ -587,8 +595,9 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
                     if(isSeleted) {
                         receipt.isSelected = true;
                     }
+                    receipt = this.generalService.addToolTipText("receipt", this.baseCurrency, receipt, this.localeData, this.commonLocaleData);
                 });
-                
+
                 this.changeDetectorRef.detectChanges();
                 return response.body;
             } else {

@@ -155,6 +155,8 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
     public hoveredPaymentUniqueName: string = "";
     /** True if table is hovered */
     public hoveredPaymentTable: boolean = false;
+    /** Holds currency */
+    public baseCurrency: string = '';
 
     /** @ignore */
     constructor(
@@ -176,6 +178,12 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
                 this.previewVoucherParams = params;
             } else {
                 this.previewVoucherParams = {};
+            }
+        });
+
+        this.store.pipe(select(s => s.settings.profile), takeUntil(this.destroyed$)).subscribe(profile => {
+            if (profile) {
+                this.baseCurrency = profile.baseCurrency;
             }
         });
     }
@@ -540,6 +548,7 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
                     if (isSeleted) {
                         payment.isSelected = true;
                     }
+                    payment = this.generalService.addToolTipText("payment", this.baseCurrency, payment, this.localeData, this.commonLocaleData);
                 });
 
                 this.changeDetectorRef.detectChanges();
