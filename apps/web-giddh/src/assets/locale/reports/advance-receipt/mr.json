@@ -26,5 +26,6 @@
     "delete_voucher": "तुम्हाला पावती हटवायची आहे का?",
     "delete_vouchers": "तुम्हाला व्हाउचर/ पावती हटवायची आहे का?",
     "uploaded_bill": "बिल अपलोड केले",
-    "currency_conversion": "[BASE_CURRENCY] मध्ये: [AMOUNT]<br />(रूपांतरण दर: [CONVERSION_RATE])"
+    "currency_conversion": "[BASE_CURRENCY] मध्ये: [AMOUNT]<br />(रूपांतरण दर: [CONVERSION_RATE])",
+    "exchange_gain_loss_label": "[BASE_CURRENCY] मध्ये: [AMOUNT]<br />एक्सचेंज [PROFIT_TYPE]: "
 }
