@@ -1544,7 +1544,11 @@
                                                                 <div class="item">{{ option.label }}</div>
                                                                 <div class="item-unique">
                                                                     ({{ localeData?.dated }}:
-                                                                    {{ option.additional?.voucherDate }})
+                                                                    {{
+                                                                        this.voucherApiVersion === 2
+                                                                            ? option.additional?.date
+                                                                            : option.additional?.voucherDate
+                                                                    }})
                                                                 </div>
                                                                 <div class="item-unique">
                                                                     ({{ commonLocaleData?.app_due }}:
@@ -2058,6 +2062,7 @@
                     [adjustedVoucherType]="vm.selectedLedger?.voucher?.shortCode"
                     [invoiceFormDetails]="adjustVoucherConfiguration"
                     [isUpdateMode]="true"
+                    [invoiceListRequestParams]="invoiceListRequestParams"
                     [advanceReceiptAdjustmentUpdatedData]="vm.selectedLedger?.voucherAdjustments"
                     (closeModelEvent)="closeAdjustmentModal($event)"
                     (submitClicked)="getAdjustedPaymentData($event)"
