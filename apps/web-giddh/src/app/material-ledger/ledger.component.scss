@@ -85,10 +85,9 @@ input {
 .ledg-head .mat-grid-list .mat-grid-tile,
 .ledg-head .mat-grid-list .mat-grid-tile .select2-container {
     padding: 8px 10px;
-    border-bottom: 1px solid var(--color-ledger-grid-border-color);
+    border-bottom: 1px solid var(--color-ledger-grid-border-color) !important;
     border-right: 1px solid var(--color-ledger-grid-border-color) !important;
     font-size: 13px;
-    // color: var(--color-nero);
     text-overflow: ellipsis;
     white-space: nowrap;
     display: flex;
