@@ -303,6 +303,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             if (event instanceof NavigationError || event instanceof NavigationEnd || event instanceof RouteConfigLoadEnd) {
                 this.navigationEnd = true;
             }
+
+            setTimeout(() => {
+                if (this.isElectron) {
+                    this.toggleSidebarPane(false, false);
+                }
+            }, 100);
         });
 
         // GETTING CURRENT PAGE
