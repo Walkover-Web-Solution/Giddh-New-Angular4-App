@@ -104,7 +104,8 @@
                                         isEstimateInvoice ||
                                         (voucherApiVersion === 2 &&
                                             isPurchaseInvoice &&
-                                            !isCashInvoice && !isCashBankAccount)
+                                            !isCashInvoice &&
+                                            !isCashBankAccount)
                                     "
                                 >
                                     <div class="text-right">
@@ -852,7 +853,8 @@
                                     isEstimateInvoice ||
                                     (voucherApiVersion === 2 &&
                                         isPurchaseInvoice &&
-                                        !isCashInvoice && !isCashBankAccount)
+                                        !isCashInvoice &&
+                                        !isCashBankAccount)
                                 "
                             >
                                 <div class="text-right">
@@ -1830,6 +1832,7 @@
                                         type="number"
                                         name="exchangeRate"
                                         [(ngModel)]="exchangeRate"
+                                        (ngModelChange)="updateStockRateOnExchangeRate()"
                                         *ngIf="showCurrencyValue"
                                         class="form-control edit-currency"
                                     />
