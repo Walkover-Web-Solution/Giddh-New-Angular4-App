@@ -5437,28 +5437,32 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     private initializeWarehouse(warehouse?: WarehouseDetails): void {
         this.store.pipe(select(appState => appState.warehouse.warehouses), filter((warehouses) => !!warehouses), take(1)).subscribe((warehouses: any) => {
             if (warehouses) {
-                const warehouseData = this.settingsUtilityService.getFormattedWarehouseData(warehouses.results);
+                let warehouseResults = cloneDeep(warehouses.results);
+                warehouseResults = warehouseResults?.filter(wh => warehouse?.uniqueName === wh.uniqueName || !wh.isArchived);
+                const warehouseData = this.settingsUtilityService.getFormattedWarehouseData(warehouseResults);
                 this.warehouses = warehouseData.formattedWarehouses;
-                this.defaultWarehouse = (warehouseData.defaultWarehouse) ? warehouseData.defaultWarehouse.uniqueName : '';
+                this.defaultWarehouse = (warehouseData.defaultWarehouse?.uniqueName) ? warehouseData.defaultWarehouse?.uniqueName : '';
 
-                if (this.isPurchaseInvoice && warehouseData && warehouseData.defaultWarehouse && !this.isUpdateMode) {
-                    this.autoFillDeliverToWarehouseAddress(warehouseData.defaultWarehouse);
-                }
+                if ((!this.isUpdateMode || (this.isUpdateMode && warehouse))) {
+                    if (this.isPurchaseInvoice && warehouseData && warehouseData.defaultWarehouse && !this.isUpdateMode) {
+                        this.autoFillDeliverToWarehouseAddress(warehouseData.defaultWarehouse);
+                    }
 
-                if (warehouse) {
-                    // Update flow is carried out and we have received warehouse details
-                    this.selectedWarehouse = warehouse.uniqueName;
-                    this.shouldShowWarehouse = true;
-                } else {
-                    if (this.isUpdateMode) {
-                        // Update flow is carried out
-                        // Hide the warehouse drop down as the API has not returned warehouse
-                        // details in response which means user has updated the item to non-stock
-                        this.shouldShowWarehouse = false;
-                    } else {
-                        // Create flow is carried out
-                        this.selectedWarehouse = String(this.defaultWarehouse);
+                    if (warehouse) {
+                        // Update flow is carried out and we have received warehouse details
+                        this.selectedWarehouse = warehouse.uniqueName;
                         this.shouldShowWarehouse = true;
+                    } else {
+                        if (this.isUpdateMode) {
+                            // Update flow is carried out
+                            // Hide the warehouse drop down as the API has not returned warehouse
+                            // details in response which means user has updated the item to non-stock
+                            this.shouldShowWarehouse = false;
+                        } else {
+                            // Create flow is carried out
+                            this.selectedWarehouse = String(this.defaultWarehouse);
+                            this.shouldShowWarehouse = true;
+                        }
                     }
                 }
             } else {
