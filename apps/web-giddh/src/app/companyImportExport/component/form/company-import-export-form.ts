@@ -87,8 +87,8 @@ export class CompanyImportExportFormComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         this.fileTypes = [
-            { label: this.localeData?.file_types.accounting_entries, value: CompanyImportExportFileTypes.ACCOUNTING_ENTRIES?.toString() },
-            { label: this.localeData?.file_types.master, value: CompanyImportExportFileTypes.MASTER_EXCEPT_ACCOUNTS?.toString() }
+            { label: this.localeData?.file_types.accounting_entries, value: CompanyImportExportFileTypes.ACCOUNTING_ENTRIES.toString() },
+            { label: this.localeData?.file_types.master, value: CompanyImportExportFileTypes.MASTER_EXCEPT_ACCOUNTS.toString() }
         ];
 
         this.currentOrganizationType = this.generalService.currentOrganizationType;
@@ -112,7 +112,7 @@ export class CompanyImportExportFormComponent implements OnInit, OnDestroy {
 
         this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
         this.currentCompanyBranches$.subscribe(response => {
-            if (response && response?.length) {
+            if (response?.length) {
                 this.currentCompanyBranches = response.map(branch => ({
                     label: branch.alias,
                     value: branch.uniqueName,
@@ -155,7 +155,7 @@ export class CompanyImportExportFormComponent implements OnInit, OnDestroy {
             this.isExportInProcess$ = of(true);
 
             if(parseInt(this.fileType) === CompanyImportExportFileTypes.MASTER_EXCEPT_ACCOUNTS) {
-                this.companyImportExportService.ExportRequest(this.currentBranch?.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                this.companyImportExportService.ExportRequest(this.currentBranch.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     if (response?.status === 'success') {
                         let res = { body: response?.body };
                         let blob = new Blob([JSON?.stringify(res)], { type: 'application/json' });
@@ -168,13 +168,13 @@ export class CompanyImportExportFormComponent implements OnInit, OnDestroy {
                     this.isExportInProcess$ = of(false);
                 });
             } else {
-                this.companyImportExportService.ExportLedgersRequest(this.from, this.to, this.currentBranch?.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                this.companyImportExportService.ExportLedgersRequest(this.from, this.to, this.currentBranch.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     if (response?.status === 'success' && response?.body) {
                         if (response?.body?.type === "message") {
                             this.toaster.successToast(response?.body?.file);
                         } else {
                             let res = { body: response?.body?.file };
-                            let blob = new Blob([JSON?.stringify(res)], { type: 'application/json' });
+                            let blob = new Blob([JSON.stringify(res)], { type: 'application/json' });
                             saveAs(blob, `${this.currentBranch?.name}_Accounting_Entries_${this.from}_${this.to}_${this.activeCompany?.uniqueName}` + '.json');
                             this.toaster.successToast(this.commonLocaleData?.app_messages?.data_exported);
                             this.backButtonPressed();

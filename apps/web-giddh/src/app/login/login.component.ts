@@ -180,9 +180,9 @@ export class LoginComponent implements OnInit, OnDestroy {
             this.authService.authState.pipe(takeUntil(this.destroyed$)).subscribe((user: SocialUser) => {
                 this.isSocialLogoutAttempted$.pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                     if (!res && user) {
-                        switch (user?.provider) {
+                        switch (user.provider) {
                             case "GOOGLE": {
-                                this.store.dispatch(this.loginAction.signupWithGoogle(user?.token));
+                                this.store.dispatch(this.loginAction.signupWithGoogle(user.token));
                                 break;
                             }
                             default: {
