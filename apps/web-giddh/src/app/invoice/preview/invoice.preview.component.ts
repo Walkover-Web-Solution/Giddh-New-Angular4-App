@@ -321,8 +321,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
                         this.purchaseRecord = {
                             balanceStatus: '',
-                            dueDate: res.body?.dueDate,
-                            grandTotal: res.body?.grandTotal,
+                            dueDate: res.body.dueDate,
+                            grandTotal: res.body.grandTotal,
                             account: {
                                 accountType: (res.body.account) ? res.body.account.type : null,
                                 uniqueName: (res.body.account) ? res.body.account.uniqueName : null,
@@ -1245,7 +1245,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         this.selectedInvoiceForDetails = null;
         this.toggleBodyClass();
 
-        if (this.purchaseRecord && this.purchaseRecord?.uniqueName) {
+        if (this.purchaseRecord?.uniqueName) {
             this.location.back();
         } else {
             this.getVouchersList(this.isUniversalDateApplicable);
@@ -1365,7 +1365,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         this.invFormData.accountDetails.currencyCode = item.account?.currency?.code ?? this.baseCurrency ?? '';
         this.invFormData.accountDetails.currencySymbol = item.accountCurrencySymbol ?? this.baseCurrencySymbol ?? '';
         this.invFormData.voucherDetails.gainLoss = item.gainLoss;
-        this.changeStatusInvoiceUniqueName = item?.uniqueName;
+        this.changeStatusInvoiceUniqueName = item.uniqueName;
 
         if (this.voucherApiVersion === 2) {
             this.updateNewAccountInVoucher(item.account);
@@ -1508,9 +1508,9 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         if (this.voucherData && this.voucherData.items && voucherUpdatedDetails) {
             let loop = 0;
             this.voucherData.items.forEach(voucher => {
-                if (voucher?.voucherNumber === voucherUpdatedDetails?.number) {
-                    if (voucher?.account?.uniqueName !== voucherUpdatedDetails?.account?.uniqueName) {
-                        this.voucherData.items[loop].account = voucherUpdatedDetails?.account;
+                if (voucher?.voucherNumber === voucherUpdatedDetails.number) {
+                    if (voucher?.account?.uniqueName !== voucherUpdatedDetails.account?.uniqueName) {
+                        this.voucherData.items[loop].account = voucherUpdatedDetails.account;
                     }
                 }
                 loop++;
@@ -1791,7 +1791,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
                             item.isSelected = this.generalService.checkIfValueExistsInArray(this.selectedInvoices, item?.uniqueName);
                             if (item.isSelected) {
-                                existingInvoices.push(item?.uniqueName);
+                                existingInvoices.push(item.uniqueName);
                             }
 
                             this.itemsListForDetails.push(this.parseItemForVm(item));
@@ -1801,8 +1801,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                         let selectedInvoices = [];
                         if (this.selectedInvoices && this.selectedInvoices.length > 0) {
                             this.selectedInvoices.forEach(invoice => {
-                                if (existingInvoices?.indexOf(invoice) > -1) {
-                                    selectedInvoices?.push(invoice);
+                                if (existingInvoices.indexOf(invoice) > -1) {
+                                    selectedInvoices.push(invoice);
                                 }
                             });
 

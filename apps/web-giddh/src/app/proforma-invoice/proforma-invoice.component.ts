@@ -3306,7 +3306,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         case 'tcspay':
                         case 'tdsrc':
                         case 'tdspay':
-                            entry.otherTaxModal.appliedOtherTax = { name: tax?.name, uniqueName: tax.uniqueName };
+                            entry.otherTaxModal.appliedOtherTax = { name: tax.name, uniqueName: tax.uniqueName };
                             entry.isOtherTaxApplicable = true;
                             break;
                         default:
@@ -4917,7 +4917,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     if (taxTypeArr.indexOf(ta.taxType) > -1) {
                         salesEntryClass.isOtherTaxApplicable = true;
                         let otherTaxModal = new SalesOtherTaxesModal();
-                        otherTaxModal.appliedOtherTax = { name: ta?.name, uniqueName: ta.uniqueName };
+                        otherTaxModal.appliedOtherTax = { name: ta.name, uniqueName: ta.uniqueName };
                         otherTaxModal.tcsCalculationMethod = ta.calculationMethod;
                         salesEntryClass.otherTaxModal = otherTaxModal;
 
@@ -5303,8 +5303,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         stateList.forEach(stateR => {
             stateListRet.push({
                 label: stateR?.name,
-                value: stateR.code ? stateR.code : stateR.stateGstCode,
-                stateGstCode: stateR.stateGstCode ? stateR.stateGstCode : stateR.code
+                value: stateR?.code ? stateR?.code : stateR?.stateGstCode,
+                stateGstCode: stateR?.stateGstCode ? stateR?.stateGstCode : stateR?.code
             });
         });
 
@@ -7160,10 +7160,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 data.state = {};
             }
 
-            data.state.code = (isCompanyAddress) ? address.stateCode : (address.state) ? address.state?.code : "";
-            data.stateCode = data.state?.code;
+            data.state.code = (isCompanyAddress) ? address.stateCode : (address.state) ? address.state.code : "";
+            data.stateCode = data.state.code;
             data.state.name = (isCompanyAddress) ? address.stateName : (address.state) ? address.state?.name : "";
-            data.stateName = data.state?.name;
+            data.stateName = data.state.name;
             data.gstNumber = (isCompanyAddress) ? address.taxNumber : address.gstNumber;
             data.pincode = address.pincode;
             if (isCompanyAddress) {
