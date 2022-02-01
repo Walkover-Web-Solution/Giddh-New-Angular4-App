@@ -312,7 +312,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                     }) :
                     this._receiptServices.GetPurchaseRecordDetails(a.accountUniqueName, a.purchaseRecordUniqueName);
                 apiCallObservable.pipe(takeUntil(this.destroyed$)).subscribe((res: any) => {
-                    if (res && res?.body) {
+                    if (res?.body) {
                         if (res.body.date) {
                             this.invoiceSearchRequest.from = res.body.date;
                             this.invoiceSearchRequest.to = res.body.date;
@@ -324,14 +324,14 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                             dueDate: res.body?.dueDate,
                             grandTotal: res.body?.grandTotal,
                             account: {
-                                accountType: (res.body.account) ? res.body.account?.type : null,
-                                uniqueName: (res.body.account) ? res.body.account?.uniqueName : null,
-                                name: (res.body.account) ? res.body.account?.name : null
+                                accountType: (res.body.account) ? res.body.account.type : null,
+                                uniqueName: (res.body.account) ? res.body.account.uniqueName : null,
+                                name: (res.body.account) ? res.body.account.name : null
                             },
-                            uniqueName: res.body?.uniqueName,
-                            voucherDate: res.body?.date,
-                            voucherNumber: res.body?.number,
-                            balanceDue: res.body?.balanceTotal,
+                            uniqueName: res.body.uniqueName,
+                            voucherDate: res.body.date,
+                            voucherNumber: res.body.number,
+                            balanceDue: res.body.balanceTotal,
                             isSelected: false,
                             dueDays: null,
                             cashInvoice: false
@@ -531,7 +531,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                         this.selectedPerformAdjustPaymentAction = false;
                     } else {
                         if (response.account && response.date) {
-                            this.getAllAdvanceReceipts(response.account?.uniqueName, response.date);
+                            this.getAllAdvanceReceipts(response.account.uniqueName, response.date);
                             this.selectedPerformAdjustPaymentAction = false;
                         }
                     }
@@ -688,7 +688,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         this.invoiceConfirmationModel.hide();
         if (this.selectedVoucher === VoucherTypeEnum.purchase && this.voucherApiVersion !== 2) {
             const requestObject = {
-                uniqueName: (selectedVoucher) ? encodeURIComponent(selectedVoucher?.uniqueName) : (this.selectedInvoice) ? encodeURIComponent(this.selectedInvoice?.uniqueName) : (this.selectedInvoiceForDetails) ? encodeURIComponent(this.selectedInvoiceForDetails?.uniqueName) : ''
+                uniqueName: (selectedVoucher) ? encodeURIComponent(selectedVoucher.uniqueName) : (this.selectedInvoice) ? encodeURIComponent(this.selectedInvoice.uniqueName) : (this.selectedInvoiceForDetails) ? encodeURIComponent(this.selectedInvoiceForDetails.uniqueName) : ''
             };
             this.purchaseRecordService.deletePurchaseRecord(requestObject).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
                 this.selectedItems = [];
@@ -770,7 +770,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         this.performActionOnInvoiceModel.hide();
         if (data) {
             data.action = 'paid';
-            this.store.dispatch(this.invoiceActions.ActionOnInvoice(data?.uniqueName, data));
+            this.store.dispatch(this.invoiceActions.ActionOnInvoice(data.uniqueName, data));
         }
     }
 
@@ -1825,7 +1825,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
                         if (this.selectedInvoices && this.selectedInvoices.length > 0) {
                             voucherData.items.forEach((v) => {
-                                v.isSelected = this.generalService?.checkIfValueExistsInArray(this.selectedInvoices, v?.uniqueName);
+                                v.isSelected = this.generalService.checkIfValueExistsInArray(this.selectedInvoices, v?.uniqueName);
                             });
                             res[0] = voucherData;
                         }
@@ -1857,7 +1857,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                         }
                     }, 100);
 
-                    if (this.purchaseRecord && this.purchaseRecord?.uniqueName) {
+                    if (this.purchaseRecord?.uniqueName) {
                         this.onSelectInvoice(this.purchaseRecord);
                     }
                 });
