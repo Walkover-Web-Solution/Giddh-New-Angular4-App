@@ -3027,12 +3027,33 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      *
      * @memberof ProformaInvoiceComponent
      */
+    public updateStockRateOnExchangeRate(): void {
+        if (this.invFormData.entries && this.invFormData.entries.length) {
+            this.invFormData.entries.forEach(entry => {
+                const transaction = entry.transactions[0];
+                if (transaction.isStockTxn) {
+                    let rate = (transaction?.stockDetails?.rate) ? (transaction?.stockDetails?.rate) : transaction?.stockDetails?.unitRates[0]?.rate;
+                    transaction.rate = Number((rate / this.exchangeRate).toFixed(this.highPrecisionRate));
+                    this.calculateStockEntryAmount(transaction);
+                } else {
+                    this.calculateConvertedAmount(transaction);
+                }
+            });
+        }
+    }
+
+    /**
+     * Updates the value of stocks in entries according to the changed ER (Exchange Rate)
+     *
+     * @memberof ProformaInvoiceComponent
+     */
     public exchangeRateChanged(): void {
         if (this.invFormData.entries && this.invFormData.entries.length) {
             this.invFormData.entries.forEach(entry => {
                 const transaction = entry.transactions[0];
                 if (transaction.isStockTxn) {
-                    transaction.rate = Number((transaction?.stockDetails?.rate / this.exchangeRate).toFixed(this.highPrecisionRate));
+                    let rate = (transaction?.stockDetails?.rate) ? (transaction?.stockDetails?.rate) : transaction?.stockDetails?.unitRates[0]?.rate;
+                    transaction.rate = Number((rate / this.exchangeRate).toFixed(this.highPrecisionRate));
                     this.calculateStockEntryAmount(transaction);
                     this.calculateWhenTrxAltered(entry, transaction)
                 } else {
@@ -5550,31 +5571,33 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      */
     private initializeWarehouse(warehouse?: WarehouseDetails): void {
         this.store.pipe(select(appState => appState.warehouse.warehouses), filter((warehouses) => !!warehouses), take(1)).subscribe((warehouses: any) => {
-            if (warehouses && (!this.isUpdateMode || (this.isUpdateMode && warehouse))) {
+            if (warehouses) {
                 let warehouseResults = cloneDeep(warehouses.results);
                 warehouseResults = warehouseResults?.filter(wh => warehouse?.uniqueName === wh.uniqueName || !wh.isArchived);
                 const warehouseData = this.settingsUtilityService.getFormattedWarehouseData(warehouseResults);
                 this.warehouses = warehouseData.formattedWarehouses;
                 this.defaultWarehouse = (warehouseData.defaultWarehouse?.uniqueName) ? warehouseData.defaultWarehouse?.uniqueName : '';
 
-                if (this.isPurchaseInvoice && warehouseData && warehouseData.defaultWarehouse && !this.isUpdateMode) {
-                    this.autoFillDeliverToWarehouseAddress(warehouseData.defaultWarehouse);
-                }
+                if ((!this.isUpdateMode || (this.isUpdateMode && warehouse))) {
+                    if (this.isPurchaseInvoice && warehouseData && warehouseData.defaultWarehouse && !this.isUpdateMode) {
+                        this.autoFillDeliverToWarehouseAddress(warehouseData.defaultWarehouse);
+                    }
 
-                if (warehouse) {
-                    // Update flow is carried out and we have received warehouse details
-                    this.selectedWarehouse = warehouse.uniqueName;
-                    this.shouldShowWarehouse = true;
-                } else {
-                    if (this.isUpdateMode) {
-                        // Update flow is carried out
-                        // Hide the warehouse drop down as the API has not returned warehouse
-                        // details in response which means user has updated the item to non-stock
-                        this.shouldShowWarehouse = false;
-                    } else {
-                        // Create flow is carried out
-                        this.selectedWarehouse = String(this.defaultWarehouse);
+                    if (warehouse) {
+                        // Update flow is carried out and we have received warehouse details
+                        this.selectedWarehouse = warehouse.uniqueName;
                         this.shouldShowWarehouse = true;
+                    } else {
+                        if (this.isUpdateMode) {
+                            // Update flow is carried out
+                            // Hide the warehouse drop down as the API has not returned warehouse
+                            // details in response which means user has updated the item to non-stock
+                            this.shouldShowWarehouse = false;
+                        } else {
+                            // Create flow is carried out
+                            this.selectedWarehouse = String(this.defaultWarehouse);
+                            this.shouldShowWarehouse = true;
+                        }
                     }
                 }
             } else {
