@@ -1830,6 +1830,7 @@
                                         type="number"
                                         name="exchangeRate"
                                         [(ngModel)]="exchangeRate"
+                                        (ngModelChange)="updateStockRateOnExchangeRate()"
                                         *ngIf="showCurrencyValue"
                                         class="form-control edit-currency"
                                     />
