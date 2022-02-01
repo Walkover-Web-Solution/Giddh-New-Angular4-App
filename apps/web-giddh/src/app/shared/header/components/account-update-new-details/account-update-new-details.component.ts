@@ -1133,13 +1133,13 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public showDeleteMergedAccountModal(merge: string) {
         merge = merge?.trim();
         this.deleteMergedAccountModalBody = this.localeData?.delete_merged_account_content;
-        this.deleteMergedAccountModalBody = this.deleteMergedAccountModalBody.replace("[MERGE]", merge);
+        this.deleteMergedAccountModalBody = this.deleteMergedAccountModalBody?.replace("[MERGE]", merge);
         this.selectedAccountForDelete = merge;
-        this.deleteMergedAccountModal.show();
+        this.deleteMergedAccountModal?.show();
     }
 
     public hideDeleteMergedAccountModal() {
-        this.deleteMergedAccountModal.hide();
+        this.deleteMergedAccountModal?.hide();
     }
 
     public deleteMergedAccount() {
