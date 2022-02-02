@@ -285,7 +285,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         /** This will be use for dialog close on route event */
         this.router.events.pipe(filter(event => event instanceof NavigationStart), takeUntil(this.destroyed$)).subscribe((event: any) => {
             if (event) {
-                this.dialog.closeAll();
+                this.dialog?.closeAll();
             }
         });
     }
