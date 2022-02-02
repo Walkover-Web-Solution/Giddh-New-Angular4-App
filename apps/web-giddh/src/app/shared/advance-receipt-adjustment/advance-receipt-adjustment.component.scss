@@ -15,3 +15,7 @@ p {
 .company-currency {
     color: $nobel;
 }
+.adjustments-list {
+    height: 280px;
+    overflow-y: auto;
+}
