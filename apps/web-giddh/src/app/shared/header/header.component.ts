@@ -313,6 +313,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             if (event instanceof NavigationError || event instanceof NavigationEnd || event instanceof RouteConfigLoadEnd) {
                 this.navigationEnd = true;
             }
+
+            setTimeout(() => {
+                if (this.isElectron) {
+                    this.toggleSidebarPane(false, false);
+                }
+            }, 100);
         });
 
         // GETTING CURRENT PAGE
@@ -363,6 +369,26 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             } else {
                 this.generalService.currentOrganizationType = OrganizationType.Company;
                 this.currentOrganizationType = OrganizationType.Company;
+            }
+        });
+
+        this.currentCompanyBranches$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response && this.currentOrganizationType === OrganizationType.Branch) {
+                const unarchivedBranches = response.filter(branch => !branch.isArchived);
+                if (!unarchivedBranches?.length) {
+                    const type = OrganizationType.Company;
+                    const organization: Organization = {
+                        type,
+                        uniqueName: this.activeCompany ? this.activeCompany.uniqueName : '',
+                        details: {
+                            branchDetails: {
+                                uniqueName: ''
+                            }
+                        }
+                    };
+                    this.store.dispatch(this.companyActions.setCompanyBranch(organization));
+                    this.store.dispatch(this.loginAction.ChangeCompany(this.activeCompany?.uniqueName, false));
+                }
             }
         });
 

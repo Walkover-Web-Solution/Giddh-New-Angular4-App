@@ -852,7 +852,7 @@ ul.sub-list {
     text-align: left;
 }
 .top-aging-table-box input {
-    width: 35px !important;
+    width: 43px !important;
     height: 26px;
     border: 1px solid $gainsboro;
     padding: 5px;
@@ -2554,6 +2554,9 @@ a.btn.btn-xs.btn-link.pull-right {
     position: relative;
     background: $midnight-blue !important;
     color: $white;
+    height: 65px;
+    display: flex;
+    align-items: center;
 }
 .close-modal {
     position: absolute;
@@ -6008,7 +6011,7 @@ button.ladda-button .ladda-label {
     display: block;
     position: absolute;
     right: 10px;
-    top: 16px;
+    top: 8px;
     z-index: 5;
     border: 0;
     border-radius: 0;

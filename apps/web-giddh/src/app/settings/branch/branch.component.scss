@@ -61,9 +61,6 @@
     font-size: 14px;
     border: 1px solid $gainsboro;
 }
-.card-basic-details span:first-child {
-    width: 60px;
-}
 .card-basic-details span:nth-child(2) {
     width: 83%;
 }
@@ -306,6 +303,37 @@
 
 .right-card-section {
     margin-top: -15px;
+
+    .branch-status {
+        float: left;
+        margin-top: 11px;
+        margin-right: -18px;
+
+        &.branch-active {
+            color: $light-green;
+            span {
+                background-color: $light-green;
+                width: 8px;
+                height: 8px;
+                float: left;
+                border-radius: 5px;
+                margin-top: 8px;
+                margin-right: 4px;
+            }
+        }
+        &.branch-archived {
+            color: $red;
+            span {
+                background-color: $red;
+                width: 8px;
+                height: 8px;
+                float: left;
+                border-radius: 5px;
+                margin-top: 8px;
+                margin-right: 4px;
+            }
+        }
+    }
 }
 .branch-vector {
     text-align: right;
