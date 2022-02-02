@@ -3061,6 +3061,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     this.calculateConvertedTotal(entry, transaction);
                 }
             });
+            this.calculateBalanceDue();
         }
     }
 
