@@ -12,7 +12,7 @@ import { PaginationComponent } from 'ngx-bootstrap/pagination';
 import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
 import { createSelector } from 'reselect';
 import { BehaviorSubject, combineLatest as observableCombineLatest, Observable, of as observableOf, ReplaySubject, Subject, } from 'rxjs';
-import { debounceTime, distinctUntilChanged, shareReplay, take, takeUntil } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, shareReplay, take, takeUntil, filter as filterObservable } from 'rxjs/operators';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { CompanyActions } from '../actions/company.actions';
 import { LedgerActions } from '../actions/ledger/ledger.actions';
@@ -291,9 +291,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.companyName$ = this.store.pipe(select(p => p.session.companyUniqueName), takeUntil(this.destroyed$));
         this.isCompanyCreated$ = this.store.pipe(select(s => s.session.isCompanyCreated), takeUntil(this.destroyed$));
         this.failedBulkEntries$ = this.store.pipe(select(p => p.ledger.ledgerBulkActionFailedEntries), takeUntil(this.destroyed$));
-        
+
         /** This will be use for dialog close on route event */
-        this.router.events.pipe(filter(event => event instanceof NavigationStart), takeUntil(this.destroyed$)).subscribe((event: any) => {
+        this.router.events.pipe(filterObservable(event => event instanceof NavigationStart), takeUntil(this.destroyed$)).subscribe((event: any) => {
             if (event) {
                 this.dialog?.closeAll();
             }
