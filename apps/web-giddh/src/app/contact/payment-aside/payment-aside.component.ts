@@ -495,8 +495,8 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
         this.totalSelectedAccountAmount = 0;
         if (selectedAccount && selectedAccount.length) {
             this.totalSelectedAccountAmount = selectedAccount.reduce((prev, cur) => {
-                const newCloseAmount = Number(String(cur.closingBalanceAmount).replace(/,/g, ''));
-                return prev + newCloseAmount;
+                const closingBalanceAmount = Number(String(cur.closingBalanceAmount).replace(/,/g, ''));
+                return prev + closingBalanceAmount;
             }, 0);
         }
         this.totalSelectedAccountAmount = Number(this.totalSelectedAccountAmount);
