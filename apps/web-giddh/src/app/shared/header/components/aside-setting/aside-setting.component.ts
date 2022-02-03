@@ -1,7 +1,7 @@
 import { Component, EventEmitter, OnInit, Output, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
-import { NavigationEnd, Router } from '@angular/router';
+import { NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Router, RouterEvent, RoutesRecognized } from '@angular/router';
 import { AppState } from 'apps/web-giddh/src/app/store';
 import { select, Store } from '@ngrx/store';
 import { take, takeUntil } from 'rxjs/operators';
@@ -69,10 +69,11 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
         this.showHideSettingsHeading(this.router.url);
 
         this.router.events.pipe(takeUntil(this.destroyed$)).subscribe(event => {
-            if (event instanceof NavigationEnd) {
+            if ((!isElectron && event instanceof NavigationEnd) || (isElectron && (event instanceof NavigationStart || event instanceof NavigationEnd || event instanceof NavigationCancel || event instanceof NavigationError || event instanceof RoutesRecognized))) {
                 this.showHideSettingsHeading(event.url);
                 this.routerUrl = event.url?.split('?')[0];
             }
+            console.log(this.routerUrl);
         });
     }
 
