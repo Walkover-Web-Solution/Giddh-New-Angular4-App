@@ -261,8 +261,11 @@ export class UpdateLedgerVm {
                 this.totalAmount = this.stockTrxEntry.amount;
             } else {
                 let trx: ILedgerTransactionItem = find(this.selectedLedger.transactions, (t) => {
-                    let category = this.accountCatgoryGetterFunc(t?.particular, t?.particular?.uniqueName);
-                    return this.isValidCategory(category);
+                    let particular = (t?.selectedAccount?.particular?.parentGroups?.length > 0 && !t?.particular.parentGroups?.length) ? t?.selectedAccount?.particular : t?.particular;
+                    let category = this.accountCatgoryGetterFunc(particular, particular?.uniqueName);
+                    if (particular?.uniqueName) {
+                        return this.isValidCategory(category);
+                    }
                 });
                 this.totalAmount = trx ? Number(trx.amount) : 0;
             }
