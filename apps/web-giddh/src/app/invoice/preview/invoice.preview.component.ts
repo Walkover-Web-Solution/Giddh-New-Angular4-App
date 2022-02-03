@@ -1801,7 +1801,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                         let selectedInvoices = [];
                         if (this.selectedInvoices && this.selectedInvoices.length > 0) {
                             this.selectedInvoices.forEach(invoice => {
-                                if (existingInvoices.indexOf(invoice) > -1) {
+                                if (existingInvoices?.indexOf(invoice) > -1) {
                                     selectedInvoices.push(invoice);
                                 }
                             });

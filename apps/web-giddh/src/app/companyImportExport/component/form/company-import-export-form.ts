@@ -158,7 +158,7 @@ export class CompanyImportExportFormComponent implements OnInit, OnDestroy {
                 this.companyImportExportService.ExportRequest(this.currentBranch.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     if (response?.status === 'success') {
                         let res = { body: response?.body };
-                        let blob = new Blob([JSON?.stringify(res)], { type: 'application/json' });
+                        let blob = new Blob([JSON.stringify(res)], { type: 'application/json' });
                         saveAs(blob, `${this.currentBranch.name}_Master_Except_Accounts_${this.from}_${this.to}_${this.activeCompany?.uniqueName}` + '.json');
                         this.toaster.successToast(this.commonLocaleData?.app_messages?.data_exported);
                         this.backButtonPressed();
