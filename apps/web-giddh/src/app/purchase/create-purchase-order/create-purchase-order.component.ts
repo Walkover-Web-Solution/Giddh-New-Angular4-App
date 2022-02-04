@@ -1447,6 +1447,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         if (!isStockItemPresent) {
             // None of the item were stock item, hide the warehouse section which is applicable only for stocks
             this.shouldShowWarehouse = false;
+        } else {
+            this.shouldShowWarehouse = true;
         }
     }
 
@@ -3346,8 +3348,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
             transaction.quantity = null;
             transaction.amount = 0;
             transaction.taxableValue = 0;
-            this.handleWarehouseVisibility();
         }
+        this.handleWarehouseVisibility();
         transaction.sacNumber = null;
         transaction.sacNumberExists = false;
         transaction.hsnNumber = null;
