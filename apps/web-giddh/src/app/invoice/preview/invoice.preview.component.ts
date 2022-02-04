@@ -1761,6 +1761,13 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                         this.itemsListForDetails = [];
                         let existingInvoices = [];
                         res[0].items = res[0].items?.map((item: ReceiptItem) => {
+
+                            if (this.selectedInvoiceForDetails?.uniqueName === item.uniqueName) {
+                                let updatedItem = cloneDeep(item);
+                                updatedItem.voucherType = this.selectedInvoiceForDetails.voucherType;
+                                this.selectedInvoiceForDetails = updatedItem;
+                            }
+
                             let dueDate = item.dueDate ? moment(item.dueDate, GIDDH_DATE_FORMAT) : null;
 
                             if (dueDate) {
