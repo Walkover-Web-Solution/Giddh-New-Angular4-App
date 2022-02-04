@@ -54,6 +54,7 @@ import { GeneralService } from 'apps/web-giddh/src/app/services/general.service'
 import { clone, cloneDeep, differenceBy, flattenDeep, uniq } from 'apps/web-giddh/src/app/lodash-optimized';
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { SettingsDiscountService } from 'apps/web-giddh/src/app/services/settings.discount.service';
+import { CustomFieldsService } from 'apps/web-giddh/src/app/services/custom-fields.service';
 
 @Component({
     selector: 'account-update-new-details',
@@ -205,6 +206,13 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public accountCountryName: string = "";
     /** True if custom fields api call in progress */
     public isCustomFieldLoading: boolean = false;
+    /** Custom fields request */
+    public customFieldsRequest: any = {
+        page: 0,
+        count: 0,
+        companyUniqueName: '',
+        moduleUniqueName: 'ACCOUNT'
+    };
 
     constructor(
         private _fb: FormBuilder,
@@ -221,7 +229,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         private groupService: GroupService,
         private invoiceService: InvoiceService,
         private changeDetectorRef: ChangeDetectorRef,
-        private settingsDiscountService: SettingsDiscountService
+        private settingsDiscountService: SettingsDiscountService,
+        private customFieldsService: CustomFieldsService
     ) {
 
     }
@@ -229,6 +238,12 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public ngOnInit() {
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
+                if (this.activeCompany?.uniqueName !== activeCompany?.uniqueName) {
+                    this.activeCompany = activeCompany;
+                    this.customFieldsRequest.companyUniqueName = activeCompany?.uniqueName;
+                    this.getCompanyCustomField();
+                }
+
                 if (activeCompany.countryV2) {
                     this.selectedCompanyCountryName = activeCompany.countryV2.alpha2CountryCode + ' - ' + activeCompany.country;
                     this.companyCountry = activeCompany.countryV2.alpha2CountryCode;
@@ -236,10 +251,10 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 this.companyCurrency = clone(activeCompany.baseCurrency);
             }
         });
+
         this.activeAccount$ = this.store.pipe(select(state => state.groupwithaccounts.activeAccount), takeUntil(this.destroyed$));
         this.moveAccountSuccess$ = this.store.pipe(select(state => state.groupwithaccounts.moveAccountSuccess), takeUntil(this.destroyed$));
         this.activeAccountTaxHierarchy$ = this.store.pipe(select(state => state.groupwithaccounts.activeAccountTaxHierarchy), takeUntil(this.destroyed$));
-        this.getCompanyCustomField();
         this.getCountry();
         this.getCurrency();
         this.getCallingCodes();
@@ -408,12 +423,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 this.addAccountForm.get('openingBalanceType')?.patchValue('CREDIT');
             } else if (a && (a === 0 || a > 0) && this.addAccountForm.get('openingBalanceType').value === '') {
                 this.addAccountForm.get('openingBalanceType')?.patchValue('CREDIT');
-            }
-        });
-
-        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
-            if (activeCompany) {
-                this.activeCompany = activeCompany;
             }
         });
 
@@ -1370,9 +1379,9 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         }
         this.isCustomFieldLoading = true;
         this.companyCustomFields = [];
-        this.groupService.getCompanyCustomField().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.customFieldsService.getAll(this.customFieldsRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.status === 'success') {
-                this.companyCustomFields = response.body;
+                this.companyCustomFields = response.body?.results;
                 this.createDynamicCustomFieldForm(this.companyCustomFields);
             } else {
                 this._toaster.errorToast(response.message);

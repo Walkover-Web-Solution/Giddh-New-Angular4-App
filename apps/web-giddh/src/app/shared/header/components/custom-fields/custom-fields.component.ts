@@ -1,9 +1,13 @@
 import { BreakpointObserver } from "@angular/cdk/layout";
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, TemplateRef } from "@angular/core";
 import { FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { select, Store } from "@ngrx/store";
 import { cloneDeep } from "apps/web-giddh/src/app/lodash-optimized";
+import { CompanyResponse } from "apps/web-giddh/src/app/models/api-models/Company";
+import { CustomFieldsService } from "apps/web-giddh/src/app/services/custom-fields.service";
 import { GroupService } from "apps/web-giddh/src/app/services/group.service";
 import { ToasterService } from "apps/web-giddh/src/app/services/toaster.service";
+import { AppState } from "apps/web-giddh/src/app/store";
 import { IOption } from "apps/web-giddh/src/app/theme/ng-virtual-select/sh-options.interface";
 import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
 import { ReplaySubject } from "rxjs";
@@ -42,6 +46,14 @@ export class CustomFieldsComponent implements OnInit, OnDestroy {
     public isMobileScreen: boolean = false;
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Custom fields request */
+    public customFieldsRequest: any = {
+        page: 1,
+        count: 20,
+        companyUniqueName: '',
+        moduleUniqueName: 'ACCOUNT'
+    };
+    public activeCompany: CompanyResponse;
 
     constructor(
         private formBuilder: FormBuilder,
@@ -49,7 +61,9 @@ export class CustomFieldsComponent implements OnInit, OnDestroy {
         private toasterService: ToasterService,
         private modalService: BsModalService,
         private breakPointObservar: BreakpointObserver,
-        private changeDetectorRef: ChangeDetectorRef
+        private changeDetectorRef: ChangeDetectorRef,
+        private store: Store<AppState>,
+        private customFieldsService: CustomFieldsService
     ) {
 
     }
@@ -67,7 +81,14 @@ export class CustomFieldsComponent implements OnInit, OnDestroy {
         });
 
         this.customFieldForm = this.createCustomFieldForm();
-        this.getCompanyCustomField();
+        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if (activeCompany) {
+                if (this.activeCompany?.uniqueName !== activeCompany?.uniqueName) {
+                    this.customFieldsRequest.companyUniqueName = activeCompany?.uniqueName;
+                    this.getCompanyCustomField();
+                }
+            }
+        });
     }
 
     /**
@@ -101,7 +122,7 @@ export class CustomFieldsComponent implements OnInit, OnDestroy {
      */
     public getCompanyCustomField(): void {
         this.isGetCustomInProgress = true;
-        this.groupService.getCompanyCustomField().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.customFieldsService.getAll(this.customFieldsRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.isEnabledIndex = null;
             if (response) {
                 if (response.status === 'success') {
