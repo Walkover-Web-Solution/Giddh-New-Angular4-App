@@ -998,14 +998,11 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                     this.selectedWarehouse = warehouse.uniqueName;
                     this.purchaseOrder.warehouse.uniqueName = warehouse.uniqueName;
                     this.purchaseOrder.warehouse.name = warehouse.name;
-                    this.shouldShowWarehouse = true;
+                    if (!this.isUpdateMode) {
+                        this.shouldShowWarehouse = true;
+                    }
                 } else {
-                    if (this.isUpdateMode) {
-                        // Update flow is carried out
-                        // Hide the warehouse drop down as the API has not returned warehouse
-                        // details in response which means user has updated the item to non-stock
-                        this.shouldShowWarehouse = false;
-                    } else {
+                    if (!this.isUpdateMode) {
                         // Create flow is carried out
                         this.selectedWarehouse = String(this.defaultWarehouse);
                         this.purchaseOrder.warehouse.uniqueName = String(defaultWarehouseUniqueName);
@@ -2546,6 +2543,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                             this.purchaseOrder.entries = this.modifyEntries(this.purchaseOrderDetails.entries);
                             this.showLoaderUntilDataPrefilled = false;
                             this.buildBulkData(this.purchaseOrder.entries.length, 0);
+                            this.handleWarehouseVisibility();
                         }
                     }, 500);
 
