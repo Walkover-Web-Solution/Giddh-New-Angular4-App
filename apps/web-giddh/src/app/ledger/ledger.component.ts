@@ -335,7 +335,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.todaySelected = true;
         this.lc.blankLedger.entryDate = moment(value.endDate).format(GIDDH_DATE_FORMAT);
 
-        if(this.isAdvanceSearchImplemented) {
+        if (this.isAdvanceSearchImplemented) {
             this.store.dispatch(this._ledgerActions.doAdvanceSearch(_.cloneDeep(this.advanceSearchRequest.dataToSend), this.advanceSearchRequest.accountUniqueName, this.trxRequest.from, this.trxRequest.to, this.advanceSearchRequest.page, this.advanceSearchRequest.count, this.advanceSearchRequest.q, this.advanceSearchRequest.branchUniqueName));
         } else {
             this.getTransactionData();
@@ -724,7 +724,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
                 if (checkedEntriesName && checkedEntriesName.length) {
                     checkedEntriesName.forEach(f => {
-                        let duplicate = this.checkedTrxWhileHovering?.some(s => s?.uniqueName === f?.uniqueName);
+                        let duplicate = this.checkedTrxWhileHovering.some(s => s.uniqueName === f.uniqueName);
                         if (!duplicate) {
                             this.checkedTrxWhileHovering.push(f);
                         }
@@ -944,7 +944,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             this.invoiceList = [];
             this._ledgerService.getInvoiceListsForCreditNote(request, date).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
                 if (response && response.body && response.body.results) {
-                    response.body.results.forEach(invoice => this.invoiceList.push({ label: invoice?.voucherNumber ? invoice?.voucherNumber : '-', value: invoice.uniqueName, additional: invoice }))
+                    response.body.results.forEach(invoice => this.invoiceList.push({ label: invoice.voucherNumber ? invoice.voucherNumber : '-', value: invoice.uniqueName, additional: invoice }))
                 }
             });
         }
@@ -1004,7 +1004,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
             this.dropDowns.filter(dd => dd.idEl === unAccountedTrx.id).forEach(dd => {
                 setTimeout(() => {
-                    dd?.show(null);
+                    dd.show(null);
                 }, 0);
             });
         } else {
@@ -1018,7 +1018,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             this.selectBlankTxn(newTrx);
             setTimeout(() => {
                 this.dropDowns.filter(dd => dd.idEl === newTrx.id).forEach(dd => {
-                    dd?.show(null);
+                    dd.show(null);
                 });
             }, 0);
         }
@@ -1027,9 +1027,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public downloadAttachedFile(fileName: string, e: Event) {
         e.stopPropagation();
         this._ledgerService.DownloadAttachement(fileName).pipe(takeUntil(this.destroyed$)).subscribe(d => {
-            if (d?.status === 'success') {
-                let blob = this.generalService.base64ToBlob(d.body?.uploadedFile, `image/${d.body?.fileType}`, 512);
-                download(d.body?.name, blob, `image/${d.body?.fileType}`)
+            if (d.status === 'success') {
+                let blob = this.generalService.base64ToBlob(d.body.uploadedFile, `image/${d.body.fileType}`, 512);
+                download(d.body.name, blob, `image/${d.body.fileType}`)
             } else {
                 this._toaster.errorToast(d.message);
             }
@@ -2023,30 +2023,30 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
             if (this.visibleTransactionTypeMobile === "debit" && this.ledgerTransactions.debitTransactions) {
                 this.ledgerTransactions.debitTransactions.forEach(transaction => {
-                    if (this.allTransactionsList[transaction?.entryDate] === undefined) {
-                        this.allTransactionsList[transaction?.entryDate] = [];
+                    if (this.allTransactionsList[transaction.entryDate] === undefined) {
+                        this.allTransactionsList[transaction.entryDate] = [];
                     }
                     this.allTransactionsList[transaction.entryDate].push(transaction);
                 });
             } else if (this.visibleTransactionTypeMobile === "credit" && this.ledgerTransactions.creditTransactions) {
                 this.ledgerTransactions.creditTransactions.forEach(transaction => {
-                    if (this.allTransactionsList[transaction?.entryDate] === undefined) {
-                        this.allTransactionsList[transaction?.entryDate] = [];
+                    if (this.allTransactionsList[transaction.entryDate] === undefined) {
+                        this.allTransactionsList[transaction.entryDate] = [];
                     }
                     this.allTransactionsList[transaction.entryDate].push(transaction);
                 });
             } else {
                 this.ledgerTransactions.debitTransactions.forEach(transaction => {
-                    if (this.allTransactionsList[transaction?.entryDate] === undefined) {
-                        this.allTransactionsList[transaction?.entryDate] = [];
+                    if (this.allTransactionsList[transaction.entryDate] === undefined) {
+                        this.allTransactionsList[transaction.entryDate] = [];
                     }
                     this.allTransactionsList[transaction.entryDate].push(transaction);
                 });
                 this.ledgerTransactions.creditTransactions.forEach(transaction => {
-                    if (this.allTransactionsList[transaction?.entryDate] === undefined) {
-                        this.allTransactionsList[transaction?.entryDate] = [];
+                    if (this.allTransactionsList[transaction.entryDate] === undefined) {
+                        this.allTransactionsList[transaction.entryDate] = [];
                     }
-                    this.allTransactionsList[transaction.entryDate]?.push(transaction);
+                    this.allTransactionsList[transaction.entryDate].push(transaction);
                 });
             }
 
@@ -2315,10 +2315,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.bulkDeleteBankTransactionsConfirmationModal?.hide();
 
         let transactionIds = this.entryUniqueNamesForBulkAction.map((transaction: any) => transaction.transactionId);
-        let params = {transactionIds: transactionIds};
+        let params = { transactionIds: transactionIds };
         this._ledgerService.deleteBankTransactions(this.trxRequest.accountUniqueName, params).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this._toaster.clearAllToaster();
-            if(response?.status === "success") {
+            if (response?.status === "success") {
                 this.getBankTransactions();
                 this._toaster.successToast(response?.body);
             } else {

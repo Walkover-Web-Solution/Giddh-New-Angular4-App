@@ -1076,7 +1076,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public downloadAttachedFile(fileName: string, e: Event) {
         e.stopPropagation();
         this.ledgerService.DownloadAttachement(fileName).pipe(takeUntil(this.destroyed$)).subscribe(d => {
-            if (d.status === 'success') {
+            if (d?.status === 'success') {
                 let blob = this.generalService.base64ToBlob(d.body.uploadedFile, `image/${d.body.fileType}`, 512);
                 download(d.body.name, blob, `image/${d.body.fileType}`)
             } else {
@@ -1748,7 +1748,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             this.companyName$.pipe(take(1)).subscribe(a => companyUniqueName = a);
             const event: UploadInput = {
                 type: 'uploadAll',
-                url: Configuration.ApiUrl + LEDGER_API.UPLOAD_FILE.replace(':companyUniqueName', companyUniqueName),
+                url: Configuration.ApiUrl + LEDGER_API.UPLOAD_FILE?.replace(':companyUniqueName', companyUniqueName),
                 method: 'POST',
                 fieldName: 'file',
                 data: { entries: _.cloneDeep(this.entryUniqueNamesForBulkAction).join() },
