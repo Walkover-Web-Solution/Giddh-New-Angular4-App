@@ -250,4 +250,11 @@ export class GeneralActions {
             payload: shouldOpen
         }
     }
+
+    public isOpenCalendlyModel(isOpen: boolean) {
+        return {
+            type: GENERAL_ACTIONS.OPEN_CALENDLY_MODEL,
+            payload: isOpen
+        }
+    }
 }
