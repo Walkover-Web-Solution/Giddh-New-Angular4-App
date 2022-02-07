@@ -262,7 +262,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         private sanitizer: DomSanitizer
     ) {
         this.calendlyUrl = this.sanitizer.bypassSecurityTrustResourceUrl(CALENDLY_URL);
-        console.log(this.calendlyUrl);
         // Reset old stored application date
         this.store.dispatch(this.companyActions.ResetApplicationDate());
         this.activeAccount$ = this.store.pipe(select(p => p.ledger.account), takeUntil(this.destroyed$));
@@ -1802,7 +1801,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         }
     }
 
-    public hideScheduleCalendlyModel() {
+    /**
+     * Hides calendly model
+     *
+     * @memberof HeaderComponent
+     */
+    public hideScheduleCalendlyModel(): void {
         this.store.dispatch(this._generalActions.isOpenCalendlyModel(false));
     }
 }
