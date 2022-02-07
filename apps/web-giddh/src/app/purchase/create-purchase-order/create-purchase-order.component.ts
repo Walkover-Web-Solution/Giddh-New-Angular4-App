@@ -994,14 +994,11 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                     this.selectedWarehouse = warehouse.uniqueName;
                     this.purchaseOrder.warehouse.uniqueName = warehouse.uniqueName;
                     this.purchaseOrder.warehouse.name = warehouse.name;
-                    this.shouldShowWarehouse = true;
+                    if (!this.isUpdateMode) {
+                        this.shouldShowWarehouse = true;
+                    }
                 } else {
-                    if (this.isUpdateMode) {
-                        // Update flow is carried out
-                        // Hide the warehouse drop down as the API has not returned warehouse
-                        // details in response which means user has updated the item to non-stock
-                        this.shouldShowWarehouse = false;
-                    } else {
+                    if (!this.isUpdateMode) {
                         // Create flow is carried out
                         this.selectedWarehouse = String(this.defaultWarehouse);
                         this.purchaseOrder.warehouse.uniqueName = String(defaultWarehouseUniqueName);
@@ -1443,6 +1440,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         if (!isStockItemPresent) {
             // None of the item were stock item, hide the warehouse section which is applicable only for stocks
             this.shouldShowWarehouse = false;
+        } else {
+            this.shouldShowWarehouse = true;
         }
     }
 
@@ -2523,6 +2522,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                             this.purchaseOrder.entries = this.modifyEntries(this.purchaseOrderDetails.entries);
                             this.showLoaderUntilDataPrefilled = false;
                             this.buildBulkData(this.purchaseOrder.entries.length, 0);
+                            this.handleWarehouseVisibility();
                         }
                     }, 500);
 
@@ -3320,8 +3320,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
             transaction.quantity = null;
             transaction.amount = 0;
             transaction.taxableValue = 0;
-            this.handleWarehouseVisibility();
         }
+        this.handleWarehouseVisibility();
         transaction.sacNumber = null;
         transaction.sacNumberExists = false;
         transaction.hsnNumber = null;
