@@ -1831,8 +1831,7 @@
                                     <input
                                         type="number"
                                         name="exchangeRate"
-                                        [(ngModel)]="exchangeRate"
-                                        (ngModelChange)="updateStockRateOnExchangeRate()"
+                                        [(ngModel)]="newExchangeRate"
                                         *ngIf="showCurrencyValue"
                                         class="form-control edit-currency"
                                     />
@@ -1847,13 +1846,14 @@
                                         (click)="
                                             showCurrencyValue = !showCurrencyValue;
                                             autoSaveIcon = !autoSaveIcon;
-                                            exchangeRate = originalExchangeRate
+                                            newExchangeRate = originalExchangeRate
                                         "
                                     />
                                     <img
                                         src=" assets/images/autosave.svg"
                                         class="edit-pencil"
                                         (click)="
+                                            exchangeRate = newExchangeRate;
                                             originalExchangeRate = exchangeRate;
                                             previousExchangeRate = exchangeRate;
                                             autoSaveIcon = !autoSaveIcon;
