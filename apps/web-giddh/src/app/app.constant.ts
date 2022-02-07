@@ -293,10 +293,6 @@ export const RESTRICTED_BRANCH_ROUTES = [
     '/pages/user-details/subscription'
 ];
 
-export const SUPPORT_TEAM_NUMBERS = [
-    "+918889500350", "+918889378604"
-];
-
 /** Settings integration tabs */
 export const SETTING_INTEGRATION_TABS = {
     // SMS: { LABEL: 'sms', VALUE: 0 },
@@ -456,3 +452,4 @@ export const GIDDH_VOUCHER_FORM = [
         attachmentAllowed: false
     }
 ];
+export const CALENDLY_URL = "https://calendly.com/d/cg6-6kx-924/schedule-demo";
