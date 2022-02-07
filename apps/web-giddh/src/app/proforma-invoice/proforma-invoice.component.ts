@@ -346,6 +346,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public formFields: any[] = [];
 
     //Multi-currency changes
+    /** Ng model of exchange rate field */
+    public newExchangeRate = 1;
     public exchangeRate = 1;
     public originalExchangeRate = 1;
     /** Stores the previous exchange rate of previous debtor */
@@ -3163,26 +3165,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     this.calculateWhenTrxAltered(entry, transaction)
                 } else {
                     this.calculateConvertedTotal(entry, transaction);
-                }
-            });
-        }
-    }
-
-    /**
-     * Updates the value of stocks in entries according to the changed ER (Exchange Rate)
-     *
-     * @memberof ProformaInvoiceComponent
-     */
-    public updateStockRateOnExchangeRate(): void {
-        if (this.invFormData.entries && this.invFormData.entries.length) {
-            this.invFormData.entries.forEach(entry => {
-                const transaction = entry.transactions[0];
-                if (transaction.isStockTxn) {
-                    let rate = (transaction?.stockDetails?.rate) ? (transaction?.stockDetails?.rate) : transaction?.stockDetails?.unitRates[0]?.rate;
-                    transaction.rate = Number((rate / this.exchangeRate).toFixed(this.highPrecisionRate));
-                    this.calculateStockEntryAmount(transaction);
-                } else {
-                    this.calculateConvertedAmount(transaction);
                 }
             });
         }
