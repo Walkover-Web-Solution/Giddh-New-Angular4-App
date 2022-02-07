@@ -211,6 +211,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
     public excludeTax: boolean = false;
     /* This will hold round off calculation */
     public calculatedRoundOff: number = 0;
+    /** Ng model of exchange rate field */
+    public newExchangeRate = 1;
     /* This will hold exchange rate */
     public exchangeRate = 1;
     /* This will hold grand total */
@@ -3644,11 +3646,13 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
             this.purchaseOrder.entries.forEach(entry => {
                 const transaction = entry.transactions[0];
                 if (transaction.isStockTxn) {
-                    const rate = this.previousExchangeRate >= 1 ? transaction.rate * this.previousExchangeRate : Number((transaction.rate / this.previousExchangeRate).toFixed(this.highPrecisionRate));
+                    let rate = (transaction?.stockDetails?.rate) ? (transaction?.stockDetails?.rate) : transaction?.stockDetails?.unitRates[0]?.rate;
+                    transaction.rate = Number((rate / this.exchangeRate).toFixed(this.highPrecisionRate));
                     transaction.rate = Number((rate / this.exchangeRate).toFixed(this.highPrecisionRate));
                     this.calculateStockEntryAmount(transaction);
                     this.calculateWhenTrxAltered(entry, transaction)
                 } else {
+                    this.calculateConvertedAmount(transaction);
                     this.calculateConvertedTotal(entry, transaction);
                 }
             });
