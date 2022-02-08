@@ -1748,7 +1748,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             this.companyName$.pipe(take(1)).subscribe(a => companyUniqueName = a);
             const event: UploadInput = {
                 type: 'uploadAll',
-                url: Configuration.ApiUrl + LEDGER_API.UPLOAD_FILE?.replace(':companyUniqueName', companyUniqueName),
+                url: Configuration.ApiUrl + LEDGER_API.UPLOAD_FILE.replace(':companyUniqueName', companyUniqueName),
                 method: 'POST',
                 fieldName: 'file',
                 data: { entries: _.cloneDeep(this.entryUniqueNamesForBulkAction).join() },
