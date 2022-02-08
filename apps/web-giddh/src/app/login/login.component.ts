@@ -130,8 +130,8 @@ export class LoginComponent implements OnInit, OnDestroy {
         contriesWithCodes.map(c => {
             this.countryCodeList.push({ value: c.countryName, label: c.value });
         });
-        this.userLoginState$ = this.store.pipe(select(p => p.session.userLoginState), takeUntil(this.destroyed$));
-        this.userDetails$ = this.store.pipe(select(p => p.session.user), takeUntil(this.destroyed$));
+        this.userLoginState$ = this.store.pipe(select(p => p?.session?.userLoginState), takeUntil(this.destroyed$));
+        this.userDetails$ = this.store.pipe(select(p => p?.session?.user), takeUntil(this.destroyed$));
         this.isTwoWayAuthInProcess$ = this.store.pipe(select(p => p.login.isTwoWayAuthInProcess), takeUntil(this.destroyed$));
         this.isTwoWayAuthInSuccess$ = this.store.pipe(select(p => p.login.isTwoWayAuthSuccess), takeUntil(this.destroyed$));
     }
@@ -263,8 +263,8 @@ export class LoginComponent implements OnInit, OnDestroy {
         let user: VerifyEmailResponseModel;
         this.userDetails$.pipe(take(1)).subscribe(p => user = p);
         let data = new VerifyMobileModel();
-        data.countryCode = Number(user.countryCode);
-        data.mobileNumber = user.contactNumber;
+        data.countryCode = Number(user?.countryCode);
+        data.mobileNumber = user?.contactNumber;
         data.oneTimePassword = this.twoWayOthForm.value.otp;
         this.store.dispatch(this.loginAction.VerifyTwoWayAuthRequest(data));
     }
