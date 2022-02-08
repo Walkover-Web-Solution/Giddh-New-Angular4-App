@@ -518,7 +518,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                             }
                         });
                     } else {
-                        this.invFormData.voucherDetails.tcsTotal = response?.taxTotal?.cumulativeAmountForAccount;
+                        this.invFormData.voucherDetails.tcsTotal = response.taxTotal.cumulativeAmountForAccount;
                     }
                 }
                 if (response['deposit']) {
