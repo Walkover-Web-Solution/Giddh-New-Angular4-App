@@ -3648,7 +3648,6 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                 if (transaction.isStockTxn) {
                     let rate = (transaction?.stockDetails?.rate) ? (transaction?.stockDetails?.rate) : transaction?.stockDetails?.unitRates[0]?.rate;
                     transaction.rate = Number((rate / this.exchangeRate).toFixed(this.highPrecisionRate));
-                    transaction.rate = Number((rate / this.exchangeRate).toFixed(this.highPrecisionRate));
                     this.calculateStockEntryAmount(transaction);
                     this.calculateWhenTrxAltered(entry, transaction)
                 } else {
