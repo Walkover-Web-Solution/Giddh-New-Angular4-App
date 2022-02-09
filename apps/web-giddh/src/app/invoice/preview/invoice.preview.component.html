@@ -135,7 +135,7 @@
                                     selectedInvoicesList?.length === 1 &&
                                     selectedInvoicesList[0].irnNumber
                                 "
-                                (click)="openModal(cancelEInvoiceTemplate)"
+                                (click)="selectedEInvoice = selectedInvoicesList[0]; openModal(cancelEInvoiceTemplate)"
                             >
                                 {{ localeData?.cancel_e_invoice }}
                             </button>
@@ -434,7 +434,10 @@
                                             selectedInvoicesList?.length === 1 &&
                                             selectedInvoicesList[0]?.irnNumber
                                         "
-                                        (click)="openModal(cancelEInvoiceTemplate)"
+                                        (click)="
+                                            selectedEInvoice = selectedInvoicesList[0];
+                                            openModal(cancelEInvoiceTemplate)
+                                        "
                                     >
                                         {{ localeData?.cancel_e_invoice }}
                                     </button>
@@ -510,7 +513,9 @@
                                         selectedInvoicesList?.length === 1 &&
                                         selectedInvoicesList[0]?.irnNumber
                                     "
-                                    (click)="openModal(cancelEInvoiceTemplate)"
+                                    (click)="
+                                        selectedEInvoice = selectedInvoicesList[0]; openModal(cancelEInvoiceTemplate)
+                                    "
                                 >
                                     {{ localeData?.cancel_e_invoice }}
                                 </button>
@@ -2020,11 +2025,11 @@
         <form>
             <div class="mr-b15">
                 <label>{{ commonLocaleData?.app_invoice_number }}</label>
-                <input type="text" class="form-control" [value]="selectedInvoicesList[0].voucherNumber" readonly />
+                <input type="text" class="form-control" [value]="selectedEInvoice?.voucherNumber" readonly />
             </div>
             <div class="mr-b15">
                 <label>{{ commonLocaleData?.app_irn }}</label>
-                <input type="text" class="form-control" [value]="selectedInvoicesList[0].irnNumber" readonly />
+                <input type="text" class="form-control" [value]="selectedEInvoice?.irnNumber" readonly />
             </div>
             <div class="mr-b15">
                 <label>{{ localeData?.cancel_reason }} <span class="red-text">*</span></label>
