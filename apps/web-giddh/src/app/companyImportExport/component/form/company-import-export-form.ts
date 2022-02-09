@@ -112,7 +112,7 @@ export class CompanyImportExportFormComponent implements OnInit, OnDestroy {
 
         this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
         this.currentCompanyBranches$.subscribe(response => {
-            if (response && response.length) {
+            if (response?.length) {
                 this.currentCompanyBranches = response.map(branch => ({
                     label: branch.alias,
                     value: branch.uniqueName,
@@ -175,7 +175,7 @@ export class CompanyImportExportFormComponent implements OnInit, OnDestroy {
                         } else {
                             let res = { body: response?.body?.file };
                             let blob = new Blob([JSON.stringify(res)], { type: 'application/json' });
-                            saveAs(blob, `${this.currentBranch.name}_Accounting_Entries_${this.from}_${this.to}_${this.activeCompany?.uniqueName}` + '.json');
+                            saveAs(blob, `${this.currentBranch?.name}_Accounting_Entries_${this.from}_${this.to}_${this.activeCompany?.uniqueName}` + '.json');
                             this.toaster.successToast(this.commonLocaleData?.app_messages?.data_exported);
                             this.backButtonPressed();
                         }
