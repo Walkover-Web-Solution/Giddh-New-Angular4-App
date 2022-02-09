@@ -62,7 +62,7 @@ export class ReceiptService {
         const requestParameter = {
             page: body.page, count: body.count, from: body.from, to: body.to, q: (body.q) ? encodeURIComponent(body.q) : body.q, sort: body.sort, sortBy: body.sortBy
         };
-        let url = this.createQueryString(this.config.apiUrl + contextPath, (type === VoucherTypeEnum.purchase && this.generalService.voucherApiVersion !== 2) ? requestParameter : { ...requestParameter, type, requestParameter });
+        let url = this.createQueryString(this.config.apiUrl + contextPath, (type === VoucherTypeEnum.purchase && this.generalService.voucherApiVersion !== 2) ? requestParameter : { ...requestParameter, type });
         if (this.generalService.voucherApiVersion === 2) {
             url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
         }
