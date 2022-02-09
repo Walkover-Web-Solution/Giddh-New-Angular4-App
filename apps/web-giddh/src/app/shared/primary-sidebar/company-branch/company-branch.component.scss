@@ -324,7 +324,7 @@
         bottom: 0;
         width: 240px;
         left: 0;
-        border-top: 1px solid var(--color-iron);
+        border-top: 1px solid var(--color-common-secondary-border);
         z-index: 991;
         background-color: var(--color-sidebar-footer-logout-section-background);
         .profile-name {
@@ -338,7 +338,7 @@
                 font-size: 12px;
                 justify-content: center;
                 align-items: center;
-                color: var(--color-white);
+                color: var(--color-secondary-button-text);
                 letter-spacing: -1px;
             }
         }

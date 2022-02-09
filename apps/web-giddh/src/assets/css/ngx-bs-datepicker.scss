@@ -12,7 +12,7 @@
     padding-right: 12px;
 }
 .daterangepicker {
-    box-shadow: 0 3px 28px 0 rgba(0, 0, 0, 0.14);
+    box-shadow: 0 3px 28px 0 var(--color-primary-common-box-shadow);
     color: var(--color-abbey);
     border: 1px solid var(--color-iron);
     z-index: 999 !important;
@@ -23,7 +23,7 @@
 .daterangepicker:after {
     top: -6px;
     border-right: 6px solid transparent;
-    border-bottom: 6px solid var(--color-white);
+    border-bottom: 6px solid var(--color-common-secondary-border);
     border-left: 6px solid transparent;
     position: absolute;
     display: inline-block;
@@ -53,7 +53,7 @@
 .applyBtn {
     background: var(--color-teal) !important;
     color: var(--color-white) !important;
-    border: 1px solid var(--color-teal) !important;
+    border: 1px solid var(--color-common-secondary-border) !important;
 }
 .daterangepicker th.month {
     color: var(--color-gray);
@@ -64,9 +64,9 @@
 th.prev.available span {
     width: 10px;
     height: 10px;
-    border-left: 2px solid var(--color-abbey);
+    border-left: 2px solid var(--color-common-secondary-border);
     display: flex;
-    border-bottom: 2px solid var(--color-abbey);
+    border-bottom: 2px solid var(--color-common-secondary-border);
     transform: rotate(45deg);
     text-align: center;
     justify-content: center;
@@ -76,9 +76,9 @@ th.prev.available span {
 th.next.available span {
     width: 10px;
     height: 10px;
-    border-left: 2px solid var(--color-abbey);
+    border-left: 2px solid var(--color-common-secondary-border);
     display: flex;
-    border-bottom: 2px solid var(--color-abbey);
+    border-bottom: 2px solid var(--color-common-secondary-border);
     transform: rotate(225deg);
     text-align: center;
     justify-content: center;

@@ -55,7 +55,7 @@
 .ps__rail-y:hover,
 .ps__rail-x:focus,
 .ps__rail-y:focus {
-    background-color: #eee;
+    background-color: var(--color-scrollbar-primary-track-background) !important;
     opacity: 0.9;
 }
 
@@ -63,7 +63,7 @@
  * Scrollbar thumb styles
  */
 .ps__thumb-x {
-    background-color: #aaa;
+    background-color: var(--color-gray);
     border-radius: 6px;
     transition: background-color 0.2s linear, height 0.2s ease-in-out;
     -webkit-transition: background-color 0.2s linear, height 0.2s ease-in-out;
@@ -75,7 +75,7 @@
 }
 
 .ps__thumb-y {
-    background-color: #aaa;
+    background-color: var(--color-scrollbar-primary-thumb-background) !important;
     border-radius: 6px;
     transition: background-color 0.2s linear, width 0.2s ease-in-out;
     -webkit-transition: background-color 0.2s linear, width 0.2s ease-in-out;
@@ -88,13 +88,13 @@
 
 .ps__rail-x:hover > .ps__thumb-x,
 .ps__rail-x:focus > .ps__thumb-x {
-    background-color: #999;
+    background-color: var(--color-gray);
     height: 11px;
 }
 
 .ps__rail-y:hover > .ps__thumb-y,
 .ps__rail-y:focus > .ps__thumb-y {
-    background-color: #999;
+    background-color: var(--color-scrollbar-primary-thumb-background) !important;
     width: 11px;
 }
 
@@ -152,7 +152,7 @@ perfect-scrollbar[fxlayout] > .ps > .ps-content {
     flex: 1 1 auto;
     -ms-flex: 1 1 auto;
     -webkit-box-flex: 1;
-    align-item: inherit;
+    align-items: inherit;
     place-content: inherit;
     -webkit-box-pack: inherit;
     -webkit-box-align: inherit;
@@ -228,8 +228,7 @@ perfect-scrollbar > .ps.ps--active-y > .ps__rail-y {
     top: 0 !important;
     right: 0 !important;
     width: 10px;
-    transition: width 200ms linear, opacity 200ms linear,
-        background-color 200ms linear;
+    transition: width 200ms linear, opacity 200ms linear, background-color 200ms linear;
 }
 perfect-scrollbar > .ps.ps--active-y > .ps__rail-y:hover {
     width: 15px;
@@ -238,8 +237,7 @@ perfect-scrollbar > .ps.ps--active-x > .ps__rail-x {
     bottom: 0 !important;
     left: 0 !important;
     height: 10px;
-    transition: height 200ms linear, opacity 200ms linear,
-        background-color 200ms linear;
+    transition: height 200ms linear, opacity 200ms linear, background-color 200ms linear;
 }
 perfect-scrollbar > .ps.ps--active-x > .ps__rail-x:hover {
     height: 15px;
@@ -252,11 +250,11 @@ perfect-scrollbar > .ps.ps--active-x.ps--active-y > .ps__rail-x {
 }
 perfect-scrollbar > .ps.ps--scrolling-y > .ps__rail-y {
     opacity: 0.9;
-    background-color: #eee;
+    background-color: var(--color-scrollbar-primary-track-background) !important;
 }
 perfect-scrollbar > .ps.ps--scrolling-x > .ps__rail-x {
     opacity: 0.9;
-    background-color: #eee;
+    background-color: var(--color-dark-fog);
 }
 perfect-scrollbar.ps-show-always > .ps.ps--active-y > .ps__rail-y {
     opacity: 0.6;
@@ -264,75 +262,30 @@ perfect-scrollbar.ps-show-always > .ps.ps--active-y > .ps__rail-y {
 perfect-scrollbar.ps-show-always > .ps.ps--active-x > .ps__rail-x {
     opacity: 0.6;
 }
-perfect-scrollbar.ps-show-active
-    > .ps.ps--active-y
-    > .ps-overlay:not(.ps-at-top)
-    .ps-indicator-top {
+perfect-scrollbar.ps-show-active > .ps.ps--active-y > .ps-overlay:not(.ps-at-top) .ps-indicator-top {
     opacity: 1;
-    background: linear-gradient(
-        to bottom,
-        rgba(255, 255, 255, 0.5) 0%,
-        rgba(255, 255, 255, 0) 100%
-    );
+    background: linear-gradient(to bottom, var(--color-white) 0%, transparent 100%);
 }
-perfect-scrollbar.ps-show-active
-    > .ps.ps--active-y
-    > .ps-overlay:not(.ps-at-bottom)
-    .ps-indicator-bottom {
+perfect-scrollbar.ps-show-active > .ps.ps--active-y > .ps-overlay:not(.ps-at-bottom) .ps-indicator-bottom {
     opacity: 1;
-    background: linear-gradient(
-        to top,
-        rgba(255, 255, 255, 0.5) 0%,
-        rgba(255, 255, 255, 0) 100%
-    );
+    background: linear-gradient(to top, var(--color-white) 0%, transparent 100%);
 }
-perfect-scrollbar.ps-show-active
-    > .ps.ps--active-x
-    > .ps-overlay:not(.ps-at-left)
-    .ps-indicator-left {
+perfect-scrollbar.ps-show-active > .ps.ps--active-x > .ps-overlay:not(.ps-at-left) .ps-indicator-left {
     opacity: 1;
-    background: linear-gradient(
-        to right,
-        rgba(255, 255, 255, 0.5) 0%,
-        rgba(255, 255, 255, 0) 100%
-    );
+    background: linear-gradient(to right, var(--color-white) 0%, transparent 100%);
 }
-perfect-scrollbar.ps-show-active
-    > .ps.ps--active-x
-    > .ps-overlay:not(.ps-at-right)
-    .ps-indicator-right {
+perfect-scrollbar.ps-show-active > .ps.ps--active-x > .ps-overlay:not(.ps-at-right) .ps-indicator-right {
     opacity: 1;
-    background: linear-gradient(
-        to left,
-        rgba(255, 255, 255, 0.5) 0%,
-        rgba(255, 255, 255, 0) 100%
-    );
+    background: linear-gradient(to left, var(--color-white) 0%, transparent 100%);
 }
-perfect-scrollbar.ps-show-active.ps-show-limits
-    > .ps.ps--active-y
-    > .ps-overlay.ps-at-top
-    .ps-indicator-top {
-    background: linear-gradient(
-        to bottom,
-        rgba(170, 170, 170, 0.5) 0%,
-        rgba(170, 170, 170, 0) 100%
-    );
+perfect-scrollbar.ps-show-active.ps-show-limits > .ps.ps--active-y > .ps-overlay.ps-at-top .ps-indicator-top {
+    background: linear-gradient(to bottom, var(--color-iron) 0%, transparent 100%);
 }
-perfect-scrollbar.ps-show-active.ps-show-limits
-    > .ps.ps--active-y
-    > .ps-overlay.ps-at-top
-    .ps-indicator-top.ps-notify {
+perfect-scrollbar.ps-show-active.ps-show-limits > .ps.ps--active-y > .ps-overlay.ps-at-top .ps-indicator-top.ps-notify {
     opacity: 1;
 }
-perfect-scrollbar.ps-show-active.ps-show-limits
-    > .ps.ps--active-y
-    > .ps-overlay.ps-at-bottom
-    .ps-indicator-bottom {
-    background: linear-gradient(
-        to top,
-        rgba(170, 170, 170, 0.5) 0%,
-        rgba(170, 170, 170, 0) 100%
-    );
+perfect-scrollbar.ps-show-active.ps-show-limits > .ps.ps--active-y > .ps-overlay.ps-at-bottom .ps-indicator-bottom {
+    background: linear-gradient(to top, var(--color-iron) 0%, transparent 100%);
 }
 perfect-scrollbar.ps-show-active.ps-show-limits
     > .ps.ps--active-y
@@ -340,15 +293,8 @@ perfect-scrollbar.ps-show-active.ps-show-limits
     .ps-indicator-bottom.ps-notify {
     opacity: 1;
 }
-perfect-scrollbar.ps-show-active.ps-show-limits
-    > .ps.ps--active-x
-    > .ps-overlay.ps-at-left
-    .ps-indicator-left {
-    background: linear-gradient(
-        to right,
-        rgba(170, 170, 170, 0.5) 0%,
-        rgba(170, 170, 170, 0) 100%
-    );
+perfect-scrollbar.ps-show-active.ps-show-limits > .ps.ps--active-x > .ps-overlay.ps-at-left .ps-indicator-left {
+    background: linear-gradient(to right, var(--color-iron) 0%, transparent 100%);
 }
 perfect-scrollbar.ps-show-active.ps-show-limits
     > .ps.ps--active-x
@@ -356,15 +302,8 @@ perfect-scrollbar.ps-show-active.ps-show-limits
     .ps-indicator-left.ps-notify {
     opacity: 1;
 }
-perfect-scrollbar.ps-show-active.ps-show-limits
-    > .ps.ps--active-x
-    > .ps-overlay.ps-at-right
-    .ps-indicator-right {
-    background: linear-gradient(
-        to left,
-        rgba(170, 170, 170, 0.5) 0%,
-        rgba(170, 170, 170, 0) 100%
-    );
+perfect-scrollbar.ps-show-active.ps-show-limits > .ps.ps--active-x > .ps-overlay.ps-at-right .ps-indicator-right {
+    background: linear-gradient(to left, var(--color-iron) 0%, transparent 100%);
 }
 perfect-scrollbar.ps-show-active.ps-show-limits
     > .ps.ps--active-x

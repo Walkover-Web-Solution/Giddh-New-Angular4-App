@@ -70,16 +70,16 @@
 
 .invoice-sidebar .single-invoice-detail {
     padding: 10px 15px;
-    border-bottom: 1px solid var(--color-iron);
+    border-bottom: 1px solid var(--color-common-primary-border);
     list-style: none;
 }
 
 .invoice-sidebar .single-invoice-detail:hover {
-    background-color: var(--color-wild-sand);
+    background-color: var(--color-primary-invoice-preview-details-left-sidebar-list-background-active-hover);
 }
 
 .invoice-sidebar .single-invoice-detail.activeItem {
-    background-color: var(--color-wild-sand);
+    background-color: var(--color-primary-invoice-preview-details-left-sidebar-list-background-active-hover);
 }
 
 .invoice-sidebar .single-invoice-detail:last-child {
@@ -135,11 +135,11 @@
 .invoice-detail-header .edit-change-status .edit-action-btn-groups {
     display: flex;
     background-color: var(--color-white);
-    border: 1px solid var(--color-iron);
+    border: 1px solid var(--color-common-secondary-border);
     margin-right: 10px;
     border-radius: 5px;
     span {
-        border-left: 1px solid var(--color-iron);
+        border-left: 1px solid var(--color-common-secondary-border);
         padding: 5px;
         display: flex;
         justify-content: center;
@@ -321,8 +321,8 @@
 }
 
 .invoice-detail {
-    background-color: var(--color-wild-sand);
     padding-bottom: 0px;
+    background-color: var(--color-primary-invoice-preview-details-background);
 }
 
 span.close-modal.cp.pull-right {
@@ -366,13 +366,14 @@ span.close-modal.cp.pull-right {
 
 .invoice-search-box input {
     flex: 1;
-    border: 1px solid var(--color-iron);
+    border: 1px solid var(--color-secondary-input-bar-border);
     border-radius: 5px;
     height: 37px;
     padding: 0 30px;
     background-image: url("../../../../../assets/images/searchIcon.svg");
     background-position: 10px 13px;
     background-repeat: no-repeat;
+    background-color: var(--color-primary-input-bar-background);
 }
 
 .invoice-search-box button {
@@ -387,7 +388,7 @@ span.close-modal.cp.pull-right {
 }
 
 .invoice-sidebar-wrapper {
-    box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 3px 3px 6px var(--color-primary-common-box-shadow);
 }
 
 .unresponsive {
