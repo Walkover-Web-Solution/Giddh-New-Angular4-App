@@ -1165,6 +1165,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     public applyAdvanceSearch(request: InvoiceFilterClassForInvoicePreview) {
+        request.from = this.invoiceSearchRequest.from,
+        request.to = this.invoiceSearchRequest.to
         this.showAdvanceSearchIcon = true;
         if (!request.invoiceDate && !request.dueDate || this.selectedVoucher === VoucherTypeEnum.purchase) {
             request.from = this.invoiceSearchRequest.from;
