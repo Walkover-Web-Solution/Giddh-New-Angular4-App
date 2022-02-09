@@ -32,7 +32,7 @@
 .general-tab,
 .email-tab,
 .estimate-tab {
-    box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0px 3px 6px var(--color-primary-common-box-shadow);
     margin: 0 15px;
     label {
         font-size: 14px;
@@ -192,7 +192,7 @@ span.viasocket a {
 }
 .delete-verified-icon {
     padding: 6px 10px;
-    border: 1px solid var(--color-iron);
+    border: 1px solid var(--color-primary-button-border);
     border-radius: 5px;
     display: inline-flex;
     justify-content: center;

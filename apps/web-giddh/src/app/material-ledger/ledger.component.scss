@@ -507,7 +507,7 @@ sh-select:focus {
     font-size: 14px;
 }
 .stat-block {
-    border-right: 1px solid var(--color-iron);
+    border-right: 1px solid var(--color-common-secondary-border);
     padding-left: 30px;
     padding-top: 20px;
     padding-bottom: 20px;
@@ -777,7 +777,7 @@ sh-select:focus {
 }
 
 .list-item {
-    border-bottom: 1px solid var(--color-iron);
+    border-bottom: 1px solid var(--color-common-secondary-border);
 }
 
 .ledger-row {
