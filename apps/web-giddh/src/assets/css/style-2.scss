@@ -147,7 +147,7 @@ $custom-typography: mat-typography-config(
     }
     .on-mobile-view tbody tr,
     .on-mobile-view tbody .mat-row {
-        box-shadow: 0 0px 5px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 0px 5px var(--color-primary-common-box-shadow);
         background: var(--color-white);
         border-bottom: none;
         cursor: pointer;
@@ -195,8 +195,8 @@ $custom-typography: mat-typography-config(
         &.child-td {
             display: table !important;
             tr {
-                box-shadow: 0 0px 0px rgb(0 0 0 / 10%) !important;
-                border-bottom: 1px solid rgb(0 0 0 / 10%);
+                border-bottom: 1px solid var(--color-iron);
+                box-shadow: 0 0px 0px var(--color-primary-common-box-shadow) !important;
             }
 
             tr:last-child {
@@ -226,7 +226,7 @@ $custom-typography: mat-typography-config(
         top: -6px;
     }
     .on-mobile-view tbody td:before {
-        color: rgba(0, 0, 0, 0.55);
+        color: var(--color-gray);
         font-size: 14px;
         content: attr(data-title);
         display: table-cell;
@@ -325,7 +325,7 @@ body {
 }
 
 .border-bottom {
-    border-bottom: 1px solid var(--color-iron);
+    border-bottom: 1px solid var(--color-common-secondary-border) !important;
 }
 /* start MDB tweaks */
 .caret {
@@ -366,6 +366,7 @@ input {
 }
 // Mat Divider
 .mat-divider {
+    border-top-width: 2px !important;
     border-top-color: var(--color-primary-mat-divider);
 }
 /* switch on off end */
@@ -550,9 +551,7 @@ input {
     border-color: transparent !important;
     background-color: transparent !important;
 }
-// .nav.nav-tabs > li a {
-//     color: red !important;
-// }
+
 .invoice-control .nav-tabs > li.active > a {
     border-bottom: 4px solid var(--color-blue) !important;
     color: var(--color-tab-primary-active) !important;
@@ -577,8 +576,8 @@ input {
 .white-box {
     background: var(--color-white);
     padding: 20px;
-    box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1);
     margin-bottom: 15px;
+    box-shadow: 0px 3px 6px var(--color-primary-common-box-shadow);
 }
 .vat-report .tab-content {
     padding: 0 15px;
@@ -634,7 +633,7 @@ ul.sub-list {
     padding-right: 40px;
 }
 .company-list .input-group {
-    border-bottom: 1px solid var(--color-iron);
+    border-bottom: 1px solid var(--color-primary-button-border);
     display: flex;
     align-items: center;
 }
@@ -646,8 +645,8 @@ ul.sub-list {
     border-radius: 0px;
     border: 0px;
     font-size: 14px;
-    color: var(--color-shark);
-    border-left: 1px solid var(--color-iron) !important;
+    color: var(--color-nero);
+    border-left: 1px solid var(--color-primary-button-border) !important;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -695,16 +694,16 @@ ul.sub-list {
     justify-content: center;
     align-items: center;
     font-size: 18px;
-    border: 1px solid rgba(26, 35, 126, 0.4) !important;
+    border: 1px solid var(--color-gray) !important;
 }
 
 .tab-integration .nav-tabs > li > a:hover {
-    border: 1px solid rgba(26, 35, 126, 0.4) !important;
+    border: 1px solid var(--color-gray) !important;
 }
 
 .tab-integration .nav-tabs > li.active a {
     background: var(--color-rectangular-tab-primary-background) !important;
-    box-shadow: 0 6px 7px var(--color-rectangular-tab-box-shadow);
+    box-shadow: 0 6px 7px var(--color-primary-common-box-shadow);
     border: 1px solid var(--color-common-primary-blue-border) !important;
     color: var(--color-shark) !important;
     border-radius: 3px;
@@ -831,7 +830,7 @@ ul.sub-list {
     background: var(--color-white) !important;
 }
 .aging-table-top .top-aging-table-top {
-    background: rgba(49, 58, 151, 0.15) !important;
+    background: var(--color-solitude-light) !important;
 }
 .aging-table-top .top-aging-table-top strong,
 .aging-table-top .top-aging-table-top span .date-range-picker {
@@ -857,7 +856,7 @@ ul.sub-list {
     right: 0;
     border: 1px solid var(--color-iron);
     padding: 20px;
-    box-shadow: 0 0 19px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 19px var(--color-primary-common-box-shadow);
     top: 75px;
     z-index: 1;
 }
@@ -955,7 +954,7 @@ ul.sub-list {
     color: var(--color-manatee);
 }
 .advance-search .input-group-addon {
-    border: 1px solid var(--color-iron);
+    border: 1px solid var(--color-primary-button-border);
     background: none;
     border-left: 0 !important;
     border-radius: 5px;
@@ -1146,7 +1145,7 @@ modal-container.modal {
 }
 .list-icon-group input:checked + label {
     background-color: var(--color-white);
-    box-shadow: 2px 2px 5px var(--color-iron);
+    box-shadow: 2px 2px 5px var(--color-primary-common-box-shadow);
 }
 .modal-consolidated-details {
     width: 75%;
@@ -1200,8 +1199,8 @@ modal-container.modal {
 .input-search .input-group-addon {
     background: var(--color-white);
     border-right: 0px;
-    border-color: var(--color-iron);
-    color: var(--color-manatee);
+    border-color: var(--color-primary-button-border);
+    color: var(--color-gray);
     font-size: 12px;
     padding-top: 10px;
     padding-right: 0px;
@@ -1211,7 +1210,7 @@ modal-container.modal {
     background: var(--color-white);
     border-radius: 0px 2px 2px 0px !important;
     border-left: 0px;
-    border-color: var(--color-iron);
+    border-color: var(--color-primary-button-border);
 }
 .btn-filter {
     background: var(--color-white);
@@ -1836,7 +1835,7 @@ input[type="checkbox"]:checked:after {
 }
 .btn-success:disabled,
 .btn-success:disabled:hover {
-    color: rgba(255, 255, 255, 0.51) !important;
+    color: var(--color-white) !important;
     border: 1px solid var(--color-success-disable) !important;
     background: var(--color-success-disable) !important;
 }
@@ -1913,7 +1912,7 @@ input[type="checkbox"]:checked:after {
 }
 .thumbnail.active {
     background: var(--color-white);
-    box-shadow: 0 5px 34px 0 rgba(211, 95, 41, 0.18);
+    box-shadow: 0 5px 34px 0 var(--color-primary-common-box-shadow);
 }
 .thumbnail {
     width: 100%;
@@ -1924,8 +1923,8 @@ input[type="checkbox"]:checked:after {
     border-color: var(--color-primary-thumbnail-border) !important;
 }
 .thumbnail:hover {
-    box-shadow: 0 5px 34px 0 rgba(58, 58, 58, 0.18);
     transition: box-shadow 0.3s ease;
+    box-shadow: 0 5px 34px 0 var(--color-primary-common-box-shadow);
 }
 .thumbnail .caption {
     padding: 20px 7px;
@@ -2129,7 +2128,7 @@ input[type="checkbox"]:checked:after {
     border-radius: 0;
 }
 .daterangepicker.dropdown-menu {
-    box-shadow: 0 3px 28px 0 rgba(0, 0, 0, 0.14);
+    box-shadow: 0 3px 28px 0 var(--color-primary-common-box-shadow);
     color: var(--color-abbey);
     border: 1px solid var(--color-iron);
     z-index: 9999 !important;
@@ -2180,7 +2179,8 @@ button:focus {
 
 .mat-raised-button:focus,
 .mat-raised-button.focus {
-    box-shadow: 0px 3px 1px -2px rgb(0 0 0 / 20%), 0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 1px 5px 0px rgb(0 0 0 / 12%) !important;
+    box-shadow: 0px 3px 1px -2px var(--color-primary-common-box-shadow),
+        0px 2px 2px 0px var(--color-primary-common-box-shadow), 0px 1px 5px 0px var(--color-primary-common-box-shadow) !important;
 }
 
 .Inpt_dwn {
@@ -2588,6 +2588,7 @@ a.btn.btn-xs.btn-link.pull-right {
     position: relative;
     background: var(--color-primary-header-background) !important;
     color: var(--color-white);
+    border-color: var(--color-primary-popup-list-header-bottom-border);
 }
 
 .modal-body {
@@ -2729,11 +2730,10 @@ select.form-control {
     text-align: left;
     background-color: var(--color-white);
     background-clip: padding-box;
-    border: 1px solid var(--color-iron);
-    border: 1px solid rgba(0, 0, 0, 0.15);
+    border: 1px solid var(--color-common-secondary-border);
     border-radius: 4px;
-    -webkit-box-shadow: 0 6px 12px var(--color-black-russian);
-    box-shadow: 0 6px 12px var(--color-black-russian);
+    -webkit-box-shadow: 0 6px 12px var(--color-primary-common-box-shadow);
+    box-shadow: 0 6px 12px var(--color-primary-common-box-shadow);
     z-index: 1001;
 }
 .grp-list {
@@ -3304,7 +3304,7 @@ label {
 }
 .pagination > li > a,
 .pagination > li > span {
-    color: rgba(0, 0, 0, 0.8);
+    color: var(--color-nero);
 }
 .pagination > .active > a,
 .pagination > .active > a:focus,
@@ -3758,7 +3758,7 @@ input[type="checkbox"][disabled] {
 }
 .empty-table h1 {
     font-size: 130%;
-    color: rgba(0, 0, 0, 0.4);
+    color: var(--color-gray);
     padding: 8px;
 }
 .input-group-btn .btn-default {
@@ -4052,6 +4052,14 @@ ng-select .select-drop i {
     pointer-events: none;
 }
 
+virtual-scroll {
+    background-color: var(--color-primary-virtual-scroll-background) !important;
+}
+
+.mat-select-panel {
+    background-color: var(--color-dropdown-primary-background);
+}
+
 virtual-scroll .scrollable-content .item > a {
     color: var(--color-dropdown-list);
     padding: 10px;
@@ -4201,7 +4209,7 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
 .btn-share:hover,
 .btn-share:focus {
     background: var(--color-blue);
-    color: var(--color-white);
+    color: var(--color-secondary-button-text);
 }
 .entry-modal {
     width: 100%;
@@ -4336,7 +4344,7 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
     width: 100%;
 }
 .ledger-head th {
-    color: rgba(0, 0, 0, 0.4);
+    color: var(--color-gray);
 }
 .total-col td {
     border: 0;
@@ -4415,7 +4423,7 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
     padding: 20px 15px;
     background: var(--color-primary-right-side-popup-header-background);
     color: var(--color-primary-right-side-popup-header-text);
-    border-bottom: 1px solid;
+    border-bottom: 1px solid var(--color-primary-popup-list-header-bottom-border);
 }
 .form-header h3 {
     font-size: 18px;
@@ -4493,7 +4501,7 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
 .long-code-details figure ul li {
     list-style: none;
     padding: 12px 0;
-    border-bottom: 1px solid var(--color-iron);
+    border-bottom: 1px solid var(--color-common-secondary-border);
 }
 .long-code-details figure ul li:last-child {
     border-bottom: 0;
@@ -5112,7 +5120,7 @@ perfect-scrollbar > .ps > .ps-overlay {
 }
 .tax-engine .transactions-overview .transaction-info:hover {
     border: 1px solid var(--color-iron);
-    box-shadow: 0 0 20px 3px var(--color-wild-sand);
+    box-shadow: 0 0 20px 3px var(--color-primary-common-box-shadow);
 }
 .tax-engine .transactions-overview .transaction-info {
     padding: 10px 15px;
@@ -5383,7 +5391,7 @@ app-header {
 .sticky-footer.sticky-footer-sale-amount {
     background: var(--color-white);
     padding: 10px;
-    box-shadow: 0 0px 6px rgba(0, 0, 0, 0.16);
+    box-shadow: 0 0px 6px var(--color-primary-common-box-shadow);
     text-align: right !important;
     padding-left: 60px;
 }
@@ -5560,7 +5568,7 @@ div#getGroupModal {
     left: 60px;
     bottom: 0;
     z-index: 3;
-    box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 6px var(--color-primary-common-box-shadow);
 }
 .menu_open .invoice-footer {
     left: 240px;
@@ -5647,10 +5655,10 @@ ul#dropdown-nested .dropdown-menu li:hover .dropdown-item {
     color: var(--color-shark);
 }
 .welcome-container input::placeholder {
-    color: rgba(0, 0, 0, 0.4) !important;
+    color: var(--color-gray) !important;
 }
 .btn-group.btn-block.invoice-btn .btn-block {
-    color: rgba(0, 0, 0, 0.4);
+    color: var(--color-gray);
 }
 .aging-page .icon-pointer .fa.fa-long-arrow-up {
     color: var(--color-manatee);
@@ -5665,7 +5673,7 @@ span.red-text {
 #invoice-setting .nav > li > a:focus,
 #invoice-setting .nav > li > a:hover {
     background: var(--color-rectangular-tab-primary-background) !important;
-    border: 1px solid rgba(26, 35, 126, 0.4) !important;
+    border: 1px solid var(--color-gray) !important;
 }
 #groupDetailForm .btn {
     width: auto;
@@ -5847,13 +5855,14 @@ ul.dropdown-menu p.lead.pd {
     border-bottom: inherit !important;
 }
 #invoice-setting ul.nav.nav-tabs a {
-    border-bottom: 1px solid rgba(26, 35, 126, 0.4) !important;
+    border-bottom: 1px solid !important;
     font-family: "opensans-regular";
     color: var(--color-rectangular-tab-inactive-primary-icon) !important;
     margin-right: 0 !important;
     margin-left: 0 !important;
     border-radius: 4px;
     background-color: var(--color-rectangular-tab-primary-background);
+    border-color: var(--color-rectangular-tab-inactive-secondary-border) !important;
 }
 #invoice-setting ul.nav-tabs > li {
     margin-right: 35px;
@@ -5879,7 +5888,7 @@ ul.dropdown-menu p.lead.pd {
 .btn-lg.btn-primary:hover {
     background: var(--color-blue);
     color: var(--color-white);
-    box-shadow: 0px 4px 4px -3px var(--color-manatee);
+    box-shadow: 0px 4px 4px -3px var(--color-primary-common-box-shadow);
     border-radius: 0px;
     border-color: var(--color-blue) !important;
 }
@@ -5935,7 +5944,7 @@ ul.dropdown-menu p.lead.pd {
     margin-right: 0;
 }
 #tab-integration .nav-tabs > li a {
-    border-bottom: 1px solid rgba(26, 35, 126, 0.4) !important;
+    border-bottom: 1px solid var(--color-gray) !important;
     font-size: 18px;
     border-radius: 4px;
     background-color: var(--color-rectangular-tab-primary-background);
@@ -5957,8 +5966,8 @@ ul.dropdown-menu p.lead.pd {
     padding: 5px 12px;
     color: var(--color-abbey);
     text-align: center;
-    background-color: var(--color-porcelain);
-    border: 1px solid var(--color-iron);
+    background-color: var(--color-dark-fog);
+    border: 1px solid var(--color-primary-button-border);
     border-radius: 5px;
     border-left: none !important;
 }
@@ -6326,7 +6335,7 @@ input.checkbox-custom[type="checkbox"] {
 .radio-custom:checked + :before {
     background: var(--color-blue);
     border: 1px solid var(--color-blue);
-    box-shadow: inset 0px 0px 0px 4px var(--color-white);
+    box-shadow: inset 0px 0px 0px 4px var(--color-primary-common-box-shadow);
 }
 .checkbox-custom:focus + .checkbox-custom-label:before {
     border: 1px solid var(--color-blue);
@@ -6374,7 +6383,7 @@ input.checkbox-custom[type="checkbox"] {
 }
 .modal-content {
     border: none !important;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 5px 15px var(--color-primary-common-box-shadow);
     position: relative;
     background-color: var(--color-popup-background);
     background-clip: padding-box;
@@ -6429,11 +6438,12 @@ ngx-daterangepicker-material {
     position: absolute;
     z-index: 1000;
     overflow: hidden;
-    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.16), 0 2px 8px 0 rgba(0, 0, 0, 0.12);
+    box-shadow: 0 2px 4px 0 var(--color-primary-common-box-shadow), 0 2px 8px 0 var(--color-primary-common-box-shadow);
     z-index: 1;
     width: 100% !important;
     max-width: 544px !important;
 }
+
 .edit-modal {
     max-width: 300px;
     margin: 0 auto;
@@ -6588,7 +6598,7 @@ span#HW_badge_cont:nth-child(3) {
 .mobile-sidebar-open:after {
     position: absolute;
     content: "";
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: var(--color-gray);
     width: 100%;
     height: 100%;
     left: 0;
@@ -6753,7 +6763,7 @@ span#HW_badge_cont:nth-child(3) {
 
 .purchase-record-confirmation-modal {
     .modal-content {
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+        box-shadow: 0 5px 15px var(--color-primary-common-box-shadow);
     }
 }
 
@@ -6787,8 +6797,8 @@ span#HW_badge_cont:nth-child(3) {
 }
 
 .daterangepicker.dropdown-menu {
-    box-shadow: 0 3px 28px 0 rgba(0, 0, 0, 0.14);
-    color: var(--color-manatee);
+    box-shadow: 0 3px 28px 0 var(--color-primary-common-box-shadow);
+    color: var(--color-gray);
     border: 1px solid var(--color-iron);
     z-index: 9999 !important;
 }
@@ -6851,7 +6861,7 @@ span#HW_badge_cont:nth-child(3) {
         width: 268px;
         font-family: inherit;
         border-radius: 4px;
-        box-shadow: 0 3px 6px var(--color-black-russian);
+        box-shadow: 0 3px 6px var(--color-primary-common-box-shadow);
         top: 20% !important;
 
         .popover-arrow {
@@ -6915,13 +6925,13 @@ span#HW_badge_cont:nth-child(3) {
             .nav-item {
                 .nav-link {
                     font-size: 16px !important;
-                    color: var(--color-tab-primary-text) !important;
+                    color: var(--color-tab-primary-inactive) !important;
                 }
             }
 
             .active {
                 > .nav-link {
-                    color: var(--color-tab-primary-text) !important;
+                    color: var(--color-tab-primary-active) !important;
                 }
             }
         }
@@ -7194,7 +7204,7 @@ giddh-datepicker {
 }
 giddh-datepicker {
     .mat-form-field-appearance-fill .mat-form-field-flex {
-        border: 1px solid var(--color-iron) !important;
+        border: 1px solid var(--color-secondary-input-bar-border) !important;
         border-radius: 5px !important;
     }
 }
@@ -7453,7 +7463,7 @@ giddh-datepicker {
         -o-transform: translate(-100px, 0px);
         -ms-transform: translate(-100px, 0px);
         transform: translate3d(-100px, 0px, 0px);
-        box-shadow: 0 0 3px rgba(0, 0, 0, 0.2) !important;
+        box-shadow: 0 0 3px var(--color-primary-common-box-shadow) !important;
 
         &.create-account {
             transform: none;
@@ -7958,7 +7968,7 @@ body.update-scroll-hidden {
     }
     .stock-lists {
         position: absolute;
-        box-shadow: 0 3px 6px var(--color-iron);
+        box-shadow: 0 3px 6px var(--color-primary-common-box-shadow);
         background: var(--color-white);
         min-width: 200px;
         display: inline-block;
@@ -8116,7 +8126,7 @@ body.update-scroll-hidden {
         content: "";
         width: 100%;
         height: 100%;
-        background-color: rgba(0, 0, 0, 0.5);
+        background-color: var(--color-gray);
         top: 0;
         z-index: 4;
     }
@@ -8580,7 +8590,7 @@ body.update-scroll-hidden {
     .menu_open:before {
         position: absolute;
         content: "";
-        background: rgba(0, 0, 0, 0.3);
+        background: var(--color-gray);
         z-index: 990;
         height: 100%;
         width: 100%;
@@ -8786,7 +8796,7 @@ body.update-scroll-hidden {
         &:after {
             position: absolute;
             content: "";
-            background-color: rgba(0, 0, 0, 0.4);
+            background-color: var(--color-gray);
             width: 100% !important;
             height: 125%;
             z-index: -1;
@@ -8837,7 +8847,7 @@ body.update-scroll-hidden {
     .mobile-setting-sidebar:after {
         position: absolute;
         content: "";
-        background-color: rgba(0, 0, 0, 0.5);
+        background-color: var(--color-gray);
         width: 100%;
         height: 100vh;
         top: 0;
@@ -9118,6 +9128,7 @@ body.update-scroll-hidden {
         min-height: 150px;
     }
 }
+
 @media only screen and (max-width: 480px) {
     td.item-padding.price .my-dropdown-menu {
         width: 180px !important;
@@ -9484,7 +9495,7 @@ input[type="checkbox"].cdk-visually-hidden::after {
 }
 .activation-key {
     .mat-input-element {
-        border: 1px solid var(--color-skeleton-loading-gradient) !important;
+        border: 1px solid var(--color-secondary-input-bar-border) !important;
     }
 }
 .susbcription-plan-amount {
@@ -9495,8 +9506,8 @@ input[type="checkbox"].cdk-visually-hidden::after {
     text-transform: lowercase;
 }
 .all_feature_button {
-    background-color: #1a237e;
-    color: white;
+    background-color: var(--color-giddh-blue);
+    color: var(--color-white);
     border: none;
     border-radius: 4px;
     height: 40px;

@@ -73,6 +73,9 @@ body.default-theme {
     --color-upgrade-plan-card-primary-background-hover: #e7e9eb;
     --color-upgrade-plan-card-primary-border-hover: #1a237e;
     --color-csv-or-excel-file-card-text: #668cff;
+    --color-primary-card-text: #212528;
+    --color-primary-card-background: #ffffff;
+    --color-primary-card-box-shadow: #00000033;
 
     // Button Color Variables
     --color-primary-button-text: #1a237e;
@@ -98,6 +101,7 @@ body.default-theme {
     --color-primary-filter-button-text: #505159;
     --color-primary-basic-button-text: #505159;
     --color-primary-cancel-button-background-hover: #9b9b9e;
+    --color-primary-button-border: #cbcfd2;
 
     // Dropdown Color Variables
     --color-dropdown-list: #212528;
@@ -176,8 +180,9 @@ body.default-theme {
     --color-primary-profit-loss-total-income-text: #668cff;
 
     // Aside Form Color Variables
-    --color-primary-aside-pane-form-box-shadow: #cbcfd2;
+    --color-primary-aside-pane-form-box-shadow: #00000033;
     --color-primary-aside-pane-back-to-main-slider: #668cff;
+    --color-primary-aside-pane-unactive-background: #212528;
 
     // Aside Setting and Aside Help Support Color Variables
     --color-primary-aside-host-after-background: #f5f5f5;
@@ -200,6 +205,7 @@ body.default-theme {
     --color-secondary-subscription-dropdown-background: #ffffff;
     --color-secondary-subscription-dropdown-background-hover: #e7e9eb;
     --color-primary-subscription-left-sidebar-box-background: #668cff26;
+    --color-primary-subscription-left-sidebar-border-right: #cbcfd2;
 
     // Proforma Invoice Color Variables
     --color-primary-performa-invoice-a-copy-invoice: #668cff;
@@ -321,6 +327,7 @@ body.default-theme {
     --color-popup-footer-background: #f5f5f5;
     --color-popup-secondary-footer-background: #cbcfd2;
     --color-popup-list-all-features-text: #505159;
+    --color-primary-popup-list-header-bottom-border: #1a237e;
 
     // Common Chips Variables
     --color-chips-primary-background: #f5f5f5;
@@ -343,8 +350,9 @@ body.default-theme {
     --color-rectangular-tab-primary-background: #ffffff;
     --color-rectangular-tab-inactive-primary-icon: #212528;
     --color-rectangular-tab-inactive-primary-text: #212528;
-    --color-rectangular-tab-inactive-primary-border: #668cff;
     --color-rectangular-tab-box-shadow: #cbcfd2;
+    --color-rectangular-tab-inactive-primary-border: #668cff;
+    --color-rectangular-tab-inactive-secondary-border: #cbcfd2;
 
     // Pagination Color Variables
     --color-pagination-button: #212528;
@@ -370,6 +378,8 @@ body.default-theme {
     --color-invoice-preview-giddh-table-border-right: #cbcfd2;
     --color-invoice-preview-span-close-modal-background: #cbcfd2;
     --color-invoice-preview-default-footer-border: #36b283;
+    --color-primary-invoice-preview-details-left-sidebar-list-background-active-hover: #f5f5f5;
+    --color-primary-invoice-preview-details-background: #f5f5f5;
 
     // Contact Color Variables
     --color-primary-contact-icon-dots-three-vertical: #505159;
@@ -557,12 +567,14 @@ body.default-theme {
     --color-btn-success-dropdown-toggle: #36b283;
     --color-common-primary-border: #cbcfd2;
     --color-common-secondary-border: #cbcfd2;
+    --color-primary-common-box-shadow: #00000033;
 
     // Toast Color Variables
     --color-red-toast: #e54556;
     --color-green-toast: #36b283;
     --color-warning-toast: #e58a00;
     --color-info-toast: #668cff;
+    --color-toast-primary-text: #f5f5f5;
 
     // Common Leftout Background Color Variables
     --color-common-primary-blue-border: #212528;
@@ -609,6 +621,9 @@ body.default-theme {
     --color-primary-square-switch-input-checked-label: #36b283;
     --color-primary-add-company-detail-add-mailer-form-background: #ffffff;
 
+    // Virtual Scroll Color Variables
+    --color-primary-virtual-scroll-background: #ffffff;
+
     // Common Leftout Text Color Variables
     --color-common-primary-dark-blue: #1a237e;
 
@@ -620,7 +635,9 @@ body.default-theme {
     --color-giddh-blue: #1a237e;
     --color-wild-sand: #f5f5f5;
     --color-white: #ffffff;
-    --color-porcelain: #e7e9eb;
+    --color-white-secondary: #f5f5f5;
+    --color-dark-fog: #e7e9eb;
+    --color-lavender: #e7e9eb;
     --color-iron: #cbcfd2;
     --color-manatee: #9b9b9e;
     --color-abbey: #505159;

@@ -1,5 +1,5 @@
 .giddh-table {
-    background: #fff;
+    background: var(--color-white);
     font-family: "opensans-semibold";
     border: 1px solid var(--color-iron);
     width: 100%;
@@ -196,8 +196,8 @@
             background: transparent;
         }
         tbody tr {
-            box-shadow: 0 0px 5px rgba(0, 0, 0, 0.1);
-            background: #fff;
+            box-shadow: 0 0px 5px var(--color-iron);
+            background: var(--color-white);
             border-bottom: none;
             cursor: pointer;
             display: block;
@@ -242,7 +242,7 @@
             top: -6px;
         }
         tbody td:before {
-            color: rgba(0, 0, 0, 0.55);
+            color: var(--color-slate);
             font-size: 14px;
             content: attr(data-title);
             display: table-cell;

@@ -71,7 +71,10 @@ body.dark-theme {
     --color-upgrade-plan-tertiary-background: #668cff26;
     --color-upgrade-plan-card-primary-background-hover: #668cff26;
     --color-upgrade-plan-card-primary-border-hover: #36b283;
-    --color-csv-or-excel-file-card-text: #668cff;
+    --color-csv-or-excel-file-card-text: #36b283;
+    --color-primary-card-text: #f5f5f5;
+    --color-primary-card-background: #212528;
+    --color-primary-card-box-shadow: #00000080;
 
     // Button Color Variables
     --color-primary-button-text: #1a237e;
@@ -97,6 +100,7 @@ body.dark-theme {
     --color-primary-filter-button-text: #9b9b9e;
     --color-primary-basic-button-text: #9b9b9e;
     --color-primary-cancel-button-background-hover: #668cff26;
+    --color-primary-button-border: #505159;
 
     // Dropdown Color Variables
     --color-dropdown-list: #f5f5f5;
@@ -176,8 +180,9 @@ body.dark-theme {
     --color-primary-profit-loss-total-income-text: #668cff;
 
     // Aside Form Color Variables
-    --color-primary-aside-pane-form-box-shadow: #212528;
+    --color-primary-aside-pane-form-box-shadow: #00000080;
     --color-primary-aside-pane-back-to-main-slider: #668cff;
+    --color-primary-aside-pane-unactive-background: #668cff26;
 
     // Aside Setting and Aside Help Support Color Variables
     --color-primary-aside-host-after-background: #f5f5f5;
@@ -200,6 +205,7 @@ body.dark-theme {
     --color-secondary-subscription-dropdown-background: #212528;
     --color-secondary-subscription-dropdown-background-hover: #668cff26;
     --color-primary-subscription-left-sidebar-box-background: #36b28326;
+    --color-primary-subscription-left-sidebar-border-right: #505159;
 
     // Proforma Invoice Color Variables
     --color-primary-performa-invoice-a-copy-invoice: #668cff;
@@ -321,6 +327,7 @@ body.dark-theme {
     --color-popup-footer-background: #212528;
     --color-popup-secondary-footer-background: #668cff26;
     --color-popup-list-all-features-text: #f5f5f5;
+    --color-primary-popup-list-header-bottom-border: #505159;
 
     // Common Chips Variables
     --color-chips-primary-background: #668cff26;
@@ -343,8 +350,9 @@ body.dark-theme {
     --color-rectangular-tab-primary-background: #212528;
     --color-rectangular-tab-inactive-primary-icon: #f5f5f5;
     --color-rectangular-tab-inactive-primary-text: #668cff26;
-    --color-rectangular-tab-inactive-primary-border: #212528;
     --color-rectangular-tab-box-shadow: #212528;
+    --color-rectangular-tab-inactive-primary-border: #212528;
+    --color-rectangular-tab-inactive-secondary-border: #505159;
 
     // Pagination Color Variables
     --color-pagination-button: #f5f5f5;
@@ -370,6 +378,8 @@ body.dark-theme {
     --color-invoice-preview-giddh-table-border-right: #9b9b9e;
     --color-invoice-preview-span-close-modal-background: #9b9b9e;
     --color-invoice-preview-default-footer-border: #36b283;
+    --color-primary-invoice-preview-details-left-sidebar-list-background-active-hover: #668cff26;
+    --color-primary-invoice-preview-details-background: #668cff26;
 
     // Contact Color Variables
     --color-primary-contact-icon-dots-three-vertical: #9b9b9e;
@@ -514,7 +524,7 @@ body.dark-theme {
     --color-scrollbar-primary-thumb-background: #505159;
 
     // Mat Divider Color Variables
-    --color-primary-mat-divider: #9b9b9e;
+    --color-primary-mat-divider: #668cff26;
 
     // Total Details Box above table Color Variables
     --color-total-details-heading: #9b9b9e;
@@ -556,12 +566,14 @@ body.dark-theme {
     --color-btn-success-dropdown-toggle: #36b283;
     --color-common-primary-border: #668cff26;
     --color-common-secondary-border: #505159;
+    --color-primary-common-box-shadow: #00000080;
 
     // Toast Color Variables
     --color-red-toast: #e54556;
     --color-green-toast: #36b283;
     --color-warning-toast: #e58a00;
     --color-info-toast: #668cff;
+    --color-toast-primary-text: #f5f5f5;
 
     // Common Leftout Background Color Variables
     --color-common-primary-blue-border: #f5f5f5;
@@ -608,6 +620,9 @@ body.dark-theme {
     --color-primary-square-switch-input-checked-label: #36b283;
     --color-primary-add-company-detail-add-mailer-form-background: #f5f5f5;
 
+    // Virtual Scroll Color Variables
+    --color-primary-virtual-scroll-background: #212528;
+
     // Common Leftout Text Color Variables
     --color-common-primary-dark-blue: #668cff;
 
@@ -619,7 +634,9 @@ body.dark-theme {
     --color-giddh-blue: #668cff;
     --color-wild-sand: #f5f5f5;
     --color-white: #212528;
-    --color-porcelain: #668cff26;
+    --color-white-secondary: #212528;
+    --color-dark-fog: #668cff26;
+    --color-lavender: #e7e9eb;
     --color-iron: #9b9b9e;
     --color-manatee: #cbcfd2;
     --color-abbey: #9b9b9e;

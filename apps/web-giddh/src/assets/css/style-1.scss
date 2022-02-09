@@ -157,6 +157,7 @@ header .navbar {
 header .navbar-nav > li.active {
     margin-left: -15px;
 }
+
 /* aside menu component */
 
 aside-menu-account .container-fluid {
@@ -684,7 +685,7 @@ aside-menu-account .container-fluid {
     width: 10px;
     height: 10px;
     margin: 70px 2px;
-    background: rgba(0, 0, 0, 0.25);
+    background: var(--color-gray);
     border-radius: 50%;
     transform: translateY(0);
     -moz-transform: translateY(0);
@@ -697,17 +698,17 @@ aside-menu-account .container-fluid {
     0%,
     60%,
     100% {
-        background: rgba(0, 0, 0, 0.25);
+        background: var(--color-gray);
         transform: translateY(0);
         -moz-transform: translateY(0);
     }
     20% {
-        background: rgba(0, 0, 0, 0.75);
+        background: var(--color-nero);
         transform: translateY(13px);
         -moz-transform: translateY(13px);
     }
     40% {
-        background: rgba(0, 0, 0, 0.75);
+        background: var(--color-nero);
         transform: translateY(-13px);
         -moz-transform: translateY(-13px);
     }
@@ -716,17 +717,17 @@ aside-menu-account .container-fluid {
     0%,
     60%,
     100% {
-        background: rgba(0, 0, 0, 0.25);
+        background: var(--color-gray);
         transform: translateY(0);
         -webkit-transform: translateY(0);
     }
     20% {
-        background: rgba(0, 0, 0, 0.75);
+        background: var(--color-nero);
         transform: translateY(13px);
         -webkit-transform: translateY(13px);
     }
     40% {
-        background: rgba(0, 0, 0, 0.75);
+        background: var(--color-nero);
         transform: translateY(-13px);
         -webkit-transform: translateY(-13px);
     }
@@ -818,7 +819,7 @@ aside-menu-account .container-fluid {
     top: -42px;
 }
 .ui-select-highlight {
-    background-color: #f9f08b;
+    background-color: var(--color-orange);
     display: inline-block;
 }
 /*breadcrumb style*/
@@ -1147,7 +1148,7 @@ table:focus {
 }
 .account-card:hover {
     background: var(--color-account-card-background-hover);
-    box-shadow: 0 5px 5px 0 rgba(58, 58, 58, 0.18);
+    box-shadow: 0 5px 5px 0 var(--color-primary-common-box-shadow);
 }
 .account-card > h1 {
     font-size: 16px;
@@ -1175,7 +1176,7 @@ table:focus {
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
-    color: rgba(0, 0, 0, 0.6);
+    color: var(--color-abbey);
 }
 .account-card > .balances ul li {
     font-size: 10px;
@@ -1245,7 +1246,7 @@ table:focus {
     color: var(--color-abbey);
     background: var(--color-white);
     border-radius: 2px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+    box-shadow: 0 1px 3px var(--color-primary-common-box-shadow), 0 1px 2px var(--color-primary-common-box-shadow);
     transition: all 0.2s ease-in-out;
 }
 .audit-log > h1 {
@@ -1262,7 +1263,7 @@ table:focus {
     width: 100%;
     height: 60px;
     position: relative;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+    box-shadow: 0 1px 3px var(--color-primary-common-box-shadow), 0 1px 2px var(--color-primary-common-box-shadow);
 }
 .audit-log .border-top-btm {
     border-bottom: 1px solid var(--color-iron);
@@ -1325,8 +1326,8 @@ table:focus {
         float: none;
         width: auto;
         margin-top: 0;
-        background-color: var(--color-shark);
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+        background-color: var(--color-nero);
+        box-shadow: 0 6px 12px var(--color-primary-common-box-shadow);
     }
     .navbar-nav > li > a {
         padding-top: 15px;
@@ -1492,13 +1493,13 @@ ul.pills li {
     position: relative;
     padding: 6px 14px;
     z-index: 2;
-    -webkit-box-shadow: 0px 3px 28px 0 rgba(0, 0, 0, 0.14);
-    -moz-box-shadow: 0px 3px 28px 0 rgba(0, 0, 0, 0.14);
-    box-shadow: 0px 3px 28px 0 rgba(0, 0, 0, 0.14);
+    -webkit-box-shadow: 0px 3px 28px 0 var(--color-primary-common-box-shadow);
+    -moz-box-shadow: 0px 3px 28px 0 var(--color-primary-common-box-shadow);
+    box-shadow: 0px 3px 28px 0 var(--color-primary-common-box-shadow);
     font-family: "opensans-regular";
     font-size: 100%;
     font-size: 14px;
-    border: 1px solid var(--color-iron);
+    border: 1px solid var(--color-common-primary-border);
     z-index: 100;
 }
 @-webkit-keyframes panel-open {
@@ -1563,8 +1564,8 @@ ul.pills li {
     left: 269px;
     box-shadow: none;
     top: 0px;
-    -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+    -webkit-box-shadow: 0 6px 12px var(--color-primary-common-box-shadow);
+    box-shadow: 0 6px 12px var(--color-primary-common-box-shadow);
 }
 .sub_nav_menu li:not(.divider) {
     padding: 5px 10px;
@@ -1637,7 +1638,7 @@ ul.pills li {
     margin-right: 5px;
 }
 .shadow {
-    box-shadow: var(--color-shark) 0px 0px 14px -4px;
+    box-shadow: var(--color-primary-common-box-shadow) 0px 0px 14px -4px;
 }
 /*giddh loader*/
 #dashboard .panel-body {
@@ -1655,7 +1656,7 @@ ul.pills li {
     z-index: 100;
 }
 .dashboard-reconnect-block {
-    background: rgba(255, 255, 255, 0.9);
+    background: #ffffffe6;
     position: absolute;
     height: 100%;
     width: 100%;
@@ -1767,7 +1768,7 @@ ul.pills li {
     color: var(--color-manatee);
 }
 .tour-backdrop {
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: var(--color-abbey);
 }
 .parent-body {
     padding-bottom: 52px;
@@ -1793,7 +1794,7 @@ ul.pills li {
     top: -6px;
     max-height: 100px;
     overflow-y: auto;
-    box-shadow: 0px 1px 1px 1px rgba(0, 0, 0, 0.5);
+    box-shadow: 0px 1px 1px 1px var(--color-primary-common-box-shadow);
 }
 .left-col-new,
 .right-col-new {
@@ -1837,11 +1838,10 @@ ul.pills li {
     list-style: none;
     background-color: var(--color-white);
     background-clip: padding-box;
-    border: 1px solid var(--color-iron);
-    border: 1px solid rgba(0, 0, 0, 0.15);
+    border: 1px solid var(--color-common-secondary-border);
     border-radius: 4px;
-    -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+    -webkit-box-shadow: 0 6px 12px var(--color-primary-common-box-shadow);
+    box-shadow: 0 6px 12px var(--color-primary-common-box-shadow);
 }
 .dropdown-menu {
     position: absolute;
@@ -1857,9 +1857,9 @@ ul.pills li {
     background-color: var(--color-white);
     -webkit-background-clip: padding-box;
     background-clip: padding-box;
-    border: 1px solid rgba(0, 0, 0, 0.15);
+    border: 1px solid var(--color-primary-common-box-shadow);
     border-radius: 4px;
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+    box-shadow: 0 6px 12px var(--color-primary-common-box-shadow);
     li {
         margin-bottom: 10px;
         color: var(--color-dropdown-list-quaternary);
@@ -1952,7 +1952,7 @@ ul.pills li {
     border-color: transparent;
 }
 .panel-heading {
-    color: rgba(0, 0, 0, 0.8) !important;
+    color: var(--color-nero) !important;
     text-transform: capitalize;
     padding: 10px 15px;
     border-bottom: 1px solid transparent;
@@ -2319,7 +2319,7 @@ form#groupDetailForm {
     bs-datepicker-container {
         overflow-y: auto;
         height: auto;
-        box-shadow: 0 0 10px 0 var(--color-manatee);
+        box-shadow: 0 0 10px 0 var(--color-primary-common-box-shadow);
         top: 50% !important;
         left: 50% !important;
         transform: translate(-50%, -50%) !important;
@@ -2366,7 +2366,7 @@ form#groupDetailForm {
     bottom: 0;
     left: 0;
     z-index: 9999;
-    background: #000000;
+    background: var(--color-primary-aside-pane-unactive-background);
     opacity: 0.5;
     -webkit-transition: opacity 0.15s linear;
     -o-transition: opacity 0.15s linear;
@@ -2566,7 +2566,7 @@ giddh-datepicker {
     }
 }
 .mat-field-border {
-    border: 1px solid var(--color-iron) !important;
+    border: 1px solid var(--color-secondary-input-bar-border) !important;
 }
 .mat-grid-tile.select2-parent.select2-ledger .mat-grid-tile-content {
     padding-left: 0px !important;
@@ -2645,12 +2645,12 @@ update-ledger-entry-panel .ledger-main .mat-form-field {
 tr.mat-header-row,
 tr.mat-row,
 tr.mat-footer-row {
-    border-bottom: 1px solid var(--color-table-primary-border-bottom);
+    border-bottom: 1px solid var(--color-table-primary-content-bar-border);
 }
 .mat-header-cell,
 .mat-cell {
     font-weight: 400;
-    padding: 14px 10px !important;
+    padding: 5px 10px !important;
     text-transform: capitalize;
     display: table-cell !important;
 }
@@ -2679,11 +2679,11 @@ tr.mat-footer-row {
 .daybook-table {
     tr.mat-row,
     tr.mat-footer-row {
-        border-top: 1px solid var(--color-iron);
+        border-top: 1px solid var(--color-table-primary-content-bar-border);
     }
     td.mat-cell {
         border-bottom-width: 0px !important;
-        border-top: 1px solid var(--color-iron);
+        border-top: 1px solid var(--color-table-primary-content-bar-border);
     }
     .nested-table {
         > tbody {
@@ -2692,7 +2692,7 @@ tr.mat-footer-row {
                     border: 0 !important;
                     padding: 8px 0;
                 }
-                border-top: 1px solid var(--color-daybook-nested-table-tbody-tr-border);
+                border-top: 1px solid var(--color-table-primary-content-bar-border);
                 &:first-child {
                     border-top: none !important;
                 }
@@ -2723,6 +2723,11 @@ td.mat-footer-cell {
     border-bottom-width: 1px;
     border-bottom-color: var(--color-table-primary-content-bar-border) !important;
 }
+
+.mat-header-row {
+    background-color: var(--color-table-heading-primary-background) !important;
+}
+
 .mat-header-row,
 .mat-row {
     display: table-row !important;

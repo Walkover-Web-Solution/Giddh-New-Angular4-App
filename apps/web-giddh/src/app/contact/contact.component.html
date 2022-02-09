@@ -919,7 +919,7 @@
                 </table>
             </ng-container>
 
-            <ng-container *ngIf="activeTab === 'vendor'">
+            <ng-container *ngIf="activeTab === 'vendor'" class="sticky-table">
                 <table
                     *ngIf="(searchStr || sundryCreditorsAccounts?.length) && customFieldsLoaded"
                     mat-table
