@@ -285,7 +285,7 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     public openAddBranchModal() {
-        this.branchModal.show();
+        this.branchModal?.show();
     }
 
     public hideAddBranchModal() {
@@ -335,7 +335,7 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
     public removeBranch(branchUniqueName, companyName) {
         this.selectedBranch = branchUniqueName;
         this.confirmationMessage = `Are you sure want to remove <b>${companyName}</b>?`;
-        this.confirmationModal.show();
+        this.confirmationModal?.show();
     }
 
     public onUserConfirmation(yesOrNo) {

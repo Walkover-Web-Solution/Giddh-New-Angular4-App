@@ -18,6 +18,7 @@ import { CreateCompanyUsersPlan, SubscriptionRequest } from "../../../models/api
 import { CompanyActions } from "../../../actions/company.actions";
 import { SettingsProfileActions } from "../../../actions/settings/profile/settings.profile.action";
 import { GeneralService } from "../../../services/general.service";
+import { DEFAULT_SIGNUP_TRIAL_PLAN } from "../../../app.constant";
 
 
 /** This interface will use for monthly data */
@@ -108,6 +109,8 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
     public isExpand: boolean = false;
     /** This will use for active company */
     public activeCompany: any = {};
+    /** This will contain the plan unique name of default trial plan */
+    public defaultTrialPlan: string = DEFAULT_SIGNUP_TRIAL_PLAN;
 
     constructor(
         public dialog: MatDialog,
