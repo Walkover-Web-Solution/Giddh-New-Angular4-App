@@ -596,8 +596,12 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
      * @memberof WarehouseComponent
      */
     public confirmStatusUpdate(warehouse: any): void {
-        this.warehouseStatusToUpdate = warehouse;
-        this.statusModal?.show();
+        if (!warehouse?.isDefault || warehouse?.isArchived) {
+            this.warehouseStatusToUpdate = warehouse;
+            this.statusModal?.show();
+        } else {
+            this.toasterService.warningToast(this.localeData?.archive_notallowed);
+        }
     }
 
     /**

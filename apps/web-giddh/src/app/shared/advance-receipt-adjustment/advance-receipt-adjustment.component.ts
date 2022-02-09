@@ -15,6 +15,7 @@ import { AdjustedVoucherType, SubVoucher } from '../../app.constant';
 import { giddhRoundOff } from '../helpers/helperFunctions';
 import { GeneralService } from '../../services/general.service';
 import { AdjustmentUtilityService } from './services/adjustment-utility.service';
+import { VoucherTypeEnum } from '../../models/api-models/Sales';
 
 /** Toast message when no advance receipt is found */
 const NO_ADVANCE_RECEIPT_FOUND = 'There is no advanced receipt for adjustment.';
@@ -88,7 +89,8 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
     @Input() public isVoucherModule: boolean;
     /** Stores the voucher eligible for adjustment */
     @Input() public voucherForAdjustment: Array<Adjustment>;
-
+    /** Holds input to get invoice list request params */
+    @Input() public invoiceListRequestParams: any;
     /** Close modal event emitter */
     @Output() public closeModelEvent: EventEmitter<{ adjustVoucherData: VoucherAdjustments, adjustPaymentData: AdjustAdvancePaymentModal }> = new EventEmitter();
     /** Submit modal event emitter */
@@ -159,8 +161,20 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
             let voucherType =
                 (this.adjustedVoucherType === AdjustedVoucherType.AdvanceReceipt || this.adjustedVoucherType === AdjustedVoucherType.Receipt) ? 'receipt' : this.adjustedVoucherType;
 
-            if (this.voucherApiVersion === 2 && voucherType === AdjustedVoucherType.Sales) {
-                voucherType = AdjustedVoucherType.SalesInvoice;
+            if (this.voucherApiVersion === 2) {
+                if (voucherType === AdjustedVoucherType.Sales) {
+                    voucherType = AdjustedVoucherType.SalesInvoice;
+                } else if (voucherType === AdjustedVoucherType.Purchase) {
+                    voucherType = AdjustedVoucherType.PurchaseInvoice;
+                } else if(voucherType === AdjustedVoucherType.Payment) {
+                    voucherType = VoucherTypeEnum.payment
+                } else if(voucherType === AdjustedVoucherType.Receipt) {
+                    voucherType = VoucherTypeEnum.receipt
+                }
+
+                if (this.invoiceListRequestParams) {
+                    this.invoiceListRequestParams.voucherType = voucherType;
+                }
             }
 
             const customerUniqueName = this.invoiceFormDetails.voucherDetails.customerUniquename;
@@ -168,10 +182,17 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
             if (typeof customerUniqueName === 'string') {
                 // New entry is created from ledger
                 if (this.voucherApiVersion === 2) {
-                    requestObject = {
-                        accountUniqueName: customerUniqueName,
-                        voucherType,
-                        subVoucher: this.adjustedVoucherType === AdjustedVoucherType.AdvanceReceipt ? SubVoucher.AdvanceReceipt : undefined
+                    if (!this.invoiceListRequestParams) {
+                        requestObject = {
+                            accountUniqueName: customerUniqueName,
+                            voucherType,
+                            subVoucher: this.adjustedVoucherType === AdjustedVoucherType.AdvanceReceipt ? SubVoucher.AdvanceReceipt : undefined
+                        }
+                    } else {
+                        requestObject = this.adjustmentUtilityService.getInvoiceListRequest(this.invoiceListRequestParams);
+                        if (requestObject && this.adjustedVoucherType === AdjustedVoucherType.AdvanceReceipt) {
+                            requestObject.subVoucher = SubVoucher.AdvanceReceipt;
+                        }
                     }
                 } else {
                     requestObject = {
@@ -183,10 +204,17 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
             } else {
                 // A ledger entry is updated
                 if (this.voucherApiVersion === 2) {
-                    requestObject = {
-                        accountUniqueName: customerUniqueName[customerUniqueName?.length-1],
-                        voucherType,
-                        subVoucher: this.adjustedVoucherType === AdjustedVoucherType.AdvanceReceipt ? SubVoucher.AdvanceReceipt : undefined
+                    if (!this.invoiceListRequestParams) {
+                        requestObject = {
+                            accountUniqueName: customerUniqueName[customerUniqueName?.length - 1],
+                            voucherType,
+                            subVoucher: this.adjustedVoucherType === AdjustedVoucherType.AdvanceReceipt ? SubVoucher.AdvanceReceipt : undefined
+                        }
+                    } else {
+                        requestObject = this.adjustmentUtilityService.getInvoiceListRequest(this.invoiceListRequestParams);
+                        if (requestObject && this.adjustedVoucherType === AdjustedVoucherType.AdvanceReceipt) {
+                            requestObject.subVoucher = SubVoucher.AdvanceReceipt;
+                        }
                     }
                 } else {
                     requestObject = {
@@ -196,7 +224,12 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
                     }
                 }
             }
-            this.salesService.getInvoiceList(requestObject, this.invoiceFormDetails.voucherDetails.voucherDate).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+
+            if (!requestObject) {
+                return;
+            }
+
+            this.salesService.getInvoiceList(requestObject, this.invoiceFormDetails.voucherDetails.voucherDate, 50).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
                 if (response && response.body) {
                     let results = (response.body.results || response.body.items);
 
@@ -222,10 +255,13 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
                     } else {
                         // Vouchers for new adjustment not found fill the suggestions with already adjusted vouchers
                         this.pushExistingAdjustments();
-                        if (this.isVoucherModule) {
-                            this.toaster.warningToast(NO_ADVANCE_RECEIPT_FOUND);
-                        } else {
-                            this.toaster.warningToast(this.commonLocaleData?.app_voucher_unavailable);
+
+                        if (!this.adjustVoucherForm?.adjustments?.length || !this.adjustVoucherForm?.adjustments[0]?.uniqueName) {
+                            if (this.isVoucherModule) {
+                                this.toaster.warningToast(NO_ADVANCE_RECEIPT_FOUND);
+                            } else {
+                                this.toaster.warningToast(this.commonLocaleData?.app_voucher_unavailable);
+                            }
                         }
                     }
                 }
@@ -249,7 +285,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
                     });
                     this.assignCurrencyInAdjustVoucherForm();
                 } else {
-                    if (this.isVoucherModule) {
+                    if ((!this.adjustVoucherForm?.adjustments?.length || !this.adjustVoucherForm?.adjustments[0]?.uniqueName) && this.isVoucherModule) {
                         this.toaster.warningToast(NO_ADVANCE_RECEIPT_FOUND);
                     }
                 }
@@ -357,7 +393,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
                     accountUniqueName: this.getAllAdvanceReceiptsRequest.accountUniqueName,
                     voucherType: this.adjustedVoucherType
                 }
-                apiCallObservable = this.salesService.getInvoiceList(requestObject, this.getAllAdvanceReceiptsRequest.invoiceDate);
+                apiCallObservable = this.salesService.getInvoiceList(requestObject, this.getAllAdvanceReceiptsRequest.invoiceDate, 50);
             }
 
             apiCallObservable.pipe(takeUntil(this.destroyed$)).subscribe(res => {
@@ -393,7 +429,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
                                 }
                             });
                         } else {
-                            if (this.isVoucherModule) {
+                            if ((!this.adjustVoucherForm?.adjustments?.length || !this.adjustVoucherForm?.adjustments[0]?.uniqueName) && this.isVoucherModule) {
                                 this.toaster.warningToast(NO_ADVANCE_RECEIPT_FOUND);
                             }
                         }
@@ -765,7 +801,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
             let convertedTotalAmount: number = 0;
             this.adjustVoucherForm.adjustments.forEach(item => {
                 if (item && item.adjustmentAmount && item.adjustmentAmount.amountForAccount) {
-                    if ((this.adjustedVoucherType === AdjustedVoucherType.SalesInvoice && item.voucherType === AdjustedVoucherType.DebitNote) || (this.adjustedVoucherType === AdjustedVoucherType.PurchaseInvoice && item.voucherType === AdjustedVoucherType.CreditNote)) {
+                    if (((this.adjustedVoucherType === AdjustedVoucherType.SalesInvoice || this.adjustedVoucherType === AdjustedVoucherType.Sales) && item.voucherType === AdjustedVoucherType.DebitNote) || ((this.adjustedVoucherType === AdjustedVoucherType.PurchaseInvoice || this.adjustedVoucherType === AdjustedVoucherType.Purchase) && item.voucherType === AdjustedVoucherType.CreditNote)) {
                         totalAmount -= Number(item.adjustmentAmount.amountForAccount);
                         convertedTotalAmount -= item.adjustmentAmount.amountForCompany;
                     } else {
@@ -922,7 +958,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
     public getExchangeGainLossText(): string {
         const isProfit = this.isExchangeProfitable();
         const profitType = isProfit ? this.commonLocaleData?.app_exchange_gain : this.commonLocaleData?.app_exchange_loss;
-        const text = `${this.localeData?.exchange_gain_loss_label?.replace('[PROFIT_TYPE]', profitType)} ${this.baseCurrencySymbol}${Math.abs(this.getConvertedBalanceDue())}`;
+        const text = `${this.localeData?.exchange_gain_loss_label?.replace('[PROFIT_TYPE]', profitType)} ${this.baseCurrencySymbol}${Math.abs(this.invoiceFormDetails?.voucherDetails?.gainLoss)}`;
         return text;
     }
 
@@ -942,12 +978,12 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
             |  Home currency strengthens   |                Gain                  |                Loss            |
             |______________________________|______________________________________|________________________________|
         */
-        if (this.adjustedVoucherType === AdjustedVoucherType.Sales || this.adjustedVoucherType === AdjustedVoucherType.CreditNote) {
+        if (this.adjustedVoucherType === AdjustedVoucherType.Sales || this.adjustedVoucherType === AdjustedVoucherType.SalesInvoice || this.adjustedVoucherType === AdjustedVoucherType.CreditNote) {
             // Exchange gain if home currency weakens as this is Export goods case (sales) where the due goes positive
-            return this.getConvertedBalanceDue() <= 0;
-        } else if (this.adjustedVoucherType === AdjustedVoucherType.Purchase || this.adjustedVoucherType === AdjustedVoucherType.DebitNote) {
+            return this.invoiceFormDetails?.voucherDetails?.gainLoss <= 0;
+        } else if (this.adjustedVoucherType === AdjustedVoucherType.Purchase || this.adjustedVoucherType === AdjustedVoucherType.PurchaseInvoice || this.adjustedVoucherType === AdjustedVoucherType.DebitNote) {
             // Exchange gain if home currency weakens as this is Import goods case (purchase) where the due goes negative
-            return this.getConvertedBalanceDue() >= 0;
+            return this.invoiceFormDetails?.voucherDetails?.gainLoss >= 0;
         }
     }
 

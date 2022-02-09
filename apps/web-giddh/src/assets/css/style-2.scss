@@ -59,6 +59,29 @@ $custom-typography: mat-typography-config(
         width: 18.2% !important;
     }
 }
+.all-table {
+    .mat-column-contact {
+        text-transform: lowercase;
+    }
+    .contact-header {
+        text-transform: capitalize !important;
+    }
+    td.mat-column-comment {
+        white-space: unset !important;
+    }
+    .comment-header {
+        min-width: 170px !important;
+    }
+}
+.billing-details {
+    .mat-form-field-infix {
+        border-top: 0 !important;
+    }
+}
+.branch-profile-wrapper {
+    float: left !important;
+    width: 50% !important;
+}
 @media screen and (max-width: 1366px) and (orientation: portrait) {
     .subscription-form-select {
         float: left !important;
@@ -509,7 +532,6 @@ input {
 .invoice-control .invoice-nav.navbar-nav > li > a.active {
     background-color: var(--color-white);
 }
-
 .navbar {
     min-height: auto;
     margin-bottom: 10px;
@@ -863,7 +885,7 @@ ul.sub-list {
     text-align: left;
 }
 .top-aging-table-box input {
-    width: 30px !important;
+    width: 43px !important;
     height: 26px;
     border: 1px solid var(--color-iron);
     padding: 5px;
@@ -1361,7 +1383,6 @@ modal-container.modal {
 /* my css end */
 
 /*input*/
-
 .form-control {
     background: var(--color-sidebar-primary-search-bar-background) !important;
     border: 1px solid var(--color-primary-input-bar-border);
@@ -2576,6 +2597,9 @@ a.btn.btn-xs.btn-link.pull-right {
     background: var(--color-primary-header-background) !important;
     color: var(--color-white);
     border-color: var(--color-primary-popup-list-header-bottom-border);
+    height: 65px;
+    display: flex;
+    align-items: center;
 }
 
 .modal-body {
@@ -6070,7 +6094,7 @@ button.ladda-button .ladda-label {
     display: block;
     position: absolute;
     right: 10px;
-    top: 16px;
+    top: 8px;
     z-index: 5;
     border: 0;
     border-radius: 0;
@@ -7166,6 +7190,16 @@ giddh-datepicker {
         align-items: center;
     }
 }
+
+.ledger-body {
+    .cdk-overlay-container {
+        z-index: 1000 !important;
+    }
+    .cdk-global-overlay-wrapper {
+        z-index: 1000 !important;
+    }
+}
+
 .cdk-overlay-container,
 .cdk-global-overlay-wrapper {
     z-index: 9999;
@@ -7684,7 +7718,7 @@ body.update-scroll-hidden {
 }
 .contact-body {
     .contact-modal {
-        height: 366px !important;
+        height: 375px !important;
         .mat-dialog-container {
             float: left !important;
             width: 100% !important;
@@ -7699,6 +7733,14 @@ body.update-scroll-hidden {
 @media (max-width: 1440px) {
     .font-xxlarge {
         font-size: 20px;
+    }
+    .right-side {
+        .whole-renewal {
+            .amount-field-content {
+                font-size: 21px;
+                margin-top: 1%;
+            }
+        }
     }
 }
 @media (max-width: 1024px) {
@@ -9454,7 +9496,7 @@ input[type="checkbox"].cdk-visually-hidden::after {
     .form-group {
         float: left;
         width: 93%;
-        margin-bottom: 0px !important;
+        margin-bottom: 12px !important;
     }
 }
 .back-btnn {

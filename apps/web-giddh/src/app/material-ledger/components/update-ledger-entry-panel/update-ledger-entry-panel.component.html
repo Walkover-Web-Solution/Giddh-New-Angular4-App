@@ -1374,7 +1374,9 @@
                                         </div>
                                         <div
                                             *ngIf="
-                                                item.voucherType === 'receipt' && item.subVoucher === 'ADVANCE_RECEIPT'
+                                                item.voucherType === 'receipt' &&
+                                                item.subVoucher === 'ADVANCE_RECEIPT' &&
+                                                voucherApiVersion !== 2
                                             "
                                         >
                                             <div class="form-group tax-width">
@@ -1541,15 +1543,23 @@
                                                                 <div class="item">{{ option.label }}</div>
                                                                 <div class="item-unique">
                                                                     ({{ localeData?.dated }}:
-                                                                    {{ option.additional?.voucherDate }})
+                                                                    {{
+                                                                        this.voucherApiVersion === 2
+                                                                            ? option.additional?.date
+                                                                            : option.additional?.voucherDate
+                                                                    }})
                                                                 </div>
                                                                 <div class="item-unique">
                                                                     ({{ commonLocaleData?.app_due }}:
                                                                     <span class="d-inline-flex">
                                                                         <amount-field
                                                                             [amount]="
-                                                                                option.additional?.balanceDue
-                                                                                    ?.amountForAccount
+                                                                                voucherApiVersion === 2
+                                                                                    ? option.additional
+                                                                                          ?.unadjustedAmount
+                                                                                          ?.amountForAccount
+                                                                                    : option.additional?.balanceDue
+                                                                                          ?.amountForAccount
                                                                             "
                                                                         >
                                                                         </amount-field>
@@ -1803,7 +1813,8 @@
                                                     isAdjustReceiptSelected ||
                                                     isAdjustVoucherSelected ||
                                                     vm.selectedLedger?.voucherAdjustments?.adjustments?.length ||
-                                                    vm.selectedLedger?.invoiceLinkingRequest?.linkedInvoices?.length
+                                                    vm.selectedLedger?.invoiceLinkingRequest?.linkedInvoices?.length ||
+                                                    vm.selectedLedger?.referenceVoucher?.uniqueName
                                                         ? 'disabled'
                                                         : null
                                                 "
@@ -2052,6 +2063,7 @@
                     [adjustedVoucherType]="vm.selectedLedger?.voucher?.shortCode"
                     [invoiceFormDetails]="adjustVoucherConfiguration"
                     [isUpdateMode]="true"
+                    [invoiceListRequestParams]="invoiceListRequestParams"
                     [advanceReceiptAdjustmentUpdatedData]="vm.selectedLedger?.voucherAdjustments"
                     (closeModelEvent)="closeAdjustmentModal($event)"
                     (submitClicked)="getAdjustedPaymentData($event)"

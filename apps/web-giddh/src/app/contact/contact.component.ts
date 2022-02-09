@@ -336,6 +336,7 @@ export class ContactComponent implements OnInit, OnDestroy {
                     }
                     if (activeTab === "vendor" && this.localeData?.page_heading) {
                         this.availableColumnsCount = [];
+                        this.showNameSearch = false;
                         this.searchedName?.reset();
                         this.translationComplete(true);
                     }
@@ -346,8 +347,9 @@ export class ContactComponent implements OnInit, OnDestroy {
                     }
                     if (activeTab === "customer" && this.localeData?.page_heading) {
                         this.availableColumnsCount = [];
+                        this.showNameSearch = false;
                         this.searchedName?.reset();
-                        this.translationComplete(true);
+                        this.translationComplete(true);                        
                     }
                 } else {
                     this.setActiveTab("aging-report");
@@ -378,7 +380,7 @@ export class ContactComponent implements OnInit, OnDestroy {
                             this.fromDate = "";
                             this.toDate = "";
                         }
-
+                      
                         this.getAccounts(this.fromDate, this.toDate, null, "true", PAGINATION_LIMIT, this.searchStr, this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
                     });
                 }, 100);
@@ -460,12 +462,15 @@ export class ContactComponent implements OnInit, OnDestroy {
                 this.getAccounts(this.fromDate, this.toDate, null, "true", PAGINATION_LIMIT, this.searchStr, this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
             }
         });
+
         this.searchedName.valueChanges.pipe(
             debounceTime(700),
             distinctUntilChanged(),
             takeUntil(this.destroyed$),
         ).subscribe(searchedText => {
-            this.searchStr$.next(searchedText);
+            if (searchedText !== null && searchedText !== undefined) {
+                this.searchStr$.next(searchedText);
+            }
         });
 
         this.store.pipe(select(state => state.company), takeUntil(this.destroyed$)).subscribe(response => {
@@ -1184,6 +1189,14 @@ export class ContactComponent implements OnInit, OnDestroy {
                     });
                     this.sundryDebtorsAccounts = cloneDeep(res.body.results);
                     this.sundryDebtorsAccounts = this.sundryDebtorsAccounts.map(element => {
+                        let customFields = [];
+                        element.customFields?.forEach(field => {
+                            customFields[field?.uniqueName] = [];
+                            customFields[field?.uniqueName] = field;
+                        });
+
+                        element.customFields = customFields;
+
                         let indexOfItem = this.selectedCheckedContacts.indexOf(element?.uniqueName);
                         if (indexOfItem === -1) {
                             element.isSelected = false;
@@ -1204,6 +1217,14 @@ export class ContactComponent implements OnInit, OnDestroy {
                     });
                     this.sundryCreditorsAccounts = cloneDeep(res.body.results);
                     this.sundryCreditorsAccounts = this.sundryCreditorsAccounts.map(element => {
+                        let customFields = [];
+                        element.customFields?.forEach(field => {
+                            customFields[field?.uniqueName] = [];
+                            customFields[field?.uniqueName] = field;
+                        });
+
+                        element.customFields = customFields;
+
                         let indexOfItem = this.selectedCheckedContacts.indexOf(element?.uniqueName);
                         if (indexOfItem === -1) {
                             element.isSelected = false;

@@ -140,8 +140,16 @@
                             <div>
                                 <span class="number-total d-inline-flex">
                                     <amount-field
-                                        [amount]="receiptsSummaryData?.advance?.amount"
-                                        [currencySymbol]="receiptsSummaryData?.advance?.symbol"
+                                        [amount]="
+                                            voucherApiVersion === 2
+                                                ? receiptsSummaryData?.advanceReceiptTotal
+                                                : receiptsSummaryData?.advance?.amount
+                                        "
+                                        [currencySymbol]="
+                                            voucherApiVersion === 2
+                                                ? activeCompany?.baseCurrencySymbol
+                                                : receiptsSummaryData?.advance?.symbol
+                                        "
                                         [currencyCode]="activeCompany?.baseCurrency"
                                     >
                                     </amount-field>
@@ -155,8 +163,16 @@
                             <div>
                                 <span class="d-inline-flex number-total">
                                     <amount-field
-                                        [amount]="receiptsSummaryData?.normal?.amount"
-                                        [currencySymbol]="receiptsSummaryData?.normal?.symbol"
+                                        [amount]="
+                                            voucherApiVersion === 2
+                                                ? receiptsSummaryData?.normalReceiptTotal
+                                                : receiptsSummaryData?.normal?.amount
+                                        "
+                                        [currencySymbol]="
+                                            voucherApiVersion === 2
+                                                ? activeCompany?.baseCurrencySymbol
+                                                : receiptsSummaryData?.normal?.symbol
+                                        "
                                         [currencyCode]="activeCompany?.baseCurrency"
                                     >
                                     </amount-field>
@@ -170,8 +186,16 @@
                             <div>
                                 <span class="d-inline-flex number-total">
                                     <amount-field
-                                        [amount]="receiptsSummaryData?.total?.amount"
-                                        [currencySymbol]="receiptsSummaryData?.total?.symbol"
+                                        [amount]="
+                                            voucherApiVersion === 2
+                                                ? receiptsSummaryData?.grandTotal
+                                                : receiptsSummaryData?.total?.amount
+                                        "
+                                        [currencySymbol]="
+                                            voucherApiVersion === 2
+                                                ? activeCompany?.baseCurrencySymbol
+                                                : receiptsSummaryData?.total?.symbol
+                                        "
                                         [currencyCode]="activeCompany?.baseCurrency"
                                     >
                                     </amount-field>
@@ -185,8 +209,16 @@
                             <div>
                                 <span class="d-inline-flex number-total">
                                     <amount-field
-                                        [amount]="receiptsSummaryData?.unUsed?.amount"
-                                        [currencySymbol]="receiptsSummaryData?.unUsed?.symbol"
+                                        [amount]="
+                                            voucherApiVersion === 2
+                                                ? receiptsSummaryData?.totalDue
+                                                : receiptsSummaryData?.unUsed?.amount
+                                        "
+                                        [currencySymbol]="
+                                            voucherApiVersion === 2
+                                                ? activeCompany?.baseCurrencySymbol
+                                                : receiptsSummaryData?.unUsed?.symbol
+                                        "
                                         [currencyCode]="activeCompany?.baseCurrency"
                                     >
                                     </amount-field>
@@ -462,25 +494,51 @@
                             <td class="entry-date" [attr.data-title]="localeData?.entry_date">
                                 {{ voucherApiVersion === 2 ? receipt?.voucherDate : receipt?.date }}
                             </td>
-                            <td [attr.data-title]="localeData?.suppliers_name">{{ receipt?.type }}</td>
+                            <td [attr.data-title]="localeData?.suppliers_name">
+                                {{ voucherApiVersion === 2 ? receipt?.receiptType : receipt?.type }}
+                            </td>
                             <td width="13%" class="text-break" [attr.data-title]="commonLocaleData?.app_voucher_type">
                                 {{ voucherApiVersion === 2 ? receipt?.account?.name : receipt?.baseAccountName }}
                             </td>
                             <td [attr.data-title]="localeData?.payment_mode_label">
-                                <div *ngFor="let paymentMode of receipt?.particularNames?.split(',')">
-                                    {{ paymentMode }}
-                                </div>
+                                <ng-container *ngIf="voucherApiVersion !== 2">
+                                    <div *ngFor="let paymentMode of receipt?.particularNames?.split(',')">
+                                        {{ paymentMode }}
+                                    </div>
+                                </ng-container>
+                                <ng-container *ngIf="voucherApiVersion === 2">
+                                    {{ receipt?.paymentMode?.name }}
+                                </ng-container>
                             </td>
                             <td
                                 width="13%"
                                 class="text-break"
-                                *ngIf="receipt?.invoices"
+                                *ngIf="receipt?.invoices || receipt?.adjustments?.length"
                                 [attr.data-title]="localeData?.invoice_no_label"
                             >
-                                <div *ngFor="let invoice of receipt?.invoices?.split(',')">{{ invoice }}</div>
+                                <ng-container *ngIf="voucherApiVersion !== 2">
+                                    <div *ngFor="let invoice of receipt?.invoices?.split(',')">{{ invoice }}</div>
+                                </ng-container>
+                                <ng-container *ngIf="voucherApiVersion === 2">
+                                    <ng-container *ngIf="receipt.adjustments?.length > 0">
+                                        <ng-container *ngFor="let adjustment of receipt.adjustments">
+                                            {{ adjustment?.voucherNumber }}<br />
+                                        </ng-container>
+                                    </ng-container>
+                                    <ng-container *ngIf="!receipt.adjustments?.length"> - </ng-container>
+                                </ng-container>
                             </td>
-                            <td [attr.data-title]="localeData?.invoice_no_label" *ngIf="!receipt?.invoices">-</td>
-                            <td [attr.data-title]="commonLocaleData?.app_total_amount">
+                            <td
+                                [attr.data-title]="localeData?.invoice_no_label"
+                                *ngIf="!receipt?.invoices && !receipt?.adjustments?.length"
+                            >
+                                -
+                            </td>
+                            <td
+                                [attr.data-title]="commonLocaleData?.app_total_amount"
+                                [tooltip]="grandTotalPopupTemplate"
+                                container="body"
+                            >
                                 <span class="d-inline-flex">
                                     <amount-field
                                         [amount]="
@@ -490,31 +548,41 @@
                                         "
                                         [currencySymbol]="
                                             voucherApiVersion === 2
-                                                ? receipt?.companyCurrencySymbol
+                                                ? receipt?.accountCurrencySymbol
                                                 : receipt?.totalAmount?.symbol
                                         "
                                         [currencyCode]="activeCompany?.baseCurrency"
                                     >
                                     </amount-field>
                                 </span>
+                                <ng-template #grandTotalPopupTemplate
+                                    ><span [innerHTML]="receipt.grandTotalTooltipText"></span>
+                                </ng-template>
                             </td>
-                            <td [attr.data-title]="localeData?.unused_amount">
+                            <td
+                                [attr.data-title]="localeData?.unused_amount"
+                                [tooltip]="balanceDuePopupTemplate"
+                                container="body"
+                            >
                                 <span class="d-inline-flex">
                                     <amount-field
                                         [amount]="
                                             voucherApiVersion === 2
-                                                ? receipt?.balanceDue?.amountForCompany
+                                                ? receipt?.balanceDue?.amountForAccount
                                                 : receipt?.unusedAmount?.amount
                                         "
                                         [currencySymbol]="
                                             voucherApiVersion === 2
-                                                ? receipt?.balanceDue?.amountForCompany
+                                                ? receipt?.accountCurrencySymbol
                                                 : receipt?.unusedAmount?.symbol
                                         "
                                         [currencyCode]="activeCompany?.baseCurrency"
                                     >
                                     </amount-field>
                                 </span>
+                                <ng-template #balanceDuePopupTemplate
+                                    ><span [innerHTML]="receipt.balanceDueTooltipText"></span>
+                                </ng-template>
                             </td>
                         </tr>
                     </tbody>
