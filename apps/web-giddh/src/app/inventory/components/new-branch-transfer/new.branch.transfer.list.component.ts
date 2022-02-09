@@ -12,7 +12,7 @@ import { InventoryService } from '../../../services/inventory.service';
 import { ReplaySubject, Observable, of as observableOf } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store';
-import { takeUntil, take } from 'rxjs/operators';
+import { takeUntil, take, filter } from 'rxjs/operators';
 import { NewBranchTransferListResponse, NewBranchTransferListPostRequestParams, NewBranchTransferListGetRequestParams, NewBranchTransferDownloadRequest } from '../../../models/api-models/BranchTransfer';
 import { branchTransferVoucherTypes, branchTransferAmountOperators } from "../../../shared/helpers/branchTransferFilters";
 import { IOption } from '../../../theme/ng-select/ng-select';
@@ -28,6 +28,7 @@ import { BsDaterangepickerConfig } from 'ngx-bootstrap/datepicker';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
 import { OrganizationType } from '../../../models/user-login-state';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
+import { NavigationStart, Router } from "@angular/router";
 
 @Component({
     selector: "new-branch-transfer-list",
@@ -136,7 +137,8 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
         private store: Store<AppState>,
         private inventoryService: InventoryService,
         private _toasty: ToasterService,
-        private settingsBranchAction: SettingsBranchActions
+        private settingsBranchAction: SettingsBranchActions,
+        private _router: Router,
     ) {
         this.store.pipe(select(p => p.settings.profile), takeUntil(this.destroyed$)).subscribe((o) => {
             if (o && !_.isEmpty(o)) {
@@ -146,9 +148,20 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
         });
         this.currentOrganizationType = this._generalService.currentOrganizationType;
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
+        
+        /** This will be use for dialog close on route event */
+        this._router.events.pipe(filter(event => event instanceof NavigationStart), takeUntil(this.destroyed$)).subscribe((event: any) => {
+            if (event) {
+                for (let i = 1; i <= this.modalService.getModalsCount(); i++) {
+                    this.modalService.hide(i);
+                }
+            }
+        });
     }
 
     public ngOnInit(): void {
+
+        document.querySelector("body")?.classList?.add("new-branch-list-page");
         this.initBranchTransferListResponse();
 
         branchTransferVoucherTypes.map(voucherType => {
@@ -220,6 +233,7 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
     }
 
     public ngOnDestroy(): void {
+        document.querySelector("body")?.classList?.remove("new-branch-list-page");
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
