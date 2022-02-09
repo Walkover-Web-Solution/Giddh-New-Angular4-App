@@ -1,5 +1,5 @@
 import { combineLatest, Observable, of, ReplaySubject } from 'rxjs';
-import { debounceTime, distinctUntilChanged, publishReplay, refCount, take, takeUntil } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, filter, publishReplay, refCount, take, takeUntil } from 'rxjs/operators';
 import {
     ChangeDetectorRef,
     Component,
@@ -27,7 +27,7 @@ import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { ElementViewContainerRef } from 'apps/web-giddh/src/app/shared/helpers/directives/elementViewChild/element.viewchild.directive';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, NavigationStart, Router } from '@angular/router';
 import { InvoiceReceiptFilter, ReceiptItem, ReciptResponse } from 'apps/web-giddh/src/app/models/api-models/recipt';
 import { InvoiceReceiptActions } from 'apps/web-giddh/src/app/actions/invoice/receipt/receipt.actions';
 import { CompanyResponse, ValidateInvoice } from 'apps/web-giddh/src/app/models/api-models/Company';
@@ -274,6 +274,15 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
         this.voucherDetails$ = this.store.pipe(select(s => s.receipt.voucher), takeUntil(this.destroyed$));
         this.companyName$ = this.store.pipe(select(state => state.session.companyUniqueName), takeUntil(this.destroyed$));
+
+        /** This will be use for dialog close on route event */
+        this._router.events.pipe(filter(event => event instanceof NavigationStart), takeUntil(this.destroyed$)).subscribe((event: any) => {
+            if (event) {
+                for (let i = 1; i <= this.modalService.getModalsCount(); i++) {
+                    this.modalService.hide(i);
+                }
+            }
+        });
     }
 
     /**
@@ -287,6 +296,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     public ngOnInit() {
+        
+        document.querySelector("body")?.classList?.add("invoice-preview-page");
         this._breakPointObservar.observe([
             '(max-width: 1023px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
@@ -1265,6 +1276,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             }
         });
         document.querySelector('body').classList.remove('fixed');
+        document.querySelector('body').classList.remove('invoice-preview-page');
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
