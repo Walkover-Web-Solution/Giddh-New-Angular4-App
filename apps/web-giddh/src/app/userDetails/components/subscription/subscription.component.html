@@ -229,7 +229,7 @@
                                     mat-flat-button
                                     color="primary"
                                     class="right-side-btn"
-                                    *ngIf="seletedUserPlans?.planDetails?.uniqueName !== defaultTrialPlan"
+                                    *ngIf="selectedSubscription?.planDetails?.uniqueName !== defaultTrialPlan"
                                     (click)="renewPlan()"
                                 >
                                     {{ commonLocaleData?.app_renew }}
