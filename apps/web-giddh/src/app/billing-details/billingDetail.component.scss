@@ -271,7 +271,7 @@
     }
     .renewal-payable {
         .mat-button-disabled {
-            background-color: $gray !important;
+            background-color: var(--color-gray) !important;
         }
     }
     .display-line {
