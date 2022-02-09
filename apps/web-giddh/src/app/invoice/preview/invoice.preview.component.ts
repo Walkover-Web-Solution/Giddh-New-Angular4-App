@@ -76,6 +76,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     @ViewChild('eWayBill', { static: true }) public eWayBill: ModalDirective;
     @ViewChild('searchBox', { static: true }) public searchBox: ElementRef;
     @ViewChild('advanceSearchComponent', { read: InvoiceAdvanceSearchComponent, static: true }) public advanceSearchComponent: InvoiceAdvanceSearchComponent;
+    @ViewChild('cancelEInvoiceTemplate', { static: false }) public cancelEInvoiceTemplate: TemplateRef<any>;
     @Input() public selectedVoucher: VoucherTypeEnum = VoucherTypeEnum.sales;
     @ViewChild(InvoicePaymentModelComponent, { static: false }) public invoicePaymentModelComponent: InvoicePaymentModelComponent;
     /* Taking input to refresh purchase bill list */
@@ -238,6 +239,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     public voucherApiVersion: 1 | 2;
     /** True if dropdown menu needs to show upwards */
     public isDropUp: boolean = false;
+    /** This holds selected e-invoice for cancelation */
+    public selectedEInvoice: any;
 
     constructor(
         private store: Store<AppState>,
@@ -669,10 +672,15 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                     }
                 }, 500);
             } else {
-                this.store.dispatch(this.invoiceActions.ActionOnInvoice(objItem?.uniqueName, {
-                    action: actionToPerform,
-                    voucherType: objItem.voucherType ?? this.selectedVoucher
-                }));
+                if (actionToPerform === "cancel" && item?.irnNumber) {
+                    this.selectedEInvoice = item;
+                    this.openModal(this.cancelEInvoiceTemplate);
+                } else {
+                    this.store.dispatch(this.invoiceActions.ActionOnInvoice(objItem?.uniqueName, {
+                        action: actionToPerform,
+                        voucherType: objItem.voucherType ?? this.selectedVoucher
+                    }));
+                }
             }
             this.selectedPerformAdjustPaymentAction = false;
         }
@@ -1891,19 +1899,19 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         let apiCallObservable;
 
         if (this.voucherApiVersion === 2) {
-            postObject.uniqueName = this.selectedInvoicesList[0]?.uniqueName;
+            postObject.uniqueName = this.selectedEInvoice?.uniqueName;
             postObject.voucherType = this.selectedVoucher;
 
-            requestObject.accountUniqueName = this.selectedInvoicesList[0]?.account?.uniqueName
+            requestObject.accountUniqueName = this.selectedEInvoice?.account?.uniqueName
             requestObject.voucherVersion = 2;
 
             apiCallObservable = this._invoiceService.cancelEInvoiceV2(requestObject, postObject);
         } else {
             if (this.selectedVoucher === VoucherTypeEnum.creditNote || this.selectedVoucher === VoucherTypeEnum.debitNote) {
                 requestObject.voucherType = this.selectedVoucher;
-                requestObject.voucherUniqueName = this.selectedInvoicesList[0]?.uniqueName;
+                requestObject.voucherUniqueName = this.selectedEInvoice?.uniqueName;
             } else if (this.selectedVoucher === VoucherTypeEnum.sales) {
-                requestObject.invoiceUniqueName = this.selectedInvoicesList[0]?.uniqueName;
+                requestObject.invoiceUniqueName = this.selectedEInvoice?.uniqueName;
             }
 
             apiCallObservable = this._invoiceService.cancelEInvoice(requestObject);
