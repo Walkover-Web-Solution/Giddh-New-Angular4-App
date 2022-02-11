@@ -6146,10 +6146,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      * @memberof ProformaInvoiceComponent
      */
     public getAllAdvanceReceipts(customerUniqueName: string, voucherDate: any): void {
-        if (this.isPendingVoucherType) {
-            return;
-        }
-
         let date;
         if (typeof voucherDate === 'string') {
             date = voucherDate;
@@ -6167,7 +6163,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             } else {
                 const requestObject = {
                     accountUniqueName: customerUniqueName,
-                    voucherType: (this.voucherApiVersion === 2 && this.isPurchaseInvoice) ? VoucherTypeEnum.purchase : this.selectedVoucherType
+                    voucherType: (this.voucherApiVersion === 2 && this.isPurchaseInvoice) ? VoucherTypeEnum.purchase : (this.isPendingVoucherType) ? this.invoiceType : this.selectedVoucherType
                 }
                 apiCallObservable = this.salesService.getInvoiceList(requestObject, date);
             }

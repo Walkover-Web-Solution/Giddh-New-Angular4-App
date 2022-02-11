@@ -702,7 +702,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             this.blankLedger.compoundTotal = giddhRoundOff((creditTotal - debitTotal), this.giddhBalanceDecimalPlaces);
         }
 
-        if (this.voucherApiVersion === 2 && (this.blankLedger.voucherType === "sal" || this.blankLedger.voucherType === "pur")) {
+        if (this.voucherApiVersion === 2 && (this.blankLedger.voucherType === "sal" || this.blankLedger.voucherType === "pur" || this.blankLedger.voucherType === "credit note" || this.blankLedger.voucherType === "debit note")) {
             this.calculatedRoundOff = Number(Math.round(this.blankLedger.compoundTotal) - this.blankLedger.compoundTotal);
             this.blankLedger.compoundTotal = Number(((this.blankLedger.compoundTotal) + this.calculatedRoundOff).toFixed(2));
         } else {
