@@ -3320,8 +3320,9 @@
                                                     (isSalesInvoice ||
                                                         isPurchaseInvoice ||
                                                         isCreditNote ||
-                                                        isDebitNote))) &&
-                                            !(isPendingVoucherType && isCashInvoice)
+                                                        isDebitNote ||
+                                                        isPendingVoucherType))) &&
+                                            !(voucherApiVersion !== 2 && isPendingVoucherType && isCashInvoice)
                                         "
                                     >
                                         <div
@@ -3347,7 +3348,8 @@
                                                                 (isSalesInvoice ||
                                                                     isPurchaseInvoice ||
                                                                     isCreditNote ||
-                                                                    isDebitNote) &&
+                                                                    isDebitNote ||
+                                                                    isPendingVoucherType) &&
                                                                 (isAccountHaveAdvanceReceipts ||
                                                                     isInvoiceAdjustedWithAdvanceReceipts)
                                                             "
@@ -3575,7 +3577,8 @@
                                                                     (voucherApiVersion === 2 &&
                                                                         (isPurchaseInvoice ||
                                                                             isCreditNote ||
-                                                                            isDebitNote))
+                                                                            isDebitNote ||
+                                                                            isPendingVoucherType))
                                                                 "
                                                             >
                                                                 <strong class="pull-right balance-due-text">
@@ -5568,7 +5571,7 @@
                 <advance-receipt-adjustment-component
                     *ngIf="showAdvanceReceiptAdjust"
                     #advanceReceiptComponent
-                    [adjustedVoucherType]="selectedVoucherType"
+                    [adjustedVoucherType]="isPendingVoucherType ? invoiceType : selectedVoucherType"
                     [isUpdateMode]="isUpdateMode"
                     [depositAmount]="depositAmount"
                     [invoiceFormDetails]="invFormData"

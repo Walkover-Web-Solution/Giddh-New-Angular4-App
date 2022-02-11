@@ -1151,7 +1151,7 @@
 
                                         <div>
                                             <div
-                                                *ngIf="!isCompany"
+                                                *ngIf="!isCompany && item.balanceStatus !== 'cancel'"
                                                 dropdown
                                                 container="body"
                                                 class="icon-ellipse select-action"
@@ -1433,7 +1433,7 @@
 
                                         <div>
                                             <div
-                                                *ngIf="!isCompany"
+                                                *ngIf="!isCompany && item.balanceStatus !== 'cancel'"
                                                 dropdown
                                                 container="body"
                                                 class="icon-ellipse select-action"
