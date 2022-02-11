@@ -1768,6 +1768,10 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                         let existingInvoices = [];
                         res[0].items = res[0].items?.map((item: ReceiptItem) => {
 
+                            if (this.voucherApiVersion === 2) {
+                                item.balanceStatus = item.balanceStatus?.toLocaleLowerCase();
+                            }
+
                             if (this.selectedInvoiceForDetails?.uniqueName === item.uniqueName) {
                                 let updatedItem = cloneDeep(item);
                                 updatedItem.voucherType = this.selectedInvoiceForDetails.voucherType;
