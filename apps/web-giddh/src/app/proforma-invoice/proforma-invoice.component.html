@@ -5569,7 +5569,9 @@
                 <advance-receipt-adjustment-component
                     *ngIf="showAdvanceReceiptAdjust"
                     #advanceReceiptComponent
-                    [adjustedVoucherType]="isPendingVoucherType ? invoiceType : selectedVoucherType"
+                    [adjustedVoucherType]="
+                        voucherApiVersion === 2 && isPendingVoucherType ? invoiceType : selectedVoucherType
+                    "
                     [isUpdateMode]="isUpdateMode"
                     [depositAmount]="depositAmount"
                     [invoiceFormDetails]="invFormData"
