@@ -24,8 +24,6 @@ import { DaybookService } from '../services/daybook.service';
 import { ToasterService } from '../services/toaster.service';
 import { MatDialog } from '@angular/material/dialog';
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { NavigationStart, Router } from '@angular/router';
-import { filter  } from 'rxjs/operators';
 @Component({
     selector: 'daybook',
     templateUrl: './daybook.component.html',
@@ -142,20 +140,12 @@ export class DaybookComponent implements OnInit, OnDestroy {
         private daybookService: DaybookService,
         private toasterService: ToasterService,
         private dialog: MatDialog,
-        private breakpointObserver: BreakpointObserver,
-        private router: Router
+        private breakpointObserver: BreakpointObserver
     ) {
 
         this.daybookQueryRequest = new DaybookQueryRequest();
         this.showAdvanceSearchIcon = false;
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
-
-        /** This will be use for dialog close on route event */
-        this.router.events.pipe(filter(event => event instanceof NavigationStart), takeUntil(this.destroyed$)).subscribe((event: any) => {
-            if (event) {
-                this.dialog?.closeAll();
-            }
-        });
     }
 
     public ngOnInit() {
