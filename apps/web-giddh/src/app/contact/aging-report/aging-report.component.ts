@@ -27,7 +27,7 @@ import { BsDropdownDirective } from "ngx-bootstrap/dropdown";
 import { PaginationComponent } from "ngx-bootstrap/pagination";
 import { BsModalRef, BsModalService, ModalOptions } from "ngx-bootstrap/modal";
 import { ElementViewContainerRef } from "../../shared/helpers/directives/elementViewChild/element.viewchild.directive";
-import { debounceTime, distinctUntilChanged, filter, take, takeUntil } from "rxjs/operators";
+import { debounceTime, distinctUntilChanged, takeUntil } from "rxjs/operators";
 import { BreakpointObserver, BreakpointState } from "@angular/cdk/layout";
 import * as moment from "moment/moment";
 import { PerfectScrollbarConfigInterface } from "ngx-perfect-scrollbar";
@@ -41,8 +41,6 @@ import { FormControl } from "@angular/forms";
 import { MatDialog } from "@angular/material/dialog";
 import { MatTableDataSource } from "@angular/material/table";
 import { MatMenuTrigger } from "@angular/material/menu";
-import { NavigationStart, Router } from "@angular/router";
-
 @Component({
     selector: "aging-report",
     templateUrl: "aging-report.component.html",
@@ -142,20 +140,12 @@ export class AgingReportComponent implements OnInit, OnDestroy {
         private componentFactoryResolver: ComponentFactoryResolver,
         private settingsBranchAction: SettingsBranchActions,
         private generalService: GeneralService,
-        private router: Router,
         private modalService: BsModalService) {
         this.agingDropDownoptions$ = this.store.pipe(select(s => s.agingreport.agingDropDownoptions), takeUntil(this.destroyed$));
         this.dueAmountReportRequest = new DueAmountReportQueryRequest();
         this.setDueRangeOpen$ = this.store.pipe(select(s => s.agingreport.setDueRangeOpen), takeUntil(this.destroyed$));
         this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
         this.getAgingReportRequestInProcess$ = this.store.pipe(select(s => s.agingreport.getAgingReportRequestInFlight), takeUntil(this.destroyed$));
-        
-        /** This will be use for dialog close on route event */
-        this.router.events.pipe(filter(event => event instanceof NavigationStart), takeUntil(this.destroyed$)).subscribe((event: any) => {
-            if (event) {
-                this.dialog?.closeAll();
-            }
-        });
     }
 
     public getDueAmountreportData() {

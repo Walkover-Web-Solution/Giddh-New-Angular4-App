@@ -101,13 +101,6 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
         });
         this.isUpdateCompanyInProgress$ = this.store.pipe(select(s => s.settings.updateProfileInProgress), takeUntil(this.destroyed$));
         this.isUpdateCompanySuccess$ = this.store.pipe(select(s => s.settings.updateProfileSuccess), takeUntil(this.destroyed$));
-
-        /** This will be use for dialog close on route event */
-        this.router.events.pipe(filter(event => event instanceof NavigationStart), takeUntil(this.destroyed$)).subscribe((event: any) => {
-            if (event) {
-                this.dialog?.closeAll();
-            }
-        });
     }
 
     public ngOnInit() {
