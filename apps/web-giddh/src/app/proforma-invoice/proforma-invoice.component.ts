@@ -1893,6 +1893,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         } else if (this.isCreditNote) {
             this.invoiceDateLabel = this.localeData?.cr_note_date;
         } else if (this.isDebitNote) {
+            this.invoiceNoLabel = this.localeData?.bill_number;
             this.invoiceDateLabel = this.localeData?.dr_note_date;
         } else if (this.isPurchaseInvoice) {
             this.invoiceDateLabel = this.localeData?.bill_date;
@@ -7192,6 +7193,13 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         let invoiceType = this.voucherTypeToNamePipe.transform(this.invoiceType);
         invoiceType = this.titleCasePipe.transform(invoiceType);
         this.copyPreviousInvoiceText = this.copyPreviousInvoiceText?.replace("[INVOICE_TYPE]", invoiceType);
+         if (this.isCreditNote) {
+            this.copyPreviousInvoiceText = this.localeData?.copy_previous_invoices;
+            this.copyPreviousInvoiceText = this.copyPreviousInvoiceText?.replace("[INVOICE_TYPE] Invoices", invoiceType);
+        } else if (this.isDebitNote) {
+            this.copyPreviousInvoiceText = this.localeData?.copy_previous_invoices;
+            this.copyPreviousInvoiceText = this.copyPreviousInvoiceText?.replace("[INVOICE_TYPE] Invoices", invoiceType);
+        }
     }
 
     /**
