@@ -61,6 +61,7 @@
     "add_customer": "ग्राहक जोडा",
     "add_vendor": "विक्रेता जोडा",
     "invoice_no": "बीजक #",
+    "bill_number":"बिल क्रमांक",
     "proforma_no": "प्रोफार्मा #",
     "estimate_no": "अंदाज #",
     "purchase_bill_no": "खरेदी बिल #",

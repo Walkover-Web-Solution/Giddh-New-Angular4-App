@@ -61,6 +61,7 @@
     "add_customer": "ग्राहक जोड़ें",
     "add_vendor": "विक्रेता जोड़ें",
     "invoice_no": "चालान #",
+    "bill_number":"बिल संख्या",
     "proforma_no": "प्रोफार्मा #",
     "estimate_no": "अनुमान #",
     "purchase_bill_no": "खरीद बिल #",

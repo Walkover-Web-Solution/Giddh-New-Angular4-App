@@ -61,6 +61,7 @@
     "add_customer": "Add Customer",
     "add_vendor": "Add Vendor",
     "invoice_no": "Invoice #",
+    "bill_number":"Bill Number",
     "proforma_no": "Proforma #",
     "estimate_no": "Estimate #",
     "purchase_bill_no": "Purchase Bill #",
