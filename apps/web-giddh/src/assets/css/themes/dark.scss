@@ -101,6 +101,7 @@ body.dark-theme {
     --color-primary-basic-button-text: #9b9b9e;
     --color-primary-cancel-button-background-hover: #668cff26;
     --color-primary-button-border: #505159;
+    --color-primary-button-border-hover: #505159;
 
     // Dropdown Color Variables
     --color-dropdown-list: #f5f5f5;
@@ -159,7 +160,7 @@ body.dark-theme {
     --color-datepicker-selected-date-background: #668cff;
     --color-datepicker-selected-date-range-background: #668cff26;
     --color-primary-datepicker-in-range-end-date-background: #668cff26;
-    --color-primary-datepicker-btn-success-hover-active-focus: #668cff;
+    --color-primary-datepicker-btn-success-hover-active-focus: #668cff26;
     --color-datepicker-mat-select-arrow-active: #668cff;
     --color-primary-datepicker-btn-angle-down: #9b9b9e;
     --color-primary-datepicker-btn-btn-danger: #e54556;
