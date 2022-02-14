@@ -7195,10 +7195,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         let invoiceType = this.voucherTypeToNamePipe.transform(this.invoiceType);
         invoiceType = this.titleCasePipe.transform(invoiceType);
         this.copyPreviousInvoiceText = this.copyPreviousInvoiceText?.replace("[INVOICE_TYPE]", invoiceType);
-         if (this.isCreditNote) {
-            this.copyPreviousInvoiceText = this.localeData?.copy_previous_invoices;
-            this.copyPreviousInvoiceText = this.copyPreviousInvoiceText?.replace(this.localeData?.invoices, invoiceType);
-        } else if (this.isDebitNote) {
+        if (this.isCreditNote || this.isDebitNote) {
             this.copyPreviousInvoiceText = this.localeData?.copy_previous_invoices;
             this.copyPreviousInvoiceText = this.copyPreviousInvoiceText?.replace(this.localeData?.invoices, invoiceType);
         }
