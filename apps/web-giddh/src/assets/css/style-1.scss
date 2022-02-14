@@ -357,7 +357,7 @@ aside-menu-account .container-fluid {
 }
 .mr-t1 {
     margin-top: 10px !important;
-    color: var(--color-common-primary-text);
+    color: var(--color-common-primary-text) !important;
 }
 .mr-t15 {
     margin-top: 15px !important;
@@ -2611,7 +2611,7 @@ update-ledger-entry-panel .ledger-main .mat-form-field {
     }
 }
 .mat-snack-bar-container {
-    color: var(--color-white) !important;
+    color: var(--color-toast-primary-text) !important;
     font-size: 13px;
 }
 .mat-snack-bar-container.error {

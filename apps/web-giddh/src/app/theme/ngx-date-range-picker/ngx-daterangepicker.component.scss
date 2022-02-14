@@ -811,7 +811,7 @@
         &:active:focus {
             background: var(--color-primary-cancel-button-background-hover);
             color: var(--color-primary-datepicker-btn-btn-danger-hover-active-focus);
-            border-color: var(--color-iron);
+            border-color: var(--color-primary-button-border-hover);
             outline: none;
             box-shadow: none;
         }

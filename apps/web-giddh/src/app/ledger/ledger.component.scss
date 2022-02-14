@@ -45,11 +45,11 @@
 }
 #ledger-transaction-left-list td,
 #ledger-transaction-right-list td {
-    border-bottom: 1px solid var(--color-iron);
+    border-bottom: 1px solid var(--color-table-primary-content-bar-border) !important;
 }
 #ledger-transaction-right-list tr,
 #ledger-transaction-left-list tr {
-    border-bottom: 1px solid var(--color-iron);
+    border-bottom: 1px solid var(--color-table-primary-content-bar-border) !important;
 }
 #ledger-transaction-right-list tr td:last-child,
 #ledger-transaction-left-list tr td:last-child {
@@ -57,7 +57,7 @@
 }
 .transaction-mapped-table thead th {
     padding: 10px 15px !important;
-    border-bottom: 1px solid var(--color-iron) !important;
+    border-bottom: 1px solid var(--color-table-primary-header-bar-border) !important;
 }
 .form-control,
 input {
@@ -548,7 +548,7 @@ sh-select:focus {
 }
 .clear-filter-btn {
     border-radius: 5px;
-    border: 1px solid var(--color-iron);
+    border: 1px solid var(--color-primary-button-border);
     color: var(--color-abbey);
     font-size: 14px;
     background-color: var(--color-white);
