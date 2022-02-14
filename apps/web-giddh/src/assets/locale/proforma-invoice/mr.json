@@ -11,6 +11,7 @@
     "customer_name": "ग्राहकाचे नाव",
     "balance_due": "शिल्लक बाकी",
     "copy_previous_invoices": "मागील [INVOICE_TYPE] पावत्या कॉपी करा",
+    "invoices": "[INVOICE_TYPE] पावत्या",
     "customer_details": "ग्राहक तपशील",
     "vendor_details": "विक्रेता तपशील",
     "billing_address": "बिलाचा पत्ता",
