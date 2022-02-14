@@ -7160,7 +7160,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.invoiceNoLabel = this.localeData?.invoice_no;
             this.invoiceDateLabel = this.commonLocaleData?.app_invoice_date;
             this.invoiceDueDateLabel = this.localeData?.invoice_due_date;
-
             this.pageList[0].label = this.localeData?.invoice_types?.sales;
             this.pageList[1].label = this.localeData?.invoice_types?.credit_note;
             this.pageList[2].label = this.localeData?.invoice_types?.debit_note;
@@ -7180,6 +7179,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.getGenerateInvoiceText();
             this.getUpdateInvoiceText();
             this.prepareInvoiceTypeFlags();
+            if (this.isDebitNote) {
+                this.invoiceNoLabel = this.localeData?.bill_number;
+            }
         }
     }
 
