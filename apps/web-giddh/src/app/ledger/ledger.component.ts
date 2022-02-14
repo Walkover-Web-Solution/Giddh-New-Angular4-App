@@ -335,7 +335,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.todaySelected = true;
         this.lc.blankLedger.entryDate = moment(value.endDate).format(GIDDH_DATE_FORMAT);
 
-        if(this.isAdvanceSearchImplemented) {
+        if (this.isAdvanceSearchImplemented) {
             this.store.dispatch(this._ledgerActions.doAdvanceSearch(_.cloneDeep(this.advanceSearchRequest.dataToSend), this.advanceSearchRequest.accountUniqueName, this.trxRequest.from, this.trxRequest.to, this.advanceSearchRequest.page, this.advanceSearchRequest.count, this.advanceSearchRequest.q, this.advanceSearchRequest.branchUniqueName));
         } else {
             this.getTransactionData();
@@ -2315,10 +2315,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.bulkDeleteBankTransactionsConfirmationModal?.hide();
 
         let transactionIds = this.entryUniqueNamesForBulkAction.map((transaction: any) => transaction.transactionId);
-        let params = {transactionIds: transactionIds};
+        let params = { transactionIds: transactionIds };
         this._ledgerService.deleteBankTransactions(this.trxRequest.accountUniqueName, params).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this._toaster.clearAllToaster();
-            if(response?.status === "success") {
+            if (response?.status === "success") {
                 this.getBankTransactions();
                 this._toaster.successToast(response?.body);
             } else {
