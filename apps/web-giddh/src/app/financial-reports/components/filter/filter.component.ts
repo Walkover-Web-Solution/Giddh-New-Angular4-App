@@ -226,7 +226,7 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
         });
         this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
         this.currentCompanyBranches$.subscribe(response => {           
-            if (response && response.length) {
+            if (response?.length) {
                 this.filterForm.get('branchUniqueName').setValue("");
                 this.forceClear$ = observableOf({ status: true });
                 this.currentCompanyBranches = [];
