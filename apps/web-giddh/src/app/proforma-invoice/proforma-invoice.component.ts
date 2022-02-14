@@ -3172,6 +3172,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     this.calculateStockEntryAmount(transaction);
                     this.calculateWhenTrxAltered(entry, transaction)
                 } else {
+                    this.calculateConvertedAmount(transaction);
                     this.calculateConvertedTotal(entry, transaction);
                 }
             });
