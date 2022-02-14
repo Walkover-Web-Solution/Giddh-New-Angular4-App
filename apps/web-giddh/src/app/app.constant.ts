@@ -248,14 +248,6 @@ if (PRODUCTION_ENV || isElectron) {
     DEFAULT_SIGNUP_TRIAL_PLAN = "xoh1591185630174";
 }
 
-export let DEFAULT_POPULAR_PLAN = "";
-
-if (PRODUCTION_ENV || isElectron) {
-    DEFAULT_POPULAR_PLAN = "Oak";
-} else {
-    DEFAULT_POPULAR_PLAN = "Popular Plan";
-}
-
 /** Type of voucher that is adjusted */
 export enum AdjustedVoucherType {
     Receipt = 'rcpt',
