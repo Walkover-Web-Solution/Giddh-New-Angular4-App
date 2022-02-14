@@ -11,7 +11,7 @@
     "customer_name": "Customer Name",
     "balance_due": "Balance Due",
     "copy_previous_invoices": "Copy Previous [INVOICE_TYPE] Invoices",
-    "invoices": "[INVOICE_TYPE] Invoices",
+    "copy_previous_dr_cr": "Copy Previous [INVOICE_TYPE]",
     "customer_details": "Customer Details",
     "vendor_details": "Vendor Details",
     "billing_address": "Billing Address",
