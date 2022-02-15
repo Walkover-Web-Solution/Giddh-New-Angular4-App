@@ -320,6 +320,10 @@ body {
     vertical-align: middle;
 }
 
+.modal-footer {
+    border-top-color: var(--color-common-secondary-border);
+}
+
 .clear-both {
     clear: both;
 }
@@ -1507,9 +1511,9 @@ header .navbar {
 .btn-primary:active:hover,
 .open > .dropdown-toggle.btn-primary:focus,
 .btn-primary:not(:disabled):not(.disabled):active {
-    background: var(--color-secondary-button-background) !important;
     color: var(--color-secondary-button-text) !important;
-    border-color: var(--color-secondary-button-background) !important;
+    border-color: var(--color-common-secondary-border) !important;
+    background: var(--color-secondary-button-background) !important;
 }
 .btn-primary.disabled.focus,
 .btn-primary.disabled:focus,
@@ -1767,6 +1771,13 @@ input[type="checkbox"]:checked:after {
     background-color: var(--color-checkbox-checked-after-background);
     border-color: var(--color-checkbox-checked-after-background);
 }
+.tab-integration {
+    .tab-pane.active {
+        .connected-accounts {
+            outline: none !important;
+        }
+    }
+}
 .tab-pane .list-inline > li {
     padding-left: 0;
     margin-bottom: 5px;
@@ -1795,9 +1806,13 @@ input[type="checkbox"]:checked:after {
     line-height: 0 !important;
 }
 .btn-success-green {
-    background-color: var(--color-success-enable) !important;
-    color: var(--color-white) !important;
-    border: 1px solid var(--color-success-enable) !important;
+    color: var(--color-nonary-button-text) !important;
+    background-color: var(--color-nonary-button-background) !important;
+    border: 1px solid var(--color-nonary-button-background) !important;
+    &:hover {
+        border: 1px solid var(--color-nonary-button-background-hover) !important;
+        background-color: var(--color-nonary-button-background-hover) !important;
+    }
 }
 .btn-success-outline {
     border: 1px solid var(--color-teal) !important;
@@ -4679,7 +4694,7 @@ GST filing
 }
 .tax-engine .column.list-column {
     display: block;
-    border-right: 1px solid var(--color-iron);
+    border-right: 1px solid var(--color-common-secondary-border);
 }
 .tax-engine .column {
     height: 100%;
@@ -4697,7 +4712,7 @@ GST filing
 }
 .tax-engine .list-filter {
     padding: 15px !important;
-    border-bottom: 1px solid var(--color-iron) !important;
+    border-bottom: 1px solid var(--color-common-secondary-border) !important;
     height: 80px;
 }
 .tax-engine .transactions-list .list-filter .btn-toolbar {
@@ -4803,6 +4818,7 @@ perfect-scrollbar > .ps > .ps-overlay {
     width: 16px;
     height: 16px;
     fill: currentColor;
+    filter: var(--color-image-filter);
 }
 .text-bottom {
     vertical-align: text-bottom;
@@ -4810,6 +4826,7 @@ perfect-scrollbar > .ps > .ps-overlay {
 .tax-engine .icon.icon-sm {
     height: 14px;
     width: 14px;
+    filter: var(--color-image-filter);
 }
 .tax-engine .transactions-list .list-filter .list-style .gstr-icon {
     margin-right: 10px;
@@ -4893,7 +4910,7 @@ perfect-scrollbar > .ps > .ps-overlay {
     text-transform: uppercase;
 }
 .tax-engine .transactions-overview .gstr-transactions-summary .transactions-table {
-    border: 1px solid var(--color-iron);
+    border: 1px solid var(--color-table-primary-content-bar-border);
 }
 .tax-engine .table.transactions-table,
 .tax-engine .transactions-list .zi-table.table-scroll {
@@ -4912,7 +4929,7 @@ perfect-scrollbar > .ps > .ps-overlay {
     border-bottom: 1px solid var(--color-dark-fog);
 }
 .tax-engine .table thead:first-child tr:first-child th {
-    border-top: 1px solid var(--color-iron);
+    border-top: 1px solid var(--color-table-primary-content-bar-border);
 }
 .tax-engine .gstr-transactions-summary .table > thead > tr > th {
     padding: 10px;
@@ -5042,9 +5059,9 @@ perfect-scrollbar > .ps > .ps-overlay {
     display: block;
 }
 .tax-engine .transactions-list .filter-band {
-    background-color: var(--color-wild-sand);
-    padding: 20px;
     height: 66px;
+    padding: 20px;
+    background-color: var(--color-tab-secondary-background);
 }
 .tax-engine .transactions-list .filter-row.back-button {
     position: relative;
@@ -5058,6 +5075,7 @@ perfect-scrollbar > .ps > .ps-overlay {
 }
 .tax-engine .icon.text-top {
     vertical-align: text-top;
+    filter: invert(0);
 }
 .tax-engine .transactions-list .filter-row + .filter-row {
     margin-left: 20px;
@@ -5189,7 +5207,7 @@ perfect-scrollbar > .ps > .ps-overlay {
     padding: 13px 13px 13px 20px;
 }
 .tax-engine .table thead:first-child tr:first-child th {
-    border-top: 1px solid var(--color-iron);
+    border-top: 1px solid var(--color-table-primary-header-bar-border);
 }
 .list-column.expanded-list-column .zi-table tr td:first-of-type,
 .list-column.expanded-list-column .zi-table tr th:first-of-type {
@@ -5284,7 +5302,7 @@ perfect-scrollbar > .ps > .ps-overlay {
 }
 .tax-engine .header-band {
     width: 100%;
-    border-bottom: 1px solid var(--color-iron);
+    border-bottom: 1px solid var(--color-common-secondary-border);
     padding: 5px 0;
     margin-bottom: 15px;
 }
@@ -5301,7 +5319,7 @@ perfect-scrollbar > .ps > .ps-overlay {
     padding: 5px 15px;
     cursor: pointer;
     display: inline-block;
-    border: 1px solid var(--color-iron);
+    border: 1px solid var(--color-common-secondary-border);
 }
 .tax-engine svg.icon.filing-step-icon {
     width: 80px;
@@ -5916,7 +5934,7 @@ ul.dropdown-menu p.lead.pd {
     left: 0;
     width: 100%;
     padding: 10px 0px 0 15px !important;
-    border-bottom: 1px solid var(--color-tab-primary-border-bottom) !important;
+    border-bottom: 1px solid transparent !important;
 }
 .gstr-tabs-head .nav.nav-tabs {
     position: relative !important;
@@ -5951,6 +5969,7 @@ ul.dropdown-menu p.lead.pd {
     font-size: 18px;
     border-radius: 4px;
     background-color: var(--color-rectangular-tab-primary-background);
+    border-color: var(--color-common-secondary-border) !important;
 }
 #tab-integration .nav-tabs > li a:hover {
     background-color: var(--color-rectangular-tab-primary-background) !important;
@@ -6104,14 +6123,14 @@ button.ladda-button .ladda-label {
     color: var(--color-primary-right-side-popup-header-text);
 }
 .ng-select-wrap.select-list.select-group .below {
-    border: 1px solid var(--color-iron);
+    border: 1px solid var(--color-secondary-input-bar-border);
     height: 36px;
     align-items: center;
     display: flex;
 }
 .ng-select-wrap.select-list ng-select .below {
     width: 100% !important;
-    border: 1px solid var(--color-iron);
+    border: 1px solid var(--color-secondary-input-bar-border);
     height: 36px;
     display: flex;
     align-items: center;
@@ -6199,13 +6218,13 @@ highcharts-chart {
     min-width: 90px !important;
 }
 #asidePaneFormTabs.custom-tabs .nav.nav-tabs {
-    border-bottom: 1px solid var(--color-iron);
     padding: 0 0px 0 0 !important;
     background-color: transparent;
     z-index: 9;
     position: relative !important;
     top: -4px !important;
     margin-bottom: 10px;
+    border-bottom: 1px solid var(--color-tab-primary-border-bottom) !important;
 }
 .contact-form .mobileNumberWidth input {
     padding-right: 0 !important;
@@ -8702,7 +8721,7 @@ body.update-scroll-hidden {
     }
     .tax-engine .list-filter {
         padding: 15px !important;
-        border-bottom: 1px solid var(--color-iron) !important;
+        border-bottom: 1px solid var(--color-common-secondary-border) !important;
         height: auto;
     }
     .list-style ul.list-inline.list-middle.download-drop-down {
