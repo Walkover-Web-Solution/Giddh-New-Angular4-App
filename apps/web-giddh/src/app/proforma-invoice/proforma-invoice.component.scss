@@ -1,6 +1,3 @@
-// define vars
-$themeClr: #fe5f00;
-$greyClr: #6d6d6d;
 // mixins
 
 /**
@@ -254,7 +251,7 @@ a[type="button"] {
     .collapse-pane-heading {
         @extend .cp;
         @include marg(B, 0px);
-        color: $greyClr;
+        color: var(--color-nero);
         display: flex;
         align-items: center;
         height: 30px;
@@ -265,7 +262,7 @@ a[type="button"] {
             align-items: center;
         }
         .ico-box {
-            @include bdr(1px, solid, $greyClr);
+            @include bdr(1px, solid, var(--color-common-secondary-border));
             @include box(20px, 20px);
             @include marg(R, 10px);
             @include radius(3px);
@@ -300,7 +297,7 @@ a[type="button"] {
 
 .list-item {
     font-size: 14px;
-    border-bottom: 1px solid var(--color-iron);
+    border-bottom: 1px solid var(--color-common-secondary-border);
     display: flex !important;
 }
 
@@ -374,7 +371,7 @@ ng-select.splSales {
 
 .billing-address {
     background: var(--color-common-primary-background-for-all-components);
-    border: 1px solid var(--color-iron);
+    border: 1px solid var(--color-common-secondary-border);
     padding: 5px;
     padding-bottom: 10px;
     &.disabled {
@@ -399,7 +396,7 @@ textarea:focus {
 
 .input-custom {
     border: none;
-    border-bottom: 1px solid var(--color-iron);
+    border-bottom: 1px solid var(--color-secondary-input-bar-border);
 }
 
 .balance-due {
@@ -425,7 +422,7 @@ textarea:focus {
     > thead {
         > tr {
             > th {
-                border: 1px solid var(--color-iron) !important;
+                border: 1px solid var(--color-table-primary-header-bar-border) !important;
                 padding: 10px 8px;
                 white-space: nowrap;
                 text-align: right;
@@ -454,7 +451,7 @@ textarea:focus {
     > tbody {
         > tr {
             > td {
-                border: 1px solid var(--color-iron) !important;
+                border: 1px solid var(--color-table-primary-content-bar-border) !important;
                 padding: 10px 8px;
                 white-space: nowrap;
                 position: relative;
@@ -503,6 +500,7 @@ textarea:focus {
     position: absolute;
     top: 50px !important;
     z-index: 97;
+    filter: var(--color-image-filter);
 }
 
 .search-arrow-image.for-purchase-invoice {
@@ -714,18 +712,18 @@ input.form-control.selected-val.cp.bottom-border-only.ng-star-inserted {
 }
 
 .description textarea {
-    border: 1px solid var(--color-iron);
+    border: 1px solid var(--color-secondary-input-bar-border);
     width: 100%;
     min-height: 55px;
     margin-top: 10px;
 }
 
 .sales-invoice-table table input[disabled] {
-    cursor: default;
-    background-color: var(--color-porcelain);
-    border: 1px solid var(--color-iron);
-    padding: 5px;
     width: 100%;
+    padding: 5px;
+    cursor: default;
+    background-color: var(--color-dark-fog);
+    border: 1px solid var(--color-secondary-input-bar-border);
     // max-width: 150px;
 }
 
@@ -867,13 +865,13 @@ span.edit-icon {
 .hsn-code-dropdown {
     position: absolute;
     background-color: var(--color-white);
-    border: 1px solid var(--color-iron);
+    border: 1px solid var(--color-common-secondary-border);
     border-radius: 3px;
     width: 100%;
     min-width: 250px;
     left: auto;
     top: 31px;
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+    box-shadow: 0 6px 12px var(--color-primary-common-box-shadow);
     right: 0;
     z-index: 4;
 }
@@ -888,7 +886,8 @@ span.edit-icon {
     width: 100%;
     padding: 5px;
     max-width: 100%;
-    border: 1px solid var(--color-iron);
+    border: 1px solid var(--color-secondary-input-bar-border);
+    background-color: var(--color-sidebar-primary-search-bar-background);
 }
 
 .hsn-code-dropdown input::placeholder,
@@ -1015,7 +1014,7 @@ section.static-invoice-table {
 
 .customer-invoice-table.bg-white {
     margin-top: 10px;
-    border-bottom: 1px solid var(--color-iron);
+    border-bottom: 1px solid var(--color-common-secondary-border);
     margin-bottom: 20px;
     background-color: var(--color-common-primary-background-for-all-components) !important;
 }
@@ -1079,14 +1078,9 @@ section.new-table {
 }
 
 .add-bulk-button {
-    color: var(--color-manatee);
+    color: var(--color-common-secondary-border);
 }
 
-.textarea-height {
-    height: 120px !important;
-}
-
-.card-invoice-table-wrapper,
 .add-btn,
 .other-detail-card,
 .total-amount-description {
@@ -1195,9 +1189,8 @@ section.new-table {
     margin-bottom: 0;
     vertical-align: middle;
     line-height: 2.4;
-    border-bottom: 1px solid var(--color-iron);
     padding-left: 6px;
-    border-bottom-color: var(--color-iron);
+    border-bottom: 1px solid var(--color-secondary-input-bar-border);
 }
 
 .loader-class {
@@ -1244,8 +1237,8 @@ section.new-table {
 }
 
 .add-bulk-item-modal .right-content hr {
-    color: var(--color-shark);
-    border-color: var(--color-iron);
+    color: var(--color-nero);
+    border-color: var(--color-common-secondary-border);
     margin: 10px -15px;
     margin-left: -15px;
 }
@@ -1293,7 +1286,7 @@ section.new-table {
 }
 
 .add-bulk-item-modal .left-content {
-    border-right: 1px solid var(--color-iron);
+    border-right: 1px solid var(--color-common-secondary-border);
     padding-right: 15px;
 }
 

@@ -1,7 +1,7 @@
 .return-body .main-wrapper {
     background-color: var(--color-gst-primary-background-color);
     padding: 0;
-    border-right: 1px solid var(--color-iron);
+    border-right: 1px solid transparent;
 }
 
 .return-content {
@@ -10,7 +10,7 @@
 }
 
 .btn-primary {
-    border-color: var(--color-blue) !important;
+    border-color: var(--color-common-secondary-border) !important;
 }
 .btn-primary.disabled,
 .btn-primary.disabled.active,
@@ -120,7 +120,7 @@ svg.icon.gstr-icon {
 
 .return-content .line {
     margin: 5px 18px;
-    border-bottom: 1px solid var(--color-iron);
+    border-bottom: 1px solid var(--color-common-secondary-border);
 }
 
 .return-content .line::before {

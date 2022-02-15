@@ -10,6 +10,8 @@ a {
 svg.icon.icon-lg {
     height: 18px;
     width: 18px;
+    filter: invert(0);
+    color: var(--color-primary-checkbox-and-expansion-panel-arrow);
 }
 
 .text-middle {
@@ -178,7 +180,7 @@ svg.icon.icon-xxlg {
 }
 
 .tax-engine .gstr3b-header .sel-tab .active a {
-    color: var(--color-white);
+    color: var(--color-primary-gstr3-page-main-button);
 }
 
 .tax-engine .gstr3b-header .sel-tab li a {
@@ -231,7 +233,7 @@ address {
 }
 
 .tax-engine .summary-content .gstr-3b-user.table > tbody > tr > td {
-    border: 1px solid var(--color-primary-tax-engine-summary-gstr-3b-report-table-tbody-thead-td-border);
+    border: 1px solid var(--color-table-primary-content-bar-border);
     padding: 10px 30px 10px 10px;
 }
 
@@ -245,7 +247,7 @@ address {
 }
 
 .tax-engine .summary-content .gstr-3b-report.table > thead > tr > td {
-    border: 1px solid var(--color-primary-tax-engine-summary-gstr-3b-report-table-tbody-thead-td-border) !important;
+    border: 1px solid var(--color-table-primary-header-bar-border) !important;
     padding: 6px;
     font-size: 13px;
 }
@@ -268,7 +270,7 @@ table {
 
 .tax-engine .summary-content .gstr-3b-report.table > tbody > tr > td {
     font-size: 13px;
-    border: 1px solid var(--color-primary-tax-engine-summary-gstr-3b-report-table-tbody-thead-td-border) !important;
+    border: 1px solid var(--color-table-primary-content-bar-border) !important;
     padding: 6px;
 }
 

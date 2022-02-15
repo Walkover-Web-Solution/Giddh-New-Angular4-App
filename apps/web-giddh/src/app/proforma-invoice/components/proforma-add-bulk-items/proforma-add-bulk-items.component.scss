@@ -60,8 +60,8 @@
 }
 
 .add-bulk-item-modal .right-content hr {
-    color: var(--color-shark);
-    border-color: var(--color-iron);
+    color: var(--color-nero);
+    border-color: var(--color-common-secondary-border);
     margin: 10px -15px;
     margin-left: -15px;
 }
@@ -94,7 +94,7 @@
 
 .add-bulk-item-modal .input-group .input-group-btn .btn {
     background: var(--color-white);
-    border-left: 1px solid var(--color-iron);
+    border-left: 1px solid var(--color-common-secondary-border);
 }
 
 .add-bulk-item-modal .btn {
@@ -110,8 +110,8 @@
 }
 
 .add-bulk-item-modal .left-content {
-    border-right: 1px solid var(--color-iron);
     padding-right: 15px;
+    border-right: 1px solid var(--color-common-secondary-border);
 }
 
 .add-bulk-item-modal .modal-title {
