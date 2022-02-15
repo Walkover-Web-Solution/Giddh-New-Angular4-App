@@ -20,13 +20,48 @@ export class CustomFieldsService {
      * @returns {Observable<BaseResponse<any, any>>}
      * @memberof CommandKService
      */
-    public getAll(request: any): Observable<BaseResponse<any, any>> {
+    public list(request: any): Observable<BaseResponse<any, any>> {
         let url = this.config.apiUrl + CUSTOM_FIELDS.GET_ALL;
         url = url.replace(':companyUniqueName', request.companyUniqueName);
         url = url.replace(':moduleUniqueName', request.moduleUniqueName);
         url = url.replace(':page', request.page);
         url = url.replace(':count', request.count);
         return this.http.get(url).pipe(
+            map((res) => {
+                let data: BaseResponse<any, any> = res;
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<any, any>(e, request)));
+    }
+
+    public create(request: any, companyUniqueName: string): Observable<BaseResponse<any, any>> {
+        let url = this.config.apiUrl + CUSTOM_FIELDS.CREATE;
+        url = url.replace(':companyUniqueName', companyUniqueName);
+        return this.http.post(url, request).pipe(
+            map((res) => {
+                let data: BaseResponse<any, any> = res;
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<any, any>(e, request)));
+    }
+
+    public delete(customFieldUniqueName: string, companyUniqueName: string): Observable<BaseResponse<any, any>> {
+        let url = this.config.apiUrl + CUSTOM_FIELDS.DELETE;
+        url = url.replace(':companyUniqueName', companyUniqueName);
+        url = url.replace(':customFieldUniqueName', customFieldUniqueName);
+        return this.http.delete(url).pipe(
+            map((res) => {
+                let data: BaseResponse<any, any> = res;
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<any, any>(e, customFieldUniqueName)));
+    }
+
+    public update(request: any, customFieldUniqueName: string, companyUniqueName: string): Observable<BaseResponse<any, any>> {
+        let url = this.config.apiUrl + CUSTOM_FIELDS.UPDATE;
+        url = url.replace(':companyUniqueName', companyUniqueName);
+        url = url.replace(':customFieldUniqueName', customFieldUniqueName);
+        return this.http.patch(url, request).pipe(
             map((res) => {
                 let data: BaseResponse<any, any> = res;
                 return data;
