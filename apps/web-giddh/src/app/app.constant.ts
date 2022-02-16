@@ -284,10 +284,6 @@ export const RESTRICTED_BRANCH_ROUTES = [
     '/pages/user-details/subscription'
 ];
 
-export const SUPPORT_TEAM_NUMBERS = [
-    "+918889500350", "+918889378604"
-];
-
 /** Settings integration tabs */
 export const SETTING_INTEGRATION_TABS = {
     // SMS: { LABEL: 'sms', VALUE: 0 },
@@ -319,3 +315,4 @@ export const UNAUTHORISED = 401;
 /** This will hide the filing feature of GST module  */
 export const SHOW_GST_FILING = false;
 export const SELECT_ALL_RECORDS = "selectallrecords";
+export const CALENDLY_URL = "https://calendly.com/d/cg6-6kx-924/schedule-demo";
