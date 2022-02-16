@@ -19,7 +19,7 @@
     right: 10px;
     z-index: 9999999;
     background-color: transparent;
-    color: var(--color-white);
+    color: var(--color-primary-right-side-popup-header-text);
     font-size: 17px;
     top: 18px;
     margin-right: 0;
@@ -75,10 +75,10 @@
     border: 0;
     border-radius: 0;
     right: 58px;
-    background-color: transparent;
-    border: 1px solid var(--color-white);
+    color: var(--color-secondary-button-text);
+    background-color: var(--color-secondary-button-background);
+    border: 1px solid var(--color-primary-button-border);
     border-radius: 5px;
-    color: var(--color-white);
     padding: 3px 14px;
     font-size: 14px;
 }
@@ -97,7 +97,7 @@
 .btn-lg:hover {
     background: var(--color-dark-fog);
     color: var(--color-blue);
-    box-shadow: 0px 4px 4px -3px var(--color-gray);
+    box-shadow: 0px 4px 4px -3px var(--color-primary-common-box-shadow);
     border-radius: 0px;
     border-color: var(--color-blue);
 }

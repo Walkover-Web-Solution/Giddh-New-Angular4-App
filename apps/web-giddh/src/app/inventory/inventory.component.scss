@@ -6,7 +6,7 @@
     padding: 2px 0px !important;
     margin-right: 35px !important;
     border-bottom: 4px solid transparent !important;
-    color: var(--color-nero) !important;
+    color: var(--color-tab-primary-inactive) !important;
     border-top: transparent !important;
     border-right: transparent !important;
     border-left: transparent !important;
@@ -32,7 +32,7 @@
 .inventory-control ::ng-deep.nav-tabs > ::ng-deep li.active > a,
 .inventory-control .nav-tabs > ::ng-deep li.active > a:focus,
 .inventory-control ::ng-deep.nav-tabs > li.active > a:hover {
-    color: var(--color-nero) !important;
+    color: var(--color-tab-primary-active) !important;
     border-bottom: 4px solid var(--color-blue) !important;
     cursor: pointer !important;
     background-color: unset !important;

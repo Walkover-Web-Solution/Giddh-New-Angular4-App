@@ -901,6 +901,7 @@ button.btn.btn-filter span.icon-cross {
     right: 9px;
     top: 9px;
     font-size: 25px;
+    color: var(--color-popup-list-head-text);
 }
 .min-width-230 {
     min-width: 230px;
@@ -909,7 +910,7 @@ button.btn.btn-filter span.icon-cross {
     right: -3px;
     width: 30px;
     height: 30px;
-    border: 2px solid rgb(217, 217, 217);
+    border: 2px solid #d9d9d9;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -935,4 +936,15 @@ button.btn.btn-filter span.icon-cross {
 }
 .min-width-137 {
     min-width: 137px;
+    color: var(--color-denary-button-text);
+    background-color: var(--color-denary-button-background);
+    border: 1px solid var(--color-primary-button-border);
+}
+
+.btn-light:not(:disabled):not(.disabled).active,
+.btn-light:not(:disabled):not(.disabled):active,
+.show > .btn-light.dropdown-toggle {
+    color: var(--color-denary-button-text);
+    background-color: var(--color-denary-button-background);
+    border: 1px solid var(--color-primary-button-border);
 }
