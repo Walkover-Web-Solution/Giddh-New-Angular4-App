@@ -290,6 +290,7 @@
                                                         <a
                                                             href="javascript:;"
                                                             (click)="showLastEstimateModal = !showLastEstimateModal"
+                                                            (clickOutside)="showLastEstimateModal = false"
                                                         >
                                                             <i class="icon-copy-file"></i> {{ copyPreviousInvoiceText }}
                                                         </a>
