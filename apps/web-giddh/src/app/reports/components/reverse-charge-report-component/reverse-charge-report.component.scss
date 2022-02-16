@@ -1,5 +1,5 @@
 .branch-transfer-report .basic > thead > tr > th {
-    border-top: 1px solid var(--color-iron) !important;
+    border-top: 1px solid var(--color-table-primary-header-bar-border) !important;
 }
 .icon-pointer.active-text-color {
     color: var(--color-blue);
@@ -10,6 +10,7 @@
 .voucher-type-dropdown .btn {
     padding: 0 8px;
     margin-right: 0px;
+    color: var(--color-primary-basic-button-text);
 }
 .icon-calender {
     position: absolute;
@@ -19,8 +20,7 @@
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    border-right: 1px solid var(--color-iron);
-    color: var(--color-gray);
+    color: var(--color-primary-basic-button-text);
     left: 0;
     font-size: 18px;
 }
@@ -28,12 +28,12 @@
     padding-left: 45px !important;
     width: 210px;
     &:focus {
-        border-color: var(--color-iron) !important;
+        border-color: var(--color-primary-button-border) !important;
     }
 }
 .btn-filter {
     background: var(--color-dark-fog);
-    border: 1px solid var(--color-iron);
+    border: 1px solid var(--color-primary-button-border);
     font-size: 16px;
     color: var(--color-giddh-blue);
     display: inline-flex;

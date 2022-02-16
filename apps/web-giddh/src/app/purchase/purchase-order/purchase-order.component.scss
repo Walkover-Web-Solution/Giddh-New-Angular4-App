@@ -8,7 +8,7 @@
             width: 230px !important;
             position: relative;
             height: 36px !important;
-            border: 1px solid var(--color-iron);
+            border: 1px solid var(--color-primary-button-border);
             background-color: var(--color-white);
             &:before {
                 position: absolute;
@@ -51,7 +51,7 @@
         align-items: center;
         font-size: 18px;
         margin-left: 10px;
-        border: 1px solid var(--color-iron);
+        border: 1px solid var(--color-primary-button-border);
         border-radius: 5px;
         color: var(--color-abbey);
         background: var(--color-white);
@@ -88,13 +88,13 @@
             .action-icon {
                 display: flex;
                 align-items: center;
-                border: 1px solid var(--color-iron);
+                border: 1px solid var(--color-primary-button-border);
                 border-radius: 5px;
                 a {
                     width: 30px;
                     font-size: 18px;
                     color: var(--color-abbey);
-                    border-right: 1px solid var(--color-iron);
+                    border-right: 1px solid var(--color-primary-button-border);
                     border-radius: 5px;
                     display: flex;
                     align-items: center;
@@ -223,7 +223,7 @@
     .download-purchase-order {
         width: 30px;
         height: 30px;
-        border: 1px solid var(--color-iron);
+        border: 1px solid var(--color-primary-button-border);
         display: flex;
         align-items: center;
         justify-content: center;
