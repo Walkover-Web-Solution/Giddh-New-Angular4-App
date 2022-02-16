@@ -47,6 +47,7 @@ body.dark-theme {
     // Filter Color Variables
     --color-filter-text-hover: #cbcfd2;
     --color-filter-background-hover: #668cff26;
+    --color-primary-filter-background: #668cff26;
 
     // Loader Color Variables
     --color-loader-primary-load-bar-and-nth-3rd-child-background: #e58a00;
@@ -71,7 +72,7 @@ body.dark-theme {
     --color-upgrade-plan-tertiary-background: #668cff26;
     --color-upgrade-plan-card-primary-background-hover: #668cff26;
     --color-upgrade-plan-card-primary-border-hover: #36b283;
-    --color-csv-or-excel-file-card-text: #36b283;
+    --color-csv-or-excel-file-card-text: #668cff;
     --color-primary-card-text: #f5f5f5;
     --color-primary-card-background: #212528;
     --color-primary-card-box-shadow: #00000080;
@@ -84,7 +85,8 @@ body.dark-theme {
     --color-secondary-button-background-hover: #668cff26;
     --color-tertiary-button-text: #f5f5f5;
     --color-tertiary-button-background: transparent;
-    --color-tertiary-button-background-hover: #e7e9eb30;
+    --color-tertiary-button-background-hover: #e7e9eb26;
+    --color-quaternary-button-text: #f5f5f5;
     --color-quaternary-button-background: #36b283;
     --color-quinary-button-background: #212528;
     --color-senary-button-text: #f5f5f5;
@@ -130,6 +132,7 @@ body.dark-theme {
     --color-input-primary-background: #668cff26;
     --color-input-secondary-background: #668cff26;
     --color-input-tertiary-background: #668cff26;
+    --color-search-bar-primary-border: #505159;
 
     // Input Bar Variables
     --color-primary-input-bar-text: #9b9b9e;
@@ -331,7 +334,9 @@ body.dark-theme {
     --color-primary-popup-list-header-bottom-border: #505159;
 
     // Common Chips Variables
+    --color-chips-primary: #f5f5f5;
     --color-chips-primary-background: #668cff26;
+    --color-chips-secondary-background: #668cff26;
 
     // Tabs Color Variables
     --color-tab-primary-text: #f5f5f5;

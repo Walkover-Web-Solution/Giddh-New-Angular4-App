@@ -48,6 +48,7 @@ body.default-theme {
     // Filter Color Variables
     --color-filter-text-hover: #f5f5f5;
     --color-filter-background-hover: #668cff;
+    --color-primary-filter-background: #e7e9eb;
 
     // Loader Color Variables
     --color-loader-primary-load-bar-and-nth-3rd-child-background: #e58a00;
@@ -130,6 +131,7 @@ body.default-theme {
     --color-input-primary-background: #e7e9eb;
     --color-input-secondary-background: #ffffff;
     --color-input-tertiary-background: #f5f5f5;
+    --color-search-bar-primary-border: #cbcfd2;
 
     // Input Bar Variables
     --color-primary-input-bar-text: #212528;
@@ -331,7 +333,9 @@ body.default-theme {
     --color-primary-popup-list-header-bottom-border: #1a237e;
 
     // Common Chips Variables
+    --color-chips-primary: #212529;
     --color-chips-primary-background: #f5f5f5;
+    --color-chips-secondary-background: #cbcfd2;
 
     // Tabs Color Variables
     --color-tab-primary-text: #1a237e;

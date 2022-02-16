@@ -11,7 +11,7 @@
 }
 
 .basic > thead > tr > th {
-    border-right: 1px solid var(--color-iron);
+    border-right: 1px solid var(--color-table-primary-header-bar-border);
 }
 
 .flex-fill {
@@ -455,14 +455,14 @@ span.icon-export-icon {
             .action-icon {
                 display: flex;
                 align-items: center;
-                border: 1px solid var(--color-iron);
+                border: 1px solid var(--color-primary-button-border);
                 border-radius: 5px;
                 display: none;
                 a {
                     width: 30px;
                     font-size: 20px;
                     color: var(--color-abbey);
-                    border-right: 1px solid var(--color-iron);
+                    border-right: 1px solid var(--color-primary-button-border);
                     border-radius: 5px;
                     display: flex;
                     align-items: center;
@@ -507,8 +507,8 @@ span.icon-export-icon {
 }
 
 .giddh-table {
-    border-right: 1px solid var(--color-invoice-preview-giddh-table-border-right);
-    border-bottom: 1px solid var(--color-iron) !important;
+    border-right: 1px solid var(--color-table-primary-content-bar-border);
+    border-bottom: 1px solid var(--color-table-primary-content-bar-border) !important;
     tbody {
         tr {
             &:hover {
