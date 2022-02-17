@@ -55,6 +55,7 @@ import { clone, cloneDeep, differenceBy, flattenDeep, uniq } from 'apps/web-gidd
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { SettingsDiscountService } from 'apps/web-giddh/src/app/services/settings.discount.service';
 import { CustomFieldsService } from 'apps/web-giddh/src/app/services/custom-fields.service';
+import { FieldTypes } from '../custom-fields/custom-fields.constant';
 
 @Component({
     selector: 'account-update-new-details',
@@ -210,9 +211,10 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public customFieldsRequest: any = {
         page: 0,
         count: 0,
-        companyUniqueName: '',
-        moduleUniqueName: 'ACCOUNT'
+        moduleUniqueName: 'account'
     };
+    /** Available field types list */
+    public availableFieldTypes: any = FieldTypes;
 
     constructor(
         private _fb: FormBuilder,
@@ -240,7 +242,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             if (activeCompany) {
                 if (this.activeCompany?.uniqueName !== activeCompany?.uniqueName) {
                     this.activeCompany = activeCompany;
-                    this.customFieldsRequest.companyUniqueName = activeCompany?.uniqueName;
                     this.getCompanyCustomField();
                 }
 
@@ -367,16 +368,20 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 }
                 // render custom field data
                 if (accountDetails.customFields && accountDetails.customFields.length > 0) {
-                    accountDetails.customFields.map(item => {
-                        this.renderCustomFieldDetails(item, accountDetails.customFields.length);
-                    });
-                }
+                    let interval = setInterval(() => {
+                        const customField = this.addAccountForm.get('customFields') as FormArray;
+                        if(customField.controls?.length > 0) {
+                            clearInterval(interval);
 
-                // render custom field data
-                if (accountDetails.customFields && accountDetails.customFields.length > 0) {
-                    accountDetails.customFields.map(item => {
-                        this.renderCustomFieldDetails(item, accountDetails.customFields.length);
-                    });
+                            accountDetails.customFields.map(item => {
+                                customField.controls?.forEach((control, index) => {
+                                    if(control?.value?.uniqueName === item?.uniqueName) {
+                                        customField.controls[index]?.get('value').setValue(item.value);      
+                                    }
+                                });
+                            });
+                        }
+                    }, 500);
                 }
                 // hsn/sac enable disable
                 if (acc.hsnNumber) {

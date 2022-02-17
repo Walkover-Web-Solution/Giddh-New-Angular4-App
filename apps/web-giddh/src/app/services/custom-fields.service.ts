@@ -6,10 +6,11 @@ import { HttpWrapperService } from "./httpWrapper.service";
 import { Observable } from "rxjs";
 import { GiddhErrorHandler } from './catchManager/catchmanger';
 import { CUSTOM_FIELDS } from './apiurls/custom-fields.api';
+import { GeneralService } from './general.service';
 
 @Injectable()
 export class CustomFieldsService {
-    constructor(private errorHandler: GiddhErrorHandler, private http: HttpWrapperService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
+    constructor(private errorHandler: GiddhErrorHandler, private http: HttpWrapperService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs, private generalService: GeneralService) {
 
     }
 
@@ -18,11 +19,11 @@ export class CustomFieldsService {
      *
      * @param {*} request
      * @returns {Observable<BaseResponse<any, any>>}
-     * @memberof CommandKService
+     * @memberof CustomFieldsService
      */
     public list(request: any): Observable<BaseResponse<any, any>> {
         let url = this.config.apiUrl + CUSTOM_FIELDS.GET_ALL;
-        url = url.replace(':companyUniqueName', request.companyUniqueName);
+        url = url.replace(':companyUniqueName', this.generalService.companyUniqueName);
         url = url.replace(':moduleUniqueName', request.moduleUniqueName);
         url = url.replace(':page', request.page);
         url = url.replace(':count', request.count);
@@ -34,9 +35,16 @@ export class CustomFieldsService {
             catchError((e) => this.errorHandler.HandleCatch<any, any>(e, request)));
     }
 
-    public create(request: any, companyUniqueName: string): Observable<BaseResponse<any, any>> {
+    /**
+     * Creates custom fields
+     *
+     * @param {*} request
+     * @returns {Observable<BaseResponse<any, any>>}
+     * @memberof CustomFieldsService
+     */
+    public create(request: any): Observable<BaseResponse<any, any>> {
         let url = this.config.apiUrl + CUSTOM_FIELDS.CREATE;
-        url = url.replace(':companyUniqueName', companyUniqueName);
+        url = url.replace(':companyUniqueName', this.generalService.companyUniqueName);
         return this.http.post(url, request).pipe(
             map((res) => {
                 let data: BaseResponse<any, any> = res;
@@ -45,9 +53,16 @@ export class CustomFieldsService {
             catchError((e) => this.errorHandler.HandleCatch<any, any>(e, request)));
     }
 
-    public delete(customFieldUniqueName: string, companyUniqueName: string): Observable<BaseResponse<any, any>> {
+    /**
+     * Deletes the custom field
+     *
+     * @param {string} customFieldUniqueName
+     * @returns {Observable<BaseResponse<any, any>>}
+     * @memberof CustomFieldsService
+     */
+    public delete(customFieldUniqueName: string): Observable<BaseResponse<any, any>> {
         let url = this.config.apiUrl + CUSTOM_FIELDS.DELETE;
-        url = url.replace(':companyUniqueName', companyUniqueName);
+        url = url.replace(':companyUniqueName', this.generalService.companyUniqueName);
         url = url.replace(':customFieldUniqueName', customFieldUniqueName);
         return this.http.delete(url).pipe(
             map((res) => {
@@ -57,9 +72,17 @@ export class CustomFieldsService {
             catchError((e) => this.errorHandler.HandleCatch<any, any>(e, customFieldUniqueName)));
     }
 
-    public update(request: any, customFieldUniqueName: string, companyUniqueName: string): Observable<BaseResponse<any, any>> {
+    /**
+     * Updates custom field
+     *
+     * @param {*} request
+     * @param {string} customFieldUniqueName
+     * @returns {Observable<BaseResponse<any, any>>}
+     * @memberof CustomFieldsService
+     */
+    public update(request: any, customFieldUniqueName: string): Observable<BaseResponse<any, any>> {
         let url = this.config.apiUrl + CUSTOM_FIELDS.UPDATE;
-        url = url.replace(':companyUniqueName', companyUniqueName);
+        url = url.replace(':companyUniqueName', this.generalService.companyUniqueName);
         url = url.replace(':customFieldUniqueName', customFieldUniqueName);
         return this.http.patch(url, request).pipe(
             map((res) => {

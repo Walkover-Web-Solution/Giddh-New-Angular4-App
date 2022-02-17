@@ -35,6 +35,7 @@ import { InvoiceService } from 'apps/web-giddh/src/app/services/invoice.service'
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { clone, cloneDeep, uniqBy } from 'apps/web-giddh/src/app/lodash-optimized';
 import { CustomFieldsService } from 'apps/web-giddh/src/app/services/custom-fields.service';
+import { FieldTypes } from '../custom-fields/custom-fields.constant';
 
 @Component({
     selector: 'account-add-new-details',
@@ -165,9 +166,10 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public customFieldsRequest: any = {
         page: 0,
         count: 0,
-        companyUniqueName: '',
-        moduleUniqueName: 'ACCOUNT'
+        moduleUniqueName: 'account'
     };
+    /** Available field types list */
+    public availableFieldTypes: any = FieldTypes;
 
     constructor(
         private _fb: FormBuilder,
@@ -271,7 +273,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             if (activeCompany) {
                 if (this.activeCompany?.uniqueName !== activeCompany?.uniqueName) {
                     this.activeCompany = activeCompany;
-                    this.customFieldsRequest.companyUniqueName = activeCompany?.uniqueName;
                     this.getCompanyCustomField();
                 }
                 if (this.activeCompany.countryV2 !== undefined && this.activeCompany.countryV2 !== null) {

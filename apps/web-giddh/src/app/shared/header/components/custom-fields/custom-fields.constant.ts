@@ -1,6 +1,6 @@
 export enum FieldTypes {
-    String = 'String',
-    Number = 'Number',
-    Boolean = 'Boolean',
-    Barcode = 'Barcode'
+    String = 'STRING',
+    Number = 'NUMBER',
+    Boolean = 'BOOLEAN',
+    Barcode = 'BARCODE'
 }
