@@ -856,7 +856,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         this.prepareCompanyCountryAndCurrencyFromProfile(profile);
                     });
 
-                    // this.makeCustomerList();
                     this.getAllLastInvoices();
                 }
                 this.invoiceType = decodeURI(params['invoiceType']) as VoucherTypeEnum;
@@ -885,7 +884,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 this.accountUniqueName = params['accUniqueName'];
                 this.invoiceNo = params['invoiceNo'];
                 this.isPurchaseInvoice = true;
-                this.copyPurchaseBill = true;
+                this.copyPurchaseBill = (params['invoiceAction'] === "edit") ? false : true;
 
                 this.store.dispatch(this.invoiceReceiptActions.ResetVoucherDetails());
                 if (this.accountUniqueName && this.invoiceType && this.invoiceNo) {
@@ -893,7 +892,18 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     this.getVoucherDetailsFromInputs();
                     this.getDefaultTemplateData();
                 }
-                this.isUpdateMode = false;
+                this.isUpdateMode = (params['invoiceAction'] === "edit") ? true : false;
+
+                if (params['invoiceAction'] === "edit") {
+                    this.selectedItem = {
+                        uniqueName: params.invoiceNo,
+                        voucherNumber: undefined,
+                        account: { name: params.accUniqueName, uniqueName: params.accUniqueName },
+                        grandTotal: undefined,
+                        voucherDate: undefined,
+                        voucherType: this.invoiceType
+                    };
+                }
             } else {
                 if (params['invoiceNo'] && params['accUniqueName'] && params['invoiceType']) {
                     // for edit mode from url
