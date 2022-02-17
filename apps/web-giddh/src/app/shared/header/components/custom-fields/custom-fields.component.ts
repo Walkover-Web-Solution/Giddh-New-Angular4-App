@@ -1,14 +1,13 @@
 import { BreakpointObserver } from "@angular/cdk/layout";
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, TemplateRef } from "@angular/core";
 import { FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { select, Store } from "@ngrx/store";
+import { PAGINATION_LIMIT } from "apps/web-giddh/src/app/app.constant";
 import { cloneDeep } from "apps/web-giddh/src/app/lodash-optimized";
-import { CompanyResponse } from "apps/web-giddh/src/app/models/api-models/Company";
 import { CustomFieldsService } from "apps/web-giddh/src/app/services/custom-fields.service";
 import { ToasterService } from "apps/web-giddh/src/app/services/toaster.service";
-import { AppState } from "apps/web-giddh/src/app/store";
 import { IOption } from "apps/web-giddh/src/app/theme/ng-virtual-select/sh-options.interface";
 import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
+import { PageChangedEvent } from "ngx-bootstrap/pagination";
 import { ReplaySubject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { FieldTypes } from "./custom-fields.constant";
@@ -33,7 +32,7 @@ export class CustomFieldsComponent implements OnInit, OnDestroy {
     /** Index to delete row in custom field */
     public selectedRowIndex: number = null;
     /** To check form value validation */
-    public isCustomFormValid: boolean = true;
+    public isCustomFormValid: boolean = false;
     /** This will hold local JSON data */
     public localeData: any = {};
     /** This will hold common JSON data */
@@ -47,14 +46,13 @@ export class CustomFieldsComponent implements OnInit, OnDestroy {
     /** Custom fields request */
     public customFieldsRequest: any = {
         page: 1,
-        count: 20,
-        companyUniqueName: '',
+        count: PAGINATION_LIMIT,
         moduleUniqueName: 'account'
     };
-    /** Active company details */
-    public activeCompany: CompanyResponse;
     /** Available field types list */
     public availableFieldTypes: any = FieldTypes;
+    /** Holds get all custom fields api response */
+    public customFieldsList: any = {};
 
     constructor(
         private formBuilder: FormBuilder,
@@ -62,7 +60,6 @@ export class CustomFieldsComponent implements OnInit, OnDestroy {
         private modalService: BsModalService,
         private breakPointObservar: BreakpointObserver,
         private changeDetectorRef: ChangeDetectorRef,
-        private store: Store<AppState>,
         private customFieldsService: CustomFieldsService
     ) {
 
@@ -81,15 +78,7 @@ export class CustomFieldsComponent implements OnInit, OnDestroy {
         });
 
         this.customFieldForm = this.createCustomFieldForm();
-        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
-            if (activeCompany) {
-                if (this.activeCompany?.uniqueName !== activeCompany?.uniqueName) {
-                    this.customFieldsRequest.companyUniqueName = activeCompany?.uniqueName;
-                    this.getCompanyCustomField();
-                }
-                this.activeCompany = activeCompany;
-            }
-        });
+        this.getCompanyCustomField();
     }
 
     /**
@@ -127,6 +116,7 @@ export class CustomFieldsComponent implements OnInit, OnDestroy {
             this.isEnabledIndex = null;
             if (response) {
                 if (response.status === 'success') {
+                    this.customFieldsList = response.body;
                     this.renderCustomField(response.body?.results);
                 } else if (response.message) {
                     this.toasterService.errorToast(response.message);
@@ -162,7 +152,7 @@ export class CustomFieldsComponent implements OnInit, OnDestroy {
     public saveCustomFields(value: any): void {
         this.isSaveCustomInProgress = true;
         let newCustomFields = value.customField?.filter(field => !field.uniqueName);
-        this.customFieldsService.create(newCustomFields, this.activeCompany?.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.customFieldsService.create(newCustomFields).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 if (response.status === 'success') {
                     this.customFieldForm.get('customField').reset();
@@ -173,6 +163,7 @@ export class CustomFieldsComponent implements OnInit, OnDestroy {
                 }
                 this.isEnabledIndex = null;
                 this.isSaveCustomInProgress = false;
+                this.isCustomFormValid = false;
                 this.changeDetectorRef.detectChanges();
             }
         });
@@ -261,12 +252,11 @@ export class CustomFieldsComponent implements OnInit, OnDestroy {
             const row = cloneDeep(this.customFieldForm.get('customField') as FormArray);
             const customFieldUniqueName = row?.value[index]?.uniqueName;
 
-            this.customFieldsService.delete(customFieldUniqueName, this.activeCompany?.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            this.customFieldsService.delete(customFieldUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                this.modalRef?.hide();
                 if (response?.status === "success") {
                     this.toasterService.successToast(this.localeData?.custom_field_deleted);
                     this.getCompanyCustomField();
-
-                    this.modalRef?.hide()
                 } else {
                     this.toasterService.errorToast(response?.message);
                 }
@@ -281,9 +271,14 @@ export class CustomFieldsComponent implements OnInit, OnDestroy {
      * @memberof CustomFieldsComponent
      */
     public editCustomfield(index: number): void {
+        if (this.isEnabledIndex !== null && this.isEnabledIndex >= 0) {
+            const row = this.customFieldForm.get('customField') as FormArray;
+            row.controls[this.isEnabledIndex] = this.initNewCustomField(this.customFieldsList?.results[this.isEnabledIndex]);
+        }
+
         this.isEnabledIndex = index;
         this.checkValidation('name', index);
-        if(this.isCustomFormValid) {
+        if (this.isCustomFormValid) {
             this.checkValidation('length', index);
         }
     }
@@ -308,6 +303,7 @@ export class CustomFieldsComponent implements OnInit, OnDestroy {
             row.controls[index].get('dataRange').get('max').setValidators([Validators.required, Validators.max(150)]);
         }
         row.controls[index].get('dataRange').get('max').setValue(null);
+        row.controls[index].get('fieldType').get('name').setValue(event.label);
     }
 
     /**
@@ -326,7 +322,7 @@ export class CustomFieldsComponent implements OnInit, OnDestroy {
                 this.isCustomFormValid = false;
             }
         } else if (type === 'length') {
-            if(!row.controls[index].get('fieldType').value.type) {
+            if (!row.controls[index].get('fieldType').value.type) {
                 this.toasterService.warningToast(this.localeData?.fill_mandatory_fields);
                 this.isCustomFormValid = false;
             } else if (row.controls[index].get('fieldType').value.type === FieldTypes.Number && row.controls[index].get('dataRange').value.max > 30) {
@@ -356,10 +352,15 @@ export class CustomFieldsComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Updates custom field
+     *
+     * @param {*} row
+     * @memberof CustomFieldsComponent
+     */
     public updateCustomFields(row: any): void {
         this.isSaveCustomInProgress = true;
-        const apiObservable = this.customFieldsService.update(row.customField[this.isEnabledIndex], row.customField[this.isEnabledIndex]?.uniqueName, this.activeCompany?.uniqueName);
-        apiObservable.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.customFieldsService.update(row.customField[this.isEnabledIndex], row.customField[this.isEnabledIndex]?.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 if (response.status === 'success') {
                     this.customFieldForm.get('customField').reset();
@@ -373,5 +374,18 @@ export class CustomFieldsComponent implements OnInit, OnDestroy {
                 this.changeDetectorRef.detectChanges();
             }
         });
+    }
+
+    /**
+     * Page change event handler
+     *
+     * @param {PageChangedEvent} event Page changed event
+     * @memberof CustomFieldsComponent
+     */
+    public pageChanged(event: PageChangedEvent): void {
+        this.isEnabledIndex = null;
+        this.isGetCustomInProgress = true;
+        this.customFieldsRequest.page = event.page;
+        this.getCompanyCustomField();
     }
 }

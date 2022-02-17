@@ -35,6 +35,7 @@
                             <sh-select
                                 [placeholder]="localeData?.field_type_placeholder"
                                 [options]="fieldTypes"
+                                [defaultValue]="item.get('fieldType')?.value?.type | titlecase"
                                 formControlName="type"
                                 name="fieldType"
                                 (selected)="customFieldTypeSelected($event, index)"
@@ -106,11 +107,21 @@
                             </button>
                             <button
                                 type="button"
-                                *ngIf="item.get('uniqueName').value"
+                                *ngIf="item.get('uniqueName').value && index !== isEnabledIndex"
                                 class="btn btn-default"
                                 (click)="editCustomfield(index)"
                             >
                                 <i class="icon-edit"></i>
+                            </button>
+                            <button
+                                type="submit"
+                                *ngIf="item.get('uniqueName').value && index === isEnabledIndex"
+                                class="btn btn-default"
+                                [disabled]="!isCustomFormValid"
+                                [ladda]="isSaveCustomInProgress"
+                                (click)="updateCustomFields(customFieldForm.value)"
+                            >
+                                <i class="icon-save"></i>
                             </button>
                         </div>
                     </div>
@@ -122,24 +133,12 @@
                         localeData?.add_new_row
                     }}</a>
                 </div>
-                <div class="col-lg-3 col-sm-3 col-xs-12" *ngIf="isEnabledIndex">
-                    <label *ngIf="isMobileScreen" class="d-block">&nbsp;</label>
-                    <button
-                        type="submit"
-                        class="btn btn-primary"
-                        [disabled]="!isCustomFormValid"
-                        [ladda]="isSaveCustomInProgress"
-                        (click)="updateCustomFields(customFieldForm.value)"
-                    >
-                        {{ commonLocaleData?.app_update }}
-                    </button>
-                </div>
                 <div class="col-lg-3 col-sm-3 col-xs-12" *ngIf="!isEnabledIndex">
                     <label *ngIf="isMobileScreen" class="d-block">&nbsp;</label>
                     <button
                         type="submit"
                         class="btn btn-primary"
-                        [disabled]="!isCustomFormValid"
+                        [disabled]="!isCustomFormValid || customFieldForm.invalid || isEnabledIndex !== null"
                         [ladda]="isSaveCustomInProgress"
                         (click)="saveCustomFields(customFieldForm.value)"
                     >
@@ -148,11 +147,25 @@
                 </div>
             </div>
         </form>
+        <div class="custom-fields-pagination">
+            <pagination
+                *ngIf="customFieldsList?.results?.length && customFieldsList?.totalItems > customFieldsRequest?.count"
+                [totalItems]="customFieldsList?.totalItems"
+                [maxSize]="5"
+                [itemsPerPage]="customFieldsList?.count"
+                [boundaryLinks]="true"
+                [rotate]="true"
+                (pageChanged)="pageChanged($event)"
+                [firstText]="commonLocaleData?.app_first"
+                [previousText]="commonLocaleData?.app_previous"
+                [nextText]="commonLocaleData?.app_next"
+                [lastText]="commonLocaleData?.app_last"
+            ></pagination>
+        </div>
     </div>
     <div class="search-loading" *ngIf="isGetCustomInProgress">
         <div class="vertical-center"><span class="spinner small"></span> {{ commonLocaleData?.app_loading }}</div>
     </div>
-
     <ng-template #template>
         <div class="modal-header">
             <h4 class="modal-title pull-left">{{ localeData?.delete_custom_field_title }}</h4>
