@@ -29,7 +29,10 @@
                 <div class="grid-title-list font-14" *ngFor="let plan of inputData">
                     <span class="sub-plan-name">{{ plan["name"] }}</span> <br />
                     <span class="sub-plan-amount"
-                        >₹{{ plan["amount"] }}/<span class="sub-plan-duration">{{ plan["durationUnit"] }}</span></span
+                        >{{ activeCompany?.countryV2.currency?.symbol }}{{ plan["amount"] }}/<span
+                            class="sub-plan-duration"
+                            >{{ plan["durationUnit"] }}</span
+                        ></span
                     >
                 </div>
             </div>
