@@ -9,7 +9,7 @@ import { StateDetailsRequest } from 'apps/web-giddh/src/app/models/api-models/Co
 import { CompanyActions } from 'apps/web-giddh/src/app/actions/company.actions';
 import { ReplaySubject } from 'rxjs';
 import { GeneralActions } from '../actions/general/general.actions';
-import { SUPPORT_TEAM_NUMBERS } from '../app.constant';
+import { CALENDLY_URL } from '../app.constant';
 
 @Component({
     selector: 'onboarding-component',
@@ -24,8 +24,6 @@ export class OnboardingComponent implements OnInit, AfterViewInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public imgPath: string = '';
     public companyCountry: string;
-    /** This will hold displayed support team number */
-    public supportTeamNumber: any = [];
     /* This will hold local JSON data */
     public localeData: any = {};
     /* This will hold common JSON data */
@@ -42,7 +40,6 @@ export class OnboardingComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     public ngOnInit() {
-        this.supportTeamNumber = SUPPORT_TEAM_NUMBERS[Math.floor(Math.random() * SUPPORT_TEAM_NUMBERS.length)];
         this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         let companyUniqueName = null;
         this.store.pipe(select(c => c.session.companyUniqueName), take(1)).subscribe(s => companyUniqueName = s);
@@ -82,9 +79,7 @@ export class OnboardingComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     public scheduleNow() {
-        if (window['SOE'] !== undefined) {
-            window['SOE'].prototype.toggleLightBox('giddhbooks');
-        }
+        this.store.dispatch(this.generalActions.isOpenCalendlyModel(true));
     }
 
     public sidebarStatusChange(event) {
