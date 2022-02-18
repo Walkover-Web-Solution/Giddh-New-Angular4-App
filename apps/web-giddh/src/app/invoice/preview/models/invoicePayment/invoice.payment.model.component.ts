@@ -66,6 +66,8 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
     public selectedPaymentMode: any;
     /** Currency symbol related to amount */
     public amountCurrency: string = '';
+    /** Input masking based on currency format in company */
+    public inputMaskFormat: string = '';
 
     constructor(
         private changeDetectorRef: ChangeDetectorRef,
@@ -121,6 +123,12 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
             }
         });
 
+        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if (activeCompany) {
+                this.inputMaskFormat = activeCompany.balanceDisplayFormat ? activeCompany.balanceDisplayFormat.toLowerCase() : '';
+            }
+        });
+
         this.loadPaymentModes();
     }
 
@@ -168,7 +176,7 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
 
     public onSelectPaymentMode(event) {
         if (event && event.value) {
-            if (this.selectedInvoiceForPayment?.account?.currency?.code === event?.additional?.currency) {
+            if (!this.isMulticurrencyAccount || this.selectedInvoiceForPayment?.account?.currency?.code === event?.additional?.currency) {
                 this.assignAmount(this.selectedInvoiceForPayment?.balanceDue?.amountForAccount, this.selectedInvoiceForPayment?.account?.currency?.symbol);
             } else {
                 this.assignAmount(this.selectedInvoiceForPayment?.balanceDue?.amountForCompany, event?.additional?.currencySymbol);
