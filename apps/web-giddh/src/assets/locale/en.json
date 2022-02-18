@@ -469,7 +469,8 @@
     "app_datatype_list": {
         "string": "String",
         "number": "Number",
-        "boolean": "Boolean"
+        "boolean": "Boolean",
+        "barcode": "Barcode"
     },
     "app_rc_heading": "Reverse Charge Confirmation",
     "app_rc_selected_note": "Note: If you check this transaction for Reverse Charge, applied taxes will be considered under Reverse Charge taxes and will be added in tax report.",
