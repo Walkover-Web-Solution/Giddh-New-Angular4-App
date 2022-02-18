@@ -190,6 +190,7 @@ export interface DownloadVoucherRequest {
 }
 class CurrencyClass {
     public code: string;
+    public symbol?: string;
 }
 
 /** Voucher request modal */
