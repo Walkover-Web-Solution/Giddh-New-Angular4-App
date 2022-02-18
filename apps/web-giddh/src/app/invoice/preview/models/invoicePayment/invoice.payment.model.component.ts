@@ -64,6 +64,8 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
     public paymentModes$: Observable<IOption[]> = observableOf([]);
     /** Selected payment mode */
     public selectedPaymentMode: any;
+    /** Currency symbol related to amount */
+    public amountCurrency: string = '';
 
     constructor(
         private changeDetectorRef: ChangeDetectorRef,
@@ -166,6 +168,12 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
 
     public onSelectPaymentMode(event) {
         if (event && event.value) {
+            if (this.selectedInvoiceForPayment?.account?.currency?.code === event?.additional?.currency) {
+                this.assignAmount(this.selectedInvoiceForPayment?.balanceDue?.amountForAccount, this.selectedInvoiceForPayment?.account?.currency?.symbol);
+            } else {
+                this.assignAmount(this.selectedInvoiceForPayment?.balanceDue?.amountForCompany, event?.additional?.currencySymbol);
+            }
+            
             this.selectedPaymentMode = event;
             this.searchService.loadDetails(event.value).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 if (response && response.body) {
@@ -186,6 +194,7 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
             })
             this.paymentActionFormObj.accountUniqueName = event.value;
         } else {
+            this.assignAmount(this.selectedInvoiceForPayment?.balanceDue?.amountForAccount, this.selectedInvoiceForPayment?.account?.currency?.symbol);
             this.selectedPaymentMode = null;
             this.paymentActionFormObj.accountUniqueName = '';
             this.isBankSelected = false;
@@ -234,6 +243,10 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
                 this.isMulticurrencyAccount = false;
                 this.exchangeRate = 1;
             }
+        }
+
+        if (this.selectedInvoiceForPayment) {
+            this.assignAmount(this.selectedInvoiceForPayment?.balanceDue?.amountForAccount, this.selectedInvoiceForPayment?.account?.currency?.symbol);
         }
     }
 
@@ -304,5 +317,17 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
             this.paymentMode = paymentMode;
             this.originalPaymentMode = paymentMode;
         });
+    }
+
+    /**
+     * Assigns the number and currency
+     *
+     * @param {number} amount
+     * @param {string} currencySymbol
+     * @memberof InvoicePaymentModelComponent
+     */
+    public assignAmount(amount: number, currencySymbol: string): void {
+        this.paymentActionFormObj.amount = String(amount);
+        this.amountCurrency = currencySymbol;
     }
 }
