@@ -66,6 +66,7 @@ import { HasFocusDirectiveModule } from '../shared/helpers/directives/has-focus/
 import { TrimPipeModule } from '../shared/helpers/pipes/trim/trim.module';
 import { TaxSidebarModule } from '../shared/tax-sidebar/tax-sidebar.module';
 import { NoDataModule } from '../shared/no-data/no-data.module';
+import { NgxMaskModule } from '../shared/helpers/directives/ngx-mask';
 
 const DEFAULT_FONT_PICKER_CONFIG: FontPickerConfigInterface = {
     // Change this to your Google API key
@@ -158,7 +159,8 @@ const INVOICE_ROUTES: Routes = [
         HasFocusDirectiveModule,
         TrimPipeModule,
         TaxSidebarModule,
-        NoDataModule
+        NoDataModule,
+        NgxMaskModule.forRoot()
     ],
     exports: [
         RouterModule,
