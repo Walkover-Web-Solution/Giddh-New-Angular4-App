@@ -297,7 +297,7 @@ export class CustomFieldsComponent implements OnInit, OnDestroy {
             row.controls[index].get('dataRange').clearValidators();
         } else if (event.value === FieldTypes.Number) {
             row.controls[index].get('dataRange').get('min').setValue(0);
-            row.controls[index].get('dataRange').get('max').setValidators([Validators.required, Validators.max(30)]);
+            row.controls[index].get('dataRange').get('max').setValidators([Validators.required]);
         } else if (event.value === FieldTypes.String || event.value === FieldTypes.Barcode) {
             row.controls[index].get('dataRange').get('min').setValue(1);
             row.controls[index].get('dataRange').get('max').setValidators([Validators.required, Validators.max(150)]);
@@ -324,9 +324,6 @@ export class CustomFieldsComponent implements OnInit, OnDestroy {
         } else if (type === 'length') {
             if (!row.controls[index].get('fieldType').value.type) {
                 this.toasterService.warningToast(this.localeData?.fill_mandatory_fields);
-                this.isCustomFormValid = false;
-            } else if (row.controls[index].get('fieldType').value.type === FieldTypes.Number && row.controls[index].get('dataRange').value.max > 30) {
-                this.toasterService.warningToast(this.localeData?.number_length_validation);
                 this.isCustomFormValid = false;
             } else if ((row.controls[index].get('fieldType').value.type === FieldTypes.String || row.controls[index].get('fieldType').value.type === FieldTypes.Barcode) && row.controls[index].get('dataRange').value.max > 150) {
                 this.toasterService.warningToast(this.localeData?.string_length_validation);
