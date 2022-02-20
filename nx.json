@@ -7,21 +7,19 @@
         "tslint.json": "*",
         "nx.json": "*"
     },
-    "projects": {
-        "libs": {
-            "tags": []
+    "affected": {
+        "defaultBase": "master"
+    },
+    "cli": {
+        "defaultCollection": "@nrwl/angular"
+    },
+    "generators": {
+        "@nrwl/angular:application": {
+            "unitTestRunner": "jest",
+            "e2eTestRunner": "cypress"
         },
-        "xplat": {
-            "tags": []
-        },
-        "web-giddh": {
-            "tags": []
-        },
-        "web-giddh-e2e": {
-            "tags": []
-        },
-        "electron-giddh": {
-            "tags": []
+        "@nrwl/angular:library": {
+            "unitTestRunner": "jest"
         }
     }
 }

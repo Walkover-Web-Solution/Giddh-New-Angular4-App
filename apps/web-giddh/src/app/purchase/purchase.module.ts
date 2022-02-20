@@ -69,10 +69,7 @@ import { PurchaseRoutingModule } from './purchase.routing.module';
         ProformaInvoiceModule,
         NoDataModule
     ],
-    entryComponents: [],
-    exports: [
-
-    ]
+    exports: []
 })
 export class PurchaseModule {
 }

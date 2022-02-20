@@ -120,7 +120,6 @@ import { ManufacturingComponent } from './manufacturing/manufacturing.component'
         GiddhRoundOffPipeModule,
         InventoryAddStockModule,
         ConfirmModalModule
-    ],
-    entryComponents: [PaginationComponent]
+    ]
 })
 export class InventoryModule { }

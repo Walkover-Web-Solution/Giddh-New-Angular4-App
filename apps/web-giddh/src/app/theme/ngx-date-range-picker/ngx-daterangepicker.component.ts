@@ -303,7 +303,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
 
     public ngOnInit(): void {
         this.store.dispatch(this.settingsFinancialYearActions.getFinancialYearLimits());
-        
+
         this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
 
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
@@ -1149,7 +1149,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
         this.updateCalendars();
     }
 
-    public mouseUp(e: MouseWheelEvent): void {
+    public mouseUp(e: any): void {
         if (this.allowMouseScroll) {
             if (e.deltaY < 0) {
                 if (!this.isOnScrollActive) {

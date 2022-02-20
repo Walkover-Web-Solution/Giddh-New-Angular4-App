@@ -63,10 +63,6 @@ import { ConfirmModalModule } from '../theme/confirm-modal/confirm-modal.module'
         PaymentAdvanceSearchComponent,
         PreviewComponent
     ],
-    entryComponents: [
-        ReceiptAdvanceSearchComponent,
-        PaymentAdvanceSearchComponent
-    ],
     exports: [
         ReportsComponent,
         ReportsDetailsComponent,

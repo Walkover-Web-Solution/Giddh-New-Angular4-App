@@ -72,9 +72,6 @@ import { TaxSidebarModule } from '../shared/tax-sidebar/tax-sidebar.module';
         TaxSidebarModule
     ],
     providers: [],
-    entryComponents: [
-        PaginationComponent
-    ],
     exports: [ViewTransactionsComponent]
 })
 export class GstModule {

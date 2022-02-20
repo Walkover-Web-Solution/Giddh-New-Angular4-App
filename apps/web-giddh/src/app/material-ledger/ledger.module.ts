@@ -86,7 +86,6 @@ import { AttachmentsModule } from '../theme/attachments/attachments.module';
     exports: [
         LedgerComponent
     ],
-    entryComponents: [PaginationComponent],
     providers: [],
     imports: [
         CommonModule,
@@ -151,7 +150,7 @@ import { AttachmentsModule } from '../theme/attachments/attachments.module';
         MatGridListModule,
         MatExpansionModule,
         AttachmentsModule
-    ],
+    ]
 })
 export class LedgerModule {
 }

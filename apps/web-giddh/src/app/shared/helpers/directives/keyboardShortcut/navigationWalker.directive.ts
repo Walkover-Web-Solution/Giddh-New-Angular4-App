@@ -210,8 +210,7 @@ export class NavigationWalkerDirective implements OnInit, OnDestroy {
                     }
                     return NodeFilter.FILTER_SKIP;
                 }
-            },
-            false
+            }
         );
     }
 

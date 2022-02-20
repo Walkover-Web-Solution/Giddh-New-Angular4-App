@@ -98,9 +98,6 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         MatTooltipModule,
         MatDialogModule
     ],
-    entryComponents: [
-        PaginationComponent
-    ],
     providers: [
         {
             provide: PERFECT_SCROLLBAR_CONFIG,

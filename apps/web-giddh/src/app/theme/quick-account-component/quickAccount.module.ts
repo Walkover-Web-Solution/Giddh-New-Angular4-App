@@ -19,8 +19,7 @@ import { LaddaModule } from 'angular2-ladda';
         TooltipModule,
         LaddaModule
     ],
-    declarations: [QuickAccountComponent],
-    entryComponents: [QuickAccountComponent]
+    declarations: [QuickAccountComponent]
 })
 
 export class QuickAccountModule { }

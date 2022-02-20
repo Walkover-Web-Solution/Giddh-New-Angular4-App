@@ -60,9 +60,6 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
         MatRadioModule,
         MatExpansionModule,
         MatSlideToggleModule
-    ],
-    entryComponents: [
-        PaginationComponent
     ]
 })
 export class DaybookModule {

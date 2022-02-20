@@ -74,7 +74,6 @@ import { NoDataModule } from '../shared/no-data/no-data.module';
     exports: [
         LedgerComponent
     ],
-    entryComponents: [PaginationComponent],
     providers: [],
     imports: [
         CommonModule,
@@ -122,7 +121,7 @@ import { NoDataModule } from '../shared/no-data/no-data.module';
         ConfirmationModalModule,
         ValidateSectionPermissionDirectiveModule,
         NoDataModule
-    ],
+    ]
 })
 export class LedgerModule {
 }

@@ -218,14 +218,6 @@ export function provideConfig() {
         GiddhDateRangepickerModule,
         DeleteTemplateConfirmationModalModule
     ],
-    entryComponents: [
-        ManageGroupsAccountsComponent,
-        CompanyAddNewUiComponent,
-        AccountOperationsComponent,
-        GroupsAccountSidebarComponent,
-        OnBoardingComponent,
-        AccountUpdateNewDetailsComponent
-    ],
     providers: [
         {
             provide: AuthServiceConfig,
