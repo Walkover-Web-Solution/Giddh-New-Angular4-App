@@ -1,25 +1,39 @@
 {
-    "npmScope": "giddh-workspaces",
-    "implicitDependencies": {
-        "angular.json": "*",
-        "package.json": "*",
-        "tsconfig.json": "*",
-        "tslint.json": "*",
-        "nx.json": "*"
-    },
-    "affected": {
-        "defaultBase": "master"
-    },
-    "cli": {
-        "defaultCollection": "@nrwl/angular"
-    },
-    "generators": {
-        "@nrwl/angular:application": {
-            "unitTestRunner": "jest",
-            "e2eTestRunner": "cypress"
-        },
-        "@nrwl/angular:library": {
-            "unitTestRunner": "jest"
-        }
+  "npmScope": "giddh-workspaces",
+  "implicitDependencies": {
+    "angular.json": "*",
+    "package.json": "*",
+    "tsconfig.json": "*",
+    "tslint.json": "*",
+    "nx.json": "*"
+  },
+  "affected": {
+    "defaultBase": "master"
+  },
+  "cli": {
+    "defaultCollection": "@nrwl/angular"
+  },
+  "tasksRunnerOptions": {
+    "default": {
+      "runner": "@nrwl/nx-cloud",
+      "options": {
+        "cacheableOperations": [
+          "build",
+          "test",
+          "lint",
+          "e2e"
+        ],
+        "accessToken": "MDQ1MjA2M2YtNjgxNy00NWQ0LWE2ODItMGFiZWIxY2Y4MTdjfHJlYWQtd3JpdGU="
+      }
     }
+  },
+  "generators": {
+    "@nrwl/angular:application": {
+      "unitTestRunner": "jest",
+      "e2eTestRunner": "cypress"
+    },
+    "@nrwl/angular:library": {
+      "unitTestRunner": "jest"
+    }
+  }
 }
