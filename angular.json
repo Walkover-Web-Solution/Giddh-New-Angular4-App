@@ -486,33 +486,6 @@
             },
             "tags": []
         },
-        "web-giddh-e2e": {
-            "root": "apps/web-giddh-e2e",
-            "projectType": "application",
-            "prefix": "",
-            "architect": {
-                "e2e": {
-                    "builder": "@angular-builders/custom-webpack:protractor",
-                    "options": {
-                        "protractorConfig": "apps/web-giddh-e2e/protractor.conf.js",
-                        "devServerTarget": "web-giddh:serve"
-                    },
-                    "configurations": {
-                        "prod": {
-                            "devServerTarget": "web-giddh:serve:prod"
-                        }
-                    }
-                },
-                "lint": {
-                    "builder": "@angular-builders/custom-webpack:tslint",
-                    "options": {
-                        "tsConfig": "apps/web-giddh-e2e/tsconfig.e2e.json",
-                        "exclude": ["**/node_modules/**"]
-                    }
-                }
-            },
-            "tags": []
-        },
         "xplat": {
             "root": "xplat",
             "sourceRoot": "xplat",
