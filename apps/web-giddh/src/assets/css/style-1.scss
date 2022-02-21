@@ -1660,7 +1660,7 @@ ul.pills li {
     z-index: 100;
 }
 .dashboard-reconnect-block {
-    background: #ffffffe6;
+    background: var(--color-common-senary-background-for-all-components);
     position: absolute;
     height: 100%;
     width: 100%;
@@ -2086,6 +2086,16 @@ perfect-scrollbar.ps-show-active > .ps.ps--active-y > .ps-overlay:not(.ps-at-bot
         .form-control {
             option {
                 background-color: var(--color-dropdown-secondary-background) !important;
+            }
+        }
+    }
+}
+
+#setting-tab {
+    .setting-container {
+        #tab-integration {
+            .nav-tabs {
+                border-color: transparent !important;
             }
         }
     }

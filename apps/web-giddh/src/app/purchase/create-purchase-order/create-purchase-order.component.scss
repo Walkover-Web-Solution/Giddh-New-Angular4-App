@@ -65,7 +65,7 @@ form {
                 }
                 .billing-address {
                     background: var(--color-white);
-                    border: 1px solid var(--color-iron);
+                    border: 1px solid var(--color-common-secondary-border);
                     padding: 5px;
                     padding-bottom: 10px;
                     width: 100%;
@@ -108,14 +108,14 @@ form {
                         margin-bottom: 0;
                         vertical-align: middle;
                         line-height: 2;
-                        border-bottom: 1px solid var(--color-iron);
+                        border-bottom: 1px solid var(--color-secondary-input-bar-border);
                         padding-left: 6px;
-                        border-bottom-color: var(--color-iron);
+                        border-bottom-color: var(--color-secondary-input-bar-border);
                         width: 100%;
                     }
                     .input-custom {
                         border: none;
-                        border-bottom: 1px solid var(--color-iron);
+                        border-bottom: 1px solid var(--color-secondary-input-bar-border);
                         width: 100%;
                     }
                     sh-select {
@@ -191,7 +191,7 @@ form {
             align-items: center;
         }
         .ico-box {
-            border: 1px solid var(--color-iron);
+            border: 1px solid var(--color-primary-button-border);
             width: 20px;
             height: 20px;
             margin-right: 10px;
@@ -276,7 +276,7 @@ form {
 
 .list-item {
     font-size: 14px;
-    border-bottom: 1px solid var(--color-iron);
+    border-bottom: 1px solid var(--color-common-secondary-border);
     display: flex !important;
 }
 
@@ -352,7 +352,7 @@ ng-select.splSales {
     text-align: right;
 }
 .description textarea {
-    border: 1px solid var(--color-iron);
+    border: 1px solid var(--color-secondary-input-bar-border);
     width: 100%;
     min-height: 55px;
     margin-top: 10px;
@@ -361,7 +361,7 @@ ng-select.splSales {
 .create-purchase-order-table table input[disabled] {
     cursor: default;
     background-color: var(--color-dark-fog);
-    border: 1px solid var(--color-iron);
+    border: 1px solid var(--color-secondary-input-bar-border);
     padding: 5px;
     width: 100%;
     &.other-taxes-input {
@@ -491,13 +491,13 @@ span.edit-icon {
 .hsn-code-dropdown {
     position: absolute;
     background-color: var(--color-white);
-    border: 1px solid var(--color-iron);
+    border: 1px solid var(--color-secondary-input-bar-border);
     border-radius: 3px;
     width: 100%;
     min-width: 250px;
     left: auto;
     top: 31px;
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+    box-shadow: 0 6px 12px var(--color-primary-common-box-shadow);
     right: 0;
     z-index: 4;
 }
@@ -511,7 +511,7 @@ span.edit-icon {
 .hsn-code-dropdown input {
     width: 100%;
     padding: 5px;
-    border: 1px solid var(--color-iron);
+    border: 1px solid var(--color-secondary-input-bar-border);
 }
 
 .hsn-code-dropdown input::placeholder,
@@ -620,7 +620,7 @@ section.static-purchase-table {
 
 .customer-purchase-table.bg-white {
     margin-top: 10px;
-    border-bottom: 1px solid var(--color-iron);
+    border-bottom: 1px solid var(--color-common-secondary-border);
     margin-bottom: 20px;
 }
 
@@ -641,7 +641,7 @@ section.new-table {
 }
 
 .new-table .thead {
-    border-right: 1px solid var(--color-iron);
+    border-right: 1px solid var(--color-table-primary-header-bar-border);
     padding: 8px 10px;
 }
 
@@ -665,7 +665,7 @@ section.new-table {
     > thead {
         > tr {
             > th {
-                border: 1px solid var(--color-iron) !important;
+                border: 1px solid var(--color-table-primary-header-bar-border) !important;
                 padding: 10px 8px;
                 white-space: nowrap;
                 text-align: right;
@@ -691,7 +691,7 @@ section.new-table {
     > tbody {
         > tr {
             > td {
-                border: 1px solid var(--color-iron) !important;
+                border: 1px solid var(--color-table-primary-content-bar-border) !important;
                 padding: 10px 8px;
                 white-space: nowrap;
                 position: relative;
@@ -783,7 +783,7 @@ table.table.table-custom-invoice.basic {
     transform: translateY(-40px);
     width: 20px;
     height: 20px;
-    border: 1px solid var(--color-gray);
+    border: 1px solid var(--color-primary-button-border);
     border-radius: 50%;
     text-align: center;
 }
@@ -1003,9 +1003,9 @@ span.eligible-ITC {
     margin-bottom: 0;
     vertical-align: middle;
     line-height: 2.4;
-    border-bottom: 1px solid var(--color-iron);
+    border-bottom: 1px solid var(--color-secondary-input-bar-border);
     padding-left: 6px;
-    border-bottom-color: var(--color-iron);
+    border-bottom-color: var(--color-secondary-input-bar-border);
 }
 
 .loader-class {
@@ -1017,14 +1017,14 @@ span.eligible-ITC {
 }
 
 .bg-white {
-    background-color: var(--color-white);
+    background-color: var(--color-white) !important;
 }
 #actionPane {
     width: 100%;
     position: relative;
     float: left;
     padding: 20px 0;
-    background-color: var(--color-iron);
+    background-color: var(--color-common-senary-background-for-all-components);
     #dropdown-basic,
     #dropdown-basic2 {
         transform: translateY(0) !important;
