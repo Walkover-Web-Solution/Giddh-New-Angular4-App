@@ -885,23 +885,31 @@
                                         <!-- added multicurrency feature make it functional to change into appropriate currency -->
                                         <span
                                             *ngIf="
-                                                enableVoucherAdjustmentMultiCurrency &&
-                                                isSalesInvoice &&
-                                                isMulticurrencyAccount &&
-                                                adjustPaymentBalanceDueData === 0 &&
-                                                invFormData.voucherDetails.balanceDue === 0
+                                                (voucherApiVersion !== 2 &&
+                                                    enableVoucherAdjustmentMultiCurrency &&
+                                                    isSalesInvoice &&
+                                                    isMulticurrencyAccount &&
+                                                    adjustPaymentBalanceDueData === 0 &&
+                                                    invFormData.voucherDetails.balanceDue === 0) ||
+                                                (voucherApiVersion === 2 &&
+                                                    invFormData.voucherDetails.gainLoss !== 0 &&
+                                                    invFormData.voucherDetails.balanceDue === 0)
                                             "
                                             class="balance-due"
                                             >{{ localeData?.exchange_label }}
                                             {{
-                                                getConvertedBalanceDue() <= 0
+                                                voucherApiVersion === 2
+                                                    ? invFormData.voucherDetails.gainLoss >= 0
+                                                        ? commonLocaleData?.app_exchange_gain
+                                                        : commonLocaleData?.app_exchange_loss
+                                                    : getConvertedBalanceDue() <= 0
                                                     ? commonLocaleData?.app_exchange_gain
                                                     : commonLocaleData?.app_exchange_loss
                                             }}:&nbsp;</span
                                         >
                                         <span
                                             class="sp-rupees d-flex justify-content-end"
-                                            *ngIf="isMulticurrencyAccount"
+                                            *ngIf="isMulticurrencyAccount && voucherApiVersion !== 2"
                                         >
                                             <amount-field
                                                 [amount]="
@@ -919,7 +927,7 @@
 
                                         <span
                                             class="sp-rupees d-flex justify-content-end"
-                                            *ngIf="!isMulticurrencyAccount"
+                                            *ngIf="!isMulticurrencyAccount && voucherApiVersion !== 2"
                                         >
                                             <amount-field
                                                 [amount]="
@@ -929,6 +937,21 @@
                                                 "
                                                 [currencySymbol]="false"
                                                 [currencyCode]="false"
+                                            >
+                                            </amount-field>
+                                        </span>
+                                        <span
+                                            class="sp-rupees d-flex justify-content-end"
+                                            *ngIf="
+                                                voucherApiVersion === 2 &&
+                                                invFormData.voucherDetails.gainLoss !== 0 &&
+                                                invFormData.voucherDetails.balanceDue === 0
+                                            "
+                                        >
+                                            <amount-field
+                                                [amount]="invFormData.voucherDetails.gainLoss"
+                                                [currencySymbol]="baseCurrencySymbol"
+                                                [currencyCode]="companyCurrency"
                                             >
                                             </amount-field>
                                         </span>
