@@ -19,7 +19,7 @@
     padding: 9px;
     margin-bottom: 10px;
     font-size: 16px;
-    box-shadow: 1px 1px 3px var(--color-iron);
+    box-shadow: 1px 1px 3px var(--color-primary-common-box-shadow);
 }
 .click-here {
     color: var(--color-blue);
@@ -39,7 +39,7 @@ span.icon-info-icon {
     margin-right: 10px;
 }
 .dropdown-menu {
-    border: 1px solid var(--color-iron);
+    border: 1px solid var(--color-common-secondary-border);
 }
 a.dropdown-item {
     color: var(--color-nero);

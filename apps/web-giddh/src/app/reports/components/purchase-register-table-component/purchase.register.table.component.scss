@@ -8,6 +8,7 @@
 .basic > thead > tr > th,
 .basic > tfoot > tr > th {
     white-space: nowrap !important;
+    background-color: var(--color-table-heading-primary-background);
 }
 .width-200px {
     width: 200px;
@@ -37,6 +38,17 @@
     text-align: center;
     line-height: 35px;
 }
+
+.table.basic.giddh-table {
+    .register-table-th {
+        th {
+            color: var(--color-table-secondary-heading) !important;
+            background-color: var(--color-table-heading-primary-background);
+            border-bottom: 1px solid var(--color-table-primary-header-bar-border) !important;
+        }
+    }
+}
+
 @media screen and (max-width: 768px) {
     .table-responsive {
         .giddh-table.on-mobile-view {
