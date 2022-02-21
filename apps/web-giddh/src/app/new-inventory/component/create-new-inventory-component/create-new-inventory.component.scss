@@ -270,6 +270,8 @@ table.stock-table th {
             display: flex;
             width: 200px;
             position: relative;
+            border: 1px solid #d9d9d9;
+            border-radius: 5px;
 
             .input-addon {
                 position: absolute;
@@ -281,6 +283,10 @@ table.stock-table th {
 
             input {
                 padding-left: 30px !important;
+            }
+
+            .search-text-padding {
+                padding: 1px 0px 0px 25px;
             }
         }
     }
@@ -312,6 +318,12 @@ table.stock-table th {
             input {
                 width: 80px;
             }
+        }
+    }
+
+    .text-field-container {
+        #fill-number {
+            border: 1px solid #d9d9d9;
         }
     }
 }
@@ -522,6 +534,14 @@ table.stock-table th {
                     width: 87px;
                     object-fit: contain;
                     transform: scale(1.2);
+                }
+            }
+        }
+
+        .product-detail-content {
+            form {
+                .text-field-border {
+                    border: 1px solid #d9d9d9 !important;
                 }
             }
         }

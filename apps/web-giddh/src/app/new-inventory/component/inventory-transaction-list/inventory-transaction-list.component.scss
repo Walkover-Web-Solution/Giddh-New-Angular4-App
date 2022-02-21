@@ -1,6 +1,11 @@
 @import "../../../../assets/css/color.scss";
 .inventory-transaction-list {
     min-height: calc(100vh - 340px);
+    .row {
+        .horizontal-padding {
+            padding: 0px 30px;
+        }
+    }
 }
 .custom-datepicker {
     margin-bottom: 0;

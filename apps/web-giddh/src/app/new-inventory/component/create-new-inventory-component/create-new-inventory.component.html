@@ -49,7 +49,7 @@
                                         <text-field
                                             [cssClass]="'form-control'"
                                             id="product-name"
-                                            placeholder="Unique Name"
+                                            placeholder="Product Name"
                                             type="text"
                                             value="Product Dummy Name Furniture"
                                         ></text-field>
@@ -63,6 +63,7 @@
                                         <text-field
                                             [cssClass]="'form-control'"
                                             id="product-unit"
+                                            placeholder="Product Unit"
                                             type="text"
                                             value="Kilo Gram"
                                         ></text-field>
@@ -70,12 +71,13 @@
                                 </div>
                                 <div class="row mr-b15">
                                     <div class="col-sm-6 col-lg-6">
-                                        <label>Under Group</label>
+                                        <label>Under Group <span class="red-text">*</span></label>
                                     </div>
                                     <div class="col-sm-6 col-lg-6">
                                         <text-field
                                             [cssClass]="'form-control'"
                                             id="under-group"
+                                            placeholder="Under Group"
                                             type="text"
                                             value=""
                                         ></text-field>
@@ -89,6 +91,7 @@
                                         <text-field
                                             [cssClass]="'form-control'"
                                             id="unique-name"
+                                            placeholder="Unique Name"
                                             type="text"
                                             value=""
                                         ></text-field>
@@ -96,13 +99,13 @@
                                 </div>
                             </form>
                         </div>
-                        <div class="col-md-4 col-lg-4 col-xl-6 col-12">
+                        <!-- <div class="col-md-4 col-lg-4 col-xl-6 col-12">
                             <div class="add-image-button">
                                 <button mat-button role="button" type="button">
                                     <img src="{{ imgPath }}add-image.svg" />
                                 </button>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </div>
@@ -110,7 +113,7 @@
                 <mat-tab-group mat-align-tabs="start" class="mat-tab-them">
                     <mat-tab label="Account">
                         <div class="tab-container-new">
-                            <form>
+                            <!-- <form>
                                 <div class="row">
                                     <div class="col-xl-8 col-md-12 col-xs-12 col-sm-12">
                                         <div class="row">
@@ -288,13 +291,13 @@
                                         </div>
                                     </div>
                                 </div>
-                            </form>
+                            </form> -->
                             <div class="sales-purchase-details">
-                                <div class="mb-3">
+                                <!-- <div class="mb-3">
                                     <mat-checkbox color="primary" class="font-14"
                                         >Is the Product/Service eligible for Sale or Purchase?
                                     </mat-checkbox>
-                                </div>
+                                </div> -->
                                 <div class="row">
                                     <div class="col-xl-8">
                                         <div class="row">
@@ -504,7 +507,7 @@
                                 </span>
                             </p>
 
-                            <form>
+                            <!-- <form>
                                 <div class="stock-made-with">
                                     <p>Computer (Made with)</p>
                                 </div>
@@ -583,7 +586,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </form>
+                            </form> -->
 
                             <p class="mr-b15 font-14">
                                 <span>
@@ -749,7 +752,7 @@
                                                     [cssClass]="'form-control'"
                                                     id="product-name"
                                                     type="text"
-                                                    placeholder="Enter HSN Code"
+                                                    placeholder="Enter Code"
                                                 ></text-field>
                                             </div>
                                         </div>
@@ -764,7 +767,7 @@
                                                     [cssClass]="'form-control'"
                                                     id="product-name"
                                                     type="text"
-                                                    placeholder="Enter SKU Code"
+                                                    placeholder="Enter Code"
                                                 ></text-field>
                                             </div>
                                         </div>
@@ -778,6 +781,7 @@
                                                 <text-field
                                                     [cssClass]="'form-control'"
                                                     id="bar-code"
+                                                    placeholder="Enter Code"
                                                     type="text"
                                                 ></text-field>
                                             </div>
@@ -789,19 +793,9 @@
                                                 <label>Expiry Date</label>
                                             </div>
                                             <div class="col-sm-6 col-lg-6">
-                                                <text-field [cssClass]="'form-control'" type="text"></text-field>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-xl-6 col-md-12 col-lg-8 col-sm-12">
-                                        <div class="row mr-b15">
-                                            <div class="col-sm-6 col-lg-6">
-                                                <label>Custom Field</label>
-                                            </div>
-                                            <div class="col-sm-6 col-lg-6">
                                                 <text-field
                                                     [cssClass]="'form-control'"
-                                                    id="expiry-code"
+                                                    placeholder="Select Date"
                                                     type="text"
                                                 ></text-field>
                                             </div>
@@ -816,6 +810,7 @@
                                                 <text-field
                                                     [cssClass]="'form-control'"
                                                     id="expiry-code"
+                                                    placeholder="Custom Field"
                                                     type="text"
                                                 ></text-field>
                                             </div>
@@ -830,6 +825,22 @@
                                                 <text-field
                                                     [cssClass]="'form-control'"
                                                     id="expiry-code"
+                                                    placeholder="Custom Field"
+                                                    type="text"
+                                                ></text-field>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-6 col-md-12 col-lg-8 col-sm-12">
+                                        <div class="row mr-b15">
+                                            <div class="col-sm-6 col-lg-6">
+                                                <label>Custom Field</label>
+                                            </div>
+                                            <div class="col-sm-6 col-lg-6">
+                                                <text-field
+                                                    [cssClass]="'form-control'"
+                                                    id="expiry-code"
+                                                    placeholder="Custom Field"
                                                     type="text"
                                                 ></text-field>
                                             </div>
@@ -1224,6 +1235,7 @@
                                         <text-field
                                             [cssClass]="'form-control'"
                                             id="service-name"
+                                            placeholder="Service Name"
                                             type="text"
                                             value="Service Dummy Name Furniture"
                                         ></text-field>
@@ -1234,19 +1246,19 @@
                                         <label>Service Unit <span class="red-text">*</span></label>
                                     </div>
                                     <div class="col-sm-6 col-lg-6">
-                                        <sh-select id="select-service-unit" type="text" placeholder="select Unit">
+                                        <sh-select id="select-service-unit" type="text" placeholder="Select Unit">
                                         </sh-select>
                                     </div>
                                 </div>
                                 <div class="row mr-b15">
                                     <div class="col-sm-6 col-lg-6">
-                                        <label>Under Group</label>
+                                        <label>Under Group <span class="red-text">*</span></label>
                                     </div>
                                     <div class="col-sm-6 col-lg-6">
                                         <sh-select
                                             id="select-service-under-group"
                                             type="text"
-                                            placeholder="select Group"
+                                            placeholder="Select Group"
                                         ></sh-select>
                                     </div>
                                 </div>
@@ -1258,6 +1270,7 @@
                                         <text-field
                                             [cssClass]="'form-control'"
                                             id="service-unique-name"
+                                            placeholder="Unique Name"
                                             type="text"
                                             value=""
                                         ></text-field>
@@ -1265,13 +1278,13 @@
                                 </div>
                             </form>
                         </div>
-                        <div class="col-md-4 col-lg-4 col-xl-6 col-12 pl-5">
+                        <!-- <div class="col-md-4 col-lg-4 col-xl-6 col-12 pl-5">
                             <div class="add-image-button">
                                 <button mat-button role="button" type="button">
                                     <img src="{{ imgPath }}add-image.svg" />
                                 </button>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </div>
@@ -2386,7 +2399,7 @@
                                 </div>
                                 <div *ngIf="false" class="row mr-b15">
                                     <div class="col-sm-12 col-md-4 col-lg-6">
-                                        <label>Under Group<span class="red-text">*</span></label>
+                                        <label>Under Group <span class="red-text">*</span></label>
                                     </div>
                                     <div class="col-sm-12 col-md-6 col-lg-6">
                                         <sh-select id="select-under-group" placeholder="Select Group"></sh-select>
@@ -2433,13 +2446,13 @@
                                 </div>
                             </form>
                         </div>
-                        <div class="col-md-4 col-lg-4 col-xl-6 col-12">
+                        <!-- <div class="col-md-4 col-lg-4 col-xl-6 col-12">
                             <div class="add-image-button">
                                 <button mat-button role="button" type="button">
                                     <img src="{{ imgPath }}add-image.svg" />
                                 </button>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </div>
@@ -4732,7 +4745,7 @@
                         </mat-menu>
                     </div>
                     <div class="search-field">
-                        <div class="input-group">
+                        <div class="input-group search-text-padding">
                             <i class="icon-search input-addon"></i>
                             <text-field
                                 [cssClass]="'form-control form-check'"
