@@ -1193,14 +1193,6 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                 }
                 this.toaster.clearAllToaster();
             }
-        } else {
-            if (addressType === "vendor") {
-                this.purchaseOrder.account[type].stateCode = null;
-                this.purchaseOrder.account[type].state.code = null;
-            } else {
-                this.purchaseOrder.company[type].stateCode = null;
-                this.purchaseOrder.company[type].state.code = null;
-            }
         }
         this.checkGstNumValidation(gstVal);
     }
