@@ -24,7 +24,6 @@
                     <input
                         type="text"
                         class="form-control"
-                        decimalDigitsDirective
                         [(ngModel)]="paymentActionFormObj.amount"
                         [placeholder]="localeData?.enter_amount"
                         name="amount"
@@ -34,6 +33,7 @@
                         [mask]="inputMaskFormat"
                         [prefix]="amountCurrency"
                         [validation]="false"
+                        [allowUnsupportedPrefix]="true"
                     />
                 </div>
             </div>
