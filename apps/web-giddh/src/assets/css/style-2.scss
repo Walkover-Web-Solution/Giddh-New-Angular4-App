@@ -1374,9 +1374,16 @@ modal-container.modal {
 }
 
 .sh-select-border .menu .scrollable-content > .item {
-    border-bottom: 1px solid var(--color-common-secondary-border);
+    border-bottom: 1px solid var(--color-common-primary-border);
     height: initial !important;
 }
+
+.highcharts-root {
+    .highcharts-background {
+        fill: var(--color-common-primary-background-for-all-components);
+    }
+}
+
 /* my css end */
 /*input*/
 .form-control {
@@ -1707,6 +1714,7 @@ p.table-email {
 .top-five-cr-dr-table .basic > tbody > tr td:first-child,
 .top-five-cr-dr-table .basic > thead > tr th:first-child {
     border-left: none !important;
+    border-color: var(--color-table-primary-header-bar-border) !important;
 }
 
 input[type="checkbox"] {
@@ -3942,7 +3950,7 @@ input[type="checkbox"][disabled]:after {
 .welcome-header h2 {
     font-size: 26px;
     font-family: "opensans-regular";
-    color: var(--color-abbey);
+    color: var(--color-common-primary-text);
 }
 .table-container section div:last-child {
     border-right: 0;
@@ -3954,7 +3962,7 @@ input[type="checkbox"][disabled]:after {
     color: var(--color-danger);
 }
 .table-container thead tr th:first-child {
-    border-left: 6px solid var(--color-iron);
+    border-left: 6px solid var(--color-table-primary-header-bar-border);
 }
 .table-container .account {
     background: var(--color-table-primary-footer-background);
@@ -4197,7 +4205,7 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
 .welcome-header h2 {
     font-size: 26px;
     font-family: "opensans-regular";
-    color: var(--color-abbey);
+    color: var(--color-common-primary-text);
     position: relative;
 }
 .welcome-header h2:after {
@@ -5819,13 +5827,13 @@ span.red-text {
 }
 .dashboard-container input[type="checkbox"]:checked:after {
     background-color: var(--color-blue);
-    border: 1px solid var(--color-blue);
+    border: 1px solid var(--color-secondary-input-bar-border);
 }
 .dashboard-container input[type="checkbox"]:checked:before {
-    border-color: var(--color-white);
+    border-color: var(--color-secondary-input-bar-border);
 }
 .dashboard-container input[type="checkbox"]:after {
-    border: 1px solid var(--color-manatee);
+    border: 1px solid var(--color-secondary-input-bar-border);
 }
 .table-custom-invoice ul.dropdown-menu {
     min-width: 160px !important;
@@ -6810,6 +6818,7 @@ span#HW_badge_cont:nth-child(3) {
     .card {
         margin-bottom: 20px;
         min-height: 426px;
+        border-color: var(--color-common-primary-border);
         background-color: var(--color-common-primary-background-for-all-components);
     }
 }

@@ -75,7 +75,7 @@
     tr {
         &:hover {
             td.raw-material {
-                background-color: rgba(221, 225, 230, 0.5);
+                background-color: #dde1e680;
             }
         }
     }
@@ -98,6 +98,7 @@
         border: none !important;
         padding: 0;
         color: var(--color-giddh-blue) !important;
+        background: none !important;
     }
 }
 .material-data {
