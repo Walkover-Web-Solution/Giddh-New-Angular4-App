@@ -5782,6 +5782,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         } else {
             this.startLoader(false);
             this._toasty.errorToast(response.message, response.code);
+            return;
         }
         this.updateAccount = false;
 
