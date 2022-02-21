@@ -1026,6 +1026,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             if (accountDetails) {
                 this.hideDepositSectionForCashBankGroups(accountDetails);
                 this.accountAddressList = accountDetails.addresses;
+                this.updateAccountDetails(accountDetails);
             }
         });
 
@@ -1941,29 +1942,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         }
 
         this.checkIfNeedToExcludeTax(data);
-
-        this.getUpdatedStateCodes(data.country.countryCode).then(() => {
-            if (data.addresses && data.addresses.length) {
-                data.addresses = [find(data.addresses, (tax) => tax.isDefault)];
-            }
-            // auto fill all the details
-            this.invFormData.accountDetails = new AccountDetailsClass(data);
-
-            if (this.invFormData.accountDetails.billingDetails?.gstNumber) {
-                this.getStateCode('billingDetails', this.statesBilling);
-                this.autoFillShippingDetails();
-            }
-            if (this.invFormData.accountDetails.shippingDetails?.gstNumber) {
-                this.getStateCode('shippingDetails', this.statesShipping);
-            }
-
-            setTimeout(() => {
-                if (this.customerBillingAddress && this.customerBillingAddress.nativeElement) {
-                    this.customerBillingAddress.nativeElement.focus();
-                }
-                this._cdr.detectChanges();
-            }, 500);
-        });
+        this.updateAccountDetails(data);
     }
 
     /**
@@ -2041,8 +2020,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             }
         } else {
             statesEle.disabled = false;
-            this.invFormData.accountDetails[type].stateCode = null;
-            this.invFormData.accountDetails[type].state.code = null;
         }
         this.checkGstNumValidation(gstVal);
     }
@@ -7655,5 +7632,41 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 }
             });
         }
+    }
+
+    /**
+     * Updates account details
+     *
+     * @private
+     * @param {*} data
+     * @memberof ProformaInvoiceComponent
+     */
+    private updateAccountDetails(data: any): void {
+        this.getUpdatedStateCodes(data.country.countryCode).then(() => {
+            if (data.addresses && data.addresses.length) {
+                data.addresses = [find(data.addresses, (tax) => tax.isDefault)];
+            }
+            // auto fill all the details
+            this.invFormData.accountDetails = new AccountDetailsClass(data);
+
+            if (this.invFormData.accountDetails.billingDetails?.gstNumber) {
+                this.getStateCode('billingDetails', this.statesBilling);
+                this.autoFillShippingDetails();
+            } else {
+                this.statesBilling.disabled = false;
+            }
+            if (this.invFormData.accountDetails.shippingDetails?.gstNumber) {
+                this.getStateCode('shippingDetails', this.statesShipping);
+            } else {
+                this.statesShipping.disabled = false;
+            }
+
+            setTimeout(() => {
+                if (this.customerBillingAddress && this.customerBillingAddress.nativeElement) {
+                    this.customerBillingAddress.nativeElement.focus();
+                }
+                this._cdr.detectChanges();
+            }, 500);
+        });
     }
 }
