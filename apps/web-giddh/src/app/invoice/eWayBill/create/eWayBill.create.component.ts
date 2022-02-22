@@ -14,6 +14,7 @@ import * as moment from 'moment';
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 import { InvoiceReceiptActions } from '../../../actions/invoice/receipt/receipt.actions';
 import { VoucherTypeEnum } from '../../../models/api-models/Sales';
+import { ToasterService } from '../../../services/toaster.service';
 
 @Component({
     selector: 'app-e-way-bill-create',
@@ -104,7 +105,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
 
     constructor(private store: Store<AppState>, private invoiceActions: InvoiceActions,
         private _invoiceService: InvoiceService, private router: Router,
-        private _cdRef: ChangeDetectorRef, private invoiceReceiptActions: InvoiceReceiptActions) {
+        private _cdRef: ChangeDetectorRef, private invoiceReceiptActions: InvoiceReceiptActions, private toaster: ToasterService) {
         this.isEwaybillGenerateInProcess$ = this.store.pipe(select(p => p.ewaybillstate.isGenerateEwaybillInProcess), takeUntil(this.destroyed$));
         this.isEwaybillGeneratedSuccessfully$ = this.store.pipe(select(p => p.ewaybillstate.isGenerateEwaybilSuccess), takeUntil(this.destroyed$));
         this.isGenarateTransporterInProcess$ = this.store.pipe(select(p => p.ewaybillstate.isAddnewTransporterInProcess), takeUntil(this.destroyed$));
@@ -416,6 +417,12 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
     private prefillDocType(): void {
         this.store.pipe(select(state => state.receipt.voucher), takeUntil(this.destroyed$)).subscribe((voucher: any) => {
             if (voucher) {
+
+                if(!voucher?.account?.billingDetails?.pincode) {
+                    this.toaster.errorToast(this.localeData?.pincode_required);
+                    this.router.navigate(['/invoice/preview/sales']);
+                }
+
                 this.voucherDetails = voucher;
 
                 let hasNonNilRatedTax = false;
@@ -436,7 +443,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
                     this.selectedDocType = this.localeData?.modified_transporter_doc_type?.bill_supply;
                 }
 
-                this.generateEwayBillform.toPinCode = voucher?.account?.billingDetails?.pincode || '';
+                this.generateEwayBillform.toPinCode = voucher?.account?.billingDetails?.pincode;
 
                 if (this.invoiceBillingGstinNo) {
                     this.generateEwayBillform.toGstIn = this.invoiceBillingGstinNo;
