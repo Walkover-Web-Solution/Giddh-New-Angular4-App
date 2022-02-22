@@ -14,6 +14,7 @@ AUTHOR:   @THEMECHANIC
 VERSION:  1
 */
 @import "../css/giddh-common.scss";
+@import "./color.scss";
 
 html,
 body {
@@ -3119,6 +3120,17 @@ td.mat-footer-cell {
 .mat-menu-item-highlighted:not([disabled]) {
     background-color: var(--color-dropdown-list-hover-background) !important;
 }
+.select-physical-product {
+    .product-detail-content,
+    .service-detail-content,
+    .combo-detail-content,
+    .text-field-container {
+        input {
+            border: 1px solid $gainsboro;
+        }
+    }
+}
+
 .change-address-mat-menu {
     .mat-menu-content {
         .mat-menu-item {
