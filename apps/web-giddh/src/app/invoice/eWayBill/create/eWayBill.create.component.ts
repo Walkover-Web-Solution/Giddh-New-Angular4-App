@@ -12,6 +12,9 @@ import { takeUntil } from 'rxjs/operators';
 import { Observable, ReplaySubject, of } from 'rxjs';
 import * as moment from 'moment';
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
+import { InvoiceReceiptActions } from '../../../actions/invoice/receipt/receipt.actions';
+import { VoucherTypeEnum } from '../../../models/api-models/Sales';
+import { ToasterService } from '../../../services/toaster.service';
 
 @Component({
     selector: 'app-e-way-bill-create',
@@ -25,7 +28,6 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
     @ViewChild('invoiceRemoveConfirmationModel', { static: true }) public invoiceRemoveConfirmationModel: ModalDirective;
     @ViewChild('subgrp', { static: true }) public subgrp: any;
     @ViewChild('doctypes', { static: true }) public doctype: any;
-
     @ViewChild('trans', { static: true }) public transport: any;
 
     public invoiceNumber: string = '';
@@ -47,13 +49,11 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
     public transporterListDetails$: Observable<IAllTransporterDetails>;
     public transporterListDetails: IAllTransporterDetails;
     public transporterFilterRequest: IEwayBillfilter = new IEwayBillfilter();
-
     public currenTransporterId: string;
     public isUserlogedIn: boolean;
     public deleteTemplateConfirmationMessage: string;
     public confirmationFlag: string;
     public showClear: boolean = false;
-
     public generateEwayBillform: GenerateEwayBill = {
         supplyType: null,
         subSupplyType: null,
@@ -65,7 +65,6 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
         transporterId: null,
         transDocNo: null,
         transDocDate: null,
-
         vehicleNo: null,
         vehicleType: null,
         transactionType: null,
@@ -79,7 +78,6 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
     public selectedInvoices: any[] = [];
     public supplyType: any = [{}];
     public isTransModeRoad: boolean = false;
-
     public modalConfig = {
         animated: true,
         keyboard: true,
@@ -91,7 +89,6 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
     public ModifiedTransporterDocType: IOption[] = [];
     public TransporterDocType = [];
     public transactionType: IOption[] = [];
-
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** This holds giddh date format */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
@@ -99,10 +96,16 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** Holds selected subtype label */
+    public selectedSubType: string = "";
+    /** Holds selected doctype label */
+    public selectedDocType: string = "";
+    /** Voucher details */
+    public voucherDetails: any;
 
     constructor(private store: Store<AppState>, private invoiceActions: InvoiceActions,
         private _invoiceService: InvoiceService, private router: Router,
-        private _cdRef: ChangeDetectorRef) {
+        private _cdRef: ChangeDetectorRef, private invoiceReceiptActions: InvoiceReceiptActions, private toaster: ToasterService) {
         this.isEwaybillGenerateInProcess$ = this.store.pipe(select(p => p.ewaybillstate.isGenerateEwaybillInProcess), takeUntil(this.destroyed$));
         this.isEwaybillGeneratedSuccessfully$ = this.store.pipe(select(p => p.ewaybillstate.isGenerateEwaybilSuccess), takeUntil(this.destroyed$));
         this.isGenarateTransporterInProcess$ = this.store.pipe(select(p => p.ewaybillstate.isAddnewTransporterInProcess), takeUntil(this.destroyed$));
@@ -177,6 +180,19 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
                 this.clearTransportForm();
             }
         });
+
+        // To clear receipts voucher store
+        this.store.dispatch(this.invoiceReceiptActions.ResetVoucherDetails());
+        // To get re-assign receipts voucher store
+        if (this.selectedInvoices[0]?.account?.uniqueName) {
+            this.store.dispatch(this.invoiceReceiptActions.getVoucherDetailsV4(this.selectedInvoices[0]?.account?.uniqueName, {
+                invoiceNumber: this.selectedInvoices[0]?.voucherNumber,
+                voucherType: VoucherTypeEnum.sales,
+                uniqueName: this.selectedInvoices[0]?.uniqueName
+            }));
+        }
+
+        this.prefillDocType();
     }
 
     public clearTransportForm() {
@@ -210,10 +226,14 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
     }
 
     public onCancelGenerateBill() {
-        this.generateEwayBillForm.reset();
-        this.subgrp.clear();
-        this.doctype.clear();
         this.transport.clear();
+        this.generateEwayBillform.toPinCode = this.voucherDetails?.account?.billingDetails?.pincode || '';
+        this.generateEwayBillform.transDistance = null;
+        this.generateEwayBillform.transMode = null;
+        this.generateEwayBillform.vehicleType = null;
+        this.generateEwayBillform.vehicleNo = null;
+        this.generateEwayBillform.transDocNo = null;
+        this.generateEwayBillform.transDocDate = null;
     }
 
     public selectTransporter(e) {
@@ -375,6 +395,64 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
                 { value: '2', label: this.localeData?.transaction_type?.credit_notes },
                 { value: '3', label: this.localeData?.transaction_type?.delivery_challan }
             ];
+
+            this.prefillSubType();
         }
+    }
+
+    private prefillSubType(): void {
+        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if (activeCompany) {
+                if (activeCompany.baseCurrency === this.selectedInvoices[0]?.account?.currency?.code) {
+                    this.generateEwayBillform.subSupplyType = '1';
+                    this.selectedSubType = this.localeData?.subsupply_types_list?.supply;
+                } else {
+                    this.generateEwayBillform.subSupplyType = '3';
+                    this.selectedSubType = this.localeData?.subsupply_types_list?.export;
+                }
+            }
+        });
+    }
+
+    private prefillDocType(): void {
+        this.store.pipe(select(state => state.receipt.voucher), takeUntil(this.destroyed$)).subscribe((voucher: any) => {
+            if (voucher) {
+
+                if(!voucher?.account?.billingDetails?.pincode) {
+                    this.toaster.errorToast(this.localeData?.pincode_required);
+                    this.router.navigate(['/invoice/preview/sales']);
+                }
+
+                this.voucherDetails = voucher;
+
+                let hasNonNilRatedTax = false;
+
+                voucher?.entries?.forEach(entry => {
+                    entry?.taxes?.forEach(tax => {
+                        if (tax.taxPercent !== 0) {
+                            hasNonNilRatedTax = true;
+                        }
+                    });
+                });
+
+                if (hasNonNilRatedTax) {
+                    this.generateEwayBillform.docType = 'INV';
+                    this.selectedDocType = this.localeData?.modified_transporter_doc_type?.invoice;
+                } else {
+                    this.generateEwayBillform.docType = 'BIL';
+                    this.selectedDocType = this.localeData?.modified_transporter_doc_type?.bill_supply;
+                }
+
+                this.generateEwayBillform.toPinCode = voucher?.account?.billingDetails?.pincode;
+
+                if (this.invoiceBillingGstinNo) {
+                    this.generateEwayBillform.toGstIn = this.invoiceBillingGstinNo;
+                } else {
+                    this.generateEwayBillform.toGstIn = 'URP';
+                }
+
+                this._cdRef.detectChanges();
+            }
+        });
     }
 }
