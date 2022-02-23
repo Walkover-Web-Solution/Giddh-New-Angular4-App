@@ -692,8 +692,13 @@
                 <giddh-page-loader [cssClass]="'mt-0 mb-0'" *ngIf="isCustomFieldLoading"></giddh-page-loader>
                 <ng-container formArrayName="customFields">
                     <ng-container
-                        *ngFor="let item of companyCustomFields; let index = index; let first = first; let last = last"
-                        [formGroupName]="index"
+                        *ngFor="
+                            let item of companyCustomFields;
+                            let companyCustomFieldIndex = index;
+                            let first = first;
+                            let last = last
+                        "
+                        [formGroupName]="companyCustomFieldIndex"
                     >
                         <ng-container
                             *ngFor="

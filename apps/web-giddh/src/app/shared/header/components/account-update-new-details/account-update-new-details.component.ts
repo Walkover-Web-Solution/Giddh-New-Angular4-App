@@ -1674,14 +1674,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             if (results && results[0] && results[1]) {
                 this.companyCustomFields = [];
                 this.addAccountForm.setControl('customFields', this._fb.array([]));
-
-                if (results[1] && results[1].status === 'success') {
-                    this.companyCustomFields = results[1].body?.results;
-                    this.createDynamicCustomFieldForm(this.companyCustomFields);
-                } else {
-                    this._toaster.errorToast(results[1].message);
-                }
-
                 let acc = results[0];
                 this.resetBankDetailsForm();
                 if (acc && acc.parentGroups[0]?.uniqueName) {
@@ -1769,15 +1761,18 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                     }
                 }
                 // render custom field data
-                if (accountDetails.customFields && accountDetails.customFields.length > 0) {
+                if (results[1] && results[1].status === 'success') {
+                    this.companyCustomFields = results[1].body?.results;
+                    this.createDynamicCustomFieldForm(this.companyCustomFields);
+                } else {
+                    this._toaster.errorToast(results[1].message);
+                }
+                if (accountDetails.customFields?.length) {
                     const customField = this.addAccountForm.get('customFields') as FormArray;
-                    if(customField.controls?.length > 0) {
+                    if (customField.controls?.length) {
                         accountDetails.customFields.forEach(item => {
-                            customField.controls?.forEach((control, index) => {
-                                if(control?.value?.uniqueName === item?.uniqueName) {
-                                    customField.controls[index]?.get('value').setValue(item.value);      
-                                }
-                            });
+                            const fieldIndex = customField.controls?.findIndex(control => control?.value?.uniqueName === item?.uniqueName);
+                            customField?.at(fieldIndex).get('value').patchValue(item.value);
                         });
                     }
                 }
@@ -1788,7 +1783,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                     this.addAccountForm.get('hsnOrSac')?.patchValue('sac');
                 }
                 this.openingBalanceTypeChnaged(accountDetails.openingBalanceType);
-                this.addAccountForm?.patchValue(accountDetails);
                 if (accountDetails.mobileNo) {
                     if (accountDetails.mobileNo.indexOf('-') > -1) {
                         let mobileArray = accountDetails.mobileNo.split('-');

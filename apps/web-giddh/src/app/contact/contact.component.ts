@@ -255,25 +255,25 @@ export class ContactComponent implements OnInit, OnDestroy {
     };
 
     constructor(
-        public dialog: MatDialog, 
-        private store: Store<AppState>, 
-        private router: Router, 
-        private companyServices: CompanyService, 
-        private commonActions: CommonActions, 
+        public dialog: MatDialog,
+        private store: Store<AppState>,
+        private router: Router,
+        private companyServices: CompanyService,
+        private commonActions: CommonActions,
         private toaster: ToasterService,
-        private contactService: ContactService, 
-        private settingsIntegrationActions: SettingsIntegrationActions, 
-        private companyActions: CompanyActions, 
+        private contactService: ContactService,
+        private settingsIntegrationActions: SettingsIntegrationActions,
+        private companyActions: CompanyActions,
         private componentFactoryResolver: ComponentFactoryResolver,
-        private groupWithAccountsAction: GroupWithAccountsAction, 
-        private cdRef: ChangeDetectorRef, 
-        private generalService: GeneralService, 
-        private route: ActivatedRoute, 
+        private groupWithAccountsAction: GroupWithAccountsAction,
+        private cdRef: ChangeDetectorRef,
+        private generalService: GeneralService,
+        private route: ActivatedRoute,
         private generalAction: GeneralActions,
-        private breakPointObservar: BreakpointObserver, 
-        private modalService: BsModalService, 
-        private settingsProfileActions: SettingsProfileActions, 
-        private settingsBranchAction: SettingsBranchActions, 
+        private breakPointObservar: BreakpointObserver,
+        private modalService: BsModalService,
+        private settingsProfileActions: SettingsProfileActions,
+        private settingsBranchAction: SettingsBranchActions,
         public currencyPipe: GiddhCurrencyPipe,
         private lightbox: Lightbox,
         private renderer: Renderer2,
@@ -355,7 +355,7 @@ export class ContactComponent implements OnInit, OnDestroy {
                         this.availableColumnsCount = [];
                         this.showNameSearch = false;
                         this.searchedName?.reset();
-                        this.translationComplete(true);                        
+                        this.translationComplete(true);
                     }
                 } else {
                     this.setActiveTab("aging-report");
@@ -386,7 +386,7 @@ export class ContactComponent implements OnInit, OnDestroy {
                             this.fromDate = "";
                             this.toDate = "";
                         }
-                      
+
                         this.getAccounts(this.fromDate, this.toDate, null, "true", PAGINATION_LIMIT, this.searchStr, this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
                     });
                 }, 100);
