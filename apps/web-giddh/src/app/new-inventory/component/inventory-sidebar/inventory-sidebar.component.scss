@@ -27,7 +27,7 @@
                             padding: 7px 15px;
                             span {
                                 i {
-                                    color: grey;
+                                    color: var(--color-lavender);
                                     margin-right: 10px;
                                     font-size: 14px;
                                 }
@@ -73,7 +73,7 @@
                 }
             }
             &:hover {
-                background-color: var(--color-lavender);
+                background-color: var(--color-sidebar-list-background-hover);
             }
         }
     }

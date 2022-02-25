@@ -4,6 +4,7 @@
         img {
             width: 40px;
             height: 40px;
+            filter: var(--color-image-filter-tertiary);
         }
         p {
             min-width: 120px;
