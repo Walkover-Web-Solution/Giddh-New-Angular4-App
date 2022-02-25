@@ -12,6 +12,7 @@ import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 
 export class GenerateEWayBillComponent {
     @Output() public closeModelEvent: EventEmitter<boolean> = new EventEmitter(true);
+    @Output() public createEWayBillEvent: EventEmitter<void> = new EventEmitter();
     @Input() public ChildSelectedInvoicesList: any[];
     /* This will hold local JSON data */
     @Input() public localeData: any = {};
@@ -29,7 +30,7 @@ export class GenerateEWayBillComponent {
     }
 
     public createEWayBill() {
-        this.router.navigate(['pages', 'invoice', 'ewaybill', 'create']);
+        this.createEWayBillEvent.emit();
     }
 
     public openModal(template: TemplateRef<any>) {
