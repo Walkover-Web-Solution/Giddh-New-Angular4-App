@@ -1,25 +1,28 @@
-import { ReplaySubject } from 'rxjs';
-import { takeUntil, delay } from 'rxjs/operators';
-import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild, ComponentFactoryResolver, } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
-import { VatReportTransactionsRequest } from '../../models/api-models/Vat';
-import { Store, select } from '@ngrx/store';
-import { AppState } from '../../store';
-import { ToasterService } from '../../services/toaster.service';
-import { VatService } from "../../services/vat.service";
-import { saveAs } from "file-saver";
-import { PAGINATION_LIMIT } from '../../app.constant';
-import { InvoiceReceiptActions } from '../../actions/invoice/receipt/receipt.actions';
-import { ModalDirective } from 'ngx-bootstrap/modal';
-import { DownloadOrSendInvoiceOnMailComponent } from '../../invoice/preview/models/download-or-send-mail/download-or-send-mail.component';
-import { InvoiceActions } from '../../actions/invoice/invoice.actions';
-import { ElementViewContainerRef } from '../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
-import { InvoiceService } from '../../services/invoice.service';
-import { GeneralService } from '../../services/general.service';
-import { VoucherTypeEnum } from '../../models/api-models/Sales';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
-import { ReceiptService } from '../../services/receipt.service';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { select, Store } from '@ngrx/store';
+import { saveAs } from 'file-saver';
+import { ModalDirective } from 'ngx-bootstrap/modal';
+import { ReplaySubject } from 'rxjs';
+import { delay, takeUntil } from 'rxjs/operators';
+
+import { InvoiceActions } from '../../actions/invoice/invoice.actions';
+import { InvoiceReceiptActions } from '../../actions/invoice/receipt/receipt.actions';
+import { PAGINATION_LIMIT } from '../../app.constant';
+import {
+    DownloadOrSendInvoiceOnMailComponent,
+} from '../../invoice/preview/models/download-or-send-mail/download-or-send-mail.component';
+import { VoucherTypeEnum } from '../../models/api-models/Sales';
+import { VatReportTransactionsRequest } from '../../models/api-models/Vat';
 import { CommonService } from '../../services/common.service';
+import { GeneralService } from '../../services/general.service';
+import { InvoiceService } from '../../services/invoice.service';
+import { ReceiptService } from '../../services/receipt.service';
+import { ToasterService } from '../../services/toaster.service';
+import { VatService } from '../../services/vat.service';
+import { ElementViewContainerRef } from '../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
+import { AppState } from '../../store';
 
 @Component({
     selector: 'app-vat-report-transactions',
@@ -62,7 +65,7 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
     /** Stores the voucher API version of current company */
     public voucherApiVersion: 1 | 2;
 
-    constructor(private store: Store<AppState>, private vatService: VatService, private toasty: ToasterService, private cdRef: ChangeDetectorRef, public route: ActivatedRoute, private router: Router, private invoiceReceiptActions: InvoiceReceiptActions, private invoiceActions: InvoiceActions, private componentFactoryResolver: ComponentFactoryResolver, private invoiceService: InvoiceService, private generalService: GeneralService, private breakpointObserver: BreakpointObserver, private receiptService: ReceiptService, private commonService: CommonService) {
+    constructor(private store: Store<AppState>, private vatService: VatService, private toasty: ToasterService, private cdRef: ChangeDetectorRef, public route: ActivatedRoute, private router: Router, private invoiceReceiptActions: InvoiceReceiptActions, private invoiceActions: InvoiceActions, private invoiceService: InvoiceService, private generalService: GeneralService, private breakpointObserver: BreakpointObserver, private receiptService: ReceiptService, private commonService: CommonService) {
 
     }
 
@@ -197,11 +200,10 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
      * @memberof VatReportTransactionsComponent
      */
     public loadDownloadOrSendMailComponent(): void {
-        let componentFactory = this.componentFactoryResolver.resolveComponentFactory(DownloadOrSendInvoiceOnMailComponent);
         let viewContainerRef = this.downloadOrSendMailComponent.viewContainerRef;
         viewContainerRef.remove();
 
-        let componentInstanceView = componentFactory.create(viewContainerRef.injector);
+        let componentInstanceView = viewContainerRef.createComponent(DownloadOrSendInvoiceOnMailComponent);
         viewContainerRef.insert(componentInstanceView.hostView);
 
         let componentInstance = componentInstanceView.instance as DownloadOrSendInvoiceOnMailComponent;
@@ -301,7 +303,7 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
                         this.toasty.errorToast(this.commonLocaleData?.app_something_went_wrong);
                     }
                 });
-        }        
+        }
     }
 
     /**

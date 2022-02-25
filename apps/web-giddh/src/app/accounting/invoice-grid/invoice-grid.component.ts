@@ -1,30 +1,45 @@
-import { distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
-import { TallyModuleService } from './../tally-service';
-import { GIDDH_DATE_FORMAT } from './../../shared/helpers/defaultDateFormat';
-import { VsForDirective } from './../../theme/ng2-vs-for/ng2-vs-for';
-import { ToasterService } from './../../services/toaster.service';
-import { KeyboardService } from './../keyboard.service';
-import { LedgerActions } from './../../actions/ledger/ledger.actions';
-import { IOption } from './../../theme/ng-select/option.interface';
-import { AccountService } from './../../services/account.service';
-import { Observable, ReplaySubject } from 'rxjs';
-import { select, Store } from '@ngrx/store';
-import { AppState } from '../../store/roots';
-import { AfterViewInit, Component, ComponentFactoryResolver, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
-import { cloneDeep, forEach, isEqual, sumBy, concat, find, without, orderBy } from 'apps/web-giddh/src/app/lodash-optimized';
-import * as moment from 'moment';
-import { BlankLedgerVM } from 'apps/web-giddh/src/app/ledger/ledger.vm';
+import { animate, state, style, transition, trigger } from '@angular/animations';
+import {
+    AfterViewInit,
+    Component,
+    ElementRef,
+    EventEmitter,
+    Input,
+    OnChanges,
+    OnDestroy,
+    OnInit,
+    Output,
+    QueryList,
+    SimpleChanges,
+    ViewChild,
+    ViewChildren,
+} from '@angular/core';
 import { Router } from '@angular/router';
+import { select, Store } from '@ngrx/store';
+import { BlankLedgerVM } from 'apps/web-giddh/src/app/ledger/ledger.vm';
+import { cloneDeep, concat, find, forEach, isEqual, orderBy, sumBy, without } from 'apps/web-giddh/src/app/lodash-optimized';
+import { TaxResponse } from 'apps/web-giddh/src/app/models/api-models/Company';
+import * as moment from 'moment';
 import { ModalDirective } from 'ngx-bootstrap/modal';
+import { Observable, ReplaySubject } from 'rxjs';
+import { distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
+
+import { InventoryAction } from '../../actions/inventory/inventory.actions';
+import { InvoiceActions } from '../../actions/invoice/invoice.actions';
 import { AccountResponse } from '../../models/api-models/Account';
 import { IFlattenAccountsResultItem } from '../../models/interfaces/flattenAccountsResultItem.interface';
-import { QuickAccountComponent } from '../../theme/quick-account-component/quickAccount.component';
-import { ElementViewContainerRef } from '../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { InventoryService } from '../../services/inventory.service';
-import { InventoryAction } from '../../actions/inventory/inventory.actions';
-import { animate, state, style, transition, trigger } from '@angular/animations';
-import { TaxResponse } from 'apps/web-giddh/src/app/models/api-models/Company';
-import { InvoiceActions } from '../../actions/invoice/invoice.actions';
+import { ElementViewContainerRef } from '../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
+import { AppState } from '../../store/roots';
+import { QuickAccountComponent } from '../../theme/quick-account-component/quickAccount.component';
+import { LedgerActions } from './../../actions/ledger/ledger.actions';
+import { AccountService } from './../../services/account.service';
+import { ToasterService } from './../../services/toaster.service';
+import { GIDDH_DATE_FORMAT } from './../../shared/helpers/defaultDateFormat';
+import { IOption } from './../../theme/ng-select/option.interface';
+import { VsForDirective } from './../../theme/ng2-vs-for/ng2-vs-for';
+import { KeyboardService } from './../keyboard.service';
+import { TallyModuleService } from './../tally-service';
 
 const TransactionsType = [
     { label: 'By', value: 'Debit' },
@@ -144,7 +159,6 @@ export class InvoiceGridComponent implements OnInit, OnDestroy, AfterViewInit, O
         private _toaster: ToasterService,
         private _router: Router,
         private _tallyModuleService: TallyModuleService,
-        private componentFactoryResolver: ComponentFactoryResolver,
         private inventoryService: InventoryService,
         private inventoryAction: InventoryAction,
         private invoiceActions: InvoiceActions,
@@ -947,10 +961,9 @@ export class InvoiceGridComponent implements OnInit, OnDestroy, AfterViewInit, O
     }
 
     public loadQuickAccountComponent() {
-        let componentFactory = this.componentFactoryResolver.resolveComponentFactory(QuickAccountComponent);
         let viewContainerRef = this.quickAccountComponent.viewContainerRef;
         viewContainerRef.remove();
-        let componentRef = viewContainerRef.createComponent(componentFactory);
+        let componentRef = viewContainerRef.createComponent(QuickAccountComponent);
         let componentInstance = componentRef.instance as QuickAccountComponent;
         componentInstance.needAutoFocus = true;
         componentInstance.closeQuickAccountModal.pipe(takeUntil(this.destroyed$)).subscribe((a) => {

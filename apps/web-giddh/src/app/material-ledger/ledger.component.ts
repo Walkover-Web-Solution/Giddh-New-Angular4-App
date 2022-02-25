@@ -1,53 +1,91 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, EventEmitter, NgZone, OnDestroy, OnInit, QueryList, TemplateRef, ViewChild, ViewChildren } from '@angular/core';
+import { BreakpointObserver } from '@angular/cdk/layout';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    ElementRef,
+    EventEmitter,
+    NgZone,
+    OnDestroy,
+    OnInit,
+    QueryList,
+    TemplateRef,
+    ViewChild,
+    ViewChildren,
+} from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
+import { download } from '@giddh-workspaces/utils';
 import { select, Store } from '@ngrx/store';
 import { LoginActions } from 'apps/web-giddh/src/app/actions/login.action';
-import { Configuration, SearchResultText, GIDDH_DATE_RANGE_PICKER_RANGES, RATE_FIELD_PRECISION, PAGINATION_LIMIT } from 'apps/web-giddh/src/app/app.constant';
-import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI, GIDDH_DATE_FORMAT_MM_DD_YYYY } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
+import {
+    Configuration,
+    GIDDH_DATE_RANGE_PICKER_RANGES,
+    PAGINATION_LIMIT,
+    RATE_FIELD_PRECISION,
+    SearchResultText,
+} from 'apps/web-giddh/src/app/app.constant';
+import {
+    GIDDH_DATE_FORMAT,
+    GIDDH_DATE_FORMAT_MM_DD_YYYY,
+    GIDDH_NEW_DATE_FORMAT_UI,
+} from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { ShSelectComponent } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-select.component';
 import * as moment from 'moment/moment';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { PaginationComponent } from 'ngx-bootstrap/pagination';
 import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
 import { createSelector } from 'reselect';
-import { BehaviorSubject, combineLatest as observableCombineLatest, Observable, of as observableOf, ReplaySubject, Subject, } from 'rxjs';
+import {
+    BehaviorSubject,
+    combineLatest as observableCombineLatest,
+    Observable,
+    of as observableOf,
+    ReplaySubject,
+    Subject,
+} from 'rxjs';
 import { debounceTime, distinctUntilChanged, shareReplay, take, takeUntil } from 'rxjs/operators';
-import { BreakpointObserver } from '@angular/cdk/layout';
+
 import { CompanyActions } from '../actions/company.actions';
 import { LedgerActions } from '../actions/ledger/ledger.actions';
+import { SettingsBranchActions } from '../actions/settings/branch/settings.branch.action';
 import { LoaderService } from '../loader/loader.service';
 import { cloneDeep, filter, find, uniq } from '../lodash-optimized';
 import { AccountResponse, AccountResponseV2 } from '../models/api-models/Account';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { ICurrencyResponse, StateDetailsRequest, TaxResponse } from '../models/api-models/Company';
-import { DownloadLedgerRequest, TransactionsRequest, TransactionsResponse, ExportLedgerRequest, } from '../models/api-models/Ledger';
+import {
+    DownloadLedgerRequest,
+    ExportLedgerRequest,
+    TransactionsRequest,
+    TransactionsResponse,
+} from '../models/api-models/Ledger';
 import { SalesOtherTaxesModal } from '../models/api-models/Sales';
 import { AdvanceSearchRequest } from '../models/interfaces/AdvanceSearchRequest';
 import { ITransactionItem } from '../models/interfaces/ledger.interface';
+import { OrganizationType } from '../models/user-login-state';
 import { LEDGER_API } from '../services/apiurls/ledger.api';
+import { CommonService } from '../services/common.service';
 import { GeneralService } from '../services/general.service';
 import { LedgerService } from '../services/ledger.service';
+import { SearchService } from '../services/search.service';
 import { ToasterService } from '../services/toaster.service';
 import { WarehouseActions } from '../settings/warehouse/action/warehouse.action';
+import { AdjustmentUtilityService } from '../shared/advance-receipt-adjustment/services/adjustment-utility.service';
 import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { AppState } from '../store';
+import { ConfirmModalComponent } from '../theme/new-confirm-modal/confirm-modal.component';
 import { BorderConfiguration, IOption } from '../theme/ng-virtual-select/sh-options.interface';
+import { ExportLedgerComponent } from './components/export-ledger/export-ledger.component';
+import {
+    GenerateVoucherConfirmationModalComponent,
+} from './components/generate-voucher-confirm-modal/generate-voucher-confirm-modal.component';
+import { ImportStatementComponent } from './components/import-statement/import-statement.component';
 import { NewLedgerEntryPanelComponent } from './components/new-ledger-entry-panel/new-ledger-entry-panel.component';
+import { ShareLedgerComponent } from './components/share-ledger/share-ledger.component';
 import { UpdateLedgerEntryPanelComponent } from './components/update-ledger-entry-panel/update-ledger-entry-panel.component';
 import { BlankLedgerVM, LedgerVM, TransactionVM } from './ledger.vm';
-import { download } from "@giddh-workspaces/utils";
-import { SearchService } from '../services/search.service';
-import { SettingsBranchActions } from '../actions/settings/branch/settings.branch.action';
-import { OrganizationType } from '../models/user-login-state';
-import { MatDialog } from '@angular/material/dialog';
-import { ImportStatementComponent } from './components/import-statement/import-statement.component';
-import { ExportLedgerComponent } from './components/export-ledger/export-ledger.component';
-import { ShareLedgerComponent } from './components/share-ledger/share-ledger.component';
-import { ConfirmModalComponent } from '../theme/new-confirm-modal/confirm-modal.component';
-import { GenerateVoucherConfirmationModalComponent } from './components/generate-voucher-confirm-modal/generate-voucher-confirm-modal.component';
-import { CommonService } from '../services/common.service';
-import { AdjustmentUtilityService } from '../shared/advance-receipt-adjustment/services/adjustment-utility.service';
 
 @Component({
     selector: 'ledger',
@@ -258,7 +296,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
         private ledgerService: LedgerService,
         private toaster: ToasterService,
         private companyActions: CompanyActions,
-        private componentFactoryResolver: ComponentFactoryResolver,
         private generalService: GeneralService,
         private loginActions: LoginActions,
         private loaderService: LoaderService,
@@ -827,7 +864,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                         permanentlyDeleteMessage: ' '
                     }
                 });
-        
+
                 dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
                     if (response) {
                         this.confirmMergeEntry();
@@ -1320,7 +1357,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             if(this.voucherApiVersion === 2) {
                 blankTransactionObj = this.adjustmentUtilityService.getAdjustmentObject(blankTransactionObj);
             }
-            
+
             this.store.dispatch(this.ledgerActions.CreateBlankLedger(cloneDeep(blankTransactionObj), this.lc.accountUnq));
         } else {
             this.toaster.showSnackBar("error", this.localeData?.transaction_required, this.commonLocaleData?.app_error);
@@ -1494,11 +1531,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
         if (!this.paginationChild) {
             return;
         }
-        let componentFactory = this.componentFactoryResolver.resolveComponentFactory(PaginationComponent);
         let viewContainerRef = this.paginationChild.viewContainerRef;
         viewContainerRef.remove();
 
-        let componentInstanceView = componentFactory.create(viewContainerRef.parentInjector);
+        let componentInstanceView = viewContainerRef.createComponent(PaginationComponent);
         viewContainerRef.insert(componentInstanceView.hostView);
 
         let componentInstance = componentInstanceView.instance as PaginationComponent;

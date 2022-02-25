@@ -1,50 +1,83 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, EventEmitter, NgZone, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { BreakpointObserver } from '@angular/cdk/layout';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    ElementRef,
+    EventEmitter,
+    NgZone,
+    OnDestroy,
+    OnInit,
+    QueryList,
+    ViewChild,
+    ViewChildren,
+} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { download } from '@giddh-workspaces/utils';
 import { select, Store } from '@ngrx/store';
 import { LoginActions } from 'apps/web-giddh/src/app/actions/login.action';
-import { Configuration, SearchResultText, GIDDH_DATE_RANGE_PICKER_RANGES, RATE_FIELD_PRECISION, PAGINATION_LIMIT } from 'apps/web-giddh/src/app/app.constant';
+import {
+    Configuration,
+    GIDDH_DATE_RANGE_PICKER_RANGES,
+    PAGINATION_LIMIT,
+    RATE_FIELD_PRECISION,
+    SearchResultText,
+} from 'apps/web-giddh/src/app/app.constant';
 import { ShareLedgerComponent } from 'apps/web-giddh/src/app/ledger/components/share-ledger/share-ledger.component';
-import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI, GIDDH_DATE_FORMAT_MM_DD_YYYY } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
+import {
+    GIDDH_DATE_FORMAT,
+    GIDDH_DATE_FORMAT_MM_DD_YYYY,
+    GIDDH_NEW_DATE_FORMAT_UI,
+} from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { ShSelectComponent } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-select.component';
 import * as moment from 'moment/moment';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
-import { PaginationComponent } from 'ngx-bootstrap/pagination';
-import { ModalDirective } from 'ngx-bootstrap/modal';
 import { BsDatepickerDirective } from 'ngx-bootstrap/datepicker';
+import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal';
+import { PaginationComponent } from 'ngx-bootstrap/pagination';
 import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
 import { createSelector } from 'reselect';
-import { BehaviorSubject, combineLatest as observableCombineLatest, Observable, of as observableOf, ReplaySubject, Subject, } from 'rxjs';
+import {
+    BehaviorSubject,
+    combineLatest as observableCombineLatest,
+    Observable,
+    of as observableOf,
+    ReplaySubject,
+    Subject,
+} from 'rxjs';
 import { debounceTime, distinctUntilChanged, shareReplay, take, takeUntil } from 'rxjs/operators';
-import { BreakpointObserver } from '@angular/cdk/layout';
+
 import { CompanyActions } from '../actions/company.actions';
 import { LedgerActions } from '../actions/ledger/ledger.actions';
+import { SettingsBranchActions } from '../actions/settings/branch/settings.branch.action';
 import { LoaderService } from '../loader/loader.service';
 import { cloneDeep, filter, find, uniq } from '../lodash-optimized';
 import { AccountResponse, AccountResponseV2 } from '../models/api-models/Account';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { ICurrencyResponse, StateDetailsRequest, TaxResponse } from '../models/api-models/Company';
-import { DownloadLedgerRequest, TransactionsRequest, TransactionsResponse, ExportLedgerRequest, } from '../models/api-models/Ledger';
+import {
+    DownloadLedgerRequest,
+    ExportLedgerRequest,
+    TransactionsRequest,
+    TransactionsResponse,
+} from '../models/api-models/Ledger';
 import { SalesOtherTaxesModal } from '../models/api-models/Sales';
 import { AdvanceSearchRequest } from '../models/interfaces/AdvanceSearchRequest';
 import { ITransactionItem } from '../models/interfaces/ledger.interface';
+import { OrganizationType } from '../models/user-login-state';
 import { LEDGER_API } from '../services/apiurls/ledger.api';
 import { GeneralService } from '../services/general.service';
 import { LedgerService } from '../services/ledger.service';
+import { SearchService } from '../services/search.service';
 import { ToasterService } from '../services/toaster.service';
 import { WarehouseActions } from '../settings/warehouse/action/warehouse.action';
 import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
-import { giddhRoundOff } from '../shared/helpers/helperFunctions';
 import { AppState } from '../store';
 import { BorderConfiguration, IOption } from '../theme/ng-virtual-select/sh-options.interface';
 import { AdvanceSearchModelComponent } from './components/advance-search/advance-search.component';
 import { NewLedgerEntryPanelComponent } from './components/new-ledger-entry-panel/new-ledger-entry-panel.component';
 import { UpdateLedgerEntryPanelComponent } from './components/update-ledger-entry-panel/update-ledger-entry-panel.component';
 import { BlankLedgerVM, LedgerVM, TransactionVM } from './ledger.vm';
-import { download } from "@giddh-workspaces/utils";
-import { SearchService } from '../services/search.service';
-import { SettingsBranchActions } from '../actions/settings/branch/settings.branch.action';
-import { OrganizationType } from '../models/user-login-state';
 
 @Component({
     selector: 'ledger',
@@ -262,7 +295,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
         private _ledgerService: LedgerService,
         private _toaster: ToasterService,
         private _companyActions: CompanyActions,
-        private componentFactoryResolver: ComponentFactoryResolver,
         private generalService: GeneralService,
         private _loginActions: LoginActions,
         private _loaderService: LoaderService,
@@ -1347,10 +1379,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     public loadUpdateLedgerComponent() {
-        let componentFactory = this.componentFactoryResolver.resolveComponentFactory(UpdateLedgerEntryPanelComponent);
         let viewContainerRef = this.updateledgercomponent.viewContainerRef;
         viewContainerRef.remove();
-        let componentRef = viewContainerRef.createComponent(componentFactory);
+        let componentRef = viewContainerRef.createComponent(UpdateLedgerEntryPanelComponent);
         let componentInstance = componentRef.instance as UpdateLedgerEntryPanelComponent;
         componentInstance.tcsOrTds = this.tcsOrTds;
         this.updateLedgerComponentInstance = componentInstance;
@@ -1476,11 +1507,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
         if (!this.paginationChild) {
             return;
         }
-        let componentFactory = this.componentFactoryResolver.resolveComponentFactory(PaginationComponent);
         let viewContainerRef = this.paginationChild.viewContainerRef;
         viewContainerRef.remove();
 
-        let componentInstanceView = componentFactory.create(viewContainerRef.parentInjector);
+        let componentInstanceView = viewContainerRef.createComponent(PaginationComponent);
         viewContainerRef.insert(componentInstanceView.hostView);
 
         let componentInstance = componentInstanceView.instance as PaginationComponent;

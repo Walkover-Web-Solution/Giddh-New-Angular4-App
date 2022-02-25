@@ -1,17 +1,20 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import * as moment from 'moment/moment';
 import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal';
 import { fromEvent, merge, Observable, ReplaySubject } from 'rxjs';
-import { debounceTime, takeUntil, take } from 'rxjs/operators';
+import { debounceTime, take, takeUntil } from 'rxjs/operators';
+
 import { GeneralActions } from '../../../actions/general/general.actions';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
-import { OrganizationType } from '../../../models/user-login-state';
 import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from '../../../app.constant';
 import { cloneDeep, isArray } from '../../../lodash-optimized';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
 import { AdvanceReceiptSummaryRequest } from '../../../models/api-models/Reports';
+import { OrganizationType } from '../../../models/user-login-state';
 import { GeneralService } from '../../../services/general.service';
+import { InvoiceBulkUpdateService } from '../../../services/invoice.bulkupdate.service';
 import { ReceiptService } from '../../../services/receipt.service';
 import { ToasterService } from '../../../services/toaster.service';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
@@ -19,8 +22,6 @@ import { ElementViewContainerRef } from '../../../shared/helpers/directives/elem
 import { AppState } from '../../../store';
 import { ADVANCE_RECEIPT_REPORT_FILTERS, ReceiptAdvanceSearchModel } from '../../constants/reports.constant';
 import { ReceiptAdvanceSearchComponent } from '../receipt-advance-search/receipt-advance-search.component';
-import { ActivatedRoute, Router } from '@angular/router';
-import { InvoiceBulkUpdateService } from '../../../services/invoice.bulkupdate.service';
 
 @Component({
     selector: 'advance-receipt-report',
@@ -171,7 +172,6 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
     /** @ignore */
     constructor(
         private changeDetectorRef: ChangeDetectorRef,
-        private componentFactoryResolver: ComponentFactoryResolver,
         private generalAction: GeneralActions,
         private receiptService: ReceiptService,
         private store: Store<AppState>,
@@ -286,10 +286,9 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
      * @memberof AdvanceReceiptReportComponent
      */
     public openModal(): void {
-        const componentFactory = this.componentFactoryResolver.resolveComponentFactory(ReceiptAdvanceSearchComponent);
         const viewContainerRef = this.receiptAdvanceSearchFilterModal.viewContainerRef;
         viewContainerRef.clear();
-        const componentRef = viewContainerRef.createComponent(componentFactory);
+        const componentRef = viewContainerRef.createComponent(ReceiptAdvanceSearchComponent);
 
         this.advanceSearchModel.adjustmentVoucherDetails.selectedValue = this.searchQueryParams.receiptTypes[0];
         this.advanceSearchModel.adjustmentVoucherDetails.isDisabled = !!this.searchQueryParams.receiptTypes.length;

@@ -1,25 +1,33 @@
-import { InvoiceReceiptActions } from '../../../../../actions/invoice/receipt/receipt.actions';
-import { Component, ComponentFactoryResolver, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { select, Store } from '@ngrx/store';
-import { InvoiceActions } from '../../../../../actions/invoice/invoice.actions';
+import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
+import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ElementViewContainerRef } from '../../../../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
-import { Observable, of, ReplaySubject } from 'rxjs';
-import { AppState } from '../../../../../store';
-import { BsModalRef } from 'ngx-bootstrap/modal';
-import { ModalDirective } from 'ngx-bootstrap/modal';
-import { takeUntil } from 'rxjs/operators';
-import { GStTransactionRequest, GstTransactionResult, GstTransactionSummary } from '../../../../../models/api-models/GstReconcile';
-import { GstReconcileActions } from '../../../../../actions/gst-reconcile/GstReconcile.actions';
-import { DownloadOrSendInvoiceOnMailComponent } from '../../../../../invoice/preview/models/download-or-send-mail/download-or-send-mail.component';
+import { select, Store } from '@ngrx/store';
+import { DownloadVoucherRequest } from 'apps/web-giddh/src/app/models/api-models/recipt';
+import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { InvoiceService } from 'apps/web-giddh/src/app/services/invoice.service';
+import { ReceiptService } from 'apps/web-giddh/src/app/services/receipt.service';
 import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
 import { saveAs } from 'file-saver';
+import { BsModalRef, ModalDirective } from 'ngx-bootstrap/modal';
+import { Observable, of, ReplaySubject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+
+import { GstReconcileActions } from '../../../../../actions/gst-reconcile/GstReconcile.actions';
+import { InvoiceActions } from '../../../../../actions/invoice/invoice.actions';
+import { InvoiceReceiptActions } from '../../../../../actions/invoice/receipt/receipt.actions';
+import {
+    DownloadOrSendInvoiceOnMailComponent,
+} from '../../../../../invoice/preview/models/download-or-send-mail/download-or-send-mail.component';
+import {
+    GStTransactionRequest,
+    GstTransactionResult,
+    GstTransactionSummary,
+} from '../../../../../models/api-models/GstReconcile';
+import {
+    ElementViewContainerRef,
+} from '../../../../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
+import { AppState } from '../../../../../store';
 import { GstReport } from '../../../../constants/gst.constant';
-import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
-import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
-import { DownloadVoucherRequest } from 'apps/web-giddh/src/app/models/api-models/recipt';
-import { ReceiptService } from 'apps/web-giddh/src/app/services/receipt.service';
 
 export const filterTransaction = {
     entityType: '',
@@ -79,7 +87,7 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
     /** Stores the voucher API version of current company */
     public voucherApiVersion: 1 | 2;
 
-    constructor(private gstAction: GstReconcileActions, private store: Store<AppState>, private route: Router, private activatedRoute: ActivatedRoute, private invoiceActions: InvoiceActions, private componentFactoryResolver: ComponentFactoryResolver,
+    constructor(private gstAction: GstReconcileActions, private store: Store<AppState>, private route: Router, private activatedRoute: ActivatedRoute, private invoiceActions: InvoiceActions,
         private invoiceReceiptActions: InvoiceReceiptActions,
         private invoiceService: InvoiceService,
         private toaster: ToasterService,
@@ -177,7 +185,7 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
                     voucherType: invoice.voucherType,
                     accountUniqueName: invoice.account.uniqueName
                 };
-            
+
                 this.store.dispatch(this.invoiceReceiptActions.VoucherPreview(downloadVoucherRequestObject, downloadVoucherRequestObject.accountUniqueName));
             }
         }
@@ -186,11 +194,10 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
     }
 
     public loadDownloadOrSendMailComponent() {
-        let componentFactory = this.componentFactoryResolver.resolveComponentFactory(DownloadOrSendInvoiceOnMailComponent);
         let viewContainerRef = this.downloadOrSendMailComponent.viewContainerRef;
         viewContainerRef.remove();
 
-        let componentInstanceView = componentFactory.create(viewContainerRef.parentInjector);
+        let componentInstanceView = viewContainerRef.createComponent(DownloadOrSendInvoiceOnMailComponent);
         viewContainerRef.insert(componentInstanceView.hostView);
 
         let componentInstance = componentInstanceView.instance as DownloadOrSendInvoiceOnMailComponent;

@@ -1,11 +1,29 @@
-import { ChangeDetectorRef, ComponentFactoryResolver, Directive, DoCheck, ElementRef, EventEmitter, forwardRef, HostListener, Input, KeyValueDiffer, KeyValueDiffers, OnChanges, OnInit, Output, Renderer2, SimpleChanges, ViewContainerRef } from '@angular/core';
+import {
+    ChangeDetectorRef,
+    Directive,
+    DoCheck,
+    ElementRef,
+    EventEmitter,
+    forwardRef,
+    HostListener,
+    Input,
+    KeyValueDiffer,
+    KeyValueDiffers,
+    OnChanges,
+    OnInit,
+    Output,
+    Renderer2,
+    SimpleChanges,
+    ViewContainerRef,
+} from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import * as _moment from 'moment';
+import { ReplaySubject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+
+import { NgxDaterangepickerLocaleService } from './ngx-daterangepicker-locale.service';
 import { NgxDaterangepickerComponent } from './ngx-daterangepicker.component';
 import { LocaleConfig } from './ngx-daterangepicker.config';
-import { NgxDaterangepickerLocaleService } from './ngx-daterangepicker-locale.service';
-import { takeUntil } from 'rxjs/operators';
-import { ReplaySubject } from 'rxjs';
 
 const moment = _moment;
 
@@ -139,7 +157,6 @@ export class NgxDaterangepickerDirective implements OnInit, OnChanges, DoCheck {
     constructor(
         public viewContainerRef: ViewContainerRef,
         public _changeDetectorRef: ChangeDetectorRef,
-        private _componentFactoryResolver: ComponentFactoryResolver,
         private _el: ElementRef,
         private _renderer: Renderer2,
         private differs: KeyValueDiffers,
@@ -147,9 +164,8 @@ export class NgxDaterangepickerDirective implements OnInit, OnChanges, DoCheck {
     ) {
         this.drops = 'down';
         this.opens = 'right';
-        const componentFactory = this._componentFactoryResolver.resolveComponentFactory(NgxDaterangepickerComponent);
         viewContainerRef.clear();
-        const componentRef = viewContainerRef.createComponent(componentFactory);
+        const componentRef = viewContainerRef.createComponent(NgxDaterangepickerComponent);
         this.picker = (<NgxDaterangepickerComponent>componentRef.instance);
         this.picker.inline = false; // set inline to false for all directive usage
     }

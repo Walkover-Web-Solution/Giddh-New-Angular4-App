@@ -1,5 +1,5 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { AfterViewInit, Component, ComponentFactoryResolver, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import * as moment from 'moment/moment';
@@ -9,6 +9,7 @@ import { ModalDirective } from 'ngx-bootstrap/modal';
 import { createSelector } from 'reselect';
 import { fromEvent, Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
+
 import { CommonActions } from '../../actions/common.actions';
 import { CompanyActions } from '../../actions/company.actions';
 import { SettingsBranchActions } from '../../actions/settings/branch/settings.branch.action';
@@ -110,7 +111,6 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
         private router: Router,
         private store: Store<AppState>,
         private settingsBranchActions: SettingsBranchActions,
-        private componentFactoryResolver: ComponentFactoryResolver,
         private companyActions: CompanyActions,
         private settingsProfileActions: SettingsProfileActions,
         private settingsProfileService: SettingsProfileService,
@@ -256,10 +256,9 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
     public loadAddCompanyComponent(isUpdateMode?: boolean): void {
         this.store.dispatch(this.commonActions.resetCountry());
 
-        let componentFactory = this.componentFactoryResolver.resolveComponentFactory(CompanyAddNewUiComponent);
         let viewContainerRef = this.companyadd.viewContainerRef;
         viewContainerRef.clear();
-        let componentRef = viewContainerRef.createComponent(componentFactory);
+        let componentRef = viewContainerRef.createComponent(CompanyAddNewUiComponent);
         (componentRef.instance as CompanyAddNewUiComponent).createBranch = true;
         (componentRef.instance as CompanyAddNewUiComponent).isUpdateMode = isUpdateMode;
         (componentRef.instance as CompanyAddNewUiComponent).entityDetails = this.branchDetails;

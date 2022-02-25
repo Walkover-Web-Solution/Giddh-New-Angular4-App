@@ -1,27 +1,50 @@
-import { distinctUntilChanged, takeUntil, take } from 'rxjs/operators';
+import { animate, state, style, transition, trigger } from '@angular/animations';
+import {
+    AfterViewInit,
+    Component,
+    ElementRef,
+    EventEmitter,
+    Input,
+    OnChanges,
+    OnDestroy,
+    OnInit,
+    Output,
+    SimpleChanges,
+    ViewChild,
+} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { InventoryService } from 'apps/web-giddh/src/app/services/inventory.service';
-import { GIDDH_DATE_FORMAT } from './../../shared/helpers/defaultDateFormat';
-import { ToasterService } from './../../services/toaster.service';
-import { KeyboardService } from './../keyboard.service';
-import { LedgerActions } from './../../actions/ledger/ledger.actions';
-import { IOption } from './../../theme/ng-select/option.interface';
-import { AccountService } from './../../services/account.service';
-import { Observable, ReplaySubject } from 'rxjs';
-import { Store, select } from '@ngrx/store';
-import { AppState } from '../../store/roots';
-import { AfterViewInit, Component, ComponentFactoryResolver, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
-import { cloneDeep, forEach, isEqual, sumBy, filter, find, without, maxBy, findIndex } from 'apps/web-giddh/src/app/lodash-optimized';
-import * as moment from 'moment';
 import { Router } from '@angular/router';
+import { select, Store } from '@ngrx/store';
+import { TallyModuleService } from 'apps/web-giddh/src/app/accounting/tally-service';
+import {
+    cloneDeep,
+    filter,
+    find,
+    findIndex,
+    forEach,
+    isEqual,
+    maxBy,
+    sumBy,
+    without,
+} from 'apps/web-giddh/src/app/lodash-optimized';
+import { InventoryService } from 'apps/web-giddh/src/app/services/inventory.service';
+import * as moment from 'moment';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { ModalDirective } from 'ngx-bootstrap/modal';
-import { TallyModuleService } from 'apps/web-giddh/src/app/accounting/tally-service';
+import { Observable, ReplaySubject } from 'rxjs';
+import { distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
+
 import { AccountResponse } from '../../models/api-models/Account';
 import { IFlattenAccountsResultItem } from '../../models/interfaces/flattenAccountsResultItem.interface';
-import { QuickAccountComponent } from '../../theme/quick-account-component/quickAccount.component';
 import { ElementViewContainerRef } from '../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
-import { animate, state, style, transition, trigger } from '@angular/animations';
+import { AppState } from '../../store/roots';
+import { QuickAccountComponent } from '../../theme/quick-account-component/quickAccount.component';
+import { LedgerActions } from './../../actions/ledger/ledger.actions';
+import { AccountService } from './../../services/account.service';
+import { ToasterService } from './../../services/toaster.service';
+import { GIDDH_DATE_FORMAT } from './../../shared/helpers/defaultDateFormat';
+import { IOption } from './../../theme/ng-select/option.interface';
+import { KeyboardService } from './../keyboard.service';
 
 const TransactionsType = [
     { label: 'By', value: 'Debit' },
@@ -134,7 +157,6 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
         private _keyboardService: KeyboardService,
         private _toaster: ToasterService, private _router: Router,
         private _tallyModuleService: TallyModuleService,
-        private componentFactoryResolver: ComponentFactoryResolver,
         private inventoryService: InventoryService,
         private fb: FormBuilder, public bsConfig: BsDatepickerConfig) {
 
@@ -933,10 +955,9 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
         if (this.quickAccountModal && this.quickAccountModal.config) {
             this.quickAccountModal.config.backdrop = false;
         }
-        let componentFactory = this.componentFactoryResolver.resolveComponentFactory(QuickAccountComponent);
         let viewContainerRef = this.quickAccountComponent.viewContainerRef;
         viewContainerRef.remove();
-        let componentRef = viewContainerRef.createComponent(componentFactory);
+        let componentRef = viewContainerRef.createComponent(QuickAccountComponent);
         let componentInstance = componentRef.instance as QuickAccountComponent;
         componentInstance.needAutoFocus = true;
         componentInstance.closeQuickAccountModal.pipe(takeUntil(this.destroyed$)).subscribe((a) => {

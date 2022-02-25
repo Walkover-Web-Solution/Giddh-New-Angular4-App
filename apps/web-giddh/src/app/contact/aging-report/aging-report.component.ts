@@ -1,46 +1,48 @@
+import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import {
-    Component,
-    ComponentFactoryResolver,
-    EventEmitter,
-    OnInit,
-    Output,
-    ViewChild,
     ChangeDetectorRef,
+    Component,
+    ElementRef,
+    EventEmitter,
     Input,
     OnDestroy,
-    ElementRef,
+    OnInit,
+    Output,
     TemplateRef,
-} from "@angular/core";
+    ViewChild,
+} from '@angular/core';
+import { FormControl } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
+import { MatMenuTrigger } from '@angular/material/menu';
+import { MatTableDataSource } from '@angular/material/table';
+import { select, Store } from '@ngrx/store';
+import * as moment from 'moment/moment';
+import { BsDropdownDirective } from 'ngx-bootstrap/dropdown';
+import { BsModalRef, BsModalService, ModalOptions } from 'ngx-bootstrap/modal';
+import { PaginationComponent } from 'ngx-bootstrap/pagination';
+import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
+import { Observable, of, ReplaySubject, Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
+
+import { AgingReportActions } from '../../actions/aging-report.actions';
+import { SettingsBranchActions } from '../../actions/settings/branch/settings.branch.action';
+import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../app.constant';
+import { cloneDeep, map as lodashMap } from '../../lodash-optimized';
 import {
     AgingAdvanceSearchModal,
     AgingDropDownoptions,
     ContactAdvanceSearchCommonModal,
     DueAmountReportQueryRequest,
-    DueAmountReportResponse, Result,
-} from "../../models/api-models/Contact";
-import { Store, select } from "@ngrx/store";
-import { AppState } from "../../store";
-import { AgingReportActions } from "../../actions/aging-report.actions";
-import { cloneDeep, map as lodashMap } from "../../lodash-optimized";
-import { Observable, of, ReplaySubject, Subject } from "rxjs";
-import { BsDropdownDirective } from "ngx-bootstrap/dropdown";
-import { PaginationComponent } from "ngx-bootstrap/pagination";
-import { BsModalRef, BsModalService, ModalOptions } from "ngx-bootstrap/modal";
-import { ElementViewContainerRef } from "../../shared/helpers/directives/elementViewChild/element.viewchild.directive";
-import { debounceTime, distinctUntilChanged, takeUntil } from "rxjs/operators";
-import { BreakpointObserver, BreakpointState } from "@angular/cdk/layout";
-import * as moment from "moment/moment";
-import { PerfectScrollbarConfigInterface } from "ngx-perfect-scrollbar";
-import { ContactAdvanceSearchComponent } from "../advanceSearch/contactAdvanceSearch.component";
-import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from "../../shared/helpers/defaultDateFormat";
-import { GeneralService } from "../../services/general.service";
-import { SettingsBranchActions } from "../../actions/settings/branch/settings.branch.action";
-import { OrganizationType } from "../../models/user-login-state";
-import { GIDDH_DATE_RANGE_PICKER_RANGES } from "../../app.constant";
-import { FormControl } from "@angular/forms";
-import { MatDialog } from "@angular/material/dialog";
-import { MatTableDataSource } from "@angular/material/table";
-import { MatMenuTrigger } from "@angular/material/menu";
+    DueAmountReportResponse,
+    Result,
+} from '../../models/api-models/Contact';
+import { OrganizationType } from '../../models/user-login-state';
+import { GeneralService } from '../../services/general.service';
+import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
+import { ElementViewContainerRef } from '../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
+import { AppState } from '../../store';
+import { ContactAdvanceSearchComponent } from '../advanceSearch/contactAdvanceSearch.component';
+
 @Component({
     selector: "aging-report",
     templateUrl: "aging-report.component.html",
@@ -137,7 +139,6 @@ export class AgingReportComponent implements OnInit, OnDestroy {
         private agingReportActions: AgingReportActions,
         private cdr: ChangeDetectorRef,
         private breakpointObserver: BreakpointObserver,
-        private componentFactoryResolver: ComponentFactoryResolver,
         private settingsBranchAction: SettingsBranchActions,
         private generalService: GeneralService,
         private modalService: BsModalService) {
@@ -294,12 +295,11 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     }
 
     public loadPaginationComponent(s) {
-        let componentFactory = this.componentFactoryResolver.resolveComponentFactory(PaginationComponent);
         if (this.paginationChild && this.paginationChild.viewContainerRef) {
             let viewContainerRef = this.paginationChild.viewContainerRef;
             viewContainerRef.remove();
 
-            let componentInstanceView = componentFactory.create(viewContainerRef.parentInjector);
+            let componentInstanceView = viewContainerRef.createComponent(PaginationComponent);
             viewContainerRef.insert(componentInstanceView.hostView);
 
             let componentInstance = componentInstanceView.instance as PaginationComponent;
@@ -521,11 +521,11 @@ export class AgingReportComponent implements OnInit, OnDestroy {
      *
      * @memberof AgingReportComponent
      */
-    public ngOnDestroy(): void {      
+    public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
-    
+
     /**
      * This function will use for emit after click outside on component
      *

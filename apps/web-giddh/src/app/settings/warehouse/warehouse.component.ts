@@ -1,20 +1,12 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import {
-    AfterViewInit,
-    Component,
-    ComponentFactoryResolver,
-    ElementRef,
-    OnDestroy,
-    OnInit,
-    TemplateRef,
-    ViewChild,
-} from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { BsDropdownConfig } from 'ngx-bootstrap/dropdown';
 import { BsModalRef, BsModalService, ModalDirective, ModalOptions } from 'ngx-bootstrap/modal';
 import { PageChangedEvent, PaginationComponent } from 'ngx-bootstrap/pagination';
 import { fromEvent, Observable, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
+
 import { CommonActions } from '../../actions/common.actions';
 import { CompanyActions } from '../../actions/company.actions';
 import { GeneralActions } from '../../actions/general/general.actions';
@@ -127,7 +119,6 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
         private bsModalService: BsModalService,
         private commonActions: CommonActions,
         private companyActions: CompanyActions,
-        private componentFactoryResolver: ComponentFactoryResolver,
         private generalActions: GeneralActions,
         private generalService: GeneralService,
         private itemOnBoardingActions: ItemOnBoardingActions,
@@ -488,10 +479,9 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
      * @memberof WarehouseComponent
      */
     private createNewWarehouseModal(): void {
-        let componentFactory = this.componentFactoryResolver.resolveComponentFactory(OnBoardingComponent);
         let viewContainerRef = this.onBoardingContainer.viewContainerRef;
         viewContainerRef.clear();
-        let componentRef = viewContainerRef.createComponent(componentFactory);
+        let componentRef = viewContainerRef.createComponent(OnBoardingComponent);
         (componentRef.instance as OnBoardingComponent).onBoardingType = OnBoardingType.Warehouse;
         (componentRef.instance as OnBoardingComponent).closeCompanyModal.pipe(takeUntil(this.destroyed$)).subscribe((data: any) => {
             if (data && data.isFirstStepCompleted) {

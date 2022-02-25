@@ -2,7 +2,6 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 import {
     AfterViewInit,
     Component,
-    ComponentFactoryResolver,
     ElementRef,
     EventEmitter,
     Input,
@@ -18,7 +17,7 @@ import {
 import { Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { BlankLedgerVM } from 'apps/web-giddh/src/app/ledger/ledger.vm';
-import { cloneDeep, forEach, isEqual, sumBy, concat, find, without, orderBy } from 'apps/web-giddh/src/app/lodash-optimized';
+import { cloneDeep, concat, find, forEach, isEqual, orderBy, sumBy, without } from 'apps/web-giddh/src/app/lodash-optimized';
 import { TaxResponse } from 'apps/web-giddh/src/app/models/api-models/Company';
 import * as moment from 'moment';
 import { ModalDirective } from 'ngx-bootstrap/modal';
@@ -33,6 +32,7 @@ import { IFlattenAccountsResultItem } from '../../../models/interfaces/flattenAc
 import { AccountService } from '../../../services/account.service';
 import { InventoryService } from '../../../services/inventory.service';
 import { ToasterService } from '../../../services/toaster.service';
+import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 import { ElementViewContainerRef } from '../../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { AppState } from '../../../store';
 import { IOption } from '../../../theme/ng-select/option.interface';
@@ -40,7 +40,6 @@ import { VsForDirective } from '../../../theme/ng2-vs-for/ng2-vs-for';
 import { QuickAccountComponent } from '../../../theme/quick-account-component/quickAccount.component';
 import { KeyboardService } from '../../keyboard.service';
 import { TallyModuleService } from '../../tally-service';
-import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 
 const TransactionsType = [
     { label: 'By', value: 'Debit' },
@@ -159,7 +158,6 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
         private _toaster: ToasterService,
         private _router: Router,
         private _tallyModuleService: TallyModuleService,
-        private componentFactoryResolver: ComponentFactoryResolver,
         private inventoryService: InventoryService,
         private inventoryAction: InventoryAction,
         private invoiceActions: InvoiceActions,
@@ -895,10 +893,9 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
     }
 
     public loadQuickAccountComponent() {
-        let componentFactory = this.componentFactoryResolver.resolveComponentFactory(QuickAccountComponent);
         let viewContainerRef = this.quickAccountComponent.viewContainerRef;
         viewContainerRef.remove();
-        let componentRef = viewContainerRef.createComponent(componentFactory);
+        let componentRef = viewContainerRef.createComponent(QuickAccountComponent);
         let componentInstance = componentRef.instance as QuickAccountComponent;
         componentInstance.needAutoFocus = true;
         componentInstance.closeQuickAccountModal.pipe(takeUntil(this.destroyed$)).subscribe((a) => {

@@ -1,17 +1,20 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import * as moment from 'moment/moment';
 import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal';
 import { fromEvent, merge, Observable, ReplaySubject } from 'rxjs';
-import { debounceTime, takeUntil, take } from 'rxjs/operators';
+import { debounceTime, take, takeUntil } from 'rxjs/operators';
+
 import { GeneralActions } from '../../../actions/general/general.actions';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
-import { OrganizationType } from '../../../models/user-login-state';
 import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from '../../../app.constant';
 import { cloneDeep, isArray } from '../../../lodash-optimized';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
 import { PaymentSummaryRequest } from '../../../models/api-models/Reports';
+import { OrganizationType } from '../../../models/user-login-state';
 import { GeneralService } from '../../../services/general.service';
+import { InvoiceBulkUpdateService } from '../../../services/invoice.bulkupdate.service';
 import { ReceiptService } from '../../../services/receipt.service';
 import { ToasterService } from '../../../services/toaster.service';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
@@ -19,8 +22,6 @@ import { ElementViewContainerRef } from '../../../shared/helpers/directives/elem
 import { AppState } from '../../../store';
 import { PAYMENT_REPORT_FILTERS, PaymentAdvanceSearchModel } from '../../constants/reports.constant';
 import { PaymentAdvanceSearchComponent } from '../payment-advance-search/payment-advance-search.component';
-import { ActivatedRoute, Router } from '@angular/router';
-import { InvoiceBulkUpdateService } from '../../../services/invoice.bulkupdate.service';
 
 @Component({
     selector: 'payment-report',
@@ -161,7 +162,6 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
     /** @ignore */
     constructor(
         private changeDetectorRef: ChangeDetectorRef,
-        private componentFactoryResolver: ComponentFactoryResolver,
         private generalAction: GeneralActions,
         private receiptService: ReceiptService,
         private store: Store<AppState>,
@@ -280,10 +280,9 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
      * @memberof PaymentReportComponent
      */
     public openModal(): void {
-        const componentFactory = this.componentFactoryResolver.resolveComponentFactory(PaymentAdvanceSearchComponent);
         const viewContainerRef = this.paymentSearchFilterModal.viewContainerRef;
         viewContainerRef.clear();
-        const componentRef = viewContainerRef.createComponent(componentFactory);
+        const componentRef = viewContainerRef.createComponent(PaymentAdvanceSearchComponent);
 
         (componentRef.instance as PaymentAdvanceSearchComponent).searchModel = cloneDeep(this.advanceSearchModel);
         (componentRef.instance as PaymentAdvanceSearchComponent).localeData = cloneDeep(this.localeData);

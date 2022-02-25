@@ -1,50 +1,83 @@
-import { Observable, of as observableOf, ReplaySubject, Subject, Subscription } from 'rxjs';
-import { distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
-import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from './../helpers/defaultDateFormat';
-import { CompanyAddNewUiComponent, ManageGroupsAccountsComponent } from './components';
-import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, EventEmitter, HostListener, NgZone, OnDestroy, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
+import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
+import { Location } from '@angular/common';
+import {
+    AfterViewChecked,
+    AfterViewInit,
+    ChangeDetectorRef,
+    Component,
+    ElementRef,
+    EventEmitter,
+    HostListener,
+    NgZone,
+    OnDestroy,
+    OnInit,
+    Output,
+    TemplateRef,
+    ViewChild,
+} from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
+import {
+    ActivatedRoute,
+    NavigationEnd,
+    NavigationError,
+    NavigationStart,
+    RouteConfigLoadEnd,
+    Router,
+} from '@angular/router';
 import { select, Store } from '@ngrx/store';
-import { BsDropdownDirective } from 'ngx-bootstrap/dropdown';
-import { TabsetComponent } from 'ngx-bootstrap/tabs';
-import { PopoverDirective } from 'ngx-bootstrap/popover';
-import { ModalDirective, BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
-import { AppState } from '../../store';
-import { LoginActions } from '../../actions/login.action';
-import { CompanyActions } from '../../actions/company.actions';
-import { CommonActions } from '../../actions/common.actions';
-import { CompanyCountry, CompanyCreateRequest, CompanyResponse, StatesRequest, Organization } from '../../models/api-models/Company';
-import { UserDetails } from '../../models/api-models/loginModels';
-import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
-import { ActivatedRoute, NavigationEnd, NavigationError, NavigationStart, RouteConfigLoadEnd, Router } from '@angular/router';
-import { ElementViewContainerRef } from '../helpers/directives/elementViewChild/element.viewchild.directive';
-import { GeneralActions } from '../../actions/general/general.actions';
-import { createSelector } from 'reselect';
-import * as moment from 'moment/moment';
-import { AuthenticationService } from '../../services/authentication.service';
-import { ICompAidata, IUlist } from '../../models/interfaces/ulist.interface';
-import { clone, cloneDeep, slice, find } from '../../lodash-optimized';
-import { DbService } from '../../services/db.service';
-import { CompAidataModel } from '../../models/db';
 import { AccountResponse } from 'apps/web-giddh/src/app/models/api-models/Account';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
-import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
-import { DEFAULT_AC, NAVIGATION_ITEM_LIST, reassignNavigationalArray } from '../../models/defaultMenus';
-import { userLoginStateEnum, OrganizationType } from '../../models/user-login-state';
-import { SubscriptionsUser } from '../../models/api-models/Subscriptions';
 import { environment } from 'apps/web-giddh/src/environments/environment';
-import { CurrentPage, OnboardingFormRequest } from '../../models/api-models/Common';
-import { CALENDLY_URL, GIDDH_DATE_RANGE_PICKER_RANGES, ROUTES_WITH_HEADER_BACK_BUTTON, VAT_SUPPORTED_COUNTRIES } from '../../app.constant';
-import { CommonService } from '../../services/common.service';
-import { Location } from '@angular/common';
-import { SettingsProfileService } from '../../services/settings.profile.service';
-import { CompanyService } from '../../services/companyService.service';
-import { SettingsBranchActions } from '../../actions/settings/branch/settings.branch.action';
-import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
+import * as moment from 'moment/moment';
+import { BsDropdownDirective } from 'ngx-bootstrap/dropdown';
+import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal';
+import { PopoverDirective } from 'ngx-bootstrap/popover';
+import { TabsetComponent } from 'ngx-bootstrap/tabs';
+import { createSelector } from 'reselect';
+import { Observable, of as observableOf, ReplaySubject, Subject, Subscription } from 'rxjs';
+import { distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
+
 import { AccountsAction } from '../../actions/accounts.actions';
+import { CommonActions } from '../../actions/common.actions';
+import { CompanyActions } from '../../actions/company.actions';
+import { GeneralActions } from '../../actions/general/general.actions';
+import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
 import { LedgerActions } from '../../actions/ledger/ledger.actions';
-import { LocaleService } from '../../services/locale.service';
+import { LoginActions } from '../../actions/login.action';
+import { SettingsBranchActions } from '../../actions/settings/branch/settings.branch.action';
 import { SettingsFinancialYearActions } from '../../actions/settings/financial-year/financial-year.action';
-import { DomSanitizer } from '@angular/platform-browser';
+import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
+import {
+    CALENDLY_URL,
+    GIDDH_DATE_RANGE_PICKER_RANGES,
+    ROUTES_WITH_HEADER_BACK_BUTTON,
+    VAT_SUPPORTED_COUNTRIES,
+} from '../../app.constant';
+import { clone, cloneDeep, find, slice } from '../../lodash-optimized';
+import { CurrentPage, OnboardingFormRequest } from '../../models/api-models/Common';
+import {
+    CompanyCountry,
+    CompanyCreateRequest,
+    CompanyResponse,
+    Organization,
+    StatesRequest,
+} from '../../models/api-models/Company';
+import { UserDetails } from '../../models/api-models/loginModels';
+import { SubscriptionsUser } from '../../models/api-models/Subscriptions';
+import { CompAidataModel } from '../../models/db';
+import { DEFAULT_AC, NAVIGATION_ITEM_LIST, reassignNavigationalArray } from '../../models/defaultMenus';
+import { ICompAidata, IUlist } from '../../models/interfaces/ulist.interface';
+import { OrganizationType, userLoginStateEnum } from '../../models/user-login-state';
+import { AuthenticationService } from '../../services/authentication.service';
+import { CommonService } from '../../services/common.service';
+import { CompanyService } from '../../services/companyService.service';
+import { DbService } from '../../services/db.service';
+import { LocaleService } from '../../services/locale.service';
+import { SettingsProfileService } from '../../services/settings.profile.service';
+import { AppState } from '../../store';
+import { ElementViewContainerRef } from '../helpers/directives/elementViewChild/element.viewchild.directive';
+import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from './../helpers/defaultDateFormat';
+import { CompanyAddNewUiComponent, ManageGroupsAccountsComponent } from './components';
 
 @Component({
     selector: 'app-header',
@@ -239,7 +272,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         private companyActions: CompanyActions,
         private groupWithAccountsAction: GroupWithAccountsAction,
         private router: Router,
-        private componentFactoryResolver: ComponentFactoryResolver,
         private zone: NgZone,
         private route: ActivatedRoute,
         private _generalActions: GeneralActions,
@@ -1005,10 +1037,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
     public loadAddCompanyNewUiComponent() {
-        let componentFactory = this.componentFactoryResolver.resolveComponentFactory(CompanyAddNewUiComponent);
         let viewContainerRef = this.companynewadd.viewContainerRef;
         viewContainerRef.clear();
-        let componentRef = viewContainerRef.createComponent(componentFactory);
+        let componentRef = viewContainerRef.createComponent(CompanyAddNewUiComponent);
         (componentRef.instance as CompanyAddNewUiComponent).closeCompanyModal.pipe(takeUntil(this.destroyed$)).subscribe((a) => {
             this.hideAddCompanyModal();
         });
@@ -1018,10 +1049,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
     public loadAddManageComponent() {
-        let componentFactory = this.componentFactoryResolver.resolveComponentFactory(ManageGroupsAccountsComponent);
         let viewContainerRef = this.addmanage.viewContainerRef;
         viewContainerRef.clear();
-        let componentRef = viewContainerRef.createComponent(componentFactory);
+        let componentRef = viewContainerRef.createComponent(ManageGroupsAccountsComponent);
         (componentRef.instance as ManageGroupsAccountsComponent).closeEvent.pipe(takeUntil(this.destroyed$)).subscribe((a) => {
             this.hideManageGroupsModal();
             viewContainerRef.remove();

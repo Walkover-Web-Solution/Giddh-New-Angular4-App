@@ -1,9 +1,8 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import {
     AfterViewInit,
-    TemplateRef,
+    ChangeDetectorRef,
     Component,
-    ComponentFactoryResolver,
     ElementRef,
     EventEmitter,
     Input,
@@ -13,41 +12,52 @@ import {
     Output,
     QueryList,
     SimpleChanges,
+    TemplateRef,
     ViewChild,
     ViewChildren,
-    ChangeDetectorRef,
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { TallyModuleService } from 'apps/web-giddh/src/app/accounting/tally-service';
-import { cloneDeep, forEach, isEqual, sumBy, filter, find, without, maxBy, findIndex } from 'apps/web-giddh/src/app/lodash-optimized';
+import {
+    cloneDeep,
+    filter,
+    find,
+    findIndex,
+    forEach,
+    isEqual,
+    maxBy,
+    sumBy,
+    without,
+} from 'apps/web-giddh/src/app/lodash-optimized';
 import { InventoryService } from 'apps/web-giddh/src/app/services/inventory.service';
 import * as moment from 'moment';
 import { BsDatepickerConfig, BsDatepickerDirective } from 'ngx-bootstrap/datepicker';
-import { ModalDirective, BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
-import { combineLatest, Observable, ReplaySubject, of as observableOf, Subject } from 'rxjs';
+import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal';
+import { combineLatest, Observable, of as observableOf, ReplaySubject, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
+
+import { CompanyActions } from '../../../actions/company.actions';
 import { LedgerActions } from '../../../actions/ledger/ledger.actions';
 import { SalesActions } from '../../../actions/sales/sales.action';
+import { PAGINATION_LIMIT, SubVoucher } from '../../../app.constant';
 import { AccountResponse, AddAccountRequest, UpdateAccountRequest } from '../../../models/api-models/Account';
+import { IForceClear } from '../../../models/api-models/Sales';
 import { IFlattenAccountsResultItem } from '../../../models/interfaces/flattenAccountsResultItem.interface';
+import { SalesService } from '../../../services/sales.service';
+import { SearchService } from '../../../services/search.service';
 import { ToasterService } from '../../../services/toaster.service';
+import { adjustmentTypes, AdjustmentTypesEnum } from '../../../shared/helpers/adjustmentTypes';
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 import { ElementViewContainerRef } from '../../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { AppState } from '../../../store';
 import { IOption } from '../../../theme/ng-select/option.interface';
+import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
 import { QuickAccountComponent } from '../../../theme/quick-account-component/quickAccount.component';
+import { VOUCHERS } from '../../constants/accounting.constant';
 import { KeyboardService } from '../../keyboard.service';
 import { KEYS } from '../journal-voucher.component';
-import { adjustmentTypes, AdjustmentTypesEnum } from "../../../shared/helpers/adjustmentTypes";
-import { SalesService } from '../../../services/sales.service';
-import { CompanyActions } from '../../../actions/company.actions';
-import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
-import { IForceClear } from '../../../models/api-models/Sales';
-import { PAGINATION_LIMIT, SubVoucher } from '../../../app.constant';
-import { SearchService } from '../../../services/search.service';
-import { VOUCHERS } from '../../constants/accounting.constant';
 
 const CustomShortcode = [
     { code: 'F9', route: 'purchase' }
@@ -252,12 +262,11 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         private _ledgerActions: LedgerActions,
         private store: Store<AppState>,
         private _keyboardService: KeyboardService,
-        private _toaster: ToasterService, 
+        private _toaster: ToasterService,
         private router: Router,
         private tallyModuleService: TallyModuleService,
-        private componentFactoryResolver: ComponentFactoryResolver,
         private inventoryService: InventoryService,
-        private fb: FormBuilder, 
+        private fb: FormBuilder,
         public bsConfig: BsDatepickerConfig,
         private salesAction: SalesActions,
         private modalService: BsModalService,
@@ -1269,10 +1278,9 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         if (this.quickAccountModal && this.quickAccountModal.config) {
             this.quickAccountModal.config.backdrop = false;
         }
-        let componentFactory = this.componentFactoryResolver.resolveComponentFactory(QuickAccountComponent);
         let viewContainerRef = this.quickAccountComponent.viewContainerRef;
         viewContainerRef.remove();
-        let componentRef = viewContainerRef.createComponent(componentFactory);
+        let componentRef = viewContainerRef.createComponent(QuickAccountComponent);
         let componentInstance = componentRef.instance as QuickAccountComponent;
         componentInstance.needAutoFocus = true;
         componentInstance.closeQuickAccountModal.pipe(takeUntil(this.destroyed$)).subscribe((a) => {
