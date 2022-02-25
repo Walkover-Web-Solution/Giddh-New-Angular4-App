@@ -385,6 +385,7 @@ body.dark-theme {
     --color-primary-header-background: #1a237e;
     --color-primary-header-icon-traingle-info: #e54556;
     --color-primary-footer-background: #f5f5f5;
+    --color-secondary-footer-background: #668cff26;
 
     // Ledger Heading Color Variable
     --color-ledger-heading: #668cff;
@@ -557,6 +558,7 @@ body.dark-theme {
     --color-primary-right-side-popup-header-text: #f5f5f5;
     --color-primary-right-side-popup-header-background: #1a237e;
     --color-primary-right-side-popup-body-background: #212528;
+    --color-secondary-right-side-popup-body-background: #212528;
     --color-right-side-popup-box-shadow: #212528;
 
     // Onboarding Contact info color variable
@@ -645,6 +647,7 @@ body.dark-theme {
     // Common Image Filter Variable
     --color-image-filter: invert(1);
     --color-image-filter-secondary: invert(0.8);
+    --color-image-filter-tertiary: invert(0.9);
 
     /************************ COMMON COLORS USED MORE THAN 12 TIMES ************************/
     --color-blue: #668cff;
