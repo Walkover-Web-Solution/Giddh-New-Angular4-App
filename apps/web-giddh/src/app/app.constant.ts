@@ -316,3 +316,9 @@ export const UNAUTHORISED = 401;
 export const SHOW_GST_FILING = false;
 export const SELECT_ALL_RECORDS = "selectallrecords";
 export const CALENDLY_URL = "https://calendly.com/d/cg6-6kx-924/schedule-demo";
+export const JOURNAL_VOUCHER_ALLOWED_DOMAINS = [
+    'giddh.com',
+    'walkover.in',
+    'muneem.co',
+    'whozzat.com',
+];
