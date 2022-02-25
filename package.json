@@ -5,11 +5,11 @@
   "scripts": {
     "ng": "ng",
     "start": "node --max_old_space_size=8192 ./node_modules/@nrwl/cli/bin/nx serve web-giddh",
-    "build": "node --max_old_space_size=8192 ./node_modules/@nrwl/cli/bin/nx build web-giddh --configuration=local --sourceMap=false ",
-    "build-prod": "node --max_old_space_size=8192 ./node_modules/@nrwl/cli/bin/nx build web-giddh --configuration=prod --sourceMap=false --output-hashing=all && node tools/web/postbuild --path=dist/apps/web-giddh-prod && npm run rm_bak_files",
-    "build-stage": "node --max_old_space_size=8192 ./node_modules/@nrwl/cli/bin/nx build web-giddh --configuration=stage --sourceMap=false --output-hashing=all && node tools/web/postbuild --path=dist/apps/web-giddh-stage && npm run rm_bak_files",
-    "build-test": "node --max_old_space_size=8192 ./node_modules/@nrwl/cli/bin/nx build web-giddh --configuration=test --sourceMap=false --output-hashing=all && node tools/web/postbuild --path=dist/apps/web-giddh-test && npm run rm_bak_files",
-    "build-dev": "node --max_old_space_size=8192 ./node_modules/@nrwl/cli/bin/nx build web-giddh --configuration=local --sourceMap=false --output-hashing=all && node tools/web/postbuild --path=dist/apps/web-giddh-local && npm run rm_bak_files",
+    "build": "node --max_old_space_size=8192 ./node_modules/@nrwl/cli/bin/nx build web-giddh --configuration=local",
+    "build-prod": "node --max_old_space_size=8192 ./node_modules/@nrwl/cli/bin/nx build web-giddh --configuration=prod && node tools/web/postbuild --path=dist/apps/web-giddh-prod && npm run rm_bak_files",
+    "build-stage": "node --max_old_space_size=8192 ./node_modules/@nrwl/cli/bin/nx build web-giddh --configuration=stage && node tools/web/postbuild --path=dist/apps/web-giddh-stage && npm run rm_bak_files",
+    "build-test": "node --max_old_space_size=8192 ./node_modules/@nrwl/cli/bin/nx build web-giddh --configuration=test && node tools/web/postbuild --path=dist/apps/web-giddh-test && npm run rm_bak_files",
+    "build-dev": "node --max_old_space_size=8192 ./node_modules/@nrwl/cli/bin/nx build web-giddh --configuration=local && node tools/web/postbuild --path=dist/apps/web-giddh-local && npm run rm_bak_files",
     "rm_bak_files": "find dist -name '*.bak' -exec rm -Rf {} \\;",
     "test": "ng test",
     "lint": "./node_modules/@nrwl/cli/bin/nx lint && ng lint",
@@ -67,7 +67,8 @@
     "cy:run": "concurrently \"npm run start\" \"wait-on http-get://localhost:3000 && cypress run --record --key ddaa8e78-116b-428a-9581-0fd63d9fc7be --reporter mochawesome --browser chrome --headless\" --kill-others --success first",
     "cy:open": "concurrently \"npm run start\" \"wait-on http-get://localhost:3000 && npm run cy:open\" --kill-others --success first",
     "cy:run1": "\"cypress run --record --key ddaa8e78-116b-428a-9581-0fd63d9fc7be --reporter mochawesome --browser chrome --headless\"",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "source-map-explorer": "source-map-explorer dist/apps/web-giddh-test/*.js"
   },
   "private": true,
   "dependencies": {
