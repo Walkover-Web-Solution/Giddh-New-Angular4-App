@@ -1973,6 +1973,11 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         }
     }
 
+    /**
+     * Create E-way bill handler
+     *
+     * @memberof InvoicePreviewComponent
+     */
     public createEWayBill(): void {
         this.store.pipe(select(state => state.receipt.voucher), take(1)).subscribe((voucher: any) => {
             if(!voucher?.account?.billingDetails?.pincode) {
