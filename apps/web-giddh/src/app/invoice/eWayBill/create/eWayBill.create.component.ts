@@ -180,19 +180,6 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
                 this.clearTransportForm();
             }
         });
-
-        // To clear receipts voucher store
-        this.store.dispatch(this.invoiceReceiptActions.ResetVoucherDetails());
-        // To get re-assign receipts voucher store
-        if (this.selectedInvoices[0]?.account?.uniqueName) {
-            this.store.dispatch(this.invoiceReceiptActions.getVoucherDetailsV4(this.selectedInvoices[0]?.account?.uniqueName, {
-                invoiceNumber: this.selectedInvoices[0]?.voucherNumber,
-                voucherType: VoucherTypeEnum.sales,
-                uniqueName: this.selectedInvoices[0]?.uniqueName
-            }));
-        }
-
-        this.prefillDocType();
     }
 
     public clearTransportForm() {
@@ -395,7 +382,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
                 { value: '2', label: this.localeData?.transaction_type?.credit_notes },
                 { value: '3', label: this.localeData?.transaction_type?.delivery_challan }
             ];
-
+            this.prefillDocType();
             this.prefillSubType();
         }
     }
