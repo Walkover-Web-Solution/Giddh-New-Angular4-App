@@ -484,7 +484,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
             if (item.label === '-') {
                 return item.value;
             } else {
-                return item.value && item.label.trim();
+                return item.value && item.label?.trim();
             }
         });
         if (this.adjustVoucherForm?.adjustments?.length > 1 || this.adjustVoucherForm?.adjustments.every(adjustment => adjustment.uniqueName !== '')) {
@@ -969,22 +969,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
      * @memberof AdvanceReceiptAdjustmentComponent
      */
     public isExchangeProfitable(): boolean {
-        /* Exchange gain/loss logic: https://www.accountingtools.com/articles/foreign-exchange-accounting.html
-             ______________________________________________________________________________________________________
-            |______________________________|_____________Import Goods_____________|__________Export Goods__________|
-            |______________________________|______________________________________|________________________________|
-            |  Home currency weakens       |                Loss                  |                Gain            |
-            |______________________________|______________________________________|________________________________|
-            |  Home currency strengthens   |                Gain                  |                Loss            |
-            |______________________________|______________________________________|________________________________|
-        */
-        if (this.adjustedVoucherType === AdjustedVoucherType.Sales || this.adjustedVoucherType === AdjustedVoucherType.SalesInvoice || this.adjustedVoucherType === AdjustedVoucherType.CreditNote) {
-            // Exchange gain if home currency weakens as this is Export goods case (sales) where the due goes positive
-            return this.invoiceFormDetails?.voucherDetails?.gainLoss >= 0;
-        } else if (this.adjustedVoucherType === AdjustedVoucherType.Purchase || this.adjustedVoucherType === AdjustedVoucherType.PurchaseInvoice || this.adjustedVoucherType === AdjustedVoucherType.DebitNote) {
-            // Exchange gain if home currency weakens as this is Import goods case (purchase) where the due goes negative
-            return this.invoiceFormDetails?.voucherDetails?.gainLoss <= 0;
-        }
+        return this.invoiceFormDetails?.voucherDetails?.gainLoss >= 0;
     }
 
     /**

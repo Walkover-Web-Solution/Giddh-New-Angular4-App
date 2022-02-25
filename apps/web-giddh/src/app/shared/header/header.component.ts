@@ -1725,7 +1725,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             if (user && user.session) {
                 let sessionExpiresAt: any = moment(user.session.expiresAt, GIDDH_DATE_FORMAT + " h:m:s");
 
-                if (sessionExpiresAt.diff(moment(), 'hours') < 2) {
+                if (sessionExpiresAt.diff(moment(), 'hours') < 24) {
                     this.lastSessionRenewalTime = moment();
                     this.store.dispatch(this.loginAction.renewSession());
                 } else {

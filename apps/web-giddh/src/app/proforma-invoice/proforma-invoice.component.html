@@ -253,14 +253,7 @@
                                                             <ng-template #notFoundLinkTemplate>
                                                                 <a
                                                                     href="javascript:void(0)"
-                                                                    class="
-                                                                        list-item
-                                                                        pd-l05 pd-r05
-                                                                        border-none
-                                                                        d-flex
-                                                                        justify-content-between
-                                                                        w-100
-                                                                    "
+                                                                    class="list-item pd-l05 pd-r05 border-none d-flex justify-content-between w-100"
                                                                     [keyboardShortcut]="'alt+c'"
                                                                 >
                                                                     <div class="item">{{ customerNotFoundText }}</div>
@@ -409,10 +402,7 @@
                                                                     }}</span>
                                                                     <span>
                                                                         <div
-                                                                            class="
-                                                                                btn-group btn-block
-                                                                                change-address-dropdown
-                                                                            "
+                                                                            class="btn-group btn-block change-address-dropdown"
                                                                             dropdown
                                                                             #billingAddressDropDownWeb="bs-dropdown"
                                                                             [attachOutsideOnClick]="true"
@@ -430,9 +420,7 @@
                                                                             >
                                                                             <ul
                                                                                 *dropdownMenu
-                                                                                class="
-                                                                                    dropdown-menu dropdown-menu-right
-                                                                                "
+                                                                                class="dropdown-menu dropdown-menu-right"
                                                                                 role="menu"
                                                                             >
                                                                                 <li
@@ -625,10 +613,7 @@
                                                                     </span>
                                                                     <span>
                                                                         <div
-                                                                            class="
-                                                                                btn-group btn-block
-                                                                                change-address-dropdown
-                                                                            "
+                                                                            class="btn-group btn-block change-address-dropdown"
                                                                             dropdown
                                                                             #shippingAddressDropDownWeb="bs-dropdown"
                                                                             [attachOutsideOnClick]="true"
@@ -649,9 +634,7 @@
                                                                             >
                                                                             <ul
                                                                                 *dropdownMenu
-                                                                                class="
-                                                                                    dropdown-menu dropdown-menu-right
-                                                                                "
+                                                                                class="dropdown-menu dropdown-menu-right"
                                                                                 role="menu"
                                                                             >
                                                                                 <li
@@ -811,10 +794,7 @@
                                                                                 <div class="form-group mr-b05">
                                                                                     <input
                                                                                         type="number"
-                                                                                        class="
-                                                                                            form-control
-                                                                                            input-custom
-                                                                                        "
+                                                                                        class="form-control input-custom"
                                                                                         autocomplete="false"
                                                                                         name="shippingPinCode"
                                                                                         [placeholder]="
@@ -885,23 +865,31 @@
                                         <!-- added multicurrency feature make it functional to change into appropriate currency -->
                                         <span
                                             *ngIf="
-                                                enableVoucherAdjustmentMultiCurrency &&
-                                                isSalesInvoice &&
-                                                isMulticurrencyAccount &&
-                                                adjustPaymentBalanceDueData === 0 &&
-                                                invFormData.voucherDetails.balanceDue === 0
+                                                (voucherApiVersion !== 2 &&
+                                                    enableVoucherAdjustmentMultiCurrency &&
+                                                    isSalesInvoice &&
+                                                    isMulticurrencyAccount &&
+                                                    adjustPaymentBalanceDueData === 0 &&
+                                                    invFormData.voucherDetails.balanceDue === 0) ||
+                                                (voucherApiVersion === 2 &&
+                                                    invFormData.voucherDetails.gainLoss !== 0 &&
+                                                    invFormData.voucherDetails.balanceDue === 0)
                                             "
                                             class="balance-due"
                                             >{{ localeData?.exchange_label }}
                                             {{
-                                                getConvertedBalanceDue() <= 0
+                                                voucherApiVersion === 2
+                                                    ? invFormData.voucherDetails.gainLoss >= 0
+                                                        ? commonLocaleData?.app_exchange_gain
+                                                        : commonLocaleData?.app_exchange_loss
+                                                    : getConvertedBalanceDue() <= 0
                                                     ? commonLocaleData?.app_exchange_gain
                                                     : commonLocaleData?.app_exchange_loss
                                             }}:&nbsp;</span
                                         >
                                         <span
                                             class="sp-rupees d-flex justify-content-end"
-                                            *ngIf="isMulticurrencyAccount"
+                                            *ngIf="isMulticurrencyAccount && voucherApiVersion !== 2"
                                         >
                                             <amount-field
                                                 [amount]="
@@ -919,7 +907,7 @@
 
                                         <span
                                             class="sp-rupees d-flex justify-content-end"
-                                            *ngIf="!isMulticurrencyAccount"
+                                            *ngIf="!isMulticurrencyAccount && voucherApiVersion !== 2"
                                         >
                                             <amount-field
                                                 [amount]="
@@ -929,6 +917,21 @@
                                                 "
                                                 [currencySymbol]="false"
                                                 [currencyCode]="false"
+                                            >
+                                            </amount-field>
+                                        </span>
+                                        <span
+                                            class="sp-rupees d-flex justify-content-end"
+                                            *ngIf="
+                                                voucherApiVersion === 2 &&
+                                                invFormData.voucherDetails.gainLoss !== 0 &&
+                                                invFormData.voucherDetails.balanceDue === 0
+                                            "
+                                        >
+                                            <amount-field
+                                                [amount]="invFormData.voucherDetails.gainLoss"
+                                                [currencySymbol]="baseCurrencySymbol"
+                                                [currencyCode]="companyCurrency"
                                             >
                                             </amount-field>
                                         </span>
@@ -1043,10 +1046,7 @@
                                                                 }}</span>
                                                                 <span>
                                                                     <div
-                                                                        class="
-                                                                            btn-group btn-block
-                                                                            change-address-dropdown
-                                                                        "
+                                                                        class="btn-group btn-block change-address-dropdown"
                                                                         dropdown
                                                                         #companyBillingAddressDropDownWeb="bs-dropdown"
                                                                         [attachOutsideOnClick]="true"
@@ -1375,7 +1375,11 @@
                                 </div>
                                 <div
                                     class="row mt-1"
-                                    *ngIf="isPurchaseInvoice && (!isUpdateMode || (isUpdateMode && poLinkUpdated))"
+                                    *ngIf="
+                                        voucherApiVersion !== 2 &&
+                                        isPurchaseInvoice &&
+                                        (!isUpdateMode || (isUpdateMode && poLinkUpdated))
+                                    "
                                 >
                                     <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3">
                                         <label>{{ localeData?.link_purchase_order }}</label>
@@ -1802,15 +1806,7 @@
                 <ng-container>
                     <!-- region normal view -->
                     <section
-                        class="
-                            static-invoice-table
-                            sales-invoice-table
-                            clearfix
-                            mr-b2
-                            white-bg
-                            container-fluid
-                            ng-tns-c8-0
-                        "
+                        class="static-invoice-table sales-invoice-table clearfix mr-b2 white-bg container-fluid ng-tns-c8-0"
                         *ngIf="!isMobileScreen"
                     >
                         <ng-container>
@@ -3474,13 +3470,7 @@
                                                             </li>
 
                                                             <li
-                                                                class="
-                                                                    clearfix
-                                                                    mr-t1
-                                                                    d-flex
-                                                                    align-items-center
-                                                                    payment-mode-amount
-                                                                "
+                                                                class="clearfix mr-t1 d-flex align-items-center payment-mode-amount"
                                                                 *ngIf="
                                                                     isSalesInvoice ||
                                                                     currentVoucherFormDetails?.depositAllowed
@@ -3494,13 +3484,7 @@
                                                                     "
                                                                     [placeholder]="commonLocaleData?.app_amount"
                                                                     name="dueAmount"
-                                                                    class="
-                                                                        form-control
-                                                                        amount-field
-                                                                        text-right
-                                                                        pull-right
-                                                                        max-width-100
-                                                                    "
+                                                                    class="form-control amount-field text-right pull-right max-width-100"
                                                                     [(ngModel)]="depositAmount"
                                                                     [prefix]="depositCurrSymbol"
                                                                     [suffix]="selectedSuffixForCurrency"
@@ -3515,22 +3499,11 @@
                                                             </li>
 
                                                             <li
-                                                                class="
-                                                                    clearfix
-                                                                    mr-t1
-                                                                    d-flex
-                                                                    align-items-center
-                                                                    payment-mode-amount
-                                                                "
+                                                                class="clearfix mr-t1 d-flex align-items-center payment-mode-amount"
                                                                 *ngIf="isCashInvoice"
                                                             >
                                                                 <span
-                                                                    class="
-                                                                        amount-field
-                                                                        pull-right
-                                                                        max-width-100
-                                                                        amount-filed-cash
-                                                                    "
+                                                                    class="amount-field pull-right max-width-100 amount-filed-cash"
                                                                 >
                                                                     <span *ngIf="isMulticurrencyAccount">{{
                                                                         invFormData.accountDetails.currencySymbol
@@ -4493,11 +4466,7 @@
                                                                     </span>
 
                                                                     <input
-                                                                        class="
-                                                                            text-right
-                                                                            form-control
-                                                                            other-taxes-input
-                                                                        "
+                                                                        class="text-right form-control other-taxes-input"
                                                                         disabled="disabled"
                                                                         [(ngModel)]="entry.otherTaxSum"
                                                                         [prefix]="
@@ -4982,13 +4951,7 @@
                                                     </li>
 
                                                     <li
-                                                        class="
-                                                            clearfix
-                                                            mr-t1
-                                                            d-flex
-                                                            align-items-center
-                                                            payment-mode-amount
-                                                        "
+                                                        class="clearfix mr-t1 d-flex align-items-center payment-mode-amount"
                                                         *ngIf="
                                                             isSalesInvoice || currentVoucherFormDetails?.depositAllowed
                                                         "
@@ -5001,13 +4964,7 @@
                                                             "
                                                             [placeholder]="commonLocaleData?.app_amount"
                                                             name="dueAmount"
-                                                            class="
-                                                                form-control
-                                                                amount-field
-                                                                text-right
-                                                                pull-right
-                                                                max-width-100
-                                                            "
+                                                            class="form-control amount-field text-right pull-right max-width-100"
                                                             [(ngModel)]="depositAmount"
                                                             [prefix]="depositCurrSymbol"
                                                             [suffix]="selectedSuffixForCurrency"
@@ -5020,22 +4977,11 @@
                                                     </li>
 
                                                     <li
-                                                        class="
-                                                            clearfix
-                                                            mr-t1
-                                                            d-flex
-                                                            align-items-center
-                                                            payment-mode-amount
-                                                        "
+                                                        class="clearfix mr-t1 d-flex align-items-center payment-mode-amount"
                                                         *ngIf="isCashInvoice"
                                                     >
                                                         <span
-                                                            class="
-                                                                amount-field
-                                                                pull-right
-                                                                max-width-100
-                                                                amount-filed-cash
-                                                            "
+                                                            class="amount-field pull-right max-width-100 amount-filed-cash"
                                                         >
                                                             <amount-field
                                                                 [amount]="invFormData.voucherDetails.balanceDue"

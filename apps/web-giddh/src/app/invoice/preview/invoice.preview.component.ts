@@ -630,6 +630,17 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
     public toggleEwayBillPopup() {
         this.eWayBill.toggle();
+        if (this.selectedVoucher === VoucherTypeEnum.sales && this.eWayBill.isShown) {
+            this.store.dispatch(this.invoiceReceiptActions.ResetVoucherDetails());
+            // To get re-assign receipts voucher store
+            if (this.selectedInvoicesList[0]?.account?.uniqueName) {
+                this.store.dispatch(this.invoiceReceiptActions.getVoucherDetailsV4(this.selectedInvoicesList[0]?.account?.uniqueName, {
+                    invoiceNumber: this.selectedInvoicesList[0]?.voucherNumber,
+                    voucherType: VoucherTypeEnum.sales,
+                    uniqueName: this.selectedInvoicesList[0]?.uniqueName
+                }));
+            }
+        }
         this._invoiceService.selectedInvoicesLists = [];
         this._invoiceService.VoucherType = this.selectedVoucher;
         this._invoiceService.setSelectedInvoicesList(this.selectedInvoicesList);
@@ -1427,7 +1438,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             });
         }
         const apiCallObservable = (this.voucherApiVersion === 2) ? this.salesService.adjustAnInvoiceWithAdvanceReceipts(this.advanceReceiptAdjustmentData.adjustments, this.changeStatusInvoiceUniqueName) : this.salesService.adjustAnInvoiceWithAdvanceReceipts(this.advanceReceiptAdjustmentData, this.changeStatusInvoiceUniqueName);
-    
+
         apiCallObservable.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 if (response.status === 'success') {
@@ -1795,7 +1806,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                             if (MULTI_CURRENCY_MODULES.indexOf(this.selectedVoucher) > -1) {
                                 // For CR/DR note and Cash/Sales invoice
                                 item = this.generalService.addToolTipText(this.selectedVoucher, this.baseCurrency, item, this.localeData, this.commonLocaleData);
-                                
+
                                 if (this.gstEInvoiceEnable) {
                                     item.eInvoiceStatusTooltip = this.getEInvoiceTooltipText(item);
                                 }
@@ -1959,5 +1970,20 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         } else {
             this.isDropUp = true;
         }
+    }
+
+    /**
+     * Create E-way bill handler
+     *
+     * @memberof InvoicePreviewComponent
+     */
+    public createEWayBill(): void {
+        this.store.pipe(select(state => state.receipt.voucher), take(1)).subscribe((voucher: any) => {
+            if(!voucher?.account?.billingDetails?.pincode) {
+                this._toaster.errorToast(this.localeData?.pincode_required);
+            } else {
+                this._router.navigate(['pages', 'invoice', 'ewaybill', 'create']);
+            }
+        });
     }
 }
