@@ -12,6 +12,7 @@ import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 
 export class GenerateEWayBillComponent {
     @Output() public closeModelEvent: EventEmitter<boolean> = new EventEmitter(true);
+    /** Create E-way bill event emitter */
     @Output() public createEWayBillEvent: EventEmitter<void> = new EventEmitter();
     @Input() public ChildSelectedInvoicesList: any[];
     /* This will hold local JSON data */
