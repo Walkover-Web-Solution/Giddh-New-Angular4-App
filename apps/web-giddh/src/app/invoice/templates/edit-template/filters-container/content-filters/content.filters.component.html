@@ -1423,7 +1423,11 @@
                             </td>
                         </tr>
                         <ng-container
-                            *ngIf="customTemplate?.templateType === 'gst_template_e' && voucherType === 'sales'"
+                            *ngIf="
+                                (customTemplate?.templateType === 'gst_template_a' ||
+                                    customTemplate?.templateType === 'gst_template_e') &&
+                                voucherType === 'sales'
+                            "
                         >
                             <tr *ngIf="fieldsAndVisibility.table.previousDue">
                                 <td>
