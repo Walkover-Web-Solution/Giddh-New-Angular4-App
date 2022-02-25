@@ -8,6 +8,7 @@
 .check-image img {
     max-height: 14px;
     cursor: pointer;
+    filter: var(--color-primary-checkbox-background-filter);
 }
 
 .basic > thead > tr > th {

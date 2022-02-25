@@ -32,7 +32,7 @@ body {
     font: 12px/1 "Open Sans", sans-serif;
     overflow: auto;
     background: var(--color-white);
-    border: 1px solid #bfbfbf;
+    border: 1px solid var(--color-common-secondary-border);
     max-width: 8.3in;
     width: 100%;
     margin: 0 auto;
@@ -40,7 +40,7 @@ body {
 #royal header h1 {
     font-weight: bolder;
     font-size: 74px;
-    color: #4b4c4f;
+    color: var(--color-common-secondary-text);
 }
 #royal header .sub_head {
     font-size: 16px;
@@ -146,7 +146,7 @@ tfoot.table-details tr th {
   z-index: -1;
 } */
 #royal .in-words {
-    color: #939393;
+    color: var(--color-common-secondary-text);
 }
 
 #royal .item {
@@ -177,11 +177,11 @@ tfoot.table-details tr th {
 }
 
 #royal .total-row {
-    border-top: 1px solid #000000;
+    border-top: 1px solid var(--color-common-secondary-border);
 }
 
 #royal .tax-table p {
-    color: #595959;
+    color: var(--color-common-secondary-text);
 }
 
 #royal .tax-table tfoot th {
@@ -240,12 +240,12 @@ tfoot.table-details tr th {
     line-height: 20px;
     padding: 15px;
     margin: 8px 0 0;
-    background: var(--color-white);
+    background: var(--color-common-primary-background-for-all-components);
     width: auto;
 }
 
 #royal .primary-color {
-    color: #df4927;
+    color: var(--color-orange);
 }
 
 #royal .text-center {
@@ -257,7 +257,7 @@ tfoot.table-details tr th {
 }
 
 #royal .secondry_clr {
-    color: #4b4c4f;
+    color: var(--color-common-secondary-text);
 }
 
 #royal .secondry_clr td {
@@ -310,8 +310,8 @@ table.tax-table.item {
     left: 0;
     right: 0;
     pointer-events: none;
-    background: rgba(204, 204, 204, 0.5);
-    border: 1px dashed #808080;
+    background: var(--color-common-senary-background-for-all-components);
+    border: 1px dashed var(--color-common-secondary-border);
 }
 
 #template-table {
@@ -361,7 +361,7 @@ img {
     color: var(--color-nero);
 }
 #royal .tax-table.item tfoot tr th {
-    border-bottom: 1px solid #666666;
+    border-bottom: 1px solid var(--color-common-secondary-border);
 }
 
 .slogan-pre-line {
