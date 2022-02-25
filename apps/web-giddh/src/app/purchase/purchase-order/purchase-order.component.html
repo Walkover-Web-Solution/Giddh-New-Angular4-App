@@ -67,7 +67,7 @@
                                     >{{ localeData?.bulk_update }}</a
                                 >
                             </li>
-                            <li role="menuitem">
+                            <li role="menuitem" *ngIf="voucherApiVersion !== 2">
                                 <a
                                     class="dropdown-item cp"
                                     href="javascript:void(0)"
@@ -130,7 +130,7 @@
                                 >{{ localeData?.bulk_update }}</a
                             >
                         </li>
-                        <li role="menuitem">
+                        <li role="menuitem" *ngIf="voucherApiVersion !== 2">
                             <a
                                 class="dropdown-item cp"
                                 href="javascript:void(0)"
@@ -382,7 +382,7 @@
                             >
                                 <a
                                     [tooltip]="localeData?.convert_tobill"
-                                    *ngIf="item.status === 'open' && !isCompany"
+                                    *ngIf="item.status === 'open' && !isCompany && voucherApiVersion !== 2"
                                     (click)="bulkUpdate('create_purchase_bill', item.voucherNumber)"
                                 >
                                     <span class="icon-tick font-12"></span>
