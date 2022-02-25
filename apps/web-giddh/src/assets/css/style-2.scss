@@ -321,7 +321,7 @@ body {
 }
 
 .modal-footer {
-    border-top-color: var(--color-common-secondary-border);
+    border-top-color: transparent;
 }
 
 .clear-both {
@@ -814,14 +814,14 @@ ul.sub-list {
     color: var(--color-secondary-button-text);
 }
 .btn-light-gray {
-    background: var(--color-dark-fog);
-    border-color: var(--color-dark-fog);
-    color: var(--color-giddh-blue);
+    color: var(--color-secondary-button-text);
+    background: var(--color-secondary-button-background);
+    border-color: var(--color-secondary-button-background);
 }
 .btn-light-gray:hover {
-    background: var(--color-blue);
-    border-color: var(--color-blue);
-    color: var(--color-white);
+    color: var(--color-secondary-button-text);
+    background: var(--color-secondary-button-background-hover);
+    border-color: var(--color-secondary-button-background-hover);
 }
 .top-aging-table-top {
     background: var(--color-dark-fog);
@@ -1389,8 +1389,8 @@ modal-container.modal {
 /* my css end */
 /*input*/
 .form-control {
-    background: var(--color-sidebar-primary-search-bar-background) !important;
-    border: 1px solid var(--color-primary-input-bar-border);
+    background: var(--color-secondary-input-bar-background) !important;
+    border: 1px solid var(--color-secondary-input-bar-border);
     border-radius: 5px !important;
     padding: 6px !important;
     outline: 0;
@@ -2484,7 +2484,15 @@ a.btn.btn-xs.btn-link.pull-right {
 .multi-select {
     position: relative;
 }
+
+// *************************DROPDOWN ARROW COLOR FIXING ATTEMPT*************************
+// $white: yellow;
+// @mixin caret-svg($caretColor) {
+//     background-image: url("data:image/svg+xml;charset=UTF-8,%3c?xml version='1.0' encoding='iso-8859-1'?%3e%3c!-- Generator: Adobe Illustrator 16.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0) --%3e%3c!DOCTYPE svg PUBLIC '-//W3C//DTD SVG 1.1//EN' 'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'%3e%3csvg version='1.1' id='Capa_1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px' width='255px' height='255px' viewBox='0 0 255 255' style='enable-background:new 0 0 255 255; fill:#{$caretColor}' xml:space='preserve'%3e%3cg%3e%3cg id='arrow-drop-down'%3e%3cpolygon points='0,63.75 127.5,191.25 255,63.75 '/%3e%3c/g%3e%3c/g%3e%3cg%3e%3c/g%3e%3cg%3e%3c/g%3e%3cg%3e%3c/g%3e%3cg%3e%3c/g%3e%3cg%3e%3c/g%3e%3cg%3e%3c/g%3e%3cg%3e%3c/g%3e%3cg%3e%3c/g%3e%3cg%3e%3c/g%3e%3cg%3e%3c/g%3e%3cg%3e%3c/g%3e%3cg%3e%3c/g%3e%3cg%3e%3c/g%3e%3cg%3e%3c/g%3e%3cg%3e%3c/g%3e%3c/svg%3e ") !important;
+// }
+
 .multi-select input.form-control {
+    // @include caret-svg($white);
     background-image: url("../images/caret.svg") !important;
     background-size: 10px !important;
     background-position: 96% !important;
@@ -2504,6 +2512,7 @@ a.btn.btn-xs.btn-link.pull-right {
     background-image: url("../images/caret.svg") !important;
     background-position: 96% !important;
 }
+
 .item-padding .multi-select input.form-control {
     padding-right: 24px !important;
 }
@@ -3537,7 +3546,6 @@ label {
     display: block;
 }
 .sticky-footer {
-    background: var(--color-abbey);
     width: 100%;
     position: fixed;
     bottom: 0;
@@ -3545,6 +3553,7 @@ label {
     left: 0;
     right: 0;
     z-index: 2;
+    background: var(--color-common-quinary-background-for-all-components);
 }
 #customInvoice .template-editor .btn-group-lg > .btn {
     border-radius: 5px;
@@ -3577,7 +3586,7 @@ label {
 #customInvoice .template-editor .table > tbody > tr > td .form-control {
     margin: 7px 0;
     background: var(--color-white);
-    border-color: var(--color-iron);
+    border-color: var(--color-secondary-input-bar-border);
     border-radius: 2px;
 }
 #customInvoice .template-editor h3 {
@@ -3643,6 +3652,7 @@ label {
     float: left;
     background: var(--color-white) url("../images/designTool.svg") no-repeat;
     background-size: 65px;
+    filter: var(--color-image-filter-secondary);
 }
 .ico-template {
     background-position: center -6px !important;
@@ -3908,7 +3918,7 @@ datepicker-inner .well table tbody .btn-default.active {
     padding: 1px 5px !important;
 }
 .calendar-dropdown {
-    border-color: var(--color-iron);
+    border-color: var(--color-common-secondary-border);
     margin-top: 1px;
     border-radius: 2px;
 }
@@ -4094,6 +4104,7 @@ virtual-scroll .scrollable-content .item > a {
     height: 100%;
     color: var(--color-dropdown-list);
     background-color: var(--color-dropdown-primary-background);
+    border-color: var(--color-common-primary-border);
 }
 
 virtual-scroll .scrollable-content .item:hover > a {
@@ -4447,10 +4458,13 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
     border-bottom: none !important;
 } /* ======================================= INVENTORY CSS ===================================== */
 .form-header {
+    height: 57.8px;
     padding: 20px 15px;
     background: var(--color-primary-right-side-popup-header-background);
     color: var(--color-primary-right-side-popup-header-text);
     border-bottom: 1px solid var(--color-primary-popup-list-header-bottom-border);
+    display: flex;
+    align-items: center;
 }
 .form-header h3 {
     font-size: 18px;
@@ -5727,7 +5741,7 @@ span.red-text {
     white-space: nowrap !important;
 }
 .icon-btn .btn-xs {
-    border: 1px solid var(--color-iron);
+    border: 1px solid var(--color-primary-button-border);
     color: var(--color-primary-input-bar-text);
     background-color: var(--color-dark-fog);
 }

@@ -911,14 +911,14 @@ button.btn.btn-filter span.icon-cross {
     right: -3px;
     width: 30px;
     height: 30px;
-    border: 2px solid #d9d9d9;
+    border: 2px solid var(--color-primary-button-border);
     display: flex;
     justify-content: center;
     align-items: center;
 }
 .arrow-icon:hover {
-    color: white;
-    background-color: rgb(91, 100, 201);
+    color: var(--color-wild-sand);
+    background-color: var(--color-blue);
 }
 .select-all-checkbox-wrapper {
     align-items: center;
