@@ -103,6 +103,7 @@ body.dark-theme {
     --color-primary-basic-button-text: #9b9b9e;
     --color-primary-cancel-button-background-hover: #668cff26;
     --color-primary-button-border: #505159;
+    --color-secondary-button-border: #505159;
     --color-primary-button-border-hover: #505159;
 
     // Dropdown Color Variables
@@ -122,6 +123,13 @@ body.dark-theme {
     --color-dropdown-list-box-shadow: #212528;
     --color-dropdown-primary-bar-border: #668cff;
 
+    // Checkbox, Radio Button, Mat-Expansion Panel Down Arrow and Icon Color Variables
+    --color-primary-checkbox-and-expansion-panel-arrow: #f5f5f5;
+    --color-primary-checkbox-background-filter: invert(0.9);
+
+    // Expansion Panel Color Variables
+    --color-primary-expansion-panel-background: #212528;
+
     // Search Bar Color Variables
     --color-sidebar-search-bar-text: #cbcfd2;
     --color-sidebar-primary-search-bar-background: #668cff26;
@@ -139,6 +147,7 @@ body.dark-theme {
     --color-primary-input-bar-border: #505159;
     --color-secondary-input-bar-border: #505159;
     --color-primary-input-bar-background: #668cff26;
+    --color-secondary-input-bar-background: #212528;
     --color-secondary-input-bar-button: #cbcfd2;
 
     // Datepicker Color Variables
@@ -186,7 +195,7 @@ body.dark-theme {
     // Aside Form Color Variables
     --color-primary-aside-pane-form-box-shadow: #00000080;
     --color-primary-aside-pane-back-to-main-slider: #668cff;
-    --color-primary-aside-pane-unactive-background: #668cff26;
+    --color-primary-aside-pane-unactive-background: #000000;
 
     // Aside Setting and Aside Help Support Color Variables
     --color-primary-aside-host-after-background: #f5f5f5;
@@ -213,6 +222,7 @@ body.dark-theme {
 
     // Proforma Invoice Color Variables
     --color-primary-performa-invoice-a-copy-invoice: #668cff;
+    --color-primary-performa-invoice-dissabled-background: #505159;
 
     // Invoice Setting Color Variables
     --color-primary-icon-estimate-path1-before: #e5455626;
@@ -331,7 +341,7 @@ body.dark-theme {
     --color-popup-footer-background: #212528;
     --color-popup-secondary-footer-background: #668cff26;
     --color-popup-list-all-features-text: #f5f5f5;
-    --color-primary-popup-list-header-bottom-border: #505159;
+    --color-primary-popup-list-header-bottom-border: #1a237e;
 
     // Common Chips Variables
     --color-chips-primary: #f5f5f5;
@@ -359,6 +369,10 @@ body.dark-theme {
     --color-rectangular-tab-box-shadow: #212528;
     --color-rectangular-tab-inactive-primary-border: #212528;
     --color-rectangular-tab-inactive-secondary-border: #505159;
+
+    // Invoice Preview Color Variables
+    --color-primary-invoice-preview-text: #ffffff;
+    --color-primary-invoice-preview-background: #212528;
 
     // Pagination Color Variables
     --color-pagination-button: #f5f5f5;
@@ -635,6 +649,7 @@ body.dark-theme {
 
     // Common Image Filter Variable
     --color-image-filter: invert(1);
+    --color-image-filter-secondary: invert(0.8);
 
     /************************ COMMON COLORS USED MORE THAN 12 TIMES ************************/
     --color-blue: #668cff;

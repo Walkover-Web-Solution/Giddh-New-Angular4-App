@@ -722,7 +722,7 @@ input.form-control.selected-val.cp.bottom-border-only.ng-star-inserted {
     width: 100%;
     padding: 5px;
     cursor: default;
-    background-color: var(--color-dark-fog);
+    background-color: var(--color-dark-fog) !important;
     border: 1px solid var(--color-secondary-input-bar-border);
     // max-width: 150px;
 }
@@ -887,7 +887,7 @@ span.edit-icon {
     padding: 5px;
     max-width: 100%;
     border: 1px solid var(--color-secondary-input-bar-border);
-    background-color: var(--color-sidebar-primary-search-bar-background);
+    background-color: transparent;
 }
 
 .hsn-code-dropdown input::placeholder,
@@ -1375,7 +1375,7 @@ table.table.table-custom-invoice.basic,
     top: 132px;
     opacity: 0.6;
     z-index: 98;
-    background: var(--color-common-tertiary-background-for-all-components);
+    background-color: var(--color-primary-performa-invoice-dissabled-background) !important;
 }
 
 .cash-invoice-input {
@@ -1542,7 +1542,7 @@ label.sales-country-label {
     transform: translateY(-40px);
     width: 20px;
     height: 20px;
-    border: 1px solid var(--color-iron);
+    border: 1px solid var(--color-primary-button-border);
     border-radius: 50%;
     text-align: center;
 }

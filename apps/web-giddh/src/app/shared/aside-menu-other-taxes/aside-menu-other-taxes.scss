@@ -15,7 +15,7 @@
     right: 10px;
     z-index: 9999999;
     background-color: transparent;
-    color: var(--color-white);
+    color: var(--color-primary-right-side-popup-header-text);
     font-size: 17px;
     top: 18px;
     margin-right: 0;
@@ -37,7 +37,7 @@
 }
 .aside-pane-form {
     background-color: var(--color-white);
-    box-shadow: 0 3px 6px var(--color-black-russian);
+    box-shadow: 0 3px 6px var(--color-primary-common-box-shadow);
     padding: 15px;
     height: calc(100vh - 90px);
     overflow: auto;
@@ -46,9 +46,10 @@
     margin-top: 15px;
 }
 .form-header {
+    height: 57.8px;
     padding: 20px 15px;
-    background: var(--color-giddh-blue);
-    color: var(--color-white);
+    background: var(--color-primary-right-side-popup-header-background);
+    color: var(--color-primary-right-side-popup-header-text);
 }
 
 .label-tax {

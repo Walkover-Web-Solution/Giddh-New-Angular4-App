@@ -2606,6 +2606,11 @@ giddh-datepicker {
     .mat-form-field-suffix {
         right: 10px !important;
         position: absolute;
+        .cursor-pointer {
+            .icon-calender {
+                color: var(--color-datepicker-date-icon);
+            }
+        }
     }
 }
 .mat-input-element {
