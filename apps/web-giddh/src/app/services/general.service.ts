@@ -9,7 +9,7 @@ import { cloneDeep, find } from '../lodash-optimized';
 import { OrganizationType } from '../models/user-login-state';
 import { AllItems } from '../shared/helpers/allItems';
 import { Router } from '@angular/router';
-import { AdjustedVoucherType } from '../app.constant';
+import { AdjustedVoucherType, JOURNAL_VOUCHER_ALLOWED_DOMAINS } from '../app.constant';
 import { VoucherTypeEnum } from '../models/api-models/Sales';
 
 @Injectable()
@@ -373,7 +373,7 @@ export class GeneralService {
         let isAllowed = false;
         if (email) {
             let emailSplit = email.split("@");
-            if (emailSplit.indexOf("giddh.com") > -1 || emailSplit.indexOf("walkover.in") > -1 || emailSplit.indexOf("muneem.co") > -1) {
+            if (JOURNAL_VOUCHER_ALLOWED_DOMAINS.includes(emailSplit[1])) {
                 isAllowed = true;
             }
         }
