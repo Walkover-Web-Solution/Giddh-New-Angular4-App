@@ -48,7 +48,6 @@ import { CustomPreloadingStrategy } from './services/lazy-preloading.service';
 import { ServiceModule } from './services/service.module';
 import { WindowRef } from './shared/helpers/window.object';
 import { SharedModule } from './shared/shared.module';
-import { SocialLoginCallbackComponent } from './social-login-callback.component';
 import { reducers } from './store';
 import { ShSelectModule } from './theme/ng-virtual-select/sh-select.module';
 import { QuicklinkModule, QuicklinkStrategy } from 'ngx-quicklink';
@@ -93,7 +92,6 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         NewUserComponent,
         BrowserDetectComponent,
         OnboardingComponent,
-        SocialLoginCallbackComponent,
         MobileHomeComponent,
         MobileHomeSidebarComponent,
         MobileSearchCompanyComponent,

@@ -6,7 +6,6 @@ import { UserAuthenticated } from './decorators/UserAuthenticated';
 import { DummyComponent } from './dummy.component';
 import { NewUserComponent } from './newUser.component';
 import { NewUserAuthGuard } from './decorators/newUserGuard';
-import { SocialLoginCallbackComponent } from './social-login-callback.component';
 import { PublicPageHandlerComponent } from './public-page-handler.component';
 import { WelcomeComponent } from './welcome/welcome.component';
 import { OnboardingComponent } from './onboarding/onboarding.component';
@@ -36,7 +35,6 @@ export const ROUTES: Routes = [
     { path: 'permissions', redirectTo: 'pages/permissions', pathMatch: 'full' },
     { path: 'settings', redirectTo: 'pages/settings', pathMatch: 'full' },
     { path: 'manufacturing', redirectTo: 'pages/manufacturing', pathMatch: 'full' },
-    { path: 'about', redirectTo: 'pages/about', pathMatch: 'full' },
     { path: 'trial-balance-and-profit-loss', redirectTo: 'pages/trial-balance-and-profit-loss', pathMatch: 'full' },
     { path: 'audit-logs', redirectTo: 'pages/audit-logs', pathMatch: 'full' },
     { path: 'ledger', redirectTo: 'pages/ledger' },
@@ -46,7 +44,6 @@ export const ROUTES: Routes = [
     { path: 'new-user', component: NewUserComponent, canActivate: [NewUserAuthGuard] },
     { path: 'welcome', component: WelcomeComponent },
     { path: 'onboarding', redirectTo: 'pages/onboarding', pathMatch: 'full' },
-    { path: 'social-login-callback', component: SocialLoginCallbackComponent },
     { path: 'invoice', redirectTo: 'pages/invoice', pathMatch: 'full' },
     { path: 'sales', redirectTo: 'pages/proforma-invoice/invoice/sales' },
     { path: 'daybook', redirectTo: 'pages/daybook', pathMatch: 'full' },
@@ -54,7 +51,6 @@ export const ROUTES: Routes = [
     { path: 'user-details', redirectTo: 'pages/user-details', pathMatch: 'full' },
     { path: 'journal-voucher', redirectTo: 'pages/journal-voucher', pathMatch: 'full' },
     { path: 'contact', redirectTo: 'pages/contact' },
-    { path: 'aging-report', redirectTo: 'pages/aging-report', pathMatch: 'full' },
     { path: 'import', redirectTo: 'pages/import', pathMatch: 'full' },
     { path: 'gstfiling', redirectTo: 'pages/gstfiling', pathMatch: 'full' },
     { path: 'company-import-export', redirectTo: 'pages/company-import-export', pathMatch: 'full' },
