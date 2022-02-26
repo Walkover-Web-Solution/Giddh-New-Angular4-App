@@ -86,7 +86,6 @@
     "@angular/router": "13.2.2",
     "@getstation/electron-google-oauth2": "^2.1.0",
     "@giddh-workspaces/scss": "file:libs/scss",
-    "@giddh-workspaces/web": "file:xplat/web",
     "@ngrx/effects": "13.0.2",
     "@ngrx/router-store": "13.0.2",
     "@ngrx/store": "13.0.2",

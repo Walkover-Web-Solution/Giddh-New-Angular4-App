@@ -485,30 +485,6 @@
                 }
             },
             "tags": []
-        },
-        "xplat": {
-            "root": "xplat",
-            "sourceRoot": "xplat",
-            "projectType": "library",
-            "prefix": "foo",
-            "architect": {
-                "test": {
-                    "builder": "@angular-builders/custom-webpack:karma",
-                    "options": {
-                        "main": "testing/test.xplat.ts",
-                        "tsConfig": "testing/tsconfig.xplat.spec.json",
-                        "karmaConfig": "testing/karma.conf.js"
-                    }
-                },
-                "lint": {
-                    "builder": "@angular-builders/custom-webpack:tslint",
-                    "options": {
-                        "tsConfig": ["testing/tsconfig.xplat.json", "testing/tsconfig.xplat.spec.json"],
-                        "exclude": ["**/node_modules/**"]
-                    }
-                }
-            },
-            "tags": []
         }
     }
 }
