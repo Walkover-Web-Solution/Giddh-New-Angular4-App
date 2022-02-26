@@ -224,10 +224,20 @@
                     }
                 },
                 "lint": {
-                    "builder": "@angular-builders/custom-webpack:tslint",
+                    "executor": "@nrwl/linter:eslint",
                     "options": {
-                        "tsConfig": ["testing/tsconfig.libs.json", "testing/tsconfig.libs.spec.json"],
-                        "exclude": ["**/node_modules/**"]
+                        "lintFilePatterns": [
+                            "libs/core/base/src/**/*.ts",
+                            "libs/core/base/src/**/*.html",
+                            "libs/core/environments/src/**/*.ts",
+                            "libs/core/environments/src/**/*.html",
+                            "libs/core/models/src/**/*.ts",
+                            "libs/core/models/src/**/*.html",
+                            "libs/core/services/src/**/*.ts",
+                            "libs/core/services/src/**/*.html",
+                            "libs/utils/**/*.ts",
+                            "libs/utils/*.ts"
+                        ]
                     }
                 }
             },
@@ -468,11 +478,14 @@
                     }
                 },
                 "lint": {
-                    "builder": "@angular-builders/custom-webpack:tslint",
+                    "executor": "@nrwl/linter:eslint",
                     "options": {
-                        "tsConfig": ["apps/web-giddh/tsconfig.app.json", "apps/web-giddh/tsconfig.spec.json"],
-                        "exclude": ["**/node_modules/**"]
-                    }
+                        "lintFilePatterns": [
+                            "apps/web-giddh/src/**/*.ts",
+                            "apps/web-giddh/src/**/*.html"
+                        ]
+                    },
+                    "outputs": ["{options.outputFile}"]
                 },
                 "test": {
                     "builder": "@angular-builders/custom-webpack:karma",

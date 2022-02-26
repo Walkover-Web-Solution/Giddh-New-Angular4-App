@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { TabsModule } from 'ngx-bootstrap/tabs';
-import { BsDatepickerModule, DatepickerModule } from 'ngx-bootstrap/datepicker';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { PaginationComponent, PaginationModule } from 'ngx-bootstrap/pagination';
 import { ModalModule } from 'ngx-bootstrap/modal';
@@ -27,14 +27,13 @@ import { TaxSidebarModule } from '../shared/tax-sidebar/tax-sidebar.module';
     providers: [],
     imports: [
         VatReportRoutingModule,
-        TabsModule,
+        TabsModule.forRoot(),
         CommonModule,
         TooltipModule,
-        BsDatepickerModule,
+        BsDatepickerModule.forRoot(),
         CurrencyModule,
         BsDropdownModule,
         ClickOutsideModule,
-        DatepickerModule,
         FormsModule,
         Daterangepicker,
         PaginationModule,

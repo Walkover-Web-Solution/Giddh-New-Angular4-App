@@ -2,7 +2,7 @@ import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
-import { Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
 import * as moment from 'moment';
 import { IOption } from 'apps/web-giddh/src/app/theme/ng-select/option.interface';
 import { AppState } from 'apps/web-giddh/src/app/store';
@@ -49,7 +49,7 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
     /** Date format type */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
     /** directive to get reference of element */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
+    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
     /* This will store modal reference */
     public modalRef: BsModalRef;
     /* This will store selected date range to use in api */
@@ -112,7 +112,7 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
         private modalService: BsModalService,
         private searchService: SearchService
     ) {
-        
+
     }
 
     public ngOnInit() {
@@ -543,7 +543,7 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
                             ...searchResults
                         ];
                     }
-                    this.accounts$ = observableOf(this.accounts);        
+                    this.accounts$ = observableOf(this.accounts);
                     this.accountsSearchResultsPaginationData.page = data.body.page;
                     this.accountsSearchResultsPaginationData.totalPages = data.body.totalPages;
                     if (successCallback) {

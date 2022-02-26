@@ -11,7 +11,7 @@ import { Observable, ReplaySubject } from 'rxjs';
 import { AppState } from 'apps/web-giddh/src/app/store';
 import { Store, select } from '@ngrx/store';
 import { take, takeUntil } from 'rxjs/operators';
-import { download } from '@giddh-workspaces/utils';
+import { download } from '@giddh/utils';
 import { GeneralService } from '../../../services/general.service';
 
 @Component({

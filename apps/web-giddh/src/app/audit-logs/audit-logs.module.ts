@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LaddaModule } from 'angular2-ladda';
-import { DatepickerModule } from 'ngx-bootstrap/datepicker';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
 import { SharedModule } from '../shared/shared.module';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
@@ -33,7 +33,7 @@ import { AuditLogsServiceModule } from './services/audit-logs.service.module';
         FormsModule,
         ReactiveFormsModule,
         AuditLogsRoutingModule,
-        DatepickerModule,
+        BsDatepickerModule.forRoot(),
         LaddaModule,
         ShSelectModule,
         AuditLogsServiceModule,

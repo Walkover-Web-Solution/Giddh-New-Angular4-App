@@ -4,7 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { ModalModule } from 'ngx-bootstrap/modal';
-import { BsDatepickerModule, DatepickerModule } from 'ngx-bootstrap/datepicker';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { TallysyncComponent } from './tallysync.component';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -62,7 +62,6 @@ const _ROUTES: Routes = [
         ClickOutsideModule,
         ElementViewChildModule,
         DecimalDigitsModule,
-        DatepickerModule,
         BsDropdownModule,
         SalesShSelectModule,
         TextMaskModule,

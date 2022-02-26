@@ -1,7 +1,7 @@
 import { Observable, of, ReplaySubject, combineLatest } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil, auditTime, take } from 'rxjs/operators';
 import { IOption } from './../../theme/ng-select/option.interface';
-import { ChangeDetectorRef, Component, ElementRef, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
 import { FormControl, NgForm } from '@angular/forms';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { select, Store } from '@ngrx/store';
@@ -99,7 +99,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
     /** Date format type */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
     /** directive to get reference of element */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
+    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
     /* This will store selected date range to show on UI */
     public selectedDateRangeUi: any;
     /* This will store available date ranges */
@@ -384,7 +384,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
         this.generateVoucherInProcess = false;
 
         let model;
-        
+
         if (this.voucherApiVersion === 2) {
             model = {
                 entryUniqueNames: uniq(this.selectedLedgerItems)
@@ -410,7 +410,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
         } else {
             this.store.dispatch(this.invoiceActions.ModifiedInvoiceStateData(model?.uniqueNames));
         }
-        
+
         if (res?.account?.uniqueName) {
             this.generateVoucherInProcess = true;
             this.store.dispatch(this.invoiceActions.PreviewInvoice(res.account?.uniqueName, model));
@@ -468,7 +468,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
             });
             this.store.dispatch(this.invoiceActions.GenerateBulkInvoice({ combined: action }, model));
         }
-        
+
         this.selectedLedgerItems = [];
         this.selectedCountOfAccounts = [];
     }

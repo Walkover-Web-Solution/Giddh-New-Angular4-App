@@ -1,11 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { AngularResizedEventModule } from 'angular-resize-event';
+import { AngularResizeEventModule } from 'angular-resize-event';
 import { LaddaModule } from 'angular2-ladda';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { ButtonsModule } from 'ngx-bootstrap/buttons';
-import { BsDatepickerModule, DatepickerModule } from 'ngx-bootstrap/datepicker';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { PaginationComponent, PaginationModule } from 'ngx-bootstrap/pagination';
@@ -105,14 +105,14 @@ import { AttachmentsModule } from '../theme/attachments/attachments.module';
         ConfirmModalModule,
         ShSelectModule,
         DecimalDigitsModule,
-        DatepickerModule,
+        BsDatepickerModule.forRoot(),
         ButtonsModule,
         BsDropdownModule,
         TextCaseChangeModule,
         ClickOutsideModule,
         QuickAccountModule,
         SelectModule.forRoot(),
-        AngularResizedEventModule,
+        AngularResizeEventModule,
         NgxMaskModule.forRoot(),
         AdvanceReceiptAdjustmentModule,
         NgxDaterangepickerMd.forRoot(),

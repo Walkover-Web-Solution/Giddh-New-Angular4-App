@@ -3,7 +3,7 @@ import { LaddaModule } from 'angular2-ladda';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { AlertModule } from 'ngx-bootstrap/alert';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
-import { DatepickerModule } from 'ngx-bootstrap/datepicker';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { TabsModule } from 'ngx-bootstrap/tabs';
@@ -47,7 +47,7 @@ import { PurchaseRoutingModule } from './purchase.routing.module';
         PurchaseRoutingModule,
         CollapseModule,
         PaginationModule,
-        DatepickerModule,
+        BsDatepickerModule.forRoot(),
         BsDropdownModule,
         Daterangepicker,
         LaddaModule,

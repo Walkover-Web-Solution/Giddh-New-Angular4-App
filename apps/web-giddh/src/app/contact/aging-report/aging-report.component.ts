@@ -108,7 +108,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     /** Stores the date field position in datepicker */
     public dateFieldPosition: any = { x: 0, y: 0 };
     /** Datepicker reference */
-    @ViewChild("datepickerTemplate", { static: true }) public datepickerTemplate: ElementRef;
+    @ViewChild("datepickerTemplate", { static: true }) public datepickerTemplate: TemplateRef<any>;
     /* Selected range label */
     public selectedRangeLabel: any = "";
     /* This will store selected date range to show on UI */

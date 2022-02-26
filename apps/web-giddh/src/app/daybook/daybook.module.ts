@@ -1,4 +1,4 @@
-import { BsDatepickerModule, DatepickerModule } from 'ngx-bootstrap/datepicker';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
@@ -36,9 +36,8 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
     imports: [CommonModule,
         ReactiveFormsModule, DecimalDigitsModule,
         FormsModule, ModalModule,
-        BsDatepickerModule,
         PaginationModule,
-        DatepickerModule,
+        BsDatepickerModule.forRoot(),
         Daterangepicker,
         DaybookRoutingModule,
         ShSelectModule,

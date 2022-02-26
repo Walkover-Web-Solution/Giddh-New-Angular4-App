@@ -16,7 +16,7 @@ import {
 } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
-import { download } from '@giddh-workspaces/utils';
+import { download } from '@giddh/utils';
 import { select, Store } from '@ngrx/store';
 import { LoginActions } from 'apps/web-giddh/src/app/actions/login.action';
 import {
@@ -124,7 +124,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     /** Instance of advance search modal */
     @ViewChild('advanceSearchModal', { static: false }) public advanceSearchModal: any;
     /** datepicker element reference  */
-    @ViewChild('datepickerTemplate', { static: false }) public datepickerTemplate: ElementRef;
+    @ViewChild('datepickerTemplate', { static: false }) public datepickerTemplate: TemplateRef<any>;
     /** Instance of entry confirmation modal */
     @ViewChild('entryConfirmModal', {static: false}) public entryConfirmModal: any;
     public isTransactionRequestInProcess$: Observable<boolean>;

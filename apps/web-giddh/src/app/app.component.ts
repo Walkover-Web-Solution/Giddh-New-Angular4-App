@@ -60,7 +60,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
 
         this.store.pipe(select(s => s.session), takeUntil(this.destroyed$)).subscribe(ss => {
             if (ss.user && ss.user.session && ss.user.session.id) {
-                let a = pick(ss.user, ['isNewUser']);
+                const a = pick(ss.user, ['isNewUser']);
                 a.isNewUser = true;
                 this._generalService.user = { ...ss.user.user, ...a };
                 if (ss.user.statusCode !== 'AUTHENTICATE_TWO_WAY') {
@@ -92,12 +92,12 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             const { ipcRenderer } = (window as any).require("electron");
             // google
             const t = ipcRenderer.send("take-server-environment", {
-                STAGING_ENV,
-                LOCAL_ENV,
-                TEST_ENV,
-                PRODUCTION_ENV,
-                AppUrl,
-                APP_FOLDER
+                STAGING_ENV:STAGING_ENV,
+                LOCAL_ENV:LOCAL_ENV,
+                TEST_ENV:TEST_ENV,
+                PRODUCTION_ENV:PRODUCTION_ENV,
+                AppUrl:AppUrl,
+                APP_FOLDER:APP_FOLDER
             });
         }
          /** This will be use for dialog close on route event */
@@ -156,7 +156,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
                     this.store.dispatch(this.commonActions.getCommonLocaleData(response.value));
                 }
             } else {
-                let supportedLocales = this._generalService.getSupportedLocales();
+                const supportedLocales = this._generalService.getSupportedLocales();
                 this.store.dispatch(this.commonActions.setActiveLocale(supportedLocales[0]));
             }
         });
@@ -187,7 +187,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         }
 
         if (location.href.includes('returnUrl')) {
-            let tUrl = location.href.split('returnUrl=');
+            const tUrl = location.href.split('returnUrl=');
             if (tUrl[1]) {
                 if (!isElectron) {
                     this.router.navigate(['pages/' + tUrl[1]]);

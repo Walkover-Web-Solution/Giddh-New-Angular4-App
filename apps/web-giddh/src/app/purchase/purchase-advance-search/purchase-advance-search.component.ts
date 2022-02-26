@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, EventEmitter, Output, Input, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, EventEmitter, Output, Input, OnDestroy, TemplateRef } from '@angular/core';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal'
 import { IOption } from '../../theme/ng-select/ng-select';
 import * as moment from 'moment/moment';
@@ -30,7 +30,7 @@ export class PurchaseAdvanceSearchComponent implements OnInit, OnDestroy {
     /* Emitter for filters */
     @Output() public closeModelEvent: EventEmitter<any> = new EventEmitter();
     /* Datepicker template */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
+    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
 
     /* This will store if device is mobile or not */
     public isMobileScreen: boolean = false;

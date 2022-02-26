@@ -4,7 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { ModalModule } from 'ngx-bootstrap/modal';
-import { DatepickerModule } from 'ngx-bootstrap/datepicker';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { NeedsAuthentication } from '../decorators/needsAuthentication';
 import { InvoiceComponent } from './invoice.component';
 import { CommonModule } from '@angular/common';
@@ -139,7 +139,7 @@ const INVOICE_ROUTES: Routes = [
         ClickOutsideModule,
         ElementViewChildModule,
         DecimalDigitsModule,
-        DatepickerModule,
+        BsDatepickerModule.forRoot(),
         BsDropdownModule,
         AsideMenuRecurringEntryModule,
         SalesShSelectModule,

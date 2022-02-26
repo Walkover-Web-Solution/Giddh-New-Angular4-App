@@ -9,7 +9,7 @@ import {
 } from 'apps/web-giddh/src/app/accounting/accouting-sidebar/accounting-sidebar.component';
 import { KeyboardService } from 'apps/web-giddh/src/app/accounting/keyboard.service';
 import { ClickOutsideModule } from 'ng-click-outside';
-import { DatepickerModule } from 'ngx-bootstrap/datepicker';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
@@ -55,7 +55,7 @@ import { VoucherGridComponent } from './voucher-grid/voucher-grid.component';
         CurrencyModule,
         FormsModule,
         ReactiveFormsModule,
-        DatepickerModule,
+        BsDatepickerModule.forRoot(),
         ModalModule,
         LaddaModule,
         DecimalDigitsModule,

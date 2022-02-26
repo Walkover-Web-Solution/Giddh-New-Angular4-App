@@ -1,0 +1,45 @@
+{
+    "extends": ["../../.eslintrc.json"],
+    "ignorePatterns": ["!**/*"],
+    "overrides": [
+      {
+        "files": ["*.ts"],
+        "extends": [
+          "plugin:@nrwl/nx/angular",
+          "plugin:@angular-eslint/template/process-inline-templates"
+        ],
+        "rules": {
+          "@angular-eslint/directive-selector": [
+            "warn",
+            {
+              "type": "attribute",
+              "prefix": "giddh",
+              "style": "camelCase"
+            }
+          ],
+          "@angular-eslint/component-selector": [
+            "warn",
+            {
+              "type": "element",
+              "prefix": "giddh",
+              "style": "kebab-case"
+            }
+          ],
+          "@typescript-eslint/no-inferrable-types": "off", // TODO: Remove this line
+          "@typescript-eslint/no-explicit-any": "off", // TODO: Remove this line
+          "@typescript-eslint/no-unused-vars": [
+              "error",
+              {
+                  "vars": "full",
+                  "args": "all"
+              }
+          ]
+        }
+      },
+      {
+        "files": ["*.html"],
+        "extends": ["plugin:@nrwl/nx/angular-template"],
+        "rules": {}
+      }
+    ]
+  }

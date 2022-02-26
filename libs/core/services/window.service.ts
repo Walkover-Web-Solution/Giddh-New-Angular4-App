@@ -1,5 +1,5 @@
 import { Injectable, Inject } from '@angular/core';
-import { isObject } from '@giddh-workspaces/utils';
+import { isObject } from '@giddh/utils';
 import { XPlatWindow } from '../models';
 import { PlatformWindowToken } from './tokens';
 

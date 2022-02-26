@@ -86,7 +86,7 @@ export class EWayBillComponent implements OnInit, OnDestroy {
     public selectedEway: Result;
     public states: any[] = [];
     /** directive to get reference of element */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
+    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
     /* This will store selected date range to use in api */
     public selectedDateRange: any;
     /* This will store selected date range to show on UI */
@@ -239,7 +239,7 @@ export class EWayBillComponent implements OnInit, OnDestroy {
                 setTimeout(() => {
                     this.store.pipe(select(state => state.session.todaySelected), take(1)).subscribe(response => {
                         this.todaySelected = response;
-            
+
                         if (universalDate && !this.todaySelected) {
                             this.selectedDateRange = { startDate: moment(dateObj[0]), endDate: moment(dateObj[1]) };
                             this.selectedDateRangeUi = moment(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);

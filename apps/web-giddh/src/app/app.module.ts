@@ -13,7 +13,7 @@ import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
 import { Daterangepicker } from 'apps/web-giddh/src/app/theme/ng2-daterangepicker/daterangepicker.module';
 import { localStorageSync } from 'ngrx-store-localstorage';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
-import { DatepickerModule } from 'ngx-bootstrap/datepicker';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
@@ -63,13 +63,13 @@ const APP_PROVIDERS = [
 ];
 
 // tslint:disable-next-line:prefer-const
-let CONDITIONAL_IMPORTS = [];
+const CONDITIONAL_IMPORTS = [];
 
 export function localStorageSyncReducer(reducer: ActionReducer<any>): ActionReducer<any> {
     return localStorageSync({ keys: ['session', 'permission'], rehydrate: true, storage: localStorage })(reducer);
 }
 
-let metaReducers: Array<MetaReducer<any, any>> = [localStorageSyncReducer];
+const metaReducers: Array<MetaReducer<any, any>> = [localStorageSyncReducer];
 if (!environment.production) {
     CONDITIONAL_IMPORTS.push(StoreDevtoolsModule.instrument({ maxAge: 50 }));
 }
@@ -120,7 +120,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         BsDropdownModule.forRoot(),
         TabsModule.forRoot(),
         TooltipModule.forRoot(),
-        DatepickerModule.forRoot(),
+        BsDatepickerModule.forRoot(),
         SharedModule.forRoot(),
         ServiceModule.forRoot(),
         ActionModule.forRoot(),

@@ -437,7 +437,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     }
 
     public onResized(event: ResizedEvent) {
-        this.totalTdElementWidth = event.newWidth + 10;
+        this.totalTdElementWidth = event.newRect.width + 10;
     }
 
     public addToDrOrCr(type: string, e: Event) {

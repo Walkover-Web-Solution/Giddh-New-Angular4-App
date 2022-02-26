@@ -10,11 +10,12 @@ import {
     OnDestroy,
     OnInit,
     QueryList,
+    TemplateRef,
     ViewChild,
     ViewChildren,
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { download } from '@giddh-workspaces/utils';
+import { download } from '@giddh/utils';
 import { select, Store } from '@ngrx/store';
 import { LoginActions } from 'apps/web-giddh/src/app/actions/login.action';
 import {
@@ -127,7 +128,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     /** upload bank statement modal instance */
     @ViewChild('importStatementModal', { static: false }) public importStatementModal: ModalDirective;
     /** datepicker element reference  */
-    @ViewChild('datepickerTemplate', { static: false }) public datepickerTemplate: ElementRef;
+    @ViewChild('datepickerTemplate', { static: false }) public datepickerTemplate: TemplateRef<any>;
     /** bulk delete bank transactions confirmation modal instance */
     @ViewChild('bulkDeleteBankTransactionsConfirmationModal', { static: false }) public bulkDeleteBankTransactionsConfirmationModal: ModalDirective;
     /** Instance of entry confirmation modal */

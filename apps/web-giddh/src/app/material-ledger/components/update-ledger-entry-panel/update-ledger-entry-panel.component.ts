@@ -548,7 +548,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     }
 
     public onResized(event: ResizedEvent) {
-        this.totalTdElementWidth = event.newWidth + 10;
+        this.totalTdElementWidth = event.newRect.width + 10;
     }
 
     public selectAccount(e: IOption, txn: ILedgerTransactionItem, selectCmp: ShSelectComponent, clearAccount?: boolean) {
@@ -2350,7 +2350,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      */
      public openAttachmentsDialog(templateRef: TemplateRef<any>): void {
         document.querySelector(".cdk-global-overlay-wrapper")?.classList?.add("double-popup-zindex");
-        
+
         let dialogRef = this.dialog.open(templateRef, {
             width: '70%',
             height: '650px'

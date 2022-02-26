@@ -4,7 +4,7 @@ import { TransactionSummaryComponent } from './filing/tabs/push-to-gstin/compone
 import { AlertModule } from 'ngx-bootstrap/alert';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
-import { DatepickerModule } from 'ngx-bootstrap/datepicker';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { PaginationComponent, PaginationModule } from 'ngx-bootstrap/pagination';
 import { TabsModule } from 'ngx-bootstrap/tabs';
@@ -50,7 +50,7 @@ import { TaxSidebarModule } from '../shared/tax-sidebar/tax-sidebar.module';
         GstRoutingModule,
         CollapseModule,
         PaginationModule,
-        DatepickerModule,
+        BsDatepickerModule.forRoot(),
         BsDropdownModule,
         Daterangepicker,
         LaddaModule,

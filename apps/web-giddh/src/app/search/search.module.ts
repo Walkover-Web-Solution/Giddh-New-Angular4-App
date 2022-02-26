@@ -7,7 +7,7 @@ import { SearchRoutingModule } from './search.routing.module';
 import { SearchSidebarComponent } from './components/sidebar-components/search.sidebar.component';
 import { SearchGridComponent } from './components/search-grid/search-grid.component';
 import { SearchFilterComponent } from './components/search-filter/search-filter.component';
-import { DatepickerModule } from 'ngx-bootstrap/datepicker';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { LaddaModule } from 'angular2-ladda';
 import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/decimalDigits.module';
@@ -35,7 +35,7 @@ import { NoDataModule } from '../shared/no-data/no-data.module';
         FormsModule,
         ReactiveFormsModule,
         SearchRoutingModule,
-        DatepickerModule,
+        BsDatepickerModule.forRoot(),
         ModalModule,
         LaddaModule,
         DecimalDigitsModule,

@@ -9,7 +9,7 @@ import { APP_BASE_HREF, CommonModule } from '@angular/common';
 
 // libs
 import { TranslateService } from '@ngx-translate/core';
-import { throwIfAlreadyLoaded } from '@giddh-workspaces/utils';
+import { throwIfAlreadyLoaded } from '@giddh/utils';
 
 // app
 import { environment } from './environments/environment';

@@ -250,7 +250,7 @@
                                             <span class="select-drop pull-right mr-t1"></span>
                                         </button>
                                         <ul class="dropdown-menu dropdown-menu-2 width-100" role="menu">
-                                            <li *ngIf="taxesList?.length == 0">
+                                            <li *ngIf="taxesList?.length === 0">
                                                 {{ commonLocaleData?.app_no_result_found }}
                                             </li>
                                             <li *ngFor="let tax of taxesList">

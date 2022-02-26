@@ -1,0 +1,32 @@
+{
+    "compileOnSave": false,
+    "compilerOptions": {
+        "rootDir": ".",
+        "sourceMap": true,
+        "declaration": false,
+        "moduleResolution": "node",
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "importHelpers": true,
+        "target": "es5",
+        "typeRoots": ["node_modules/@types"],
+        "module": "esnext",
+        "lib": [
+            "esnext",
+            "dom"
+        ],
+        "skipLibCheck": true,
+        "skipDefaultLibCheck": true,
+        "baseUrl": ".",
+        // TODO: Uncomment below line
+        // "strict": true,
+        "paths": {
+            "@giddh/core/base": ["libs/core/base/index.ts"],
+            "@giddh/core/models": ["libs/core/models/index.ts"],
+            "@giddh/core/services": ["libs/core/services/index.ts"],
+            "@giddh/core": ["libs/core/index.ts"],
+            "@giddh/utils": ["libs/utils/index.ts"]
+        }
+    },
+    "exclude": ["node_modules", "tmp"]
+}

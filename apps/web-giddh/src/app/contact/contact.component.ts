@@ -129,7 +129,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     @ViewChild("staticTabs", { static: true }) public staticTabs: MatTableModule;
     @Output() selectedTabChange: EventEmitter<MatTabChangeEvent>;
     @ViewChild("messageBox", { static: false }) public messageBox: ElementRef;
-    @ViewChild("datepickerTemplate", { static: true }) public datepickerTemplate: ElementRef;
+    @ViewChild("datepickerTemplate", { static: true }) public datepickerTemplate: TemplateRef<any>;
     public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     public universalDate$: Observable<any>;
     public messageBody = {

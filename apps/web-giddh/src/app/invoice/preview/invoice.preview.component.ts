@@ -199,7 +199,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     /** Date format type */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
     /** directive to get reference of element */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
+    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
     /** Stores the voucher eligible for adjustment */
     public voucherForAdjustment: Array<Adjustment>;
     /** This will store selected date range to show on UI */

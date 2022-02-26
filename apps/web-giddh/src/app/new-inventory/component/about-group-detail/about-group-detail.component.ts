@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, TemplateRef } from '@angular/core';
 import { GeneralService } from '../../../services/general.service';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
@@ -41,7 +41,7 @@ export class AboutGroupDetailComponent implements OnInit {
     public isHSN: boolean = true;
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
+    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
 
     constructor(
         private generalService: GeneralService, private modalService: BsModalService,

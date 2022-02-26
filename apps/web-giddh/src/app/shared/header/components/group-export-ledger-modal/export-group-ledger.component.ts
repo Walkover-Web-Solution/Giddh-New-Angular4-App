@@ -1,5 +1,5 @@
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
-import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild, Input } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, ViewChild, Input, TemplateRef } from '@angular/core';
 import { PermissionDataService } from 'apps/web-giddh/src/app/permissions/permission-data.service';
 import { some } from '../../../../lodash-optimized';
 import * as moment from 'moment/moment';
@@ -33,7 +33,7 @@ export class ExportGroupLedgerComponent implements OnInit {
     /** Date format type */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
     /** directive to get reference of element */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
+    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
     /* This will store modal reference */
     public modalRef: BsModalRef;
     /* This will store selected date range to use in api */
