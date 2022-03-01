@@ -7,7 +7,7 @@
 
 import { ILedgerTransactionItem, ITotalItem } from '../interfaces/ledger.interface';
 import { IPagination } from '../interfaces/paginatedResponse.interface';
-import { OtherSalesItemClass, SalesEntryClass, VoucherTypeEnum } from './Sales';
+import { AmountClassMulticurrency, OtherSalesItemClass, VoucherTypeEnum } from './Sales';
 import { INameUniqueName } from './Inventory';
 
 export interface IInvoiceResult {
@@ -677,6 +677,7 @@ export class InvoicePreviewDetailsVm {
     voucherStatus?: string;
     accountCurrencySymbol?: string;
     hasAttachment?: boolean;
+    balanceDue?: AmountClassMulticurrency;
 }
 
 export class InvoicePaymentRequest {
