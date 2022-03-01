@@ -101,7 +101,7 @@
                             <label>{{ commonLocaleData?.app_total_amount }}<span class="red-text">*</span></label>
                             <text-field
                                 type="text"
-                                [cssClass]="'form-control'"
+                                [cssClass]="'form-control mat-field-border'"
                                 decimalDigitsDirective
                                 [readonly]="true"
                                 [mask]="inputMaskFormat"
@@ -123,7 +123,7 @@
                             </label>
                             <text-field
                                 type="text"
-                                [cssClass]="'form-control'"
+                                [cssClass]="'form-control mat-field-border'"
                                 [placeholder]="commonLocaleData?.app_enter_otp"
                                 required
                                 name="receivedOtp"
@@ -233,7 +233,7 @@
                                         >
                                         <div class="input-content">
                                             <text-field
-                                                [cssClass]="'form-control amount-input'"
+                                                [cssClass]="'form-control amount-input mat-field-border'"
                                                 name="closingBalanceAmount{{ entryIdx }}"
                                                 maxLength="12"
                                                 decimalDigitsDirective
@@ -265,7 +265,7 @@
                                             autocomplete="off"
                                             required
                                             type="text"
-                                            class="form-control"
+                                            class="form-control mat-field-border"
                                             [disabled]="isPayClicked"
                                             [placeholder]="commonLocaleData?.app_remark"
                                         ></textarea>
