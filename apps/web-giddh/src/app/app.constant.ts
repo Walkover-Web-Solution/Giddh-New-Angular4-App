@@ -446,3 +446,9 @@ export const GIDDH_VOUCHER_FORM = [
     }
 ];
 export const CALENDLY_URL = "https://calendly.com/d/cg6-6kx-924/schedule-demo";
+export const JOURNAL_VOUCHER_ALLOWED_DOMAINS = [
+    'giddh.com',
+    'walkover.in',
+    'muneem.co',
+    'whozzat.com',
+];
