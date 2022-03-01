@@ -246,12 +246,21 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
         if (userResponse.action === 'download') {
             this.downloadFile();
         } else if (userResponse.action === 'send_mail' && userResponse.emails && userResponse.emails.length) {
-            this.store.dispatch(this.invoiceActions.SendInvoiceOnMail(this.selectedInvoice.accountUniqueName, {
-                emailId: userResponse.emails,
-                voucherNumber: [this.selectedInvoice.voucherNumber],
-                typeOfInvoice: userResponse.typeOfInvoice,
-                voucherType: this.selectedInvoice.voucherType
-            }));
+            if (this.voucherApiVersion === 2) {
+                this.store.dispatch(this.invoiceActions.SendInvoiceOnMail(this.selectedInvoice.accountUniqueName, {
+                    email: { to: userResponse.emails },
+                    uniqueName: this.selectedInvoice.uniqueName,
+                    copyTypes: userResponse.typeOfInvoice,
+                    voucherType: this.selectedInvoice.voucherType
+                }));
+            } else {
+                this.store.dispatch(this.invoiceActions.SendInvoiceOnMail(this.selectedInvoice.accountUniqueName, {
+                    emailId: userResponse.emails,
+                    voucherNumber: [this.selectedInvoice.voucherNumber],
+                    typeOfInvoice: userResponse.typeOfInvoice,
+                    voucherType: this.selectedInvoice.voucherType
+                }));
+            }
         } else if (userResponse.action === 'send_sms' && userResponse.numbers && userResponse.numbers.length) {
             this.store.dispatch(this.invoiceActions.SendInvoiceOnSms(this.selectedInvoice.account.uniqueName, { numbers: userResponse.numbers }, this.selectedInvoice.voucherNumber));
         }
