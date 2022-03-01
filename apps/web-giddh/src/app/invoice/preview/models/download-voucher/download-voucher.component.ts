@@ -66,14 +66,14 @@ export class DownloadVoucherComponent implements OnInit, OnDestroy {
 
         if (this.generalService.voucherApiVersion === 2) {
             let dataToSend = {
-                typeOfInvoice: this.invoiceType,
+                copyTypes: this.invoiceType,
                 voucherType: voucherType,
                 uniqueName: this.selectedItem.uniqueName
             };
 
             this.commonService.downloadFile(dataToSend, "VOUCHER", "pdf").pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 if (response?.status !== "error") {
-                    if (dataToSend.typeOfInvoice.length > 1 || this.selectedItem.hasAttachment) {
+                    if (dataToSend.copyTypes.length > 1 || this.selectedItem.hasAttachment) {
                         saveAs(response, `${this.selectedItem.voucherNumber}.` + 'zip');
                     } else {
                         saveAs(response, `${this.selectedItem.voucherNumber}.` + 'pdf');
