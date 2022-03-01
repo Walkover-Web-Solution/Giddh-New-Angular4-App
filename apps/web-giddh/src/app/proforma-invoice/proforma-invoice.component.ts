@@ -4479,13 +4479,23 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.store.dispatch(this.proformaActions.sendMail(req, this.invoiceType));
         } else {
             request = request as { email: string, invoiceType: string[] };
-            this.store.dispatch(this.invoiceActions.SendInvoiceOnMail(this.accountUniqueName, {
-                emailId: request.email.split(','),
-                voucherNumber: [this.invoiceNo],
-                voucherType: this.invoiceType,
-                typeOfInvoice: request.invoiceType ? request.invoiceType : [],
-                uniqueName: (this.voucherApiVersion === 2) ? this.newVoucherUniqueName : undefined
-            }));
+
+            if (this.voucherApiVersion === 2) {
+                this.store.dispatch(this.invoiceActions.SendInvoiceOnMail(this.accountUniqueName, {
+                    email: { to: request.email.split(',') },
+                    voucherType: this.invoiceType,
+                    copyTypes: request.invoiceType ? request.invoiceType : [],
+                    uniqueName: this.newVoucherUniqueName
+                }));
+            } else {
+                this.store.dispatch(this.invoiceActions.SendInvoiceOnMail(this.accountUniqueName, {
+                    emailId: request.email.split(','),
+                    voucherNumber: [this.invoiceNo],
+                    voucherType: this.invoiceType,
+                    typeOfInvoice: request.invoiceType ? request.invoiceType : [],
+                    uniqueName: undefined
+                }));
+            }
         }
         this.cancelEmailModal();
     }

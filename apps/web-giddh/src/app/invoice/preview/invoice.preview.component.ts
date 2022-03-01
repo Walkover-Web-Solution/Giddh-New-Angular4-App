@@ -834,24 +834,6 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         return saveAs(blob, `${this.commonLocaleData?.app_invoice}-${this.selectedInvoice.account?.uniqueName}.pdf`);
     }
 
-    /**
-     * onDownloadOrSendMailEvent
-     */
-    public onDownloadOrSendMailEvent(userResponse: { action: string, emails: string[], numbers: string[], typeOfInvoice: string[] }) {
-        if (userResponse.action === 'download') {
-            this.downloadFile();
-        } else if (userResponse.action === 'send_mail' && userResponse.emails && userResponse.emails.length) {
-            this.store.dispatch(this.invoiceActions.SendInvoiceOnMail(this.selectedInvoice.account?.uniqueName, {
-                emailId: userResponse.emails,
-                voucherNumber: [this.selectedInvoice.voucherNumber],
-                typeOfInvoice: userResponse.typeOfInvoice,
-                voucherType: this.selectedVoucher
-            }));
-        } else if (userResponse.action === 'send_sms' && userResponse.numbers && userResponse.numbers.length) {
-            this.store.dispatch(this.invoiceActions.SendInvoiceOnSms(this.selectedInvoice.account.uniqueName, { numbers: userResponse.numbers }, this.selectedInvoice.voucherNumber));
-        }
-    }
-
     public sortButtonClicked(type: 'asc' | 'desc', columnName: string) {
         if (this.showAdvanceSearchIcon) {
             this.advanceSearchFilter.sort = type;
@@ -1240,12 +1222,21 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
     public sendEmail(obj: any) {
         if (obj.email) {
-            this.store.dispatch(this.invoiceActions.SendInvoiceOnMail(this.selectedInvoiceForDetails.account.uniqueName, {
-                emailId: obj.email.split(','),
-                voucherNumber: [obj.invoiceNumber || this.selectedInvoiceForDetails.voucherNumber],
-                voucherType: this.selectedVoucher,
-                typeOfInvoice: obj.invoiceType ? obj.invoiceType : []
-            }));
+            if (this.voucherApiVersion === 2) {
+                this.store.dispatch(this.invoiceActions.SendInvoiceOnMail(this.selectedInvoiceForDetails.account.uniqueName, {
+                    email: { to: obj.email.split(',') },
+                    uniqueName: obj.uniqueName || this.selectedInvoiceForDetails.uniqueName,
+                    voucherType: this.selectedVoucher,
+                    copyTypes: obj.invoiceType ? obj.invoiceType : []
+                }));
+            } else {
+                this.store.dispatch(this.invoiceActions.SendInvoiceOnMail(this.selectedInvoiceForDetails.account.uniqueName, {
+                    emailId: obj.email.split(','),
+                    voucherNumber: [obj.invoiceNumber || this.selectedInvoiceForDetails.voucherNumber],
+                    voucherType: this.selectedVoucher,
+                    typeOfInvoice: obj.invoiceType ? obj.invoiceType : []
+                }));
+            }
         } else {
             this.store.dispatch(this.invoiceActions.SendInvoiceOnSms(this.selectedInvoiceForDetails.account?.uniqueName, {
                 numbers: obj.numbers.split(',')
@@ -1336,6 +1327,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         obj.account = invoice?.account;
         obj.voucherStatus = invoice?.balanceStatus;
         obj.accountCurrencySymbol = invoice?.accountCurrencySymbol;
+        obj.balanceDue = invoice.balanceDue;
         return obj;
     }
 
