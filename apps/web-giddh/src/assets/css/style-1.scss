@@ -3128,6 +3128,9 @@ td.mat-footer-cell {
         input {
             border: 1px solid $gainsboro;
         }
+        input[placeholder="Search"][type="text"] {
+            border: none;
+        }
     }
 }
 

@@ -143,6 +143,20 @@ $custom-typography: mat-typography-config(
     color: var(--color-datepicker-ternary-date);
 }
 
+.product-option {
+    .product-option-wrapper {
+        .mat-select {
+            border: 1px solid #d9d9d9;
+            border-radius: 5px;
+            height: 35px;
+            display: flex !important;
+            flex-direction: column;
+            justify-content: center;
+            padding: 0px 5px;
+        }
+    }
+}
+
 @media (max-width: 768px) {
     .text-left-sm {
         text-align: left !important;
