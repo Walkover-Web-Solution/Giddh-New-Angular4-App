@@ -139,6 +139,18 @@
 
     .combo-detail-content {
         min-height: 63vh;
+        .table-responsive {
+            .table.combo-table {
+                thead {
+                    th:nth-child(2) {
+                        min-width: 235px;
+                    }
+                }
+                td {
+                    min-width: 87px;
+                }
+            }
+        }
     }
 }
 
@@ -289,6 +301,13 @@ table.stock-table th {
                 padding: 1px 0px 0px 25px;
             }
         }
+
+        .bulk-creation-filter-btn {
+            border: 1px solid #d9d9d9;
+            margin-right: 13px;
+            display: grid;
+            place-content: center;
+        }
     }
 
     .bulk-create-table td {
@@ -411,6 +430,10 @@ table.stock-table th {
             margin-top: 10px;
         }
     }
+}
+
+.mat-input-element.mat-form-field-autofill-control.form-control.form-check.ng-pristine.ng-valid.cdk-text-field-autofill-monitored.ng-touched {
+    border: none !important;
 }
 
 @media (min-width: 1200px) and (max-width: 1650px) {

@@ -314,10 +314,10 @@
                                                     </div>
                                                     <form>
                                                         <div class="row">
-                                                            <div class="col-sm-6 col-lg-6">
+                                                            <div class="col-sm-6 col-lg-5">
                                                                 <label>Linked Account/s </label>
                                                             </div>
-                                                            <div class="col-sm-6 col-lg-6 pl-0 mr-b15">
+                                                            <div class="col-sm-6 col-lg-7 pl-0 mr-b15">
                                                                 <textarea
                                                                     type="text"
                                                                     id="linked-account"
@@ -325,7 +325,7 @@
                                                                     placeholder="All Accounts Selected"
                                                                 ></textarea>
                                                             </div>
-                                                            <div class="col-sm-6 col-lg-6">
+                                                            <!-- <div class="col-sm-6 col-lg-6">
                                                                 <label>Applicable Tax </label>
                                                             </div>
                                                             <div class="col-sm-6 col-lg-6 pl-0 mr-b15">
@@ -339,8 +339,8 @@
                                                                         >Price Inclusive of Tax ?
                                                                     </mat-checkbox>
                                                                 </p>
-                                                            </div>
-                                                            <div class="col-sm-6 col-lg-6">
+                                                            </div> -->
+                                                            <div class="col-sm-6 col-lg-5">
                                                                 <label>Unit & Price </label>
                                                             </div>
                                                             <div class="col-xl-6 col-lg-5 col-sm-5 col-11 pl-0 mr-b15">
@@ -401,7 +401,7 @@
                                                     </form>
                                                 </div>
                                             </div>
-                                            <div class="col-xl-6 col-12 pl-5">
+                                            <div class="col-xl-6 col-12 pl-4">
                                                 <div class="sales-information">
                                                     <div class="select-puchase-info mr-b15">
                                                         <mat-checkbox color="primary" id="sales-info-check">
@@ -411,10 +411,10 @@
                                                     <form>
                                                         <!-- input field will disabled if sales info unchecked -->
                                                         <div class="row">
-                                                            <div class="col-sm-6 col-lg-6">
+                                                            <div class="col-sm-6 col-lg-5">
                                                                 <label>Linked Account/s </label>
                                                             </div>
-                                                            <div class="col-sm-6 col-lg-6 pl-0 mr-b15">
+                                                            <div class="col-sm-6 col-lg-7 pl-0 mr-b15">
                                                                 <textarea
                                                                     type="text"
                                                                     id="sales-linked-account"
@@ -423,7 +423,7 @@
                                                                     disabled
                                                                 ></textarea>
                                                             </div>
-                                                            <div class="col-sm-6 col-lg-6">
+                                                            <!-- <div class="col-sm-6 col-lg-6">
                                                                 <label>Applicable Tax </label>
                                                             </div>
                                                             <div class="col-sm-6 col-lg-6 pl-0 mr-b15">
@@ -437,8 +437,8 @@
                                                                         Price Inclusive of Tax ?
                                                                     </mat-checkbox>
                                                                 </p>
-                                                            </div>
-                                                            <div class="col-sm-6 col-lg-6">
+                                                            </div> -->
+                                                            <div class="col-sm-6 col-lg-5">
                                                                 <label>Unit & Price </label>
                                                             </div>
                                                             <div class="col-xl-6 col-lg-5 col-sm-5 col-11 pl-0 mr-b15">
@@ -460,6 +460,14 @@
                                                                             disabled
                                                                         ></text-field>
                                                                     </div>
+                                                                    <button
+                                                                        mat-icon-button
+                                                                        role="button"
+                                                                        class="icon-button-remove"
+                                                                        type="button"
+                                                                    >
+                                                                        <i class="icon-trash"></i>
+                                                                    </button>
                                                                 </div>
                                                                 <div class="row add-new-field">
                                                                     <div class="col-sm-6 col-6">
@@ -480,6 +488,14 @@
                                                                             disabled
                                                                         ></text-field>
                                                                     </div>
+                                                                    <button
+                                                                        mat-icon-button
+                                                                        class="icon-button-add"
+                                                                        role="button"
+                                                                        type="button"
+                                                                    >
+                                                                        <i class="icon-plus"></i>
+                                                                    </button>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -1310,6 +1326,7 @@
                                                                 <text-field
                                                                     [cssClass]="'form-control'"
                                                                     id="service-inventory-account"
+                                                                    placeholder="Select Account"
                                                                     type="text"
                                                                     value=""
                                                                 ></text-field>
@@ -1328,6 +1345,7 @@
                                                                 <text-field
                                                                     [cssClass]="'form-control'"
                                                                     id="low-stock-report"
+                                                                    placeholder="Enter Qty"
                                                                     type="text"
                                                                     value=""
                                                                 ></text-field>
@@ -1432,7 +1450,7 @@
                                     </mat-checkbox>
                                 </div>
                                 <div class="row">
-                                    <div class="col-8">
+                                    <div class="col-12">
                                         <div class="row">
                                             <div class="col-xl-6 col-12">
                                                 <div class="purchase-information">
@@ -1447,10 +1465,10 @@
                                                     </div>
                                                     <form>
                                                         <div class="row">
-                                                            <div class="col-sm-6 col-lg-6">
+                                                            <div class="col-sm-6 col-lg-5">
                                                                 <label>Linked Account/s </label>
                                                             </div>
-                                                            <div class="col-sm-6 col-lg-6 pl-0 mr-b15">
+                                                            <div class="col-sm-6 col-lg-7 pl-0 mr-b15">
                                                                 <textarea
                                                                     type="text"
                                                                     id="linked-account"
@@ -1458,7 +1476,7 @@
                                                                     placeholder="All Accounts Selected"
                                                                 ></textarea>
                                                             </div>
-                                                            <div class="col-sm-6 col-lg-6">
+                                                            <!-- <div class="col-sm-6 col-lg-6">
                                                                 <label>Applicable Tax </label>
                                                             </div>
                                                             <div class="col-sm-6 col-lg-6 pl-0 mr-b15">
@@ -1473,8 +1491,8 @@
                                                                         >Price Inclusive of Tax ?
                                                                     </mat-checkbox>
                                                                 </p>
-                                                            </div>
-                                                            <div class="col-sm-6 col-lg-6">
+                                                            </div> -->
+                                                            <div class="col-sm-6 col-lg-5">
                                                                 <label>Unit & Price </label>
                                                             </div>
                                                             <div class="col-xl-6 col-lg-5 col-sm-5 col-11 pl-0 mr-b15">
@@ -1535,7 +1553,7 @@
                                                     </form>
                                                 </div>
                                             </div>
-                                            <div class="col-xl-6 col-12 pl-5">
+                                            <div class="col-xl-6 col-12 pl-4">
                                                 <div class="sales-information">
                                                     <div class="select-puchase-info mr-b15">
                                                         <mat-checkbox color="primary" id="sales-info-check">
@@ -1545,10 +1563,10 @@
                                                     <form>
                                                         <!-- input field will disabled if sales info unchecked -->
                                                         <div class="row">
-                                                            <div class="col-sm-6 col-lg-6">
+                                                            <div class="col-sm-6 col-lg-5">
                                                                 <label>Linked Account/s </label>
                                                             </div>
-                                                            <div class="col-sm-6 col-lg-6 pl-0 mr-b15">
+                                                            <div class="col-sm-6 col-lg-7 pl-0 mr-b15">
                                                                 <textarea
                                                                     type="text"
                                                                     id="sales-linked-account"
@@ -1557,7 +1575,7 @@
                                                                     disabled
                                                                 ></textarea>
                                                             </div>
-                                                            <div class="col-sm-6 col-lg-6">
+                                                            <!-- <div class="col-sm-6 col-lg-6">
                                                                 <label>Applicable Tax </label>
                                                             </div>
                                                             <div class="col-sm-6 col-lg-6 pl-0 mr-b15">
@@ -1575,8 +1593,8 @@
                                                                         >Price Inclusive of Tax ?
                                                                     </mat-checkbox>
                                                                 </p>
-                                                            </div>
-                                                            <div class="col-sm-6 col-lg-6">
+                                                            </div> -->
+                                                            <div class="col-sm-6 col-lg-5">
                                                                 <label>Unit & Price </label>
                                                             </div>
                                                             <div class="col-xl-6 col-lg-5 col-sm-5 col-11 pl-0 mr-b15">
@@ -1599,6 +1617,14 @@
                                                                             disabled
                                                                         ></text-field>
                                                                     </div>
+                                                                    <button
+                                                                        mat-icon-button
+                                                                        role="button"
+                                                                        class="icon-button-remove"
+                                                                        type="button"
+                                                                    >
+                                                                        <i class="icon-trash"></i>
+                                                                    </button>
                                                                 </div>
                                                                 <div class="row add-new-field">
                                                                     <div class="col-sm-6 col-6">
@@ -1619,6 +1645,14 @@
                                                                             disabled
                                                                         ></text-field>
                                                                     </div>
+                                                                    <button
+                                                                        mat-icon-button
+                                                                        class="icon-button-add"
+                                                                        role="button"
+                                                                        type="button"
+                                                                    >
+                                                                        <i class="icon-plus"></i>
+                                                                    </button>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -1846,7 +1880,7 @@
                                         </div>
                                         <button mat-button class="text-primary mr-b15">+ Another option</button>
                                     </form>
-                                    <div class="mt-3 mb-3">
+                                    <!-- <div class="mt-3 mb-3">
                                         <button mat-stroked-button class="bdr-radius-50">
                                             <i class="icon-options mr-2"></i>Customise
                                         </button>
@@ -1901,7 +1935,7 @@
                                                 </td>
                                             </tr>
                                         </table>
-                                    </div>
+                                    </div> -->
                                 </div>
                             </div>
                         </div>
@@ -1920,7 +1954,7 @@
                                                     [cssClass]="'form-control'"
                                                     id="product-name"
                                                     type="text"
-                                                    placeholder="Enter HSN Code"
+                                                    placeholder="Enter Code"
                                                 ></text-field>
                                             </div>
                                         </div>
@@ -1935,7 +1969,7 @@
                                                     [cssClass]="'form-control'"
                                                     id="product-name"
                                                     type="text"
-                                                    placeholder="Enter SKU Code"
+                                                    placeholder="Enter Code"
                                                 ></text-field>
                                             </div>
                                         </div>
@@ -1950,6 +1984,7 @@
                                                     [cssClass]="'form-control'"
                                                     id="bar-code"
                                                     type="text"
+                                                    placeholder="Enter Code"
                                                 ></text-field>
                                             </div>
                                         </div>
@@ -1960,20 +1995,10 @@
                                                 <label>Expiry Date</label>
                                             </div>
                                             <div class="col-sm-6 col-lg-6">
-                                                <text-field [cssClass]="'form-control'" type="text"></text-field>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-xl-6 col-md-12 col-lg-8 col-sm-12">
-                                        <div class="row mr-b15">
-                                            <div class="col-sm-6 col-lg-6">
-                                                <label>Custom Field</label>
-                                            </div>
-                                            <div class="col-sm-6 col-lg-6">
                                                 <text-field
                                                     [cssClass]="'form-control'"
-                                                    id="expiry-code"
                                                     type="text"
+                                                    placeholder="Select Date"
                                                 ></text-field>
                                             </div>
                                         </div>
@@ -1988,6 +2013,7 @@
                                                     [cssClass]="'form-control'"
                                                     id="expiry-code"
                                                     type="text"
+                                                    placeholder="Custom Field"
                                                 ></text-field>
                                             </div>
                                         </div>
@@ -2002,6 +2028,22 @@
                                                     [cssClass]="'form-control'"
                                                     id="expiry-code"
                                                     type="text"
+                                                    placeholder="Custom Field"
+                                                ></text-field>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-6 col-md-12 col-lg-8 col-sm-12">
+                                        <div class="row mr-b15">
+                                            <div class="col-sm-6 col-lg-6">
+                                                <label>Custom Field</label>
+                                            </div>
+                                            <div class="col-sm-6 col-lg-6">
+                                                <text-field
+                                                    [cssClass]="'form-control'"
+                                                    id="expiry-code"
+                                                    type="text"
+                                                    placeholder="Custom Field"
                                                 ></text-field>
                                             </div>
                                         </div>
@@ -2494,6 +2536,7 @@
                                         id="value-field"
                                         type="text"
                                         value="2"
+                                        placeholder="0"
                                     ></text-field>
                                 </td>
                                 <td width="20%">0.00</td>
@@ -2537,6 +2580,7 @@
                                         id="value-field"
                                         type="text"
                                         value="2"
+                                        placeholder="0"
                                     ></text-field>
                                 </td>
                                 <td width="20%">0.00</td>
@@ -2583,10 +2627,10 @@
                                         </div>
                                         <form>
                                             <div class="row">
-                                                <div class="col-sm-6 col-lg-6">
+                                                <div class="col-sm-6 col-lg-5">
                                                     <label>Linked Account/s </label>
                                                 </div>
-                                                <div class="col-sm-6 col-lg-6 pl-0 mr-b15">
+                                                <div class="col-sm-6 col-lg-7 pl-0 mr-b15">
                                                     <textarea
                                                         type="text"
                                                         id="linked-account"
@@ -2594,7 +2638,7 @@
                                                         placeholder="All Accounts Selected"
                                                     ></textarea>
                                                 </div>
-                                                <div class="col-sm-6 col-lg-6">
+                                                <!-- <div class="col-sm-6 col-lg-6">
                                                     <label>Applicable Tax </label>
                                                 </div>
                                                 <div class="col-sm-6 col-lg-6 pl-0 mr-b15">
@@ -2608,8 +2652,8 @@
                                                             >Price Inclusive of Tax ?
                                                         </mat-checkbox>
                                                     </p>
-                                                </div>
-                                                <div class="col-sm-6 col-lg-6">
+                                                </div> -->
+                                                <div class="col-sm-6 col-lg-5">
                                                     <label>Unit & Price </label>
                                                 </div>
                                                 <div class="col-xl-6 col-lg-5 col-sm-5 col-11 pl-0 mr-b15">
@@ -2670,7 +2714,7 @@
                                         </form>
                                     </div>
                                 </div>
-                                <div class="col-xl-6 col-12 pl-5">
+                                <div class="col-xl-6 col-12 pl-4">
                                     <div class="sales-information">
                                         <div class="select-puchase-info mr-b15">
                                             <mat-checkbox color="primary" id="sales-info-check" type="checkbox">
@@ -2680,10 +2724,10 @@
                                         <form>
                                             <!-- input field will disabled if sales info unchecked -->
                                             <div class="row">
-                                                <div class="col-sm-6 col-lg-6">
+                                                <div class="col-sm-6 col-lg-5">
                                                     <label>Linked Account/s </label>
                                                 </div>
-                                                <div class="col-sm-6 col-lg-6 pl-0 mr-b15">
+                                                <div class="col-sm-6 col-lg-7 pl-0 mr-b15">
                                                     <textarea
                                                         type="text"
                                                         id="sales-linked-account"
@@ -2692,7 +2736,7 @@
                                                         disabled
                                                     ></textarea>
                                                 </div>
-                                                <div class="col-sm-6 col-lg-6">
+                                                <!-- <div class="col-sm-6 col-lg-6">
                                                     <label>Applicable Tax </label>
                                                 </div>
                                                 <div class="col-sm-6 col-lg-6 pl-0 mr-b15">
@@ -2710,8 +2754,8 @@
                                                             >Price Inclusive of Tax ?
                                                         </mat-checkbox>
                                                     </p>
-                                                </div>
-                                                <div class="col-sm-6 col-lg-6">
+                                                </div> -->
+                                                <div class="col-sm-6 col-lg-5">
                                                     <label>Unit & Price </label>
                                                 </div>
                                                 <div class="col-xl-6 col-lg-5 col-sm-5 col-11 pl-0 mr-b15">
@@ -2734,6 +2778,14 @@
                                                                 disabled
                                                             ></text-field>
                                                         </div>
+                                                        <button
+                                                            mat-icon-button
+                                                            class="icon-button-remove"
+                                                            role="button"
+                                                            type="button"
+                                                        >
+                                                            <i class="icon-trash"></i>
+                                                        </button>
                                                     </div>
                                                     <div class="row add-new-field">
                                                         <div class="col-sm-6 col-6">
@@ -2754,6 +2806,14 @@
                                                                 disabled
                                                             ></text-field>
                                                         </div>
+                                                        <button
+                                                            mat-icon-button
+                                                            class="icon-button-add"
+                                                            role="button"
+                                                            type="button"
+                                                        >
+                                                            <i class="icon-plus"></i>
+                                                        </button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -2968,7 +3028,7 @@
                                                             <div class="col-sm-6 col-lg-6">
                                                                 <label>Linked Account/s </label>
                                                             </div>
-                                                            <div class="col-sm-6 col-lg-6 pl-0 mr-b15">
+                                                            <div class="col-sm-6 col-lg-7 pl-0 mr-b15">
                                                                 <textarea
                                                                     type="text"
                                                                     id="linked-account"
@@ -3052,7 +3112,7 @@
                                                     </form>
                                                 </div>
                                             </div>
-                                            <div class="col-xl-6 col-12 pl-5">
+                                            <div class="col-xl-6 col-12 pl-4">
                                                 <div class="sales-information">
                                                     <div class="select-puchase-info mr-b15">
                                                         <mat-checkbox
@@ -3069,7 +3129,7 @@
                                                             <div class="col-sm-6 col-lg-6">
                                                                 <label>Linked Account/s </label>
                                                             </div>
-                                                            <div class="col-sm-6 col-lg-6 pl-0 mr-b15">
+                                                            <div class="col-sm-6 col-lg-7 pl-0 mr-b15">
                                                                 <textarea
                                                                     type="text"
                                                                     id="sales-linked-account"
@@ -4709,7 +4769,7 @@
             <div class="container-fluid">
                 <div class="bulk-create-head mr-b15 d-flex">
                     <div>
-                        <button mat-icon-button class="btn" [matMenuTriggerFor]="menu">
+                        <button mat-icon-button class="btn bulk-creation-filter-btn" [matMenuTriggerFor]="menu">
                             <i class="icon-options"></i>
                         </button>
                         <mat-menu #menu="matMenu">
