@@ -909,7 +909,7 @@
                                         >
                                         <span
                                             class="sp-rupees d-flex justify-content-end"
-                                            *ngIf="isMulticurrencyAccount && voucherApiVersion !== 2"
+                                            *ngIf="isMulticurrencyAccount"
                                         >
                                             <amount-field
                                                 [amount]="
@@ -927,7 +927,7 @@
 
                                         <span
                                             class="sp-rupees d-flex justify-content-end"
-                                            *ngIf="!isMulticurrencyAccount && voucherApiVersion !== 2"
+                                            *ngIf="!isMulticurrencyAccount"
                                         >
                                             <amount-field
                                                 [amount]="
