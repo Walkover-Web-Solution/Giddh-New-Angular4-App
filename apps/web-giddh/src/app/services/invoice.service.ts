@@ -416,7 +416,7 @@ export class InvoiceService {
     * API: 'accounts/:accountUniqueName/invoices/mail'
     * Method: POST
     */
-    public SendInvoiceOnMail(accountUniqueName: string, dataToSend: { emailId: string[], voucherNumber: string[], typeOfInvoice: string[], voucherType?: string }): Observable<BaseResponse<string, string>> {
+    public SendInvoiceOnMail(accountUniqueName: string, dataToSend: any): Observable<BaseResponse<string, string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let url = this.config.apiUrl + INVOICE_API_2.SEND_INVOICE_ON_MAIL.replace(':companyUniqueName', this.companyUniqueName)
             .replace(':accountUniqueName', encodeURIComponent(accountUniqueName));

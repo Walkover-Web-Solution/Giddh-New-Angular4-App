@@ -258,14 +258,14 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
     public downloadInvoice() {
         if(this.voucherApiVersion === 2) {
             let dataToSend = {
-                typeOfInvoice: this.invoiceType,
+                copyTypes: this.invoiceType,
                 voucherType: this.selectedVoucher?.voucherType,
                 uniqueName: this.selectedVoucher?.uniqueName
             };
 
             this.commonService.downloadFile(dataToSend, "VOUCHER", "pdf").pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 if (response?.status !== "error") {
-                    if (dataToSend.typeOfInvoice.length > 1 || this.voucherHasAttachments) {
+                    if (dataToSend.copyTypes.length > 1 || this.voucherHasAttachments) {
                         saveAs(response, `${this.selectedVoucher?.voucherNumber}.` + 'zip');
                     } else {
                         saveAs(response, `${this.selectedVoucher?.voucherNumber}.` + 'pdf');
