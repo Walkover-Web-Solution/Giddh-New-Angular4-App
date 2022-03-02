@@ -49,7 +49,7 @@
                                         <div class="col-7 col-sm-7 pl-0">
                                             <div class="voucher-number-date font-12">
                                                 <span class="order-number">
-                                                    {{ row.voucherNumber }}
+                                                    {{ row.voucherNumber || commonLocaleData?.app_not_available }}
                                                 </span>
                                                 <span class="order-date"> | {{ row.voucherDate }} </span>
                                             </div>
@@ -82,7 +82,9 @@
                                 <div class="row">
                                     <div class="col-xl-4 col-lg-3 col-sm-12">
                                         <div class="voucher-number-holder">
-                                            <h3 class="voucher-number">{{ voucherDetails?.number }}</h3>
+                                            <h3 class="voucher-number">
+                                                {{ voucherDetails?.number || commonLocaleData?.app_not_available }}
+                                            </h3>
                                             <p class="account-holder-name">{{ voucherDetails?.account?.name }}</p>
                                         </div>
                                     </div>

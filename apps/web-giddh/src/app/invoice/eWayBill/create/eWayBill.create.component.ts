@@ -70,6 +70,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
         transactionType: null,
         docType: null,
         toGstIn: null,
+        uniqueName: null
     };
     public generateNewTransporter: IEwayBillTransporter = {
         transporterId: null,
@@ -437,6 +438,8 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
                 } else {
                     this.generateEwayBillform.toGstIn = 'URP';
                 }
+
+                this.generateEwayBillform.uniqueName = voucher?.uniqueName;
 
                 this._cdRef.detectChanges();
             }
