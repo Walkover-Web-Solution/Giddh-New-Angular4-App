@@ -104,7 +104,7 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
      * @memberof AttachmentsComponent
      */
     public ngOnInit(): void {
-        this.imgPath = (isElectron || isCordova) ? "assets/images/" : AppUrl + APP_FOLDER + "assets/images/";
+        this.imgPath = isElectron ? "assets/images/" : AppUrl + APP_FOLDER + "assets/images/";
         this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
