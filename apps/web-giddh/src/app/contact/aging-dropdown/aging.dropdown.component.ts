@@ -1,5 +1,5 @@
 import { takeUntil } from 'rxjs/operators';
-import { Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
+import { AfterContentChecked, Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
 import { ToasterService } from '../../services/toaster.service';
 import { AgingDropDownoptions } from '../../models/api-models/Contact';
 import { AppState } from '../../store';
@@ -12,7 +12,7 @@ import { AgingReportActions } from '../../actions/aging-report.actions';
     templateUrl: 'aging.dropdown.component.html',
     styleUrls: ['./aging.dropdown.component.scss']
 })
-export class AgingDropdownComponent implements OnDestroy {
+export class AgingDropdownComponent implements OnDestroy, AfterContentChecked {
     /* This will hold local JSON data */
     @Input() public localeData: any = {};
     /* This will hold common JSON data */
@@ -31,6 +31,12 @@ export class AgingDropdownComponent implements OnDestroy {
 
     constructor(private store: Store<AppState>, private toasty: ToasterService, private agingReportActions: AgingReportActions) {
         this.setDueRangeRequestInFlight$ = this.store.pipe(select(s => s.agingreport.setDueRangeRequestInFlight), takeUntil(this.destroyed$));
+    }
+    
+    public ngAfterContentChecked(): void {
+        this.options.fourth = Number(this.options.fourth);
+        this.options.fifth = Number(this.options.fifth);
+        this.options.sixth = Number(this.options.sixth);
     }
 
     public ngOnDestroy() {
