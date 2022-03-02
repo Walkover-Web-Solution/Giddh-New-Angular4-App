@@ -686,25 +686,34 @@
                             >
                                 <div class="col-lg-8">
                                     <div class="name-of-field">
-                                        <label>{{ item.key }} </label>
+                                        <label>{{ item.fieldName }} </label>
                                         <input
-                                            *ngIf="item.dataType === 'STRING'"
+                                            *ngIf="
+                                                item.fieldType?.type === availableFieldTypes.String ||
+                                                item.fieldType?.type === availableFieldTypes.Barcode
+                                            "
                                             type="text"
                                             name="values{{ index }}"
                                             formControlName="value"
                                             class="form-control"
-                                            [maxLength]="item.valueLength"
+                                            [maxLength]="item.dataRange?.max"
+                                            [attr.pattern]="item.regex"
                                         />
                                         <input
-                                            *ngIf="item.dataType === 'NUMERIC'"
-                                            type="text"
+                                            *ngIf="item.fieldType?.type === availableFieldTypes.Number"
+                                            type="number"
                                             name="values{{ index }}"
                                             formControlName="value"
                                             class="form-control"
-                                            [maxLength]="item.valueLength"
+                                            [min]="item.dataRange?.min"
+                                            [max]="item.dataRange?.max"
                                             decimalDigitsDirective
+                                            [attr.pattern]="item.regex"
                                         />
-                                        <div *ngIf="item.dataType === 'BOOLEAN'" class="clearfix">
+                                        <div
+                                            *ngIf="item.fieldType?.type === availableFieldTypes.Boolean"
+                                            class="clearfix"
+                                        >
                                             <span class="d-inline-block">
                                                 <input
                                                     id="yes{{ index }}"
