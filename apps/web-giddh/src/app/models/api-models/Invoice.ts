@@ -516,6 +516,7 @@ export class GenerateEwayBill {
     public transactionType: string;
     public docType: string;
     public toGstIn: string;
+    public uniqueName: string;
 }
 
 export class UpdateEwayVehicle {

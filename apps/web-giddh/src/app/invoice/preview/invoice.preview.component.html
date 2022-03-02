@@ -1024,7 +1024,9 @@
                                         class="d-flex position-relative"
                                     >
                                         <a href="javascript:void(0);" class="btn-link-2">{{
-                                            item.voucherNumber ? item.voucherNumber : "-"
+                                            item.voucherNumber
+                                                ? item.voucherNumber
+                                                : commonLocaleData?.app_not_available
                                         }}</a>
                                     </div>
 
@@ -1320,7 +1322,7 @@
                                     "
                                 >
                                     <a class="cursor-pointer" (click)="onSelectInvoice(item)">
-                                        {{ item.voucherNumber || "-" }}</a
+                                        {{ item.voucherNumber || commonLocaleData?.app_not_available }}</a
                                     >
                                 </td>
 
@@ -1356,10 +1358,10 @@
                                         voucherApiVersion === 2
                                             ? item.referenceVoucher
                                                 ? item.referenceVoucher.number
-                                                : "-"
+                                                : commonLocaleData?.app_not_available
                                             : item.invoiceLinkingRequest?.linkedInvoices?.length
                                             ? item.invoiceLinkingRequest?.linkedInvoices[0].invoiceNumber
-                                            : "-"
+                                            : commonLocaleData?.app_not_available
                                     }}
                                 </td>
 
@@ -1545,7 +1547,11 @@
                                         <div class="col-6 p-0">
                                             <div class="invoice-name-download">
                                                 <a class="invoice-number-a" (click)="onSelectInvoice(item)">
-                                                    {{ item.voucherNumber ? item.voucherNumber : "-" }}</a
+                                                    {{
+                                                        item.voucherNumber
+                                                            ? item.voucherNumber
+                                                            : commonLocaleData?.app_not_available
+                                                    }}</a
                                                 >
                                                 <span class="icon-download"></span>
                                             </div>

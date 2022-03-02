@@ -41,7 +41,7 @@
                                 'active-file': !isMobileView && voucherPdf?.uniqueName === previewedFile?.uniqueName
                             }"
                             (click)="showVoucherPreview()"
-                            >{{ voucherPdf?.name }}</span
+                            >{{ voucherPdf?.name || commonLocaleData?.app_not_available }}</span
                         >
                         <a class="cursor-pointer" *ngIf="!isCompany" (click)="showDeleteVoucherModal(i)"
                             ><i class="icon-trash"></i
