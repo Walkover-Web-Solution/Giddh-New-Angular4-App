@@ -703,11 +703,12 @@
                                         />
                                         <input
                                             *ngIf="item.fieldType?.type === availableFieldTypes.Number"
-                                            type="text"
+                                            type="number"
                                             name="values{{ index }}"
                                             formControlName="value"
                                             class="form-control"
-                                            [maxLength]="item.dataRange?.max"
+                                            [min]="item.dataRange?.min"
+                                            [max]="item.dataRange?.max"
                                             decimalDigitsDirective
                                             [attr.pattern]="item.regex"
                                         />
