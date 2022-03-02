@@ -283,7 +283,8 @@
                                                         ? commonLocaleData?.app_invoice
                                                         : commonLocaleData?.app_voucher) +
                                                     ' : ' +
-                                                    vm.selectedLedger.voucherNumber
+                                                    (vm.selectedLedger.voucherNumber ||
+                                                        commonLocaleData?.app_not_available)
                                                 "
                                                 (click)="downloadFiles('VOUCHER', $event)"
                                                 matTooltipClass="tooltip-black"
@@ -296,7 +297,7 @@
                                                 *ngIf="
                                                     voucherApiVersion === 2 &&
                                                     (vm.selectedLedger.attachedFile?.length > 0 ||
-                                                        vm.selectedLedger.voucherNumber?.length > 0) &&
+                                                        vm.selectedLedger.voucherGenerated) &&
                                                     (txn?.particular?.name || txn?.particular?.uniqueName)
                                                 "
                                                 (click)="openAttachmentsDialog(attachments)"
@@ -304,13 +305,15 @@
                                                 [containerClass]="'col-xs-3'"
                                                 [matTooltip]="
                                                     vm.selectedLedger.attachedFile?.length > 0 &&
-                                                    vm.selectedLedger.voucherNumber?.length > 0
-                                                        ? vm.selectedLedger.voucherNumber +
+                                                    vm.selectedLedger.voucherGenerated
+                                                        ? (vm.selectedLedger.voucherNumber ||
+                                                              commonLocaleData?.app_not_available) +
                                                           ', ' +
                                                           vm.selectedLedger.attachedFileName
                                                         : vm.selectedLedger.attachedFile?.length > 0
                                                         ? vm.selectedLedger.attachedFileName
-                                                        : vm.selectedLedger.voucherNumber
+                                                        : vm.selectedLedger.voucherNumber ||
+                                                          commonLocaleData?.app_not_available
                                                 "
                                                 matTooltipClass="tooltip-black"
                                             >
@@ -609,7 +612,8 @@
                                                         ? commonLocaleData?.app_invoice
                                                         : commonLocaleData?.app_voucher) +
                                                     ' : ' +
-                                                    vm.selectedLedger.voucherNumber
+                                                    (vm.selectedLedger.voucherNumber ||
+                                                        commonLocaleData?.app_not_available)
                                                 "
                                                 matTooltipClass="tooltip-black"
                                                 (click)="downloadFiles('VOUCHER', $event)"
@@ -622,7 +626,7 @@
                                                 *ngIf="
                                                     voucherApiVersion === 2 &&
                                                     (vm.selectedLedger.attachedFile?.length > 0 ||
-                                                        vm.selectedLedger.voucherNumber?.length > 0) &&
+                                                        vm.selectedLedger.voucherGenerated) &&
                                                     (txn?.particular?.name || txn?.particular?.uniqueName)
                                                 "
                                                 (click)="openAttachmentsDialog(attachments)"
@@ -630,13 +634,15 @@
                                                 [containerClass]="'col-xs-3'"
                                                 [matTooltip]="
                                                     vm.selectedLedger.attachedFile?.length > 0 &&
-                                                    vm.selectedLedger.voucherNumber?.length > 0
-                                                        ? vm.selectedLedger.voucherNumber +
+                                                    vm.selectedLedger.voucherGenerated
+                                                        ? (vm.selectedLedger.voucherNumber ||
+                                                              commonLocaleData?.app_not_available) +
                                                           ', ' +
                                                           vm.selectedLedger.attachedFileName
                                                         : vm.selectedLedger.attachedFile?.length > 0
                                                         ? vm.selectedLedger.attachedFileName
-                                                        : vm.selectedLedger.voucherNumber
+                                                        : vm.selectedLedger.voucherNumber ||
+                                                          commonLocaleData?.app_not_available
                                                 "
                                                 matTooltipClass="tooltip-black"
                                             >
