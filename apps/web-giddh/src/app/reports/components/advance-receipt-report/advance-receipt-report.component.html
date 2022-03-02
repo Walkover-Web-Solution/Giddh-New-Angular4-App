@@ -522,17 +522,19 @@
                                 <ng-container *ngIf="voucherApiVersion === 2">
                                     <ng-container *ngIf="receipt.adjustments?.length > 0">
                                         <ng-container *ngFor="let adjustment of receipt.adjustments">
-                                            {{ adjustment?.voucherNumber }}<br />
+                                            {{ adjustment?.voucherNumber || commonLocaleData?.app_not_available }}<br />
                                         </ng-container>
                                     </ng-container>
-                                    <ng-container *ngIf="!receipt.adjustments?.length"> - </ng-container>
+                                    <ng-container *ngIf="!receipt.adjustments?.length">{{
+                                        commonLocaleData?.app_not_available
+                                    }}</ng-container>
                                 </ng-container>
                             </td>
                             <td
                                 [attr.data-title]="localeData?.invoice_no_label"
                                 *ngIf="!receipt?.invoices && !receipt?.adjustments?.length"
                             >
-                                -
+                                {{ commonLocaleData?.app_not_available }}
                             </td>
                             <td
                                 [attr.data-title]="commonLocaleData?.app_total_amount"
