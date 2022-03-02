@@ -33,6 +33,11 @@ export class AgingDropdownComponent implements OnDestroy, AfterContentChecked {
         this.setDueRangeRequestInFlight$ = this.store.pipe(select(s => s.agingreport.setDueRangeRequestInFlight), takeUntil(this.destroyed$));
     }
     
+    /**
+     * This will use for respond after angular checks the content projected into the directive or component.
+     *
+     * @memberof AgingDropdownComponent
+     */
     public ngAfterContentChecked(): void {
         this.options.fourth = Number(this.options.fourth);
         this.options.fifth = Number(this.options.fifth);
