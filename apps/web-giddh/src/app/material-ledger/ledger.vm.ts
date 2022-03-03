@@ -409,6 +409,8 @@ export class BlankLedgerVM {
     public passportNumber?: string;
     public touristSchemeApplicable?: boolean;
     public index?: number;
+    public mergePB?: boolean;
+    public referenceVoucher?: ReferenceVoucher;
 }
 
 export class IInvoiceLinkingRequest {
@@ -418,6 +420,13 @@ export class IInvoiceLinkingRequest {
 export class ILinkedInvoice {
     public invoiceUniqueName: string;
     public voucherType: string;
+}
+
+export class ReferenceVoucher {
+    public uniqueName: string;
+    public number?: any;
+    public voucherType?: string;
+    public date?: string;
 }
 
 export class TransactionVM {
@@ -452,6 +461,7 @@ export class TransactionVM {
     public invoiceLinkingRequest?: IInvoiceLinkingRequest;
     public voucherAdjustments?: VoucherAdjustments;
     public showDropdown?: boolean = false;
+    public referenceVoucher?: ReferenceVoucher;
 }
 
 export interface IInventory {

@@ -64,7 +64,11 @@
                                     <div class="col-7 col-sm-7">
                                         <div class="invoice-number-date">
                                             <span class="invoice-number">
-                                                {{ item.voucherNumber ? item.voucherNumber : "-" }}
+                                                {{
+                                                    item.voucherNumber
+                                                        ? item.voucherNumber
+                                                        : commonLocaleData?.app_not_available
+                                                }}
                                             </span>
                                             <span class="invoice-date"> | {{ item?.voucherDate }} </span>
                                         </div>
@@ -100,7 +104,11 @@
                                 <div class="col-md-4 col-12">
                                     <div class="invoice-num-holder">
                                         <h3 class="invoice-num">
-                                            {{ selectedItem?.voucherNumber ? selectedItem?.voucherNumber : "-" }}
+                                            {{
+                                                selectedItem?.voucherNumber
+                                                    ? selectedItem?.voucherNumber
+                                                    : commonLocaleData?.app_not_available
+                                            }}
                                         </h3>
                                         <p class="account-holder-name">{{ selectedItem?.account.name }}</p>
                                     </div>
@@ -761,7 +769,7 @@
     [config]="{ keyboard: true, ignoreBackdropClick: true }"
     tabindex="-1"
 >
-    <div class="modal-dialog send-mail-modal">
+    <div *ngIf="showEmailSendModal?.isShown" class="modal-dialog send-mail-modal">
         <div class="modal-content">
             <app-send-email-invoice-component
                 [voucherType]="voucherType"
@@ -784,7 +792,7 @@
     [config]="{ keyboard: true, ignoreBackdropClick: true }"
     tabindex="-1"
 >
-    <div class="modal-dialog send-mail-modal">
+    <div *ngIf="downloadVoucherModal?.isShown" class="modal-dialog send-mail-modal">
         <div class="modal-content">
             <download-voucher
                 [selectedItem]="selectedItem"
