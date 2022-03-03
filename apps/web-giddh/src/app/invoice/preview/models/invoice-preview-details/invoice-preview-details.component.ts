@@ -157,6 +157,8 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     private attachedAttachmentBlob: Blob;
     /** True if left sidebar is expanded */
     private isSidebarExpanded: boolean = false;
+    /** Stores the voucher API version of company */
+    public voucherApiVersion: 1 | 2;
 
     constructor(
         private _cdr: ChangeDetectorRef,
@@ -241,6 +243,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         this.fileUploadOptions = { concurrency: 0 };
 
         this.companyName$.pipe(take(1)).subscribe(companyUniqueName => this.companyUniqueName = companyUniqueName);
+        this.voucherApiVersion = this._generalService.voucherApiVersion;
     }
 
     ngOnChanges(changes: SimpleChanges): void {
