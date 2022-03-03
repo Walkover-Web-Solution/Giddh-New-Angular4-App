@@ -442,8 +442,11 @@
                                             <div
                                                 class="history-btn"
                                                 *ngIf="
-                                                    selectedItem?.voucherType !== 'proformas' &&
-                                                    selectedItem?.voucherType !== 'estimates'
+                                                    (voucherApiVersion !== 2 &&
+                                                        selectedItem?.voucherType === 'purchase') ||
+                                                    (voucherApiVersion === 2 &&
+                                                        selectedItem?.voucherType !== 'proformas' &&
+                                                        selectedItem?.voucherType !== 'estimates')
                                                 "
                                             >
                                                 <button
