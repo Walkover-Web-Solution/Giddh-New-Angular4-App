@@ -1,5 +1,5 @@
 import { takeUntil } from 'rxjs/operators';
-import { AfterContentChecked, Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
 import { ToasterService } from '../../services/toaster.service';
 import { AgingDropDownoptions } from '../../models/api-models/Contact';
 import { AppState } from '../../store';
@@ -12,7 +12,7 @@ import { AgingReportActions } from '../../actions/aging-report.actions';
     templateUrl: 'aging.dropdown.component.html',
     styleUrls: ['./aging.dropdown.component.scss']
 })
-export class AgingDropdownComponent implements OnDestroy, AfterContentChecked {
+export class AgingDropdownComponent implements OnDestroy {
     /* This will hold local JSON data */
     @Input() public localeData: any = {};
     /* This will hold common JSON data */
@@ -31,17 +31,6 @@ export class AgingDropdownComponent implements OnDestroy, AfterContentChecked {
 
     constructor(private store: Store<AppState>, private toasty: ToasterService, private agingReportActions: AgingReportActions) {
         this.setDueRangeRequestInFlight$ = this.store.pipe(select(s => s.agingreport.setDueRangeRequestInFlight), takeUntil(this.destroyed$));
-    }
-    
-    /**
-     * This will use for respond after angular checks the content projected into the directive or component.
-     *
-     * @memberof AgingDropdownComponent
-     */
-    public ngAfterContentChecked(): void {
-        this.options.fourth = Number(this.options.fourth);
-        this.options.fifth = Number(this.options.fifth);
-        this.options.sixth = Number(this.options.sixth);
     }
 
     public ngOnDestroy() {
@@ -73,7 +62,7 @@ export class AgingDropdownComponent implements OnDestroy, AfterContentChecked {
         }
         this.updateRange = true;
     }
-    
+
     /**
      * This will use for click outside on ranges
      *
