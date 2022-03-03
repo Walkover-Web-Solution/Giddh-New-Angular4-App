@@ -239,6 +239,8 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         });
         this.uploadInput = new EventEmitter<UploadInput>();
         this.fileUploadOptions = { concurrency: 0 };
+
+        this.companyName$.pipe(take(1)).subscribe(companyUniqueName => this.companyUniqueName = companyUniqueName);
     }
 
     ngOnChanges(changes: SimpleChanges): void {
@@ -523,8 +525,6 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
 
                 this.pdfPreviewHasError = false;
                 this.pdfPreviewLoaded = false;
-
-                this.companyName$.pipe(take(1)).subscribe(companyUniqueName => this.companyUniqueName = companyUniqueName);
 
                 let getRequest = { companyUniqueName: this.companyUniqueName, accountUniqueName: this.selectedItem?.account?.uniqueName, uniqueName: this.selectedItem?.uniqueName };
 
