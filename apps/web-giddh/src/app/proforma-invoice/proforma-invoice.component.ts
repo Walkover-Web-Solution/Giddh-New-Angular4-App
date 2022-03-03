@@ -6793,7 +6793,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 billingDetails: {
                     address: company?.billingDetails?.address,
                     state: { code: company?.billingDetails?.state?.code, name: company?.billingDetails?.state?.name },
-                    gstNumber: company?.billingDetails?.taxNumber,
+                    gstNumber: company?.billingDetails?.gstNumber ?? company?.billingDetails?.taxNumber,
                     stateName: company?.billingDetails?.state?.name,
                     stateCode: company?.billingDetails?.state?.code,
                     pincode: company?.billingDetails?.pincode
@@ -6801,7 +6801,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 shippingDetails: {
                     address: company?.shippingDetails?.address,
                     state: { code: company?.shippingDetails?.state?.code, name: company?.shippingDetails?.state?.name },
-                    gstNumber: company?.shippingDetails?.taxNumber,
+                    gstNumber: company?.shippingDetails?.gstNumber ?? company?.shippingDetails?.taxNumber,
                     stateName: company?.shippingDetails?.state?.name,
                     stateCode: company?.shippingDetails?.state?.code,
                     pincode: company?.shippingDetails?.pincode
@@ -6841,7 +6841,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         this.purchaseBillCompany.billingDetails.state.name = defaultAddress.stateName;
                         this.purchaseBillCompany.billingDetails.stateCode = defaultAddress.stateCode;
                         this.purchaseBillCompany.billingDetails.stateName = defaultAddress.stateName;
-                        this.purchaseBillCompany.billingDetails.gstNumber = defaultAddress.taxNumber;
+                        this.purchaseBillCompany.billingDetails.gstNumber = defaultAddress.gstNumber ?? defaultAddress.taxNumber;
                         this.purchaseBillCompany.billingDetails.pincode = defaultAddress.pincode;
                         this.isDeliverAddressFilled = true;
                     }
@@ -6868,7 +6868,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     this.purchaseBillCompany.shippingDetails.state.name = defaultAddress.stateName;
                     this.purchaseBillCompany.shippingDetails.stateCode = defaultAddress.stateCode;
                     this.purchaseBillCompany.shippingDetails.stateName = defaultAddress.stateName;
-                    this.purchaseBillCompany.shippingDetails.gstNumber = defaultAddress.taxNumber;
+                    this.purchaseBillCompany.shippingDetails.gstNumber = defaultAddress.gstNumber ?? defaultAddress.taxNumber;
                     this.purchaseBillCompany.shippingDetails.pincode = defaultAddress.pincode;
                 } else {
                     this.resetShippingAddress();
@@ -7140,7 +7140,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             data.stateCode = data.state.code;
             data.state.name = (isCompanyAddress) ? address.stateName : (address.state) ? address.state.name : "";
             data.stateName = data.state.name;
-            data.gstNumber = (isCompanyAddress) ? address.taxNumber : address.gstNumber;
+            data.gstNumber = (isCompanyAddress) ? (address.gstNumber ?? address.taxNumber) : address.gstNumber;
             data.pincode = address.pincode;
             if (isCompanyAddress) {
                 this.autoFillCompanyShippingDetails();
