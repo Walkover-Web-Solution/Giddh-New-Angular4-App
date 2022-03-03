@@ -62,7 +62,7 @@ export class AgingDropdownComponent implements OnDestroy {
         }
         this.updateRange = true;
     }
-    
+
     /**
      * This will use for click outside on ranges
      *
