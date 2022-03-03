@@ -759,4 +759,31 @@ export class InvoiceService {
             }),
             catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
     }
+
+    /**
+     * This will get voucher versions
+     *
+     * @param {*} params
+     * @param {string} voucherUniqueName
+     * @return {*}  {Observable<BaseResponse<any, string>>}
+     * @memberof InvoiceService
+     */
+    public getVoucherVersions(params: any, voucherUniqueName: string): Observable<BaseResponse<any, string>> {
+        let url = this.config.apiUrl + INVOICE_API.GET_ALL_VERSIONS;
+        url = url.replace(':companyUniqueName', params.companyUniqueName);
+        url = url.replace(':voucherUniqueName', voucherUniqueName);
+        url = url.replace(':page', params.page);
+        url = url.replace(':count', params.count);
+
+        if (this.generalService.voucherApiVersion === 2) {
+            url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
+        }
+
+        return this.http.get(url).pipe(
+            map((res) => {
+                let data: BaseResponse<any, string> = res;
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
+    }
 }
