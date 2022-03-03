@@ -3,5 +3,6 @@
     "by_user": "[USER] द्वारा",
     "po_created": "[VALUE] के लिए खरीद आदेश",
     "pb_created": "[VALUE] के लिए बनाया गया बिल खरीद",
-    "value_changed": "[FIELD] को अपडेट किया गया [VALUE]"
+    "value_changed": "[FIELD] को अपडेट किया गया [VALUE]",
+    "voucher_created": "[VALUE] के लिए बनाया गया वाउचर"
 }
