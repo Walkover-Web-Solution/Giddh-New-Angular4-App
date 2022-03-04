@@ -33,13 +33,13 @@
     border: 1px solid var(--color-primary-button-border);
     padding-left: 7px !important;
     background: var(--color-white);
-    color: var(--color-secondary-button-text);
+    color: var(--color-dropdown-list);
 }
 .btn.dropdown-toggle .caret {
     position: absolute;
     right: 10px;
     top: 14px;
-    color: var(--color-gray);
+    color: var(--color-dropdown-secondary-list-icon);
     border-right: 6px solid transparent;
     border-left: 6px solid transparent;
     border-top: 6px dashed;
