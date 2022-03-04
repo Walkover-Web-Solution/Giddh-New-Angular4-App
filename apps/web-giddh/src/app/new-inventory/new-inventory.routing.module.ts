@@ -10,13 +10,13 @@ import { CreateCustomFieldComponent } from "./component/create-custom-field/crea
 import { AdjustInventoryComponent } from "./component/adjust-inventory-list/adjust-inventory-list.component";
 import { AdjustGroupComponent } from "./component/adjust-group/adjust-group.component";
 import { AdjustProductServiceComponent } from "./component/adjust-product-service/adjust-product-service.component";
-import { CreateNewInventoryComponent } from "./component/create-new-inventory-component/create-new-inventory.component";
 import { InventoryDashboardComponent } from "./component/inventory-dashboard/inventory-dashboard.component";
 import { DashboardSellingReport } from "./component/inventory-dashboard/dashboard-selling-report/dashboard-selling-report.component";
 import { ProductServiceListComponent } from "./component/inventory-product-service-list/inventory-product-service-list.component";
 import { InventoryTransactionListComponent } from "./component/inventory-transaction-list/inventory-transaction-list.component";
 import { InventoryCustomFieldComponent } from "./component/inventory-custom-field/inventory-custom-field.component";
 import { ListGroupComponent } from "./component/stock-group/list-group/list-group.component";
+import { StockCreateEditModule } from "./component/stock-create-edit/stock-create-edit.module";
 
 const routes: Routes = [
     {
@@ -89,8 +89,8 @@ const routes: Routes = [
         component: AdjustProductServiceComponent,
     },
     {
-        path: "create-new-inventory",
-        component: CreateNewInventoryComponent,
+        path: "stock",
+        loadChildren: () => import('./component/stock-create-edit/stock-create-edit.module').then(module => module.StockCreateEditModule)
     },
     {
         path: "inventory-dashboard",
@@ -105,7 +105,7 @@ const routes: Routes = [
 
 @NgModule({
     declarations: [],
-    imports: [RouterModule.forChild(routes)],
+    imports: [RouterModule.forChild(routes), StockCreateEditModule],
     exports: [RouterModule],
 })
 export class NewInventoryRoutingModule {
