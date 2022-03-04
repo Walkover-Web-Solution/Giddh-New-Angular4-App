@@ -176,6 +176,7 @@ form {
     position: absolute;
     top: 70px;
     z-index: 97;
+    filter: var(--color-image-filter);
 }
 // collapse
 .collapse-pane {
