@@ -2852,3 +2852,12 @@ td.mat-footer-cell {
     opacity: 1 !important;
     transform: none !important;
 } /* material css for ledger end*/
+.form-control {
+    &.custom-field {
+        &.ng-touched {
+            &.ng-invalid {
+                border: 2px solid $red !important;
+            }
+        }
+    }
+}
