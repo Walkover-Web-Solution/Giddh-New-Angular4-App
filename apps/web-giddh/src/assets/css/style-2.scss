@@ -507,6 +507,7 @@ input {
 .dropdown-arrow {
     position: relative;
 }
+
 .dropdown-arrow:after {
     width: 0px;
     height: 0px;
@@ -518,6 +519,15 @@ input {
     border-right: 5px solid transparent;
     border-left: 5px solid transparent;
     border-bottom: 5px solid transparent;
+}
+
+#content-wrapper {
+    .account-wrapper {
+        .from-or-to-acc[type="text"],
+        .form-control.debit-credit[type="text"] {
+            border: 1px solid var(--color-secondary-input-bar-border) !important;
+        }
+    }
 }
 .invoice-control .nav.nav-tabs {
     margin-bottom: 15px;
@@ -1361,6 +1371,11 @@ modal-container.modal {
 .custom-datepicker i img {
     width: 14px;
 }
+
+.bs-datepicker-body table td.is-highlighted:not(.disabled):not(.selected) span {
+    color: var(--color-datepicker-quaternary-date);
+}
+
 .payment-success-modal {
     transform: translate(0, -0%) !important;
 }
@@ -2493,6 +2508,8 @@ a.btn.btn-xs.btn-link.pull-right {
 
 .multi-select input.form-control {
     // @include caret-svg($white);
+
+    // *************************ORIGINAL DROPDOWN ARROW IMAGE*************************
     background-image: url("../images/caret.svg") !important;
     background-size: 10px !important;
     background-position: 96% !important;

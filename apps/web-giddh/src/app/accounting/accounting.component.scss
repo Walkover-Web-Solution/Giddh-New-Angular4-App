@@ -25,12 +25,14 @@
 }
 
 .bg-wrap {
-    background: var(--color-wild-sand);
+    background: var(--color-common-primary-background-for-all-components);
 }
 
 .entry-table thead th {
     font-weight: normal;
     padding: 8px 6px;
+    color: var(--color-table-tertiary-heading);
+    border-color: var(--color-table-primary-header-bar-border);
 }
 
 .entry-table tbody tr td {
@@ -39,20 +41,21 @@
 }
 
 .entry-table tbody tr td .form-control {
-    background: transparent !important;
     border: 0;
     border-radius: 0 !important;
     height: 28px;
     line-height: 28px;
     padding: 0 6px !important;
+    color: var(--color-table-quinary-content) !important;
+    background: transparent !important;
 }
 
 .entry-table tbody tr td .form-control.focus:focus {
-    background: var(--color-iron) !important;
+    background: transparent !important;
 }
 
 .active-row {
-    background: var(--color-dark-fog);
+    background: transparent;
 }
 
 .confirmation-box {
@@ -74,6 +77,7 @@
     margin: 20px 0;
     min-width: 250px;
     font-size: 14px;
+    border-color: var(--color-table-primary-content-bar-border);
 }
 
 .total-box > span {
@@ -161,12 +165,16 @@ input[name="entryDate"] {
 
 textarea[name="narration"] {
     background: transparent !important;
-    border: 0;
+    border: 1px solid var(--color-secondary-input-bar-border);
+}
+
+textarea[name="narration"]:focus {
+    border: 1px solid var(--color-secondary-input-bar-border) !important;
 }
 
 input[name="entryDate"]:focus,
 textarea[name="narration"]:focus {
-    background: var(--color-dark-fog) !important;
+    background: transparent !important;
 }
 
 :host ::ng-deep .menu {

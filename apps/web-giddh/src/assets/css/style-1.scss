@@ -2608,6 +2608,8 @@ giddh-datepicker {
     .ledger-account-label
     input.form-control.focused {
     padding-left: 1px !important;
+    background-color: transparent !important;
+    border: 1px solid var(--color-tertiary-input-bar-border);
 }
 .ledger-advance-search-field {
     .mat-form-field-suffix {
