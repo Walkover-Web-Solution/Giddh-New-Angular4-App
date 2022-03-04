@@ -2993,3 +2993,12 @@ td.mat-footer-cell {
     z-index: 99 !important;
 }
 /* material css for ledger end*/
+.form-control {
+    &.custom-field {
+        &.ng-touched {
+            &.ng-invalid {
+                border: 2px solid $red !important;
+            }
+        }
+    }
+}

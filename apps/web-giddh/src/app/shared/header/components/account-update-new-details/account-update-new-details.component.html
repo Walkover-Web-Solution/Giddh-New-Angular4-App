@@ -712,7 +712,10 @@
                             >
                                 <div class="col-lg-8">
                                     <div class="name-of-field">
-                                        <label>{{ item.fieldName }} </label>
+                                        <label
+                                            >{{ item.fieldName }}
+                                            <span class="red-text" *ngIf="item.isMandatory">*</span>
+                                        </label>
                                         <input
                                             *ngIf="
                                                 item.fieldType?.type === availableFieldTypes.String ||
@@ -721,20 +724,22 @@
                                             type="text"
                                             name="values{{ index }}"
                                             formControlName="value"
-                                            class="form-control"
+                                            class="form-control custom-field"
                                             [maxLength]="item.dataRange?.max"
                                             [attr.pattern]="item.regex"
+                                            [required]="item.isMandatory"
                                         />
                                         <input
                                             *ngIf="item.fieldType?.type === availableFieldTypes.Number"
                                             type="number"
                                             name="values{{ index }}"
                                             formControlName="value"
-                                            class="form-control"
+                                            class="form-control custom-field"
                                             [min]="item.dataRange?.min"
                                             [max]="item.dataRange?.max"
                                             decimalDigitsDirective
                                             [attr.pattern]="item.regex"
+                                            [required]="item.isMandatory"
                                         />
                                         <div
                                             *ngIf="item.fieldType?.type === availableFieldTypes.Boolean"
@@ -750,7 +755,7 @@
                                                     name="booleanType{{ index }}"
                                                 />
                                                 <label for="yes{{ index }}" class="radio-custom-label">{{
-                                                    commonLocaleData?.app_yes?.toUpperCase()
+                                                    commonLocaleData?.app_true?.toUpperCase()
                                                 }}</label>
                                             </span>
 
@@ -764,7 +769,7 @@
                                                     name="booleanType{{ index }}"
                                                 />
                                                 <label for="no{{ index }}" class="radio-custom-label">{{
-                                                    commonLocaleData?.app_no?.toUpperCase()
+                                                    commonLocaleData?.app_false?.toUpperCase()
                                                 }}</label>
                                             </span>
                                         </div>

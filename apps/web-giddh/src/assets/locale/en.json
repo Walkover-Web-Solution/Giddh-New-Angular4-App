@@ -668,5 +668,7 @@
     "app_unarchive": "Unarchive",
     "app_archived": "Archived",
     "app_unarchived": "Active",
-    "app_not_available": "N/A"
+    "app_not_available": "N/A",
+    "app_true": "True",
+    "app_false": "False"
 }
