@@ -805,10 +805,14 @@ a#reload-bank-transaction i.icon-refresh {
     font-size: 18px !important;
 }
 input#ledger-search {
-    border: 1px solid var(--color-secondary-input-bar-border);
     padding-left: 27px !important;
-    background-color: var(--color-sidebar-primary-search-bar-background) !important;
+    background-color: transparent !important;
+    border: 1px solid var(--color-secondary-input-bar-border);
+    &:focus {
+        border: 1px solid var(--color-secondary-input-bar-border) !important;
+    }
 }
+
 .mat-grid-tile.select2-ledger {
     overflow: visible !important;
 }
