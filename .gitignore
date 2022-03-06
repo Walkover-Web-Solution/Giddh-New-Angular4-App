@@ -2,8 +2,6 @@
 default.entitlements.mac.plist
 electron-sign/embedded.provisionprofile
 
-package-lock_*
-
 # Logs
 logs
 *.log
@@ -158,7 +156,6 @@ xplat/**/*.ngsummary.json
 
 /apps/electron-giddh/src/node_modules
 
-package-lock.json
 /apps/electron-giddh/src/
 
 #
