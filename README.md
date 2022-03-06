@@ -26,14 +26,15 @@ Branch `beta-stage` is considered to be the parent branch of all the new branche
 1. Checkout a new branch named `<card-id>-stage` (where `<card-id>` needs to be replaced by Clickup card ID) from `beta-stage`. For eg: `dtqvbd-stage`
 2. Complete your development on branch `dtqvbd-stage`
 3. Proceed to deployment of `dtqvbd-stage` to `giddh-2.0` (TEST env.)
-4. If conflicts occur follow below rules as per your scenario:
+4. **Resolving merge conflicts:** If conflicts occur follow below rules as per your scenario:
     1. If PR from `dtqvbd-stage` -> `giddh-2.0` has conflict -> Checkout a new branch `dtqvbd-test` from `giddh-2.0` and take a pull from `dtqvbd-stage` and resolve conflicts in branch `dtqvbd-test`; raise PR from `dtqvbd-test` to `giddh-2.0`
     2. If PR from `dtqvbd-stage` -> `beta-stage` has conflict -> Take a pull from `beta-stage` to branch `dtqvbd-stage` and resolve conflicts in it; raise PR from `dtqvbd-stage` -> `beta-stage`
     3. If PR from `beta-stage` -> `beta-branch` has conflict -> Checkout a new branch `dtqvbd-beta` from `beta-branch` and take a pull from `beta-stage`; raise PR from `dtqvbd-beta` to `beta-branch`
     4. If PR from `beta-branch` -> `production` has conflict -> Checkout a new branch `dtqvbd-prod` from `production` and take a pull from `beta-branch`; raise PR from `dtqvbd-prod` to `production`
-    5. <u>**IN NO CASE YOUR BRANCH `dtqvbd-stage` SHOULD TAKE A PULL FROM `giddh-2.0` AND RESOLVING MERGE CONFLICTS DIRECTLY ON GITHUB IS STRICTLY PROHIBITED**</u>
+    5. :warning:&nbsp;:skull:&nbsp;:warning:&nbsp;&nbsp;<u>**IN NO CASE YOUR BRANCH `dtqvbd-stage` SHOULD TAKE A PULL FROM `giddh-2.0`**</u>
+    6. :x:&nbsp;&nbsp;<u>**RESOLVING MERGE CONFLICTS DIRECTLY ON GITHUB IS STRICTLY PROHIBITED**</u>
 5. Once PR is merged, provide your feature/bug on TEST env. for testing to tester
-6. If issues are raised in testing: tester raises issue **I1** for developer; **F1** card is assigned back to the developer for issue fixing
+6. **If issues are raised in testing:** tester raises issue **I1** for developer; **F1** card is assigned back to the developer for issue fixing
 7. **I1** issue should be fixed on `dtqvbd-stage` by developer:
         if branch `dtqvbd-stage` has conflict with `giddh-2.0` -> follow **Step 4.1** above
 8. **I1** is tested and **F1** card is READY FOR PROD; raise PR from `dtqvbd-stage` -> `beta-stage`
@@ -44,7 +45,13 @@ All of the changes **must be present on a single branch `<card-id>-stage`** whic
 
 `dtqvbd-stage` -> `beta-stage` -> `beta-branch` -> `production`
 
-If you face any issues in the understanding of contributing guideline then please reach out to other contributors first than trying it out for yourself. If you have any suggestions for the improvement of this guideline then also you're welcome :)
+If you face any issues in the understanding of contributing guideline then please reach out to other contributors first than trying it out for yourself. If you have any suggestions for the improvement of this guideline then also you're welcome! :smiley:
+
+### **Resolving `package-lock.json` conflicts:**
+It has been observed that developers over the time of development face merge conflicts issue in `package-lock.json` file. This happens when two developers run `npm install` command on their respective machines and commit the code. Resolving merge conflict of lock file could be tiresome and is not guaranteed to work always and therefore, as of `npm@5.7.0`, NPM has provided an automated way of doing the same.
+> As of `npm@5.7.0`, these conflicts can be resolved by manually fixing any `package.json` conflicts, and then running `npm install --package-lock-only` again. npm will automatically resolve any conflicts for you and write a merged package lock that includes all the dependencies from both branches in a reasonable tree. If --package-lock-only is provided, it will do this without also modifying your local node_modules/.
+
+So, now you just need to resolve the conflicts of `package.json` file and run the command `npm install --package-lock-only` to resolve the merge conflicts of `package-lock.json` file.
 
 # Angular Style Guide
 
