@@ -120,7 +120,10 @@
                     "label": "भुगतान",
                     "link": "/pages/reports/payment",
                     "icon": "icon-reciept-new",
-                    "description": "कुल, और अप्रयुक्त भुगतान"
+                    "description": "कुल, और अप्रयुक्त भुगतान",
+                    "additional": {
+                        "voucherVersion": 2
+                    }
                 }
             ]
         },

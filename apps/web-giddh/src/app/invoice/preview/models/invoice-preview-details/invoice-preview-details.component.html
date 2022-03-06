@@ -439,7 +439,16 @@
                                                     ></a>
                                                 </span>
                                             </div>
-                                            <div class="history-btn" *ngIf="selectedItem?.voucherType === 'purchase'">
+                                            <div
+                                                class="history-btn"
+                                                *ngIf="
+                                                    (voucherApiVersion !== 2 &&
+                                                        selectedItem?.voucherType === 'purchase') ||
+                                                    (voucherApiVersion === 2 &&
+                                                        selectedItem?.voucherType !== 'proformas' &&
+                                                        selectedItem?.voucherType !== 'estimates')
+                                                "
+                                            >
                                                 <button
                                                     class="btn btn-primary"
                                                     (click)="toggleActivityHistoryAsidePane()"
@@ -727,7 +736,7 @@
     <aside-revision-history
         (closeAsideEvent)="toggleActivityHistoryAsidePane()"
         [companyUniqueName]="companyUniqueName"
-        [purchaseBill]="selectedItem"
+        [selectedVoucher]="selectedItem"
     ></aside-revision-history>
 </div>
 

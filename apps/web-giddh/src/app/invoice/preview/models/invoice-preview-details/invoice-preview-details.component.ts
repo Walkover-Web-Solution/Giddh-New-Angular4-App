@@ -157,6 +157,8 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     private attachedAttachmentBlob: Blob;
     /** True if left sidebar is expanded */
     private isSidebarExpanded: boolean = false;
+    /** Stores the voucher API version of company */
+    public voucherApiVersion: 1 | 2;
 
     constructor(
         private _cdr: ChangeDetectorRef,
@@ -239,6 +241,9 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         });
         this.uploadInput = new EventEmitter<UploadInput>();
         this.fileUploadOptions = { concurrency: 0 };
+
+        this.companyName$.pipe(take(1)).subscribe(companyUniqueName => this.companyUniqueName = companyUniqueName);
+        this.voucherApiVersion = this._generalService.voucherApiVersion;
     }
 
     ngOnChanges(changes: SimpleChanges): void {
@@ -523,8 +528,6 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
 
                 this.pdfPreviewHasError = false;
                 this.pdfPreviewLoaded = false;
-
-                this.companyName$.pipe(take(1)).subscribe(companyUniqueName => this.companyUniqueName = companyUniqueName);
 
                 let getRequest = { companyUniqueName: this.companyUniqueName, accountUniqueName: this.selectedItem?.account?.uniqueName, uniqueName: this.selectedItem?.uniqueName };
 
