@@ -8,5 +8,6 @@
     "file_uploaded": "File uploaded successfully",
     "confirm_delete_file": "Are you sure you want to delete the attached file?",
     "delete_entries_content": "All their corresponding vouchers and invoices will be deleted permanently and will no longer be accessible from other modules.",
-    "remove_file": "Deleted Successfully."
+    "remove_file": "Deleted Successfully.",
+    "confirm_delete_voucher": "Are you sure you want to delete the voucher?"
 }
