@@ -1173,10 +1173,19 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             request.sortBy = this.invoiceSearchRequest.sortBy;
         }
 
+        if (this.voucherApiVersion === 2) {
+            request.voucherDate = request.invoiceDate;
+            delete request['invoiceDate'];
+        }
+
         this.store.dispatch(this.invoiceReceiptActions.GetAllInvoiceReceiptRequest(request, this.selectedVoucher));
         this._receiptServices.getAllReceiptBalanceDue(request, this.selectedVoucher).pipe(takeUntil(this.destroyed$)).subscribe(res => {
             this.parseBalRes(res);
         });
+
+        if (this.voucherApiVersion === 2) {
+            request.invoiceDate = request.voucherDate;
+        }
     }
 
     public resetAdvanceSearch() {

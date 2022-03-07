@@ -51,9 +51,9 @@ export class InvoiceFilterClassForInvoicePreview extends CommonPaginatedRequest 
     public totalEqual: boolean;
     public totalLessThan: boolean;
     public totalMoreThan: boolean;
-    public invoiceDateEqual: boolean;
-    public invoiceDateAfter: boolean;
-    public invoiceDateBefore: boolean;
+    public invoiceDateEqual?: boolean;
+    public invoiceDateAfter?: boolean;
+    public invoiceDateBefore?: boolean;
     public dueDateEqual: boolean;
     public dueDateAfter: boolean;
     public dueDateBefore: boolean;
@@ -80,6 +80,10 @@ export class InvoiceFilterClassForInvoicePreview extends CommonPaginatedRequest 
     public expireTo?: string;
     public purchaseOrderNumber?: any;
     public status?: string;
+    public voucherDateEqual?: boolean;
+    public voucherDateAfter?: boolean;
+    public voucherDateBefore?: boolean;
+    public voucherDate?: any;
 }
 
 export class InvoiceFilterClass extends CommonPaginatedRequest {
