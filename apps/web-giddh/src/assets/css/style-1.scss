@@ -3131,6 +3131,21 @@ td.mat-footer-cell {
         input[placeholder="Search"][type="text"] {
             border: none;
         }
+        input[placeholder="Product Unit"],
+        input[placeholder="Under Group"],
+        input[placeholder="Service Unit"],
+        .default-input-field {
+            width: 100%;
+            height: 36px;
+            border-radius: 5px;
+            padding-left: 6px;
+        }
+    }
+}
+
+.mat-chip-list-wrapper {
+    input.mat-input-element {
+        border: none;
     }
 }
 
