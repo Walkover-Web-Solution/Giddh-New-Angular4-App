@@ -1815,7 +1815,7 @@
                                                     (!isPettyCash &&
                                                         currentOrganizationType === 'COMPANY' &&
                                                         branches?.length > 1) ||
-                                                    isAdvanceReceipt ||
+                                                    (voucherApiVersion === 2 && isAdvanceReceipt) ||
                                                     isAdjustReceiptSelected ||
                                                     isAdjustVoucherSelected ||
                                                     vm.selectedLedger?.voucherAdjustments?.adjustments?.length ||
