@@ -21,8 +21,8 @@
                         <mat-radio-group color="primary" [(ngModel)]="stockForm.type" name="product_type">
                             <mat-radio-button value="PRODUCT" [checked]="true">Product</mat-radio-button>
                             <mat-radio-button value="SERVICE">Service</mat-radio-button>
-                            <mat-radio-button value="COMBO">Combo</mat-radio-button>
-                            <mat-radio-button value="BULK">Bulk Creation</mat-radio-button>
+                            <!-- <mat-radio-button value="COMBO">Combo</mat-radio-button>
+                            <mat-radio-button value="BULK">Bulk Creation</mat-radio-button> -->
                         </mat-radio-group>
                     </form>
                 </div>
@@ -59,13 +59,30 @@
                                         <label>Product Unit <span class="red-text">*</span></label>
                                     </div>
                                     <div class="col-sm-6 col-lg-6">
-                                        <text-field
+                                        <!-- <text-field
                                             [cssClass]="'form-control'"
                                             id="product-unit"
                                             placeholder="Product Unit"
                                             type="text"
                                             value="Kilo Gram"
-                                        ></text-field>
+                                        ></text-field> -->
+                                        <form>
+                                            <input
+                                                type="text"
+                                                placeholder="Product Unit"
+                                                matInput
+                                                [formControl]="productUnitControl"
+                                                [matAutocomplete]="auto1"
+                                            />
+                                            <mat-autocomplete autoActiveFirstOption #auto1="matAutocomplete">
+                                                <mat-option
+                                                    *ngFor="let option of productUnitFilteredOptions | async"
+                                                    [value]="option"
+                                                >
+                                                    {{ option }}
+                                                </mat-option>
+                                            </mat-autocomplete>
+                                        </form>
                                     </div>
                                 </div>
                                 <div class="row mr-b15">
@@ -73,13 +90,30 @@
                                         <label>Under Group <span class="red-text">*</span></label>
                                     </div>
                                     <div class="col-sm-6 col-lg-6">
-                                        <text-field
+                                        <!-- <text-field
                                             [cssClass]="'form-control'"
                                             id="under-group"
                                             placeholder="Under Group"
                                             type="text"
                                             value=""
-                                        ></text-field>
+                                        ></text-field> -->
+                                        <form>
+                                            <input
+                                                type="text"
+                                                placeholder="Under Group"
+                                                matInput
+                                                [formControl]="productUnderGroupControl"
+                                                [matAutocomplete]="auto2"
+                                            />
+                                            <mat-autocomplete autoActiveFirstOption #auto2="matAutocomplete">
+                                                <mat-option
+                                                    *ngFor="let option of productUnderGroupFilteredOptions | async"
+                                                    [value]="option"
+                                                >
+                                                    {{ option }}
+                                                </mat-option>
+                                            </mat-autocomplete>
+                                        </form>
                                     </div>
                                 </div>
                                 <div class="row mr-b15">
@@ -314,15 +348,41 @@
                                                     <form>
                                                         <div class="row">
                                                             <div class="col-sm-6 col-lg-5">
-                                                                <label>Linked Account/s </label>
+                                                                <label>Linked Account/s</label>
                                                             </div>
                                                             <div class="col-sm-6 col-lg-7 pl-0 mr-b15">
-                                                                <textarea
+                                                                <!-- <textarea
                                                                     type="text"
                                                                     id="linked-account"
                                                                     class="form-control"
                                                                     placeholder="All Accounts Selected"
-                                                                ></textarea>
+                                                                ></textarea> -->
+                                                                <form>
+                                                                    <input
+                                                                        type="text"
+                                                                        placeholder="Linked Accounts"
+                                                                        class="default-input-field"
+                                                                        matInput
+                                                                        [formControl]="
+                                                                            productPurchaseLinkedGroupControl
+                                                                        "
+                                                                        [matAutocomplete]="productPurchaseLinkedAcc"
+                                                                    />
+                                                                    <mat-autocomplete
+                                                                        autoActiveFirstOption
+                                                                        #productPurchaseLinkedAcc="matAutocomplete"
+                                                                    >
+                                                                        <mat-option
+                                                                            *ngFor="
+                                                                                let productPurchaseLinkedGroupOption of productPurchaseLinkedGroupFilteredOptions
+                                                                                    | async
+                                                                            "
+                                                                            [value]="productPurchaseLinkedGroupOption"
+                                                                        >
+                                                                            {{ productPurchaseLinkedGroupOption }}
+                                                                        </mat-option>
+                                                                    </mat-autocomplete>
+                                                                </form>
                                                             </div>
                                                             <!-- <div class="col-sm-6 col-lg-6">
                                                                 <label>Applicable Tax </label>
@@ -416,13 +476,37 @@
                                                                 <label>Linked Account/s </label>
                                                             </div>
                                                             <div class="col-sm-6 col-lg-7 pl-0 mr-b15">
-                                                                <textarea
+                                                                <!-- <textarea
                                                                     type="text"
                                                                     id="sales-linked-account"
                                                                     class="form-control"
                                                                     placeholder="All Accounts Selected"
                                                                     disabled
-                                                                ></textarea>
+                                                                ></textarea> -->
+                                                                <form>
+                                                                    <input
+                                                                        type="text"
+                                                                        placeholder="All Accounts Selected"
+                                                                        class="default-input-field"
+                                                                        matInput
+                                                                        [formControl]="productSalesLinkedControl"
+                                                                        [matAutocomplete]="productSalesLinkedAcc"
+                                                                    />
+                                                                    <mat-autocomplete
+                                                                        autoActiveFirstOption
+                                                                        #productSalesLinkedAcc="matAutocomplete"
+                                                                    >
+                                                                        <mat-option
+                                                                            *ngFor="
+                                                                                let productSalesLinkedGroupOption of productSalesLinkedFilteredOptions
+                                                                                    | async
+                                                                            "
+                                                                            [value]="productSalesLinkedGroupOption"
+                                                                        >
+                                                                            {{ productSalesLinkedGroupOption }}
+                                                                        </mat-option>
+                                                                    </mat-autocomplete>
+                                                                </form>
                                                             </div>
                                                             <!-- <div class="col-sm-6 col-lg-6">
                                                                 <label>Applicable Tax </label>
@@ -606,20 +690,20 @@
                                 </div>
                             </form> -->
 
-                            <p class="mr-b15 font-14">
+                            <!-- <p class="mr-b15 font-14">
                                 <span>
                                     <mat-checkbox color="primary" id="stock">
                                         Continue selling when out of stock?
                                     </mat-checkbox>
                                 </span>
-                            </p>
-                            <p class="mr-b15 font-14">
+                            </p> -->
+                            <!-- <p class="mr-b15 font-14">
                                 <span>
                                     <mat-checkbox color="primary" name="return-policy" id="return-policy">
                                         Is this stock eligible for return policy?
                                     </mat-checkbox>
                                 </span>
-                            </p>
+                            </p> -->
                             <p class="mr-b15 font-14">
                                 <span>
                                     <mat-checkbox color="primary" [checked]="true" id="variant">
@@ -1267,8 +1351,28 @@
                                         <label>Service Unit <span class="red-text">*</span></label>
                                     </div>
                                     <div class="col-sm-6 col-lg-6">
-                                        <sh-select id="select-service-unit" type="text" placeholder="Select Unit">
-                                        </sh-select>
+                                        <!-- <sh-select id="select-service-unit" type="text" placeholder="Select Unit">
+                                        </sh-select> -->
+                                        <form>
+                                            <input
+                                                type="text"
+                                                placeholder="Service Unit"
+                                                matInput
+                                                [formControl]="serviceUnitGroupControl"
+                                                [matAutocomplete]="auto3"
+                                            />
+                                            <mat-autocomplete autoActiveFirstOption #auto3="matAutocomplete">
+                                                <mat-option
+                                                    *ngFor="
+                                                        let serviceUnitGroupOption of serviceUnitGroupFilteredOptions
+                                                            | async
+                                                    "
+                                                    [value]="serviceUnitGroupOption"
+                                                >
+                                                    {{ serviceUnitGroupOption }}
+                                                </mat-option>
+                                            </mat-autocomplete>
+                                        </form>
                                     </div>
                                 </div>
                                 <div class="row mr-b15">
@@ -1276,11 +1380,31 @@
                                         <label>Under Group <span class="red-text">*</span></label>
                                     </div>
                                     <div class="col-sm-6 col-lg-6">
-                                        <sh-select
+                                        <!-- <sh-select
                                             id="select-service-under-group"
                                             type="text"
                                             placeholder="Select Group"
-                                        ></sh-select>
+                                        ></sh-select> -->
+                                        <form>
+                                            <input
+                                                type="text"
+                                                placeholder="Under Group"
+                                                matInput
+                                                [formControl]="serviceUnderGroupControl"
+                                                [matAutocomplete]="auto4"
+                                            />
+                                            <mat-autocomplete autoActiveFirstOption #auto4="matAutocomplete">
+                                                <mat-option
+                                                    *ngFor="
+                                                        let serviceUnderGroupOption of serviceUnderGroupFilteredOptions
+                                                            | async
+                                                    "
+                                                    [value]="serviceUnderGroupOption"
+                                                >
+                                                    {{ serviceUnderGroupOption }}
+                                                </mat-option>
+                                            </mat-autocomplete>
+                                        </form>
                                     </div>
                                 </div>
                                 <div class="row mr-b15">
@@ -1315,7 +1439,7 @@
                         <div class="tab-container-new">
                             <form>
                                 <div class="row">
-                                    <div class="col-md-8 col-lg-12 col-xl-8 col-12">
+                                    <!-- <div class="col-md-8 col-lg-12 col-xl-8 col-12">
                                         <div class="row">
                                             <div class="col-md-12 col-lg-8 col-xl-6 col-12">
                                                 <div class="row">
@@ -1361,7 +1485,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> -->
 
                                     <!-- hidden for service content -->
                                     <div hidden class="col-xl-6 col-lg-12 pl-5">
@@ -1450,11 +1574,11 @@
                             </form>
                             <!-- hidden for service content -->
                             <div class="sales-purchase-details">
-                                <div class="mb-3">
+                                <!-- <div class="mb-3">
                                     <mat-checkbox color="primary" class="font-14"
                                         >Is the Product/Service eligible for Sale or Purchase?
                                     </mat-checkbox>
-                                </div>
+                                </div> -->
                                 <div class="row">
                                     <div class="col-12">
                                         <div class="row">
@@ -1472,15 +1596,41 @@
                                                     <form>
                                                         <div class="row">
                                                             <div class="col-sm-6 col-lg-5">
-                                                                <label>Linked Account/s </label>
+                                                                <label>Linked Account/s</label>
                                                             </div>
                                                             <div class="col-sm-6 col-lg-7 pl-0 mr-b15">
-                                                                <textarea
+                                                                <!-- <textarea
                                                                     type="text"
                                                                     id="linked-account"
                                                                     class="form-control"
                                                                     placeholder="All Accounts Selected"
-                                                                ></textarea>
+                                                                ></textarea> -->
+                                                                <form>
+                                                                    <input
+                                                                        type="text"
+                                                                        placeholder="All Accounts Selected"
+                                                                        class="default-input-field"
+                                                                        matInput
+                                                                        [formControl]="
+                                                                            servicePurchaseLinkedGroupControl
+                                                                        "
+                                                                        [matAutocomplete]="servicePurchaseLinkedAcc"
+                                                                    />
+                                                                    <mat-autocomplete
+                                                                        autoActiveFirstOption
+                                                                        #servicePurchaseLinkedAcc="matAutocomplete"
+                                                                    >
+                                                                        <mat-option
+                                                                            *ngFor="
+                                                                                let servicePurchaseLinkedGroupOption of servicePurchaseLinkedGroupFilteredOptions
+                                                                                    | async
+                                                                            "
+                                                                            [value]="servicePurchaseLinkedGroupOption"
+                                                                        >
+                                                                            {{ servicePurchaseLinkedGroupOption }}
+                                                                        </mat-option>
+                                                                    </mat-autocomplete>
+                                                                </form>
                                                             </div>
                                                             <!-- <div class="col-sm-6 col-lg-6">
                                                                 <label>Applicable Tax </label>
@@ -1575,13 +1725,37 @@
                                                                 <label>Linked Account/s </label>
                                                             </div>
                                                             <div class="col-sm-6 col-lg-7 pl-0 mr-b15">
-                                                                <textarea
+                                                                <!-- <textarea
                                                                     type="text"
                                                                     id="sales-linked-account"
                                                                     class="form-control"
                                                                     placeholder="All Accounts Selected"
                                                                     disabled
-                                                                ></textarea>
+                                                                ></textarea> -->
+                                                                <form>
+                                                                    <input
+                                                                        type="text"
+                                                                        placeholder="All Accounts Selected"
+                                                                        class="default-input-field"
+                                                                        matInput
+                                                                        [formControl]="serviceSalesLinkedGroupControl"
+                                                                        [matAutocomplete]="serviceSalesLinkedAcc"
+                                                                    />
+                                                                    <mat-autocomplete
+                                                                        autoActiveFirstOption
+                                                                        #serviceSalesLinkedAcc="matAutocomplete"
+                                                                    >
+                                                                        <mat-option
+                                                                            *ngFor="
+                                                                                let serviceSalesLinkedGroupOption of serviceSalesLinkedGroupFilteredOptions
+                                                                                    | async
+                                                                            "
+                                                                            [value]="serviceSalesLinkedGroupOption"
+                                                                        >
+                                                                            {{ serviceSalesLinkedGroupOption }}
+                                                                        </mat-option>
+                                                                    </mat-autocomplete>
+                                                                </form>
                                                             </div>
                                                             <!-- <div class="col-sm-6 col-lg-6">
                                                                 <label>Applicable Tax </label>
