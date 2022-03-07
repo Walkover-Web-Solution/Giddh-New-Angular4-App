@@ -14,7 +14,9 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
     /* this will store image path*/
     public imgPath: string = "";
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    public stockForm: any = {};
+    public stockForm: any = {
+        type: 'PRODUCT'
+    };
 
     constructor(
     ) {
