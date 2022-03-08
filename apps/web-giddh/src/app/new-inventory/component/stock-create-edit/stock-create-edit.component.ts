@@ -16,35 +16,35 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
     public imgPath: string = "";
     // Variables for Product Unit Dropdown Under Product Radio Button
     productUnitControl = new FormControl();
-    productUnitOptions: string[] = [' Dummy One', ' Dummy Two', ' Dummy Three'];
+    productUnitOptions: string[] = ['Dummy One', 'Dummy Two', 'Dummy Three'];
     productUnitFilteredOptions: Observable<string[]>;
     // Variables for Under Control Dropdown Under Product Radio Button
     productUnderGroupControl = new FormControl();
-    productUnderGroupOptions: string[] = [' Dummy Four', ' Dummy Five', ' Dummy Six'];
+    productUnderGroupOptions: string[] = ['Dummy Four', 'Dummy Five', 'Dummy Six'];
     productUnderGroupFilteredOptions: Observable<string[]>;
     // Variables for Linked Account/s Dropdown Under Product Radio Button > Account Tab > Purchase Information
     productPurchaseLinkedGroupControl = new FormControl();
-    productPurchaseLinkedGroupOptions: string[] = [' Dummy Four', ' Dummy Five', ' Dummy Six'];
+    productPurchaseLinkedGroupOptions: string[] = ['Dummy Four', 'Dummy Five', 'Dummy Six'];
     productPurchaseLinkedGroupFilteredOptions: Observable<string[]>;
     // Variables for Linked Account/s Dropdown Under Product Radio Button > Account Tab > Sales Information
     productSalesLinkedControl = new FormControl();
-    productSalesLinkedOptions: string[] = [' Dummy Four', ' Dummy Five', ' Dummy Six'];
+    productSalesLinkedOptions: string[] = ['Dummy Four', 'Dummy Five', 'Dummy Six'];
     productSalesLinkedFilteredOptions: Observable<string[]>;
     // Variables for Service Unit Dropdown Under Service Radio Button
     serviceUnitGroupControl = new FormControl();
-    serviceUnitGroupOptions: string[] = [' Dummy One', ' Dummy Two', ' Dummy Three'];
+    serviceUnitGroupOptions: string[] = ['Dummy One', 'Dummy Two', 'Dummy Three'];
     serviceUnitGroupFilteredOptions: Observable<string[]>;
     // Variables for Under Group Dropdown Under Service Radio Button
     serviceUnderGroupControl = new FormControl();
-    serviceUnderGroupOptions: string[] = [' Dummy Four', ' Dummy Five', ' Dummy Six'];
+    serviceUnderGroupOptions: string[] = ['Dummy Four', 'Dummy Five', 'Dummy Six'];
     serviceUnderGroupFilteredOptions: Observable<string[]>;
     // Variables for Linked Account/s Dropdown Under Service Radio Button > Account Tab > Purchase Information
     servicePurchaseLinkedGroupControl = new FormControl();
-    servicePurchaseLinkedGroupOptions: string[] = [' Dummy Four', ' Dummy Five', ' Dummy Six'];
+    servicePurchaseLinkedGroupOptions: string[] = ['Dummy Four', 'Dummy Five', 'Dummy Six'];
     servicePurchaseLinkedGroupFilteredOptions: Observable<string[]>;
     // Variables for Linked Account/s Dropdown Under Service Radio Button > Account Tab > Sales Information
     serviceSalesLinkedGroupControl = new FormControl();
-    serviceSalesLinkedGroupOptions: string[] = [' Dummy Four', ' Dummy Five', ' Dummy Six'];
+    serviceSalesLinkedGroupOptions: string[] = ['Dummy Four', 'Dummy Five', 'Dummy Six'];
     serviceSalesLinkedGroupFilteredOptions: Observable<string[]>;
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
