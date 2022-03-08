@@ -269,24 +269,26 @@ export class DaybookComponent implements OnInit, OnDestroy {
     public getDaybook(withFilters = null): void {
         this.showLoader = true;
         this.daybookService.GetDaybook(withFilters, this.daybookQueryRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response?.status === "success" && response?.body?.entries?.length > 0) {
-                this.daybookQueryRequest.page = response?.body?.page;
-                response?.body?.entries.map(item => {
-                    item.isExpanded = this.isAllExpanded;
-                });
+            if (response?.status === "success") {
+                if (response?.body?.entries?.length > 0) {
+                    this.daybookQueryRequest.page = response?.body?.page;
+                    response?.body?.entries.map(item => {
+                        item.isExpanded = this.isAllExpanded;
+                    });
 
-                if (this.todaySelected) {
-                    this.daybookQueryRequest.from = moment(response?.body?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
-                    this.daybookQueryRequest.to = moment(response?.body?.toDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                    if (this.todaySelected) {
+                        this.daybookQueryRequest.from = moment(response?.body?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                        this.daybookQueryRequest.to = moment(response?.body?.toDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
 
-                    this.selectedDateRange = { startDate: moment(response?.body?.fromDate, GIDDH_DATE_FORMAT), endDate: moment(response?.body?.toDate, GIDDH_DATE_FORMAT) };
-                    this.selectedDateRangeUi = moment(response?.body?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(response?.body?.toDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
-                    this.fromDate = moment(response?.body?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
-                    this.toDate = moment(response?.body?.toDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                        this.fromDate = moment(response?.body?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                        this.toDate = moment(response?.body?.toDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                    }
+
+                    this.daybookData = response?.body;
+                    this.checkIsStockEntryAvailable();
                 }
-
-                this.daybookData = response?.body;
-                this.checkIsStockEntryAvailable();
+                this.selectedDateRange = { startDate: moment(response?.body?.fromDate, GIDDH_DATE_FORMAT), endDate: moment(response?.body?.toDate, GIDDH_DATE_FORMAT) };
+                this.selectedDateRangeUi = moment(response?.body?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(response?.body?.toDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
             } else {
                 if (response?.message) {
                     this.daybookData = { entries: [], totalItems: 0, page: 0 };
