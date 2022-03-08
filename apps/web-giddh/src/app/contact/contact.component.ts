@@ -398,6 +398,12 @@ export class ContactComponent implements OnInit, OnDestroy {
             }
         });
 
+        this.store.pipe(select(state => state.sales.updatedAccountDetails), takeUntil(this.destroyed$)).subscribe(response => {
+            if(response) {
+                this.getAccounts(this.fromDate, this.toDate, null, "true", PAGINATION_LIMIT, this.searchStr, this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
+            }
+        });
+
         this.searchStr$.pipe(
             debounceTime(1000),
             distinctUntilChanged(), takeUntil(this.destroyed$))

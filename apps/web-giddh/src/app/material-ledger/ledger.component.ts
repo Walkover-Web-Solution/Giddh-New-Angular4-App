@@ -2538,9 +2538,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         });
 
         dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
-            if (response) {
-                this.getTransactionData();
-            }
+            this.getTransactionData();
         });
     }
 }

@@ -80,13 +80,7 @@
                     </div>
                 </div>
                 <div
-                    class="
-                        clear-filter
-                        align-items-center
-                        d-flex
-                        justify-content-xl-center justify-content-lg-start
-                        w-50
-                    "
+                    class="clear-filter align-items-center d-flex justify-content-xl-center justify-content-lg-start w-50"
                     *ngIf="showClearFilter"
                 >
                     <button class="btn btn-filter mr-0" (click)="resetAdvanceSearch()">
@@ -375,7 +369,11 @@
 
                             <th #paymentModeParent width="13%" class="bd-rr bd-rb td-search-box">
                                 <div [hidden]="showPaymentSearchBar">
-                                    <i class="icon-search" (click)="searchBy(null, 'paymentMode', true)"></i>
+                                    <i
+                                        class="icon-search"
+                                        *ngIf="voucherApiVersion !== 2"
+                                        (click)="searchBy(null, 'paymentMode', true)"
+                                    ></i>
                                     <span>{{ localeData?.payment_mode_label }}</span>
                                 </div>
                                 <div class="input-container" [hidden]="!showPaymentSearchBar">
@@ -396,7 +394,11 @@
 
                             <th #invoiceNumberParent width="13%" class="bd-rr bd-rb td-search-box">
                                 <div [hidden]="showInvoiceSearchBar">
-                                    <i class="icon-search" (click)="searchBy(null, 'invoiceNumber', true)"></i>
+                                    <i
+                                        class="icon-search"
+                                        *ngIf="voucherApiVersion !== 2"
+                                        (click)="searchBy(null, 'invoiceNumber', true)"
+                                    ></i>
                                     <span>{{ localeData?.invoice_no_label }}</span>
                                 </div>
                                 <div class="input-container" [hidden]="!showInvoiceSearchBar">
@@ -500,7 +502,10 @@
                             <td width="13%" class="text-break" [attr.data-title]="commonLocaleData?.app_voucher_type">
                                 {{ voucherApiVersion === 2 ? receipt?.account?.name : receipt?.baseAccountName }}
                             </td>
-                            <td [attr.data-title]="localeData?.payment_mode_label">
+                            <td
+                                [ngClass]="{ 'pl-0': voucherApiVersion === 2 }"
+                                [attr.data-title]="localeData?.payment_mode_label"
+                            >
                                 <ng-container *ngIf="voucherApiVersion !== 2">
                                     <div *ngFor="let paymentMode of receipt?.particularNames?.split(',')">
                                         {{ paymentMode }}
@@ -513,6 +518,7 @@
                             <td
                                 width="13%"
                                 class="text-break"
+                                [ngClass]="{ 'pl-0': voucherApiVersion === 2 }"
                                 *ngIf="receipt?.invoices || receipt?.adjustments?.length"
                                 [attr.data-title]="localeData?.invoice_no_label"
                             >

@@ -222,15 +222,7 @@
                                 (currentTxn?.selectedAccount || shouldShowAdvanceReceiptMandatoryFields) &&
                                 (companyTaxesList$ | async)?.length
                             "
-                            class="
-                                custom-component
-                                item-padding
-                                amount
-                                position-relative
-                                dropdown-container
-                                text-right
-                                dropdown-width
-                            "
+                            class="custom-component item-padding amount position-relative dropdown-container text-right dropdown-width"
                             (clickOutside)="hideTax()"
                             (click)="$event.stopPropagation()"
                         >
@@ -839,7 +831,7 @@
                             class="pull-left"
                             name="generateInvoice"
                             [disabled]="
-                                isAdvanceReceipt ||
+                                (voucherApiVersion === 2 && isAdvanceReceipt) ||
                                 currentTxn?.voucherAdjustments?.adjustments?.length ||
                                 currentTxn?.invoiceLinkingRequest?.linkedInvoices?.length ||
                                 currentTxn?.referenceVoucher?.uniqueName ||
