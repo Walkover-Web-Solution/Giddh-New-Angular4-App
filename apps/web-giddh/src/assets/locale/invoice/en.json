@@ -174,5 +174,7 @@
     "exchange_gain_loss_label": "In [BASE_CURRENCY]: [AMOUNT]<br />Exchange [PROFIT_TYPE]: ",
     "works_for_single_entry": "Works only for single entry.",
     "uploaded_purchase_bill": "Uploaded Bill",
-    "auto_generated_purchase_bill": "Giddh/Auto Generated Bill"
+    "auto_generated_purchase_bill": "Giddh Auto Generated Bill",
+    "amount_adjusted": "Amount adjusted successfully",
+    "pincode_required": "Please update pincode in voucher before creating eway bill."
 }

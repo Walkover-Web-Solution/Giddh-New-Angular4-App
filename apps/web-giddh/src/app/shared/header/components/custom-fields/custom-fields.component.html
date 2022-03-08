@@ -22,43 +22,43 @@
                                 type="text"
                                 class="form-control"
                                 [placeholder]="localeData?.name_placeholder"
-                                [maxlength]="50"
+                                [maxlength]="100"
                                 (blur)="checkValidation('name', index)"
-                                formControlName="key"
-                                name="key"
+                                formControlName="fieldName"
+                                name="fieldName"
                                 autocomplete="off"
                                 [attr.disabled]="item.get('uniqueName').value && isEnabledIndex !== index ? '' : null"
                             />
                         </div>
-                        <div class="col-lg-3 col-sm-3 col-xs-12">
+                        <div class="col-lg-3 col-sm-3 col-xs-12" formGroupName="fieldType">
                             <label *ngIf="first || isMobileScreen">{{ localeData?.type }}</label>
                             <sh-select
                                 [placeholder]="localeData?.field_type_placeholder"
-                                [options]="dataTypeList"
-                                formControlName="dataType"
-                                name="dataType"
+                                [options]="fieldTypes"
+                                [defaultValue]="item.get('fieldType')?.value?.type | titlecase"
+                                formControlName="type"
+                                name="fieldType"
                                 (selected)="customFieldTypeSelected($event, index)"
                                 [disabled]="item.get('uniqueName').value && isEnabledIndex !== index"
                             >
                             </sh-select>
                         </div>
-                        <div class="col-lg-3 col-sm-3 col-xs-12">
+                        <div class="col-lg-3 col-sm-3 col-xs-12" formGroupName="dataRange">
                             <label *ngIf="first || isMobileScreen">{{ localeData?.length }}</label>
                             <input
                                 *ngIf="
-                                    item.get('dataType').value === 'BOOLEAN' ||
-                                    item.get('dataType').value === 'NUMERIC' ||
-                                    !item.get('dataType').value
+                                    item.get('fieldType').value.type === availableFieldTypes.Boolean ||
+                                    item.get('fieldType').value.type === availableFieldTypes.Number ||
+                                    !item.get('fieldType').value.type
                                 "
-                                type="number"
-                                [max]="30"
-                                [maxLength]="2"
+                                type="text"
+                                maxlength="30"
                                 class="form-control"
-                                formControlName="valueLength"
-                                name="valueLength"
+                                formControlName="max"
+                                name="dataRange"
                                 [attr.disabled]="
                                     (item.get('uniqueName').value && isEnabledIndex !== index) ||
-                                    item.get('dataType').value === 'BOOLEAN'
+                                    item.get('fieldType').value.type === availableFieldTypes.Boolean
                                         ? ''
                                         : null
                                 "
@@ -66,16 +66,19 @@
                                 autocomplete="off"
                             />
                             <input
-                                *ngIf="item.get('dataType').value === 'STRING'"
-                                type="text"
+                                *ngIf="
+                                    item.get('fieldType').value.type === availableFieldTypes.String ||
+                                    item.get('fieldType').value.type === availableFieldTypes.Barcode
+                                "
+                                type="number"
                                 class="form-control"
                                 [max]="150"
                                 [maxLength]="3"
-                                formControlName="valueLength"
-                                name="valueLength"
+                                formControlName="max"
+                                name="dataRange"
                                 [attr.disabled]="
                                     (item.get('uniqueName').value && isEnabledIndex !== index) ||
-                                    item.get('dataType').value === 'BOOLEAN'
+                                    item.get('fieldType').value.type === availableFieldTypes.Boolean
                                         ? ''
                                         : null
                                 "
@@ -103,11 +106,21 @@
                             </button>
                             <button
                                 type="button"
-                                *ngIf="item.get('uniqueName').value"
+                                *ngIf="item.get('uniqueName').value && index !== isEnabledIndex"
                                 class="btn btn-default"
                                 (click)="editCustomfield(index)"
                             >
                                 <i class="icon-edit"></i>
+                            </button>
+                            <button
+                                type="submit"
+                                *ngIf="item.get('uniqueName').value && index === isEnabledIndex"
+                                class="btn btn-default"
+                                [disabled]="!isCustomFormValid"
+                                [ladda]="isSaveCustomInProgress"
+                                (click)="updateCustomFields(customFieldForm.value)"
+                            >
+                                <i class="icon-save"></i>
                             </button>
                         </div>
                     </div>
@@ -119,37 +132,39 @@
                         localeData?.add_new_row
                     }}</a>
                 </div>
-                <div class="col-lg-3 col-sm-3 col-xs-12" *ngIf="updateModeLength">
+                <div class="col-lg-3 col-sm-3 col-xs-12" *ngIf="!isEnabledIndex">
                     <label *ngIf="isMobileScreen" class="d-block">&nbsp;</label>
                     <button
                         type="submit"
                         class="btn btn-primary"
-                        [disabled]="customFieldForm.invalid || !isCustomFormValid"
+                        [disabled]="!isCustomFormValid || customFieldForm.invalid || isEnabledIndex !== null"
                         [ladda]="isSaveCustomInProgress"
-                        (click)="submitCustomFields(customFieldForm.value, 'update')"
-                    >
-                        {{ commonLocaleData?.app_update }}
-                    </button>
-                </div>
-                <div class="col-lg-3 col-sm-3 col-xs-12" *ngIf="!updateModeLength">
-                    <label *ngIf="isMobileScreen" class="d-block">&nbsp;</label>
-                    <button
-                        type="submit"
-                        class="btn btn-primary"
-                        [disabled]="customFieldForm.invalid"
-                        [ladda]="isSaveCustomInProgress"
-                        (click)="submitCustomFields(customFieldForm.value, 'create')"
+                        (click)="saveCustomFields(customFieldForm.value)"
                     >
                         {{ commonLocaleData?.app_save }}
                     </button>
                 </div>
             </div>
         </form>
+        <div class="custom-fields-pagination">
+            <pagination
+                *ngIf="customFieldsList?.results?.length && customFieldsList?.totalItems > customFieldsRequest?.count"
+                [totalItems]="customFieldsList?.totalItems"
+                [maxSize]="5"
+                [itemsPerPage]="customFieldsList?.count"
+                [boundaryLinks]="true"
+                [rotate]="true"
+                (pageChanged)="pageChanged($event)"
+                [firstText]="commonLocaleData?.app_first"
+                [previousText]="commonLocaleData?.app_previous"
+                [nextText]="commonLocaleData?.app_next"
+                [lastText]="commonLocaleData?.app_last"
+            ></pagination>
+        </div>
     </div>
     <div class="search-loading" *ngIf="isGetCustomInProgress">
         <div class="vertical-center"><span class="spinner small"></span> {{ commonLocaleData?.app_loading }}</div>
     </div>
-
     <ng-template #template>
         <div class="modal-header">
             <h4 class="modal-title pull-left">{{ localeData?.delete_custom_field_title }}</h4>

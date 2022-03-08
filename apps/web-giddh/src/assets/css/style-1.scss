@@ -441,7 +441,7 @@ aside-menu-account .container-fluid {
     border: none;
 }
 .border-top-none {
-    border-top: none;
+    border-top: none !important;
 }
 .bd-r-right-none {
     border-right: none;
@@ -2812,6 +2812,26 @@ td.mat-footer-cell {
 .mat-button-focus-overlay {
     background: transparent !important;
 }
+
+.receipt-card {
+    text-field {
+        input.mat-input-element {
+            border-bottom: 1px solid $gainsboro;
+        }
+    }
+}
+
+.right-currency {
+    text-field {
+        input.mat-input-element {
+            border: 1px solid $gainsboro;
+            display: inline-block !important;
+            width: 80px;
+            height: 26px !important;
+        }
+    }
+}
+
 @media (max-width: 767px) {
     .sidebar-overlay {
         .mat-tab-group {
@@ -2851,4 +2871,143 @@ td.mat-footer-cell {
 .mat-sort-header-arrow.ng-trigger.ng-trigger-arrowPosition {
     opacity: 1 !important;
     transform: none !important;
-} /* material css for ledger end*/
+}
+.double-popup-zindex {
+    z-index: 99 !important;
+}
+.receipt-card {
+    .mat-form-field {
+        .mat-form-field-wrapper {
+            padding-bottom: 0px !important;
+        }
+        &.no-border-top {
+            .mat-form-field-wrapper {
+                .mat-form-field-flex {
+                    .mat-form-field-infix {
+                        border-top: none !important;
+                        padding-top: 0px !important;
+                    }
+                }
+            }
+        }
+    }
+    .mat-form-field-appearance-fill {
+        .mat-form-field-flex {
+            padding: 0px !important;
+            .mat-form-field-infix {
+                textarea.mat-input-element {
+                    margin: -13px 0 !important;
+                }
+            }
+        }
+    }
+    .mat-field-select {
+        &.only-bottom-border {
+            .mat-form-field-wrapper {
+                .mat-form-field-flex {
+                    border-top: 0px;
+                    border-left: 0px;
+                    border-right: 0px;
+                    margin-bottom: 1px !important;
+                }
+            }
+        }
+        .mat-form-field-wrapper {
+            .mat-form-field-flex {
+                border: 1px solid $very-light-gray;
+                height: 36px;
+                border-radius: 4px;
+                .mat-select-arrow-wrapper {
+                    transform: translateY(0%) !important;
+                }
+                .mat-form-field-infix {
+                    border-top: 6px solid transparent !important;
+                    .mat-select {
+                        padding-left: 6px;
+                    }
+                    .mat-form-field-label-wrapper {
+                        top: -5px !important;
+                        .mat-form-field-label {
+                            mat-label {
+                                padding-left: 6px;
+                                color: $nobel !important;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .disabled .form-control {
+        background: $whisper-light !important;
+    }
+    .caret-button {
+        min-width: 20px !important;
+        margin-top: -3px !important;
+    }
+}
+.border-left-right-none {
+    border-left: none !important;
+    border-right: none !important;
+}
+.text-field {
+    .text-field-container {
+        .input-custom {
+            border: none;
+            border-bottom: 1px solid $gainsboro;
+        }
+    }
+}
+.change-address-mat-menu {
+    .mat-menu-content {
+        .mat-menu-item {
+            border-bottom: 1px solid $gainsboro;
+            &:last-child {
+                border-bottom: none !important;
+            }
+            &:hover {
+                background: $lavender !important;
+                .dropdown-item {
+                    color: $chetwode-blue !important;
+                }
+            }
+            .dropdown-item {
+                padding: 0 !important;
+                white-space: normal;
+                word-break: break-word;
+                font-size: 14px;
+                &:hover {
+                    background: transparent;
+                }
+            }
+        }
+    }
+}
+.error-box {
+    .tax-control-cmp {
+        a {
+            #tax-control-multi-select {
+                .tax-input {
+                    border: 2px solid $red !important;
+                }
+            }
+        }
+    }
+}
+.mat-option {
+    font-size: 14px !important;
+}
+.border-radius-5 {
+    border-radius: 5px !important;
+}
+/* material css for ledger end*/
+.form-control {
+    &.custom-field {
+        &.ng-touched {
+            &.ng-invalid {
+                border: 2px solid $red !important;
+            }
+        }
+    }
+}

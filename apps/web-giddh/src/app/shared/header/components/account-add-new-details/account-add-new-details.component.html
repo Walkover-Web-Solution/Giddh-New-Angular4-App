@@ -686,25 +686,39 @@
                             >
                                 <div class="col-lg-8">
                                     <div class="name-of-field">
-                                        <label>{{ item.key }} </label>
+                                        <label
+                                            >{{ item.fieldName }}
+                                            <span class="red-text" *ngIf="item.isMandatory">*</span>
+                                        </label>
                                         <input
-                                            *ngIf="item.dataType === 'STRING'"
+                                            *ngIf="
+                                                item.fieldType?.type === availableFieldTypes.String ||
+                                                item.fieldType?.type === availableFieldTypes.Barcode
+                                            "
                                             type="text"
                                             name="values{{ index }}"
                                             formControlName="value"
-                                            class="form-control"
-                                            [maxLength]="item.valueLength"
+                                            class="form-control custom-field"
+                                            [maxLength]="item.dataRange?.max"
+                                            [attr.pattern]="item.regex"
+                                            [required]="item.isMandatory"
                                         />
                                         <input
-                                            *ngIf="item.dataType === 'NUMERIC'"
-                                            type="text"
+                                            *ngIf="item.fieldType?.type === availableFieldTypes.Number"
+                                            type="number"
                                             name="values{{ index }}"
                                             formControlName="value"
-                                            class="form-control"
-                                            [maxLength]="item.valueLength"
+                                            class="form-control custom-field"
+                                            [min]="item.dataRange?.min"
+                                            [max]="item.dataRange?.max"
                                             decimalDigitsDirective
+                                            [attr.pattern]="item.regex"
+                                            [required]="item.isMandatory"
                                         />
-                                        <div *ngIf="item.dataType === 'BOOLEAN'" class="clearfix">
+                                        <div
+                                            *ngIf="item.fieldType?.type === availableFieldTypes.Boolean"
+                                            class="clearfix"
+                                        >
                                             <span class="d-inline-block">
                                                 <input
                                                     id="yes{{ index }}"
@@ -715,7 +729,7 @@
                                                     name="booleanType{{ index }}"
                                                 />
                                                 <label for="yes{{ index }}" class="radio-custom-label">{{
-                                                    commonLocaleData?.app_yes?.toUpperCase()
+                                                    commonLocaleData?.app_true?.toUpperCase()
                                                 }}</label>
                                             </span>
 
@@ -729,7 +743,7 @@
                                                     name="booleanType{{ index }}"
                                                 />
                                                 <label for="no{{ index }}" class="radio-custom-label">{{
-                                                    commonLocaleData?.app_no?.toUpperCase()
+                                                    commonLocaleData?.app_false?.toUpperCase()
                                                 }}</label>
                                             </span>
                                         </div>
