@@ -892,6 +892,7 @@
                                                     adjustPaymentBalanceDueData === 0 &&
                                                     invFormData.voucherDetails.balanceDue === 0) ||
                                                 (voucherApiVersion === 2 &&
+                                                    invFormData.voucherDetails.gainLoss &&
                                                     invFormData.voucherDetails.gainLoss !== 0 &&
                                                     invFormData.voucherDetails.balanceDue === 0)
                                             "
@@ -944,6 +945,7 @@
                                             class="sp-rupees d-flex justify-content-end"
                                             *ngIf="
                                                 voucherApiVersion === 2 &&
+                                                invFormData.voucherDetails.gainLoss &&
                                                 invFormData.voucherDetails.gainLoss !== 0 &&
                                                 invFormData.voucherDetails.balanceDue === 0
                                             "
