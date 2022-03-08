@@ -1322,6 +1322,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                                 }
                             });
                             if (this.isPurchaseInvoice) {
+                                if (this.voucherApiVersion !== 2) {
+                                    obj.companyDetails.billingDetails.state = { code: obj.companyDetails.billingDetails?.stateCode };
+                                    obj.companyDetails.shippingDetails.state = { code: obj.companyDetails.shippingDetails?.stateCode };
+                                }
                                 this.assignCompanyBillingShipping(obj.companyDetails);
 
                                 if (this.copyPurchaseBill) {
