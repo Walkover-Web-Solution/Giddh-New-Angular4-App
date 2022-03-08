@@ -839,7 +839,7 @@
                             class="pull-left"
                             name="generateInvoice"
                             [disabled]="
-                                isAdvanceReceipt ||
+                                (voucherApiVersion === 2 && isAdvanceReceipt) ||
                                 currentTxn?.voucherAdjustments?.adjustments?.length ||
                                 currentTxn?.invoiceLinkingRequest?.linkedInvoices?.length ||
                                 currentTxn?.referenceVoucher?.uniqueName ||

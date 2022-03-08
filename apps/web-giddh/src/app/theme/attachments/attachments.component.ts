@@ -23,6 +23,7 @@ import { InvoiceBulkUpdateService } from "../../services/invoice.bulkupdate.serv
 import { BreakpointObserver } from "@angular/cdk/layout";
 import * as printJS from 'print-js';
 import { OrganizationType } from "../../models/user-login-state";
+import { VoucherTypeEnum } from "../../models/api-models/Sales";
 
 @Component({
     selector: "attachments",
@@ -424,8 +425,8 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
      * @memberof AttachmentsComponent
      */
     public showDeleteVoucherModal(): void {
-        let messageBody = this.localeData?.confirm_delete_file;
-        let autoDeleteEntries = this.invoiceSettings?.invoiceSettings?.autoDeleteEntries;
+        let messageBody = this.localeData?.confirm_delete_voucher;
+        let autoDeleteEntries = (this.selectedItem?.voucherGenerated && this.selectedItem?.voucherGeneratedType === VoucherTypeEnum.sales) ? this.invoiceSettings?.invoiceSettings?.autoDeleteEntries : false;
         if (autoDeleteEntries) {
             messageBody = this.localeData?.entries_delete_message;
         }
