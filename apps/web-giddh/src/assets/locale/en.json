@@ -469,7 +469,8 @@
     "app_datatype_list": {
         "string": "String",
         "number": "Number",
-        "boolean": "Boolean"
+        "boolean": "Boolean",
+        "barcode": "Barcode"
     },
     "app_rc_heading": "Reverse Charge Confirmation",
     "app_rc_selected_note": "Note: If you check this transaction for Reverse Charge, applied taxes will be considered under Reverse Charge taxes and will be added in tax report.",
@@ -638,7 +639,8 @@
         "internet_error": "Please check your internet connection.",
         "internet_disconnected": "Internet disconnected",
         "warehouse_created": "New warehouse created successfully.",
-        "warehouse_updated": "Warehouse updated successfully."
+        "warehouse_updated": "Warehouse updated successfully.",
+        "voucher_saved": "Voucher generated successfully"
     },
     "app_supported_languages": {
         "english": "English",
@@ -665,5 +667,8 @@
     "app_archive": "Archive",
     "app_unarchive": "Unarchive",
     "app_archived": "Archived",
-    "app_unarchived": "Active"
+    "app_unarchived": "Active",
+    "app_not_available": "N/A",
+    "app_true": "True",
+    "app_false": "False"
 }

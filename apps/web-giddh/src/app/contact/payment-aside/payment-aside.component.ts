@@ -495,7 +495,8 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
         this.totalSelectedAccountAmount = 0;
         if (selectedAccount && selectedAccount.length) {
             this.totalSelectedAccountAmount = selectedAccount.reduce((prev, cur) => {
-                return prev + Number(cur.closingBalanceAmount);
+                const closingBalanceAmount = Number(String(cur.closingBalanceAmount).replace(/,/g, ''));
+                return prev + closingBalanceAmount;
             }, 0);
         }
         this.totalSelectedAccountAmount = Number(this.totalSelectedAccountAmount);
@@ -547,7 +548,8 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
                 remarks: '',
                 vendorUniqueName: ''
             };
-            transaction.amount = item?.closingBalanceAmount;
+            const closingBalanceAmount = Number(String(item?.closingBalanceAmount).replace(/,/g, ''));
+            transaction.amount = String(closingBalanceAmount);
             transaction.remarks = item?.remarks;
             transaction.vendorUniqueName = item?.uniqueName;
             this.requestObjectToGetOTP.bankPaymentTransactions.push(transaction);

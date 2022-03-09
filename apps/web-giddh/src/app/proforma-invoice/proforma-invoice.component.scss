@@ -441,8 +441,8 @@ textarea:focus {
                 }
                 &:nth-child(3) {
                     white-space: normal;
-                    width: 90px;
-                    min-width: 90px;
+                    width: 100px;
+                    min-width: 100px;
                 }
                 &:last-child {
                     //border-right: none !important;
@@ -465,7 +465,7 @@ textarea:focus {
                 }
                 &:nth-child(3) {
                     white-space: normal;
-                    width: 90px;
+                    width: 100px;
                 }
                 &.error-box.item-tax {
                     border: 2px solid $red !important;
@@ -553,6 +553,13 @@ textarea:focus {
         width: 100%;
         left: 0;
         overflow: hidden;
+    }
+    .delete-image {
+        top: -7px;
+        position: absolute;
+        right: -20px;
+        width: 4%;
+        cursor: pointer;
     }
 }
 
@@ -1355,7 +1362,8 @@ section.new-table {
     min-width: 40px;
 }
 
-table.table.table-custom-invoice.basic {
+table.table.table-custom-invoice.basic,
+.other-details-section {
     max-width: 1025px;
     width: 100%;
 }
@@ -1782,7 +1790,7 @@ span.eligible-ITC {
         border-bottom: none;
         margin-bottom: 0;
     }
-    .showInMobile {
+    .show-in-mobile {
         background: $white;
         border-top: 1px solid $gainsboro;
         padding-right: 15px;

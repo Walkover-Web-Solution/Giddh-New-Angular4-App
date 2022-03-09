@@ -784,6 +784,11 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
                 activeCompany: action.payload
             });
         }
+        case CompanyActions.RESET_ACTIVE_COMPANY_DATA: {
+            return Object.assign({}, state, {
+                activeCompany: null
+            });
+        }
 
         default:
             return state;
