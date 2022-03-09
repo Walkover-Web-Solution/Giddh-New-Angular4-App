@@ -115,6 +115,15 @@
                     "link": "/pages/contact/vendor",
                     "icon": "icon-vendor",
                     "description": "बल्क एसएमएस/ईमेल भेजें, रिमाइंडर सेट करें"
+                },
+                {
+                    "label": "भुगतान",
+                    "link": "/pages/reports/payment",
+                    "icon": "icon-reciept-new",
+                    "description": "कुल, और अप्रयुक्त भुगतान",
+                    "additional": {
+                        "voucherVersion": 2
+                    }
                 }
             ]
         },
