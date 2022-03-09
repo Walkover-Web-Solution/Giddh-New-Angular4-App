@@ -112,7 +112,8 @@
 	"invoice_copy_options": {
 		"original": "मूळ",
 		"customer": "ग्राहक",
-		"transport": "वाहतूक"
+		"transport": "वाहतूक",
+        "attachment": "संलग्नक"
 	},
     "invalid_email": "[EMAIL] अवैध ईमेल आहे!",
 	"select_copy": "कॉपी निवडा",
