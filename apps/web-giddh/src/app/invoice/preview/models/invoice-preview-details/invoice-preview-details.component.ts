@@ -241,7 +241,6 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         this.fileUploadOptions = { concurrency: 0 };
 
         this.companyName$.pipe(take(1)).subscribe(companyUniqueName => this.companyUniqueName = companyUniqueName);
-        this.voucherApiVersion = this._generalService.voucherApiVersion;
     }
 
     public ngOnChanges(changes: SimpleChanges): void {
