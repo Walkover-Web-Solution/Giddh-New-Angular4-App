@@ -24,6 +24,8 @@ export class DownloadVoucherComponent implements OnInit, OnDestroy {
     public isOriginal: boolean = false;
     public isTransport: boolean = false;
     public isCustomer: boolean = false;
+    /** True if attachment is checked */
+    public isAttachment: boolean = false;
     public isProformaEstimatesInvoice: boolean = false;
     @Output() public cancelEvent: EventEmitter<boolean> = new EventEmitter<boolean>();
     /** Stores the voucher API version of company */
@@ -71,9 +73,9 @@ export class DownloadVoucherComponent implements OnInit, OnDestroy {
                 uniqueName: this.selectedItem.uniqueName
             };
 
-            this.commonService.downloadFile(dataToSend, "VOUCHER", "pdf").pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            this.commonService.downloadFile(dataToSend, (this.isAttachment ? "ALL" : "VOUCHER"), "pdf").pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 if (response?.status !== "error") {
-                    if (dataToSend.copyTypes.length > 1 || this.selectedItem.hasAttachment) {
+                    if (dataToSend.copyTypes.length > 1 || this.isAttachment) {
                         saveAs(response, `${this.selectedItem.voucherNumber}.` + 'zip');
                     } else {
                         saveAs(response, `${this.selectedItem.voucherNumber}.` + 'pdf');
