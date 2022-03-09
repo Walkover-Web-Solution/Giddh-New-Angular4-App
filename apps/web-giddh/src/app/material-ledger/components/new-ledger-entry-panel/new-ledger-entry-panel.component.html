@@ -535,7 +535,15 @@
                                             >
                                                 <ng-template #optionTemplate let-option="option">
                                                     <a href="javascript:void(0)" class="list-item sh-template">
-                                                        <div class="item">{{ option?.label }}</div>
+                                                        <div class="item">
+                                                            {{
+                                                                (blankLedger.voucherType === "pur" ||
+                                                                    blankLedger.voucherType === "purchase") &&
+                                                                !option.label
+                                                                    ? commonLocaleData?.app_not_available
+                                                                    : option.label
+                                                            }}
+                                                        </div>
                                                         <div class="item-unique">
                                                             ({{ localeData?.dated }}:
                                                             {{ option.additional?.voucherDate }})

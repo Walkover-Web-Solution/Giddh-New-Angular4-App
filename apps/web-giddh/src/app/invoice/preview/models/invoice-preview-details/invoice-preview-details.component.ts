@@ -55,7 +55,6 @@ import { ProformaListComponent } from '../../../proforma/proforma-list.component
     styleUrls: [`./invoice-preview-details.component.scss`],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-
 export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
     @ViewChild('searchElement', { static: true }) public searchElement: ElementRef;
     @ViewChild('showEmailSendModal', { static: true }) public showEmailSendModal: ModalDirective;
@@ -84,7 +83,6 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     @Input() public localeData: any = {};
     /* This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
-
     @Output() public deleteVoucher: EventEmitter<any> = new EventEmitter();
     @Output() public updateVoucherAction: EventEmitter<string> = new EventEmitter();
     @Output() public closeEvent: EventEmitter<boolean> = new EventEmitter();
@@ -112,7 +110,6 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     public isMobileView = false;
     public fileUploadOptions: UploaderOptions;
     public uploadInput: EventEmitter<UploadInput>;
-
     public sessionKey$: Observable<string>;
     public companyName$: Observable<string>;
     public isFileUploading: boolean = false;
@@ -203,7 +200,8 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                 (this.attachedDocumentType.type === 'pdf' || this.attachedDocumentType.type === 'image')));
     }
 
-    ngOnInit() {
+    public ngOnInit(): void {
+        this.voucherApiVersion = this._generalService.voucherApiVersion;
         if(document.getElementsByClassName("sidebar-collapse")?.length > 0) {
             this.isSidebarExpanded = false;
         } else {
@@ -246,8 +244,8 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         this.voucherApiVersion = this._generalService.voucherApiVersion;
     }
 
-    ngOnChanges(changes: SimpleChanges): void {
-        if ('items' in changes && changes.items.currentValue.filter(newItem => (!changes?.items?.previousValue || changes?.items?.previousValue?.every(oldItem => oldItem.uniqueName !== newItem?.uniqueName)))?.length) {
+    public ngOnChanges(changes: SimpleChanges): void {
+        if ('items' in changes && changes.items.currentValue.filter(newItem => (!changes?.items?.previousValue || changes?.items?.previousValue?.every(oldItem => oldItem?.uniqueName !== newItem?.uniqueName)))?.length) {
             this.filteredData = changes.items.currentValue;
             if (this.selectedItem && this.selectedItem.uniqueName) {
                 this.selectedItem = this.filteredData.filter(item => {
@@ -284,7 +282,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         }
     }
 
-    ngAfterViewInit(): void {
+    public ngAfterViewInit(): void {
         this.searchElement?.nativeElement.focus();
         fromEvent(this.searchElement?.nativeElement, 'input')
             .pipe(
