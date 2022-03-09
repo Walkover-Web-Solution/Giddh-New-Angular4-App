@@ -93,6 +93,19 @@
                                 }}</label
                             >
                         </div>
+                        <div
+                            class="checkbox"
+                            *ngIf="voucherApiVersion === 2 && voucherHasAttachments && downloadTabActive"
+                        >
+                            <label
+                                ><input
+                                    name="attachment"
+                                    type="checkbox"
+                                    value="Attachment"
+                                    [(ngModel)]="isAttachment"
+                                />{{ localeData?.attachment }}</label
+                            >
+                        </div>
                     </div>
                 </ng-container>
 

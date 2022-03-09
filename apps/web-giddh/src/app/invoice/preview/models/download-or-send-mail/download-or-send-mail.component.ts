@@ -69,6 +69,8 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
     public selectedVoucherUniqueName: string = "";
     /** Voucher has attachments */
     public voucherHasAttachments: boolean = false;
+    /** True if attachment is checked */
+    public isAttachment: boolean = false;
 
     constructor(
         private _toasty: ToasterService,
@@ -265,9 +267,9 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
                 uniqueName: this.selectedVoucher?.uniqueName
             };
 
-            this.commonService.downloadFile(dataToSend, "VOUCHER", "pdf").pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            this.commonService.downloadFile(dataToSend, (this.isAttachment ? "ALL" : "VOUCHER"), "pdf").pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 if (response?.status !== "error") {
-                    if (dataToSend.copyTypes.length > 1 || this.voucherHasAttachments) {
+                    if (dataToSend.copyTypes.length > 1 || this.isAttachment) {
                         saveAs(response, `${this.selectedVoucher?.voucherNumber}.` + 'zip');
                     } else {
                         saveAs(response, `${this.selectedVoucher?.voucherNumber}.` + 'pdf');
