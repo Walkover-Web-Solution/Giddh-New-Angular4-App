@@ -11,5 +11,6 @@
 	"invalid_aadhar_no": "अमान्य आधार संख्या:",
 	"your_aadhar_no": "आपका आधार नंबर",
     "aadhar_required_note": "नोट: <strong>आधार ई-साइन</strong> के लिए आधार आवश्यक है",
-    "go": "जाओ"
+    "go": "जाओ",
+    "attachment": "संलग्नक"
 }

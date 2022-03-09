@@ -112,7 +112,8 @@
     "invoice_copy_options": {
         "original": "Original",
         "customer": "Customer",
-        "transport": "Transport"
+        "transport": "Transport",
+        "attachment": "Attachment"
     },
     "invalid_email": "[EMAIL] is invalid email!",
     "select_copy": "Select Copy",
