@@ -247,7 +247,13 @@
                                 class="text-right"
                                 [attr.data-title]="localeData?.voucher_no"
                             >
-                                {{ entry.voucherNo }}
+                                {{
+                                    entry.voucherNo
+                                        ? entry.voucherNo
+                                        : entry.voucherName === "purchase"
+                                        ? commonLocaleData?.app_not_available
+                                        : ""
+                                }}
                             </td>
                         </ng-container>
                         <ng-container matColumnDef="debit_amount">
