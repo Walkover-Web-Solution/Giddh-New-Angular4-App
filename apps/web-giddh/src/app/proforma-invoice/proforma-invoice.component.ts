@@ -744,7 +744,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public toggleRcmCheckbox(event: any): void {
         event.preventDefault();
         this.rcmConfiguration = this.generalService.getRcmConfiguration(event?.target?.checked, this.commonLocaleData);
-        console.log(this.rcmConfiguration);
     }
 
     /**
