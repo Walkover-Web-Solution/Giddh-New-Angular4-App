@@ -104,6 +104,12 @@
                 {{ commonLocaleData?.app_customer }}
             </label>
         </div>
+        <div class="checkbox" *ngIf="voucherApiVersion === 2 && selectedItem?.hasAttachment">
+            <label>
+                <input name="attachment" type="checkbox" value="Attachment" [(ngModel)]="isAttachment" />
+                {{ localeData?.invoice_copy_options?.attachment }}
+            </label>
+        </div>
     </div>
 
     <!-- region buttons -->

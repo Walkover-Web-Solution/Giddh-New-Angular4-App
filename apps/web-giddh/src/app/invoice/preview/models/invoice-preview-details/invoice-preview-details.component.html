@@ -425,7 +425,7 @@
                                                         [tooltip]="localeData?.download_attachment"
                                                         placement="top"
                                                         (click)="downloadFile()"
-                                                        ><i class="icon-download"></i
+                                                        ><i class="icon-download-new"></i
                                                     ></a>
                                                 </span>
 
@@ -442,8 +442,11 @@
                                             <div
                                                 class="history-btn"
                                                 *ngIf="
-                                                    selectedItem?.voucherType !== 'proformas' &&
-                                                    selectedItem?.voucherType !== 'estimates'
+                                                    (voucherApiVersion !== 2 &&
+                                                        selectedItem?.voucherType === 'purchase') ||
+                                                    (voucherApiVersion === 2 &&
+                                                        selectedItem?.voucherType !== 'proformas' &&
+                                                        selectedItem?.voucherType !== 'estimates')
                                                 "
                                             >
                                                 <button
