@@ -290,6 +290,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     public ngOnInit() {
+        
+        document.querySelector("body")?.classList?.add("invoice-preview-page");
         this._breakPointObservar.observe([
             '(max-width: 1023px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
@@ -1282,6 +1284,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             }
         });
         document.querySelector('body').classList.remove('fixed');
+        document.querySelector('body').classList.remove('invoice-preview-page');
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
