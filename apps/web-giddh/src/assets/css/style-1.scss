@@ -1812,15 +1812,6 @@ ul.pills li {
         flex-direction: column;
     }
 }
-.expense-ledger {
-    update-ledger-entry-panel {
-        #entryModal {
-            .modal-body {
-                padding: 15px 0px !important;
-            }
-        }
-    }
-}
 .advanced label {
     font-size: 14px;
 }
@@ -2872,9 +2863,6 @@ td.mat-footer-cell {
     opacity: 1 !important;
     transform: none !important;
 }
-.double-popup-zindex {
-    z-index: 99 !important;
-}
 .receipt-card {
     .mat-form-field {
         .mat-form-field-wrapper {
@@ -3000,6 +2988,9 @@ td.mat-footer-cell {
 }
 .border-radius-5 {
     border-radius: 5px !important;
+}
+.double-popup-zindex {
+    z-index: 99 !important;
 }
 /* material css for ledger end*/
 .form-control {

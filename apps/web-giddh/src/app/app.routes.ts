@@ -19,6 +19,7 @@ import { MobileHomeComponent } from "./mobile-home/mobile-home.component";
 import { MobileHomeSidebarComponent } from './mobile-home/mobile-home-sidebar/mobile-home-sidebar.component';
 import { MobileSearchCompanyComponent } from './mobile-home/mobile-search-company/mobile-search-company.component';
 import { MobileSearchBranchComponent } from './mobile-home/mobile-search-branch/mobile-search-branch.component';
+import { InventoryCreateGroupComponent } from './new-inventory/component/create-group/create-group.component';
 import { DownloadComponent } from './download/download.component';
 
 export const ROUTES: Routes = [
@@ -66,6 +67,7 @@ export const ROUTES: Routes = [
         children: [
             { path: 'home', loadChildren: () => import('./home/home.module').then(module => module.HomeModule), canActivate: [NeedsAuthorization] },
             { path: 'invoice', loadChildren: () => import('./invoice/invoice.module').then(module => module.InvoiceModule), canActivate: [NeedsAuthorization] },
+            { path: 'thermal', loadChildren: () => import('./invoice/thermal-pdf/thermal-pdf.module').then(module => module.ThermalModule) },
             {
                 path: 'daybook',
                 loadChildren: () => import('./daybook/daybook.module').then(module => module.DaybookModule),
@@ -76,6 +78,8 @@ export const ROUTES: Routes = [
                 redirectTo: 'purchase-management'
             },
             { path: 'inventory', loadChildren: () => import('./inventory/inventory.module').then(module => module.InventoryModule), canActivate: [NeedsAuthorization] },
+            { path: 'new-inventory', loadChildren: () => import('./new-inventory/new-inventory.module').then(module => module.NewInventoryModule), canActivate: [NeedsAuthorization] },
+
             { path: 'inventory-in-out', loadChildren: () => import('./inventory-in-out/inventory-in-out.module').then(module => module.InventoryInOutModule), canActivate: [NeedsAuthorization] },
             { path: 'search', loadChildren: () => import('./search/search.module').then(module => module.SearchModule) },
             { path: 'trial-balance-and-profit-loss', loadChildren: () => import('./financial-reports/financial-reports.module').then(module => module.FinancialReportsModule), canActivate: [NeedsAuthentication, NeedsAuthorization] },
@@ -94,6 +98,7 @@ export const ROUTES: Routes = [
             { path: 'company-import-export', loadChildren: () => import('./companyImportExport/companyImportExport.module').then(module => module.CompanyImportExportModule) },
             { path: 'reports', loadChildren: () => import('./reports/reports.module').then(module => module.ReportsModule), canActivate: [NeedsAuthorization] },
             { path: 'proforma-invoice', loadChildren: () => import('./proforma-invoice/proforma-invoice.module').then(module => module.ProformaInvoiceModule), canActivate: [NeedsAuthorization] },
+            { path: 'create-group', component: InventoryCreateGroupComponent, canActivate: [NeedsAuthorization] },
             { path: 'onboarding', component: OnboardingComponent, canActivate: [NeedsAuthorization] },
             { path: 'welcome', component: WelcomeComponent, canActivate: [NeedsAuthorization] },
             { path: 'billing-detail', loadChildren: () => import('./billing-details/billingDetail.module').then(module => module.BillingDetailModule) },
@@ -102,10 +107,11 @@ export const ROUTES: Routes = [
             { path: 'mobile-search-company', component: MobileSearchCompanyComponent, canActivate: [NeedsAuthorization] },
             { path: 'mobile-search-branch', component: MobileSearchBranchComponent, canActivate: [NeedsAuthorization] },
             { path: 'giddh-all-items', loadChildren: () => import('./all-items/all-item.module').then(module => module.AllItemModule), canActivate: [NeedsAuthorization] },
-            // { path: 'tallysync', loadChildren: () => import('./tallysync/tallysync.module').then(module => module.TallysyncModule), canActivate: [NeedsAuthorization] },
+            { path: 'tallysync', loadChildren: () => import('./tallysync/tallysync.module').then(module => module.TallysyncModule), canActivate: [NeedsAuthorization] },
             { path: 'expenses-manager', loadChildren: () => import('./expenses/expenses.module').then(module => module.ExpensesModule), canActivate: [NeedsAuthorization] },
             { path: 'vat-report', loadChildren: () => import('./vat-report/vatReport.module').then(module => module.VatReportModule), canActivate: [NeedsAuthorization] },
             { path: 'purchase-management', loadChildren: () => import('./purchase/purchase.module').then(module => module.PurchaseModule), canActivate: [NeedsAuthorization] },
+            { path: 'voucher', loadChildren: () => import('./payment-receipt/payment-receipt.module').then(module => module.PaymentReceiptModule), canActivate: [NeedsAuthorization] },
             { path: 'verify-email', loadChildren: () => import('./verify-email/verify-email.module').then(module => module.VerifyEmailModule), canActivate: [NeedsAuthorization] },
             { path: 'voucher', loadChildren: () => import('./payment-receipt/payment-receipt.module').then(module => module.PaymentReceiptModule), canActivate: [NeedsAuthorization] },
             { path: '**', redirectTo: 'home', pathMatch: 'full' }

@@ -273,7 +273,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
         private commonService: CommonService,
         private adjustmentUtilityService: AdjustmentUtilityService
     ) {
-
         this.lc = new LedgerVM();
         this.advanceSearchRequest = new AdvanceSearchRequest();
         this.trxRequest = new TransactionsRequest();
@@ -291,6 +290,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.companyName$ = this.store.pipe(select(p => p.session.companyUniqueName), takeUntil(this.destroyed$));
         this.isCompanyCreated$ = this.store.pipe(select(s => s.session.isCompanyCreated), takeUntil(this.destroyed$));
         this.failedBulkEntries$ = this.store.pipe(select(p => p.ledger.ledgerBulkActionFailedEntries), takeUntil(this.destroyed$));
+
     }
 
     public toggleShow() {

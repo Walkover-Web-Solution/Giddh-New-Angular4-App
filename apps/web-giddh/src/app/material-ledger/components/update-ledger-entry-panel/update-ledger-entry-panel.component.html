@@ -1497,7 +1497,6 @@
                                                     <input
                                                         matInput
                                                         *ngIf="vm.selectedLedger?.voucher?.shortCode !== 'sal'"
-                                                        [disabled]=""
                                                         id="update-ledger-invoice-number"
                                                         type="text"
                                                         [placeholder]="
@@ -1625,8 +1624,8 @@
                                             <td
                                                 *ngIf="
                                                     voucherApiVersion === 2 &&
-                                                    (vm.selectedLedger.voucher?.shortCode === 'credit note' ||
-                                                        vm.selectedLedger.voucher?.shortCode === 'debit note')
+                                                    (vm.selectedLedger?.voucher?.shortCode === 'credit note' ||
+                                                        vm.selectedLedger?.voucher?.shortCode === 'debit note')
                                                 "
                                                 class="pd-r1 pb-1"
                                             >
@@ -1642,10 +1641,10 @@
                                             </td>
                                             <td
                                                 *ngIf="
-                                                    vm.selectedLedger.voucher?.shortCode !== 'jr' &&
-                                                    vm.selectedLedger.voucher?.shortCode !== 'cntr' &&
-                                                    vm.selectedLedger.voucher?.shortCode !== 'rcpt' &&
-                                                    vm.selectedLedger.voucher?.shortCode !== 'advance-receipt'
+                                                    vm.selectedLedger?.voucher?.shortCode !== 'jr' &&
+                                                    vm.selectedLedger?.voucher?.shortCode !== 'cntr' &&
+                                                    vm.selectedLedger?.voucher?.shortCode !== 'rcpt' &&
+                                                    vm.selectedLedger?.voucher?.shortCode !== 'advance-receipt'
                                                 "
                                                 class="pd-r1 pb-1"
                                             >

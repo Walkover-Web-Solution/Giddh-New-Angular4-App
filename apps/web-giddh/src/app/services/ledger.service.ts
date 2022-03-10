@@ -110,6 +110,7 @@ export class LedgerService {
         delete model.baseCurrencyToDisplay;
         delete model.foreignCurrencyToDisplay;
         delete model.otherTaxModal;
+      
         let url = LEDGER_API.CREATE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             .replace(':accountUniqueName', encodeURIComponent(accountUniqueName));
         if (this.generalService.voucherApiVersion === 2) {
@@ -383,14 +384,13 @@ export class LedgerService {
     * delete Multiple Ledger transaction
     */
     public DeleteMultipleLedgerTransaction(accountUniqueName: string, entryUniqueNamesArray: string[]): Observable<BaseResponse<any, string>> {
-        let sessionId = this.generalService.sessionId;
         this.companyUniqueName = this.generalService.companyUniqueName;
         let url = this.config.apiUrl + LEDGER_API.MULTIPLE_DELETE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName));
 
         if (this.generalService.voucherApiVersion === 2) {
             url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
         }
-        return this.httpClient.request('delete', url, { headers: { 'Session-Id': sessionId }, body: { entryUniqueNames: entryUniqueNamesArray } }).pipe(map((res) => {
+        return this.http.deleteWithBody(url, { entryUniqueNames: entryUniqueNamesArray }).pipe(map((res) => {
             let data: any = res;
             data.queryString = { accountUniqueName, entryUniqueNamesArray };
             return data;

@@ -27,7 +27,7 @@ import { BsDropdownDirective } from "ngx-bootstrap/dropdown";
 import { PaginationComponent } from "ngx-bootstrap/pagination";
 import { BsModalRef, BsModalService, ModalOptions } from "ngx-bootstrap/modal";
 import { ElementViewContainerRef } from "../../shared/helpers/directives/elementViewChild/element.viewchild.directive";
-import { debounceTime, distinctUntilChanged, take, takeUntil } from "rxjs/operators";
+import { debounceTime, distinctUntilChanged, takeUntil } from "rxjs/operators";
 import { BreakpointObserver, BreakpointState } from "@angular/cdk/layout";
 import * as moment from "moment/moment";
 import { PerfectScrollbarConfigInterface } from "ngx-perfect-scrollbar";
@@ -41,7 +41,6 @@ import { FormControl } from "@angular/forms";
 import { MatDialog } from "@angular/material/dialog";
 import { MatTableDataSource } from "@angular/material/table";
 import { MatMenuTrigger } from "@angular/material/menu";
-
 @Component({
     selector: "aging-report",
     templateUrl: "aging-report.component.html",
@@ -187,12 +186,10 @@ export class AgingReportComponent implements OnInit, OnDestroy {
         this.universalDate$.pipe(takeUntil(this.destroyed$)).subscribe(dateObj => {
             if (dateObj) {
                 let universalDate = cloneDeep(dateObj);
-
                 this.dueAmountReportRequest.from = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
                 this.dueAmountReportRequest.to = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
                 this.selectedDateRange = { startDate: moment(universalDate[0]), endDate: moment(universalDate[1]) };
                 this.selectedDateRangeUi = moment(universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-
                 this.getDueReport();
             }
         });

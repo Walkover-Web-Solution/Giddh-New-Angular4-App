@@ -139,7 +139,7 @@ $greyClr: #6d6d6d;
     }
     /* Transition */
     &:hover::after {
-        color: $silver;
+        color: $gray;
     }
     &::after {
         -webkit-transition: 0.25s all ease;
@@ -984,10 +984,6 @@ section.static-invoice-table {
     max-width: 485px;
 }
 
-.m-l-10 {
-    margin-left: 10px;
-}
-
 // redesign in DIV formate css
 // .customer-invoice-table:nth-child(2) {
 //   padding-top: 10px;
@@ -1245,7 +1241,7 @@ section.new-table {
 
 .add-bulk-item-modal .right-content hr {
     color: $black;
-    border-color: $very-light-gray;
+    border-color: $gainsboro;
     margin: 10px -15px;
     margin-left: -15px;
 }
@@ -1663,7 +1659,6 @@ span.eligible-ITC {
 .height-rate {
     height: 1px;
 }
-
 .other-detail-card {
     textarea {
         min-height: 100px;
@@ -1687,6 +1682,15 @@ span.eligible-ITC {
                 white-space: normal;
                 word-break: break-word;
             }
+        }
+    }
+}
+#button-focus-proforma {
+    .btn {
+        &:focus {
+            z-index: 3 !important;
+            outline: 0 !important;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25) !important;
         }
     }
 }
