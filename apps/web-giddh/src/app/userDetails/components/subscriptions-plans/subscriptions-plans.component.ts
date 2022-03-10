@@ -11,7 +11,6 @@ import { SettingsProfileActions } from '../../../actions/settings/profile/settin
 import { CompanyActions } from '../../../actions/company.actions';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormControl } from '@angular/forms';
-import { DEFAULT_SIGNUP_TRIAL_PLAN } from '../../../app.constant';
 import { SettingsProfileService } from '../../../services/settings.profile.service';
 import { ToasterService } from '../../../services/toaster.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -73,8 +72,6 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
     public unlimitedUsersTooltipContent: string = "";
     /** This will contain the tooltip content of unlimited customers */
     public unlimitedCustomersVendorsTooltipContent: string = "";
-    /** This will contain the plan unique name of default trial plan */
-    public defaultTrialPlan: string = DEFAULT_SIGNUP_TRIAL_PLAN;
     /** This will hold if plans are showing */
     public isShowPlans: boolean = false;
     /** This will hold the object of active company */
