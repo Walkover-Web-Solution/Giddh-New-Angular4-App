@@ -5946,16 +5946,6 @@ button.btn.btn-filter {
     margin-top: 70px;
     z-index: 99999;
 }
-.invoice-preview-page {
-    .modal-backdrop + .modal {
-        z-index: 9999 !important;
-    }
-}
-.new-branch-list-page {
-    .modal-backdrop + .modal {
-        z-index: 9999 !important;
-    }
-}
 .modal-backdrop + .modal.fade .modal-dialog {
     transform: translate(0);
 }

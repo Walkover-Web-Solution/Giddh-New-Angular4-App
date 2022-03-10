@@ -55,7 +55,6 @@ import { QuicklinkModule, QuicklinkStrategy } from 'ngx-quicklink';
 import { DownloadComponent } from './download/download.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { SnackBarModule } from './theme/snackbar/snackbar.module';
-import { MatDialogModule } from '@angular/material/dialog';
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -140,7 +139,6 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         QuicklinkModule,
         MatSnackBarModule,
         SnackBarModule,
-        MatDialogModule,
         ...CONDITIONAL_IMPORTS
     ],
     /**

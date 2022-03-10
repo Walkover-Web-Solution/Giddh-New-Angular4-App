@@ -27,7 +27,7 @@ import { BsDropdownDirective } from "ngx-bootstrap/dropdown";
 import { PaginationComponent } from "ngx-bootstrap/pagination";
 import { BsModalRef, BsModalService, ModalOptions } from "ngx-bootstrap/modal";
 import { ElementViewContainerRef } from "../../shared/helpers/directives/elementViewChild/element.viewchild.directive";
-import { debounceTime, distinctUntilChanged, takeUntil } from "rxjs/operators";
+import { debounceTime, distinctUntilChanged, take, takeUntil } from "rxjs/operators";
 import { BreakpointObserver, BreakpointState } from "@angular/cdk/layout";
 import * as moment from "moment/moment";
 import { PerfectScrollbarConfigInterface } from "ngx-perfect-scrollbar";
@@ -41,6 +41,7 @@ import { FormControl } from "@angular/forms";
 import { MatDialog } from "@angular/material/dialog";
 import { MatTableDataSource } from "@angular/material/table";
 import { MatMenuTrigger } from "@angular/material/menu";
+
 @Component({
     selector: "aging-report",
     templateUrl: "aging-report.component.html",
