@@ -152,11 +152,11 @@ export class ProfitLossComponent implements OnInit, AfterViewInit, OnDestroy {
                     });
                 }
 
-                if (data?.incomeStatment?.grossProfit?.type === "DEBIT") {
+                if (data?.incomeStatment?.grossProfit?.type === "DEBIT" && data.incomeStatment.grossProfit.amount) {
                     data.incomeStatment.grossProfit.amount = "-" + data.incomeStatment.grossProfit.amount;
                 }
 
-                if (data?.incomeStatment?.operatingProfit?.type === "DEBIT") {
+                if (data?.incomeStatment?.operatingProfit?.type === "DEBIT" && data.incomeStatment.operatingProfit.amount) {
                     data.incomeStatment.operatingProfit.amount = "-" + data.incomeStatment.operatingProfit.amount;
                 }
 
