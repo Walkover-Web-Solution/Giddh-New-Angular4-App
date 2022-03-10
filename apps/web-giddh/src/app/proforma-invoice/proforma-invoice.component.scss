@@ -1690,6 +1690,15 @@ span.eligible-ITC {
         }
     }
 }
+#button-focus-proforma {
+    .btn {
+        &:focus {
+            z-index: 3 !important;
+            outline: 0 !important;
+            border-color: $chetwode-blue !important;
+        }
+    }
+}
 /* resposnvie */
 @media (max-width: 1199px) {
     .invoice-date-due-date {

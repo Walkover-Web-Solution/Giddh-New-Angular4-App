@@ -77,7 +77,10 @@
         </ng-container>
         <!--endregion-->
         <!-- region main form -->
-        <div [hidden]="(isUpdateMode && isUpdateDataInProcess) || (isLastInvoiceCopied && isUpdateDataInProcess)">
+        <div
+            [hidden]="(isUpdateMode && isUpdateDataInProcess) || (isLastInvoiceCopied && isUpdateDataInProcess)"
+            id="button-focus-proforma"
+        >
             <form
                 #invoiceForm="ngForm"
                 novalidate
