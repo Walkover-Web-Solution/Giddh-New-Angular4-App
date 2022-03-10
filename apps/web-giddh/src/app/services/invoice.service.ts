@@ -743,7 +743,8 @@ export class InvoiceService {
             catchError((error) => this.errorHandler.HandleCatch<string, any>(error)));
     }
 
-    /* This will verify the email
+    /**
+     * This will verify the email
      *
      * @param {*} params
      * @returns {Observable<BaseResponse<any, string>>}

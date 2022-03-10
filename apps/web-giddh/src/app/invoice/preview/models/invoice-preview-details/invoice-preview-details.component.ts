@@ -963,7 +963,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
      * @private
      * @memberof PurchaseOrderPreviewComponent
      */
-     private scrollToActiveItem(): void {
+    private scrollToActiveItem(): void {
         setTimeout(() => {
             this.perfectScrollbar?.directiveRef?.scrollToElement(".single-invoice-detail.activeItem");
         }, 200);

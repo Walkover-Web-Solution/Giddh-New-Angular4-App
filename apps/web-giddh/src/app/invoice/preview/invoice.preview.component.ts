@@ -51,9 +51,9 @@ import { SalesService } from '../../services/sales.service';
 import { GeneralService } from '../../services/general.service';
 import { OrganizationType } from '../../models/user-login-state';
 import { CommonActions } from '../../actions/common.actions';
-import { giddhRoundOff } from '../../shared/helpers/helperFunctions';
-import { GeneralActions } from '../../actions/general/general.actions';
 import { AdjustmentUtilityService } from '../../shared/advance-receipt-adjustment/services/adjustment-utility.service';
+import { GeneralActions } from '../../actions/general/general.actions';
+import { giddhRoundOff } from '../../shared/helpers/helperFunctions';
 
 /** Multi currency modules includes Cash/Sales Invoice and CR/DR note */
 const MULTI_CURRENCY_MODULES = [VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote, VoucherTypeEnum.purchase];
@@ -237,10 +237,10 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     public hasVoucherListPermissions: boolean = true;
     /** Stores the voucher API version of company */
     public voucherApiVersion: 1 | 2;
-    /** True if dropdown menu needs to show upwards */
-    public isDropUp: boolean = false;
     /** This holds selected e-invoice for cancelation */
     public selectedEInvoice: any;
+    /** True if dropdown menu needs to show upwards */
+    public isDropUp: boolean = false;
 
     constructor(
         private store: Store<AppState>,
@@ -1966,7 +1966,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         const actionPopupHeight = 200;
         const calculatedPosition = screenHeight - clickedPosition;
 
-        if(calculatedPosition > actionPopupHeight) {
+        if (calculatedPosition > actionPopupHeight) {
             this.isDropUp = false;
         } else {
             this.isDropUp = true;
