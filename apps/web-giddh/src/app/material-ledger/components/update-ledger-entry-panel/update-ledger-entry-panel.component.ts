@@ -303,7 +303,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     }
 
     public ngOnInit() {
-        document.querySelector('body').classList.remove('ledger-body');
+        document.querySelector('body').classList.add('ledger-body');
         if(this.searchResultsPaginationPage) {
             this.searchResultsPaginationData.page = this.searchResultsPaginationPage;
         }
