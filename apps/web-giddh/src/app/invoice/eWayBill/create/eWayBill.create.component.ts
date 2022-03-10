@@ -12,8 +12,6 @@ import { takeUntil } from 'rxjs/operators';
 import { Observable, ReplaySubject, of } from 'rxjs';
 import * as moment from 'moment';
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
-import { InvoiceReceiptActions } from '../../../actions/invoice/receipt/receipt.actions';
-import { VoucherTypeEnum } from '../../../models/api-models/Sales';
 import { ToasterService } from '../../../services/toaster.service';
 
 @Component({
@@ -106,7 +104,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
 
     constructor(private store: Store<AppState>, private invoiceActions: InvoiceActions,
         private _invoiceService: InvoiceService, private router: Router,
-        private _cdRef: ChangeDetectorRef, private invoiceReceiptActions: InvoiceReceiptActions, private toaster: ToasterService) {
+        private _cdRef: ChangeDetectorRef, private toaster: ToasterService) {
         this.isEwaybillGenerateInProcess$ = this.store.pipe(select(p => p.ewaybillstate.isGenerateEwaybillInProcess), takeUntil(this.destroyed$));
         this.isEwaybillGeneratedSuccessfully$ = this.store.pipe(select(p => p.ewaybillstate.isGenerateEwaybilSuccess), takeUntil(this.destroyed$));
         this.isGenarateTransporterInProcess$ = this.store.pipe(select(p => p.ewaybillstate.isAddnewTransporterInProcess), takeUntil(this.destroyed$));
@@ -203,6 +201,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
             this.generateBill['invoiceNumber'] = this.invoiceNumber;
             this.generateBill['toGstIn'] = this.invoiceBillingGstinNo ? this.invoiceBillingGstinNo : 'URP';
             this.generateBill['transDocDate'] = this.generateBill['transDocDate'] ? moment(this.generateBill['transDocDate']).format('DD/MM/YYYY') : null;
+            this.generateBill['uniqueName'] = this.generateEwayBillform?.uniqueName;
 
             if (generateBillform.valid) {
                 this.store.dispatch(this.invoiceActions.GenerateNewEwaybill(generateBillform.value));
