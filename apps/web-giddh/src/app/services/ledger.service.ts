@@ -13,7 +13,6 @@ import { DaybookQueryRequest, DayBookRequestModel } from '../models/api-models/D
 import { ToasterService } from './toaster.service';
 import { ReportsDetailedRequestFilter } from '../models/api-models/Reports';
 import { cloneDeep } from '../lodash-optimized';
-import { HttpClient } from '@angular/common/http';
 
 @Injectable({
     providedIn: 'any'
@@ -24,7 +23,6 @@ export class LedgerService {
     constructor(
         private errorHandler: GiddhErrorHandler,
         public http: HttpWrapperService,
-        private httpClient: HttpClient,
         private generalService: GeneralService,
         @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs,
         private toaster: ToasterService) {

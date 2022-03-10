@@ -361,8 +361,6 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
     public translationLoaded: boolean = false;
     /** Length of entry description */
     public entryDescriptionLength: number = ENTRY_DESCRIPTION_LENGTH;
-    /** Stores the voucher API version of current company */
-    public voucherApiVersion: 1 | 2;
     /** True if form save in progress */
     public isFormSaveInProgress: boolean = false;
     /** Stores the voucher API version of current company */

@@ -316,7 +316,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                     }) :
                     this._receiptServices.GetPurchaseRecordDetails(a.accountUniqueName, a.purchaseRecordUniqueName);
                 apiCallObservable.pipe(takeUntil(this.destroyed$)).subscribe((res: any) => {
-                    if (res && res.body) {
+                    if (res?.body) {
                         if (res.body.date) {
                             this.invoiceSearchRequest.from = res.body.date;
                             this.invoiceSearchRequest.to = res.body.date;
