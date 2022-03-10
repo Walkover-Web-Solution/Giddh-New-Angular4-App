@@ -120,7 +120,7 @@ export class ThermalComponent implements OnInit {
                     for (let taxApp of entry.taxes) {
                         if (taxApp.amount?.amountForAccount > 0) {
                             let taxAmount = parseFloat(taxApp.amount?.amountForAccount).toFixed(2);
-                            tax += this.printerFormat.formatCenter(this.justifyText(taxApp.accountName + ':   ' + '' + taxAmount));
+                            tax += this.printerFormat.formatCenter(this.justifyText(taxApp.accountName + taxApp.taxPercent + '%' + ': '+ '' + taxAmount));
                         }
                     }
                 }
@@ -150,9 +150,7 @@ export class ThermalComponent implements OnInit {
                             this.printerFormat.formatBold(
                                 this.justifyText('Products', 'Qty      Rate    Net Amount'))) +
                         this.printerFormat.formatCenter(this.blankDash()) +
-                        this.printerFormat.lineBreak +
                         items +
-                        this.printerFormat.lineBreak +
                         this.printerFormat.formatCenter(this.blankDash()) +
                         this.justifyText('No Of Items:  ' + noOfItems, 'Total Amt : ' + subTotal.padStart(11)) +
                         this.printerFormat.lineBreak +
