@@ -2501,7 +2501,7 @@ a.btn.btn-xs.btn-link.pull-right {
 }
 
 .multi-select input.form-control {
-    background-image: var(--color-dropdown-primary-caret-icon) !important;
+    // background-image: var(--color-dropdown-primary-caret-icon) !important;
     background-size: 10px !important;
     background-position: 96% !important;
     background-repeat: no-repeat !important;
@@ -2509,7 +2509,7 @@ a.btn.btn-xs.btn-link.pull-right {
     padding-right: 24px !important;
 }
 .aside-pane.sales-aside-tax-pane .multi-select input.form-control {
-    background-image: var(--color-dropdown-primary-caret-icon) !important;
+    // background-image: var(--color-dropdown-primary-caret-icon) !important;
     background-size: 12px !important;
     background-position: 94% !important;
     background-repeat: no-repeat !important;
@@ -2517,7 +2517,7 @@ a.btn.btn-xs.btn-link.pull-right {
     padding-right: 32px !important;
 }
 #tax-control-multi-select.multi-select input.form-control[readonly] {
-    background-image: var(--color-dropdown-primary-caret-icon) !important;
+    // background-image: var(--color-dropdown-primary-caret-icon) !important;
     background-position: 96% !important;
 }
 
