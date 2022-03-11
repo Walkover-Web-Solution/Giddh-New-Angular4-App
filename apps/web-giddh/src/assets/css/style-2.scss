@@ -5946,6 +5946,16 @@ button.btn.btn-filter {
     margin-top: 70px;
     z-index: 99999;
 }
+.invoice-preview-page {
+    .modal-backdrop + .modal {
+        z-index: 9999 !important;
+    }
+}
+.new-branch-list-page {
+    .modal-backdrop + .modal {
+        z-index: 9999 !important;
+    }
+}
 .modal-backdrop + .modal.fade .modal-dialog {
     transform: translate(0);
 }
@@ -6066,7 +6076,9 @@ highcharts-chart {
 .invoice-modal-content .app-aside-menu-other-taxes:host {
     top: 60px !important;
 }
-#top0 {
+
+#top0,
+.no-top {
     top: 0 !important;
 }
 #top0 app-aside-menu-other-taxes {

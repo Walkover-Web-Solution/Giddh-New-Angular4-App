@@ -29,6 +29,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatSelectModule } from '@angular/material/select';
 import { DeleteTemplateConfirmationModalModule } from '../../../invoice/templates/edit-template/modals/confirmation-modal/confirmation.modal.module';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { AttachmentsModule } from '../../../theme/attachments/attachments.module';
 
 @NgModule({
     declarations: [
@@ -63,7 +64,8 @@ import { MatExpansionModule } from '@angular/material/expansion';
         MatDialogModule,
         MatSelectModule,
         DeleteTemplateConfirmationModalModule,
-        MatExpansionModule
+        MatExpansionModule,
+        AttachmentsModule
     ],
     exports: [UpdateLedgerEntryPanelComponent, UpdateLedgerTaxControlComponent, UpdateLedgerDiscountComponent]
 })

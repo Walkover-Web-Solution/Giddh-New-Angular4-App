@@ -27,11 +27,27 @@
                 voucherType !== 'proforma' &&
                 voucherType !== 'proformas' &&
                 voucherType !== 'estimates' &&
-                voucherType !== 'estimate'
+                voucherType !== 'estimate' &&
+                voucherType !== 'debit note' &&
+                voucherType !== 'credit note'
             "
         >
             <h3 class="font-16 mr-b05">{{ localeData?.invoice_copy }}</h3>
             <hr />
+
+            <div class="checkbox" *ngIf="voucherApiVersion === 2">
+                <label>
+                    <input
+                        name="originalCopy"
+                        type="checkbox"
+                        value="Original"
+                        checked
+                        [(ngModel)]="isOriginal"
+                        (change)="invoiceTypeChanged($event)"
+                    />
+                    {{ localeData?.original }}
+                </label>
+            </div>
 
             <div class="checkbox">
                 <label>
@@ -62,7 +78,12 @@
         <div class="row mr-t2 mr-b1">
             <div class="col-sm-12">
                 <div class="btn-group" role="group">
-                    <button type="button" class="btn btn-success" [disabled]="!emailAddresses" (click)="sendEmail()">
+                    <button
+                        type="button"
+                        class="btn btn-success"
+                        [disabled]="!emailAddresses || (!isTransport && !isOriginal && !isCustomer)"
+                        (click)="sendEmail()"
+                    >
                         {{ commonLocaleData?.app_send }}
                     </button>
 

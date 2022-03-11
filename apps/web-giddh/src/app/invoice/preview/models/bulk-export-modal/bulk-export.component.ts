@@ -132,7 +132,14 @@ export class BulkExportModal implements OnInit, OnDestroy {
                     }
                 });
             }
-            postRequest.sendTo = { recipients: validEmails };
+            if (this.generalService.voucherApiVersion === 2) {
+                postRequest.email = { to: validEmails };
+            } else {
+                postRequest.sendTo = { recipients: validEmails };
+            }
+        } else {
+            postRequest.email = undefined;
+            postRequest.sendTo = undefined;
         }
 
         if (!validRecipients) {

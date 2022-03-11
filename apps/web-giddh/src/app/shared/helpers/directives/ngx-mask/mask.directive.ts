@@ -121,6 +121,8 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, OnInit, O
     @Input() public clearIfNotMatch: IConfig['clearIfNotMatch'] | null = null;
     @Input() public validation: IConfig['validation'] | null = null;
     @Input() public customDecimalPlaces: number;
+    /** True if need to forcefully allow prefix even if currency is in the list of unsupported list */
+    @Input() public allowUnsupportedPrefix: IConfig['allowUnsupportedPrefix'] = false;
 
     private _maskValue!: string;
     private _inputValue!: string;
@@ -199,7 +201,11 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, OnInit, O
             this._maskService.maskAvailablePatterns = patterns.currentValue;
         }
         if (prefix) {
-            this._maskService.prefix = unSupportedPrefixAndSuffix.map(m => m.symbol).includes(prefix.currentValue) ? '' : prefix.currentValue || '';
+            if (this.allowUnsupportedPrefix) {
+                this._maskService.prefix = prefix.currentValue || '';
+            } else {
+                this._maskService.prefix = unSupportedPrefixAndSuffix.map(m => m.symbol).includes(prefix.currentValue) ? '' : prefix.currentValue || '';
+            }
         }
         if (suffix) {
             this._maskService.suffix = unSupportedPrefixAndSuffix.map(m => m.symbol).includes(suffix.currentValue) ? '' : suffix.currentValue || '';
