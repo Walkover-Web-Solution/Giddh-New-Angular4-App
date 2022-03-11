@@ -280,6 +280,7 @@ export class LoginActions {
                     if (stateDetail.body && stateDetail.status === 'success') {
                         this._generalService.companyUniqueName = stateDetail.body.companyUniqueName;
                         this._generalService.currentBranchUniqueName = stateDetail.body.branchUniqueName || '';
+                        this._generalService.voucherApiVersion = stateDetail.body.voucherVersion || 1;
                         if (stateDetail.body.branchUniqueName) {
                             const details = {
                                 branchDetails: {

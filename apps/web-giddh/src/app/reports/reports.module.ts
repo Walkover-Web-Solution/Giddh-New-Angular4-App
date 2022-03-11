@@ -30,6 +30,18 @@ import { ReportsComponent } from './reports.component';
 import { ReportsRoutingModule } from './reports.routing.module';
 import { TaxSidebarModule } from '../shared/tax-sidebar/tax-sidebar.module';
 import { NoDataModule } from '../shared/no-data/no-data.module';
+import { PaymentReportComponent } from './components/payment-report/payment-report.component';
+import { PaymentAdvanceSearchComponent } from './components/payment-advance-search/payment-advance-search.component';
+import { PreviewComponent } from '../payment-receipt/components/preview/preview.component';
+import { MatCardModule } from '@angular/material/card';
+import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatButtonModule } from '@angular/material/button';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { NewConfirmModalModule } from '../theme/new-confirm-modal';
+import { MatDialogModule } from '@angular/material/dialog';
+import { SendEmailModule } from '../shared/send-email/send-email.module';
+import { ConfirmModalModule } from '../theme/confirm-modal/confirm-modal.module';
 
 @NgModule({
     declarations: [
@@ -46,10 +58,14 @@ import { NoDataModule } from '../shared/no-data/no-data.module';
         AdvanceReceiptReportComponent,
         ReceiptAdvanceSearchComponent,
         ColumnarReportTableComponent,
-        CashFlowStatementComponent
+        CashFlowStatementComponent,
+        PaymentReportComponent,
+        PaymentAdvanceSearchComponent,
+        PreviewComponent
     ],
     entryComponents: [
-        ReceiptAdvanceSearchComponent
+        ReceiptAdvanceSearchComponent,
+        PaymentAdvanceSearchComponent
     ],
     exports: [
         ReportsComponent,
@@ -77,7 +93,16 @@ import { NoDataModule } from '../shared/no-data/no-data.module';
         ModalModule.forRoot(),
         SharedModule,
         TaxSidebarModule,
-        NoDataModule
+        NoDataModule,
+        MatCardModule,
+        FormFieldsModule,
+        MatMenuModule,
+        MatButtonModule,
+        MatTooltipModule,
+        NewConfirmModalModule,
+        MatDialogModule,
+        SendEmailModule,
+        ConfirmModalModule
     ]
 })
 

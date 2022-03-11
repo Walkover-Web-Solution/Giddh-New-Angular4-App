@@ -36,6 +36,8 @@ export class GiddhDatepickerComponent implements ControlValueAccessor, OnInit, O
     @Input() public showToggleIcon: boolean = true;
     /** Will disable the field if true */
     @Input() public disabled: boolean = false;
+    /** True if we need to show error */
+    @Input() public showError: boolean = false;
     /** Emitting selected date object as output */
     @Output() public dateSelected: EventEmitter<any> = new EventEmitter<any>();
     /** Emitting the state of datepicker (open/close) */
@@ -147,6 +149,10 @@ export class GiddhDatepickerComponent implements ControlValueAccessor, OnInit, O
         if (value) {
             this.innerValue = value;
             this.calendarDate = moment(value, GIDDH_DATE_FORMAT).toDate();
+            this.changeDetectorRef.detectChanges();
+        } else {
+            this.innerValue = "";
+            this.calendarDate = "";
             this.changeDetectorRef.detectChanges();
         }
     }

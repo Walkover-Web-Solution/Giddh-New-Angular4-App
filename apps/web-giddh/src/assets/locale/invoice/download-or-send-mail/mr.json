@@ -3,6 +3,7 @@
 	"enter_mobile_no": "देश कोडसह मोबाइल नंबर प्रविष्ट करा",
 	"invoice_copy": "चलन प्रत",
 	"transport": "वाहतूक",
+    "original": "मूळ",
 	"download_invoice": "बीजक डाउनलोड करा",
 	"enter_valid_email_error": "काही वैध ईमेल आयडी प्रविष्ट करा",
 	"invalid_emails": "अवैध ईमेल.",
@@ -10,5 +11,6 @@
 	"invalid_aadhar_no": "अवैध आधार क्रमांक",
 	"your_aadhar_no": "आपला आधार क्रमांक",
 	"aadhar_required_note": "सुचना: <strong>आधार ई साइन इन</strong> साठी आधार आवश्यक आहे",
-    "go": "जा"
+    "go": "जा",
+    "attachment": "संलग्नक"
 }
