@@ -7,6 +7,8 @@ export interface INameUniqueName {
     name: string;
     isActive?: boolean;
     customerName?: string;
+    parentGroups?: any;
+    category?: any;
 }
 
 /*

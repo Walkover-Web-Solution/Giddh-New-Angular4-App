@@ -99,6 +99,10 @@ export class InprogressComponent implements OnInit, OnDestroy {
                     let tallyEntries =
                         (element.totalSavedEntries * 100) /
                         element.totalTallyEntries;
+                    let tallyVouchers =
+                        (element.totalSavedVouchers * 100) /
+                        element.totalTallyVouchers;
+
                     element["groupsPercent"] =
                         (isNaN(tallyGroups) ? 0 : tallyGroups).toFixed(2) + "%";
                     element["accountsPercent"] =
@@ -107,6 +111,9 @@ export class InprogressComponent implements OnInit, OnDestroy {
                     element["entriesPercent"] =
                         (isNaN(tallyEntries) ? 0 : tallyEntries).toFixed(2) +
                         "%";
+                    element["vouchersPercent"] =
+                        (isNaN(tallyVouchers) ? 0 : tallyVouchers).toFixed(2) +
+                        "%";    
 
                     //error
                     let tallyErrorGroups =
@@ -118,6 +125,10 @@ export class InprogressComponent implements OnInit, OnDestroy {
                     let tallyErrorEntries =
                         (element.tallyErrorEntries * 100) /
                         element.totalTallyEntries;
+                    let tallyErrorVouchers =
+                        (element.tallyErrorVouchers * 100) /
+                        element.totalTallyVouchers;
+
                     element["groupsErrorPercent"] =
                         (isNaN(tallyErrorGroups)
                             ? 0
@@ -133,6 +144,11 @@ export class InprogressComponent implements OnInit, OnDestroy {
                             ? 0
                             : tallyErrorEntries
                         ).toFixed(2) + "%";
+                    element["vouchersErrorPercent"] =
+                        (isNaN(tallyErrorVouchers)
+                            ? 0
+                            : tallyErrorVouchers
+                        ).toFixed(2) + "%";    
                 });
             }
             this.isLoading = false;
