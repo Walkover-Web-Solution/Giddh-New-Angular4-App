@@ -286,6 +286,8 @@ export class DaybookComponent implements OnInit, OnDestroy {
 
                     this.daybookData = response?.body;
                     this.checkIsStockEntryAvailable();
+                } else {
+                    this.daybookData = { entries: [], totalItems: 0, page: 0 };
                 }
                 this.selectedDateRange = { startDate: moment(response?.body?.fromDate, GIDDH_DATE_FORMAT), endDate: moment(response?.body?.toDate, GIDDH_DATE_FORMAT) };
                 this.selectedDateRangeUi = moment(response?.body?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(response?.body?.toDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
