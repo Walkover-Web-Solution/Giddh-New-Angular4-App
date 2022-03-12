@@ -45,7 +45,7 @@ export class SendEmailInvoiceComponent implements OnInit {
     }
 
     invoiceTypeChanged(event) {
-        let val = event.target.value;
+        const val = event.target.value;
         if (event.target.checked) {
             this.invoiceType.push(val);
         } else {

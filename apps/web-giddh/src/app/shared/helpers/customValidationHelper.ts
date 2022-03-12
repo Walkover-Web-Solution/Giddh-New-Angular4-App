@@ -23,8 +23,8 @@ export const mobileValidator = (control: FormControl) => {
 
 export const uniqueNameValidator = (control: FormControl) => {
     return new Promise<any>((resolve, reject) => {
-        let pattern = /^[a-z0-9]*$/;
-        let val = control.value.toLowerCase();
+        const pattern = /^[a-z0-9]*$/;
+        const val = control.value.toLowerCase();
         if (!pattern.test(val)) {
             resolve({ notValidUniqueName: true });
         } else {
@@ -34,14 +34,14 @@ export const uniqueNameValidator = (control: FormControl) => {
 };
 
 export const digitsOnly: ValidatorFn = (control: AbstractControl): { [key: string]: boolean } => {
-    let v: string = control.value;
+    const v: string = control.value;
     if (control.dirty) {
         return /^[+]?([0-9]+(?:[\.][0-9]*)?|\.[0-9]+)$/.test(v) ? null : { digits: true };
     }
 };
 
 export const decimalDigits: ValidatorFn = (control: AbstractControl): { [key: string]: boolean } => {
-    let v = control.value;
+    const v = control.value;
     if (control.dirty && v) {
         return /^[+-]?[0-9]{1,9}(?:\.[0-9]{1,3})?$/.test(v) ? null : { digits: true };
     } else {
@@ -51,7 +51,7 @@ export const decimalDigits: ValidatorFn = (control: AbstractControl): { [key: st
 
 export const equalSigns = (ocVal: string) => {
     return (c: FormControl) => {
-        let v = c.value;
+        const v = c.value;
         if (v && ocVal) {
             return Math.sign(v) !== Math.sign(parseFloat(ocVal)) ? null : { invalidSign: true };
         }
@@ -77,7 +77,7 @@ export const stockManufacturingDetailsValidator = (control: AbstractControl) => 
 };
 
 export const dateValidator = (control: FormControl) => {
-    let datePattern = /^\d{1,2}\-\d{1,2}\-\d{4}$/;
+    const datePattern = /^\d{1,2}\-\d{1,2}\-\d{4}$/;
 
     if (!datePattern.test(control.value)) {
         return { invalidDate: true };

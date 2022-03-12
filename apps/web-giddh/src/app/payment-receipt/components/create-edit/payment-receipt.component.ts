@@ -570,7 +570,7 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
      * @param {Function} successCallback Callback to carry out further operation
      * @memberof PaymentReceiptComponent
      */
-    public onSearchQueryChanged(query: string, page: number = 1, searchType: string, successCallback?: Function): void {
+    public onSearchQueryChanged(query: string, page: number = 1, searchType: string, successCallback?: (...args: any[]) => any): void {
         if (!this.preventDefaultScrollApiCall &&
             (query || (this.defaultCustomerSuggestions && this.defaultCustomerSuggestions.length === 0) || successCallback)) {
             this.searchCustomerResultsPaginationData.query = query;
@@ -1065,8 +1065,8 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
      * @returns Promise to carry out further operations
      * @memberof PaymentReceiptComponent
      */
-    private getUpdatedStateCodes(countryCode: any): Promise<any> {
-        return new Promise((resolve: Function) => {
+    private getUpdatedStateCodes(countryCode: any): Promise<void> {
+        return new Promise((resolve) => {
             if (countryCode) {
                 if (this.countryStates[countryCode]) {
                     this.statesSource = this.countryStates[countryCode];

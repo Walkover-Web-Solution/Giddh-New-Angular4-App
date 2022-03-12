@@ -17,7 +17,7 @@ export class ValidateSectionPermissionDirective implements OnChanges, OnDestroy 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(
-        private elementRef: ElementRef, 
+        private elementRef: ElementRef,
         private renderer: Renderer2,
         private store: Store<AppState>) {
 
@@ -32,7 +32,7 @@ export class ValidateSectionPermissionDirective implements OnChanges, OnDestroy 
         if(!this.hasPermission) {
             this.store.pipe(select(state => state.session.commonLocaleData), takeUntil(this.destroyed$)).subscribe((response) => {
                 if (response) {
-                    let commonLocaleData = response;
+                    const commonLocaleData = response;
                     if(!this.errorMessage) {
                         this.errorMessage = commonLocaleData?.app_giddh_no_permissions;
                     }

@@ -68,7 +68,7 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
     }
 
     @HostListener('window:resize', ['$event'])
-    public resizeEvent(e) {
+    public resizeEvent() {
         this.headerRect = this.header.nativeElement?.getBoundingClientRect();
         this.myModelRect = this.myModel.nativeElement?.getBoundingClientRect();
     }
@@ -123,7 +123,7 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
             }
         });
 
-        this.groupList$.subscribe(response => {
+        this.groupList$.subscribe(() => {
             if (this.keyupInitialized) {
                 setTimeout(() => {
                     this.groupSrch?.nativeElement.focus();

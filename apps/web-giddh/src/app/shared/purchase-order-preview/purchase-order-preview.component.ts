@@ -74,11 +74,11 @@ export class PurchaseOrderPreviewModalComponent implements OnInit, OnDestroy {
         this.isLoading = true;
         this.pdfPreviewHasError = false;
         this.pdfPreviewLoaded = false;
-        let getRequest = { companyUniqueName: this.purchaseOrderCompanyUniqueName, accountUniqueName: this.purchaseOrderAccountUniqueName, poUniqueName: this.purchaseOrderUniqueName };
+        const getRequest = { companyUniqueName: this.purchaseOrderCompanyUniqueName, accountUniqueName: this.purchaseOrderAccountUniqueName, poUniqueName: this.purchaseOrderUniqueName };
 
         this.purchaseOrderService.getPdf(getRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                let blob: Blob = this.generalService.base64ToBlob(response.body, 'application/pdf', 512);
+                const blob: Blob = this.generalService.base64ToBlob(response.body, 'application/pdf', 512);
                 const file = new Blob([blob], { type: 'application/pdf' });
                 URL.revokeObjectURL(this.pdfFileURL);
                 this.pdfFileURL = URL.createObjectURL(file);

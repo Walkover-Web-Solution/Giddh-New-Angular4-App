@@ -180,7 +180,7 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
                 this.selectedInvoice.uniqueName = invoice.purchaseRecordUniqueName;
 
                 if(this.voucherApiVersion !== 2) {
-                    let downloadVoucherRequestObject = {
+                    const downloadVoucherRequestObject = {
                         voucherNumber: [invoice.voucherNumber],
                         voucherType: invoice.voucherType,
                         accountUniqueName: invoice.accountUniqueName
@@ -200,13 +200,13 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
      * @memberof VatReportTransactionsComponent
      */
     public loadDownloadOrSendMailComponent(): void {
-        let viewContainerRef = this.downloadOrSendMailComponent.viewContainerRef;
+        const viewContainerRef = this.downloadOrSendMailComponent.viewContainerRef;
         viewContainerRef.remove();
 
-        let componentInstanceView = viewContainerRef.createComponent(DownloadOrSendInvoiceOnMailComponent);
+        const componentInstanceView = viewContainerRef.createComponent(DownloadOrSendInvoiceOnMailComponent);
         viewContainerRef.insert(componentInstanceView.hostView);
 
-        let componentInstance = componentInstanceView.instance as DownloadOrSendInvoiceOnMailComponent;
+        const componentInstance = componentInstanceView.instance as DownloadOrSendInvoiceOnMailComponent;
         componentInstance.selectedVoucher = this.selectedInvoice;
         componentInstance.downloadOrSendMailEvent.subscribe(e => this.onDownloadOrSendMailEvent(e));
         componentInstance.downloadInvoiceEvent.subscribe(e => this.ondownloadInvoiceEvent(e));
@@ -276,14 +276,14 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
      */
     public ondownloadInvoiceEvent(invoiceCopy): void {
         if(this.voucherApiVersion === 2) {
-            let dataToSend = {
+            const dataToSend = {
                 voucherType: this.selectedInvoice.voucherType,
                 voucherNumber: [this.selectedInvoice.voucherNumber],
                 typeOfInvoice: invoiceCopy,
                 uniqueName: this.selectedInvoice.voucherUniqueName
             };
 
-            let accountUniqueName: string = this.selectedInvoice.account?.uniqueName;
+            const accountUniqueName: string = this.selectedInvoice.account?.uniqueName;
             this.receiptService.DownloadVoucher(dataToSend, accountUniqueName, false).pipe(takeUntil(this.destroyed$)).subscribe(res => {
                 if (res) {
                     if (dataToSend.typeOfInvoice.length > 1) {
@@ -295,7 +295,7 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
                 }
             });
         } else {
-            let dataToSend = {
+            const dataToSend = {
                 voucherNumber: [this.selectedInvoice.voucherNumber],
                 typeOfInvoice: invoiceCopy,
                 voucherType: this.selectedInvoice.voucherType
@@ -322,7 +322,7 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
      * @memberof VatReportTransactionsComponent
      */
     public downloadFile() {
-        let blob = this.generalService.base64ToBlob(this.base64Data, 'application/pdf', 512);
+        const blob = this.generalService.base64ToBlob(this.base64Data, 'application/pdf', 512);
         return saveAs(blob, `${this.commonLocaleData?.app_invoice}-${this.selectedInvoice.account.uniqueName}.pdf`);
     }
 

@@ -68,7 +68,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
     public isUpdateCompanyInProgress$: Observable<boolean>;
     public isCreateAndSwitchCompanyInProcess: boolean;
     public isMobileScreen: boolean = true;
-    public apiPostmanDocUrl: String = API_POSTMAN_DOC_URL;
+    public apiPostmanDocUrl: string = API_POSTMAN_DOC_URL;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** This will hold local JSON data */
     public localeData: any = {};
@@ -324,7 +324,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
     private setStateDetails(tabName: string): void {
         let companyUniqueName = null;
         this.store.pipe(select(c => c.session.companyUniqueName), take(1)).subscribe(s => companyUniqueName = s);
-        let stateDetailsRequest = new StateDetailsRequest();
+        const stateDetailsRequest = new StateDetailsRequest();
         stateDetailsRequest.companyUniqueName = companyUniqueName;
         stateDetailsRequest.lastState = `pages/user-details/${tabName}`;
         this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));

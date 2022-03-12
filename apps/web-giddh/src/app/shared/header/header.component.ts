@@ -353,7 +353,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         // GETTING CURRENT PAGE
         this.store.pipe(select(s => s.general.currentPage), takeUntil(this.destroyed$)).subscribe(response => {
             this.isLedgerAccSelected = false;
-            let currentPageResponse = clone(response);
+            const currentPageResponse = clone(response);
             if (currentPageResponse) {
                 if (currentPageResponse && currentPageResponse.url && currentPageResponse.url.includes('ledger/')) {
                     this.isLedgerAccSelected = true;
@@ -365,10 +365,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         });
         this.user$ = this.store.pipe(select(createSelector([(state: AppState) => state.session.user], (user) => {
             if (user && user.user && user.user.name && user.user.name.length > 1) {
-                let name = user.user.name;
+                const name = user.user.name;
                 if (user.user.name.match(/\s/g)) {
                     this.userFullName = name;
-                    let formattedName = name.split(' ');
+                    const formattedName = name.split(' ');
                     this.userName = formattedName[0][0] + formattedName[1][0];
                 } else {
                     this.userName = user.user.name[0] + user.user.name[1];
@@ -432,7 +432,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 return;
             }
 
-            let orderedCompanies = _.orderBy(companies, 'name');
+            const orderedCompanies = _.orderBy(companies, 'name');
             this.companyList = orderedCompanies;
             this.companyListForFilter = orderedCompanies;
             this.companies$ = observableOf(orderedCompanies);
@@ -552,14 +552,14 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.store.dispatch(this.companyActions.GetApplicationDate());
         this.user$.pipe(take(1)).subscribe((u) => {
             if (u) {
-                let userEmail = u.email;
+                const userEmail = u.email;
                 this.userEmail = clone(userEmail);
-                let userEmailDomain = userEmail.replace(/.*@/, '');
+                const userEmailDomain = userEmail.replace(/.*@/, '');
                 this.userIsCompanyUser = userEmailDomain && this.companyDomains.indexOf(userEmailDomain) !== -1;
-                let name = u.name;
+                const name = u.name;
                 if (u.name.match(/\s/g)) {
                     this.userFullName = name;
-                    let formattedName = name.split(' ');
+                    const formattedName = name.split(' ');
                     this.userName = formattedName[0][0] + formattedName[1][0];
                 } else {
                     this.userName = u.name[0] + u.name[1];
@@ -582,16 +582,16 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             this.isLedgerAccSelected = false;
             const lastState = s.toLowerCase();
 
-            let lastStateHaveParams: boolean = lastState.includes('?');
+            const lastStateHaveParams: boolean = lastState.includes('?');
             if (lastStateHaveParams) {
-                let tempParams = lastState.substr(lastState.lastIndexOf('?'));
-                let urlParams = new URLSearchParams(tempParams);
-                let queryParams: any = {};
+                const tempParams = lastState.substr(lastState.lastIndexOf('?'));
+                const urlParams = new URLSearchParams(tempParams);
+                const queryParams: any = {};
                 urlParams.forEach((val, key) => {
                     queryParams[key] = val;
                 });
 
-                let route = NAVIGATION_ITEM_LIST.find((page) => {
+                const route = NAVIGATION_ITEM_LIST.find((page) => {
                     if (!page.additional) {
                         return;
                     }
@@ -604,7 +604,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 }
             } else {
                 if (lastState.includes('ledger/')) {
-                    let isDestroyed: Subject<boolean> = new Subject<boolean>();
+                    const isDestroyed: Subject<boolean> = new Subject<boolean>();
                     isDestroyed.next(false);
                     this.activeAccount$.pipe(takeUntil(isDestroyed)).subscribe(acc => {
                         if (acc) {
@@ -640,7 +640,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
         this.store.pipe(select(s => s.general.headerTitle)).pipe(takeUntil(this.destroyed$)).subscribe(menu => {
             if (menu) {
-                let menuItem: IUlist = NAVIGATION_ITEM_LIST.find(item => {
+                const menuItem: IUlist = NAVIGATION_ITEM_LIST.find(item => {
                     if (menu.additional && item.additional) {
                         return item?.uniqueName.toLowerCase() === menu.uniqueName.toLowerCase() && item.additional.tabIndex === menu.additional.tabIndex;
                     }
@@ -675,8 +675,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
         this.store.pipe(select(state => state.session.currentLocale), takeUntil(this.destroyed$)).subscribe(response => {
             if (this.activeLocale && this.activeLocale !== response?.value) {
-                this.localeService.getLocale('header', response?.value).subscribe(response => {
-                    this.localeData = response;
+                this.localeService.getLocale('header', response?.value).subscribe(res => {
+                    this.localeData = res;
                 });
             }
             this.activeLocale = response?.value;
@@ -702,7 +702,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.settingsProfileService.GetProfileInfo().pipe(take(1)).subscribe((response: any) => {
             if (response && response.status === "success" && response.body) {
                 this.store.dispatch(this.settingsProfileAction.handleCompanyProfileResponse(response));
-                let res = response.body;
+                const res = response.body;
                 this.store.dispatch(this.companyActions.setActiveCompanyData(res));
 
                 if (res.countryV2 !== null && res.countryV2 !== undefined) {
@@ -721,7 +721,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                     this.subscribedPlan = res.subscription;
 
                     if (this.subscribedPlan?.expiry) {
-                        let expiry = (this.subscribedPlan?.expiry)?.split("-")?.reverse()?.join("-");
+                        const expiry = (this.subscribedPlan?.expiry)?.split("-")?.reverse()?.join("-");
                         this.remainingSubscriptionDays = Number((new Date(expiry).getTime() - new Date().getTime()) / (1000 * 3600 * 24));
                     } else {
                         this.remainingSubscriptionDays = false;
@@ -743,7 +743,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public ngAfterViewInit() {
         if (window['Headway'] === undefined) {
             /* TO SHOW NOTIFICATIONS */
-            let scriptTag = document.createElement('script');
+            const scriptTag = document.createElement('script');
             scriptTag.src = 'https://cdn.headwayapp.co/widget.js';
             scriptTag.type = 'text/javascript';
             scriptTag.defer = true;
@@ -782,7 +782,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             if (dateObj && dateObj.length) {
                 this.isTodaysDateSelected = !dateObj[3];  //entry-setting API date response in case of today fromDate/toDate will be null
                 if (this.isTodaysDateSelected) {
-                    let today = cloneDeep([moment(), moment()]);
+                    const today = cloneDeep([moment(), moment()]);
                     this.selectedDateRange = { startDate: moment(today[0]), endDate: moment(today[1]) };
                     this.selectedDateRangeUi = this.commonLocaleData?.app_today;
                 } else {
@@ -935,7 +935,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         let menu: any = {};
         menu.time = +new Date();
 
-        let o: IUlist = find(NAVIGATION_ITEM_LIST, (item) => {
+        const o: IUlist = find(NAVIGATION_ITEM_LIST, (item) => {
             if (queryParamsObj) {
                 if (item.additional) {
                     return item?.uniqueName.toLowerCase() === pageName.toLowerCase() && item.additional.tabIndex === queryParamsObj.tabIndex;
@@ -1037,26 +1037,26 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
     public loadAddCompanyNewUiComponent() {
-        let viewContainerRef = this.companynewadd.viewContainerRef;
+        const viewContainerRef = this.companynewadd.viewContainerRef;
         viewContainerRef.clear();
-        let componentRef = viewContainerRef.createComponent(CompanyAddNewUiComponent);
-        (componentRef.instance as CompanyAddNewUiComponent).closeCompanyModal.pipe(takeUntil(this.destroyed$)).subscribe((a) => {
+        const componentRef = viewContainerRef.createComponent(CompanyAddNewUiComponent);
+        (componentRef.instance as CompanyAddNewUiComponent).closeCompanyModal.pipe(takeUntil(this.destroyed$)).subscribe(() => {
             this.hideAddCompanyModal();
         });
-        (componentRef.instance as CompanyAddNewUiComponent).closeCompanyModalAndShowAddManege.pipe(takeUntil(this.destroyed$)).subscribe((a) => {
+        (componentRef.instance as CompanyAddNewUiComponent).closeCompanyModalAndShowAddManege.pipe(takeUntil(this.destroyed$)).subscribe(() => {
             this.hideCompanyModalAndShowAddAndManage();
         });
     }
 
     public loadAddManageComponent() {
-        let viewContainerRef = this.addmanage.viewContainerRef;
+        const viewContainerRef = this.addmanage.viewContainerRef;
         viewContainerRef.clear();
-        let componentRef = viewContainerRef.createComponent(ManageGroupsAccountsComponent);
-        (componentRef.instance as ManageGroupsAccountsComponent).closeEvent.pipe(takeUntil(this.destroyed$)).subscribe((a) => {
+        const componentRef = viewContainerRef.createComponent(ManageGroupsAccountsComponent);
+        (componentRef.instance as ManageGroupsAccountsComponent).closeEvent.pipe(takeUntil(this.destroyed$)).subscribe(() => {
             this.hideManageGroupsModal();
             viewContainerRef.remove();
         });
-        this.manageGroupsAccountsModal.onShown.pipe(takeUntil(this.destroyed$)).subscribe((a => {
+        this.manageGroupsAccountsModal.onShown.pipe(takeUntil(this.destroyed$)).subscribe((() => {
             (componentRef.instance as ManageGroupsAccountsComponent).headerRect = (componentRef.instance as ManageGroupsAccountsComponent).header?.nativeElement.getBoundingClientRect();
             (componentRef.instance as ManageGroupsAccountsComponent).myModelRect = (componentRef.instance as ManageGroupsAccountsComponent).myModel?.nativeElement.getBoundingClientRect();
         }));
@@ -1087,8 +1087,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
     public closeSidebarMobile(e) {
-        let excludeElements = ['icon-bar', 'hamburger-menu', 'refresh-manually', 'icon-down-new'];
-        let elementClass = e?.target?.className?.toString();
+        const excludeElements = ['icon-bar', 'hamburger-menu', 'refresh-manually', 'icon-down-new'];
+        const elementClass = e?.target?.className?.toString();
         let validElement = true;
 
         excludeElements.forEach(className => {
@@ -1271,7 +1271,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         }
 
         if (this.activeCompanyForDb?.uniqueName) {
-            let isSmallScreen: boolean = !(window.innerWidth > 1440 && window.innerHeight > 717);
+            const isSmallScreen: boolean = !(window.innerWidth > 1440 && window.innerHeight > 717);
             let branches = [];
             this.store.pipe(select(appStore => appStore.settings.branches), take(1)).subscribe(response => {
                 branches = response || [];
@@ -1299,8 +1299,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     private getElectronAppVersion() {
         this.authService.GetElectronAppVersion().pipe(take(1)).subscribe((res: string) => {
             if (res && typeof res === 'string') {
-                let version = res.split('files')[0];
-                let versNum = version.split(' ')[1];
+                const version = res.split('files')[0];
+                const versNum = version.split(' ')[1];
                 this.apkVersion = versNum;
             }
         });
@@ -1329,7 +1329,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     public getStates(countryCode) {
         if (countryCode !== undefined && countryCode !== null && countryCode !== "") {
-            let statesRequest = new StatesRequest();
+            const statesRequest = new StatesRequest();
             statesRequest.country = countryCode;
             this.store.dispatch(this._generalActions.getAllState(statesRequest));
         }
@@ -1342,10 +1342,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
     public setCurrentPage() {
-        let currentUrl = this.router.url;
+        const currentUrl = this.router.url;
 
         if (currentUrl.includes('/ledger')) {
-            let currentPageObj = new CurrentPage();
+            const currentPageObj = new CurrentPage();
             currentPageObj.name = "";
             currentPageObj.url = currentUrl;
             currentPageObj.additional = "";
@@ -1361,7 +1361,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
     public setCurrentPageTitle(menu) {
-        let currentPageObj = new CurrentPage();
+        const currentPageObj = new CurrentPage();
         currentPageObj.name = menu?.name;
         currentPageObj.url = menu?.uniqueName;
         currentPageObj.additional = menu?.additional;
@@ -1427,7 +1427,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         });
     }
 
-    @HostListener('document:keydown.escape', ['$event']) onKeydownHandler(event: KeyboardEvent) {
+    @HostListener('document:keydown.escape', ['$event']) onKeydownHandler() {
         this.toggleSidebarPane(false, false);
     }
 
@@ -1577,7 +1577,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             this.selectedDateRangeUi = moment(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
             this.fromDate = moment(value.startDate).format(GIDDH_DATE_FORMAT);
             this.toDate = moment(value.endDate).format(GIDDH_DATE_FORMAT);
-            let dates = {
+            const dates = {
                 fromDate: this.fromDate,
                 toDate: this.toDate,
             };
@@ -1585,12 +1585,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             this.store.dispatch(this.companyActions.SetApplicationDate(dates));
         } else {
             this.isTodaysDateSelected = true;
-            let today = cloneDeep([moment(), moment()]);
+            const today = cloneDeep([moment(), moment()]);
 
             this.selectedDateRange = { startDate: moment(today[0]), endDate: moment(today[1]) };
             this.selectedDateRangeUi = this.commonLocaleData?.app_today;
 
-            let dates = {
+            const dates = {
                 fromDate: null,
                 toDate: null,
                 duration: null,
@@ -1651,7 +1651,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      * @memberof HeaderComponent
      */
     @HostListener('window:orientationchange', ['$event'])
-    onOrientationChange(event) {
+    onOrientationChange() {
         if (window['Headway'] !== undefined) {
             window['Headway'].init();
         }
@@ -1664,7 +1664,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      * @memberof HeaderComponent
      */
     @HostListener('window:resize', ['$event'])
-    windowResize(event) {
+    windowResize() {
         if (window['Headway'] !== undefined) {
             window['Headway'].init();
         }
@@ -1676,7 +1676,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      */
     public checkIfPageHasTabs(): void | boolean {
         this.pageHasTabs = false;
-        let currentUrl = this.router.url;
+        const currentUrl = this.router.url;
 
         NAVIGATION_ITEM_LIST.find((page) => {
             if (page.uniqueName === decodeURI(currentUrl) && page.hasTabs === true) {
@@ -1708,8 +1708,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     private getElectronMacAppVersion(): void {
         this.authService.getElectronMacAppVersion().pipe(take(1)).subscribe((res: string) => {
             if (res && typeof res === 'string') {
-                let version = res.split('files')[0];
-                let versNum = version.split(' ')[1];
+                const version = res.split('files')[0];
+                const versNum = version.split(' ')[1];
                 this.macAppVersion = versNum;
             }
         });
@@ -1723,7 +1723,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public checkAndRenewUserSession(): void {
         this.store.pipe(select(state => state.session.user), take(1)).subscribe((user) => {
             if (user && user.session) {
-                let sessionExpiresAt: any = moment(user.session.expiresAt, GIDDH_DATE_FORMAT + " h:m:s");
+                const sessionExpiresAt: any = moment(user.session.expiresAt, GIDDH_DATE_FORMAT + " h:m:s");
 
                 if (sessionExpiresAt.diff(moment(), 'hours') < 24) {
                     this.lastSessionRenewalTime = moment();

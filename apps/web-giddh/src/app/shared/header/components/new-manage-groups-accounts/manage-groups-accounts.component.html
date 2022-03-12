@@ -65,7 +65,7 @@
                         </div>
                         <div
                             class="search-loading no-result"
-                            *ngIf="!(searchLoad | async) && !(groupList$ | async)?.length"
+                            *ngIf="(searchLoad | async) === false && !(groupList$ | async)?.length"
                         >
                             <div class="vertical-center">
                                 <h1>{{ localeData?.no_result_found }}</h1>
@@ -80,7 +80,7 @@
                                 [scrollIndicators]="true"
                             >
                                 <div
-                                    *ngIf="!(searchLoad | async)"
+                                    *ngIf="(searchLoad | async) === false"
                                     [ngStyle]="{ 'width': groupsidebar?.mc?.columns?.length * 255 + 'px' }"
                                     class="wrap-account-sidebar"
                                 >

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
 import { ControlValueAccessor, FormControl, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors } from '@angular/forms';
 import { CustomKeyboardEvent } from './custom-keyboard-event';
 import { Directive, forwardRef, HostListener, Inject, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
@@ -135,7 +136,6 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, OnInit, O
     private giddhDecimalPlaces: number = 2;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    // tslint:disable-next-line
     public onChange = (_: any) => {
     };
     public onTouch = () => {

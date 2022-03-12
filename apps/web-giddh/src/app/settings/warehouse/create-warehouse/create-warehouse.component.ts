@@ -355,7 +355,7 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
      * @param {Function} [successCallback] Callback to carry out further operations
      * @memberof CreateWarehouseComponent
      */
-    public loadLinkedEntities(successCallback?: Function): void {
+    public loadLinkedEntities(successCallback?: (...args: any[]) => any): void {
         this.settingsProfileService.getAllLinkedEntities().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.body && response.status === 'success') {
                 this.addressConfiguration.linkedEntities = response.body.map(result => ({

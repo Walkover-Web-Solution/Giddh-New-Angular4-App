@@ -100,7 +100,7 @@ export class AccountDetailModalComponent implements OnChanges, OnDestroy {
             case 2: // go to sales/ purchase/ debit note or credit note generate page
                 if (this.voucherType === VoucherTypeEnum.sales) {
                     // special case, because we don't have cash invoice as voucher type at api side so we are handling it ui side
-                    let isCashInvoice = this.accountUniqueName === 'cash';
+                    const isCashInvoice = this.accountUniqueName === 'cash';
                     this.goToRoute(`proforma-invoice/invoice/${isCashInvoice ? 'cash' : 'sales'}`);
                 } else {
                     // for purchase/ debit and credit note
@@ -157,12 +157,12 @@ export class AccountDetailModalComponent implements OnChanges, OnDestroy {
      * @memberof AccountDetailModalComponent
      */
     public typeInTextarea(newText) {
-        let el: HTMLInputElement = this.messageBox?.nativeElement;
-        let start = el.selectionStart;
-        let end = el.selectionEnd;
-        let text = el.value;
-        let before = text.substring(0, start);
-        let after = text.substring(end, text.length);
+        const el: HTMLInputElement = this.messageBox?.nativeElement;
+        const start = el.selectionStart;
+        const end = el.selectionEnd;
+        const text = el.value;
+        const before = text.substring(0, start);
+        const after = text.substring(end, text.length);
         el.value = (before + newText + after);
         el.selectionStart = el.selectionEnd = start + newText.length;
         el.focus();
@@ -171,7 +171,7 @@ export class AccountDetailModalComponent implements OnChanges, OnDestroy {
 
     // Send Email/Sms for Accounts
     public send() {
-        let request: BulkEmailRequest = {
+        const request: BulkEmailRequest = {
             data: {
                 subject: this.messageBody.subject,
                 message: this.messageBody.msg,
@@ -190,7 +190,7 @@ export class AccountDetailModalComponent implements OnChanges, OnDestroy {
                     r.status === 'success' ? this._toaster.successToast(r.body) : this._toaster.errorToast(r.message);
                 });
         } else if (this.messageBody.btn.set === this.localeData?.send_sms) {
-            let temp = request;
+            const temp = request;
             delete temp.data['subject'];
             return this._companyServices.sendSms(temp).pipe(takeUntil(this.destroyed$))
                 .subscribe((r) => {
@@ -215,7 +215,7 @@ export class AccountDetailModalComponent implements OnChanges, OnDestroy {
             url = `${url}${additionalParams}`;
         }
         if (isElectron) {
-            let ipcRenderer = (window as any).require('electron').ipcRenderer;
+            const ipcRenderer = (window as any).require('electron').ipcRenderer;
             url = location.origin + location.pathname + `#./pages/${part}/${this.accountUniqueName}`;
             console.log(ipcRenderer.send('open-url', url));
         } else {

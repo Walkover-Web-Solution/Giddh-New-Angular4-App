@@ -152,7 +152,7 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
         }
 
         this.taxes.map(tax => {
-            let index = this.taxRenderData.findIndex(f => f.uniqueName === tax.uniqueName);
+            const index = this.taxRenderData.findIndex(f => f.uniqueName === tax.uniqueName);
 
             // if tax is already prepared then only check if it's checked or not on basis of applicable taxes
             if (index > -1) {
@@ -166,20 +166,20 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
                 }
             } else {
 
-                let taxObj = new TaxControlData();
+                const taxObj = new TaxControlData();
                 taxObj.name = tax.name;
                 taxObj.uniqueName = tax.uniqueName;
                 taxObj.type = tax.taxType;
 
                 if (this.date) {
-                    let taxObject = orderBy(tax.taxDetail, (p: ITaxDetail) => {
+                    const taxObject = orderBy(tax.taxDetail, (p: ITaxDetail) => {
                         return moment(p.date, GIDDH_DATE_FORMAT);
                     }, 'desc');
-                    let exactDate = taxObject.filter(p => moment(p.date, GIDDH_DATE_FORMAT).isSame(moment(this.date, GIDDH_DATE_FORMAT)));
+                    const exactDate = taxObject.filter(p => moment(p.date, GIDDH_DATE_FORMAT).isSame(moment(this.date, GIDDH_DATE_FORMAT)));
                     if (exactDate.length > 0) {
                         taxObj.amount = exactDate[0].taxValue;
                     } else {
-                        let filteredTaxObject = taxObject.filter(p => moment(p.date, GIDDH_DATE_FORMAT) < moment(this.date, GIDDH_DATE_FORMAT));
+                        const filteredTaxObject = taxObject.filter(p => moment(p.date, GIDDH_DATE_FORMAT) < moment(this.date, GIDDH_DATE_FORMAT));
                         if (filteredTaxObject.length > 0) {
                             taxObj.amount = filteredTaxObject[0].taxValue;
                         } else {
@@ -299,16 +299,16 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
             this.hideOtherPopups.emit(true);
             return;
         }
-        let focussableElements = `.${this.rootClass} input[type=text]:not([disabled]),.${this.rootClass} [tabindex]:not([disabled]):not([tabindex="-1"])`;
+        const focussableElements = `.${this.rootClass} input[type=text]:not([disabled]),.${this.rootClass} [tabindex]:not([disabled]):not([tabindex="-1"])`;
         // if (document.activeElement && document.activeElement.form) {
-        let focussable = Array.prototype.filter.call(document.querySelectorAll(focussableElements),
+        const focussable = Array.prototype.filter.call(document.querySelectorAll(focussableElements),
             (element) => {
                 // check for visibility while always include the current activeElement
                 return element.offsetWidth > 0 || element.offsetHeight > 0 || element === document.activeElement
             });
-        let index = focussable.indexOf(document.activeElement);
+        const index = focussable.indexOf(document.activeElement);
         if (index > -1) {
-            let nextElement = focussable[index + 1] || focussable[0];
+            const nextElement = focussable[index + 1] || focussable[0];
             nextElement.focus();
         }
         this.toggleTaxPopup(false);

@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/ban-types */
+/* eslint-disable @typescript-eslint/no-empty-interface */
+/* eslint-disable no-var */
 /*
  * Custom Type Definitions
  * When including 3rd party modules you also need to include the type definition for the module

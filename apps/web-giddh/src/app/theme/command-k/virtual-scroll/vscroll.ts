@@ -1,4 +1,4 @@
-import { Component, ContentChild, ElementRef, EventEmitter, Input, NgZone, OnChanges, OnDestroy, OnInit, Output, Renderer2, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, ContentChild, ElementRef, EventEmitter, HostBinding, Input, NgZone, OnChanges, OnDestroy, OnInit, Output, Renderer2, SimpleChanges, ViewChild } from '@angular/core';
 
 export interface ChangeEvent {
     start?: number;
@@ -19,9 +19,9 @@ interface IUpdateEmit {
     </div>
   `,
     // tslint:disable-next-line:use-host-property-decorator
-    host: {
-        '[style.overflow-y]': "parentScroll ? 'hidden' : 'auto'"
-    },
+    // host: {
+    //     '[style.overflow-y]': "parentScroll ? 'hidden' : 'auto'"
+    // },
     styles: [`
     :host {
       overflow: hidden;
@@ -63,6 +63,10 @@ export class ScrollComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public bufferAmount: number = 0;
     @Input() public scrollAnimationTime: number = 0;
     @Input() public doNotCheckAngularZone: boolean = true;
+
+    @HostBinding('style.overflow-y') get overflowValue() {
+        return this.parentScroll ? 'hidden' : 'auto';
+    }
 
     public viewPortItems: any[];
     public previousStart: number;
@@ -151,13 +155,13 @@ export class ScrollComponent implements OnInit, OnChanges, OnDestroy {
      */
     public scrollInto(item: any, direction?: string) {
 
-        let el: Element = this.parentScroll instanceof Window ? document.body : this.parentScroll || this.element?.nativeElement;
-        let index: number = (this.items || []).indexOf(item);
+        const el: Element = this.parentScroll instanceof Window ? document.body : this.parentScroll || this.element?.nativeElement;
+        const index: number = (this.items || []).indexOf(item);
         if (index < 0 || index >= (this.items || []).length) {
             return;
         }
 
-        let d = this.calculateDimensions();
+        const d = this.calculateDimensions();
         let scrollTop = (Math.floor(index / d.itemsPerRow) * d.childHeight) - (d.childHeight * Math.min(index, (d.itemsPerCol - 1)));
 
         /**
@@ -192,8 +196,8 @@ export class ScrollComponent implements OnInit, OnChanges, OnDestroy {
 
         // check if scroll position is not the multiplication of element height
         if ((scrollTop / d.childHeight) % 1 !== 0) {
-            let int = Math.floor(scrollTop / d.childHeight);
-            let it = (direction) ? int : int + 1;
+            const int = Math.floor(scrollTop / d.childHeight);
+            const it = (direction) ? int : int + 1;
             scrollTop = it * d.childHeight;
         }
 
@@ -215,7 +219,7 @@ export class ScrollComponent implements OnInit, OnChanges, OnDestroy {
      * usage: if you need to get current selected row
      */
     public activeItem(): any {
-        let index = this.getHighLightedItemIndex();
+        const index = this.getHighLightedItemIndex();
         // due to 0 is not consider
         return (index || index === 0) ? this.items[index] : null;
     }
@@ -225,8 +229,8 @@ export class ScrollComponent implements OnInit, OnChanges, OnDestroy {
      * usage: if you need to get current selected row
      */
     public makeItemSelected(): any {
-        let index = this.getHighLightedItemIndex();
-        let d = this.activeItem();
+        const index = this.getHighLightedItemIndex();
+        const d = this.activeItem();
         if (d) {
             this.items.map((item: any, idx: number) => {
                 if (idx === index) {
@@ -259,7 +263,7 @@ export class ScrollComponent implements OnInit, OnChanges, OnDestroy {
         } else if (index === 0 && direction) {
             this.lastActiveItemIdx = index;
         } else {
-            let last = this.items.length - 1;
+            const last = this.items.length - 1;
             this.lastActiveItemIdx = (direction) ? (index - 1) : (index < last) ? (index + 1) : last;
         }
         return this.items[this.lastActiveItemIdx];
@@ -285,10 +289,10 @@ export class ScrollComponent implements OnInit, OnChanges, OnDestroy {
             return false;
         }
         let item;
-        let d = this.calculateDimensions();
+        const d = this.calculateDimensions();
         // EMOJI case inline list case
         if (d.itemsPerRow > 1) {
-            let index = this.getHighLightedItemIndex();
+            const index = this.getHighLightedItemIndex();
             switch (key) {
                 // left arrow
                 case 37: {
@@ -348,7 +352,7 @@ export class ScrollComponent implements OnInit, OnChanges, OnDestroy {
 
     private backToPrevRow(index: number, d: any) {
         if (index < this.items.length && index !== 0) {
-            let idx = index - d.itemsPerRow;
+            const idx = index - d.itemsPerRow;
             if (idx > 0) {
                 return this.items[idx];
             } else {
@@ -361,8 +365,8 @@ export class ScrollComponent implements OnInit, OnChanges, OnDestroy {
 
     private jumpToNextRow(index: number, d: any) {
         if (index < (this.items.length - 1)) {
-            let idx = index + d.itemsPerRow;
-            let last = this.items.length - 1;
+            const idx = index + d.itemsPerRow;
+            const last = this.items.length - 1;
             if (idx > last) {
                 return this.items[last];
             } else {
@@ -403,7 +407,7 @@ export class ScrollComponent implements OnInit, OnChanges, OnDestroy {
     private countItemsPerRow() {
         let offsetTop;
         let itemsPerRow;
-        let children = this.contentElementRef?.nativeElement.children;
+        const children = this.contentElementRef?.nativeElement.children;
         for (itemsPerRow = 0; itemsPerRow < children.length; itemsPerRow++) {
             // tslint:disable-next-line:curly
             if (offsetTop !== undefined && offsetTop !== children[itemsPerRow].offsetTop) break;
@@ -424,11 +428,11 @@ export class ScrollComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     private calculateDimensions() {
-        let el: Element = this.parentScroll instanceof Window ? document.body : this.parentScroll || this.element?.nativeElement;
-        let items = this.items || [];
-        let itemCount = items.length;
-        let viewWidth = el.clientWidth - this.scrollbarWidth;
-        let viewHeight = el.clientHeight - this.scrollbarHeight;
+        const el: Element = this.parentScroll instanceof Window ? document.body : this.parentScroll || this.element?.nativeElement;
+        const items = this.items || [];
+        const itemCount = items.length;
+        const viewWidth = el.clientWidth - this.scrollbarWidth;
+        const viewHeight = el.clientHeight - this.scrollbarHeight;
 
         let contentDimensions;
         if (this.childWidth === undefined || this.childHeight === undefined) {
@@ -441,16 +445,16 @@ export class ScrollComponent implements OnInit, OnChanges, OnDestroy {
                 height: viewHeight
             };
         }
-        let childWidth = this.childWidth || contentDimensions.width;
-        let childHeight = this.childHeight || contentDimensions.height;
+        const childWidth = this.childWidth || contentDimensions.width;
+        const childHeight = this.childHeight || contentDimensions.height;
 
         let itemsPerRow = Math.max(1, this.countItemsPerRow());
-        let itemsPerRowByCalc = Math.max(1, Math.floor(viewWidth / childWidth));
-        let itemsPerCol = Math.max(1, Math.floor(viewHeight / childHeight));
-        let elScrollTop = this.parentScroll instanceof Window
+        const itemsPerRowByCalc = Math.max(1, Math.floor(viewWidth / childWidth));
+        const itemsPerCol = Math.max(1, Math.floor(viewHeight / childHeight));
+        const elScrollTop = this.parentScroll instanceof Window
             ? (window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0)
             : el.scrollTop;
-        let scrollTop = Math.max(0, elScrollTop);
+        const scrollTop = Math.max(0, elScrollTop);
         const scrollHeight = childHeight * Math.ceil(itemCount / itemsPerRow);
         if (itemsPerCol === 1 && Math.floor(scrollTop / scrollHeight * itemCount) + itemsPerRowByCalc >= itemCount) {
             itemsPerRow = itemsPerRowByCalc;
@@ -492,15 +496,15 @@ export class ScrollComponent implements OnInit, OnChanges, OnDestroy {
         if (!this.doNotCheckAngularZone) {
             NgZone.assertNotInAngularZone();
         }
-        let d = this.calculateDimensions();
-        let items = this.items || [];
-        let offsetTop = this.getElementsOffset();
+        const d = this.calculateDimensions();
+        const items = this.items || [];
+        const offsetTop = this.getElementsOffset();
         let elScrollTop = this.getScrollPosition();
         if (elScrollTop > d.scrollHeight) {
             elScrollTop = d.scrollHeight + offsetTop;
         }
-        let scrollTop = Math.max(0, elScrollTop - offsetTop);
-        let indexByScrollTop = Math.round((scrollTop / d.scrollHeight) * (d.itemCount / d.itemsPerRow));
+        const scrollTop = Math.max(0, elScrollTop - offsetTop);
+        const indexByScrollTop = Math.round((scrollTop / d.scrollHeight) * (d.itemCount / d.itemsPerRow));
         let end = Math.min(d.itemCount, (indexByScrollTop * d.itemsPerRow) + (d.itemsPerRow * (d.itemsPerCol + 1)));
 
         let maxStartEnd = end;
@@ -508,7 +512,7 @@ export class ScrollComponent implements OnInit, OnChanges, OnDestroy {
         if (modEnd) {
             maxStartEnd = end + d.itemsPerRow - modEnd;
         }
-        let maxStart = Math.max(0, maxStartEnd - d.itemsPerCol * d.itemsPerRow - d.itemsPerRow);
+        const maxStart = Math.max(0, maxStartEnd - d.itemsPerCol * d.itemsPerRow - d.itemsPerRow);
         let start = Math.min(maxStart, (indexByScrollTop * d.itemsPerRow));
 
         start = !isNaN(start) ? start : -1;
@@ -521,14 +525,14 @@ export class ScrollComponent implements OnInit, OnChanges, OnDestroy {
 
             this.zone.run(() => {
                 // update the scroll list
-                let _end = end >= 0 ? end : 0; // To prevent from accidentally selecting the entire array with a negative 1 (-1) in the end position.
+                const _end = end >= 0 ? end : 0; // To prevent from accidentally selecting the entire array with a negative 1 (-1) in the end position.
                 this.viewPortItems = items.slice(start, _end);
                 // looping again due to some issues
                 this.viewPortItems.map((t: any, index: number) => {
                     t.isHilighted = (index === this.lastActiveItemIdx - start) ? true : false;
                     return t;
                 });
-                let o: IUpdateEmit = {
+                const o: IUpdateEmit = {
                     items: this.viewPortItems,
                     idx: this.lastActiveItemIdx
                 };

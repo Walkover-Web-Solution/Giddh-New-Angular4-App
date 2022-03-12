@@ -56,7 +56,7 @@ export class NavigationWalkerDirective implements OnInit, OnDestroy {
             return;
         }
 
-        let ignoredEl = this.ignoredEl.some(s => {
+        const ignoredEl = this.ignoredEl.some(s => {
             return s.contains(event.target);
         });
 
@@ -224,7 +224,6 @@ export class NavigationWalkerDirective implements OnInit, OnDestroy {
         if (this.listener) {
             this.listener();
         }
-        // @ts-ignore
         node.focus();
         this.listener = this._renderer.listen(node, 'blur', () => this.resetCurrentNode());
     }

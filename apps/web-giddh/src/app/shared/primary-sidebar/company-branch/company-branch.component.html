@@ -61,7 +61,9 @@
                     <ul
                         class="list-style-none font-14"
                         *ngIf="
-                            companyListForFilter && companyListForFilter.length && !(isCompanyRefreshInProcess$ | async)
+                            companyListForFilter &&
+                            companyListForFilter.length &&
+                            (isCompanyRefreshInProcess$ | async) === false
                         "
                     >
                         <li

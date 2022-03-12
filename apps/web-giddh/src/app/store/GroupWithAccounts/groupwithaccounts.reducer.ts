@@ -69,15 +69,278 @@ const prepare = (mockData: GroupsWithAccountsResponse[]): GroupsWithAccountsResp
         return m;
     }), 'category');
 };
-
-const prepareFlattenGroupsAccounts = (mockData: IFlattenGroupsAccountsDetail[]): IFlattenGroupsAccountsDetail[] => {
-    return mockData.map((m) => {
-        m = Object.assign({}, m, {
-            isOpen: false
-        });
-        return m;
-    });
+const toggleActiveGroupFunc = (groups: IGroupsWithAccounts[], uniqueName: string): boolean => {
+    let myChildElementIsOpen = false;
+    if (groups) {
+        for (const grp of groups) {
+            if (grp.uniqueName === uniqueName) {
+                grp.isActive = true;
+                grp.isOpen = !grp.isOpen;
+                myChildElementIsOpen = !grp.isOpen;
+                break;
+            } else {
+                grp.isActive = false;
+            }
+            if (grp.groups) {
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                myChildElementIsOpen = toggleActiveGroupFunc(grp.groups, uniqueName);
+                if (grp.isOpen) {
+                    return myChildElementIsOpen;
+                }
+            }
+        }
+    }
+    return myChildElementIsOpen;
 };
+const updateActiveGroupFunc = (groups: IGroupsWithAccounts[], uniqueName: string, updatedGroup: GroupResponse, result: boolean): boolean => {
+    if (result) {
+        return result;
+    }
+    if (groups) {
+        for (const grp of groups) {
+            if (grp.uniqueName === uniqueName) {
+                grp.name = updatedGroup.name;
+                grp.uniqueName = updatedGroup.uniqueName;
+                grp.isActive = true;
+                grp.isOpen = false;
+                result = true;
+                break;
+            }
+            if (grp.groups) {
+                result = updateActiveGroupFunc(grp.groups, uniqueName, updatedGroup, result);
+                if (result) {
+                    break;
+                }
+            }
+        }
+    }
+    return result;
+};
+const AddAndActiveGroupFunc = (groups: IGroupsWithAccounts[], gData: BaseResponse<GroupResponse, GroupCreateRequest>, myChildElementIsOpen: boolean): boolean => {
+    if (groups) {
+        for (const grp of groups) {
+            if (grp.uniqueName === gData.request.parentGroupUniqueName) {
+                const newData = new GroupsWithAccountsResponse();
+                newData.accounts = [];
+                newData.category = grp.category;
+                newData.groups = [];
+                newData.isActive = false;
+                newData.name = gData.body.name;
+                newData.synonyms = gData.body.synonyms;
+                newData.uniqueName = gData.body.uniqueName;
+                grp.isOpen = true;
+                grp.groups.push(newData);
+                myChildElementIsOpen = true;
+                return myChildElementIsOpen;
+            }
+            if (grp.groups) {
+                myChildElementIsOpen = AddAndActiveGroupFunc(grp.groups, gData, myChildElementIsOpen);
+                if (myChildElementIsOpen) {
+                    return myChildElementIsOpen;
+                }
+            }
+        }
+    }
+    return myChildElementIsOpen;
+};
+const setActiveGroupFunc = (groups: IGroupsWithAccounts[], uniqueName: string, result: IGroupsWithAccounts) => {
+    for (const el of groups) {
+        if (el.uniqueName === uniqueName) {
+            el.isActive = true;
+            el.isOpen = true;
+            result = el;
+            return result;
+        }
+        if (el.groups) {
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            result = setActiveGroupFunc(el.groups, uniqueName, result);
+            if (result) {
+                el.isOpen = true;
+                result = el;
+            } else {
+                el.isOpen = false;
+            }
+        }
+    }
+    return result;
+};
+const removeGroupFunc = (groups: IGroupsWithAccounts[], uniqueName: string, result: IGroupsWithAccounts) => {
+    for (let i = 0; i < groups.length; i++) {
+        if (groups[i].uniqueName === uniqueName) {
+            result = groups[i];
+            groups.splice(i, 1);
+            return result;
+        }
+        if (groups[i].groups) {
+            result = removeGroupFunc(groups[i].groups, uniqueName, result);
+            if (result) {
+                return result;
+            }
+        }
+    }
+};
+const removeAccountFunc = (groups: IGroupsWithAccounts[], uniqueName: string, accountUniqueName: string, result: IAccountsInfo): IAccountsInfo => {
+    if (groups) {
+        for (const grp of groups) {
+            if (grp.uniqueName === uniqueName) {
+                const index = grp.accounts.findIndex(a => a.uniqueName === accountUniqueName);
+                grp.isOpen = false;
+                grp.isActive = false;
+                result = grp.accounts[index];
+                grp.accounts.splice(index, 1);
+                return result;
+            }
+            if (grp.groups) {
+                result = removeAccountFunc(grp.groups, uniqueName, accountUniqueName, result);
+                if (result) {
+                    return result;
+                }
+            }
+        }
+    }
+};
+const addNewGroupFunc = (groups: IGroupsWithAccounts[], gData: IGroupsWithAccounts, parentUniqueName: string, result: boolean): boolean => {
+    if (result) {
+        return result;
+    }
+    for (const grp of groups) {
+        if (grp.uniqueName === parentUniqueName) {
+            grp.groups.push(gData);
+            result = true;
+            return result;
+        }
+        if (grp.groups) {
+            result = addNewGroupFunc(grp.groups, gData, parentUniqueName, result);
+            if (result) {
+                return result;
+            }
+        }
+    }
+    return result;
+};
+const addNewAccountFunc = (groups: IGroupsWithAccounts[], aData: IAccountsInfo, grpUniqueName: string, result: boolean): boolean => {
+    if (result) {
+        return result;
+    }
+    if (groups) {
+        for (const grp of groups) {
+            if (grp.uniqueName === grpUniqueName) {
+                grp.isOpen = true;
+                grp.accounts.push(aData);
+                result = true;
+                return result;
+            }
+            if (grp.groups) {
+                result = addNewAccountFunc(grp.groups, aData, grpUniqueName, result);
+                if (result) {
+                    return result;
+                }
+            }
+        }
+    }
+    return result;
+};
+
+const addCreatedAccountFunc = (groups: IGroupsWithAccounts[], aData: AccountResponseV2 | AccountResponse, grpUniqueName: string, result: boolean): boolean => {
+    if (result) {
+        return result;
+    }
+    if (groups) {
+        for (const grp of groups) {
+            if (grp.uniqueName === grpUniqueName) {
+                grp.isOpen = true;
+                grp.accounts.push(
+                    {
+                        uniqueName: aData.uniqueName,
+                        name: aData.name,
+                        isActive: true,
+                        stocks: aData.stocks,
+                        mergedAccounts: aData.mergedAccounts,
+                    }
+                );
+                result = true;
+                return result;
+            }
+            if (grp.groups) {
+                result = addCreatedAccountFunc(grp.groups, aData, grpUniqueName, result);
+                if (result) {
+                    return result;
+                }
+            }
+        }
+    }
+    return result;
+};
+
+const UpdateAccountFunc = (groups: IGroupsWithAccounts[],
+    aData: AccountResponseV2, grpUniqueName: string, accountUniqueName: string, result: boolean): boolean => {
+    if (result) {
+        return result;
+    }
+    if (groups) {
+        for (const grp of groups) {
+            if (grp.uniqueName === grpUniqueName) {
+                grp.isOpen = true;
+                const index = grp.accounts.findIndex(p => p.uniqueName === accountUniqueName);
+                if (index > -1) {
+                    grp.accounts[index].uniqueName = aData.uniqueName;
+                    grp.accounts[index].name = aData.name;
+                    grp.accounts[index].isActive = true;
+                    grp.accounts[index].stocks = aData.stocks;
+                    grp.accounts[index].mergedAccounts = aData.mergedAccounts;
+                }
+                result = true;
+                return result;
+            }
+            if (grp.groups) {
+                result = UpdateAccountFunc(grp.groups, aData, grpUniqueName, accountUniqueName, result);
+                if (result) {
+                    return result;
+                }
+            }
+        }
+    }
+    return result;
+};
+
+const findAndRemoveAccountFunc = (groups: IGroupsWithAccounts[], uniqueName: string, result: boolean) => {
+    for (const grp of groups) {
+        const accIndex = grp.accounts.findIndex(f => f.uniqueName === uniqueName);
+
+        if (accIndex > -1) {
+            grp.accounts.splice(accIndex, 1);
+            result = true;
+            return result;
+        }
+        if (grp.groups) {
+            result = findAndRemoveAccountFunc(grp.groups, uniqueName, result);
+            if (result) {
+                return result;
+            }
+        }
+    }
+};
+
+const genAddAndManageUi = (groups: IGroupsWithAccounts[], uniqueName: string, result: boolean) => {
+    for (const grp of groups) {
+        if (grp.uniqueName === uniqueName) {
+            grp.isActive = true;
+            grp.isOpen = true;
+            result = true;
+            return result;
+        }
+
+        if (grp.groups) {
+            result = genAddAndManageUi(grp.groups, uniqueName, result);
+
+            if (result) {
+                grp.isOpen = true;
+                return result;
+            }
+        }
+    }
+};
+
 
 /**
  * Setting the InitialState for this Reducer's Store
@@ -159,10 +422,10 @@ export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = i
                 activeTab: 0
             });
         }
-        case GroupWithAccountsAction.GET_GROUP_WITH_ACCOUNTS_RESPONSE:
-            let data: BaseResponse<GroupsWithAccountsResponse[], string> = action.payload;
+        case GroupWithAccountsAction.GET_GROUP_WITH_ACCOUNTS_RESPONSE: {
+            const data: BaseResponse<GroupsWithAccountsResponse[], string> = action.payload;
             if (data.status === 'success') {
-                let newData = prepare(data.body);
+                const newData = prepare(data.body);
                 return Object.assign({}, state, {
                     isGroupWithAccountsLoading: false,
                     groupswithaccounts: newData,
@@ -177,13 +440,14 @@ export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = i
                 });
             }
             return state;
+        }
         case GroupWithAccountsAction.GET_GROUP_DETAILS:
             return Object.assign({}, state, {
                 activeGroupInProgress: true
             });
 
-        case GroupWithAccountsAction.GET_GROUP_DETAILS_RESPONSE:
-            let grpData: BaseResponse<GroupResponse, string> = action.payload;
+        case GroupWithAccountsAction.GET_GROUP_DETAILS_RESPONSE: {
+            const grpData: BaseResponse<GroupResponse, string> = action.payload;
             if (grpData.status === 'success') {
                 return Object.assign({}, state, {
                     activeGroup: grpData.body,
@@ -199,16 +463,17 @@ export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = i
                 });
             }
             return state;
+        }
         case GroupWithAccountsAction.CREATE_GROUP:
             return Object.assign({}, state, {
                 isCreateGroupInProcess: true,
                 isCreateGroupSuccess: false
             });
-        case GroupWithAccountsAction.CREATE_GROUP_RESPONSE:
-            let gData: BaseResponse<GroupResponse, GroupCreateRequest> = action.payload;
+        case GroupWithAccountsAction.CREATE_GROUP_RESPONSE: {
+            const gData: BaseResponse<GroupResponse, GroupCreateRequest> = action.payload;
             if (gData.status === 'success') {
-                let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
-                let myChildElementIsOpen = false;
+                const groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
+                const myChildElementIsOpen = false;
                 AddAndActiveGroupFunc(groupArray, gData, myChildElementIsOpen);
                 return Object.assign({}, state, {
                     groupswithaccounts: groupArray,
@@ -220,41 +485,45 @@ export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = i
                 isCreateGroupInProcess: false,
                 isCreateGroupSuccess: false
             });
-
-        case GroupWithAccountsAction.SHARED_GROUP_WITH_RESPONSE:
-            let sharedData: BaseResponse<GroupSharedWithResponse[], string> = action.payload;
+        }
+        case GroupWithAccountsAction.SHARED_GROUP_WITH_RESPONSE: {
+            const sharedData: BaseResponse<GroupSharedWithResponse[], string> = action.payload;
             if (sharedData.status === 'success') {
                 return Object.assign({}, state, {
                     activeGroupSharedWith: sharedData.body
                 });
             }
             return state;
-        case AccountsAction.SHARED_ACCOUNT_WITH_RESPONSE:
-            let sharedAccountData: BaseResponse<AccountSharedWithResponse[], string> = action.payload;
+        }
+        case AccountsAction.SHARED_ACCOUNT_WITH_RESPONSE: {
+            const sharedAccountData: BaseResponse<AccountSharedWithResponse[], string> = action.payload;
             if (sharedAccountData.status === 'success') {
                 return Object.assign({}, state, {
                     activeAccountSharedWith: sharedAccountData.body
                 });
             }
             return state;
-        case GroupWithAccountsAction.UNSHARE_GROUP_RESPONSE:
-            let unSharedData: BaseResponse<string, string> = action.payload;
+        }
+        case GroupWithAccountsAction.UNSHARE_GROUP_RESPONSE: {
+            const unSharedData: BaseResponse<string, string> = action.payload;
             if (unSharedData.status === 'success') {
-                let myGroupSharedWith = _.cloneDeep(state.activeGroupSharedWith).filter(ac => unSharedData.request !== ac.userEmail);
+                const myGroupSharedWith = _.cloneDeep(state.activeGroupSharedWith).filter(ac => unSharedData.request !== ac.userEmail);
                 return Object.assign({}, state, {
                     activeGroupSharedWith: myGroupSharedWith
                 });
             }
             return state;
-        case AccountsAction.UNSHARE_ACCOUNT_RESPONSE:
-            let unSharedAccData: BaseResponse<string, string> = action.payload;
+        }
+        case AccountsAction.UNSHARE_ACCOUNT_RESPONSE: {
+            const unSharedAccData: BaseResponse<string, string> = action.payload;
             if (unSharedAccData.status === 'success') {
-                let myAccountSharedWith = _.cloneDeep(state.activeAccountSharedWith).filter(ac => unSharedAccData.request !== ac.userEmail);
+                const myAccountSharedWith = _.cloneDeep(state.activeAccountSharedWith).filter(ac => unSharedAccData.request !== ac.userEmail);
                 return Object.assign({}, state, {
                     activeAccountSharedWith: myAccountSharedWith
                 });
             }
             return state;
+        }
         case GroupWithAccountsAction.RESET_GROUPS_STATE:
             return Object.assign({}, state, {
                 groupswithaccounts: [],
@@ -284,26 +553,28 @@ export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = i
             return Object.assign({}, state, {
                 activeGroupTaxHierarchy: null
             });
-        case GroupWithAccountsAction.GET_GROUP_TAX_HIERARCHY_RESPONSE:
-            let taxHierarchyData: BaseResponse<GroupsTaxHierarchyResponse, string> = action.payload;
+        case GroupWithAccountsAction.GET_GROUP_TAX_HIERARCHY_RESPONSE: {
+            const taxHierarchyData: BaseResponse<GroupsTaxHierarchyResponse, string> = action.payload;
             if (taxHierarchyData.status === 'success') {
                 return Object.assign({}, state, {
                     activeGroupTaxHierarchy: taxHierarchyData.body
                 });
             }
             return state;
+        }
         case AccountsAction.GET_ACCOUNT_TAX_HIERARCHY:
             return Object.assign({}, state, {
                 activeAccountTaxHierarchy: null
             });
-        case AccountsAction.GET_ACCOUNT_TAX_HIERARCHY_RESPONSE:
-            let accountTaxHierarchyData: BaseResponse<AccountsTaxHierarchyResponse, string> = action.payload;
+        case AccountsAction.GET_ACCOUNT_TAX_HIERARCHY_RESPONSE: {
+            const accountTaxHierarchyData: BaseResponse<AccountsTaxHierarchyResponse, string> = action.payload;
             if (accountTaxHierarchyData.status === 'success') {
                 return Object.assign({}, state, {
                     activeAccountTaxHierarchy: accountTaxHierarchyData.body
                 });
             }
             return state;
+        }
         case GroupWithAccountsAction.SHOW_ADD_GROUP_FORM:
             return Object.assign({}, state, {
                 addAccountOpen: false,
@@ -360,11 +631,11 @@ export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = i
                 isUpdateGroupSuccess: false
             });
         case GroupWithAccountsAction.UPDATE_GROUP_RESPONSE: {
-            let activeGrpData: BaseResponse<GroupResponse, GroupUpateRequest> = action.payload;
+            const activeGrpData: BaseResponse<GroupResponse, GroupUpateRequest> = action.payload;
             if (activeGrpData.status === 'success') {
-                let newObj = Object.assign({}, activeGrpData.body, { isOpen: true, isActive: true });
-                let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
-                let result = false;
+                const newObj = Object.assign({}, activeGrpData.body, { isOpen: true, isActive: true });
+                const groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
+                const result = false;
                 updateActiveGroupFunc(groupArray, activeGrpData.queryString?.groupUniqueName, activeGrpData.body, result);
                 return Object.assign({}, state, {
                     activeGroup: newObj,
@@ -380,8 +651,8 @@ export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = i
                 isUpdateGroupSuccess: false
             });
         }
-        case AccountsAction.GET_ACCOUNT_DETAILS_RESPONSE:
-            let activeAccount: BaseResponse<AccountResponseV2, string> = action.payload;
+        case AccountsAction.GET_ACCOUNT_DETAILS_RESPONSE: {
+            const activeAccount: BaseResponse<AccountResponseV2, string> = action.payload;
             if (activeAccount.status === 'success') {
                 return Object.assign({}, state, {
                     activeAccount: action.payload.body,
@@ -389,14 +660,15 @@ export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = i
                 });
             }
             return state;
+        }
         case AccountsAction.UPDATE_ACCOUNTV2:
             return Object.assign({}, state, { updateAccountInProcess: true, updateAccountIsSuccess: false });
         case AccountsAction.RESET_UPDATE_ACCOUNTV2:
             return Object.assign({}, state, { updateAccountInProcess: false, updateAccountIsSuccess: false });
         case AccountsAction.UPDATE_ACCOUNT_RESPONSEV2: {
-            let updatedAccount: BaseResponse<AccountResponseV2, AccountRequestV2> = action.payload;
+            const updatedAccount: BaseResponse<AccountResponseV2, AccountRequestV2> = action.payload;
             if (updatedAccount.status === 'success') {
-                let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
+                const groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
                 UpdateAccountFunc(groupArray, updatedAccount.body, updatedAccount.queryString?.groupUniqueName, updatedAccount.queryString?.accountUniqueName, false);
                 return Object.assign({}, state, {
                     activeAccount: action.payload.body,
@@ -416,10 +688,10 @@ export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = i
                 isDeleteAccInProcess: true
             };
 
-        case AccountsAction.DELETE_ACCOUNT_RESPONSE:
-            let d: BaseResponse<string, any> = action.payload;
+        case AccountsAction.DELETE_ACCOUNT_RESPONSE: {
+            const d: BaseResponse<string, any> = action.payload;
             if (d.status === 'success') {
-                let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
+                const groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
                 removeAccountFunc(groupArray, d.request.accountUniqueName, d.request?.groupUniqueName, null);
                 return Object.assign({}, state, {
                     groupswithaccounts: groupArray,
@@ -430,7 +702,7 @@ export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = i
                 });
             }
             return state;
-
+        }
         case AccountsAction.RESET_DELETE_ACCOUNT_FLAGS:
             return {
                 ...state, isDeleteAccSuccess: false, isDeleteAccInProcess: false
@@ -442,10 +714,10 @@ export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = i
                 isDeleteGroupInProcess: true,
                 isDeleteGroupSuccess: false
             };
-        case GroupWithAccountsAction.DELETE_GROUP_RESPONSE:
-            let g: BaseResponse<string, string> = action.payload;
+        case GroupWithAccountsAction.DELETE_GROUP_RESPONSE: {
+            const g: BaseResponse<string, string> = action.payload;
             if (g.status === 'success') {
-                let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
+                const groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
                 removeGroupFunc(groupArray, g.request, null);
                 return Object.assign({}, state, {
                     groupswithaccounts: groupArray,
@@ -459,6 +731,7 @@ export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = i
                 isDeleteGroupInProcess: false,
                 isDeleteGroupSuccess: false
             };
+        }
         case GroupWithAccountsAction.MOVE_GROUP:
             return {
                 ...state,
@@ -466,10 +739,10 @@ export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = i
                 isMoveGroupSuccess: false
             };
         case GroupWithAccountsAction.MOVE_GROUP_RESPONSE: {
-            let m: BaseResponse<MoveGroupResponse, MoveGroupRequest> = action.payload;
+            const m: BaseResponse<MoveGroupResponse, MoveGroupRequest> = action.payload;
             if (m.status === 'success') {
-                let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
-                let deletedItem = removeGroupFunc(groupArray, m.queryString?.groupUniqueName, null);
+                const groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
+                const deletedItem = removeGroupFunc(groupArray, m.queryString?.groupUniqueName, null);
                 addNewGroupFunc(groupArray, deletedItem, m.request.parentGroupUniqueName, false);
                 return Object.assign({}, state, {
                     groupswithaccounts: groupArray,
@@ -486,7 +759,7 @@ export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = i
             };
         }
         case GroupWithAccountsAction.GEN_ADD_AND_MANAGE_UI: {
-            let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(action.payload.groups);
+            const groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(action.payload.groups);
             genAddAndManageUi(groupArray, action.payload, null);
             return {
                 ...state,
@@ -495,10 +768,10 @@ export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = i
         }
 
         case AccountsAction.MOVE_ACCOUNT_RESPONSE: {
-            let mAcc: BaseResponse<string, AccountMoveRequest> = action.payload;
+            const mAcc: BaseResponse<string, AccountMoveRequest> = action.payload;
             if (mAcc.status === 'success') {
-                let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
-                let deletedItem = removeAccountFunc(groupArray, mAcc.queryString.activeGroupUniqueName, mAcc.queryString.accountUniqueName, null);
+                const groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
+                const deletedItem = removeAccountFunc(groupArray, mAcc.queryString.activeGroupUniqueName, mAcc.queryString.accountUniqueName, null);
                 addNewAccountFunc(groupArray, deletedItem, mAcc.request.uniqueName, false);
                 return Object.assign({}, state, {
                     groupswithaccounts: groupArray,
@@ -516,9 +789,9 @@ export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = i
             });
         }
         case AccountsAction.MERGE_ACCOUNT_RESPONSE: {
-            let dd: BaseResponse<string, AccountMergeRequest[]> = action.payload;
+            const dd: BaseResponse<string, AccountMergeRequest[]> = action.payload;
             if (dd.status === 'success') {
-                let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
+                const groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
                 dd.request.forEach(f => {
                     findAndRemoveAccountFunc(groupArray, f.uniqueName, false);
                 });
@@ -528,6 +801,7 @@ export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = i
                     groupswithaccounts: groupArray
                 };
             }
+            break;
         }
         case AccountsAction.CREATE_ACCOUNTV2:
         case AccountsAction.CREATE_ACCOUNT: {
@@ -535,13 +809,13 @@ export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = i
         }
 
         case AccountsAction.CREATE_ACCOUNT_RESPONSEV2: {
-            let accountData: BaseResponse<AccountResponseV2, AccountRequestV2> = action.payload;
+            const accountData: BaseResponse<AccountResponseV2, AccountRequestV2> = action.payload;
             if (accountData.status === 'success') {
-                let o: INameUniqueName = {
+                const o: INameUniqueName = {
                     name: accountData.body.name,
                     uniqueName: accountData.body.uniqueName
                 };
-                let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
+                const groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
                 if (groupArray) {
                     addCreatedAccountFunc(groupArray, accountData.body, accountData.queryString?.groupUniqueName, false);
                 }
@@ -557,13 +831,13 @@ export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = i
         }
 
         case AccountsAction.CREATE_ACCOUNT_RESPONSE: {
-            let accountData: BaseResponse<AccountResponse, AccountRequest> = action.payload;
+            const accountData: BaseResponse<AccountResponse, AccountRequest> = action.payload;
             if (accountData.status === 'success') {
-                let o: INameUniqueName = {
+                const o: INameUniqueName = {
                     name: accountData.body.name,
                     uniqueName: accountData.body.uniqueName
                 };
-                let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
+                const groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
                 if (groupArray) {
                     addCreatedAccountFunc(groupArray, accountData.body, accountData.queryString?.groupUniqueName, false);
                 }
@@ -586,279 +860,9 @@ export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = i
             return Object.assign({}, state, {
                 activeTab: action.payload
             });
-        }    
+        }
         default: {
             return state;
         }
     }
 }
-
-const toggleActiveGroupFunc = (groups: IGroupsWithAccounts[], uniqueName: string): boolean => {
-    let myChildElementIsOpen = false;
-    if (groups) {
-        for (let grp of groups) {
-            if (grp.uniqueName === uniqueName) {
-                grp.isActive = true;
-                grp.isOpen = !grp.isOpen;
-                myChildElementIsOpen = !grp.isOpen;
-                break;
-            } else {
-                grp.isActive = false;
-            }
-            if (grp.groups) {
-                myChildElementIsOpen = toggleActiveGroupFunc(grp.groups, uniqueName);
-                if (grp.isOpen) {
-                    return myChildElementIsOpen;
-                }
-            }
-        }
-    }
-    return myChildElementIsOpen;
-};
-const updateActiveGroupFunc = (groups: IGroupsWithAccounts[], uniqueName: string, updatedGroup: GroupResponse, result: boolean): boolean => {
-    if (result) {
-        return result;
-    }
-    if (groups) {
-        for (let grp of groups) {
-            if (grp.uniqueName === uniqueName) {
-                grp.name = updatedGroup.name;
-                grp.uniqueName = updatedGroup.uniqueName;
-                grp.isActive = true;
-                grp.isOpen = false;
-                result = true;
-                break;
-            }
-            if (grp.groups) {
-                result = updateActiveGroupFunc(grp.groups, uniqueName, updatedGroup, result);
-                if (result) {
-                    break;
-                }
-            }
-        }
-    }
-    return result;
-};
-const AddAndActiveGroupFunc = (groups: IGroupsWithAccounts[], gData: BaseResponse<GroupResponse, GroupCreateRequest>, myChildElementIsOpen: boolean): boolean => {
-    if (groups) {
-        for (let grp of groups) {
-            if (grp.uniqueName === gData.request.parentGroupUniqueName) {
-                let newData = new GroupsWithAccountsResponse();
-                newData.accounts = [];
-                newData.category = grp.category;
-                newData.groups = [];
-                newData.isActive = false;
-                newData.name = gData.body.name;
-                newData.synonyms = gData.body.synonyms;
-                newData.uniqueName = gData.body.uniqueName;
-                grp.isOpen = true;
-                grp.groups.push(newData);
-                myChildElementIsOpen = true;
-                return myChildElementIsOpen;
-            }
-            if (grp.groups) {
-                myChildElementIsOpen = AddAndActiveGroupFunc(grp.groups, gData, myChildElementIsOpen);
-                if (myChildElementIsOpen) {
-                    return myChildElementIsOpen;
-                }
-            }
-        }
-    }
-    return myChildElementIsOpen;
-};
-const setActiveGroupFunc = (groups: IGroupsWithAccounts[], uniqueName: string, result: IGroupsWithAccounts) => {
-    for (let el of groups) {
-        if (el.uniqueName === uniqueName) {
-            el.isActive = true;
-            el.isOpen = true;
-            result = el;
-            return result;
-        }
-        if (el.groups) {
-            result = setActiveGroupFunc(el.groups, uniqueName, result);
-            if (result) {
-                el.isOpen = true;
-                result = el;
-            } else {
-                el.isOpen = false;
-            }
-        }
-    }
-    return result;
-};
-const removeGroupFunc = (groups: IGroupsWithAccounts[], uniqueName: string, result: IGroupsWithAccounts) => {
-    for (let i = 0; i < groups.length; i++) {
-        if (groups[i].uniqueName === uniqueName) {
-            result = groups[i];
-            groups.splice(i, 1);
-            return result;
-        }
-        if (groups[i].groups) {
-            result = removeGroupFunc(groups[i].groups, uniqueName, result);
-            if (result) {
-                return result;
-            }
-        }
-    }
-};
-const removeAccountFunc = (groups: IGroupsWithAccounts[], uniqueName: string, accountUniqueName: string, result: IAccountsInfo): IAccountsInfo => {
-    if (groups) {
-        for (let grp of groups) {
-            if (grp.uniqueName === uniqueName) {
-                let index = grp.accounts.findIndex(a => a.uniqueName === accountUniqueName);
-                grp.isOpen = false;
-                grp.isActive = false;
-                result = grp.accounts[index];
-                grp.accounts.splice(index, 1);
-                return result;
-            }
-            if (grp.groups) {
-                result = removeAccountFunc(grp.groups, uniqueName, accountUniqueName, result);
-                if (result) {
-                    return result;
-                }
-            }
-        }
-    }
-};
-const addNewGroupFunc = (groups: IGroupsWithAccounts[], gData: IGroupsWithAccounts, parentUniqueName: string, result: boolean): boolean => {
-    if (result) {
-        return result;
-    }
-    for (let grp of groups) {
-        if (grp.uniqueName === parentUniqueName) {
-            grp.groups.push(gData);
-            result = true;
-            return result;
-        }
-        if (grp.groups) {
-            result = addNewGroupFunc(grp.groups, gData, parentUniqueName, result);
-            if (result) {
-                return result;
-            }
-        }
-    }
-    return result;
-};
-const addNewAccountFunc = (groups: IGroupsWithAccounts[], aData: IAccountsInfo, grpUniqueName: string, result: boolean): boolean => {
-    if (result) {
-        return result;
-    }
-    if (groups) {
-        for (let grp of groups) {
-            if (grp.uniqueName === grpUniqueName) {
-                grp.isOpen = true;
-                grp.accounts.push(aData);
-                result = true;
-                return result;
-            }
-            if (grp.groups) {
-                result = addNewAccountFunc(grp.groups, aData, grpUniqueName, result);
-                if (result) {
-                    return result;
-                }
-            }
-        }
-    }
-    return result;
-};
-
-const addCreatedAccountFunc = (groups: IGroupsWithAccounts[], aData: AccountResponseV2 | AccountResponse, grpUniqueName: string, result: boolean): boolean => {
-    if (result) {
-        return result;
-    }
-    if (groups) {
-        for (let grp of groups) {
-            if (grp.uniqueName === grpUniqueName) {
-                grp.isOpen = true;
-                grp.accounts.push(
-                    {
-                        uniqueName: aData.uniqueName,
-                        name: aData.name,
-                        isActive: true,
-                        stocks: aData.stocks,
-                        mergedAccounts: aData.mergedAccounts,
-                    }
-                );
-                result = true;
-                return result;
-            }
-            if (grp.groups) {
-                result = addCreatedAccountFunc(grp.groups, aData, grpUniqueName, result);
-                if (result) {
-                    return result;
-                }
-            }
-        }
-    }
-    return result;
-};
-
-const UpdateAccountFunc = (groups: IGroupsWithAccounts[],
-    aData: AccountResponseV2, grpUniqueName: string, accountUniqueName: string, result: boolean): boolean => {
-    if (result) {
-        return result;
-    }
-    if (groups) {
-        for (let grp of groups) {
-            if (grp.uniqueName === grpUniqueName) {
-                grp.isOpen = true;
-                let index = grp.accounts.findIndex(p => p.uniqueName === accountUniqueName);
-                if (index > -1) {
-                    grp.accounts[index].uniqueName = aData.uniqueName;
-                    grp.accounts[index].name = aData.name;
-                    grp.accounts[index].isActive = true;
-                    grp.accounts[index].stocks = aData.stocks;
-                    grp.accounts[index].mergedAccounts = aData.mergedAccounts;
-                }
-                result = true;
-                return result;
-            }
-            if (grp.groups) {
-                result = UpdateAccountFunc(grp.groups, aData, grpUniqueName, accountUniqueName, result);
-                if (result) {
-                    return result;
-                }
-            }
-        }
-    }
-    return result;
-};
-
-const findAndRemoveAccountFunc = (groups: IGroupsWithAccounts[], uniqueName: string, result: boolean) => {
-    for (let grp of groups) {
-        let accIndex = grp.accounts.findIndex(f => f.uniqueName === uniqueName);
-
-        if (accIndex > -1) {
-            grp.accounts.splice(accIndex, 1);
-            result = true;
-            return result;
-        }
-        if (grp.groups) {
-            result = findAndRemoveAccountFunc(grp.groups, uniqueName, result);
-            if (result) {
-                return result;
-            }
-        }
-    }
-};
-
-const genAddAndManageUi = (groups: IGroupsWithAccounts[], uniqueName: string, result: boolean) => {
-    for (let grp of groups) {
-        if (grp.uniqueName === uniqueName) {
-            grp.isActive = true;
-            grp.isOpen = true;
-            result = true;
-            return result;
-        }
-
-        if (grp.groups) {
-            result = genAddAndManageUi(grp.groups, uniqueName, result);
-
-            if (result) {
-                grp.isOpen = true;
-                return result;
-            }
-        }
-    }
-};

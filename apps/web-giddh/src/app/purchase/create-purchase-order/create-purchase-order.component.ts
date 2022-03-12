@@ -919,9 +919,9 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
      * @returns Promise to carry out further operations
      * @memberof CreatePurchaseOrderComponent
      */
-    private getUpdatedStateCodes(countryCode: any, isCompanyStates: boolean): Promise<any> {
+    private getUpdatedStateCodes(countryCode: any, isCompanyStates: boolean): Promise<void> {
         this.startLoader(true);
-        return new Promise((resolve: Function) => {
+        return new Promise((resolve) => {
             if (countryCode) {
                 this.salesService.getStateCode(countryCode).pipe(takeUntil(this.destroyed$)).subscribe(resp => {
                     this.startLoader(false);
@@ -3011,7 +3011,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
      * @param {Function} successCallback Callback to carry out further operation
      * @memberof CreatePurchaseOrderComponent
      */
-    public onSearchQueryChanged(query: string, page: number = 1, searchType: string, successCallback?: Function): void {
+    public onSearchQueryChanged(query: string, page: number = 1, searchType: string, successCallback?: (...args: any[]) => any): void {
         if (!this.preventDefaultScrollApiCall &&
             (query || (searchType === SEARCH_TYPE.VENDOR && this.defaultVendorSuggestions && this.defaultVendorSuggestions.length === 0) ||
                 (searchType === SEARCH_TYPE.ITEM && this.defaultItemSuggestions && this.defaultItemSuggestions.length === 0) || successCallback)) {

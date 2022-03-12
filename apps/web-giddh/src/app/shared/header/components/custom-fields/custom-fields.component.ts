@@ -151,7 +151,7 @@ export class CustomFieldsComponent implements OnInit, OnDestroy {
      */
     public saveCustomFields(value: any): void {
         this.isSaveCustomInProgress = true;
-        let newCustomFields = value.customField?.filter(field => !field.uniqueName);
+        const newCustomFields = value.customField?.filter(field => !field.uniqueName);
         this.customFieldsService.create(newCustomFields).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 if (response.status === 'success') {
@@ -176,7 +176,7 @@ export class CustomFieldsComponent implements OnInit, OnDestroy {
      * @memberof CustomFieldsComponent
      */
     public renderCustomField(response: any): void {
-        let res: any[] = response;
+        const res: any[] = response;
         this.customFieldForm = this.createCustomFieldForm();
         const customRow = this.customFieldForm.get('customField') as FormArray;
         if (res.length) {
@@ -195,7 +195,7 @@ export class CustomFieldsComponent implements OnInit, OnDestroy {
      * @memberof CustomFieldsComponent
      */
     public initNewCustomField(item: any): FormGroup {
-        let initCustomForm = this.formBuilder.group({
+        const initCustomForm = this.formBuilder.group({
             fieldName: [null, Validators.compose([Validators.required])],
             fieldType: this.formBuilder.group({
                 name: null,

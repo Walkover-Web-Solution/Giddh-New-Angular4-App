@@ -49,7 +49,7 @@
                             <sh-select
                                 [options]="countrySource"
                                 [isFilterEnabled]="true"
-                                (viewInitEvent)="onViewReady($event)"
+                                (viewInitEvent)="onViewReady()"
                                 formControlName="countryCode"
                                 [defaultValue]="accountCountryName"
                                 (selected)="selectCountry($event)"
@@ -304,9 +304,7 @@
                                                 class="form-control"
                                                 autocomplete="false"
                                                 #gstNumberField
-                                                (blur)="
-                                                    checkGstNumValidation(gstNumberField); getStateCode(gst, states)
-                                                "
+                                                (blur)="checkGstNumValidation(gstNumberField); getStateCode(gst)"
                                                 name="gstNumber"
                                                 formControlName="gstNumber"
                                                 [placeholder]="taxNamePlaceholder"
@@ -409,7 +407,7 @@
                                     <a
                                         class="text-right btn btn-primary add-address-btn"
                                         href="javascript:void(0);"
-                                        (click)="addGstDetailsForm(gst.get('gstNumber').value)"
+                                        (click)="addGstDetailsForm()"
                                     >
                                         <i class="icon-plus"></i> {{ localeData?.add_address }}
                                     </a>
@@ -803,7 +801,7 @@
                         (click)="submit()"
                         class="btn btn-primary update-btn-zindex"
                         [ladda]="updateAccountInProcess$ | async"
-                        [disabled]="addAccountForm.invalid || !(isGstValid$ | async)"
+                        [disabled]="addAccountForm.invalid || (isGstValid$ | async) === false"
                     >
                         {{ commonLocaleData?.app_update }}
                     </button>
@@ -1057,7 +1055,7 @@
                         (click)="submit()"
                         class="btn btn-primary update-btn-zindex"
                         [ladda]="updateAccountInProcess$ | async"
-                        [disabled]="addAccountForm.invalid || !(isGstValid$ | async)"
+                        [disabled]="addAccountForm.invalid || (isGstValid$ | async) === false"
                     >
                         {{ commonLocaleData?.app_update }}
                     </button>

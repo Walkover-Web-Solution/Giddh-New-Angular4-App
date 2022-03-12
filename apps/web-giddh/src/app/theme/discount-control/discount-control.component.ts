@@ -50,7 +50,7 @@ export class DiscountControlComponent implements OnInit, OnDestroy, OnChanges {
         private store: Store<AppState>,
         private settingsDiscountService: SettingsDiscountService
     ) {
-        
+
     }
 
     public onFocusLastDiv(el) {
@@ -61,15 +61,15 @@ export class DiscountControlComponent implements OnInit, OnDestroy, OnChanges {
             this.hideOtherPopups.emit(true);
             return;
         }
-        let focussableElements = '.ledger-panel input[type=text]:not([disabled]),.ledger-panel [tabindex]:not([disabled]):not([tabindex="-1"])';
-        let focussable = Array.prototype.filter.call(document.querySelectorAll(focussableElements),
+        const focussableElements = '.ledger-panel input[type=text]:not([disabled]),.ledger-panel [tabindex]:not([disabled]):not([tabindex="-1"])';
+        const focussable = Array.prototype.filter.call(document.querySelectorAll(focussableElements),
             (element) => {
                 // check for visibility while always include the current activeElement
                 return element.offsetWidth > 0 || element.offsetHeight > 0 || element === document.activeElement;
             });
-        let index = focussable.indexOf(document.activeElement);
+        const index = focussable.indexOf(document.activeElement);
         if (index > -1) {
-            let nextElement = focussable[index + 1] || focussable[0];
+            const nextElement = focussable[index + 1] || focussable[0];
             nextElement.focus();
         }
         this.hideDiscountMenu();
@@ -136,9 +136,9 @@ export class DiscountControlComponent implements OnInit, OnDestroy, OnChanges {
     private processDiscountList(): void {
         this.discountsList.forEach(acc => {
             if (this.discountAccountsDetails) {
-                let hasItem = this.discountAccountsDetails.some(s => s.discountUniqueName === acc.uniqueName);
+                const hasItem = this.discountAccountsDetails.some(s => s.discountUniqueName === acc.uniqueName);
                 if (!hasItem) {
-                    let obj: LedgerDiscountClass = new LedgerDiscountClass();
+                    const obj: LedgerDiscountClass = new LedgerDiscountClass();
                     obj.amount = acc.discountValue;
                     obj.discountValue = acc.discountValue;
                     obj.discountType = acc.discountType;

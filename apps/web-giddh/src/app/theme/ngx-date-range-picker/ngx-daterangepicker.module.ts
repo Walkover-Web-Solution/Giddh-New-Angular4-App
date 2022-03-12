@@ -40,8 +40,6 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 })
 
 export class NgxDaterangepickerMd {
-    constructor() {
-    }
 
     static forRoot(config: LocaleConfig = {}): ModuleWithProviders<NgxDaterangepickerMd> {
         return {

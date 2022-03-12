@@ -1,4 +1,9 @@
-<div class="bd-rr row view-forms m-0" id="middleBody" [perfectScrollbar]="config" *ngIf="!(showNewForm$ | async)">
+<div
+    class="bd-rr row view-forms m-0"
+    id="middleBody"
+    [perfectScrollbar]="config"
+    *ngIf="(showNewForm$ | async) === false"
+>
     <!--breadcrumbs-->
     <div class="breadcrumbs container-fluid top-bar bd-rb row mr-0 ml-0 h-100" *ngIf="breadcrumbPath?.length > 0">
         <div class="col-lg-6">
@@ -62,7 +67,7 @@
         <!--account add component-->
 
         <account-add-new-details
-            *ngIf="!(activeAccount$ | async) && (showAddNewAccount$ | async)"
+            *ngIf="(activeAccount$ | async) === false && (showAddNewAccount$ | async)"
             [activeGroupUniqueName]="activeGroupUniqueName$ | async"
             [createAccountInProcess$]="createAccountInProcess$"
             (isGroupSelected)="isGroupSelected($event)"

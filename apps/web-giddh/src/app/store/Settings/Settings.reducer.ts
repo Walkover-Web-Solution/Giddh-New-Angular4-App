@@ -10,8 +10,7 @@ import { SETTINGS_FINANCIAL_YEAR_ACTIONS } from '../../actions/settings/financia
 import { IFinancialYearResponse, ILockFinancialYearRequest } from '../../services/settings.financial-year.service';
 import { CustomActions } from '../customActions';
 import { SETTINGS_BRANCH_ACTIONS } from '../../actions/settings/branch/settings.branch.const';
-import { CreateDiscountRequest, IDiscountList } from '../../models/api-models/SettingsDiscount';
-import { AccountResponse } from '../../models/api-models/Account';
+import { IDiscountList } from '../../models/api-models/SettingsDiscount';
 import { COMMON_ACTIONS } from '../../actions/common.const';
 import { SETTINGS_TAXES_ACTIONS } from "../../actions/settings/taxes/settings.taxes.const";
 import { cloneDeep, filter, map, orderBy } from '../../lodash-optimized';
@@ -119,7 +118,7 @@ export const initialState: SettingsState = {
 };
 
 export function SettingsReducer(state = initialState, action: CustomActions): SettingsState {
-    let newState = cloneDeep(state);
+    const newState = cloneDeep(state);
     switch (action.type) {
         case COMMON_ACTIONS.RESET_APPLICATION_DATA: {
             return Object.assign({}, state, initialState);
@@ -130,70 +129,78 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
         case SETTINGS_FINANCIAL_YEAR_ACTIONS.UPDATE_FINANCIAL_YEAR_PERIOD_RESPONSE: {
             return Object.assign({}, state, { refreshCompany: true });
         }
-        case SETTINGS_INTEGRATION_ACTIONS.GET_SMS_KEY_RESPONSE:
-            let gtsmsres: BaseResponse<SmsKeyClass, string> = action.payload;
+        case SETTINGS_INTEGRATION_ACTIONS.GET_SMS_KEY_RESPONSE: {
+            const gtsmsres: BaseResponse<SmsKeyClass, string> = action.payload;
             if (gtsmsres.status === 'success') {
                 newState.integration.smsForm = gtsmsres.body;
                 return Object.assign({}, state, newState);
             }
             return state;
-        case SETTINGS_INTEGRATION_ACTIONS.CREATE_SMS_KEY_RESPONSE:
-            let crtsmsres: BaseResponse<string, SmsKeyClass> = action.payload;
+        }
+        case SETTINGS_INTEGRATION_ACTIONS.CREATE_SMS_KEY_RESPONSE: {
+            const crtsmsres: BaseResponse<string, SmsKeyClass> = action.payload;
             if (crtsmsres.status === 'success') {
                 newState.integration.smsForm = crtsmsres.request;
                 return Object.assign({}, state, newState);
             }
             return state;
-        case SETTINGS_INTEGRATION_ACTIONS.GET_EMAIL_KEY_RESPONSE:
-            let gtemlres: BaseResponse<EmailKeyClass, string> = action.payload;
+        }
+        case SETTINGS_INTEGRATION_ACTIONS.GET_EMAIL_KEY_RESPONSE: {
+            const gtemlres: BaseResponse<EmailKeyClass, string> = action.payload;
             if (gtemlres.status === 'success') {
                 newState.integration.emailForm = gtemlres.body;
                 return Object.assign({}, state, newState);
             }
             return state;
-        case SETTINGS_INTEGRATION_ACTIONS.CREATE_EMAIL_KEY_RESPONSE:
-            let crtemlres: BaseResponse<string, EmailKeyClass> = action.payload;
+        }
+        case SETTINGS_INTEGRATION_ACTIONS.CREATE_EMAIL_KEY_RESPONSE: {
+            const crtemlres: BaseResponse<string, EmailKeyClass> = action.payload;
             if (crtemlres.status === 'success') {
                 newState.integration.emailForm = crtemlres.request;
                 return Object.assign({}, state, newState);
             }
             return state;
-        case SETTINGS_INTEGRATION_ACTIONS.CREATE_PAYMENT_KEY_RESPONSE:
-            let crtpytres: BaseResponse<string, PaymentClass> = action.payload;
+        }
+        case SETTINGS_INTEGRATION_ACTIONS.CREATE_PAYMENT_KEY_RESPONSE: {
+            const crtpytres: BaseResponse<string, PaymentClass> = action.payload;
             if (crtpytres.status === 'success') {
                 newState.integration.paymentForm = crtpytres.request;
                 return Object.assign({}, state, newState);
             }
             return state;
-        case SETTINGS_INTEGRATION_ACTIONS.UPDATE_PAYMENT_KEY_RESPONSE:
-            let crtpytUpres: BaseResponse<string, PaymentClass> = action.payload;
+        }
+        case SETTINGS_INTEGRATION_ACTIONS.UPDATE_PAYMENT_KEY_RESPONSE: {
+            const crtpytUpres: BaseResponse<string, PaymentClass> = action.payload;
             if (crtpytUpres.status === 'success') {
                 return Object.assign({}, state, newState);
             }
             return state;
-        case SETTINGS_INTEGRATION_ACTIONS.GET_RAZOR_PAY_DETAILS_RESPONSE:
-            let getRzrPayRes: BaseResponse<RazorPayDetailsResponse, string> = action.payload;
+        }
+        case SETTINGS_INTEGRATION_ACTIONS.GET_RAZOR_PAY_DETAILS_RESPONSE: {
+            const getRzrPayRes: BaseResponse<RazorPayDetailsResponse, string> = action.payload;
             if (getRzrPayRes.status === 'success') {
                 newState.integration.razorPayForm = getRzrPayRes.body;
                 return Object.assign({}, state, newState);
             }
             return state;
+        }
         case SETTINGS_INTEGRATION_ACTIONS.SAVE_RAZOR_PAY_DETAILS_RESPONSE:
-        case SETTINGS_INTEGRATION_ACTIONS.UPDATE_RAZOR_PAY_DETAILS_RESPONSE:
-            let svRzrPayRes: BaseResponse<RazorPayDetailsResponse, RazorPayClass> = action.payload;
+        case SETTINGS_INTEGRATION_ACTIONS.UPDATE_RAZOR_PAY_DETAILS_RESPONSE: {
+            const svRzrPayRes: BaseResponse<RazorPayDetailsResponse, RazorPayClass> = action.payload;
             if (svRzrPayRes.status === 'success') {
                 newState.integration.razorPayForm = svRzrPayRes.body;
                 return Object.assign({}, state, newState);
             }
             return state;
-        case SETTINGS_INTEGRATION_ACTIONS.DELETE_RAZOR_PAY_DETAILS_RESPONSE:
-            let dltRzrPayRes: BaseResponse<string, string> = action.payload;
+        }
+        case SETTINGS_INTEGRATION_ACTIONS.DELETE_RAZOR_PAY_DETAILS_RESPONSE: {
+            const dltRzrPayRes: BaseResponse<string, string> = action.payload;
             if (dltRzrPayRes.status === 'success') {
                 newState.integration.razorPayForm = null;
                 return Object.assign({}, state, newState);
             }
             return state;
-
+        }
         // region profile
 
         case SETTINGS_PROFILE_ACTIONS.GET_PROFILE_INFO: {
@@ -201,7 +208,7 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
         }
 
         case SETTINGS_PROFILE_ACTIONS.GET_PROFILE_RESPONSE: {
-            let response: BaseResponse<CompanyResponse, string> = action.payload;
+            const response: BaseResponse<CompanyResponse, string> = action.payload;
             if (response.status === 'success') {
                 newState.profile = response.body;
                 newState.profileRequest = true;
@@ -213,7 +220,7 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
             return { ...state, updateProfileInProgress: true, getProfileInProgress: false };
         }
         case SETTINGS_PROFILE_ACTIONS.GET_BRANCH_INFO_RESPONSE: {
-            let response: BaseResponse<any, any> = action.payload;
+            const response: BaseResponse<any, any> = action.payload;
             if (response && response.status === 'success') {
                 newState.currentBranch = response.body;
                 return Object.assign({}, state, newState);
@@ -221,7 +228,7 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
             return state;
         }
         case SETTINGS_PROFILE_ACTIONS.UPDATE_PROFILE_RESPONSE: {
-            let response: BaseResponse<CompanyResponse, string> = action.payload;
+            const response: BaseResponse<CompanyResponse, string> = action.payload;
             if (response.status === 'success') {
                 newState.profile = cloneDeep(response.body);
                 newState.updateProfileSuccess = true;
@@ -248,7 +255,7 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
             });
         }
         case SETTINGS_PROFILE_ACTIONS.PATCH_PROFILE_RESPONSE: {
-            let response: BaseResponse<CompanyResponse, string> = action.payload;
+            const response: BaseResponse<CompanyResponse, string> = action.payload;
             if (response.status === 'success') {
                 return {
                     ...state,
@@ -265,7 +272,7 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
             });
         }
         case SETTINGS_PROFILE_ACTIONS.GET_INVENTORY_RESPONSE: {
-            let response: BaseResponse<CompanyResponse, string> = action.payload;
+            const response: BaseResponse<CompanyResponse, string> = action.payload;
             if (response.status === 'success') {
                 newState.inventory = response.body;
                 newState.profileRequest = true;
@@ -274,7 +281,7 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
             return { ...state, updateProfileInProgress: true };
         }
         case SETTINGS_PROFILE_ACTIONS.UPDATE_INVENTORY_RESPONSE: {
-            let response: BaseResponse<CompanyResponse, string> = action.payload;
+            const response: BaseResponse<CompanyResponse, string> = action.payload;
             if (response.status === 'success') {
                 newState.updateProfileSuccess = true;
                 newState.profileRequest = true;
@@ -292,7 +299,7 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
             return Object.assign({}, state, newState);
         }
         case SETTINGS_LINKED_ACCOUNTS_ACTIONS.GET_ALL_ACCOUNTS_RESPONSE: {
-            let response: BaseResponse<BankAccountsResponse[], string> = action.payload;
+            const response: BaseResponse<BankAccountsResponse[], string> = action.payload;
             if (response.status === 'success') {
                 newState.linkedAccounts.isBankAccountsInProcess = false;
                 newState.linkedAccounts.bankAccounts = orderBy(response.body, ['siteName'], ['asc']);
@@ -302,7 +309,7 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
             return Object.assign({}, state, newState);
         }
         case SETTINGS_LINKED_ACCOUNTS_ACTIONS.REFRESH_ALL_ACCOUNTS_RESPONSE: {
-            let response: BaseResponse<LinkedAccountsState[], string> = action.payload;
+            const response: BaseResponse<LinkedAccountsState[], string> = action.payload;
             if (response.status === 'success') {
                 newState.linkedAccounts = response.body as LinkedAccountsState;
                 return Object.assign({}, state, newState);
@@ -318,7 +325,7 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
             return Object.assign({}, state, newState);
         }
         case SETTINGS_LINKED_ACCOUNTS_ACTIONS.DELETE_BANK_ACCOUNT_RESPONSE: {
-            let response: BaseResponse<string, string> = action.payload;
+            const response: BaseResponse<string, string> = action.payload;
             if (response.status === 'success') {
                 map(newState.linkedAccounts.bankAccounts, (ac) => {
                     filter(ac.accounts, (account) => account.loginId !== response.request);
@@ -330,7 +337,7 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
             return Object.assign({}, state, newState);
         }
         case SETTINGS_FINANCIAL_YEAR_ACTIONS.GET_ALL_FINANCIAL_YEARS_RESPONSE: {
-            let response: BaseResponse<IFinancialYearResponse, string> = action.payload;
+            const response: BaseResponse<IFinancialYearResponse, string> = action.payload;
             if (response.status === 'success') {
                 newState.financialYears = response.body;
                 return Object.assign({}, state, newState);
@@ -338,7 +345,7 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
             return state;
         }
         case SETTINGS_FINANCIAL_YEAR_ACTIONS.LOCK_FINANCIAL_YEAR_RESPONSE: {
-            let response: BaseResponse<IFinancialYearResponse, ILockFinancialYearRequest> = action.payload;
+            const response: BaseResponse<IFinancialYearResponse, ILockFinancialYearRequest> = action.payload;
             if (response.status === 'success') {
                 newState.financialYears = null;
                 return Object.assign({}, state, newState);
@@ -346,7 +353,7 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
             return state;
         }
         case SETTINGS_FINANCIAL_YEAR_ACTIONS.UNLOCK_FINANCIAL_YEAR_RESPONSE: {
-            let response: BaseResponse<IFinancialYearResponse, ILockFinancialYearRequest> = action.payload;
+            const response: BaseResponse<IFinancialYearResponse, ILockFinancialYearRequest> = action.payload;
             if (response.status === 'success') {
                 newState.financialYears = null;
                 return Object.assign({}, state, newState);
@@ -354,7 +361,7 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
             return state;
         }
         case SETTINGS_FINANCIAL_YEAR_ACTIONS.ADD_FINANCIAL_YEAR_RESPONSE: {
-            let response: BaseResponse<IFinancialYearResponse, string> = action.payload;
+            const response: BaseResponse<IFinancialYearResponse, string> = action.payload;
             if (response.status === 'success') {
                 newState.financialYears = null;
                 newState.refreshCompany = true;
@@ -369,7 +376,7 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
             return Object.assign({}, state, { refreshCompany: false });
         }
         case SETTINGS_PERMISSION_ACTIONS.GET_USERS_WITH_COMPANY_PERMISSIONS_RESPONSE: {
-            let response: BaseResponse<any, string> = action.payload;
+            const response: BaseResponse<any, string> = action.payload;
             if (response.status === 'success') {
                 newState.financialYears = null;
                 newState.usersWithCompanyPermissions = response.body;
@@ -378,7 +385,7 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
             return state;
         }
         case SETTINGS_LINKED_ACCOUNTS_ACTIONS.RECONNECT_ACCOUNT_RESPONSE: {
-            let response: BaseResponse<any, string> = action.payload;
+            const response: BaseResponse<any, string> = action.payload;
             if (response.status === 'success') {
                 newState.linkedAccounts.iframeSource = response.body.connectUrl;
                 return Object.assign({}, state, newState);
@@ -394,84 +401,88 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
             return Object.assign({}, state, newState);
         }
         case SETTINGS_BRANCH_ACTIONS.GET_ALL_BRANCHES_RESPONSE: {
-            let response: BaseResponse<any, any> = action.payload;
+            const response: BaseResponse<any, any> = action.payload;
             if (response.status === 'success') {
                 newState.branches = response.body;
                 return Object.assign({}, state, newState);
             }
             return Object.assign({}, state, newState);
         }
-        case SETTINGS_INTEGRATION_ACTIONS.GET_CASHFREE_DETAILS_RESPONSE:
-            let cashFreeRes: BaseResponse<any, any> = action.payload;
+        case SETTINGS_INTEGRATION_ACTIONS.GET_CASHFREE_DETAILS_RESPONSE: {
+            const cashFreeRes: BaseResponse<any, any> = action.payload;
             if (cashFreeRes.status === 'success') {
                 newState.integration.payoutForm = cashFreeRes.body;
                 return Object.assign({}, state, newState);
             }
             return state;
+        }
         case SETTINGS_INTEGRATION_ACTIONS.SAVE_CASHFREE_DETAILS_RESPONSE:
-        case SETTINGS_INTEGRATION_ACTIONS.UPDATE_CASHFREE_DETAILS_RESPONSE:
-            let savecashFreeRes: BaseResponse<any, any> = action.payload;
+        case SETTINGS_INTEGRATION_ACTIONS.UPDATE_CASHFREE_DETAILS_RESPONSE: {
+            const savecashFreeRes: BaseResponse<any, any> = action.payload;
             if (savecashFreeRes.status === 'success') {
                 newState.integration.payoutForm = savecashFreeRes.request;
                 return Object.assign({}, state, newState);
             }
             return state;
-        case SETTINGS_INTEGRATION_ACTIONS.DELETE_CASHFREE_DETAILS_RESPONSE:
-            let dltCashFreeRes: BaseResponse<string, string> = action.payload;
+        }
+        case SETTINGS_INTEGRATION_ACTIONS.DELETE_CASHFREE_DETAILS_RESPONSE: {
+            const dltCashFreeRes: BaseResponse<string, string> = action.payload;
             if (dltCashFreeRes.status === 'success') {
                 newState.integration.payoutForm = {};
                 return Object.assign({}, state, newState);
             }
             return state;
-
-        case SETTINGS_INTEGRATION_ACTIONS.GET_AUTOCOLLECT_USER_RESPONSE:
-            let autoCollectRes: BaseResponse<any, any> = action.payload;
+        }
+        case SETTINGS_INTEGRATION_ACTIONS.GET_AUTOCOLLECT_USER_RESPONSE: {
+            const autoCollectRes: BaseResponse<any, any> = action.payload;
             if (autoCollectRes.status === 'success') {
                 newState.integration.autoCollect = autoCollectRes.body;
                 return Object.assign({}, state, newState);
             }
             return state;
-
-        case SETTINGS_INTEGRATION_ACTIONS.ADD_AUTOCOLLECT_USER_RESPONSE:
-        case SETTINGS_INTEGRATION_ACTIONS.UPDATE_CASHFREE_DETAILS_RESPONSE:
-            let saveautoCollectRes: BaseResponse<any, any> = action.payload;
+        }
+        case SETTINGS_INTEGRATION_ACTIONS.ADD_AUTOCOLLECT_USER_RESPONSE: {
+            const saveautoCollectRes: BaseResponse<any, any> = action.payload;
             if (saveautoCollectRes.status === 'success') {
                 newState.integration.autoCollect = saveautoCollectRes.request;
                 return Object.assign({}, state, newState);
             }
             return state;
-        case SETTINGS_INTEGRATION_ACTIONS.DELETE_AUTOCOLLECT_USER_RESPONSE:
-            let dltautoCollectRes: BaseResponse<string, string> = action.payload;
+        }
+        case SETTINGS_INTEGRATION_ACTIONS.DELETE_AUTOCOLLECT_USER_RESPONSE: {
+            const dltautoCollectRes: BaseResponse<string, string> = action.payload;
             if (dltautoCollectRes.status === 'success') {
                 newState.integration.autoCollect = {};
                 return Object.assign({}, state, newState);
             }
             return state;
-
-        case SETTINGS_INTEGRATION_ACTIONS.GET_PAYMENT_GATEWAY_RESPONSE:
-            let paymentGatewayRes: BaseResponse<any, any> = action.payload;
+        }
+        case SETTINGS_INTEGRATION_ACTIONS.GET_PAYMENT_GATEWAY_RESPONSE: {
+            const paymentGatewayRes: BaseResponse<any, any> = action.payload;
             if (paymentGatewayRes.status === 'success') {
                 newState.integration.paymentGateway = paymentGatewayRes.body;
                 return Object.assign({}, state, newState);
             }
             return state;
-
-        case SETTINGS_INTEGRATION_ACTIONS.UPDATE_PAYMENT_GATEWAY_RESPONSE:
-            let paymntGtwy: BaseResponse<any, any> = action.payload;
+        }
+        case SETTINGS_INTEGRATION_ACTIONS.UPDATE_PAYMENT_GATEWAY_RESPONSE: {
+            const paymntGtwy: BaseResponse<any, any> = action.payload;
             if (paymntGtwy.status === 'success') {
                 newState.integration.paymentGateway = paymntGtwy.request;
                 return Object.assign({}, state, newState);
             }
             return state;
-        case SETTINGS_INTEGRATION_ACTIONS.DELETE_PAYMENT_GATEWAY_RESPONSE:
-            let dltpaymentGatewayRes: BaseResponse<string, string> = action.payload;
+        }
+        case SETTINGS_INTEGRATION_ACTIONS.DELETE_PAYMENT_GATEWAY_RESPONSE: {
+            const dltpaymentGatewayRes: BaseResponse<string, string> = action.payload;
             if (dltpaymentGatewayRes.status === 'success') {
                 newState.integration.paymentGateway = {};
                 return Object.assign({}, state, newState);
             }
             return state;
+        }
         case SETTINGS_INTEGRATION_ACTIONS.GET_AMAZON_SELLER_RESPONSE: {
-            let AmazonSellerRes: BaseResponse<any, any> = action.payload;
+            const AmazonSellerRes: BaseResponse<any, any> = action.payload;
             if (AmazonSellerRes.status === 'success') {
                 newState.integration.amazonSeller = AmazonSellerRes.body;
                 return Object.assign({}, state, newState);
@@ -486,7 +497,7 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
             });
         }
         case SETTINGS_INTEGRATION_ACTIONS.ADD_AMAZON_SELLER_RESPONSE: {
-            let AmazonSellerRes: BaseResponse<any, any> = action.payload;
+            const AmazonSellerRes: BaseResponse<any, any> = action.payload;
             if (AmazonSellerRes.status === 'success') {
                 newState.amazonState.isSellerSuccess = true;
                 return Object.assign({}, state, newState);
@@ -502,10 +513,10 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
         }
 
         case SETTINGS_INTEGRATION_ACTIONS.UPDATE_AMAZON_SELLER_RESPONSE: {
-            let AmazonSellerRes: BaseResponse<any, any> = action.payload;
+            const AmazonSellerRes: BaseResponse<any, any> = action.payload;
             if (AmazonSellerRes.status === 'success') {
                 // debugger;
-                let seller = state.integration.amazonSeller.findIndex(p => p.sellerId === AmazonSellerRes.body.sellerId);
+                const seller = state.integration.amazonSeller.findIndex(p => p.sellerId === AmazonSellerRes.body.sellerId);
                 newState.integration.amazonSeller[seller] = cloneDeep(AmazonSellerRes.body);
                 newState.amazonState.isSellerUpdated = true;
                 return Object.assign({}, state, newState);
@@ -513,16 +524,16 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
             return state;
         }
         case SETTINGS_INTEGRATION_ACTIONS.DELETE_AMAZON_SELLER_RESPONSE: {
-            let deleteAmazonSellerRes: BaseResponse<any, any> = action.payload;
+            const deleteAmazonSellerRes: BaseResponse<any, any> = action.payload;
             if (deleteAmazonSellerRes.status === 'success') {
-                let st = newState.integration.amazonSeller.findIndex(p => p.sellerId === deleteAmazonSellerRes.request.sellerId);
+                const st = newState.integration.amazonSeller.findIndex(p => p.sellerId === deleteAmazonSellerRes.request.sellerId);
                 newState.integration.amazonSeller.splice(st, 1);
                 return Object.assign({}, state, newState);
             }
             return state;
         }
         case SETTINGS_INTEGRATION_ACTIONS.GET_GMAIL_INTEGRATION_STATUS_RESPONSE: {
-            let response: BaseResponse<any, any> = action.payload;
+            const response: BaseResponse<any, any> = action.payload;
             if (response && response.body) {
                 return Object.assign({}, state, { isGmailIntegrated: true });
             } else {
@@ -531,7 +542,7 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
         }
 
         case SETTINGS_INTEGRATION_ACTIONS.REMOVE_GMAIL_INTEGRATION_RESPONSE: {
-            let response: BaseResponse<any, any> = action.payload;
+            const response: BaseResponse<any, any> = action.payload;
             if (response.status === 'success') {
                 return Object.assign({}, state, { isGmailIntegrated: false });
             } else {
@@ -544,15 +555,15 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
             return Object.assign({}, state, newState);
         }
 
-        case SETTINGS_TAXES_ACTIONS.GET_TAX_RESPONSE:
-            let taxes: BaseResponse<any, string> = action.payload;
+        case SETTINGS_TAXES_ACTIONS.GET_TAX_RESPONSE: {
+            const taxes: BaseResponse<any, string> = action.payload;
             if (taxes.status === 'success') {
                 return Object.assign({}, state, {
                     taxes: taxes.body
                 });
             }
             return Object.assign({}, state, {});
-
+        }
         case SETTINGS_TAXES_ACTIONS.RESET_TAX_RESPONSE: {
             return { ...state, taxes: null };
         }
@@ -566,7 +577,7 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
         }
 
         case SETTINGS_FINANCIAL_YEAR_ACTIONS.GET_FINANCIAL_YEAR_LIMITS_RESPONSE: {
-            let financialYearLimits: BaseResponse<any, any> = action.payload;
+            const financialYearLimits: BaseResponse<any, any> = action.payload;
             if (financialYearLimits.status === 'success') {
                 return Object.assign({}, state, {
                     financialYearLimits: financialYearLimits.body

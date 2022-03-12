@@ -151,14 +151,14 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
             (state: AppState) => state.groupwithaccounts.activeAccountTaxHierarchy,
             (state: AppState) => state.company && state.company.taxes],
             (activeAccount, activeAccountTaxHierarchy, taxes) => {
-                let arr: IOption[] = [];
+                const arr: IOption[] = [];
                 if (taxes) {
                     if (activeAccount) {
-                        let applicableTaxes = activeAccount.applicableTaxes.map(p => p?.uniqueName);
+                        const applicableTaxes = activeAccount.applicableTaxes.map(p => p?.uniqueName);
 
                         // set isGstEnabledAcc or not
                         if (activeAccount.parentGroups[0]?.uniqueName) {
-                            let col = activeAccount.parentGroups[0]?.uniqueName;
+                            const col = activeAccount.parentGroups[0]?.uniqueName;
                             this.isHsnSacEnabledAcc = col === 'revenuefromoperations' || col === 'otherincome' || col === 'operatingcost' || col === 'indirectexpenses';
                             this.isGstEnabledAcc = !this.isHsnSacEnabledAcc;
                         }
@@ -166,8 +166,8 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
                         if (activeAccountTaxHierarchy) {
 
                             if (activeAccountTaxHierarchy.inheritedTaxes) {
-                                let inheritedTaxes = flattenDeep(activeAccountTaxHierarchy.inheritedTaxes.map(p => p.applicableTaxes)).map((j: any) => j?.uniqueName);
-                                let allTaxes = applicableTaxes?.filter(f => inheritedTaxes.indexOf(f) === -1);
+                                const inheritedTaxes = flattenDeep(activeAccountTaxHierarchy.inheritedTaxes.map(p => p.applicableTaxes)).map((j: any) => j?.uniqueName);
+                                const allTaxes = applicableTaxes?.filter(f => inheritedTaxes.indexOf(f) === -1);
                                 // set value in tax group form
                                 this.taxGroupForm.setValue({ taxes: allTaxes });
                             } else {
@@ -224,7 +224,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
 
         this.activeAccount$.subscribe(a => {
             if (a && a.parentGroups[0]?.uniqueName) {
-                let col = a.parentGroups[0]?.uniqueName;
+                const col = a.parentGroups[0]?.uniqueName;
                 this.isHsnSacEnabledAcc = col === 'revenuefromoperations' || col === 'otherincome' || col === 'operatingcost' || col === 'indirectexpenses';
                 this.isGstEnabledAcc = !this.isHsnSacEnabledAcc;
             }
@@ -290,12 +290,12 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
 
                 if (this.breadcrumbUniquePath) {
                     if (this.breadcrumbUniquePath[0]) {
-                        let col = this.breadcrumbUniquePath[0];
+                        const col = this.breadcrumbUniquePath[0];
                         this.isHsnSacEnabledAcc = col === 'revenuefromoperations' || col === 'otherincome' || col === 'operatingcost' || col === 'indirectexpenses';
                         this.isGstEnabledAcc = !this.isHsnSacEnabledAcc;
                     }
                     if (this.breadcrumbUniquePath[1]) {
-                        let col = this.breadcrumbUniquePath[1];
+                        const col = this.breadcrumbUniquePath[1];
                         if (col === 'sundrycreditors') {
                             this.showBankDetail = true;
                         } else {
@@ -318,7 +318,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
             }
         });
 
-        this.accountsAction.mergeAccountResponse$.pipe(takeUntil(this.destroyed$)).subscribe(res => {
+        this.accountsAction.mergeAccountResponse$.pipe(takeUntil(this.destroyed$)).subscribe(() => {
             this.selectedaccountForMerge = '';
         });
 
@@ -341,7 +341,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
             (state: AppState) => state.groupwithaccounts.activeAccount],
             (activeAccount) => {
                 let result: boolean = false;
-                let activeGroupUniqueName = this.breadcrumbUniquePath[this.breadcrumbUniquePath?.length - 2];
+                const activeGroupUniqueName = this.breadcrumbUniquePath[this.breadcrumbUniquePath?.length - 2];
                 if (activeGroupUniqueName && activeAccount) {
                     result = this.getAccountFromGroup(activeAccount, false);
                 } else {
@@ -354,7 +354,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     public shareAccount() {
         let activeAcc;
         this.activeAccount$.pipe(take(1)).subscribe(p => activeAcc = p);
-        let accObject = new ShareAccountRequest();
+        const accObject = new ShareAccountRequest();
         accObject.role = 'view_only';
         accObject.user = this.shareAccountForm.controls['userEmail'].value;
         this.store.dispatch(this._ledgerActions.shareAccount(accObject, activeAcc?.uniqueName));
@@ -369,10 +369,10 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         let activeAcc;
         this.activeAccount$.pipe(take(1)).subscribe(p => activeAcc = p);
 
-        let grpObject = new AccountMoveRequest();
+        const grpObject = new AccountMoveRequest();
         grpObject.uniqueName = this.moveAccountForm.controls['moveto'].value;
 
-        let activeGrpName = this.breadcrumbUniquePath[this.breadcrumbUniquePath?.length - 2];
+        const activeGrpName = this.breadcrumbUniquePath[this.breadcrumbUniquePath?.length - 2];
 
         this.store.dispatch(this.accountsAction.moveAccount(grpObject, activeAcc?.uniqueName, activeGrpName));
         this.moveAccountForm.reset();
@@ -392,11 +392,9 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     }
 
     public flattenGroup(rawList: any[], parents: any[] = []) {
-        let listofUN;
-        listofUN = map(rawList, (listItem) => {
-            let newParents;
+        const listofUN = map(rawList, (listItem) => {
             let result;
-            newParents = union([], parents);
+            const newParents = union([], parents);
             newParents.push({
                 name: listItem?.name,
                 uniqueName: listItem?.uniqueName
@@ -416,7 +414,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
 
     public isRootLevelGroupFunc(uniqueName: string) {
         const rootLevelGroups: ColumnGroupsAccountVM[] | any[] = this.columnsRef?.columns[0]?.groups || [];
-        for (let grp of rootLevelGroups) {
+        for (const grp of rootLevelGroups) {
             if (grp?.uniqueName === uniqueName) {
                 this.isRootLevelGroup = true;
                 return;
@@ -486,15 +484,13 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
 
     public applyTax() {
         let activeAccount: AccountResponseV2 = null;
-        let activeGroup: GroupResponse = null;
         this.store.pipe(take(1)).subscribe(s => {
             if (s.groupwithaccounts) {
                 activeAccount = s.groupwithaccounts.activeAccount;
-                activeGroup = s.groupwithaccounts.activeGroup;
             }
         });
         if (activeAccount) {
-            let data: ApplyTaxRequest = new ApplyTaxRequest();
+            const data: ApplyTaxRequest = new ApplyTaxRequest();
             data.isAccount = true;
             data.taxes = [];
             this.activeAccountTaxHierarchy$.pipe(take(1)).subscribe((t) => {
@@ -506,7 +502,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
                     });
                 }
             });
-            data.taxes.push.apply(data.taxes, this.taxGroupForm.value.taxes);
+            data.taxes.push(...this.taxGroupForm.value.taxes);
             data.uniqueName = activeAccount.uniqueName;
             this.store.dispatch(this.accountsAction.applyAccountTax(data));
         }
@@ -554,7 +550,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     public deleteMergedAccount() {
         let activeAccount: AccountResponseV2 = null;
         this.activeAccount$.pipe(take(1)).subscribe(p => activeAccount = p);
-        let obj = new AccountUnMergeRequest();
+        const obj = new AccountUnMergeRequest();
         obj.uniqueNames = [this.selectedAccountForDelete];
         this.store.dispatch(this.accountsAction.unmergeAccount(activeAccount?.uniqueName, obj));
         this.showDeleteMove = false;
@@ -563,7 +559,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
 
     public selectAccount(v: IOption[]) {
         if (v?.length) {
-            let accounts = [];
+            const accounts = [];
             v.map(a => {
                 accounts.push(a.value);
             });
@@ -581,10 +577,10 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     public mergeAccounts() {
         let activeAccount: AccountResponseV2 = null;
         this.activeAccount$.pipe(take(1)).subscribe(p => activeAccount = p);
-        let finalData: AccountMergeRequest[] = [];
+        const finalData: AccountMergeRequest[] = [];
         if (this.selectedaccountForMerge?.length) {
             this.selectedaccountForMerge.map((acc) => {
-                let obj = new AccountMergeRequest();
+                const obj = new AccountMergeRequest();
                 obj.uniqueName = acc;
                 finalData.push(obj);
             });
@@ -610,7 +606,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     public moveMergeAccountTo() {
         let activeAccount: AccountResponseV2 = null;
         this.activeAccount$.pipe(take(1)).subscribe(p => activeAccount = p);
-        let obj = new AccountUnMergeRequest();
+        const obj = new AccountUnMergeRequest();
         obj.uniqueNames = [this.setAccountForMove];
         obj.moveTo = this.selectedAccountForMove;
         this.store.dispatch(this.accountsAction.unmergeAccount(activeAccount?.uniqueName, obj));
@@ -638,7 +634,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     public deleteAccount() {
         let activeAccUniqueName = null;
         this.activeAccount$.pipe(take(1)).subscribe(s => activeAccUniqueName = s?.uniqueName);
-        let activeGrpName = this.breadcrumbUniquePath[this.breadcrumbUniquePath?.length - 2];
+        const activeGrpName = this.breadcrumbUniquePath[this.breadcrumbUniquePath?.length - 2];
         this.store.dispatch(this.accountsAction.deleteAccount(activeAccUniqueName, activeGrpName));
 
         this.hideDeleteAccountModal();

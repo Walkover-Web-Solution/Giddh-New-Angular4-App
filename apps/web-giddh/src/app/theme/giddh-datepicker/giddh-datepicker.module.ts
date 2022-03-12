@@ -21,7 +21,7 @@ export const GIDDH_DATEPICKER_FORMAT = {
 };
 
 export class PickDateAdapter extends NativeDateAdapter {
-    format(date: Date, displayFormat: Object): string {
+    format(date: Date, displayFormat: any): string {
         if (displayFormat === 'input') {
             return formatDate(date, 'dd-MM-yyyy', this.locale);
         } else {

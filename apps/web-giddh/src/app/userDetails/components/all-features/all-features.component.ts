@@ -14,6 +14,4 @@ export class AllFeaturesComponent {
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
 
-    constructor() { }
-
 }

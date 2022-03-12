@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input, OnDestroy } from '@angular/core';
 import * as moment from 'moment';
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 import { SettingsProfileService } from '../../../services/settings.profile.service';
@@ -11,7 +11,7 @@ import { ReplaySubject } from 'rxjs';
     templateUrl: './company-details-sidebar.component.html'
 })
 
-export class CompanyDetailsSidebarComponent implements OnInit {
+export class CompanyDetailsSidebarComponent implements OnInit, OnDestroy {
     @Input() public selectedCompany: any;
     /* This will hold local JSON data */
     @Input() public localeData: any = {};

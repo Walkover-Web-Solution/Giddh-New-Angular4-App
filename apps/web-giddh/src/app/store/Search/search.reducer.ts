@@ -46,7 +46,7 @@ export function searchReducer(state = initialState, action: CustomActions): Sear
             return Object.assign({}, state, initialState);
         }
         case SearchActions.SEARCH_RESPONSE: {
-            let searchResp: BaseResponse<any, SearchRequest> = action.payload;
+            const searchResp: BaseResponse<any, SearchRequest> = action.payload;
             if (searchResp.status === 'success') {
                 return Object.assign({}, state, {
                     searchPaginationInfo: {
@@ -94,9 +94,9 @@ export function searchReducer(state = initialState, action: CustomActions): Sear
 }
 
 const flattenSearchGroupsAndAccounts = (accountList, groupName) => {
-    let uniqueList: AccountFlat[] = [];
+    const uniqueList: AccountFlat[] = [];
     each(accountList, (account) => {
-        let accountFlat: AccountFlat = {
+        const accountFlat: AccountFlat = {
             parent: groupName,
             closeBalanceType: account.closingBalance.type,
             closingBalance: Number(account.closingBalance.amount),

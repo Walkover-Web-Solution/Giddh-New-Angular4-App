@@ -92,7 +92,7 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
 
         this.store.pipe(select(profile => profile.settings.profile), takeUntil(this.destroyed$)).subscribe((response) => {
             if (response && !_.isEmpty(response)) {
-                let companyInfo = _.cloneDeep(response);
+                const companyInfo = _.cloneDeep(response);
                 this.currentCompany = companyInfo?.name;
             }
         });
@@ -181,7 +181,7 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
         this.isSubscriptionPlanShow.emit(true);
         this.router.navigate(['/pages', 'user-details', 'subscription']);
     }
-    
+
     /**
      * This function will be use for buy plan
      *
@@ -189,7 +189,7 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
      * @memberof SubscriptionsPlansComponent
      */
     public buyPlanClicked(plan: any) {
-        let activationKey = this.licenceKey.value;
+        const activationKey = this.licenceKey.value;
         if (activationKey) {
             this.SubscriptionRequestObj.licenceKey = activationKey;
         } else {
@@ -201,7 +201,7 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
             this.patchProfile({ subscriptionRequest: this.SubscriptionRequestObj, callNewPlanApi: true });
         } else {
         this.router.navigate(['pages', 'billing-detail', 'buy-plan']);
-        } 
+        }
         this.store.dispatch(this.companyActions.selectedPlan(this.allSubscriptions[plan.uniqueName]));
     }
 
@@ -218,7 +218,7 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
     }
 
     public createCompanyViaActivationKey() {
-        let activationKey = this.licenceKey.value;
+        const activationKey = this.licenceKey.value;
         this.SubscriptionRequestObj.userUniqueName = this.logedInUser.uniqueName;
         if (activationKey) {
             this.SubscriptionRequestObj.licenceKey = activationKey;
@@ -311,7 +311,7 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
      */
     private getPlans(activeCompany: any): void {
         this.authenticationService.getAllUserSubsciptionPlans(activeCompany?.countryV2?.alpha2CountryCode).pipe(takeUntil(this.destroyed$)).subscribe(res => {
-            let subscriptions = res.body;
+            const subscriptions = res.body;
 
             subscriptions.forEach(subscription => {
                 this.allSubscriptions[subscription.planDetails.uniqueName] = [];

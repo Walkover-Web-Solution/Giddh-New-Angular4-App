@@ -303,7 +303,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         }
 
         this.addAccountForm.get('activeGroupUniqueName').setValue(this.activeGroupUniqueName);
-        this.accountsAction.mergeAccountResponse$.pipe(takeUntil(this.destroyed$)).subscribe(res => {
+        this.accountsAction.mergeAccountResponse$.pipe(takeUntil(this.destroyed$)).subscribe(() => {
             this.selectedaccountForMerge = '';
         });
         this.isTaxableAccount$ = this.store.pipe(select(createSelector([
@@ -330,7 +330,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             if (response) {
                 selectedGroupDetails = response;
                 if (selectedGroupDetails?.parentGroups) {
-                    let parentGroup = selectedGroupDetails.parentGroups?.length > 1 ? selectedGroupDetails.parentGroups[1] : { uniqueName: selectedGroupDetails?.uniqueName };
+                    const parentGroup = selectedGroupDetails.parentGroups?.length > 1 ? selectedGroupDetails.parentGroups[1] : { uniqueName: selectedGroupDetails?.uniqueName };
                     if (parentGroup) {
                         this.isParentDebtorCreditor(parentGroup.uniqueName);
                     }
@@ -354,14 +354,14 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             (state: AppState) => state.groupwithaccounts.activeAccountTaxHierarchy,
             (state: AppState) => state.company && state.company.taxes],
             (activeAccount: AccountResponseV2, activeAccountTaxHierarchy: AccountsTaxHierarchyResponse, taxes: TaxResponse[]) => {
-                let arr: IOption[] = [];
+                const arr: IOption[] = [];
                 if (taxes) {
                     if (activeAccount) {
-                        let applicableTaxes = activeAccount.applicableTaxes.map(p => p?.uniqueName);
+                        const applicableTaxes = activeAccount.applicableTaxes.map(p => p?.uniqueName);
 
                         // set isGstEnabledAcc or not
                         if (activeAccount.parentGroups[0]?.uniqueName) {
-                            let col = activeAccount.parentGroups[0]?.uniqueName;
+                            const col = activeAccount.parentGroups[0]?.uniqueName;
                             this.isHsnSacEnabledAcc = col === 'revenuefromoperations' || col === 'otherincome' || col === 'operatingcost' || col === 'indirectexpenses';
                             this.isGstEnabledAcc = !this.isHsnSacEnabledAcc;
                         }
@@ -369,8 +369,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                         if (activeAccountTaxHierarchy) {
 
                             if (activeAccountTaxHierarchy.inheritedTaxes) {
-                                let inheritedTaxes = flattenDeep(activeAccountTaxHierarchy.inheritedTaxes.map(p => p.applicableTaxes)).map((j: any) => j?.uniqueName);
-                                let allTaxes = applicableTaxes?.filter(f => inheritedTaxes.indexOf(f) === -1);
+                                const inheritedTaxes = flattenDeep(activeAccountTaxHierarchy.inheritedTaxes.map(p => p.applicableTaxes)).map((j: any) => j?.uniqueName);
+                                const allTaxes = applicableTaxes?.filter(f => inheritedTaxes.indexOf(f) === -1);
                                 // set value in tax group form
                                 this.taxGroupForm.setValue({ taxes: allTaxes });
                             } else {
@@ -412,8 +412,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         });
     }
 
-    public onViewReady(ev) {
-        let accountCountry = this.addAccountForm.get('country').get('countryCode').value;
+    public onViewReady() {
+        const accountCountry = this.addAccountForm.get('country').get('countryCode').value;
         this.selectedCountryCode = accountCountry;
         if (accountCountry) {
             if (accountCountry !== 'IN') {
@@ -488,7 +488,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public initialGstDetailsForm(val: IAccountAddress = null): FormGroup {
         this.isStateRequired = this.checkActiveGroupCountry();
 
-        let gstFields = this._fb.group({
+        const gstFields = this._fb.group({
             gstNumber: ['', Validators.compose([Validators.maxLength(15)])],
             address: [''],
             state: this._fb.group({
@@ -513,8 +513,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public resetGstStateForm() {
         this.forceClear$ = observableOf({ status: true });
 
-        let addresses = this.addAccountForm.get('addresses') as FormArray;
-        for (let control of addresses.controls) {
+        const addresses = this.addAccountForm.get('addresses') as FormArray;
+        for (const control of addresses.controls) {
             control.get('stateCode')?.patchValue(null);
             control.get('state').get('code')?.patchValue(null);
             control.get('gstNumber').setValue("");
@@ -522,8 +522,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     }
 
     public resetBankDetailsForm() {
-        let accountBankDetails = this.addAccountForm.get('accountBankDetails') as FormArray;
-        for (let control of accountBankDetails.controls) {
+        const accountBankDetails = this.addAccountForm.get('accountBankDetails') as FormArray;
+        for (const control of accountBankDetails.controls) {
             control.get('bankName')?.patchValue(null);
             control.get('bankAccountNo')?.patchValue(null);
             control.get('beneficiaryName')?.patchValue(null);
@@ -533,7 +533,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         }
     }
 
-    public addGstDetailsForm(value: string) {         // commented code because we no need GSTIN No. to add new address
+    public addGstDetailsForm() {         // commented code because we no need GSTIN No. to add new address
         const addresses = this.addAccountForm.get('addresses') as FormArray;
         addresses.push(this.initialGstDetailsForm(null));
         if (addresses?.length > 4) {
@@ -563,16 +563,16 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
 
     public isDefaultAddressSelected(val: boolean, i: number) {
         if (val) {
-            let addresses = this.addAccountForm.get('addresses') as FormArray;
-            for (let control of addresses.controls) {
+            const addresses = this.addAccountForm.get('addresses') as FormArray;
+            for (const control of addresses.controls) {
                 control.get('isDefault')?.patchValue(false);
             }
             addresses.controls[i].get('isDefault')?.patchValue(true);
         }
     }
 
-    public getStateCode(gstForm: FormGroup, statesEle: ShSelectComponent) {
-        let gstVal: string = gstForm.get('gstNumber').value;
+    public getStateCode(gstForm: FormGroup) {
+        const gstVal: string = gstForm.get('gstNumber').value;
         gstForm.get('gstNumber').setValue(gstVal?.trim());
         if (gstVal?.length) {
             if (gstVal?.length !== 15) {
@@ -581,9 +581,9 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
 
             if (gstVal?.length >= 2) {
                 this.statesSource$.pipe(take(1)).subscribe(state => {
-                    let stateCode = this.stateGstCode[gstVal.substr(0, 2)];
+                    const stateCode = this.stateGstCode[gstVal.substr(0, 2)];
 
-                    let currentState = state.find(st => st.value === stateCode);
+                    const currentState = state.find(st => st.value === stateCode);
                     if (currentState) {
                         gstForm.get('stateCode')?.patchValue(currentState.value);
                         gstForm.get('state').get('code')?.patchValue(currentState.value);
@@ -640,7 +640,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
 
     public checkMobileNo(ele) {
         try {
-            let parsedNumber = parsePhoneNumberFromString('+' + this.addAccountForm.get('mobileCode').value + ele.value, this.addAccountForm.get('country').get('countryCode').value as CountryCode);
+            const parsedNumber = parsePhoneNumberFromString('+' + this.addAccountForm.get('mobileCode').value + ele.value, this.addAccountForm.get('country').get('countryCode').value as CountryCode);
             if (parsedNumber.isValid()) {
                 ele.classList.remove('error-box');
                 this.isMobileNumberValid = true;
@@ -671,9 +671,9 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 return;
             }
         }
-        let accountRequest: AccountRequestV2 = this.addAccountForm.value as AccountRequestV2;
+        const accountRequest: AccountRequestV2 = this.addAccountForm.value as AccountRequestV2;
         if (this.stateList && accountRequest.addresses && accountRequest.addresses.length > 0 && !this.isHsnSacEnabledAcc) {
-            let selectedStateObj = this.getStateGSTCode(this.stateList, accountRequest.addresses[0].stateCode);
+            const selectedStateObj = this.getStateGSTCode(this.stateList, accountRequest.addresses[0].stateCode);
             if (selectedStateObj) {
                 accountRequest.addresses[0].stateCode = selectedStateObj.stateGstCode;
             }
@@ -704,10 +704,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 }
                 return f;
             });
-
-            if (accountRequest.mobileCode && accountRequest.mobileNo) {
-                accountRequest.mobileNo = accountRequest.mobileNo;
-            }
         }
 
         if (!this.showVirtualAccount) {
@@ -770,9 +766,9 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             this.addAccountForm.get('accountBankDetails').reset();
             this.store.dispatch(this._generalActions.resetStatesList());
             this.store.dispatch(this.commonActions.resetOnboardingForm());
-            let phoneCode = event.additional;
+            const phoneCode = event.additional;
             this.addAccountForm.get('mobileCode').setValue(phoneCode);
-            let currencyCode = this.countryCurrency[event.value];
+            const currencyCode = this.countryCurrency[event.value];
             this.addAccountForm.get('currency').setValue(currencyCode);
             this.getStates(event.value);
             this.getOnboardingForm(event.value);
@@ -794,7 +790,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public selectGroup(event: IOption) {
         if (event) {
             this.activeGroupUniqueName = event.value;
-            let parent = event.additional;
+            const parent = event.additional;
             if (parent[1]) {
                 this.isParentDebtorCreditor(parent[1].uniqueName);
             }
@@ -840,7 +836,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 });
                 this.countrySource$ = observableOf(this.countrySource);
             } else {
-                let countryRequest = new CountryRequest();
+                const countryRequest = new CountryRequest();
                 countryRequest.formName = '';
                 this.store.dispatch(this.commonActions.GetAllCountry(countryRequest));
             }
@@ -848,7 +844,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     }
 
     public getOnboardingForm(countryCode: string) {
-        let onboardingFormRequest = new OnboardingFormRequest();
+        const onboardingFormRequest = new OnboardingFormRequest();
         onboardingFormRequest.formName = '';
         onboardingFormRequest.country = countryCode;
         this.selectedCountryCode = countryCode;
@@ -886,7 +882,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         if (ele.value?.trim()) {
             if (this.formFields['taxName']['regex'] !== "" && this.formFields['taxName']['regex']?.length > 0) {
                 for (let key = 0; key < this.formFields['taxName']['regex'].length; key++) {
-                    let regex = new RegExp(this.formFields['taxName']['regex'][key]);
+                    const regex = new RegExp(this.formFields['taxName']['regex'][key]);
                     if (regex.test(ele.value)) {
                         isValid = true;
                         break;
@@ -913,8 +909,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public getStates(countryCode, selectedAcountCurrency?: string) {
         this.store.dispatch(this._generalActions.resetStatesList());
         if (countryCode && this.addAccountForm) {
-            let accountBankDetails = this.addAccountForm.get('accountBankDetails') as FormArray;
-            for (let control of accountBankDetails.controls) {
+            const accountBankDetails = this.addAccountForm.get('accountBankDetails') as FormArray;
+            for (const control of accountBankDetails.controls) {
                 if (countryCode === 'IN') {
                     control.get('bankAccountNo').setValidators([Validators.minLength(9), Validators.maxLength(18)]);
                     this.bankIbanNumberMaxLength = '18';
@@ -959,7 +955,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 });
                 this.statesSource$ = observableOf(this.states);
             } else {
-                let statesRequest = new StatesRequest();
+                const statesRequest = new StatesRequest();
                 statesRequest.country = countryCode;
                 this.store.dispatch(this._generalActions.getAllState(statesRequest));
             }
@@ -978,7 +974,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public moveAccount() {
         let activeAcc;
         this.activeAccount$.pipe(take(1)).subscribe(p => activeAcc = p);
-        let grpObject = new AccountMoveRequest();
+        const grpObject = new AccountMoveRequest();
         grpObject.uniqueName = this.moveAccountForm.controls['moveto'].value;
 
         this.store.dispatch(this.accountsAction.moveAccount(grpObject, activeAcc?.uniqueName, this.activeGroupUniqueName));
@@ -987,10 +983,10 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public mergeAccounts() {
         let activeAccount: AccountResponseV2 = null;
         this.activeAccount$.pipe(take(1)).subscribe(p => activeAccount = p);
-        let finalData: AccountMergeRequest[] = [];
+        const finalData: AccountMergeRequest[] = [];
         if (this.selectedaccountForMerge?.length) {
             this.selectedaccountForMerge.map((acc) => {
-                let obj = new AccountMergeRequest();
+                const obj = new AccountMergeRequest();
                 obj.uniqueName = acc;
                 finalData.push(obj);
             });
@@ -1024,7 +1020,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public deleteMergedAccount() {
         let activeAccount: AccountResponseV2 = null;
         this.activeAccount$.pipe(take(1)).subscribe(p => activeAccount = p);
-        let obj = new AccountUnMergeRequest();
+        const obj = new AccountUnMergeRequest();
         obj.uniqueNames = [this.selectedAccountForDelete];
         this.store.dispatch(this.accountsAction.unmergeAccount(activeAccount?.uniqueName, obj));
         this.showDeleteMove = false;
@@ -1067,15 +1063,13 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
 
     public applyTax() {
         let activeAccount: AccountResponseV2 = null;
-        let activeGroup: GroupResponse = null;
         this.store.pipe(take(1)).subscribe(s => {
             if (s.groupwithaccounts) {
                 activeAccount = s.groupwithaccounts.activeAccount;
-                activeGroup = s.groupwithaccounts.activeGroup;
             }
         });
         if (activeAccount) {
-            let data: ApplyTaxRequest = new ApplyTaxRequest();
+            const data: ApplyTaxRequest = new ApplyTaxRequest();
             data.isAccount = true;
             data.taxes = [];
             this.activeAccountTaxHierarchy$.pipe(take(1)).subscribe((t) => {
@@ -1087,8 +1081,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                     });
                 }
             });
-
-            data.taxes.push.apply(data.taxes, this.taxGroupForm.value.taxes);
+            data.taxes.push(...this.taxGroupForm.value.taxes);
             data.uniqueName = activeAccount?.uniqueName;
             this.store.dispatch(this.accountsAction.applyAccountTax(data));
         }
@@ -1107,7 +1100,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public moveMergeAccountTo() {
         let activeAccount: AccountResponseV2 = null;
         this.activeAccount$.pipe(take(1)).subscribe(p => activeAccount = p);
-        let obj = new AccountUnMergeRequest();
+        const obj = new AccountUnMergeRequest();
         obj.uniqueNames = [this.setAccountForMove];
         obj.moveTo = this.selectedAccountForMove;
         this.store.dispatch(this.accountsAction.unmergeAccount(activeAccount?.uniqueName, obj));
@@ -1146,16 +1139,14 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
      */
     public toggleStateRequired(): void {
         this.isStateRequired = this.checkActiveGroupCountry();
-        let i = 0;
-        let addresses = this.addAccountForm.get('addresses') as FormArray;
-        for (let control of addresses.controls) {
+        const addresses = this.addAccountForm.get('addresses') as FormArray;
+        for (const control of addresses.controls) {
             if (this.isStateRequired) {
                 control.get('stateCode').setValidators([Validators.required]);
             } else {
                 control.get('stateCode').setValidators(null);
             }
             control.get('stateCode').updateValueAndValidity();
-            i++;
         }
         this.addAccountForm.controls['addresses'].updateValueAndValidity();
     }
@@ -1172,8 +1163,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             let trim: string = '';
             // changes account number validation for country india as well ref card : GIDK-1119
             trim = element.value.replace(/[^a-zA-Z0-9]/g, '');
-            let accountBankDetail = this.addAccountForm.get('accountBankDetails') as FormArray;
-            for (let control of accountBankDetail.controls) {
+            const accountBankDetail = this.addAccountForm.get('accountBankDetails') as FormArray;
+            for (const control of accountBankDetail.controls) {
                 if (type === 'bankAccountNo') {
                     control.get('bankAccountNo')?.patchValue(trim);
                 } else if (type === 'swiftCode') {
@@ -1230,7 +1221,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         }
         if (this.activeAccountName) {
             uniq(this.selectedDiscounts);
-            let assignDiscountObject: ApplyDiscountRequestV2 = new ApplyDiscountRequestV2();
+            const assignDiscountObject: ApplyDiscountRequestV2 = new ApplyDiscountRequestV2();
             assignDiscountObject.uniqueName = this.activeAccountName;
             assignDiscountObject.discounts = this.selectedDiscounts;
             assignDiscountObject.isAccount = true;
@@ -1295,7 +1286,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
      * @memberof AccountUpdateNewDetailsComponent
      */
     public initialCustomFieldDetailsForm(value: CustomFieldsData = null): FormGroup {
-        let customFields = this._fb.group({
+        const customFields = this._fb.group({
             uniqueName: [''],
             value: [''],
         });
@@ -1391,7 +1382,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
      * @param {Function} successCallback Callback to carry out further operation
      * @memberof AccountAddNewDetailsComponent
      */
-    public onGroupSearchQueryChanged(query: string, page: number = 1, successCallback?: Function): void {
+    public onGroupSearchQueryChanged(query: string, page: number = 1, successCallback?: (...args: any[]) => any): void {
         this.groupsSearchResultsPaginationData.query = query;
         if (!this.preventDefaultGroupScrollApiCall &&
             (query || (this.defaultGroupSuggestions && this.defaultGroupSuggestions.length === 0) || successCallback)) {
@@ -1444,7 +1435,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public getInvoiceSettings(): void {
         this.invoiceService.GetInvoiceSetting().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.status === "success" && response.body) {
-                let invoiceSettings = cloneDeep(response.body);
+                const invoiceSettings = cloneDeep(response.body);
                 this.inventorySettings = invoiceSettings.companyInventorySettings;
 
                 if (!this.addAccountForm.get("hsnOrSac")?.value) {
@@ -1517,7 +1508,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
      * @param {Function} successCallback Callback to carry out further operation
      * @memberof AuditLogsFormComponent
      */
-    public onAccountSearchQueryChanged(query: string, page: number = 1, successCallback?: Function): void {
+    public onAccountSearchQueryChanged(query: string, page: number = 1, successCallback?: (...args: any[]) => any): void {
         this.accountsSearchResultsPaginationData.query = query;
         if (!this.preventDefaultScrollApiCall &&
             (query || (this.defaultAccountSuggestions && this.defaultAccountSuggestions.length === 0) || successCallback)) {
@@ -1674,10 +1665,10 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             if (results && results[0] && results[1]) {
                 this.companyCustomFields = [];
                 this.addAccountForm.setControl('customFields', this._fb.array([]));
-                let acc = results[0];
+                const acc = results[0];
                 this.resetBankDetailsForm();
                 if (acc && acc.parentGroups[0]?.uniqueName) {
-                    let col = acc.parentGroups[0]?.uniqueName;
+                    const col = acc.parentGroups[0]?.uniqueName;
                     this.isHsnSacEnabledAcc = col === 'revenuefromoperations' || col === 'otherincome' || col === 'operatingcost' || col === 'indirectexpenses';
                     this.isGstEnabledAcc = !this.isHsnSacEnabledAcc;
                     this.activeAccountGroup = acc.parentGroups?.length > 0 ? [{
@@ -1697,7 +1688,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                     this.showHideAddressTab();
                 }
 
-                let accountDetails: AccountRequestV2 = acc as AccountRequestV2;
+                const accountDetails: AccountRequestV2 = acc as AccountRequestV2;
                 if (accountDetails?.uniqueName) {
                     this.accountInheritedDiscounts = [];
                     if (accountDetails && accountDetails.inheritedDiscounts) {
@@ -1711,9 +1702,9 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                         if (response.status === 'success') {
                             if (response.body) {
                                 if (response.body[accountDetails?.uniqueName]) {
-                                    let list = response.body[accountDetails?.uniqueName];
+                                    const list = response.body[accountDetails?.uniqueName];
                                     Object.keys(list).forEach(key => {
-                                        let UniqueName = list[key]['discount']['uniqueName'];
+                                        const UniqueName = list[key]['discount']['uniqueName'];
                                         this.selectedDiscounts.push(UniqueName);
                                     });
                                 }
@@ -1785,7 +1776,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 this.openingBalanceTypeChnaged(accountDetails.openingBalanceType);
                 if (accountDetails.mobileNo) {
                     if (accountDetails.mobileNo.indexOf('-') > -1) {
-                        let mobileArray = accountDetails.mobileNo.split('-');
+                        const mobileArray = accountDetails.mobileNo.split('-');
                         this.addAccountForm.get('mobileCode')?.patchValue(mobileArray[0]);
                         this.addAccountForm.get('mobileNo')?.patchValue(mobileArray[1]);
                     } else {

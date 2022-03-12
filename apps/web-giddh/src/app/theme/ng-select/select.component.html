@@ -5,7 +5,7 @@
     #selection
     [attr.tabindex]="disabled || isTypeAheadMode ? null : 0"
     [ngClass]="{ 'open': isOpen, 'focus': hasFocus, 'below': isBelow, 'disabled': disabled }"
-    (click)="onSelectContainerClick($event)"
+    (click)="onSelectContainerClick()"
     (focus)="onSelectContainerFocus()"
     (keydown)="onSelectContainerKeydown($event)"
 >
@@ -23,9 +23,7 @@
         <div class="placeholder" *ngIf="!optionList.hasSelected">
             {{ placeholderView }}
         </div>
-        <div class="clear" *ngIf="allowClear && optionList.hasSelected" (click)="onClearSelectionClick($event)">
-            &#x2715;
-        </div>
+        <div class="clear" *ngIf="allowClear && optionList.hasSelected" (click)="onClearSelectionClick()">&#x2715;</div>
         <div class="toggle" *ngIf="isOpen">
             <span class="select-drop"><i class="fa fa-caret-up"></i></span>
             <!-- <span class="glyphicon glyphicon-triangle-top"></span> -->
@@ -65,7 +63,7 @@
                 [value]="optionList.hasSelected ? optionList.selection[0].label : ''"
                 (input)="onFilterInput($event.target.value)"
                 (keydown)="onTypeAheadFilterKeydown($event)"
-                (keyup)="onTypeAheadFilterKeyup($event)"
+                (keyup)="onTypeAheadFilterKeyup()"
                 (focus)="onTypeAheadFilterFocus()"
                 class="form-control"
             />

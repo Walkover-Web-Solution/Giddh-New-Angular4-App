@@ -36,7 +36,7 @@ export class MaskApplierService {
         this._shift = new Set();
         this.clearIfNotMatch = this._config.clearIfNotMatch;
         this.dropSpecialCharacters = this._config.dropSpecialCharacters;
-        this.maskSpecialCharacters = this._config!.specialCharacters;
+        this.maskSpecialCharacters = this._config?.specialCharacters;
         this.maskAvailablePatterns = this._config.patterns;
         this.prefix = this._config.prefix || '';
         this.suffix = this._config.suffix;
@@ -56,7 +56,8 @@ export class MaskApplierService {
         inputValue: string,
         maskExpression: string,
         position: number = 0,
-        cb: Function = () => {
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
+        cb: (...args: any[]) => any = () => {
         },
     ): string {
         if (inputValue === undefined || inputValue === null || maskExpression === undefined) {
@@ -110,7 +111,7 @@ export class MaskApplierService {
             ) {
                 inputValue = this._checkInput(inputValue);
             }
-            let precision: number = this.getPrecision(maskExpression);
+            const precision: number = this.getPrecision(maskExpression);
             let strForSep: string;
             if (maskExpression.startsWith(Separators.SEPARATOR)) {
                 if (
@@ -178,7 +179,7 @@ export class MaskApplierService {
             }
 
             const commaShift: number = result.indexOf(',') - inputValue.indexOf(',');
-            let shiftStep: number = result.length - inputValue.length;
+            const shiftStep: number = result.length - inputValue.length;
 
             // position shifting issue fixed for custom separators
             if (!(maskExpression.startsWith(Separators.IND_COMMA_SEPARATED) ||
@@ -218,8 +219,8 @@ export class MaskApplierService {
                         shiftCustomOperator = ' ';
                         break;
                 }
-                let resultSpecialCharLength: number = (result.match(new RegExp(shiftCustomOperator, 'g')) || []).length;
-                let inputSpecialCharLength: number = (inputValue.match(new RegExp(shiftCustomOperator, 'g')) || []).length;
+                const resultSpecialCharLength: number = (result.match(new RegExp(shiftCustomOperator, 'g')) || []).length;
+                const inputSpecialCharLength: number = (inputValue.match(new RegExp(shiftCustomOperator, 'g')) || []).length;
 
                 // if new separator character added to result then shift cursor by special character length
                 if (resultSpecialCharLength > inputSpecialCharLength) {
@@ -514,8 +515,6 @@ export class MaskApplierService {
      */
     private checkInputPrecisionForCustomInput = (inputValue: string, precision: number, decimalMarker: string): string => {
         if (precision < Infinity) {
-            let precisionRegEx: RegExp;
-
             const splitter = inputValue.split(decimalMarker);
             if (precision === 0) {
                 inputValue = splitter[0];

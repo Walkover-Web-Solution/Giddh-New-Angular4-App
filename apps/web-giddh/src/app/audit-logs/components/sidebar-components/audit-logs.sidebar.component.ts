@@ -74,7 +74,7 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
         private groupService: GroupService,
         private searchService: SearchService
     ) {
-        
+
     }
 
     public ngOnInit() {
@@ -219,7 +219,7 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
      * @param {Function} successCallback Callback to carry out further operation
      * @memberof AuditLogsSidebarComponent
      */
-    public onAccountSearchQueryChanged(query: string, page: number = 1, successCallback?: Function): void {
+    public onAccountSearchQueryChanged(query: string, page: number = 1, successCallback?: (...args: any[]) => any): void {
         this.accountsSearchResultsPaginationData.query = query;
         if (!this.preventDefaultScrollApiCall &&
             (query || (this.defaultAccountSuggestions && this.defaultAccountSuggestions.length === 0) || successCallback)) {
@@ -302,7 +302,7 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
      * @param {Function} successCallback Callback to carry out further operation
      * @memberof AuditLogsSidebarComponent
      */
-    public onGroupSearchQueryChanged(query: string, page: number = 1, successCallback?: Function): void {
+    public onGroupSearchQueryChanged(query: string, page: number = 1, successCallback?: (...args: any[]) => any): void {
         this.groupsSearchResultsPaginationData.query = query;
         if (!this.preventDefaultGroupScrollApiCall &&
             (query || (this.defaultGroupSuggestions && this.defaultGroupSuggestions.length === 0) || successCallback)) {

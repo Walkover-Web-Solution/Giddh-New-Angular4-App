@@ -37,13 +37,13 @@ export function PermissionReducer(state = initialState, action: CustomActions): 
         }
         case PERMISSION_ACTIONS.GET_ROLES_RESPONSE: {
             let newState = cloneDeep(state);
-            let res = action.payload as BaseResponse<IRoleCommonResponseAndRequest[],
+            const res = action.payload as BaseResponse<IRoleCommonResponseAndRequest[],
                 string>;
             if (res.status === 'success') {
                 newState.roles = res.body;
                 newState.roles = sortBy(newState.roles, [(o) => o.name]);
                 newState.roles = sortBy(newState.roles, [(o) => !o.isFixed]);
-                let sortedRoles = cloneDeep(newState);
+                const sortedRoles = cloneDeep(newState);
                 sortedRoles.roles.forEach((role) => {
                     role.scopes = sortBy(role.scopes, [(o) => o.name]);
                 });
@@ -57,9 +57,9 @@ export function PermissionReducer(state = initialState, action: CustomActions): 
             return { ...state, addUpdateRoleInProcess: true };
         }
         case PERMISSION_ACTIONS.CREATE_ROLE_RESPONSE: {
-            let newState = cloneDeep(state);
+            const newState = cloneDeep(state);
             newState.addUpdateRoleInProcess = false;
-            let res = action.payload;
+            const res = action.payload;
             if (res.status === 'success') {
                 newState.roles.push(res.body);
             }
@@ -69,8 +69,8 @@ export function PermissionReducer(state = initialState, action: CustomActions): 
             return { ...state, addUpdateRoleInProcess: true };
         }
         case PERMISSION_ACTIONS.UPDATE_ROLE_RESPONSE: {
-            let newState = cloneDeep(state);
-            let roleIndx = newState.roles.findIndex((role) => role.uniqueName === action.payload.roleUniqueName);
+            const newState = cloneDeep(state);
+            const roleIndx = newState.roles.findIndex((role) => role.uniqueName === action.payload.roleUniqueName);
             if (roleIndx > -1) {
                 newState.roles[roleIndx] = action.payload;
                 return { ...state, ...newState, addUpdateRoleInProcess: false };
@@ -95,8 +95,8 @@ export function PermissionReducer(state = initialState, action: CustomActions): 
             return state;
         }
         case PERMISSION_ACTIONS.GET_ALL_PAGES_RESPONSE: {
-            let newState = cloneDeep(state);
-            let res = action.payload as BaseResponse<string[], string>;
+            const newState = cloneDeep(state);
+            const res = action.payload as BaseResponse<string[], string>;
             if (res.status === 'success') {
                 newState.pages = res.body;
                 return Object.assign({}, state, newState);
@@ -104,8 +104,8 @@ export function PermissionReducer(state = initialState, action: CustomActions): 
             return state;
         }
         case PERMISSION_ACTIONS.GET_ALL_PERMISSIONS_RESPONSE: {
-            let newState = cloneDeep(state);
-            let res = action.payload as BaseResponse<GetAllPermissionResponse[], string>;
+            const newState = cloneDeep(state);
+            const res = action.payload as BaseResponse<GetAllPermissionResponse[], string>;
             if (res.status === 'success') {
                 newState.permissions = res.body;
                 return Object.assign({}, state, newState);
@@ -113,13 +113,13 @@ export function PermissionReducer(state = initialState, action: CustomActions): 
             return state;
         }
         case PERMISSION_ACTIONS.PUSH_TEMP_ROLE_IN_STORE: {
-            let newState = cloneDeep(state);
-            let res = action.payload;
+            const newState = cloneDeep(state);
+            const res = action.payload;
             newState.newRole = res;
             return Object.assign({}, state, newState);
         }
         case PERMISSION_ACTIONS.REMOVE_NEWLY_CREATED_ROLE_FROM_STORE: {
-            let newState = cloneDeep(state);
+            const newState = cloneDeep(state);
             newState.newRole = {};
             return Object.assign({}, state, newState);
         }
@@ -127,7 +127,7 @@ export function PermissionReducer(state = initialState, action: CustomActions): 
             return Object.assign({}, state, { createPermissionInProcess: true, createPermissionSuccess: false });
         }
         case AccountsAction.SHARE_ENTITY_RESPONSE: {
-            let res = action.payload;
+            const res = action.payload;
             if (res.status === 'success') {
                 return Object.assign({}, state, {
                     createPermissionInProcess: false, createPermissionSuccess: true

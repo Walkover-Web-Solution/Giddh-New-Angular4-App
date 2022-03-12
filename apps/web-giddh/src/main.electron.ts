@@ -6,8 +6,6 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 // app
 import { AppElectronModule } from './app/app.electron.module';
 import { environment } from './environments/environment';
-// @ts-ignore
-// let jQuery = ($ as any) = window['$'] = window['jQuery'] = require('jquery');
 if (environment.production) {
     enableProdMode();
 }

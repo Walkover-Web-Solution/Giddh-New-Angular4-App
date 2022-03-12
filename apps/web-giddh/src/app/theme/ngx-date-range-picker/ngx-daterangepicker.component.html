@@ -494,7 +494,7 @@
                                                     class="btn btn-danger"
                                                     *ngIf="showCancel"
                                                     type="button"
-                                                    (click)="clickCancel($event)"
+                                                    (click)="clickCancel()"
                                                 >
                                                     {{ commonLocaleData?.app_datepicker?.cancel }}
                                                 </button>
@@ -506,7 +506,7 @@
                                                     *ngIf="!isMobileScreen"
                                                     [disabled]="applyBtn.disabled"
                                                     type="button"
-                                                    (click)="clickApply($event)"
+                                                    (click)="clickApply()"
                                                 >
                                                     {{ commonLocaleData?.app_datepicker?.done }}
                                                 </button>
@@ -515,7 +515,7 @@
                                                     *ngIf="isMobileScreen"
                                                     [disabled]="applyBtn.disabled"
                                                     type="button"
-                                                    (click)="clickApply($event); closeCalender()"
+                                                    (click)="clickApply(); closeCalender()"
                                                 >
                                                     {{ commonLocaleData?.app_datepicker?.done }}
                                                 </button>

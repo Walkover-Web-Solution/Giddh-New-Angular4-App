@@ -248,7 +248,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
                 return;
             }
 
-            let orderedCompanies = _.orderBy(companies, 'name');
+            const orderedCompanies = _.orderBy(companies, 'name');
             this.companyList = orderedCompanies;
         });
         this.updateIndexDbSuccess$.subscribe(res => {
@@ -305,7 +305,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
                 if(account && !this.isItemAdded) {
                     this.isItemAdded = true;
                     // save data to db
-                    let item: any = {};
+                    const item: any = {};
                     item.time = +new Date();
                     item.route = this.router.url;
                     item.parentGroups = account.parentGroups;
@@ -355,7 +355,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
         );
 
         this.subscriptions.push(_combine);
-        let config: ModalOptions = { class: 'universal_modal', show: true, keyboard: true, animated: false };
+        const config: ModalOptions = { class: 'universal_modal', show: true, keyboard: true, animated: false };
         this.modelRef = this.modalService.show(this.navigationModal, config);
     }
 
@@ -467,14 +467,14 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
                 }
             } else {
                 // direct account scenario
-                let url = `ledger/${item.uniqueName}`;
+                const url = `ledger/${item.uniqueName}`;
                 if (!isCtrlClicked) {
                     this.router.navigate([url]); // added link in routerLink
                 }
             }
             // save data to db
             item.time = +new Date();
-            let entity = (item.type) === 'MENU' ? 'menus' : 'accounts';
+            const entity = (item.type) === 'MENU' ? 'menus' : 'accounts';
             this.doEntryInDb(entity, item, fromInvalidState);
         }, 200);
     }
@@ -561,7 +561,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
         }
 
         if (this.activeCompanyForDb && this.activeCompanyForDb.uniqueName) {
-            let isSmallScreen: boolean = !(window.innerWidth > 1440 && window.innerHeight > 717);
+            const isSmallScreen: boolean = !(window.innerWidth > 1440 && window.innerHeight > 717);
             let branches = [];
             this.store.pipe(select(appStore => appStore.settings.branches), take(1)).subscribe(response => {
                 branches = response || [];

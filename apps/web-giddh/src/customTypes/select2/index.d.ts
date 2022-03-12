@@ -80,7 +80,7 @@ interface Select2Options {
     */
     templateSelection?: (object: Select2SelectionObject, container: JQuery) => any;
     templateResult?: (object: Select2SelectionObject) => any;
-    language?: string | string[] | {};
+    language?: string | string[] | unknown;
     selectOnClose?: boolean;
     sorter?: (data: any[]) => any[];
     dropdownParent?: JQuery;
@@ -200,9 +200,6 @@ interface JQuery {
 
 declare class Select2 {
     constructor(element: JQuery, options: Select2Options);
-    focus(): void;
-    destroy(): void;
-    on(event: string, callback: Function): void;
     selection: any;
     dropdown: any;
     results: any;
@@ -211,4 +208,7 @@ declare class Select2 {
     $selection: JQuery;
     $results: JQuery;
     options: { options: Select2Options };
+    focus(): void;
+    destroy(): void;
+    on(event: string, callback: (...args: unknown[]) => unknown): void;
 }

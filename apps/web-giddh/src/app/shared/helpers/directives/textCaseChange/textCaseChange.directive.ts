@@ -7,10 +7,6 @@ import { FormControl } from '@angular/forms';
 export class TextCaseChangeDirective {
     @Input() public control: FormControl;
 
-    constructor() {
-        
-    }
-
     @HostListener('document:paste', ['$event'])
     public Paste(event) {
         if ('textcasechangedirective' in event.target.attributes) {

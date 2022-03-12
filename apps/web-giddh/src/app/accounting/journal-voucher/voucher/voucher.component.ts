@@ -600,16 +600,17 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                     openChequePopup = true;
                     this.openChequeDetailForm();
                 }
-                let idx = this.selectedIdx;
-                let transaction = this.requestObj.transactions[idx];
+                const idx = this.selectedIdx;
+                const transaction = this.requestObj.transactions[idx];
                 if (acc) {
                     const formattedCurrentDate = moment(this.universalDate[1], GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
                     this.tallyModuleService.getCurrentBalance(this.currentCompanyUniqueName, acc.uniqueName, formattedCurrentDate, formattedCurrentDate).subscribe((data) => {
                         if (data && data.body) {
                             this.setAccountCurrentBalance(data.body, idx);
                         }
+                    // eslint-disable-next-line @typescript-eslint/no-empty-function
                     }, () => { });
-                    let accModel = {
+                    const accModel = {
                         name: acc.name,
                         UniqueName: acc.uniqueName,
                         groupUniqueName: acc.parentGroups[acc.parentGroups.length - 1].uniqueName,
@@ -630,7 +631,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                         this.groupUniqueName = accModel?.groupUniqueName;
                         this.selectAccUnqName = acc.uniqueName;
 
-                        let len = this.requestObj.transactions[idx].inventory ? this.requestObj.transactions[idx].inventory.length : 0;
+                        const len = this.requestObj.transactions[idx].inventory ? this.requestObj.transactions[idx].inventory.length : 0;
                         if (!len || this.requestObj.transactions[idx].inventory && this.requestObj.transactions[idx].inventory[len - 1].stock.uniqueName) {
                             this.requestObj.transactions[idx].inventory.push(this.initInventory());
                         }
@@ -709,7 +710,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @memberof AccountAsVoucherComponent
      */
     public addNewEntry(amount: any, transactionObj: any, entryIndex: number) {
-        let index = entryIndex;
+        const index = entryIndex;
         // let reqField: any = document.getElementById(`first_element_${entryIndex - 1}`);
         // if (amount === 0 || amount === '0') {
         //     if (entryIndex === 0) {
@@ -738,13 +739,13 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     }
 
     public calModAmt(amount, transactionObj, indx) {
-        let lastIndx = this.requestObj.transactions.length - 1;
+        const lastIndx = this.requestObj.transactions.length - 1;
         transactionObj.amount = Number(amount);
         transactionObj.total = transactionObj.amount;
 
-        let debitTransactions = filter(this.requestObj.transactions, (o: any) => o.type === 'by');
+        const debitTransactions = filter(this.requestObj.transactions, (o: any) => o.type === 'by');
         this.totalDebitAmount = sumBy(debitTransactions, (o: any) => Number(o.amount));
-        let creditTransactions = filter(this.requestObj.transactions, (o: any) => o.type === 'to');
+        const creditTransactions = filter(this.requestObj.transactions, (o: any) => o.type === 'to');
         this.totalCreditAmount = sumBy(creditTransactions, (o: any) => Number(o.amount));
         if (indx === lastIndx && this.requestObj.transactions[indx].selectedAccount.name) {
             if (this.totalCreditAmount < this.totalDebitAmount || (this.totalCreditAmount === 0 && this.totalDebitAmount === 0)) {
@@ -823,10 +824,10 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                         return false;
                     }
 
-                    let voucherAdjustments = this.receiptEntries;
+                    const voucherAdjustments = this.receiptEntries;
                     if (voucherAdjustments && voucherAdjustments.length > 0) {
-                        let dataVoucherAdjustments = [];
-                        let byEntry = data.transactions[1];
+                        const dataVoucherAdjustments = [];
+                        const byEntry = data.transactions[1];
                         let totalTransactions = data.transactions.length;
                         let adjustmentsCount = 0;
 
@@ -884,8 +885,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                         element.type = (element.type === 'by') ? 'credit' : 'debit';
                     }
                 });
-                let accUniqueName: string = maxBy(data.transactions, (o: any) => o.amount).selectedAccount.UniqueName;
-                let indexOfMaxAmountEntry = findIndex(data.transactions, (o: any) => o.selectedAccount.UniqueName === accUniqueName);
+                const accUniqueName: string = maxBy(data.transactions, (o: any) => o.amount).selectedAccount.UniqueName;
+                const indexOfMaxAmountEntry = findIndex(data.transactions, (o: any) => o.selectedAccount.UniqueName === accUniqueName);
                 if (this.requestObj.voucherType === VOUCHERS.RECEIPT) {
                     if (this.receiptEntries && this.receiptEntries.length > 0) {
                         data.transactions.splice(0, 2);
@@ -1022,7 +1023,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      */
     public watchKeyboardEvent(event) {
         if (event) {
-            let navigateTo = find(this.navigateURL, (o: any) => o.code === event.key);
+            const navigateTo = find(this.navigateURL, (o: any) => o.code === event.key);
             if (navigateTo) {
                 this.router.navigate(['accounting', navigateTo.route]);
             }
@@ -1045,7 +1046,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * validateTransaction
      */
     public validateTransaction(transactions) {
-        let validEntry = this.removeBlankTransaction(transactions);
+        const validEntry = this.removeBlankTransaction(transactions);
         let entryIsValid = true;
         validEntry.forEach(obj => {
             if (obj.particular && !obj.amount) {
@@ -1079,8 +1080,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      */
     public onSelectStock(item) {
         if (item) {
-            let idx = this.selectedStockIdx;
-            let entryItem = cloneDeep(item);
+            const idx = this.selectedStockIdx;
+            const entryItem = cloneDeep(item);
             this.prepareEntry(entryItem, this.selectedIdx);
             // setTimeout(() => {
             //   this.selectedStk.focus();
@@ -1095,9 +1096,9 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * prepareEntry
      */
     public prepareEntry(item, idx) {
-        let i = this.selectedStockIdx;
+        const i = this.selectedStockIdx;
         if (item && item.stockUnit) {
-            let defaultUnit = {
+            const defaultUnit = {
                 stockUnitCode: item.stockUnit.name,
                 code: item.stockUnit.code,
                 rate: 0
@@ -1125,18 +1126,18 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * changePrice
      */
     public changePrice(idx, val) {
-        let i = this.selectedIdx;
+        const i = this.selectedIdx;
         this.requestObj.transactions[i].inventory[idx].unit.rate = !Number.isNaN(val) ? Number(cloneDeep(val)) : 0;
         this.requestObj.transactions[i].inventory[idx].amount = Number((this.requestObj.transactions[i].inventory[idx].unit.rate * this.requestObj.transactions[i].inventory[idx].quantity).toFixed(2));
         this.amountChanged(idx);
     }
 
     public amountChanged(invIdx) {
-        let i = this.selectedIdx;
+        const i = this.selectedIdx;
         if (this.requestObj.transactions && this.requestObj.transactions[i].inventory[invIdx].stock && this.requestObj.transactions[i].inventory[invIdx].quantity) {
             this.requestObj.transactions[i].inventory[invIdx].unit.rate = Number((this.requestObj.transactions[i].inventory[invIdx].amount / this.requestObj.transactions[i].inventory[invIdx].quantity).toFixed(2));
         }
-        let total = this.calculateTransactionTotal(this.requestObj.transactions[i].inventory);
+        const total = this.calculateTransactionTotal(this.requestObj.transactions[i].inventory);
         this.requestObj.transactions[i].total = total;
         this.requestObj.transactions[i].amount = total;
     }
@@ -1153,14 +1154,14 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     }
 
     public changeQuantity(idx, val) {
-        let i = this.selectedIdx;
+        const i = this.selectedIdx;
         this.requestObj.transactions[i].inventory[idx].quantity = Number(val);
         this.requestObj.transactions[i].inventory[idx].amount = Number((this.requestObj.transactions[i].inventory[idx].unit.rate * this.requestObj.transactions[i].inventory[idx].quantity).toFixed(2));
         this.amountChanged(idx);
     }
 
     public validateAndAddNewStock(idx) {
-        let i = this.selectedIdx;
+        const i = this.selectedIdx;
         if (this.requestObj.transactions[i].inventory.length - 1 === idx) {
             this.requestObj.transactions[i].inventory.push(this.initInventory());
         }
@@ -1193,7 +1194,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      */
     public validateAccount(transactionObj, ev, idx) {
         if (!ev.shiftKey) {
-            let lastIndx = this.requestObj.transactions.length - 1;
+            const lastIndx = this.requestObj.transactions.length - 1;
             if (idx === lastIndx) {
                 return;
             }
@@ -1262,7 +1263,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * sortStockItems
      */
     public sortStockItems(ItemArr) {
-        let stockAccountArr: IOption[] = [];
+        const stockAccountArr: IOption[] = [];
         forEach(ItemArr, (obj: any) => {
             stockAccountArr.push({
                 label: `${obj.name} (${obj.uniqueName})`,
@@ -1278,10 +1279,10 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         if (this.quickAccountModal && this.quickAccountModal.config) {
             this.quickAccountModal.config.backdrop = false;
         }
-        let viewContainerRef = this.quickAccountComponent.viewContainerRef;
+        const viewContainerRef = this.quickAccountComponent.viewContainerRef;
         viewContainerRef.remove();
-        let componentRef = viewContainerRef.createComponent(QuickAccountComponent);
-        let componentInstance = componentRef.instance as QuickAccountComponent;
+        const componentRef = viewContainerRef.createComponent(QuickAccountComponent);
+        const componentInstance = componentRef.instance as QuickAccountComponent;
         componentInstance.needAutoFocus = true;
         componentInstance.closeQuickAccountModal.pipe(takeUntil(this.destroyed$)).subscribe((a) => {
             this.hideQuickAccountModal();
@@ -1412,8 +1413,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      */
     public createAccountsList(): void {
         if (this.allAccounts) {
-            let accList: IOption[] = [];
-            let accountList = [];
+            const accList: IOption[] = [];
+            const accountList = [];
             this.allAccounts.forEach((acc: IFlattenAccountsResultItem) => {
                 if (!accountList[acc.uniqueName] && this.activeCompany && acc.currency === this.activeCompany.baseCurrency) {
                     if (this.requestObj.voucherType === VOUCHERS.CONTRA) {
@@ -1578,7 +1579,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         this.store.pipe(select(companyStore => companyStore.company), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
                 if (res.taxes) {
-                    let taxList: IOption[] = [];
+                    const taxList: IOption[] = [];
                     Object.keys(res.taxes).forEach(key => {
                         taxList.push({ label: res.taxes[key].name, value: res.taxes[key].uniqueName });
 
@@ -1599,7 +1600,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @memberof AccountAsVoucherComponent
      */
     public getInvoiceListForReceiptVoucher(): void {
-        let pendingInvoiceList: IOption[] = [];
+        const pendingInvoiceList: IOption[] = [];
         this.pendingInvoiceList = [];
         this.pendingInvoiceListSource$ = observableOf(pendingInvoiceList);
 
@@ -1683,7 +1684,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @memberof AccountAsVoucherComponent
      */
     public removeReceiptEntry(index: number): void {
-        let receiptEntries = [];
+        const receiptEntries = [];
         let loop = 0;
         this.receiptEntries.forEach(entry => {
             if (loop !== index) {
@@ -1767,7 +1768,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      */
     public addNewAdjustmentEntry(): void {
         if (this.totalEntries === 0 || (this.receiptEntries[this.totalEntries - 1] && this.receiptEntries[this.totalEntries - 1] !== undefined && parseFloat(this.receiptEntries[this.totalEntries - 1].amount) > 0)) {
-            let getAdjustmentTypes = this.prepareAdjustmentTypes(this.totalEntries);
+            const getAdjustmentTypes = this.prepareAdjustmentTypes(this.totalEntries);
 
             this.receiptEntries[this.totalEntries] = {
                 allowedTypes: getAdjustmentTypes,
@@ -1857,7 +1858,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
         if (receiptTotal < this.adjustmentTransaction.amount) {
             if (entry.type === AdjustmentTypesEnum.againstReference) {
-                let invoiceBalanceDue = parseFloat(this.pendingInvoiceList[entry.invoice.uniqueName].balanceDue.amountForAccount);
+                const invoiceBalanceDue = parseFloat(this.pendingInvoiceList[entry.invoice.uniqueName].balanceDue.amountForAccount);
                 if (invoiceBalanceDue >= entry.amount) {
                     this.addNewAdjustmentEntry();
                     this.validateEntries(false);
@@ -1911,7 +1912,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @memberof AccountAsVoucherComponent
      */
     public prepareAdjustmentTypes(index: number, entry?: any): IOption[] {
-        let adjustmentTypesOptions: IOption[] = [];
+        const adjustmentTypesOptions: IOption[] = [];
 
         adjustmentTypes.map(type => {
             if ((index === 0 && (type.value === AdjustmentTypesEnum.receipt || type.value === AdjustmentTypesEnum.advanceReceipt)) || (index > 0 && type.value === AdjustmentTypesEnum.againstReference) || (entry && type.value === entry.type)) {
@@ -2018,7 +2019,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @param {Function} successCallback Callback to carry out further operation
      * @memberof AccountAsVoucherComponent
      */
-    public onAccountSearchQueryChanged(query: string, page: number = 1, successCallback?: Function): void {
+    public onAccountSearchQueryChanged(query: string, page: number = 1, successCallback?: (...args: any[]) => any): void {
         this.accountsSearchResultsPaginationData.query = query;
         if (!this.preventDefaultScrollApiCall &&
             (query || (this.defaultAccountSuggestions && this.defaultAccountSuggestions.length === 0) || successCallback)) {

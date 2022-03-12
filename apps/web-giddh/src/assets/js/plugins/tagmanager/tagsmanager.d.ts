@@ -12,7 +12,7 @@ interface ITagsManagerOptions {
 	typeahead?: boolean;
 	typeaheadAjaxSource?: string;
 	typeaheadAjaxPolling?: boolean;
-	typeaheadDelegate?: Function;
+	typeaheadDelegate?: (...args: any[]) => any;
 	typeaheadOverrides?: ITypeaheadOverrides;
 	typeaheadSource?: any;
 	AjaxPush?: string; //url
@@ -29,14 +29,14 @@ interface ITagsManagerOptions {
 	tagsContainer?: HTMLElement;
 	tagCloseIcon?: string;
 	tagClass?: string;
-	validator: Function;
+	validator: (...args: any[]) => any;
 	onlyTagList?: boolean;
 }
 
 interface ITypeaheadOverrides {
-	instanceSelectHandler?: Function;
+	instanceSelectHandler?: (...args: any[]) => any;
 	selectedClass?: string;
-	select?: Function;
+	select?: (...args: any[]) => any;
 }
 
 interface ITagsManager {
@@ -52,8 +52,8 @@ interface ITagsManager {
 		options?: ITagsManagerOptions,
 		tagToManipulate?: string): void;
 	setupTypeahead(): void;
-	onTypeaheadAjaxSuccess(data: any, isSetTypeaheadSource: boolean, process?: Function): void;
-	ajaxPolling(query: string, process: Function): void;
+	onTypeaheadAjaxSuccess(data: any, isSetTypeaheadSource: boolean, process?: (...args: any[]) => any): void;
+	ajaxPolling(query: string, process: (...args: any[]) => any): void;
 	setTypeaheadSource(source: any): void;
 	trimTag(tag: string): string;
 	popTag(): void;

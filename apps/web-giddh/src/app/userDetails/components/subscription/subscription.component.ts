@@ -205,7 +205,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
         this.translationComplete();
     }
     /**
-     * This function will use for get subscribed companies 
+     * This function will use for get subscribed companies
      *
      * @memberof SubscriptionComponent
      */
@@ -278,12 +278,12 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
      */
     public filterSubscriptions(): void {
         this.subscriptions$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            let subscriptions = [];
+            const subscriptions = [];
             this.subscriptions = [];
-            
+
             if (response?.length) {
                 response.forEach(subscription => {
-                    let subscriptionDetails = cloneDeep(subscription);
+                    const subscriptionDetails = cloneDeep(subscription);
 
                     subscriptionDetails.remainingDays = Number(moment(subscriptionDetails.expiry, GIDDH_DATE_FORMAT).diff(moment(), 'days'));
                     subscriptionDetails.startedAt = moment(subscriptionDetails.startedAt, GIDDH_DATE_FORMAT).format("D MMM, y");
@@ -307,7 +307,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
                     }
                 });
 
-                this.plansList = uniqBy(response.map(subscription => { return { name: subscription.planDetails?.name, uniqueName: subscription.planDetails?.uniqueName } }), "uniqueName");
+                this.plansList = uniqBy(response.map(subscription => ({ name: subscription.planDetails?.name, uniqueName: subscription.planDetails?.uniqueName })), "uniqueName");
                 if (subscriptions?.length > 0) {
                     this.subscriptions = subscriptions;
                     let loop = 0;
@@ -403,7 +403,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     /**
-     * This function will use for patch profile 
+     * This function will use for patch profile
      *
      * @param {*} obj
      * @memberof SubscriptionComponent

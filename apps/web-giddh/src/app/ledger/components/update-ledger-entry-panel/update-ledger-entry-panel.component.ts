@@ -1341,7 +1341,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @param {Function} successCallback Callback to carry out further operation
      * @memberof UpdateLedgerEntryPanelComponent
      */
-    public onSearchQueryChanged(query: string, page: number = 1, withStocks: boolean = true, successCallback?: Function): void {
+    public onSearchQueryChanged(query: string, page: number = 1, withStocks: boolean = true, successCallback?: (...args: any[]) => any): void {
         if (query || (this.defaultSuggestions && this.defaultSuggestions.length === 0) || successCallback) {
             this.searchResultsPaginationData.query = query;
             const currentLedgerCategory = this.activeAccount ? this.generalService.getAccountCategory(this.activeAccount, this.activeAccount.uniqueName) : '';

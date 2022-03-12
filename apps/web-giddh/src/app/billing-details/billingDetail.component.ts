@@ -370,7 +370,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     /**
-     * This function will use for on select state change 
+     * This function will use for on select state change
      *
      * @param {*} event
      * @memberof BillingDetailComponent
@@ -750,7 +750,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
       * @memberof BillingDetailComponent
       */
     public getUpdatedStateCodes(countryCode: any, isCompanyStates?: boolean): Promise<any> {
-        return new Promise((resolve: Function) => {
+        return new Promise((resolve: (...args: any[]) => any) => {
             if (countryCode) {
                 if (this.countryStates[countryCode]) {
                     if (!isCompanyStates) {
@@ -782,7 +782,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
      *
      * @param {StateCode[]} stateList
      * @param {string} countryCode
-     * @return {IOption[]} 
+     * @return {IOption[]}
      * @memberof BillingDetailComponent
      */
     public modifyStateResp(stateList: StateCode[], countryCode: string): IOption[] {

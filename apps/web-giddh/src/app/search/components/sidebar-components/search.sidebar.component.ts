@@ -285,7 +285,7 @@ export class SearchSidebarComponent implements OnInit, OnChanges, OnDestroy {
      * @param {Function} successCallback Callback to carry out further operation
      * @memberof SearchSidebarComponent
      */
-    public onGroupSearchQueryChanged(query: string, page: number = 1, successCallback?: Function): void {
+    public onGroupSearchQueryChanged(query: string, page: number = 1, successCallback?: (...args: any[]) => any): void {
         this.groupsSearchResultsPaginationData.query = query;
         if (!this.preventDefaultGroupScrollApiCall &&
             (query || (this.defaultGroupSuggestions && this.defaultGroupSuggestions.length === 0) || successCallback)) {

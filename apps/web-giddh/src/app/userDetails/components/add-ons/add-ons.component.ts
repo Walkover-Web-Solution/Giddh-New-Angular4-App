@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 
 @Component({
     selector: 'add-ons',
@@ -6,8 +6,8 @@ import { Component } from "@angular/core";
     styleUrls: ['./add-ons.component.scss'],
 })
 
-export class AddOnsComponent{
-    
+export class AddOnsComponent implements OnInit {
+
     /**  Image path variable */
     public imgPath: string = '';
 

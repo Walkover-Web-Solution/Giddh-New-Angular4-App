@@ -9,7 +9,7 @@ import { REMOVE_TRAILING_ZERO_REGEX } from 'apps/web-giddh/src/app/app.constant'
 
 @Pipe({ name: 'giddhCurrency', pure: true })
 
-export class GiddhCurrencyPipe implements OnInit, OnDestroy, PipeTransform {
+export class GiddhCurrencyPipe implements OnDestroy, PipeTransform {
 
     public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public _currencyNumberType: string;
@@ -36,10 +36,6 @@ export class GiddhCurrencyPipe implements OnInit, OnDestroy, PipeTransform {
         }
     }
 
-    public ngOnInit() {
-        this.getInitialProfileData();
-    }
-
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();
@@ -61,16 +57,16 @@ export class GiddhCurrencyPipe implements OnInit, OnDestroy, PipeTransform {
         if (input == null) {
             return;
         }
-        let result = input.toString().split('.');
+        const result = input.toString().split('.');
         // let finaloutput;
         // let currencyType = this._currencyNumberType;
         // let digitAfterDecimal: number = this.currencyDecimalType;
         // let lastThree;
         let finaloutput;
-        let currencyType = this._currencyNumberType ? this._currencyNumberType : localStorage.getItem('currencyNumberType');
+        const currencyType = this._currencyNumberType ? this._currencyNumberType : localStorage.getItem('currencyNumberType');
         let digitAfterDecimallocal: number = parseInt(localStorage.getItem('currencyDesimalType'));
         digitAfterDecimallocal = digitAfterDecimallocal ? digitAfterDecimallocal : 0;
-        let digitAfterDecimal: number = customDecimalPlaces ? Number(customDecimalPlaces) : this.currencyDecimalType ? this.currencyDecimalType : digitAfterDecimallocal;
+        const digitAfterDecimal: number = customDecimalPlaces ? Number(customDecimalPlaces) : this.currencyDecimalType ? this.currencyDecimalType : digitAfterDecimallocal;
         let lastThree;
         let afterdecDigit = null;
         // currencyType=(currencyType==null)?((this._currencyType.currencyType!=null)? this._currencyType.currencyType : '10,000,000'):'10,000,000';
@@ -127,7 +123,7 @@ export class GiddhCurrencyPipe implements OnInit, OnDestroy, PipeTransform {
                 }
             }
         }
-        let otherNumbers = result[0].substring(0, result[0].length - 3);
+        const otherNumbers = result[0].substring(0, result[0].length - 3);
 
         switch (currencyType) {
             case 'IND_COMMA_SEPARATED':

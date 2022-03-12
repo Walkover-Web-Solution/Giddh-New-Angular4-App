@@ -91,7 +91,7 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
 
         this.getCurrentPeriod$.subscribe(period => {
             if (period && period.from) {
-                let date = {
+                const date = {
                     startDate: moment(period.from, GIDDH_DATE_FORMAT).startOf('month').format(GIDDH_DATE_FORMAT),
                     endDate: moment(period.to, GIDDH_DATE_FORMAT).endOf('month').format(GIDDH_DATE_FORMAT)
                 };
@@ -157,7 +157,7 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
     public loadTaxDetails(): void {
         this.gstReconcileService.getTaxDetails().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.body) {
-                let taxes = response.body;
+                const taxes = response.body;
                 if(!this.activeCompanyGstNumber && taxes?.length === 1) {
                     this.activeCompanyGstNumber = taxes[0];
                 }

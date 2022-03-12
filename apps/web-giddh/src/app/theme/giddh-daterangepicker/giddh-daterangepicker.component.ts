@@ -59,15 +59,15 @@ export class GiddhDaterangepickerComponent implements OnInit, OnChanges, OnDestr
 
         this.store.pipe(select(state => state.settings.financialYears), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                let financialYears = response.financialYears;
+                const financialYears = response.financialYears;
                 if (financialYears && financialYears.length) {
                     if (financialYears[0].financialYearStarts) {
-                        let minDate = new Date(financialYears[0].financialYearStarts.split("-").reverse().join("-"));
+                        const minDate = new Date(financialYears[0].financialYearStarts.split("-").reverse().join("-"));
                         this.minDate = new Date(minDate.getFullYear(), minDate.getMonth(), minDate.getDate());
                     }
 
                     if (financialYears[financialYears.length - 1].financialYearEnds) {
-                        let maxDate = new Date(financialYears[financialYears.length - 1].financialYearEnds.split("-").reverse().join("-"));
+                        const maxDate = new Date(financialYears[financialYears.length - 1].financialYearEnds.split("-").reverse().join("-"));
                         this.maxDate = new Date(maxDate.getFullYear(), maxDate.getMonth(), maxDate.getDate());
                     }
                 }

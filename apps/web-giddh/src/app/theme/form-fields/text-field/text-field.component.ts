@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input, OnChanges, OnDestroy, OnInit, Optional, Self, SimpleChanges, ViewChild } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input, OnChanges, OnDestroy, Optional, Self, SimpleChanges, ViewChild } from "@angular/core";
 import { ControlValueAccessor, NgControl } from "@angular/forms";
 import { MatFormFieldControl } from "@angular/material/form-field";
 import { Subject } from "rxjs";
@@ -18,7 +18,7 @@ const noop = () => { };
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class TextFieldComponent implements OnInit, OnChanges, OnDestroy, ControlValueAccessor {
+export class TextFieldComponent implements OnChanges, OnDestroy, ControlValueAccessor {
     @ViewChild('textField', {static: false}) public textField: ElementRef;
     @Input() public cssClass: string = "";
     /** Taking placeholder as input */
@@ -52,19 +52,11 @@ export class TextFieldComponent implements OnInit, OnChanges, OnDestroy, Control
     }
 
     /**
-     * On Component Init
-     *
-     * @memberof TextFieldComponent
-     */
-    public ngOnInit(): void {
-
-    }
-
-    /**
      * On Change of input properties
      *
      * @memberof TextFieldComponent
      */
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     public ngOnChanges(changes: SimpleChanges): void {
         if(this.autoFocus) {
             setTimeout(() => {
@@ -151,8 +143,8 @@ export class TextFieldComponent implements OnInit, OnChanges, OnDestroy, Control
      * @memberof TextFieldComponent
      */
     public setDescribedByIds(ids: string[]): void {
-        const controlElement = this.elementRef.nativeElement.querySelector('.text-field-container')!;
-        controlElement.setAttribute('aria-describedby', ids.join(' '));
+        const controlElement = this.elementRef?.nativeElement?.querySelector('.text-field-container');
+        controlElement?.setAttribute('aria-describedby', ids.join(' '));
     }
 
     /**

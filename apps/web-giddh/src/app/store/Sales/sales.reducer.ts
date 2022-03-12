@@ -32,7 +32,7 @@ export function salesReducer(state = initialState, action: CustomActions): Sales
             return Object.assign({}, state, initialState);
         }
         case SALES_ACTIONS.GET_ACCOUNT_DETAILS_RESPONSE: {
-            let res: BaseResponse<AccountResponseV2, string> = action.payload;
+            const res: BaseResponse<AccountResponseV2, string> = action.payload;
             if (res.status === 'success') {
                 return Object.assign({}, state, {
                     acDtl: action.payload.body
@@ -52,7 +52,7 @@ export function salesReducer(state = initialState, action: CustomActions): Sales
         }
 
         case SALES_ACTIONS.ADD_ACCOUNT_DETAILS_RESPONSE: {
-            let res: BaseResponse<AccountResponseV2, string> = action.payload;
+            const res: BaseResponse<AccountResponseV2, string> = action.payload;
             if (res.status === 'success') {
                 return {
                     ...state,
@@ -75,7 +75,7 @@ export function salesReducer(state = initialState, action: CustomActions): Sales
         }
 
         case SALES_ACTIONS.UPDATE_ACCOUNT_DETAILS_RESPONSE: {
-            let res: BaseResponse<AccountResponseV2, string> = action.payload;
+            const res: BaseResponse<AccountResponseV2, string> = action.payload;
             if (res.status === 'success') {
                 return {
                     ...state,
@@ -97,7 +97,7 @@ export function salesReducer(state = initialState, action: CustomActions): Sales
             });
         }
         case SALES_ACTIONS.STOCK_AC_SUCCESS: {
-            let data = action.payload;
+            const data = action.payload;
             return Object.assign({}, state, { newlyCreatedStockAc: data });
         }
         default: {

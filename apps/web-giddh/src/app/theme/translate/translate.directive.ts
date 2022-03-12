@@ -2,7 +2,7 @@ import { Directive, Input, OnInit, Output, EventEmitter, OnDestroy } from '@angu
 import { LocaleService } from '../../services/locale.service';
 import { AppState } from '../../store';
 import { Store, select } from '@ngrx/store';
-import { take, takeUntil } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
 
 @Directive({

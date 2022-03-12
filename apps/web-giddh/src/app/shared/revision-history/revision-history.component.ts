@@ -49,9 +49,9 @@ export class RevisionHistoryComponent implements OnDestroy {
     public translationLoaded: boolean = false;
 
     constructor(
-        private purchaseOrderService: PurchaseOrderService, 
-        private toaster: ToasterService, 
-        private generalService: GeneralService, 
+        private purchaseOrderService: PurchaseOrderService,
+        private toaster: ToasterService,
+        private generalService: GeneralService,
         private purchaseRecordService: PurchaseRecordService,
         private cdRef: ChangeDetectorRef,
         private invoiceService: InvoiceService
@@ -87,7 +87,7 @@ export class RevisionHistoryComponent implements OnDestroy {
                 if (res) {
                     if (res.status === 'success') {
                         if (res.body) {
-                            let versions = res.body;
+                            const versions = res.body;
 
                             if (versions.results && versions.results.length > 0) {
                                 versions.results.forEach(result => {
@@ -123,7 +123,7 @@ export class RevisionHistoryComponent implements OnDestroy {
      */
     public getVersionMessage(type: string, change: any): string {
         let message = "";
-        let revisionField = this.generalService.getRevisionField(change.type);
+        const revisionField = this.generalService.getRevisionField(change.type);
 
         if (change.optType === "CREATE") {
             if (type === "po") {
@@ -182,7 +182,7 @@ export class RevisionHistoryComponent implements OnDestroy {
                 if (res) {
                     if (res.status === 'success') {
                         if (res.body) {
-                            let versions = res.body;
+                            const versions = res.body;
 
                             if (this.generalService.voucherApiVersion === 2) {
                                 versions.results = cloneDeep(versions.items);

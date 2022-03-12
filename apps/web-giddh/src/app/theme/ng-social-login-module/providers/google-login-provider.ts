@@ -17,7 +17,7 @@ export class GoogleLoginProvider extends BaseLoginProvider {
     }
 
     public initialize(): Promise<SocialUser> {
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
             this.loadScript(this.loginProviderObj, () => {
                 gapi.load('auth2', () => {
                     this.isInitialize = true;
@@ -50,7 +50,7 @@ export class GoogleLoginProvider extends BaseLoginProvider {
     }
 
     public signIn(): Promise<SocialUser> {
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
             const promise = this.auth2.signIn();
             promise.then(() => {
                 resolve(this.drawUser());

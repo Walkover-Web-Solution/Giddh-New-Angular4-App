@@ -371,7 +371,7 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
      * @param {Function} successCallback Success callback to carry out further operations
      * @memberof CreateBranchComponent
      */
-    public loadLinkedEntities(successCallback: Function): void {
+    public loadLinkedEntities(successCallback: (...args: any[]) => any): void {
         this.settingsProfileService.getAllLinkedEntities().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.body && response.status === 'success') {
                 this.addressConfiguration.linkedEntities = response.body.map(result => ({

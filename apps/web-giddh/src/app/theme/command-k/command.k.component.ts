@@ -145,7 +145,7 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
      */
     public initSetParentWidth(): void {
         if (this.setParentWidth && this.mainEle) {
-            let box: any = this.parentEle.getBoundingClientRect();
+            const box: any = this.parentEle.getBoundingClientRect();
             this.ItemWidth = (box.width > this.ItemWidth) ? box.width : this.ItemWidth;
             this.renderer.setStyle(this.mainEle?.nativeElement, 'width', `${box.width}px`);
             if (this.searchWrapEle) {
@@ -223,7 +223,7 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
         this.isLoading = true;
 
         if (this.listOfSelectedGroups && this.listOfSelectedGroups.length > 0) {
-            let lastGroup = this._generalService.getLastElement(this.listOfSelectedGroups);
+            const lastGroup = this._generalService.getLastElement(this.listOfSelectedGroups);
             this.commandKRequestParams.group = lastGroup.uniqueName;
         } else {
             this.commandKRequestParams.group = "";
@@ -233,7 +233,7 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
             this.isLoading = false;
 
             if (res && res.body && res.body.results && res.body.results.length > 0) {
-                let length = (this.searchedItems) ? this.searchedItems.length : 0;
+                const length = (this.searchedItems) ? this.searchedItems.length : 0;
                 res.body.results.forEach((key, index) => {
                     key.loop = length + index;
                     this.searchedItems.push(key);
@@ -254,7 +254,7 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
             this.initSetParentWidth();
 
             if (this.virtualScrollElem) {
-                let item = this.virtualScrollElem.directionToll(40);
+                const item = this.virtualScrollElem.directionToll(40);
                 if (item) {
                     this.refreshToll(item, 40);
                 }
@@ -270,7 +270,7 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
      */
     private captureValueFromList(): void {
         if (this.virtualScrollElem) {
-            let item = this.virtualScrollElem.activeItem();
+            const item = this.virtualScrollElem.activeItem();
             if (item) {
                 this.itemSelected(item);
                 if (item.type === 'GROUP') {
@@ -301,7 +301,7 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
      * @memberof CommandKComponent
      */
     public handleKeydown(e: any): void {
-        let key = e.which || e.keyCode;
+        const key = e.which || e.keyCode;
 
         if (key === TAB) {
             e.preventDefault();
@@ -311,7 +311,7 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
         // prevent caret movement and animate selected element
         if (this.isOpen && [UP_ARROW, DOWN_ARROW].indexOf(key) !== -1 && this.virtualScrollElem) {
             e.preventDefault();
-            let item = this.virtualScrollElem.directionToll(key);
+            const item = this.virtualScrollElem.directionToll(key);
             if (item) {
                 this.refreshToll(item, key);
             }
@@ -398,7 +398,7 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
      * @memberof CommandKComponent
      */
     public initSearch(e: KeyboardEvent, term: string): void {
-        let key = e.which || e.keyCode;
+        const key = e.which || e.keyCode;
         // preventing search operation on arrows key
         if (this.isOpen && SPECIAL_KEYS.indexOf(key) !== -1) {
             return;
@@ -410,10 +410,9 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
     /**
      * This function puts the focus in search box
      *
-     * @param {KeyboardEvent} [e]
      * @memberof CommandKComponent
      */
-    public focusInSearchBox(e?: KeyboardEvent): void {
+    public focusInSearchBox(): void {
         if (this.searchEle) {
             this.searchEle.nativeElement.focus();
         }

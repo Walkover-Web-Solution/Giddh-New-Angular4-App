@@ -1,5 +1,5 @@
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
-import { Component, EventEmitter, OnInit, Output, ViewChild, Input, TemplateRef } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, ViewChild, Input, TemplateRef, OnDestroy } from '@angular/core';
 import { PermissionDataService } from 'apps/web-giddh/src/app/permissions/permission-data.service';
 import { some } from '../../../../lodash-optimized';
 import * as moment from 'moment/moment';
@@ -16,7 +16,7 @@ import { takeUntil } from 'rxjs/operators';
     templateUrl: './export-group-ledger.component.html'
 })
 
-export class ExportGroupLedgerComponent implements OnInit {
+export class ExportGroupLedgerComponent implements OnInit, OnDestroy {
     /* This will hold local JSON data */
     @Input() public localeData: any = {};
     /* This will hold common JSON data */
@@ -70,7 +70,7 @@ export class ExportGroupLedgerComponent implements OnInit {
         if (this._permissionDataService.getData && this._permissionDataService.getData.length > 0) {
             this._permissionDataService.getData.forEach(f => {
                 if (f.name === 'LEDGER') {
-                    let isAdmin = some(f.permissions, (prm) => prm.code === 'UPDT');
+                    const isAdmin = some(f.permissions, (prm) => prm.code === 'UPDT');
                     this.emailTypeSelected = isAdmin ? 'admin-detailed' : 'view-detailed';
                     this.emailTypeMini = isAdmin ? 'admin-condensed' : 'view-condensed';
                     this.emailTypeDetail = isAdmin ? 'admin-detailed' : 'view-detailed';
@@ -80,7 +80,7 @@ export class ExportGroupLedgerComponent implements OnInit {
 
         this.universalDate$.subscribe(dateObj => {
             if (dateObj) {
-                let universalDate = _.cloneDeep(dateObj);
+                const universalDate = _.cloneDeep(dateObj);
                 this.selectedDateRange = { startDate: moment(dateObj[0]), endDate: moment(dateObj[1]) };
                 this.selectedDateRangeUi = moment(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
                 this.fromDate = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);

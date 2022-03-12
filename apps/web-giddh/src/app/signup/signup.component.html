@@ -36,7 +36,7 @@
                                         [formGroup]="emailVerifyForm"
                                         *ngIf="loginUsing === 'email'"
                                     >
-                                        <div *ngIf="!(isLoginWithEmailSubmited$ | async)" class="clearfix">
+                                        <div *ngIf="(isLoginWithEmailSubmited$ | async) === false" class="clearfix">
                                             <input
                                                 class="form-control mr-b1"
                                                 formControlName="email"
@@ -201,7 +201,10 @@
                 </div>
                 <div class="modal-body clearfix">
                     <form class="col-xs-12" name="verifyEmailForm" novalidate [formGroup]="emailVerifyForm">
-                        <div *ngIf="!(isLoginWithEmailSubmited$ | async)" class="clearfix form-group form-group-lg">
+                        <div
+                            *ngIf="(isLoginWithEmailSubmited$ | async) === false"
+                            class="clearfix form-group form-group-lg"
+                        >
                             <input
                                 class="form-control mr-t1"
                                 formControlName="email"
@@ -271,7 +274,7 @@
                         novalidate
                         [formGroup]="mobileVerifyForm"
                     >
-                        <div class="clearfix form-group-lg" *ngIf="!(isLoginWithMobileSubmited$ | async)">
+                        <div class="clearfix form-group-lg" *ngIf="(isLoginWithMobileSubmited$ | async) === false">
                             <sh-select
                                 [options]="countryCodeList"
                                 class="form-inline"
@@ -289,18 +292,13 @@
                             />
                         </div>
                         <button
-                            *ngIf="!(isLoginWithMobileSubmited$ | async)"
+                            *ngIf="(isLoginWithMobileSubmited$ | async) === false"
                             class="btn sharp btn-block btn-blue btn-lg mr-t1"
-                            (click)="
-                                getOtp(
-                                    mobileVerifyForm.controls['mobileNumber'].value,
-                                    mobileVerifyForm.controls['country'].value
-                                )
-                            "
+                            (click)="getOtp(mobileVerifyForm.controls['mobileNumber'].value)"
                             [ladda]="isLoginWithMobileInProcess$ | async"
                             [disabled]="!mobileVerifyForm.controls['mobileNumber'].valid"
                         >
-                            {{ !(isLoginWithMobileInProcess$ | async) ? "Get Otp" : "Resend" }}
+                            {{ (isLoginWithMobileInProcess$ | async) === false ? "Get Otp" : "Resend" }}
                         </button>
                         <div class="clearfix form-group form-group-lg" *ngIf="isLoginWithMobileSubmited$ | async">
                             <hr class="mrtb10" />

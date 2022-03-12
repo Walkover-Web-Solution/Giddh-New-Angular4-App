@@ -102,7 +102,7 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
                 return;
             }
 
-            let orderedCompanies = orderBy(companies, 'name');
+            const orderedCompanies = orderBy(companies, 'name');
             this.companyList = orderedCompanies;
             this.companyListForFilter = orderedCompanies;
             this.companies$ = observableOf(orderedCompanies);
@@ -123,7 +123,7 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
 
                 this.currentCompanyBranches$.subscribe(response => {
                     if (response && response.length) {
-                        let unarchivedBranches = response.filter(branch => branch.isArchived === false);
+                        const unarchivedBranches = response.filter(branch => branch.isArchived === false);
                         this.branchList = unarchivedBranches?.sort(this.generalService.sortBranches);
                         this.currentCompanyBranches = this.branchList;
                         if(this.companyBranches) {
@@ -265,7 +265,7 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
                     this.socialAuthService.signOut().then(() => {
                         this.store.dispatch(this.loginAction.ClearSession());
                         this.store.dispatch(this.loginAction.socialLogoutAttempt());
-                    }).catch((err) => {
+                    }).catch(() => {
                         this.store.dispatch(this.loginAction.ClearSession());
                         this.store.dispatch(this.loginAction.socialLogoutAttempt());
                     });
@@ -287,10 +287,10 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
         if (!company.branches || reloadBranches) {
             company.branches = [];
             this.branchRefreshInProcess = true;
-            let branchFilterRequest: BranchFilterRequest = { from: '', to: '', companyUniqueName: company?.uniqueName };
+            const branchFilterRequest: BranchFilterRequest = { from: '', to: '', companyUniqueName: company?.uniqueName };
             this.settingsBranchService.GetAllBranches(branchFilterRequest).subscribe(response => {
                 if (response?.status === "success") {
-                    let unarchivedBranches = response?.body?.filter(branch => branch.isArchived === false);
+                    const unarchivedBranches = response?.body?.filter(branch => branch.isArchived === false);
                     this.branchList = unarchivedBranches?.sort(this.generalService.sortBranches);
                     company.branches = this.branchList;
                     this.companyBranches = company;

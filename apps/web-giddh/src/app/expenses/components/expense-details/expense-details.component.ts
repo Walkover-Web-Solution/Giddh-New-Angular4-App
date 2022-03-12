@@ -613,7 +613,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
      * @param {Function} successCallback Callback to carry out further operation
      * @memberof ExpenseDetailsComponent
      */
-    public onDebtorAccountSearchQueryChanged(query: string, page: number = 1, successCallback?: Function): void {
+    public onDebtorAccountSearchQueryChanged(query: string, page: number = 1, successCallback?: (...args: any[]) => any): void {
         this.debtorAccountsSearchResultsPaginationData.query = query;
         if (!this.preventDefaultDebtorScrollApiCall &&
             (query || (this.defaultDebtorAccountSuggestions && this.defaultDebtorAccountSuggestions.length === 0) || successCallback)) {
@@ -716,7 +716,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
      * @param {Function} successCallback Callback to carry out further operation
      * @memberof ExpenseDetailsComponent
      */
-    public onCreditorAccountSearchQueryChanged(query: string, page: number = 1, successCallback?: Function): void {
+    public onCreditorAccountSearchQueryChanged(query: string, page: number = 1, successCallback?: (...args: any[]) => any): void {
         this.creditorAccountsSearchResultsPaginationData.query = query;
         if (!this.preventDefaultCreditorScrollApiCall &&
             (query || (this.defaultCreditorAccountSuggestions && this.defaultCreditorAccountSuggestions.length === 0) || successCallback)) {
@@ -819,7 +819,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
      * @param {Function} successCallback Callback to carry out further operation
      * @memberof ExpenseDetailsComponent
      */
-    public onCashBankAccountSearchQueryChanged(query: string, page: number = 1, successCallback?: Function): void {
+    public onCashBankAccountSearchQueryChanged(query: string, page: number = 1, successCallback?: (...args: any[]) => any): void {
         this.cashBankAccountsSearchResultsPaginationData.query = query;
         if (!this.preventDefaultCashBankScrollApiCall &&
             (query || (this.defaultCashBankAccountSuggestions && this.defaultCashBankAccountSuggestions.length === 0) || successCallback)) {

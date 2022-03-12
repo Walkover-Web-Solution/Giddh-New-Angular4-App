@@ -58,8 +58,8 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
 
         this.store.pipe(select(state => state.session.currentLocale), takeUntil(this.destroyed$)).subscribe(response => {
             if(this.activeLocale && this.activeLocale !== response?.value) {
-                this.localeService.getLocale('aside-setting', response?.value).subscribe(response => {
-                    this.localeData = response;
+                this.localeService.getLocale('aside-setting', response?.value).subscribe(res => {
+                    this.localeData = res;
                     this.translationComplete(true);
                 });
             }
@@ -131,7 +131,7 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
      */
     public translationComplete(event: any): void {
         if (event) {
-            let settingsPageTabs = this.localeData?.tabs;
+            const settingsPageTabs = this.localeData?.tabs;
 
             if (settingsPageTabs) {
                 let loop = 0;

@@ -46,12 +46,12 @@ export function agingReportReducer(state = initialState, action: CustomActions):
             return Object.assign({}, state, { setDueRangeOpen: false });
         }
         case AgingReportActions.CREATE_DUE_DAY_RANGE_RESPONSE: {
-            let data = action.payload as BaseResponse<string, DueRangeRequest>;
+            const data = action.payload as BaseResponse<string, DueRangeRequest>;
 
             if (data.status === 'error') {
                 return Object.assign({}, state, { setDueRangeRequestInFlight: false });
             }
-            let agingDropDownoptions: AgingDropDownoptions = {
+            const agingDropDownoptions: AgingDropDownoptions = {
                 fourth: parseInt(data.request.range[0]),
                 fifth: parseInt(data.request.range[1]),
                 sixth: parseInt(data.request.range[2])
@@ -60,11 +60,11 @@ export function agingReportReducer(state = initialState, action: CustomActions):
 
         }
         case AgingReportActions.GET_DUE_DAY_RANGE_RESPONSE: {
-            let data = action.payload as BaseResponse<string[], string>;
+            const data = action.payload as BaseResponse<string[], string>;
             if (data.status === 'error') {
                 return state;
             }
-            let agingDropDownoptions: AgingDropDownoptions = {
+            const agingDropDownoptions: AgingDropDownoptions = {
                 fourth: parseInt(data.body[0]),
                 fifth: parseInt(data.body[1]),
                 sixth: parseInt(data.body[2])
@@ -75,9 +75,9 @@ export function agingReportReducer(state = initialState, action: CustomActions):
         case AgingReportActions.GET_DUE_DAY_REPORT_RESPONSE: {
             // no payload means error from server
             if (action.payload) {
-                let data: DueAmountReportResponse = _.cloneDeep(action.payload) as DueAmountReportResponse;
+                const data: DueAmountReportResponse = _.cloneDeep(action.payload) as DueAmountReportResponse;
                 let noData = false;
-                let getAgingReportRequestInFlight = false;
+                const getAgingReportRequestInFlight = false;
                 if (data.results.length < 1) {
                     noData = true;
                 }

@@ -80,13 +80,7 @@ export class SelectComponent implements ControlValueAccessor, OnChanges, OnInit,
     public width: number;
     public top: number;
     public left: number;
-    public onChange = (_: any) => {
-        //
-    }
-    public onTouched = () => {
-        //
-    }
-    private filterInputWidth: number = 1;
+    public filterInputWidth: number = 1;
     private isDisabled: boolean = false;
     private clearClicked: boolean = false;
     // private showTypeAheadInput: boolean = false;
@@ -95,7 +89,6 @@ export class SelectComponent implements ControlValueAccessor, OnChanges, OnInit,
     private optionListClicked: boolean = false;
     private optionClicked: boolean = false;
     /** Keys. **/
-
     private KEYS: any = {
         BACKSPACE: 8,
         TAB: 9,
@@ -105,14 +98,19 @@ export class SelectComponent implements ControlValueAccessor, OnChanges, OnInit,
         UP: 38,
         DOWN: 40
     };
+    private _value: any[] = [];
+
+    public onChange = (_: any) => {
+        //
+    }
+    public onTouched = () => {
+        //
+    }
 
     constructor(private hostElement: ElementRef) {
     }
 
-    private _value: any[] = [];
-
     /** Value. **/
-
     get value(): string | string[] {
         return this.multiple ? this._value : this._value[0];
     }
@@ -171,7 +169,7 @@ export class SelectComponent implements ControlValueAccessor, OnChanges, OnInit,
         this.updateWidth();
     }
 
-    public onSelectContainerClick(event: any) {
+    public onSelectContainerClick() {
         this.selectContainerClicked = true;
         if (!this.focused) {
             this.processMyLogic();
@@ -180,7 +178,7 @@ export class SelectComponent implements ControlValueAccessor, OnChanges, OnInit,
     }
 
     public onSelectContainerFocus() {
-        let initialFocusValue = this.hasFocus;
+        const initialFocusValue = this.hasFocus;
         this._focus();
         if (!initialFocusValue) {
             this.processMyLogic();
@@ -234,16 +232,16 @@ export class SelectComponent implements ControlValueAccessor, OnChanges, OnInit,
         this.handleMultipleFilterKeydown(event);
     }
 
-    public onMultipleFilterKeyup(event: any) {
-        this.handleMultipleFilterKeyup(event);
+    public onMultipleFilterKeyup() {
+        this.handleMultipleFilterKeyup();
     }
 
-    public onMultipleFilterFocus(event: any) {
+    public onMultipleFilterFocus() {
         this._focus();
     }
 
     public onTypeAheadFilterFocus() {
-        let initialFocusValue = this.hasFocus;
+        const initialFocusValue = this.hasFocus;
         this._focus();
         if (!initialFocusValue) {
             this.processMyLogic();
@@ -256,11 +254,11 @@ export class SelectComponent implements ControlValueAccessor, OnChanges, OnInit,
         this.handleMultipleFilterKeydown(event);
     }
 
-    public onTypeAheadFilterKeyup(event: any) {
-        this.handleMultipleFilterKeyup(event);
+    public onTypeAheadFilterKeyup() {
+        this.handleMultipleFilterKeyup();
     }
 
-    public onClearSelectionClick(event: any) {
+    public onClearSelectionClick() {
         this.clearClicked = true;
         this.clearSelection();
         this.closeDropdown(true);
@@ -344,9 +342,9 @@ export class SelectComponent implements ControlValueAccessor, OnChanges, OnInit,
 
     /** Input change handling. **/
     private handleInputChanges(changes: SimpleChanges) {
-        let optionsChanged: boolean = changes.hasOwnProperty('options');
-        let noFilterChanged: boolean = changes.hasOwnProperty('noFilter');
-        let placeholderChanged: boolean = changes.hasOwnProperty('placeholder');
+        const optionsChanged: boolean = Object.prototype.hasOwnProperty.call(changes, 'options');
+        const noFilterChanged: boolean = Object.prototype.hasOwnProperty.call(changes, 'noFilter');
+        const placeholderChanged: boolean = Object.prototype.hasOwnProperty.call(changes, 'placeholder');
 
         if (optionsChanged) {
             this.updateOptionList(changes.options.currentValue);
@@ -383,7 +381,7 @@ export class SelectComponent implements ControlValueAccessor, OnChanges, OnInit,
 
     private selectOption(option: Option) {
         if (!option.selected && !option.disabled) {
-            this.optionList.select(option, this.multiple, this.isTypeAheadMode);
+            this.optionList.select(option, this.multiple);
 
             this.valueChanged();
             this.selected.emit(option.wrappedOption);
@@ -409,7 +407,7 @@ export class SelectComponent implements ControlValueAccessor, OnChanges, OnInit,
     }
 
     private clearSelection() {
-        let selection: Option[] = this.optionList.selection;
+        const selection: Option[] = this.optionList.selection;
         if (selection.length > 0) {
             this.optionList.clearSelection();
             this.valueChanged();
@@ -423,7 +421,7 @@ export class SelectComponent implements ControlValueAccessor, OnChanges, OnInit,
     }
 
     private clearSelectionManually() {
-        let selection: Option[] = this.optionList.selection;
+        const selection: Option[] = this.optionList.selection;
         if (selection.length > 0) {
             if (selection.length === 1) {
                 this.deselected.emit(selection[0].wrappedOption);
@@ -440,7 +438,7 @@ export class SelectComponent implements ControlValueAccessor, OnChanges, OnInit,
     }
 
     private selectHighlightedOption() {
-        let option: Option = this.optionList.highlightedOption;
+        const option: Option = this.optionList.highlightedOption;
         if (option !== null) {
             this.selectOption(option);
             this.closeDropdown(true);
@@ -448,10 +446,10 @@ export class SelectComponent implements ControlValueAccessor, OnChanges, OnInit,
     }
 
     private deselectLast() {
-        let sel: Option[] = this.optionList.selection;
+        const sel: Option[] = this.optionList.selection;
 
         if (sel.length > 0) {
-            let option: Option = sel[sel.length - 1];
+            const option: Option = sel[sel.length - 1];
             this.deselectOption(option);
             if (!this.isTypeAheadMode) {
                 this.setMultipleFilterInput(option.label + ' ');
@@ -501,7 +499,7 @@ export class SelectComponent implements ControlValueAccessor, OnChanges, OnInit,
             this.updateFilterWidth();
         }
         setTimeout(() => {
-            let hasShown: boolean = this.optionList.filter(term);
+            const hasShown: boolean = this.optionList.filter(term);
             if (!hasShown) {
                 this.noOptionsFound.emit(term);
             }
@@ -523,7 +521,7 @@ export class SelectComponent implements ControlValueAccessor, OnChanges, OnInit,
     }
 
     private handleSelectContainerKeydown(event: any) {
-        let key = event.which;
+        const key = event.which;
 
         if (this.isOpen) {
             if (key === this.KEYS.ESC || (key === this.KEYS.UP && event.altKey)) {
@@ -572,7 +570,7 @@ export class SelectComponent implements ControlValueAccessor, OnChanges, OnInit,
     }
 
     private handleMultipleFilterKeydown(event: any) {
-        let key = event.which;
+        const key = event.which;
         if (key === this.KEYS.BACKSPACE) {
             if (this.optionList.hasSelected && this.filterEnabled &&
                 (this.filterInput?.nativeElement.value === '' && !this.isTypeAheadMode)) {
@@ -584,7 +582,7 @@ export class SelectComponent implements ControlValueAccessor, OnChanges, OnInit,
         }
     }
 
-    private handleMultipleFilterKeyup(event: any) {
+    private handleMultipleFilterKeyup() {
         // let key = event.which;
         // if (key === this.KEYS.BACKSPACE) {
         //   if (this.optionList.hasSelected && this.filterEnabled &&
@@ -595,7 +593,7 @@ export class SelectComponent implements ControlValueAccessor, OnChanges, OnInit,
     }
 
     private handleSingleFilterKeydown(event: any) {
-        let key = event.which;
+        const key = event.which;
 
         if (key === this.KEYS.ESC || key === this.KEYS.TAB
             || key === this.KEYS.UP || key === this.KEYS.DOWN
@@ -617,7 +615,7 @@ export class SelectComponent implements ControlValueAccessor, OnChanges, OnInit,
 
     private updateFilterWidth() {
         if (typeof this.filterInput !== 'undefined') {
-            let value: string = this.filterInput?.nativeElement.value;
+            const value: string = this.filterInput?.nativeElement.value;
             this.filterInputWidth = value.length === 0 ?
                 1 + this.placeholderView.length * 10 : 1 + value.length * 10;
         }

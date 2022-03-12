@@ -75,7 +75,7 @@ export class FinancialSearchPipe implements PipeTransform {
                     acc.isIncludedInSearch = true;
                     acc.isVisible = true;
                 }
-                for (let grp of input.childGroups) {
+                for (const grp of input.childGroups) {
                     this.search(grp, s, true);
                     grp.isIncludedInSearch = true;
                     grp.isVisible = true;
@@ -114,7 +114,7 @@ export class FinancialSearchPipe implements PipeTransform {
     }
 
     public resetGroup(input: ChildGroup) {
-        let parentGroups = ['operatingcost', 'revenuefromoperations', 'otherincome', 'indirectexpenses'];
+        const parentGroups = ['operatingcost', 'revenuefromoperations', 'otherincome', 'indirectexpenses'];
         if (input) {
             for (let grp of input.childGroups) {
                 grp = this.resetGroup(grp);

@@ -48,7 +48,7 @@ export class DecimalDigitsDirective implements OnDestroy {
 
     @HostListener('keydown', ['$event'])
     public onKeyDown(event) {
-        let e = event as KeyboardEvent;
+        const e = event as KeyboardEvent;
         if (this.OnlyNumber) {
             if (this.navigationKeys.indexOf(e.key) > -1 ||
                 // Allow: Ctrl+A
@@ -77,9 +77,9 @@ export class DecimalDigitsDirective implements OnDestroy {
 
     @HostListener('keypress', ['$event'])
     public onKeyPress(event) {
-        let e = event as any;
+        const e = event as any;
 
-        let valInFloat: number = parseFloat(e.target.value);
+        const valInFloat: number = parseFloat(e.target.value);
 
         if (this.minValue) {
             // (isNaN(valInFloat) && e.key === "0") - When user enters value for first time valInFloat will be NaN, e.key condition is
@@ -104,10 +104,10 @@ export class DecimalDigitsDirective implements OnDestroy {
                 // Probably an old IE browser
             }
 
-            let dotLength: number = e.target.value.replace(/[^.]/g, '').length;
+            const dotLength: number = e.target.value.replace(/[^.]/g, '').length;
 
             // If user has not entered a dot(.) e.target.value.split(".")[1] will be undefined
-            let decimalLength = e.target.value.split('.')[1] ? e.target.value.split('.')[1].length : 0;
+            const decimalLength = e.target.value.split('.')[1] ? e.target.value.split('.')[1].length : 0;
 
             // (this.giddhDecimalPlaces - 1) because we don't get decimalLength including currently pressed character
             // currentCursorPos > e.target.value.indexOf(".") because we must allow user's to enter value before dot(.)
@@ -135,7 +135,7 @@ export class DecimalDigitsDirective implements OnDestroy {
                     cl = 0;
                 }
             }
-            let evt = new Event('input');
+            const evt = new Event('input');
             event.target.value = cl;
             event.target.dispatchEvent(evt);
             event.preventDefault();
@@ -150,7 +150,7 @@ export class DecimalDigitsDirective implements OnDestroy {
             if (!new RegExp('^(\\d+)((\\.)\\d{1,' + this.giddhDecimalPlaces + '})?$', 'g').test(cl)) {
                 cl = 0;
             }
-            let evt = new Event('input');
+            const evt = new Event('input');
             event.target.value = cl;
             event.target.dispatchEvent(evt);
             event.preventDefault();

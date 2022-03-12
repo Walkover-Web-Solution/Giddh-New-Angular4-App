@@ -1,4 +1,4 @@
-// tslint:disable: no-any typedef
+/* eslint-disable no-var */
 declare var global: any;
 
 (function () {

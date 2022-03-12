@@ -169,7 +169,7 @@ export class AccountingComponent implements OnInit, OnDestroy {
                 this.openCreateAccountPopupInInvoice = false;
             }, 100);
         } else {
-            let selectedPageIndx = PAGE_SHORTCUT_MAPPING.findIndex((page: any) => {
+            const selectedPageIndx = PAGE_SHORTCUT_MAPPING.findIndex((page: any) => {
                 if (event.altKey) {
                     return page.keyCode === event.which && page.altKey;
                 } else {
@@ -187,7 +187,7 @@ export class AccountingComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         let companyUniqueName = null;
         this.store.pipe(select(c => c.session.companyUniqueName), take(1)).subscribe(s => companyUniqueName = s);
-        let stateDetailsRequest = new StateDetailsRequest();
+        const stateDetailsRequest = new StateDetailsRequest();
         stateDetailsRequest.companyUniqueName = companyUniqueName;
         stateDetailsRequest.lastState = 'journal-voucher';
 
@@ -199,14 +199,14 @@ export class AccountingComponent implements OnInit, OnDestroy {
     /**
      * setAccount to send accountObj to service
      */
-    public setAccount(accountObj) {
+    public setAccount() {
         //
     }
 
     /**
      * setStock to send stockObj to service
      */
-    public setStock(stockObj) {
+    public setStock() {
         //
     }
 

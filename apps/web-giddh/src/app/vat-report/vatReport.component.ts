@@ -185,7 +185,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
         }
 
         if (this.taxNumber) {
-            let vatReportRequest = new VatReportRequest();
+            const vatReportRequest = new VatReportRequest();
             vatReportRequest.from = this.fromDate;
             vatReportRequest.to = this.toDate;
             vatReportRequest.taxNumber = this.taxNumber;
@@ -206,14 +206,14 @@ export class VatReportComponent implements OnInit, OnDestroy {
     }
 
     public downloadVatReport() {
-        let vatReportRequest = new VatReportRequest();
+        const vatReportRequest = new VatReportRequest();
         vatReportRequest.from = this.fromDate;
         vatReportRequest.to = this.toDate;
         vatReportRequest.taxNumber = this.taxNumber;
         vatReportRequest.branchUniqueName = this.currentBranch.uniqueName;
         this.vatService.downloadVatReport(vatReportRequest).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             if (res.status === "success") {
-                let blob = this.generalService.base64ToBlob(res.body, 'application/xls', 512);
+                const blob = this.generalService.base64ToBlob(res.body, 'application/xls', 512);
                 return saveAs(blob, `VatReport.xlsx`);
             } else {
                 this.toasty.clearAllToaster();
@@ -223,7 +223,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
     }
 
     public saveLastState(companyUniqueName) {
-        let stateDetailsRequest = new StateDetailsRequest();
+        const stateDetailsRequest = new StateDetailsRequest();
         stateDetailsRequest.companyUniqueName = companyUniqueName;
         stateDetailsRequest.lastState = 'pages/vat-report';
         this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));

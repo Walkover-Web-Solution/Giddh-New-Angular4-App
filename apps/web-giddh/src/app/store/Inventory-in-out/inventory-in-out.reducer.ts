@@ -48,7 +48,7 @@ export function InventoryInOutReducer(state: InventoryInOutState = initialState,
             return { ...state, userSuccess: false };
         }
         case INVENTORY_USER_ACTIONS.CREATE_USER_RESPONSE: {
-            let userState = _.cloneDeep(state.inventoryUsers);
+            const userState = _.cloneDeep(state.inventoryUsers);
             userState.push(action.payload.body);
             return { ...state, userSuccess: true, inventoryUsers: userState };
         }

@@ -591,7 +591,7 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
      * @param {Function} successCallback Callback to carry out further operation
      * @memberof AdvanceSearchModelComponent
      */
-    public onAccountSearchQueryChanged(query: string, page: number = 1, successCallback?: Function): void {
+    public onAccountSearchQueryChanged(query: string, page: number = 1, successCallback?: (...args: any[]) => any): void {
         this.accountsSearchResultsPaginationData.query = query;
         if (!this.preventDefaultScrollApiCall &&
             (query || (this.defaultAccountSuggestions && this.defaultAccountSuggestions.length === 0) || successCallback)) {
@@ -677,7 +677,7 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
      * @param {Function} successCallback Callback to carry out further operation
      * @memberof AdvanceSearchModelComponent
      */
-    public onStockSearchQueryChanged(query: string, page: number = 1, successCallback?: Function): void {
+    public onStockSearchQueryChanged(query: string, page: number = 1, successCallback?: (...args: any[]) => any): void {
         this.stocksSearchResultsPaginationData.query = query;
         if (!this.preventDefaultStockScrollApiCall &&
             (query || (this.defaultStockSuggestions && this.defaultStockSuggestions.length === 0) || successCallback)) {
@@ -734,7 +734,7 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
      * @param {Function} successCallback Callback to carry out further operation
      * @memberof AdvanceSearchModelComponent
      */
-    public onGroupSearchQueryChanged(query: string, page: number = 1, successCallback?: Function): void {
+    public onGroupSearchQueryChanged(query: string, page: number = 1, successCallback?: (...args: any[]) => any): void {
         this.groupsSearchResultsPaginationData.query = query;
         if (!this.preventDefaultGroupScrollApiCall &&
             (query || (this.defaultGroupSuggestions && this.defaultGroupSuggestions.length === 0) || successCallback)) {

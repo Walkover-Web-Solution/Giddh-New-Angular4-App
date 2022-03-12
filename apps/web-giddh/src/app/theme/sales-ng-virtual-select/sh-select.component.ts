@@ -161,11 +161,10 @@ export class SalesShSelectComponent implements ControlValueAccessor, AfterViewIn
 
     public filterByIOption(array: IOption[], term: string, action: string = 'default') {
 
-        let filteredArr: any[];
         let startsWithArr: any[];
         let includesArr: any[] = [];
 
-        filteredArr = this.getFilteredArrOfIOptionItems(array, term, action);
+        const filteredArr = this.getFilteredArrOfIOptionItems(array, term, action);
 
         startsWithArr = filteredArr.filter(function (item) {
             if (startsWith(item?.label?.toLocaleLowerCase(), term) || startsWith(item?.value?.toLocaleLowerCase(), term)) {
@@ -183,7 +182,7 @@ export class SalesShSelectComponent implements ControlValueAccessor, AfterViewIn
     public getFilteredArrOfIOptionItems(array: IOption[], term: string, action: string) {
         if (action === FLATTEN_SEARCH_TERM) {
             return array.filter((item) => {
-                let mergedAccounts = item.additional && item.additional.mergedAccounts ?
+                const mergedAccounts = item.additional && item.additional.mergedAccounts ?
                     _.cloneDeep(item.additional.mergedAccounts.split(',').map(a => a.trim().toLocaleLowerCase())) : '';
                 return _.includes(item.label.toLocaleLowerCase(), term) || _.includes(item.additional.uniqueName.toLocaleLowerCase(), term) || _.includes(mergedAccounts, term);
             });
@@ -201,7 +200,7 @@ export class SalesShSelectComponent implements ControlValueAccessor, AfterViewIn
         } else if (this._options && this.useInBuiltFilterForIOptionTypeItems) {
             this.filteredData = this.filterByIOption(this._options, lowercaseFilter);
         } else {
-            let filteredData = this._options ? this._options.filter(item => {
+            const filteredData = this._options ? this._options.filter(item => {
                 if (this.customFilter) {
                     return this.customFilter(lowercaseFilter, item);
                 }
@@ -236,7 +235,7 @@ export class SalesShSelectComponent implements ControlValueAccessor, AfterViewIn
     }
 
     public toggleSelected(item) {
-        let callChanges: boolean = true;
+        const callChanges: boolean = true;
         if (!item) {
             return;
         }
@@ -275,7 +274,7 @@ export class SalesShSelectComponent implements ControlValueAccessor, AfterViewIn
         this.isOpen = true;
         this.onShow.emit();
         if (this.menuEle && this.menuEle.virtualScrollElm && this.menuEle.virtualScrollElm) {
-            let item = this.rows.find(p => p?.value === (this._selectedValues.length > 0 ? this._selectedValues[0] : (this.rows.length > 0 ? this.rows[0].value : null)));
+            const item = this.rows.find(p => p?.value === (this._selectedValues.length > 0 ? this._selectedValues[0] : (this.rows.length > 0 ? this.rows[0].value : null)));
             if (item !== null) {
                 this.menuEle.virtualScrollElm.scrollInto(item);
             }
@@ -288,20 +287,20 @@ export class SalesShSelectComponent implements ControlValueAccessor, AfterViewIn
     }
 
     public keydownUp(event) {
-        let key = event.which;
+        const key = event.which;
         if (this.isOpen) {
             if (key === this.KEYS.ESC || key === this.KEYS.TAB || (key === this.KEYS.UP && event.altKey)) {
                 this.hide();
             } else if (key === this.KEYS.ENTER) {
                 if (this.menuEle && this.menuEle.virtualScrollElm && this.menuEle.virtualScrollElm) {
-                    let item = this.menuEle.virtualScrollElm.getHighlightedOption();
+                    const item = this.menuEle.virtualScrollElm.getHighlightedOption();
                     if (item !== null) {
                         this.toggleSelected(item);
                     }
                 }
             } else if (key === this.KEYS.UP) {
                 if (this.menuEle && this.menuEle.virtualScrollElm && this.menuEle.virtualScrollElm) {
-                    let item = this.menuEle.virtualScrollElm.getPreviousHilightledOption();
+                    const item = this.menuEle.virtualScrollElm.getPreviousHilightledOption();
                     if (item !== null) {
                         this.menuEle.virtualScrollElm.scrollInto(item);
                         this.menuEle.virtualScrollElm.startupLoop = true;
@@ -311,7 +310,7 @@ export class SalesShSelectComponent implements ControlValueAccessor, AfterViewIn
                 }
             } else if (key === this.KEYS.DOWN) {
                 if (this.menuEle && this.menuEle.virtualScrollElm && this.menuEle.virtualScrollElm) {
-                    let item = this.menuEle.virtualScrollElm.getNextHilightledOption();
+                    const item = this.menuEle.virtualScrollElm.getNextHilightledOption();
                     if (item !== null) {
                         this.menuEle.virtualScrollElm.scrollInto(item);
                         this.menuEle.virtualScrollElm.startupLoop = true;
@@ -444,8 +443,7 @@ export class SalesShSelectComponent implements ControlValueAccessor, AfterViewIn
 
     public onChange() {
         if (this.multiple) {
-            let newValues: string[];
-            newValues = this._selectedValues.map(p => p?.value);
+            const newValues = this._selectedValues.map(p => p?.value);
             this.propagateChange(newValues);
             this.selected.emit(this._selectedValues);
         } else {

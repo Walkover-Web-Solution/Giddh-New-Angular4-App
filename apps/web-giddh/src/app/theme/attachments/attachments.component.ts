@@ -169,7 +169,7 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
      * @memberof AttachmentsComponent
      */
     private getFiles(): void {
-        let getRequest = {
+        const getRequest = {
             voucherType: (this.selectedItem.voucherGeneratedType) ? this.selectedItem.voucherGeneratedType : undefined,
             entryUniqueName: this.selectedItem.voucherUniqueName ?? this.selectedItem.entryUniqueName ?? this.selectedItem.uniqueName,
             uniqueName: (this.selectedItem.voucherUniqueName) ? this.selectedItem.voucherUniqueName : undefined
@@ -203,7 +203,7 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
                 }
 
                 if (response.body?.data) {
-                    let objectURL = this.generalService.base64ToBlob(response.body?.data, 'application/pdf', 512);
+                    const objectURL = this.generalService.base64ToBlob(response.body?.data, 'application/pdf', 512);
                     this.voucherPdf = { name: this.selectedItem?.voucherNumber, uniqueName: this.selectedItem?.voucherUniqueName, type: "pdf", src: objectURL, originalSrc: objectURL, encodedData: response.body?.data, isChecked: false, originalFileExtension: "pdf" };
                     if (!this.isMobileView) {
                         this.showVoucherPreview();
@@ -218,7 +218,7 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
                 this.changeDetectionRef.detectChanges();
                 this.toaster.errorToast(response?.message ?? this.commonLocaleData?.app_something_went_wrong);
             }
-        }, (error => {
+        }, (() => {
             this.isLoading = false;
             this.changeDetectionRef.detectChanges();
             this.toaster.errorToast(this.commonLocaleData?.app_something_went_wrong);
@@ -236,14 +236,14 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
         if (!this.isMobileView) {
             if (attachment?.type === "pdf") {
                 const file = new Blob([attachment?.src], { type: 'application/pdf' });
-                let pdfFileURL = URL.createObjectURL(file);
+                const pdfFileURL = URL.createObjectURL(file);
                 this.previewedFile.src = this.domSanitizer.bypassSecurityTrustResourceUrl(pdfFileURL);
             }
             this.changeDetectionRef.detectChanges();
         } else {
             if (this.previewedFile?.type === "pdf") {
                 const file = new Blob([this.previewedFile?.src], { type: 'application/pdf' });
-                let pdfFileURL = URL.createObjectURL(file);
+                const pdfFileURL = URL.createObjectURL(file);
                 window.open(pdfFileURL);
             } else if (this.previewedFile?.type === "image") {
                 this.openPreview();
@@ -262,12 +262,12 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
         this.previewedFile = cloneDeep(this.voucherPdf);
         if (!this.isMobileView) {
             const file = new Blob([this.voucherPdf?.src], { type: 'application/pdf' });
-            let pdfFileURL = URL.createObjectURL(file);
+            const pdfFileURL = URL.createObjectURL(file);
             this.previewedFile.src = this.domSanitizer.bypassSecurityTrustResourceUrl(pdfFileURL);
             this.changeDetectionRef.detectChanges();
         } else {
             const file = new Blob([this.voucherPdf?.src], { type: 'application/pdf' });
-            let pdfFileURL = URL.createObjectURL(file);
+            const pdfFileURL = URL.createObjectURL(file);
             window.open(pdfFileURL);
         }
     }
@@ -278,9 +278,9 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
      * @memberof AttachmentsComponent
      */
     public openPreview(): void {
-        let file = new Image();
+        const file = new Image();
         file.src = this.previewedFile.originalSrc;
-        let windowObject = window.open("");
+        const windowObject = window.open("");
         windowObject.document.write(file.outerHTML);
     }
 
@@ -293,7 +293,7 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
     public onUploadOutput(output: UploadOutput): void {
         if (output.type === 'allAddedToQueue') {
             let sessionKey = null;
-            let companyUniqueName = this.activeCompany?.uniqueName;
+            const companyUniqueName = this.activeCompany?.uniqueName;
             this.sessionKey$.pipe(take(1)).subscribe(key => sessionKey = key);
             const event: UploadInput = {
                 type: 'uploadAll',
@@ -331,7 +331,7 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
     public selectAttachment(event: any, attachment: any): void {
         attachment.isChecked = event?.checked;
 
-        let allAttachmentSelected = this.attachments?.filter(attachment => !attachment.isChecked);
+        const allAttachmentSelected = this.attachments?.filter(attachment => !attachment.isChecked);
         if ((!this.attachments?.length || (this.attachments?.length && !allAttachmentSelected?.length)) && (!this.voucherPdf?.type || this.voucherPdf?.isChecked)) {
             this.selectAll = true;
         } else {
@@ -347,9 +347,9 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
      * @memberof AttachmentsComponent
      */
     public downloadFiles(): void {
-        let isAttachmentSelected = this.attachments?.filter(attachment => attachment.isChecked);
+        const isAttachmentSelected = this.attachments?.filter(attachment => attachment.isChecked);
         if (isAttachmentSelected?.length > 0 && this.voucherPdf?.isChecked) {
-            let getRequest = {
+            const getRequest = {
                 typeOfInvoice: ["Original"],
                 voucherType: this.selectedItem.voucherGeneratedType,
                 entryUniqueName: (this.selectedItem.voucherUniqueName) ? undefined : this.selectedItem.entryUniqueName,
@@ -362,16 +362,16 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
                 } else {
                     this.toaster.errorToast(this.commonLocaleData?.app_something_went_wrong);
                 }
-            }, (error => {
+            }, (() => {
                 this.toaster.errorToast(this.commonLocaleData?.app_something_went_wrong);
             }));
         } else if (isAttachmentSelected?.length > 0) {
-            let src = this.generalService.base64ToBlob(this.attachments[0].encodedData, this.attachments[0].type, 512);
+            const src = this.generalService.base64ToBlob(this.attachments[0].encodedData, this.attachments[0].type, 512);
             saveAs(src, `${this.attachments[0].name}`);
         } else if (this.voucherPdf?.isChecked) {
             saveAs(this.voucherPdf.src, `${this.voucherPdf.name}.pdf`);
         } else if (this.previewedFile?.type) {
-            let src = this.generalService.base64ToBlob(this.previewedFile.encodedData, this.previewedFile.originalFileExtension, 512);
+            const src = this.generalService.base64ToBlob(this.previewedFile.encodedData, this.previewedFile.originalFileExtension, 512);
             saveAs(src, `${this.previewedFile.name}.${this.previewedFile.originalFileExtension}`);
         } else {
             this.toaster.showSnackBar("error", this.localeData?.download_unavailable);
@@ -386,7 +386,7 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
      * @memberof AttachmentsComponent
      */
     public showDeleteAttachedFileModal(index: number): void {
-        let dialogRef = this.dialog.open(ConfirmModalComponent, {
+        const dialogRef = this.dialog.open(ConfirmModalComponent, {
             width: '40%',
             data: {
                 title: this.commonLocaleData?.app_delete,
@@ -400,7 +400,7 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
             if (response) {
                 this.ledgerService.removeAttachment(this.attachments[index]?.uniqueName).subscribe((response) => {
                     if (response?.status === 'success') {
-                        let updatedAttachments = this.attachments.filter(attachment => attachment.uniqueName !== this.attachments[index]?.uniqueName);
+                        const updatedAttachments = this.attachments.filter(attachment => attachment.uniqueName !== this.attachments[index]?.uniqueName);
                         this.attachments = updatedAttachments;
                         this.refreshAfterClose = true;
 
@@ -426,12 +426,12 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
      */
     public showDeleteVoucherModal(): void {
         let messageBody = this.localeData?.confirm_delete_voucher;
-        let autoDeleteEntries = (this.selectedItem?.voucherGenerated && this.selectedItem?.voucherGeneratedType === VoucherTypeEnum.sales) ? this.invoiceSettings?.invoiceSettings?.autoDeleteEntries : false;
+        const autoDeleteEntries = (this.selectedItem?.voucherGenerated && this.selectedItem?.voucherGeneratedType === VoucherTypeEnum.sales) ? this.invoiceSettings?.invoiceSettings?.autoDeleteEntries : false;
         if (autoDeleteEntries) {
             messageBody = this.localeData?.entries_delete_message;
         }
 
-        let dialogRef = this.dialog.open(ConfirmModalComponent, {
+        const dialogRef = this.dialog.open(ConfirmModalComponent, {
             width: '40%',
             data: {
                 title: this.commonLocaleData?.app_delete,
@@ -444,7 +444,7 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
 
         dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
             if (response) {
-                let bulkDeleteModel = {
+                const bulkDeleteModel = {
                     voucherUniqueNames: [this.selectedItem?.voucherUniqueName],
                     voucherType: this.selectedItem?.voucherGeneratedType
                 };
@@ -497,14 +497,14 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
      * @memberof AttachmentsComponent
      */
     public printFiles(): void {
-        let isAttachmentSelected = this.attachments?.filter(attachment => attachment.isChecked && attachment.type !== "unsupported");
+        const isAttachmentSelected = this.attachments?.filter(attachment => attachment.isChecked && attachment.type !== "unsupported");
 
         if (!isAttachmentSelected?.length && !this.voucherPdf?.isChecked && (!this.previewedFile || this.previewedFile?.type === "unsupported")) {
             this.toaster.showSnackBar("error", this.localeData?.print_unavailable);
             return;
         }
 
-        let filesToPrint = [];
+        const filesToPrint = [];
 
         if (this.voucherPdf?.isChecked) {
             filesToPrint.push({ file: this.voucherPdf?.encodedData, type: "pdf" });
@@ -553,7 +553,7 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
                     }
                 }, 100);
             },
-            onError: (error) => {
+            onError: () => {
                 this.toaster.showSnackBar("error", this.commonLocaleData?.app_something_went_wrong);
             }
         });

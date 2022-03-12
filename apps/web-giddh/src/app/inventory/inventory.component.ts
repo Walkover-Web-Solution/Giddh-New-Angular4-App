@@ -422,7 +422,7 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
      * @param {Function} successCallback Success callback function to carry out further tasks
      * @memberof InventoryComponent
      */
-    private loadInventoryTab(successCallback: Function): void {
+    private loadInventoryTab(successCallback: (...args: any[]) => any): void {
         this.inventoryService.getLinkedStocks().pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response) {
                 if (response.status === 'success' && response.body && response.body.results) {

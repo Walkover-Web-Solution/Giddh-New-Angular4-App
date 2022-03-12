@@ -118,7 +118,7 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges, OnDestr
         if (this.ScrollToElement) {
             this.columnView.forEach((p, index) => {
                 if (this.mc.columns[index].SelectedItem) {
-                    let itemIndex = this.mc.columns[index].Items.findIndex(item => item.uniqueName === this.mc.columns[index].SelectedItem.uniqueName && item.isGroup === this.mc.columns[index].SelectedItem.isGroup);
+                    const itemIndex = this.mc.columns[index].Items.findIndex(item => item.uniqueName === this.mc.columns[index].SelectedItem.uniqueName && item.isGroup === this.mc.columns[index].SelectedItem.isGroup);
                     p.scrollToElement(itemIndex);
                 }
             });
@@ -128,7 +128,7 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges, OnDestr
 
     // tslint:disable-next-line:no-empty
     public ngOnInit() {
-        let i = Number;
+        const i = Number;
         let text = this.localeData?.item_no;
         text = text?.replace("[ITEM_NO]", i);
         this.items = Array.from({length: 100000}).map((_, i) => text);
@@ -214,14 +214,14 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges, OnDestr
 
         this.groupService.GetGroupDetails(activeGroup.uniqueName).subscribe(group => {
             if (group && group.status === "success" && group.body) {
-                let groupDetails = group.body;
+                const groupDetails = group.body;
                 if (groupDetails && groupDetails.parentGroups && groupDetails.parentGroups?.length > 0) {
                     this.currentGroupIndex = groupDetails.parentGroups?.length;
                 } else {
                     this.currentGroupIndex = 0;
                 }
 
-                let currentGroup: any = {
+                const currentGroup: any = {
                     synonyms: groupDetails.synonyms,
                     groups: groupDetails.groups,
                     name: groupDetails.name,
@@ -243,19 +243,19 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges, OnDestr
         this.mc.columns.push(new ColumnGroupsAccountVM(new GroupsWithAccountsResponse()));
         this.mc.columns[0].groups = [];
         if (this._groups) {
-            for (let key of this._groups) {
+            for (const key of this._groups) {
                 key.isOpen = false;
                 this.mc.columns[0].groups.push(key);
             }
-            let grps = this.mc.columns[0].groups || [];
-            let accs = this.mc.columns[0].accounts || [];
-            let grps2 = grps.map(p => ({ ...p, isGroup: true } as IGroupOrAccount));
-            let accs2 = accs.map(p => ({ ...p, isGroup: false } as IGroupOrAccount));
+            const grps = this.mc.columns[0].groups || [];
+            const accs = this.mc.columns[0].accounts || [];
+            const grps2 = grps.map(p => ({ ...p, isGroup: true } as IGroupOrAccount));
+            const accs2 = accs.map(p => ({ ...p, isGroup: false } as IGroupOrAccount));
             this.mc.columns[0].Items = [...grps2, ...accs2] as IGroupOrAccount[];
             this.mc.columns[0].SelectedItem = this.mc.columns[0].Items.find(p => p.isActive) || this.mc.columns[0].Items.find(p => p.isOpen);
-            let col = this.polulateColms(this.mc.columns[0].groups);
+            const col = this.polulateColms(this.mc.columns[0].groups);
             if (col) {
-                for (let key of this.mc.columns[0].groups) {
+                for (const key of this.mc.columns[0].groups) {
                     if (key.uniqueName === col.uniqueName) {
                         key.isOpen = true;
                     }
@@ -271,10 +271,10 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges, OnDestr
 
         if (this.isSearchingGroups) {
             if (grps && grps?.length > 0) {
-                let newCOL = new ColumnGroupsAccountVM(null);
-                let allGrps = [];
-                let allAccount = [];
-                for (let grp of grps) {
+                const newCOL = new ColumnGroupsAccountVM(null);
+                const allGrps = [];
+                const allAccount = [];
+                for (const grp of grps) {
                     if (activeGroup && grp.uniqueName === activeGroup.uniqueName) {
                         grp.isOpen = true;
                         grp.isActive = true;
@@ -285,13 +285,13 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges, OnDestr
                     }
                 }
                 if (!activeGroup) {
-                    for (let grp of grps) {
+                    for (const grp of grps) {
                         if (grp?.accounts && grp?.accounts?.length > 0) {
                             allAccount.push(...grp.accounts);
                         }
                     }
                 } else {
-                    for (let grp of grps) {
+                    for (const grp of grps) {
                         if (grp?.uniqueName === activeGroup?.uniqueName) {
                             if (grp?.accounts && grp?.accounts?.length > 0) {
                                 allAccount.push(...grp.accounts);
@@ -301,37 +301,37 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges, OnDestr
                 }
                 newCOL.groups = [];
                 newCOL.accounts = [];
-                for (let key of allGrps) {
+                for (const key of allGrps) {
                     newCOL.groups.push(key);
                 }
-                for (let key of allAccount) {
+                for (const key of allAccount) {
                     newCOL.accounts.push(key);
                 }
-                let grps1 = newCOL.groups || [];
-                let accs = newCOL.accounts || [];
-                let grps2 = grps1.map(p => ({ ...p, isGroup: true } as IGroupOrAccount));
-                let accs2 = accs.map(p => ({ ...p, isGroup: false } as IGroupOrAccount));
+                const grps1 = newCOL.groups || [];
+                const accs = newCOL.accounts || [];
+                const grps2 = grps1.map(p => ({ ...p, isGroup: true } as IGroupOrAccount));
+                const accs2 = accs.map(p => ({ ...p, isGroup: false } as IGroupOrAccount));
                 newCOL.Items = [...grps2, ...accs2] as IGroupOrAccount[];
                 newCOL.SelectedItem = newCOL.Items.find(p => p.isActive) || newCOL.Items.find(p => p.isOpen);
-                let col = this.polulateColms(allGrps);
+                const col = this.polulateColms(allGrps);
                 this.mc.columns.splice(1, 0, newCOL);
                 if (col) {
                     return newCOL;
                 }
             }
         } else {
-            for (let grp of grps) {
+            for (const grp of grps) {
                 if (activeGroup && grp.uniqueName === activeGroup.uniqueName) {
-                    let newCOL = new ColumnGroupsAccountVM(grp);
+                    const newCOL = new ColumnGroupsAccountVM(grp);
                     newCOL.groups = [];
                     if (activeGroup.groups) {
-                        for (let key of activeGroup.groups) {
+                        for (const key of activeGroup.groups) {
                             newCOL.groups.push(key);
                         }
-                        let grps1 = newCOL.groups || [];
-                        let accs = newCOL.accounts || [];
-                        let grps2 = grps1.map(p => ({ ...p, isGroup: true } as IGroupOrAccount));
-                        let accs2 = accs.map(p => ({ ...p, isGroup: false } as IGroupOrAccount));
+                        const grps1 = newCOL.groups || [];
+                        const accs = newCOL.accounts || [];
+                        const grps2 = grps1.map(p => ({ ...p, isGroup: true } as IGroupOrAccount));
+                        const accs2 = accs.map(p => ({ ...p, isGroup: false } as IGroupOrAccount));
                         newCOL.Items = [...grps2, ...accs2] as IGroupOrAccount[];
                         newCOL.SelectedItem = newCOL.Items.find(p => p.isActive) || newCOL.Items.find(p => p.isOpen);
                     }
@@ -340,12 +340,12 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges, OnDestr
                     return newCOL;
                 } else {
                     if (grp.groups) {
-                        let col = this.polulateColms(grp.groups);
+                        const col = this.polulateColms(grp.groups);
                         if (col) {
-                            let newCOL = new ColumnGroupsAccountVM(grp);
+                            const newCOL = new ColumnGroupsAccountVM(grp);
                             newCOL.groups = [];
                             newCOL.isOpen = false;
-                            for (let key of grp.groups) {
+                            for (const key of grp.groups) {
                                 if (key.uniqueName === col.uniqueName) {
                                     key.isOpen = true;
                                 } else {
@@ -353,10 +353,10 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges, OnDestr
                                 }
                                 newCOL.groups.push(key);
                             }
-                            let grps1 = newCOL.groups || [];
-                            let accs = newCOL.accounts || [];
-                            let grps2 = grps1.map(p => ({ ...p, isGroup: true } as IGroupOrAccount));
-                            let accs2 = accs.map(p => ({ ...p, isGroup: false } as IGroupOrAccount));
+                            const grps1 = newCOL.groups || [];
+                            const accs = newCOL.accounts || [];
+                            const grps2 = grps1.map(p => ({ ...p, isGroup: true } as IGroupOrAccount));
+                            const accs2 = accs.map(p => ({ ...p, isGroup: false } as IGroupOrAccount));
                             newCOL.Items = [...grps2, ...accs2] as IGroupOrAccount[];
                             newCOL.SelectedItem = newCOL.Items.find(p => p.isActive) || newCOL.Items.find(p => p.isOpen);
                             this.mc.columns.splice(1, 0, newCOL);
@@ -394,7 +394,7 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges, OnDestr
                 { name: activeGroup.name, uniqueName: activeGroup.uniqueName }
             ] : []
         };
-        let parentGrp = this.getBreadCrumbPathFromGroup(currentAccount, null, this.breadcrumbPath, this.breadcrumbUniqueNamePath);
+        const parentGrp = this.getBreadCrumbPathFromGroup(currentAccount, null, this.breadcrumbPath, this.breadcrumbUniqueNamePath);
         this.breadcrumbPathChanged.emit({ breadcrumbPath: this.breadcrumbPath, breadcrumbUniqueNamePath: this.breadcrumbUniqueNamePath });
         if (parentGrp) {
             if (this.mc.columns[currentIndex - 1] && this.mc.columns[currentIndex - 1].uniqueName !== parentGrp.uniqueName) {
@@ -466,7 +466,7 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges, OnDestr
             return result;
         }
         if (activeEntity?.parentGroups) {
-            for (let group of activeEntity.parentGroups) {
+            for (const group of activeEntity.parentGroups) {
                 parentUniquenamePath.push(group.uniqueName);
                 parentPath.push(group.name);
             }
@@ -487,7 +487,7 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges, OnDestr
      * @param nodes Object containing current and previous nodes
      * @param navigator instance of NavigationWalker
      */
-    public onRightKey(nodes, navigator) {
+    public onRightKey(nodes) {
         if (nodes.currentVertical) {
             nodes.currentVertical.click();
         } else {
@@ -548,7 +548,7 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges, OnDestr
 
         this.getBreadCrumbPathFromGroup(activeGroup, null, this.breadcrumbPath, this.breadcrumbUniqueNamePath);
 
-        let listBckup = this.mc.activeGroupFromGroupListBackup(grpsBck, this.currentGroup?.uniqueName, null);
+        const listBckup = this.mc.activeGroupFromGroupListBackup(grpsBck, this.currentGroup?.uniqueName, null);
         if (listBckup && this.currentGroup) {
             this.currentGroup.groups = listBckup.groups;
             this.currentGroup.accounts = listBckup.accounts;

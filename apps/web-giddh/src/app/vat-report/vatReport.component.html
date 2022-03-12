@@ -111,16 +111,7 @@
                                                         id="button-nested"
                                                         dropdownToggle
                                                         type="button"
-                                                        class="
-                                                            dropdown
-                                                            clearfix
-                                                            list-title
-                                                            filter-by
-                                                            return-sel
-                                                            font-large
-                                                            dropdown-toggle
-                                                            pull-left
-                                                        "
+                                                        class="dropdown clearfix list-title filter-by return-sel font-large dropdown-toggle pull-left"
                                                         aria-controls="dropdown-nested"
                                                     >
                                                         <ng-container *ngIf="isMonthSelected">
@@ -340,19 +331,13 @@
                                             </table>
                                         </div>
                                     </div>
-                                    <div class="white-box" *ngIf="i == 2">
+                                    <div class="white-box" *ngIf="i === 2">
                                         <p class="font-14 text-black">
                                             <strong>{{ report.section }}</strong>
                                         </p>
                                         <div class="table-responsive">
                                             <table
-                                                class="
-                                                    table-hide-title table
-                                                    basic
-                                                    table-border-bottom
-                                                    mr-t2
-                                                    on-mobile-view
-                                                "
+                                                class="table-hide-title table basic table-border-bottom mr-t2 on-mobile-view"
                                             >
                                                 <tbody>
                                                     <tr *ngFor="let reportSections of report.sections; let i = index">

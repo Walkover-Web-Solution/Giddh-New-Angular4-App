@@ -283,7 +283,7 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
      * @param {Function} successCallback Callback to carry out further operation
      * @memberof SettingLinkedAccountsComponent
      */
-    public onAccountSearchQueryChanged(query: string, page: number = 1, successCallback?: Function): void {
+    public onAccountSearchQueryChanged(query: string, page: number = 1, successCallback?: (...args: any[]) => any): void {
         this.accountsSearchResultsPaginationData.query = query;
         if (!this.preventDefaultScrollApiCall &&
             (query || (this.defaultAccountSuggestions && this.defaultAccountSuggestions.length === 0) || successCallback)) {

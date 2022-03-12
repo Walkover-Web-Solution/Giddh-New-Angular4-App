@@ -82,7 +82,7 @@ export class InprogressComponent implements OnInit, OnDestroy {
                 this.progressData = res.results;
                 this.progressData.forEach(element => {
                     if (element.updatedAt) {
-                        let preparedDateString = this.prepareDate(element.updatedAt)[0];
+                        const preparedDateString = this.prepareDate(element.updatedAt)[0];
                         element['dateString'] = this.prepareCovertedDate(preparedDateString);
                     }
                     if (element.createdAt) {
@@ -90,16 +90,16 @@ export class InprogressComponent implements OnInit, OnDestroy {
                         element['dateDDMMYY'] = this.prepareDate(element.createdAt)[1];
                     }
                     //completed
-                    let tallyGroups =
+                    const tallyGroups =
                         (element.totalSavedGroups * 100) /
                         element.totalTallyGroups;
-                    let tallyAccounts =
+                    const tallyAccounts =
                         (element.totalSavedAccounts * 100) /
                         element.totalTallyAccounts;
-                    let tallyEntries =
+                    const tallyEntries =
                         (element.totalSavedEntries * 100) /
                         element.totalTallyEntries;
-                    let tallyVouchers =
+                    const tallyVouchers =
                         (element.totalSavedVouchers * 100) /
                         element.totalTallyVouchers;
 
@@ -113,19 +113,19 @@ export class InprogressComponent implements OnInit, OnDestroy {
                         "%";
                     element["vouchersPercent"] =
                         (isNaN(tallyVouchers) ? 0 : tallyVouchers).toFixed(2) +
-                        "%";    
+                        "%";
 
                     //error
-                    let tallyErrorGroups =
+                    const tallyErrorGroups =
                         (element.tallyErrorGroups * 100) /
                         element.totalTallyGroups;
-                    let tallyErrorAccounts =
+                    const tallyErrorAccounts =
                         (element.tallyErrorAccounts * 100) /
                         element.totalTallyAccounts;
-                    let tallyErrorEntries =
+                    const tallyErrorEntries =
                         (element.tallyErrorEntries * 100) /
                         element.totalTallyEntries;
-                    let tallyErrorVouchers =
+                    const tallyErrorVouchers =
                         (element.tallyErrorVouchers * 100) /
                         element.totalTallyVouchers;
 
@@ -148,7 +148,7 @@ export class InprogressComponent implements OnInit, OnDestroy {
                         (isNaN(tallyErrorVouchers)
                             ? 0
                             : tallyErrorVouchers
-                        ).toFixed(2) + "%";    
+                        ).toFixed(2) + "%";
                 });
             }
             this.isLoading = false;
@@ -164,7 +164,7 @@ export class InprogressComponent implements OnInit, OnDestroy {
             .pipe(takeUntil(this.destroyed$))
             .subscribe(res => {
                 if (res.status === "success") {
-                    let blobData = this.generalService.base64ToBlob(res.body, "application/xlsx", 512);
+                    const blobData = this.generalService.base64ToBlob(res.body, "application/xlsx", 512);
                     return saveAs(
                         blobData,
                         `${row.company.name}-error-log.xlsx`
@@ -185,7 +185,7 @@ export class InprogressComponent implements OnInit, OnDestroy {
      * @memberof CompletedComponent
      */
     public prepareDate(dateArray: any) {
-        let date = []
+        const date = []
         if (dateArray[5] < 10) {
             dateArray[5] = '0' + dateArray[5];
         }
@@ -208,8 +208,8 @@ export class InprogressComponent implements OnInit, OnDestroy {
    * @memberof CompletedComponent
    */
     public prepareCovertedDate(UTCtoLocalTime: string) {
-        let UTCtoLocalTimeZoneDate = this.generalService.ConvertUTCTimeToLocalTime(UTCtoLocalTime);
-        let dateArray = UTCtoLocalTimeZoneDate.toString().split(' '); // ["Mon", "Jan", "27", "2020", "05:11:08", "GMT+0530", "(India", "Standard", "Time)"]
+        const UTCtoLocalTimeZoneDate = this.generalService.ConvertUTCTimeToLocalTime(UTCtoLocalTime);
+        const dateArray = UTCtoLocalTimeZoneDate.toString().split(' '); //["Mon", "Jan", "27", "2020", "05:11:08", "GMT+0530", "(India", "Standard", "Time)"]
         return dateArray[2] + ' ' + dateArray[1] + ' ' + dateArray[3] + ' @ ' + dateArray[4];
     }
 

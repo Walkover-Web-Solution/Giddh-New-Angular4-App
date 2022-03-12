@@ -32,39 +32,40 @@ const initialState: CurrentCommonState = {
 export function CommonReducer(state: CurrentCommonState = initialState, action: CustomActions): CurrentCommonState {
 
     switch (action.type) {
-        case CommonActions.GET_COUNTRY_RESPONSE:
-            let countries: BaseResponse<CountryResponse[], string> = action.payload;
+        case CommonActions.GET_COUNTRY_RESPONSE: {
+            const countries: BaseResponse<CountryResponse[], string> = action.payload;
             if (countries.status === 'success') {
                 return Object.assign({}, state, {
                     countries: countries.body
                 });
             }
             return Object.assign({}, state, {});
-        case CommonActions.GET_ALL_COUNTRY_RESPONSE:
-            let countriesRes: BaseResponse<CountryResponse[], string> = action.payload;
+        }
+        case CommonActions.GET_ALL_COUNTRY_RESPONSE: {
+            const countriesRes: BaseResponse<CountryResponse[], string> = action.payload;
             if (countriesRes.status === 'success') {
                 return Object.assign({}, state, {
                     countriesAll: countriesRes.body
                 });
             }
             return Object.assign({}, state, {});
-
-        case CommonActions.GET_CALLING_CODES_RESPONSE:
-            let callingcodes: BaseResponse<CallingCodesResponse, string> = action.payload;
+        }
+        case CommonActions.GET_CALLING_CODES_RESPONSE: {
+            const callingcodes: BaseResponse<CallingCodesResponse, string> = action.payload;
             if (callingcodes.status === 'success') {
                 return Object.assign({}, state, {
                     callingcodes: callingcodes.body
                 });
             }
             return Object.assign({}, state, {});
-
+        }
         case CommonActions.GET_ONBOARDING_FORM: {
             return Object.assign({}, state, {
                 getOnboardingFormInProcess: true
             });
         }
-        case CommonActions.GET_ONBOARDING_FORM_RESPONSE:
-            let onboardingform: BaseResponse<OnboardingFormResponse, string> = action.payload;
+        case CommonActions.GET_ONBOARDING_FORM_RESPONSE: {
+            const onboardingform: BaseResponse<OnboardingFormResponse, string> = action.payload;
             if (onboardingform.status === 'success') {
                 return Object.assign({}, state, {
                     onboardingform: onboardingform.body,
@@ -72,16 +73,16 @@ export function CommonReducer(state: CurrentCommonState = initialState, action: 
                 });
             }
             return Object.assign({}, state, {});
-
-        case CommonActions.GET_PARTY_TYPE_RESPONSE:
-            let partyTypeRes: BaseResponse<any, string> = action.payload;
+        }
+        case CommonActions.GET_PARTY_TYPE_RESPONSE: {
+            const partyTypeRes: BaseResponse<any, string> = action.payload;
             if (partyTypeRes.status === 'success') {
                 return Object.assign({}, state, {
                     partyTypes: partyTypeRes.body.partyTypes
                 });
             }
             return Object.assign({}, state, {});
-
+        }
         case CommonActions.RESET_ONBOARDING_FORM_RESPONSE: {
             return { ...state, onboardingform: null };
         }

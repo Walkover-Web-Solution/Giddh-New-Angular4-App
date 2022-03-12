@@ -52,13 +52,13 @@ export class ShareAccountModalComponent implements OnInit, OnDestroy {
     }
 
     public async shareAccount() {
-        let activeAccount = await this.activeAccount$.pipe(first()).toPromise();
-        let userRole = {
+        const activeAccount = await this.activeAccount$.pipe(first()).toPromise();
+        const userRole = {
             emailId: this.email,
             entity: 'account',
             entityUniqueName: activeAccount?.uniqueName,
         };
-        let selectedPermission = clone(this.selectedPermission);
+        const selectedPermission = clone(this.selectedPermission);
         this.store.dispatch(this.accountActions.shareEntity(userRole, selectedPermission.toLowerCase()));
         this.email = '';
         this.selectedPermission = '';
@@ -69,8 +69,8 @@ export class ShareAccountModalComponent implements OnInit, OnDestroy {
     }
 
     public updatePermission(model: ShareRequestForm, event: any) {
-        let data = cloneDeep(model);
-        let newPermission = event.target.value;
+        const data = cloneDeep(model);
+        const newPermission = event.target.value;
         data.roleUniqueName = newPermission;
         this.store.dispatch(this.accountActions.updateEntityPermission(data, newPermission, 'account'));
     }

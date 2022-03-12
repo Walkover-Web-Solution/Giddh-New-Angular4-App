@@ -1453,7 +1453,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * @param {Function} successCallback Callback to carry out further operation
      * @memberof LedgerComponent
      */
-    public onSearchQueryChanged(query: string, page: number = 1, withStocks: boolean = true, successCallback?: Function): void {
+    public onSearchQueryChanged(query: string, page: number = 1, withStocks: boolean = true, successCallback?: (...args: any[]) => any): void {
         this.searchResultsPaginationData.query = query;
         if (!this.preventDefaultScrollApiCall &&
             (query || (this.defaultSuggestions && this.defaultSuggestions.length === 0) || successCallback)) {

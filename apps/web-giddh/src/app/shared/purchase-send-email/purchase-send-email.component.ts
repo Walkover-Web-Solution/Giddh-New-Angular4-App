@@ -32,9 +32,9 @@ export class PurchaseSendEmailModalComponent implements OnInit, OnDestroy {
     public commonLocaleData: any = {};
 
     constructor(
-        public purchaseOrderService: PurchaseOrderService, 
-        private toaster: ToasterService, 
-        public purchaseRecordService: PurchaseRecordService, 
+        public purchaseOrderService: PurchaseOrderService,
+        private toaster: ToasterService,
+        public purchaseRecordService: PurchaseRecordService,
         private generalService: GeneralService,
         private store: Store<AppState>,
         private invoiceActions: InvoiceActions
@@ -59,8 +59,8 @@ export class PurchaseSendEmailModalComponent implements OnInit, OnDestroy {
      * @memberof PurchaseSendEmailModalComponent
      */
     public sendEmail(): void {
-        let getRequest = { companyUniqueName: this.sendEmailRequest?.companyUniqueName, accountUniqueName: this.sendEmailRequest?.accountUniqueName, uniqueName: this.sendEmailRequest?.uniqueName };
-        let postRequest = { emailId: [this.emailId] };
+        const getRequest = { companyUniqueName: this.sendEmailRequest?.companyUniqueName, accountUniqueName: this.sendEmailRequest?.accountUniqueName, uniqueName: this.sendEmailRequest?.uniqueName };
+        const postRequest = { emailId: [this.emailId] };
 
         if (this.module === "purchase-order") {
             this.purchaseOrderService.sendEmail(getRequest, postRequest).pipe(takeUntil(this.destroyed$)).subscribe((res) => {

@@ -15,9 +15,9 @@ export const initialState: InvoicePurchaseState = {
 export function InvoicePurchaseReducer(state = initialState, action: CustomActions): InvoicePurchaseState {
     switch (action.type) {
         case PURCHASE_INVOICE_ACTIONS.SET_TAXES_FOR_COMPANY: {
-            let response: BaseResponse<ITaxResponse[], string> = action.payload;
+            const response: BaseResponse<ITaxResponse[], string> = action.payload;
             if (response.status === 'success') {
-                let newState = cloneDeep(state);
+                const newState = cloneDeep(state);
                 newState.taxes = response.body;
                 return Object.assign({}, state, newState);
             }

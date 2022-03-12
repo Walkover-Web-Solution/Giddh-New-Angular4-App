@@ -16,7 +16,7 @@ const initialState = {
 };
 
 export function SessionReducer(state: any = initialState, action: CustomActions): any {
-    let newState = _.cloneDeep(state);
+    const newState = _.cloneDeep(state);
     switch (action.type) {
         case SessionActions.GET_ALL_SESSION_RESPONSE:
             newState.Usersession = action.payload.body;

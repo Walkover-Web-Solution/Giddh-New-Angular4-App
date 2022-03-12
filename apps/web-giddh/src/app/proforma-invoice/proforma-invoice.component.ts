@@ -1738,7 +1738,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public getInvoiceListsForCreditNote(voucherDate?: string): void {
         if (this.invFormData && this.invFormData.voucherDetails && this.invFormData.voucherDetails.customerUniquename) {
             let request;
-            
+
             if (this.voucherApiVersion === 2) {
                 request = {
                     accountUniqueName: this.invFormData.voucherDetails.customerUniquename,
@@ -5252,9 +5252,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      * @returns Promise to carry out further operations
      * @memberof ProformaInvoiceComponent
      */
-    private getUpdatedStateCodes(countryCode: any, isCompanyStates?: boolean): Promise<any> {
+    private getUpdatedStateCodes(countryCode: any, isCompanyStates?: boolean): Promise<void> {
         this.startLoader(true);
-        return new Promise((resolve: Function) => {
+        return new Promise((resolve) => {
             if (countryCode) {
                 if (this.countryStates[countryCode]) {
                     if (!isCompanyStates) {
@@ -6116,7 +6116,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      * @param {Function} successCallback Callback to carry out further operation
      * @memberof ProformaInvoiceComponent
      */
-    public onSearchQueryChanged(query: string, page: number = 1, searchType: string, successCallback?: Function): void {
+    public onSearchQueryChanged(query: string, page: number = 1, searchType: string, successCallback?: (...args: any[]) => any): void {
         if (!this.preventDefaultScrollApiCall &&
             (query || (searchType === SEARCH_TYPE.CUSTOMER && this.defaultCustomerSuggestions && this.defaultCustomerSuggestions.length === 0) ||
                 (searchType === SEARCH_TYPE.ITEM && this.defaultItemSuggestions && this.defaultItemSuggestions.length === 0) || successCallback)) {

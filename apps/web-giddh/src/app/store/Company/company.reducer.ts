@@ -71,8 +71,8 @@ export function CompanyReducer(state: CurrentCompanyState = initialState, action
                 isTaxesLoading: true,
                 isGetTaxesSuccess: false
             });
-        case CompanyActions.GET_TAX_RESPONSE:
-            let taxes: BaseResponse<TaxResponse[], string> = action.payload;
+        case CompanyActions.GET_TAX_RESPONSE: {
+            const taxes: BaseResponse<TaxResponse[], string> = action.payload;
             if (taxes.status === 'success') {
                 return Object.assign({}, state, {
                     taxes: taxes.body,
@@ -89,6 +89,7 @@ export function CompanyReducer(state: CurrentCompanyState = initialState, action
             return Object.assign({}, state, {
                 isTaxesLoading: false
             });
+        }
         case CompanyActions.SET_ACTIVE_COMPANY:
             return state;
 
@@ -101,7 +102,7 @@ export function CompanyReducer(state: CurrentCompanyState = initialState, action
         }
 
         case SETTINGS_TAXES_ACTIONS.CREATE_TAX_RESPONSE: {
-            let res: BaseResponse<TaxResponse, string> = action.payload;
+            const res: BaseResponse<TaxResponse, string> = action.payload;
             if (res.status === 'success') {
                 return {
                     ...state,
@@ -126,7 +127,7 @@ export function CompanyReducer(state: CurrentCompanyState = initialState, action
         }
 
         case SETTINGS_TAXES_ACTIONS.UPDATE_TAX_RESPONSE: {
-            let res: BaseResponse<TaxResponse, any> = action.payload;
+            const res: BaseResponse<TaxResponse, any> = action.payload;
             if (res.status === 'success') {
                 return {
                     ...state,
@@ -148,10 +149,10 @@ export function CompanyReducer(state: CurrentCompanyState = initialState, action
         }
 
         case SETTINGS_TAXES_ACTIONS.DELETE_TAX_RESPONSE: {
-            let res: BaseResponse<TaxResponse, string> = action.payload;
+            const res: BaseResponse<TaxResponse, string> = action.payload;
             if (res.status === 'success') {
-                let newState = _.cloneDeep(state);
-                let taxIndx = newState.taxes.findIndex((tax) => tax.uniqueName === res.request);
+                const newState = _.cloneDeep(state);
+                const taxIndx = newState.taxes.findIndex((tax) => tax.uniqueName === res.request);
                 if (taxIndx > -1) {
                     newState.taxes.splice(taxIndx, 1);
                 }
@@ -164,7 +165,7 @@ export function CompanyReducer(state: CurrentCompanyState = initialState, action
                 isAccountInfoLoading: true
             });
         case CompanyActions.GET_REGISTRATION_ACCOUNT_RESPONSE: {
-            let account: BaseResponse<IRegistration, string> = action.payload;
+            const account: BaseResponse<IRegistration, string> = action.payload;
             if (account.status === 'success') {
                 return Object.assign({}, state, {
                     account: account.body,
@@ -186,8 +187,8 @@ export function CompanyReducer(state: CurrentCompanyState = initialState, action
             return Object.assign({}, state, {
                 isGetAllIntegratedBankInProgress: true,
             });
-        case CompanyActions.GET_ALL_INTEGRATED_BANK_RESPONSE:
-            let response: BaseResponse<IntegratedBankList[], string> = action.payload;
+        case CompanyActions.GET_ALL_INTEGRATED_BANK_RESPONSE: {
+            const response: BaseResponse<IntegratedBankList[], string> = action.payload;
             if (response.status === 'success') {
                 return Object.assign({}, state, {
                     integratedBankList: response.body,
@@ -198,6 +199,7 @@ export function CompanyReducer(state: CurrentCompanyState = initialState, action
                     isGetAllIntegratedBankInProgress: false
                 });
             }
+        }
         default:
             return state;
     }

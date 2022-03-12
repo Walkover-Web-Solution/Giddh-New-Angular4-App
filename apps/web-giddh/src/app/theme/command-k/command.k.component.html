@@ -125,7 +125,7 @@
     <!-- input box template -->
     <ng-template #searchEleTemplate>
         <div class="d-flex bd-rb">
-            <div #searchWrapEle class="search-wrapper" (click)="focusInSearchBox($event)">
+            <div #searchWrapEle class="search-wrapper" (click)="focusInSearchBox()">
                 <span class="icon-search-icon"><i class="icon-search"></i></span>
                 <span *ngFor="let item of listOfSelectedGroups; let idx = index">
                     <div class="vR">

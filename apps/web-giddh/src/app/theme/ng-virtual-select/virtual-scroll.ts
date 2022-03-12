@@ -101,8 +101,8 @@ export class VirtualScrollComponent implements OnInit, OnDestroy, OnChanges, Aft
     }
 
     get width(): any {
-        let el = this.element?.nativeElement;
-        let viewWidth = el.clientWidth - this.scrollbarWidth;
+        const el = this.element?.nativeElement;
+        const viewWidth = el.clientWidth - this.scrollbarWidth;
         return viewWidth;
     }
 
@@ -156,7 +156,7 @@ export class VirtualScrollComponent implements OnInit, OnDestroy, OnChanges, Aft
 
     public ngAfterViewInit() {
         if (this.selectedValues && this.selectedValues.length > 0) {
-            let item = this.items.find(p => p.value === (this.selectedValues.length > 0 ? this.selectedValues[0].value : (this.items.length > 0 ? this.items[0].value : null)));
+            const item = this.items.find(p => p.value === (this.selectedValues.length > 0 ? this.selectedValues[0].value : (this.items.length > 0 ? this.items[0].value : null)));
             setTimeout(() => {
                 this.scrollInto(item);
             }, 50);
@@ -168,12 +168,12 @@ export class VirtualScrollComponent implements OnInit, OnDestroy, OnChanges, Aft
     }
 
     public scrollInto(item: any) {
-        let index: number = (this.items || []).indexOf(item);
+        const index: number = (this.items || []).indexOf(item);
         if (index < 0 || index >= (this.items || []).length) {
             return;
         }
 
-        let d = this.calculateDimensions();
+        const d = this.calculateDimensions();
         if ((index + 1) < d.itemsPerCol) {
             this.element.nativeElement.scrollTop = 0;
         } else if (((this.items || []).length - d.itemsPerCol) > 0 && ((this.items || []).length - d.itemsPerCol) < index) {
@@ -188,7 +188,7 @@ export class VirtualScrollComponent implements OnInit, OnDestroy, OnChanges, Aft
     }
 
     public getHighlightedOption(): IOption {
-        let index = this.items.findIndex(p => p.isHilighted);
+        const index = this.items.findIndex(p => p.isHilighted);
         if (index > -1) {
             return this.items[index];
         }
@@ -196,7 +196,7 @@ export class VirtualScrollComponent implements OnInit, OnDestroy, OnChanges, Aft
     }
 
     public getPreviousHilightledOption(): IOption {
-        let index = this.items.findIndex(p => p.isHilighted);
+        const index = this.items.findIndex(p => p.isHilighted);
         if (index > 0) {
             return this.items[index - 1];
         } else {
@@ -205,7 +205,7 @@ export class VirtualScrollComponent implements OnInit, OnDestroy, OnChanges, Aft
     }
 
     public getNextHilightledOption(): IOption {
-        let index = this.items.findIndex(p => p.isHilighted);
+        const index = this.items.findIndex(p => p.isHilighted);
         if (index < this.items.length) {
             return this.items[index + 1];
         } else {
@@ -216,7 +216,7 @@ export class VirtualScrollComponent implements OnInit, OnDestroy, OnChanges, Aft
     private countItemsPerRow() {
         let offsetTop;
         let itemsPerRow;
-        let children = this.contentElementRef?.nativeElement.children;
+        const children = this.contentElementRef?.nativeElement.children;
         for (itemsPerRow = 0; itemsPerRow < children.length; itemsPerRow++) {
             if (offsetTop !== undefined && offsetTop !== children[itemsPerRow].offsetTop) {
                 break;
@@ -227,13 +227,13 @@ export class VirtualScrollComponent implements OnInit, OnDestroy, OnChanges, Aft
     }
 
     private calculateDimensions() {
-        let el = this.element?.nativeElement;
-        let content = this.contentElementRef?.nativeElement;
+        const el = this.element?.nativeElement;
+        const content = this.contentElementRef?.nativeElement;
 
-        let items = this.items || [];
-        let itemCount = items.length === 0 ? 2 : this.items.length;
-        let viewWidth = el.clientWidth - this.scrollbarWidth;
-        let viewHeight = el.clientHeight - this.scrollbarHeight;
+        const items = this.items || [];
+        const itemCount = items.length === 0 ? 2 : this.items.length;
+        const viewWidth = el.clientWidth - this.scrollbarWidth;
+        const viewHeight = el.clientHeight - this.scrollbarHeight;
 
         let contentDimensions;
         if (this.childWidth === undefined || this.childHeight === undefined) {
@@ -242,12 +242,12 @@ export class VirtualScrollComponent implements OnInit, OnDestroy, OnChanges, Aft
                 height: viewHeight
             };
         }
-        let childWidth = this.childWidth || contentDimensions.width;
-        let childHeight = this.childHeight || contentDimensions.height;
+        const childWidth = this.childWidth || contentDimensions.width;
+        const childHeight = this.childHeight || contentDimensions.height;
 
         let itemsPerRow = Math.max(1, this.countItemsPerRow());
-        let itemsPerRowByCalc = Math.max(1, Math.floor(viewWidth / childWidth));
-        let itemsPerCol = Math.max(1, Math.floor(viewHeight / childHeight));
+        const itemsPerRowByCalc = Math.max(1, Math.floor(viewWidth / childWidth));
+        const itemsPerCol = Math.max(1, Math.floor(viewHeight / childHeight));
         if (itemsPerCol === 1 && Math.floor(el.scrollTop / this.scrollHeight * itemCount) + itemsPerRowByCalc >= itemCount) {
             itemsPerRow = itemsPerRowByCalc;
         }
@@ -270,24 +270,24 @@ export class VirtualScrollComponent implements OnInit, OnDestroy, OnChanges, Aft
     }
 
     private calculateItems() {
-        let el = this.element?.nativeElement;
+        const el = this.element?.nativeElement;
 
-        let d = this.calculateDimensions();
-        let items = this.items || [];
+        const d = this.calculateDimensions();
+        const items = this.items || [];
         this.scrollHeight = d.childHeight * d.itemCount / d.itemsPerRow;
         if (this.element?.nativeElement.scrollTop > this.scrollHeight) {
             this.element.nativeElement.scrollTop = this.scrollHeight;
         }
-        let indexByScrollTop = el.scrollTop / this.scrollHeight * d.itemCount / d.itemsPerRow;
-        let end = Math.min(d.itemCount, Math.ceil(indexByScrollTop) * d.itemsPerRow + d.itemsPerRow * (d.itemsPerCol + 1));
+        const indexByScrollTop = el.scrollTop / this.scrollHeight * d.itemCount / d.itemsPerRow;
+        const end = Math.min(d.itemCount, Math.ceil(indexByScrollTop) * d.itemsPerRow + d.itemsPerRow * (d.itemsPerCol + 1));
 
         let maxStartEnd = end;
         const modEnd = end % d.itemsPerRow;
         if (modEnd) {
             maxStartEnd = end + d.itemsPerRow - modEnd;
         }
-        let maxStart = Math.max(0, maxStartEnd - d.itemsPerCol * d.itemsPerRow - d.itemsPerRow);
-        let start = Math.min(maxStart, Math.floor(indexByScrollTop) * d.itemsPerRow);
+        const maxStart = Math.max(0, maxStartEnd - d.itemsPerCol * d.itemsPerRow - d.itemsPerRow);
+        const start = Math.min(maxStart, Math.floor(indexByScrollTop) * d.itemsPerRow);
         this.topPadding = d.childHeight * Math.ceil(start / d.itemsPerRow);
         if (start !== this.previousStart || end !== this.previousEnd) {
 

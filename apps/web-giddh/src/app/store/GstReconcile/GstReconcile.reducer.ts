@@ -82,9 +82,9 @@ export function GstReconcileReducer(state: GstReconcileState = initialState, act
                 isGstReconcileInvoiceSuccess: false
             };
 
-        case GST_RECONCILE_ACTIONS.GST_RECONCILE_INVOICE_RESPONSE:
-            let response: BaseResponse<GstReconcileInvoiceResponse, GstReconcileInvoiceRequest> = action.payload;
-            let newState: GstReconcileState = _.cloneDeep(state);
+        case GST_RECONCILE_ACTIONS.GST_RECONCILE_INVOICE_RESPONSE: {
+            const response: BaseResponse<GstReconcileInvoiceResponse, GstReconcileInvoiceRequest> = action.payload;
+            const newState: GstReconcileState = _.cloneDeep(state);
             newState.isGstReconcileInvoiceInProcess = false;
 
             if (response.status === 'success') {
@@ -171,7 +171,7 @@ export function GstReconcileReducer(state: GstReconcileState = initialState, act
 
             }
             return newState;
-
+        }
         default:
             return state;
     }

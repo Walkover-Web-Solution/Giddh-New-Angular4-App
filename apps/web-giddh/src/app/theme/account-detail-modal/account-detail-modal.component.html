@@ -83,11 +83,11 @@
                     </div>
 
                     <div class="modal-body pd-l2 pd-r2 clearfix">
-                        <h1 class="mr-b1" *ngIf="messageBody.type == 'Email'" style="margin-top: 15px">
+                        <h1 class="mr-b1" *ngIf="messageBody.type === 'Email'" style="margin-top: 15px">
                             {{ localeData?.enter_subject }}:
                         </h1>
                         <input
-                            *ngIf="messageBody.type == 'Email'"
+                            *ngIf="messageBody.type === 'Email'"
                             class="form-control mr-b1"
                             #subject
                             [(ngModel)]="messageBody.subject"

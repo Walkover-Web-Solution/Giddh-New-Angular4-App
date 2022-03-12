@@ -198,7 +198,7 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
             this.toaster.errorToast(this.localeData?.validations?.enter_url, this.localeData?.validation);
             return;
         }
-        
+
         this.settingsTriggersService.CreateTrigger(dataToSave).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.showToaster(this.commonLocaleData?.app_messages?.trigger_created, response);
         });
@@ -317,7 +317,7 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
      * @param {Function} successCallback Callback to carry out further operation
      * @memberof SettingTriggerComponent
      */
-    public onAccountSearchQueryChanged(query: string, page: number = 1, successCallback?: Function): void {
+    public onAccountSearchQueryChanged(query: string, page: number = 1, successCallback?: (...args: any[]) => any): void {
         this.accountsSearchResultsPaginationData.query = query;
         if (!this.preventDefaultScrollApiCall &&
             (query || (this.defaultAccountSuggestions && this.defaultAccountSuggestions.length === 0) || successCallback)) {
@@ -373,7 +373,7 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
      * @param {Function} successCallback Callback to carry out further operation
      * @memberof AdvanceSearchModelComponent
      */
-    public onGroupSearchQueryChanged(query: string, page: number = 1, successCallback?: Function): void {
+    public onGroupSearchQueryChanged(query: string, page: number = 1, successCallback?: (...args: any[]) => any): void {
         this.groupsSearchResultsPaginationData.query = query;
         if (!this.preventDefaultGroupScrollApiCall &&
             (query || (this.defaultGroupSuggestions && this.defaultGroupSuggestions.length === 0) || successCallback)) {
@@ -578,7 +578,7 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
         };
 
         this.showAllFilters();
-        
+
         setTimeout(() => {
             this.resetNewFormFields();
         }, 100);
@@ -611,7 +611,7 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
             this.getTriggers();
             this.toaster.successToast(successMessage, this.commonLocaleData?.app_success);
         } else {
-            this.toaster.errorToast(response?.message, response?.code);                
+            this.toaster.errorToast(response?.message, response?.code);
         }
     }
 }

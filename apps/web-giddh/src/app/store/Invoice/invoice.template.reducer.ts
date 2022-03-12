@@ -390,16 +390,16 @@ export function InvoiceTemplateReducer(state = initialState, action: CustomActio
             return Object.assign({}, state, initialState);
         }
         case INVOICE.TEMPLATE.GET_SAMPLE_TEMPLATES_RESPONSE: {
-            let nextState = _.cloneDeep(state);
-            let res: BaseResponse<CustomTemplateResponse[], string> = action.payload;
+            const nextState = _.cloneDeep(state);
+            const res: BaseResponse<CustomTemplateResponse[], string> = action.payload;
             if (res && res.status === 'success') {
                 nextState.sampleTemplates = res.body;
             }
             return Object.assign({}, state, nextState);
         }
         case INVOICE.TEMPLATE.GET_ALL_CREATED_TEMPLATES_RESPONSE: {
-            let nextState = _.cloneDeep(state);
-            let res: BaseResponse<CustomTemplateResponse[], string> = action.payload;
+            const nextState = _.cloneDeep(state);
+            const res: BaseResponse<CustomTemplateResponse[], string> = action.payload;
             if (res && res.status === 'success') {
                 nextState.customCreatedTemplates = _.sortBy(res.body, [(o) => !o.isDefault]);
                 nextState.hasInvoiceTemplatePermissions = true;
@@ -409,11 +409,11 @@ export function InvoiceTemplateReducer(state = initialState, action: CustomActio
             return Object.assign({}, state, nextState);
         }
         case INVOICE.TEMPLATE.SET_TEMPLATE_AS_DEFAULT_RESPONSE: {
-            let nextState = _.cloneDeep(state);
-            let res: BaseResponse<any, string> = action.payload;
+            const nextState = _.cloneDeep(state);
+            const res: BaseResponse<any, string> = action.payload;
             if (res?.status === 'success') {
-                let uniqName = res?.queryString?.templateUniqueName;
-                let indx = nextState.customCreatedTemplates.findIndex((template) => template.uniqueName === uniqName);
+                const uniqName = res?.queryString?.templateUniqueName;
+                const indx = nextState.customCreatedTemplates.findIndex((template) => template.uniqueName === uniqName);
                 if (indx > -1) {
                     if (res.body.type === 'voucher') {
                         nextState.customCreatedTemplates.forEach((tem) => tem.isDefaultForVoucher = false);
@@ -428,11 +428,11 @@ export function InvoiceTemplateReducer(state = initialState, action: CustomActio
             return state;
         }
         case INVOICE.TEMPLATE.DELETE_TEMPLATE_RESPONSE: {
-            let nextState = _.cloneDeep(state);
-            let res: BaseResponse<any, string> = action.payload;
+            const nextState = _.cloneDeep(state);
+            const res: BaseResponse<any, string> = action.payload;
             if (res?.status === 'success') {
-                let uniqName = res?.queryString?.templateUniqueName;
-                let indx = nextState.customCreatedTemplates.findIndex((template) => template.uniqueName === uniqName);
+                const uniqName = res?.queryString?.templateUniqueName;
+                const indx = nextState.customCreatedTemplates.findIndex((template) => template.uniqueName === uniqName);
                 if (indx > -1) {
                     nextState.customCreatedTemplates.splice(indx, 1);
                 }

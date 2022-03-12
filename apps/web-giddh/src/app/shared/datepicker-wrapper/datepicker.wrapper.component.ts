@@ -25,8 +25,8 @@ export class DatepickerWrapperComponent implements OnInit, OnChanges {
     @Input() public showWeekNumbers: boolean;
     @Input() public showISOWeekNumbers: boolean;
     @Input() public showDropdowns: boolean;
-    @Input() public isInvalidDate: Function;
-    @Input() public isCustomDate: Function;
+    @Input() public isInvalidDate: (...args: any[]) => any;
+    @Input() public isCustomDate: (...args: any[]) => any;
     @Input() public showClearButton: boolean;
     @Input() public ranges: any;
     @Input() public opens: string;

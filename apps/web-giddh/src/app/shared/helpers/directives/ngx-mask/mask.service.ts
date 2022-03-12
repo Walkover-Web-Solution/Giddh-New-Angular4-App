@@ -33,7 +33,8 @@ export class MaskService extends MaskApplierService {
         inputValue: string,
         maskExpression: string,
         position: number = 0,
-        cb: Function = () => {
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
+        cb: (...args: any[]) => any = () => {
         }
     ): string {
         if (!maskExpression) {
@@ -94,7 +95,8 @@ export class MaskService extends MaskApplierService {
         return result + (this.maskExpression === 'IP' ? prefNmask : prefNmask.slice(resLen));
     }
 
-    public applyValueChanges(position: number = 0, cb: Function = () => {
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    public applyValueChanges(position: number = 0, cb: (...args: any[]) => any = () => {
     }): void {
         this._formElement.value = this.applyMask(this._formElement.value, this.maskExpression, position, cb);
         if (this._formElement === this.document.activeElement) {

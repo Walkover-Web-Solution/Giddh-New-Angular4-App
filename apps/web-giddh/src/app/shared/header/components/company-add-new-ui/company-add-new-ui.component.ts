@@ -129,7 +129,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
         if (this._generalService.createNewCompany) {
             this.company = this._generalService.createNewCompany;
             if (this.company.contactNo.toString().includes('-')) {
-                let contact = this.company.contactNo.split('-');
+                const contact = this.company.contactNo.split('-');
                 this.company.contactNo = contact[1];
             }
             this.isMobileNumberValid = true;
@@ -150,7 +150,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
                 this.store.pipe(select(ss => ss.session.lastState), take(1)).subscribe(se => {
                     prevTab = se;
                 });
-                let stateDetailsRequest = new StateDetailsRequest();
+                const stateDetailsRequest = new StateDetailsRequest();
                 stateDetailsRequest.companyUniqueName = this.company?.uniqueName;
                 stateDetailsRequest.lastState = this.isNewUser ? 'welcome' : 'onboarding';
                 this._generalService.companyUniqueName = this.company?.uniqueName;
@@ -244,7 +244,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
         this.socketCompanyRequest.utm_campaign = this._generalService.getUtmParameter('utm_campaign');
         this.socketCompanyRequest.utm_term = this._generalService.getUtmParameter('utm_term');
         this.socketCompanyRequest.utm_content = this._generalService.getUtmParameter('utm_content');
-        this._companyService.SocketCreateCompany(this.socketCompanyRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this._companyService.SocketCreateCompany(this.socketCompanyRequest).pipe(takeUntil(this.destroyed$)).subscribe(() => {
             this.closeCompanyModal.emit();
             this._route.navigate(['welcome']);
         });
@@ -295,6 +295,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
             this.isLoggedInWithSocialAccount$.subscribe((val) => {
                 if (val) {
                     this.socialAuthService.signOut().then().catch((err) => {
+                        console.error(err);
                     });
                     this.store.dispatch(this._loginAction.ClearSession());
                     this.store.dispatch(this._loginAction.socialLogoutAttempt());
@@ -330,7 +331,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
     public checkMobileNo(ele) {
         try {
             if (ele) {
-                let parsedNumber = parsePhoneNumberFromString('+' + this.company.phoneCode + ele.value, this.company.country as CountryCode);
+                const parsedNumber = parsePhoneNumberFromString('+' + this.company.phoneCode + ele.value, this.company.country as CountryCode);
                 if (parsedNumber.isValid()) {
                     ele.classList.remove('error-box');
                     this.isMobileNumberValid = true;
@@ -354,7 +355,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
 
     public selectCountry(event: IOption) {
         if (event) {
-            let phoneCode = event.additional;
+            const phoneCode = event.additional;
             this.company.phoneCode = phoneCode;
             this.company.baseCurrency = this.countryCurrency[event.value];
         }
@@ -362,19 +363,17 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
 
     private getRandomString(comnanyName, city) {
         // tslint:disable-next-line:one-variable-per-declaration
-        let d, dateString, randomGenerate, strings;
         comnanyName = this.removeSpecialCharacters(comnanyName);
         city = this.removeSpecialCharacters(city);
-        d = new Date();
-        dateString = d.getTime().toString();
-        randomGenerate = this.getSixCharRandom();
-        strings = [comnanyName, city, dateString, randomGenerate];
+        const d = new Date();
+        const dateString = d.getTime().toString();
+        const randomGenerate = this.getSixCharRandom();
+        const strings = [comnanyName, city, dateString, randomGenerate];
         return strings.join('');
     }
 
     private removeSpecialCharacters(str) {
-        let finalString;
-        finalString = str.replace(/[^a-zA-Z0-9]/g, '');
+        const finalString = str.replace(/[^a-zA-Z0-9]/g, '');
         return finalString.substr(0, 6).toLowerCase();
     }
 
@@ -409,7 +408,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
                 }
                 this.getCurrency();
             } else {
-                let countryRequest = new CountryRequest();
+                const countryRequest = new CountryRequest();
                 countryRequest.formName = 'onboarding';
                 this.store.dispatch(this.commonActions.GetCountry(countryRequest));
             }
@@ -461,7 +460,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
             branchUniqueName: this.entityDetails?.uniqueName,
             name: this.company.name,
             alias: this.company.nameAlias
-        }).pipe(takeUntil(this.destroyed$)).subscribe(data => {
+        }).pipe(takeUntil(this.destroyed$)).subscribe(() => {
             this.store.dispatch(this.companyActions.userStoreCreateBranch(null));
             this.store.dispatch(this.companyActions.removeCompanyCreateSession());
             this.closeCompanyModal.emit();

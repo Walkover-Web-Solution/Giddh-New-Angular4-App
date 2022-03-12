@@ -48,7 +48,8 @@ export class AuthService {
                         user.provider = key;
                         this._user = user;
                         this._authState.next(user);
-                    }).catch((err) => {
+                    // eslint-disable-next-line @typescript-eslint/no-empty-function
+                    }).catch(() => {
 
                     });
                 }
@@ -70,7 +71,7 @@ export class AuthService {
                     });
                 } else {
                     providerObject.initialize().then(() => {
-                        let obj = this.providers.get(providerId);
+                        const obj = this.providers.get(providerId);
                         if (obj.isInitialize) {
                             obj.signIn().then((u: SocialUser) => {
                                 u.provider = providerId;
@@ -101,7 +102,7 @@ export class AuthService {
                     this._authState.next(null);
                     resolve();
                     this.loadingService.hide();
-                }).catch((err) => {
+                }).catch(() => {
                     this._authState.next(null);
                     this.loadingService.hide();
                 });

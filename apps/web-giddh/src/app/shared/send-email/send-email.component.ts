@@ -27,9 +27,6 @@ export class SendEmailComponent implements OnInit {
     /** Holds payment voucher type */
     public paymentVoucherType: string = VoucherTypeEnum.payment;
 
-    constructor() {
-    }
-
     /**
      * Initializes the component
      *
@@ -49,7 +46,7 @@ export class SendEmailComponent implements OnInit {
      */
     public selectDownloadOptions(event: any): void {
         if (event) {
-            let value = event.source?.value;
+            const value = event.source?.value;
             if (event.checked) {
                 this.downloadCopy.push(value);
             } else {

@@ -77,7 +77,7 @@ export class KeyboardShortcutDirective {
         } else if (typeof this.keyboardShortcut === 'string') {
             key = this.keyboardShortcut;
         } else {
-            let keys = Object.keys(this.keyboardShortcut).filter(p => this.keyboardShortcut[p]);
+            const keys = Object.keys(this.keyboardShortcut).filter(p => this.keyboardShortcut[p]);
             this.matchArray(event, keys);
             return;
         }
@@ -85,14 +85,14 @@ export class KeyboardShortcutDirective {
     }
 
     private matchArray(event: KeyboardEvent, shortcuts: string[]) {
-        for (let key of shortcuts) {
+        for (const key of shortcuts) {
             this.matchSingle(event, key);
         }
     }
 
     private matchSingle(event: KeyboardEvent, key: string) {
         if (key.includes('+')) {
-            let keys = key.split('+');
+            const keys = key.split('+');
             const match = keys.every(k => (controlKeyMaps[k] && event[controlKeyMaps[k]]) || keyMaps[k] === event.which);
             if (match) {
                 this.onMatch(key);

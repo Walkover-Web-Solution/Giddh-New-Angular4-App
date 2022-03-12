@@ -1,7 +1,6 @@
 import { Component, EventEmitter, OnInit, Output, HostListener, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { GeneralActions } from 'apps/web-giddh/src/app/actions/general/general.actions';
-import { CALENDLY_URL } from 'apps/web-giddh/src/app/app.constant';
 import { AuthenticationService } from 'apps/web-giddh/src/app/services/authentication.service';
 import { AppState } from 'apps/web-giddh/src/app/store';
 import { ReplaySubject } from 'rxjs';
@@ -77,8 +76,8 @@ export class AsideHelpSupportComponent implements OnInit, OnDestroy {
     private getElectronAppVersion(): void {
         this.authService.GetElectronAppVersion().pipe(takeUntil(this.destroyed$)).subscribe((res: string) => {
             if (res && typeof res === 'string') {
-                let version = res.split('files')[0];
-                let versNum = version.split(' ')[1];
+                const version = res.split('files')[0];
+                const versNum = version.split(' ')[1];
                 this.apkVersion = versNum;
             }
         });
@@ -90,7 +89,7 @@ export class AsideHelpSupportComponent implements OnInit, OnDestroy {
      * @param {KeyboardEvent} event
      * @memberof AsideHelpSupportComponent
      */
-    @HostListener('document:keydown.escape', ['$event']) onKeydownHandler(event: KeyboardEvent) {
+    @HostListener('document:keydown.escape', ['$event']) onKeydownHandler() {
         this.closeAsidePane();
     }
 
@@ -103,8 +102,8 @@ export class AsideHelpSupportComponent implements OnInit, OnDestroy {
     private getElectronMacAppVersion(): void {
         this.authService.getElectronMacAppVersion().pipe(takeUntil(this.destroyed$)).subscribe((res: string) => {
             if (res && typeof res === 'string') {
-                let version = res.split('files')[0];
-                let versNum = version.split(' ')[1];
+                const version = res.split('files')[0];
+                const versNum = version.split(' ')[1];
                 this.macAppVersion = versNum;
             }
         });

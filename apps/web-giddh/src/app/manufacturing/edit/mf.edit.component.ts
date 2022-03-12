@@ -571,7 +571,7 @@ export class MfEditComponent implements OnInit, OnDestroy {
      * @param {Function} successCallback Callback to carry out further operation
      * @memberof MfEditComponent
      */
-    public onExpenseAccountSearchQueryChanged(query: string, page: number = 1, successCallback?: Function): void {
+    public onExpenseAccountSearchQueryChanged(query: string, page: number = 1, successCallback?: (...args: any[]) => any): void {
         this.expenseAccountsSearchResultsPaginationData.query = query;
         if (!this.preventExpenseDefaultScrollApiCall &&
             (query || (this.defaultExpenseAccountSuggestions && this.defaultExpenseAccountSuggestions.length === 0) || successCallback)) {
@@ -655,7 +655,7 @@ export class MfEditComponent implements OnInit, OnDestroy {
      * @param {Function} successCallback Callback to carry out further operation
      * @memberof MfEditComponent
      */
-    public onLiabilitiesAssetAccountSearchQueryChanged(query: string, page: number = 1, successCallback?: Function): void {
+    public onLiabilitiesAssetAccountSearchQueryChanged(query: string, page: number = 1, successCallback?: (...args: any[]) => any): void {
         this.liabilitiesAssetAccountsSearchResultsPaginationData.query = query;
         if (!this.preventLiabilitiesAssetDefaultScrollApiCall &&
             (query || (this.defaultLiabilitiesAssetAccountSuggestions && this.defaultLiabilitiesAssetAccountSuggestions.length === 0) || successCallback)) {

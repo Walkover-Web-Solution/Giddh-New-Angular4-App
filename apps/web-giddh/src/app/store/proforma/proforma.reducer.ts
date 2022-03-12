@@ -71,7 +71,7 @@ export function ProformaReducer(state: ProformaState = initialState, action: Cus
         }
 
         case PROFORMA_ACTIONS.GENERATE_PROFORMA_RESPONSE: {
-            let response: BaseResponse<VoucherClass, VoucherClass> = action.payload;
+            const response: BaseResponse<VoucherClass, VoucherClass> = action.payload;
             if (response.status === 'success') {
                 let no: string;
                 switch (response.request.voucherDetails.voucherType) {
@@ -109,7 +109,7 @@ export function ProformaReducer(state: ProformaState = initialState, action: Cus
         }
 
         case PROFORMA_ACTIONS.GET_ALL_PROFORMA_RESPONSE: {
-            let response: BaseResponse<ProformaResponse, ProformaFilter> = action.payload;
+            const response: BaseResponse<ProformaResponse, ProformaFilter> = action.payload;
             return {
                 ...state,
                 getAllInProcess: false,
@@ -129,7 +129,7 @@ export function ProformaReducer(state: ProformaState = initialState, action: Cus
         }
 
         case PROFORMA_ACTIONS.GET_PROFORMA_DETAILS_RESPONSE: {
-            let response: BaseResponse<VoucherClass, ProformaGetRequest> = action.payload;
+            const response: BaseResponse<VoucherClass, ProformaGetRequest> = action.payload;
             return {
                 ...state,
                 isGetDetailsInProcess: false,
@@ -147,8 +147,8 @@ export function ProformaReducer(state: ProformaState = initialState, action: Cus
         }
 
         case PROFORMA_ACTIONS.UPDATE_PROFORMA_RESPONSE: {
-            let vouchers = { ...state.vouchers };
-            let result = action.payload as BaseResponse<any, VoucherClass>;
+            const vouchers = { ...state.vouchers };
+            const result = action.payload as BaseResponse<any, VoucherClass>;
             if (result.status === 'success') {
                 return {
                     ...state,
@@ -217,7 +217,7 @@ export function ProformaReducer(state: ProformaState = initialState, action: Cus
         }
 
         case PROFORMA_ACTIONS.GET_ESTIMATE_VERSIONS_RESPONSE: {
-            let res: BaseResponse<ProformaGetAllVersionsResponse, ProformaGetRequest> = action.payload;
+            const res: BaseResponse<ProformaGetAllVersionsResponse, ProformaGetRequest> = action.payload;
             return {
                 ...state,
                 activeVoucherVersions: res.status === 'success' ? res.body.results : [],

@@ -130,7 +130,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
 
         this.store.pipe(select(state => state.settings && state.settings.profile), takeUntil(this.destroyed$)).subscribe((profile) => {
             if (profile && !isEmpty(profile)) {
-                let companyInfo = cloneDeep(profile);
+                const companyInfo = cloneDeep(profile);
                 this.currentBranch = companyInfo.name;
                 this.currentBranchNameAlias = companyInfo.nameAlias;
             }
@@ -159,12 +159,12 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
                 this.showLoader = false;
             }
             if (companies && companies.length && branches) {
-                let companiesWithSuperAdminRole = [];
+                const companiesWithSuperAdminRole = [];
                 each(companies, (cmp) => {
                     each(cmp.userEntityRoles, (company) => {
                         if (company.entity.entity === 'COMPANY' && company.role.uniqueName === 'super_admin') {
                             if (branches?.length) {
-                                let existIndx = branches.findIndex((b) => b.uniqueName === cmp.uniqueName);
+                                const existIndx = branches.findIndex((b) => b.uniqueName === cmp.uniqueName);
                                 if (existIndx === -1) {
                                     companiesWithSuperAdminRole.push(cmp);
                                 }
@@ -256,9 +256,9 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
     public loadAddCompanyComponent(isUpdateMode?: boolean): void {
         this.store.dispatch(this.commonActions.resetCountry());
 
-        let viewContainerRef = this.companyadd.viewContainerRef;
+        const viewContainerRef = this.companyadd.viewContainerRef;
         viewContainerRef.clear();
-        let componentRef = viewContainerRef.createComponent(CompanyAddNewUiComponent);
+        const componentRef = viewContainerRef.createComponent(CompanyAddNewUiComponent);
         (componentRef.instance as CompanyAddNewUiComponent).createBranch = true;
         (componentRef.instance as CompanyAddNewUiComponent).isUpdateMode = isUpdateMode;
         (componentRef.instance as CompanyAddNewUiComponent).entityDetails = this.branchDetails;
@@ -307,16 +307,16 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
                 this.selectedCompaniesName.push(cmp);
             }
         } else {
-            let indx = this.selectedCompaniesUniquename.indexOf(cmp.uniqueName);
+            const indx = this.selectedCompaniesUniquename.indexOf(cmp.uniqueName);
             this.selectedCompaniesUniquename.splice(indx, 1);
-            let idx = this.selectedCompaniesName.indexOf(cmp);
+            const idx = this.selectedCompaniesName.indexOf(cmp);
             this.selectedCompaniesName.splice(idx, 1);
         }
         this.isAllCompaniesSelected();
     }
 
     public createBranches() {
-        let dataToSend = { childCompanyUniqueNames: this.selectedCompaniesUniquename };
+        const dataToSend = { childCompanyUniqueNames: this.selectedCompaniesUniquename };
         this.store.dispatch(this.settingsBranchActions.CreateBranches(dataToSend));
         this.hideAddBranchModal();
     }
@@ -344,7 +344,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     public getAllBranches() {
-        let branchFilterRequest = new BranchFilterRequest();
+        const branchFilterRequest = new BranchFilterRequest();
         branchFilterRequest.from = this.filters['from'];
         branchFilterRequest.to = this.filters['to'];
 
@@ -368,7 +368,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
 
     public setFilterDate(data) {
         if (data) {
-            let branchFilterRequest = new BranchFilterRequest();
+            const branchFilterRequest = new BranchFilterRequest();
             branchFilterRequest.from = moment(data[0]).format(GIDDH_DATE_FORMAT);
             branchFilterRequest.to = moment(data[1]).format(GIDDH_DATE_FORMAT);
 
@@ -539,7 +539,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
      * @param {Function} successCallback Callback to carry out futher operations
      * @memberof BranchComponent
      */
-    private loadAddresses(method: string, successCallback: Function): void {
+    private loadAddresses(method: string, successCallback: (...args: any[]) => any): void {
         this.settingsProfileService.getCompanyAddresses(method).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response && response.body && response.status === 'success') {
                 this.addressConfiguration.linkedEntities = this.settingsUtilityService.getFormattedCompanyAddresses(response.body.results).map(address => (
@@ -601,7 +601,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
         const isArchived = !this.branchStatusToUpdate?.isArchived;
         this.settingsBranchService.updateBranchStatus({ isArchived: isArchived }, this.branchStatusToUpdate?.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success") {
-                let branchFilterRequest = new BranchFilterRequest();
+                const branchFilterRequest = new BranchFilterRequest();
                 branchFilterRequest.from = this.filters['from'];
                 branchFilterRequest.to = this.filters['to'];
                 this.store.dispatch(this.settingsBranchActions.GetALLBranches(branchFilterRequest));

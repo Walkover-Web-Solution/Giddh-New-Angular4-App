@@ -29,13 +29,11 @@ const getWindowScroll = () => {
             scrollLeft: pageXOffset
         };
     } else {
-        let sx;
-        let sy;
         const d = document;
         const r = d.documentElement;
         const b = d.body;
-        sx = r.scrollLeft || b.scrollLeft || 0;
-        sy = r.scrollTop || b.scrollTop || 0;
+        const sx = r.scrollLeft || b.scrollLeft || 0;
+        const sy = r.scrollTop || b.scrollTop || 0;
         return {
             scrollTop: sy,
             scrollLeft: sx
@@ -455,7 +453,7 @@ export class VsForDirective implements OnChanges, AfterViewInit, OnDestroy {
             return res;
         });
         this.sizesCumulative.push(sum);
-        let size1 = this.sizesCumulative[itemIndex];
+        const size1 = this.sizesCumulative[itemIndex];
         this.parent.scrollTop = size1;
         this.updateInnerCollection();
     }

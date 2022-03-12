@@ -284,7 +284,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
         this.detectChanges();
     }
 
-    public removeInvoice(invoice: any[]) {
+    public removeInvoice() {
         this.confirmationFlag = 'closeConfirmation';
 
         let removeInvoice = this.localeData?.remove_invoice;

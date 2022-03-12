@@ -132,7 +132,7 @@ export class SignupComponent implements OnInit, OnDestroy {
         });
         this.signUpWithPasswdForm = this.fb.group({
             email: ["", [Validators.required, Validators.email]],
-            password: ["", [Validators.required, Validators.minLength(8), Validators.maxLength(20), Validators.pattern("^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$^+=!*()@%&]).{8,20}$")]]
+            password: ["", [Validators.required, Validators.minLength(8), Validators.maxLength(20), Validators.pattern("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[#$^+=!*()@%&]).{8,20}$")]]
         });
         this.signupVerifyForm = this.fb.group({
             email: ["", [Validators.required, Validators.email]],
@@ -189,7 +189,7 @@ export class SignupComponent implements OnInit, OnDestroy {
     }
 
     public LoginWithEmail(email: string) {
-        let data = new SignupwithEmaillModel();
+        const data = new SignupwithEmaillModel();
         this.retryCount++;
         data.email = email;
         data.retryCount = this.retryCount;
@@ -197,14 +197,14 @@ export class SignupComponent implements OnInit, OnDestroy {
     }
 
     public VerifyEmail(email: string, code: string) {
-        let data = new VerifyEmailModel();
+        const data = new VerifyEmailModel();
         data.email = email;
         data.verificationCode = code;
         this.store.dispatch(this.loginAction.VerifyEmailRequest(data));
     }
 
     public VerifyCode(mobile: string, code: string) {
-        let data = new VerifyMobileModel();
+        const data = new VerifyMobileModel();
         data.countryCode = Number(this.selectedCountry);
         data.mobileNumber = mobile;
         data.oneTimePassword = code;
@@ -214,7 +214,7 @@ export class SignupComponent implements OnInit, OnDestroy {
     public verifyTwoWayCode() {
         let user: VerifyEmailResponseModel;
         this.userDetails$.pipe(take(1)).subscribe(p => user = p);
-        let data = new VerifyMobileModel();
+        const data = new VerifyMobileModel();
         data.countryCode = Number(user.countryCode);
         data.mobileNumber = user.contactNumber;
         data.oneTimePassword = this.twoWayOthForm.value.otp;
@@ -250,9 +250,8 @@ export class SignupComponent implements OnInit, OnDestroy {
         this.hideTowWayAuthModal();
     }
 
-    // tslint:disable-next-line:no-empty
-    public getOtp(mobileNumber: string, code: string) {
-        let data: SignupWithMobile = new SignupWithMobile();
+    public getOtp(mobileNumber: string) {
+        const data: SignupWithMobile = new SignupWithMobile();
         data.mobileNumber = mobileNumber;
         data.countryCode = Number(this.selectedCountry);
         this.store.dispatch(this.loginAction.SignupWithMobileRequest(data));
@@ -290,7 +289,7 @@ export class SignupComponent implements OnInit, OnDestroy {
      */
     public setCountryCode(event: IOption) {
         if (event.value) {
-            let country = this.countryCodeList.filter((obj) => obj.value === event.value);
+            const country = this.countryCodeList.filter((obj) => obj.value === event.value);
             this.selectedCountry = country[0].label;
         }
     }
@@ -301,13 +300,13 @@ export class SignupComponent implements OnInit, OnDestroy {
      * @memberof SignupComponent
      */
     public generateRandomBanner() {
-        let bannerArr = ["1", "2", "3"];
-        let selectedSlide = bannerArr[Math.floor(Math.random() * bannerArr.length)];
+        const bannerArr = ["1", "2", "3"];
+        const selectedSlide = bannerArr[Math.floor(Math.random() * bannerArr.length)];
         this.selectedBanner = "slide" + selectedSlide;
     }
 
     public SignupWithPasswd(model: FormGroup) {
-        let ObjToSend = model.value;
+        const ObjToSend = model.value;
         if (ObjToSend) {
             this.store.dispatch(this.loginAction.SignupWithPasswdRequest(ObjToSend));
         }
