@@ -304,7 +304,7 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
             let model: DownloadVoucherRequest = {
                 voucherType: this.selectedInvoice.voucherType,
                 voucherNumber: [this.selectedInvoice.voucherNumber],
-                typeOfInvoice: invoiceCopy,
+                copyTypes: invoiceCopy,
                 uniqueName: this.selectedInvoice.voucherUniqueName
             };
 
