@@ -890,7 +890,7 @@
                                         >
                                         <span
                                             class="sp-rupees d-flex justify-content-end"
-                                            *ngIf="isMulticurrencyAccount"
+                                            *ngIf="isMulticurrencyAccount && voucherApiVersion !== 2"
                                         >
                                             <amount-field
                                                 [amount]="
@@ -2984,7 +2984,8 @@
                                                 invoiceForm?.controls['message2']?.errors?.maxlength)
                                         "
                                     >
-                                        <span class="max-character-label">Characters left:&nbsp;</span
+                                        <span class="max-character-label"
+                                            >{{ commonLocaleData?.app_characters_left }}:&nbsp;</span
                                         ><span class="max-character-value">{{
                                             200 - invFormData?.templateDetails?.other?.message2?.length
                                         }}</span>

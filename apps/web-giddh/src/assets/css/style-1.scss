@@ -3002,3 +3002,8 @@ td.mat-footer-cell {
         }
     }
 }
+.voucher-preview-edit {
+    .popover {
+        z-index: 1000 !important;
+    }
+}

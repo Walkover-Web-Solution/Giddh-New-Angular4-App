@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter, Input, ChangeDetectorRef, OnDestroy } from '@angular/core';
+import { Component, Output, EventEmitter, Input, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { PurchaseOrderService } from '../../services/purchase-order.service';
 import { ToasterService } from '../../services/toaster.service';
 import { PAGINATION_LIMIT } from '../../app.constant';
@@ -14,8 +14,7 @@ import { cloneDeep } from '../../lodash-optimized';
     templateUrl: './revision-history.component.html',
     styleUrls: ['./revision-history.component.scss']
 })
-
-export class RevisionHistoryComponent implements OnInit, OnDestroy {
+export class RevisionHistoryComponent implements OnDestroy {
     /* Taking PO details as input */
     @Input() public purchaseOrder: any;
     /* Taking voucher details as input */
@@ -58,27 +57,6 @@ export class RevisionHistoryComponent implements OnInit, OnDestroy {
         private invoiceService: InvoiceService
         ) {
 
-    }
-
-    /**
-     * Initializes the component
-     *
-     * @memberof RevisionHistoryComponent
-     */
-    public ngOnInit(): void {
-        if (this.selectedVoucher) {
-            this.purchaseVersionsGetRequest.companyUniqueName = this.companyUniqueName;
-            this.purchaseVersionsGetRequest.accountUniqueName = this.selectedVoucher.account?.uniqueName;
-            this.purchaseVersionsPostRequest.uniqueName = this.selectedVoucher.uniqueName;
-            this.getVoucherVersions(true);
-        }
-
-        if (this.purchaseOrder) {
-            this.purchaseVersionsGetRequest.companyUniqueName = this.purchaseOrder.company?.uniqueName;
-            this.purchaseVersionsGetRequest.accountUniqueName = this.purchaseOrder.account?.uniqueName;
-            this.purchaseVersionsPostRequest.purchaseNumber = this.purchaseOrder.number;
-            this.getPurchaseOrderVersions(true);
-        }
     }
 
     /**
@@ -253,6 +231,20 @@ export class RevisionHistoryComponent implements OnInit, OnDestroy {
     public translationComplete(event: any): void {
         if (event) {
             this.translationLoaded = true;
+
+            if (this.selectedVoucher) {
+                this.purchaseVersionsGetRequest.companyUniqueName = this.companyUniqueName;
+                this.purchaseVersionsGetRequest.accountUniqueName = this.selectedVoucher.account?.uniqueName;
+                this.purchaseVersionsPostRequest.uniqueName = this.selectedVoucher.uniqueName;
+                this.getVoucherVersions(true);
+            }
+    
+            if (this.purchaseOrder) {
+                this.purchaseVersionsGetRequest.companyUniqueName = this.purchaseOrder.company?.uniqueName;
+                this.purchaseVersionsGetRequest.accountUniqueName = this.purchaseOrder.account?.uniqueName;
+                this.purchaseVersionsPostRequest.purchaseNumber = this.purchaseOrder.number;
+                this.getPurchaseOrderVersions(true);
+            }
         }
     }
 

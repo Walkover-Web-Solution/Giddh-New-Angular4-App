@@ -217,7 +217,6 @@ export const FILE_ATTACHMENT_TYPE = {
     UNSUPPORTED: ['doc', 'docx', 'xls', 'xlsx']
 };
 
-
 /** Error message to display if the stock is invalid */
 export const INVALID_STOCK_ERROR_MESSAGE = 'Both Unit and Rate fields are mandatory if you provide data for either of them.';
 
@@ -238,15 +237,6 @@ export const HIGH_RATE_FIELD_PRECISION = 16;
 
 /** Regex to remove trailing zeros from a string representation of number */
 export const REMOVE_TRAILING_ZERO_REGEX = /^([\d,' ]*)$|^([\d,' ]*)\.0*$|^([\d,' ]+\.[0-9]*?)0*$/;
-
-/* This plan unique name will be used as a default plan while creating new company/branch */
-export let DEFAULT_SIGNUP_TRIAL_PLAN = "";
-
-if (PRODUCTION_ENV || isElectron) {
-    DEFAULT_SIGNUP_TRIAL_PLAN = "e6v1566224240273";
-} else {
-    DEFAULT_SIGNUP_TRIAL_PLAN = "xoh1591185630174";
-}
 
 /** Type of voucher that is adjusted */
 export enum AdjustedVoucherType {
