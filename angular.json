@@ -224,7 +224,7 @@
                     }
                 },
                 "lint": {
-                    "executor": "@nrwl/linter:eslint",
+                    "builder": "@nrwl/linter:eslint",
                     "options": {
                         "lintFilePatterns": [
                             "libs/core/base/src/**/*.ts",
@@ -238,6 +238,29 @@
                             "libs/utils/**/*.ts",
                             "libs/utils/*.ts"
                         ]
+                    }
+                }
+            },
+            "tags": []
+        },
+        "ui-giddh-loader": {
+            "projectType": "library",
+            "root": "libs/ui/giddh-loader",
+            "sourceRoot": "libs/ui/giddh-loader/src",
+            "prefix": "giddh",
+            "architect": {
+                "test": {
+                    "builder": "@nrwl/jest:jest",
+                    "outputs": ["coverage/libs/ui/giddh-loader"],
+                    "options": {
+                        "jestConfig": "libs/ui/giddh-loader/jest.config.js",
+                        "passWithNoTests": true
+                    }
+                },
+                "lint": {
+                    "builder": "@nrwl/linter:eslint",
+                    "options": {
+                        "lintFilePatterns": ["libs/ui/giddh-loader/src/**/*.ts", "libs/ui/giddh-loader/src/**/*.html"]
                     }
                 }
             },
@@ -478,12 +501,9 @@
                     }
                 },
                 "lint": {
-                    "executor": "@nrwl/linter:eslint",
+                    "builder": "@nrwl/linter:eslint",
                     "options": {
-                        "lintFilePatterns": [
-                            "apps/web-giddh/src/**/*.ts",
-                            "apps/web-giddh/src/**/*.html"
-                        ]
+                        "lintFilePatterns": ["apps/web-giddh/src/**/*.ts", "apps/web-giddh/src/**/*.html"]
                     },
                     "outputs": ["{options.outputFile}"]
                 },

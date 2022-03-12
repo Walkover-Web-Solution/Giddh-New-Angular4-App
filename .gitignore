@@ -160,3 +160,5 @@ xplat/**/*.ngsummary.json
 
 #
 .env
+
+.angular

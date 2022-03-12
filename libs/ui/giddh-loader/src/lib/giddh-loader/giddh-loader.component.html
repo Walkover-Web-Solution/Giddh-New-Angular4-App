@@ -1,0 +1,17 @@
+<ng-container *ngIf="loaderType === loaderTypes.IndefiniteHorizontalBarLoader">
+    <div class="load-bar-wrap" [ngClass]="cssClass">
+        <div class="load-bar">
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+        </div>
+    </div>
+</ng-container>
+<ng-container *ngIf="loaderType === loaderTypes.IndefiniteCircularLoader">
+    <div class="no-data mr-t2 loader-main" [ngClass]="cssClass">
+        <div class="spinner2">
+            <div class="cube1"></div>
+            <div class="cube2"></div>
+        </div>
+    </div>
+</ng-container>

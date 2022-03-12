@@ -11,20 +11,18 @@
         "target": "es5",
         "typeRoots": ["node_modules/@types"],
         "module": "esnext",
-        "lib": [
-            "esnext",
-            "dom"
-        ],
+        "lib": ["esnext", "dom"],
         "skipLibCheck": true,
         "skipDefaultLibCheck": true,
         "baseUrl": ".",
         // TODO: Uncomment below line
         // "strict": true,
         "paths": {
+            "@giddh/ui/giddh-loader": ["libs/ui/giddh-loader/src/index.ts"],
+            "@giddh/core": ["libs/core/index.ts"],
             "@giddh/core/base": ["libs/core/base/index.ts"],
             "@giddh/core/models": ["libs/core/models/index.ts"],
             "@giddh/core/services": ["libs/core/services/index.ts"],
-            "@giddh/core": ["libs/core/index.ts"],
             "@giddh/utils": ["libs/utils/index.ts"]
         }
     },

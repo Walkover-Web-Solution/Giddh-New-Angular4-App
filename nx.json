@@ -1,5 +1,5 @@
 {
-    "npmScope": "giddh-workspaces",
+    "npmScope": "giddh",
     "implicitDependencies": {
         "angular.json": "*",
         "package.json": {
@@ -21,12 +21,7 @@
         "default": {
             "runner": "@nrwl/nx-cloud",
             "options": {
-                "cacheableOperations": [
-                    "build",
-                    "test",
-                    "lint",
-                    "e2e"
-                ],
+                "cacheableOperations": ["build", "test", "lint", "e2e"],
                 "accessToken": "MDQ1MjA2M2YtNjgxNy00NWQ0LWE2ODItMGFiZWIxY2Y4MTdjfHJlYWQtd3JpdGU="
             }
         }
