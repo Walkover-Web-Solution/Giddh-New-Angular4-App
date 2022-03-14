@@ -22,6 +22,10 @@
             color: $black !important;
         }
     }
+    .custom-fields-pagination {
+        width: 61.5%;
+        margin-top: 20px;
+    }
 }
 @media (max-height: 800px) {
     .custom-filed-list-wrapper {

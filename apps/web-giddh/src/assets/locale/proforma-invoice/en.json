@@ -48,7 +48,6 @@
     "attachment": "Attachment",
     "drag_drop_file": "Drag/Drop file or click here",
     "deposit": "Deposit",
-    "advance_receipt": "Advance Receipt",
     "adjust_amount": "Adjust Amount",
     "product_service_description": "Product/Service Description",
     "qty": "Qty",
@@ -88,7 +87,7 @@
     "custom_field1": "Custom field 1",
     "custom_field2": "Custom field 2",
     "file_uploaded": "File uploaded successfully",
-    "voucher_updated": "Voucher updated Successfully",
+    "voucher_updated": "Voucher updated successfully",
     "purchase_record_error": "Please change either purchase invoice number or vendor details.",
     "purchase_bill": "Purchase Bill",
     "quantity_error": "Quantity recorded can't be more than quantity ordered",
@@ -105,5 +104,8 @@
     "date_change_confirmation_heading": "Date Change Confirmation",
     "change_single_entry_date": "Do you want to change the entry date as well?",
     "change_all_entry_dates": "Do you want to change the all entries date with this date?",
-    "exchange_label": "Exchange"
+    "exchange_label": "Exchange",
+    "confirm_delete_file": "Are you sure you want to delete the attached file?",
+    "enter_amount": "Please enter deposit amount",
+    "voucher_number_required": "Voucher number is mandatory."
 }

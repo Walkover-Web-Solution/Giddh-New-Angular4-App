@@ -144,15 +144,15 @@ export class UpdateLedgerVm {
     public accountCatgoryGetterFunc(account, accountName): string {
         let parent = account && account.parentGroups && account.parentGroups.length > 0 ? account.parentGroups[0] : '';
         if (parent) {
-            if (find(['shareholdersfunds', 'noncurrentliabilities', 'currentliabilities'], p => p === parent.uniqueName)) {
+            if (find(['shareholdersfunds', 'noncurrentliabilities', 'currentliabilities'], p => p === (parent.uniqueName || parent))) {
                 return 'liabilities';
-            } else if (find(['fixedassets'], p => p === parent.uniqueName)) {
+            } else if (find(['fixedassets'], p => p === (parent.uniqueName || parent))) {
                 return 'fixedassets';
-            } else if (find(['noncurrentassets', 'currentassets'], p => p === parent.uniqueName)) {
+            } else if (find(['noncurrentassets', 'currentassets'], p => p === (parent.uniqueName || parent))) {
                 return 'assets';
-            } else if (find(['revenuefromoperations', 'otherincome'], p => p === parent.uniqueName)) {
+            } else if (find(['revenuefromoperations', 'otherincome'], p => p === (parent.uniqueName || parent))) {
                 return 'income';
-            } else if (find(['operatingcost', 'indirectexpenses'], p => p === parent.uniqueName)) {
+            } else if (find(['operatingcost', 'indirectexpenses'], p => p === (parent.uniqueName || parent))) {
                 if (accountName === 'roundoff') {
                     return 'roundoff';
                 }
@@ -261,8 +261,11 @@ export class UpdateLedgerVm {
                 this.totalAmount = this.stockTrxEntry.amount;
             } else {
                 let trx: ILedgerTransactionItem = find(this.selectedLedger.transactions, (t) => {
-                    let category = this.accountCatgoryGetterFunc(t?.particular, t?.particular?.uniqueName);
-                    return this.isValidCategory(category);
+                    let particular = (t?.selectedAccount?.particular?.parentGroups?.length > 0 && !t?.particular.parentGroups?.length) ? t?.selectedAccount?.particular : t?.particular;
+                    let category = this.accountCatgoryGetterFunc(particular, particular?.uniqueName);
+                    if (particular?.uniqueName) {
+                        return this.isValidCategory(category);
+                    }
                 });
                 this.totalAmount = trx ? Number(trx.amount) : 0;
             }
@@ -424,7 +427,7 @@ export class UpdateLedgerVm {
                     let category = this.accountCatgoryGetterFunc(t?.particular, t?.particular?.uniqueName);
 
                     // find account that's from category income || expenses || fixed assets and update it's amount too
-                    if (this.isValidCategory(category)) {
+                    if (category && this.isValidCategory(category)) {
                         t.amount = giddhRoundOff(Number(this.totalAmount), this.giddhBalanceDecimalPlaces);
                         t.isUpdated = true;
                     }

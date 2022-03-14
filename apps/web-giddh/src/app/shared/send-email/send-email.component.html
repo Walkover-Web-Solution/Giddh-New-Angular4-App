@@ -1,0 +1,81 @@
+<ng-container
+    appTranslate
+    [file]="'invoice/send-email'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+>
+    <div class="modal-header theme-bg pd-2 pd-l2 pd-r2 clearfix">
+        <h3 class="modal-title bg" mat-dialog-title>{{ localeData?.page_heading }}</h3>
+        <i aria-hidden="true" class="icon-cross text-right close-modal" mat-dialog-close></i>
+    </div>
+
+    <div class="modal-body">
+        <div class="row mr-b1">
+            <div class="col-sm-12">
+                <text-field
+                    [cssClass]="'form-control mat-field-border'"
+                    [placeholder]="localeData?.enter_email_address"
+                    [(ngModel)]="emailAddresses"
+                ></text-field>
+            </div>
+        </div>
+
+        <div class="clearfix" *ngIf="![receiptVoucherType, paymentVoucherType].includes(voucherType)">
+            <h3 class="font-16 mr-b05">{{ localeData?.invoice_copy }}</h3>
+            <hr />
+            <div class="checkbox">
+                <mat-checkbox
+                    name="original-copy"
+                    color="primary"
+                    value="Original"
+                    [checked]="downloadCopy.includes('Original')"
+                    (change)="selectDownloadOptions($event)"
+                    >{{ localeData?.original }}</mat-checkbox
+                >
+            </div>
+            <div class="checkbox">
+                <mat-checkbox
+                    name="transport-copy"
+                    color="primary"
+                    value="Transport"
+                    [checked]="downloadCopy.includes('Transport')"
+                    (change)="selectDownloadOptions($event)"
+                    >{{ localeData?.transport }}</mat-checkbox
+                >
+            </div>
+            <div class="checkbox">
+                <mat-checkbox
+                    name="customer-copy"
+                    color="primary"
+                    value="Customer"
+                    [checked]="downloadCopy.includes('Customer')"
+                    (change)="selectDownloadOptions($event)"
+                    >{{ commonLocaleData?.app_customer }}</mat-checkbox
+                >
+            </div>
+        </div>
+
+        <!-- region buttons -->
+        <div class="row mr-t2 mr-b1">
+            <div class="col-sm-12">
+                <div class="btn-group" role="group">
+                    <button
+                        type="button"
+                        class="btn btn-success"
+                        mat-raised-button
+                        [disabled]="!emailAddresses || !downloadCopy?.length"
+                        (click)="sendEmail()"
+                        mat-dialog-close
+                    >
+                        {{ commonLocaleData?.app_send }}
+                    </button>
+
+                    <button type="button" class="btn btn-danger" mat-raised-button mat-dialog-close>
+                        {{ commonLocaleData?.app_cancel }}
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- endregion -->
+    </div>
+</ng-container>

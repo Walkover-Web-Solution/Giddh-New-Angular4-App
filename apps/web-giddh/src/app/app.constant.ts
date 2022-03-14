@@ -217,7 +217,6 @@ export const FILE_ATTACHMENT_TYPE = {
     UNSUPPORTED: ['doc', 'docx', 'xls', 'xlsx']
 };
 
-
 /** Error message to display if the stock is invalid */
 export const INVALID_STOCK_ERROR_MESSAGE = 'Both Unit and Rate fields are mandatory if you provide data for either of them.';
 
@@ -239,15 +238,6 @@ export const HIGH_RATE_FIELD_PRECISION = 16;
 /** Regex to remove trailing zeros from a string representation of number */
 export const REMOVE_TRAILING_ZERO_REGEX = /^([\d,' ]*)$|^([\d,' ]*)\.0*$|^([\d,' ]+\.[0-9]*?)0*$/;
 
-/* This plan unique name will be used as a default plan while creating new company/branch */
-export let DEFAULT_SIGNUP_TRIAL_PLAN = "";
-
-if (PRODUCTION_ENV || isElectron) {
-    DEFAULT_SIGNUP_TRIAL_PLAN = "e6v1566224240273";
-} else {
-    DEFAULT_SIGNUP_TRIAL_PLAN = "xoh1591185630174";
-}
-
 /** Type of voucher that is adjusted */
 export enum AdjustedVoucherType {
     Receipt = 'rcpt',
@@ -255,6 +245,7 @@ export enum AdjustedVoucherType {
     Sales = 'sal', // used in ledger
     SalesInvoice = 'sales', // used in invoice preview module
     Purchase = 'pur',
+    PurchaseInvoice = 'purchase',
     CreditNote = 'credit note',
     DebitNote = 'debit note',
     Payment = 'pay',
@@ -315,6 +306,135 @@ export const UNAUTHORISED = 401;
 /** This will hide the filing feature of GST module  */
 export const SHOW_GST_FILING = false;
 export const SELECT_ALL_RECORDS = "selectallrecords";
+/** Stores the voucher wise form values to toggle fields in voucher module */
+export const GIDDH_VOUCHER_FORM = [
+    {
+        type: "sales",
+        advanceReceiptAllowed: false,
+        rcmAllowed: true,
+        depositAllowed: true,
+        taxesAllowed: true,
+        quantityAllowed: true,
+        rateAllowed: true,
+        discountAllowed: true,
+        addressAllowed: true,
+        otherDetails: true,
+        dueDate: true,
+        attachmentAllowed: false
+    },
+    {
+        type: "cash",
+        advanceReceiptAllowed: false,
+        rcmAllowed: false,
+        depositAllowed: false,
+        taxesAllowed: true,
+        quantityAllowed: true,
+        rateAllowed: true,
+        discountAllowed: true,
+        addressAllowed: true,
+        otherDetails: true,
+        dueDate: true,
+        attachmentAllowed: false
+    },
+    {
+        type: "estimate",
+        advanceReceiptAllowed: false,
+        rcmAllowed: false,
+        depositAllowed: false,
+        taxesAllowed: true,
+        quantityAllowed: true,
+        rateAllowed: true,
+        discountAllowed: true,
+        addressAllowed: true,
+        otherDetails: true,
+        dueDate: true,
+        attachmentAllowed: false
+    },
+    {
+        type: "proformas",
+        advanceReceiptAllowed: false,
+        rcmAllowed: false,
+        depositAllowed: false,
+        taxesAllowed: true,
+        quantityAllowed: true,
+        rateAllowed: true,
+        discountAllowed: true,
+        addressAllowed: true,
+        otherDetails: true,
+        dueDate: true,
+        attachmentAllowed: false
+    },
+    {
+        type: "purchase",
+        advanceReceiptAllowed: false,
+        rcmAllowed: true,
+        depositAllowed: true,
+        taxesAllowed: true,
+        quantityAllowed: true,
+        rateAllowed: true,
+        discountAllowed: true,
+        addressAllowed: true,
+        otherDetails: true,
+        dueDate: true,
+        attachmentAllowed: true
+    },
+    {
+        type: "credit note",
+        advanceReceiptAllowed: false,
+        rcmAllowed: true,
+        depositAllowed: false,
+        taxesAllowed: true,
+        quantityAllowed: true,
+        rateAllowed: true,
+        discountAllowed: true,
+        addressAllowed: true,
+        otherDetails: true,
+        dueDate: false,
+        attachmentAllowed: false
+    },
+    {
+        type: "debit note",
+        advanceReceiptAllowed: false,
+        rcmAllowed: true,
+        depositAllowed: false,
+        taxesAllowed: true,
+        quantityAllowed: true,
+        rateAllowed: true,
+        discountAllowed: true,
+        addressAllowed: true,
+        otherDetails: true,
+        dueDate: false,
+        attachmentAllowed: false
+    },
+    {
+        type: "payment",
+        advanceReceiptAllowed: false,
+        rcmAllowed: false,
+        depositAllowed: false,
+        taxesAllowed: false,
+        quantityAllowed: false,
+        rateAllowed: false,
+        discountAllowed: false,
+        addressAllowed: true,
+        otherDetails: true,
+        dueDate: false,
+        attachmentAllowed: false
+    },
+    {
+        type: "receipt",
+        advanceReceiptAllowed: true,
+        rcmAllowed: false,
+        depositAllowed: false,
+        taxesAllowed: false,
+        quantityAllowed: false,
+        rateAllowed: false,
+        discountAllowed: false,
+        addressAllowed: true,
+        otherDetails: true,
+        dueDate: false,
+        attachmentAllowed: false
+    }
+];
 export const CALENDLY_URL = "https://calendly.com/d/cg6-6kx-924/schedule-demo";
 export const JOURNAL_VOUCHER_ALLOWED_DOMAINS = [
     'giddh.com',

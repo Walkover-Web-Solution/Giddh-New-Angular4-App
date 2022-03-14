@@ -2,5 +2,6 @@
     "voucher_refno": "वाउचर रेफ नं",
     "voucher_refdate": "वाउचर रेफरी तिथि",
     "narration": "कथन",
-    "gross_total": "कुल योग"
+    "gross_total": "कुल योग",
+    "unit": "वैकल्पिक इकाई"
 }
