@@ -53,7 +53,6 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         private commonActions: CommonActions,
         public dialog: MatDialog,
         private modalService: BsModalService
-
     ) {
         this.isProdMode = PRODUCTION_ENV;
         this.isElectron = isElectron;
@@ -110,6 +109,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             }
         });
     }
+    
 
     public sidebarStatusChange(event) {
         this.sideMenu.isopen = event;
