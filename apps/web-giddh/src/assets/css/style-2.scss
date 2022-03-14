@@ -5961,6 +5961,9 @@ button.btn.btn-filter {
     .modal-backdrop + .modal {
         z-index: 9999 !important;
     }
+    .nav-left-bar {
+        z-index: 999 !important;
+    }
 }
 .new-branch-list-page {
     .modal-backdrop + .modal {
@@ -6096,8 +6099,16 @@ highcharts-chart {
     top: 0 !important;
 }
 .voucher-preview-edit {
-    .invoice-modal-content {
-        z-index: 999 !important;
+    .primary-main-header {
+        z-index: 99 !important;
+    }
+    .navbar-nav {
+        z-index: 99 !important;
+    }
+}
+.aside-menu-othertax-open {
+    .nav-left-bar {
+        z-index: 99 !important;
     }
 }
 .aside-panel-ledger {
