@@ -53,7 +53,6 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         private commonActions: CommonActions,
         public dialog: MatDialog,
         private modalService: BsModalService
-
     ) {
         this.isProdMode = PRODUCTION_ENV;
         this.isElectron = isElectron;
@@ -100,8 +99,8 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
                 APP_FOLDER
             });
         }
-         /** This will be use for dialog close on route event */
-         this.router.events.pipe(filter(event => event instanceof NavigationStart), takeUntil(this.destroyed$)).subscribe((event: any) => {
+        /** This will be use for dialog close on route event */
+        this.router.events.pipe(filter(event => event instanceof NavigationStart), takeUntil(this.destroyed$)).subscribe((event: any) => {
             if (event) {
                 this.dialog?.closeAll();
                 for (let i = 1; i <= this.modalService.getModalsCount(); i++) {
@@ -110,6 +109,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             }
         });
     }
+    
 
     public sidebarStatusChange(event) {
         this.sideMenu.isopen = event;
