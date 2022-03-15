@@ -586,6 +586,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                 if (response.status === 'success') {
                     product.stockDetails.rate = response.body.purchaseAccountDetails?.unitRates[0]?.rate;
                     product.stockDetails.stockUnit = response.body.purchaseAccountDetails?.unitRates[0]?.stockUnitCode;
+                    this.calculateRowTotal(product);
                 }
             });
 
@@ -622,8 +623,6 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
 
                 this.focusDefaultSource();
             }
-
-            this.calculateRowTotal(product);
 
             setTimeout(() => {
                 if (this.productDescription && this.productDescription.nativeElement) {
