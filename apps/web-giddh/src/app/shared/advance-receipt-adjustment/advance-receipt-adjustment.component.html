@@ -174,7 +174,7 @@
                                                         {{
                                                             (option?.additional?.voucherType === "pur" ||
                                                                 option?.additional?.voucherType === "purchase") &&
-                                                            !option.label
+                                                            (!option.label || option.label === "-")
                                                                 ? commonLocaleData?.app_not_available
                                                                 : option.label
                                                         }}

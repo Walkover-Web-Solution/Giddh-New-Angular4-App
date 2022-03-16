@@ -1210,7 +1210,6 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         this.sortRequestForUi = { sortBy: '', sort: '' };
         this.invoiceSearchRequest.sort = '';
         this.invoiceSearchRequest.sortBy = '';
-        this.invoiceSearchRequest.q = '';
         this.invoiceSearchRequest.page = 1;
         this.invoiceSearchRequest.count = PAGINATION_LIMIT;
         this.invoiceSearchRequest.voucherNumber = '';
@@ -1223,6 +1222,9 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
         // set date picker date as application date
         if (universalDate.length > 1) {
+            this.selectedDateRange = { startDate: moment(universalDate[0]), endDate: moment(universalDate[1]) };
+            this.selectedDateRangeUi = moment(universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+
             this.invoiceSearchRequest.from = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
             this.invoiceSearchRequest.to = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
         }
