@@ -341,4 +341,8 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
             }
         });
     }
+
+    public selectUnit(event: any): void {
+        console.log(event);
+    }
 }

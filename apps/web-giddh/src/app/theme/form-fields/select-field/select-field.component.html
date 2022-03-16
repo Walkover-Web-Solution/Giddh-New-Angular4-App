@@ -1,0 +1,16 @@
+<input
+    type="text"
+    [placeholder]="placeholder"
+    matInput
+    [matAutocomplete]="auto"
+    (blur)="resetValueIfOptionNotSelected()"
+    [attr.name]="names"
+    [(ngModel)]="ngModel"
+    (ngModelChange)="searchFormControl.next(ngModel)"
+/>
+<mat-autocomplete [displayWith]="displayLabel" (optionSelected)="handleChange($event)" #auto="matAutocomplete">
+    <mat-option *ngFor="let option of fieldFilteredOptions" [value]="option">
+        {{ option?.label }}
+    </mat-option>
+    <mat-option disabled *ngIf="fieldFilteredOptions?.length === 0"> No results found </mat-option>
+</mat-autocomplete>

@@ -53,10 +53,20 @@
                                 </div>
                                 <div class="row mr-b15">
                                     <div class="col-sm-6 col-lg-6">
-                                        <label>Product Unit <span class="red-text">*</span></label>
+                                        <label
+                                            >Product Unit {{ stockForm.stockUnitCode }}
+                                            <span class="red-text">*</span></label
+                                        >
                                     </div>
                                     <div class="col-sm-6 col-lg-6">
-                                        <input
+                                        <select-field
+                                            [names]="'stockUnitCode'"
+                                            [(ngModel)]="stockForm.stockUnitCode"
+                                            [placeholder]="'Product Unit'"
+                                            [options]="stockUnits"
+                                            (change)="selectUnit($event)"
+                                        ></select-field>
+                                        <!-- <input
                                             type="text"
                                             placeholder="Product Unit"
                                             matInput
@@ -78,7 +88,7 @@
                                             <mat-option disabled *ngIf="stockUnitsFilteredOptions?.length === 0">
                                                 No results found
                                             </mat-option>
-                                        </mat-autocomplete>
+                                        </mat-autocomplete> -->
                                     </div>
                                 </div>
                                 <div class="row mr-b15">
