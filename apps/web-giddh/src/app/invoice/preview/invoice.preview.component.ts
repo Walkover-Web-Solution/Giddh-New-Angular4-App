@@ -1213,6 +1213,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         this.invoiceSearchRequest.page = 1;
         this.invoiceSearchRequest.count = PAGINATION_LIMIT;
         this.invoiceSearchRequest.voucherNumber = '';
+        this.selectedRangeLabel = "";
 
         let universalDate;
         // get application date

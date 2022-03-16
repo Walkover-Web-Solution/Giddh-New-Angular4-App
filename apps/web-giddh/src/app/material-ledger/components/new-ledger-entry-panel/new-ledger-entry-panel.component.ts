@@ -1358,7 +1358,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             const adjustments = cloneDeep(event.adjustVoucherData.adjustments);
             if (adjustments && adjustments.length > 0) {
                 adjustments.forEach(adjustment => {
-                    adjustment.voucherNumber = adjustment.voucherNumber === '-' ? '' : adjustment.voucherNumber;
+                    adjustment.voucherNumber = this.generalService.getVoucherNumberLabel(adjustment.voucherType, adjustment.voucherNumber, this.commonLocaleData);
                 });
             }
             this.currentTxn.voucherAdjustments = {

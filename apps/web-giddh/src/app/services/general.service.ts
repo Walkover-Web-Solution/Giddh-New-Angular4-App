@@ -1008,4 +1008,22 @@ export class GeneralService {
         }
         return item;
     }
+
+    /**
+     * This returns voucher number
+     *
+     * @private
+     * @param {*} item
+     * @returns {*}
+     * @memberof GeneralService
+     */
+    public getVoucherNumberLabel(voucherType: string, voucherNumber: any, commonLocaleData: any): any {
+        if ((voucherType === "pur" || voucherType === VoucherTypeEnum.purchase) && (!voucherNumber || voucherNumber === "-")) {
+            voucherNumber = commonLocaleData?.app_not_available;
+        } else if (!voucherNumber) {
+            voucherNumber = "-";
+        }
+
+        return voucherNumber;
+    }
 }

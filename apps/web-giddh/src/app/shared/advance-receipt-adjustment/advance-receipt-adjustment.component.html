@@ -171,13 +171,7 @@
                                             <ng-template #optionTemplate let-option="option">
                                                 <a href="javascript:void(0)" class="list-item">
                                                     <div class="item">
-                                                        {{
-                                                            (option?.additional?.voucherType === "pur" ||
-                                                                option?.additional?.voucherType === "purchase") &&
-                                                            (!option.label || option.label === "-")
-                                                                ? commonLocaleData?.app_not_available
-                                                                : option.label
-                                                        }}
+                                                        {{ option.label }}
                                                     </div>
                                                     <div class="item-unique">
                                                         <p class="font-12 text-gray mb-0">

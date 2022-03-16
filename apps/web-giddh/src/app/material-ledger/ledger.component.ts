@@ -986,7 +986,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
                         items = response.body.items;
                     }
 
-                    items?.forEach(invoice => this.invoiceList.push({ label: invoice?.voucherNumber ? invoice.voucherNumber : '-', value: invoice?.uniqueName, additional: invoice }));
+                    items?.forEach(invoice => {
+                        invoice.voucherNumber = this.generalService.getVoucherNumberLabel(invoice?.voucherType, invoice?.voucherNumber, this.commonLocaleData);
+                        
+                        this.invoiceList.push({ label: invoice?.voucherNumber ? invoice.voucherNumber : '-', value: invoice?.uniqueName, additional: invoice })
+                    });
                 }
             });
         }
