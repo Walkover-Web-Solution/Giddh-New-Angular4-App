@@ -1131,7 +1131,11 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                         items = response.body.items;
                     }
 
-                    items?.forEach(invoice => this.invoiceList.push({ label: invoice?.voucherNumber ? invoice.voucherNumber : '-', value: invoice?.uniqueName, additional: invoice }))
+                    items?.forEach(invoice => {
+                        invoice.voucherNumber = this.generalService.getVoucherNumberLabel(invoice?.voucherType, invoice?.voucherNumber, this.commonLocaleData);
+
+                        this.invoiceList.push({ label: invoice?.voucherNumber ? invoice.voucherNumber : '-', value: invoice?.uniqueName, additional: invoice })
+                    });
                 } else {
                     this.forceClear$ = observableOf({ status: true });
                 }
@@ -1145,6 +1149,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
                 if (selectedInvoice) {
                     if(this.voucherApiVersion === 2) {
+                        selectedInvoice.number = this.generalService.getVoucherNumberLabel(selectedInvoice?.voucherType, selectedInvoice?.number, this.commonLocaleData);
+
                         invoiceSelected = {
                             label: selectedInvoice.number ? selectedInvoice.number : '-',
                             value: selectedInvoice.uniqueName,
@@ -1770,7 +1776,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             const adjustments = cloneDeep(event.adjustVoucherData.adjustments);
             if (adjustments) {
                 adjustments.forEach(adjustment => {
-                    adjustment.voucherNumber = adjustment.voucherNumber === '-' ? '' : adjustment.voucherNumber;
+                    adjustment.voucherNumber = this.generalService.getVoucherNumberLabel(adjustment.voucherType, adjustment.voucherNumber, this.commonLocaleData);
                 });
 
                 this.vm.selectedLedger.voucherAdjustments = {
@@ -1951,9 +1957,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     private formatAdjustments(): void {
         if (this.vm.selectedLedger?.voucherAdjustments?.adjustments?.length) {
             this.vm.selectedLedger.voucherAdjustments.adjustments.forEach(adjustment => {
-                if (!adjustment.voucherNumber) {
-                    adjustment.voucherNumber = '-';
-                }
+                adjustment.voucherNumber = this.generalService.getVoucherNumberLabel(adjustment.voucherType, adjustment.voucherNumber, this.commonLocaleData);
                 adjustment.accountCurrency = adjustment.accountCurrency ?? adjustment.currency ?? { symbol: this.activeCompany?.baseCurrencySymbol, code: this.activeCompany?.baseCurrency };
             });
         }

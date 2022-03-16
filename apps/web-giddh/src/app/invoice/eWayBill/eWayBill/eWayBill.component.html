@@ -38,7 +38,7 @@
             <tab [heading]="localeData?.tab_generated_bills" id="tab1">
                 <div class="clearfix">
                     <div class="col-md-12">
-                        <div class="table-responsive">
+                        <div class="table-responsive table-wrapper">
                             <table class="table basic table-bordered giddh-table on-mobile-view">
                                 <thead
                                     class="thead-background1"
@@ -209,8 +209,9 @@
                                             <a
                                                 (click)="onSelectEwayDownload(item)"
                                                 [tooltip]="localeData?.download_eway_bill"
+                                                class="cursor-pointer pull-right"
                                             >
-                                                <i class="icon-download1 cursor-pointer pull-right"></i
+                                                <i class="icon-download1"></i
                                             ></a>
                                         </td>
                                         <td [attr.data-title]="commonLocaleData?.app_customer_name">
