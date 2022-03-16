@@ -1,9 +1,14 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { FormControl } from "@angular/forms";
-import { ReplaySubject, Observable } from "rxjs";
+import { ReplaySubject, Observable, of } from "rxjs";
 import { takeUntil, map, startWith } from "rxjs/operators";
 import { COMMA, ENTER } from "@angular/cdk/keycodes";
 import { MatChipInputEvent } from "@angular/material/chips";
+import { InventoryService } from "../../../services/inventory.service";
+import { IOption } from "../../../theme/ng-virtual-select/sh-options.interface";
+import { cloneDeep } from "../../../lodash-optimized";
+import { IGroupsWithStocksHierarchyMinItem } from "../../../models/interfaces/groupsWithStocks.interface";
+import { SalesService } from "../../../services/sales.service";
 
 @Component({
     selector: "stock-create-edit",
@@ -14,22 +19,22 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
     public separatorKeysCodes: any[] = [ENTER, COMMA];
     /* this will store image path*/
     public imgPath: string = "";
-    // Variables for Product Unit Dropdown Under Product Radio Button
-    productUnitControl = new FormControl();
-    productUnitOptions: string[] = ['Dummy One', 'Dummy Two', 'Dummy Three'];
-    productUnitFilteredOptions: Observable<string[]>;
+    // Variables for Stock Unit Dropdown Under Product Radio Button
+    public searchStockUnit = new FormControl();
+    public stockUnits: IOption[] = [];
+    public stockUnitsFilteredOptions: IOption[] = [];
     // Variables for Under Control Dropdown Under Product Radio Button
-    productUnderGroupControl = new FormControl();
-    productUnderGroupOptions: string[] = ['Dummy Four', 'Dummy Five', 'Dummy Six'];
-    productUnderGroupFilteredOptions: Observable<string[]>;
+    public searchStockGroup = new FormControl();
+    public stockGroups: IOption[] = [];
+    public stockGroupsFilteredOptions: IOption[] = [];
     // Variables for Linked Account/s Dropdown Under Product Radio Button > Account Tab > Purchase Information
-    productPurchaseLinkedGroupControl = new FormControl();
-    productPurchaseLinkedGroupOptions: string[] = ['Dummy Four', 'Dummy Five', 'Dummy Six'];
-    productPurchaseLinkedGroupFilteredOptions: Observable<string[]>;
+    public searchPurchaseAccount = new FormControl();
+    public purchaseAccounts: IOption[] = [];
+    public purchaseAccountsFilteredOptions: IOption[] = [];
     // Variables for Linked Account/s Dropdown Under Product Radio Button > Account Tab > Sales Information
-    productSalesLinkedControl = new FormControl();
-    productSalesLinkedOptions: string[] = ['Dummy Four', 'Dummy Five', 'Dummy Six'];
-    productSalesLinkedFilteredOptions: Observable<string[]>;
+    public searchSalesAccount = new FormControl();
+    public salesAccounts: IOption[] = [];
+    public salesAccountsFilteredOptions: IOption[] = [];
     // Variables for Service Unit Dropdown Under Service Radio Button
     serviceUnitGroupControl = new FormControl();
     serviceUnitGroupOptions: string[] = ['Dummy One', 'Dummy Two', 'Dummy Three'];
@@ -94,8 +99,11 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
             }
         ]
     };
+    public stockGroupUniqueName: string = "";
 
     constructor(
+        private inventoryService: InventoryService,
+        private salesService: SalesService
     ) {
     }
 
@@ -103,15 +111,26 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         /* added image path */
         this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
 
-        this.productUnitFilteredOptions = this.productUnitControl.valueChanges.pipe(
-            startWith(''),
-            map(value => this._productUnitfilter(value)),
-        );
+        this.getStockUnits();
+        this.getStockGroups();
+        this.getPurchaseAccounts();
+        this.getSalesAccounts();
 
-        this.productUnderGroupFilteredOptions = this.productUnderGroupControl.valueChanges.pipe(
-            startWith(''),
-            map(value => this._productUnderGroupfilter(value)),
-        );
+        this.searchStockUnit.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(search => {
+            this.filterStockUnits(search);
+        });
+
+        this.searchStockGroup.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(search => {
+            this.filterStockGroups(search);
+        });
+
+        this.searchPurchaseAccount.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(search => {
+            this.filterPurchaseAccounts(search);
+        });
+
+        this.searchSalesAccount.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(search => {
+            this.filterSalesAccounts(search);
+        });
 
         this.serviceUnitGroupFilteredOptions = this.serviceUnitGroupControl.valueChanges.pipe(
             startWith(''),
@@ -121,16 +140,6 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         this.serviceUnderGroupFilteredOptions = this.serviceUnderGroupControl.valueChanges.pipe(
             startWith(''),
             map(value => this._serviceUnderGroupfilter(value)),
-        );
-
-        this.productPurchaseLinkedGroupFilteredOptions = this.productPurchaseLinkedGroupControl.valueChanges.pipe(
-            startWith(''),
-            map(value => this._productPurchaseLinkedGroupfilter(value)),
-        );
-
-        this.productSalesLinkedFilteredOptions = this.productSalesLinkedControl.valueChanges.pipe(
-            startWith(''),
-            map(value => this._productSalesLinkedfilter(value)),
         );
 
         this.servicePurchaseLinkedGroupFilteredOptions = this.servicePurchaseLinkedGroupControl.valueChanges.pipe(
@@ -166,14 +175,48 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         // }
     }
 
-    private _productUnitfilter(value: string): string[] {
-        const filterValue = value.toLowerCase();
-        return this.productUnitOptions.filter(productUnitOption => productUnitOption.toLowerCase().includes(filterValue));
+    private filterStockUnits(search: string): void {
+        let filteredUnits: IOption[] = [];
+        this.stockUnits.forEach(unit => {
+            if (typeof search !== "string" || unit?.label?.toLowerCase()?.indexOf(search?.toLowerCase()) > -1) {
+                filteredUnits.push({ label: unit.label, value: unit.value, additional: unit });
+            }
+        });
+
+        this.stockUnitsFilteredOptions = filteredUnits;
     }
 
-    private _productUnderGroupfilter(value: string): string[] {
-        const filterValue = value.toLowerCase();
-        return this.productUnderGroupOptions.filter(productUnderGroupOption => productUnderGroupOption.toLowerCase().includes(filterValue));
+    private filterStockGroups(search: string): void {
+        let filteredGroups: IOption[] = [];
+        this.stockGroups.forEach(group => {
+            if (typeof search !== "string" || group?.label?.toLowerCase()?.indexOf(search?.toLowerCase()) > -1) {
+                filteredGroups.push({ label: group.label, value: group.value, additional: group });
+            }
+        });
+
+        this.stockGroupsFilteredOptions = filteredGroups;
+    }
+
+    public filterPurchaseAccounts(search: string): void {
+        let filteredAccounts: IOption[] = [];
+        this.purchaseAccounts.forEach(account => {
+            if (typeof search !== "string" || account?.label?.toLowerCase()?.indexOf(search?.toLowerCase()) > -1) {
+                filteredAccounts.push({ label: account.label, value: account.value, additional: account });
+            }
+        });
+
+        this.purchaseAccountsFilteredOptions = filteredAccounts;
+    }
+
+    public filterSalesAccounts(search: string): void {
+        let filteredAccounts: IOption[] = [];
+        this.salesAccounts.forEach(account => {
+            if (typeof search !== "string" || account?.label?.toLowerCase()?.indexOf(search?.toLowerCase()) > -1) {
+                filteredAccounts.push({ label: account.label, value: account.value, additional: account });
+            }
+        });
+
+        this.salesAccountsFilteredOptions = filteredAccounts;
     }
 
     private _serviceUnitGroupfilter(value: string): string[] {
@@ -186,16 +229,6 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         return this.serviceUnderGroupOptions.filter(serviceUnderGroupOption => serviceUnderGroupOption.toLowerCase().includes(filterValue));
     }
 
-    private _productPurchaseLinkedGroupfilter(value: string): string[] {
-        const filterValue = value.toLowerCase();
-        return this.productPurchaseLinkedGroupOptions.filter(productPurchaseLinkedGroupOption => productPurchaseLinkedGroupOption.toLowerCase().includes(filterValue));
-    }
-
-    private _productSalesLinkedfilter(value: string): string[] {
-        const filterValue = value.toLowerCase();
-        return this.productSalesLinkedOptions.filter(productSalesLinkedGroupOption => productSalesLinkedGroupOption.toLowerCase().includes(filterValue));
-    }
-
     private _servicePurchaseLinkedfilter(value: string): string[] {
         const filterValue = value.toLowerCase();
         return this.servicePurchaseLinkedGroupOptions.filter(servicePurchaseLinkedGroupOption => servicePurchaseLinkedGroupOption.toLowerCase().includes(filterValue));
@@ -204,5 +237,108 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
     private _serviceSalesLinkedfilter(value: string): string[] {
         const filterValue = value.toLowerCase();
         return this.serviceSalesLinkedGroupOptions.filter(serviceSalesLinkedGroupOption => serviceSalesLinkedGroupOption.toLowerCase().includes(filterValue));
+    }
+
+    public getStockUnits(): void {
+        this.inventoryService.GetStockUnit().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.status === "success") {
+                this.stockUnits = response?.body?.map(result => {
+                    return {
+                        value: result.code,
+                        label: result.name,
+                        additional: result
+                    };
+                }) || [];
+
+                this.stockUnitsFilteredOptions = cloneDeep(this.stockUnits);
+            }
+        });
+    }
+
+    public displayLabel(option: any): string {
+        return option?.label;
+    }
+
+    public resetValueIfOptionNotSelected(field: string): void {
+        setTimeout(() => {
+            switch (field) {
+                case "stockUnit":
+                    this.checkAndResetValue(this.searchStockUnit, this.stockForm.stockUnitCode);
+                    break;
+
+                case "stockGroup":
+                    this.checkAndResetValue(this.searchStockGroup, this.stockGroupUniqueName);
+                    break;
+
+                case "purchaseAccount":
+                    this.checkAndResetValue(this.searchPurchaseAccount, this.stockForm.purchaseAccountDetails.accountUniqueName);
+                    break;
+
+                case "salesAccount":
+                    this.checkAndResetValue(this.searchSalesAccount, this.stockForm.salesAccountDetails.accountUniqueName);
+                    break;
+            }
+        }, 200);
+    }
+
+    private checkAndResetValue(formControl: FormControl, value: any): void {
+        if (typeof formControl?.value !== "object" && formControl?.value !== value) {
+            formControl.setValue({ label: value });
+        }
+    }
+
+    public getStockGroups(): void {
+        this.inventoryService.GetGroupsWithStocksFlatten().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.status === "success") {
+                let stockGroups: IOption[] = [];
+                this.arrangeStockGroups(response.body?.results, stockGroups);
+
+                this.stockGroups = stockGroups;
+                this.stockGroupsFilteredOptions = cloneDeep(this.stockGroups);
+            }
+        });
+    }
+
+    private arrangeStockGroups(groups: IGroupsWithStocksHierarchyMinItem[], parents: IOption[] = []): void {
+        groups.map(group => {
+            if (group) {
+                let newOption: IOption = { label: '', value: '', additional: {} };
+                newOption.label = group.name;
+                newOption.value = group.uniqueName;
+                newOption.additional = group;
+                parents.push(newOption);
+                if (group.childStockGroups?.length > 0) {
+                    this.arrangeStockGroups(group.childStockGroups, parents);
+                }
+            }
+        });
+    }
+
+    public getPurchaseAccounts(): void {
+        this.salesService.getAccountsWithCurrency('operatingcost, indirectexpenses').pipe(takeUntil(this.destroyed$)).subscribe(data => {
+            if (data.status === 'success') {
+                let purchaseAccounts: IOption[] = [];
+                data.body.results.map(account => {
+                    purchaseAccounts.push({ label: `${account.name} (${account.uniqueName})`, value: account.uniqueName, additional: account });
+                });
+
+                this.purchaseAccounts = purchaseAccounts;
+                this.purchaseAccountsFilteredOptions = cloneDeep(this.purchaseAccounts);
+            }
+        });
+    }
+
+    public getSalesAccounts(): void {
+        this.salesService.getAccountsWithCurrency('revenuefromoperations, otherincome').pipe(takeUntil(this.destroyed$)).subscribe(data => {
+            if (data.status === 'success') {
+                let salesAccounts: IOption[] = [];
+                data.body.results.map(account => {
+                    salesAccounts.push({ label: `${account.name} (${account.uniqueName})`, value: account.uniqueName, additional: account });
+                });
+
+                this.salesAccounts = salesAccounts;
+                this.salesAccountsFilteredOptions = cloneDeep(this.salesAccounts);
+            }
+        });
     }
 }
