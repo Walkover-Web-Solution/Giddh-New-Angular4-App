@@ -1,8 +1,7 @@
 <div class="relative create-new-inventory-page static-tabs-on-page">
     <hamburger-menu></hamburger-menu>
     <div class="new-inventory-page-header">
-        <label class="page-title-inventory"> Create Inventory </label>
-
+        <label class="page-title-inventory"> Create Stock </label>
         <div class="inventory-header-right">
             <button mat-icon-button class="ml-3" style="font-size: 25px" [routerLink]="['/pages/new-inventory']">
                 ×
@@ -44,8 +43,8 @@
                                     <div class="col-sm-6 col-lg-6">
                                         <text-field
                                             [cssClass]="'form-control'"
-                                            name="productName"
-                                            placeholder="Product Name"
+                                            [name]="'productName'"
+                                            [placeholder]="'Product Name'"
                                             [type]="'text'"
                                             [(ngModel)]="stockForm.name"
                                         >
@@ -61,15 +60,23 @@
                                             type="text"
                                             placeholder="Product Unit"
                                             matInput
-                                            [formControl]="productUnitControl"
+                                            [formControl]="searchStockUnit"
                                             [matAutocomplete]="auto1"
+                                            (blur)="resetValueIfOptionNotSelected('stockUnit')"
                                         />
-                                        <mat-autocomplete autoActiveFirstOption #auto1="matAutocomplete">
+                                        <mat-autocomplete
+                                            [displayWith]="displayLabel"
+                                            (optionSelected)="stockForm.stockUnitCode = event?.option?.value"
+                                            #auto1="matAutocomplete"
+                                        >
                                             <mat-option
-                                                *ngFor="let option of productUnitFilteredOptions | async"
+                                                *ngFor="let option of stockUnitsFilteredOptions"
                                                 [value]="option"
                                             >
-                                                {{ option }}
+                                                {{ option?.label }}
+                                            </mat-option>
+                                            <mat-option disabled *ngIf="stockUnitsFilteredOptions?.length === 0">
+                                                No results found
                                             </mat-option>
                                         </mat-autocomplete>
                                     </div>
@@ -83,15 +90,23 @@
                                             type="text"
                                             placeholder="Under Group"
                                             matInput
-                                            [formControl]="productUnderGroupControl"
+                                            [formControl]="searchStockGroup"
                                             [matAutocomplete]="auto2"
+                                            (blur)="resetValueIfOptionNotSelected('stockGroup')"
                                         />
-                                        <mat-autocomplete autoActiveFirstOption #auto2="matAutocomplete">
+                                        <mat-autocomplete
+                                            [displayWith]="displayLabel"
+                                            (optionSelected)="stockGroupUniqueName = event?.option?.value"
+                                            #auto2="matAutocomplete"
+                                        >
                                             <mat-option
-                                                *ngFor="let option of productUnderGroupFilteredOptions | async"
+                                                *ngFor="let option of stockGroupsFilteredOptions"
                                                 [value]="option"
                                             >
-                                                {{ option }}
+                                                {{ option?.label }}
+                                            </mat-option>
+                                            <mat-option disabled *ngIf="stockGroupsFilteredOptions?.length === 0">
+                                                No results found
                                             </mat-option>
                                         </mat-autocomplete>
                                     </div>
@@ -103,8 +118,8 @@
                                     <div class="col-sm-6 col-lg-6">
                                         <text-field
                                             [cssClass]="'form-control'"
-                                            name="uniqueName"
-                                            placeholder="Unique Name"
+                                            [name]="'uniqueName'"
+                                            [placeholder]="'Unique Name'"
                                             [type]="'text'"
                                             [(ngModel)]="stockForm.uniqueName"
                                         ></text-field>
@@ -320,7 +335,6 @@
                                                                 color="primary"
                                                                 id="purchase-info-check"
                                                                 type="checkbox"
-                                                                [checked]="true"
                                                                 >Purchase Information
                                                             </mat-checkbox>
                                                         </div>
@@ -334,21 +348,36 @@
                                                                     placeholder="Linked Accounts"
                                                                     class="default-input-field"
                                                                     matInput
-                                                                    [formControl]="productPurchaseLinkedGroupControl"
-                                                                    [matAutocomplete]="productPurchaseLinkedAcc"
+                                                                    [formControl]="searchPurchaseAccount"
+                                                                    [matAutocomplete]="auto3"
+                                                                    (blur)="
+                                                                        resetValueIfOptionNotSelected('purchaseAccount')
+                                                                    "
                                                                 />
                                                                 <mat-autocomplete
-                                                                    autoActiveFirstOption
-                                                                    #productPurchaseLinkedAcc="matAutocomplete"
+                                                                    [displayWith]="displayLabel"
+                                                                    (optionSelected)="
+                                                                        stockForm.purchaseAccountDetails.accountUniqueName =
+                                                                            event?.option?.value
+                                                                    "
+                                                                    #auto3="matAutocomplete"
                                                                 >
                                                                     <mat-option
                                                                         *ngFor="
-                                                                            let productPurchaseLinkedGroupOption of productPurchaseLinkedGroupFilteredOptions
-                                                                                | async
+                                                                            let option of purchaseAccountsFilteredOptions
                                                                         "
-                                                                        [value]="productPurchaseLinkedGroupOption"
+                                                                        [value]="option"
                                                                     >
-                                                                        {{ productPurchaseLinkedGroupOption }}
+                                                                        {{ option?.label }}
+                                                                    </mat-option>
+                                                                    <mat-option
+                                                                        disabled
+                                                                        *ngIf="
+                                                                            purchaseAccountsFilteredOptions?.length ===
+                                                                            0
+                                                                        "
+                                                                    >
+                                                                        No results found
                                                                     </mat-option>
                                                                 </mat-autocomplete>
                                                             </div>
@@ -383,8 +412,8 @@
                                                                     <div class="col-sm-6 col-6">
                                                                         <text-field
                                                                             [cssClass]="'form-control'"
-                                                                            type="text"
-                                                                            id="rate"
+                                                                            [type]="'text'"
+                                                                            [name]="'rate'"
                                                                             placeholder="Rate"
                                                                         >
                                                                         </text-field>
@@ -397,25 +426,6 @@
                                                                     >
                                                                         <i class="icon-trash"></i>
                                                                     </button>
-                                                                </div>
-                                                                <div class="row add-new-field">
-                                                                    <div class="col-sm-6 col-6">
-                                                                        <text-field
-                                                                            [cssClass]="'form-control'"
-                                                                            type="text"
-                                                                            id="select-unit"
-                                                                            placeholder="Select Unit"
-                                                                        ></text-field>
-                                                                    </div>
-                                                                    <div class="col-sm-6 col-6">
-                                                                        <text-field
-                                                                            [cssClass]="'form-control'"
-                                                                            type="text"
-                                                                            id="rate"
-                                                                            placeholder="Rate"
-                                                                        >
-                                                                        </text-field>
-                                                                    </div>
                                                                     <button
                                                                         mat-icon-button
                                                                         class="icon-button-add"
@@ -442,33 +452,40 @@
                                                                 <label>Linked Account/s </label>
                                                             </div>
                                                             <div class="col-sm-6 col-lg-7 pl-0 mr-b15">
-                                                                <!-- <textarea
-                                                                        type="text"
-                                                                        id="sales-linked-account"
-                                                                        class="form-control"
-                                                                        placeholder="All Accounts Selected"
-                                                                        disabled
-                                                                    ></textarea> -->
                                                                 <input
                                                                     type="text"
-                                                                    placeholder="All Accounts Selected"
+                                                                    placeholder="Linked Accounts"
                                                                     class="default-input-field"
                                                                     matInput
-                                                                    [formControl]="productSalesLinkedControl"
-                                                                    [matAutocomplete]="productSalesLinkedAcc"
+                                                                    [formControl]="searchSalesAccount"
+                                                                    [matAutocomplete]="auto4"
+                                                                    (blur)="
+                                                                        resetValueIfOptionNotSelected('salesAccount')
+                                                                    "
                                                                 />
                                                                 <mat-autocomplete
-                                                                    autoActiveFirstOption
-                                                                    #productSalesLinkedAcc="matAutocomplete"
+                                                                    [displayWith]="displayLabel"
+                                                                    (optionSelected)="
+                                                                        stockForm.salesAccountDetails.accountUniqueName =
+                                                                            event?.option?.value
+                                                                    "
+                                                                    #auto4="matAutocomplete"
                                                                 >
                                                                     <mat-option
                                                                         *ngFor="
-                                                                            let productSalesLinkedGroupOption of productSalesLinkedFilteredOptions
-                                                                                | async
+                                                                            let option of salesAccountsFilteredOptions
                                                                         "
-                                                                        [value]="productSalesLinkedGroupOption"
+                                                                        [value]="option"
                                                                     >
-                                                                        {{ productSalesLinkedGroupOption }}
+                                                                        {{ option?.label }}
+                                                                    </mat-option>
+                                                                    <mat-option
+                                                                        disabled
+                                                                        *ngIf="
+                                                                            salesAccountsFilteredOptions?.length === 0
+                                                                        "
+                                                                    >
+                                                                        No results found
                                                                     </mat-option>
                                                                 </mat-autocomplete>
                                                             </div>
@@ -517,27 +534,6 @@
                                                                     >
                                                                         <i class="icon-trash"></i>
                                                                     </button>
-                                                                </div>
-                                                                <div class="row add-new-field">
-                                                                    <div class="col-sm-6 col-6">
-                                                                        <text-field
-                                                                            [cssClass]="'form-control'"
-                                                                            type="text"
-                                                                            id="sales-select-unit"
-                                                                            placeholder="Select Unit"
-                                                                            disabled
-                                                                        >
-                                                                        </text-field>
-                                                                    </div>
-                                                                    <div class="col-sm-6 col-6">
-                                                                        <text-field
-                                                                            [cssClass]="'form-control'"
-                                                                            type="text"
-                                                                            id="sales-rate"
-                                                                            placeholder="Rate"
-                                                                            disabled
-                                                                        ></text-field>
-                                                                    </div>
                                                                     <button
                                                                         mat-icon-button
                                                                         class="icon-button-add"
@@ -808,7 +804,10 @@
                         <mat-tab label="Other">
                             <div class="tab-container-new">
                                 <div class="row">
-                                    <div class="col-xl-6 col-md-12 col-lg-8 col-sm-12">
+                                    <div
+                                        class="col-xl-6 col-md-12 col-lg-8 col-sm-12"
+                                        *ngIf="stockForm.type === 'PRODUCT'"
+                                    >
                                         <div class="row mr-b15">
                                             <div class="col-sm-6 col-lg-6">
                                                 <label>HSN Code</label>
@@ -816,9 +815,29 @@
                                             <div class="col-sm-6 col-lg-6">
                                                 <text-field
                                                     [cssClass]="'form-control'"
-                                                    id="product-name"
-                                                    type="text"
-                                                    placeholder="Enter Code"
+                                                    [name]="'hsnNumber'"
+                                                    [type]="'text'"
+                                                    [placeholder]="'Enter Code'"
+                                                    [(ngModel)]="stockForm.hsnNumber"
+                                                ></text-field>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div
+                                        class="col-xl-6 col-md-12 col-lg-8 col-sm-12"
+                                        *ngIf="stockForm.type === 'SERVICE'"
+                                    >
+                                        <div class="row mr-b15">
+                                            <div class="col-sm-6 col-lg-6">
+                                                <label>SAC Code</label>
+                                            </div>
+                                            <div class="col-sm-6 col-lg-6">
+                                                <text-field
+                                                    [cssClass]="'form-control'"
+                                                    [name]="'sacNumber'"
+                                                    [type]="'text'"
+                                                    [placeholder]="'Enter Code'"
+                                                    [(ngModel)]="stockForm.sacNumber"
                                                 ></text-field>
                                             </div>
                                         </div>
@@ -831,9 +850,10 @@
                                             <div class="col-sm-6 col-lg-6">
                                                 <text-field
                                                     [cssClass]="'form-control'"
-                                                    id="product-name"
-                                                    type="text"
-                                                    placeholder="Enter Code"
+                                                    [name]="'skuCode'"
+                                                    [type]="'text'"
+                                                    [placeholder]="'Enter Code'"
+                                                    [(ngModel)]="stockForm.skuCode"
                                                 ></text-field>
                                             </div>
                                         </div>
