@@ -59,15 +59,7 @@
                                         >
                                     </div>
                                     <div class="col-sm-6 col-lg-6">
-                                        <select-field
-                                            [names]="'stockUnitCode'"
-                                            name="stockUnitCode"
-                                            [(ngModel)]="stockForm.stockUnitCode"
-                                            [placeholder]="'Product Unit'"
-                                            [options]="stockUnits"
-                                            (change)="selectUnit($event)"
-                                        ></select-field>
-                                        <!-- <input
+                                        <input
                                             type="text"
                                             placeholder="Product Unit"
                                             matInput
@@ -89,7 +81,7 @@
                                             <mat-option disabled *ngIf="stockUnitsFilteredOptions?.length === 0">
                                                 No results found
                                             </mat-option>
-                                        </mat-autocomplete> -->
+                                        </mat-autocomplete>
                                     </div>
                                 </div>
                                 <div class="row mr-b15">
@@ -686,67 +678,52 @@
                                     <div class="product-option-wrapper">
                                         <div class="row">
                                             <div class="col-sm-12 col-md-6">
-                                                <div class="row mr-b15">
+                                                <div
+                                                    class="row mr-b15"
+                                                    *ngFor="let option of variantOptions; let i = index"
+                                                >
                                                     <div class="col-sm-6 col-lg-4">
-                                                        <label>Option 1</label>
+                                                        <label>Option</label>
                                                         <text-field
                                                             [cssClass]="'form-control'"
-                                                            placeholder="Size"
-                                                            id="select-option"
+                                                            [placeholder]="'Size'"
+                                                            [name]="'option-' + i"
+                                                            [(ngModel)]="option.name"
                                                         ></text-field>
                                                     </div>
                                                     <div class="col-sm-6 col-lg-6">
                                                         <label>Category</label>
                                                         <div class="multi-select-input">
-                                                            <mat-chip-list #chipList aria-label="Fruit selection">
+                                                            <mat-chip-list #chipList>
                                                                 <mat-chip
                                                                     class="s-chip"
-                                                                    *ngFor="let categorys of category"
-                                                                    [selectable]="selectable"
-                                                                    [removable]="removable"
-                                                                    (removed)="remove(categorys)"
+                                                                    *ngFor="let value of variantOptions[i]?.values"
+                                                                    (removed)="removeOption(value, i)"
                                                                 >
-                                                                    {{ categorys.name }}
-                                                                    <button
-                                                                        class="chip-close-btn"
-                                                                        matChipRemove
-                                                                        *ngIf="removable"
-                                                                    >
+                                                                    {{ value }}
+                                                                    <button class="chip-close-btn" matChipRemove>
                                                                         <i class="icon-cross"></i>
                                                                     </button>
                                                                 </mat-chip>
 
                                                                 <input
-                                                                    placeholder="xs, x, m"
-                                                                    id="select-category"
                                                                     [matChipInputFor]="chipList"
                                                                     [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                                                                    [matChipInputAddOnBlur]="addOnBlur"
-                                                                    (matChipInputTokenEnd)="add($event)"
+                                                                    [matChipInputAddOnBlur]="true"
+                                                                    (matChipInputTokenEnd)="addOption($event, i)"
                                                                 />
                                                             </mat-chip-list>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="row mr-b15">
-                                                    <div class="col-sm-6 col-lg-4">
-                                                        <text-field
-                                                            [cssClass]="'form-control'"
-                                                            placeholder="Ex: Size, Color"
-                                                            id="select-size-color"
-                                                        >
-                                                        </text-field>
-                                                    </div>
-                                                    <div class="col-sm-6 col-lg-6">
-                                                        <text-field
-                                                            [cssClass]="'form-control'"
-                                                            placeholder="Separate options with a comma"
-                                                        ></text-field>
-                                                    </div>
-                                                </div>
                                             </div>
                                         </div>
-                                        <button mat-button class="text-primary mr-b15 d-block cp">
+                                        <button
+                                            mat-button
+                                            class="text-primary mr-b15 d-block cp"
+                                            *ngIf="variantOptions?.length < 3"
+                                            (click)="addVariantOption()"
+                                        >
                                             + Another option
                                         </button>
                                         <div class="mt-3 mb-3">
@@ -758,7 +735,7 @@
                                             <table class="stock-table font-14" style="margin-left: 2px">
                                                 <tr>
                                                     <th>Stock Name<span class="red-text">*</span></th>
-                                                    <th>Unique Name</th>
+                                                    <!-- <th>Unique Name</th> -->
                                                     <th>Unit</th>
                                                     <th class="text-right">
                                                         Cost Price<span class="red-text">*</span>
@@ -769,12 +746,12 @@
                                                     <th class="text-right">SKU Code</th>
                                                     <th class="text-center">Archive</th>
                                                 </tr>
-                                                <tr *ngFor="let categorys of category">
-                                                    <td>{{ categorys.name }}</td>
-                                                    <td>
+                                                <tr *ngFor="let variant of stockForm.variants">
+                                                    <td>{{ variant.name }}</td>
+                                                    <!-- <td>
                                                         <text-field [cssClass]="'form-control'" placeholder="-">
                                                         </text-field>
-                                                    </td>
+                                                    </td> -->
                                                     <td>
                                                         <mat-select class="font-14">
                                                             <mat-option value="unit1"> Unit 1 </mat-option>
