@@ -53,35 +53,15 @@
                                 </div>
                                 <div class="row mr-b15">
                                     <div class="col-sm-6 col-lg-6">
-                                        <label
-                                            >Product Unit {{ stockForm.stockUnitCode }}
-                                            <span class="red-text">*</span></label
-                                        >
+                                        <label>Product Unit <span class="red-text">*</span></label>
                                     </div>
                                     <div class="col-sm-6 col-lg-6">
-                                        <input
-                                            type="text"
-                                            placeholder="Product Unit"
-                                            matInput
-                                            [formControl]="searchStockUnit"
-                                            [matAutocomplete]="auto1"
-                                            (blur)="resetValueIfOptionNotSelected('stockUnit')"
-                                        />
-                                        <mat-autocomplete
-                                            [displayWith]="displayLabel"
-                                            (optionSelected)="stockForm.stockUnitCode = event?.option?.value"
-                                            #auto1="matAutocomplete"
-                                        >
-                                            <mat-option
-                                                *ngFor="let option of stockUnitsFilteredOptions"
-                                                [value]="option"
-                                            >
-                                                {{ option?.label }}
-                                            </mat-option>
-                                            <mat-option disabled *ngIf="stockUnitsFilteredOptions?.length === 0">
-                                                No results found
-                                            </mat-option>
-                                        </mat-autocomplete>
+                                        <select-field
+                                            [name]="'stockUnitCode'"
+                                            [placeholder]="'Product Unit'"
+                                            [options]="stockUnits"
+                                            (selectedOption)="selectUnit($event)"
+                                        ></select-field>
                                     </div>
                                 </div>
                                 <div class="row mr-b15">
@@ -89,29 +69,12 @@
                                         <label>Under Group <span class="red-text">*</span></label>
                                     </div>
                                     <div class="col-sm-6 col-lg-6">
-                                        <input
-                                            type="text"
-                                            placeholder="Under Group"
-                                            matInput
-                                            [formControl]="searchStockGroup"
-                                            [matAutocomplete]="auto2"
-                                            (blur)="resetValueIfOptionNotSelected('stockGroup')"
-                                        />
-                                        <mat-autocomplete
-                                            [displayWith]="displayLabel"
-                                            (optionSelected)="stockGroupUniqueName = event?.option?.value"
-                                            #auto2="matAutocomplete"
-                                        >
-                                            <mat-option
-                                                *ngFor="let option of stockGroupsFilteredOptions"
-                                                [value]="option"
-                                            >
-                                                {{ option?.label }}
-                                            </mat-option>
-                                            <mat-option disabled *ngIf="stockGroupsFilteredOptions?.length === 0">
-                                                No results found
-                                            </mat-option>
-                                        </mat-autocomplete>
+                                        <select-field
+                                            [name]="'stockGroup'"
+                                            [placeholder]="'Under Group'"
+                                            [options]="stockGroups"
+                                            (selectedOption)="selectGroup($event)"
+                                        ></select-field>
                                     </div>
                                 </div>
                                 <div class="row mr-b15">
@@ -346,59 +309,13 @@
                                                                 <label>Linked Account/s</label>
                                                             </div>
                                                             <div class="col-sm-6 col-lg-7 pl-0 mr-b15">
-                                                                <input
-                                                                    type="text"
-                                                                    placeholder="Linked Accounts"
-                                                                    class="default-input-field"
-                                                                    matInput
-                                                                    [formControl]="searchPurchaseAccount"
-                                                                    [matAutocomplete]="auto3"
-                                                                    (blur)="
-                                                                        resetValueIfOptionNotSelected('purchaseAccount')
-                                                                    "
-                                                                />
-                                                                <mat-autocomplete
-                                                                    [displayWith]="displayLabel"
-                                                                    (optionSelected)="
-                                                                        stockForm.purchaseAccountDetails.accountUniqueName =
-                                                                            event?.option?.value
-                                                                    "
-                                                                    #auto3="matAutocomplete"
-                                                                >
-                                                                    <mat-option
-                                                                        *ngFor="
-                                                                            let option of purchaseAccountsFilteredOptions
-                                                                        "
-                                                                        [value]="option"
-                                                                    >
-                                                                        {{ option?.label }}
-                                                                    </mat-option>
-                                                                    <mat-option
-                                                                        disabled
-                                                                        *ngIf="
-                                                                            purchaseAccountsFilteredOptions?.length ===
-                                                                            0
-                                                                        "
-                                                                    >
-                                                                        No results found
-                                                                    </mat-option>
-                                                                </mat-autocomplete>
+                                                                <select-field
+                                                                    [name]="'purchaseAccount'"
+                                                                    [placeholder]="'Linked Accounts'"
+                                                                    [options]="purchaseAccounts"
+                                                                    (selectedOption)="selectPurchaseAccount($event)"
+                                                                ></select-field>
                                                             </div>
-                                                            <!-- <div class="col-sm-6 col-lg-6">
-                                                                <label>Applicable Tax </label>
-                                                            </div>
-                                                            <div class="col-sm-6 col-lg-6 pl-0 mr-b15">
-                                                                <sh-select id="applicable-tax" placeholder="Select Tax">
-                                                                </sh-select>
-                                                                <p class="mt-2 font-14">
-                                                                    <mat-checkbox
-                                                                        color="primary"
-                                                                        id="purchase-price-tax"
-                                                                        type="checkbox"
-                                                                        >Price Inclusive of Tax ?
-                                                                    </mat-checkbox>
-                                                                </p>
-                                                            </div> -->
                                                             <div class="col-sm-6 col-lg-5">
                                                                 <label>Unit & Price </label>
                                                             </div>
@@ -455,58 +372,13 @@
                                                                 <label>Linked Account/s </label>
                                                             </div>
                                                             <div class="col-sm-6 col-lg-7 pl-0 mr-b15">
-                                                                <input
-                                                                    type="text"
-                                                                    placeholder="Linked Accounts"
-                                                                    class="default-input-field"
-                                                                    matInput
-                                                                    [formControl]="searchSalesAccount"
-                                                                    [matAutocomplete]="auto4"
-                                                                    (blur)="
-                                                                        resetValueIfOptionNotSelected('salesAccount')
-                                                                    "
-                                                                />
-                                                                <mat-autocomplete
-                                                                    [displayWith]="displayLabel"
-                                                                    (optionSelected)="
-                                                                        stockForm.salesAccountDetails.accountUniqueName =
-                                                                            event?.option?.value
-                                                                    "
-                                                                    #auto4="matAutocomplete"
-                                                                >
-                                                                    <mat-option
-                                                                        *ngFor="
-                                                                            let option of salesAccountsFilteredOptions
-                                                                        "
-                                                                        [value]="option"
-                                                                    >
-                                                                        {{ option?.label }}
-                                                                    </mat-option>
-                                                                    <mat-option
-                                                                        disabled
-                                                                        *ngIf="
-                                                                            salesAccountsFilteredOptions?.length === 0
-                                                                        "
-                                                                    >
-                                                                        No results found
-                                                                    </mat-option>
-                                                                </mat-autocomplete>
+                                                                <select-field
+                                                                    [name]="'salesAccount'"
+                                                                    [placeholder]="'Linked Accounts'"
+                                                                    [options]="salesAccounts"
+                                                                    (selectedOption)="selectSalesAccount($event)"
+                                                                ></select-field>
                                                             </div>
-                                                            <!-- <div class="col-sm-6 col-lg-6">
-                                                                    <label>Applicable Tax </label>
-                                                                </div>
-                                                                <div class="col-sm-6 col-lg-6 pl-0 mr-b15">
-                                                                    <sh-select
-                                                                        id="sales-applicable-tax"
-                                                                        placeholder="Select Tax"
-                                                                        disabled
-                                                                    ></sh-select>
-                                                                    <p class="mt-2 font-14">
-                                                                        <mat-checkbox color="primary" id="sales-price-tax">
-                                                                            Price Inclusive of Tax ?
-                                                                        </mat-checkbox>
-                                                                    </p>
-                                                                </div> -->
                                                             <div class="col-sm-6 col-lg-5">
                                                                 <label>Unit & Price </label>
                                                             </div>
