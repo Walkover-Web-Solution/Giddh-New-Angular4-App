@@ -4,7 +4,7 @@
     matInput
     [matAutocomplete]="auto"
     (blur)="resetValueIfOptionNotSelected()"
-    [attr.name]="names"
+    [attr.name]="name"
     [(ngModel)]="ngModel"
     (ngModelChange)="searchFormControl.next(ngModel)"
 />

@@ -1,7 +1,7 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input, OnChanges, OnDestroy, OnInit, Optional, Self, SimpleChanges } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Optional, Output, Self, SimpleChanges } from "@angular/core";
 import { ControlValueAccessor, FormControl, NgControl } from "@angular/forms";
 import { MatFormFieldControl } from "@angular/material/form-field";
-import { Observable, ReplaySubject, Subject } from "rxjs";
+import { ReplaySubject, Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { cloneDeep } from "../../../lodash-optimized";
 import { IOption } from "../../ng-virtual-select/sh-options.interface";
@@ -26,11 +26,12 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy, Contr
     @Input() public placeholder: any = "";
     @Input() public options: any;
     /** Taking name as input */
-    @Input() public names: any = "";
+    @Input() public name: any = "";
+    @Output() public optionSelected: EventEmitter<any> = new EventEmitter<any>();
 
     /** ngModel of input */
     public ngModel: any;
-    public searchFormControl: ReplaySubject<any>;
+    public searchFormControl: Subject<any> = new Subject();
     public fieldOptions: IOption[] = [];
     public fieldFilteredOptions: IOption[] = [];
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -46,7 +47,9 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy, Contr
         private elementRef: ElementRef<HTMLElement>,
         private changeDetectionRef: ChangeDetectorRef
     ) {
-
+        if (this.ngControl) {
+            this.ngControl.valueAccessor = this;
+        }
     }
 
     public ngOnInit(): void {
@@ -110,7 +113,7 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy, Contr
      * @memberof SelectFieldComponent
      */
     set value(value: any) {
-        this.ngModel = value;
+        this.ngModel = value?.value;
         this.onChangeCallback(value);
         this.onTouchedCallback();
         this.stateChanges.next();
@@ -167,16 +170,7 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy, Contr
         controlElement.setAttribute("aria-describedby", ids.join(" "));
     }
 
-    /**
-     * Callback for handing input data
-     *
-     * @memberof SelectFieldComponent
-     */
-    public handleInput(): void {
-        this.onChangeCallback(this.value);
-    }
-
     public handleChange(event: any): void {
-        this.onChangeCallback(event?.option);
+        this.optionSelected.emit(event?.option?.value);
     }
 }
