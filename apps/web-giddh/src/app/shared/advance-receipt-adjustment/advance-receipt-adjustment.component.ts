@@ -244,7 +244,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
                             this.handlePartiallyAdjustedVoucher(item);
                             if (item && item.voucherDate) {
                                 item.voucherDate = item.voucherDate.replace(/-/g, '/');
-                                item.voucherNumber = !item.voucherNumber ? '-' : item.voucherNumber;
+                                item.voucherNumber = this.generalService.getVoucherNumberLabel(item.voucherType, item.voucherNumber, this.commonLocaleData);
                                 item.accountCurrency = item.accountCurrency ?? item.currency ?? { symbol: this.baseCurrencySymbol, code: this.companyCurrency };
                                 this.adjustVoucherOptions.push({ value: item.uniqueName, label: item.voucherNumber, additional: item });
                                 this.newAdjustVoucherOptions.push({ value: item.uniqueName, label: item.voucherNumber, additional: item });
@@ -279,6 +279,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
                             }
                             item.voucherDate = item.voucherDate.replace(/-/g, '/');
                             item.accountCurrency = item.accountCurrency ?? item.currency ?? { symbol: this.baseCurrencySymbol, code: this.companyCurrency };
+                            item.voucherNumber = this.generalService.getVoucherNumberLabel(item.voucherType, item.voucherNumber, this.commonLocaleData);
                             this.adjustVoucherOptions.push({ value: item.uniqueName, label: item.voucherNumber, additional: item });
                             this.newAdjustVoucherOptions.push({ value: item.uniqueName, label: item.voucherNumber, additional: item });
                         }
@@ -404,6 +405,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
                             if (item && item.uniqueName) {
                                 item.voucherDate = item.voucherDate.replace(/-/g, '/');
                                 item.accountCurrency = item.accountCurrency ?? item.currency ?? { symbol: this.baseCurrencySymbol, code: this.companyCurrency };
+                                item.voucherNumber = this.generalService.getVoucherNumberLabel(item.voucherType, item.voucherNumber, this.commonLocaleData);
                                 this.adjustVoucherOptions.push({ value: item.uniqueName, label: item.voucherNumber, additional: item });
                                 this.newAdjustVoucherOptions.push({ value: item.uniqueName, label: item.voucherNumber, additional: item });
                             }
@@ -424,6 +426,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
                                     }
                                     item.voucherDate = item.voucherDate.replace(/-/g, '/');
                                     item.accountCurrency = item.accountCurrency ?? item.currency ?? { symbol: this.baseCurrencySymbol, code: this.companyCurrency };
+                                    item.voucherNumber = this.generalService.getVoucherNumberLabel(item.voucherType, item.voucherNumber, this.commonLocaleData);
                                     this.adjustVoucherOptions.push({ value: item.uniqueName, label: item.voucherNumber, additional: item });
                                     this.newAdjustVoucherOptions.push({ value: item.uniqueName, label: item.voucherNumber, additional: item });
                                 }
@@ -677,7 +680,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
             }
         }
         this.adjustVoucherOptions = _.uniqBy(this.adjustVoucherOptions, (item) => {
-            if (item.label === '-') {
+            if (item.label === '-' || item.label === this.commonLocaleData?.app_not_available) {
                 return item.value;
             } else {
                 return item.value && item.label.trim();
@@ -750,7 +753,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
 
         if (entryData && this.newAdjustVoucherOptions && this.newAdjustVoucherOptions.length) {
             selectedVoucherOptions = this.newAdjustVoucherOptions.find(item => {
-                if (item.label !== '-') {
+                if (item.label !== '-' && item.label !== this.commonLocaleData?.app_not_available) {
                     return item.label === entryData.voucherNumber;
                 } else {
                     return item.value === entryData.uniqueName;
