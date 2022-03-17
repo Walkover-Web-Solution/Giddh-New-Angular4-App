@@ -30,7 +30,7 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy, Contr
 
     /** ngModel of input */
     public ngModel: any;
-    public searchFormControl: ReplaySubject<any>;
+    public searchFormControl: Subject<any> = new Subject();
     public fieldOptions: IOption[] = [];
     public fieldFilteredOptions: IOption[] = [];
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -46,7 +46,9 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy, Contr
         private elementRef: ElementRef<HTMLElement>,
         private changeDetectionRef: ChangeDetectorRef
     ) {
-
+        if (this.ngControl) {
+            this.ngControl.valueAccessor = this;
+        }
     }
 
     public ngOnInit(): void {
