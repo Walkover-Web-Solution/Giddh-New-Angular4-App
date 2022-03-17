@@ -267,10 +267,27 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
                 uniqueName: this.selectedVoucher?.uniqueName
             };
 
-            this.commonService.downloadFile(dataToSend, (this.isAttachment ? "ALL" : "VOUCHER"), "pdf").pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            let downloadOption = "";
+            let fileType = "pdf";
+            if (this.isAttachment) {
+                if (this.invoiceType?.length > 0) {
+                    downloadOption = "ALL";
+                } else {
+                    downloadOption = "ATTACHMENT";
+                    fileType = "base64";
+                }
+            } else {
+                downloadOption = "VOUCHER";
+            }
+
+            this.commonService.downloadFile(dataToSend, downloadOption, fileType).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 if (response?.status !== "error") {
                     if (dataToSend.copyTypes.length > 1 || this.isAttachment) {
-                        saveAs(response, `${this.selectedVoucher?.voucherNumber}.` + 'zip');
+                        if (fileType === "base64") {
+                            saveAs((this.generalService.base64ToBlob(response.body.attachments[0].encodedData, '', 512)), response.body.attachments[0].name);
+                        } else {
+                            saveAs(response, `${this.selectedVoucher?.voucherNumber}.` + 'zip');
+                        }
                     } else {
                         saveAs(response, `${this.selectedVoucher?.voucherNumber}.` + 'pdf');
                     }
