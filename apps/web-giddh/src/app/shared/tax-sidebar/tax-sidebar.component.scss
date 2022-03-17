@@ -29,14 +29,18 @@
                             margin-bottom: 4px;
                             span {
                                 i {
-                                    color: var(--color-abbey);
+                                    color: var(--color-sidebar-create-company-list-text);
                                     margin-right: 10px;
                                     font-size: 20px;
                                 }
                             }
                             &.disabled {
                                 span {
-                                    color: var(--color-abbey) !important;
+                                    color: var(--color-common-primary-disabled) !important;
+                                }
+                                .icon-GSTR,
+                                .icon-GSTR:hover {
+                                    color: var(--color-common-primary-disabled) !important;
                                 }
                             }
                             &.active {

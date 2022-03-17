@@ -57,7 +57,7 @@
     background-color: var(--color-common-primary-background-for-all-components);
     margin-bottom: 15px;
     font-size: 14px;
-    border: 1px solid var(--color-iron);
+    border: 1px solid var(--color-common-secondary-border);
 }
 .card-basic-details span:nth-child(2) {
     width: 83%;
@@ -90,10 +90,10 @@
 }
 .card-basic-details {
     padding: 20px;
-    border-bottom: 1px solid var(--color-iron);
+    border-bottom: 1px solid var(--color-common-secondary-border);
 }
 .branch-sales-details {
-    border-top: 1px solid var(--color-iron);
+    border-top: 1px solid var(--color-common-secondary-border);
     padding-top: 20px;
     label {
         font-family: "opensans-semibold";
