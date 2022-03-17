@@ -4,11 +4,10 @@
     matInput
     [matAutocomplete]="auto"
     (blur)="resetValueIfOptionNotSelected()"
-    [attr.name]="name"
-    [(ngModel)]="ngModel"
-    (ngModelChange)="searchFormControl.next(ngModel)"
+    [name]="name"
+    [formControl]="searchFormControl"
 />
-<mat-autocomplete [displayWith]="displayLabel" (optionSelected)="handleChange($event)" #auto="matAutocomplete">
+<mat-autocomplete [displayWith]="displayLabel" (optionSelected)="optionSelected($event)" #auto="matAutocomplete">
     <mat-option *ngFor="let option of fieldFilteredOptions" [value]="option">
         {{ option?.label }}
     </mat-option>

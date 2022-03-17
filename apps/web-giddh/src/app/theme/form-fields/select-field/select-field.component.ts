@@ -1,73 +1,79 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Optional, Output, Self, SimpleChanges } from "@angular/core";
-import { ControlValueAccessor, FormControl, NgControl } from "@angular/forms";
-import { MatFormFieldControl } from "@angular/material/form-field";
-import { ReplaySubject, Subject } from "rxjs";
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from "@angular/core";
+import { FormControl } from "@angular/forms";
+import { ReplaySubject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { cloneDeep } from "../../../lodash-optimized";
 import { IOption } from "../../ng-virtual-select/sh-options.interface";
-
-const noop = () => {
-};
 
 @Component({
     selector: "select-field",
     styleUrls: ["./select-field.component.scss"],
     templateUrl: "./select-field.component.html",
-    providers: [
-        {
-            provide: MatFormFieldControl,
-            useExisting: SelectFieldComponent,
-            multi: true
-        }
-    ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy, ControlValueAccessor {
+export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy {
+    /** Placeholder of search field */
     @Input() public placeholder: any = "";
+    /** List of data */
     @Input() public options: any;
-    /** Taking name as input */
+    /** Name of search field */
     @Input() public name: any = "";
-    @Output() public optionSelected: EventEmitter<any> = new EventEmitter<any>();
-
-    /** ngModel of input */
-    public ngModel: any;
-    public searchFormControl: Subject<any> = new Subject();
-    public fieldOptions: IOption[] = [];
+    /** Callback for option selected */
+    @Output() public selectedOption: EventEmitter<any> = new EventEmitter<any>();
+    /** Search field form control */
+    public searchFormControl = new FormControl();
+    /** Filtered options to show in autocomplete list */
     public fieldFilteredOptions: IOption[] = [];
+    /** Selected value from option list */
+    public selectedValue: any = '';
+    /** Subject to release subscriptions */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    /** Used for change detection */
-    public stateChanges = new Subject<void>();
-    /** Placeholders for the callbacks which are later provided by the Control Value Accessor */
-    private onTouchedCallback: () => void = noop;
-    private onChangeCallback: (_: any) => void = noop;
-
     constructor(
-        @Optional() @Self() public ngControl: NgControl,
-        private elementRef: ElementRef<HTMLElement>,
-        private changeDetectionRef: ChangeDetectorRef
+
     ) {
-        if (this.ngControl) {
-            this.ngControl.valueAccessor = this;
-        }
     }
 
+    /**
+     * Lifecycle hook for component initialization
+     *
+     * @memberof SelectFieldComponent
+     */
     public ngOnInit(): void {
-        this.searchFormControl.pipe(takeUntil(this.destroyed$)).subscribe(search => {
+        this.searchFormControl.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(search => {
             this.filterOptions(search);
         });
     }
 
+    /**
+     * Lifecycle hook which detects any changes in values
+     *
+     * @param {SimpleChanges} changes
+     * @memberof SelectFieldComponent
+     */
     public ngOnChanges(changes: SimpleChanges): void {
         if (changes?.options) {
             this.fieldFilteredOptions = cloneDeep(this.options);
         }
     }
 
+    /**
+     * Lifecycle hook which releases all memory
+     *
+     * @memberof SelectFieldComponent
+     */
     public ngOnDestroy(): void {
-        this.stateChanges.complete();
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 
+    /**
+     * Filters the option based on search
+     *
+     * @private
+     * @param {string} search
+     * @memberof SelectFieldComponent
+     */
     private filterOptions(search: string): void {
         let filteredOptions: IOption[] = [];
         this.options.forEach(option => {
@@ -79,98 +85,38 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy, Contr
         this.fieldFilteredOptions = filteredOptions;
     }
 
+    /**
+     * Displays the label on selection
+     *
+     * @param {*} option
+     * @returns {string}
+     * @memberof SelectFieldComponent
+     */
     public displayLabel(option: any): string {
         return option?.label;
     }
 
+    /**
+     * Resets the selected value if option not selected after new search
+     *
+     * @memberof SelectFieldComponent
+     */
     public resetValueIfOptionNotSelected(): void {
         setTimeout(() => {
-
+            if (typeof this.searchFormControl?.value !== "object" && this.searchFormControl?.value !== this.selectedValue) {
+                this.searchFormControl.setValue({ label: this.selectedValue });
+            }
         }, 200);
     }
 
-    private checkAndResetValue(formControl: FormControl, value: any): void {
-        if (typeof formControl?.value !== "object" && formControl?.value !== value) {
-            formControl.setValue({ label: value });
-        }
-    }
-
-    //////// ControlValueAccessor //////////
-
     /**
-     * This is used to get the inner value of datepicker
+     * Emits the selected option data
      *
-     * @type {*}
+     * @param {*} event
      * @memberof SelectFieldComponent
      */
-    get value(): any {
-        return this.ngModel;
-    };
-
-    /**
-     * set accessor including call the onchange callback
-     *
-     * @memberof SelectFieldComponent
-     */
-    set value(value: any) {
-        this.ngModel = value?.value;
-        this.onChangeCallback(value);
-        this.onTouchedCallback();
-        this.stateChanges.next();
-    }
-
-    /**
-     * Used to Set touched on blur
-     *
-     * @memberof SelectFieldComponent
-     */
-    public onBlur(): void {
-        this.onTouchedCallback();
-    }
-
-    /**
-     * Form ControlValueAccessor interface
-     *
-     * @param {*} value
-     * @memberof SelectFieldComponent
-     */
-    public writeValue(value: any): void {
-        this.value = value;
-        this.changeDetectionRef.detectChanges();
-    }
-
-    /**
-     * Form ControlValueAccessor interface
-     *
-     * @param {*} fn
-     * @memberof SelectFieldComponent
-     */
-    public registerOnChange(fn: any): void {
-        this.onChangeCallback = fn;
-    }
-
-    /**
-     * Form ControlValueAccessor interface
-     *
-     * @param {*} fn
-     * @memberof SelectFieldComponent
-     */
-    public registerOnTouched(fn: any): void {
-        this.onTouchedCallback = fn;
-    }
-
-    /**
-     * This method is used by the <mat-form-field> to set element ids that should be used for the aria-describedby attribute of your control
-     *
-     * @param {string[]} ids
-     * @memberof SelectFieldComponent
-     */
-    public setDescribedByIds(ids: string[]): void {
-        const controlElement = this.elementRef.nativeElement.querySelector(".select-field-container")!;
-        controlElement.setAttribute("aria-describedby", ids.join(" "));
-    }
-
-    public handleChange(event: any): void {
-        this.optionSelected.emit(event?.option?.value);
+    public optionSelected(event: any): void {
+        this.selectedValue = event?.option?.value?.label;
+        this.selectedOption.emit(event?.option?.value);
     }
 }
