@@ -90,7 +90,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         accountGroup: null,
         lowStockAlertCount: 0,
         outOfStockSelling: true,
-        variants: null,
+        variants: [],
         options: [
             {
                 name: null,
@@ -100,6 +100,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         ]
     };
     public stockGroupUniqueName: string = "";
+    public variantOptions: any[] = [];
 
     constructor(
         private inventoryService: InventoryService,
@@ -111,6 +112,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         /* added image path */
         this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
 
+        this.addVariantOption();
         this.getStockUnits();
         this.getStockGroups();
         this.getPurchaseAccounts();
@@ -159,20 +161,24 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         this.destroyed$.complete();
     }
 
-    public addOption(event: MatChipInputEvent): void {
+    public addOption(event: MatChipInputEvent, index: number): void {
         const value = (event.value || "").trim();
 
-        // Clear the input value
+        if (value) {
+            this.variantOptions[index]['values'].push(value);
+        }
         // tslint:disable-next-line:no-non-null-assertion
         event.chipInput!.clear();
+
+        this.generateVariants();
     }
 
-    public removeOption(value: any): void {
-        // const index = this.category.indexOf(categorys);
+    public removeOption(value: any, index: number): void {
+        const valueIndex = this.variantOptions[index]['values'].indexOf(value);
 
-        // if (index >= 0) {
-        //     this.category.splice(index, 1);
-        // }
+        if (valueIndex > -1) {
+            this.variantOptions[index]['values'].splice(valueIndex, 1);
+        }
     }
 
     private filterStockUnits(search: string): void {
@@ -345,4 +351,62 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
     public selectUnit(event: any): void {
         console.log(event);
     }
+
+    public addVariantOption(): void {
+        const optionIndex = this.variantOptions.length + 1;
+        this.variantOptions.push({ name: "Option " + optionIndex, values: [], order: optionIndex });
+    }
+
+    public generateVariants(): void {
+        let attributes = [];
+
+        this.variantOptions?.forEach((option, index) => {
+            attributes[index] = [];
+            let optionName = option?.name;
+            option?.values?.forEach(value => {
+                attributes[index].push({ [optionName]: value })
+            });
+        });
+
+        attributes = attributes.reduce((previous, current) => previous.flatMap(currentValue => current.map(finalValue => ({ ...currentValue, ...finalValue }))));
+
+        let variants = [];
+        attributes.forEach(attribute => {
+            let variantValues = [];
+            Object.keys(attribute).forEach(key => {
+                variantValues.push(attribute[key]);
+            });
+
+            variants.push(variantValues.join(" / "));
+        });
+
+        this.stockForm.variants = [];
+
+        variants?.forEach(variant => {
+            this.stockForm.variants.push({
+                name: variant,
+                archive: false,
+                uniqueName: undefined,
+                skuCode: undefined,
+                warehouseBalance: [
+                    {
+                        warehouse: {
+                            name: undefined,
+                            uniqueName: undefined
+                        },
+                        stockUnit: {
+                            name: "nos",
+                            code: "nos"
+                        },
+                        openingQuantity: 0,
+                        openingAmount: 0
+                    }
+                ]
+            });
+        });
+
+        console.log(variants);
+    }
+
+
 }
