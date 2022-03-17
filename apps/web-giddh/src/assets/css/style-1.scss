@@ -2546,7 +2546,13 @@ giddh-datepicker {
 .mat-raised-button {
     margin-right: 15px !important;
     height: 36px;
+    box-shadow: none !important;
 }
+
+.mat-raised-button:focus {
+    box-shadow: none !important;
+}
+
 .search-ledger-field {
     .btn-danger,
     .btn-success,
