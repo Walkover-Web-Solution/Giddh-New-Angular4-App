@@ -168,4 +168,22 @@
         [voucherType]="voucherType"
     >
     </gst-template-i>
+
+    <!-- GST TEMPLATE *ngSwitchCase="'thermal_template'" -->
+    <thermal-template
+        *ngSwitchCase="'thermal_template'"
+        [fieldsAndVisibility]="fieldsAndVisibility"
+        [isPreviewMode]="isPreviewMode"
+        [showLogo]="showLogo"
+        [imageSignatureSrc]="imageSignatureSrc"
+        [showImageSignature]="showImageSignature"
+        [companyGSTIN]="companyGSTIN"
+        [companyPAN]="companyPAN"
+        [inputTemplate]="inputTemplate"
+        [logoSrc]="logoSrc"
+        [templateUISectionVisibility]="templateUISectionVisibility"
+        (sectionName)="onClickSection($event)"
+        [voucherType]="voucherType"
+    >
+    </thermal-template>
 </ng-container>

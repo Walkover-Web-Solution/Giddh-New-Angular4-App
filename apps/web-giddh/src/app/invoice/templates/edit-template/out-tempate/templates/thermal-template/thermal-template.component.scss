@@ -8,30 +8,6 @@
     padding-bottom: 10px;
     margin-bottom: 15px;
 }
-.qr-footer {
-    margin: 0 auto;
-    width: 130px;
-}
-.template-footer {
-    float: left;
-    width: 100%;
-}
-.left-footer {
-    float: left;
-    width: 50%;
-    text-align: left;
-    padding-left: 0;
-}
-.right-footer {
-    width: 50%;
-    float: right;
-    text-align: right;
-    padding-right: 0px;
-}
-.thermal-footer {
-    float: left;
-    width: 100%;
-}
 * {
     border: 0;
     box-sizing: content-box;
@@ -330,11 +306,9 @@ header img {
 }
 
 #default table.balance {
-    width: 100%;
+    width: 85%;
     float: right;
-    margin: 0px 0px 5px;
-    border-bottom: 1px dashed;
-    padding-bottom: 10px;
+    margin: 10px 7px 10px;
 }
 
 #default table.balance th,
@@ -372,9 +346,7 @@ header img {
 }
 
 #default .subfooter {
-    padding: 0px 15px 0px 15px;
-    width: 96% !important;
-    margin: 0 !important;
+    padding: 10px 10px 0px 10px;
     .notes2-default-text {
         white-space: pre-line;
     }
@@ -387,8 +359,8 @@ header img {
 }
 
 #default .subfooter h4 {
-    font-size: 16px;
-    margin: 0;
+    margin-top: 5px;
+    margin-bottom: 5px;
 }
 
 #default .docTitle {
@@ -447,7 +419,7 @@ header img {
     z-index: 0;
 }
 
-#default .qr-image img {
+#default header .qr-image img {
     width: 160px;
     height: 100%;
     float: right !important;
@@ -584,7 +556,7 @@ table.tax-table.item {
     border-bottom: 1px dashed;
 }
 .thermal-table tbody tr td {
-    padding: 0px 17px 5px 10px;
+    padding: 0px 20px 5px 10px;
 }
 .img-signature {
     text-align: center;
