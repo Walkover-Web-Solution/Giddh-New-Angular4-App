@@ -1,11 +1,13 @@
 <input
     type="text"
+    [class]="cssClass"
     [placeholder]="placeholder"
     matInput
     [matAutocomplete]="auto"
     (blur)="resetValueIfOptionNotSelected()"
     [name]="name"
     [formControl]="searchFormControl"
+    [readonly]="readonly"
 />
 <mat-autocomplete [displayWith]="displayLabel" (optionSelected)="optionSelected($event)" #auto="matAutocomplete">
     <mat-option *ngFor="let option of fieldFilteredOptions" [value]="option">

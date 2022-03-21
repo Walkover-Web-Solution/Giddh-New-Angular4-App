@@ -22,7 +22,6 @@ const noop = () => {
 export class TextFieldComponent implements OnInit, OnChanges, OnDestroy, ControlValueAccessor {
     @ViewChild('textField', {static: false}) public textField: ElementRef;
     @Input() public cssClass: string = "";
-
     @Input() public cssStyle: string = "";
     /** Taking placeholder as input */
     @Input() public placeholder: any = "";

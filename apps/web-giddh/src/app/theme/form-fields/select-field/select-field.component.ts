@@ -12,12 +12,16 @@ import { IOption } from "../../ng-virtual-select/sh-options.interface";
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy {
+    /** CSS class name to add on the field */
+    @Input() public cssClass: string = "";
     /** Placeholder of search field */
     @Input() public placeholder: any = "";
     /** List of data */
     @Input() public options: any;
     /** Name of search field */
     @Input() public name: any = "";
+    /** True if field is readonly */
+    @Input() public readonly: boolean;
     /** Callback for option selected */
     @Output() public selectedOption: EventEmitter<any> = new EventEmitter<any>();
     /** Search field form control */

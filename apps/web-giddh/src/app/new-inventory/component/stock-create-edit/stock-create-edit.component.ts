@@ -1,13 +1,13 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from "@angular/core";
-import { FormControl } from "@angular/forms";
-import { ReplaySubject, Observable } from "rxjs";
-import { takeUntil, map, startWith } from "rxjs/operators";
+import { ReplaySubject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 import { COMMA, ENTER } from "@angular/cdk/keycodes";
 import { MatChipInputEvent } from "@angular/material/chips";
 import { InventoryService } from "../../../services/inventory.service";
 import { IOption } from "../../../theme/ng-virtual-select/sh-options.interface";
 import { IGroupsWithStocksHierarchyMinItem } from "../../../models/interfaces/groupsWithStocks.interface";
 import { SalesService } from "../../../services/sales.service";
+import { ToasterService } from "../../../services/toaster.service";
 
 @Component({
     selector: "stock-create-edit",
@@ -27,22 +27,6 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
     public purchaseAccounts: IOption[] = [];
     /** Sales accounts list */
     public salesAccounts: IOption[] = [];
-    // Variables for Service Unit Dropdown Under Service Radio Button
-    serviceUnitGroupControl = new FormControl();
-    serviceUnitGroupOptions: string[] = ['Dummy One', 'Dummy Two', 'Dummy Three'];
-    serviceUnitGroupFilteredOptions: Observable<string[]>;
-    // Variables for Under Group Dropdown Under Service Radio Button
-    serviceUnderGroupControl = new FormControl();
-    serviceUnderGroupOptions: string[] = ['Dummy Four', 'Dummy Five', 'Dummy Six'];
-    serviceUnderGroupFilteredOptions: Observable<string[]>;
-    // Variables for Linked Account/s Dropdown Under Service Radio Button > Account Tab > Purchase Information
-    servicePurchaseLinkedGroupControl = new FormControl();
-    servicePurchaseLinkedGroupOptions: string[] = ['Dummy Four', 'Dummy Five', 'Dummy Six'];
-    servicePurchaseLinkedGroupFilteredOptions: Observable<string[]>;
-    // Variables for Linked Account/s Dropdown Under Service Radio Button > Account Tab > Sales Information
-    serviceSalesLinkedGroupControl = new FormControl();
-    serviceSalesLinkedGroupOptions: string[] = ['Dummy Four', 'Dummy Five', 'Dummy Six'];
-    serviceSalesLinkedGroupFilteredOptions: Observable<string[]>;
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public stockForm: any = {
@@ -93,10 +77,14 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
     };
     public stockGroupUniqueName: string = "";
     public variantOptions: any[] = [];
+    public isPurchaseInformationEnabled: boolean = false;
+    public isSalesInformationEnabled: boolean = false;
+    public isVariantAvailable: boolean = false;
 
     constructor(
         private inventoryService: InventoryService,
-        private salesService: SalesService
+        private salesService: SalesService,
+        private toaster: ToasterService
     ) {
     }
 
@@ -109,27 +97,6 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         this.getStockGroups();
         this.getPurchaseAccounts();
         this.getSalesAccounts();
-
-        this.serviceUnitGroupFilteredOptions = this.serviceUnitGroupControl.valueChanges.pipe(
-            startWith(''),
-            map(value => this._serviceUnitGroupfilter(value)),
-        );
-
-        this.serviceUnderGroupFilteredOptions = this.serviceUnderGroupControl.valueChanges.pipe(
-            startWith(''),
-            map(value => this._serviceUnderGroupfilter(value)),
-        );
-
-        this.servicePurchaseLinkedGroupFilteredOptions = this.servicePurchaseLinkedGroupControl.valueChanges.pipe(
-            startWith(''),
-            map(value => this._servicePurchaseLinkedfilter(value)),
-        );
-
-        this.serviceSalesLinkedGroupFilteredOptions = this.serviceSalesLinkedGroupControl.valueChanges.pipe(
-            startWith(''),
-            map(value => this._serviceSalesLinkedfilter(value)),
-        );
-
     }
 
     public ngOnDestroy(): void {
@@ -139,42 +106,26 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
 
     public addOption(event: MatChipInputEvent, index: number): void {
         const value = (event.value || "").trim();
+        const valueIndex = this.variantOptions[index]['values'].indexOf(value);
+        if (valueIndex === -1) {
+            if (value) {
+                this.variantOptions[index]['values'].push(value);
+            }
+            // tslint:disable-next-line:no-non-null-assertion
+            event.chipInput!.clear();
 
-        if (value) {
-            this.variantOptions[index]['values'].push(value);
+            this.generateVariants();
+        } else {
+            this.toaster.showSnackBar("warning", "You've already used the option value " + value);
         }
-        // tslint:disable-next-line:no-non-null-assertion
-        event.chipInput!.clear();
-
-        this.generateVariants();
     }
 
     public removeOption(value: any, index: number): void {
         const valueIndex = this.variantOptions[index]['values'].indexOf(value);
-
         if (valueIndex > -1) {
             this.variantOptions[index]['values'].splice(valueIndex, 1);
         }
-    }
-
-    private _serviceUnitGroupfilter(value: string): string[] {
-        const filterValue = value.toLowerCase();
-        return this.serviceUnitGroupOptions.filter(serviceUnitGroupOption => serviceUnitGroupOption.toLowerCase().includes(filterValue));
-    }
-
-    private _serviceUnderGroupfilter(value: string): string[] {
-        const filterValue = value.toLowerCase();
-        return this.serviceUnderGroupOptions.filter(serviceUnderGroupOption => serviceUnderGroupOption.toLowerCase().includes(filterValue));
-    }
-
-    private _servicePurchaseLinkedfilter(value: string): string[] {
-        const filterValue = value.toLowerCase();
-        return this.servicePurchaseLinkedGroupOptions.filter(servicePurchaseLinkedGroupOption => servicePurchaseLinkedGroupOption.toLowerCase().includes(filterValue));
-    }
-
-    private _serviceSalesLinkedfilter(value: string): string[] {
-        const filterValue = value.toLowerCase();
-        return this.serviceSalesLinkedGroupOptions.filter(serviceSalesLinkedGroupOption => serviceSalesLinkedGroupOption.toLowerCase().includes(filterValue));
+        this.generateVariants();
     }
 
     public getStockUnits(): void {
@@ -251,11 +202,13 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         let attributes = [];
 
         this.variantOptions?.forEach((option, index) => {
-            attributes[index] = [];
-            let optionName = option?.name;
-            option?.values?.forEach(value => {
-                attributes[index].push({ [optionName]: value })
-            });
+            if (option?.values?.length > 0) {
+                attributes[index] = [];
+                let optionName = option?.name;
+                option?.values?.forEach(value => {
+                    attributes[index].push({ [optionName]: value })
+                });
+            }
         });
 
         attributes = attributes.reduce((previous, current) => previous.flatMap(currentValue => current.map(finalValue => ({ ...currentValue, ...finalValue }))));
@@ -296,19 +249,35 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         });
     }
 
-    public selectUnit(event: any): void {
-        this.stockForm.stockUnitCode = event?.value;
+    public addNewPurchaseUnitPrice(): void {
+        this.stockForm.purchaseAccountDetails.unitRates.push({
+            rate: null,
+            stockUnitCode: null
+        });
     }
 
-    public selectGroup(event: any): void {
-        this.stockGroupUniqueName = event?.value;
+    public deletePurchaseUnitPrice(unitRateIndex: number): void {
+        let unitRates = this.stockForm.purchaseAccountDetails.unitRates?.filter((data, index) => index !== unitRateIndex).map(data => { return data });
+        this.stockForm.purchaseAccountDetails.unitRates = unitRates;
+
+        if (unitRates?.length === 0) {
+            this.addNewPurchaseUnitPrice();
+        }
     }
 
-    public selectPurchaseAccount(event: any): void {
-        this.stockForm.purchaseAccountDetails.accountUniqueName = event?.value;
+    public addNewSalesUnitPrice(): void {
+        this.stockForm.salesAccountDetails.unitRates.push({
+            rate: null,
+            stockUnitCode: null
+        });
     }
 
-    public selectSalesAccount(event: any): void {
-        this.stockForm.salesAccountDetails.accountUniqueName = event?.value;
+    public deleteSalesUnitPrice(unitRateIndex: number): void {
+        let unitRates = this.stockForm.salesAccountDetails.unitRates?.filter((data, index) => index !== unitRateIndex).map(data => { return data });
+        this.stockForm.salesAccountDetails.unitRates = unitRates;
+
+        if (unitRates?.length === 0) {
+            this.addNewSalesUnitPrice();
+        }
     }
 }

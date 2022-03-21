@@ -57,10 +57,11 @@
                                     </div>
                                     <div class="col-sm-6 col-lg-6">
                                         <select-field
+                                            [cssClass]="'form-control'"
                                             [name]="'stockUnitCode'"
                                             [placeholder]="'Product Unit'"
                                             [options]="stockUnits"
-                                            (selectedOption)="selectUnit($event)"
+                                            (selectedOption)="stockForm.stockUnitCode = $event?.value"
                                         ></select-field>
                                     </div>
                                 </div>
@@ -70,10 +71,11 @@
                                     </div>
                                     <div class="col-sm-6 col-lg-6">
                                         <select-field
+                                            [cssClass]="'form-control'"
                                             [name]="'stockGroup'"
                                             [placeholder]="'Under Group'"
                                             [options]="stockGroups"
-                                            (selectedOption)="selectGroup($event)"
+                                            (selectedOption)="stockGroupUniqueName = $event?.value"
                                         ></select-field>
                                     </div>
                                 </div>
@@ -301,6 +303,8 @@
                                                                 color="primary"
                                                                 id="purchase-info-check"
                                                                 type="checkbox"
+                                                                name="isPurchaseInformationEnabled"
+                                                                [(ngModel)]="isPurchaseInformationEnabled"
                                                                 >Purchase Information
                                                             </mat-checkbox>
                                                         </div>
@@ -310,31 +314,54 @@
                                                             </div>
                                                             <div class="col-sm-6 col-lg-7 pl-0 mr-b15">
                                                                 <select-field
+                                                                    [cssClass]="'form-control'"
                                                                     [name]="'purchaseAccount'"
                                                                     [placeholder]="'Linked Accounts'"
                                                                     [options]="purchaseAccounts"
-                                                                    (selectedOption)="selectPurchaseAccount($event)"
+                                                                    (selectedOption)="
+                                                                        stockForm.purchaseAccountDetails.accountUniqueName =
+                                                                            $event?.value
+                                                                    "
+                                                                    [readonly]="!isPurchaseInformationEnabled"
                                                                 ></select-field>
                                                             </div>
                                                             <div class="col-sm-6 col-lg-5">
                                                                 <label>Unit & Price </label>
                                                             </div>
                                                             <div class="col-xl-6 col-lg-5 col-sm-5 col-11 pl-0 mr-b15">
-                                                                <div class="row add-new-field mr-b15">
+                                                                <div
+                                                                    class="row add-new-field mr-b15"
+                                                                    *ngFor="
+                                                                        let purchaseUnitRates of stockForm
+                                                                            ?.purchaseAccountDetails?.unitRates;
+                                                                        let i = index
+                                                                    "
+                                                                >
                                                                     <div class="col-sm-6 col-6">
-                                                                        <text-field
+                                                                        <select-field
                                                                             [cssClass]="'form-control'"
-                                                                            type="text"
-                                                                            id="select-unit"
-                                                                            placeholder="Select Unit"
-                                                                        ></text-field>
+                                                                            [name]="'purchaseStockUnitCode' + i"
+                                                                            [placeholder]="'Unit'"
+                                                                            [options]="stockUnits"
+                                                                            (selectedOption)="
+                                                                                stockForm.purchaseAccountDetails.unitRates[
+                                                                                    i
+                                                                                ].stockUnitCode = $event?.value
+                                                                            "
+                                                                            [readonly]="!isPurchaseInformationEnabled"
+                                                                        ></select-field>
                                                                     </div>
                                                                     <div class="col-sm-6 col-6">
                                                                         <text-field
                                                                             [cssClass]="'form-control'"
                                                                             [type]="'text'"
-                                                                            [name]="'rate'"
-                                                                            placeholder="Rate"
+                                                                            [name]="'purchaseStockRate' + i"
+                                                                            [placeholder]="'Rate'"
+                                                                            [(ngModel)]="
+                                                                                stockForm.purchaseAccountDetails
+                                                                                    .unitRates[i].rate
+                                                                            "
+                                                                            [readonly]="!isPurchaseInformationEnabled"
                                                                         >
                                                                         </text-field>
                                                                     </div>
@@ -343,6 +370,8 @@
                                                                         role="button"
                                                                         class="icon-button-remove"
                                                                         type="button"
+                                                                        (click)="deletePurchaseUnitPrice(i)"
+                                                                        [disabled]="!isPurchaseInformationEnabled"
                                                                     >
                                                                         <i class="icon-trash"></i>
                                                                     </button>
@@ -351,6 +380,14 @@
                                                                         class="icon-button-add"
                                                                         role="button"
                                                                         type="button"
+                                                                        (click)="addNewPurchaseUnitPrice()"
+                                                                        *ngIf="
+                                                                            i ===
+                                                                            stockForm.purchaseAccountDetails.unitRates
+                                                                                ?.length -
+                                                                                1
+                                                                        "
+                                                                        [disabled]="!isPurchaseInformationEnabled"
                                                                     >
                                                                         <i class="icon-plus"></i>
                                                                     </button>
@@ -362,8 +399,13 @@
                                                 <div class="col-xl-6 col-12 pl-4">
                                                     <div class="sales-information">
                                                         <div class="select-puchase-info mr-b15">
-                                                            <mat-checkbox color="primary" id="sales-info-check">
-                                                                Sales Information
+                                                            <mat-checkbox
+                                                                color="primary"
+                                                                id="sales-info-check"
+                                                                type="checkbox"
+                                                                name="isSalesInformationEnabled"
+                                                                [(ngModel)]="isSalesInformationEnabled"
+                                                                >Sales Information
                                                             </mat-checkbox>
                                                         </div>
                                                         <!-- input field will disabled if sales info unchecked -->
@@ -373,39 +415,65 @@
                                                             </div>
                                                             <div class="col-sm-6 col-lg-7 pl-0 mr-b15">
                                                                 <select-field
+                                                                    [cssClass]="'form-control'"
                                                                     [name]="'salesAccount'"
                                                                     [placeholder]="'Linked Accounts'"
                                                                     [options]="salesAccounts"
-                                                                    (selectedOption)="selectSalesAccount($event)"
+                                                                    (selectedOption)="
+                                                                        stockForm.salesAccountDetails.accountUniqueName =
+                                                                            $event?.value
+                                                                    "
+                                                                    [readonly]="!isSalesInformationEnabled"
                                                                 ></select-field>
                                                             </div>
                                                             <div class="col-sm-6 col-lg-5">
                                                                 <label>Unit & Price </label>
                                                             </div>
                                                             <div class="col-xl-6 col-lg-5 col-sm-5 col-11 pl-0 mr-b15">
-                                                                <div class="row add-new-field mr-b15">
+                                                                <div
+                                                                    class="row add-new-field mr-b15"
+                                                                    *ngFor="
+                                                                        let salesUnitRates of stockForm
+                                                                            ?.salesAccountDetails?.unitRates;
+                                                                        let i = index
+                                                                    "
+                                                                >
                                                                     <div class="col-sm-6 col-6">
-                                                                        <text-field
+                                                                        <select-field
                                                                             [cssClass]="'form-control'"
-                                                                            type="text"
-                                                                            placeholder="Select Unit"
-                                                                            disabled
-                                                                        ></text-field>
+                                                                            [name]="'salesStockUnitCode' + i"
+                                                                            [placeholder]="'Unit'"
+                                                                            [options]="stockUnits"
+                                                                            (selectedOption)="
+                                                                                stockForm.salesAccountDetails.unitRates[
+                                                                                    i
+                                                                                ].stockUnitCode = $event?.value
+                                                                            "
+                                                                            [readonly]="!isSalesInformationEnabled"
+                                                                        ></select-field>
                                                                     </div>
                                                                     <div class="col-sm-6 col-6">
                                                                         <text-field
                                                                             [cssClass]="'form-control'"
-                                                                            type="text"
-                                                                            id="sales-rate"
-                                                                            placeholder="Rate"
-                                                                            disabled
-                                                                        ></text-field>
+                                                                            [type]="'text'"
+                                                                            [name]="'salesStockRate' + i"
+                                                                            [placeholder]="'Rate'"
+                                                                            [(ngModel)]="
+                                                                                stockForm.salesAccountDetails.unitRates[
+                                                                                    i
+                                                                                ].rate
+                                                                            "
+                                                                            [readonly]="!isSalesInformationEnabled"
+                                                                        >
+                                                                        </text-field>
                                                                     </div>
                                                                     <button
                                                                         mat-icon-button
                                                                         role="button"
                                                                         class="icon-button-remove"
                                                                         type="button"
+                                                                        (click)="deleteSalesUnitPrice(i)"
+                                                                        [disabled]="!isSalesInformationEnabled"
                                                                     >
                                                                         <i class="icon-trash"></i>
                                                                     </button>
@@ -414,6 +482,14 @@
                                                                         class="icon-button-add"
                                                                         role="button"
                                                                         type="button"
+                                                                        (click)="addNewSalesUnitPrice()"
+                                                                        *ngIf="
+                                                                            i ===
+                                                                            stockForm.salesAccountDetails.unitRates
+                                                                                ?.length -
+                                                                                1
+                                                                        "
+                                                                        [disabled]="!isSalesInformationEnabled"
                                                                     >
                                                                         <i class="icon-plus"></i>
                                                                     </button>
@@ -430,7 +506,7 @@
                         </mat-tab>
                         <mat-tab label="Inventory">
                             <div class="tab-container-new">
-                                <p class="mr-b15 font-14">
+                                <!-- <p class="mr-b15 font-14">
                                     <span>
                                         <mat-checkbox
                                             color="primary"
@@ -438,12 +514,12 @@
                                             name="product-service"
                                             id="product-service"
                                         >
-                                            Is the Product/Service a manufactured entity?
+                                            Is the {{ stockForm.type | titlecase }} a manufactured entity?
                                         </mat-checkbox>
                                     </span>
                                 </p>
 
-                                <!-- <form>
+                                <form>
                                     <div class="stock-made-with">
                                         <p>Computer (Made with)</p>
                                     </div>
@@ -540,13 +616,19 @@
                                 </p> -->
                                 <p class="mr-b15 font-14">
                                     <span>
-                                        <mat-checkbox color="primary" [checked]="true" id="variant">
+                                        <mat-checkbox
+                                            color="primary"
+                                            [checked]="true"
+                                            id="variant"
+                                            name="isVariantAvailable"
+                                            [(ngModel)]="isVariantAvailable"
+                                        >
                                             Variant? This product has multiple options like size or colours etc..
                                         </mat-checkbox>
                                     </span>
                                 </p>
                                 <!-- this div wil be visible if uper checkbox checked -->
-                                <div class="product-option">
+                                <div class="product-option" *ngIf="isVariantAvailable">
                                     <div class="product-option-wrapper">
                                         <div class="row">
                                             <div class="col-sm-12 col-md-6">
@@ -598,12 +680,12 @@
                                         >
                                             + Another option
                                         </button>
-                                        <div class="mt-3 mb-3">
+                                        <!-- <div class="mt-3 mb-3">
                                             <button mat-stroked-button class="bdr-radius-50">
                                                 <i class="icon-options mr-2"></i>Customise
                                             </button>
-                                        </div>
-                                        <div class="table-responsive">
+                                        </div> -->
+                                        <div class="table-responsive" *ngIf="stockForm.variants?.length > 0">
                                             <table class="stock-table font-14" style="margin-left: 2px">
                                                 <tr>
                                                     <th>Stock Name<span class="red-text">*</span></th>
@@ -1450,12 +1532,6 @@
                                                                 <label>Linked Account/s</label>
                                                             </div>
                                                             <div class="col-sm-6 col-lg-7 pl-0 mr-b15">
-                                                                <!-- <textarea
-                                                                        type="text"
-                                                                        id="linked-account"
-                                                                        class="form-control"
-                                                                        placeholder="All Accounts Selected"
-                                                                    ></textarea> -->
                                                                 <input
                                                                     type="text"
                                                                     placeholder="Linked Accounts"
