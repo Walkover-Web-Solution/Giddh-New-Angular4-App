@@ -79,7 +79,7 @@
     tr {
         &:hover {
             td.raw-material {
-                background-color: #dde1e680;
+                background-color: var(--color-iron);
             }
         }
     }
@@ -120,7 +120,7 @@
     font-family: "opensans-regular";
 }
 .row-gray-background th {
-    background-color: var(--color-primary-mf-report-row-gray-background-th-background);
+    background-color: var(--color-primary-mf-report-row-gray-th-background);
 }
 .mf-report-head {
     margin-top: 15px;

@@ -392,7 +392,7 @@
             }
             &:hover {
                 span {
-                    background-color: var(--color-datepicker-rightside-list-secondary-text-hover) !important;
+                    background-color: var(--color-datepicker-right-side-list-secondary-text-hover) !important;
                     color: var(--color-common-primary-text) !important;
                     border-color: var(--color-abbey);
                 }
@@ -473,7 +473,7 @@
         }
         &.active {
             transition: background 300ms ease-out;
-            background: #0000001a;
+            background: var(--color-iron);
             &,
             &:hover {
                 background-color: var(--color-blue);
@@ -532,7 +532,7 @@
 
     select {
         display: inline-block;
-        background-color: #ffffffe6;
+        background-color: var(--color-white);
         width: 100%;
         padding: 5px;
         border: 1px solid var(--color-wild-sand);
@@ -693,7 +693,7 @@
                             }
                         }
                         &.active {
-                            background-color: var(--color-datepicker-rightside-list-secondary-text-hover) !important;
+                            background-color: var(--color-datepicker-right-side-list-secondary-text-hover) !important;
                             border-left: 3px solid var(--color-primary-datepicker-input-bottom-border) !important;
                             font-family: "opensans-semibold";
                             color: var(--color-primary-datepicker-input-bottom-border);
@@ -1171,7 +1171,7 @@ td span {
         position: relative;
         padding-left: 10px;
         font-size: 13px;
-        color: #0000008a;
+        color: var(--color-abbey);
         margin: 9px 0 0;
         font-style: normal;
         text-align: left;
@@ -1582,7 +1582,7 @@ td span {
             }
         }
         li:hover {
-            background-color: var(--color-datepicker-rightside-list-secondary-text-hover);
+            background-color: var(--color-datepicker-right-side-list-secondary-text-hover);
         }
     }
 }
