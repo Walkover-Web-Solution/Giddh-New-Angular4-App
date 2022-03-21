@@ -104,7 +104,11 @@ export class BulkExportModal implements OnInit, OnDestroy {
         getRequest.q = (this.advanceSearch.q) ? this.advanceSearch.q : "";
 
         postRequest = this.advanceSearch;
-        postRequest.voucherUniqueNames = this.voucherUniqueNames;
+        if (this.generalService.voucherApiVersion === 2) {
+            postRequest.uniqueNames = this.voucherUniqueNames;
+        } else {
+            postRequest.voucherUniqueNames = this.voucherUniqueNames;
+        }
         postRequest.copyTypes = this.copyTypes;
 
         delete postRequest.count;
