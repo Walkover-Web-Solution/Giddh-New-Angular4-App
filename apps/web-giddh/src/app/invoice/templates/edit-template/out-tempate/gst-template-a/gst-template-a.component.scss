@@ -1,41 +1,9 @@
 @import "../../../../../../../assets/css/color.scss";
 
-.companyTitle {
-    text-align: center;
-}
-.companyGstin {
-    border-bottom: 1px dashed;
-    padding-bottom: 10px;
-    margin-bottom: 15px;
-}
-.qr-footer {
-    margin: 0 auto;
-    width: 130px;
-}
-.template-footer {
-    float: left;
-    width: 100%;
-}
-.left-footer {
-    float: left;
-    width: 50%;
-    text-align: left;
-    padding-left: 0;
-}
-.right-footer {
-    width: 50%;
-    float: right;
-    text-align: right;
-    padding-right: 0px;
-}
-.thermal-footer {
-    float: left;
-    width: 100%;
-}
 * {
     border: 0;
     box-sizing: content-box;
-    color: var(--color-nero);
+    color: $nero;
     font-family: inherit;
     font-style: inherit;
     font-weight: inherit;
@@ -96,8 +64,8 @@ p {
 #default {
     overflow: auto;
     /* font-size: 93%; */
-    background: var(--color-primary-invoice-preview-background);
-    border: 1px solid var(--color-common-secondary-border);
+    background: #fff;
+    border: 1px solid #bfbfbf;
     padding: 0;
 }
 
@@ -105,10 +73,11 @@ p {
     box-sizing: border-box;
     font-size: 12px;
     margin: 0 auto;
+    overflow: hidden;
     padding: 0.1in;
     letter-spacing: 0;
     width: 100%;
-    background: var(--color-primary-invoice-preview-background);
+    background: #fff;
     border-radius: 1px;
 }
 
@@ -116,9 +85,8 @@ p {
 
 #default header {
     margin: 0;
-    background: var(--color-primary-invoice-preview-background);
+    background: #fff;
     padding: 10px;
-    padding-bottom: 0;
 }
 
 #default header:after {
@@ -152,7 +120,7 @@ p {
     border: 0;
     padding: 0;
     text-align: left;
-    color: var(--color-nero);
+    color: $nero;
 }
 
 .hidden-label {
@@ -239,13 +207,13 @@ header img {
 .word-break {
     word-break: break-word;
 }
+
 /* table items */
 
 #default table.item {
     clear: both;
-    width: 97%;
+    width: 100%;
     table-layout: auto;
-    margin: 0 auto;
 }
 
 #default table.item th,
@@ -256,13 +224,13 @@ header img {
 }
 #default table.item tfoot tr th {
     padding-right: 7px;
-    border-top: 1px solid var(--color-iron);
+    border-top: 1px solid $light-gray;
 }
 /* tcs */
 .tcs hr {
     margin-top: 50px;
     width: 100%;
-    border-bottom: 1px solid var(--color-red);
+    border-bottom: 1px solid $cinnabar-orange;
 }
 .tcs table {
     margin: 50px 0px;
@@ -274,7 +242,7 @@ header img {
 .tcs table th {
     border-radius: 0;
     padding: 5px;
-    border: 1px solid var(--color-common-secondary-border);
+    border: 1px solid $light-gray;
     vertical-align: top;
     text-align: right;
 }
@@ -318,21 +286,19 @@ header img {
 #default table.item td {
     border-radius: 0;
     padding: 7px;
-    border-top: 1px solid var(--color-table-primary-content-bar-border);
+    border-top: 1px solid $light-gray;
     line-height: 1.2rem;
     vertical-align: top;
 }
 
 #default table.item td p {
-    color: var(--color-abbey);
+    color: $zambezi;
 }
 
 #default table.balance {
-    width: 100%;
+    width: 85%;
     float: right;
-    margin: 0px 0px 5px;
-    border-bottom: 1px dashed;
-    padding-bottom: 10px;
+    margin: 10px 7px 10px;
 }
 
 #default table.balance th,
@@ -352,7 +318,7 @@ header img {
 }
 
 #default aside h1 {
-    border-color: var(--color-common-secondary-border);
+    border-color: #999;
     border-bottom-style: solid;
 }
 
@@ -362,7 +328,7 @@ header img {
     border-top: 1px solid;
     padding: 16px 0px 10px 0;
     margin: 8px 0 0;
-    background: var(--color-primary-invoice-preview-background);
+    background: #fff;
 }
 
 #default aside {
@@ -370,9 +336,7 @@ header img {
 }
 
 #default .subfooter {
-    padding: 0px 15px 0px 15px;
-    width: 96% !important;
-    margin: 0 !important;
+    padding: 10px 10px 0px 10px;
     .notes2-default-text {
         white-space: pre-line;
     }
@@ -380,13 +344,13 @@ header img {
 
 #default .subfooter hr {
     width: 100%;
-    border-bottom: 1px solid var(--color-common-secondary-border);
+    border-bottom: 1px solid #ccc;
     margin: 3px 0;
 }
 
 #default .subfooter h4 {
-    font-size: 16px;
-    margin: 0;
+    margin-top: 5px;
+    margin-bottom: 5px;
 }
 
 #default .docTitle {
@@ -409,7 +373,7 @@ header img {
     content: attr(title);
     width: auto;
     position: relative;
-    background: var(--color-primary-invoice-preview-background);
+    background: #fff;
     margin: 0 auto;
     padding: 6px 16px;
     right: 0;
@@ -437,7 +401,7 @@ header img {
     position: absolute;
     top: 0;
     bottom: 0;
-    background: var(--color-blue);
+    background: aqua;
     left: 0;
     right: 0;
     width: 100%;
@@ -445,7 +409,7 @@ header img {
     z-index: 0;
 }
 
-#default .qr-image img {
+#default header .qr-image img {
     width: 160px;
     height: 100%;
     float: right !important;
@@ -492,7 +456,7 @@ strong {
     right: 0;
     pointer-events: none;
     background: rgba(204, 204, 204, 0.5);
-    border: 1px dashed var(--color-common-secondary-border);
+    border: 1px dashed #808080;
 }
 
 .edit-template {
@@ -502,7 +466,7 @@ strong {
     padding: 4px;
     height: 15px;
     z-index: 1;
-    background: var(--color-primary-invoice-preview-background);
+    background: #fff;
     width: 20px;
 }
 
@@ -528,15 +492,15 @@ strong {
     width: 60%;
     height: 1px;
     margin: 0px 0 auto auto;
-    border-bottom: 1px solid var(--color-common-secondary-border);
+    border-bottom: 1px solid #ccc;
 }
 
 .green-row {
-    border-bottom: solid 1px var(--color-teal);
+    border-bottom: solid 1px rgb(121, 189, 88);
     padding: 6px 16px;
 }
 .tax-table p {
-    color: var(--color-abbey);
+    color: $zambezi;
 }
 
 .tax-table tfoot th {
@@ -555,7 +519,7 @@ strong {
 .tax-table tbody tr td,
 .tax-table tfoot tr th {
     padding: 6px;
-    border-right: 1px solid var(--color-table-primary-header-bar-border);
+    border-right: 1px solid $light-gray;
 }
 
 .tax-table thead tr th:last-child,
@@ -568,21 +532,21 @@ table.tax-table.item {
     padding-top: 0px !important;
 }
 .tax-table.item tfoot tr th {
-    border-bottom: 1px solid var(--color-table-primary-header-bar-border);
+    border-bottom: 1px solid $light-gray;
 }
 .tax-table tbody tr td {
     border-top: 0px solid;
 }
-.thermal-table {
+.warehouse-table {
     width: 100%;
-    margin-bottom: 0;
-    padding-bottom: 0;
+    border-bottom: 1px solid $light-gray;
+    margin-bottom: 10px;
+    padding-bottom: 5px;
     padding-right: 0px;
     padding-left: 0px;
-    border-bottom: 1px dashed;
 }
-.thermal-table tbody tr td {
-    padding: 0px 17px 5px 10px;
+.warehouse-table tbody tr td {
+    padding: 0px 20px 5px 10px;
 }
 .img-signature {
     text-align: center;

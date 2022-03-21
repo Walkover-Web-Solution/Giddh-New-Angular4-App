@@ -5,13 +5,13 @@
 }
 
 .invoice-preview {
-    width: 9in;
+    // width: 9in;
+    width: 32%; // thermal
     float: right;
     overflow: auto;
     max-height: calc(100vh - 108px);
     /* margin-bottom: 70px; */
 }
-
 #email-template {
     background-color: var(--color-white);
     border: 1px solid var(--color-iron);
