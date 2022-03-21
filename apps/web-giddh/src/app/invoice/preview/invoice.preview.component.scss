@@ -506,7 +506,7 @@ span.icon-export-icon {
 }
 
 .giddh-table {
-    border-right: 1px solid $gainsboro-light;
+    border-right: 1px solid $gainsboro;
     border-bottom: 1px solid $gainsboro !important;
     tbody {
         tr {
@@ -540,7 +540,22 @@ span.icon-export-icon {
 .cancel-remarks-section {
     min-height: 120px;
 }
-
+.giddh-table {
+    border-bottom: 1px solid $gainsboro !important;
+    tbody {
+        tr {
+            td {
+                margin-top: -1px !important;
+                &:last-child {
+                    border-bottom: none !important;
+                }
+                &.status-mobile {
+                    border-bottom: none !important;
+                }
+            }
+        }
+    }
+}
 /* responsive */
 @media (max-width: 1024px) {
     .perform-payment {
@@ -638,9 +653,6 @@ span.icon-export-icon {
         transform: rotate(45deg);
         background-color: $white;
         z-index: -1;
-    }
-    .d-block {
-        display: block !important;
     }
     .click-dropdown ul {
         left: auto;
@@ -843,7 +855,7 @@ span.icon-export-icon {
 
     .min-wid-check {
         min-width: 40px;
-        .check-image {
+        .check-img {
             width: 20px;
         }
     }

@@ -39,6 +39,7 @@ export class AsideMenuOtherTaxes implements OnInit, OnChanges, OnDestroy {
     }
 
     public ngOnInit(): void {
+        document.querySelector('body').classList.add('aside-menu-othertax-open');
         this.taxesOptions = this.taxes
             ?.filter(f => ['tcsrc', 'tcspay', 'tdsrc', 'tdspay'].includes(f.taxType))
             .map(m => {
@@ -68,7 +69,7 @@ export class AsideMenuOtherTaxes implements OnInit, OnChanges, OnDestroy {
     public applyTax(tax: IOption): void {
         if (tax && tax.value) {
             this.otherTaxesModal.appliedOtherTax = { name: tax.label, uniqueName: tax.value };
-            let taxType = this.taxes.find(f => f.uniqueName === tax.value).taxType;
+            let taxType = this.taxes.find(f => f?.uniqueName === tax.value).taxType;
             this.isDisabledCalMethod = ['tdsrc', 'tdspay'].includes(taxType);
             if (!this.isDisabledCalMethod) {
                 this.otherTaxesModal.tcsCalculationMethod = SalesOtherTaxesCalculationMethodEnum.OnTotalAmount;
@@ -94,6 +95,7 @@ export class AsideMenuOtherTaxes implements OnInit, OnChanges, OnDestroy {
      * @memberof AsideMenuOtherTaxes
      */
     public ngOnDestroy(): void {
+        document.querySelector('body').classList.remove('aside-menu-othertax-open');
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }

@@ -108,6 +108,7 @@ export class LedgerService {
         delete model.baseCurrencyToDisplay;
         delete model.foreignCurrencyToDisplay;
         delete model.otherTaxModal;
+      
         let url = LEDGER_API.CREATE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             .replace(':accountUniqueName', encodeURIComponent(accountUniqueName));
         if (this.generalService.voucherApiVersion === 2) {

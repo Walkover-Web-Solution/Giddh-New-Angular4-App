@@ -46,10 +46,10 @@ export class MfEditComponent implements OnInit, OnDestroy {
     public selectedProduct: string;
     public selectedProductName: string;
     public showFromDatePicker: boolean = false;
-    public moment = moment;
-    public initialQuantityObj: any = [];
     /* To check page is not inventory page */
     public isInventoryPage: boolean = false;
+    public moment = moment;
+    public initialQuantityObj: any = [];
     public needForceClearLiability$: Observable<IForceClear> = observableOf({ status: false });
     public needForceClearGroup$: Observable<IForceClear> = observableOf({ status: false });
 
@@ -119,10 +119,10 @@ export class MfEditComponent implements OnInit, OnDestroy {
         private store: Store<AppState>,
         private manufacturingActions: ManufacturingActions,
         private inventoryAction: InventoryAction,
+        private router: Router,
         private _location: Location,
         private _inventoryService: InventoryService,
         private generalAction: GeneralActions,
-        private router: Router,
         private generalService: GeneralService,
         private _toasty: ToasterService,
         private searchService: SearchService,
@@ -339,7 +339,6 @@ export class MfEditComponent implements OnInit, OnDestroy {
             } else {
                 manufacturingObj.otherExpenses = [objToPush];
             }
-            
             this.manufacturingDetails = manufacturingObj;
 
             this.otherExpenses = {};
@@ -510,7 +509,7 @@ export class MfEditComponent implements OnInit, OnDestroy {
     public clearDate() {
         this.manufacturingDetails.date = '';
     }
-    
+
     /**
      * To toggle add expense entry block
      *
@@ -732,16 +731,6 @@ export class MfEditComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Releases memory
-     *
-     * @memberof MfEditComponent
-     */
-    public ngOnDestroy(): void {
-        this.destroyed$.next(true);
-        this.destroyed$.complete();
-    }
-
-    /**
      * Intializes the warehouse
      *
      * @private
@@ -758,5 +747,15 @@ export class MfEditComponent implements OnInit, OnDestroy {
                 });
             }
         });
+    }
+
+    /**
+     * Releases memory
+     *
+     * @memberof MfEditComponent
+     */
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 }
