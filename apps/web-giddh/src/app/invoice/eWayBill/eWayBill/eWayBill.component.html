@@ -255,6 +255,7 @@
                                                     class="dropdown-toggle"
                                                     id="button-basic"
                                                     dropdownToggle
+                                                    (click)="showActionsMenu($event)"
                                                     >{{ commonLocaleData?.app_actions }} <i class="caret"></i
                                                 ></a>
                                                 <ul
@@ -263,6 +264,7 @@
                                                     class="dropdown-menu dropdown-left"
                                                     role="menu"
                                                     aria-labelledby="button-basic"
+                                                    [ngClass]="{ 'dropup-menu': isDropUp }"
                                                 >
                                                     <li role="menuitem">
                                                         <a
@@ -281,9 +283,12 @@
                                                         >
                                                     </li>
                                                     <li role="menuitem">
-                                                        <a class="dropdown-item" (click)="openModal(item, cancel)">{{
-                                                            commonLocaleData?.app_cancel
-                                                        }}</a>
+                                                        <a
+                                                            class="dropdown-item"
+                                                            href="javascript:void(0)"
+                                                            (click)="openModal(item, cancel)"
+                                                            >{{ commonLocaleData?.app_cancel }}</a
+                                                        >
                                                     </li>
                                                 </ul>
                                             </div>

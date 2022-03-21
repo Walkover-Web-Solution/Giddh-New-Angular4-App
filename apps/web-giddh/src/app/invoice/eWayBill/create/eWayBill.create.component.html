@@ -260,9 +260,9 @@
                                         [(ngModel)]="generateEwayBillform.vehicleType"
                                         type="radio"
                                     />
-                                    <label for="dimensional" class="radio-custom-label"
-                                        >{{ localeData?.over_dimensional_cargo }} {{ isTransModeRoad }}</label
-                                    >
+                                    <label for="dimensional" class="radio-custom-label">{{
+                                        localeData?.over_dimensional_cargo
+                                    }}</label>
                                 </span>
                             </ng-container>
                         </div>
@@ -461,11 +461,11 @@
                         >
                         <input
                             #TransportersID="ngModel"
-                            type="number"
-                            pattern="[0-9^ .&]{4,15}"
+                            type="text"
+                            pattern="[0-9]{2}[0-9|A-Z]{13}"
                             minlength="4"
+                            maxlength="15"
                             class="form-control"
-                            onKeyPress="if(this.value.length==15) return false;"
                             [ngClass]="{
                                 'has-error': TransportersID.invalid && TransportersID.touched && TransportersID.dirty,
                                 'has-success': TransportersID.valid
@@ -505,6 +505,7 @@
                         <div class="clearfix" *ngIf="transportEditMode">
                             <button
                                 class="btn btn-md btn-green mr-r1"
+                                [disabled]="generateTransporterForm.invalid"
                                 [ladda]="updateTransporterInProcess$ | async"
                                 (click)="updateTransporter(generateTransporterForm)"
                                 type="submit"
