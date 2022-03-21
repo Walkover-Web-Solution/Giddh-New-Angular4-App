@@ -27,7 +27,7 @@ body.dark-theme {
     --color-tertiary-login-box-body-text: #f5f5f5;
     --color-primary-google-box-background: #668cff;
     --color-primary-login-with-google-box-background: #668cff;
-    --color-primary-login-signup-linkedin-ico: #668cff;
+    --color-primary-login-signup-linkedin-icon: #668cff;
     --color-primary-login-slide-content-btn-white: #e58a0026;
     --color-primary-signup-ico-google-background: #e58a0026;
     --color-primary-login-hash-tag: #e54556;
@@ -166,7 +166,7 @@ body.dark-theme {
     --color-datepicker-date-icon: #9b9b9e;
     --color-datepicker-rightside-list-text: #f5f5f5;
     --color-datepicker-rightside-list-primary-text-hover: #212528;
-    --color-datepicker-rightside-list-secondary-text-hover: #212528;
+    --color-datepicker-right-side-list-secondary-text-hover: #212528;
     --color-datepicker-input-label: #f5f5f5;
     --color-primary-datepicker-input-bottom-border: #668cff;
     --color-datepicker-unselected-month: #f5f5f5;
@@ -314,7 +314,7 @@ body.dark-theme {
     --color-design-filters-swatch-ul-li-nth-child18-background: #9b9b9e;
 
     // Company Branch Color Variables
-    --color-primary-company-branch-company-branch-dropdown-total-company-count: #9b9b9e;
+    --color-primary-company-branch-dropdown-total-company-count: #9b9b9e;
     --color-primary-company-branch-digit-orange: #e58a00;
     --color-primary-company-branch-company-list-btn-group-active-hover: #e58a0026;
     --color-primary-company-branch-branch-list-active-hover: #e58a0026;
@@ -459,7 +459,7 @@ body.dark-theme {
     --color-primary-tax-sidebar-gst-menu-items-ul: #9b9b9e;
 
     // MF Report Color Variables
-    --color-primary-mf-report-row-gray-background-th-background: #668cff26;
+    --color-primary-mf-report-row-gray-th-background: #668cff26;
 
     // New Branch Transfer Color Variables
     --color-new-branch-table-delivery-basic-thead-tbody-tr-th-last-child: #9b9b9e;
@@ -543,7 +543,7 @@ body.dark-theme {
     --color-table-searchbar-background: #668cff26;
     --color-table-primary-header-bar-border: #668cff26;
     --color-table-primary-content-bar-border: #668cff26;
-    --color-table-primary-giddh-table-thead-register-table-th-th-background: #e58a0026;
+    --color-table-primary-giddh-table-thead-register-table-th-background: #e58a0026;
     --color-table-icon-sort-asc: #9b9b9e;
     --color-table-primary-footer-background: #668cff26;
     --color-table-primary-footer: #668cff26;
@@ -636,9 +636,9 @@ body.dark-theme {
     --color-upload-btn-background: #e58a0026;
     --color-pop-panel-form-control-background: #e58a0026;
     --color-ledger-row-td-select2-container-select2-search__field-background: #e58a0026;
-    --color-ratio-chart-block-nth-child2-span-pie-text_center: #e58a00;
-    --color-ratio-chart-block-nth-child3-span-pie-text_center: #e54556;
-    --color-ratio-chart-block-nth-child4-span-pie-text_center: #36b283;
+    --color-ratio-chart-block-nth-child2-span-pie-text-center: #e58a00;
+    --color-ratio-chart-block-nth-child3-span-pie-text-center: #e54556;
+    --color-ratio-chart-block-nth-child4-span-pie-text-center: #36b283;
     --color-scroll-auto-webkit-scrollbar-track-background: #9b9b9e;
     --color-primary-virtual-scroll-scrollable-content-item-a-item-stock: #cbcfd2;
     --color-manufacture-source-tbody-tr-td-nth-child1-before-background: #9b9b9e;
@@ -662,7 +662,7 @@ body.dark-theme {
     --color-image-filter: invert(1);
     --color-image-filter-secondary: invert(0.8);
     --color-image-filter-tertiary: invert(0.9);
-    --color-caret-image: url("../../images/caretDark.svg");
+    --color-caret-image: url("../../images/caret-dark.svg");
 
     /************************ COMMON COLORS USED MORE THAN 12 TIMES ************************/
     --color-blue: #668cff;
