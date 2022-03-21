@@ -112,6 +112,8 @@ export class EWayBillComponent implements OnInit, OnDestroy {
     public commonLocaleData: any = {};
     /** True if today selected */
     public todaySelected: boolean = false;
+    /** True if dropdown menu needs to show upwards */
+    public isDropUp: boolean = false;
 
     constructor(
         private store: Store<AppState>,
@@ -141,7 +143,7 @@ export class EWayBillComponent implements OnInit, OnDestroy {
         this.store.pipe(select(s => s.general.states), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
                 Object.keys(res.stateList).forEach(key => {
-                    this.states.push({ label: res.stateList[key].code + ' - ' + res.stateList[key].name, value: res.stateList[key].code });
+                    this.states.push({ label: res.stateList[key].code + ' - ' + res.stateList[key].name, value: res.stateList[key].stateGstCode });
                 });
                 this.statesSource$ = observableOf(this.states);
             }
@@ -558,5 +560,26 @@ export class EWayBillComponent implements OnInit, OnDestroy {
      */
     public handleNavigation(): void {
         this.router.navigate(['pages', 'gstfiling']);
+    }
+
+    /**
+     * This will determine if dropdown menu needs to show downwards or upwards
+     *
+     * @param {*} event
+     * @memberof EWayBillComponent
+     */
+    public showActionsMenu(event: any) {
+        const screenHeight = event?.view?.innerHeight;
+        const clickedPosition = event?.y;
+        const actionPopupHeight = 300;
+        const calculatedPosition = screenHeight - clickedPosition;
+
+        if (calculatedPosition > actionPopupHeight) {
+            this.isDropUp = false;
+        } else {
+            this.isDropUp = true;
+        }
+
+        this._cd.detectChanges();
     }
 }
