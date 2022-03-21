@@ -1491,6 +1491,7 @@
                     <div class="clearfix" *ngIf="transportEditMode">
                         <button
                             class="btn btn-md btn-green mr-r1"
+                            [disabled]="generateTransporterForm.invalid"
                             [ladda]="updateTransporterInProcess$ | async"
                             (click)="updateTransporter(generateTransporterForm)"
                             type="submit"
