@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, Component, ElementRef, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { ReplaySubject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { COMMA, ENTER } from "@angular/cdk/keycodes";
@@ -8,6 +8,9 @@ import { IOption } from "../../../theme/ng-virtual-select/sh-options.interface";
 import { IGroupsWithStocksHierarchyMinItem } from "../../../models/interfaces/groupsWithStocks.interface";
 import { SalesService } from "../../../services/sales.service";
 import { ToasterService } from "../../../services/toaster.service";
+import { select, Store } from "@ngrx/store";
+import { AppState } from "../../../store";
+import { CompanyActions } from "../../../actions/company.actions";
 
 @Component({
     selector: "stock-create-edit",
@@ -27,7 +30,8 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
     public purchaseAccounts: IOption[] = [];
     /** Sales accounts list */
     public salesAccounts: IOption[] = [];
-
+    /** Taxes list */
+    public taxes: IOption[] = [];
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public stockForm: any = {
         type: 'PRODUCT',
@@ -39,7 +43,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         taxes: null,
         skuCode: null,
         skuCodeHeading: null,
-        customField1Heading: null,
+        customField1Heading: "Custom Field",
         customField1Value: null,
         customField2Heading: null,
         customField2Value: null,
@@ -80,11 +84,14 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
     public isPurchaseInformationEnabled: boolean = false;
     public isSalesInformationEnabled: boolean = false;
     public isVariantAvailable: boolean = false;
+    public inlineEditCustomField: number = 0;
 
     constructor(
         private inventoryService: InventoryService,
         private salesService: SalesService,
-        private toaster: ToasterService
+        private toaster: ToasterService,
+        private store: Store<AppState>,
+        private companyAction: CompanyActions
     ) {
     }
 
@@ -97,6 +104,19 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         this.getStockGroups();
         this.getPurchaseAccounts();
         this.getSalesAccounts();
+        this.getTaxes();
+
+        this.store.pipe(select(state => state?.company?.taxes), takeUntil(this.destroyed$)).subscribe(response => {
+            if(response?.length > 0) {
+                this.taxes = response?.map(result => {
+                    return {
+                        value: result.uniqueName,
+                        label: result.name,
+                        additional: result
+                    };
+                }) || [];
+            }
+        });
     }
 
     public ngOnDestroy(): void {
@@ -198,6 +218,10 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         this.variantOptions.push({ name: "Option " + optionIndex, values: [], order: optionIndex });
     }
 
+    public deleteVariantOption(index: number): void {
+        this.variantOptions = this.variantOptions.filter((data, optionIndex) => optionIndex !== index).map(data => { return data });
+    }
+
     public generateVariants(): void {
         let attributes = [];
 
@@ -279,5 +303,18 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         if (unitRates?.length === 0) {
             this.addNewSalesUnitPrice();
         }
+    }
+
+    public selectVariantUnit(variant: any, event: any): void {
+        variant.warehouseBalance[0].stockUnit = { name: event.label, code: event.value };
+    }
+
+    public getTaxes(): void {
+        this.store.dispatch(this.companyAction.getTax());
+    }
+
+    public showCustomFieldLabelInlineEdit(field: number): void {
+        console.log(field);
+        this.inlineEditCustomField = field;
     }
 }

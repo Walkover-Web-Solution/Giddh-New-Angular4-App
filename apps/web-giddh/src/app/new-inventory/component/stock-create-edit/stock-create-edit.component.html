@@ -93,6 +93,25 @@
                                         ></text-field>
                                     </div>
                                 </div>
+                                <div class="row mr-b15">
+                                    <div class="col-sm-6 col-lg-6">
+                                        <label>Applicable Tax</label>
+                                    </div>
+                                    <div class="col-sm-6 col-lg-6">
+                                        <mat-select
+                                            name="taxes"
+                                            class="form-control"
+                                            placeholder="Select Tax"
+                                            [(ngModel)]="stockForm.taxes"
+                                            multiple
+                                        >
+                                            <mat-option *ngFor="let tax of taxes" [value]="tax.value">{{
+                                                tax.label
+                                            }}</mat-option>
+                                            >
+                                        </mat-select>
+                                    </div>
+                                </div>
                             </div>
                             <!-- <div class="col-md-4 col-lg-4 col-xl-6 col-12">
                                 <div class="add-image-button">
@@ -637,16 +656,17 @@
                                                     *ngFor="let option of variantOptions; let i = index"
                                                 >
                                                     <div class="col-sm-6 col-lg-4">
-                                                        <label>Option</label>
+                                                        <label>Option Name</label>
                                                         <text-field
                                                             [cssClass]="'form-control'"
                                                             [placeholder]="'Size'"
                                                             [name]="'option-' + i"
                                                             [(ngModel)]="option.name"
+                                                            [type]="'text'"
                                                         ></text-field>
                                                     </div>
                                                     <div class="col-sm-6 col-lg-6">
-                                                        <label>Category</label>
+                                                        <label>Option Values</label>
                                                         <div class="multi-select-input">
                                                             <mat-chip-list #chipList>
                                                                 <mat-chip
@@ -667,6 +687,14 @@
                                                                     (matChipInputTokenEnd)="addOption($event, i)"
                                                                 />
                                                             </mat-chip-list>
+                                                        </div>
+                                                        <div *ngIf="variantOptions?.length > 1">
+                                                            <button
+                                                                class="chip-close-btn"
+                                                                (click)="deleteVariantOption(i)"
+                                                            >
+                                                                <i class="icon-cross"></i>
+                                                            </button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -689,52 +717,60 @@
                                             <table class="stock-table font-14" style="margin-left: 2px">
                                                 <tr>
                                                     <th>Stock Name<span class="red-text">*</span></th>
-                                                    <!-- <th>Unique Name</th> -->
                                                     <th>Unit</th>
                                                     <th class="text-right">
-                                                        Cost Price<span class="red-text">*</span>
+                                                        Opening Quantity<span class="red-text">*</span>
                                                     </th>
                                                     <th class="text-right">
-                                                        Sale Price <span class="red-text">*</span>
+                                                        Opening Amount<span class="red-text">*</span>
                                                     </th>
                                                     <th class="text-right">SKU Code</th>
                                                     <th class="text-center">Archive</th>
                                                 </tr>
-                                                <tr *ngFor="let variant of stockForm.variants">
+                                                <tr *ngFor="let variant of stockForm.variants; let i = index">
                                                     <td>{{ variant.name }}</td>
-                                                    <!-- <td>
-                                                        <text-field [cssClass]="'form-control'" placeholder="-">
-                                                        </text-field>
-                                                    </td> -->
                                                     <td>
-                                                        <mat-select class="font-14">
-                                                            <mat-option value="unit1"> Unit 1 </mat-option>
-                                                            <mat-option value="unit2"> Unit 2 </mat-option>
-                                                            <mat-option value="unit3"> Unit 3 </mat-option>
-                                                            <mat-option value="unit4"> Unit 4 </mat-option>
-                                                        </mat-select>
+                                                        <select-field
+                                                            [cssClass]="'form-control'"
+                                                            [name]="'variantUnit' + i"
+                                                            [placeholder]="'Unit'"
+                                                            [options]="stockUnits"
+                                                            (selectedOption)="selectVariantUnit(variant, $event)"
+                                                        ></select-field>
                                                     </td>
                                                     <td>
                                                         <text-field
                                                             [cssClass]="'form-control text-right'"
-                                                            placeholder="0.00"
+                                                            [placeholder]="'0.00'"
+                                                            [name]="'variantOpeningQuantity' + i"
+                                                            [(ngModel)]="variant.warehouseBalance[0].openingQuantity"
+                                                            [type]="'number'"
                                                         ></text-field>
                                                     </td>
                                                     <td>
                                                         <text-field
                                                             [cssClass]="'form-control text-right'"
-                                                            placeholder="0.00"
+                                                            [placeholder]="'0.00'"
+                                                            [name]="'variantOpeningAmount' + i"
+                                                            [(ngModel)]="variant.warehouseBalance[0].openingAmount"
+                                                            [type]="'number'"
                                                         ></text-field>
                                                     </td>
                                                     <td>
                                                         <text-field
                                                             [cssClass]="'form-control text-right'"
-                                                            placeholder="-"
-                                                        >
-                                                        </text-field>
+                                                            [placeholder]="'-'"
+                                                            [name]="'variantSkuCode' + i"
+                                                            [(ngModel)]="variant.skuCode"
+                                                            [type]="'text'"
+                                                        ></text-field>
                                                     </td>
                                                     <td class="text-center">
-                                                        <mat-checkbox color="primary"></mat-checkbox>
+                                                        <mat-checkbox
+                                                            color="primary"
+                                                            name="variantArchive{{ i }}"
+                                                            [(ngModel)]="variant.archive"
+                                                        ></mat-checkbox>
                                                     </td>
                                                 </tr>
                                             </table>
@@ -784,7 +820,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-xl-6 col-md-12 col-lg-8 col-sm-12">
+                                    <div class="col-xl-6 col-md-12 col-lg-8 col-sm-12" *ngIf="!isVariantAvailable">
                                         <div class="row mr-b15">
                                             <div class="col-sm-6 col-lg-6">
                                                 <label>SKU Code</label>
@@ -802,44 +838,30 @@
                                     </div>
                                     <div class="col-xl-6 col-md-12 col-lg-8 col-sm-12">
                                         <div class="row mr-b15">
-                                            <div class="col-sm-6 col-lg-6">
-                                                <label>Barcode (ISBN, UPC, GTIN, etc.)</label>
-                                            </div>
-                                            <div class="col-sm-6 col-lg-6">
+                                            <div class="col-sm-6 col-lg-6 custom-field1-parent">
+                                                <label
+                                                    *ngIf="inlineEditCustomField === 0 || inlineEditCustomField === 2"
+                                                    (click)="showCustomFieldLabelInlineEdit(1)"
+                                                    >{{ stockForm.customField1Heading || "Custom Field" }}</label
+                                                >
                                                 <text-field
+                                                    *ngIf="inlineEditCustomField === 1"
                                                     [cssClass]="'form-control'"
-                                                    id="bar-code"
-                                                    placeholder="Enter Code"
-                                                    type="text"
+                                                    [name]="'customField1Heading'"
+                                                    [placeholder]="'Custom Field'"
+                                                    [type]="'text'"
+                                                    [(ngModel)]="stockForm.customField1Heading"
+                                                    [autoFocus]="true"
+                                                    (blur)="showCustomFieldLabelInlineEdit(0)"
                                                 ></text-field>
                                             </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-xl-6 col-md-12 col-lg-8 col-sm-12">
-                                        <div class="row mr-b15">
-                                            <div class="col-sm-6 col-lg-6">
-                                                <label>Expiry Date</label>
-                                            </div>
                                             <div class="col-sm-6 col-lg-6">
                                                 <text-field
                                                     [cssClass]="'form-control'"
-                                                    placeholder="Select Date"
-                                                    type="text"
-                                                ></text-field>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-xl-6 col-md-12 col-lg-8 col-sm-12">
-                                        <div class="row mr-b15">
-                                            <div class="col-sm-6 col-lg-6">
-                                                <label>Custom Field</label>
-                                            </div>
-                                            <div class="col-sm-6 col-lg-6">
-                                                <text-field
-                                                    [cssClass]="'form-control'"
-                                                    id="expiry-code"
-                                                    placeholder="Custom Field"
-                                                    type="text"
+                                                    [name]="'customField1Value'"
+                                                    [placeholder]="'Custom Field'"
+                                                    [type]="'text'"
+                                                    [(ngModel)]="stockForm.customField1Value"
                                                 ></text-field>
                                             </div>
                                         </div>
@@ -852,24 +874,10 @@
                                             <div class="col-sm-6 col-lg-6">
                                                 <text-field
                                                     [cssClass]="'form-control'"
-                                                    id="expiry-code"
-                                                    placeholder="Custom Field"
-                                                    type="text"
-                                                ></text-field>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-xl-6 col-md-12 col-lg-8 col-sm-12">
-                                        <div class="row mr-b15">
-                                            <div class="col-sm-6 col-lg-6">
-                                                <label>Custom Field</label>
-                                            </div>
-                                            <div class="col-sm-6 col-lg-6">
-                                                <text-field
-                                                    [cssClass]="'form-control'"
-                                                    id="expiry-code"
-                                                    placeholder="Custom Field"
-                                                    type="text"
+                                                    [name]="'customField2Value'"
+                                                    [placeholder]="'Custom Field'"
+                                                    [type]="'text'"
+                                                    [(ngModel)]="stockForm.customField2Value"
                                                 ></text-field>
                                             </div>
                                         </div>
