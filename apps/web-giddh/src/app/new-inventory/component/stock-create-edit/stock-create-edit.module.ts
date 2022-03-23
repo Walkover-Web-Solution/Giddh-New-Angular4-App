@@ -16,7 +16,7 @@ import { HamburgerMenuModule } from "../../../shared/header/components/hamburger
 import { FormFieldsModule } from "../../../theme/form-fields/form-fields.module";
 import { StockCreateEditComponent } from "./stock-create-edit.component";
 import { StockCreateEditRoutingModule } from "./stock-create-edit.routing.module";
-import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 @NgModule({
     declarations: [
@@ -47,5 +47,5 @@ import {MatAutocompleteModule} from '@angular/material/autocomplete';
     ]
 })
 export class StockCreateEditModule {
-    
+
 }
