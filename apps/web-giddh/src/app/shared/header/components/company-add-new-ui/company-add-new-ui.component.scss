@@ -27,6 +27,7 @@ label .required {
     max-width: 200px;
     margin: 30px auto;
     display: block;
+    filter: var(--color-primary-giddh-logo);
 }
 
 .welcome-wrapper {
@@ -71,6 +72,10 @@ label .required {
 .phone-code-caret {
     width: 85px;
     margin-right: 28px;
+}
+
+input#contactNo::placeholder {
+    color: var(--color-common-primary-input-placeholder);
 }
 
 @media (max-width: 767px) {
