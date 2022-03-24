@@ -449,6 +449,9 @@ body.default-theme {
     --color-sidebar-list-background-hover: #668cff26;
     --color-sidebar-primary-box-shadow: #00000033;
 
+    // Giddh Logo Color Variable
+    --color-primary-giddh-logo: ;
+
     // Tax Sidebar Color Variables
     --color-primary-tax-sidebar-text: #505159;
     --color-primary-tax-sidebar-list-active: #668cff;
@@ -595,6 +598,7 @@ body.default-theme {
     --color-common-secondary-border: #cbcfd2;
     --color-primary-common-box-shadow: #00000033;
     --color-common-primary-disabled: #cbcfd2;
+    --color-common-primary-input-placeholder: #cbcfd2;
 
     // Toast Color Variables
     --color-red-toast: #e54556;
