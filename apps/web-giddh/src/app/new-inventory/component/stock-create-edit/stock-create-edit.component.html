@@ -31,14 +31,20 @@
             </div>
 
             <!--product content start-->
-            <div class="product-detail-content px-3" *ngIf="stockForm.type === 'PRODUCT'">
+            <div
+                class="product-detail-content px-3"
+                *ngIf="stockForm.type === 'PRODUCT' || stockForm.type === 'SERVICE'"
+            >
                 <div class="row flex-column-reverse flex-md-row">
                     <div class="col-xl-8 col-lg-12">
                         <div class="row flex-column-reverse flex-md-row">
                             <div class="col-md-8 col-lg-8 col-xl-6 col-12">
                                 <div class="row mr-b15">
                                     <div class="col-sm-6 col-lg-6">
-                                        <label>Product Name <span class="red-text">*</span></label>
+                                        <label
+                                            >{{ stockForm.type | titlecase }} Name
+                                            <span class="red-text">*</span></label
+                                        >
                                     </div>
                                     <div class="col-sm-6 col-lg-6">
                                         <text-field
@@ -53,7 +59,10 @@
                                 </div>
                                 <div class="row mr-b15">
                                     <div class="col-sm-6 col-lg-6">
-                                        <label>Product Unit <span class="red-text">*</span></label>
+                                        <label
+                                            >{{ stockForm.type | titlecase }} Unit
+                                            <span class="red-text">*</span></label
+                                        >
                                     </div>
                                     <div class="col-sm-6 col-lg-6">
                                         <select-field
@@ -61,7 +70,9 @@
                                             [name]="'stockUnitCode'"
                                             [placeholder]="'Product Unit'"
                                             [options]="stockUnits"
-                                            (selectedOption)="stockForm.stockUnitCode = $event?.value"
+                                            (selectedOption)="
+                                                stockForm.stockUnitCode = $event?.value; stockUnitName = $event.label
+                                            "
                                         ></select-field>
                                     </div>
                                 </div>
@@ -642,7 +653,8 @@
                                             name="isVariantAvailable"
                                             [(ngModel)]="isVariantAvailable"
                                         >
-                                            Variant? This product has multiple options like size or colours etc..
+                                            Variant? This {{ stockForm.type | lowercase }} has multiple options like
+                                            size or colours etc..
                                         </mat-checkbox>
                                     </span>
                                 </p>
@@ -716,7 +728,7 @@
                                         <div class="table-responsive" *ngIf="stockForm.variants?.length > 0">
                                             <table class="stock-table font-14" style="margin-left: 2px">
                                                 <tr>
-                                                    <th>Stock Name<span class="red-text">*</span></th>
+                                                    <th>Variant Name<span class="red-text">*</span></th>
                                                     <th>Unit</th>
                                                     <th class="text-right">
                                                         Opening Quantity<span class="red-text">*</span>
@@ -838,12 +850,18 @@
                                     </div>
                                     <div class="col-xl-6 col-md-12 col-lg-8 col-sm-12">
                                         <div class="row mr-b15">
-                                            <div class="col-sm-6 col-lg-6 custom-field1-parent">
-                                                <label
-                                                    *ngIf="inlineEditCustomField === 0 || inlineEditCustomField === 2"
-                                                    (click)="showCustomFieldLabelInlineEdit(1)"
-                                                    >{{ stockForm.customField1Heading || "Custom Field" }}</label
-                                                >
+                                            <div class="col-sm-6 col-lg-6">
+                                                <label *ngIf="inlineEditCustomField !== 1"
+                                                    >{{ stockForm.customField1Heading || "Custom Field" }}
+
+                                                    <span class="pull-right">
+                                                        <i
+                                                            *ngIf="inlineEditCustomField !== 1"
+                                                            class="icon-edit-pencil cursor-pointer"
+                                                            (click)="showCustomFieldLabelInlineEdit(1)"
+                                                        ></i>
+                                                    </span>
+                                                </label>
                                                 <text-field
                                                     *ngIf="inlineEditCustomField === 1"
                                                     [cssClass]="'form-control'"
@@ -852,8 +870,13 @@
                                                     [type]="'text'"
                                                     [(ngModel)]="stockForm.customField1Heading"
                                                     [autoFocus]="true"
-                                                    (blur)="showCustomFieldLabelInlineEdit(0)"
                                                 ></text-field>
+                                                <span class="pull-right" *ngIf="inlineEditCustomField === 1">
+                                                    <i
+                                                        class="icon-save cursor-pointer"
+                                                        (click)="showCustomFieldLabelInlineEdit(0)"
+                                                    ></i>
+                                                </span>
                                             </div>
                                             <div class="col-sm-6 col-lg-6">
                                                 <text-field
@@ -869,7 +892,32 @@
                                     <div class="col-xl-6 col-md-12 col-lg-8 col-sm-12">
                                         <div class="row mr-b15">
                                             <div class="col-sm-6 col-lg-6">
-                                                <label>Custom Field</label>
+                                                <label *ngIf="inlineEditCustomField !== 2"
+                                                    >{{ stockForm.customField2Heading || "Custom Field" }}
+
+                                                    <span class="pull-right">
+                                                        <i
+                                                            *ngIf="inlineEditCustomField !== 2"
+                                                            class="icon-edit-pencil cursor-pointer"
+                                                            (click)="showCustomFieldLabelInlineEdit(2)"
+                                                        ></i>
+                                                    </span>
+                                                </label>
+                                                <text-field
+                                                    *ngIf="inlineEditCustomField === 2"
+                                                    [cssClass]="'form-control'"
+                                                    [name]="'customField2Heading'"
+                                                    [placeholder]="'Custom Field'"
+                                                    [type]="'text'"
+                                                    [(ngModel)]="stockForm.customField2Heading"
+                                                    [autoFocus]="true"
+                                                ></text-field>
+                                                <span class="pull-right" *ngIf="inlineEditCustomField === 2">
+                                                    <i
+                                                        class="icon-save cursor-pointer"
+                                                        (click)="showCustomFieldLabelInlineEdit(0)"
+                                                    ></i>
+                                                </span>
                                             </div>
                                             <div class="col-sm-6 col-lg-6">
                                                 <text-field
@@ -1275,7 +1323,7 @@
             <!--product content end-->
 
             <!--service content start-->
-            <div class="service-detail-content px-3" *ngIf="stockForm.type === 'SERVICE'">
+            <div class="service-detail-content px-3" *ngIf="false">
                 <div class="row">
                     <div class="col-xl-8 col-lg-12">
                         <div class="row flex-column-reverse flex-md-row">
@@ -5131,7 +5179,7 @@
         <div class="d-flex">
             <div class="button-group">
                 <button id="clear-btn" mat-raised-button class="btn-primary min-width-100 bdr-radius-50">Clear</button>
-                <button id="create-new-btn" mat-raised-button class="btn-success min-width-100 bdr-radius-50" disabled>
+                <button id="create-new-btn" mat-raised-button class="btn-success min-width-100 bdr-radius-50">
                     Create New
                 </button>
             </div>

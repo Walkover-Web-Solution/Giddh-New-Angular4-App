@@ -1,6 +1,6 @@
-import { ChangeDetectionStrategy, Component, ElementRef, OnDestroy, OnInit, ViewChild } from "@angular/core";
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from "@angular/core";
 import { ReplaySubject } from "rxjs";
-import { takeUntil } from "rxjs/operators";
+import { filter, take, takeUntil } from "rxjs/operators";
 import { COMMA, ENTER } from "@angular/cdk/keycodes";
 import { MatChipInputEvent } from "@angular/material/chips";
 import { InventoryService } from "../../../services/inventory.service";
@@ -11,6 +11,7 @@ import { ToasterService } from "../../../services/toaster.service";
 import { select, Store } from "@ngrx/store";
 import { AppState } from "../../../store";
 import { CompanyActions } from "../../../actions/company.actions";
+import { WarehouseActions } from "../../../settings/warehouse/action/warehouse.action";
 
 @Component({
     selector: "stock-create-edit",
@@ -43,9 +44,9 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         taxes: null,
         skuCode: null,
         skuCodeHeading: null,
-        customField1Heading: "Custom Field",
+        customField1Heading: "Custom Field 1",
         customField1Value: null,
-        customField2Heading: null,
+        customField2Heading: "Custom Field 2",
         customField2Value: null,
         purchaseAccountDetails: {
             accountUniqueName: null,
@@ -85,13 +86,16 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
     public isSalesInformationEnabled: boolean = false;
     public isVariantAvailable: boolean = false;
     public inlineEditCustomField: number = 0;
+    public warehouses: any[] = [];
+    public stockUnitName: string = "";
 
     constructor(
         private inventoryService: InventoryService,
         private salesService: SalesService,
         private toaster: ToasterService,
         private store: Store<AppState>,
-        private companyAction: CompanyActions
+        private companyAction: CompanyActions,
+        private warehouseAction: WarehouseActions
     ) {
     }
 
@@ -105,18 +109,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         this.getPurchaseAccounts();
         this.getSalesAccounts();
         this.getTaxes();
-
-        this.store.pipe(select(state => state?.company?.taxes), takeUntil(this.destroyed$)).subscribe(response => {
-            if(response?.length > 0) {
-                this.taxes = response?.map(result => {
-                    return {
-                        value: result.uniqueName,
-                        label: result.name,
-                        additional: result
-                    };
-                }) || [];
-            }
-        });
+        this.getWarehouses();
     }
 
     public ngOnDestroy(): void {
@@ -249,6 +242,11 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
 
         this.stockForm.variants = [];
 
+        let defaultWarehouse = null;
+        if (this.warehouses?.length > 0) {
+            defaultWarehouse = this.warehouses?.filter(warehouse => warehouse.isDefault);
+        }
+
         variants?.forEach(variant => {
             this.stockForm.variants.push({
                 name: variant,
@@ -258,12 +256,12 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 warehouseBalance: [
                     {
                         warehouse: {
-                            name: undefined,
-                            uniqueName: undefined
+                            name: (defaultWarehouse) ? defaultWarehouse[0]?.name : undefined,
+                            uniqueName: (defaultWarehouse) ? defaultWarehouse[0]?.uniqueName : undefined
                         },
                         stockUnit: {
-                            name: "nos",
-                            code: "nos"
+                            name: this.stockUnitName,
+                            code: this.stockForm.stockUnitCode
                         },
                         openingQuantity: 0,
                         openingAmount: 0
@@ -310,11 +308,36 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
     }
 
     public getTaxes(): void {
-        this.store.dispatch(this.companyAction.getTax());
+        this.store.pipe(select(state => state?.company?.taxes), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.length > 0) {
+                this.taxes = response?.map(result => {
+                    return {
+                        value: result.uniqueName,
+                        label: result.name,
+                        additional: result
+                    };
+                }) || [];
+            } else {
+                this.store.dispatch(this.companyAction.getTax());
+            }
+        });
     }
 
     public showCustomFieldLabelInlineEdit(field: number): void {
-        console.log(field);
         this.inlineEditCustomField = field;
+    }
+
+    public getWarehouses(): void {
+        this.store.pipe(select(state => state.warehouse.warehouses), takeUntil(this.destroyed$)).subscribe((warehouses: any) => {
+            if (warehouses) {
+                this.warehouses = warehouses.results;
+            } else {
+                this.store.dispatch(this.warehouseAction.fetchAllWarehouses({ page: 1, count: 0 }));
+            }
+        });
+    }
+
+    public createStock(): void {
+        
     }
 }
