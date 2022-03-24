@@ -60,6 +60,8 @@ export class InvoiceAdvanceSearchComponent implements OnInit, OnChanges {
     public dateFieldPosition: any = { x: 0, y: 0 };
     /** Stores the E-invoice status */
     public eInvoiceStatusDropdownOptions: IOption[] = [];
+    /** Stores the voucher API version of company */
+    public voucherApiVersion: 1 | 2;
 
     constructor(private generalService: GeneralService, private modalService: BsModalService) {
 
@@ -94,6 +96,8 @@ export class InvoiceAdvanceSearchComponent implements OnInit, OnChanges {
             { label: this.commonLocaleData?.app_date_options?.after, value: 'after' },
             { label: this.commonLocaleData?.app_date_options?.before, value: 'before' },
         ];
+        
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
     }
 
     public invoiceTotalRangeChanged(item: IOption) {
