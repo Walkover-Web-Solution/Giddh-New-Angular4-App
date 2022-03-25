@@ -148,7 +148,7 @@
     "app_invalid_transporter_name_message": "Transporter name should contain atleast 5 characters and should not contain any special character.",
     "app_transporter_id": "Transporter ID",
     "app_transporter_id_placeholder": "Mention number",
-    "app_invalid_transporter_id_message": "Transporter id should contain atleast 4 characters and should contain digit only.",
+    "app_invalid_transporter_id_message": "Transporter ID should contain atleast 4 characters.",
     "app_transporter_table_name": "Name",
     "app_transporter_table_id": "Transporter ID",
     "app_transporter": "Transporter",

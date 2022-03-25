@@ -41,5 +41,7 @@
 	"number_system_label": "संख्या प्रणाली",
 	"inventory_type": "यादीचा प्रकार",
 	"language": "भाषा",
-	"select_language": "भाषा निवडा"
+	"select_language": "भाषा निवडा",
+    "theme": "थीम",
+    "select_theme": "थीम निवडा"
 }

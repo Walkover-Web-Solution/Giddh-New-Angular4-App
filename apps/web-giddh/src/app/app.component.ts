@@ -53,7 +53,6 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         private commonActions: CommonActions,
         public dialog: MatDialog,
         private modalService: BsModalService
-
     ) {
         this.isProdMode = PRODUCTION_ENV;
         this.isElectron = isElectron;
@@ -100,8 +99,8 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
                 APP_FOLDER:APP_FOLDER
             });
         }
-         /** This will be use for dialog close on route event */
-         this.router.events.pipe(filter(event => event instanceof NavigationStart), takeUntil(this.destroyed$)).subscribe((event: any) => {
+        /** This will be use for dialog close on route event */
+        this.router.events.pipe(filter(event => event instanceof NavigationStart), takeUntil(this.destroyed$)).subscribe((event: any) => {
             if (event) {
                 this.dialog?.closeAll();
                 for (let i = 1; i <= this.modalService.getModalsCount(); i++) {
@@ -110,6 +109,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             }
         });
     }
+    
 
     public sidebarStatusChange(event) {
         this.sideMenu.isopen = event;
@@ -158,6 +158,17 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             } else {
                 const supportedLocales = this._generalService.getSupportedLocales();
                 this.store.dispatch(this.commonActions.setActiveLocale(supportedLocales[0]));
+            }
+        });
+
+        this.store.pipe(select(state => state.session.activeTheme), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.value) {
+                document.querySelector("body")?.classList?.remove("dark-theme");
+                document.querySelector("body")?.classList?.remove("default-theme");
+                document.querySelector("body")?.classList?.add(response?.value);
+            } else {
+                let availableThemes = this._generalService.getAvailableThemes();
+                this.store.dispatch(this.commonActions.setActiveTheme(availableThemes[0]));
             }
         });
     }

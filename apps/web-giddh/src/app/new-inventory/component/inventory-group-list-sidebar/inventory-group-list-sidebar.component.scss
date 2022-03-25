@@ -1,8 +1,6 @@
-@import "../../../../assets/css/color.scss";
-
 .sub-detail-sidebar {
     min-height: 100vh;
-    background-color: $white;
+    background-color: var(--color-white);
     max-height: 100%;
     width: 230px !important;
     margin: -15px;
@@ -15,7 +13,7 @@
         font-size: 16px;
         font-family: "opensans-semibold";
         padding: 10px 15px;
-        background-color: $lavender;
+        background-color: var(--color-sidebar-list-background-hover);
     }
     ul {
         list-style: none;
@@ -32,7 +30,7 @@
             padding: 6px 15px;
             font-size: 14px;
             a {
-                color: $gray;
+                color: var(--color-gray);
             }
         }
     }
@@ -40,8 +38,8 @@
 .sidebar-handle {
     width: 36px;
     height: 30px;
-    border: 1px solid $gainsboro;
-    background-color: $white;
+    border: 1px solid var(--color-primary-button-border);
+    background-color: var(--color-white);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -63,7 +61,7 @@
     .sub-detail-sidebar {
         z-index: 10;
         height: 100vh;
-        box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 0 6px var(--color-primary-common-box-shadow);
     }
     .sidebar-handle {
         z-index: 10;

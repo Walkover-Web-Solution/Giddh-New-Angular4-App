@@ -65,8 +65,10 @@
     </ng-template>
 
     <div class="clearfix">
-        <h3 class="font-16 mr-b05">{{ localeData?.invoice_copy }}</h3>
-        <hr />
+        <ng-container *ngIf="selectedItem.voucherType === 'sales'">
+            <h3 class="font-16 mr-b05">{{ localeData?.invoice_copy }}</h3>
+            <hr />
+        </ng-container>
 
         <div class="checkbox" *ngIf="voucherApiVersion === 2">
             <label>
@@ -81,7 +83,7 @@
                 {{ localeData?.invoice_copy_options?.original }}
             </label>
         </div>
-        <div class="checkbox">
+        <div class="checkbox" *ngIf="selectedItem.voucherType === 'sales'">
             <label>
                 <input
                     type="checkbox"
@@ -93,7 +95,7 @@
             </label>
         </div>
 
-        <div class="checkbox">
+        <div class="checkbox" *ngIf="selectedItem.voucherType === 'sales'">
             <label>
                 <input
                     type="checkbox"
@@ -117,7 +119,7 @@
         <div class="col-sm-12">
             <div class="btn-group" role="group">
                 <button
-                    [disabled]="!isOriginal && !isTransport && !isCustomer"
+                    [disabled]="!isOriginal && !isTransport && !isCustomer && !isAttachment"
                     type="button"
                     class="btn btn-success"
                     (click)="onDownloadInvoiceEvent()"

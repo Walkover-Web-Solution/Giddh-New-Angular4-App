@@ -473,4 +473,28 @@ export class GstReconcileActions {
             payload: response
         };
     }
+
+    /**
+     * Resets the gstr3b response
+     *
+     * @returns {CustomActions}
+     * @memberof GstReconcileActions
+     */
+    public resetGstr3BOverViewResponse(): CustomActions {
+        return {
+            type: GSTR_ACTIONS.RESET_GSTR3B_OVERVIEW_RESPONSE
+        };
+    }
+
+    /**
+     * Resets the gstr1 response
+     *
+     * @returns {CustomActions}
+     * @memberof GstReconcileActions
+     */
+    public resetGstr1OverViewResponse(): CustomActions {
+        return {
+            type: GSTR_ACTIONS.RESET_GSTR1_OVERVIEW_RESPONSE
+        };
+    }
 }

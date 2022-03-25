@@ -1,5 +1,3 @@
-@import "../../../../assets/css/color.scss";
-
 .create-group-page {
     padding-top: 15px;
     .image-group {
@@ -17,7 +15,7 @@
     margin-bottom: 15px;
 }
 .create-group-footer {
-    background-color: $whisper-color;
+    background-color: var(--color-lavender);
     height: 60px;
     text-align: left;
     display: flex;

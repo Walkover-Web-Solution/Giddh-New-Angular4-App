@@ -86,6 +86,8 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Stores the voucher API version of current company */
     public voucherApiVersion: 1 | 2;
+    /** Holds gst number */
+    public selectedGstNumber: string = '';
 
     constructor(private gstAction: GstReconcileActions, private store: Store<AppState>, private route: Router, private activatedRoute: ActivatedRoute, private invoiceActions: InvoiceActions,
         private invoiceReceiptActions: InvoiceReceiptActions,
@@ -147,6 +149,7 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
         this.filterParam.gstin = this.activeCompanyGstNumber;
 
         this.activatedRoute.firstChild.queryParams.pipe(takeUntil(this.destroyed$)).subscribe(params => {
+            this.selectedGstNumber = params.selectedGst;
             this.filterParam.entityType = params.entityType;
             this.filterParam.type = params.type;
             this.filterParam.status = params.status;
@@ -166,7 +169,7 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
     }
 
     public goBack() {
-        this.route.navigate(['pages', 'gstfiling', 'filing-return'], { queryParams: { return_type: this.selectedGst, from: this.currentPeriod.from, to: this.currentPeriod.to } });
+        this.route.navigate(['pages', 'gstfiling', 'filing-return'], { queryParams: { return_type: this.selectedGst, from: this.currentPeriod.from, to: this.currentPeriod.to, selectedGst: this.selectedGstNumber } });
     }
 
     public pageChanged(event) {

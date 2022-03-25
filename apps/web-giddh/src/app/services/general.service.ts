@@ -957,6 +957,19 @@ export class GeneralService {
     }
 
     /**
+     * This will return available themes
+     *
+     * @returns {*}
+     * @memberof GeneralService
+     */
+    public getAvailableThemes(): any {
+        return [
+            { label: 'Default', value: 'default-theme' },
+            { label: 'Dark', value: 'dark-theme' }
+        ];
+    }
+
+    /*
      * Adds tooltip text for grand total and total due amount
      * to item supplied (for Cash/Sales Invoice and CR/DR note)
      *
@@ -1007,5 +1020,23 @@ export class GeneralService {
         } catch (error) {
         }
         return item;
+    }
+
+    /**
+     * This returns voucher number
+     *
+     * @private
+     * @param {*} item
+     * @returns {*}
+     * @memberof GeneralService
+     */
+    public getVoucherNumberLabel(voucherType: string, voucherNumber: any, commonLocaleData: any): any {
+        if ((voucherType === "pur" || voucherType === VoucherTypeEnum.purchase) && (!voucherNumber || voucherNumber === "-")) {
+            voucherNumber = commonLocaleData?.app_not_available;
+        } else if (!voucherNumber) {
+            voucherNumber = "-";
+        }
+
+        return voucherNumber;
     }
 }
