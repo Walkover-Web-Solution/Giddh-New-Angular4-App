@@ -11,6 +11,7 @@
     "customer_name": "ग्राहक का नाम",
     "balance_due": "शेष राशि",
     "copy_previous_invoices": "पिछला चालान [INVOICE_TYPE] कॉपी करें",
+    "copy_previous_dr_cr": "पिछला [INVOICE_TYPE] कॉपी करें",    
     "customer_details": "उपभोक्ता विवरण",
     "vendor_details": "विक्रेता विवरण",
     "billing_address": "बिल भेजने का पता",
@@ -47,7 +48,6 @@
     "attachment": "आसक्ति",
     "drag_drop_file": "फ़ाइल को ड्रैग / ड्रॉप करें या यहाँ क्लिक करें",
     "deposit": "जमा",
-    "advance_receipt": "अग्रिम रसीद",
     "adjust_amount": "राशि समायोजित करें",
     "product_service_description": "उत्पाद / सेवा विवरण",
     "qty": "मात्रा",
@@ -62,6 +62,7 @@
     "add_customer": "ग्राहक जोड़ें",
     "add_vendor": "विक्रेता जोड़ें",
     "invoice_no": "चालान #",
+    "bill_number":"बिल संख्या",
     "proforma_no": "प्रोफार्मा #",
     "estimate_no": "अनुमान #",
     "purchase_bill_no": "खरीद बिल #",
@@ -103,5 +104,8 @@
     "date_change_confirmation_heading": "तिथि परिवर्तन की पुष्टि",
     "change_single_entry_date": "क्या आप प्रवेश तिथि भी बदलना चाहते हैं?",
     "change_all_entry_dates": "क्या आप इस तिथि के साथ सभी प्रविष्टियों की तारीख बदलना चाहते हैं?",
-    "exchange_label": "विनिमय"
+    "exchange_label": "विनिमय",
+    "confirm_delete_file": "क्या आप वाकई संलग्न फ़ाइल को हटाना चाहते हैं?",
+    "enter_amount": "कृपया जमा राशि दर्ज करें",
+    "voucher_number_required": "वाउचर नंबर अनिवार्य है।"
 }

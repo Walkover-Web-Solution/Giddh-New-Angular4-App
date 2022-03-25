@@ -68,6 +68,19 @@
         <h3 class="font-16 mr-b05">{{ localeData?.invoice_copy }}</h3>
         <hr />
 
+        <div class="checkbox" *ngIf="voucherApiVersion === 2">
+            <label>
+                <input
+                    name="originalCopy"
+                    type="checkbox"
+                    value="Original"
+                    checked
+                    [(ngModel)]="isOriginal"
+                    (change)="invoiceTypeChanged($event)"
+                />
+                {{ localeData?.invoice_copy_options?.original }}
+            </label>
+        </div>
         <div class="checkbox">
             <label>
                 <input
@@ -91,13 +104,24 @@
                 {{ commonLocaleData?.app_customer }}
             </label>
         </div>
+        <div class="checkbox" *ngIf="voucherApiVersion === 2 && selectedItem?.hasAttachment">
+            <label>
+                <input name="attachment" type="checkbox" value="Attachment" [(ngModel)]="isAttachment" />
+                {{ localeData?.invoice_copy_options?.attachment }}
+            </label>
+        </div>
     </div>
 
     <!-- region buttons -->
     <div class="row mr-t2 mr-b1">
         <div class="col-sm-12">
             <div class="btn-group" role="group">
-                <button type="button" class="btn btn-success" (click)="onDownloadInvoiceEvent()">
+                <button
+                    [disabled]="!isOriginal && !isTransport && !isCustomer && !isAttachment"
+                    type="button"
+                    class="btn btn-success"
+                    (click)="onDownloadInvoiceEvent()"
+                >
                     {{ commonLocaleData?.app_download }}
                 </button>
 

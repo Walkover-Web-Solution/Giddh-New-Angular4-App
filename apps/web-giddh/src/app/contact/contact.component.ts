@@ -44,7 +44,6 @@ import { IFlattenAccountsResultItem } from "../models/interfaces/flattenAccounts
 import { CompanyService } from "../services/companyService.service";
 import { ContactService } from "../services/contact.service";
 import { GeneralService } from "../services/general.service";
-import { GroupService } from "../services/group.service";
 import { ToasterService } from "../services/toaster.service";
 import { ElementViewContainerRef } from "../shared/helpers/directives/elementViewChild/element.viewchild.directive";
 import { AppState } from "../store";
@@ -59,6 +58,7 @@ import { MatTableModule } from "@angular/material/table";
 import { MatTabChangeEvent } from "@angular/material/tabs";
 import { MatDialog } from "@angular/material/dialog";
 import { MatMenuTrigger } from "@angular/material/menu";
+import { CustomFieldsService } from "../services/custom-fields.service";
 
 @Component({
     selector: "contact-detail",
@@ -247,12 +247,18 @@ export class ContactComponent implements OnInit, OnDestroy {
     public showSelectAll: boolean = false;
     /** True if custom fields finished loading */
     public customFieldsLoaded: boolean = false;
+    /** Custom fields request */
+    public customFieldsRequest: any = {
+        page: 0,
+        count: 0,
+        moduleUniqueName: 'account'
+    };
 
     constructor(public dialog: MatDialog, private store: Store<AppState>, private router: Router, private companyServices: CompanyService, private commonActions: CommonActions, private toaster: ToasterService,
         private contactService: ContactService, private settingsIntegrationActions: SettingsIntegrationActions, private companyActions: CompanyActions, private componentFactoryResolver: ComponentFactoryResolver,
         private groupWithAccountsAction: GroupWithAccountsAction, private cdRef: ChangeDetectorRef, private generalService: GeneralService, private route: ActivatedRoute, private generalAction: GeneralActions,
-        private breakPointObservar: BreakpointObserver, private modalService: BsModalService, private settingsProfileActions: SettingsProfileActions, private groupService: GroupService,
-        private settingsBranchAction: SettingsBranchActions, public currencyPipe: GiddhCurrencyPipe, private lightbox: Lightbox ,private renderer: Renderer2) {
+        private breakPointObservar: BreakpointObserver, private modalService: BsModalService, private settingsProfileActions: SettingsProfileActions,
+        private settingsBranchAction: SettingsBranchActions, public currencyPipe: GiddhCurrencyPipe, private lightbox: Lightbox ,private renderer: Renderer2, private customFieldsService: CustomFieldsService) {
         this.searchLoader$ = this.store.pipe(select(p => p.search.searchLoader), takeUntil(this.destroyed$));
         this.dueAmountReportRequest = new DueAmountReportQueryRequest();
         this.createAccountIsSuccess$ = this.store.pipe(select(state => state.groupwithaccounts.createAccountIsSuccess), takeUntil(this.destroyed$));
@@ -370,6 +376,12 @@ export class ContactComponent implements OnInit, OnDestroy {
         this.createAccountIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((yes: boolean) => {
             if (yes && this.accountAsideMenuState === "in") {
                 this.toggleAccountAsidePane();
+                this.getAccounts(this.fromDate, this.toDate, null, "true", PAGINATION_LIMIT, this.searchStr, this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
+            }
+        });
+
+        this.store.pipe(select(state => state.sales.updatedAccountDetails), takeUntil(this.destroyed$)).subscribe(response => {
+            if(response) {
                 this.getAccounts(this.fromDate, this.toDate, null, "true", PAGINATION_LIMIT, this.searchStr, this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
             }
         });
@@ -1432,13 +1444,20 @@ export class ContactComponent implements OnInit, OnDestroy {
      * @memberof ContactComponent
      */
     public getCompanyCustomField(): void {
-        this.groupService.getCompanyCustomField().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.customFieldsService.list(this.customFieldsRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.status === "success") {
-                if (response.body) {
-                    this.colspanLength = 11 + response.body.length;
-                    this.addNewFieldFilters(response.body);
+                if (response.body?.results?.length) {
+                    let customFields = response.body.results?.map(field => {
+                        return {
+                            key: field.fieldName,
+                            uniqueName: field.uniqueName
+                        }
+                    });
+
+                    this.colspanLength = 11 + customFields?.length;
+                    this.addNewFieldFilters(customFields);
+                    this.companyCustomFields$ = observableOf(customFields);
                 }
-                this.companyCustomFields$ = observableOf(response.body);
             } else {
                 this.toaster.showSnackBar("error", response.message);
             }

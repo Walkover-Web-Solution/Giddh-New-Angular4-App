@@ -12,7 +12,7 @@
             <span aria-hidden="true">&times;</span>
         </button>
     </div>
-    <div class="modal-body font-14">
+    <div class="modal-body font-14 adjustments-list">
         <div class="row">
             <div class="col-md-12">
                 <span class="text-light" *ngIf="isUpdateMode && isVoucherModule">
@@ -109,6 +109,7 @@
                                 enableVoucherAdjustmentMultiCurrency &&
                                 getBalanceDue() === 0 &&
                                 getConvertedBalanceDue() !== 0 &&
+                                invoiceFormDetails?.voucherDetails?.gainLoss &&
                                 adjustedVoucherType !== 'rcpt' &&
                                 adjustedVoucherType !== 'advance-receipt' &&
                                 adjustedVoucherType !== 'jr' &&
@@ -133,7 +134,7 @@
                                 <label>{{ commonLocaleData?.app_amount }}<span class="text-danger">* </span></label>
                             </div>
                         </div>
-                        <div class="col-sm-2">
+                        <div class="col-sm-2" *ngIf="voucherApiVersion !== 2">
                             <div class="form-group">
                                 <label>{{ commonLocaleData?.app_tax }}</label>
                             </div>
@@ -169,7 +170,9 @@
                                         >
                                             <ng-template #optionTemplate let-option="option">
                                                 <a href="javascript:void(0)" class="list-item">
-                                                    <div class="item">{{ option.label }}</div>
+                                                    <div class="item">
+                                                        {{ option.label }}
+                                                    </div>
                                                     <div class="item-unique">
                                                         <p class="font-12 text-gray mb-0">
                                                             ({{ commonLocaleData?.app_dated }}:
@@ -232,7 +235,7 @@
                                     >
                                 </div>
                             </div>
-                            <div class="col-sm-2">
+                            <div class="col-sm-2" *ngIf="voucherApiVersion !== 2">
                                 <div class="form-group">
                                     <ng-container
                                         *ngIf="
@@ -287,7 +290,15 @@
                                     </ng-container>
                                 </div>
                             </div>
-                            <div *ngIf="!entry.linkingAdjustment && !shouldDisableEdit(entry)" class="col-sm-3">
+                            <div
+                                *ngIf="
+                                    (voucherApiVersion !== 2 &&
+                                        !entry.linkingAdjustment &&
+                                        !shouldDisableEdit(entry)) ||
+                                    voucherApiVersion === 2
+                                "
+                                class="col-sm-3"
+                            >
                                 <a
                                     href="javascript:void(0)"
                                     (click)="deleteAdjustVoucherRow(entryIdx)"
@@ -305,7 +316,7 @@
                     </p>
 
                     <div class="clearfix">
-                        <div *ngIf="isVoucherModule" class="clearfix mr-b1 mt-2 row">
+                        <div *ngIf="isVoucherModule && voucherApiVersion !== 2" class="clearfix mr-b1 mt-2 row">
                             <div class="col-md-2 col-sm-3 col-xs-5">
                                 <span class="d-inline-block font-14">{{ localeData?.tax_deducted }}</span>
                             </div>
@@ -343,7 +354,7 @@
                             </div>
                         </div>
 
-                        <ng-container *ngIf="isVoucherModule && isTaxDeducted">
+                        <ng-container *ngIf="isVoucherModule && isTaxDeducted && voucherApiVersion !== 2">
                             <div>
                                 <div>
                                     <div class="form-group row clearfix">

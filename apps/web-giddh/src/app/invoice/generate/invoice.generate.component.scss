@@ -185,7 +185,7 @@ button.btn.btn-filter span.icon-cross {
 }
 
 .pending-table-description {
-    white-space: normal;
+    white-space: normal !important;
 }
 
 .close-modal img {
@@ -270,7 +270,6 @@ span.close-modal.cp.pull-right {
         margin-right: 8px;
     }
 }
-
 // responsive
 @media (max-width: 1023px) {
     .pending-advance-search {

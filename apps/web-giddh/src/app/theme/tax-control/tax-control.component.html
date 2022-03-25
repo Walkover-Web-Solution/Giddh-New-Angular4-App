@@ -53,7 +53,7 @@
 
             <li class="relative" *ngFor="let tax of taxRenderData; trackBy: trackByFn; let idx = index">
                 <label
-                    class="checkbox overflow-hidden width-100 bd-rb pd-b05 custom-item"
+                    class="checkbox overflow-hidden width-100 bd-rb pd-b05 custom-item d-flex align-items-center"
                     placement="bottom"
                     *ngIf="taxRenderData.length - 1 !== idx"
                     (click)="$event.stopPropagation()"

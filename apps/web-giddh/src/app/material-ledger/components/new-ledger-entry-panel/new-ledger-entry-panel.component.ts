@@ -224,7 +224,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     @ViewChild('adjustPaymentModal', { static: true }) public adjustPaymentModal: TemplateRef<any>;
     /** Stores the multi-lingual label of current voucher */
     public currentVoucherLabel: string;
-
     // private below
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** True, if exchange rate is swapped */
@@ -237,6 +236,14 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public isDatepickerOpen: boolean = false;
     /** True if more details is open */
     public isMoreDetailsOpen: boolean;
+    /** Stores the voucher API version of current company */
+    public voucherApiVersion: 1 | 2;
+    /** True if user itself checked the generate voucher  */
+    public manualGenerateVoucherChecked: boolean = false;
+    /** Holds input to get invoice list request params */
+    public invoiceListRequestParams: any = {};
+    /** Round off amount */
+    public calculatedRoundOff: number = 0;
 
     constructor(private store: Store<AppState>,
         private cdRef: ChangeDetectorRef,
@@ -256,6 +263,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     }
 
     public ngOnInit() {
+        document.querySelector('body').classList.add('ledger-body');
         this.voucherTypeList = observableOf([{
             label: this.commonLocaleData?.app_voucher_types.sales,
             value: 'sal'
@@ -353,6 +361,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             this.availableItcList[1].label = this.localeData?.import_services;
             this.availableItcList[2].label = this.localeData?.others;
         }
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
     }
 
     @HostListener('click', ['$event'])
@@ -692,6 +701,14 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         } else {
             this.blankLedger.compoundTotal = giddhRoundOff((creditTotal - debitTotal), this.giddhBalanceDecimalPlaces);
         }
+
+        if (this.voucherApiVersion === 2 && (this.blankLedger.voucherType === "sal" || this.blankLedger.voucherType === "pur" || this.blankLedger.voucherType === "credit note" || this.blankLedger.voucherType === "debit note")) {
+            this.calculatedRoundOff = Number(Math.round(this.blankLedger.compoundTotal) - this.blankLedger.compoundTotal);
+            this.blankLedger.compoundTotal = Number(((this.blankLedger.compoundTotal) + this.calculatedRoundOff).toFixed(2));
+        } else {
+            this.calculatedRoundOff = 0;
+        }
+
         this.blankLedger.convertedCompoundTotal = this.calculateConversionRate(this.blankLedger.compoundTotal);
     }
 
@@ -807,6 +824,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     }
 
     public ngOnDestroy(): void {
+        document.querySelector('body').classList.remove('ledger-body');
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
@@ -994,16 +1012,23 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public creditNoteInvoiceSelected(event: any): void {
         if (event && event.value && event.additional) {
             if (this.currentTxn) {
-                this.currentTxn.invoiceLinkingRequest = {
-                    linkedInvoices: [
-                        {
-                            invoiceUniqueName: event.value,
-                            voucherType: event.additional.voucherType
-                        }
-                    ]
+                if (this.voucherApiVersion === 2) {
+                    this.currentTxn.referenceVoucher = {
+                        uniqueName: event.value
+                    }
+                    this.selectedInvoiceAmount = event.additional.unadjustedAmount.amountForAccount;
+                } else {
+                    this.currentTxn.invoiceLinkingRequest = {
+                        linkedInvoices: [
+                            {
+                                invoiceUniqueName: event.value,
+                                voucherType: event.additional.voucherType
+                            }
+                        ]
+                    }
+                    this.selectedInvoiceAmount = event.additional.balanceDue.amountForAccount;
                 }
             }
-            this.selectedInvoiceAmount = event.additional.balanceDue.amountForAccount;
             this.blankLedger.generateInvoice = true;
         }
     }
@@ -1017,9 +1042,13 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         this.forceClear$ = observableOf({ status: true });
         if (this.currentTxn) {
             this.currentTxn.invoiceLinkingRequest = null;
+            this.currentTxn.referenceVoucher = null;
         }
         this.selectedInvoiceForCreditNote = null;
-        this.blankLedger.generateInvoice = false;
+
+        if(!this.currentTxn?.voucherAdjustments?.adjustments?.length) {
+            this.blankLedger.generateInvoice = this.manualGenerateVoucherChecked;
+        }
     }
 
     /**
@@ -1036,13 +1065,17 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         } else if (event.value === VoucherTypeEnum.creditNote || event.value === VoucherTypeEnum.debitNote) {
             this.shouldShowAdvanceReceipt = false;
             this.removeSelectedInvoice();
-            this.getInvoiceListsForCreditNote.emit(event.value);
-            this.blankLedger.generateInvoice = true;
+            this.getInvoiceListsForCreditNote.emit([this.currentTxn, event.value]);
             this.isAdvanceReceipt = false;
         } else {
             this.shouldShowAdvanceReceipt = false;
             this.isAdvanceReceipt = false;
         }
+
+        if (this.voucherApiVersion === 2 && this.isAdvanceReceipt) {
+            this.blankLedger.generateInvoice = true;
+        }
+
         this.handleAdvanceReceiptChange();
         this.currentVoucherLabel = this.generalService.getCurrentVoucherLabel(this.blankLedger?.voucherType, this.commonLocaleData);
     }
@@ -1326,7 +1359,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             const adjustments = cloneDeep(event.adjustVoucherData.adjustments);
             if (adjustments && adjustments.length > 0) {
                 adjustments.forEach(adjustment => {
-                    adjustment.voucherNumber = adjustment.voucherNumber === '-' ? '' : adjustment.voucherNumber;
+                    adjustment.voucherNumber = this.generalService.getVoucherNumberLabel(adjustment.voucherType, adjustment.voucherNumber, this.commonLocaleData);
                 });
             }
             this.currentTxn.voucherAdjustments = {
@@ -1344,6 +1377,12 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                     this.isAdjustReceiptSelected = false;
                 }
                 this.isAdjustVoucherSelected = false;
+
+                if(!this.selectedInvoiceForCreditNote) {
+                    this.blankLedger.generateInvoice = this.manualGenerateVoucherChecked;
+                }
+            } else {
+                this.blankLedger.generateInvoice = true;
             }
         }
 
@@ -1364,6 +1403,10 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 this.isAdjustReceiptSelected = false;
             }
             this.isAdjustVoucherSelected = false;
+
+            if(!this.selectedInvoiceForCreditNote) {
+                this.blankLedger.generateInvoice = this.manualGenerateVoucherChecked;
+            }
         }
         this.adjustmentDialogRef.close();
     }
@@ -1379,6 +1422,10 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         this.isAdjustAdvanceReceiptSelected = false;
         this.isAdjustReceiptSelected = false;
         this.isAdjustVoucherSelected = false;
+        
+        if(!this.selectedInvoiceForCreditNote) {
+            this.blankLedger.generateInvoice = this.manualGenerateVoucherChecked;
+        }
     }
 
     /**
@@ -1441,12 +1488,12 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 voucherDate: this.blankLedger.entryDate,
                 tcsTotal: 0,
                 tdsTotal: 0,
-                balanceDue: this.currentTxn.total,
-                grandTotal: this.currentTxn.total,
+                balanceDue: this.blankLedger.compoundTotal,
+                grandTotal: this.blankLedger.compoundTotal,
                 customerName: this.currentTxn.selectedAccount ? this.currentTxn.selectedAccount.name : '',
                 customerUniquename: this.currentTxn.selectedAccount ? this.currentTxn.selectedAccount.uniqueName : '',
-                totalTaxableValue: this.currentTxn.total,
-                subTotal: this.currentTxn.total,
+                totalTaxableValue: this.blankLedger.compoundTotal,
+                subTotal: this.blankLedger.compoundTotal,
                 exchangeRate: this.blankLedger.exchangeRate ?? 1
             },
             accountDetails: {
@@ -1464,6 +1511,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      * @memberof NewLedgerEntryPanelComponent
      */
     private openAdjustPaymentModal(): void {
+        if (this.voucherApiVersion === 2) {
+            this.invoiceListRequestParams = { particularAccount: this.currentTxn?.selectedAccount, voucherType: this.blankLedger.voucherType, ledgerAccount: this.activeAccount };
+        }
         this.adjustmentDialogRef = this.dialog.open(this.adjustPaymentModal, {
             width: '980px',
             panelClass: 'container-modal-class'

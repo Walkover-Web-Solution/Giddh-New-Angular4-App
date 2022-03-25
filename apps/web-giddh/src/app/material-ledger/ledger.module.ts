@@ -68,6 +68,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { NewConfirmationModalModule } from '../theme/new-confirmation-modal/confirmation-modal.module';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { AttachmentsModule } from '../theme/attachments/attachments.module';
 
 @NgModule({
     declarations: [
@@ -148,7 +149,8 @@ import { MatExpansionModule } from '@angular/material/expansion';
         MatSelectModule,
         NewConfirmationModalModule,
         MatGridListModule,
-        MatExpansionModule
+        MatExpansionModule,
+        AttachmentsModule
     ],
 })
 export class LedgerModule {

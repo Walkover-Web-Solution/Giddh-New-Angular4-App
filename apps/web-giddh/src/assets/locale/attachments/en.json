@@ -1,0 +1,13 @@
+{
+    "attachments": "Attachments",
+    "preview": "Preview",
+    "preview_unavailable": "Preview is not available for selected file.",
+    "download_unavailable": "No supported files available to download.",
+    "print_unavailable": "No supported files available to print.",
+    "entries_delete_message": "You enabled to delete entries on voucher delete, so this will delete your entry as well.",
+    "file_uploaded": "File uploaded successfully",
+    "confirm_delete_file": "Are you sure you want to delete the attached file?",
+    "delete_entries_content": "All their corresponding vouchers and invoices will be deleted permanently and will no longer be accessible from other modules.",
+    "remove_file": "Deleted Successfully.",
+    "confirm_delete_voucher": "Are you sure you want to delete the voucher?"
+}

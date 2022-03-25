@@ -3,6 +3,7 @@
     "enter_mobile_no": "Enter mobile no. with countryCode",
     "invoice_copy": "Invoice Copy",
     "transport": "Transport",
+    "original": "Original",
     "download_invoice": "Download Invoice",
     "enter_valid_email_error": "Enter some valid email Id's",
     "invalid_emails": "Invalid email(s).",
@@ -10,5 +11,6 @@
     "invalid_aadhar_no": "Invalid Aadhar No:",
     "your_aadhar_no": "Your Aadhaar No.",
     "aadhar_required_note": "NOTE: Aadhaar is required for <strong>Aadhaar eSign</strong>",
-    "go": "Go"
+    "go": "Go",
+    "attachment": "Attachment"
 }

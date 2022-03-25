@@ -1,6 +1,6 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, EventEmitter, NgZone, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, EventEmitter, NgZone, OnDestroy, OnInit, QueryList, TemplateRef, ViewChild, ViewChildren } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { LoginActions } from 'apps/web-giddh/src/app/actions/login.action';
 import { Configuration, SearchResultText, GIDDH_DATE_RANGE_PICKER_RANGES, RATE_FIELD_PRECISION, PAGINATION_LIMIT } from 'apps/web-giddh/src/app/app.constant';
@@ -46,6 +46,8 @@ import { ExportLedgerComponent } from './components/export-ledger/export-ledger.
 import { ShareLedgerComponent } from './components/share-ledger/share-ledger.component';
 import { ConfirmModalComponent } from '../theme/new-confirm-modal/confirm-modal.component';
 import { GenerateVoucherConfirmationModalComponent } from './components/generate-voucher-confirm-modal/generate-voucher-confirm-modal.component';
+import { CommonService } from '../services/common.service';
+import { AdjustmentUtilityService } from '../shared/advance-receipt-adjustment/services/adjustment-utility.service';
 
 @Component({
     selector: 'ledger',
@@ -85,6 +87,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     @ViewChild('advanceSearchModal', { static: false }) public advanceSearchModal: any;
     /** datepicker element reference  */
     @ViewChild('datepickerTemplate', { static: false }) public datepickerTemplate: ElementRef;
+    /** Instance of entry confirmation modal */
+    @ViewChild('entryConfirmModal', {static: false}) public entryConfirmModal: any;
     public isTransactionRequestInProcess$: Observable<boolean>;
     public ledgerBulkActionSuccess$: Observable<boolean>;
     public searchTermStream: Subject<string> = new Subject();
@@ -242,6 +246,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public touchedTransaction: any;
     /** This is used to show hide bottom spacing when more detail is opened while CREATE/UPDATE ledger */
     public isMoreDetailsOpened: boolean = false;
+    /** Stores the voucher API version of current company */
+    public voucherApiVersion: 1 | 2;
+    /** Selected entry details */
+    public selectedItem: any;
 
     constructor(
         private store: Store<AppState>,
@@ -261,7 +269,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
         private searchService: SearchService,
         private settingsBranchAction: SettingsBranchActions,
         private zone: NgZone,
-        public dialog: MatDialog
+        public dialog: MatDialog,
+        private commonService: CommonService,
+        private adjustmentUtilityService: AdjustmentUtilityService,
+        private router: Router
     ) {
 
         this.lc = new LedgerVM();
@@ -485,6 +496,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
+        document.querySelector('body').classList.add('ledger-body');
         this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: 0 }));
         // get company taxes
         this.store.dispatch(this.companyActions.getTax());
@@ -803,6 +815,29 @@ export class LedgerComponent implements OnInit, OnDestroy {
             this.hasLedgerPermission = response;
             this.cdRf.detectChanges();
         });
+
+        this.store.pipe(select(state => state.ledger.showDuplicateVoucherConfirmation), takeUntil(this.destroyed$)).subscribe(response => {
+            if(response?.status === "confirm") {
+                let dialogRef = this.dialog.open(ConfirmModalComponent, {
+                    data: {
+                        title: this.commonLocaleData?.app_confirm,
+                        body: response?.message,
+                        ok: this.commonLocaleData?.app_yes,
+                        cancel: this.commonLocaleData?.app_no,
+                        permanentlyDeleteMessage: ' '
+                    }
+                });
+        
+                dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+                    if (response) {
+                        this.confirmMergeEntry();
+                    } else {
+                        this.cancelMergeEntry();
+                    }
+                });
+            }
+        });
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
     }
 
     private assignPrefixAndSuffixForCurrency() {
@@ -909,15 +944,31 @@ export class LedgerComponent implements OnInit, OnDestroy {
     /**
      * Get Invoice list for credit note
      *
-     * @param {any} voucher Selected voucher
+     * @param {any} current transaction and voucher type
      * @memberof LedgerComponent
      */
-    public getInvoiceListsForCreditNote(voucherType: string): void {
+    public getInvoiceListsForCreditNote(event: any): void {
+        const voucherType = (event) ? event[1] : "";
         if (voucherType && this.selectedTxnAccUniqueName && this.accountUniquename) {
-            const request = {
-                accountUniqueNames: [this.selectedTxnAccUniqueName, this.accountUniquename],
-                voucherType
-            };
+            let request;
+
+            let activeAccount = null;
+            this.lc.activeAccount$.pipe(take(1)).subscribe(account => activeAccount = account);
+
+            if (this.voucherApiVersion === 2) {
+                request = this.adjustmentUtilityService.getInvoiceListRequest({ particularAccount: event[0]?.selectedAccount, voucherType: voucherType, ledgerAccount: activeAccount });
+            } else {
+                request = {
+                    accountUniqueNames: [this.selectedTxnAccUniqueName, this.accountUniquename],
+                    voucherType
+                };
+            }
+
+            // don't call api if it's invalid case
+            if (!request) {
+                return;
+            }
+
             let date;
             if (this.lc && this.lc.blankLedger && this.lc.blankLedger.entryDate) {
                 if (typeof this.lc.blankLedger.entryDate === 'string') {
@@ -928,8 +979,19 @@ export class LedgerComponent implements OnInit, OnDestroy {
             }
             this.invoiceList = [];
             this.ledgerService.getInvoiceListsForCreditNote(request, date).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
-                if (response && response.body && response.body.results) {
-                    response.body.results.forEach(invoice => this.invoiceList.push({ label: invoice?.voucherNumber ? invoice.voucherNumber : '-', value: invoice?.uniqueName, additional: invoice }))
+                if (response && response.body) {
+                    let items = [];
+                    if(response.body.results) {
+                        items = response.body.results;
+                    } else if(response.body.items) {
+                        items = response.body.items;
+                    }
+
+                    items?.forEach(invoice => {
+                        invoice.voucherNumber = this.generalService.getVoucherNumberLabel(invoice?.voucherType, invoice?.voucherNumber, this.commonLocaleData);
+                        
+                        this.invoiceList.push({ label: invoice?.voucherNumber ? invoice.voucherNumber : '-', value: invoice?.uniqueName, additional: invoice })
+                    });
                 }
             });
         }
@@ -1012,7 +1074,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public downloadAttachedFile(fileName: string, e: Event) {
         e.stopPropagation();
         this.ledgerService.DownloadAttachement(fileName).pipe(takeUntil(this.destroyed$)).subscribe(d => {
-            if (d.status === 'success') {
+            if (d?.status === 'success') {
                 let blob = this.generalService.base64ToBlob(d.body.uploadedFile, `image/${d.body.fileType}`, 512);
                 download(d.body.name, blob, `image/${d.body.fileType}`)
             } else {
@@ -1021,18 +1083,22 @@ export class LedgerComponent implements OnInit, OnDestroy {
         });
     }
 
-    public downloadInvoice(invoiceName: string, voucherType: string, e: Event) {
+    public downloadInvoice(transaction: any, e: Event) {
         e.stopPropagation();
         let activeAccount = null;
         this.lc.activeAccount$.pipe(take(1)).subscribe(p => activeAccount = p);
         let downloadRequest = new DownloadLedgerRequest();
-        downloadRequest.invoiceNumber = [invoiceName];
-        downloadRequest.voucherType = voucherType;
+        if(this.voucherApiVersion === 2) {
+            downloadRequest.uniqueName = transaction.voucherUniqueName;
+        } else {
+            downloadRequest.invoiceNumber = [transaction.voucherNumber];
+        }
+        downloadRequest.voucherType = transaction.voucherGeneratedType;
 
         this.ledgerService.DownloadInvoice(downloadRequest, this.lc.accountUnq).pipe(takeUntil(this.destroyed$)).subscribe(d => {
             if (d.status === 'success') {
                 let blob = this.generalService.base64ToBlob(d.body, 'application/pdf', 512);
-                download(`${activeAccount.name} - ${invoiceName}.pdf`, blob, 'application/pdf');
+                download(`${activeAccount.name} - ${transaction.voucherNumber}.pdf`, blob, 'application/pdf');
             } else {
                 this.toaster.showSnackBar("error", d.message);
             }
@@ -1254,6 +1320,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
             if (blankTransactionObj.otherTaxType === 'tds') {
                 delete blankTransactionObj['tcsCalculationMethod'];
             }
+
+            if(this.voucherApiVersion === 2) {
+                blankTransactionObj = this.adjustmentUtilityService.getAdjustmentObject(blankTransactionObj);
+            }
+            
             this.store.dispatch(this.ledgerActions.CreateBlankLedger(cloneDeep(blankTransactionObj), this.lc.accountUnq));
         } else {
             this.toaster.showSnackBar("error", this.localeData?.transaction_required, this.commonLocaleData?.app_error);
@@ -1324,6 +1395,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     public ngOnDestroy(): void {
+        document.querySelector('body').classList.remove('ledger-body');
         this.store.dispatch(this.ledgerActions.ResetLedger());
         this.destroyed$.next(true);
         this.destroyed$.complete();
@@ -1700,7 +1772,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     public onSelectInvoiceGenerateOption(isCombined: boolean) {
         this.entryUniqueNamesForBulkAction = _.uniq(this.entryUniqueNamesForBulkAction);
-        this.store.dispatch(this.ledgerActions.GenerateBulkLedgerInvoice({ combined: isCombined }, [{ accountUniqueName: this.lc.accountUnq, entries: _.cloneDeep(this.entryUniqueNamesForBulkAction) }], 'ledger'));
+        if(this.voucherApiVersion === 2) {
+            this.store.dispatch(this.ledgerActions.GenerateBulkLedgerInvoice({ combined: isCombined }, { entryUniqueNames: _.cloneDeep(this.entryUniqueNamesForBulkAction) }, 'ledger'));
+        } else {
+            this.store.dispatch(this.ledgerActions.GenerateBulkLedgerInvoice({ combined: isCombined }, [{ accountUniqueName: this.lc.accountUnq, entries: _.cloneDeep(this.entryUniqueNamesForBulkAction) }], 'ledger'));
+        }
     }
 
     public openSelectFilePopup(fileInput: any) {
@@ -1871,7 +1947,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             uniqueName: transaction.selectedAccount ? transaction.selectedAccount.uniqueName : '',
             parentGroups: formattedCurrentLedgerAccountParentGroups.length ? formattedCurrentLedgerAccountParentGroups : transaction.selectedAccount ? transaction.selectedAccount.parentGroups : []
         };
-        const shouldShowRcmEntry = this.generalService.shouldShowRcmSection(currentLedgerAccountDetails, selectedAccountDetails);
+        const shouldShowRcmEntry = this.generalService.shouldShowRcmSection(currentLedgerAccountDetails, selectedAccountDetails, this.activeCompany);
         if (this.lc && this.lc.currentBlankTxn) {
             this.lc.currentBlankTxn['shouldShowRcmEntry'] = shouldShowRcmEntry;
         }
@@ -2359,5 +2435,78 @@ export class LedgerComponent implements OnInit, OnDestroy {
      */
     public handleOpenMoreDetail(isOpened: boolean): void {
         this.isMoreDetailsOpened = isOpened;
+    }
+
+    /**
+     * This will merge the duplicate voucher entry
+     *
+     * @memberof LedgerComponent
+     */
+    public confirmMergeEntry(): void {
+        this.lc.blankLedger.mergePB = true;
+        this.saveBlankTransaction();
+    }
+
+    /**
+     * This will close the merge popup
+     *
+     * @memberof LedgerComponent
+     */
+    public cancelMergeEntry(): void {
+        this.lc.showNewLedgerPanel = true;
+    }
+
+    /**
+     * Download files (voucher/attachment)
+     *
+     * @param {*} transaction
+     * @param {string} downloadOption
+     * @memberof LedgerComponent
+     */
+    public downloadFiles(transaction: any, downloadOption: string, event: any): void {
+        if(this.voucherApiVersion === 2) {
+            let dataToSend = {
+                voucherType: transaction.voucherGeneratedType,
+                entryUniqueName: (transaction.voucherUniqueName) ? undefined : transaction.entryUniqueName,
+                uniqueName: (transaction.voucherUniqueName) ? transaction.voucherUniqueName : undefined
+            };
+
+            let fileName = (downloadOption === "VOUCHER") ? transaction.voucherNumber + '.pdf' : transaction.attachedFileName;
+
+            this.commonService.downloadFile(dataToSend, downloadOption, 'pdf').pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                if (response?.status !== "error") {
+                    saveAs(response, fileName);
+                } else {
+                    this.toaster.errorToast(this.commonLocaleData?.app_something_went_wrong);
+                }
+            }, (error => {
+                this.toaster.errorToast(this.commonLocaleData?.app_something_went_wrong);
+            }));
+        } else {
+            if(downloadOption === "VOUCHER") {
+                this.downloadInvoice(transaction, event);
+            } else {
+                this.downloadAttachedFile(transaction.attachedFileUniqueName, event);
+            }
+        }
+    }
+
+    /**
+     * Shows the attachments popup
+     *
+     * @param {TemplateRef<any>} templateRef
+     * @param {*} transaction
+     * @memberof LedgerComponent
+     */
+    public openAttachmentsDialog(templateRef: TemplateRef<any>, transaction: any): void {
+        this.selectedItem = transaction;
+        let dialogRef = this.dialog.open(templateRef, {
+            width: '70%',
+            height: '650px'
+        });
+
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            this.getTransactionData();
+        });
     }
 }

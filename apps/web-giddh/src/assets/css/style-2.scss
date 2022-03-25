@@ -78,6 +78,10 @@ $custom-typography: mat-typography-config(
         min-width: 170px !important;
     }
 }
+.branch-profile-wrapper {
+    float: left !important;
+    width: auto !important;
+}
 @media screen and (max-width: 1366px) and (orientation: portrait) {
     .subscription-form-select {
         float: left !important;
@@ -1248,7 +1252,7 @@ modal-container.modal {
 
         .calendly-inline-widget object {
             width: 100% !important;
-            height: 610px !important;
+            height: 646px !important;
         }
     }
 }
@@ -6000,6 +6004,16 @@ button.btn.btn-filter {
     margin-top: 70px;
     z-index: 99999;
 }
+.invoice-preview-page {
+    .modal-backdrop + .modal {
+        z-index: 9999 !important;
+    }
+}
+.new-branch-list-page {
+    .modal-backdrop + .modal {
+        z-index: 9999 !important;
+    }
+}
 .modal-backdrop + .modal.fade .modal-dialog {
     transform: translate(0);
 }
@@ -6121,7 +6135,9 @@ highcharts-chart {
 .invoice-modal-content .app-aside-menu-other-taxes:host {
     top: 60px !important;
 }
-#top0 {
+
+#top0,
+.no-top {
     top: 0 !important;
 }
 #top0 app-aside-menu-other-taxes {
@@ -7154,6 +7170,16 @@ giddh-datepicker {
         align-items: center;
     }
 }
+
+.ledger-body {
+    .cdk-overlay-container {
+        z-index: 1000 !important;
+    }
+    .cdk-global-overlay-wrapper {
+        z-index: 1000 !important;
+    }
+}
+
 .cdk-overlay-container,
 .cdk-global-overlay-wrapper {
     z-index: 9999;

@@ -312,6 +312,17 @@ p.edit-message {
 .tax-width {
     width: 100px;
 }
+.delete-attachment {
+    background-color: $gainsboro-light;
+    border: 1px solid $gainsboro;
+    border-radius: 5px;
+    margin-right: 14px;
+    margin-left: 7px;
+    padding: 0px 4px 2px 4px;
+    img {
+        width: 14px;
+    }
+}
 /* responsive */
 
 @media only screen and (max-width: 1359px) {
@@ -514,5 +525,10 @@ p.edit-message {
     }
     .ledger-book {
         padding-top: 15px;
+    }
+}
+@media (min-width: 1301px) and (max-width: 1386px) {
+    .reference-invoice {
+        width: 150px;
     }
 }
