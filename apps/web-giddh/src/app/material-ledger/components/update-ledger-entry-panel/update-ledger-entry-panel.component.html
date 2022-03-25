@@ -1919,11 +1919,10 @@
                                             *ngIf="vm.selectedLedger?.attachedFile?.length > 0"
                                         >
                                             <span>{{ vm.selectedLedger?.attachedFileName }}</span>
-                                            <span class="delete-attachment cursor-pointer">
-                                                <img
-                                                    (click)="showDeleteAttachedFileModal()"
-                                                    src="assets/images/multiply.svg"
-                                                />
+                                            <span class="delete-attachment">
+                                                <a class="cursor-pointer" (click)="showDeleteAttachedFileModal()">
+                                                    <i class="icon-trash"></i>
+                                                </a>
                                             </span>
                                         </div>
 
