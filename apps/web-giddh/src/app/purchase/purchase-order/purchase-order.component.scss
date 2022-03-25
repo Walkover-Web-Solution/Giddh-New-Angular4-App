@@ -192,7 +192,22 @@
         padding: 14px 0;
     }
 }
-
+.giddh-table {
+    border-bottom: 1px solid $gainsboro !important;
+    tbody {
+        tr {
+            td {
+                margin-top: -1px !important;
+                &:last-child {
+                    border-bottom: none !important;
+                }
+                &.status-mobile {
+                    border-bottom: none !important;
+                }
+            }
+        }
+    }
+}
 @media (max-width: 768px) {
     .purchase-order-header {
         margin-bottom: 15px;
