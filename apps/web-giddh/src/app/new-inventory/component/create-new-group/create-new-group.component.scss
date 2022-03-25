@@ -1,5 +1,3 @@
-@import "../../../../assets/css/color.scss";
-
 :host {
     position: fixed;
     left: auto;
@@ -16,9 +14,9 @@
     right: 10px;
     z-index: 9999999;
     background-color: transparent;
-    color: $white;
+    color: var(--color-primary-right-side-popup-header-text);
     font-size: 17px;
-    top: 18px;
+    top: 16px;
     margin-right: 0;
     border: 0;
     border-radius: 0;
@@ -72,10 +70,12 @@
             padding-bottom: 15px;
             img {
                 width: 80px;
+                filter: var(--color-image-filter-tertiary);
             }
         }
         .bg-white {
             height: 82vh;
+            background-color: var(--color-secondary-right-side-popup-body-background) !important;
         }
         .wrapper-contain {
             form {
@@ -99,10 +99,10 @@
         .create-one-item {
             padding: 15px 0 0;
             &:hover {
-                background-color: $lavender;
+                background-color: var(--color-lavender);
             }
             .wrapper-create-item {
-                border-bottom: 1px solid $gainsboro;
+                border-bottom: 1px solid var(--color-iron);
                 display: flex;
                 margin: 0 45px 0;
                 padding-bottom: 15px;
@@ -110,8 +110,8 @@
                 .circle-icon {
                     width: 80px;
                     height: 80px;
-                    border: 1px solid $midnight-blue;
-                    background-color: $white;
+                    border: 1px solid var(--color-giddh-blue);
+                    background-color: var(--color-white);
                     border-radius: 50%;
                 }
                 .create-item {

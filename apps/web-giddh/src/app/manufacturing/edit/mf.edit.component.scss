@@ -1,6 +1,5 @@
-@import "../../../assets/css/color.scss";
 .resources-table {
-    border-right: 1px solid $gainsboro;
+    border-right: 1px solid var(--color-iron);
 }
 .cost-per strong {
     white-space: normal;

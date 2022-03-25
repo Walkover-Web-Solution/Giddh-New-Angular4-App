@@ -1,4 +1,3 @@
-@import "../../../assets/css/color.scss";
 #inlnImg img {
     max-height: 18px;
 }
@@ -38,7 +37,7 @@
 .disabled-list-item {
     padding: 6px;
     height: 100%;
-    background: $white;
+    background: var(--color-white);
     font-size: 14px;
 }
 .tooltip-box {
@@ -46,7 +45,7 @@
     right: 0;
     top: 0;
     .icon-info {
-        color: $gray;
+        color: var(--color-abbey);
     }
 }
 .form-control,
@@ -61,7 +60,7 @@
     width: calc(100% - 42px);
 }
 .payment-text {
-    color: $gray;
+    color: var(--color-abbey);
 }
 .bank-logo {
     img {
@@ -70,6 +69,7 @@
         width: 100%;
     }
 }
+
 /*responsive*/
 @media (max-width: 1359px) {
     .xs-pd-l15 {
@@ -82,7 +82,7 @@
 .plus-cross-btn {
     i {
         padding: 5px 0;
-        color: $gray;
+        color: var(--color-abbey);
         font-size: 20px;
     }
 }
@@ -168,15 +168,15 @@
     }
 }
 .icici-button {
-    border: 1px solid $dark-orange;
-    color: $dark-orange;
+    border: 1px solid var(--color-primary-setting-integration-icici-button);
+    color: var(--color-primary-setting-integration-icici-button);
 }
 .button-separator {
-    color: $very-light-gray;
+    color: var(--color-iron);
 }
 .account-wrapper {
     width: 65%;
-    border-bottom: 1px solid $cornflower-blue-light;
+    border-bottom: 1px solid var(--color-primary-setting-integration-account-wrapper-border);
     padding-bottom: 8px;
     margin-bottom: 20px;
 }
@@ -184,24 +184,25 @@
     border: none !important;
 }
 .account-info-background {
-    background-color: $light-alice-blue;
     padding-top: 9px;
     padding-bottom: 9px;
     margin-top: 3px;
     margin-left: 1px;
+    background-color: var(--color-common-quaternary-background-for-all-components);
 }
 .view-only-field {
-    background-color: $white;
+    background-color: var(--color-input-secondary-background);
     padding: 8px;
     border-radius: 5px;
-    color: $midnight-blue;
+    color: var(--color-common-senary-text);
 }
 .disabled-field {
-    background-color: $gray-95;
     padding: 8px;
-    color: $black;
     border-radius: 5px;
     word-break: break-word;
+    color: var(--color-common-septenary-text);
+    background-color: var(--color-input-tertiary-background);
+    border: 1px solid var(--color-primary-input-bar-border);
 }
 .payment-updates {
     width: 90%;
@@ -210,7 +211,7 @@
     overflow: hidden;
 }
 .account-number {
-    color: $midnight-blue;
+    color: var(--color-common-senary-text);
 }
 .limit-upto {
     margin-left: 7px;
@@ -221,38 +222,38 @@
     vertical-align: top;
     display: inline-block;
     a {
-        color: $grey-chateau;
+        color: var(--color-primary-setting-integration-action-anchor);
     }
 }
 .user-action-div {
     a {
-        color: $grey-chateau;
+        color: var(--color-primary-setting-integration-action-anchor);
     }
 }
 .account-approval-status {
     margin-left: 13px;
 }
 .field-label {
-    color: $omiod;
+    color: var(--color-primary-setting-integration-field-label);
 }
 .account-approval-status.approved {
-    color: $tree-green;
+    color: var(--color-primary-setting-integration-account-approval-status-approved);
     i::before {
-        color: $tree-green;
+        color: var(--color-primary-setting-integration-account-approval-status-approved);
     }
 }
 .account-approval-status.pending-approval {
-    color: $orange-new;
+    color: var(--color-primary-setting-integration-account-approval-status-pending-approval);
     i::before {
-        color: $orange-new;
+        color: var(--color-primary-setting-integration-account-approval-status-pending-approval);
     }
 }
 .connected-accounts {
     margin-left: 10px;
 }
 .btn-light-blue {
-    background-color: $light-alice-blue;
-    color: $midnight-blue;
+    color: var(--color-common-senary-text);
+    background-color: var(--color-primary-basic-button-opacity);
 }
 .modal {
     .account-modal {

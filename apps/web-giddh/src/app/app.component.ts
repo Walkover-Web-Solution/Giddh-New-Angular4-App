@@ -160,6 +160,17 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
                 this.store.dispatch(this.commonActions.setActiveLocale(supportedLocales[0]));
             }
         });
+
+        this.store.pipe(select(state => state.session.activeTheme), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.value) {
+                document.querySelector("body")?.classList?.remove("dark-theme");
+                document.querySelector("body")?.classList?.remove("default-theme");
+                document.querySelector("body")?.classList?.add(response?.value);
+            } else {
+                let availableThemes = this._generalService.getAvailableThemes();
+                this.store.dispatch(this.commonActions.setActiveTheme(availableThemes[0]));
+            }
+        });
     }
 
     public ngAfterViewInit() {
