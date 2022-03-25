@@ -1,1 +1,30 @@
-stock-balance works!
+<div class="stock-balance-wrapper">
+    <div class="top-bar">
+        <div class="top-bar-left-side">
+            <button mat-flat-button color="primary" class="new-stock-btn"><mat-icon>add</mat-icon>New Stock</button>
+            <div class="warehouse-select-bar">
+                <mat-form-field class="search-warehouse-bar" appearance="outline">
+                    <img class="search-img" src="{{ imgPath }}search.png" alt="" />
+                    <mat-select
+                        placeholder="Search Warehouse"
+                        [formControl]="toppings"
+                        multiple
+                        class="select-warehouse-bar"
+                    >
+                        <button mat-flat-button disableRipple class="create-warehouse-btn">
+                            <mat-icon>add</mat-icon>Create Warehouse
+                        </button>
+                        <mat-option *ngFor="let topping of toppingList" [value]="topping">{{ topping }}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="top-bar-right-side">
+            <button mat-flat-button class="export-btn">Export</button>
+
+            <button mat-flat-button class="filter-btn">
+                <img src="{{ imgPath }}filter.svg" alt="filter-button" />
+            </button>
+        </div>
+    </div>
+</div>

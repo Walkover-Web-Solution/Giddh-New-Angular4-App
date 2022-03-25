@@ -1,0 +1,53 @@
+@import "../../../../assets/css/color.scss";
+
+.stock-balance-wrapper {
+    padding: 0px 20px 0px 20px;
+
+    .top-bar {
+        display: flex;
+        justify-content: space-between;
+
+        .top-bar-left-side {
+            .new-stock-btn {
+                background: $cornflower;
+                padding: 0px 15px 0px 10px;
+            }
+
+            .search-warehouse-bar {
+                .search-img {
+                    height: 15px;
+                    width: auto;
+                    position: absolute;
+                }
+
+                .create-warehouse-btn {
+                    color: $cornflower;
+                }
+
+                .select-warehouse-bar::placeholder {
+                    padding-left: 10px;
+                }
+            }
+
+            .warehouse-select-bar {
+                position: relative;
+                display: inline-block;
+                margin-left: 10px;
+            }
+        }
+
+        .top-bar-right-side {
+            .export-btn {
+                margin-right: 37px;
+                border: 1px solid $cloud;
+            }
+            .filter-btn {
+                border: 1px solid $cloud;
+                border-radius: 5px;
+                min-width: 45px;
+                padding: 0px 7px;
+                top: 1px;
+            }
+        }
+    }
+}

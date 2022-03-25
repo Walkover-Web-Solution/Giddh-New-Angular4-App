@@ -38,6 +38,8 @@ import { DashboardProfitStockList } from "./component/inventory-dashboard/dashbo
 import { DashboardPurchaseReport } from "./component/inventory-dashboard/dashboard-purchase-report/dashboard-purchase-report.component";
 import { DashboardSalesReport } from "./component/inventory-dashboard/dashboard-sales-report/dashboard-sales-report.component";
 import { DashboardSellingReport } from "./component/inventory-dashboard/dashboard-selling-report/dashboard-selling-report.component";
+import { StockCreateEditModule } from "./component/stock-create-edit/stock-create-edit.module";
+import { StockBalanceComponent } from "./component/stock-balance/stock-balance.component";
 import { FormFieldsModule } from "../theme/form-fields/form-fields.module";
 import { TranslateDirectiveModule } from "../theme/translate/translate.directive.module";
 import { CommonModule } from "@angular/common";
@@ -54,8 +56,8 @@ import { MatRadioModule } from "@angular/material/radio";
 import { MatTabsModule } from "@angular/material/tabs";
 import { MatChipsModule } from "@angular/material/chips";
 import { MatInputModule } from "@angular/material/input";
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from "@angular/material/select";
-import { StockCreateEditModule } from "./component/stock-create-edit/stock-create-edit.module";
 
 @NgModule({
     declarations: [
@@ -93,8 +95,8 @@ import { StockCreateEditModule } from "./component/stock-create-edit/stock-creat
         DashboardPurchaseReport,
         DashboardSalesReport,
         DashboardSellingReport,
-        ListGroupComponent
-
+        ListGroupComponent,
+        StockBalanceComponent
     ],
     imports: [
         NewInventoryRoutingModule,
@@ -118,7 +120,8 @@ import { StockCreateEditModule } from "./component/stock-create-edit/stock-creat
         MatChipsModule,
         MatInputModule,
         MatSelectModule,
-        StockCreateEditModule
+        StockCreateEditModule,
+        MatFormFieldModule
     ],
     exports: [
         NewInventoryComponent,

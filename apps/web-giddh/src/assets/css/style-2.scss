@@ -5266,6 +5266,22 @@ perfect-scrollbar > .ps > .ps-overlay {
     background-color: transparent;
 }
 
+.stock-balance-wrapper {
+    .search-warehouse-bar {
+        .mat-form-field-infix {
+            height: 58px;
+            margin-top: -16px;
+            padding: 16px 0px;
+        }
+    }
+}
+#mat-select-0-panel {
+    min-width: calc(100% + 24px) !important;
+    position: absolute;
+    top: 44px;
+    left: 28px;
+}
+
 app-header {
     position: relative;
 }
