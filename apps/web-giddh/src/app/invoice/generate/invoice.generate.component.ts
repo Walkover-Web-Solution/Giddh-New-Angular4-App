@@ -319,6 +319,12 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
             this.hasPendingVouchersListPermissions = response;
         });
 
+        this.store.pipe(select(state => state.receipt.invoiceDataHasError), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.generateVoucherInProcess = false;
+            }
+        });
+
         this.voucherApiVersion = this.generalService.voucherApiVersion;
     }
 

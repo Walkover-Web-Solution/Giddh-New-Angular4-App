@@ -80,7 +80,11 @@
                     [(ngModel)]="isOriginal"
                     (change)="invoiceTypeChanged($event)"
                 />
-                {{ localeData?.invoice_copy_options?.original }}
+                {{
+                    selectedItem.voucherType === "purchase"
+                        ? commonLocaleData?.app_purchase_bill
+                        : localeData?.invoice_copy_options?.original
+                }}
             </label>
         </div>
         <div class="checkbox" *ngIf="selectedItem.voucherType === 'sales'">

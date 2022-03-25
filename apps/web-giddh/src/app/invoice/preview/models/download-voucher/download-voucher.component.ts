@@ -92,10 +92,12 @@ export class DownloadVoucherComponent implements OnInit, OnDestroy {
                         if (fileType === "base64") {
                             saveAs((this.generalService.base64ToBlob(response.body.attachments[0].encodedData, '', 512)), response.body.attachments[0].name);
                         } else {
-                            saveAs(response, `${this.selectedItem.voucherNumber}.` + 'zip');
+                            let voucherNumber = (this.selectedItem?.voucherNumber) ? this.selectedItem?.voucherNumber : this.commonLocaleData?.app_not_available;
+                            saveAs(response, `${voucherNumber}.` + 'zip');
                         }
                     } else {
-                        saveAs(response, `${this.selectedItem.voucherNumber}.` + 'pdf');
+                        let voucherNumber = (this.selectedItem?.voucherNumber) ? this.selectedItem?.voucherNumber : this.commonLocaleData?.app_not_available;
+                        saveAs(response, `${voucherNumber}.` + 'pdf');
                     }
                     this.cancel();
                 } else {

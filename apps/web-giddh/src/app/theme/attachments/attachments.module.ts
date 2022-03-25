@@ -10,6 +10,7 @@ import { MatDialogModule } from "@angular/material/dialog";
 import { GiddhPageLoaderModule } from "../../shared/giddh-page-loader/giddh-page-loader.module";
 import { FormsModule } from "@angular/forms";
 import { TranslateDirectiveModule } from "../translate/translate.directive.module";
+import { MatTooltipModule } from "@angular/material/tooltip";
 
 @NgModule({
     declarations: [
@@ -25,7 +26,8 @@ import { TranslateDirectiveModule } from "../translate/translate.directive.modul
         GiddhPageLoaderModule,
         FormsModule,
         TranslateDirectiveModule,
-        MatDialogModule
+        MatDialogModule,
+        MatTooltipModule
     ],
     exports: [
         AttachmentsComponent
