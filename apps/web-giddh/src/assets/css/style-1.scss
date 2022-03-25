@@ -3098,7 +3098,7 @@ td.mat-footer-cell {
     &.custom-field {
         &.ng-touched {
             &.ng-invalid {
-                border: 2px solid $red !important;
+                border: 2px solid var(--color-red) !important;
             }
         }
     }
