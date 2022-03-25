@@ -135,7 +135,7 @@
                                     selectedInvoicesList?.length === 1 &&
                                     selectedInvoicesList[0].irnNumber
                                 "
-                                (click)="openModal(cancelEInvoiceTemplate)"
+                                (click)="selectedEInvoice = selectedInvoicesList[0]; openModal(cancelEInvoiceTemplate)"
                             >
                                 {{ localeData?.cancel_e_invoice }}
                             </button>
@@ -434,7 +434,10 @@
                                             selectedInvoicesList?.length === 1 &&
                                             selectedInvoicesList[0]?.irnNumber
                                         "
-                                        (click)="openModal(cancelEInvoiceTemplate)"
+                                        (click)="
+                                            selectedEInvoice = selectedInvoicesList[0];
+                                            openModal(cancelEInvoiceTemplate)
+                                        "
                                     >
                                         {{ localeData?.cancel_e_invoice }}
                                     </button>
@@ -510,7 +513,9 @@
                                         selectedInvoicesList?.length === 1 &&
                                         selectedInvoicesList[0]?.irnNumber
                                     "
-                                    (click)="openModal(cancelEInvoiceTemplate)"
+                                    (click)="
+                                        selectedEInvoice = selectedInvoicesList[0]; openModal(cancelEInvoiceTemplate)
+                                    "
                                 >
                                     {{ localeData?.cancel_e_invoice }}
                                 </button>
@@ -757,7 +762,7 @@
                                 <th
                                     [attr.data-title]="localeData?.po_number"
                                     width="12%"
-                                    *ngIf="selectedVoucher === 'purchase'"
+                                    *ngIf="voucherApiVersion !== 2 && selectedVoucher === 'purchase'"
                                     class="td-search-box"
                                     #searchPurchaseOrderContainer
                                     (clickOutside)="
@@ -1010,13 +1015,14 @@
                                     <div
                                         (click)="onSelectInvoice(item)"
                                         [ngClass]="{
-                                            'remove-capitalize': selectedVoucher === 'purchase',
                                             'cp': selectedVoucher === 'purchase' && !item.voucherNumber
                                         }"
-                                        class="d-flex position-relative"
+                                        class="d-flex position-relative remove-capitalize"
                                     >
                                         <a href="javascript:void(0);" class="btn-link-2">{{
-                                            item.voucherNumber ? item.voucherNumber : "-"
+                                            item.voucherNumber
+                                                ? item.voucherNumber
+                                                : commonLocaleData?.app_not_available
                                         }}</a>
                                     </div>
 
@@ -1058,7 +1064,7 @@
                                 <td [attr.data-title]="commonLocaleData?.app_date">{{ item.voucherDate }}</td>
                                 <td
                                     [attr.data-title]="localeData?.linked_voucher"
-                                    *ngIf="selectedVoucher === 'purchase'"
+                                    *ngIf="voucherApiVersion !== 2 && selectedVoucher === 'purchase'"
                                 >
                                     {{ item.purchaseOrderNumbers }}
                                 </td>
@@ -1138,7 +1144,7 @@
 
                                         <div>
                                             <div
-                                                *ngIf="!isCompany"
+                                                *ngIf="!isCompany && item.balanceStatus !== 'cancel'"
                                                 dropdown
                                                 container="body"
                                                 class="icon-ellipse select-action"
@@ -1303,9 +1309,10 @@
                                             ? localeData?.dr_note_no
                                             : localeData?.cr_note_no
                                     "
+                                    class="remove-capitalize"
                                 >
                                     <a class="cursor-pointer" (click)="onSelectInvoice(item)">
-                                        {{ item.voucherNumber || "-" }}</a
+                                        {{ item.voucherNumber || commonLocaleData?.app_not_available }}</a
                                     >
                                 </td>
 
@@ -1341,10 +1348,10 @@
                                         voucherApiVersion === 2
                                             ? item.referenceVoucher
                                                 ? item.referenceVoucher.number
-                                                : "-"
+                                                : commonLocaleData?.app_not_available
                                             : item.invoiceLinkingRequest?.linkedInvoices?.length
                                             ? item.invoiceLinkingRequest?.linkedInvoices[0].invoiceNumber
-                                            : "-"
+                                            : commonLocaleData?.app_not_available
                                     }}
                                 </td>
 
@@ -1418,7 +1425,7 @@
 
                                         <div>
                                             <div
-                                                *ngIf="!isCompany"
+                                                *ngIf="!isCompany && item.balanceStatus !== 'cancel'"
                                                 dropdown
                                                 container="body"
                                                 class="icon-ellipse select-action"
@@ -1529,7 +1536,11 @@
                                         <div class="col-6 p-0">
                                             <div class="invoice-name-download">
                                                 <a class="invoice-number-a" (click)="onSelectInvoice(item)">
-                                                    {{ item.voucherNumber ? item.voucherNumber : "-" }}</a
+                                                    {{
+                                                        item.voucherNumber
+                                                            ? item.voucherNumber
+                                                            : commonLocaleData?.app_not_available
+                                                    }}</a
                                                 >
                                                 <span class="icon-download"></span>
                                             </div>
@@ -1836,6 +1847,7 @@
                                 [localeData]="localeData"
                                 [commonLocaleData]="commonLocaleData"
                                 (closeModelEvent)="toggleEwayBillPopup()"
+                                (createEWayBillEvent)="createEWayBill()"
                             >
                             </app-generate-ewaybill-modal>
                         </div>
@@ -2014,11 +2026,11 @@
         <form>
             <div class="mr-b15">
                 <label>{{ commonLocaleData?.app_invoice_number }}</label>
-                <input type="text" class="form-control" [value]="selectedInvoicesList[0].voucherNumber" readonly />
+                <input type="text" class="form-control" [value]="selectedEInvoice?.voucherNumber" readonly />
             </div>
             <div class="mr-b15">
                 <label>{{ commonLocaleData?.app_irn }}</label>
-                <input type="text" class="form-control" [value]="selectedInvoicesList[0].irnNumber" readonly />
+                <input type="text" class="form-control" [value]="selectedEInvoice?.irnNumber" readonly />
             </div>
             <div class="mr-b15">
                 <label>{{ localeData?.cancel_reason }} <span class="red-text">*</span></label>

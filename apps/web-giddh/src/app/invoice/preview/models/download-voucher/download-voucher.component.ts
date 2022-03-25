@@ -24,6 +24,8 @@ export class DownloadVoucherComponent implements OnInit, OnDestroy {
     public isOriginal: boolean = false;
     public isTransport: boolean = false;
     public isCustomer: boolean = false;
+    /** True if attachment is checked */
+    public isAttachment: boolean = false;
     public isProformaEstimatesInvoice: boolean = false;
     @Output() public cancelEvent: EventEmitter<boolean> = new EventEmitter<boolean>();
     /** Stores the voucher API version of company */
@@ -66,15 +68,32 @@ export class DownloadVoucherComponent implements OnInit, OnDestroy {
 
         if (this.generalService.voucherApiVersion === 2) {
             let dataToSend = {
-                typeOfInvoice: this.invoiceType,
+                copyTypes: this.invoiceType,
                 voucherType: voucherType,
                 uniqueName: this.selectedItem.uniqueName
             };
 
-            this.commonService.downloadFile(dataToSend, "VOUCHER", "pdf").pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            let downloadOption = "";
+            let fileType = "pdf";
+            if (this.isAttachment) {
+                if (this.invoiceType?.length > 0) {
+                    downloadOption = "ALL";
+                } else {
+                    downloadOption = "ATTACHMENT";
+                    fileType = "base64";
+                }
+            } else {
+                downloadOption = "VOUCHER";
+            }
+
+            this.commonService.downloadFile(dataToSend, downloadOption, fileType).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 if (response?.status !== "error") {
-                    if (dataToSend.typeOfInvoice.length > 1 || this.selectedItem.hasAttachment) {
-                        saveAs(response, `${this.selectedItem.voucherNumber}.` + 'zip');
+                    if (dataToSend.copyTypes.length > 1 || this.isAttachment) {
+                        if (fileType === "base64") {
+                            saveAs((this.generalService.base64ToBlob(response.body.attachments[0].encodedData, '', 512)), response.body.attachments[0].name);
+                        } else {
+                            saveAs(response, `${this.selectedItem.voucherNumber}.` + 'zip');
+                        }
                     } else {
                         saveAs(response, `${this.selectedItem.voucherNumber}.` + 'pdf');
                     }

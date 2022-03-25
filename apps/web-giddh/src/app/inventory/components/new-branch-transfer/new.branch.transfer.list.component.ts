@@ -12,7 +12,7 @@ import { InventoryService } from '../../../services/inventory.service';
 import { ReplaySubject, Observable, of as observableOf } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store';
-import { takeUntil, take } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { NewBranchTransferListResponse, NewBranchTransferListPostRequestParams, NewBranchTransferListGetRequestParams, NewBranchTransferDownloadRequest } from '../../../models/api-models/BranchTransfer';
 import { branchTransferVoucherTypes, branchTransferAmountOperators } from "../../../shared/helpers/branchTransferFilters";
 import { IOption } from '../../../theme/ng-select/ng-select';
@@ -149,6 +149,7 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit(): void {
+        document.querySelector("body")?.classList?.add("new-branch-list-page");
         this.initBranchTransferListResponse();
 
         branchTransferVoucherTypes.map(voucherType => {
@@ -220,6 +221,7 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
     }
 
     public ngOnDestroy(): void {
+        document.querySelector("body")?.classList?.remove("new-branch-list-page");
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }

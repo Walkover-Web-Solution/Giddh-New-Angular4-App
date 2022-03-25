@@ -194,8 +194,6 @@
                             !allPayments?.length &&
                             !searchQueryParams?.receiptNumber &&
                             !searchQueryParams?.baseAccountName &&
-                            !searchQueryParams?.particularName &&
-                            !searchQueryParams?.invoiceNumber &&
                             !searchQueryParams?.receiptTypes?.length
                         "
                     >
@@ -277,45 +275,15 @@
                                 </div>
                             </th>
 
-                            <th #paymentModeParent width="13%" class="bd-rr bd-rb td-search-box">
-                                <div [hidden]="showPaymentModeSearchBar">
-                                    <i class="icon-search" (click)="searchBy(null, 'paymentMode', true)"></i>
+                            <th width="13%" class="bd-rr bd-rb td-search-box">
+                                <div>
                                     <span>{{ localeData?.payment_mode_label }}</span>
-                                </div>
-                                <div class="input-container" [hidden]="!showPaymentModeSearchBar">
-                                    <input
-                                        #paymentMode
-                                        (clickOutside)="
-                                            showPaymentModeSearchBar ? searchBy($event, 'paymentMode', false) : ''
-                                        "
-                                        [(ngModel)]="searchQueryParams.particularName"
-                                        (ngModelChange)="updateSearchQuery(searchQueryParams.particularName)"
-                                        type="text"
-                                        [placeholder]="localeData?.payment_mode_placeholder"
-                                        class="w100"
-                                        #paymentModeField
-                                    />
                                 </div>
                             </th>
 
-                            <th #invoiceNumberParent width="13%" class="bd-rr bd-rb td-search-box">
-                                <div [hidden]="showInvoiceSearchBar">
-                                    <i class="icon-search" (click)="searchBy(null, 'invoiceNumber', true)"></i>
+                            <th width="13%" class="bd-rr bd-rb td-search-box">
+                                <div>
                                     <span>{{ localeData?.invoice_no_label }}</span>
-                                </div>
-                                <div class="input-container" [hidden]="!showInvoiceSearchBar">
-                                    <input
-                                        #invoiceNumber
-                                        (clickOutside)="
-                                            showInvoiceSearchBar ? searchBy($event, 'invoiceNumber', false) : ''
-                                        "
-                                        [(ngModel)]="searchQueryParams.invoiceNumber"
-                                        (ngModelChange)="updateSearchQuery(searchQueryParams.invoiceNumber)"
-                                        type="text"
-                                        [placeholder]="localeData?.invoice_no_placeholder"
-                                        class="w100"
-                                        #paymentModeField
-                                    />
                                 </div>
                             </th>
 
@@ -398,7 +366,7 @@
                             <td width="13%" class="text-break" [attr.data-title]="commonLocaleData?.app_voucher_type">
                                 {{ voucherApiVersion === 2 ? payment?.account?.name : payment?.baseAccountName }}
                             </td>
-                            <td [attr.data-title]="localeData?.payment_mode_label">
+                            <td class="pl-0" [attr.data-title]="localeData?.payment_mode_label">
                                 <ng-container *ngIf="voucherApiVersion !== 2">
                                     <div *ngFor="let paymentMode of payment?.particularNames?.split(',')">
                                         {{ paymentMode }}
@@ -410,7 +378,7 @@
                             </td>
                             <td
                                 width="13%"
-                                class="text-break"
+                                class="text-break pl-0"
                                 *ngIf="payment?.invoices || payment?.adjustments?.length"
                                 [attr.data-title]="localeData?.invoice_no_label"
                             >
@@ -420,17 +388,19 @@
                                 <ng-container *ngIf="voucherApiVersion === 2">
                                     <ng-container *ngIf="payment.adjustments?.length > 0">
                                         <ng-container *ngFor="let adjustment of payment.adjustments">
-                                            {{ adjustment?.voucherNumber }}<br />
+                                            {{ adjustment?.voucherNumber || commonLocaleData?.app_not_available }}<br />
                                         </ng-container>
                                     </ng-container>
-                                    <ng-container *ngIf="!payment.adjustments?.length"> - </ng-container>
+                                    <ng-container *ngIf="!payment.adjustments?.length">{{
+                                        commonLocaleData?.app_not_available
+                                    }}</ng-container>
                                 </ng-container>
                             </td>
                             <td
                                 [attr.data-title]="localeData?.invoice_no_label"
                                 *ngIf="!payment?.invoices && !payment?.adjustments?.length"
                             >
-                                -
+                                {{ commonLocaleData?.app_not_available }}
                             </td>
                             <td
                                 [attr.data-title]="commonLocaleData?.app_total_amount"

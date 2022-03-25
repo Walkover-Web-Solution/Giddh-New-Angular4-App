@@ -9,9 +9,8 @@ import { AuthenticationService } from '../../../services/authentication.service'
 import { AppState } from '../../../store';
 import { SettingsProfileActions } from '../../../actions/settings/profile/settings.profile.action';
 import { CompanyActions } from '../../../actions/company.actions';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute} from '@angular/router';
 import { FormControl } from '@angular/forms';
-import { DEFAULT_SIGNUP_TRIAL_PLAN, DEFAULT_POPULAR_PLAN } from '../../../app.constant';
 import { SettingsProfileService } from '../../../services/settings.profile.service';
 import { ToasterService } from '../../../services/toaster.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -73,10 +72,6 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
     public unlimitedUsersTooltipContent: string = "";
     /** This will contain the tooltip content of unlimited customers */
     public unlimitedCustomersVendorsTooltipContent: string = "";
-    /** This will contain the plan unique name of default trial plan */
-    public defaultTrialPlan: string = DEFAULT_SIGNUP_TRIAL_PLAN;
-    /** This will contain the plan name of popular plan */
-    public defaultPopularPlan: string = DEFAULT_POPULAR_PLAN;
     /** This will hold if plans are showing */
     public isShowPlans: boolean = false;
     /** This will hold the object of active company */
@@ -103,7 +98,6 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
         });
         this.isUpdateCompanyInProgress$ = this.store.pipe(select(s => s.settings.updateProfileInProgress), takeUntil(this.destroyed$));
         this.isUpdateCompanySuccess$ = this.store.pipe(select(s => s.settings.updateProfileSuccess), takeUntil(this.destroyed$));
-
     }
 
     public ngOnInit() {
@@ -324,12 +318,10 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
                 this.allSubscriptions[subscription.planDetails.uniqueName] = subscription;
             });
             this.inputData = [];
-            let loop = 0;
             let allPlans = uniqBy(subscriptions.map(subscription => { return subscription.planDetails }), "name");
-            allPlans = allPlans?.filter(plan => plan?.amount > 0);
+            allPlans = allPlans?.filter(plan => (activeCompany?.countryV2?.alpha2CountryCode !== "IN" && plan?.uniqueName === "58x1579340958478") || plan?.amount > 0); // show plan if company country is not india and it's bonsai plan or plan amount is greater than 0
             allPlans.forEach(plan => {
                 this.inputData.push(plan);
-                loop++;
             });
 
             this.showLoader = false;

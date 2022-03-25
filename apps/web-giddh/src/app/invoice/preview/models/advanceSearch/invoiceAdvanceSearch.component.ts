@@ -60,6 +60,8 @@ export class InvoiceAdvanceSearchComponent implements OnInit, OnChanges {
     public dateFieldPosition: any = { x: 0, y: 0 };
     /** Stores the E-invoice status */
     public eInvoiceStatusDropdownOptions: IOption[] = [];
+    /** Stores the voucher API version of company */
+    public voucherApiVersion: 1 | 2;
 
     constructor(private generalService: GeneralService, private modalService: BsModalService) {
 
@@ -94,6 +96,8 @@ export class InvoiceAdvanceSearchComponent implements OnInit, OnChanges {
             { label: this.commonLocaleData?.app_date_options?.after, value: 'after' },
             { label: this.commonLocaleData?.app_date_options?.before, value: 'before' },
         ];
+        
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
     }
 
     public invoiceTotalRangeChanged(item: IOption) {
@@ -172,18 +176,36 @@ export class InvoiceAdvanceSearchComponent implements OnInit, OnChanges {
 
     public dateChanged(item: IOption, type: string) {
         if (type === 'invoice') {
-            this.request.invoiceDateEqual = false;
-            this.request.invoiceDateAfter = false;
-            this.request.invoiceDateBefore = false;
+            if (this.generalService.voucherApiVersion === 2) {
+                this.request.voucherDateEqual = false;
+                this.request.voucherDateAfter = false;
+                this.request.voucherDateBefore = false;
+            } else {
+                this.request.invoiceDateEqual = false;
+                this.request.invoiceDateAfter = false;
+                this.request.invoiceDateBefore = false;
+            }
             switch (item.value) {
                 case 'on':
-                    this.request.invoiceDateEqual = true;
+                    if (this.generalService.voucherApiVersion === 2) {
+                        this.request.voucherDateEqual = true;
+                    } else {
+                        this.request.invoiceDateEqual = true;
+                    }
                     break;
                 case 'after':
-                    this.request.invoiceDateAfter = true;
+                    if (this.generalService.voucherApiVersion === 2) {
+                        this.request.voucherDateAfter = true;
+                    } else {
+                        this.request.invoiceDateAfter = true;
+                    }
                     break;
                 case 'before':
-                    this.request.invoiceDateBefore = true;
+                    if (this.generalService.voucherApiVersion === 2) {
+                        this.request.voucherDateBefore = true;
+                    } else {
+                        this.request.invoiceDateBefore = true;
+                    }
                     break;
             }
         } else {

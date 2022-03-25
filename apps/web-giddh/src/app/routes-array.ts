@@ -50,6 +50,7 @@ export const ROUTES = [
         children: [
             { path: 'home', loadChildren: () => import('./home/home.module').then(module => module.HomeModule) },
             { path: 'invoice', loadChildren: () => import('./invoice/invoice.module').then(module => module.InvoiceModule) },
+            { path: 'thermal', loadChildren: () => import('./invoice/thermal-pdf/thermal-pdf.module').then(module => module.ThermalModule) },
             { path: 'daybook', loadChildren: () => import('./daybook/daybook.module').then(module => module.DaybookModule) },
             { path: 'purchase', loadChildren: () => import('./purchase/purchase.module').then(module => module.PurchaseModule) },
             { path: 'inventory', loadChildren: () => import('./inventory/inventory.module').then(module => module.InventoryModule) },
@@ -107,6 +108,7 @@ export const ROUTES = [
             { path: 'verify-email', loadChildren: () => import('./verify-email/verify-email.module').then(module => module.VerifyEmailModule) },
             { path: 'billing-detail' },
             { path: 'billing-detail/buy-plan' },
+            { path: 'voucher', loadChildren: () => import('./payment-receipt/payment-receipt.module').then(module => module.PaymentReceiptModule) },
             { path: '**', redirectTo: 'home', pathMatch: 'full' }
         ]
     },

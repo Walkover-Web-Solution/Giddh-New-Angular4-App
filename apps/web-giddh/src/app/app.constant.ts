@@ -217,7 +217,6 @@ export const FILE_ATTACHMENT_TYPE = {
     UNSUPPORTED: ['doc', 'docx', 'xls', 'xlsx']
 };
 
-
 /** Error message to display if the stock is invalid */
 export const INVALID_STOCK_ERROR_MESSAGE = 'Both Unit and Rate fields are mandatory if you provide data for either of them.';
 
@@ -238,23 +237,6 @@ export const HIGH_RATE_FIELD_PRECISION = 16;
 
 /** Regex to remove trailing zeros from a string representation of number */
 export const REMOVE_TRAILING_ZERO_REGEX = /^([\d,' ]*)$|^([\d,' ]*)\.0*$|^([\d,' ]+\.[0-9]*?)0*$/;
-
-/* This plan unique name will be used as a default plan while creating new company/branch */
-export let DEFAULT_SIGNUP_TRIAL_PLAN = "";
-
-if (PRODUCTION_ENV || isElectron) {
-    DEFAULT_SIGNUP_TRIAL_PLAN = "e6v1566224240273";
-} else {
-    DEFAULT_SIGNUP_TRIAL_PLAN = "xoh1591185630174";
-}
-
-export let DEFAULT_POPULAR_PLAN = "";
-
-if (PRODUCTION_ENV || isElectron) {
-    DEFAULT_POPULAR_PLAN = "Oak";
-} else {
-    DEFAULT_POPULAR_PLAN = "Popular Plan";
-}
 
 /** Type of voucher that is adjusted */
 export enum AdjustedVoucherType {
@@ -291,10 +273,6 @@ export const RESTRICTED_BRANCH_ROUTES = [
     '/pages/settings/create-branch',
     '/pages/settings/financial-year',
     '/pages/user-details/subscription'
-];
-
-export const SUPPORT_TEAM_NUMBERS = [
-    "+918889500350", "+918889378604"
 ];
 
 /** Settings integration tabs */
@@ -455,4 +433,11 @@ export const GIDDH_VOUCHER_FORM = [
         dueDate: false,
         attachmentAllowed: false
     }
+];
+export const CALENDLY_URL = "https://calendly.com/d/cg6-6kx-924/schedule-demo";
+export const JOURNAL_VOUCHER_ALLOWED_DOMAINS = [
+    'giddh.com',
+    'walkover.in',
+    'muneem.co',
+    'whozzat.com',
 ];

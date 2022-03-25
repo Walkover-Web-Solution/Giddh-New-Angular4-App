@@ -14,3 +14,7 @@ p {
 .company-currency {
     color: var(--color-gray);
 }
+.adjustments-list {
+    height: 300px;
+    overflow-y: auto;
+}

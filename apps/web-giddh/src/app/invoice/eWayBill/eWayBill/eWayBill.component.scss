@@ -67,7 +67,6 @@
     .icon-download1 {
         visibility: hidden;
         opacity: 0;
-        padding-left: 10px;
         font-size: 17px;
         transition: 0.5s all ease;
     }
@@ -119,8 +118,13 @@ label {
     }
 }
 .custom-tabs {
-    table {
-        margin-top: 15px;
+    .table-wrapper {
+        height: calc(100vh - 295px);
+        overflow-y: auto;
+
+        table {
+            margin-top: 15px;
+        }
     }
 }
 .no-data {
@@ -128,7 +132,9 @@ label {
     margin-top: -20px;
     padding-top: 20px;
 }
-
+.dropup-menu {
+    transform: translateY(-101%) !important;
+}
 // my css
 
 @media (min-width: 768px) {

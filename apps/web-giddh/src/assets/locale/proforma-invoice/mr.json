@@ -11,6 +11,7 @@
     "customer_name": "ग्राहकाचे नाव",
     "balance_due": "शिल्लक बाकी",
     "copy_previous_invoices": "मागील [INVOICE_TYPE] पावत्या कॉपी करा",
+    "copy_previous_dr_cr": "मागील [INVOICE_TYPE] कॉपी करा",
     "customer_details": "ग्राहक तपशील",
     "vendor_details": "विक्रेता तपशील",
     "billing_address": "बिलाचा पत्ता",
@@ -61,6 +62,7 @@
     "add_customer": "ग्राहक जोडा",
     "add_vendor": "विक्रेता जोडा",
     "invoice_no": "बीजक #",
+    "bill_number":"बिल क्रमांक",
     "proforma_no": "प्रोफार्मा #",
     "estimate_no": "अंदाज #",
     "purchase_bill_no": "खरेदी बिल #",
@@ -104,5 +106,6 @@
     "change_all_entry_dates": "आपण या तारखेसह सर्व नोंदी तारीख बदलू इच्छिता??",
     "exchange_label": "विनिमय",
     "confirm_delete_file": "आपली खात्री आहे की आपण संलग्न केलेली फाइल हटवू इच्छिता?",
-    "enter_amount": "कृपया ठेव रक्कम प्रविष्ट करा"
+    "enter_amount": "कृपया ठेव रक्कम प्रविष्ट करा",
+    "voucher_number_required": "व्हाउचर क्रमांक अनिवार्य आहे"
 }

@@ -271,13 +271,16 @@
                                         mat-icon-button
                                         class="pos-abs arrow-icon"
                                         [matMenuTriggerFor]="downloadCsvEmail"
-                                        *ngIf="selectedCheckedContacts?.length"
                                         id="button-basic"
                                     >
                                         <span class="icon-arrow-down"></span>
                                     </button>
                                     <mat-menu #downloadCsvEmail="matMenu">
-                                        <button mat-menu-item (click)="openEmailDialog()">
+                                        <button
+                                            mat-menu-item
+                                            *ngIf="selectedCheckedContacts?.length"
+                                            (click)="openEmailDialog()"
+                                        >
                                             {{ commonLocaleData?.app_email }}
                                         </button>
                                         <button mat-menu-item (click)="downloadCSV()">

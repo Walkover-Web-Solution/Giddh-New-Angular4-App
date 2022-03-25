@@ -112,7 +112,8 @@
     "invoice_copy_options": {
         "original": "Original",
         "customer": "Customer",
-        "transport": "Transport"
+        "transport": "Transport",
+        "attachment": "Attachment"
     },
     "invalid_email": "[EMAIL] is invalid email!",
     "select_copy": "Select Copy",
@@ -175,5 +176,6 @@
     "works_for_single_entry": "Works only for single entry.",
     "uploaded_purchase_bill": "Uploaded Bill",
     "auto_generated_purchase_bill": "Giddh Auto Generated Bill",
-    "amount_adjusted": "Amount adjusted successfully"
+    "amount_adjusted": "Amount adjusted successfully",
+    "pincode_required": "Please update pincode in voucher before creating eway bill."
 }

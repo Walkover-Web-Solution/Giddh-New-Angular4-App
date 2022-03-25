@@ -1546,7 +1546,7 @@
                                                     ? commonLocaleData?.app_invoice
                                                     : commonLocaleData?.app_voucher) +
                                                 ' : ' +
-                                                txn.voucherNumber
+                                                (txn.voucherNumber || commonLocaleData?.app_not_available)
                                             "
                                             [matTooltipPosition]="'right'"
                                             matTooltipClass="tooltip-black"
@@ -1562,10 +1562,12 @@
                                             (click)="openAttachmentsDialog(attachments, txn)"
                                             [matTooltip]="
                                                 txn.attachedFileUniqueName && txn.voucherGenerated
-                                                    ? txn.voucherNumber + ', ' + txn.attachedFileName
+                                                    ? (txn.voucherNumber || commonLocaleData?.app_not_available) +
+                                                      ', ' +
+                                                      txn.attachedFileName
                                                     : txn.attachedFileUniqueName
                                                     ? txn.attachedFileName
-                                                    : txn.voucherNumber
+                                                    : txn.voucherNumber || commonLocaleData?.app_not_available
                                             "
                                             [matTooltipPosition]="'right'"
                                             matTooltipClass="tooltip-black"
@@ -1976,7 +1978,7 @@
                                                     ? commonLocaleData?.app_invoice
                                                     : commonLocaleData?.app_voucher) +
                                                 ' : ' +
-                                                txn.voucherNumber
+                                                (txn.voucherNumber || commonLocaleData?.app_not_available)
                                             "
                                             [matTooltipPosition]="'right'"
                                             matTooltipClass="tooltip-black"
@@ -1992,10 +1994,12 @@
                                             (click)="openAttachmentsDialog(attachments, txn)"
                                             [matTooltip]="
                                                 txn.attachedFileUniqueName && txn.voucherGenerated
-                                                    ? txn.voucherNumber + ', ' + txn.attachedFileName
+                                                    ? (txn.voucherNumber || commonLocaleData?.app_not_available) +
+                                                      ', ' +
+                                                      txn.attachedFileName
                                                     : txn.attachedFileUniqueName
                                                     ? txn.attachedFileName
-                                                    : txn.voucherNumber
+                                                    : txn.voucherNumber || commonLocaleData?.app_not_available
                                             "
                                             [matTooltipPosition]="'right'"
                                             matTooltipClass="tooltip-black"

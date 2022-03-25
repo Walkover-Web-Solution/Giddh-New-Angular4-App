@@ -138,10 +138,10 @@ button.toast-close-button {
     white-space: normal;
     word-break: break-word;
     flex-basis: auto;
-    max-width: 400px;
+    max-width: 500px;
     display: flex;
     flex-direction: row;
-    min-width: 400px;
+    min-width: 500px;
     width: 100%;
 }
 #toast-container .toast:hover {

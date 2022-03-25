@@ -64,7 +64,7 @@
                             [attr.data-title]="commonLocaleData?.app_voucher_number"
                             class="text-center"
                         >
-                            {{ item.voucherNumber }}
+                            {{ item.voucherNumber || commonLocaleData?.app_not_available }}
                         </td>
                     </ng-container>
                     <ng-container matColumnDef="voucher_refno">
@@ -75,7 +75,7 @@
                             [attr.data-title]="localeData?.voucher_refno"
                             class="text-center"
                         >
-                            {{ item.voucherRefNo }}
+                            {{ item.voucherRefNo || commonLocaleData?.app_not_available }}
                         </td>
                     </ng-container>
                     <ng-container matColumnDef="voucher_refdate">

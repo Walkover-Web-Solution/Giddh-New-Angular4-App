@@ -535,7 +535,15 @@
                                             >
                                                 <ng-template #optionTemplate let-option="option">
                                                     <a href="javascript:void(0)" class="list-item sh-template">
-                                                        <div class="item">{{ option?.label }}</div>
+                                                        <div class="item">
+                                                            {{
+                                                                (blankLedger.voucherType === "pur" ||
+                                                                    blankLedger.voucherType === "purchase") &&
+                                                                !option.label
+                                                                    ? commonLocaleData?.app_not_available
+                                                                    : option.label
+                                                            }}
+                                                        </div>
                                                         <div class="item-unique">
                                                             ({{ localeData?.dated }}:
                                                             {{ option.additional?.voucherDate }})
@@ -570,13 +578,13 @@
                                             (voucherApiVersion === 2 || selectedInvoiceForCreditNote)
                                         "
                                         class="cp remove-invoice pd-r1 hidden-xs d-flex align-items-center"
-                                        (click)="removeSelectedInvoice()"
                                     >
                                         <div
                                             [ngClass]="{
                                                 'form-group float-left mb-0 mr-r1 mr-t1': voucherApiVersion === 2
                                             }"
                                             *ngIf="selectedInvoiceForCreditNote"
+                                            (click)="removeSelectedInvoice()"
                                         >
                                             <span class="remove-invoice-icon">×</span>
                                             <span class="label">{{ commonLocaleData?.app_remove }}</span>
@@ -839,7 +847,7 @@
                             class="pull-left"
                             name="generateInvoice"
                             [disabled]="
-                                isAdvanceReceipt ||
+                                (voucherApiVersion === 2 && isAdvanceReceipt) ||
                                 currentTxn?.voucherAdjustments?.adjustments?.length ||
                                 currentTxn?.invoiceLinkingRequest?.linkedInvoices?.length ||
                                 currentTxn?.referenceVoucher?.uniqueName ||

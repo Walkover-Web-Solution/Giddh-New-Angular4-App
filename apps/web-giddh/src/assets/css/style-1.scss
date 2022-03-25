@@ -3094,3 +3094,17 @@ td.mat-footer-cell {
 }
 
 /* material css for ledger end*/
+.form-control {
+    &.custom-field {
+        &.ng-touched {
+            &.ng-invalid {
+                border: 2px solid $red !important;
+            }
+        }
+    }
+}
+.voucher-preview-edit {
+    .popover {
+        z-index: 1000 !important;
+    }
+}

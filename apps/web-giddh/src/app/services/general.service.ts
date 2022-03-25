@@ -9,7 +9,7 @@ import { cloneDeep, find } from '../lodash-optimized';
 import { OrganizationType } from '../models/user-login-state';
 import { AllItems } from '../shared/helpers/allItems';
 import { Router } from '@angular/router';
-import { AdjustedVoucherType } from '../app.constant';
+import { AdjustedVoucherType, JOURNAL_VOUCHER_ALLOWED_DOMAINS } from '../app.constant';
 import { VoucherTypeEnum } from '../models/api-models/Sales';
 
 @Injectable()
@@ -373,7 +373,7 @@ export class GeneralService {
         let isAllowed = false;
         if (email) {
             let emailSplit = email.split("@");
-            if (emailSplit.indexOf("giddh.com") > -1 || emailSplit.indexOf("walkover.in") > -1 || emailSplit.indexOf("muneem.co") > -1) {
+            if (JOURNAL_VOUCHER_ALLOWED_DOMAINS.includes(emailSplit[1])) {
                 isAllowed = true;
             }
         }
@@ -771,7 +771,7 @@ export class GeneralService {
             visibleMenuItems[menuIndex].items = [];
             menuItem.items?.forEach(item => {
                 const isValidItem = apiItems.find(apiItem => apiItem.uniqueName === item.link);
-                if (((isValidItem && item.hide !== module) || (item.alwaysPresent && item.hide !== module)) && (!item.additional?.countrySpecific?.length || item.additional?.countrySpecific?.indexOf(countryCode) > -1)) {
+                if (((isValidItem && item.hide !== module) || (item.alwaysPresent && item.hide !== module)) && (!item.additional?.countrySpecific?.length || item.additional?.countrySpecific?.indexOf(countryCode) > -1) && (!item.additional?.voucherVersion || item.additional?.voucherVersion === this.voucherApiVersion)) {
                     // If items returned from API have the current item which can be shown in branch/company mode, add it
                     visibleMenuItems[menuIndex].items.push(item);
                 }
@@ -1020,5 +1020,23 @@ export class GeneralService {
         } catch (error) {
         }
         return item;
+    }
+
+    /**
+     * This returns voucher number
+     *
+     * @private
+     * @param {*} item
+     * @returns {*}
+     * @memberof GeneralService
+     */
+    public getVoucherNumberLabel(voucherType: string, voucherNumber: any, commonLocaleData: any): any {
+        if ((voucherType === "pur" || voucherType === VoucherTypeEnum.purchase) && (!voucherNumber || voucherNumber === "-")) {
+            voucherNumber = commonLocaleData?.app_not_available;
+        } else if (!voucherNumber) {
+            voucherNumber = "-";
+        }
+
+        return voucherNumber;
     }
 }

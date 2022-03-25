@@ -57,7 +57,11 @@ export class SendEmailInvoiceComponent implements OnInit {
         if ([VoucherTypeEnum.estimate, VoucherTypeEnum.generateEstimate, VoucherTypeEnum.proforma, VoucherTypeEnum.generateProforma].includes(this.voucherType)) {
             this.successEvent.emit(this.emailAddresses);
         } else {
-            this.successEvent.emit({ email: this.emailAddresses, invoiceType: this.invoiceType, invoiceNumber: this.selectedItem.voucherNumber });
+            if(this.voucherApiVersion === 2) {
+                this.successEvent.emit({ email: this.emailAddresses, invoiceType: this.invoiceType, uniqueName: this.selectedItem.uniqueName });
+            } else {
+                this.successEvent.emit({ email: this.emailAddresses, invoiceType: this.invoiceType, invoiceNumber: this.selectedItem.voucherNumber });
+            }
         }
         this.cancel();
     }

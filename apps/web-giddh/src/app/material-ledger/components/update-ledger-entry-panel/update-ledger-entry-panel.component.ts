@@ -559,6 +559,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             txn.particular.name = undefined;
             txn.particular.uniqueName = undefined;
             txn.amount = 0;
+            txn.particular.parentGroups = undefined;
+            txn.particular.category = undefined;
 
             // check if need to showEntryPanel
             // first check with opened ledger
@@ -1129,7 +1131,11 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                         items = response.body.items;
                     }
 
-                    items?.forEach(invoice => this.invoiceList.push({ label: invoice?.voucherNumber ? invoice.voucherNumber : '-', value: invoice?.uniqueName, additional: invoice }))
+                    items?.forEach(invoice => {
+                        invoice.voucherNumber = this.generalService.getVoucherNumberLabel(invoice?.voucherType, invoice?.voucherNumber, this.commonLocaleData);
+
+                        this.invoiceList.push({ label: invoice?.voucherNumber ? invoice.voucherNumber : '-', value: invoice?.uniqueName, additional: invoice })
+                    });
                 } else {
                     this.forceClear$ = observableOf({ status: true });
                 }
@@ -1143,6 +1149,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
                 if (selectedInvoice) {
                     if(this.voucherApiVersion === 2) {
+                        selectedInvoice.number = this.generalService.getVoucherNumberLabel(selectedInvoice?.voucherType, selectedInvoice?.number, this.commonLocaleData);
+
                         invoiceSelected = {
                             label: selectedInvoice.number ? selectedInvoice.number : '-',
                             value: selectedInvoice.uniqueName,
@@ -1769,7 +1777,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             const adjustments = cloneDeep(event.adjustVoucherData.adjustments);
             if (adjustments) {
                 adjustments.forEach(adjustment => {
-                    adjustment.voucherNumber = adjustment.voucherNumber === '-' ? '' : adjustment.voucherNumber;
+                    adjustment.voucherNumber = this.generalService.getVoucherNumberLabel(adjustment.voucherType, adjustment.voucherNumber, this.commonLocaleData);
                 });
 
                 this.vm.selectedLedger.voucherAdjustments = {
@@ -1880,7 +1888,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      */
     private openAdjustPaymentModal(): void {
         if (this.voucherApiVersion === 2) {
-            let particularAccount = (this.vm.selectedLedger?.transactions[0]?.particular?.uniqueName === this.activeAccount?.uniqueName) ? this.vm.selectedLedger?.particular : this.vm.selectedLedger?.transactions[0]?.particular;
+            const mainTransaction = this.vm.selectedLedger?.transactions?.filter(transaction => !transaction.isDiscount && !transaction.isTax && transaction?.particular?.uniqueName && transaction?.particular?.uniqueName !== 'roundoff');
+
+            let particularAccount = (mainTransaction[0]?.particular?.uniqueName === this.activeAccount?.uniqueName) ? this.vm.selectedLedger?.particular : mainTransaction[0]?.particular;
 
             this.invoiceListRequestParams = { particularAccount: particularAccount, voucherType: this.vm.selectedLedger?.voucher?.name, ledgerAccount: this.activeAccount };
         }
@@ -1948,9 +1958,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     private formatAdjustments(): void {
         if (this.vm.selectedLedger?.voucherAdjustments?.adjustments?.length) {
             this.vm.selectedLedger.voucherAdjustments.adjustments.forEach(adjustment => {
-                if (!adjustment.voucherNumber) {
-                    adjustment.voucherNumber = '-';
-                }
+                adjustment.voucherNumber = this.generalService.getVoucherNumberLabel(adjustment.voucherType, adjustment.voucherNumber, this.commonLocaleData);
                 adjustment.accountCurrency = adjustment.accountCurrency ?? adjustment.currency ?? { symbol: this.activeCompany?.baseCurrencySymbol, code: this.activeCompany?.baseCurrency };
             });
         }
