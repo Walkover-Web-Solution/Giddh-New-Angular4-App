@@ -18,18 +18,14 @@ export class ThermalTemplateComponent implements OnInit, OnDestroy, OnChanges {
 
     @Input() public fieldsAndVisibility: any = null;
     @Input() public isPreviewMode: boolean = false;
-    @Input() public showLogo: boolean = true;
     @Input() public showCompanyName: boolean;
     @Input() public companyGSTIN: string;
-    @Input() public companyPAN: string;
     @Input() public inputTemplate: CustomTemplateResponse = new CustomTemplateResponse();
-    @Input() public logoSrc: string;
     @Input() public templateUISectionVisibility: TemplateContentUISectionVisibility = new TemplateContentUISectionVisibility();
     /* This will hold the value if Gst Composition will show/hide */
     @Input() public showGstComposition: boolean = false;
     @Input() public voucherType = '';
     @Input() public imageSignatureSrc: string;
-    @Input() public showImageSignature: boolean;
 
     @Output() public sectionName: EventEmitter<string> = new EventEmitter();
     public companyAddress: string = '';

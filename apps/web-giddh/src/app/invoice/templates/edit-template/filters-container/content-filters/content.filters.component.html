@@ -353,7 +353,12 @@
                             </div>
                         </div>
                     </ng-container>
-                    <div *ngIf="fieldsAndVisibility.header.dueDate" class="form-group">
+                    <div
+                        *ngIf="
+                            fieldsAndVisibility.header.dueDate && customTemplate?.templateType !== 'thermal_template'
+                        "
+                        class="form-group"
+                    >
                         <input
                             type="checkbox"
                             name="dueDateCheckbox"
@@ -508,7 +513,13 @@
                         />
                         Customer Name
                     </div>
-                    <div *ngIf="fieldsAndVisibility.header.attentionTo" class="form-group">
+                    <div
+                        *ngIf="
+                            fieldsAndVisibility.header.attentionTo &&
+                            customTemplate?.templateType !== 'thermal_template'
+                        "
+                        class="form-group"
+                    >
                         <input
                             type="checkbox"
                             name="attentionToCheckbox"
@@ -526,7 +537,8 @@
                             customTemplate?.templateType !== 'gst_template_d' &&
                             customTemplate?.templateType !== 'gst_template_e' &&
                             customTemplate?.templateType !== 'gst_template_i' &&
-                            customTemplate?.templateType !== 'gst_template_h'
+                            customTemplate?.templateType !== 'gst_template_h' &&
+                            customTemplate?.templateType !== 'thermal_template'
                         "
                         class="form-group"
                     >
@@ -544,7 +556,8 @@
                             fieldsAndVisibility.header.customerMobileNumber &&
                             customTemplate?.templateType !== 'gst_template_b' &&
                             customTemplate?.templateType !== 'gst_template_d' &&
-                            customTemplate?.templateType !== 'gst_template_e'
+                            customTemplate?.templateType !== 'gst_template_e' &&
+                            customTemplate?.templateType !== 'thermal_template'
                         "
                         class="form-group"
                     >
@@ -645,7 +658,8 @@
                     *ngIf="
                         customTemplate?.templateType !== 'gst_template_b' &&
                         customTemplate?.templateType !== 'gst_template_d' &&
-                        customTemplate?.templateType !== 'gst_template_h'
+                        customTemplate?.templateType !== 'gst_template_h' &&
+                        customTemplate?.templateType !== 'thermal_template'
                     "
                 >
                     <h3>Shipping Details</h3>
@@ -734,7 +748,8 @@
                     class="clearfix"
                     *ngIf="
                         customTemplate?.templateType !== 'gst_template_d' &&
-                        customTemplate?.templateType !== 'gst_template_h'
+                        customTemplate?.templateType !== 'gst_template_h' &&
+                        customTemplate?.templateType !== 'thermal_template'
                     "
                 >
                     <h3>
@@ -815,7 +830,13 @@
                                 </ng-container>
                             </div>
                         </div>
-                        <div class="form-group" *ngIf="fieldsAndVisibility.header.trackingNumber">
+                        <div
+                            class="form-group"
+                            *ngIf="
+                                fieldsAndVisibility.header.trackingNumber &&
+                                customTemplate?.templateType !== 'thermal_template'
+                            "
+                        >
                             <input
                                 type="checkbox"
                                 name="trackingNumberCheckbox"
@@ -856,7 +877,8 @@
                     class="clearfix custom-field mr-b2"
                     *ngIf="
                         customTemplate?.templateType !== 'gst_template_b' &&
-                        customTemplate?.templateType !== 'gst_template_d'
+                        customTemplate?.templateType !== 'gst_template_d' &&
+                        customTemplate?.templateType !== 'thermal_template'
                     "
                 >
                     <h3>
@@ -992,7 +1014,8 @@
                                 fieldsAndVisibility.table.sNo &&
                                 customTemplate?.templateType !== 'gst_template_c' &&
                                 customTemplate?.templateType !== 'gst_template_f' &&
-                                customTemplate?.templateType !== 'gst_template_g'
+                                customTemplate?.templateType !== 'gst_template_g' &&
+                                customTemplate?.templateType !== 'thermal_template'
                             "
                         >
                             <td>
@@ -1028,7 +1051,11 @@
                                 </ng-container>
                             </td>
                         </tr>
-                        <tr *ngIf="fieldsAndVisibility?.table.date">
+                        <tr
+                            *ngIf="
+                                fieldsAndVisibility?.table.date && customTemplate.templateType !== 'thermal_template'
+                            "
+                        >
                             <td>
                                 <label>
                                     <input
@@ -1102,7 +1129,8 @@
                         <tr
                             *ngIf="
                                 customTemplate.sections['table'].data['item'].display &&
-                                customTemplate.sections['table'].data['showDescriptionInRows']
+                                customTemplate.sections['table'].data['showDescriptionInRows'] &&
+                                customTemplate.templateType !== 'thermal_template'
                             "
                         >
                             <td class="pb-3" colspan="2">
@@ -1119,7 +1147,11 @@
                                 </label>
                             </td>
                         </tr>
-                        <tr *ngIf="fieldsAndVisibility.table.hsnSac">
+                        <tr
+                            *ngIf="
+                                fieldsAndVisibility.table.hsnSac && customTemplate.templateType !== 'thermal_template'
+                            "
+                        >
                             <td>
                                 <label>
                                     <input
@@ -1280,7 +1312,11 @@
                                 </ng-container>
                             </td>
                         </tr>
-                        <tr *ngIf="fieldsAndVisibility.table.discount">
+                        <tr
+                            *ngIf="
+                                fieldsAndVisibility.table.discount && customTemplate.templateType !== 'thermal_template'
+                            "
+                        >
                             <td>
                                 <label>
                                     <input
@@ -1316,7 +1352,12 @@
                                 </ng-container>
                             </td>
                         </tr>
-                        <tr *ngIf="fieldsAndVisibility.table.taxableValue">
+                        <tr
+                            *ngIf="
+                                fieldsAndVisibility.table.taxableValue &&
+                                customTemplate.templateType !== 'thermal_template'
+                            "
+                        >
                             <td>
                                 <label>
                                     <input
@@ -1422,7 +1463,12 @@
                                 </ng-container>
                             </td>
                         </tr>
-                        <tr *ngIf="fieldsAndVisibility.table.previousDue">
+                        <tr
+                            *ngIf="
+                                fieldsAndVisibility.table.previousDue &&
+                                customTemplate.templateType !== 'thermal_template'
+                            "
+                        >
                             <td>
                                 <label>
                                     <input
@@ -1558,45 +1604,6 @@
                                     </ng-container>
                                 </td>
                             </tr>
-                            <tr>
-                                <td>
-                                    <label
-                                        ><input
-                                            type="checkbox"
-                                            name="totalDueCheckbox"
-                                            [(ngModel)]="customTemplate.sections['table'].data['totalDue'].display"
-                                            (ngModelChange)="onChangeFieldVisibility(null, null, null)"
-                                            checked
-                                        />
-                                        Total Due</label
-                                    >
-                                </td>
-                                <td>
-                                    <input
-                                        type="text"
-                                        value="Total Due"
-                                        name="totalDue"
-                                        maxlength="40"
-                                        [class.error-box]="contentForm?.controls['totalDue']?.errors?.maxlength"
-                                        hasFocus
-                                        #totalDue="hasFocus"
-                                        class="form-control"
-                                        [(ngModel)]="customTemplate.sections['table'].data['totalDue'].label"
-                                        (ngModelChange)="onFieldChange(null, null, null)"
-                                        [disabled]="!customTemplate.sections['table'].data['totalDue'].display"
-                                    />
-                                    <ng-container
-                                        *ngIf="
-                                            totalDue?.isFocused || contentForm?.controls['totalDue']?.errors?.maxlength
-                                        "
-                                    >
-                                        <span class="max-character-label">Characters left:&nbsp;</span
-                                        ><span class="max-character-value">{{
-                                            40 - customTemplate.sections["table"].data["totalDue"].label.length
-                                        }}</span>
-                                    </ng-container>
-                                </td>
-                            </tr>
                         </ng-container>
                         <tr
                             *ngIf="
@@ -1604,7 +1611,8 @@
                                 customTemplate?.templateType !== 'gst_template_a' &&
                                 customTemplate?.templateType !== 'gst_template_c' &&
                                 customTemplate?.templateType !== 'gst_template_f' &&
-                                customTemplate?.templateType !== 'gst_template_g'
+                                customTemplate?.templateType !== 'gst_template_g' &&
+                                customTemplate?.templateType !== 'thermal_template'
                             "
                         >
                             <td class="pb-3">
@@ -1816,6 +1824,18 @@
                         Company Name
                     </div>
                     <div
+                        *ngIf="showGstComposition && customTemplate?.templateType === 'thermal_template'"
+                        class="form-group"
+                    >
+                        <input
+                            type="checkbox"
+                            name="showQrCodeCheckbox"
+                            [(ngModel)]="customTemplate.sections['header'].data['showQrCode'].display"
+                            (ngModelChange)="onChangeFieldVisibility(null, null, null)"
+                        />
+                        Show QR code
+                    </div>
+                    <div
                         *ngIf="fieldsAndVisibility.header.gstin && customTemplate?.templateType === 'gst_template_e'"
                         class="form-group"
                     >
@@ -1867,7 +1887,8 @@
                             fieldsAndVisibility.footer.taxableAmount &&
                             customTemplate?.templateType !== 'gst_template_b' &&
                             customTemplate?.templateType !== 'gst_template_d' &&
-                            customTemplate?.templateType !== 'gst_template_e'
+                            customTemplate?.templateType !== 'gst_template_e' &&
+                            customTemplate?.templateType !== 'thermal_template'
                         "
                         class="form-group"
                     >
@@ -1901,6 +1922,27 @@
                         Invoice Total
                     </div>
                     <div
+                        class="form-group"
+                        *ngIf="
+                            customTemplate?.templateType === 'thermal_template' &&
+                            voucherType === 'sales' &&
+                            customTemplate.sections['footer'].data['taxBifurcation']
+                        "
+                    >
+                        <div class="form-group">
+                            <input
+                                type="checkbox"
+                                name="taxBifurcationCheckbox"
+                                [(ngModel)]="customTemplate.sections['footer'].data['taxBifurcation'].display"
+                                (ngModelChange)="
+                                    onChangeFieldVisibility(null, null, null);
+                                    checkedTaxBifurcation('taxRateBifurcation', 'footer')
+                                "
+                            />
+                            Tax Bifurcation
+                        </div>
+                    </div>
+                    <div
                         *ngIf="
                             fieldsAndVisibility.footer.totalInWords &&
                             customTemplate?.templateType !== 'gst_template_b' &&
@@ -1917,6 +1959,151 @@
                         />
                         Invoice Total(in words)
                     </div>
+                    <div
+                        *ngIf="
+                            customTemplate?.templateType === 'thermal_template' &&
+                            voucherType === 'sales' &&
+                            customTemplate.sections['table'].data['totalQuantity']
+                        "
+                        class="clearfix mr-t2"
+                    >
+                        <div class="mb-0 form-group thanks-input-group">
+                            <input
+                                type="checkbox"
+                                name="totalQ"
+                                [(ngModel)]="customTemplate.sections['table'].data['totalQuantity'].display"
+                                (ngModelChange)="onChangeFieldVisibility(null, null, null)"
+                                checked
+                            />
+                            <input
+                                type="text"
+                                [class.error-box]="contentForm?.controls['totalQuantity']?.errors?.maxlength"
+                                class="form-control thanks-input-inline"
+                                hasFocus
+                                #totalQuantity="hasFocus"
+                                [disabled]="!fieldsAndVisibility.table.totalQuantity?.display"
+                                (keyup)="onFieldChange(null, null, null)"
+                                [(ngModel)]="customTemplate.sections['table'].data['totalQuantity'].label"
+                                placeholder="Total Quantity"
+                                maxlength="30"
+                                name="totalQuantity"
+                            />
+                        </div>
+                        <div
+                            class="form-group ml-3 clearfix"
+                            *ngIf="
+                                totalQuantity?.isFocused || contentForm?.controls['totalQuantity']?.errors?.maxlength
+                            "
+                        >
+                            <span class="max-character-label">Characters left:&nbsp;</span
+                            ><span class="max-character-value">{{
+                                30 - customTemplate.sections["table"].data["totalQuantity"].label.length
+                            }}</span>
+                        </div>
+                    </div>
+                    <div *ngIf="customTemplate.templateType === 'thermal_template'" class="form-group">
+                        <input
+                            type="checkbox"
+                            name="totalDueCheckbox"
+                            [(ngModel)]="customTemplate.sections['footer'].data['totalDue'].display"
+                            (ngModelChange)="onChangeFieldVisibility(null, null, null)"
+                            checked
+                        />
+                        Total Due
+                        <div class="ml-3">
+                            <input
+                                type="text"
+                                value="Total Due"
+                                name="totalDue"
+                                maxlength="40"
+                                [class.error-box]="contentForm?.controls['totalDue']?.errors?.maxlength"
+                                hasFocus
+                                #totalDue="hasFocus"
+                                class="form-control"
+                                [(ngModel)]="customTemplate.sections['footer'].data['totalDue'].label"
+                                (ngModelChange)="onFieldChange(null, null, null)"
+                                [disabled]="!customTemplate.sections['footer'].data['totalDue'].display"
+                            />
+                            <ng-container
+                                *ngIf="totalDue?.isFocused || contentForm?.controls['totalDue']?.errors?.maxlength"
+                            >
+                                <span class="max-character-label">Characters left:&nbsp;</span
+                                ><span class="max-character-value">{{
+                                    40 - customTemplate.sections["footer"].data["totalDue"].label.length
+                                }}</span>
+                            </ng-container>
+                        </div>
+                    </div>
+                    <div
+                        *ngIf="
+                            fieldsAndVisibility.table.discount && customTemplate?.templateType === 'thermal_template'
+                        "
+                        class="form-group"
+                    >
+                        <input
+                            type="checkbox"
+                            name="ds"
+                            [(ngModel)]="customTemplate.sections['table'].data['discount'].display"
+                            (ngModelChange)="onChangeFieldVisibility(null, null, null)"
+                            checked
+                        />
+                        Discount
+                        <div class="ml-3">
+                            <input
+                                type="text"
+                                hasFocus
+                                #discount="hasFocus"
+                                maxlength="10"
+                                [class.error-box]="contentForm?.controls['ds1']?.errors?.maxlength"
+                                class="form-control"
+                                name="ds1"
+                                [(ngModel)]="customTemplate.sections['table'].data['discount'].label"
+                                (ngModelChange)="onFieldChange(null, null, null)"
+                                [disabled]="!customTemplate.sections['table'].data['discount'].display"
+                            />
+                            <ng-container
+                                *ngIf="discount?.isFocused || contentForm?.controls['ds1']?.errors?.maxlength"
+                            >
+                                <span class="max-character-label">Characters left:&nbsp;</span
+                                ><span class="max-character-value">{{
+                                    10 - customTemplate.sections["table"].data["discount"].label.length
+                                }}</span>
+                            </ng-container>
+                        </div>
+                    </div>
+                    <div *ngIf="fieldsAndVisibility.footer.taxableAmount" class="form-group">
+                        <input
+                            type="checkbox"
+                            name="tam"
+                            [(ngModel)]="customTemplate.sections['footer'].data['taxableAmount'].display"
+                            (ngModelChange)="onChangeFieldVisibility(null, null, null)"
+                        />
+                        Taxable Amount
+                        <div class="ml-3">
+                            <input
+                                type="text"
+                                hasFocus
+                                #taxableValue="hasFocus"
+                                maxlength="14"
+                                [class.error-box]="contentForm?.controls['tv1']?.errors?.maxlength"
+                                class="form-control"
+                                name="tv1"
+                                [(ngModel)]="customTemplate.sections['table'].data['taxableValue'].label"
+                                (ngModelChange)="onFieldChange(null, null, null)"
+                                [disabled]="!customTemplate.sections['table'].data['taxableValue'].display"
+                            />
+                            <ng-container
+                                class="form-group ml-3 clearfix"
+                                *ngIf="taxableValue?.isFocused || contentForm?.controls['tv1']?.errors?.maxlength"
+                            >
+                                <span class="max-character-label">Characters left:&nbsp;</span
+                                ><span class="max-character-value">{{
+                                    14 - customTemplate.sections["table"].data["taxableValue"].label.length
+                                }}</span>
+                            </ng-container>
+                        </div>
+                    </div>
+
                     <div
                         class="form-group"
                         *ngIf="
@@ -1973,6 +2160,8 @@
                         class="clearfix mr-t1 form-group"
                         *ngIf="
                             customTemplate?.type === 'invoice' &&
+                            customTemplate?.templateType === 'gst_template_a' &&
+                            customTemplate?.templateType === 'gst_template_e' &&
                             customTemplate.sections['footer'].data['showNotesAtLastPage']
                         "
                     >
@@ -2088,6 +2277,7 @@
                             }}</span>
                         </div>
                     </div>
+
                     <div
                         *ngIf="
                             customTemplate?.type === 'invoice' &&
@@ -2146,7 +2336,13 @@
                 </div>
             </div>
         </div> -->
-                    <div class="clearfix mr-t1 row">
+                    <div
+                        *ngIf="
+                            customTemplate?.templateType === 'gst_template_a' ||
+                            customTemplate?.templateType === 'gst_template_e'
+                        "
+                        class="clearfix mr-t1 row"
+                    >
                         <div class="clearfix" class="col-lg-6 col-md-12">
                             <div class="mb-4px">
                                 <input
