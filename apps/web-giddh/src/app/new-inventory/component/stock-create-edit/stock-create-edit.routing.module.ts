@@ -1,10 +1,12 @@
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
+import { MainComponent } from "./main.component";
 import { StockCreateEditComponent } from "./stock-create-edit.component";
 
 const routes: Routes = [
     {
-        path: "", component: StockCreateEditComponent,
+        path: "", 
+        component: MainComponent,
         children: [
             {
                 path: "",
@@ -16,7 +18,7 @@ const routes: Routes = [
                 component: StockCreateEditComponent
             },
             {
-                path: "edit/:stockUniqueName",
+                path: "edit/:stockGroupUniqueName/:stockUniqueName",
                 component: StockCreateEditComponent
             }
         ]

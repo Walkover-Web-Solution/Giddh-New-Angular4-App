@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from "@angular/core";
 import { FormControl } from "@angular/forms";
 import { ReplaySubject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
@@ -22,6 +22,8 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public name: any = "";
     /** True if field is readonly */
     @Input() public readonly: boolean;
+    /** Default value to prefill */
+    @Input() public defaultValue: any = "";
     /** Callback for option selected */
     @Output() public selectedOption: EventEmitter<any> = new EventEmitter<any>();
     /** Search field form control */
@@ -34,7 +36,7 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(
-
+        private changeDetection: ChangeDetectorRef
     ) {
     }
 
@@ -58,6 +60,10 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy {
     public ngOnChanges(changes: SimpleChanges): void {
         if (changes?.options) {
             this.fieldFilteredOptions = cloneDeep(this.options);
+        }
+
+        if (changes?.defaultValue) {
+            this.searchFormControl.setValue({ label: changes?.defaultValue.currentValue });
         }
     }
 

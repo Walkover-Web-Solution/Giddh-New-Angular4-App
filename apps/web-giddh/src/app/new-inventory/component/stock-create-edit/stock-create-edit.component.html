@@ -1,20 +1,9 @@
 <div class="relative create-new-inventory-page static-tabs-on-page">
     <hamburger-menu></hamburger-menu>
-    <div class="new-inventory-page-header">
-        <label class="page-title-inventory"> Create Stock </label>
-        <div class="inventory-header-right">
-            <button mat-icon-button class="ml-3" style="font-size: 25px" [routerLink]="['/pages/new-inventory']">
-                ×
-            </button>
-        </div>
-    </div>
-
     <div class="select-physical-product">
         <form class="form-body">
             <div class="px-3 mt-2">
-                <p class="text-gray font-14">
-                    Select if its a physical good or a service or a combo of more than 1 product.
-                </p>
+                <p class="text-gray font-14">Select if its a physical good or a service.</p>
                 <div class="select-product-type mt-1">
                     <div class="radio-btn-wrapper mr-t15">
                         <mat-radio-group color="primary" [(ngModel)]="stockForm.type" name="productType">
@@ -73,6 +62,7 @@
                                             (selectedOption)="
                                                 stockForm.stockUnitCode = $event?.value; stockUnitName = $event.label
                                             "
+                                            [defaultValue]="stockUnitName"
                                         ></select-field>
                                     </div>
                                 </div>
@@ -87,6 +77,7 @@
                                             [placeholder]="'Under Group'"
                                             [options]="stockGroups"
                                             (selectedOption)="stockGroupUniqueName = $event?.value"
+                                            [defaultValue]="stockGroupName"
                                         ></select-field>
                                     </div>
                                 </div>
@@ -353,6 +344,7 @@
                                                                             $event?.value
                                                                     "
                                                                     [readonly]="!isPurchaseInformationEnabled"
+                                                                    [defaultValue]="purchaseAccountName"
                                                                 ></select-field>
                                                             </div>
                                                             <div class="col-sm-6 col-lg-5">
@@ -379,6 +371,9 @@
                                                                                 ].stockUnitCode = $event?.value
                                                                             "
                                                                             [readonly]="!isPurchaseInformationEnabled"
+                                                                            [defaultValue]="
+                                                                                purchaseUnitRates.stockUnitName
+                                                                            "
                                                                         ></select-field>
                                                                     </div>
                                                                     <div class="col-sm-6 col-6">
@@ -454,6 +449,7 @@
                                                                             $event?.value
                                                                     "
                                                                     [readonly]="!isSalesInformationEnabled"
+                                                                    [defaultValue]="salesAccountName"
                                                                 ></select-field>
                                                             </div>
                                                             <div class="col-sm-6 col-lg-5">
@@ -480,6 +476,9 @@
                                                                                 ].stockUnitCode = $event?.value
                                                                             "
                                                                             [readonly]="!isSalesInformationEnabled"
+                                                                            [defaultValue]="
+                                                                                salesUnitRates.stockUnitName
+                                                                            "
                                                                         ></select-field>
                                                                     </div>
                                                                     <div class="col-sm-6 col-6">
@@ -665,7 +664,7 @@
                                             <div class="col-sm-12 col-md-6">
                                                 <div
                                                     class="row mr-b15"
-                                                    *ngFor="let option of variantOptions; let i = index"
+                                                    *ngFor="let option of stockForm.options; let i = index"
                                                 >
                                                     <div class="col-sm-6 col-lg-4">
                                                         <label>Option Name</label>
@@ -683,7 +682,7 @@
                                                             <mat-chip-list #chipList>
                                                                 <mat-chip
                                                                     class="s-chip"
-                                                                    *ngFor="let value of variantOptions[i]?.values"
+                                                                    *ngFor="let value of stockForm.options[i]?.values"
                                                                     (removed)="removeOption(value, i)"
                                                                 >
                                                                     {{ value }}
@@ -700,7 +699,7 @@
                                                                 />
                                                             </mat-chip-list>
                                                         </div>
-                                                        <div *ngIf="variantOptions?.length > 1">
+                                                        <div *ngIf="stockForm.options?.length > 1">
                                                             <button
                                                                 class="chip-close-btn"
                                                                 (click)="deleteVariantOption(i)"
@@ -715,7 +714,7 @@
                                         <button
                                             mat-button
                                             class="text-primary mr-b15 d-block cp"
-                                            *ngIf="variantOptions?.length < 3"
+                                            *ngIf="stockForm.options?.length < 3"
                                             (click)="addVariantOption()"
                                         >
                                             + Another option
@@ -748,6 +747,9 @@
                                                             [placeholder]="'Unit'"
                                                             [options]="stockUnits"
                                                             (selectedOption)="selectVariantUnit(variant, $event)"
+                                                            [defaultValue]="
+                                                                variant.warehouseBalance[0]?.stockUnit?.name
+                                                            "
                                                         ></select-field>
                                                     </td>
                                                     <td>
@@ -5179,8 +5181,21 @@
         <div class="d-flex">
             <div class="button-group">
                 <button id="clear-btn" mat-raised-button class="btn-primary min-width-100 bdr-radius-50">Clear</button>
-                <button id="create-new-btn" mat-raised-button class="btn-success min-width-100 bdr-radius-50">
+                <button
+                    *ngIf="!queryParams?.stockUniqueName"
+                    mat-raised-button
+                    class="btn-success min-width-100 bdr-radius-50"
+                    (click)="createStock()"
+                >
                     Create New
+                </button>
+                <button
+                    *ngIf="queryParams?.stockUniqueName"
+                    mat-raised-button
+                    class="btn-success min-width-100 bdr-radius-50"
+                    (click)="updateStock()"
+                >
+                    Update
                 </button>
             </div>
         </div>
