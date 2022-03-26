@@ -974,4 +974,44 @@ export class InventoryService {
                 return data;
             }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, companyUniqueName)));
     }
+
+    public createStock(model: any, stockGroupUniqueName: any): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        let url = this.config.apiUrl + INVENTORY_API.NEW.CREATE;
+        url = url.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName));
+        url = url.replace(':stockGroupUniqueName', encodeURIComponent(stockGroupUniqueName));
+        return this.http.post(url, model).pipe(map((res) => {
+            let data: BaseResponse<any, any> = res;
+            data.request = model;
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)));
+    }
+
+    public getStock(groupUniqueName: string, stockUniqueName: string): Observable<BaseResponse<any, any>> {
+        const companyUniqueName = this.generalService.companyUniqueName;
+        let url = this.config.apiUrl + INVENTORY_API.NEW.GET;
+        url = url.replace(':companyUniqueName', encodeURIComponent(companyUniqueName));
+        url = url.replace(':stockGroupUniqueName', encodeURIComponent(groupUniqueName));
+        url = url.replace(':stockUniqueName', encodeURIComponent(stockUniqueName));
+
+        return this.http.get(url).pipe(map((res) => {
+            let data: BaseResponse<any, string> = res;
+            data.request = groupUniqueName;
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e, groupUniqueName)));
+    }
+
+    public updateStock(model: any, stockGroupUniqueName: any, stockUniqueName: string): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        let url = this.config.apiUrl + INVENTORY_API.NEW.UPDATE;
+        url = url.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName));
+        url = url.replace(':stockGroupUniqueName', encodeURIComponent(stockGroupUniqueName));
+        url = url.replace(':stockUniqueName', encodeURIComponent(stockUniqueName));
+
+        return this.http.put(url, model).pipe(map((res) => {
+            let data: BaseResponse<any, any> = res;
+            data.request = model;
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)));
+    }
 }

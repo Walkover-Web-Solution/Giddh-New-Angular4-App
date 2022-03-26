@@ -17,9 +17,11 @@ import { FormFieldsModule } from "../../../theme/form-fields/form-fields.module"
 import { StockCreateEditComponent } from "./stock-create-edit.component";
 import { StockCreateEditRoutingModule } from "./stock-create-edit.routing.module";
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MainComponent } from "./main.component";
 
 @NgModule({
     declarations: [
+        MainComponent,
         StockCreateEditComponent
     ],
     imports: [

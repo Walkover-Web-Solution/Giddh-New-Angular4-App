@@ -69,5 +69,10 @@ export const INVENTORY_API = {
         CREATE_STOCK_GROUP: COMMON_V5 + '/stock-group',
         GET_STOCK_GROUP: COMMON_V5 + '/stock-group/:groupUniqueName',
         UPDATE_STOCK_GROUP: COMMON_V5 + '/stock-group/:groupUniqueName'
+    },
+    NEW: {
+        CREATE: 'company/:companyUniqueName/stock-group/:stockGroupUniqueName/stock',
+        GET: 'company/:companyUniqueName/stock-group/:stockGroupUniqueName/stock/:stockUniqueName',
+        UPDATE: 'company/:companyUniqueName/stock-group/:stockGroupUniqueName/stock/:stockUniqueName'
     }
 };
