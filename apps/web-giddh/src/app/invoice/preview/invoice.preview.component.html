@@ -1346,7 +1346,7 @@
                                 >
                                     {{
                                         voucherApiVersion === 2
-                                            ? item.referenceVoucher
+                                            ? item.referenceVoucher?.number
                                                 ? item.referenceVoucher.number
                                                 : commonLocaleData?.app_not_available
                                             : item.invoiceLinkingRequest?.linkedInvoices?.length
