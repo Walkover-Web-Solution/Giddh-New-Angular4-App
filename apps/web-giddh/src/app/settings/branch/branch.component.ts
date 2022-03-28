@@ -481,7 +481,13 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
      * @memberof BranchComponent
      */
     public setDefault(entity: any, branch: any, entityType: string): void {
+        if (entityType === "warehouse" && entity?.isArchived) {
+            this.toasterService.warningToast(this.localeData?.archived_default_error);
+            return;
+        }
+
         entity.isDefault = !entity.isDefault;
+
         if (entityType === 'address') {
             branch.addresses.forEach(branchAddress => {
                 if (branchAddress.uniqueName === entity.uniqueName) {
@@ -576,8 +582,15 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
      * @memberof BranchComponent
      */
     public confirmStatusUpdate(branch: any): void {
-        this.branchStatusToUpdate = branch;
-        this.statusModal?.show();
+        this.branches$.pipe(take(1)).subscribe((branches: any) => {
+            const unarchivedBranches = branches?.filter(currentBranch => !currentBranch?.isArchived);
+            if (unarchivedBranches?.length > 1 || branch?.isArchived) {
+                this.branchStatusToUpdate = branch;
+                this.statusModal?.show();
+            } else {
+                this.toasterService.warningToast(this.localeData?.archive_notallowed);
+            }
+        });
     }
 
     /**

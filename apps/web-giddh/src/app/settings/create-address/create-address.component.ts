@@ -59,6 +59,8 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
     @Input() public localeData: any = {};
     /* This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
+    /** List of entities which can be archived */
+    public entityArchived: string[] = ["BRANCH", "WAREHOUSE"];
 
     constructor(
         private formBuilder: FormBuilder,
@@ -74,6 +76,7 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         if (this.addressConfiguration) {
             if (this.addressConfiguration.type === SettingsAsideFormType.CreateAddress || this.addressConfiguration.type === SettingsAsideFormType.CreateBranchAddress) {
+                this.addressConfiguration.linkedEntities = this.addressConfiguration.linkedEntities?.filter(address => (!address.entity?.includes(this.entityArchived)) || (address.entity?.includes(this.entityArchived) && !address.isArchived));
                 const taxValidatorPatterns = this.addressConfiguration.tax.name ? this.addressConfiguration.tax.validation : [];
                 this.addressForm = this.formBuilder.group({
                     name: ['', [Validators.required, Validators.maxLength(100)]],

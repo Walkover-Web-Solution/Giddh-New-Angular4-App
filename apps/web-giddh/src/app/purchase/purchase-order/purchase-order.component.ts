@@ -18,6 +18,7 @@ import { SettingsUtilityService } from '../../settings/services/settings-utility
 import { WarehouseActions } from '../../settings/warehouse/action/warehouse.action';
 import { BULK_UPDATE_FIELDS } from '../../shared/helpers/purchaseOrderStatus';
 import { OrganizationType } from '../../models/user-login-state';
+import { cloneDeep } from '../../lodash-optimized';
 
 @Component({
     selector: 'purchase-order',
@@ -133,6 +134,8 @@ export class PurchaseOrderComponent implements OnDestroy {
     public commonLocaleData: any = {};
     /** True if translations loaded */
     public translationLoaded: boolean = false;
+    /** Stores the voucher API version of current company */
+    public voucherApiVersion: 1 | 2;
 
     constructor(private modalService: BsModalService, private generalService: GeneralService, private breakPointObservar: BreakpointObserver, public purchaseOrderService: PurchaseOrderService, private store: Store<AppState>, private toaster: ToasterService, public route: ActivatedRoute, private router: Router, public purchaseOrderActions: PurchaseOrderActions, private settingsUtilityService: SettingsUtilityService, private warehouseActions: WarehouseActions) {
         this.activeCompanyUniqueName$ = this.store.pipe(select(state => state.session.companyUniqueName), (takeUntil(this.destroyed$)));
@@ -149,6 +152,7 @@ export class PurchaseOrderComponent implements OnDestroy {
         });
 
         this.initBulkUpdateFields();
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
     }
 
     /**
@@ -233,7 +237,9 @@ export class PurchaseOrderComponent implements OnDestroy {
 
         this.store.pipe(select(appState => appState.warehouse.warehouses), filter((warehouses) => !!warehouses), takeUntil(this.destroyed$)).subscribe((warehouses: any) => {
             if (warehouses) {
-                const warehouseData = this.settingsUtilityService.getFormattedWarehouseData(warehouses.results);
+                let warehouseResults = cloneDeep(warehouses.results);
+                warehouseResults = warehouseResults?.filter(warehouse => !warehouse.isArchived);
+                const warehouseData = this.settingsUtilityService.getFormattedWarehouseData(warehouseResults);
                 if (warehouseData) {
                     this.warehouses = warehouseData.formattedWarehouses;
                 }

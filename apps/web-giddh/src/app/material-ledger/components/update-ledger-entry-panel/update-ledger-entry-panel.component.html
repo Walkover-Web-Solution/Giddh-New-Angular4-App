@@ -283,7 +283,8 @@
                                                         ? commonLocaleData?.app_invoice
                                                         : commonLocaleData?.app_voucher) +
                                                     ' : ' +
-                                                    vm.selectedLedger.voucherNumber
+                                                    (vm.selectedLedger.voucherNumber ||
+                                                        commonLocaleData?.app_not_available)
                                                 "
                                                 (click)="downloadFiles('VOUCHER', $event)"
                                                 matTooltipClass="tooltip-black"
@@ -296,7 +297,7 @@
                                                 *ngIf="
                                                     voucherApiVersion === 2 &&
                                                     (vm.selectedLedger.attachedFile?.length > 0 ||
-                                                        vm.selectedLedger.voucherNumber?.length > 0) &&
+                                                        vm.selectedLedger.voucherGenerated) &&
                                                     (txn?.particular?.name || txn?.particular?.uniqueName)
                                                 "
                                                 (click)="openAttachmentsDialog(attachments)"
@@ -304,13 +305,15 @@
                                                 [containerClass]="'col-xs-3'"
                                                 [matTooltip]="
                                                     vm.selectedLedger.attachedFile?.length > 0 &&
-                                                    vm.selectedLedger.voucherNumber?.length > 0
-                                                        ? vm.selectedLedger.voucherNumber +
+                                                    vm.selectedLedger.voucherGenerated
+                                                        ? (vm.selectedLedger.voucherNumber ||
+                                                              commonLocaleData?.app_not_available) +
                                                           ', ' +
                                                           vm.selectedLedger.attachedFileName
                                                         : vm.selectedLedger.attachedFile?.length > 0
                                                         ? vm.selectedLedger.attachedFileName
-                                                        : vm.selectedLedger.voucherNumber
+                                                        : vm.selectedLedger.voucherNumber ||
+                                                          commonLocaleData?.app_not_available
                                                 "
                                                 matTooltipClass="tooltip-black"
                                             >
@@ -609,7 +612,8 @@
                                                         ? commonLocaleData?.app_invoice
                                                         : commonLocaleData?.app_voucher) +
                                                     ' : ' +
-                                                    vm.selectedLedger.voucherNumber
+                                                    (vm.selectedLedger.voucherNumber ||
+                                                        commonLocaleData?.app_not_available)
                                                 "
                                                 matTooltipClass="tooltip-black"
                                                 (click)="downloadFiles('VOUCHER', $event)"
@@ -622,7 +626,7 @@
                                                 *ngIf="
                                                     voucherApiVersion === 2 &&
                                                     (vm.selectedLedger.attachedFile?.length > 0 ||
-                                                        vm.selectedLedger.voucherNumber?.length > 0) &&
+                                                        vm.selectedLedger.voucherGenerated) &&
                                                     (txn?.particular?.name || txn?.particular?.uniqueName)
                                                 "
                                                 (click)="openAttachmentsDialog(attachments)"
@@ -630,13 +634,15 @@
                                                 [containerClass]="'col-xs-3'"
                                                 [matTooltip]="
                                                     vm.selectedLedger.attachedFile?.length > 0 &&
-                                                    vm.selectedLedger.voucherNumber?.length > 0
-                                                        ? vm.selectedLedger.voucherNumber +
+                                                    vm.selectedLedger.voucherGenerated
+                                                        ? (vm.selectedLedger.voucherNumber ||
+                                                              commonLocaleData?.app_not_available) +
                                                           ', ' +
                                                           vm.selectedLedger.attachedFileName
                                                         : vm.selectedLedger.attachedFile?.length > 0
                                                         ? vm.selectedLedger.attachedFileName
-                                                        : vm.selectedLedger.voucherNumber
+                                                        : vm.selectedLedger.voucherNumber ||
+                                                          commonLocaleData?.app_not_available
                                                 "
                                                 matTooltipClass="tooltip-black"
                                             >
@@ -1374,7 +1380,9 @@
                                         </div>
                                         <div
                                             *ngIf="
-                                                item.voucherType === 'receipt' && item.subVoucher === 'ADVANCE_RECEIPT'
+                                                item.voucherType === 'receipt' &&
+                                                item.subVoucher === 'ADVANCE_RECEIPT' &&
+                                                voucherApiVersion !== 2
                                             "
                                         >
                                             <div class="form-group tax-width">
@@ -1538,18 +1546,36 @@
                                                     >
                                                         <ng-template #optionTemplate let-option="option">
                                                             <a href="javascript:void(0)" class="list-item sh-template">
-                                                                <div class="item">{{ option.label }}</div>
+                                                                <div class="item">
+                                                                    {{
+                                                                        (vm.selectedLedger?.voucher?.shortCode ===
+                                                                            "pur" ||
+                                                                            vm.selectedLedger?.voucher?.shortCode ===
+                                                                                "purchase") &&
+                                                                        !option.label
+                                                                            ? commonLocaleData?.app_not_available
+                                                                            : option.label
+                                                                    }}
+                                                                </div>
                                                                 <div class="item-unique">
                                                                     ({{ localeData?.dated }}:
-                                                                    {{ option.additional?.voucherDate }})
+                                                                    {{
+                                                                        this.voucherApiVersion === 2
+                                                                            ? option.additional?.date
+                                                                            : option.additional?.voucherDate
+                                                                    }})
                                                                 </div>
                                                                 <div class="item-unique">
                                                                     ({{ commonLocaleData?.app_due }}:
                                                                     <span class="d-inline-flex">
                                                                         <amount-field
                                                                             [amount]="
-                                                                                option.additional?.balanceDue
-                                                                                    ?.amountForAccount
+                                                                                voucherApiVersion === 2
+                                                                                    ? option.additional
+                                                                                          ?.unadjustedAmount
+                                                                                          ?.amountForAccount
+                                                                                    : option.additional?.balanceDue
+                                                                                          ?.amountForAccount
                                                                             "
                                                                         >
                                                                         </amount-field>
@@ -1570,10 +1596,7 @@
                                                 (click)="removeSelectedInvoice()"
                                             >
                                                 <div class="mr-t1">
-                                                    <span class="remove-invoice-icon">×</span>
-                                                    <span class="remove-invoice-label">{{
-                                                        commonLocaleData?.app_remove
-                                                    }}</span>
+                                                    <span class="remove-invoice-icon"><i class="icon-trash"></i></span>
                                                 </div>
                                             </td>
                                             <td class="pd-r1">
@@ -1799,11 +1822,12 @@
                                                     (!isPettyCash &&
                                                         currentOrganizationType === 'COMPANY' &&
                                                         branches?.length > 1) ||
-                                                    isAdvanceReceipt ||
+                                                    (voucherApiVersion === 2 && isAdvanceReceipt) ||
                                                     isAdjustReceiptSelected ||
                                                     isAdjustVoucherSelected ||
                                                     vm.selectedLedger?.voucherAdjustments?.adjustments?.length ||
-                                                    vm.selectedLedger?.invoiceLinkingRequest?.linkedInvoices?.length
+                                                    vm.selectedLedger?.invoiceLinkingRequest?.linkedInvoices?.length ||
+                                                    vm.selectedLedger?.referenceVoucher?.uniqueName
                                                         ? 'disabled'
                                                         : null
                                                 "
@@ -1892,11 +1916,10 @@
                                             *ngIf="vm.selectedLedger?.attachedFile?.length > 0"
                                         >
                                             <span>{{ vm.selectedLedger?.attachedFileName }}</span>
-                                            <span class="delete-attachment cursor-pointer">
-                                                <img
-                                                    (click)="showDeleteAttachedFileModal()"
-                                                    src="assets/images/multiply.svg"
-                                                />
+                                            <span class="delete-attachment">
+                                                <a class="cursor-pointer" (click)="showDeleteAttachedFileModal()">
+                                                    <i class="icon-trash"></i>
+                                                </a>
                                             </span>
                                         </div>
 
@@ -2052,6 +2075,7 @@
                     [adjustedVoucherType]="vm.selectedLedger?.voucher?.shortCode"
                     [invoiceFormDetails]="adjustVoucherConfiguration"
                     [isUpdateMode]="true"
+                    [invoiceListRequestParams]="invoiceListRequestParams"
                     [advanceReceiptAdjustmentUpdatedData]="vm.selectedLedger?.voucherAdjustments"
                     (closeModelEvent)="closeAdjustmentModal($event)"
                     (submitClicked)="getAdjustedPaymentData($event)"

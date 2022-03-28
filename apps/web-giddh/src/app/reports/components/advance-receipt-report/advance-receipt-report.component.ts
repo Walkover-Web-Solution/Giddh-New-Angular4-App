@@ -7,7 +7,7 @@ import { debounceTime, takeUntil, take } from 'rxjs/operators';
 import { GeneralActions } from '../../../actions/general/general.actions';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
 import { OrganizationType } from '../../../models/user-login-state';
-import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from '../../../app.constant';
+import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT, SubVoucher } from '../../../app.constant';
 import { cloneDeep, isArray } from '../../../lodash-optimized';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
 import { AdvanceReceiptSummaryRequest } from '../../../models/api-models/Reports';
@@ -165,6 +165,8 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
     public hoveredReceiptUniqueName: string = "";
     /** True if table is hovered */
     public hoveredReceiptTable: boolean = false;
+    /** Holds currency */
+    public baseCurrency: string = '';
 
     /** @ignore */
     constructor(
@@ -188,6 +190,12 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
                 this.previewVoucherParams = {};
             }
         });
+
+        this.store.pipe(select(s => s.settings.profile), takeUntil(this.destroyed$)).subscribe(profile => {
+            if (profile) {
+                this.baseCurrency = profile.baseCurrency;
+            }
+        });
     }
 
     /** Subscribe to universal date and set header title */
@@ -207,9 +215,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
             }
             this.fetchReceiptsData();
         });
-        this.store.pipe(
-            select(state => state.session.activeCompany), takeUntil(this.destroyed$)
-        ).subscribe(activeCompany => {
+        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             this.activeCompany = activeCompany;
         });
         this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
@@ -285,8 +291,8 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
         viewContainerRef.clear();
         const componentRef = viewContainerRef.createComponent(componentFactory);
 
-        this.advanceSearchModel.adjustmentVoucherDetails.selectedValue = this.searchQueryParams.receiptTypes[0];
-        this.advanceSearchModel.adjustmentVoucherDetails.isDisabled = !!this.searchQueryParams.receiptTypes.length;
+        this.advanceSearchModel.adjustmentVoucherDetails.selectedValue = (this.searchQueryParams.receiptTypes?.length) ? this.searchQueryParams.receiptTypes[0] : undefined;
+        this.advanceSearchModel.adjustmentVoucherDetails.isDisabled = !!this.searchQueryParams.receiptTypes?.length;
         (componentRef.instance as ReceiptAdvanceSearchComponent).searchModel = cloneDeep(this.advanceSearchModel);
         (componentRef.instance as ReceiptAdvanceSearchComponent).localeData = cloneDeep(this.localeData);
         (componentRef.instance as ReceiptAdvanceSearchComponent).commonLocaleData = cloneDeep(this.commonLocaleData);
@@ -499,14 +505,56 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
                 to: this.toDate,
                 count: this.paginationLimit,
                 q: this.searchQueryParams.q,
-                totalAmount: (this.advanceSearchModel.totalAmountFilter) ? this.advanceSearchModel.totalAmountFilter.amount : "",
-                totalAmountOperation: (this.advanceSearchModel.totalAmountFilter) ? this.advanceSearchModel.totalAmountFilter.selectedValue : "",
-                unUsedAmount: (this.advanceSearchModel.unusedAmountFilter) ? this.advanceSearchModel.unusedAmountFilter.amount : "",
-                unUsedAmountOperation: (this.advanceSearchModel.unusedAmountFilter) ? this.advanceSearchModel.unusedAmountFilter.selectedValue : "",
+                total: (this.advanceSearchModel.totalAmountFilter) ? this.advanceSearchModel.totalAmountFilter.amount : "",
+                balanceDue: (this.advanceSearchModel.unusedAmountFilter) ? this.advanceSearchModel.unusedAmountFilter.amount : "",
                 sort: this.searchQueryParams.sort,
                 sortBy: this.searchQueryParams.sortBy,
                 branchUniqueName: this.currentBranch.uniqueName
             };
+
+            if (additionalRequestParameters.receiptTypes?.length > 0) {
+                if (additionalRequestParameters.receiptTypes[0] === "advance receipt") {
+                    requestObject.subVoucher = SubVoucher.AdvanceReceipt;
+                }
+            }
+            delete additionalRequestParameters['receiptTypes'];
+
+            requestObject.balanceMoreThan = false;
+            requestObject.balanceLessThan = false;
+            requestObject.balanceEqual = false;
+
+            if (this.advanceSearchModel.unusedAmountFilter.selectedValue === 'GREATER_THAN') {
+                requestObject.balanceMoreThan = true;
+            } else if(this.advanceSearchModel.unusedAmountFilter.selectedValue === 'GREATER_THAN_OR_EQUALS') {
+                requestObject.balanceEqual = true;
+                requestObject.balanceMoreThan = true;
+            } else if (this.advanceSearchModel.unusedAmountFilter.selectedValue === 'LESS_THAN_OR_EQUALS') {
+                requestObject.balanceEqual = true;
+                requestObject.balanceLessThan = true;
+            } else if (this.advanceSearchModel.unusedAmountFilter.selectedValue === 'EQUALS') {
+                requestObject.balanceEqual = true;
+            }
+
+            requestObject.totalMoreThan = false;
+            requestObject.totalLessThan = false;
+            requestObject.totalEqual = false;
+
+            if (this.advanceSearchModel.totalAmountFilter.selectedValue === 'GREATER_THAN') {
+                requestObject.totalMoreThan = true;
+            } else if(this.advanceSearchModel.totalAmountFilter.selectedValue === 'GREATER_THAN_OR_EQUALS') {
+                requestObject.totalEqual = true;
+                requestObject.totalMoreThan = true;
+            } else if (this.advanceSearchModel.totalAmountFilter.selectedValue === 'LESS_THAN_OR_EQUALS') {
+                requestObject.totalEqual = true;
+                requestObject.totalLessThan = true;
+            } else if (this.advanceSearchModel.totalAmountFilter.selectedValue === 'EQUALS') {
+                requestObject.totalEqual = true;
+            }
+
+            delete additionalRequestParameters['unUsedAmount'];
+            delete additionalRequestParameters['unUsedAmountOperation'];
+            delete additionalRequestParameters['totalAmount'];
+            delete additionalRequestParameters['totalAmountOperation'];
         } else {
             requestObject = {
                 companyUniqueName: this.activeCompanyUniqueName,
@@ -549,13 +597,22 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
      * @memberof AdvanceReceiptReportComponent
      */
     private fetchSummary(): Observable<BaseResponse<any, AdvanceReceiptSummaryRequest>> {
-        const requestObject: AdvanceReceiptSummaryRequest = {
-            companyUniqueName: this.activeCompanyUniqueName,
-            from: this.fromDate,
-            to: this.toDate,
-            branchUniqueName: this.currentBranch.uniqueName
-        };
-        return this.receiptService.fetchSummary(requestObject);
+        if (this.voucherApiVersion === 2) {
+            const requestObj = {
+                from: this.fromDate,
+                to: this.toDate,
+                q: this.searchQueryParams.q
+            };
+            return this.receiptService.getAllReceiptBalanceDue(requestObj, "receipt");
+        } else {
+            const requestObject: AdvanceReceiptSummaryRequest = {
+                companyUniqueName: this.activeCompanyUniqueName,
+                from: this.fromDate,
+                to: this.toDate,
+                branchUniqueName: this.currentBranch.uniqueName
+            };
+            return this.receiptService.fetchSummary(requestObject);
+        }
     }
 
     /**
@@ -580,8 +637,9 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
                     if(isSeleted) {
                         receipt.isSelected = true;
                     }
+                    receipt = this.generalService.addToolTipText("receipt", this.baseCurrency, receipt, this.localeData, this.commonLocaleData);
                 });
-                
+
                 this.changeDetectorRef.detectChanges();
                 return response.body;
             } else {
@@ -667,13 +725,22 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
      */
     public translationComplete(event: boolean): void {
         if (event) {
-            this.advanceReceiptAdvanceSearchAmountFilters = [
-                { label: this.commonLocaleData?.app_comparision_filters.greater_than, value: 'GREATER_THAN' },
-                { label: this.commonLocaleData?.app_comparision_filters.greater_than_equals, value: 'GREATER_THAN_OR_EQUALS' },
-                { label: this.commonLocaleData?.app_comparision_filters.less_than_equals, value: 'LESS_THAN_OR_EQUALS' },
-                { label: this.commonLocaleData?.app_comparision_filters.equals, value: 'EQUALS' },
-                { label: this.commonLocaleData?.app_comparision_filters.not_equals, value: 'NOT_EQUALS' }
-            ];
+            if (this.voucherApiVersion === 2) {
+                this.advanceReceiptAdvanceSearchAmountFilters = [
+                    { label: this.commonLocaleData?.app_comparision_filters.greater_than, value: 'GREATER_THAN' },
+                    { label: this.commonLocaleData?.app_comparision_filters.greater_than_equals, value: 'GREATER_THAN_OR_EQUALS' },
+                    { label: this.commonLocaleData?.app_comparision_filters.less_than_equals, value: 'LESS_THAN_OR_EQUALS' },
+                    { label: this.commonLocaleData?.app_comparision_filters.equals, value: 'EQUALS' }
+                ];
+            } else {
+                this.advanceReceiptAdvanceSearchAmountFilters = [
+                    { label: this.commonLocaleData?.app_comparision_filters.greater_than, value: 'GREATER_THAN' },
+                    { label: this.commonLocaleData?.app_comparision_filters.greater_than_equals, value: 'GREATER_THAN_OR_EQUALS' },
+                    { label: this.commonLocaleData?.app_comparision_filters.less_than_equals, value: 'LESS_THAN_OR_EQUALS' },
+                    { label: this.commonLocaleData?.app_comparision_filters.equals, value: 'EQUALS' },
+                    { label: this.commonLocaleData?.app_comparision_filters.not_equals, value: 'NOT_EQUALS' }
+                ];
+            }
 
             this.receiptTypes = [
                 { label: this.localeData?.receipt_types.normal_receipts, value: 'normal receipt' },

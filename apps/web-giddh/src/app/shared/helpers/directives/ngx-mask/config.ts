@@ -18,6 +18,7 @@ export interface IConfig {
             symbol?: string;
         };
     };
+    allowUnsupportedPrefix: boolean;
 }
 
 export type optionsConfig = Partial<IConfig>;
@@ -74,6 +75,7 @@ export const initialConfig: IConfig = {
             pattern: new RegExp('\\d'),
         },
     },
+    allowUnsupportedPrefix: false
 };
 
 export const withoutValidation: string[] = [

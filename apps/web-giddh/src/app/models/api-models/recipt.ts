@@ -1,3 +1,4 @@
+import { ReferenceVoucher } from '../../material-ledger/ledger.vm';
 import { InvoiceFilterClassForInvoicePreview } from './Invoice';
 import { AmountClassMulticurrency, IInvoiceLinkingRequest } from "./Sales";
 
@@ -52,6 +53,8 @@ export interface ReceiptItem {
     eInvoiceStatusTooltip?: string;
     gainLoss?: number;
     exchangeRate?: number;
+    referenceVoucher?: ReferenceVoucher;
+    adjustments?: any;
 }
 
 export interface ReciptResponse {
@@ -184,9 +187,11 @@ export interface DownloadVoucherRequest {
     voucherType: string;
     uniqueName?: string;
     typeOfInvoice?: string[];
+    copyTypes?: string[];
 }
 class CurrencyClass {
     public code: string;
+    public symbol?: string;
 }
 
 /** Voucher request modal */

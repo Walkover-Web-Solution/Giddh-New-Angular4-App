@@ -271,13 +271,16 @@
                                         mat-icon-button
                                         class="pos-abs arrow-icon"
                                         [matMenuTriggerFor]="downloadCsvEmail"
-                                        *ngIf="selectedCheckedContacts?.length"
                                         id="button-basic"
                                     >
                                         <span class="icon-arrow-down"></span>
                                     </button>
                                     <mat-menu #downloadCsvEmail="matMenu">
-                                        <button mat-menu-item (click)="openEmailDialog()">
+                                        <button
+                                            mat-menu-item
+                                            *ngIf="selectedCheckedContacts?.length"
+                                            (click)="openEmailDialog()"
+                                        >
                                             {{ commonLocaleData?.app_email }}
                                         </button>
                                         <button mat-menu-item (click)="downloadCSV()">
@@ -758,7 +761,7 @@
                         <td mat-cell *matCellDef="let account" [attr.data-title]="commonLocaleData?.app_sales">
                             <span class="d-flex justify-content-end">
                                 <amount-field
-                                    [amount]="account.creditTotal"
+                                    [amount]="account.debitTotal"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
                                 >
@@ -780,7 +783,7 @@
                         <td mat-cell *matCellDef="let account" [attr.data-title]="commonLocaleData?.app_receipt">
                             <span class="d-flex justify-content-end">
                                 <amount-field
-                                    [amount]="account.debitTotal"
+                                    [amount]="account.creditTotal"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
                                 >
@@ -829,7 +832,7 @@
                     </ng-container>
 
                     <ng-container matColumnDef="contact">
-                        <th mat-header-cell *matHeaderCellDef>
+                        <th class="contact-header" mat-header-cell *matHeaderCellDef>
                             <div class="d-flex">
                                 <div class="flex-fill">
                                     {{ localeData?.contacts }}
@@ -873,7 +876,7 @@
                     </ng-container>
 
                     <ng-container matColumnDef="comment">
-                        <th mat-header-cell *matHeaderCellDef>
+                        <th class="comment-header" mat-header-cell *matHeaderCellDef>
                             {{ localeData?.comment }}
                         </th>
                         <td
@@ -906,7 +909,7 @@
                         <ng-container [matColumnDef]="column?.uniqueName">
                             <th mat-header-cell *matHeaderCellDef>{{ column?.key }}</th>
                             <td mat-cell *matCellDef="let account" [attr.data-title]="column?.key">
-                                {{ account.column }}
+                                {{ account.customFields[column?.uniqueName]?.value }}
                             </td>
                         </ng-container>
                     </ng-container>
@@ -916,7 +919,7 @@
                 </table>
             </ng-container>
 
-            <ng-container *ngIf="activeTab === 'vendor'">
+            <ng-container *ngIf="activeTab === 'vendor'" class="sticky-table">
                 <table
                     *ngIf="(searchStr || sundryCreditorsAccounts?.length) && customFieldsLoaded"
                     mat-table
@@ -1218,7 +1221,7 @@
                         <td mat-cell *matCellDef="let account" [attr.data-title]="account.receipts">
                             <span class="d-flex justify-content-end">
                                 <amount-field
-                                    [amount]="account.debitTotal"
+                                    [amount]="account.creditTotal"
                                     [currencySymbol]="false"
                                     [currencyCode]="false"
                                 >
@@ -1266,7 +1269,7 @@
                     </ng-container>
 
                     <ng-container matColumnDef="contact">
-                        <th mat-header-cell *matHeaderCellDef>
+                        <th class="contact-header" mat-header-cell *matHeaderCellDef>
                             <div class="d-flex">
                                 <div class="flex-fill">
                                     {{ localeData?.contacts }}
@@ -1315,7 +1318,7 @@
                     </ng-container>
 
                     <ng-container matColumnDef="comment">
-                        <th mat-header-cell *matHeaderCellDef>
+                        <th class="comment-header" mat-header-cell *matHeaderCellDef>
                             {{ localeData?.comment }}
                         </th>
                         <td
@@ -1343,7 +1346,7 @@
                         <ng-container [matColumnDef]="column?.uniqueName">
                             <th mat-header-cell *matHeaderCellDef>{{ column?.key }}</th>
                             <td mat-cell *matCellDef="let account" [attr.data-title]="column?.key">
-                                {{ account.column }}
+                                {{ account.customFields[column?.uniqueName]?.value }}
                             </td>
                         </ng-container>
                     </ng-container>

@@ -38,7 +38,7 @@
             <tab [heading]="localeData?.tab_generated_bills" id="tab1">
                 <div class="clearfix">
                     <div class="col-md-12">
-                        <div class="table-responsive">
+                        <div class="table-responsive table-wrapper">
                             <table class="table basic table-bordered giddh-table on-mobile-view">
                                 <thead
                                     class="thead-background1"
@@ -209,8 +209,9 @@
                                             <a
                                                 (click)="onSelectEwayDownload(item)"
                                                 [tooltip]="localeData?.download_eway_bill"
+                                                class="cursor-pointer pull-right"
                                             >
-                                                <i class="icon-download1 cursor-pointer pull-right"></i
+                                                <i class="icon-download1"></i
                                             ></a>
                                         </td>
                                         <td [attr.data-title]="commonLocaleData?.app_customer_name">
@@ -254,6 +255,7 @@
                                                     class="dropdown-toggle"
                                                     id="button-basic"
                                                     dropdownToggle
+                                                    (click)="showActionsMenu($event)"
                                                     >{{ commonLocaleData?.app_actions }} <i class="caret"></i
                                                 ></a>
                                                 <ul
@@ -262,6 +264,7 @@
                                                     class="dropdown-menu dropdown-left"
                                                     role="menu"
                                                     aria-labelledby="button-basic"
+                                                    [ngClass]="{ 'dropup-menu': isDropUp }"
                                                 >
                                                     <li role="menuitem">
                                                         <a
@@ -280,9 +283,12 @@
                                                         >
                                                     </li>
                                                     <li role="menuitem">
-                                                        <a class="dropdown-item" (click)="openModal(item, cancel)">{{
-                                                            commonLocaleData?.app_cancel
-                                                        }}</a>
+                                                        <a
+                                                            class="dropdown-item"
+                                                            href="javascript:void(0)"
+                                                            (click)="openModal(item, cancel)"
+                                                            >{{ commonLocaleData?.app_cancel }}</a
+                                                        >
                                                     </li>
                                                 </ul>
                                             </div>

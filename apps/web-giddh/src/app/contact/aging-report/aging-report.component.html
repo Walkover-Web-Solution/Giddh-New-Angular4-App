@@ -149,7 +149,7 @@
         </div>
     </div>
     <div class="contact-main aging-page">
-        <div class="pd-b2 mr-b1 mr-t1 on-mobile-view mobile-card-wrapper">
+        <div class="pd-b2 mr-b1 on-mobile-view mobile-card-wrapper">
             <div *ngIf="!isMobileScreen" class="table-responsive">
                 <ng-container *ngTemplateOutlet="mainTable"></ng-container>
             </div>
@@ -221,12 +221,15 @@
     <div [hidden]="!(dueAmountReportData$ | async)?.results?.length && !dueAmountReportRequest?.q">
         <div class="d-flex justify-content-end">
             <mat-menu #agingDropdown="matMenu" class="aging-dropdown-table">
-                <aging-dropdown
-                    [options]="agingDropDownoptions"
-                    *ngIf="setDueRangeOpen$ | async"
-                    [localeData]="localeData"
-                    [commonLocaleData]="commonLocaleData"
-                ></aging-dropdown>
+                <ng-template matMenuContent>
+                    <aging-dropdown
+                        (close)="onCloseMenu()"
+                        [options]="agingDropDownoptions"
+                        *ngIf="setDueRangeOpen$ | async"
+                        [localeData]="localeData"
+                        [commonLocaleData]="commonLocaleData"
+                    ></aging-dropdown>
+                </ng-template>
             </mat-menu>
         </div>
 
@@ -529,7 +532,7 @@
         <text-field
             [type]="'text'"
             [placeholder]="getSearchFieldText(fieldName)"
-            [cssClass]="'form-control search-table'"
+            [cssClass]="'form-control search-table mat-field-border'"
             [formControl]="formControl"
             [autoFocus]="show"
         ></text-field>

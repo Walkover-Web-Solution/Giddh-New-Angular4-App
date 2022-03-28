@@ -1,5 +1,3 @@
-@import "../../../../../../assets/css/color.scss";
-
 .swatch ul {
     max-width: 260px;
 }
@@ -10,85 +8,85 @@
 }
 
 .swatch ul li:nth-child(1) {
-    background: $silver;
+    background: var(--color-gray);
 }
 
 .swatch ul li:nth-child(2) {
-    background: $dark-gray;
+    background: var(--color-abbey);
 }
 
 .swatch ul li:nth-child(3) {
-    background: $black;
+    background: var(--color-nero);
 }
 
 .swatch ul li:nth-child(4) {
-    background: $cinnabar-orange;
+    background: var(--color-red);
 }
 
 .swatch ul li:nth-child(5) {
-    background: $grayish-blue;
+    background: var(--color-design-filters-swatch-ul-li-nth-child5-background);
 }
 
 .swatch ul li:nth-child(6) {
-    background: $charcoal;
+    background: var(--color-nero);
 }
 
 .swatch ul li:nth-child(7) {
-    background: $bud-green;
+    background: var(--color-design-filters-swatch-ul-li-nth-child7-background);
 }
 
 .swatch ul li:nth-child(8) {
-    background: $eastern-blue;
+    background: var(--color-design-filters-swatch-ul-li-nth-child8-background);
 }
 
 .swatch ul li:nth-child(9) {
-    background: $cloud-burst;
+    background: var(--color-design-filters-swatch-ul-li-nth-child9-background);
 }
 
 .swatch ul li:nth-child(10) {
-    background: $atlantis;
+    background: var(--color-design-filters-swatch-ul-li-nth-child10-background);
 }
 
 .swatch ul li:nth-child(11) {
-    background: $green;
+    background: var(--color-secondary-success);
 }
 
 .swatch ul li:nth-child(12) {
-    background: $sherpa-blue;
+    background: var(--color-design-filters-swatch-ul-li-nth-child12-background);
 }
 
 .swatch ul li:nth-child(13) {
-    background: $bright-yellow;
+    background: var(--color-design-filters-swatch-ul-li-nth-child13-background);
 }
 
 .swatch ul li:nth-child(14) {
-    background: $burgundy;
+    background: var(--color-design-filters-swatch-ul-li-nth-child14-background);
 }
 
 .swatch ul li:nth-child(15) {
-    background: $dull-pink;
+    background: var(--color-design-filters-swatch-ul-li-nth-child15-background);
 }
 
 .swatch ul li:nth-child(16) {
-    background: $bright-pink;
+    background: var(--color-design-filters-swatch-ul-li-nth-child16-background);
 }
 
 .swatch ul li:nth-child(17) {
-    background: $deep-pink;
+    background: var(--color-design-filters-swatch-ul-li-nth-child17-background);
 }
 
 .swatch ul li:nth-child(18) {
-    background: $dark-magenta;
+    background: var(--color-design-filters-swatch-ul-li-nth-child18-background);
 }
 
 .upload-button {
     width: 100px !important;
-    background: $white;
+    background: var(--color-white);
     display: table-cell;
     text-align: center;
     height: 100px;
     vertical-align: middle;
-    border: 4px dashed $nobel;
+    border: 4px dashed var(--color-gray);
     cursor: pointer;
 }
 

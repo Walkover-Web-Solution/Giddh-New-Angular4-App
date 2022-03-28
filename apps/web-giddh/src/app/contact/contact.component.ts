@@ -44,7 +44,6 @@ import { IFlattenAccountsResultItem } from "../models/interfaces/flattenAccounts
 import { CompanyService } from "../services/companyService.service";
 import { ContactService } from "../services/contact.service";
 import { GeneralService } from "../services/general.service";
-import { GroupService } from "../services/group.service";
 import { ToasterService } from "../services/toaster.service";
 import { ElementViewContainerRef } from "../shared/helpers/directives/elementViewChild/element.viewchild.directive";
 import { AppState } from "../store";
@@ -59,6 +58,7 @@ import { MatTableModule } from "@angular/material/table";
 import { MatTabChangeEvent } from "@angular/material/tabs";
 import { MatDialog } from "@angular/material/dialog";
 import { MatMenuTrigger } from "@angular/material/menu";
+import { CustomFieldsService } from "../services/custom-fields.service";
 
 @Component({
     selector: "contact-detail",
@@ -247,31 +247,37 @@ export class ContactComponent implements OnInit, OnDestroy {
     public showSelectAll: boolean = false;
     /** True if custom fields finished loading */
     public customFieldsLoaded: boolean = false;
+    /** Custom fields request */
+    public customFieldsRequest: any = {
+        page: 0,
+        count: 0,
+        moduleUniqueName: 'account'
+    };
 
     constructor(
-        public dialog: MatDialog, 
-        private store: Store<AppState>, 
-        private router: Router, 
-        private companyServices: CompanyService, 
-        private commonActions: CommonActions, 
+        public dialog: MatDialog,
+        private store: Store<AppState>,
+        private router: Router,
+        private companyServices: CompanyService,
+        private commonActions: CommonActions,
         private toaster: ToasterService,
-        private contactService: ContactService, 
-        private settingsIntegrationActions: SettingsIntegrationActions, 
-        private companyActions: CompanyActions, 
+        private contactService: ContactService,
+        private settingsIntegrationActions: SettingsIntegrationActions,
+        private companyActions: CompanyActions,
         private componentFactoryResolver: ComponentFactoryResolver,
-        private groupWithAccountsAction: GroupWithAccountsAction, 
-        private cdRef: ChangeDetectorRef, 
-        private generalService: GeneralService, 
-        private route: ActivatedRoute, 
+        private groupWithAccountsAction: GroupWithAccountsAction,
+        private cdRef: ChangeDetectorRef,
+        private generalService: GeneralService,
+        private route: ActivatedRoute,
         private generalAction: GeneralActions,
-        private breakPointObservar: BreakpointObserver, 
-        private modalService: BsModalService, 
-        private settingsProfileActions: SettingsProfileActions, 
-        private groupService: GroupService,
-        private settingsBranchAction: SettingsBranchActions, 
+        private breakPointObservar: BreakpointObserver,
+        private modalService: BsModalService,
+        private settingsProfileActions: SettingsProfileActions,
+        private settingsBranchAction: SettingsBranchActions,
         public currencyPipe: GiddhCurrencyPipe,
         private lightbox: Lightbox,
-        private renderer: Renderer2) {
+        private renderer: Renderer2,
+        private customFieldsService: CustomFieldsService) {
 
         this.searchLoader$ = this.store.pipe(select(state => state.search.searchLoader), takeUntil(this.destroyed$));
         this.dueAmountReportRequest = new DueAmountReportQueryRequest();
@@ -336,6 +342,7 @@ export class ContactComponent implements OnInit, OnDestroy {
                     }
                     if (activeTab === "vendor" && this.localeData?.page_heading) {
                         this.availableColumnsCount = [];
+                        this.showNameSearch = false;
                         this.searchedName?.reset();
                         this.translationComplete(true);
                     }
@@ -346,6 +353,7 @@ export class ContactComponent implements OnInit, OnDestroy {
                     }
                     if (activeTab === "customer" && this.localeData?.page_heading) {
                         this.availableColumnsCount = [];
+                        this.showNameSearch = false;
                         this.searchedName?.reset();
                         this.translationComplete(true);
                     }
@@ -388,6 +396,12 @@ export class ContactComponent implements OnInit, OnDestroy {
         this.createAccountIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((yes: boolean) => {
             if (yes && this.accountAsideMenuState === "in") {
                 this.toggleAccountAsidePane();
+                this.getAccounts(this.fromDate, this.toDate, null, "true", PAGINATION_LIMIT, this.searchStr, this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
+            }
+        });
+
+        this.store.pipe(select(state => state.sales.updatedAccountDetails), takeUntil(this.destroyed$)).subscribe(response => {
+            if(response) {
                 this.getAccounts(this.fromDate, this.toDate, null, "true", PAGINATION_LIMIT, this.searchStr, this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
             }
         });
@@ -460,12 +474,15 @@ export class ContactComponent implements OnInit, OnDestroy {
                 this.getAccounts(this.fromDate, this.toDate, null, "true", PAGINATION_LIMIT, this.searchStr, this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
             }
         });
+
         this.searchedName.valueChanges.pipe(
             debounceTime(700),
             distinctUntilChanged(),
             takeUntil(this.destroyed$),
         ).subscribe(searchedText => {
-            this.searchStr$.next(searchedText);
+            if (searchedText !== null && searchedText !== undefined) {
+                this.searchStr$.next(searchedText);
+            }
         });
 
         this.store.pipe(select(state => state.company), takeUntil(this.destroyed$)).subscribe(response => {
@@ -1184,6 +1201,14 @@ export class ContactComponent implements OnInit, OnDestroy {
                     });
                     this.sundryDebtorsAccounts = cloneDeep(res.body.results);
                     this.sundryDebtorsAccounts = this.sundryDebtorsAccounts.map(element => {
+                        let customFields = [];
+                        element.customFields?.forEach(field => {
+                            customFields[field?.uniqueName] = [];
+                            customFields[field?.uniqueName] = field;
+                        });
+
+                        element.customFields = customFields;
+
                         let indexOfItem = this.selectedCheckedContacts.indexOf(element?.uniqueName);
                         if (indexOfItem === -1) {
                             element.isSelected = false;
@@ -1204,6 +1229,14 @@ export class ContactComponent implements OnInit, OnDestroy {
                     });
                     this.sundryCreditorsAccounts = cloneDeep(res.body.results);
                     this.sundryCreditorsAccounts = this.sundryCreditorsAccounts.map(element => {
+                        let customFields = [];
+                        element.customFields?.forEach(field => {
+                            customFields[field?.uniqueName] = [];
+                            customFields[field?.uniqueName] = field;
+                        });
+
+                        element.customFields = customFields;
+
                         let indexOfItem = this.selectedCheckedContacts.indexOf(element?.uniqueName);
                         if (indexOfItem === -1) {
                             element.isSelected = false;
@@ -1431,13 +1464,20 @@ export class ContactComponent implements OnInit, OnDestroy {
      * @memberof ContactComponent
      */
     public getCompanyCustomField(): void {
-        this.groupService.getCompanyCustomField().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.customFieldsService.list(this.customFieldsRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.status === "success") {
-                if (response.body) {
-                    this.colspanLength = 11 + response.body.length;
-                    this.addNewFieldFilters(response.body);
+                if (response.body?.results?.length) {
+                    let customFields = response.body.results?.map(field => {
+                        return {
+                            key: field.fieldName,
+                            uniqueName: field.uniqueName
+                        }
+                    });
+
+                    this.colspanLength = 11 + customFields?.length;
+                    this.addNewFieldFilters(customFields);
+                    this.companyCustomFields$ = observableOf(customFields);
                 }
-                this.companyCustomFields$ = observableOf(response.body);
             } else {
                 this.toaster.showSnackBar("error", response.message);
             }

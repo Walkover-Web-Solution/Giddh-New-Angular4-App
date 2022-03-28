@@ -112,7 +112,8 @@
 	"invoice_copy_options": {
 		"original": "मूळ",
 		"customer": "ग्राहक",
-		"transport": "वाहतूक"
+		"transport": "वाहतूक",
+        "attachment": "संलग्नक"
 	},
     "invalid_email": "[EMAIL] अवैध ईमेल आहे!",
 	"select_copy": "कॉपी निवडा",
@@ -175,5 +176,6 @@
     "works_for_single_entry": "केवळ एकल प्रवेशासाठी कार्य करते.",
     "uploaded_purchase_bill": "बिल अपलोड केले",
     "auto_generated_purchase_bill": "गिद्ध ऑटो वयुत्पन्न बिल",
-    "amount_adjusted": "रक्कम यशस्वीरित्या समायोजित केली"
+    "amount_adjusted": "रक्कम यशस्वीरित्या समायोजित केली",
+    "pincode_required": "कृपया ई-वे बिल तयार करण्यापूर्वी व्हाउचरमध्ये पिनकोड अपडेट करा."
 }

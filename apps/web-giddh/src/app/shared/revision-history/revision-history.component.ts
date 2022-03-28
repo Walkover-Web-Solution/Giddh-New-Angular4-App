@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter, Input, ChangeDetectorRef, OnDestroy } from '@angular/core';
+import { Component, Output, EventEmitter, Input, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { PurchaseOrderService } from '../../services/purchase-order.service';
 import { ToasterService } from '../../services/toaster.service';
 import { PAGINATION_LIMIT } from '../../app.constant';
@@ -6,18 +6,19 @@ import { GeneralService } from '../../services/general.service';
 import { PurchaseRecordService } from '../../services/purchase-record.service';
 import { takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
+import { InvoiceService } from '../../services/invoice.service';
+import { cloneDeep } from '../../lodash-optimized';
 
 @Component({
     selector: 'aside-revision-history',
     templateUrl: './revision-history.component.html',
     styleUrls: ['./revision-history.component.scss']
 })
-
-export class RevisionHistoryComponent implements OnInit, OnDestroy {
+export class RevisionHistoryComponent implements OnDestroy {
     /* Taking PO details as input */
     @Input() public purchaseOrder: any;
-    /* Taking PB details as input */
-    @Input() public purchaseBill: any;
+    /* Taking voucher details as input */
+    @Input() public selectedVoucher: any;
     /* Taking company uniquename as input */
     @Input() public companyUniqueName: any;
     /* Emitting the close popup event */
@@ -47,31 +48,15 @@ export class RevisionHistoryComponent implements OnInit, OnDestroy {
     /** True if translations loaded */
     public translationLoaded: boolean = false;
 
-    constructor(public purchaseOrderService: PurchaseOrderService, private toaster: ToasterService, private generalService: GeneralService, public purchaseRecordService: PurchaseRecordService, private cdRef: ChangeDetectorRef) {
+    constructor(
+        private purchaseOrderService: PurchaseOrderService, 
+        private toaster: ToasterService, 
+        private generalService: GeneralService, 
+        private purchaseRecordService: PurchaseRecordService,
+        private cdRef: ChangeDetectorRef,
+        private invoiceService: InvoiceService
+        ) {
 
-    }
-
-    /**
-     * Initializes the component
-     *
-     * @memberof RevisionHistoryComponent
-     */
-    public ngOnInit(): void {
-        if (this.purchaseBill) {
-            this.purchaseVersionsGetRequest.companyUniqueName = this.companyUniqueName;
-            this.purchaseVersionsGetRequest.accountUniqueName = this.purchaseBill.account?.uniqueName;
-            this.purchaseVersionsPostRequest.uniqueName = this.purchaseBill.uniqueName;
-
-            this.getPurchaseBillVersions(true);
-        }
-
-        if (this.purchaseOrder) {
-            this.purchaseVersionsGetRequest.companyUniqueName = this.purchaseOrder.company?.uniqueName;
-            this.purchaseVersionsGetRequest.accountUniqueName = this.purchaseOrder.account?.uniqueName;
-            this.purchaseVersionsPostRequest.purchaseNumber = this.purchaseOrder.number;
-
-            this.getPurchaseOrderVersions(true);
-        }
     }
 
     /**
@@ -146,9 +131,9 @@ export class RevisionHistoryComponent implements OnInit, OnDestroy {
                 poCreated = poCreated?.replace("[VALUE]", change.newValue);
                 message += poCreated;
             } else {
-                let pbCreated = this.localeData?.pb_created;
-                pbCreated = pbCreated?.replace("[VALUE]", change.newValue);
-                message += pbCreated;
+                let voucherCreated = (this.generalService.voucherApiVersion === 2) ? this.localeData?.voucher_created : this.localeData?.pb_created;
+                voucherCreated = voucherCreated?.replace("[VALUE]", ((change.newValue) ? change.newValue : change.oldValue));
+                message += voucherCreated;
             }
         } else {
             let valueChanged = this.localeData?.value_changed;
@@ -169,8 +154,8 @@ export class RevisionHistoryComponent implements OnInit, OnDestroy {
         if (this.purchaseVersionsGetRequest.page !== event.page) {
             this.purchaseVersionsGetRequest.page = event.page;
 
-            if (this.purchaseBill) {
-                this.getPurchaseBillVersions(false);
+            if (this.selectedVoucher) {
+                this.getVoucherVersions(false);
             } else {
                 this.getPurchaseOrderVersions(false);
             }
@@ -183,7 +168,7 @@ export class RevisionHistoryComponent implements OnInit, OnDestroy {
      * @param {boolean} resetPage
      * @memberof RevisionHistoryComponent
      */
-    public getPurchaseBillVersions(resetPage: boolean): void {
+    public getVoucherVersions(resetPage: boolean): void {
         if (this.purchaseVersionsGetRequest?.companyUniqueName && this.purchaseVersionsPostRequest?.uniqueName) {
             this.isLoading = true;
             this.purchaseVersions = {};
@@ -192,14 +177,19 @@ export class RevisionHistoryComponent implements OnInit, OnDestroy {
                 this.purchaseVersionsGetRequest.page = 1;
             }
 
-            this.purchaseRecordService.getAllVersions(this.purchaseVersionsGetRequest, this.purchaseVersionsPostRequest).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+            const apiObservable = (this.generalService.voucherApiVersion === 2) ? this.invoiceService.getVoucherVersions(this.purchaseVersionsGetRequest, this.purchaseVersionsPostRequest.uniqueName) : this.purchaseRecordService.getAllVersions(this.purchaseVersionsGetRequest, this.purchaseVersionsPostRequest);
+            apiObservable.pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                 if (res) {
                     if (res.status === 'success') {
                         if (res.body) {
                             let versions = res.body;
 
-                            if (versions.results && versions.results.length > 0) {
-                                versions.results.forEach(result => {
+                            if (this.generalService.voucherApiVersion === 2) {
+                                versions.results = cloneDeep(versions.items);
+                            }
+
+                            if (versions?.results?.length > 0) {
+                                versions?.results?.forEach(result => {
                                     result.versionTime = new Date(result.versionTime);
                                     if (result.changes && result.changes.length > 0) {
                                         result.changes.forEach(change => {
@@ -241,6 +231,20 @@ export class RevisionHistoryComponent implements OnInit, OnDestroy {
     public translationComplete(event: any): void {
         if (event) {
             this.translationLoaded = true;
+
+            if (this.selectedVoucher) {
+                this.purchaseVersionsGetRequest.companyUniqueName = this.companyUniqueName;
+                this.purchaseVersionsGetRequest.accountUniqueName = this.selectedVoucher.account?.uniqueName;
+                this.purchaseVersionsPostRequest.uniqueName = this.selectedVoucher.uniqueName;
+                this.getVoucherVersions(true);
+            }
+    
+            if (this.purchaseOrder) {
+                this.purchaseVersionsGetRequest.companyUniqueName = this.purchaseOrder.company?.uniqueName;
+                this.purchaseVersionsGetRequest.accountUniqueName = this.purchaseOrder.account?.uniqueName;
+                this.purchaseVersionsPostRequest.purchaseNumber = this.purchaseOrder.number;
+                this.getPurchaseOrderVersions(true);
+            }
         }
     }
 

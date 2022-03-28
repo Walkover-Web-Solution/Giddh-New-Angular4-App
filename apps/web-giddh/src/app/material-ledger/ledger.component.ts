@@ -273,7 +273,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
         private commonService: CommonService,
         private adjustmentUtilityService: AdjustmentUtilityService
     ) {
-
         this.lc = new LedgerVM();
         this.advanceSearchRequest = new AdvanceSearchRequest();
         this.trxRequest = new TransactionsRequest();
@@ -291,6 +290,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.companyName$ = this.store.pipe(select(p => p.session.companyUniqueName), takeUntil(this.destroyed$));
         this.isCompanyCreated$ = this.store.pipe(select(s => s.session.isCompanyCreated), takeUntil(this.destroyed$));
         this.failedBulkEntries$ = this.store.pipe(select(p => p.ledger.ledgerBulkActionFailedEntries), takeUntil(this.destroyed$));
+
     }
 
     public toggleShow() {
@@ -495,6 +495,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
+        document.querySelector('body').classList.add('ledger-body');
         this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: 0 }));
         // get company taxes
         this.store.dispatch(this.companyActions.getTax());
@@ -977,8 +978,19 @@ export class LedgerComponent implements OnInit, OnDestroy {
             }
             this.invoiceList = [];
             this.ledgerService.getInvoiceListsForCreditNote(request, date).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
-                if (response && response.body && response.body.results) {
-                    response.body.results.forEach(invoice => this.invoiceList.push({ label: invoice?.voucherNumber ? invoice.voucherNumber : '-', value: invoice?.uniqueName, additional: invoice })) 
+                if (response && response.body) {
+                    let items = [];
+                    if(response.body.results) {
+                        items = response.body.results;
+                    } else if(response.body.items) {
+                        items = response.body.items;
+                    }
+
+                    items?.forEach(invoice => {
+                        invoice.voucherNumber = this.generalService.getVoucherNumberLabel(invoice?.voucherType, invoice?.voucherNumber, this.commonLocaleData);
+                        
+                        this.invoiceList.push({ label: invoice?.voucherNumber ? invoice.voucherNumber : '-', value: invoice?.uniqueName, additional: invoice })
+                    });
                 }
             });
         }
@@ -1061,7 +1073,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public downloadAttachedFile(fileName: string, e: Event) {
         e.stopPropagation();
         this.ledgerService.DownloadAttachement(fileName).pipe(takeUntil(this.destroyed$)).subscribe(d => {
-            if (d.status === 'success') {
+            if (d?.status === 'success') {
                 let blob = this.generalService.base64ToBlob(d.body.uploadedFile, `image/${d.body.fileType}`, 512);
                 download(d.body.name, blob, `image/${d.body.fileType}`)
             } else {
@@ -1382,6 +1394,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     public ngOnDestroy(): void {
+        document.querySelector('body').classList.remove('ledger-body');
         this.store.dispatch(this.ledgerActions.ResetLedger());
         this.destroyed$.next(true);
         this.destroyed$.complete();
@@ -2492,9 +2505,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         });
 
         dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
-            if (response) {
-                this.getTransactionData();
-            }
+            this.getTransactionData();
         });
     }
 }

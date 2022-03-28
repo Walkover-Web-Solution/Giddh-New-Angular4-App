@@ -56,7 +56,7 @@ export class ProformaInvoiceUtilityService {
             delete data.account.name;
             delete data.account.country;
             if (data.account.billingDetails) {
-                data.account.billingDetails.taxNumber = data.account.billingDetails.gstNumber;
+                data.account.billingDetails.taxNumber = (data.account.billingDetails.gstNumber) ? data.account.billingDetails.gstNumber : (data.account.billingDetails.taxNumber && data.uniqueName) ? data.account.billingDetails.taxNumber : "";
                 data.account.billingDetails.country = {
                     code: data.account.billingDetails.countryCode,
                     name: data.account.billingDetails.countryName
@@ -68,7 +68,7 @@ export class ProformaInvoiceUtilityService {
                 delete data.account.billingDetails.countryCode;
             }
             if (data.account.shippingDetails) {
-                data.account.shippingDetails.taxNumber = data.account.shippingDetails.gstNumber;
+                data.account.shippingDetails.taxNumber = (data.account.shippingDetails.gstNumber) ? data.account.shippingDetails.gstNumber : (data.account.shippingDetails.taxNumber && data.uniqueName) ? data.account.shippingDetails.taxNumber : "";
                 data.account.shippingDetails.country = {
                     code: data.account.shippingDetails.countryCode,
                     name: data.account.shippingDetails.countryName
@@ -95,11 +95,9 @@ export class ProformaInvoiceUtilityService {
         if(data?.company) {
             if (data.company.billingDetails) {
                 data.company.billingDetails.taxNumber = data.company.billingDetails.gstNumber;
-                delete data.company.billingDetails.gstNumber;
             }
             if (data.company.shippingDetails) {
                 data.company.shippingDetails.taxNumber = data.company.shippingDetails.gstNumber;
-                delete data.company.shippingDetails.gstNumber;
             }
         }
         if([VoucherTypeEnum.debitNote, VoucherTypeEnum.creditNote].includes(data.type)) {

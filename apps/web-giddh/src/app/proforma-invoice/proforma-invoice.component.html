@@ -77,7 +77,10 @@
         </ng-container>
         <!--endregion-->
         <!-- region main form -->
-        <div [hidden]="(isUpdateMode && isUpdateDataInProcess) || (isLastInvoiceCopied && isUpdateDataInProcess)">
+        <div
+            [hidden]="(isUpdateMode && isUpdateDataInProcess) || (isLastInvoiceCopied && isUpdateDataInProcess)"
+            id="button-focus-proforma"
+        >
             <form
                 #invoiceForm="ngForm"
                 novalidate
@@ -98,7 +101,15 @@
                                 <div
                                     class="show-on-small-screen"
                                     [ngClass]="{ 'pending-sales-balance-due': isPendingSales }"
-                                    *ngIf="isSalesInvoice || isProformaInvoice || isEstimateInvoice"
+                                    *ngIf="
+                                        isSalesInvoice ||
+                                        isProformaInvoice ||
+                                        isEstimateInvoice ||
+                                        (voucherApiVersion === 2 &&
+                                            isPurchaseInvoice &&
+                                            !isCashInvoice &&
+                                            !isCashBankAccount)
+                                    "
                                 >
                                     <div class="text-right">
                                         <p class="font-20 b pb-r1">
@@ -300,6 +311,7 @@
                                                         <a
                                                             href="javascript:;"
                                                             (click)="showLastEstimateModal = !showLastEstimateModal"
+                                                            (clickOutside)="showLastEstimateModal = false"
                                                         >
                                                             <i class="icon-copy-file"></i> {{ copyPreviousInvoiceText }}
                                                         </a>
@@ -836,7 +848,15 @@
                             <!-- region balance due -->
                             <div
                                 class="col-sm-3 col-md-3 balance-due-absolute"
-                                *ngIf="isSalesInvoice || isProformaInvoice || isEstimateInvoice"
+                                *ngIf="
+                                    isSalesInvoice ||
+                                    isProformaInvoice ||
+                                    isEstimateInvoice ||
+                                    (voucherApiVersion === 2 &&
+                                        isPurchaseInvoice &&
+                                        !isCashInvoice &&
+                                        !isCashBankAccount)
+                                "
                             >
                                 <div class="text-right">
                                     <p class="font-20 pb-r1">
@@ -865,23 +885,32 @@
                                         <!-- added multicurrency feature make it functional to change into appropriate currency -->
                                         <span
                                             *ngIf="
-                                                enableVoucherAdjustmentMultiCurrency &&
-                                                isSalesInvoice &&
-                                                isMulticurrencyAccount &&
-                                                adjustPaymentBalanceDueData === 0 &&
-                                                invFormData.voucherDetails.balanceDue === 0
+                                                (voucherApiVersion !== 2 &&
+                                                    enableVoucherAdjustmentMultiCurrency &&
+                                                    isSalesInvoice &&
+                                                    isMulticurrencyAccount &&
+                                                    adjustPaymentBalanceDueData === 0 &&
+                                                    invFormData.voucherDetails.balanceDue === 0) ||
+                                                (voucherApiVersion === 2 &&
+                                                    invFormData.voucherDetails.gainLoss &&
+                                                    invFormData.voucherDetails.gainLoss !== 0 &&
+                                                    invFormData.voucherDetails.balanceDue === 0)
                                             "
                                             class="balance-due"
                                             >{{ localeData?.exchange_label }}
                                             {{
-                                                getConvertedBalanceDue() <= 0
+                                                voucherApiVersion === 2
+                                                    ? invFormData.voucherDetails.gainLoss >= 0
+                                                        ? commonLocaleData?.app_exchange_gain
+                                                        : commonLocaleData?.app_exchange_loss
+                                                    : getConvertedBalanceDue() <= 0
                                                     ? commonLocaleData?.app_exchange_gain
                                                     : commonLocaleData?.app_exchange_loss
                                             }}:&nbsp;</span
                                         >
                                         <span
                                             class="sp-rupees d-flex justify-content-end"
-                                            *ngIf="isMulticurrencyAccount"
+                                            *ngIf="isMulticurrencyAccount && voucherApiVersion !== 2"
                                         >
                                             <amount-field
                                                 [amount]="
@@ -909,6 +938,22 @@
                                                 "
                                                 [currencySymbol]="false"
                                                 [currencyCode]="false"
+                                            >
+                                            </amount-field>
+                                        </span>
+                                        <span
+                                            class="sp-rupees d-flex justify-content-end"
+                                            *ngIf="
+                                                voucherApiVersion === 2 &&
+                                                invFormData.voucherDetails.gainLoss &&
+                                                invFormData.voucherDetails.gainLoss !== 0 &&
+                                                invFormData.voucherDetails.balanceDue === 0
+                                            "
+                                        >
+                                            <amount-field
+                                                [amount]="invFormData.voucherDetails.gainLoss"
+                                                [currencySymbol]="baseCurrencySymbol"
+                                                [currencyCode]="companyCurrency"
                                             >
                                             </amount-field>
                                         </span>
@@ -1355,7 +1400,11 @@
                                 </div>
                                 <div
                                     class="row mt-1"
-                                    *ngIf="isPurchaseInvoice && (!isUpdateMode || (isUpdateMode && poLinkUpdated))"
+                                    *ngIf="
+                                        voucherApiVersion !== 2 &&
+                                        isPurchaseInvoice &&
+                                        (!isUpdateMode || (isUpdateMode && poLinkUpdated))
+                                    "
                                 >
                                     <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3">
                                         <label>{{ localeData?.link_purchase_order }}</label>
@@ -1461,8 +1510,11 @@
                                                                 <div class="item-unique">
                                                                     ({{ commonLocaleData?.app_due }}:
                                                                     {{
-                                                                        option.additional?.balanceDue?.amountForAccount
-                                                                            | giddhCurrency
+                                                                        voucherApiVersion === 2
+                                                                            ? (option.additional?.unadjustedAmount
+                                                                                  ?.amountForAccount | giddhCurrency)
+                                                                            : (option.additional?.balanceDue
+                                                                                  ?.amountForAccount | giddhCurrency)
                                                                     }})
                                                                 </div>
                                                             </a>
@@ -1475,10 +1527,9 @@
                                                 class="cp for-mobile-screen remove-invoice"
                                                 (click)="removeSelectedInvoice()"
                                             >
-                                                <span class="remove-invoice-icon mr-r05">×</span>
-                                                <span class="remove-invoice-label">{{
-                                                    commonLocaleData?.app_remove
-                                                }}</span>
+                                                <span class="remove-invoice-icon mr-r05"
+                                                    ><i class="icon-trash"></i
+                                                ></span>
                                             </div>
                                         </div>
                                         <div
@@ -1491,10 +1542,9 @@
                                                     class="cp remove-invoice"
                                                     (click)="removeSelectedInvoice()"
                                                 >
-                                                    <span class="remove-invoice-icon mr-r05">×</span>
-                                                    <span class="remove-invoice-label">{{
-                                                        commonLocaleData?.app_remove
-                                                    }}</span>
+                                                    <span class="remove-invoice-icon mr-r05"
+                                                        ><i class="icon-trash"></i
+                                                    ></span>
                                                 </div>
                                                 <div class="form-group">
                                                     <label>{{ invoiceDateLabel }}</label>
@@ -1808,7 +1858,7 @@
                                     <input
                                         type="number"
                                         name="exchangeRate"
-                                        [(ngModel)]="exchangeRate"
+                                        [(ngModel)]="newExchangeRate"
                                         *ngIf="showCurrencyValue"
                                         class="form-control edit-currency"
                                     />
@@ -1823,18 +1873,19 @@
                                         (click)="
                                             showCurrencyValue = !showCurrencyValue;
                                             autoSaveIcon = !autoSaveIcon;
-                                            exchangeRate = originalExchangeRate
+                                            newExchangeRate = originalExchangeRate
                                         "
                                     />
                                     <img
                                         src=" assets/images/autosave.svg"
                                         class="edit-pencil"
                                         (click)="
+                                            exchangeRate = newExchangeRate;
                                             originalExchangeRate = exchangeRate;
                                             previousExchangeRate = exchangeRate;
                                             autoSaveIcon = !autoSaveIcon;
                                             showCurrencyValue = !showCurrencyValue;
-                                            updateStockEntries();
+                                            exchangeRateChanged();
                                             calculateGrandTotal()
                                         "
                                         *ngIf="autoSaveIcon"
@@ -2962,7 +3013,8 @@
                                                 invoiceForm?.controls['message2']?.errors?.maxlength)
                                         "
                                     >
-                                        <span class="max-character-label">Characters left:&nbsp;</span
+                                        <span class="max-character-label"
+                                            >{{ commonLocaleData?.app_characters_left }}:&nbsp;</span
                                         ><span class="max-character-value">{{
                                             200 - invFormData?.templateDetails?.other?.message2?.length
                                         }}</span>
@@ -3270,8 +3322,9 @@
                                                     (isSalesInvoice ||
                                                         isPurchaseInvoice ||
                                                         isCreditNote ||
-                                                        isDebitNote))) &&
-                                            !(isPendingVoucherType && isCashInvoice)
+                                                        isDebitNote ||
+                                                        isPendingVoucherType))) &&
+                                            !(voucherApiVersion !== 2 && isPendingVoucherType && isCashInvoice)
                                         "
                                     >
                                         <div
@@ -3297,7 +3350,8 @@
                                                                 (isSalesInvoice ||
                                                                     isPurchaseInvoice ||
                                                                     isCreditNote ||
-                                                                    isDebitNote) &&
+                                                                    isDebitNote ||
+                                                                    isPendingVoucherType) &&
                                                                 (isAccountHaveAdvanceReceipts ||
                                                                     isInvoiceAdjustedWithAdvanceReceipts)
                                                             "
@@ -3416,7 +3470,9 @@
                                                                             commonLocaleData?.app_select_account
                                                                         "
                                                                         [notFoundLink]="false"
-                                                                        [forceClearReactive]="forceClear$ | async"
+                                                                        [forceClearReactive]="
+                                                                            forceClearDepositAccount$ | async
+                                                                        "
                                                                         [multiple]="false"
                                                                         [ItemHeight]="33"
                                                                         [useInBuiltFilterForIOptionTypeItems]="true"
@@ -3519,7 +3575,14 @@
 
                                                             <li
                                                                 class="clearfix mr-t1 bigger-dollar"
-                                                                *ngIf="isSalesInvoice"
+                                                                *ngIf="
+                                                                    isSalesInvoice ||
+                                                                    (voucherApiVersion === 2 &&
+                                                                        (isPurchaseInvoice ||
+                                                                            isCreditNote ||
+                                                                            isDebitNote ||
+                                                                            isPendingVoucherType))
+                                                                "
                                                             >
                                                                 <strong class="pull-right balance-due-text">
                                                                     <span *ngIf="isMulticurrencyAccount">{{
@@ -3554,7 +3617,7 @@
                                     <!--endregion-->
 
                                     <!-- region balance due for purchase -->
-                                    <div class="table-row" *ngIf="isPurchaseInvoice">
+                                    <div class="table-row" *ngIf="isPurchaseInvoice && voucherApiVersion !== 2">
                                         <div class="table-cell">
                                             <strong
                                                 >{{ localeData?.balance_due }}
@@ -5484,7 +5547,9 @@
                 <advance-receipt-adjustment-component
                     *ngIf="showAdvanceReceiptAdjust"
                     #advanceReceiptComponent
-                    [adjustedVoucherType]="selectedVoucherType"
+                    [adjustedVoucherType]="
+                        voucherApiVersion === 2 && isPendingVoucherType ? invoiceType : selectedVoucherType
+                    "
                     [isUpdateMode]="isUpdateMode"
                     [depositAmount]="depositAmount"
                     [invoiceFormDetails]="invFormData"

@@ -16,7 +16,7 @@ import { ReceiptService } from '../../../services/receipt.service';
 import { ToasterService } from '../../../services/toaster.service';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
 import { ElementViewContainerRef } from '../../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
-import { AppState } from '../../../store';
+import { AppState } from '../../../store'; 
 import { PAYMENT_REPORT_FILTERS, PaymentAdvanceSearchModel } from '../../constants/reports.constant';
 import { PaymentAdvanceSearchComponent } from '../payment-advance-search/payment-advance-search.component';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -36,14 +36,6 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
     @ViewChild('receiptNumber', { static: false }) public receiptNumber: ElementRef;
     /** Parent of payment number search bar */
     @ViewChild('paymentNumberParent', { static: false }) public paymentNumberParent: ElementRef;
-    /** Payment mode search bar */
-    @ViewChild('paymentMode', { static: false }) public paymentMode: ElementRef;
-    /** Parent of payment mode search bar */
-    @ViewChild('paymentModeParent', { static: false }) public paymentModeParent: ElementRef;
-    /** Invoice number search bar */
-    @ViewChild('invoiceNumber', { static: false }) public invoiceNumber: ElementRef;
-    /** Parent of invoice number search bar */
-    @ViewChild('invoiceNumberParent', { static: false }) public invoiceNumberParent: ElementRef;
     /** Advance search modal instance */
     @ViewChild('paymentSearchFilterModal', { static: false }) public paymentSearchFilterModal: ElementViewContainerRef;
     /** Container of Advance search modal instance */
@@ -70,8 +62,6 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
     public searchQueryParams: any = {
         receiptNumber: '',  // Receipt Number
         baseAccountName: '',  // Vendor Name
-        particularName: '', // Payment Mode
-        invoiceNumber: '',  // Invoice Number
         sortBy: '',  // Sort by
         sort: '',
         q: ''
@@ -155,6 +145,8 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
     public hoveredPaymentUniqueName: string = "";
     /** True if table is hovered */
     public hoveredPaymentTable: boolean = false;
+    /** Holds currency */
+    public baseCurrency: string = '';
 
     /** @ignore */
     constructor(
@@ -176,6 +168,12 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
                 this.previewVoucherParams = params;
             } else {
                 this.previewVoucherParams = {};
+            }
+        });
+
+        this.store.pipe(select(s => s.settings.profile), takeUntil(this.destroyed$)).subscribe(profile => {
+            if (profile) {
+                this.baseCurrency = profile.baseCurrency;
             }
         });
     }
@@ -201,9 +199,7 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
             }
             this.fetchPaymentsData();
         });
-        this.store.pipe(
-            select(state => state.session.activeCompany), takeUntil(this.destroyed$)
-        ).subscribe(activeCompany => {
+        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             this.activeCompany = activeCompany;
         });
         this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
@@ -326,18 +322,6 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
                 }
                 this.showVendorSearchBar = openFilter;
                 break;
-            case PAYMENT_REPORT_FILTERS.PAYMENT_MODE_FILTER:
-                if (event && this.childOf(event.target, this.paymentModeParent?.nativeElement)) {
-                    return;
-                }
-                this.showPaymentModeSearchBar = openFilter;
-                break;
-            case PAYMENT_REPORT_FILTERS.INVOICE_FILTER:
-                if (event && this.childOf(event.target, this.invoiceNumberParent?.nativeElement)) {
-                    return;
-                }
-                this.showInvoiceSearchBar = openFilter;
-                break;
             default: break;
         }
     }
@@ -380,8 +364,6 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
             receiptTypes: [],
             receiptNumber: '',
             baseAccountName: '',
-            particularName: '',
-            invoiceNumber: '',
             sortBy: '',
             sort: ''
         };
@@ -434,9 +416,7 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
         if (!this.previewVoucherParams?.uniqueName) {
             merge(
                 fromEvent(this.vendorName?.nativeElement, 'input'),
-                fromEvent(this.receiptNumber?.nativeElement, 'input'),
-                fromEvent(this.paymentMode?.nativeElement, 'input'),
-                fromEvent(this.invoiceNumber?.nativeElement, 'input')).pipe(debounceTime(700), takeUntil(this.destroyed$)).subscribe((value) => {
+                fromEvent(this.receiptNumber?.nativeElement, 'input')).pipe(debounceTime(700), takeUntil(this.destroyed$)).subscribe((value) => {
                     this.showClearFilter = true;
                     this.fetchAllPayments(this.searchQueryParams).pipe(takeUntil(this.destroyed$)).subscribe((response) => this.handleFetchAllPaymentResponse(response));
                 });
@@ -472,14 +452,49 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
             to: this.toDate,
             count: this.paginationLimit,
             q: this.searchQueryParams.q,
-            totalAmount: (this.advanceSearchModel.totalAmountFilter) ? this.advanceSearchModel.totalAmountFilter.amount : "",
-            totalAmountOperation: (this.advanceSearchModel.totalAmountFilter) ? this.advanceSearchModel.totalAmountFilter.selectedValue : "",
-            unUsedAmount: (this.advanceSearchModel.unusedAmountFilter) ? this.advanceSearchModel.unusedAmountFilter.amount : "",
-            unUsedAmountOperation: (this.advanceSearchModel.unusedAmountFilter) ? this.advanceSearchModel.unusedAmountFilter.selectedValue : "",
+            total: (this.advanceSearchModel.totalAmountFilter) ? this.advanceSearchModel.totalAmountFilter.amount : "",
+                balanceDue: (this.advanceSearchModel.unusedAmountFilter) ? this.advanceSearchModel.unusedAmountFilter.amount : "",
             sort: this.searchQueryParams.sort,
             sortBy: this.searchQueryParams.sortBy,
             branchUniqueName: this.currentBranch.uniqueName
         };
+
+        requestObject.balanceMoreThan = false;
+        requestObject.balanceLessThan = false;
+        requestObject.balanceEqual = false;
+
+        if (this.advanceSearchModel.unusedAmountFilter.selectedValue === 'GREATER_THAN') {
+            requestObject.balanceMoreThan = true;
+        } else if(this.advanceSearchModel.unusedAmountFilter.selectedValue === 'GREATER_THAN_OR_EQUALS') {
+            requestObject.balanceEqual = true;
+            requestObject.balanceMoreThan = true;
+        } else if (this.advanceSearchModel.unusedAmountFilter.selectedValue === 'LESS_THAN_OR_EQUALS') {
+            requestObject.balanceEqual = true;
+            requestObject.balanceLessThan = true;
+        } else if (this.advanceSearchModel.unusedAmountFilter.selectedValue === 'EQUALS') {
+            requestObject.balanceEqual = true;
+        }
+
+        requestObject.totalMoreThan = false;
+        requestObject.totalLessThan = false;
+        requestObject.totalEqual = false;
+
+        if (this.advanceSearchModel.totalAmountFilter.selectedValue === 'GREATER_THAN') {
+            requestObject.totalMoreThan = true;
+        } else if(this.advanceSearchModel.totalAmountFilter.selectedValue === 'GREATER_THAN_OR_EQUALS') {
+            requestObject.totalEqual = true;
+            requestObject.totalMoreThan = true;
+        } else if (this.advanceSearchModel.totalAmountFilter.selectedValue === 'LESS_THAN_OR_EQUALS') {
+            requestObject.totalEqual = true;
+            requestObject.totalLessThan = true;
+        } else if (this.advanceSearchModel.totalAmountFilter.selectedValue === 'EQUALS') {
+            requestObject.totalEqual = true;
+        }
+
+        delete additionalRequestParameters['unUsedAmount'];
+        delete additionalRequestParameters['unUsedAmountOperation'];
+        delete additionalRequestParameters['totalAmount'];
+        delete additionalRequestParameters['totalAmountOperation'];
 
         const optionalParams = cloneDeep(additionalRequestParameters);
         if (optionalParams) {
@@ -502,13 +517,22 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
      * @memberof PaymentReportComponent
      */
     private fetchSummary(): Observable<BaseResponse<any, PaymentSummaryRequest>> {
-        const requestObject: PaymentSummaryRequest = {
-            companyUniqueName: this.activeCompanyUniqueName,
-            from: this.fromDate,
-            to: this.toDate,
-            branchUniqueName: this.currentBranch.uniqueName
-        };
-        return this.receiptService.fetchSummary(requestObject);
+        if (this.voucherApiVersion === 2) {
+            const requestObj = {
+                from: this.fromDate,
+                to: this.toDate,
+                q: this.searchQueryParams.q
+            };
+            return this.receiptService.getAllReceiptBalanceDue(requestObj, "payment");
+        } else {
+            const requestObject: PaymentSummaryRequest = {
+                companyUniqueName: this.activeCompanyUniqueName,
+                from: this.fromDate,
+                to: this.toDate,
+                branchUniqueName: this.currentBranch.uniqueName
+            };
+            return this.receiptService.fetchSummary(requestObject);
+        }
     }
 
     /**
@@ -533,6 +557,7 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
                     if (isSeleted) {
                         payment.isSelected = true;
                     }
+                    payment = this.generalService.addToolTipText("payment", this.baseCurrency, payment, this.localeData, this.commonLocaleData);
                 });
 
                 this.changeDetectorRef.detectChanges();
@@ -624,8 +649,7 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
                 { label: this.commonLocaleData?.app_comparision_filters.greater_than, value: 'GREATER_THAN' },
                 { label: this.commonLocaleData?.app_comparision_filters.greater_than_equals, value: 'GREATER_THAN_OR_EQUALS' },
                 { label: this.commonLocaleData?.app_comparision_filters.less_than_equals, value: 'LESS_THAN_OR_EQUALS' },
-                { label: this.commonLocaleData?.app_comparision_filters.equals, value: 'EQUALS' },
-                { label: this.commonLocaleData?.app_comparision_filters.not_equals, value: 'NOT_EQUALS' }
+                { label: this.commonLocaleData?.app_comparision_filters.equals, value: 'EQUALS' }
             ];
             this.advanceSearchModel.totalAmountFilter.filterValues = this.paymentAdvanceSearchAmountFilters;
             this.advanceSearchModel.unusedAmountFilter.filterValues = this.paymentAdvanceSearchAmountFilters;

@@ -1,6 +1,5 @@
 /* ADD BULK ITEM */
 
-@import "../../../../assets/css/color.scss";
 .add-bulk-item-modal.modal-dialog {
     width: 870px !important;
     margin: 30px auto;
@@ -21,12 +20,12 @@
     padding: 4px;
 
     &:hover {
-        background-color: $lavender;
-        color: $chetwode-blue;
+        background-color: var(--color-lavender);
+        color: var(--color-blue);
     }
 
     &:hover h5 {
-        color: $chetwode-blue;
+        color: var(--color-blue);
     }
 }
 
@@ -37,7 +36,7 @@
 }
 
 .add-bulk-item-modal .single-product-wrapper h5 {
-    color: $night-rider;
+    color: var(--color-nero);
     font-size: 14px;
 }
 
@@ -61,8 +60,8 @@
 }
 
 .add-bulk-item-modal .right-content hr {
-    color: $black;
-    border-color: $gainsboro;
+    color: var(--color-nero);
+    border-color: var(--color-iron);
     margin: 10px -15px;
     margin-left: -15px;
 }
@@ -94,8 +93,8 @@
 }
 
 .add-bulk-item-modal .input-group .input-group-btn .btn {
-    background: $white;
-    border-left: 1px solid $gainsboro;
+    background: var(--color-white);
+    border-left: 1px solid var(--color-iron);
 }
 
 .add-bulk-item-modal .btn {
@@ -103,7 +102,7 @@
 }
 
 .add-bulk-item-modal .input-group-btn .fa {
-    color: $silver;
+    color: var(--color-gray);
 }
 
 .add-bulk-item-modal .single-selected-stock {
@@ -111,13 +110,13 @@
 }
 
 .add-bulk-item-modal .left-content {
-    border-right: 1px solid $gainsboro;
+    border-right: 1px solid var(--color-iron);
     padding-right: 15px;
 }
 
 .add-bulk-item-modal .modal-title {
     font-size: 22px !important;
-    color: $white;
+    color: var(--color-white);
 }
 
 .table-custom-invoice .sales-tax .dropdown-menu-right li label {

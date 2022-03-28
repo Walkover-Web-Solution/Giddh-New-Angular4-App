@@ -535,7 +535,15 @@
                                             >
                                                 <ng-template #optionTemplate let-option="option">
                                                     <a href="javascript:void(0)" class="list-item sh-template">
-                                                        <div class="item">{{ option?.label }}</div>
+                                                        <div class="item">
+                                                            {{
+                                                                (blankLedger.voucherType === "pur" ||
+                                                                    blankLedger.voucherType === "purchase") &&
+                                                                !option.label
+                                                                    ? commonLocaleData?.app_not_available
+                                                                    : option.label
+                                                            }}
+                                                        </div>
                                                         <div class="item-unique">
                                                             ({{ localeData?.dated }}:
                                                             {{ option.additional?.voucherDate }})
@@ -545,7 +553,11 @@
                                                             <span class="d-inline-flex">
                                                                 <amount-field
                                                                     [amount]="
-                                                                        option.additional?.balanceDue.amountForAccount
+                                                                        voucherApiVersion === 2
+                                                                            ? option.additional?.unadjustedAmount
+                                                                                  ?.amountForAccount
+                                                                            : option.additional?.balanceDue
+                                                                                  ?.amountForAccount
                                                                     "
                                                                     [currencySymbol]="false"
                                                                     [currencyCode]="false"
@@ -566,16 +578,15 @@
                                             (voucherApiVersion === 2 || selectedInvoiceForCreditNote)
                                         "
                                         class="cp remove-invoice pd-r1 hidden-xs d-flex align-items-center"
-                                        (click)="removeSelectedInvoice()"
                                     >
                                         <div
                                             [ngClass]="{
                                                 'form-group float-left mb-0 mr-r1 mr-t1': voucherApiVersion === 2
                                             }"
                                             *ngIf="selectedInvoiceForCreditNote"
+                                            (click)="removeSelectedInvoice()"
                                         >
-                                            <span class="remove-invoice-icon">×</span>
-                                            <span class="label">{{ commonLocaleData?.app_remove }}</span>
+                                            <span class="remove-invoice-icon"><i class="icon-trash"></i></span>
                                         </div>
                                         <div
                                             class="form-group float-left"
@@ -730,6 +741,31 @@
 
         <table class="width-100 mr-t05">
             <tbody>
+                <tr *ngIf="calculatedRoundOff">
+                    <td class="text-right">
+                        <span class="primary-color">
+                            {{ commonLocaleData?.app_round_off }}:
+                            <span class="d-inline-flex">
+                                <span class="d-inline-flex">
+                                    <amount-field
+                                        [amount]="calculatedRoundOff"
+                                        [currencySymbol]="
+                                            selectedCurrency === 0
+                                                ? baseCurrencyDetails?.symbol
+                                                : foreignCurrencyDetails?.symbol
+                                        "
+                                        [currencyCode]="
+                                            selectedCurrency === 0
+                                                ? baseCurrencyDetails?.code
+                                                : foreignCurrencyDetails?.code
+                                        "
+                                    >
+                                    </amount-field>
+                                </span>
+                            </span>
+                        </span>
+                    </td>
+                </tr>
                 <tr>
                     <td class="text-right">
                         <span class="primary-color">
@@ -810,9 +846,10 @@
                             class="pull-left"
                             name="generateInvoice"
                             [disabled]="
-                                isAdvanceReceipt ||
+                                (voucherApiVersion === 2 && isAdvanceReceipt) ||
                                 currentTxn?.voucherAdjustments?.adjustments?.length ||
                                 currentTxn?.invoiceLinkingRequest?.linkedInvoices?.length ||
+                                currentTxn?.referenceVoucher?.uniqueName ||
                                 isReadOnly
                                     ? 'disabled'
                                     : null
@@ -925,8 +962,10 @@
                         *ngIf="blankLedger?.attachedFile?.length > 0"
                     >
                         <span>{{ blankLedger.attachedFileName }}</span>
-                        <span class="delete-attachment cursor-pointer">
-                            <img (click)="showDeleteAttachedFileModal()" src="assets/images/multiply.svg" />
+                        <span class="delete-attachment">
+                            <a class="cursor-pointer" (click)="showDeleteAttachedFileModal()">
+                                <i class="icon-trash"></i>
+                            </a>
                         </span>
                     </div>
                 </div>
@@ -1062,6 +1101,7 @@
                 [adjustedVoucherType]="blankLedger.voucherType"
                 [invoiceFormDetails]="adjustVoucherConfiguration"
                 [advanceReceiptAdjustmentUpdatedData]="currentTxn?.voucherAdjustments"
+                [invoiceListRequestParams]="invoiceListRequestParams"
                 (closeModelEvent)="closeAdjustmentModal($event)"
                 (submitClicked)="getAdjustedPaymentData($event)"
             >

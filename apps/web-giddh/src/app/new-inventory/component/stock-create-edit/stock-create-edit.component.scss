@@ -1,11 +1,9 @@
-@import "../../../../assets/css/color.scss";
-
 .new-inventory-page-header {
     padding: 0 15px 15px;
     margin-bottom: 15px;
     display: flex;
     justify-content: space-between;
-    border-bottom: 1px solid $gainsboro;
+    border-bottom: 1px solid var(--color-gray);
     align-items: center;
 
     .inventory-header-right {
@@ -36,7 +34,7 @@
 
         display: flex;
         justify-content: space-between;
-        border-bottom: 1px solid $gainsboro;
+        border-bottom: 1px solid var(--color-gray);
         margin-bottom: 15px;
         font-size: 14px;
         padding-bottom: 5px;
@@ -85,7 +83,7 @@
             &::after {
                 position: absolute;
                 width: 1px;
-                background-color: $gainsboro;
+                background-color: var(--color-gray);
                 height: 100%;
                 content: "";
                 left: -20px;
@@ -102,7 +100,7 @@
         &:after {
             position: absolute;
             content: "";
-            background-color: $gainsboro;
+            background-color: var(--color-gray);
             right: 0;
             height: 1px;
             width: calc(100% - 220px);
@@ -235,14 +233,14 @@ table.stock-table th {
 .bulk-create-table th,
 .bulk-create-table td,
 .bulk-create-table tbody {
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--color-gray);
     border-collapse: collapse;
     min-width: 160px;
 }
 
 .combo-table th,
 .bulk-create-table th {
-    border-bottom: 1px solid $gainsboro;
+    border-bottom: 1px solid var(--color-gray);
 }
 
 .combo-table th:first-child,
@@ -262,7 +260,7 @@ table.stock-table th {
                 align-items: center;
                 width: 36px;
                 height: 36px;
-                border-color: $gainsboro;
+                border-color: var(--color-gray);
                 background-color: $white;
 
                 i {
@@ -511,7 +509,7 @@ table.stock-table th {
 
             td {
                 input {
-                    border: 1px solid $gainsboro !important;
+                    border: 1px solid var(--color-gray) !important;
                 }
             }
         }

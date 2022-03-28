@@ -41,7 +41,7 @@
                                 'active-file': !isMobileView && voucherPdf?.uniqueName === previewedFile?.uniqueName
                             }"
                             (click)="showVoucherPreview()"
-                            >{{ voucherPdf?.name }}</span
+                            >{{ voucherPdf?.name || commonLocaleData?.app_not_available }}</span
                         >
                         <a class="cursor-pointer" *ngIf="!isCompany" (click)="showDeleteVoucherModal(i)"
                             ><i class="icon-trash"></i
@@ -89,10 +89,20 @@
                         Attach File</label>
                 </label> -->
                 <div class="right-side-buttons" *ngIf="isMobileView">
-                    <a href="javascript:;" (click)="downloadFiles()">
-                        <i class="icon-attachment"></i>
+                    <a
+                        href="javascript:;"
+                        (click)="downloadFiles()"
+                        [matTooltip]="commonLocaleData?.app_download"
+                        [matTooltipPosition]="'above'"
+                    >
+                        <i class="icon-file"></i>
                     </a>
-                    <a href="javascript:;" (click)="printFiles()">
+                    <a
+                        href="javascript:;"
+                        (click)="printFiles()"
+                        [matTooltip]="commonLocaleData?.app_print"
+                        [matTooltipPosition]="'above'"
+                    >
                         <i class="fa fa-print"></i>
                     </a>
                 </div>
@@ -105,18 +115,38 @@
                             [href]="previewedFile?.src"
                             target="_blank"
                             [disabled]="selectAll || previewedFile?.type === 'unsupported'"
+                            [matTooltip]="commonLocaleData?.app_preview"
+                            [matTooltipPosition]="'above'"
                             ><i class="icon-search"></i
                         ></a>
-                        <a *ngIf="previewedFile?.type === 'image'" (click)="openPreview()"
+                        <a
+                            *ngIf="previewedFile?.type === 'image'"
+                            (click)="openPreview()"
+                            [matTooltip]="commonLocaleData?.app_preview"
+                            [matTooltipPosition]="'above'"
                             ><i class="icon-search"></i
                         ></a>
-                        <a *ngIf="previewedFile?.type === 'unsupported'"><i class="icon-search"></i></a>
+                        <a
+                            *ngIf="previewedFile?.type === 'unsupported'"
+                            [matTooltip]="commonLocaleData?.app_preview"
+                            [matTooltipPosition]="'above'"
+                            ><i class="icon-search"></i
+                        ></a>
                     </span>
                     <span>
-                        <a (click)="downloadFiles()"><i class="icon-attachment"></i></a>
+                        <a
+                            (click)="downloadFiles()"
+                            [matTooltip]="commonLocaleData?.app_download"
+                            [matTooltipPosition]="'above'"
+                            ><i class="icon-file"></i
+                        ></a>
                     </span>
                     <span>
-                        <a (click)="printFiles()">
+                        <a
+                            (click)="printFiles()"
+                            [matTooltip]="commonLocaleData?.app_print"
+                            [matTooltipPosition]="'above'"
+                        >
                             <i class="fa fa-print"></i>
                         </a>
                     </span>

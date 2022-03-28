@@ -34,6 +34,8 @@ import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { InvoiceService } from 'apps/web-giddh/src/app/services/invoice.service';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { clone, cloneDeep, uniqBy } from 'apps/web-giddh/src/app/lodash-optimized';
+import { CustomFieldsService } from 'apps/web-giddh/src/app/services/custom-fields.service';
+import { FieldTypes } from '../custom-fields/custom-fields.constant';
 
 @Component({
     selector: 'account-add-new-details',
@@ -160,6 +162,14 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public activeParentGroupUniqueName: string = '';
     /** True if custom fields api call in progress */
     public isCustomFieldLoading: boolean = false;
+    /** Custom fields request */
+    public customFieldsRequest: any = {
+        page: 0,
+        count: 0,
+        moduleUniqueName: 'account'
+    };
+    /** Available field types list */
+    public availableFieldTypes: any = FieldTypes;
 
     constructor(
         private _fb: FormBuilder,
@@ -171,7 +181,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         private generalService: GeneralService,
         private groupService: GroupService,
         private groupWithAccountsAction: GroupWithAccountsAction,
-        private invoiceService: InvoiceService) {
+        private invoiceService: InvoiceService,
+        private customFieldsService: CustomFieldsService) {
         this.activeGroup$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroup), takeUntil(this.destroyed$));
 
     }
@@ -218,7 +229,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 }
             }
         });
-        this.getCompanyCustomField();
 
         this.addAccountForm.get('hsnOrSac').valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(a => {
             const hsn: AbstractControl = this.addAccountForm.get('hsnNumber');
@@ -261,7 +271,10 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
 
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
-                this.activeCompany = activeCompany;
+                if (this.activeCompany?.uniqueName !== activeCompany?.uniqueName) {
+                    this.activeCompany = activeCompany;
+                    this.getCompanyCustomField();
+                }
                 if (this.activeCompany.countryV2 !== undefined && this.activeCompany.countryV2 !== null) {
                     this.getStates(this.activeCompany.countryV2.alpha2CountryCode);
                 }
@@ -930,9 +943,9 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         }
         this.isCustomFieldLoading = true;
         this.companyCustomFields = [];
-        this.groupService.getCompanyCustomField().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.customFieldsService.list(this.customFieldsRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.status === 'success') {
-                this.companyCustomFields = response.body;
+                this.companyCustomFields = response.body?.results;
                 this.createDynamicCustomFieldForm(this.companyCustomFields);
             } else {
                 this._toaster.errorToast(response.message);

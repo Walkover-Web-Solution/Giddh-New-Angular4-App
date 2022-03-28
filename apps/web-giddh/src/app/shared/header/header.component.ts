@@ -33,7 +33,7 @@ import { userLoginStateEnum, OrganizationType } from '../../models/user-login-st
 import { SubscriptionsUser } from '../../models/api-models/Subscriptions';
 import { environment } from 'apps/web-giddh/src/environments/environment';
 import { CurrentPage, OnboardingFormRequest } from '../../models/api-models/Common';
-import { GIDDH_DATE_RANGE_PICKER_RANGES, ROUTES_WITH_HEADER_BACK_BUTTON, VAT_SUPPORTED_COUNTRIES } from '../../app.constant';
+import { CALENDLY_URL, GIDDH_DATE_RANGE_PICKER_RANGES, ROUTES_WITH_HEADER_BACK_BUTTON, VAT_SUPPORTED_COUNTRIES } from '../../app.constant';
 import { CommonService } from '../../services/common.service';
 import { Location } from '@angular/common';
 import { SettingsProfileService } from '../../services/settings.profile.service';
@@ -44,6 +44,7 @@ import { AccountsAction } from '../../actions/accounts.actions';
 import { LedgerActions } from '../../actions/ledger/ledger.actions';
 import { LocaleService } from '../../services/locale.service';
 import { SettingsFinancialYearActions } from '../../actions/settings/financial-year/financial-year.action';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
     selector: 'app-header',
@@ -214,6 +215,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public isIpadScreen: boolean = false;
     /** True if sidebar is forcely expanded */
     public sidebarForcelyExpanded: boolean = false;
+    /** True if calendly model is activated */
+    public isCalendlyModelActivate: boolean = false;
+    /** Calendly url */
+    public calendlyUrl: any = '';
 
     /**
      * Returns whether the back button in header should be displayed or not
@@ -253,8 +258,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         private ledgerAction: LedgerActions,
         public location: Location,
         private localeService: LocaleService,
-        private settingsFinancialYearActions: SettingsFinancialYearActions
+        private settingsFinancialYearActions: SettingsFinancialYearActions,
+        private sanitizer: DomSanitizer
     ) {
+        this.calendlyUrl = this.sanitizer.bypassSecurityTrustResourceUrl(CALENDLY_URL);
         // Reset old stored application date
         this.store.dispatch(this.companyActions.ResetApplicationDate());
         this.activeAccount$ = this.store.pipe(select(p => p.ledger.account), takeUntil(this.destroyed$));
@@ -303,6 +310,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             if (event instanceof NavigationError || event instanceof NavigationEnd || event instanceof RouteConfigLoadEnd) {
                 this.navigationEnd = true;
             }
+
+            setTimeout(() => {
+                if (this.isElectron) {
+                    this.toggleSidebarPane(false, false);
+                }
+            }, 100);
         });
 
         // GETTING CURRENT PAGE
@@ -341,7 +354,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 if (this.generalService.currentBranchUniqueName) {
                     this.currentCompanyBranches$.pipe(take(1)).subscribe(response => {
                         if (response) {
-                            this.currentBranch = response.find(branch => (branch?.uniqueName === this.generalService.currentBranchUniqueName));
+                            this.currentBranch = response.find(branch => (branch.uniqueName === this.generalService.currentBranchUniqueName));
                             if (!this.activeCompanyForDb) {
                                 this.activeCompanyForDb = new CompAidataModel();
                             }
@@ -353,6 +366,26 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             } else {
                 this.generalService.currentOrganizationType = OrganizationType.Company;
                 this.currentOrganizationType = OrganizationType.Company;
+            }
+        });
+
+        this.currentCompanyBranches$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response && this.currentOrganizationType === OrganizationType.Branch) {
+                const unarchivedBranches = response.filter(branch => !branch.isArchived);
+                if (!unarchivedBranches?.length) {
+                    const type = OrganizationType.Company;
+                    const organization: Organization = {
+                        type,
+                        uniqueName: this.activeCompany ? this.activeCompany.uniqueName : '',
+                        details: {
+                            branchDetails: {
+                                uniqueName: ''
+                            }
+                        }
+                    };
+                    this.store.dispatch(this.companyActions.setCompanyBranch(organization));
+                    this.store.dispatch(this.loginAction.ChangeCompany(this.activeCompany?.uniqueName, false));
+                }
             }
         });
 
@@ -431,6 +464,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 this.store.dispatch(this.settingsProfileAction.handleFreePlanSubscribed(false));
                 this.getCurrentCompanyData();
             }
+        });
+
+        this.store.pipe(select(state => state.general.isCalendlyModelOpen), takeUntil(this.destroyed$)).subscribe(response => {
+            this.isCalendlyModelActivate = response;
         });
     }
 
@@ -682,16 +719,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             /* TO SHOW NOTIFICATIONS */
         } else {
             window['Headway'].init();
-        }
-
-        if (window['SOE'] === undefined) {
-            /* For Schedule now */
-            let scriptTag = document.createElement('script');
-            scriptTag.src = 'https://cdn.oncehub.com/mergedjs/so.js';
-            scriptTag.type = 'text/javascript';
-            scriptTag.defer = true;
-            document.body.appendChild(scriptTag);
-            /* For Schedule now */
         }
 
         if (this.selectedPlanStatus === 'expired') {// active expired
@@ -1332,9 +1359,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      * @memberof HeaderComponent
      */
     public openScheduleModel() {
-        if (window['SOE'] !== undefined) {
-            window['SOE'].prototype.toggleLightBox('giddhbooks');
-        }
+        this.store.dispatch(this._generalActions.isOpenCalendlyModel(true));
     }
 
     /**
@@ -1670,7 +1695,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             if (user && user.session) {
                 let sessionExpiresAt: any = moment(user.session.expiresAt, GIDDH_DATE_FORMAT + " h:m:s");
 
-                if (sessionExpiresAt.diff(moment(), 'hours') < 2) {
+                if (sessionExpiresAt.diff(moment(), 'hours') < 24) {
                     this.lastSessionRenewalTime = moment();
                     this.store.dispatch(this.loginAction.renewSession());
                 } else {
@@ -1774,5 +1799,14 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         } else {
             this.toggleSidebarPane(true, isMobileSidebar);
         }
+    }
+
+    /**
+     * Hides calendly model
+     *
+     * @memberof HeaderComponent
+     */
+    public hideScheduleCalendlyModel(): void {
+        this.store.dispatch(this._generalActions.isOpenCalendlyModel(false));
     }
 }
