@@ -148,6 +148,7 @@
     td.no-dbl-click-select {
         white-space: normal !important;
         word-break: normal !important;
+        text-transform: none !important;
     }
 }
 .click-dropdown .dropdown-btn {
@@ -540,7 +541,22 @@ span.icon-export-icon {
 .cancel-remarks-section {
     min-height: 120px;
 }
-
+.giddh-table {
+    border-bottom: 1px solid $gainsboro !important;
+    tbody {
+        tr {
+            td {
+                margin-top: -1px !important;
+                &:last-child {
+                    border-bottom: none !important;
+                }
+                &.status-mobile {
+                    border-bottom: none !important;
+                }
+            }
+        }
+    }
+}
 /* responsive */
 @media (max-width: 1024px) {
     .perform-payment {

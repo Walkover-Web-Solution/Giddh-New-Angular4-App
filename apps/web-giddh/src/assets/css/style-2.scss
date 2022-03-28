@@ -6084,8 +6084,18 @@ highcharts-chart {
 #top0 app-aside-menu-other-taxes {
     top: 0 !important;
 }
-.invoice-modal-content #top0 app-aside-menu-other-taxes {
-    top: 60px !important;
+.voucher-preview-edit {
+    .primary-main-header {
+        z-index: 99 !important;
+    }
+    .navbar-nav {
+        z-index: 99 !important;
+    }
+}
+.aside-menu-othertax-open {
+    .nav-left-bar {
+        z-index: 99 !important;
+    }
 }
 .aside-panel-ledger {
     display: flex !important;
