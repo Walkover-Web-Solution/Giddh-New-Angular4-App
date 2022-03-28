@@ -1,10 +1,10 @@
 <div class="stock-balance-wrapper">
-    <div class="top-bar">
-        <div class="top-bar-left-side">
+    <div class="stock-balance-top-bar">
+        <div class="stock-balance-top-bar-left-side">
             <button mat-flat-button color="primary" class="new-stock-btn"><mat-icon>add</mat-icon>New Stock</button>
             <div class="warehouse-select-bar">
                 <mat-form-field class="search-warehouse-bar" appearance="outline">
-                    <img class="search-img" src="{{ imgPath }}search.png" alt="" />
+                    <img class="search-img" src="{{ imgPath }}search-new.svg" />
                     <mat-select
                         placeholder="Search Warehouse"
                         [formControl]="toppings"
@@ -14,17 +14,56 @@
                         <button mat-flat-button disableRipple class="create-warehouse-btn">
                             <mat-icon>add</mat-icon>Create Warehouse
                         </button>
+                        <mat-select-trigger>
+                            {{ toppings.value ? toppings.value[0] : "" }}
+                            <span *ngIf="toppings.value?.length > 1"> (+{{ toppings.value.length - 1 }}) </span>
+                        </mat-select-trigger>
                         <mat-option *ngFor="let topping of toppingList" [value]="topping">{{ topping }}</mat-option>
                     </mat-select>
                 </mat-form-field>
             </div>
         </div>
-        <div class="top-bar-right-side">
-            <button mat-flat-button class="export-btn">Export</button>
-
-            <button mat-flat-button class="filter-btn">
-                <img src="{{ imgPath }}filter.svg" alt="filter-button" />
+        <div class="stock-balance-top-bar-right-side">
+            <button mat-flat-button class="export-btn">
+                <img src="{{ imgPath }}download-blue.svg" alt="" /> Export
             </button>
+
+            <button mat-flat-button [matMenuTriggerFor]="menu" class="filter-btn">
+                <img src="{{ imgPath }}filter.svg" alt="filter-button" />
+                <mat-menu #menu="matMenu">
+                    <button mat-menu-item><mat-checkbox color="primary">Dummy 1</mat-checkbox></button>
+                    <button mat-menu-item><mat-checkbox color="primary">Dummy 2</mat-checkbox></button>
+                </mat-menu>
+            </button>
+        </div>
+    </div>
+    <div class="stock-balance-main-list-table">
+        <div class="stocks-list">
+            <div class="stocks-list-head custom-material-search-bar stock-searchbar">
+                <img src="{{ imgPath }}search-new.svg" class="search-icon" />
+                <mat-form-field appearance="outline">
+                    <input matInput placeholder="Stocks" />
+                </mat-form-field>
+            </div>
+            <div class="stock-list-body">
+                <div class="box1">lorem5</div>
+            </div>
+        </div>
+        <div class="unique-name-list">
+            <div class="unique-name-list-head custom-material-search-bar unique-name-searchbar">
+                <img src="{{ imgPath }}search-new.svg" class="search-icon" />
+                <mat-form-field appearance="outline">
+                    <input matInput placeholder="Unique Name" />
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="group-list">
+            <div class="group-list-head custom-material-search-bar group-searchbar">
+                <img src="{{ imgPath }}search-new.svg" class="search-icon" />
+                <mat-form-field appearance="outline">
+                    <input matInput placeholder="Group" />
+                </mat-form-field>
+            </div>
         </div>
     </div>
 </div>

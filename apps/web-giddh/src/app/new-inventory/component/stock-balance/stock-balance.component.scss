@@ -3,11 +3,15 @@
 .stock-balance-wrapper {
     padding: 0px 20px 0px 20px;
 
-    .top-bar {
+    .stock-balance-top-bar {
         display: flex;
         justify-content: space-between;
+        align-items: center;
 
-        .top-bar-left-side {
+        .stock-balance-top-bar-left-side {
+            display: flex;
+            align-items: center;
+
             .new-stock-btn {
                 background: $cornflower;
                 padding: 0px 15px 0px 10px;
@@ -33,20 +37,130 @@
                 position: relative;
                 display: inline-block;
                 margin-left: 10px;
+
+                .search-warehouse-bar {
+                    top: 10px;
+                }
             }
         }
 
-        .top-bar-right-side {
+        .stock-balance-top-bar-right-side {
+            margin-top: 5px;
             .export-btn {
-                margin-right: 37px;
-                border: 1px solid $cloud;
+                margin-right: 10px;
+                border: 1px solid $cornflower;
+                color: $cornflower;
+                padding: 0px 8px;
+                img {
+                    height: 18px;
+                    width: auto;
+                }
             }
             .filter-btn {
                 border: 1px solid $cloud;
                 border-radius: 5px;
-                min-width: 45px;
+                min-width: 40px;
                 padding: 0px 7px;
-                top: 1px;
+                top: 0px;
+                left: 0px;
+            }
+        }
+    }
+
+    .stock-balance-main-list-table {
+        display: flex;
+        width: 700px;
+        height: 500px;
+        background-color: pink;
+        margin-top: 20px;
+        position: relative;
+        bottom: 17px;
+        .stocks-list {
+            width: 242px;
+            height: 100%;
+            background-color: white;
+            border-right: 2px solid $light-black-russian;
+            .stocks-list-head {
+                height: 48px;
+                width: 100%;
+                border-bottom: 1px solid $cloud;
+            }
+            .custom-material-search-bar {
+                input {
+                    font-size: 14px;
+                    &::placeholder {
+                        color: $midnight-blue;
+                        font-weight: 500;
+                    }
+                }
+                .search-icon {
+                    position: absolute;
+                    z-index: 1;
+                    top: 11.5px;
+                    left: 6px;
+                }
+            }
+        }
+        .unique-name-list {
+            height: 100%;
+            width: 150px;
+            background-color: lightgreen;
+            .unique-name-list-head {
+                mat-form-field {
+                    position: relative;
+                    left: 11px;
+                }
+            }
+            .custom-material-search-bar {
+                height: 48px;
+                border-bottom: 1px solid $cloud;
+                input {
+                    font-size: 14px;
+                    &::placeholder {
+                        color: $midnight-blue;
+                        font-weight: 500;
+                    }
+                }
+                .search-icon {
+                    position: absolute;
+                    top: 11.5px;
+                    left: 258px;
+                    z-index: 1;
+                }
+            }
+            .unique-name-searchbar {
+                mat-form-field {
+                    width: 132px;
+                    height: 36px;
+                }
+            }
+        }
+        .group-list {
+            height: 100%;
+            width: 150px;
+            background-color: yellowgreen;
+            .group-list-head {
+                height: 48px;
+                border-bottom: 1px solid $cloud;
+                input {
+                    font-size: 14px;
+                    &::placeholder {
+                        color: $midnight-blue;
+                        font-weight: 500;
+                    }
+                }
+                .search-icon {
+                    position: absolute;
+                    z-index: 1;
+                    top: 11.5px;
+                    left: 397.5px;
+                }
+            }
+            .group-searchbar {
+                mat-form-field {
+                    width: 128px;
+                    height: 36px;
+                }
             }
         }
     }
