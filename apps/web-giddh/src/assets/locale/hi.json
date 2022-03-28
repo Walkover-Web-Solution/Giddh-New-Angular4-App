@@ -667,5 +667,7 @@
     "app_unarchived": "सक्रिय",
     "app_not_available": "N/A",
     "app_true": "सही",
-    "app_false": "गलत"
+    "app_false": "गलत",
+    "app_preview": "पूर्वावलोकन",
+    "app_purchase_bill": "खरीद बिल"
 }

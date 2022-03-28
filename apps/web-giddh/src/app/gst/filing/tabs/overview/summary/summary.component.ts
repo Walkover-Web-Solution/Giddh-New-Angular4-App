@@ -1,4 +1,4 @@
-import { GstOverViewResult, GstOverViewSummary } from '../../../../../models/api-models/GstReconcile';
+import { GstOverViewRequest, GstOverViewResult, GstOverViewSummary } from '../../../../../models/api-models/GstReconcile';
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { Router } from '@angular/router';
@@ -7,6 +7,7 @@ import { ReconcileActionState } from '../../../../../store/GstReconcile/GstRecon
 import { AppState } from '../../../../../store';
 import { takeUntil } from 'rxjs/operators';
 import { GstReport } from '../../../../constants/gst.constant';
+import { GstReconcileActions } from 'apps/web-giddh/src/app/actions/gst-reconcile/GstReconcile.actions';
 
 interface SequenceConfig {
     name: string;
@@ -48,7 +49,7 @@ export class OverviewSummaryComponent implements OnInit, OnDestroy {
     }
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor(private store: Store<AppState>, private route: Router) {
+    constructor(private store: Store<AppState>, private route: Router, private gstAction: GstReconcileActions) {
         this.gstr1OverviewData$ = this.store.pipe(select(p => p.gstR.gstr1OverViewData), takeUntil(this.destroyed$));
         this.gstr2OverviewData$ = this.store.pipe(select(p => p.gstR.gstr2OverViewData), takeUntil(this.destroyed$));
 		this.companyGst$ = this.store.pipe(select(p => p.gstR.activeCompanyGst), takeUntil(this.destroyed$));
@@ -74,6 +75,16 @@ export class OverviewSummaryComponent implements OnInit, OnDestroy {
 			}
 		});
 
+        let request: GstOverViewRequest = new GstOverViewRequest();
+        request.from = this.currentPeriod.from;
+        request.to = this.currentPeriod.to;
+        request.gstin = this.activeCompanyGstNumber;
+
+        this.store.pipe(select(state => state.gstR.gstr1OverViewDataFetchedSuccessfully), takeUntil(this.destroyed$)).subscribe(response => {
+            if (!response) {
+                this.store.dispatch(this.gstAction.GetOverView(GstReport.Gstr1, request));
+            }
+        });
 	}
 
 	/**
@@ -107,6 +118,7 @@ export class OverviewSummaryComponent implements OnInit, OnDestroy {
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+        this.store.dispatch(this.gstAction.resetGstr1OverViewResponse());
     }
 
     public mapResponseData(data: GstOverViewSummary[], sequencingList: SequenceConfig[]): GstOverViewSummary[] {
