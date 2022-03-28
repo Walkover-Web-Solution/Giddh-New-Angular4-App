@@ -5316,6 +5316,28 @@ perfect-scrollbar > .ps > .ps-overlay {
             }
         }
     }
+    .stock-list-body {
+        .stock-list-expanded-content {
+            .mat-form-field-infix {
+                border: 1px solid;
+                border-radius: 5px;
+                width: 112px;
+                height: 34px;
+
+                .mat-select-value {
+                    position: relative;
+                    padding-left: 8px;
+                    top: 4px;
+                    height: 20px;
+                }
+                .mat-select-arrow-wrapper {
+                    position: relative;
+                    top: 13px;
+                    right: 3px;
+                }
+            }
+        }
+    }
 }
 #mat-select-0-panel {
     min-width: calc(100% + 24px) !important;
@@ -5327,6 +5349,14 @@ perfect-scrollbar > .ps > .ps-overlay {
         span.mat-button-wrapper {
             color: $cornflower;
         }
+    }
+}
+
+.mat-select-panel-wrap {
+    .mat-select-panel {
+        position: absolute;
+        top: 47.5px;
+        left: 16px;
     }
 }
 

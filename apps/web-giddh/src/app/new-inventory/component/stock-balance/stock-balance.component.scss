@@ -83,6 +83,7 @@
             .stocks-list-head {
                 height: 48px;
                 width: 100%;
+                overflow: hidden;
                 border-bottom: 1px solid $cloud;
             }
             .custom-material-search-bar {
@@ -98,6 +99,53 @@
                     z-index: 1;
                     top: 11.5px;
                     left: 6px;
+                }
+            }
+            .stock-list-body {
+                .stock-list-box {
+                    height: 60px;
+                    // height: 248px;
+                    border-bottom: 1px solid $dark-fog;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    padding-left: 10px;
+                    transition: all 0.5s;
+
+                    &:hover {
+                        background-color: #668cff26;
+                    }
+
+                    .stock-list-box-heading {
+                        font-size: 14px;
+                        color: $black-pearl;
+                    }
+                    .stock-list-box-content {
+                        font-size: 12px;
+                        color: #505159;
+                    }
+                    .dot {
+                        position: relative;
+                        bottom: 3.5px;
+                        font-weight: bold;
+                    }
+
+                    .stock-list-expanded {
+                        .stock-list-expanded-content {
+                            display: flex;
+                            height: 54px;
+                            align-items: center;
+                            width: 100%;
+                            overflow: hidden;
+                            .stock-list-expanded-content-head {
+                                font-size: 14px;
+                            }
+                            mat-form-field {
+                                top: 4px;
+                                left: 12px;
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -164,4 +212,9 @@
             }
         }
     }
+}
+
+.active {
+    height: 248px !important;
+    background-color: #668cff26;
 }
