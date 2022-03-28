@@ -107,17 +107,17 @@
 
     li {
         a {
-            color: $nero !important;
+            color: var(--color-nero) !important;
             padding-left: 50px !important;
 
             &:hover {
-                background: $lavender;
-                color: $midnight-blue !important;
+                background: var(--color-dark-fog);
+                color: var(--color-giddh-blue) !important;
             }
 
             &.active {
-                background: $lavender;
-                color: $midnight-blue !important;
+                background: var(--color-dark-fog);
+                color: var(--color-giddh-blue) !important;
             }
         }
     }

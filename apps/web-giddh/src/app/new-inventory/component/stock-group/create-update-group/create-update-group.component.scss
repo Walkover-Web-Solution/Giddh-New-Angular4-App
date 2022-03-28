@@ -32,7 +32,7 @@
 }
 
 .create-group-footer {
-    background-color: $whisper-color;
+    background-color: var(--color-dark-fog);
     height: 60px;
     text-align: left;
     display: flex;
@@ -46,7 +46,7 @@
 
 .page-title-inventory {
     font-weight: bold;
-    color: $midnight-blue;
+    color: var(--color-giddh-blue);
     font-size: 16px;
 }
 
