@@ -224,10 +224,10 @@ span.eligible-ITC {
 .advanced {
     background: $alice-blue;
     table.xs-table-block {
-        tbody tr {
+        tr {
             td.remove-invoice {
                 span:first-child {
-                    font-size: 25px;
+                    font-size: 16px;
                     vertical-align: middle;
                     color: $gray;
                     padding-right: 8px;

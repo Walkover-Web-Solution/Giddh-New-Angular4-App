@@ -30,6 +30,8 @@
                     margin-left: 5px;
                     width: 71%;
                     margin-top: 3px;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
                 }
                 a {
                     color: $dark-gray !important;
@@ -53,6 +55,8 @@
                             margin-left: 5px;
                             width: 77%;
                             margin-top: 1px;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
                         }
                         a {
                             color: $dark-gray !important;

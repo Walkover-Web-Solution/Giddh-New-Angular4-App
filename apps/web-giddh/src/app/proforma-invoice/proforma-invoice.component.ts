@@ -1924,7 +1924,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                             items = response.body.items;
                         }
 
-                        items?.forEach(invoice => this.invoiceList.push({ label: invoice.voucherNumber ? invoice.voucherNumber : '-', value: invoice.uniqueName, additional: invoice }));
+                        items?.forEach(invoice => this.invoiceList.push({ label: invoice.voucherNumber ? invoice.voucherNumber : this.commonLocaleData?.app_not_available, value: invoice.uniqueName, additional: invoice }));
                     } else {
                         this.invoiceSelected = '';
                     }
@@ -1935,7 +1935,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                             if (selectedInvoice) {
                                 selectedInvoice['voucherDate'] = selectedInvoice['invoiceDate'];
                                 invoiceSelected = {
-                                    label: selectedInvoice.number ? selectedInvoice.number : '-',
+                                    label: selectedInvoice.number ? selectedInvoice.number : this.commonLocaleData?.app_not_available,
                                     value: selectedInvoice.uniqueName,
                                     additional: selectedInvoice
                                 };
@@ -1950,7 +1950,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                             if (selectedInvoice) {
                                 selectedInvoice['voucherDate'] = selectedInvoice['invoiceDate'];
                                 invoiceSelected = {
-                                    label: selectedInvoice.invoiceNumber ? selectedInvoice.invoiceNumber : '-',
+                                    label: selectedInvoice.invoiceNumber ? selectedInvoice.invoiceNumber : this.commonLocaleData?.app_not_available,
                                     value: selectedInvoice.invoiceUniqueName,
                                     additional: selectedInvoice
                                 };
@@ -4164,7 +4164,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     type: this.proformaInvoiceUtilityService.parseVoucherType(this.invoiceType),
                     exchangeRate: exRate,
                     dueDate: data.voucherDetails.dueDate,
-                    number: this.invoiceNo,
+                    number: (this.invoiceNo !== unqName) ? this.invoiceNo : "",
                     uniqueName: unqName,
                     roundOffApplicable: this.applyRoundOff,
                     subVoucher: (this.isRcmEntry) ? SubVoucher.ReverseCharge : undefined,
@@ -6100,7 +6100,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.advanceReceiptAdjustmentData = advanceReceiptsAdjustEvent.adjustVoucherData;
         if (this.advanceReceiptAdjustmentData && this.advanceReceiptAdjustmentData.adjustments) {
             this.advanceReceiptAdjustmentData.adjustments.forEach(adjustment => {
-                adjustment.voucherNumber = adjustment.voucherNumber === '-' ? '' : adjustment.voucherNumber;
+                adjustment.voucherNumber = adjustment.voucherNumber === this.commonLocaleData?.app_not_available ? '' : adjustment.voucherNumber;
             });
         }
         this.adjustPaymentData = advanceReceiptsAdjustEvent.adjustPaymentData;
