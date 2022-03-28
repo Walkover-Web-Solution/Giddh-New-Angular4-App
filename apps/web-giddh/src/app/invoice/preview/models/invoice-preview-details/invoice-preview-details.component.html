@@ -410,7 +410,8 @@
                                                 <span
                                                     *ngIf="
                                                         selectedItem?.voucherType === 'purchase' &&
-                                                        attachedDocumentType?.type
+                                                        attachedDocumentType?.type &&
+                                                        voucherApiVersion !== 2
                                                     "
                                                     [ngClass]="{
                                                         'disabled':

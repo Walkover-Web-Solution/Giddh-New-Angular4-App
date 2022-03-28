@@ -10,7 +10,6 @@ export const currencyNumberSystems: ICurrencynumberSystem[] = [
     { value: 'INT_APOSTROPHE_SEPARATED', name: '10\’000\’000', type: '3-3-3' }
 ];
 export const digitAfterDecimal: ICurrencynumberSystem[] = [
-    { value: '0', name: '0 digit' },
     { value: '2', name: '2 digits' },
     { value: '4', name: '4 digits' }
 ];

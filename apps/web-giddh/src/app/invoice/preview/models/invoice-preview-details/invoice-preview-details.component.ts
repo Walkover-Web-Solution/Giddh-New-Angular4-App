@@ -593,8 +593,12 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                 return;
             }
         } else if (this.selectedItem?.voucherType === VoucherTypeEnum.creditNote || this.selectedItem?.voucherType === VoucherTypeEnum.debitNote) {
-            if(this._generalService.voucherApiVersion === 2) {
-                return saveAs(this.selectedItem.blob, `${this.selectedItem.voucherNumber}.pdf`);
+            if (this._generalService.voucherApiVersion === 2) {
+                if (this.selectedItem.hasAttachment) {
+                    this.downloadVoucherModal.show();
+                } else {
+                    return saveAs(this.selectedItem.blob, `${this.selectedItem.voucherNumber}.pdf`);
+                }
             } else {
                 this.downloadCreditDebitNotePdf();
             }
@@ -862,7 +866,12 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         if (this.pdfPreviewHasError || !this.pdfPreviewLoaded) {
             return;
         }
-        saveAs(this.attachedDocumentBlob, 'purchasebill.pdf');
+        if (this._generalService.voucherApiVersion === 2 && this.selectedItem.hasAttachment) {
+            this.downloadVoucherModal.show();
+        } else {
+            let voucherNumber = (this.selectedItem?.voucherNumber) ? this.selectedItem?.voucherNumber : this.commonLocaleData?.app_not_available;
+            saveAs(this.attachedDocumentBlob, voucherNumber + '.pdf');
+        }
     }
 
     /**
