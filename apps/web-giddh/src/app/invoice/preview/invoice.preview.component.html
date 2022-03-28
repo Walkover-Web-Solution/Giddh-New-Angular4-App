@@ -1346,12 +1346,13 @@
                                 >
                                     {{
                                         voucherApiVersion === 2
-                                            ? item.referenceVoucher?.number
-                                                ? item.referenceVoucher.number
-                                                : commonLocaleData?.app_not_available
+                                            ? item.referenceVoucher
+                                                ? item.referenceVoucher?.number || commonLocaleData?.app_not_available
+                                                : ""
                                             : item.invoiceLinkingRequest?.linkedInvoices?.length
-                                            ? item.invoiceLinkingRequest?.linkedInvoices[0].invoiceNumber
-                                            : commonLocaleData?.app_not_available
+                                            ? item.invoiceLinkingRequest?.linkedInvoices[0].invoiceNumber ||
+                                              commonLocaleData?.app_not_available
+                                            : ""
                                     }}
                                 </td>
 
