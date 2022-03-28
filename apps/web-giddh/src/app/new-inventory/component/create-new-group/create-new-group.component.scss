@@ -227,11 +227,11 @@
             width: 50px;
             display: flex;
             height: 50px;
-            background-color: $white-smoke;
+            background-color: var(--color-common-quinary-background-for-all-components);
             border-radius: 100%;
             align-items: center;
             justify-content: center;
-            border: 2px solid $persian-blue;
+            border: 2px solid var(--color-giddh-blue);
         }
     }
 
