@@ -207,7 +207,7 @@ export class AdjustmentUtilityService {
         } else if (isCashBankLedger) {
             if (isDebtorCreditorAccount) {
                 request = {
-                    accountUniqueName: data?.ledgerAccount?.uniqueName,
+                    accountUniqueName: data?.particularAccount?.uniqueName,
                     voucherType: data?.voucherType,
                     noteVoucherType: undefined
                 };
