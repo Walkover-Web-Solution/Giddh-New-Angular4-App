@@ -116,6 +116,7 @@ import { VoucherTypeToNamePipe } from '../shared/header/pipe/voucherTypeToNamePi
 import { Location, TitleCasePipe } from '@angular/common';
 import { VoucherForm } from '../models/api-models/Voucher';
 import { AdjustmentUtilityService } from '../shared/advance-receipt-adjustment/services/adjustment-utility.service';
+import { GstReconcileActions } from '../actions/gst-reconcile/GstReconcile.actions';
 
 /** Type of search: customer and item (product/service) search */
 const SEARCH_TYPE = {
@@ -682,7 +683,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         private voucherTypeToNamePipe: VoucherTypeToNamePipe,
         private titleCasePipe: TitleCasePipe,
         private location: Location,
-        private adjustmentUtilityService: AdjustmentUtilityService
+        private adjustmentUtilityService: AdjustmentUtilityService,
+        private gstAction: GstReconcileActions
     ) {
         this.advanceReceiptAdjustmentData = new VoucherAdjustments();
         this.advanceReceiptAdjustmentData.adjustments = [];
@@ -2418,7 +2420,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             return entry;
         });
 
-        if (this.isPurchaseInvoice && this.isRcmEntry && !this.validateTaxes(cloneDeep(data))) {
+        if ((this.isPurchaseInvoice || this.isSalesInvoice || this.isCashInvoice || this.isCreditNote || this.isDebitNote) && this.isRcmEntry && !this.validateTaxes(cloneDeep(data))) {
             this.startLoader(false);
             return;
         }
@@ -4164,7 +4166,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     type: this.proformaInvoiceUtilityService.parseVoucherType(this.invoiceType),
                     exchangeRate: exRate,
                     dueDate: data.voucherDetails.dueDate,
-                    number: (this.invoiceNo !== unqName) ? this.invoiceNo : "",
+                    number: (this.isPurchaseInvoice) ? this.invFormData.voucherDetails.voucherNumber : this.invoiceNo,
                     uniqueName: unqName,
                     roundOffApplicable: this.applyRoundOff,
                     subVoucher: (this.isRcmEntry) ? SubVoucher.ReverseCharge : undefined,
@@ -4333,6 +4335,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.isUpdateMode = false;
 
             if(this.callFromOutside) {
+                this.store.dispatch(this.gstAction.resetGstr3BOverViewResponse());
                 this.location?.back();
             }
         } else {
