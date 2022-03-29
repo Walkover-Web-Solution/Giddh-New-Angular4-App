@@ -1505,11 +1505,11 @@ header .navbar {
     width: 100%;
 } /*btn*/
 .btn-pink {
-    background: var(--color-blue);
-    border: 1px solid var(--color-blue);
-    color: var(--color-white);
+    background: var(--color-secondary-button-background);
+    border: 1px solid var(--color-secondary-button-background);
+    color: var(--color-secondary-button-text);
     &:hover {
-        color: var(--color-white);
+        color: var(--color-secondary-button-text);
     }
 }
 .dropdown-toggle.btn-pink {
@@ -2249,7 +2249,7 @@ input[type="number"]::-webkit-inner-spin-button {
 .navbar-right .dropdown-menu,
 .pull-right > .dropdown-menu {
     top: 54px;
-    border-color: var(--color-iron);
+    border-color: var(--color-common-secondary-border);
 }
 .ledger-main .form-control:focus {
     border: 1px solid var(--color-blue) !important;

@@ -2792,21 +2792,25 @@ td.mat-footer-cell {
     &.error {
         .snack-container {
             background-image: url("../images/failure.svg");
+            background-position-y: center;
         }
     }
     &.success {
         .snack-container {
             background-image: url("../images/success.svg");
+            background-position-y: center;
         }
     }
     &.warning {
         .snack-container {
             background-image: url("../images/exclamation-white.svg");
+            background-position-y: center;
         }
     }
     &.info {
         .snack-container {
             background-image: url("../images/info-white.svg");
+            background-position-y: center;
         }
     }
 }
