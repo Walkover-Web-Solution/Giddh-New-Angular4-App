@@ -21,6 +21,11 @@ const noop = () => {
 })
 export class TextFieldComponent implements OnInit, OnChanges, OnDestroy, ControlValueAccessor {
     @ViewChild('textField', {static: false}) public textField: ElementRef;
+    @Input() public pattern: any = null;
+    @Input() public required: boolean = false;
+    @Input() public min: number = null;
+    @Input() public max: number = null;
+    @Input() public allowDecimalDigitsOnly: boolean = false;
     @Input() public cssClass: string = "";
     @Input() public cssStyle: string = "";
     /** Taking placeholder as input */

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { ReplaySubject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { COMMA, ENTER } from "@angular/cdk/keycodes";
@@ -13,7 +13,11 @@ import { AppState } from "../../../store";
 import { CompanyActions } from "../../../actions/company.actions";
 import { WarehouseActions } from "../../../settings/warehouse/action/warehouse.action";
 import { ActivatedRoute, Router } from "@angular/router";
-import { cloneDeep } from "../../../lodash-optimized";
+import { cloneDeep, findIndex, forEach } from "../../../lodash-optimized";
+import { NgForm } from "@angular/forms";
+import { INVALID_STOCK_ERROR_MESSAGE } from "../../../app.constant";
+import { CustomFieldsService } from "../../../services/custom-fields.service";
+import { FieldTypes } from "../../../shared/header/components/custom-fields/custom-fields.constant";
 
 @Component({
     selector: "stock-create-edit",
@@ -22,6 +26,9 @@ import { cloneDeep } from "../../../lodash-optimized";
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class StockCreateEditComponent implements OnInit, OnDestroy {
+    /** Instance of stock create/edit form */
+    @ViewChild('stockCreateEditForm', { static: false }) public stockCreateEditForm: NgForm;
+    /** Key codes for handling of add variant options */
     public separatorKeysCodes: any[] = [ENTER, COMMA];
     /* this will store image path*/
     public imgPath: string = "";
@@ -34,7 +41,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
     /** Sales accounts list */
     public salesAccounts: IOption[] = [];
     /** Taxes list */
-    public taxes: IOption[] = [];
+    public taxes: any[] = [];
     public stockForm: any = {
         type: 'PRODUCT',
         name: null,
@@ -75,7 +82,8 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         lowStockAlertCount: 0,
         outOfStockSelling: true,
         variants: [],
-        options: []
+        options: [],
+        customFields: []
     };
     public stockGroupUniqueName: string = "";
     public isPurchaseInformationEnabled: boolean = false;
@@ -88,6 +96,17 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
     public purchaseAccountName: string = "";
     public salesAccountName: string = "";
     public queryParams: any = {};
+    public taxTempArray: any[] = [];
+    public showLoader: boolean = false;
+    /** Custom fields request */
+    public customFieldsRequest: any = {
+        page: 0,
+        count: 0,
+        moduleUniqueName: 'stock'
+    };
+    /** Available field types list */
+    public availableFieldTypes: any = FieldTypes;
+    private selectedTaxes: any[] = [];
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(
@@ -99,7 +118,8 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         private warehouseAction: WarehouseActions,
         private route: ActivatedRoute,
         private router: Router,
-        private changeDetection: ChangeDetectorRef
+        private changeDetection: ChangeDetectorRef,
+        private customFieldsService: CustomFieldsService
     ) {
     }
 
@@ -107,17 +127,19 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         /* added image path */
         this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
 
-        this.addVariantOption();
+        this.getTaxes();
         this.getStockUnits();
         this.getStockGroups();
         this.getPurchaseAccounts();
         this.getSalesAccounts();
-        this.getTaxes();
         this.getWarehouses();
+        this.getCustomFields();
 
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
-            this.queryParams = params;
-            this.getStockDetails();
+            if (params?.stockUniqueName) {
+                this.queryParams = params;
+                this.getStockDetails();
+            }
         });
     }
 
@@ -199,7 +221,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
 
                 this.purchaseAccounts = purchaseAccounts;
 
-                if(this.queryParams?.stockUniqueName) {
+                if (this.queryParams?.stockUniqueName) {
                     this.findPurchaseAccountName();
                 }
             }
@@ -216,7 +238,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
 
                 this.salesAccounts = salesAccounts;
 
-                if(this.queryParams?.stockUniqueName) {
+                if (this.queryParams?.stockUniqueName) {
                     this.findSalesAccountName();
                 }
             }
@@ -224,8 +246,13 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
     }
 
     public addVariantOption(): void {
-        const optionIndex = this.stockForm.options?.length + 1;
-        this.stockForm.options.push({ name: "Option " + optionIndex, values: [], order: optionIndex });
+        if (this.isVariantAvailable) {
+            const optionIndex = this.stockForm.options?.length + 1;
+            this.stockForm.options.push({ name: "Option " + optionIndex, values: [], order: optionIndex });
+        } else {
+            this.stockForm.options = [];
+            this.generateVariants();
+        }
     }
 
     public deleteVariantOption(index: number): void {
@@ -334,13 +361,8 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
     public getTaxes(): void {
         this.store.pipe(select(state => state?.company?.taxes), takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.length > 0) {
-                this.taxes = response?.map(result => {
-                    return {
-                        value: result.uniqueName,
-                        label: result.name,
-                        additional: result
-                    };
-                }) || [];
+                this.taxes = response || [];
+                this.checkSelectedTaxes();
             } else {
                 this.store.dispatch(this.companyAction.getTax());
             }
@@ -361,9 +383,61 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         });
     }
 
-    public createStock(): void {
+    public createStock(stockCreateEditForm: NgForm): void {
+        if (stockCreateEditForm.invalid) {
+            return;
+        }
+
+        if (this.isPurchaseInformationEnabled) {
+            if (this.validateStock(this.stockForm.purchaseAccountDetails?.unitRates)) {
+                this.stockForm.purchaseAccountDetails.unitRates = this.stockForm.purchaseAccountDetails.unitRates.filter((unitRate) => {
+                    return unitRate.stockUnitCode || unitRate.rate;
+                });
+            } else {
+                this.toaster.showSnackBar("error", INVALID_STOCK_ERROR_MESSAGE);
+                return;
+            }
+        }
+        if (this.isSalesInformationEnabled) {
+            if (this.validateStock(this.stockForm.salesAccountDetails?.unitRates)) {
+                this.stockForm.salesAccountDetails.unitRates = this.stockForm.salesAccountDetails.unitRates?.filter((unitRate) => {
+                    return unitRate.stockUnitCode || unitRate.rate;
+                });
+            } else {
+                this.toaster.showSnackBar("error", INVALID_STOCK_ERROR_MESSAGE);
+                return;
+            }
+        }
+
+        if (!this.stockGroupUniqueName) {
+            let mainGroupExists = this.stockGroups?.filter(group => group?.value === "maingroup");
+            if (mainGroupExists?.length > 0) {
+                this.stockGroupUniqueName = "maingroup";
+            } else {
+                let stockRequest = {
+                    name: 'Main Group',
+                    uniqueName: 'maingroup',
+                    hsnNumber: '',
+                    sacNumber: ''
+                };
+                this.inventoryService.CreateStockGroup(stockRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                    if (response?.status === "success") {
+                        this.saveStock();
+                    } else {
+                        this.toaster.showSnackBar("error", response?.message);
+                    }
+                });
+            }
+        } else {
+            this.saveStock();
+        }
+    }
+
+    private saveStock(): void {
+        this.formatRequest();
+
         this.inventoryService.createStock(this.stockForm, this.stockGroupUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if(response?.status === "success") {
+            if (response?.status === "success") {
 
             } else {
                 this.toaster.showSnackBar("error", response?.message);
@@ -372,34 +446,33 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
     }
 
     public getStockDetails(): void {
-        this.inventoryService.getStock(this.queryParams?.stockGroupUniqueName, this.queryParams?.stockUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if(response?.status === "success" && response.body) {
-                this.stockForm = {
-                    type: response.body.type,
-                    name: response.body.name,
-                    uniqueName: response.body.uniqueName,
-                    stockUnitCode: response.body.stockUnit?.code,
-                    hsnNumber: response.body.hsnNumber,
-                    sacNumber: response.body.sacNumber,
-                    taxes: response.body.taxes,
-                    skuCode: response.body.skuCode,
-                    skuCodeHeading: response.body.skuCodeHeading,
-                    customField1Heading: response.body.customField1Heading,
-                    customField1Value: response.body.customField1Value,
-                    customField2Heading: response.body.customField2Heading,
-                    customField2Value: response.body.customField2Value,
-                    purchaseAccountDetails: response.body.purchaseAccountDetails,
-                    salesAccountDetails: response.body.salesAccountDetails,
-                    isFsStock: response.body.isFsStock,
-                    manufacturingDetails: response.body.manufacturingDetails,
-                    accountGroup: response.body.accountGroup,
-                    lowStockAlertCount: response.body.lowStockAlertCount,
-                    outOfStockSelling: response.body.outOfStockSelling,
-                    variants: response.body.variants,
-                    options: response.body.options
-                };
-
-                this.stockGroupUniqueName = this.queryParams?.stockGroupUniqueName;
+        this.showLoader = true;
+        this.inventoryService.getStock(this.queryParams?.stockUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.status === "success" && response.body) {
+                this.stockForm.type = response.body.type;
+                this.stockForm.name = response.body.name;
+                this.stockForm.uniqueName = response.body.uniqueName;
+                this.stockForm.stockUnitCode = response.body.stockUnit?.code;
+                this.stockForm.hsnNumber = response.body.hsnNumber;
+                this.stockForm.sacNumber = response.body.sacNumber;
+                this.stockForm.taxes = response.body.taxes;
+                this.stockForm.skuCode = response.body.skuCode;
+                this.stockForm.skuCodeHeading = response.body.skuCodeHeading;
+                this.stockForm.customField1Heading = response.body.customField1Heading;
+                this.stockForm.customField1Value = response.body.customField1Value;
+                this.stockForm.customField2Heading = response.body.customField2Heading;
+                this.stockForm.customField2Value = response.body.customField2Value;
+                this.stockForm.purchaseAccountDetails = response.body.purchaseAccountDetails;
+                this.stockForm.salesAccountDetails = response.body.salesAccountDetails;
+                this.stockForm.isFsStock = response.body.isFsStock;
+                this.stockForm.manufacturingDetails = response.body.manufacturingDetails;
+                this.stockForm.accountGroup = response.body.accountGroup;
+                this.stockForm.lowStockAlertCount = response.body.lowStockAlertCount;
+                this.stockForm.outOfStockSelling = response.body.outOfStockSelling;
+                this.stockForm.variants = response.body.variants;
+                this.stockForm.options = response.body.options;
+                this.selectedTaxes = response.body.taxes;
+                this.stockGroupUniqueName = response.body.stockGroup?.uniqueName;
                 this.isPurchaseInformationEnabled = this.stockForm?.purchaseAccountDetails?.accountUniqueName;
                 this.isSalesInformationEnabled = this.stockForm?.salesAccountDetails?.accountUniqueName;
                 this.isVariantAvailable = (this.stockForm?.variants?.length) ? true : false;
@@ -407,7 +480,8 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 this.stockGroupName = response.body?.stockGroup?.name;
                 this.findPurchaseAccountName();
                 this.findSalesAccountName();
-
+                this.checkSelectedTaxes();
+                this.showLoader = false;
                 this.changeDetection.detectChanges();
             } else {
                 this.toaster.showSnackBar("error", response?.message);
@@ -417,24 +491,151 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
 
     private findPurchaseAccountName(): void {
         let purchaseAccountName = this.purchaseAccounts?.filter(purchaseAccount => purchaseAccount.value === this.stockForm?.purchaseAccountDetails?.accountUniqueName);
-        if(purchaseAccountName?.length > 0) {
+        if (purchaseAccountName?.length > 0) {
             this.purchaseAccountName = purchaseAccountName[0]?.label;
         }
     }
 
     private findSalesAccountName(): void {
         let salesAccountName = this.salesAccounts?.filter(salesAccount => salesAccount.value === this.stockForm?.salesAccountDetails?.accountUniqueName);
-        if(salesAccountName?.length > 0) {
+        if (salesAccountName?.length > 0) {
             this.salesAccountName = salesAccountName[0]?.label;
         }
     }
 
-    public updateStock(): void {
-        this.inventoryService.updateStock(this.stockForm, this.queryParams?.stockGroupUniqueName, this.queryParams?.stockUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if(response?.status === "success") {
+    public updateStock(stockCreateEditForm: NgForm): void {
+        if (stockCreateEditForm.invalid) {
+            return;
+        }
+
+        this.formatRequest();
+
+        this.inventoryService.updateStock(this.stockForm, this.stockGroupUniqueName, this.queryParams?.stockUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.status === "success") {
 
             } else {
                 this.toaster.showSnackBar("error", response?.message);
+            }
+        });
+    }
+
+    /**
+     * Validates the stock to have both unit and rate if either of them has been provided
+     * The stock to be created is valid if the user has either provided both unit and rate or
+     * has provided none. If the user provides anyone of them then it is invalid entry and method
+     * will return false
+     *
+     * @private
+     * @param {Array<any>} unitRates Array of stockUnitCode and rate keys
+     * @returns {boolean} True, if the stock is valid
+     * @memberof StockCreateEditComponent
+     */
+    private validateStock(unitRates: Array<any>): boolean {
+        if (unitRates) {
+            const formEntries = unitRates.filter((unitRate) => {
+                return (unitRate.stockUnitCode && !unitRate.rate) || (!unitRate.stockUnitCode && unitRate.rate);
+            });
+            return formEntries?.length === 0;
+        }
+        return true;
+    }
+
+    public selectTax(taxSelected: any): void {
+        let isSelected = this.selectedTaxes?.filter(selectedTax => selectedTax === taxSelected.uniqueName);
+
+        if (taxSelected.taxType !== 'gstcess') {
+            let index = findIndex(this.taxTempArray, (taxTemp) => taxTemp.taxType === taxSelected.taxType);
+            if (index > -1 && !isSelected?.length) {
+                forEach(this.taxes, (tax) => {
+                    if (tax.taxType === taxSelected.taxType) {
+                        tax.isChecked = false;
+                        tax.isDisabled = true;
+                    }
+                    if ((taxSelected.taxType === 'tcsrc' || taxSelected.taxType === 'tdsrc' || taxSelected.taxType === 'tcspay' || taxSelected.taxType === 'tdspay') && (tax.taxType === 'tcsrc' || tax.taxType === 'tdsrc' || tax.taxType === 'tcspay' || tax.taxType === 'tdspay')) {
+                        tax.isChecked = false;
+                        tax.isDisabled = true;
+                    }
+                });
+            }
+
+            if (index < 0 && !isSelected?.length) {
+                forEach(this.taxes, (tax) => {
+                    if (tax.taxType === taxSelected.taxType) {
+                        tax.isChecked = false;
+                        tax.isDisabled = true;
+                    }
+
+                    if ((taxSelected.taxType === 'tcsrc' || taxSelected.taxType === 'tdsrc' || taxSelected.taxType === 'tcspay' || taxSelected.taxType === 'tdspay') && (tax.taxType === 'tcsrc' || tax.taxType === 'tdsrc' || tax.taxType === 'tcspay' || tax.taxType === 'tdspay')) {
+                        tax.isChecked = false;
+                        tax.isDisabled = true;
+                    }
+                    if (tax.uniqueName === taxSelected.uniqueName) {
+                        taxSelected.isChecked = true;
+                        taxSelected.isDisabled = false;
+                        this.taxTempArray.push(taxSelected);
+                    }
+                });
+            } else if (index > -1 && !isSelected?.length) {
+                taxSelected.isChecked = true;
+                taxSelected.isDisabled = false;
+                this.taxTempArray = this.taxTempArray.filter(taxTemp => {
+                    return taxSelected.taxType !== taxTemp.taxType;
+                });
+                this.taxTempArray.push(taxSelected);
+            } else {
+                let idx = findIndex(this.taxTempArray, (taxTemp) => taxTemp.uniqueName === taxSelected.uniqueName);
+                this.taxTempArray.splice(idx, 1);
+                taxSelected.isChecked = false;
+                forEach(this.taxes, (tax) => {
+                    if (tax.taxType === taxSelected.taxType) {
+                        tax.isDisabled = false;
+                    }
+                    if ((taxSelected.taxType === 'tcsrc' || taxSelected.taxType === 'tdsrc' || taxSelected.taxType === 'tcspay' || taxSelected.taxType === 'tdspay') && (tax.taxType === 'tcsrc' || tax.taxType === 'tdsrc' || tax.taxType === 'tcspay' || tax.taxType === 'tdspay')) {
+                        tax.isDisabled = false;
+                    }
+                });
+            }
+        } else {
+            if (!isSelected?.length) {
+                this.taxTempArray.push(taxSelected);
+                taxSelected.isChecked = true;
+            } else {
+                let idx = findIndex(this.taxTempArray, (taxTemp) => taxTemp.uniqueName === taxSelected.uniqueName);
+                this.taxTempArray.splice(idx, 1);
+                taxSelected.isChecked = false;
+            }
+        }
+        this.selectedTaxes = this.taxTempArray.map(tax => tax.uniqueName);
+    }
+
+    private checkSelectedTaxes(): void {
+        if (this.taxes?.length > 0) {
+            this.taxes?.forEach(tax => {
+                if (this.stockForm?.taxes?.includes(tax?.uniqueName)) {
+                    this.selectTax(tax);
+                }
+            });
+        }
+    }
+
+    public getCustomFields(): void {
+        this.customFieldsService.list(this.customFieldsRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response && response.status === 'success') {
+                this.stockForm.customFields = response.body?.results;
+            } else {
+                this.toaster.showSnackBar("error", response.message);
+            }
+            this.changeDetection.detectChanges();
+        });
+    }
+
+    public formatRequest(): void {
+        this.stockForm.taxes = this.taxTempArray.map(tax => tax.uniqueName);
+
+        this.stockForm.customFields = this.stockForm.customFields?.map(customField => {
+            return {
+                uniqueName: customField.uniqueName,
+                value: customField.value
             }
         });
     }

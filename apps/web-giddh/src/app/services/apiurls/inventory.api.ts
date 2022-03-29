@@ -72,7 +72,7 @@ export const INVENTORY_API = {
     },
     NEW: {
         CREATE: 'company/:companyUniqueName/stock-group/:stockGroupUniqueName/stock',
-        GET: 'company/:companyUniqueName/stock-group/:stockGroupUniqueName/stock/:stockUniqueName',
+        GET: 'company/:companyUniqueName/stock/:stockUniqueName',
         UPDATE: 'company/:companyUniqueName/stock-group/:stockGroupUniqueName/stock/:stockUniqueName'
     }
 };

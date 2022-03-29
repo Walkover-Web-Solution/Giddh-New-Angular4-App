@@ -7,6 +7,7 @@ import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
 import { MatRadioModule } from "@angular/material/radio";
 import { MatSelectModule } from "@angular/material/select";
+import { DecimalDigitsModule } from "../../shared/helpers/directives/decimalDigits/decimalDigits.module";
 import { SelectFieldComponent } from "./select-field/select-field.component";
 import { TextFieldComponent } from "./text-field/text-field.component";
 
@@ -24,7 +25,8 @@ import { TextFieldComponent } from "./text-field/text-field.component";
         MatSelectModule,
         MatCheckboxModule,
         MatAutocompleteModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        DecimalDigitsModule
     ],
     exports: [
         TextFieldComponent,

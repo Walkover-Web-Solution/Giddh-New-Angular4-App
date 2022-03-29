@@ -18,6 +18,7 @@ import { StockCreateEditComponent } from "./stock-create-edit.component";
 import { StockCreateEditRoutingModule } from "./stock-create-edit.routing.module";
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MainComponent } from "./main.component";
+import { GiddhPageLoaderModule } from "../../../shared/giddh-page-loader/giddh-page-loader.module";
 
 @NgModule({
     declarations: [
@@ -42,7 +43,8 @@ import { MainComponent } from "./main.component";
         HamburgerMenuModule,
         ReactiveFormsModule,
         FormFieldsModule,
-        MatAutocompleteModule
+        MatAutocompleteModule,
+        GiddhPageLoaderModule
     ],
     exports: [
         StockCreateEditComponent

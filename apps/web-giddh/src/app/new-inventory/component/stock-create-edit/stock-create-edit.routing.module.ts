@@ -18,7 +18,7 @@ const routes: Routes = [
                 component: StockCreateEditComponent
             },
             {
-                path: "edit/:stockGroupUniqueName/:stockUniqueName",
+                path: "edit/:stockUniqueName",
                 component: StockCreateEditComponent
             }
         ]
