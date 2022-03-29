@@ -987,18 +987,17 @@ export class InventoryService {
         }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)));
     }
 
-    public getStock(groupUniqueName: string, stockUniqueName: string): Observable<BaseResponse<any, any>> {
+    public getStock(stockUniqueName: string): Observable<BaseResponse<any, any>> {
         const companyUniqueName = this.generalService.companyUniqueName;
         let url = this.config.apiUrl + INVENTORY_API.NEW.GET;
         url = url.replace(':companyUniqueName', encodeURIComponent(companyUniqueName));
-        url = url.replace(':stockGroupUniqueName', encodeURIComponent(groupUniqueName));
         url = url.replace(':stockUniqueName', encodeURIComponent(stockUniqueName));
 
         return this.http.get(url).pipe(map((res) => {
             let data: BaseResponse<any, string> = res;
-            data.request = groupUniqueName;
+            data.request = stockUniqueName;
             return data;
-        }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e, groupUniqueName)));
+        }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e, stockUniqueName)));
     }
 
     public updateStock(model: any, stockGroupUniqueName: any, stockUniqueName: string): Observable<BaseResponse<any, any>> {
