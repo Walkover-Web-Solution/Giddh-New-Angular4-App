@@ -5323,6 +5323,8 @@ perfect-scrollbar > .ps > .ps-overlay {
                 border-radius: 5px;
                 width: 112px;
                 height: 34px;
+                color: $white;
+                background-color: $white;
 
                 .mat-select-value {
                     position: relative;
@@ -5352,11 +5354,12 @@ perfect-scrollbar > .ps > .ps-overlay {
     }
 }
 
-.mat-select-panel-wrap {
-    .mat-select-panel {
-        position: absolute;
-        top: 47.5px;
-        left: 16px;
+.myPanelClass {
+    margin-top: 30px !important;
+    margin-left: 16px !important;
+
+    button {
+        color: $cornflower;
     }
 }
 
