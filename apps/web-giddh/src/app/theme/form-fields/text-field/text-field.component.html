@@ -32,10 +32,10 @@
         (input)="handleInput()"
         [readonly]="readonly"
         [ngClass]="{ 'error-box': showError }"
-        [pattern]="pattern"
+        [attr.pattern]="pattern"
         [required]="required"
-        [min]="min"
-        [max]="max"
+        [attr.min]="min"
+        [attr.max]="max"
         *ngIf="allowDecimalDigitsOnly"
         decimalDigitsDirective
         #textField
