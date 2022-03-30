@@ -3415,6 +3415,7 @@
                                                                                     <amount-field
                                                                                         [amount]="
                                                                                             adjustPaymentData.totalAdjustedAmount
+                                                                                                | replace: '-':''
                                                                                         "
                                                                                         [currencySymbol]="
                                                                                             isMulticurrencyAccount

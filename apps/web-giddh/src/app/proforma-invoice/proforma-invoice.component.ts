@@ -6412,7 +6412,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         let isPartyTypeSez = false;
         this.tcsTdsTaxesAccount = [];
         this.accountAssignedApplicableDiscounts = [];
-        if (this.isSalesInvoice || this.isCashInvoice || (this.voucherApiVersion === 2 && (this.isCreditNote || this.isDebitNote))) {
+        if (this.isSalesInvoice || this.isCashInvoice || (this.voucherApiVersion === 2 && this.isCreditNote)) {
             if (data && data.addresses && data.addresses.length > 0) {
                 data.addresses.forEach(address => {
                     if (address.partyType && address.partyType.toLowerCase() === "sez") {
