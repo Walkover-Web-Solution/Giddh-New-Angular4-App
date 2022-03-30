@@ -97,7 +97,7 @@
                                                 adjustedVoucherType === 'pay')
                                         )
                                     "
-                                    [amount]="getConvertedBalanceDue()"
+                                    [amount]="getBalanceDue() === 0 ? 0 : getConvertedBalanceDue()"
                                     [currencySymbol]="baseCurrencySymbol"
                                     [currencyCode]="companyCurrency"
                                 >
