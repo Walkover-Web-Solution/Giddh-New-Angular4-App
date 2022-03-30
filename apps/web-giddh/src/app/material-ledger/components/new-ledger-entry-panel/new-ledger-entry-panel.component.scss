@@ -7,7 +7,7 @@
             table {
                 td.remove-invoice {
                     span:first-child {
-                        font-size: 25px;
+                        font-size: 16px;
                         vertical-align: middle;
                         color: var(--color-abbey);
                     }
@@ -117,14 +117,15 @@ span.eligible-ITC {
     margin-right: 0 !important;
 }
 .delete-attachment {
-    background-color: var(--color-primary-basic-button-opacity);
-    border: 1px solid var(--color-primary-button-border);
-    border-radius: 5px;
+    margin-right: 14px;
     margin-left: 7px;
-    padding: 0px 4px 2px 4px;
-    img {
-        width: 14px;
-        filter: var(--color-image-filter-tertiary);
+    float: right;
+    margin-top: -6px;
+    a {
+        color: var(--color-dark-gray);
+        i {
+            font-size: 15px;
+        }
     }
 }
 @media only screen and (max-width: 767px) {
