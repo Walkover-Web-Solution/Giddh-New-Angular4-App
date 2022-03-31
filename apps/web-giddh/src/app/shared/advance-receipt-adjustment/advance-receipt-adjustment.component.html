@@ -179,8 +179,18 @@
                                                             {{ option.additional.voucherDate }})
                                                         </p>
                                                         <p class="font-12 text-gray mb-0">
-                                                            ({{ commonLocaleData?.app_amount }}: {{ currencySymbol
-                                                            }}{{ option?.additional?.balanceDue?.amountForAccount }})
+                                                            ({{ commonLocaleData?.app_amount }}:
+                                                            {{ option?.additional?.currency?.symbol }}
+                                                            <span class="d-inline-flex">
+                                                                <amount-field
+                                                                    [amount]="
+                                                                        option?.additional?.balanceDue?.amountForAccount
+                                                                    "
+                                                                    [currencySymbol]="false"
+                                                                    [currencyCode]="false"
+                                                                >
+                                                                </amount-field>
+                                                            </span>
                                                         </p>
                                                     </div>
                                                 </a>
