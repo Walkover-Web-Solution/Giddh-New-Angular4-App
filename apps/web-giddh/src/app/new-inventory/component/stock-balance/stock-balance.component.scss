@@ -1,0 +1,438 @@
+@import "../../../../assets/css/color.scss";
+
+.stock-balance-wrapper {
+    padding: 0px 20px 0px 20px;
+
+    .stock-balance-top-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .stock-balance-top-bar-left-side {
+            display: flex;
+            align-items: center;
+
+            .new-stock-btn {
+                color: $white;
+                background: $cornflower;
+                padding: 0px 15px 0px 10px;
+            }
+
+            .search-warehouse-bar {
+                .search-img {
+                    height: 15px;
+                    width: auto;
+                    position: absolute;
+                }
+
+                .create-warehouse-btn {
+                    color: $cornflower;
+                }
+
+                .select-warehouse-bar::placeholder {
+                    padding-left: 10px;
+                }
+            }
+
+            .warehouse-select-bar {
+                position: relative;
+                display: inline-block;
+                margin-left: 10px;
+
+                .search-warehouse-bar {
+                    top: 10px;
+                }
+            }
+        }
+
+        .stock-balance-top-bar-right-side {
+            margin-top: 5px;
+            .export-btn {
+                margin-right: 10px;
+                border: 1px solid $cornflower;
+                color: $cornflower;
+                padding: 0px 8px;
+                img {
+                    height: 18px;
+                    width: auto;
+                }
+            }
+            .filter-btn {
+                border: 1px solid $cloud;
+                border-radius: 5px;
+                min-width: 40px;
+                padding: 0px 7px;
+                top: 0px;
+                left: 0px;
+            }
+        }
+    }
+
+    .stock-balance-main-list-table {
+        display: flex;
+        height: auto;
+        margin-top: 20px;
+        position: relative;
+        bottom: 17px;
+
+        .scroll-list-wrapper {
+            display: flex;
+            overflow-x: auto;
+        }
+
+        .stocks-list,
+        .unique-name-list,
+        .group-list,
+        .warehouse-list {
+            width: 242px;
+            height: 100%;
+            background-color: $white;
+            border-right: 2px solid $light-black-russian;
+            .stocks-list-head {
+                height: 60px;
+                width: 100%;
+                overflow: hidden;
+                border-bottom: 1px solid $cloud;
+            }
+            .custom-material-search-bar {
+                input {
+                    font-size: 14px;
+                    &::placeholder {
+                        color: $midnight-blue;
+                        font-weight: 500;
+                    }
+                }
+                .search-icon {
+                    position: absolute;
+                    z-index: 1;
+                    top: 22.5px;
+                    left: 6px;
+                }
+
+                mat-form-field {
+                    top: 11px;
+                }
+            }
+            .stock-list-body {
+                .stock-list-box {
+                    .stock-list-unexpanded {
+                        height: 60px;
+                        // height: 248px;
+                        border-bottom: 1px solid $dark-fog;
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: center;
+                        padding-left: 10px;
+                        overflow: auto;
+
+                        &:hover {
+                            background-color: #668cff26;
+                        }
+                    }
+
+                    .stock-list-box-heading {
+                        font-size: 14px;
+                        color: $black-pearl;
+                    }
+                    .stock-list-box-content {
+                        font-size: 12px;
+                        color: #505159;
+                    }
+                    .dot {
+                        position: relative;
+                        bottom: 3.5px;
+                        font-weight: bold;
+                    }
+
+                    .stock-list-expanded {
+                        height: 248px;
+                        padding-left: 10px;
+                        background-color: #668cff26;
+                        .stock-list-expanded-content {
+                            display: flex;
+                            height: 54px;
+                            align-items: center;
+                            width: 100%;
+                            overflow: hidden;
+
+                            .stock-list-expanded-content-head {
+                                font-size: 14px;
+                            }
+                            mat-form-field {
+                                top: 4px;
+                                left: 52px;
+
+                                button {
+                                    color: $cornflower;
+                                }
+                            }
+                        }
+                        .add-new-variant-btn {
+                            text-decoration: underline;
+                            position: relative;
+                            right: 20px;
+                            color: $cornflower;
+                        }
+                    }
+                }
+            }
+        }
+        .unique-name-list {
+            height: 100%;
+            width: 150px;
+            background-color: $white;
+            border-right: none;
+            .unique-name-list-head {
+                mat-form-field {
+                    position: relative;
+                    left: 11px;
+                }
+            }
+            .stock-list-body {
+                .stock-list-box {
+                    .stock-list-unexpanded {
+                        .stock-list-box-heading {
+                            color: #505159;
+                        }
+                    }
+                    .stock-list-expanded-content {
+                        .stock-list-expanded-content-head {
+                            color: #505159;
+                        }
+                    }
+                }
+            }
+            .custom-material-search-bar {
+                height: 60px;
+                position: relative;
+                border-bottom: 1px solid $cloud;
+
+                input {
+                    font-size: 14px;
+                    &::placeholder {
+                        color: $midnight-blue;
+                        font-weight: 500;
+                    }
+                }
+                .search-icon {
+                    position: absolute;
+                    top: 22.5px;
+                    left: 18px;
+                    z-index: 1;
+                }
+            }
+            .unique-name-searchbar {
+                mat-form-field {
+                    width: 132px;
+                    height: 36px;
+                }
+            }
+        }
+        .group-list {
+            height: 100%;
+            width: 150px;
+            background-color: $white;
+            border-right: none;
+            .group-list-head {
+                height: 60px;
+                position: relative;
+                border-bottom: 1px solid $cloud;
+
+                input {
+                    font-size: 14px;
+                    &::placeholder {
+                        color: $midnight-blue;
+                        font-weight: 500;
+                    }
+                }
+                .search-icon {
+                    position: absolute;
+                    z-index: 1;
+                    top: 22.5px;
+                }
+            }
+            .stock-list-body {
+                .stock-list-box {
+                    .stock-list-unexpanded {
+                        .stock-list-box-heading {
+                            color: #505159;
+                        }
+                    }
+
+                    .stock-list-expanded-content {
+                        .stock-list-expanded-content-head {
+                            color: #505159;
+                        }
+                    }
+                }
+            }
+            .group-searchbar {
+                mat-form-field {
+                    width: 128px;
+                    height: 36px;
+                }
+            }
+        }
+
+        .warehouse-list-wrapper {
+            height: 100%;
+            width: 715px;
+            display: flex;
+
+            .warehouse-odd {
+                background-color: $gray-95;
+            }
+            .warehouse-even {
+                background-color: $white;
+            }
+
+            .warehouse-list {
+                height: 100%;
+                width: 300px;
+                border-right: none;
+                font-size: 14px;
+                .warehouse-list-head {
+                    height: 60px;
+                    border-bottom: 1px solid $cloud;
+                    overflow: hidden;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+
+                    .warehouse-list-head-num {
+                        color: $midnight-blue;
+                        font-weight: 600;
+                    }
+
+                    .warehouse-list-head-options {
+                        display: flex;
+                        justify-content: space-between;
+                        width: 91%;
+
+                        .opening-bal,
+                        .quantity,
+                        .unit {
+                            position: relative;
+                            padding-right: 7px;
+                            color: #505159;
+
+                            .sort-img {
+                                position: absolute;
+                                height: 12.5px;
+                                width: auto;
+                                top: 5px;
+                            }
+
+                            .opening-bal-sort-img {
+                                left: 82px;
+                            }
+
+                            .quantity-sort-img {
+                                left: 60px;
+                            }
+
+                            .unit-sort-img {
+                                left: 30px;
+                            }
+                        }
+                    }
+                }
+
+                .stock-list-body {
+                    .stock-list-box {
+                        .stock-list-unexpanded {
+                            .stock-list-box-heading {
+                                color: #505159;
+                            }
+                        }
+
+                        .stock-list-expanded-content {
+                            position: relative;
+                            .stock-list-expanded-content-head {
+                                color: #505159;
+                            }
+
+                            .opening-bal-val,
+                            .quantity-val,
+                            .unit-val {
+                                background-color: #668cff26;
+                                height: 35px;
+                                display: flex;
+                                align-items: center;
+                                border-radius: 5px;
+                                padding-left: 5px;
+                            }
+
+                            .opening-bal-val {
+                                width: 144px;
+                            }
+
+                            .quantity-val {
+                                width: 112px;
+                                margin: 0px 10px;
+                            }
+
+                            .unit-val {
+                                width: 80px;
+                                margin-right: 5px;
+                            }
+                        }
+                    }
+                }
+
+                .stock-list-body {
+                    .stock-list-box {
+                        .proper-spacing-list {
+                            .opening-bal-input {
+                                background-color: $white;
+                                width: 115px;
+                                border-radius: 5px;
+                                padding-left: 4px;
+                                height: 34px;
+                                position: relative;
+                                top: 2px;
+                            }
+
+                            .quantity-dropdown {
+                                position: absolute;
+                                left: 115px !important;
+                                top: 0px !important;
+                                width: 112px;
+                            }
+
+                            .unit-dropdown {
+                                position: absolute;
+                                top: 0px !important;
+                                left: 215px !important;
+                                width: 80px;
+                            }
+                        }
+                    }
+
+                    .proper-spacing-list {
+                        .opening-bal-value {
+                            display: inline-block;
+                            position: relative;
+                            right: 8px;
+                            width: 91px;
+                            margin-left: 12px;
+                        }
+
+                        .quantity-value {
+                            display: inline-block;
+                            margin-left: 33px;
+                            width: 69px;
+                        }
+
+                        .unit-value {
+                            display: inline-block;
+                            margin-left: 39px;
+                            width: 38px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
