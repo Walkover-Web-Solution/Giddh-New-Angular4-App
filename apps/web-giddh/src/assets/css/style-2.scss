@@ -10630,6 +10630,31 @@ input[type="checkbox"].cdk-visually-hidden::after {
             }
         }
     }
+
+    .stock-list-body {
+        .stock-list-expanded-content {
+            .mat-form-field-infix {
+                border: 1px solid;
+                border-radius: 5px;
+                width: 112px;
+                height: 34px;
+                color: $white;
+                background-color: $white;
+
+                .mat-select-value {
+                    position: relative;
+                    padding-left: 8px;
+                    top: 4px;
+                    height: 20px;
+                }
+                .mat-select-arrow-wrapper {
+                    position: relative;
+                    top: 13px;
+                    right: 3px;
+                }
+            }
+        }
+    }
 }
 #mat-select-0-panel {
     min-width: calc(100% + 24px) !important;
@@ -10641,5 +10666,14 @@ input[type="checkbox"].cdk-visually-hidden::after {
         span.mat-button-wrapper {
             color: $cornflower;
         }
+    }
+}
+
+.myPanelClass {
+    margin-top: 30px !important;
+    margin-left: 16px !important;
+
+    button {
+        color: $cornflower;
     }
 }
