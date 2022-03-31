@@ -3,10 +3,7 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { Router } from '@angular/router';
 import { AppState } from 'apps/web-giddh/src/app/store';
-import { select, Store } from '@ngrx/store';
-import { take, takeUntil } from 'rxjs/operators';
-import { Organization } from 'apps/web-giddh/src/app/models/api-models/Company';
-import { OrganizationType } from 'apps/web-giddh/src/app/models/user-login-state';
+import { Store } from '@ngrx/store';
 import { ReplaySubject } from 'rxjs';
 
 @Component({

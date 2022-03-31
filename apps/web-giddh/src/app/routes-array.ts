@@ -109,6 +109,7 @@ export const ROUTES = [
             { path: 'billing-detail' },
             { path: 'billing-detail/buy-plan' },
             { path: 'voucher', loadChildren: () => import('./payment-receipt/payment-receipt.module').then(module => module.PaymentReceiptModule) },
+            { path: 'custom-fields', loadChildren: () => import('./custom-fields/custom-fields.module').then(module => module.CustomFieldsModule) },
             { path: '**', redirectTo: 'home', pathMatch: 'full' }
         ]
     },

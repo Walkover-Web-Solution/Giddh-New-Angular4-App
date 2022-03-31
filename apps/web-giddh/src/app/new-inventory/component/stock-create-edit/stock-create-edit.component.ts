@@ -553,6 +553,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
             let mainGroupExists = this.stockGroups?.filter(group => group?.value === "maingroup");
             if (mainGroupExists?.length > 0) {
                 this.stockGroupUniqueName = "maingroup";
+                this.saveStock();
             } else {
                 let stockRequest = {
                     name: 'Main Group',
