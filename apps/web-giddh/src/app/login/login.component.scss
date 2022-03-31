@@ -107,7 +107,7 @@ body.unresponsive {
     vertical-align: middle;
     -webkit-transform: translateZ(0);
     transform: translateZ(0);
-    box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+    box-shadow: 0 0 1px var(--color-primary-common-box-shadow);
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
     -moz-osx-font-smoothing: grayscale;
@@ -210,13 +210,13 @@ button.close {
 }
 
 .btn-blue {
-    color: var(--color-senary-button-text);
+    color: var(--color-senary-button-text) !important;
     border-color: var(--color-senary-button-background);
     background: var(--color-senary-button-background);
 }
 
 .btn-blue:hover {
-    color: var(--color-senary-button-text);
+    color: var(--color-senary-button-text) !important;
     border-color: var(--color-senary-button-background-hover);
     background: var(--color-senary-button-background-hover);
 }

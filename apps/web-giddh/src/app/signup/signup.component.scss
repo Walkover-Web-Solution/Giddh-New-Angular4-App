@@ -107,7 +107,7 @@ body.unresponsive {
     vertical-align: middle;
     -webkit-transform: translateZ(0);
     transform: translateZ(0);
-    box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+    box-shadow: 0 0 1px var(--color-primary-common-box-shadow);
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
     -moz-osx-font-smoothing: grayscale;
@@ -125,13 +125,13 @@ body.unresponsive {
     transform: scale(1.1);
 }
 .btn-blue {
-    color: var(--color-senary-button-text);
+    color: var(--color-senary-button-text) !important;
     border-color: var(--color-senary-button-background);
     background: var(--color-senary-button-background);
 }
 
 .btn-blue:hover {
-    color: var(--color-senary-button-text);
+    color: var(--color-senary-button-text) !important;
     border-color: var(--color-senary-button-background-hover);
     background: var(--color-senary-button-background-hover);
 }
@@ -139,7 +139,7 @@ body.unresponsive {
 
 .giddh-spinner {
     animation: rotate 1.5s infinite linear;
-    background: #221f1f none repeat scroll 0 0;
+    background: var(--color-black) none repeat scroll 0 0;
     border: 7px solid var(--color-danger);
     border-radius: 50%;
     box-shadow: 0 -10px 0 14px var(--color-white) inset;
@@ -377,7 +377,7 @@ small {
     align-self: flex-start;
     position: relative;
     width: 100%;
-    background: rgba(106, 106, 168, 15%);
+    background: #6a6aa826;
     margin: 0 -15px;
 }
 
