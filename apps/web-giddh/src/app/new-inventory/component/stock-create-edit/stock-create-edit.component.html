@@ -1001,7 +1001,12 @@
                                             >
                                                 <div class="row mr-b15">
                                                     <div class="col-sm-6 col-lg-6">
-                                                        <label>{{ customField?.fieldName }}</label>
+                                                        <label
+                                                            >{{ customField?.fieldName }}
+                                                            <span class="red-text" *ngIf="customField.isMandatory"
+                                                                >*</span
+                                                            ></label
+                                                        >
                                                     </div>
                                                     <div class="col-sm-6 col-lg-6">
                                                         <text-field
@@ -1040,6 +1045,7 @@
                                                             color="primary"
                                                             [name]="customField?.uniqueName"
                                                             [(ngModel)]="customField.value"
+                                                            [required]="customField.isMandatory"
                                                             *ngIf="
                                                                 customField.fieldType?.type ===
                                                                 availableFieldTypes.Boolean

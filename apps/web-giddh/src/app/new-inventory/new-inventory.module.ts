@@ -29,7 +29,6 @@ import { InventoryAdjustmentReasonAside } from "./component/inventory-adjustment
 import { InventoryAdjustmentBulkEntryComponent } from "./component/inventory-adjust-bulk-entry/inventory-adjust-bulk-entry.component";
 import { CreateNewInventoryComponent } from "./component/create-new-inventory-component/create-new-inventory.component";
 import { NewInventoryAdavanceSearch } from "./component/new-inventory-advance-search/new-inventory-advance-search.component";
-import { InventorySidebarComponent } from "./component/inventory-sidebar/inventory-sidebar.component";
 import { InventoryDashboardComponent } from "./component/inventory-dashboard/inventory-dashboard.component";
 import { InventoryActivityComponent } from "./component/inventory-dashboard/inventory-activity/inventory-activity.component";
 import { DashboardItemProductDetail } from "./component/inventory-dashboard/dashboard-item-product-detail/dashboard-item-product-detail.component";
@@ -56,6 +55,7 @@ import { MatChipsModule } from "@angular/material/chips";
 import { MatInputModule } from "@angular/material/input";
 import { MatSelectModule } from "@angular/material/select";
 import { StockCreateEditModule } from "./component/stock-create-edit/stock-create-edit.module";
+import { InventorySidebarModule } from "./component/inventory-sidebar/inventory-sidebar.module";
 
 @NgModule({
     declarations: [
@@ -84,7 +84,6 @@ import { StockCreateEditModule } from "./component/stock-create-edit/stock-creat
         InventoryAdjustmentBulkEntryComponent,
         CreateNewInventoryComponent,
         NewInventoryAdavanceSearch,
-        InventorySidebarComponent,
         InventoryDashboardComponent,
         InventoryActivityComponent,
         DashboardItemProductDetail,
@@ -94,7 +93,6 @@ import { StockCreateEditModule } from "./component/stock-create-edit/stock-creat
         DashboardSalesReport,
         DashboardSellingReport,
         ListGroupComponent
-
     ],
     imports: [
         NewInventoryRoutingModule,
@@ -118,6 +116,7 @@ import { StockCreateEditModule } from "./component/stock-create-edit/stock-creat
         MatChipsModule,
         MatInputModule,
         MatSelectModule,
+        InventorySidebarModule,
         StockCreateEditModule
     ],
     exports: [
@@ -147,7 +146,6 @@ import { StockCreateEditModule } from "./component/stock-create-edit/stock-creat
         InventoryAdjustmentBulkEntryComponent,
         CreateNewInventoryComponent,
         NewInventoryAdavanceSearch,
-        InventorySidebarComponent,
         InventoryDashboardComponent,
         InventoryActivityComponent,
         DashboardItemProductDetail,

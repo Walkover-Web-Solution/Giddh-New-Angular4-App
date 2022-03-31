@@ -16,12 +16,12 @@
                         <span>Dashboard</span>
                     </a>
                 </li> -->
-                <li>
+                <!-- <li>
                     <a class="d-block clearfix">
                         <span><i class="icon-report"></i></span>
                         <span>Report</span>
                     </a>
-                </li>
+                </li> -->
                 <!-- <li>
                     <a class="d-block clearfix">
                         <span><i class="icon-settings-cog"></i></span>
@@ -77,11 +77,37 @@
                 </li>
                 <li>
                     <a class="d-block clearfix">
+                        <span><i class="icon-inventory"></i></span>
+                        <span>Stock</span>
+                    </a>
+                    <ng-container>
+                        <ul class="inventory-sub-bar">
+                            <li>
+                                <a
+                                    href="javascript:void(0);"
+                                    [routerLink]="['stock/create']"
+                                    [routerLinkActive]="['active']"
+                                >
+                                    Product
+                                </a>
+                                <a
+                                    href="javascript:void(0);"
+                                    [routerLink]="['stock/create']"
+                                    [routerLinkActive]="['active']"
+                                >
+                                    Service
+                                </a>
+                            </li>
+                        </ul>
+                    </ng-container>
+                </li>
+                <!-- <li>
+                    <a class="d-block clearfix">
                         <span><i class="icon-adjust-inventory"></i></span>
                         <span>Adjust Inventory</span>
                     </a>
-                </li>
-                <li>
+                </li> -->
+                <!-- <li>
                     <a class="d-block clearfix">
                         <span><i class="icon-package"></i></span>
                         <span>Packages</span>
@@ -110,7 +136,7 @@
                         <span><i class="icon-fixed-assets"></i></span>
                         <span>Fixed Assets</span>
                     </a>
-                </li>
+                </li> -->
             </ul>
         </div>
     </div>

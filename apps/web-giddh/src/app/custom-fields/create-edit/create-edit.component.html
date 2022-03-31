@@ -1,0 +1,92 @@
+<div class="relative create-custom-field-page">
+    <hamburger-menu></hamburger-menu>
+    <span class="back-to-page cursor-pointer" [routerLink]="['/pages/custom-fields/list']">Back</span>
+    <div class="custom-field-wrapper relative">
+        <div>
+            <form>
+                <p class="text-gray mx-3 my-3 font-14">
+                    Create custom fields for information which are not covered under existing fields.
+                </p>
+                <div class="col-md-8 col-lg-8 col-xl-6 col-12">
+                    <div class="row mr-b15">
+                        <div class="col-sm-4 col-lg-4">
+                            <label>Field Name <span class="red-text">*</span></label>
+                        </div>
+                        <div class="col-sm-8 col-lg-6">
+                            <input type="text" id="field-name" class="form-control" placeholder="Enter Name" />
+                        </div>
+                    </div>
+                    <div class="row mr-b15">
+                        <div class="col-sm-4 col-lg-4">
+                            <label>Field Type <span class="red-text">*</span></label>
+                        </div>
+                        <div class="col-sm-8 col-lg-6">
+                            <select id="field-type" placeholder="Select Type"></select>
+                        </div>
+                    </div>
+                    <!-- if filed type text field , info details and text limit  will show -->
+                    <div class="row mr-b15" hidden>
+                        <div class="col-sm-4 col-lg-4"><label>Info Details</label></div>
+                        <div class="col-sm-8 col-lg-6">
+                            <textarea
+                                class="form-control"
+                                placeholder="Enter some text to help user understands the purpose of this custom field. (Optional)"
+                            ></textarea>
+                        </div>
+                    </div>
+                    <div class="row mr-b15" hidden>
+                        <div class="col-sm-4 col-lg-4"><label>Text Limit</label></div>
+                        <div class="col-sm-8 col-lg-6">
+                            <input type="text" id="text-limt" class="form-control" placeholder="Text Limit" />
+                        </div>
+                    </div>
+                    <div class="row mr-b15">
+                        <div class="col-sm-4 col-lg-4">
+                            <label>Fields <span class="red-text">*</span></label>
+                        </div>
+                        <div class="col-sm-8 col-lg-6">
+                            <!-- this div will appear when new field added  -->
+                            <div class="add-icon-delete mr-b15" hidden>
+                                <input type="text" id="fields" class="form-control" placeholder="Enter Field Name" />
+                                <i class="icon-trash"></i>
+                            </div>
+
+                            <div class="add-icon-delete mr-b15">
+                                <input type="text" id="fields" class="form-control" placeholder="Enter Field Name" />
+                                <i class="icon-plus"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mr-b15">
+                        <div class="col-sm-4 col-lg-4"><label>Field Mandatory ?</label></div>
+                        <div class="col-sm-8 col-lg-6">
+                            <div class="select-type">
+                                <span class="mr-r15">
+                                    <input type="radio" class="radio-custom" name="yes-btn" id="yes-btn" />
+                                    <label for="yes-btn" class="radio-custom-label">Yes</label>
+                                </span>
+                                <span>
+                                    <input type="radio" class="radio-custom" name="no-btn" id="no-btn" />
+                                    <label for="no-btn" class="radio-custom-label">No</label>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="vector-image">
+            <img src="../../../../assets/images/create-custom-field-vector.svg" />
+        </div>
+    </div>
+</div>
+<div class="inventory-footer sticky-footer">
+    <div class="inner-content-footer">
+        <div class="d-flex">
+            <div class="button-group">
+                <button id="clear-btn" class="btn btn-primary min-width-100 bdr-radius-50">Clear</button>
+                <button id="save-btn" class="btn btn-success min-width-100 bdr-radius-50" disabled>Save</button>
+            </div>
+        </div>
+    </div>
+</div>
