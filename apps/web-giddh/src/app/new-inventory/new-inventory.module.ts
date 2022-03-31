@@ -56,6 +56,7 @@ import { MatInputModule } from "@angular/material/input";
 import { MatSelectModule } from "@angular/material/select";
 import { StockCreateEditModule } from "./component/stock-create-edit/stock-create-edit.module";
 import { InventorySidebarModule } from "./component/inventory-sidebar/inventory-sidebar.module";
+import { StockBalanceComponent } from "./component/stock-balance/stock-balance.component";
 
 @NgModule({
     declarations: [
@@ -92,7 +93,8 @@ import { InventorySidebarModule } from "./component/inventory-sidebar/inventory-
         DashboardPurchaseReport,
         DashboardSalesReport,
         DashboardSellingReport,
-        ListGroupComponent
+        ListGroupComponent,
+        StockBalanceComponent
     ],
     imports: [
         NewInventoryRoutingModule,

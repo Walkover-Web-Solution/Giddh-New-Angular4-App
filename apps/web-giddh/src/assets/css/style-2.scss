@@ -10580,3 +10580,66 @@ input[type="checkbox"].cdk-visually-hidden::after {
         border-radius: 5px !important;
     }
 }
+.stock-balance-wrapper {
+    .search-warehouse-bar {
+        .mat-form-field-infix {
+            height: 58px;
+            width: 200px;
+            margin-top: -16px;
+            padding: 16px 0px;
+
+            .mat-select-placeholder,
+            mat-select-trigger {
+                padding-left: 23px;
+            }
+
+            .mat-select-arrow {
+                position: relative;
+                top: 5px;
+            }
+        }
+    }
+    .stock-balance-main-list-table {
+        .custom-material-search-bar {
+            .mat-form-field-outline {
+                height: 32px;
+                background-color: $gray-95;
+                border-radius: 5px;
+            }
+            input {
+                position: absolute;
+                bottom: 17.5px;
+                padding-left: 15px;
+            }
+        }
+        .stock-searchbar {
+            .mat-form-field-outline {
+                width: 230px;
+                color: $gray-95;
+            }
+        }
+        .unique-name-searchbar {
+            .mat-form-field-outline {
+                width: 127px;
+                color: $gray-95;
+            }
+        }
+        .group-searchbar {
+            .mat-form-field-outline {
+                color: $gray-95;
+            }
+        }
+    }
+}
+#mat-select-0-panel {
+    min-width: calc(100% + 24px) !important;
+    position: absolute;
+    top: 44px;
+    left: 28px;
+
+    button {
+        span.mat-button-wrapper {
+            color: $cornflower;
+        }
+    }
+}

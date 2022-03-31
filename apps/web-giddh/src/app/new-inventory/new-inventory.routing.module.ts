@@ -17,6 +17,7 @@ import { InventoryTransactionListComponent } from "./component/inventory-transac
 import { InventoryCustomFieldComponent } from "./component/inventory-custom-field/inventory-custom-field.component";
 import { ListGroupComponent } from "./component/stock-group/list-group/list-group.component";
 import { StockCreateEditModule } from "./component/stock-create-edit/stock-create-edit.module";
+import { StockBalanceComponent } from "./component/stock-balance/stock-balance.component";
 
 const routes: Routes = [
     {
@@ -100,6 +101,10 @@ const routes: Routes = [
         path: "top-selling-report",
         component: DashboardSellingReport,
     },
+    {
+        path: "stock-balance",
+        component: StockBalanceComponent,
+    }
 ];
 
 
