@@ -2199,6 +2199,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
         const initialAccounts: Array<IOption> = [];
         this.vm.selectedLedger.transactions?.map(t => {
+            t.amount = giddhRoundOff(t.amount, this.vm.giddhBalanceDecimalPlaces);
+
             if (this.vm.selectedLedger.discounts && this.vm.selectedLedger.discounts.length > 0 && !t?.isTax && t?.particular?.uniqueName !== 'roundoff') {
                 let category = this.vm.accountCatgoryGetterFunc(t.particular, t.particular.uniqueName);
                 if (this.vm.isValidCategory(category)) {
