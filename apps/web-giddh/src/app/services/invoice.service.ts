@@ -638,7 +638,13 @@ export class InvoiceService {
 
     public exportCsvInvoiceDownload(model: any): Observable<BaseResponse<string, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.post(this.config.apiUrl + INVOICE_API.DOWNLOAD_INVOICE_EXPORT_CSV.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':from', encodeURIComponent(model.from)).replace(':to', encodeURIComponent(model.to)), model.dataToSend).pipe(
+        let url = this.config.apiUrl + INVOICE_API.DOWNLOAD_INVOICE_EXPORT_CSV.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':from', encodeURIComponent(model.from)).replace(':to', encodeURIComponent(model.to));
+
+        if (this.generalService.voucherApiVersion === 2) {
+            url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
+        }
+
+        return this.http.post(url, model.dataToSend).pipe(
             map((res) => {
                 let data: BaseResponse<string, any> = res;
                 data.request = model;

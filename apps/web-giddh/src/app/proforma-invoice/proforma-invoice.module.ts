@@ -30,6 +30,7 @@ import { ProformaInvoiceComponent } from './proforma-invoice.component';
 import { ProformaInvoiceRoutingModule } from './proforma-invoice.routing.module';
 import { AdvanceReceiptAdjustmentModule } from '../shared/advance-receipt-adjustment/advance-receipt-adjustment.module';
 import { HasFocusDirectiveModule } from '../shared/helpers/directives/has-focus/has-focus.module';
+import { ReplacePipeModule } from '../shared/helpers/pipes/replace/replace.module';
 
 @NgModule({
     imports: [
@@ -57,7 +58,8 @@ import { HasFocusDirectiveModule } from '../shared/helpers/directives/has-focus/
         CurrencyModule,
         NgxMaskModule.forRoot(),
         AdvanceReceiptAdjustmentModule,
-        HasFocusDirectiveModule
+        HasFocusDirectiveModule,
+        ReplacePipeModule
     ],
     exports: [ProformaInvoiceComponent, SalesAddStockComponent, AsideMenuProductServiceComponent],
     declarations: [
