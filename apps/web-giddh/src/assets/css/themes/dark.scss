@@ -123,6 +123,7 @@ body.dark-theme {
     --color-dropdown-terniary-background: #668cff;
     --color-dropdown-list-hover-background: #668cff26;
     --color-dropdown-secondary-list-hover-background: #668cff26;
+    --color-dropdown-tertiary-list-hover-background: #668cff26;
     --color-dropdown-list-box-shadow: #212528;
     --color-dropdown-primary-bar-border: #668cff;
 
@@ -430,6 +431,7 @@ body.dark-theme {
     --color-master-page-main-content-secondary-background: #212528;
     --color-master-page-sidebar-active-list-text: #f5f5f5;
     --color-master-page-sidebar-active-list-background: #668cff26;
+    --color-master-page-sidebar-primary-group: #9b9b9e;
 
     // Left Sidebar Color Variables
     --color-sidebar-content-text: #f5f5f5;
@@ -665,6 +667,7 @@ body.dark-theme {
 
     /************************ COMMON COLORS USED MORE THAN 12 TIMES ************************/
     --color-blue: #668cff;
+    --color-black: #212528;
     --color-giddh-blue: #668cff;
     --color-wild-sand: #f5f5f5;
     --color-skeleton-loading-gradient-inner: #212528;

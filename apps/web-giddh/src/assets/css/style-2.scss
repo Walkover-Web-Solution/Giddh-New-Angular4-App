@@ -2800,7 +2800,7 @@ select.form-control {
     display: block;
     font-size: 14px;
     font-weight: 500;
-    color: var(--color-abbey);
+    color: var(--color-master-page-sidebar-primary-group);
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
@@ -3724,6 +3724,7 @@ label {
     border-color: var(--color-abbey);
     color: var(--color-abbey);
 }
+
 .swatch-preview span {
     border-radius: 50%;
     float: left;
@@ -4113,6 +4114,10 @@ virtual-scroll .scrollable-content .item > a {
     color: var(--color-dropdown-list);
     background-color: var(--color-dropdown-primary-background);
     border-color: var(--color-common-primary-border);
+
+    &:hover {
+        background-color: var(--color-dropdown-tertiary-list-hover-background);
+    }
 }
 
 virtual-scroll .scrollable-content .item:hover > a {
@@ -4137,6 +4142,10 @@ virtual-scroll .scrollable-content .item > a .item-stock {
 }
 .customer-invoice-table virtual-scroll .scrollable-content .item > a {
     white-space: initial;
+
+    &:hover {
+        background-color: var(--color-dropdown-tertiary-list-hover-background);
+    }
 }
 
 virtual-scroll .scrollable-content .item.selected > a,
@@ -4152,6 +4161,16 @@ virtual-scroll .scrollable-content .item.selected > a {
 virtual-scroll .scrollable-content .item:hover .item,
 .item.hilighted > a > .item {
     color: var(--dark-blue01);
+}
+
+virtual-scroll {
+    .scrollable-content {
+        .item.selected.hilighted {
+            .list-item {
+                background-color: var(--color-dropdown-tertiary-list-hover-background);
+            }
+        }
+    }
 }
 
 sh-select .header {
@@ -6132,7 +6151,7 @@ button.btn.btn-filter {
 .modal {
     z-index: 9999;
 }
-.select2-ledger .menu .item:hover {
+.select2-ledger .menu .list-item:hover {
     background: var(--color-dropdown-list-hover-background) !important;
 }
 .select2-ledger .menu .item:hover a {
