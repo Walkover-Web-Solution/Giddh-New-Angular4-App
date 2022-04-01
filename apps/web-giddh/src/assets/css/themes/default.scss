@@ -128,6 +128,7 @@ body.default-theme {
     --color-dropdown-tertiary-list-hover-background: #e7e9eb;
     --color-dropdown-list-box-shadow: #cbcfd2;
     --color-dropdown-primary-bar-border: #1a237e;
+    --color-primary-dropdown-placeholder: #9b9b9e;
 
     // Checkbox, Radio Button, Mat-Expansion Panel Down Arrow and Icon Color Variables
     --color-primary-icon: #212528;
@@ -150,9 +151,12 @@ body.default-theme {
     --color-input-secondary-background: #ffffff;
     --color-input-tertiary-background: #f5f5f5;
     --color-search-bar-primary-border: #cbcfd2;
+    --color-primary-search-bar-placeholder: #1a237e;
+    --color-secondary-search-bar-placeholder: #9b9b9e;
 
     // Input Bar Variables
     --color-primary-input-bar-text: #212528;
+    --color-secondary-input-bar-text: #9b9b9e;
     --color-primary-input-bar-border: #f5f5f5;
     --color-secondary-input-bar-border: #cbcfd2;
     --color-tertiary-input-bar-border: #cbcfd2;
@@ -161,6 +165,7 @@ body.default-theme {
     --color-tertiary-input-bar-background: #e7e9eb;
     --color-primary-input-bar-background-focus: #668cff26;
     --color-secondary-input-bar-button: #9b9b9e;
+    --color-primary-input-placeholder: #9b9b9e;
 
     // Datepicker Color Variables
     --color-datepicker-title-text: #212528;
@@ -504,6 +509,10 @@ body.default-theme {
     // Inventory Stock Report Color Variables
     --color-primary-credit: #1a237e;
     --color-primary-inventory-stock-report-journal: #36b283;
+    --color-primary-inventory-stock-balance-list-background: #f5f5f5;
+    --color-primary-inventory-stock-balance-text: #505159;
+    --color-primary-inventory-stock-expanded-list-background: #668cff26;
+    --color-primary-inventory-stock-dropdown-button-background: #ffffff;
 
     // All Features Color Variables
     --color-all-features-money-back-guarantee: #9b9b9e;

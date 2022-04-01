@@ -13,7 +13,13 @@
                             <label>Field Name <span class="red-text">*</span></label>
                         </div>
                         <div class="col-sm-8 col-lg-6">
-                            <input type="text" id="field-name" class="form-control" placeholder="Enter Name" />
+                            <text-field
+                                type="text"
+                                matInput
+                                id="field-name"
+                                class="form-control"
+                                placeholder="Enter Name"
+                            ></text-field>
                         </div>
                     </div>
                     <div class="row mr-b15">
@@ -21,7 +27,16 @@
                             <label>Field Type <span class="red-text">*</span></label>
                         </div>
                         <div class="col-sm-8 col-lg-6">
-                            <select id="field-type" placeholder="Select Type"></select>
+                            <mat-select
+                                id="field-type"
+                                placeholder="Select Type"
+                                disableOptionCentering
+                                panelClass="myPanelClass position-fix"
+                            >
+                                <mat-option>Dummy1</mat-option>
+                                <mat-option>Dummy1</mat-option>
+                                <mat-option>Dummy1</mat-option>
+                            </mat-select>
                         </div>
                     </div>
                     <!-- if filed type text field , info details and text limit  will show -->
@@ -30,6 +45,7 @@
                         <div class="col-sm-8 col-lg-6">
                             <textarea
                                 class="form-control"
+                                matInput
                                 placeholder="Enter some text to help user understands the purpose of this custom field. (Optional)"
                             ></textarea>
                         </div>
@@ -37,7 +53,13 @@
                     <div class="row mr-b15" hidden>
                         <div class="col-sm-4 col-lg-4"><label>Text Limit</label></div>
                         <div class="col-sm-8 col-lg-6">
-                            <input type="text" id="text-limt" class="form-control" placeholder="Text Limit" />
+                            <text-field
+                                matInput
+                                type="text"
+                                id="text-limt"
+                                class="form-control"
+                                placeholder="Text Limit"
+                            ></text-field>
                         </div>
                     </div>
                     <div class="row mr-b15">
@@ -47,12 +69,24 @@
                         <div class="col-sm-8 col-lg-6">
                             <!-- this div will appear when new field added  -->
                             <div class="add-icon-delete mr-b15" hidden>
-                                <input type="text" id="fields" class="form-control" placeholder="Enter Field Name" />
+                                <text-field
+                                    type="text"
+                                    matInput
+                                    id="fields"
+                                    class="form-control"
+                                    placeholder="Enter Field Name"
+                                ></text-field>
                                 <i class="icon-trash"></i>
                             </div>
 
                             <div class="add-icon-delete mr-b15">
-                                <input type="text" id="fields" class="form-control" placeholder="Enter Field Name" />
+                                <text-field
+                                    type="text"
+                                    matInput
+                                    id="fields"
+                                    class="form-control"
+                                    placeholder="Enter Field Name"
+                                ></text-field>
                                 <i class="icon-plus"></i>
                             </div>
                         </div>
@@ -62,12 +96,14 @@
                         <div class="col-sm-8 col-lg-6">
                             <div class="select-type">
                                 <span class="mr-r15">
-                                    <input type="radio" class="radio-custom" name="yes-btn" id="yes-btn" />
-                                    <label for="yes-btn" class="radio-custom-label">Yes</label>
+                                    <!-- <input type="radio" class="radio-custom" name="yes-btn" id="yes-btn" />
+                                    <label for="yes-btn" class="radio-custom-label">Yes</label> -->
+                                    <mat-radio-button color="primary">Yes</mat-radio-button>
                                 </span>
                                 <span>
-                                    <input type="radio" class="radio-custom" name="no-btn" id="no-btn" />
-                                    <label for="no-btn" class="radio-custom-label">No</label>
+                                    <!-- <input type="radio" class="radio-custom" name="no-btn" id="no-btn" />
+                                    <label for="no-btn" class="radio-custom-label">No</label> -->
+                                    <mat-radio-button color="primary">No</mat-radio-button>
                                 </span>
                             </div>
                         </div>
@@ -84,8 +120,10 @@
     <div class="inner-content-footer">
         <div class="d-flex">
             <div class="button-group">
-                <button id="clear-btn" class="btn btn-primary min-width-100 bdr-radius-50">Clear</button>
-                <button id="save-btn" class="btn btn-success min-width-100 bdr-radius-50" disabled>Save</button>
+                <button mat-button id="clear-btn" class="btn btn-primary min-width-100 bdr-radius-50">Clear</button>
+                <button mat-button id="save-btn" class="btn btn-success min-width-100 bdr-radius-50" disabled>
+                    Save
+                </button>
             </div>
         </div>
     </div>

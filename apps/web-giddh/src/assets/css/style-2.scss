@@ -10591,6 +10591,7 @@ input[type="checkbox"].cdk-visually-hidden::after {
             .mat-select-placeholder,
             mat-select-trigger {
                 padding-left: 23px;
+                color: var(--color-secondary-search-bar-placeholder);
             }
 
             .mat-select-arrow {
@@ -10599,11 +10600,16 @@ input[type="checkbox"].cdk-visually-hidden::after {
             }
         }
     }
+    .mat-form-field-appearance-outline {
+        .mat-form-field-outline {
+            color: var(--color-search-bar-primary-border);
+        }
+    }
     .stock-balance-main-list-table {
         .custom-material-search-bar {
             .mat-form-field-outline {
                 height: 32px;
-                background-color: $gray-95;
+                background-color: var(--color-sidebar-primary-search-bar-background);
                 border-radius: 5px;
             }
             input {
@@ -10615,18 +10621,18 @@ input[type="checkbox"].cdk-visually-hidden::after {
         .stock-searchbar {
             .mat-form-field-outline {
                 width: 230px;
-                color: $gray-95;
+                color: var(--color-sidebar-primary-search-bar-background);
             }
         }
         .unique-name-searchbar {
             .mat-form-field-outline {
                 width: 127px;
-                color: $gray-95;
+                color: var(--color-sidebar-primary-search-bar-background);
             }
         }
         .group-searchbar {
             .mat-form-field-outline {
-                color: $gray-95;
+                color: var(--color-sidebar-primary-search-bar-background);
             }
         }
     }
@@ -10638,8 +10644,8 @@ input[type="checkbox"].cdk-visually-hidden::after {
                 border-radius: 5px;
                 width: 112px;
                 height: 34px;
-                color: $white;
-                background-color: $white;
+                color: var(--color-white);
+                background-color: var(--color-white);
 
                 .mat-select-value {
                     position: relative;
@@ -10652,9 +10658,17 @@ input[type="checkbox"].cdk-visually-hidden::after {
                     top: 13px;
                     right: 3px;
                 }
+                .mat-select-placeholder {
+                    color: var(--color-secondary-search-bar-placeholder);
+                }
             }
         }
     }
+
+    // .stock-balance-top-bar-left-side {
+    //     .search-warehouse-bar {
+    //     }
+    // }
 }
 #mat-select-0-panel {
     min-width: calc(100% + 24px) !important;
@@ -10664,8 +10678,12 @@ input[type="checkbox"].cdk-visually-hidden::after {
 
     button {
         span.mat-button-wrapper {
-            color: $cornflower;
+            color: var(--color-blue);
         }
+    }
+
+    .mat-pseudo-checkbox {
+        color: var(--color-primary-checkbox-and-expansion-panel-arrow);
     }
 }
 
@@ -10674,6 +10692,38 @@ input[type="checkbox"].cdk-visually-hidden::after {
     margin-left: 16px !important;
 
     button {
-        color: $cornflower;
+        color: var(--color-blue);
+    }
+}
+
+.myPanelClass.position-fix {
+    min-width: calc(100% + 15px) !important;
+    position: absolute;
+    top: 1px;
+    left: -7px;
+}
+
+.create-custom-field-page {
+    .custom-field-wrapper {
+        text-field {
+            .text-field-container {
+                input {
+                    width: 100%;
+                    height: auto;
+                    border: none;
+                    background-color: var(--color-secondary-input-bar-background);
+
+                    &::placeholder {
+                        color: var(--color-primary-input-placeholder);
+                    }
+                }
+            }
+        }
+        .mat-select {
+            .mat-select-placeholder {
+                font-size: 14px;
+                color: var(--color-primary-dropdown-placeholder);
+            }
+        }
     }
 }

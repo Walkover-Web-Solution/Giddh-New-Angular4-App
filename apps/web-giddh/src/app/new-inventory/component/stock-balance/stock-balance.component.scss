@@ -1,5 +1,3 @@
-@import "../../../../assets/css/color.scss";
-
 .stock-balance-wrapper {
     padding: 0px 20px 0px 20px;
 
@@ -13,9 +11,13 @@
             align-items: center;
 
             .new-stock-btn {
-                color: $white;
-                background: $cornflower;
+                color: var(--color-secondary-button-text);
+                background: var(--color-secondary-button-background);
                 padding: 0px 15px 0px 10px;
+
+                &:hover {
+                    background-color: var(--color-secondary-button-background-hover);
+                }
             }
 
             .search-warehouse-bar {
@@ -23,10 +25,11 @@
                     height: 15px;
                     width: auto;
                     position: absolute;
+                    filter: var(--color-image-filter);
                 }
 
                 .create-warehouse-btn {
-                    color: $cornflower;
+                    color: var(--color-blue);
                 }
 
                 .select-warehouse-bar::placeholder {
@@ -48,22 +51,28 @@
         .stock-balance-top-bar-right-side {
             margin-top: 5px;
             .export-btn {
-                margin-right: 10px;
-                border: 1px solid $cornflower;
-                color: $cornflower;
                 padding: 0px 8px;
+                margin-right: 10px;
+                color: var(--color-blue);
+                border: 1px solid var(--color-blue);
+                background-color: var(--color-primary-inventory-stock-dropdown-button-background);
                 img {
                     height: 18px;
                     width: auto;
                 }
             }
             .filter-btn {
-                border: 1px solid $cloud;
                 border-radius: 5px;
                 min-width: 40px;
                 padding: 0px 7px;
                 top: 0px;
                 left: 0px;
+                border: 1px solid var(--color-primary-button-border);
+                background-color: var(--color-primary-inventory-stock-dropdown-button-background);
+
+                img {
+                    filter: var(--color-image-filter);
+                }
             }
         }
     }
@@ -86,19 +95,19 @@
         .warehouse-list {
             width: 242px;
             height: 100%;
-            background-color: $white;
-            border-right: 2px solid $light-black-russian;
+            background-color: var(--color-white);
+            border-right: 2px solid var(--color-common-secondary-border);
             .stocks-list-head {
                 height: 60px;
                 width: 100%;
                 overflow: hidden;
-                border-bottom: 1px solid $cloud;
+                border-bottom: 1px solid var(--color-common-primary-border);
             }
             .custom-material-search-bar {
                 input {
                     font-size: 14px;
                     &::placeholder {
-                        color: $midnight-blue;
+                        color: var(--color-primary-search-bar-placeholder);
                         font-weight: 500;
                     }
                 }
@@ -107,6 +116,7 @@
                     z-index: 1;
                     top: 22.5px;
                     left: 6px;
+                    filter: var(--color-image-filter);
                 }
 
                 mat-form-field {
@@ -118,7 +128,7 @@
                     .stock-list-unexpanded {
                         height: 60px;
                         // height: 248px;
-                        border-bottom: 1px solid $dark-fog;
+                        border-bottom: 1px solid var(--color-common-primary-border);
                         display: flex;
                         flex-direction: column;
                         justify-content: center;
@@ -126,17 +136,17 @@
                         overflow: auto;
 
                         &:hover {
-                            background-color: #668cff26;
+                            background-color: var(--color-primary-inventory-stock-expanded-list-background);
                         }
                     }
 
                     .stock-list-box-heading {
                         font-size: 14px;
-                        color: $black-pearl;
+                        color: var(--color-nero);
                     }
                     .stock-list-box-content {
                         font-size: 12px;
-                        color: #505159;
+                        color: var(--color-primary-inventory-stock-balance-text);
                     }
                     .dot {
                         position: relative;
@@ -147,7 +157,7 @@
                     .stock-list-expanded {
                         height: 248px;
                         padding-left: 10px;
-                        background-color: #668cff26;
+                        background-color: var(--color-primary-inventory-stock-expanded-list-background);
                         .stock-list-expanded-content {
                             display: flex;
                             height: 54px;
@@ -163,7 +173,7 @@
                                 left: 52px;
 
                                 button {
-                                    color: $cornflower;
+                                    color: var(--color-blue);
                                 }
                             }
                         }
@@ -171,7 +181,7 @@
                             text-decoration: underline;
                             position: relative;
                             right: 20px;
-                            color: $cornflower;
+                            color: var(--color-blue);
                         }
                     }
                 }
@@ -180,7 +190,7 @@
         .unique-name-list {
             height: 100%;
             width: 150px;
-            background-color: $white;
+            background-color: var(--color-white);
             border-right: none;
             .unique-name-list-head {
                 mat-form-field {
@@ -192,12 +202,12 @@
                 .stock-list-box {
                     .stock-list-unexpanded {
                         .stock-list-box-heading {
-                            color: #505159;
+                            color: var(--color-primary-inventory-stock-balance-text);
                         }
                     }
                     .stock-list-expanded-content {
                         .stock-list-expanded-content-head {
-                            color: #505159;
+                            color: var(--color-primary-inventory-stock-balance-text);
                         }
                     }
                 }
@@ -205,12 +215,12 @@
             .custom-material-search-bar {
                 height: 60px;
                 position: relative;
-                border-bottom: 1px solid $cloud;
+                border-bottom: 1px solid var(--color-common-primary-border);
 
                 input {
                     font-size: 14px;
                     &::placeholder {
-                        color: $midnight-blue;
+                        color: var(--color-primary-search-bar-placeholder);
                         font-weight: 500;
                     }
                 }
@@ -219,6 +229,7 @@
                     top: 22.5px;
                     left: 18px;
                     z-index: 1;
+                    filter: var(--color-image-filter);
                 }
             }
             .unique-name-searchbar {
@@ -231,17 +242,17 @@
         .group-list {
             height: 100%;
             width: 150px;
-            background-color: $white;
+            background-color: var(--color-white);
             border-right: none;
             .group-list-head {
                 height: 60px;
                 position: relative;
-                border-bottom: 1px solid $cloud;
+                border-bottom: 1px solid var(--color-common-primary-border);
 
                 input {
                     font-size: 14px;
                     &::placeholder {
-                        color: $midnight-blue;
+                        color: var(--color-primary-search-bar-placeholder);
                         font-weight: 500;
                     }
                 }
@@ -249,19 +260,20 @@
                     position: absolute;
                     z-index: 1;
                     top: 22.5px;
+                    filter: var(--color-image-filter);
                 }
             }
             .stock-list-body {
                 .stock-list-box {
                     .stock-list-unexpanded {
                         .stock-list-box-heading {
-                            color: #505159;
+                            color: var(--color-primary-inventory-stock-balance-text);
                         }
                     }
 
                     .stock-list-expanded-content {
                         .stock-list-expanded-content-head {
-                            color: #505159;
+                            color: var(--color-primary-inventory-stock-balance-text);
                         }
                     }
                 }
@@ -280,10 +292,10 @@
             display: flex;
 
             .warehouse-odd {
-                background-color: $gray-95;
+                background-color: var(--color-primary-inventory-stock-balance-list-background);
             }
             .warehouse-even {
-                background-color: $white;
+                background-color: var(--color-white);
             }
 
             .warehouse-list {
@@ -293,7 +305,7 @@
                 font-size: 14px;
                 .warehouse-list-head {
                     height: 60px;
-                    border-bottom: 1px solid $cloud;
+                    border-bottom: 1px solid var(--color-common-primary-border);
                     overflow: hidden;
                     display: flex;
                     flex-direction: column;
@@ -301,7 +313,7 @@
                     justify-content: center;
 
                     .warehouse-list-head-num {
-                        color: $midnight-blue;
+                        color: var(--color-giddh-blue);
                         font-weight: 600;
                     }
 
@@ -315,7 +327,7 @@
                         .unit {
                             position: relative;
                             padding-right: 7px;
-                            color: #505159;
+                            color: var(--color-primary-inventory-stock-balance-text);
 
                             .sort-img {
                                 position: absolute;
@@ -343,20 +355,24 @@
                     .stock-list-box {
                         .stock-list-unexpanded {
                             .stock-list-box-heading {
-                                color: #505159;
+                                color: var(--color-primary-inventory-stock-balance-text);
                             }
                         }
 
                         .stock-list-expanded-content {
                             position: relative;
                             .stock-list-expanded-content-head {
-                                color: #505159;
+                                color: var(--color-primary-inventory-stock-balance-text);
+
+                                .opening-bal-input::placeholder {
+                                    color: var(--color-secondary-input-bar-text);
+                                }
                             }
 
                             .opening-bal-val,
                             .quantity-val,
                             .unit-val {
-                                background-color: #668cff26;
+                                background-color: var(--color-solitude-light);
                                 height: 35px;
                                 display: flex;
                                 align-items: center;
@@ -385,7 +401,7 @@
                     .stock-list-box {
                         .proper-spacing-list {
                             .opening-bal-input {
-                                background-color: $white;
+                                background-color: var(--color-white);
                                 width: 115px;
                                 border-radius: 5px;
                                 padding-left: 4px;
@@ -435,4 +451,8 @@
             }
         }
     }
+}
+
+.create-warehouse-btn {
+    background-color: var(--color-primary-inventory-stock-dropdown-button-background);
 }
