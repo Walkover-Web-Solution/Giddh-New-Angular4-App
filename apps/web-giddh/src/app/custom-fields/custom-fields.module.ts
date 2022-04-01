@@ -14,6 +14,9 @@ import { MatCommonModule } from '@angular/material/core';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { FormFieldsModule } from "../theme/form-fields/form-fields.module";
+import { MatTooltipModule } from "@angular/material/tooltip";
+import { TranslateDirectiveModule } from "../theme/translate/translate.directive.module";
+import { PaginationModule } from "ngx-bootstrap/pagination";
 
 @NgModule({
     declarations: [
@@ -33,7 +36,10 @@ import { FormFieldsModule } from "../theme/form-fields/form-fields.module";
         MatCommonModule,
         MatRadioModule,
         MatSelectModule,
-        FormFieldsModule
+        FormFieldsModule,
+        MatTooltipModule,
+        TranslateDirectiveModule,
+        PaginationModule
     ]
 })
 export class CustomFieldsModule {
