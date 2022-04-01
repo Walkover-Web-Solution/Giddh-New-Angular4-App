@@ -8,12 +8,18 @@ import { CustomFieldsCreateEditComponent } from "./create-edit/create-edit.compo
 import { CustomFieldsRoutingModule } from "./custom-fields.routing.module";
 import { CustomFieldsListComponent } from "./list/list.component";
 import { MainComponent } from "./main.component";
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatCommonModule } from '@angular/material/core';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatSelectModule } from '@angular/material/select';
+import { FormFieldsModule } from "../theme/form-fields/form-fields.module";
 
 @NgModule({
     declarations: [
         MainComponent,
         CustomFieldsListComponent,
-        CustomFieldsCreateEditComponent
+        CustomFieldsCreateEditComponent,
     ],
     imports: [
         CommonModule,
@@ -21,7 +27,13 @@ import { MainComponent } from "./main.component";
         CustomFieldsRoutingModule,
         HamburgerMenuModule,
         MatButtonModule,
-        MatTableModule
+        MatTableModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatCommonModule,
+        MatRadioModule,
+        MatSelectModule,
+        FormFieldsModule
     ]
 })
 export class CustomFieldsModule {
