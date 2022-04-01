@@ -729,12 +729,15 @@
                                                                     />
                                                                 </mat-chip-list>
                                                             </div>
-                                                            <div *ngIf="stockForm.options?.length > 1">
+                                                            <div
+                                                                class="delete-btn-wrapper"
+                                                                *ngIf="stockForm.options?.length > 1"
+                                                            >
                                                                 <button
                                                                     class="chip-close-btn"
                                                                     (click)="deleteVariantOption(i)"
                                                                 >
-                                                                    <i class="icon-cross"></i>
+                                                                    <i class="icon-trash"></i>
                                                                 </button>
                                                             </div>
                                                         </div>
@@ -743,7 +746,8 @@
                                             </div>
                                             <button
                                                 mat-button
-                                                class="text-primary mr-b15 d-block cp"
+                                                class="text-primary mr-b15 d-block cp another-option-btn"
+                                                disableRipple
                                                 *ngIf="stockForm.options?.length < 3"
                                                 (click)="addVariantOption()"
                                             >
@@ -918,7 +922,7 @@
                                                     <label *ngIf="inlineEditCustomField !== 1"
                                                         >{{ stockForm.customField1Heading || "Custom Field" }}
 
-                                                        <span class="pull-right">
+                                                        <span class="pull-right right-fix-pencil-icon">
                                                             <i
                                                                 *ngIf="inlineEditCustomField !== 1"
                                                                 class="icon-edit-pencil cursor-pointer"
@@ -935,7 +939,10 @@
                                                         [(ngModel)]="stockForm.customField1Heading"
                                                         [autoFocus]="true"
                                                     ></text-field>
-                                                    <span class="pull-right" *ngIf="inlineEditCustomField === 1">
+                                                    <span
+                                                        class="pull-right right-fix-save-icon"
+                                                        *ngIf="inlineEditCustomField === 1"
+                                                    >
                                                         <i
                                                             class="icon-save cursor-pointer"
                                                             (click)="showCustomFieldLabelInlineEdit(0)"
@@ -959,7 +966,7 @@
                                                     <label *ngIf="inlineEditCustomField !== 2"
                                                         >{{ stockForm.customField2Heading || "Custom Field" }}
 
-                                                        <span class="pull-right">
+                                                        <span class="pull-right right-fix-pencil-icon">
                                                             <i
                                                                 *ngIf="inlineEditCustomField !== 2"
                                                                 class="icon-edit-pencil cursor-pointer"
@@ -976,7 +983,10 @@
                                                         [(ngModel)]="stockForm.customField2Heading"
                                                         [autoFocus]="true"
                                                     ></text-field>
-                                                    <span class="pull-right" *ngIf="inlineEditCustomField === 2">
+                                                    <span
+                                                        class="pull-right right-fix-save-icon"
+                                                        *ngIf="inlineEditCustomField === 2"
+                                                    >
                                                         <i
                                                             class="icon-save cursor-pointer"
                                                             (click)="showCustomFieldLabelInlineEdit(0)"

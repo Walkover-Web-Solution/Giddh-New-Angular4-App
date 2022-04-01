@@ -10664,12 +10664,8 @@ input[type="checkbox"].cdk-visually-hidden::after {
             }
         }
     }
-
-    // .stock-balance-top-bar-left-side {
-    //     .search-warehouse-bar {
-    //     }
-    // }
 }
+
 #mat-select-0-panel {
     min-width: calc(100% + 24px) !important;
     position: absolute;
@@ -10723,6 +10719,18 @@ input[type="checkbox"].cdk-visually-hidden::after {
             .mat-select-placeholder {
                 font-size: 14px;
                 color: var(--color-primary-dropdown-placeholder);
+            }
+        }
+    }
+}
+
+.select-physical-product {
+    .product-option {
+        .product-option-wrapper {
+            .multi-select-input {
+                input {
+                    background: var(--color-secondary-input-bar-background);
+                }
             }
         }
     }
