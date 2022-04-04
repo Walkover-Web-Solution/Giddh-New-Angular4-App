@@ -123,8 +123,9 @@ body.default-theme {
     --color-dropdown-primary-background: #ffffff;
     --color-dropdown-secondary-background: #e7e9eb;
     --color-dropdown-terniary-background: #e7e9eb;
-    --color-dropdown-list-hover-background: #e7e9eb;
+    --color-dropdown-list-hover-background: #668cff26;
     --color-dropdown-secondary-list-hover-background: #f5f5f5;
+    --color-dropdown-tertiary-list-hover-background: #e7e9eb;
     --color-dropdown-list-box-shadow: #cbcfd2;
     --color-dropdown-primary-bar-border: #1a237e;
     --color-primary-dropdown-placeholder: #9b9b9e;
@@ -438,6 +439,7 @@ body.default-theme {
     --color-master-page-main-content-secondary-background: #ffffff;
     --color-master-page-sidebar-active-list-text: #212528;
     --color-master-page-sidebar-active-list-background: #f5f5f5;
+    --color-master-page-sidebar-primary-group: #9b9b9e;
 
     // Left Sidebar Color Variables
     --color-sidebar-content-text: #212528;
@@ -616,7 +618,7 @@ body.default-theme {
     --color-green-toast: #36b283;
     --color-warning-toast: #e58a00;
     --color-info-toast: #668cff;
-    --color-toast-primary-text: #f5f5f5;
+    --color-toast-primary-text: #ffffff;
     --color-primary-toast-cross-background: #668cff26;
 
     // Common Leftout Background Color Variables
@@ -678,6 +680,7 @@ body.default-theme {
 
     /************************ COMMON COLORS USED MORE THAN 12 TIMES ************************/
     --color-blue: #668cff;
+    --color-black: #212528;
     --color-giddh-blue: #1a237e;
     --color-wild-sand: #f5f5f5;
     --color-skeleton-loading-gradient-inner: #f5f5f5;
