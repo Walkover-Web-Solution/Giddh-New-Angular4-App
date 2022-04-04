@@ -4,3 +4,9 @@ export enum FieldTypes {
     Boolean = 'BOOLEAN',
     Barcode = 'BARCODE'
 }
+
+export enum FieldModules {
+    Account = 'Account',
+    Stock = 'Stock',
+    Group = 'Group'
+}

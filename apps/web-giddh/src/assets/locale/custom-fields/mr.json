@@ -13,5 +13,10 @@
     "type": "प्रकार",
     "length": "लांबी/मर्यादा",
     "add_new_row": "नवीन पंक्ती जोडा",
-    "field_type_placeholder": "फिल्टर करण्यासाठी टाइप करा"
+    "field_type_placeholder": "फिल्टर करण्यासाठी टाइप करा",
+    "modules": {
+        "account": "Account",
+        "stock": "Stock",
+        "group": "Group"
+    }
 }

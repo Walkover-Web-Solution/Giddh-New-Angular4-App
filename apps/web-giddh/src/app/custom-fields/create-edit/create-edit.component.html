@@ -1,130 +1,190 @@
-<div class="relative create-custom-field-page">
-    <hamburger-menu></hamburger-menu>
-    <span class="back-to-page cursor-pointer" [routerLink]="['/pages/custom-fields/list']">Back</span>
-    <div class="custom-field-wrapper relative">
-        <div>
-            <form>
-                <p class="text-gray mx-3 my-3 font-14">
-                    Create custom fields for information which are not covered under existing fields.
-                </p>
-                <div class="col-md-8 col-lg-8 col-xl-6 col-12">
-                    <div class="row mr-b15">
-                        <div class="col-sm-4 col-lg-4">
-                            <label>Field Name <span class="red-text">*</span></label>
-                        </div>
-                        <div class="col-sm-8 col-lg-6">
-                            <text-field
-                                type="text"
-                                matInput
-                                id="field-name"
-                                class="form-control"
-                                placeholder="Enter Name"
-                            ></text-field>
-                        </div>
-                    </div>
-                    <div class="row mr-b15">
-                        <div class="col-sm-4 col-lg-4">
-                            <label>Field Type <span class="red-text">*</span></label>
-                        </div>
-                        <div class="col-sm-8 col-lg-6">
-                            <mat-select
-                                id="field-type"
-                                placeholder="Select Type"
-                                disableOptionCentering
-                                panelClass="myPanelClass position-fix"
-                            >
-                                <mat-option>Dummy1</mat-option>
-                                <mat-option>Dummy1</mat-option>
-                                <mat-option>Dummy1</mat-option>
-                            </mat-select>
-                        </div>
-                    </div>
-                    <!-- if filed type text field , info details and text limit  will show -->
-                    <div class="row mr-b15" hidden>
-                        <div class="col-sm-4 col-lg-4"><label>Info Details</label></div>
-                        <div class="col-sm-8 col-lg-6">
-                            <textarea
-                                class="form-control"
-                                matInput
-                                placeholder="Enter some text to help user understands the purpose of this custom field. (Optional)"
-                            ></textarea>
-                        </div>
-                    </div>
-                    <div class="row mr-b15" hidden>
-                        <div class="col-sm-4 col-lg-4"><label>Text Limit</label></div>
-                        <div class="col-sm-8 col-lg-6">
-                            <text-field
-                                matInput
-                                type="text"
-                                id="text-limt"
-                                class="form-control"
-                                placeholder="Text Limit"
-                            ></text-field>
-                        </div>
-                    </div>
-                    <div class="row mr-b15">
-                        <div class="col-sm-4 col-lg-4">
-                            <label>Fields <span class="red-text">*</span></label>
-                        </div>
-                        <div class="col-sm-8 col-lg-6">
-                            <!-- this div will appear when new field added  -->
-                            <div class="add-icon-delete mr-b15" hidden>
-                                <text-field
-                                    type="text"
-                                    matInput
-                                    id="fields"
-                                    class="form-control"
-                                    placeholder="Enter Field Name"
-                                ></text-field>
-                                <i class="icon-trash"></i>
+<ng-container
+    appTranslate
+    [file]="'custom-fields'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+    (translationComplete)="translationComplete($event)"
+>
+    <giddh-page-loader *ngIf="showLoader"></giddh-page-loader>
+    <ng-container *ngIf="!showLoader">
+        <div class="relative create-custom-field-page">
+            <hamburger-menu></hamburger-menu>
+            <span class="back-to-page cursor-pointer" (click)="showGetAll()">Back</span>
+            <div class="custom-field-wrapper relative">
+                <div>
+                    <form #customFieldCreateEditForm="ngForm" novalidate autocomplete="off">
+                        <p class="text-gray mx-3 my-3 font-14">
+                            Create custom fields for information which are not covered under existing fields.
+                        </p>
+                        <div class="col-md-8 col-lg-8 col-xl-6 col-12">
+                            <div class="row mr-b15">
+                                <div class="col-sm-4 col-lg-4">
+                                    <label>Field Name <span class="red-text">*</span></label>
+                                </div>
+                                <div class="col-sm-8 col-lg-6">
+                                    <text-field
+                                        [type]="'text'"
+                                        [cssClass]="'form-control'"
+                                        [placeholder]="'Enter Name'"
+                                        [name]="'fieldName'"
+                                        [(ngModel)]="customFieldRequest.fieldName"
+                                        [required]="true"
+                                    >
+                                    </text-field>
+                                </div>
                             </div>
-
-                            <div class="add-icon-delete mr-b15">
-                                <text-field
-                                    type="text"
-                                    matInput
-                                    id="fields"
-                                    class="form-control"
-                                    placeholder="Enter Field Name"
-                                ></text-field>
-                                <i class="icon-plus"></i>
+                            <div class="row mr-b15">
+                                <div class="col-sm-4 col-lg-4">
+                                    <label>Field Type <span class="red-text">*</span></label>
+                                </div>
+                                <div class="col-sm-8 col-lg-6">
+                                    <select-field
+                                        [cssClass]="'form-control'"
+                                        [name]="'fieldType'"
+                                        [placeholder]="'Select Type'"
+                                        [options]="fieldTypes"
+                                        (selectedOption)="selectFieldType($event)"
+                                        [defaultValue]="selectedFieldType.name"
+                                    >
+                                    </select-field>
+                                </div>
+                            </div>
+                            <div class="row mr-b15" *ngIf="visibleFields.fieldInfo">
+                                <div class="col-sm-4 col-lg-4"><label>Info Details</label></div>
+                                <div class="col-sm-8 col-lg-6">
+                                    <textarea
+                                        class="form-control"
+                                        matInput
+                                        name="fieldInfo"
+                                        [(ngModel)]="customFieldRequest.fieldInfo"
+                                        placeholder="Enter some text to help user understands the purpose of this custom field. (Optional)"
+                                    ></textarea>
+                                </div>
+                            </div>
+                            <div class="row mr-b15" *ngIf="visibleFields.fieldLimit">
+                                <div class="col-sm-4 col-lg-4"><label>Field Limit</label></div>
+                                <div class="col-sm-8 col-lg-6">
+                                    <text-field
+                                        [type]="'number'"
+                                        [name]="'minLimit'"
+                                        [(ngModel)]="customFieldRequest.dataRange.min"
+                                        [cssClass]="'form-control'"
+                                        [placeholder]="'Min Limit'"
+                                    ></text-field>
+                                    <text-field
+                                        [type]="'number'"
+                                        [name]="'maxLimit'"
+                                        [(ngModel)]="customFieldRequest.dataRange.max"
+                                        [cssClass]="'form-control'"
+                                        [placeholder]="'Max Limit'"
+                                    ></text-field>
+                                </div>
+                            </div>
+                            <div class="row mr-b15" *ngIf="visibleFields.fieldOptions">
+                                <div class="col-sm-4 col-lg-4">
+                                    <label>Fields <span class="red-text">*</span></label>
+                                </div>
+                                <div class="col-sm-8 col-lg-6">
+                                    <div class="add-icon-delete mr-b15">
+                                        <text-field
+                                            type="text"
+                                            matInput
+                                            id="fields"
+                                            class="form-control"
+                                            placeholder="Enter Field Name"
+                                        ></text-field>
+                                        <i class="icon-trash"></i>
+                                        <i class="icon-plus"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mr-b15">
+                                <div class="col-sm-4 col-lg-4"><label>Field Mandatory ?</label></div>
+                                <div class="col-sm-8 col-lg-6">
+                                    <div class="select-type">
+                                        <span class="mr-r15">
+                                            <mat-radio-group
+                                                color="primary"
+                                                name="isMandatory"
+                                                [(ngModel)]="customFieldRequest.isMandatory"
+                                            >
+                                                <mat-radio-button value="true">Yes</mat-radio-button>
+                                                <mat-radio-button value="false">No</mat-radio-button>
+                                            </mat-radio-group>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mr-b15">
+                                <div class="col-sm-4 col-lg-4">
+                                    <label>Modules <span class="red-text">*</span></label>
+                                </div>
+                                <div class="col-sm-8 col-lg-6">
+                                    <mat-select
+                                        name="modules"
+                                        placeholder="Select Modules"
+                                        [(value)]="selectedModules"
+                                        [required]="true"
+                                        [multiple]="true"
+                                    >
+                                        <mat-option
+                                            *ngFor="let module of fieldModules"
+                                            [value]="module.uniqueName"
+                                            (click)="setModules(module)"
+                                            >{{ module.name }}
+                                        </mat-option>
+                                    </mat-select>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="row mr-b15">
-                        <div class="col-sm-4 col-lg-4"><label>Field Mandatory ?</label></div>
-                        <div class="col-sm-8 col-lg-6">
-                            <div class="select-type">
-                                <span class="mr-r15">
-                                    <!-- <input type="radio" class="radio-custom" name="yes-btn" id="yes-btn" />
-                                    <label for="yes-btn" class="radio-custom-label">Yes</label> -->
-                                    <mat-radio-button color="primary">Yes</mat-radio-button>
-                                </span>
-                                <span>
-                                    <!-- <input type="radio" class="radio-custom" name="no-btn" id="no-btn" />
-                                    <label for="no-btn" class="radio-custom-label">No</label> -->
-                                    <mat-radio-button color="primary">No</mat-radio-button>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
+                    </form>
                 </div>
-            </form>
-        </div>
-        <div class="vector-image">
-            <img src="../../../../assets/images/create-custom-field-vector.svg" />
-        </div>
-    </div>
-</div>
-<div class="inventory-footer sticky-footer">
-    <div class="inner-content-footer">
-        <div class="d-flex">
-            <div class="button-group">
-                <button mat-button id="clear-btn" class="btn btn-primary min-width-100 bdr-radius-50">Clear</button>
-                <button mat-button id="save-btn" class="btn btn-success min-width-100 bdr-radius-50" disabled>
-                    Save
-                </button>
+                <div class="vector-image">
+                    <img src="../../../../assets/images/create-custom-field-vector.svg" />
+                </div>
             </div>
         </div>
-    </div>
-</div>
+        <div class="inventory-footer sticky-footer">
+            <div class="inner-content-footer">
+                <div class="d-flex">
+                    <div class="button-group">
+                        <ng-container *ngIf="customFieldUniqueName">
+                            <button
+                                mat-button
+                                class="btn btn-primary min-width-100 bdr-radius-50"
+                                (click)="showGetAll()"
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                mat-button
+                                class="btn btn-success min-width-100 bdr-radius-50"
+                                [disabled]="customFieldCreateEditForm.invalid"
+                                (click)="updateCustomField(customFieldCreateEditForm)"
+                            >
+                                Update
+                            </button>
+                        </ng-container>
+                        <ng-container *ngIf="!customFieldUniqueName">
+                            <button
+                                mat-button
+                                class="btn btn-primary min-width-100 bdr-radius-50"
+                                (click)="resetForm(customFieldCreateEditForm)"
+                            >
+                                Clear
+                            </button>
+                            <button
+                                mat-button
+                                class="btn btn-success min-width-100 bdr-radius-50"
+                                [disabled]="customFieldCreateEditForm.invalid"
+                                (click)="createCustomField(customFieldCreateEditForm)"
+                            >
+                                Save
+                            </button>
+                        </ng-container>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+</ng-container>

@@ -13,5 +13,10 @@
     "type": "Type",
     "length": "Length/Limit",
     "add_new_row": "+ Add New Row",
-    "field_type_placeholder": "Type to filter"
+    "field_type_placeholder": "Type to filter",
+    "modules": {
+        "account": "Account",
+        "stock": "Stock",
+        "group": "Group"
+    }
 }
