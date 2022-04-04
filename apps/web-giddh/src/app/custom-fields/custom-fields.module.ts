@@ -17,6 +17,8 @@ import { FormFieldsModule } from "../theme/form-fields/form-fields.module";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { TranslateDirectiveModule } from "../theme/translate/translate.directive.module";
 import { PaginationModule } from "ngx-bootstrap/pagination";
+import { FormsModule } from "@angular/forms";
+import { GiddhPageLoaderModule } from "../shared/giddh-page-loader/giddh-page-loader.module";
 
 @NgModule({
     declarations: [
@@ -39,7 +41,9 @@ import { PaginationModule } from "ngx-bootstrap/pagination";
         FormFieldsModule,
         MatTooltipModule,
         TranslateDirectiveModule,
-        PaginationModule
+        PaginationModule,
+        FormsModule,
+        GiddhPageLoaderModule
     ]
 })
 export class CustomFieldsModule {
