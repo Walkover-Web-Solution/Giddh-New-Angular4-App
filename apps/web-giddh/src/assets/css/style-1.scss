@@ -2607,6 +2607,9 @@ giddh-datepicker {
     input.form-control.focused {
     padding-left: 1px !important;
     background-color: transparent !important;
+    &::placeholder {
+        color: var(--color-common-secondary-input-placeholder);
+    }
 }
 .ledger-advance-search-field {
     .mat-form-field-suffix {
