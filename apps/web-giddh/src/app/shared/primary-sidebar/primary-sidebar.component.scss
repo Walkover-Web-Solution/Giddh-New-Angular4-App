@@ -167,6 +167,9 @@
             &:focus {
                 border-color: var(--color-iron) !important;
             }
+            &::placeholder {
+                color: var(--color-sidebar-search-bar-text);
+            }
         }
         .input-group-append {
             font-size: 12px;

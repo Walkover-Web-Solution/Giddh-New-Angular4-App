@@ -574,7 +574,7 @@ textarea:focus {
 
 .modal-invoice-footer {
     position: absolute;
-    background: rgba(112, 112, 112, 0.92);
+    background: var(--color-slate);
     bottom: 0;
     width: 100%;
     color: var(--color-white);
@@ -1163,7 +1163,7 @@ section.new-table {
 .other-detail-card {
     max-width: 400px;
     margin: 20px 0;
-    box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 6px var(--color-primary-common-box-shadow);
     background-color: var(--color-white);
     padding: 15px 20px;
     border-radius: 3px;
@@ -1364,6 +1364,12 @@ table.table.table-custom-invoice.basic,
 .other-details-section {
     max-width: 1025px;
     width: 100%;
+
+    .other-details-section-list {
+        position: relative;
+        top: 20px;
+        margin-bottom: 20px !important;
+    }
 }
 
 .customer-invoice-form {
