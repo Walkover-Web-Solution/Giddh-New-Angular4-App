@@ -19,6 +19,7 @@ import { TranslateDirectiveModule } from "../theme/translate/translate.directive
 import { PaginationModule } from "ngx-bootstrap/pagination";
 import { FormsModule } from "@angular/forms";
 import { GiddhPageLoaderModule } from "../shared/giddh-page-loader/giddh-page-loader.module";
+import { NoDataModule } from "../shared/no-data/no-data.module";
 
 @NgModule({
     declarations: [
@@ -43,7 +44,8 @@ import { GiddhPageLoaderModule } from "../shared/giddh-page-loader/giddh-page-lo
         TranslateDirectiveModule,
         PaginationModule,
         FormsModule,
-        GiddhPageLoaderModule
+        GiddhPageLoaderModule,
+        NoDataModule
     ]
 })
 export class CustomFieldsModule {

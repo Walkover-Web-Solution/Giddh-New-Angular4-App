@@ -41,7 +41,7 @@
                                             <text-field
                                                 [cssClass]="'form-control'"
                                                 [name]="'productName'"
-                                                [placeholder]="'Product Name'"
+                                                [placeholder]="'Enter Name'"
                                                 [type]="'text'"
                                                 [(ngModel)]="stockForm.name"
                                             >
@@ -59,7 +59,7 @@
                                             <select-field
                                                 [cssClass]="'form-control'"
                                                 [name]="'stockUnitCode'"
-                                                [placeholder]="'Product Unit'"
+                                                [placeholder]="'Select Unit'"
                                                 [options]="stockUnits"
                                                 (selectedOption)="
                                                     stockForm.stockUnitCode = $event?.value;

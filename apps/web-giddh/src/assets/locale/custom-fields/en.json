@@ -18,5 +18,22 @@
         "account": "Account",
         "stock": "Stock",
         "group": "Group"
-    }
+    },
+    "add_new": "+ Add Custom Field",
+    "s_no": "No.",
+    "field_name": "Field Name",
+    "field_name_placeholder": "Enter Name",
+    "field_type": "Field Type",
+    "mandatory": "Mandatory",
+    "create_note": "Create custom fields for information which are not covered under existing fields.",
+    "info_details": "Info Details",
+    "info_details_placeholder": "Enter some text to help user understands the purpose of this custom field. (Optional)",
+    "field_limit": "Field Limit",
+    "min_limit": "Min Limit",
+    "max_limit": "Max Limit",
+    "options": "Options",
+    "option_name": "Enter Option",
+    "field_mandatory": "Field Mandatory?",
+    "modules_label": "Modules",
+    "modules_placeholder": "Select Modules"
 }

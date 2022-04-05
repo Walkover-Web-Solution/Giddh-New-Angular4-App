@@ -9,23 +9,25 @@
     <ng-container *ngIf="!showLoader">
         <div class="relative create-custom-field-page">
             <hamburger-menu></hamburger-menu>
-            <span class="back-to-page cursor-pointer" (click)="showGetAll()">Back</span>
+            <span class="back-to-page cursor-pointer" (click)="redirectToGetAllPage()">{{
+                commonLocaleData?.app_back
+            }}</span>
             <div class="custom-field-wrapper relative">
                 <div>
                     <form #customFieldCreateEditForm="ngForm" novalidate autocomplete="off">
-                        <p class="text-gray mx-3 my-3 font-14">
-                            Create custom fields for information which are not covered under existing fields.
+                        <p class="text-gray mx-3 my-3 font-14" *ngIf="!customFieldUniqueName">
+                            {{ localeData?.create_note }}
                         </p>
                         <div class="col-md-8 col-lg-8 col-xl-6 col-12">
                             <div class="row mr-b15">
                                 <div class="col-sm-4 col-lg-4">
-                                    <label>Field Name <span class="red-text">*</span></label>
+                                    <label>{{ localeData?.field_name }} <span class="red-text">*</span></label>
                                 </div>
                                 <div class="col-sm-8 col-lg-6">
                                     <text-field
                                         [type]="'text'"
                                         [cssClass]="'form-control'"
-                                        [placeholder]="'Enter Name'"
+                                        [placeholder]="localeData?.field_name_placeholder"
                                         [name]="'fieldName'"
                                         [(ngModel)]="customFieldRequest.fieldName"
                                         [required]="true"
@@ -35,34 +37,39 @@
                             </div>
                             <div class="row mr-b15">
                                 <div class="col-sm-4 col-lg-4">
-                                    <label>Field Type <span class="red-text">*</span></label>
+                                    <label>{{ localeData?.field_type }} <span class="red-text">*</span></label>
                                 </div>
                                 <div class="col-sm-8 col-lg-6">
                                     <select-field
                                         [cssClass]="'form-control'"
                                         [name]="'fieldType'"
-                                        [placeholder]="'Select Type'"
+                                        [placeholder]="localeData?.field_type_placeholder"
                                         [options]="fieldTypes"
                                         (selectedOption)="selectFieldType($event)"
-                                        [defaultValue]="selectedFieldType.name"
+                                        [defaultValue]="customFieldRequest?.fieldType?.name"
+                                        [required]="true"
                                     >
                                     </select-field>
                                 </div>
                             </div>
                             <div class="row mr-b15" *ngIf="visibleFields.fieldInfo">
-                                <div class="col-sm-4 col-lg-4"><label>Info Details</label></div>
+                                <div class="col-sm-4 col-lg-4">
+                                    <label>{{ localeData?.info_details }}</label>
+                                </div>
                                 <div class="col-sm-8 col-lg-6">
                                     <textarea
                                         class="form-control"
                                         matInput
                                         name="fieldInfo"
                                         [(ngModel)]="customFieldRequest.fieldInfo"
-                                        placeholder="Enter some text to help user understands the purpose of this custom field. (Optional)"
+                                        [placeholder]="localeData?.info_details_placeholder"
                                     ></textarea>
                                 </div>
                             </div>
                             <div class="row mr-b15 minMaxField-wrapper" *ngIf="visibleFields.fieldLimit">
-                                <div class="col-sm-4 col-lg-4"><label>Field Limit</label></div>
+                                <div class="col-sm-4 col-lg-4">
+                                    <label>{{ localeData?.field_limit }}</label>
+                                </div>
                                 <div class="col-sm-8 col-lg-6">
                                     <div class="minMaxField">
                                         <text-field
@@ -70,21 +77,21 @@
                                             [name]="'minLimit'"
                                             [(ngModel)]="customFieldRequest.dataRange.min"
                                             [cssClass]="'form-control'"
-                                            [placeholder]="'Min Limit'"
+                                            [placeholder]="localeData?.min_limit"
                                         ></text-field>
                                         <text-field
                                             [type]="'number'"
                                             [name]="'maxLimit'"
                                             [(ngModel)]="customFieldRequest.dataRange.max"
                                             [cssClass]="'form-control'"
-                                            [placeholder]="'Max Limit'"
+                                            [placeholder]="localeData?.max_limit"
                                         ></text-field>
                                     </div>
                                 </div>
                             </div>
                             <div class="row mr-b15" *ngIf="visibleFields.fieldOptions">
                                 <div class="col-sm-4 col-lg-4">
-                                    <label>Fields <span class="red-text">*</span></label>
+                                    <label>{{ localeData?.options }} <span class="red-text">*</span></label>
                                 </div>
                                 <div class="col-sm-8 col-lg-6">
                                     <div class="add-icon-delete mr-b15">
@@ -93,7 +100,7 @@
                                             matInput
                                             id="fields"
                                             class="form-control"
-                                            placeholder="Enter Field Name"
+                                            [placeholder]="localeData?.option_name"
                                         ></text-field>
                                         <i class="icon-trash"></i>
                                         <i class="icon-plus"></i>
@@ -101,7 +108,9 @@
                                 </div>
                             </div>
                             <div class="row mr-b15">
-                                <div class="col-sm-4 col-lg-4"><label>Field Mandatory ?</label></div>
+                                <div class="col-sm-4 col-lg-4">
+                                    <label>{{ localeData?.field_mandatory }}</label>
+                                </div>
                                 <div class="col-sm-8 col-lg-6">
                                     <div class="select-type">
                                         <span class="mr-r15">
@@ -110,8 +119,12 @@
                                                 name="isMandatory"
                                                 [(ngModel)]="customFieldRequest.isMandatory"
                                             >
-                                                <mat-radio-button value="true">Yes</mat-radio-button>
-                                                <mat-radio-button value="false">No</mat-radio-button>
+                                                <mat-radio-button [value]="true"
+                                                    >{{ commonLocaleData?.app_yes }}
+                                                </mat-radio-button>
+                                                <mat-radio-button [value]="false"
+                                                    >{{ commonLocaleData?.app_no }}
+                                                </mat-radio-button>
                                             </mat-radio-group>
                                         </span>
                                     </div>
@@ -119,12 +132,12 @@
                             </div>
                             <div class="row mr-b15">
                                 <div class="col-sm-4 col-lg-4">
-                                    <label>Modules <span class="red-text">*</span></label>
+                                    <label>{{ localeData?.modules_label }} <span class="red-text">*</span></label>
                                 </div>
                                 <div class="col-sm-8 col-lg-6">
                                     <mat-select
                                         name="modules"
-                                        placeholder="Select Modules"
+                                        [placeholder]="localeData?.modules_placeholder"
                                         [(value)]="selectedModules"
                                         [required]="true"
                                         [multiple]="true"
@@ -154,17 +167,17 @@
                             <button
                                 mat-button
                                 class="btn btn-primary min-width-100 bdr-radius-50"
-                                (click)="showGetAll()"
+                                (click)="redirectToGetAllPage()"
                             >
-                                Cancel
+                                {{ commonLocaleData?.app_cancel }}
                             </button>
                             <button
                                 mat-button
                                 class="btn btn-success min-width-100 bdr-radius-50"
-                                [disabled]="customFieldCreateEditForm.invalid"
+                                [disabled]="customFieldCreateEditForm.invalid || !customFieldRequest.fieldType?.type"
                                 (click)="updateCustomField(customFieldCreateEditForm)"
                             >
-                                Update
+                                {{ commonLocaleData?.app_update }}
                             </button>
                         </ng-container>
                         <ng-container *ngIf="!customFieldUniqueName">
@@ -173,15 +186,15 @@
                                 class="btn btn-primary min-width-100 bdr-radius-50"
                                 (click)="resetForm(customFieldCreateEditForm)"
                             >
-                                Clear
+                                {{ commonLocaleData?.app_clear }}
                             </button>
                             <button
                                 mat-button
                                 class="btn btn-success min-width-100 bdr-radius-50"
-                                [disabled]="customFieldCreateEditForm.invalid"
+                                [disabled]="customFieldCreateEditForm.invalid || !customFieldRequest.fieldType?.type"
                                 (click)="createCustomField(customFieldCreateEditForm)"
                             >
-                                Save
+                                {{ commonLocaleData?.app_save }}
                             </button>
                         </ng-container>
                     </div>

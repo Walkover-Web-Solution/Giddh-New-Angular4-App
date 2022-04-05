@@ -15,8 +15,9 @@ import { FieldModules, FieldTypes } from "../custom-fields.constant";
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CustomFieldsCreateEditComponent implements OnInit, OnDestroy {
-    /** Instance of stock create/edit form */
+    /** Instance of custom field create/edit form */
     @ViewChild('customFieldCreateEditForm', { static: false }) public customFieldCreateEditForm: NgForm;
+    /** Object for custom field request */
     public customFieldRequest: any = {
         fieldName: null,
         fieldType: {
@@ -41,14 +42,16 @@ export class CustomFieldsCreateEditComponent implements OnInit, OnDestroy {
     public fieldTypes: any[] = [];
     /** Available field modules list */
     public fieldModules: any[] = [];
+    /** Conditionally visible fields in form */
     public visibleFields: any = {
         fieldInfo: true,
         fieldLimit: true,
         fieldOptions: false
     }
+    /** Custom field unique name in edit mode */
     public customFieldUniqueName: string = "";
+    /** Selected modules */
     public selectedModules: any[] = [];
-    public selectedFieldType: any = {};
     /** True if loader is visible */
     public showLoader: boolean = false;
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
@@ -88,8 +91,15 @@ export class CustomFieldsCreateEditComponent implements OnInit, OnDestroy {
         this.destroyed$.complete();
     }
 
+    /**
+     * Get custom field data
+     *
+     * @param {string} customFieldUniqueName
+     * @returns {void}
+     * @memberof CustomFieldsCreateEditComponent
+     */
     public getCustomField(customFieldUniqueName: string): void {
-        if(!customFieldUniqueName) {
+        if (!customFieldUniqueName) {
             return;
         }
 
@@ -100,7 +110,6 @@ export class CustomFieldsCreateEditComponent implements OnInit, OnDestroy {
                     this.customFieldRequest = cloneDeep(response.body);
                     this.selectFieldType({ label: this.customFieldRequest.fieldType?.name, value: this.customFieldRequest.fieldType?.type });
                     this.selectedModules = this.customFieldRequest?.modules?.map(module => module.uniqueName);
-                    this.selectedFieldType = response.body?.fieldType;
                 } else if (response.message) {
                     this.toasterService.errorToast(response.message);
                 }
@@ -114,7 +123,7 @@ export class CustomFieldsCreateEditComponent implements OnInit, OnDestroy {
      * Callback for translation response complete
      *
      * @param {boolean} event
-     * @memberof CustomFieldsComponent
+     * @memberof CustomFieldsCreateEditComponent
      */
     public translationComplete(event: boolean): void {
         if (event) {
@@ -133,6 +142,12 @@ export class CustomFieldsCreateEditComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Callback for selection of field type
+     *
+     * @param {*} field
+     * @memberof CustomFieldsCreateEditComponent
+     */
     public selectFieldType(field: any): void {
         const fieldType = field?.value;
         if (fieldType === FieldTypes.String || fieldType === FieldTypes.Number || fieldType === FieldTypes.Barcode) {
@@ -151,40 +166,69 @@ export class CustomFieldsCreateEditComponent implements OnInit, OnDestroy {
         this.customFieldRequest.fieldType = { name: field?.label, type: field?.value };
     }
 
+    /**
+     * Creates custom field
+     *
+     * @param {NgForm} customFieldCreateEditForm
+     * @returns {void}
+     * @memberof CustomFieldsCreateEditComponent
+     */
     public createCustomField(customFieldCreateEditForm: NgForm): void {
         if (customFieldCreateEditForm.invalid) {
             return;
         }
+        this.toggleLoader(true);
 
         this.customFieldsService.create([this.customFieldRequest]).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success") {
                 this.toasterService.showSnackBar("success", this.localeData?.custom_field_created);
-                this.showGetAll();
+                this.redirectToGetAllPage();
             } else {
                 this.toasterService.showSnackBar("error", response?.message);
             }
+            this.toggleLoader(false);
         });
     }
 
+    /**
+     * Updates custom field
+     *
+     * @param {NgForm} customFieldCreateEditForm
+     * @returns {void}
+     * @memberof CustomFieldsCreateEditComponent
+     */
     public updateCustomField(customFieldCreateEditForm: NgForm): void {
         if (customFieldCreateEditForm.invalid) {
             return;
         }
+        this.toggleLoader(true);
 
         this.customFieldsService.update(this.customFieldRequest, this.customFieldUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success") {
                 this.toasterService.showSnackBar("success", this.localeData?.custom_field_updated);
-                this.showGetAll();
+                this.redirectToGetAllPage();
             } else {
                 this.toasterService.showSnackBar("error", response?.message);
             }
+            this.toggleLoader(false);
         });
     }
 
-    public showGetAll(): void {
+    /**
+     * Redirects to get all custom fields page
+     *
+     * @memberof CustomFieldsCreateEditComponent
+     */
+    public redirectToGetAllPage(): void {
         this.router.navigate(["/pages/custom-fields/list"]);
     }
 
+    /**
+     * Toggles the modules selection
+     *
+     * @param {*} selectedModule
+     * @memberof CustomFieldsCreateEditComponent
+     */
     public setModules(selectedModule: any): void {
         if (!this.customFieldRequest.modules?.length) {
             this.customFieldRequest.modules = [];
@@ -198,8 +242,14 @@ export class CustomFieldsCreateEditComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Resets the form
+     *
+     * @param {NgForm} customFieldCreateEditForm
+     * @memberof CustomFieldsCreateEditComponent
+     */
     public resetForm(customFieldCreateEditForm: NgForm): void {
-        this.customFieldCreateEditForm?.reset();
+        customFieldCreateEditForm?.reset();
 
         this.customFieldRequest = {
             fieldName: null,
