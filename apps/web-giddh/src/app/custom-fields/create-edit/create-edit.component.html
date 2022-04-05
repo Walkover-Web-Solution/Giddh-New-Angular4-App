@@ -61,23 +61,25 @@
                                     ></textarea>
                                 </div>
                             </div>
-                            <div class="row mr-b15" *ngIf="visibleFields.fieldLimit">
+                            <div class="row mr-b15 minMaxField-wrapper" *ngIf="visibleFields.fieldLimit">
                                 <div class="col-sm-4 col-lg-4"><label>Field Limit</label></div>
                                 <div class="col-sm-8 col-lg-6">
-                                    <text-field
-                                        [type]="'number'"
-                                        [name]="'minLimit'"
-                                        [(ngModel)]="customFieldRequest.dataRange.min"
-                                        [cssClass]="'form-control'"
-                                        [placeholder]="'Min Limit'"
-                                    ></text-field>
-                                    <text-field
-                                        [type]="'number'"
-                                        [name]="'maxLimit'"
-                                        [(ngModel)]="customFieldRequest.dataRange.max"
-                                        [cssClass]="'form-control'"
-                                        [placeholder]="'Max Limit'"
-                                    ></text-field>
+                                    <div class="minMaxField">
+                                        <text-field
+                                            [type]="'number'"
+                                            [name]="'minLimit'"
+                                            [(ngModel)]="customFieldRequest.dataRange.min"
+                                            [cssClass]="'form-control'"
+                                            [placeholder]="'Min Limit'"
+                                        ></text-field>
+                                        <text-field
+                                            [type]="'number'"
+                                            [name]="'maxLimit'"
+                                            [(ngModel)]="customFieldRequest.dataRange.max"
+                                            [cssClass]="'form-control'"
+                                            [placeholder]="'Max Limit'"
+                                        ></text-field>
+                                    </div>
                                 </div>
                             </div>
                             <div class="row mr-b15" *ngIf="visibleFields.fieldOptions">

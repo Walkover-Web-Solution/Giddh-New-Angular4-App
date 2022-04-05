@@ -10706,7 +10706,7 @@ input[type="checkbox"].cdk-visually-hidden::after {
                 input {
                     width: 100%;
                     height: auto;
-                    border: none;
+                    // border: none;
                     background-color: var(--color-secondary-input-bar-background);
 
                     &::placeholder {
@@ -10719,6 +10719,18 @@ input[type="checkbox"].cdk-visually-hidden::after {
             .mat-select-placeholder {
                 font-size: 14px;
                 color: var(--color-primary-dropdown-placeholder);
+            }
+        }
+        .minMaxField-wrapper {
+            .minMaxField {
+                .text-field-container {
+                    width: 42%;
+                    display: inline-block;
+
+                    &:first-child {
+                        margin-right: 10px;
+                    }
+                }
             }
         }
     }
