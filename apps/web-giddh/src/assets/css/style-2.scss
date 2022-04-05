@@ -5718,7 +5718,11 @@ ul#dropdown-nested .dropdown-menu li:hover .dropdown-item {
 .welcome-container .select-box .custom-select input.form-control.selected-val.cp,
 .welcome-container .select-box input,
 .welcome-container .select-box textarea {
-    color: var(--color-nero);
+    color: var(--color-nero) !important;
+
+    &::placeholder {
+        color: var(--color-common-primary-input-placeholder) !important;
+    }
 }
 .welcome-container input::placeholder {
     color: var(--color-gray) !important;
@@ -6719,7 +6723,7 @@ span#HW_badge_cont:nth-child(3) {
                 a {
                     span {
                         i {
-                            color: var(--color-white);
+                            color: var(--color-primary-right-sidebar-list-text-hover);
                         }
                     }
                 }
@@ -6730,7 +6734,7 @@ span#HW_badge_cont:nth-child(3) {
             a {
                 span {
                     i {
-                        color: var(--color-white);
+                        color: var(--color-primary-right-sidebar-list-text-hover);
                     }
                 }
             }

@@ -149,6 +149,10 @@ button.form-control:focus {
     border-color: var(--color-iron) !important;
 }
 
+.form-control::placeholder {
+    color: var(--color-common-primary-input-placeholder);
+}
+
 .label-btn {
     border: 0 !important;
     background: transparent !important;

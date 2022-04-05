@@ -12,7 +12,7 @@ label .required {
 }
 
 .form-control {
-    color: var(--color-abbey);
+    color: var(--color-nero) !important;
 }
 
 .modal-body p {
@@ -74,7 +74,7 @@ label .required {
     margin-right: 28px;
 }
 
-input#contactNo::placeholder {
+input::placeholder {
     color: var(--color-common-primary-input-placeholder);
 }
 
