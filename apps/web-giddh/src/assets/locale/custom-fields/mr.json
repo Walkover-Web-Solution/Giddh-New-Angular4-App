@@ -15,8 +15,25 @@
     "add_new_row": "नवीन पंक्ती जोडा",
     "field_type_placeholder": "फिल्टर करण्यासाठी टाइप करा",
     "modules": {
-        "account": "Account",
-        "stock": "Stock",
-        "group": "Group"
-    }
+        "account": "खाते",
+        "stock": "स्टॉक",
+        "group": "गट"
+    },
+    "add_new": "+ कस्टम फ़ील्ड जोड़ें",
+    "s_no": "क्रमांक",
+    "field_name": "फील्डचे नाव",
+    "field_name_placeholder": "नाव प्रविष्ट करा",
+    "field_type": "फील्ड प्रकार",
+    "mandatory": "अनिवार्य",
+    "create_note": "विद्यमान फील्ड अंतर्गत समाविष्ट नसलेल्या माहितीसाठी सानुकूल फील्ड तयार करा.",
+    "info_details": "माहिती तपशील",
+    "info_details_placeholder": "वापरकर्त्यांना या सानुकूल फील्डचा उद्देश समजण्यात मदत करण्यासाठी काही मजकूर प्रविष्ट करा. (पर्यायी)",
+    "field_limit": "फील्ड मर्यादा",
+    "min_limit": "किमान मर्यादा",
+    "max_limit": "कमाल मर्यादा",
+    "options": "पर्याय",
+    "option_name": "पर्याय प्रविष्ट करा",
+    "field_mandatory": "फील्ड अनिवार्य?",
+    "modules_label": "मॉड्यूल्स",
+    "modules_placeholder": "मॉड्यूल्स निवडा"
 }

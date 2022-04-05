@@ -161,6 +161,10 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         this.getCustomFields();
 
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
+            if (params?.type) {
+                this.stockForm.type = params?.type?.toUpperCase();
+                this.changeDetection.detectChanges();
+            }
             if (params?.stockUniqueName) {
                 this.queryParams = params;
                 this.getStockDetails();

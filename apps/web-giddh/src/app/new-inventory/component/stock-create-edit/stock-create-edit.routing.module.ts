@@ -10,11 +10,11 @@ const routes: Routes = [
         children: [
             {
                 path: "",
-                redirectTo: "create",
+                redirectTo: "product/create",
                 pathMatch: "full"
             },
             {
-                path: "create",
+                path: ":type/create",
                 component: StockCreateEditComponent
             },
             {
