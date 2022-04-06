@@ -126,6 +126,8 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
     private selectedTaxes: any[] = [];
     /** Holds custom fields data */
     private customFieldsData: any[] = [];
+    /** Holds stock type from url */
+    private stockType: string = "";
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -163,6 +165,8 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             if (params?.type) {
                 this.stockForm.type = params?.type?.toUpperCase();
+                this.stockType = params?.type?.toUpperCase();
+                this.resetForm(this.stockCreateEditForm);
                 this.changeDetection.detectChanges();
             }
             if (params?.stockUniqueName) {
@@ -591,7 +595,8 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         this.inventoryService.createStock(request, this.stockGroupUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.toggleLoader(false);
             if (response?.status === "success") {
-
+                this.toaster.showSnackBar("success", "Stock created successfully");
+                this.router.navigate(['/pages/inventory']);
             } else {
                 this.toaster.showSnackBar("error", response?.message);
             }
@@ -698,7 +703,8 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         this.inventoryService.updateStock(request, this.stockGroupUniqueName, this.queryParams?.stockUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.toggleLoader(false);
             if (response?.status === "success") {
-
+                this.toaster.showSnackBar("success", "Stock updated successfully");
+                this.router.navigate(['/pages/inventory']);
             } else {
                 this.toaster.showSnackBar("error", response?.message);
             }
@@ -886,6 +892,74 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
      */
     private toggleLoader(showLoader: boolean): void {
         this.showLoader = showLoader;
+        this.changeDetection.detectChanges();
+    }
+
+    /**
+     * Resets the form
+     *
+     * @param {NgForm} stockCreateEditForm
+     * @memberof StockCreateEditComponent
+     */
+    public resetForm(stockCreateEditForm: NgForm): void {
+        stockCreateEditForm?.reset();
+
+        this.stockForm = {
+            type: this.stockType,
+            name: null,
+            uniqueName: null,
+            stockUnitCode: null,
+            hsnNumber: null,
+            sacNumber: null,
+            taxes: null,
+            skuCode: null,
+            openingQuantity: null,
+            openingAmount: null,
+            skuCodeHeading: null,
+            customField1Heading: "Custom Field 1",
+            customField1Value: null,
+            customField2Heading: "Custom Field 2",
+            customField2Value: null,
+            purchaseAccountDetails: {
+                accountUniqueName: null,
+                unitRates: [
+                    {
+                        rate: null,
+                        stockUnitCode: null,
+                        stockUnitName: null
+                    }
+                ]
+            },
+            salesAccountDetails: {
+                accountUniqueName: null,
+                unitRates: [
+                    {
+                        rate: null,
+                        stockUnitCode: null,
+                        stockUnitName: null
+                    }
+                ]
+            },
+            isFsStock: null,
+            manufacturingDetails: null,
+            accountGroup: null,
+            lowStockAlertCount: 0,
+            outOfStockSelling: true,
+            variants: [],
+            options: [],
+            customFields: []
+        };
+
+        this.stockGroupUniqueName = "";
+        this.isPurchaseInformationEnabled = false;
+        this.isSalesInformationEnabled = false;
+        this.isVariantAvailable = false;
+        this.stockUnitName = "";
+        this.stockGroupName = "";
+        this.customFieldsData = [];
+        this.selectedTaxes = [];
+        this.taxTempArray = [];
+
         this.changeDetection.detectChanges();
     }
 }

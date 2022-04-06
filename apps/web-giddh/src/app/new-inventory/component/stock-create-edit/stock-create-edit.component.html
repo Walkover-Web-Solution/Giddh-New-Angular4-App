@@ -4066,7 +4066,12 @@
         <div class="inner-content-footer">
             <div class="d-flex">
                 <div class="button-group">
-                    <button id="clear-btn" mat-raised-button class="btn-primary min-width-100 bdr-radius-50">
+                    <button
+                        id="clear-btn"
+                        mat-raised-button
+                        class="btn-primary min-width-100 bdr-radius-50"
+                        (click)="resetForm(stockCreateEditForm)"
+                    >
                         Clear
                     </button>
                     <button
