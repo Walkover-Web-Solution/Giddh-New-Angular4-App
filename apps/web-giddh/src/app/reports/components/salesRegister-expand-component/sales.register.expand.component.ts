@@ -144,6 +144,12 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
         this.getDetailedsalesRequestFilter.sort = ord;
         this.getDetailedSalesReport(this.getDetailedsalesRequestFilter);
     }
+
+    // Back Button Function
+    public salesRegisterBack(){
+        this.router.navigate(['/pages/reports/sales-register']);
+    }
+
     /**
     * emitExpand
     */

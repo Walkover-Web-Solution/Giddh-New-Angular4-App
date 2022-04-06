@@ -255,6 +255,15 @@ table th {
     .btn-group.d-flex.open.show {
         display: flex !important;
     }
+    .top-bar-content {
+        .top-bar-content-right-side {
+            .back-btn {
+                position: relative;
+                top: 1px;
+                right: 10px;
+            }
+        }
+    }
 }
 
 .verticle-align-top a {
