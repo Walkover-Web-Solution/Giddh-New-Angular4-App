@@ -1,10 +1,8 @@
-@import "../../../assets/css/color.scss";
-
 .menu {
     margin: 0;
     padding: 0;
     position: absolute;
-    background-color: $white;
+    background-color: var(--color-white);
     width: 100%;
     overflow: auto;
     box-sizing: border-box;
@@ -24,20 +22,20 @@
     word-break: break-word;
     height: auto !important;
     &:hover {
-        background: $lavender;
+        background: var(--color-dark-fog);
     }
 }
 .item.selected {
-    color: $chetwode-blue !important;
-    background: $lavender !important;
+    color: var(--color-blue) !important;
+    background: var(--color-dark-fog) !important;
 }
 
 .item.hilighted {
-    color: $chetwode-blue !important;
-    background: $lavender !important;
+    color: var(--color-blue) !important;
+    background: var(--color-dark-fog) !important;
 }
 .item.hilighted a {
-    color: $chetwode-blue !important;
+    color: var(--color-blue) !important;
 }
 
 .item > a {
@@ -45,7 +43,7 @@
 }
 
 .no-result-link > a {
-    color: $deep-sky-blue-hover !important;
+    color: var(--color-blue) !important;
 }
 
 #noresult:hover {
@@ -55,7 +53,7 @@
 .no-result-link {
     top: 0;
     z-index: 99;
-    background: $white;
+    background: var(--color-white);
     width: calc(100% - 15px);
 }
 .no-result-link {

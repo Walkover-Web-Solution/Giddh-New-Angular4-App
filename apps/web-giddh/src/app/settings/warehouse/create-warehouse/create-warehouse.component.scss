@@ -1,22 +1,21 @@
-@import "../../../../assets/css/color.scss";
 /* create warehouse css starts */
 .create-warehouse-page {
     .create-warehouse-under {
-        border-bottom: 1px solid $gainsboro;
+        border-bottom: 1px solid var(--color-common-secondary-border);
         .warehouse-under-company {
             p {
-                color: $black;
+                color: var(--color-nero);
             }
             .warehouse-company-name {
                 .label-wrapper {
                     display: flex;
                     font-size: 14px;
                     label {
-                        color: $dark-gray;
+                        color: var(--color-abbey);
                         min-width: 200px;
                     }
                     span {
-                        color: $dark-gray;
+                        color: var(--color-abbey);
                         display: block;
                     }
                     img {
@@ -41,7 +40,7 @@
             font-size: 14px;
             display: flex;
             align-items: center;
-            color: $nero;
+            color: var(--color-nero);
             margin-bottom: 15px;
             label {
                 min-width: 200px;
@@ -67,10 +66,10 @@
                         align-items: center;
                         display: flex;
                         &:hover:after {
-                            color: $rich-blue;
+                            color: var(--color-blue);
                         }
                         .icon-favorite-selected {
-                            color: $rich-blue;
+                            color: var(--color-blue);
                         }
                     }
                 }
@@ -88,7 +87,7 @@
                         padding: 5px;
                         cursor: pointer;
                         &.icon-plus {
-                            color: $light-sea-green;
+                            color: var(--color-teal);
                         }
                     }
                 }
@@ -97,7 +96,7 @@
     }
 }
 .footer-btn {
-    background-color: $whisper-color;
+    background-color: var(--color-dark-fog);
     padding: 15px;
 }
 .linked-entities {
@@ -116,10 +115,10 @@
             align-items: center;
             display: flex;
             &:hover:after {
-                color: $rich-blue;
+                color: var(--color-blue);
             }
             .icon-favorite-selected {
-                color: $rich-blue;
+                color: var(--color-blue);
             }
         }
     }

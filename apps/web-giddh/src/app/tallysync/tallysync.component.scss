@@ -1,13 +1,12 @@
-@import "../../assets/css/color.scss";
 .btn-default {
-    background: $white;
-    border-color: $chetwode-blue;
-    color: $midnight-express;
+    background: var(--color-white);
+    border-color: var(--color-blue);
+    color: var(--color-common-primary-blue-border);
 }
 .btn-default.active {
-    background: $chetwode-blue;
-    color: $white;
-    border-color: $chetwode-blue;
+    background: var(--color-blue);
+    color: var(--color-white);
+    border-color: var(--color-blue);
     box-shadow: none;
 }
 
@@ -19,7 +18,7 @@
 .open > .dropdown-toggle.btn-default:hover,
 .btn-default:active,
 .btn-default:active:focus {
-    background: $chetwode-blue;
-    color: $white;
-    border-color: $chetwode-blue;
+    background: var(--color-blue);
+    color: var(--color-white);
+    border-color: var(--color-blue);
 }

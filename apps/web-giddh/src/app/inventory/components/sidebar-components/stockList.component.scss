@@ -1,13 +1,11 @@
-@import "../../../../assets/css/color.scss";
-
 .stock-items .active {
-    background-color: $lavender;
+    background-color: var(--color-dark-fog);
 }
 .stock-items .active a .span {
-    color: $jacksons-purple !important;
+    color: var(--color-giddh-blue) !important;
 }
 .span {
-    color: $black;
+    color: var(--color-nero);
     font-size: 14px;
 }
 .in-list {
@@ -23,11 +21,11 @@
     line-height: 14px !important;
 }
 .stock-items .active .btn-link .fa {
-    color: $jacksons-purple;
+    color: var(--color-giddh-blue);
 }
 .stock-items > li .in-list:hover {
-    background-color: $lavender;
+    background-color: var(--color-dark-fog);
 }
 .stock-items > li .in-list:hover a > span {
-    color: $chetwode-blue !important;
+    color: var(--color-blue) !important;
 }

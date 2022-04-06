@@ -1,10 +1,8 @@
-@import "../../assets/css/color.scss";
-
 .invoice-control {
     .nav.nav-tabs {
         margin-bottom: 20px;
         padding: 12px 0px 0 15px !important;
-        background-color: $alice-blue-light;
+        background-color: var(--color-wild-sand);
         z-index: 9;
         position: relative;
         top: -4px;
@@ -20,12 +18,12 @@
     border-right: 0px !important;
     border-left: 0px !important;
     border-bottom: 0px !important;
-    border-top: 1px solid $gainsboro;
+    border-top: 1px solid var(--color-iron);
     white-space: normal;
 }
 
 .table-border-bottom .last-row td {
-    background: $white-smoke;
+    background: var(--color-wild-sand);
     padding: 14px 10px;
     font-weight: bold;
 }
@@ -35,12 +33,12 @@
 }
 
 .return-sel {
-    background-color: $gray-95;
+    background-color: var(--color-wild-sand);
     border-radius: 18px;
     padding: 5px 15px;
     cursor: pointer;
     display: inline-block;
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--color-iron);
 }
 .tax-engine {
     background: none;

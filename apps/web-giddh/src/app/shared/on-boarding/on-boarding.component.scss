@@ -1,23 +1,23 @@
 /**new modal design**/
-@import "../../../assets//css/color.scss";
+
 .modal-body label {
-    color: $gray;
+    color: var(--color-abbey);
     margin-bottom: 5px;
 }
 
 label .required {
     position: relative;
     top: 0px;
-    color: $scarlet;
+    color: var(--color-primary-onboarding-label-required);
 }
 
 .form-control {
-    color: $gray;
+    color: var(--color-abbey);
 }
 
 .modal-body p {
     font-size: 14px;
-    color: $pink-swan;
+    color: var(--color-primary-on-boarding-modal-body-p);
     text-align: center;
     margin-left: -28px;
     margin-right: -28px;
@@ -38,7 +38,8 @@ label .required {
 }
 
 .add-company-detail {
-    background-color: $alice-blue-light;
+    background-color: var(--color-wild-sand);
+    margin-bottom: 0 !important;
 }
 
 .welcome-select {
@@ -50,7 +51,7 @@ label .required {
 .welcome-header h1 {
     font-size: 30px;
     font-family: "opensans-regular";
-    color: $midnight-blue;
+    color: var(--color-giddh-blue);
 }
 
 .add-company-detail p {
@@ -66,13 +67,13 @@ label .required {
 }
 
 .name-error {
-    color: $red;
+    color: var(--color-danger);
     font-size: 11px;
     float: right;
 }
 
 .add-company-detail {
-    background-color: $alice-blue-light;
+    background-color: var(--color-wild-sand);
 }
 
 @media (min-width: 768px) {
