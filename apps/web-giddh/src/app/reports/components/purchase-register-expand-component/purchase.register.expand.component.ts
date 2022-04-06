@@ -139,6 +139,12 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
         this.getDetailedPurchaseRequestFilter.sort = ord;
         this.getDetailedPurchaseReport(this.getDetailedPurchaseRequestFilter);
     }
+
+    // Back Button Function
+    public purchaseRegisterBack(){
+        this.router.navigate(['/pages/reports/purchase-register']);
+    }
+
     /**
     * emitExpand
     */
