@@ -1428,7 +1428,7 @@ modal-container.modal {
     border-radius: 5px !important;
     padding: 6px !important;
     outline: 0;
-    color: var(--color-sidebar-search-bar-text) !important;
+    color: var(--color-nero) !important;
     box-shadow: none;
     font-size: 14px !important;
 }
@@ -4168,6 +4168,11 @@ virtual-scroll .scrollable-content .item > a {
     font-size: 14px !important;
 }
 
+virtual-scroll .scrollable-content .item.selected > a,
+virtual-scroll .scrollable-content .item.hilighted > a {
+    background-color: var(--color-dropdown-tertiary-list-hover-background);
+}
+
 virtual-scroll .scrollable-content .item.selected > a {
     color: var(--color-blue) !important;
 }
@@ -5740,10 +5745,10 @@ ul#dropdown-nested .dropdown-menu li:hover .dropdown-item {
 .welcome-container .select-box .custom-select input.form-control.selected-val.cp,
 .welcome-container .select-box input,
 .welcome-container .select-box textarea {
-    color: var(--color-nero);
+    color: var(--color-nero) !important;
 }
 .welcome-container input::placeholder {
-    color: var(--color-gray) !important;
+    color: var(--color-common-primary-input-placeholder) !important;
 }
 .btn-group.btn-block.invoice-btn .btn-block {
     color: var(--color-gray);
@@ -5900,12 +5905,49 @@ span.red-text {
     height: auto !important;
 }
 
+.sales-invoice-table {
+    .other-details-section {
+        .other-details-section-list {
+            .mat-form-field-wrapper {
+                .mat-form-field-infix {
+                    height: 30px;
+
+                    input:first-child::placeholder {
+                        color: var(--color-common-primary-input-placeholder);
+                    }
+
+                    .mat-input-element.mat-form-field-autofill-control.mat-datepicker-input {
+                        position: absolute;
+                        padding-top: 7px;
+                        padding-left: 36px;
+                    }
+                }
+            }
+
+            .mat-datepicker-toggle {
+                .mat-button-wrapper {
+                    .mat-datepicker-toggle-default-icon {
+                        color: var(--color-datepicker-date-icon);
+                        position: absolute;
+                        bottom: 13px;
+                        right: 10px;
+                    }
+                }
+            }
+        }
+    }
+}
+
 ul.dropdown-menu p.lead.pd {
     font-size: 14px;
 }
 .form-control {
     height: 36px;
     font-size: 14px !important;
+
+    &::placeholder {
+        color: var(--color-common-primary-input-placeholder);
+    }
 }
 .nav-tabs > li.active > a,
 .invoice-control .nav-tabs > li.active > a {
@@ -6471,6 +6513,9 @@ input.checkbox-custom[type="checkbox"] {
 .select2-parent.select2-ledger .ledger-account-label sh-select .header input {
     padding-left: 3px !important;
     font-size: 13px !important;
+    &::placeholder {
+        color: var(--color-common-secondary-input-placeholder);
+    }
 }
 .select2-parent.select2-ledger .ledger-account-label input.form-control.focused {
     padding-left: 13px !important;
@@ -6741,7 +6786,7 @@ span#HW_badge_cont:nth-child(3) {
                 a {
                     span {
                         i {
-                            color: var(--color-white);
+                            color: var(--color-primary-right-sidebar-list-text-hover);
                         }
                     }
                 }
@@ -6752,7 +6797,7 @@ span#HW_badge_cont:nth-child(3) {
             a {
                 span {
                     i {
-                        color: var(--color-white);
+                        color: var(--color-primary-right-sidebar-list-text-hover);
                     }
                 }
             }

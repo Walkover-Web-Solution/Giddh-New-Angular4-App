@@ -224,16 +224,17 @@ body.dark-theme {
     --color-aside-menu-create-tax-custom-tags-span-background: #9b9b9e;
 
     // Subscription Plans Color Variables
+    --color-primary-subscription-plans-top-bar-background: #505159;
     --color-primary-subscription-plans-selected-background: #668cff26;
     --color-primary-subscription-active: #36b283;
     --color-primary-subscription-green-red-orange-dot-background: #36b283;
     --color-primary-tab-header-text: #212528;
     --color-primary-subscription-search-placeholder-text: #cbcfd2;
     --color-primary-subscription-dropdown-text: #cbcfd2;
-    --color-primary-subscription-dropdown-background: #668cff26;
+    --color-primary-subscription-dropdown-background: #212528;
     --color-secondary-subscription-dropdown-background: #212528;
     --color-secondary-subscription-dropdown-background-hover: #668cff26;
-    --color-primary-subscription-left-sidebar-box-background: #36b28326;
+    --color-primary-subscription-left-sidebar-box-background: #668cff26;
     --color-primary-subscription-left-sidebar-border-right: #505159;
 
     // Proforma Invoice Color Variables
@@ -444,7 +445,7 @@ body.dark-theme {
     // Left Sidebar Color Variables
     --color-sidebar-content-text: #f5f5f5;
     --color-sidebar-primary-anchor-text: #9b9b9e;
-    --color-sidebar-secondary-anchor-text: #505159;
+    --color-sidebar-secondary-anchor-text: #9b9b9e;
     --color-sidebar-anchor-text-hover: #668cff;
     --color-sidebar-menu-list-items: #212528;
     --color-sidebar-list-head: #f5f5f5;
@@ -453,7 +454,7 @@ body.dark-theme {
     --color-sidebar-footer-logout-section-background: #668cff26;
     --color-sidebar-company-count-text: #cbcfd2;
     --color-sidebar-company-count-background: #668cff26;
-    --color-sidebar-create-company-list-text: #f5f5f5;
+    --color-sidebar-create-company-list-text: #9b9b9e;
     --color-sidebar-create-company-list-background: #668cff26;
     --color-sidebar-list-background-hover: #668cff26;
     --color-sidebar-primary-box-shadow: #00000080;
@@ -528,6 +529,7 @@ body.dark-theme {
     --color-right-sidebar-icon: #f5f5f5;
     --color-right-sidebar-settings: #f5f5f5;
     --color-right-sidebar-primary-background: #668cff26;
+    --color-primary-right-sidebar-list-text-hover: #f5f5f5;
     --color-right-sidebar-primary-journal-voucher-list: #f5f5f5;
     --color-right-sidebar-primary-journal-voucher-list-hover: #668cff26;
     --color-right-sidebar-primary-journal-voucher-background: #668cff26;
@@ -611,7 +613,9 @@ body.dark-theme {
     --color-common-secondary-border: #505159;
     --color-primary-common-box-shadow: #00000080;
     --color-common-primary-disabled: #9b9b9e;
+    --color-common-secondary-disabled: #9b9b9e;
     --color-common-primary-input-placeholder: #505159;
+    --color-common-secondary-input-placeholder: #cbcfd2;
 
     // Toast Color Variables
     --color-red-toast: #e54556;

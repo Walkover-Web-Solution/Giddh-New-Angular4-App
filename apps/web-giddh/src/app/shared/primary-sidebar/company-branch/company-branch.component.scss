@@ -22,6 +22,9 @@
             &:focus {
                 border-color: var(--color-iron) !important;
             }
+            &::placeholder {
+                color: var(--color-common-secondary-input-placeholder) !important;
+            }
         }
         .input-group-append {
             font-size: 12px;

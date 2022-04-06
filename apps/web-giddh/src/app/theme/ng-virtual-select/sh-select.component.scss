@@ -96,16 +96,18 @@ i.close.icon.clear:hover::after {
 }
 
 .header .form-control[readonly] {
-    background-color: var(--color-discount-search-bar-background) !important;
+    color: var(--color-nero) !important;
     border: 1px solid var(--color-secondary-input-bar-border);
+    background-color: var(--color-discount-search-bar-background) !important;
 }
 
 .sh-select-disabled .selected-val,
 .sh-select-disabled .form-control,
 .sh-select-disabled .form-control[readonly] {
-    background: var(--color-input-primary-background) !important;
-    pointer-events: none;
     cursor: not-allowed;
+    pointer-events: none;
+    color: var(--color-common-secondary-disabled) !important;
+    background: var(--color-input-primary-background) !important;
 }
 
 :host(.disabled-ledger) {
@@ -117,6 +119,10 @@ i.close.icon.clear:hover::after {
             background: var(--color-white) !important;
         }
     }
+}
+
+.form-control::placeholder {
+    color: var(--color-common-primary-input-placeholder);
 }
 
 .selected-val {
