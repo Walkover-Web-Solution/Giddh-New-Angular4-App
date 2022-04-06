@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from "@angular/core";
 import { FormControl } from "@angular/forms";
+import { MatAutocompleteTrigger } from "@angular/material/autocomplete";
 import { ReplaySubject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { cloneDeep } from "../../../lodash-optimized";
@@ -32,6 +33,8 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy {
     public fieldFilteredOptions: IOption[] = [];
     /** Selected value from option list */
     public selectedValue: any = '';
+    /** Trigger instance for auto complete */
+    public trigger: MatAutocompleteTrigger;
     /** Subject to release subscriptions */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 

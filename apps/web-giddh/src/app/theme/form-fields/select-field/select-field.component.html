@@ -8,6 +8,8 @@
     [name]="name"
     [formControl]="searchFormControl"
     [readonly]="readonly"
+    (click)="trigger?.openPanel()"
+    #trigger="matAutocompleteTrigger"
 />
 <mat-autocomplete [displayWith]="displayLabel" (optionSelected)="optionSelected($event)" #auto="matAutocomplete">
     <mat-option *ngFor="let option of fieldFilteredOptions" [value]="option">
