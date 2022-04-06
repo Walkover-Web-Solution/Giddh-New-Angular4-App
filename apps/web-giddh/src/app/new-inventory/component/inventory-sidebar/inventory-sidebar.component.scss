@@ -7,24 +7,29 @@
     width: 240px;
     left: -240px;
     z-index: 999;
+
     .aside-pane {
         background: var(--color-white);
         overflow: initial;
         z-index: unset;
+
         .back-to-main-slider {
             display: block;
             padding: 15px 15px 3px;
             margin-bottom: 0;
         }
+
         .help-aside-body {
             .inventory-items {
                 ul {
                     li {
                         padding: 0px;
+
                         a {
                             display: flex;
                             align-items: flex-start;
                             padding: 7px 15px;
+
                             span {
                                 i {
                                     color: var(--color-lavender);
@@ -42,19 +47,24 @@
 
 .inventory-items {
     padding: 15px 0 0;
+
     ul {
         padding: 0;
         list-style: none;
         font-size: 14px;
         font-family: "opensans-semibold";
+
         li {
             padding: 6px 20px;
             margin-bottom: 0px;
+
             a {
                 cursor: pointer;
+
                 img {
                     margin-right: 12px;
                 }
+
                 span {
                     color: var(--color-nero);
                     &:first-child {
@@ -66,27 +76,53 @@
                         width: 28px;
                         float: left;
                     }
+
                     &:last-child {
                         float: left;
                         width: 80%;
                     }
                 }
             }
+
             &:hover {
                 background-color: var(--color-sidebar-list-background-hover);
             }
         }
     }
 }
+
 .inventory-items ul li:hover a span i {
     color: var(--color-nero) !important;
 }
+
+.inventory-sub-bar {
+    font-family: "opensans-regular" !important;
+
+    li {
+        a {
+            color: var(--color-nero) !important;
+            padding-left: 50px !important;
+
+            &:hover {
+                background: var(--color-dark-fog);
+                color: var(--color-giddh-blue) !important;
+            }
+
+            &.active {
+                background: var(--color-dark-fog);
+                color: var(--color-giddh-blue) !important;
+            }
+        }
+    }
+}
+
 @media (max-width: 767px) {
     :host.inventory-sidebar {
         z-index: 9999;
         top: 0;
     }
 }
+
 @media (max-height: 700px) {
     .help-aside-body {
         height: 100%;

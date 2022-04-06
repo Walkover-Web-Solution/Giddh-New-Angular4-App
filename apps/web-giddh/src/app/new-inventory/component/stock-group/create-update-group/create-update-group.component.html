@@ -1,0 +1,253 @@
+<div
+    class="relative"
+    appTranslate
+    [file]="'inventory/stock-group'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+>
+    <hamburger-menu [pageHeading]="'Create Group'"></hamburger-menu>
+    <div class="new-inventory-page-header">
+        <label class="page-title-inventory"> Create Stock group </label>
+
+        <div class="inventory-header-right">
+            <button mat-icon-button class="ml-3" style="font-size: 25px" [routerLink]="['stock-group/list-group']">
+                ×
+            </button>
+        </div>
+    </div>
+
+    <form autocomplete="off" novalidate name="groupForm" [formGroup]="groupForm" (ngSubmit)="saveGroup()">
+        <div class="container-fluid">
+            <div class="create-group-page">
+                <div class="row">
+                    <div class="col-xl-4 col-lg-6 col-md-6">
+                        <div class="create-group-form">
+                            <p class="mr-b15 text-gray font-14">
+                                Lorem Ipsum dummy text will come here about create stock.
+                            </p>
+                        </div>
+                        <div class="row mr-b15">
+                            <div class="col-sm-6">
+                                <label>Group Name <span class="red-text">*</span></label>
+                            </div>
+                            <div class="col-sm-6">
+                                <text-field
+                                    [cssClass]="'form-control'"
+                                    name="name"
+                                    id="name"
+                                    placeholder="Enter Group Name"
+                                    formControlName="name"
+                                    (change)="generateUniqueName()"
+                                ></text-field>
+                            </div>
+                        </div>
+                        <div class="row mr-b15">
+                            <div class="col-sm-6">
+                                <label>Unique Name <span class="red-text">*</span></label>
+                            </div>
+                            <div class="col-sm-6">
+                                <text-field
+                                    [cssClass]="'form-control'"
+                                    name="unique-name"
+                                    id="unique-name"
+                                    placeholder="Unique Name"
+                                    formControlName="uniqueName"
+                                    (blur)="validateUniqueName()"
+                                ></text-field>
+                            </div>
+                        </div>
+
+                        <div class="row mr-b15">
+                            <div class="col-sm-6">
+                                <mat-radio-group
+                                    aria-label="Select an option"
+                                    class="d-flex"
+                                    formControlName="showCodeType"
+                                >
+                                    <mat-radio-button
+                                        color="primary"
+                                        name="showCodeType"
+                                        id="hsnCodeType"
+                                        value="hsn"
+                                        (change)="changeCodeType()"
+                                        class="font-size-14 mr-3"
+                                        >HSN Code
+                                    </mat-radio-button>
+                                    <mat-radio-button
+                                        color="primary"
+                                        name="showCodeType"
+                                        id="sacCodeType"
+                                        value="sac"
+                                        class="font-size-14"
+                                        (change)="changeCodeType()"
+                                        >SAC Code
+                                    </mat-radio-button>
+                                </mat-radio-group>
+                            </div>
+                            <div class="col-sm-6">
+                                <div *ngIf="groupForm.get('showCodeType').value === 'hsn'">
+                                    <text-field
+                                        [cssClass]="'form-control'"
+                                        name="hsn-code"
+                                        id="hsn-code"
+                                        placeholder="Enter HSN Code"
+                                        formControlName="hsnNumber"
+                                        decimalDigitsDirective
+                                        maxlength="10"
+                                    ></text-field>
+                                </div>
+                                <div *ngIf="groupForm.get('showCodeType').value === 'sac'">
+                                    <text-field
+                                        [cssClass]="'form-control'"
+                                        name="sac-code"
+                                        id="sac-code"
+                                        placeholder="Enter SAC Code"
+                                        formControlName="sacNumber"
+                                        decimalDigitsDirective
+                                        maxlength="10"
+                                    ></text-field>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mr-t15">
+                            <div class="col-sm-6">
+                                <label>&nbsp;</label>
+                            </div>
+                            <div class="col-sm-6">
+                                <mat-checkbox
+                                    color="primary"
+                                    formControlName="isSubGroup"
+                                    name="sub-group"
+                                    id="sub-group"
+                                    >Is it Sub-group?
+                                </mat-checkbox>
+                            </div>
+                        </div>
+                        <div class="row mr-t15">
+                            <div class="col-sm-6">
+                                <label>Parent Group</label>
+                            </div>
+                            <div class="col-sm-6">
+                                <sh-select
+                                    [options]="groups$ | async"
+                                    formControlName="parentStockGroupUniqueName"
+                                    [disabled]="!groupForm.get('isSubGroup').value"
+                                    [placeholder]="'Select Parent Group'"
+                                    [multiple]="false"
+                                    [ItemHeight]="33"
+                                    [forceClearReactive]="forceClear$ | async"
+                                    [isRequired]="true"
+                                ></sh-select>
+                            </div>
+                        </div>
+                        <div class="row mr-t15">
+                            <div class="col-sm-6">
+                                <label>Tax</label>
+                            </div>
+                            <div class="col-sm-6">
+                                <mat-select class="form-control">
+                                    <mat-option value="CESS@50">
+                                        <mat-checkbox color="primary"> CESS@50 </mat-checkbox>
+                                    </mat-option>
+                                    <mat-option value="GST12">
+                                        <mat-checkbox color="primary">GST12 </mat-checkbox>
+                                    </mat-option>
+                                    <mat-option value="Gst14">
+                                        <mat-checkbox color="primary">Gst14</mat-checkbox>
+                                    </mat-option>
+                                    <mat-option value="GST18">
+                                        <mat-checkbox color="primary">GST18</mat-checkbox>
+                                    </mat-option>
+                                    <mat-option value="TCS@20">
+                                        <mat-checkbox color="primary">TCS@20</mat-checkbox>
+                                    </mat-option>
+                                    <mat-option value="GST5">
+                                        <mat-checkbox color="primary">GST5</mat-checkbox>
+                                    </mat-option>
+                                    <mat-option value="TCSREC">
+                                        <mat-checkbox color="primary">TCSREC</mat-checkbox>
+                                    </mat-option>
+                                </mat-select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-7 col-lg-6 col-md-6">
+                        <div class="image-group relative">
+                            <div class="add-image">
+                                <button mat-button role="button" type="button" (click)="groupImage.click()">
+                                    <img src="{{ imgPath }}add-image.svg" />
+                                </button>
+
+                                <input
+                                    #groupImage
+                                    type="file"
+                                    class="d-none"
+                                    name="image"
+                                    id="image"
+                                    [options]="fileUploadOptions"
+                                    ngFileSelect
+                                    [uploadInput]="uploadInput"
+                                    (uploadOutput)="onUploadOutput($event)"
+                                />
+                            </div>
+                            <div class="group-vector">
+                                <img src="{{ imgPath }}create-group-vector.svg" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="other-group mt-3 mb-3">
+                    <mat-tab-group dynamicHeight class="mat-tab-them">
+                        <mat-tab label="Other">
+                            <div class="other-tab-content mt-3">
+                                <mat-checkbox
+                                    color="primary"
+                                    name="out-of-stock-selling"
+                                    id="out-of-stock-selling"
+                                    formControlName="outOfStockSelling"
+                                    >Continue selling when out of stock? (Will be applicable on all the subsequent
+                                    group/stock)
+                                </mat-checkbox>
+                            </div>
+                        </mat-tab>
+                    </mat-tab-group>
+                </div>
+            </div>
+        </div>
+        <div class="create-group-footer sticky-footer">
+            <div class="footer-wrapper">
+                <div class="button-group">
+                    <button
+                        *ngIf="!groupUniqueName"
+                        id="clear-btn"
+                        type="button"
+                        mat-raised-button
+                        class="btn-primary btn-left-right-round min-width-100"
+                        (click)="resetGroupForm()"
+                    >
+                        Clear
+                    </button>
+                    <button
+                        *ngIf="groupUniqueName"
+                        id="clear-btn"
+                        mat-raised-button
+                        type="button"
+                        class="btn-primary btn-left-right-round min-width-100"
+                        [routerLink]="'/pages/new-inventory/stock-group/list'"
+                    >
+                        Cancel
+                    </button>
+                    <button
+                        mat-raised-button
+                        id="create-group-btn"
+                        [disabled]="groupForm?.invalid || isFileUploading"
+                        class="btn-success btn-left-right-round"
+                    >
+                        {{ groupUniqueName ? "Update Group" : "Create Group" }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

@@ -1,8 +1,0 @@
-{
-    "unit_name": "Unit Name",
-    "unit_code": "Unit Code",
-    "parent_unit": "Parent Unit",
-    "parent_unit_placeholder": "Choose a parent unit",
-    "quantity_per_unit": "Qty. per Unit",
-    "invalid_unit": "Only numbers and lower case alphabets without spaces are allowed!"
-}
