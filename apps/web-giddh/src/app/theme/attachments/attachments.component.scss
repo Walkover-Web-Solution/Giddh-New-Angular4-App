@@ -1,11 +1,9 @@
-@import "../../../assets/css/color.scss";
-
 .wrapper {
     .header {
         display: flex;
         align-items: center;
-        background-color: $midnight-blue;
-        color: $white;
+        background-color: var(--color-giddh-blue);
+        color: var(--color-white);
         width: 100%;
         padding-left: 10px;
         height: 50px;
@@ -14,7 +12,7 @@
         display: flex;
         height: 77vh;
         .left-side {
-            border-right: 1px solid $dim-gray;
+            border-right: 1px solid var(--color-gray);
             width: 35%;
             padding: 10px 10px 10px 13px;
             position: relative;
@@ -34,7 +32,7 @@
                     text-overflow: ellipsis;
                 }
                 a {
-                    color: $dark-gray !important;
+                    color: var(--color-dark-gray) !important;
                     position: absolute;
                     right: 0;
                 }
@@ -59,7 +57,7 @@
                             text-overflow: ellipsis;
                         }
                         a {
-                            color: $dark-gray !important;
+                            color: var(--color-dark-gray) !important;
                             position: absolute;
                             right: 0;
                         }
@@ -72,7 +70,7 @@
                 right: 14px;
                 a {
                     margin-left: 5px;
-                    color: $dark-gray !important;
+                    color: var(--color-dark-gray) !important;
                 }
             }
         }
@@ -81,14 +79,14 @@
             padding: 10px 13px;
             .right-side-buttons {
                 display: flex;
-                background-color: $white;
-                border: 1px solid $gainsboro;
+                background-color: var(--color-white);
+                border: 1px solid var(--color-iron);
                 border-radius: 5px;
                 min-width: 67px;
                 float: right;
                 margin-right: 2px;
                 span {
-                    border-left: 1px solid $gainsboro;
+                    border-left: 1px solid var(--color-iron);
                     padding: 5px;
                     display: flex;
                     justify-content: center;
@@ -100,7 +98,7 @@
                         border-left: none;
                     }
                     a {
-                        color: $dark-gray !important;
+                        color: var(--color-dark-gray) !important;
                         cursor: pointer;
                     }
                 }
@@ -128,10 +126,10 @@
     }
 }
 .active-file {
-    color: $primary;
+    color: var(--color-blue);
 }
 .disabled {
-    background-color: $gainsboro !important;
+    background-color: var(--color-iron) !important;
     cursor: not-allowed !important;
 }
 ::ng-deep {

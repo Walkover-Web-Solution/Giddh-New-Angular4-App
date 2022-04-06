@@ -1,14 +1,12 @@
-@import "../../../assets/css/color.scss";
-
 .panel {
     box-shadow: none;
 
     .running {
-        color: $deep-sky-blue-hover;
+        color: var(--color-blue);
     }
 
     .panel-heading {
-        background: $whisper;
+        background: var(--color-dark-fog);
     }
 
     .panel-footer {
@@ -17,7 +15,7 @@
     }
 
     .panel-body {
-        color: $gray;
+        color: var(--color-abbey);
         background: transparent;
         padding: 15px 0px 0px 0px;
 
@@ -25,12 +23,12 @@
             box-shadow: none;
             height: 5px;
             margin-bottom: 0px;
-            border: $gainsboro 1px solid;
+            border: var(--color-iron) 1px solid;
         }
 
         .progress-bar {
-            background: $silver;
-            border: 1px solid $silver;
+            background: var(--color-gray);
+            border: 1px solid var(--color-gray);
             box-shadow: none;
         }
 
@@ -59,6 +57,6 @@
     }
 
     .text-success {
-        color: $success-green;
+        color: var(--color-success-enable);
     }
 }

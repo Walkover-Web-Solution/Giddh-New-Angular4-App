@@ -1,12 +1,10 @@
-@import "../../../../assets/css/color.scss";
-
 .modal-header {
-    background-color: $davy-grey;
+    background-color: var(--color-abbey);
 }
 
 .invoice-image-section {
     text-align: center;
-    background-color: $white;
+    background-color: var(--color-white);
     margin-bottom: 35px;
     z-index: -9;
     height: 73vh;
@@ -19,6 +17,6 @@
         font-size: 36px;
         max-width: 60%;
         margin: 0 auto;
-        color: $red;
+        color: var(--color-danger);
     }
 }

@@ -1,4 +1,3 @@
-@import "../../../assets/css/color.scss";
 .upload-and-map-content {
     h2 {
         font-size: 32px;
@@ -23,7 +22,7 @@
 .upload-icon {
     font-size: 62px;
     float: none;
-    color: $whisper-light;
+    color: var(--color-dark-fog);
 }
 
 .sample-file-btn {
@@ -32,7 +31,7 @@
 }
 
 .dashed-border {
-    border: 2px dashed $gainsboro;
+    border: 2px dashed var(--color-common-secondary-border);
 }
 
 .import-type {
@@ -50,8 +49,8 @@
     align-items: center;
     justify-content: flex-end;
     margin: 0 15px;
-    border: 1px solid $gainsboro;
-    background: $gray-95;
+    border: 1px solid var(--color-iron);
+    background: var(--color-wild-sand);
     padding: 15px;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -71,7 +70,7 @@
 }
 
 .has-error .form-control {
-    border-color: $red !important;
+    border-color: var(--color-danger) !important;
 }
 
 #csvUploadInput {
@@ -90,27 +89,27 @@
     top: 0;
     bottom: 0;
     z-index: 9;
-    background: $white;
+    background: var(--color-white);
     text-align: left;
     position: absolute;
-    border: 1px solid $light-gray;
+    border: 1px solid var(--color-secondary-input-bar-border);
     border-radius: 2px !important;
     padding: 6px 12px !important;
     outline: 0;
-    color: rgba(0, 0, 0, 0.6);
+    color: var(--color-common-primary-text);
     font-size: 14px;
     width: calc(100% - 95px);
 }
 .select-file {
-    color: $light-green;
+    color: var(--color-primary-select-file);
 }
 .file-upload-panel {
     width: 100%;
     text-align: left;
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--color-secondary-input-bar-border);
     padding: 8px;
     border-radius: 4px;
-    color: $very-light-gray;
+    color: var(--color-iron);
 }
 .linked-entities {
     .list-item {
@@ -128,10 +127,10 @@
             align-items: center;
             display: flex;
             &:hover:after {
-                color: $rich-blue;
+                color: var(--color-blue);
             }
             .icon-favorite-selected {
-                color: $rich-blue;
+                color: var(--color-blue);
             }
         }
     }

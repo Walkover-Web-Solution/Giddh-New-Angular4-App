@@ -1,19 +1,18 @@
-@import "../../../../assets/css/color.scss";
 .total-amount {
     font-size: 18px;
 }
 
 .total-income-text {
-    color: $cornflower-blue;
+    color: var(--color-primary-profit-loss-total-income-text);
 }
 
 .total-expenses-text {
-    color: $grandis;
+    color: var(--color-primary-profit-loss-total-expenses-text);
 }
 
 span.month-dropdown {
     font-size: 12px;
-    color: $dark-gray;
+    color: var(--color-abbey);
     vertical-align: top;
 }
 
@@ -24,7 +23,7 @@ span.month-dropdown {
 
 .dashboard-filter .btn-group span {
     vertical-align: middle;
-    color: $dark-gray;
+    color: var(--color-abbey);
 }
 
 .underline {
@@ -33,7 +32,7 @@ span.month-dropdown {
 
 .dashboard-filter {
     display: inline-flex;
-    color: $dark-gray;
+    color: var(--color-abbey);
     align-items: center;
 }
 
@@ -43,7 +42,7 @@ span.month-dropdown {
 }
 
 .due-amount {
-    color: $nero;
+    color: var(--color-common-primary-text);
     font-size: 16px;
     margin: 0;
     padding: 0;
@@ -54,7 +53,7 @@ span.icon-rupees {
 }
 
 .panel-body small {
-    color: $dark-gray;
+    color: var(--color-abbey);
 }
 .profit-loss-chart {
     margin: 0 auto !important;
@@ -63,7 +62,7 @@ span.icon-rupees {
     max-width: 190px;
     min-width: 190px;
     border-radius: 30px;
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--color-primary-button-border);
 }
 @media (max-width: 1300px) and (min-width: 991px) {
     .panel-heading {

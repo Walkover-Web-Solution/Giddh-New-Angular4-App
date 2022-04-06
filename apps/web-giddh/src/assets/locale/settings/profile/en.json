@@ -41,5 +41,7 @@
     "number_system_label": "Number System",
     "inventory_type": "Inventory Type",
     "language": "Language",
-    "select_language": "Select Language"
+    "select_language": "Select Language",
+    "theme": "Theme",
+    "select_theme": "Select Theme"
 }
