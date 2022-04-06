@@ -956,7 +956,10 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         this.isVariantAvailable = false;
         this.stockUnitName = "";
         this.stockGroupName = "";
+        this.purchaseAccountName = "";
+        this.salesAccountName = "";
         this.customFieldsData = [];
+        this.inlineEditCustomField = 0;
         this.selectedTaxes = [];
         this.taxTempArray = [];
 
