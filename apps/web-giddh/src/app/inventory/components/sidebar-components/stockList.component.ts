@@ -23,9 +23,9 @@ import { BreakpointObserver } from '@angular/cdk/layout';
             <span class="d-block mr-r1" *ngIf="item.count" [hidden]="(activeStockUniqueName$ | async) === item.uniqueName">
          {{item.count}}</span>
           </a>
-          <button class="btn btn-link btn-xs pull-right" (click)="goToManageStock(item)" *ngIf="!isMobileScreen && (activeStockUniqueName$ | async) === item.uniqueName">
+          <a class="btn btn-link btn-xs pull-right" [routerLink]="'/pages/new-inventory/stock/edit/' + item.uniqueName" *ngIf="!isMobileScreen && (activeStockUniqueName$ | async) === item.uniqueName">
             <i class="icon-edit-pencil"> </i>
-          </button>
+          </a>
         </div>
       </li>
     </ul>
