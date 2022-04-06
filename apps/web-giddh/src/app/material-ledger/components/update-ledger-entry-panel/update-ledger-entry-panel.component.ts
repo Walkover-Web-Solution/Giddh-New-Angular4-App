@@ -2230,7 +2230,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     }];
                 }
                 initialAccounts.push({
-                    label: `${t.particular?.name} (${t.inventory.stock?.uniqueName})`,
+                    label: `${t.particular?.name} (${t.inventory.stock?.name})`,
                     value: `${t.particular?.uniqueName}#${t.inventory.stock?.uniqueName}`,
                     additional: {
                         stock: {
