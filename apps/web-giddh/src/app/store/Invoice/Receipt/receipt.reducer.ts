@@ -233,6 +233,7 @@ export function Receiptreducer(state: ReceiptState = initialState, action: Custo
         case INVOICE_ACTIONS.PREVIEW_INVOICE: {
             return {
                 ...state,
+                invoiceDataHasError: false,
                 voucherDetailsInProcess: true
             };
         }

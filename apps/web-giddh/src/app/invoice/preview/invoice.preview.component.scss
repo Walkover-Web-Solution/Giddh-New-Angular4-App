@@ -148,6 +148,7 @@
     td.no-dbl-click-select {
         white-space: normal !important;
         word-break: normal !important;
+        text-transform: none !important;
     }
 }
 .click-dropdown .dropdown-btn {
@@ -544,7 +545,7 @@ span.icon-export-icon {
     min-height: 120px;
 }
 .giddh-table {
-    border-bottom: 1px solid var(--color-gray) !important;
+    border-bottom: 1px solid var(--color-common-primary-border) !important;
     tbody {
         tr {
             td {

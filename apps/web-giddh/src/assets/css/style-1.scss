@@ -2606,7 +2606,6 @@ giddh-datepicker {
     input.form-control.focused {
     padding-left: 1px !important;
     background-color: transparent !important;
-    border: 1px solid var(--color-tertiary-input-bar-border);
 }
 .ledger-advance-search-field {
     .mat-form-field-suffix {
@@ -2784,21 +2783,25 @@ td.mat-footer-cell {
     &.error {
         .snack-container {
             background-image: url("../images/failure.svg");
+            background-position-y: center;
         }
     }
     &.success {
         .snack-container {
             background-image: url("../images/success.svg");
+            background-position-y: center;
         }
     }
     &.warning {
         .snack-container {
             background-image: url("../images/exclamation-white.svg");
+            background-position-y: center;
         }
     }
     &.info {
         .snack-container {
             background-image: url("../images/info-white.svg");
+            background-position-y: center;
         }
     }
 }

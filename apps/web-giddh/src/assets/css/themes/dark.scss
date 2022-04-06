@@ -123,6 +123,7 @@ body.dark-theme {
     --color-dropdown-terniary-background: #668cff;
     --color-dropdown-list-hover-background: #668cff26;
     --color-dropdown-secondary-list-hover-background: #668cff26;
+    --color-dropdown-tertiary-list-hover-background: #668cff26;
     --color-dropdown-list-box-shadow: #212528;
     --color-dropdown-primary-bar-border: #668cff;
 
@@ -186,7 +187,7 @@ body.dark-theme {
     --color-primary-datepicker-btn-btn-danger-hover-active-focus: #e54556;
     --color-primary-datepicker-drop-down-box-shadow: #cbcfd2;
     --color-primary-datepicker-in-range-background: #668cff26;
-    --color-primary-datepicker-activatedDate: #668cff26;
+    --color-primary-datepicker-activated-date: #668cff26;
     --color-primary-datepicker-md-drppicker-th-div: #cbcfd2;
     --color-primary-datepicker-unselected-date-hover: #668cff26;
     --color-primary-datepicker-dropdown-color-active: #668cff;
@@ -430,6 +431,7 @@ body.dark-theme {
     --color-master-page-main-content-secondary-background: #212528;
     --color-master-page-sidebar-active-list-text: #f5f5f5;
     --color-master-page-sidebar-active-list-background: #668cff26;
+    --color-master-page-sidebar-primary-group: #9b9b9e;
 
     // Left Sidebar Color Variables
     --color-sidebar-content-text: #f5f5f5;
@@ -581,7 +583,7 @@ body.dark-theme {
     // Onboarding Color Variable
     --color-primary-onboarding-p: #cbcfd2;
     --color-primary-on-boarding-modal-body-p: #cbcfd2;
-    --color-primary-onboarding-sFSection-Jkvq-sFsubmit-btn-primary: #36b283;
+    --color-primary-onboarding-sfsection-jkvq-sfsubmit-btn-primary: #36b283;
 
     // Common Color Variables
     --color-danger: #e54556;
@@ -604,7 +606,7 @@ body.dark-theme {
     --color-green-toast: #36b283;
     --color-warning-toast: #e58a00;
     --color-info-toast: #668cff;
-    --color-toast-primary-text: #f5f5f5;
+    --color-toast-primary-text: #ffffff;
 
     // Common Leftout Background Color Variables
     --color-common-primary-blue-border: #f5f5f5;
@@ -665,6 +667,7 @@ body.dark-theme {
 
     /************************ COMMON COLORS USED MORE THAN 12 TIMES ************************/
     --color-blue: #668cff;
+    --color-black: #212528;
     --color-giddh-blue: #668cff;
     --color-wild-sand: #f5f5f5;
     --color-skeleton-loading-gradient-inner: #212528;

@@ -97,7 +97,7 @@
                                                 adjustedVoucherType === 'pay')
                                         )
                                     "
-                                    [amount]="getConvertedBalanceDue()"
+                                    [amount]="getBalanceDue() === 0 ? 0 : getConvertedBalanceDue()"
                                     [currencySymbol]="baseCurrencySymbol"
                                     [currencyCode]="companyCurrency"
                                 >
@@ -180,7 +180,7 @@
                                                         </p>
                                                         <p class="font-12 text-gray mb-0">
                                                             ({{ commonLocaleData?.app_amount }}:
-                                                            {{ currencySymbol }}
+                                                            {{ option?.additional?.currency?.symbol }}
                                                             <span class="d-inline-flex">
                                                                 <amount-field
                                                                     [amount]="

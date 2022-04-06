@@ -578,8 +578,7 @@
                                             *ngIf="selectedInvoiceForCreditNote"
                                             (click)="removeSelectedInvoice()"
                                         >
-                                            <span class="remove-invoice-icon">×</span>
-                                            <span class="label">{{ commonLocaleData?.app_remove }}</span>
+                                            <span class="remove-invoice-icon"><i class="icon-trash"></i></span>
                                         </div>
                                         <div
                                             class="form-group float-left"
@@ -955,8 +954,10 @@
                         *ngIf="blankLedger?.attachedFile?.length > 0"
                     >
                         <span>{{ blankLedger.attachedFileName }}</span>
-                        <span class="delete-attachment cursor-pointer">
-                            <img (click)="showDeleteAttachedFileModal()" src="assets/images/multiply.svg" />
+                        <span class="delete-attachment">
+                            <a class="cursor-pointer" (click)="showDeleteAttachedFileModal()">
+                                <i class="icon-trash"></i>
+                            </a>
                         </span>
                     </div>
                 </div>

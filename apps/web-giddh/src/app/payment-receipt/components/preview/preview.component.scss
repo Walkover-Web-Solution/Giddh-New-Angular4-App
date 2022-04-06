@@ -26,7 +26,7 @@
 
     .single-voucher-details {
         padding: 10px 15px;
-        border-bottom: 1px solid #d9d9d9;
+        border-bottom: 1px solid var(--color-iron);
         list-style: none;
     }
     .voucher-number-date {
@@ -83,7 +83,7 @@
                     height: 34px;
                     width: 34px;
                     background-color: #ddd;
-                    border: 1px solid #d9d9d9;
+                    border: 1px solid var(--color-iron);
                     border-radius: 5px;
                     position: static;
                     transform: inherit;
@@ -97,12 +97,12 @@
                 .edit-action-btn-groups {
                     display: flex;
                     background-color: #fff;
-                    border: 1px solid #d9d9d9;
+                    border: 1px solid var(--color-iron);
                     margin-right: 10px;
                     border-radius: 5px;
 
                     span {
-                        border-left: 1px solid #d9d9d9;
+                        border-left: 1px solid var(--color-iron);
                         padding: 5px;
                         display: flex;
                         justify-content: center;
