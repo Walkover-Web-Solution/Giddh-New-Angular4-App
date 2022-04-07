@@ -141,7 +141,7 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
     }
 
     // Back Button Function
-    public purchaseRegisterBack(){
+    public gotoPurchaseRegister(){
         this.router.navigate(['/pages/reports/purchase-register']);
     }
 

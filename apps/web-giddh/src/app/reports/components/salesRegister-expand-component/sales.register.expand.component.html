@@ -71,7 +71,9 @@
                 </a>
             </div>
             <div class="dis middle top-bar-content-right-side">
-                <button mat-flat-button color="primary" class="back-btn" (click)="salesRegisterBack()">Back</button>
+                <button mat-flat-button color="primary" class="back-btn" (click)="gotoSalesRegister()">
+                    {{ commonLocaleData?.app_back }}
+                </button>
                 <div
                     class="advance-icon cursor-pointer align-items-center btn-group mr-0"
                     #filterDropDownList="bs-dropdown"
