@@ -60,8 +60,7 @@ import { PurchaseOrderService } from './purchase-order.service';
 import { LocaleService } from './locale.service';
 import { BulkVoucherExportService } from './bulkvoucherexport.service';
 import { CustomFieldsService } from "./custom-fields.service";
-import { PrinterFormatService } from "./printer.format.service";
-import { PrinterService } from "./printer.service";
+import { ThermalService } from "./thermal.service";
 
 /**
  * Do not specify providers for modules that might be imported by a lazy loaded module.
@@ -134,8 +133,7 @@ export class ServiceModule {
                 BulkVoucherExportService,
                 LocaleService,
                 CustomFieldsService,
-                PrinterFormatService,
-                PrinterService
+                ThermalService
             ]
         };
     }

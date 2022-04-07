@@ -54,7 +54,7 @@
                         *ngIf="fieldsAndVisibility?.header?.showCompanyAddress?.display"
                         [ngStyle]="{ 'text-align': 'center' }"
                     >
-                        <p><strong>Company Address</strong></p>
+                        <p>Ltd. 405-406, Capt. C. S. Naydu Arcade, 10/2, Indore 452001(M. P.)</p>
                     </div>
                     <div
                         class="companyGstin"
@@ -62,7 +62,7 @@
                         [ngStyle]="{ 'text-align': 'center' }"
                     >
                         <strong>{{ fieldsAndVisibility.header.gstin?.label }}</strong>
-                        {{ companyGSTIN ? companyGSTIN : "12BAUCS7548A1Z4THERMAL" }}
+                        {{ companyGSTIN ? companyGSTIN : "12BAUCS7548A1Z4" }}
                     </div>
                     <div class="header-table-thermal">
                         <table class="thermal-table" cellspacing="0" cellpadding="0">
@@ -74,32 +74,35 @@
                                             <strong>Walkover Web Solutions Pvt</strong>
                                         </p>
                                         <p class="gst-cust" *ngIf="fieldsAndVisibility.header.billingGstin?.display">
-                                            GSTIN:23AAAAAA000A1Z0
+                                            {{
+                                                fieldsAndVisibility.header.billingGstin?.label?.length > 0
+                                                    ? fieldsAndVisibility.header.billingGstin?.label
+                                                    : "GSTIN"
+                                            }}
+                                            11AAAAAA000Z0A1
                                         </p>
                                     </td>
                                     <td class="invdate">
                                         <ng-container *ngIf="voucherType === 'sales'">
                                             <tr *ngIf="fieldsAndVisibility.header.invoiceDate?.display">
-                                                <td>
+                                                <td class="text-left invdate-td">
                                                     <strong>{{
                                                         fieldsAndVisibility.header.invoiceDate?.label?.length > 0
                                                             ? fieldsAndVisibility.header.invoiceDate?.label
                                                             : "Invoice Date"
                                                     }}</strong>
                                                 </td>
-                                                <td>
-                                                    <p>11/09/2017</p>
-                                                </td>
+                                                <td class="text-right invdate-td">11/09/2017</td>
                                             </tr>
                                             <tr *ngIf="fieldsAndVisibility.header.invoiceNumber?.display">
-                                                <td>
+                                                <td class="text-left invdate-td">
                                                     <strong>{{
                                                         fieldsAndVisibility.header.invoiceNumber?.label?.length > 0
                                                             ? fieldsAndVisibility.header.invoiceNumber?.label
                                                             : "Invoice No."
                                                     }}</strong>
                                                 </td>
-                                                <td class="invoice-head">20170911-1</td>
+                                                <td class="invoice-head text-right invdate-td">20170911-1</td>
                                             </tr>
                                         </ng-container>
                                         <!-- <tr *ngIf="fieldsAndVisibility.header.dueDate?.display">
@@ -282,7 +285,7 @@
                                         {{ fieldsAndVisibility.table.totalQuantity.label }}
                                     </p>
                                 </td>
-                                <td class="text-right">
+                                <td class="text-left">
                                     <p *ngIf="fieldsAndVisibility.table.totalQuantity?.display">4 No.</p>
                                 </td>
 
@@ -302,23 +305,23 @@
                                 <td>1800.00</td>
                             </tr>
                             <tr *ngIf="fieldsAndVisibility.footer.taxBifurcation?.display">
-                                <td class="text-left tax-gst">CGST9%</td>
-                                <td class="text-right">4500000.00</td>
+                                <td class="text-left tax-gst">
+                                    CGST9% <span class="right-tax-amount">4500000.00</span>
+                                </td>
                                 <td></td>
-                                <td></td>
-                                <!-- <p class="tax-gst"> CGST9% </p><p class="text-right">: 4500000.00</p>
-                                        <p class="tax-gst"> SGST9% : <p class="text-right">: 4500000.00</p> -->
                             </tr>
                             <tr *ngIf="fieldsAndVisibility.footer.taxBifurcation?.display">
-                                <td class="text-left tax-gst">SGST9%</td>
-                                <td class="text-right">4500000.00</td>
+                                <td class="text-left tax-gst">
+                                    SGST9% <span class="right-tax-amount">4500000.00</span>
+                                </td>
                                 <td></td>
-                                <td></td>
-
-                                <!-- <p class="tax-gst"> CGST9% </p><p class="text-right">: 4500000.00</p>
-                                                                        <p class="tax-gst"> SGST9% : <p class="text-right">: 4500000.00</p> -->
                             </tr>
-                            <tr *ngIf="fieldsAndVisibility.footer.totalDue?.display">
+                            <tr
+                                *ngIf="
+                                    fieldsAndVisibility.footer.totalDue?.display &&
+                                    fieldsAndVisibility.footer.totalInWords?.display
+                                "
+                            >
                                 <td></td>
                                 <td></td>
                                 <td>{{ fieldsAndVisibility.footer.totalDue?.label }}</td>
@@ -330,7 +333,12 @@
                             class="totalInWords"
                             style="text-align: center"
                         >
-                            <p *ngIf="fieldsAndVisibility.footer.totalInWords?.display">
+                            <p
+                                *ngIf="
+                                    fieldsAndVisibility.footer.totalInWords?.display &&
+                                    fieldsAndVisibility.footer.totalDue?.display
+                                "
+                            >
                                 Two Thousand One Hundred Twenty Four Only
                             </p>
                         </div>

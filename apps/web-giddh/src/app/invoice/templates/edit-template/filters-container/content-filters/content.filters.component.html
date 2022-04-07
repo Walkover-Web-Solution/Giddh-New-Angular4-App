@@ -122,7 +122,8 @@
                         class="form-group"
                         *ngIf="
                             (customTemplate?.templateType === 'gst_template_a' ||
-                                customTemplate?.templateType === 'gst_template_e') &&
+                                customTemplate?.templateType === 'gst_template_e' ||
+                                customTemplate?.templateType === 'thermal_template') &&
                             voucherType === 'sales' &&
                             customTemplate.sections['header'].data['showCompanyAddress']
                         "
@@ -442,7 +443,7 @@
                 />
             </div> -->
 
-                        <div class="ml-3">
+                        <div class="ml-3" *ngIf="customTemplate.templateType !== 'thermal_template'">
                             Invoice
                             <input
                                 type="text"
@@ -581,7 +582,7 @@
                             (ngModelChange)="onChangeFieldVisibility(null, null, null); changeDisableBilling()"
                         />
                         Billing Address
-                        <div class="ml-3">
+                        <div class="ml-3" *ngIf="customTemplate?.templateType !== 'thermal_template'">
                             <input
                                 type="text"
                                 hasFocus
@@ -623,7 +624,7 @@
                             (ngModelChange)="onChangeFieldVisibility(null, null, null)"
                         />
                         GSTIN
-                        <div class="ml-3">
+                        <div class="ml-3" *ngIf="customTemplate?.templateType !== 'thermal_template'">
                             <input
                                 type="text"
                                 hasFocus

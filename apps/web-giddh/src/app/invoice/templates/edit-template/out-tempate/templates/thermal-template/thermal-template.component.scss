@@ -31,6 +31,10 @@
 .thermal-footer {
     float: left;
     width: 100%;
+    margin-bottom: 15px !important;
+}
+.quantity-right {
+    padding-left: 15px;
 }
 .totalInWords {
     margin: 0 auto;
@@ -94,13 +98,14 @@ p {
 }
 .invdate {
     float: right;
+    text-align: right;
+    line-height: 32px;
 }
 .custAddress {
     float: left;
 }
 .gst-cust {
-    margin-top: 10px !important;
-    margin-bottom: 10px !important;
+    margin-top: 9px !important;
 }
 /* table */
 #thermal_template table {
@@ -119,10 +124,12 @@ p {
 
 #thermal_template {
     overflow: auto;
-    /* font-size: 93%; */
     background: #fff;
     border: 1px solid #bfbfbf;
     padding: 0;
+    max-width: 6.3in;
+    width: 100%;
+    margin: 0 auto;
 }
 
 #thermal_template body {
@@ -208,7 +215,6 @@ header img {
 }
 
 #thermal_template header span {
-    margin: 0 0 1em 1em;
     max-height: 25%;
     max-width: 60%;
     position: relative;
@@ -223,7 +229,16 @@ header img {
 
 #thermal_template header table tr td {
     border: 0;
-    /* padding: 4px 0; */
+    padding-left: 0px;
+}
+.thermal-table .invdate tr {
+    width: 100%;
+}
+.text-left.invdate-td {
+    float: left;
+    min-width: 50% !important;
+    text-align: right !important;
+    padding-right: 13px;
 }
 
 /* article */
@@ -489,7 +504,6 @@ strong {
 }
 
 .invoice-head {
-    width: 50%;
     word-break: break-word;
 }
 
@@ -622,6 +636,10 @@ table.tax-table.item {
     justify-content: flex-end;
     align-items: flex-end;
 }
-#thermal_template {
-    width: 60%;
+
+.header-table-thermal {
+    margin-top: 20px;
+}
+.right-tax-amount {
+    padding-left: 10px;
 }
