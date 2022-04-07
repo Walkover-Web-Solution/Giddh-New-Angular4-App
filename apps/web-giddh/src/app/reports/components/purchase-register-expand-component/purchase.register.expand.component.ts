@@ -140,8 +140,12 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
         this.getDetailedPurchaseReport(this.getDetailedPurchaseRequestFilter);
     }
 
-    // Back Button Function
-    public gotoPurchaseRegister(){
+    /**
+     * Redirects to Purchase Register Page
+     *
+     * @memberof PurchaseRegisterExpandComponent
+     */
+    public gotoPurchaseRegister(): void {
         this.router.navigate(['/pages/reports/purchase-register']);
     }
 

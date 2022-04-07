@@ -145,8 +145,12 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
         this.getDetailedSalesReport(this.getDetailedsalesRequestFilter);
     }
 
-    // Back Button Function
-    public gotoSalesRegister(){
+    /**
+     * Redirects to Sales Register Page
+     *
+     * @memberof SalesRegisterExpandComponent
+     */
+    public gotoSalesRegister(): void {
         this.router.navigate(['/pages/reports/sales-register']);
     }
 
