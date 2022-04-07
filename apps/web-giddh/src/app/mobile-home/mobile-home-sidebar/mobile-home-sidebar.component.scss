@@ -1,20 +1,19 @@
-@import "../../../assets/css/color.scss";
 .mobile-home-sidebar-wrapper {
     max-width: 280px;
     width: 100%;
-    background-color: $white;
-    color: $nero;
+    background-color: var(--color-white);
+    color: var(--color-nero);
     height: 100vh;
     letter-spacing: 0;
     .sidebar-header {
-        background-color: $midnight-blue;
-        color: $white;
+        background-color: var(--color-giddh-blue);
+        color: var(--color-white);
         padding: 15px;
         position: relative;
         .company-name-alice {
             width: 45px;
             height: 45px;
-            background: $chetwode-blue;
+            background: var(--color-blue);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -52,12 +51,12 @@
             li {
                 a {
                     padding: 10px 15px;
-                    color: $nero;
+                    color: var(--color-nero);
                     font-family: "opensans-semibold";
                     display: flex;
                     font-size: 14px;
                     &:hover {
-                        background-color: $lavender;
+                        background-color: var(--color-dark-fog);
                     }
                 }
             }

@@ -1,15 +1,13 @@
-@import "../../../../assets/css/color.scss";
-
 .or-line::before {
     content: " ";
-    border-bottom: 1px solid $dim-gray;
+    border-bottom: 1px solid var(--color-gray);
     display: inline-block;
     width: 57px;
     margin-right: 13px;
 }
 .or-line::after {
     content: "";
-    border-bottom: 1px solid $dim-gray;
+    border-bottom: 1px solid var(--color-gray);
     display: inline-block;
     width: 57px;
     margin-left: 13px;
@@ -17,7 +15,7 @@
 .or-line {
     display: flex;
     align-items: center;
-    color: $dim-gray;
+    color: var(--color-gray);
     margin-bottom: 10px;
 }
 .my-dropdown-men {
@@ -36,7 +34,7 @@
     .fa-percent {
         top: 9px;
         right: 6px;
-        color: $gray;
+        color: var(--color-abbey);
     }
 }
 .value-box {

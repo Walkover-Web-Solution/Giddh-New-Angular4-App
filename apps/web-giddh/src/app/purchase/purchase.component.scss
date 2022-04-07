@@ -1,21 +1,19 @@
-@import "../../assets/css/color.scss";
-
 .invoice-bg {
-    background-color: $solitude;
+    background-color: var(--color-wild-sand);
     padding: 20px;
 }
 
 .invoice-nav.navbar-nav > li > a {
     padding: 6px 30px;
     font-size: 14px;
-    color: $night-rider;
-    background-color: $whisper;
+    color: var(--color-nero);
+    background-color: var(--color-dark-fog);
 }
 
 .invoice-nav.navbar-nav > li > a:hover {
-    color: $white;
+    color: var(--color-white);
 }
 
 .invoice-nav.navbar-nav > li > a.active {
-    background-color: $white;
+    background-color: var(--color-white);
 }

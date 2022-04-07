@@ -1,8 +1,6 @@
-@import "../../../../assets/css/color.scss";
-
 .or-line::before {
     content: " ";
-    border-bottom: 1px solid $gainsboro;
+    border-bottom: 1px solid var(--color-iron);
     display: inline-block;
     width: 57px;
     margin-right: 13px;
@@ -10,7 +8,7 @@
 
 .or-line::after {
     content: "";
-    border-bottom: 1px solid $gainsboro;
+    border-bottom: 1px solid var(--color-iron);
     display: inline-block;
     width: 57px;
     margin-left: 13px;
@@ -19,7 +17,7 @@
 .or-line {
     display: flex;
     align-items: center;
-    color: $gainsboro;
+    color: var(--color-iron);
     margin-bottom: 10px;
 }
 .discount-item {
@@ -42,7 +40,7 @@
     .fa-percent {
         top: 9px;
         right: 6px;
-        color: $gray;
+        color: var(--color-abbey);
     }
 }
 .value-box {

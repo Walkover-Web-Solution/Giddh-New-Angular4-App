@@ -1,5 +1,3 @@
-@import "../../../../assets/css/color.scss";
-
 .max-width-300 {
     max-width: 300px;
 }
@@ -9,11 +7,11 @@
 }
 
 .appearance-none:focus {
-    background: $very-light-gray !important;
+    background: var(--color-iron) !important;
 }
 
 .appearance-none {
-    background: $whisper-color !important;
+    background: var(--color-dark-fog) !important;
 }
 
 .max-height28 {

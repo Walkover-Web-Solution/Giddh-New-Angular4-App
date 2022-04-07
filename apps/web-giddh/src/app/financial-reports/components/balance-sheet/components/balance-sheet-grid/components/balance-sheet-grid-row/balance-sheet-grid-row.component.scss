@@ -1,4 +1,3 @@
-@import "../../../../../../../../assets/css/color.scss";
 .pl-grid-row {
     flex-wrap: nowrap;
 }
@@ -17,5 +16,5 @@
     }
 }
 .trial-balance-viewport {
-    background-color: $solitude;
+    background-color: var(--color-common-quinary-background-for-all-components);
 }
