@@ -261,6 +261,11 @@ table th {
                 position: relative;
                 top: 1px;
                 right: 10px;
+                background-color: var(--color-secondary-button-background);
+
+                &:hover {
+                    background-color: var(--color-secondary-button-background-hover);
+                }
             }
         }
     }
