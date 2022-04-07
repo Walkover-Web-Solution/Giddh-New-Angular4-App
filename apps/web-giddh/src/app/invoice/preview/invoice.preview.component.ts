@@ -1391,10 +1391,34 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         this.changeStatusInvoiceUniqueName = item.uniqueName;
 
         if (this.voucherApiVersion === 2) {
-            this.updateNewAccountInVoucher(item.account);
-            this.advanceReceiptAdjustmentData = { adjustments: this.adjustmentUtilityService.formatAdjustmentsObject(item.adjustments) };
-            this.showAdvanceReceiptAdjust = true;
-            this.adjustPaymentModal.show();
+            this._receiptServices.getVoucherDetailsV4(item.account.uniqueName, {
+                invoiceNumber: item.voucherNumber,
+                voucherType: VoucherTypeEnum.sales,
+                uniqueName: item.uniqueName
+            }).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
+                if (response?.status === "success") {
+                    let tcsSum: number = 0;
+                    let tdsSum: number = 0;
+                    response.body?.entries.forEach(entry => {
+                        entry.taxes?.forEach(tax => {
+                            if (['tcsrc', 'tcspay'].includes(tax?.taxType)) {
+                                tcsSum += tax.amount?.amountForAccount;
+                            } else if (['tdsrc', 'tdspay'].includes(tax?.taxType)) {
+                                tdsSum += tax.amount?.amountForAccount;
+                            }
+                        });
+                    });
+                    this.invFormData.voucherDetails.tcsTotal = tcsSum;
+                    this.invFormData.voucherDetails.tdsTotal = tdsSum;
+
+                    this.updateNewAccountInVoucher(item.account);
+                    this.advanceReceiptAdjustmentData = { adjustments: this.adjustmentUtilityService.formatAdjustmentsObject(response.body?.adjustments) };
+                    this.showAdvanceReceiptAdjust = true;
+                    this.adjustPaymentModal.show();
+                } else {
+                    this._toaster.errorToast(response?.message);
+                }
+            });
         } else {
             this.selectedPerformAdjustPaymentAction = true;
             // To clear receipts voucher store
