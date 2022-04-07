@@ -514,13 +514,13 @@ button.btn.btn-filter span.icon-cross {
 }
 
 .pending-approval-button {
-    background-color: $solitude;
+    background-color: var(--color-secondary-button-background);
     width: 140px;
     height: 37px;
 }
 
 .pending-approval-button:hover {
-    background-color: $grayscale;
+    background-color: var(--color-secondary-button-background-hover);
 }
 
 .all-table {
