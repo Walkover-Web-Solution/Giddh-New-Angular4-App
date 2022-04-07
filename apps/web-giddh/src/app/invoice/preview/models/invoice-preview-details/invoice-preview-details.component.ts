@@ -23,8 +23,10 @@ import { LEDGER_API } from 'apps/web-giddh/src/app/services/apiurls/ledger.api';
 import { CommonService } from 'apps/web-giddh/src/app/services/common.service';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { InvoiceService } from 'apps/web-giddh/src/app/services/invoice.service';
+import { InvoiceTemplatesService } from 'apps/web-giddh/src/app/services/invoice.templates.service';
 import { PurchaseRecordService } from 'apps/web-giddh/src/app/services/purchase-record.service';
 import { SalesService } from 'apps/web-giddh/src/app/services/sales.service';
+import { ThermalService } from 'apps/web-giddh/src/app/services/thermal.service';
 import { saveAs } from 'file-saver';
 import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal';
 import { PerfectScrollbarComponent } from 'ngx-perfect-scrollbar';
@@ -157,6 +159,9 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     private attachedAttachmentBlob: Blob;
     /** True if left sidebar is expanded */
     private isSidebarExpanded: boolean = false;
+    /** Observable to get observable store data of voucher */
+    public voucherDetails$: Observable<any>;
+    public defaultTemplate: any;
 
     constructor(
         private _cdr: ChangeDetectorRef,
@@ -176,7 +181,9 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         private salesService: SalesService,
         private modalService: BsModalService,
         private domSanitizer: DomSanitizer,
-        private commonService: CommonService) {
+        private commonService: CommonService,
+        private thermalService: ThermalService,
+        private _invoiceTemplatesService: InvoiceTemplatesService) {
         this._breakPointObservar.observe([
             '(max-width: 1023px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
@@ -185,6 +192,10 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         this.sessionKey$ = this.store.pipe(select(p => p.session.user.session.id), takeUntil(this.destroyed$));
         this.companyName$ = this.store.pipe(select(p => p.session.companyUniqueName), takeUntil(this.destroyed$));
         this.isUpdateVoucherActionSuccess$ = this.store.pipe(select(s => s.proforma.isUpdateProformaActionSuccess), takeUntil(this.destroyed$));
+        this.voucherDetails$ = this.store.pipe(
+            select((s) => s.receipt.voucher),
+            takeUntil(this.destroyed$)
+        );
     }
 
     /**
@@ -202,7 +213,16 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     }
 
     ngOnInit() {
-        if(document.getElementsByClassName("sidebar-collapse")?.length > 0) {
+        this._invoiceTemplatesService.getAllCreatedTemplates("sales").pipe(takeUntil(this.destroyed$)).subscribe((res) => { 
+            if(res) {
+                const defaultTemplate = res.body?.filter(res => res.isDefault);
+                if(defaultTemplate?.length > 0) {
+                    this.defaultTemplate = defaultTemplate[0];
+                }
+            }
+           
+        });
+        if (document.getElementsByClassName("sidebar-collapse")?.length > 0) {
             this.isSidebarExpanded = false;
         } else {
             this.isSidebarExpanded = true;
@@ -380,7 +400,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         this.imagePreviewSource = null;
         this.selectedItem.hasAttachment = false;
 
-        if(this._generalService.voucherApiVersion === 2 && ![VoucherTypeEnum.generateEstimate, VoucherTypeEnum.generateProforma].includes(this.voucherType)) {
+        if (this._generalService.voucherApiVersion === 2 && ![VoucherTypeEnum.generateEstimate, VoucherTypeEnum.generateProforma].includes(this.voucherType)) {
             let getRequest = {
                 voucherType: this.selectedItem.voucherType,
                 uniqueName: this.selectedItem.uniqueName
@@ -400,7 +420,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                     this.pdfPreviewLoaded = true;
                     /** Creating voucher pdf finish */
 
-                    if(result.body.attachments?.length > 0) {
+                    if (result.body.attachments?.length > 0) {
                         /** Creating attachment start */
                         this.selectedItem.hasAttachment = true;
                         this.isAttachmentExpanded = false;
@@ -593,7 +613,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                 return;
             }
         } else if (this.selectedItem?.voucherType === VoucherTypeEnum.creditNote || this.selectedItem?.voucherType === VoucherTypeEnum.debitNote) {
-            if(this._generalService.voucherApiVersion === 2) {
+            if (this._generalService.voucherApiVersion === 2) {
                 return saveAs(this.selectedItem.blob, `${this.selectedItem.voucherNumber}.pdf`);
             } else {
                 this.downloadCreditDebitNotePdf();
@@ -642,6 +662,27 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         }
     }
 
+    /**
+     * This will use for print thermal pdf document
+     *
+     * @memberof InvoicePreviewDetailsComponent
+     */
+    public printThermal() {
+        this.voucherDetails$.subscribe((res) => {
+            console.log(res);
+            
+            if (res) {
+                this.thermalService.print(this.defaultTemplate, res);
+            } else {
+                this.store.dispatch(this._invoiceReceiptActions.getVoucherDetailsV4(this.selectedItem.account?.uniqueName, {
+                    invoiceNumber: this.selectedItem?.voucherNumber,
+                    voucherType: this.selectedItem.voucherType,
+                    uniqueName: this.selectedItem?.uniqueName
+                }));
+            }
+        });
+    }
+
     public goToInvoice(type?: string) {
         // remove fixed class because we are navigating to invoice generate page where user can scroll the page
         document.querySelector('body').classList.remove('fixed');
@@ -653,7 +694,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     }
 
     public ngOnDestroy(): void {
-        if(this.isSidebarExpanded) {
+        if (this.isSidebarExpanded) {
             this.isSidebarExpanded = false;
             this._generalService.expandSidebar();
             document.querySelector('.nav-left-bar').classList.add('open');

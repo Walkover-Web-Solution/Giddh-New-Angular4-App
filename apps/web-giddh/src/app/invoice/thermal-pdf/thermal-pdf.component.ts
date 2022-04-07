@@ -34,10 +34,10 @@ export class ThermalComponent implements OnInit {
 
     public ngOnInit(): void {
         this.store.dispatch(
-            this.invoiceReceiptActions.getVoucherDetailsV4("kriti", {
-                invoiceNumber: "K59",
+            this.invoiceReceiptActions.getVoucherDetailsV4("rishi", {
+                invoiceNumber: "A-20220401-1",
                 voucherType: "sales",
-                uniqueName: "ay7jt1646806875852",
+                uniqueName: "hzrui1648807228136",
             })
         );
     }
@@ -66,6 +66,8 @@ export class ThermalComponent implements OnInit {
         }
 
         this.voucherDetails$.subscribe((res) => {
+            console.log('response',res);
+            
             // The QR data
             let qr = "This is testing";
 
@@ -108,17 +110,10 @@ export class ThermalComponent implements OnInit {
                 rateField.padStart(15) +
                 "" +
                 netAmountField.padStart(15);
-            console.log(itemDetailsField.length);
-            console.log(quantityField.length);
-            console.log(rateField.length);
-            console.log(netAmountField.length);
-                
+              
             let itemFieldLength = this.maxLength - itemDetailsField.length;
-            console.log('item field length', itemFieldLength);
             
             let itemFieldName = productsField.substring(0, itemFieldLength);
-            console.log('item field name', itemFieldName);
-
 
             if (itemFieldName.length < productsField.length) {
                 let lastIndex = itemFieldName.lastIndexOf(" ");
@@ -159,11 +154,11 @@ export class ThermalComponent implements OnInit {
                         2
                     ) + " ";
                 let itemDetails =
-                    quantity.padStart(10) +
+                    quantity.padStart(7) +
                     "" +
-                    rate.padStart(10) +
+                    rate.padStart(16) +
                     "" +
-                    amount.padStart(12);
+                    amount.padStart(13);
                 let itemLength = this.maxLength - itemDetails.length;
                 let itemName = productName.substr(0, itemLength);
                 let remainingName = "";
@@ -200,6 +195,8 @@ export class ThermalComponent implements OnInit {
                 }
                 if (entry.taxes && entry.taxes.length > 0) {
                     for (let taxApp of entry.taxes) {
+                        console.log('taxApp',taxApp);
+                        
                         if (taxApp.amount?.amountForAccount > 0) {
                             let taxAmount = parseFloat(
                                 taxApp.amount?.amountForAccount
@@ -248,7 +245,7 @@ export class ThermalComponent implements OnInit {
                     this.blankDash() + this.printerFormat.lineBreak +
                     this.printerFormat.formatBold(
                         this.justifyText(productsField, itemDetailsField)
-                    ) +
+                    )  + this.printerFormat.lineBreak +
                     this.printerFormat.formatCenter(this.blankDash()) +
                     items +
                     this.printerFormat.formatCenter(this.blankDash()) +
@@ -335,20 +332,20 @@ export class ThermalComponent implements OnInit {
                  
 
                         var config = qz.configs.create(printer); // Create a default config for the found printer
-                        // let txt = [
-                        //     this.printerFormat.initPrinter +
-                        //     header +
-                        //     table +
-                        //     footer +
-                        //     this.printerFormat.endPrinter +
-                        //     this.printerFormat.fullCut,
-                        // ];
-                        var txt = [{
-                            type: 'pixel',
-                            format: 'pdf',
-                            flavor: 'file',
-                            data: 'https://www.adobe.com/support/products/enterprise/knowledgecenter/media/c4611_sample_explain.pdf'
-                        }];
+                        let txt = [
+                            this.printerFormat.initPrinter +
+                            header +
+                            table +
+                            footer +
+                            this.printerFormat.endPrinter +
+                            this.printerFormat.fullCut,
+                        ];
+                        // var txt = [{
+                        //     type: 'pixel',
+                        //     format: 'pdf',
+                        //     flavor: 'file',
+                        //     data: 'https://www.adobe.com/support/products/enterprise/knowledgecenter/media/c4611_sample_explain.pdf'
+                        // }];
                         return qz.print(config, txt);
                     })
                     .catch(function (e: any) {
