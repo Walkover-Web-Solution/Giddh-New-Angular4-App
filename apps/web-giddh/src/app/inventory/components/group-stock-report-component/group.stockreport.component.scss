@@ -1,6 +1,5 @@
-@import "../../../../assets/css/color.scss";
 .bd-rt {
-    border-color: $gainsboro;
+    border-color: var(--color-common-secondary-border);
 }
 
 :host ::ng-deep .fb-1-container {
@@ -75,7 +74,7 @@ table {
 
 .td-search-box div i {
     margin-top: 1px;
-    color: $wild-blue-yonder;
+    color: var(--color-blue);
     padding-right: 8px;
     cursor: pointer;
     display: flex;
@@ -96,9 +95,9 @@ table {
     min-width: 100%;
     padding: 11px;
     padding-right: 40px;
-    color: $nero;
+    color: var(--color-nero);
     border: none;
-    background-color: $white-smoke;
+    background-color: var(--color-sidebar-primary-search-bar-background);
 }
 
 .td-search-box .input-container i {
@@ -113,7 +112,7 @@ table {
 }
 
 .basic > thead > tr > th {
-    border-right: 1px solid $gainsboro;
+    border-right: 1px solid var(--color-table-primary-header-bar-border);
 }
 
 .icon-pointer .glyphicon {
@@ -121,37 +120,37 @@ table {
 }
 
 .td-search-box div i:hover {
-    color: $nobel;
+    color: var(--color-gray);
 }
 
 .dropdown-menu > li > a:hover {
-    color: $chetwode-blue;
-    background: $whisper;
+    color: var(--color-blue);
+    background: var(--color-dark-fog);
 }
 
 .stock-input {
     background-color: transparent !important;
-    border-bottom: 1px dotted $white !important;
+    border-bottom: 1px dotted var(--color-white) !important;
     border: none;
     width: auto;
     padding: 0 !important;
     height: auto;
     text-align: center;
     min-width: 155px;
-    color: $white;
+    color: var(--color-white);
 }
 
 .footer-tr td {
-    background-color: $whisper;
+    background-color: var(--color-dark-fog);
 }
 
 .total-footer {
-    background-color: $white;
+    background-color: var(--color-white);
     display: flex;
     .foot-item {
         padding: 41px;
         h2 {
-            color: $wistful;
+            color: var(--color-gray);
             font-size: 20px;
             margin-bottom: 10px;
         }
@@ -201,11 +200,11 @@ table {
 .icon-pointer .icon-sort-asc {
     line-height: 20px;
     width: 15px;
-    color: $wild-blue-yonder;
+    color: var(--color-blue);
 }
 
 .icon-pointer .active-text-color {
-    color: $deep-sky-blue;
+    color: var(--color-blue);
 }
 
 .sticky-footer-sale-amount {
@@ -227,7 +226,7 @@ table {
         }
         .operators {
             font-size: 39px;
-            color: $wistful;
+            color: var(--color-gray);
         }
         h2 {
             font-size: 18px;
@@ -265,11 +264,11 @@ table {
 }
 
 .text-purple {
-    color: $chetwode-blue;
+    color: var(--color-blue);
 }
 
 .btn-link-2 {
-    color: $vivid-blue;
+    color: var(--color-blue);
 }
 
 .mr-b100 {
@@ -296,10 +295,10 @@ td.border-right-none {
     justify-content: center;
     align-items: center;
     font-size: 18px;
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--color-primary-button-border);
     border-radius: 5px;
-    color: $midnight-blue;
-    background: $white;
+    color: var(--color-giddh-blue);
+    background: var(--color-white);
 }
 
 .inventory-stock-table {
@@ -315,10 +314,10 @@ td.border-right-none {
 }
 
 button.btn.btn-filter {
-    background: $whisper;
-    border: 1px solid $gainsboro;
+    background: var(--color-dark-fog);
+    border: 1px solid var(--color-primary-button-border);
     font-size: 14px;
-    color: $midnight-blue;
+    color: var(--color-giddh-blue);
     display: inline-flex;
     justify-content: space-between;
     align-items: center;
@@ -330,12 +329,12 @@ button.btn.btn-filter {
 }
 
 .inventory-stock-table input.form-control.stock-input {
-    color: $nero;
+    color: var(--color-nero);
     text-align: left;
 }
 
 .recept-modal .modal-title {
-    color: $white;
+    color: var(--color-white);
 }
 
 .mt-0 {
@@ -346,12 +345,12 @@ button.btn.btn-filter {
     text-transform: none;
 }
 .icon-btn {
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--color-primary-button-border);
     border-radius: 5px;
     height: 36px;
     width: 36px;
     margin-top: 0;
-    background-color: $white;
+    background-color: var(--color-white);
     .strong {
         font-weight: bold;
     }
@@ -417,7 +416,7 @@ button.btn.btn-filter {
             .dropdown-toggle {
                 border-width: 0px !important;
                 background: transparent;
-                color: $white;
+                color: var(--color-white);
             }
         }
         .bottom-details {
@@ -433,9 +432,9 @@ button.btn.btn-filter {
         text-align: end !important;
         margin-bottom: 0 !important;
         a {
-            background: $deep-sky-blue;
-            border: 1px solid $deep-sky-blue;
-            color: $white;
+            background: var(--color-blue);
+            border: 1px solid var(--color-blue);
+            color: var(--color-white);
             border-radius: 5px;
             font-size: 14px;
             padding: 7px 8px;
@@ -444,9 +443,9 @@ button.btn.btn-filter {
     }
 }
 .input-group-addon {
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--color-common-secondary-border);
     border-left: 0;
-    background-color: $whisper-light;
+    background-color: var(--color-dark-fog);
 }
 
 @media (max-width: 767px) {

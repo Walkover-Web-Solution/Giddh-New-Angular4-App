@@ -1,9 +1,8 @@
-@import "../../../../assets/css/color.scss";
 .branch-transfer-report .basic > thead > tr > th {
-    border-top: 1px solid $gainsboro !important;
+    border-top: 1px solid var(--color-table-primary-header-bar-border) !important;
 }
 .icon-pointer.active-text-color {
-    color: $deep-sky-blue;
+    color: var(--color-blue);
 }
 .voucher-type-dropdown {
     display: inline-block;
@@ -11,6 +10,7 @@
 .voucher-type-dropdown .btn {
     padding: 0 8px;
     margin-right: 0px;
+    color: var(--color-primary-basic-button-text);
 }
 .icon-calender {
     position: absolute;
@@ -20,8 +20,7 @@
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    border-right: 1px solid $gainsboro;
-    color: $nobel;
+    color: var(--color-primary-basic-button-text);
     left: 0;
     font-size: 18px;
 }
@@ -29,14 +28,14 @@
     padding-left: 45px !important;
     width: 210px;
     &:focus {
-        border-color: $gainsboro !important;
+        border-color: var(--color-primary-button-border) !important;
     }
 }
 .btn-filter {
-    background: $whisper-color;
-    border: 1px solid $gainsboro;
+    background: var(--color-dark-fog);
+    border: 1px solid var(--color-primary-button-border);
     font-size: 16px;
-    color: $midnight-blue;
+    color: var(--color-giddh-blue);
     display: inline-flex;
     justify-content: space-between;
     -webkit-box-align: center;

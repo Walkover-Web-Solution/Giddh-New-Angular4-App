@@ -1,4 +1,3 @@
-@import "../../assets/css/color.scss";
 #main {
     position: relative;
     float: left;
@@ -9,9 +8,9 @@
         width: 100%;
         .back-button {
             margin-top: 4%;
-            background-color: $very-light-gray !important;
-            border-color: $gainsboro;
-            color: $night-rider;
+            background-color: var(--color-iron) !important;
+            border-color: var(--color-iron);
+            color: var(--color-nero);
             font-family: "opensans-semibold" !important;
             margin-bottom: 15px !important;
             padding-left: 12px !important;
@@ -64,11 +63,11 @@
         .billing-name {
             font-size: 20px;
             font-weight: 700;
-            color: $gray;
+            color: var(--color-gray);
         }
         .billing-wrapper {
-            border-right: 1px solid $gainsboro;
             height: 100%;
+            border-right: 1px solid var(--color-common-secondary-border);
             .form-label {
                 height: 16px;
                 margin-bottom: 6px !important;
@@ -80,23 +79,22 @@
                 float: left;
                 width: 100%;
                 height: 37px;
-                border: 1px solid $skeleton-loading-gradient-bg;
-                color: black !important;
+                border: 1px solid var(--color-dark-fog);
             }
         }
         .mat-input {
             float: left;
             width: 100%;
             label {
-                color: $slate-color;
+                color: var(--color-slate);
                 float: left;
                 width: 100%;
             }
         }
 
         .form-control {
-            background: $white !important;
-            border: 1px solid $gainsboro;
+            background: var(--color-white) !important;
+            border: 1px solid var(--color-secondary-input-bar-border);
             border-radius: 2px !important;
             padding: 6px !important;
         }
@@ -111,10 +109,10 @@
             height: 39px;
         }
         .red-text {
-            color: $black-pearl !important;
+            color: var(--color-danger) !important;
         }
         .billing-details form label {
-            color: $dark-gray-new;
+            color: var(--color-gray);
             font-size: 15px;
             font-weight: 400;
         }
@@ -143,7 +141,7 @@
                 margin-bottom: 13px;
             }
             .renewal-details {
-                color: $black-pearl;
+                color: var(--color-nero);
             }
             .renewal-data {
                 padding-left: 4px;
@@ -154,7 +152,7 @@
                 padding-top: 0px;
             }
             .renewal-card-subtitle {
-                color: $slate;
+                color: var(--color-slate);
                 font-size: 16px;
                 font-weight: bold;
                 margin-bottom: 0px !important;
@@ -179,25 +177,31 @@
             .renewal-card {
                 float: left;
                 width: 100%;
+                color: var(--color-primary-card-text);
+                background-color: var(--color-primary-card-background);
+                box-shadow: 1px 0px 4px var(--color-primary-card-box-shadow);
             }
             .renewal-off {
-                color: $slate;
+                color: var(--color-slate);
                 font-size: 12px;
                 font-weight: 600;
                 padding-left: 4px;
             }
             .discount-off {
-                color: $green;
+                color: var(--color-teal);
                 font-weight: bold;
             }
             .features {
                 line-height: 1.7;
-                color: $slate-color;
+                color: var(--color-slate);
                 margin-bottom: 3px;
             }
             .renewal-payable {
                 float: left;
                 width: 100%;
+                .mat-button-disabled {
+                    background-color: var(--color-slate) !important;
+                }
             }
             .new-payable {
                 font-size: 15px !important;
@@ -240,8 +244,11 @@
                 font-weight: bolder;
                 height: 38px;
                 font-size: 17px;
-                background-color: $midnight-blue;
-                color: $white;
+                color: var(--color-senary-button-text);
+                background-color: var(--color-senary-button-background);
+                &:hover {
+                    background-color: var(--color-senary-button-background-hover);
+                }
             }
         }
     }
@@ -250,7 +257,7 @@
         width: 100%;
         padding-top: 12px;
         padding-bottom: 13px;
-        color: $gray;
+        color: var(--color-gray);
         font-size: 14px;
         padding-left: 5px;
         .renewal-subscription-extra {
@@ -264,7 +271,7 @@
     }
     .renewal-payable {
         .mat-button-disabled {
-            background-color: $gray !important;
+            background-color: var(--color-gray) !important;
         }
     }
     .display-line {
