@@ -8,7 +8,7 @@
     [name]="name"
     [formControl]="searchFormControl"
     [readonly]="readonly"
-    (click)="trigger?.openPanel()"
+    (click)="!readonly ? trigger?.openPanel() : trigger?.closePanel()"
     #trigger="matAutocompleteTrigger"
 />
 <mat-autocomplete [displayWith]="displayLabel" (optionSelected)="optionSelected($event)" #auto="matAutocomplete">
