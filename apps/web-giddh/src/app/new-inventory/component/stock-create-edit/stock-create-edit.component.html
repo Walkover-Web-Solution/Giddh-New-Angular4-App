@@ -336,6 +336,7 @@
                                                                     type="checkbox"
                                                                     name="isPurchaseInformationEnabled"
                                                                     [(ngModel)]="isPurchaseInformationEnabled"
+                                                                    (ngModelChange)="togglePurchaseInformation()"
                                                                     >Purchase Information
                                                                 </mat-checkbox>
                                                             </div>
@@ -450,6 +451,7 @@
                                                                     type="checkbox"
                                                                     name="isSalesInformationEnabled"
                                                                     [(ngModel)]="isSalesInformationEnabled"
+                                                                    (ngModelChange)="toggleSalesInformation()"
                                                                     >Sales Information
                                                                 </mat-checkbox>
                                                             </div>
@@ -4067,7 +4069,7 @@
             <div class="d-flex">
                 <div class="button-group">
                     <button
-                        id="clear-btn"
+                        *ngIf="!queryParams?.stockUniqueName"
                         mat-raised-button
                         class="btn-primary min-width-100 bdr-radius-50"
                         (click)="resetForm(stockCreateEditForm)"
@@ -4082,6 +4084,14 @@
                         [disabled]="stockCreateEditForm.invalid"
                     >
                         Create New
+                    </button>
+                    <button
+                        *ngIf="queryParams?.stockUniqueName"
+                        mat-raised-button
+                        class="btn-primary min-width-100 bdr-radius-50"
+                        (click)="cancelEdit()"
+                    >
+                        Cancel
                     </button>
                     <button
                         *ngIf="queryParams?.stockUniqueName"

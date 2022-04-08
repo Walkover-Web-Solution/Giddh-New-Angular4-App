@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { ReplaySubject } from "rxjs";
-import { takeUntil } from "rxjs/operators";
+import { distinctUntilChanged, takeUntil } from "rxjs/operators";
 import { COMMA, ENTER } from "@angular/cdk/keycodes";
 import { MatChipInputEvent } from "@angular/material/chips";
 import { InventoryService } from "../../../services/inventory.service";
@@ -10,7 +10,6 @@ import { SalesService } from "../../../services/sales.service";
 import { ToasterService } from "../../../services/toaster.service";
 import { select, Store } from "@ngrx/store";
 import { AppState } from "../../../store";
-import { CompanyActions } from "../../../actions/company.actions";
 import { WarehouseActions } from "../../../settings/warehouse/action/warehouse.action";
 import { ActivatedRoute, Router } from "@angular/router";
 import { cloneDeep, findIndex, forEach } from "../../../lodash-optimized";
@@ -18,6 +17,7 @@ import { NgForm } from "@angular/forms";
 import { INVALID_STOCK_ERROR_MESSAGE } from "../../../app.constant";
 import { CustomFieldsService } from "../../../services/custom-fields.service";
 import { FieldTypes } from "../../../shared/header/components/custom-fields/custom-fields.constant";
+import { CompanyActions } from "../../../actions/company.actions";
 
 @Component({
     selector: "stock-create-edit",
@@ -172,6 +172,10 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
             if (params?.stockUniqueName) {
                 this.queryParams = params;
                 this.getStockDetails();
+            } else {
+                if (!["PRODUCT", "SERVICE"].includes(params?.type?.toUpperCase())) {
+                    this.router.navigate(['/pages/inventory']);
+                }
             }
         });
     }
@@ -347,7 +351,14 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
      * @memberof StockCreateEditComponent
      */
     public deleteVariantOption(index: number): void {
-        this.stockForm.options = this.stockForm.options.filter((data, optionIndex) => optionIndex !== index).map(data => { return data });
+        this.stockForm.options = this.stockForm.options.filter((data, optionIndex) => optionIndex !== index).map((data, optionIndex) => {
+            return {
+                name: data.name,
+                values: data.values,
+                order: optionIndex + 1
+            }
+        });
+        this.generateVariants();
     }
 
     /**
@@ -489,7 +500,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
      * @memberof StockCreateEditComponent
      */
     public getTaxes(): void {
-        this.store.pipe(select(state => state?.company?.taxes), takeUntil(this.destroyed$)).subscribe(response => {
+        this.store.pipe(select(state => state?.company?.taxes), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.length > 0) {
                 this.taxes = response || [];
                 this.checkSelectedTaxes();
@@ -964,5 +975,58 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         this.taxTempArray = [];
 
         this.changeDetection.detectChanges();
+    }
+
+    /**
+     * This will redirect to inventory list page
+     *
+     * @memberof StockCreateEditComponent
+     */
+    public cancelEdit(): void {
+        this.router.navigate(['/pages/inventory']);
+    }
+
+    /**
+     * Resets the purchase information
+     *
+     * @memberof StockCreateEditComponent
+     */
+    public togglePurchaseInformation(): void {
+        if (!this.isPurchaseInformationEnabled) {
+            this.purchaseAccountName = "";
+            this.stockForm.purchaseAccountDetails = {
+                accountUniqueName: null,
+                unitRates: [
+                    {
+                        rate: null,
+                        stockUnitCode: null,
+                        stockUnitName: null
+                    }
+                ]
+            }
+            this.changeDetection.detectChanges();
+        }
+    }
+
+    /**
+     * Resets the sales information
+     *
+     * @memberof StockCreateEditComponent
+     */
+    public toggleSalesInformation(): void {
+        if (!this.isSalesInformationEnabled) {
+            this.salesAccountName = "";
+            this.stockForm.salesAccountDetails = {
+                accountUniqueName: null,
+                unitRates: [
+                    {
+                        rate: null,
+                        stockUnitCode: null,
+                        stockUnitName: null
+                    }
+                ]
+            }
+            this.changeDetection.detectChanges();
+        }
     }
 }
