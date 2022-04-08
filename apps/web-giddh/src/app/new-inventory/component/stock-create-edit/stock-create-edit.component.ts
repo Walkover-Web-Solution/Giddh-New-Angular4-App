@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { ReplaySubject } from "rxjs";
-import { takeUntil } from "rxjs/operators";
+import { distinctUntilChanged, takeUntil } from "rxjs/operators";
 import { COMMA, ENTER } from "@angular/cdk/keycodes";
 import { MatChipInputEvent } from "@angular/material/chips";
 import { InventoryService } from "../../../services/inventory.service";
@@ -17,7 +17,7 @@ import { NgForm } from "@angular/forms";
 import { INVALID_STOCK_ERROR_MESSAGE } from "../../../app.constant";
 import { CustomFieldsService } from "../../../services/custom-fields.service";
 import { FieldTypes } from "../../../shared/header/components/custom-fields/custom-fields.constant";
-import { CompanyService } from "../../../services/companyService.service";
+import { CompanyActions } from "../../../actions/company.actions";
 
 @Component({
     selector: "stock-create-edit",
@@ -136,7 +136,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         private salesService: SalesService,
         private toaster: ToasterService,
         private store: Store<AppState>,
-        private companyService: CompanyService,
+        private companyAction: CompanyActions,
         private warehouseAction: WarehouseActions,
         private route: ActivatedRoute,
         private router: Router,
@@ -500,10 +500,12 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
      * @memberof StockCreateEditComponent
      */
     public getTaxes(): void {
-        this.companyService.getCompanyTaxes().pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response?.status === "success" && response?.body?.length > 0) {
-                this.taxes = response?.body || [];
+        this.store.pipe(select(state => state?.company?.taxes), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.length > 0) {
+                this.taxes = response || [];
                 this.checkSelectedTaxes();
+            } else {
+                this.store.dispatch(this.companyAction.getTax());
             }
         });
     }
