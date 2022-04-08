@@ -174,7 +174,11 @@
                             <button
                                 mat-button
                                 class="btn btn-success min-width-100 bdr-radius-50"
-                                [disabled]="customFieldCreateEditForm.invalid || !customFieldRequest.fieldType?.type"
+                                [disabled]="
+                                    customFieldCreateEditForm.invalid ||
+                                    !customFieldRequest.fieldType?.type ||
+                                    !customFieldRequest.modules?.length
+                                "
                                 (click)="updateCustomField(customFieldCreateEditForm)"
                             >
                                 {{ commonLocaleData?.app_update }}
@@ -191,7 +195,11 @@
                             <button
                                 mat-button
                                 class="btn btn-success min-width-100 bdr-radius-50"
-                                [disabled]="customFieldCreateEditForm.invalid || !customFieldRequest.fieldType?.type"
+                                [disabled]="
+                                    customFieldCreateEditForm.invalid ||
+                                    !customFieldRequest.fieldType?.type ||
+                                    !customFieldRequest.modules?.length
+                                "
                                 (click)="createCustomField(customFieldCreateEditForm)"
                             >
                                 {{ commonLocaleData?.app_save }}
