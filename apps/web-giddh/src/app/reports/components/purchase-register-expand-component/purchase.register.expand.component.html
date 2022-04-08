@@ -47,7 +47,7 @@
         </div>
     </div>
     <div class="top-bar">
-        <div class="form-inline d-flex justify-content-between">
+        <div class="form-inline d-flex justify-content-between top-bar-content">
             <div class="form-group expand-collapse-btn mr-1 mb-0">
                 <a
                     class="cp"
@@ -70,7 +70,10 @@
                     <span class="icon-collapse"></span>
                 </a>
             </div>
-            <div class="dis middle">
+            <div class="dis middle top-bar-content-right-side">
+                <button mat-flat-button color="primary" class="back-btn" (click)="gotoPurchaseRegister()">
+                    {{ commonLocaleData?.app_back }}
+                </button>
                 <div
                     (clickOutside)="hideListItems()"
                     class="advance-icon cursor-pointer align-items-center btn-group mr-0"
