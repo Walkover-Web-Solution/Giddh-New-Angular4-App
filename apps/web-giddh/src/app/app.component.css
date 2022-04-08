@@ -1,6 +1,8 @@
 html,
 body {
     height: 100%;
+    background-color: var(--color-body-background);
+    color: var(--color-common-primary-text);
 }
 
 a.active {

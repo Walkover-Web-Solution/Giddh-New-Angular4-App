@@ -1,5 +1,3 @@
-@import "../../../../../assets/css/color.scss";
-
 .custom-filed-list-wrapper {
     padding: 15px;
     height: 768px;
@@ -19,7 +17,7 @@
             }
         }
         i {
-            color: $black !important;
+            color: var(--color-nero) !important;
         }
     }
     .custom-fields-pagination {

@@ -1,12 +1,10 @@
-@import "../../../../assets/css/color.scss";
-
 .receipt-card {
     box-shadow: none !important;
 
     .receipt-table {
         th,
         td {
-            border: 1px solid $gainsboro !important;
+            border: 1px solid var(--color-iron) !important;
         }
     }
 }
@@ -48,7 +46,7 @@
     position: relative;
     float: left;
     padding: 20px 0;
-    background-color: $very-light-gray;
+    background-color: var(--color-iron);
 
     div {
         div {
@@ -86,16 +84,16 @@
         top: 132px;
         opacity: 0.6;
         z-index: 98;
-        background: $alice-blue-light;
+        background: var(--color-wild-sand);
     }
 }
 .billing-address {
-    background: $white;
-    border: 1px solid $gainsboro;
+    background: var(--color-white);
+    border: 1px solid var(--color-iron);
     padding: 5px;
     padding-bottom: 10px;
     &.disabled {
-        background: $whisper-light;
+        background: var(--color-lavender);
     }
     textarea {
         border: none;
@@ -113,13 +111,13 @@
     min-width: 180px;
     vertical-align: middle;
     line-height: 2.4;
-    border-bottom: 1px solid $gainsboro;
+    border-bottom: 1px solid var(--color-iron);
     padding-left: 6px;
-    border-bottom-color: $gainsboro;
+    border-bottom-color: var(--color-iron);
     padding-bottom: 0;
 }
 .disabled {
-    background: $whisper-light;
+    background: var(--color-lavender);
     pointer-events: none;
     opacity: 0.7;
 }
@@ -165,7 +163,7 @@ section.billing-address-wrap {
 }
 .aqua-color {
     a {
-        color: $deep-sky-blue;
+        color: var(--color-blue);
         font-size: 12px;
     }
     i {
@@ -175,12 +173,12 @@ section.billing-address-wrap {
 
 .input-custom {
     border: none;
-    border-bottom: 1px solid $gainsboro !important;
+    border-bottom: 1px solid var(--color-iron) !important;
 }
 
 input.mat-input-element {
     border: none;
-    border-bottom: 1px solid $gainsboro !important;
+    border-bottom: 1px solid var(--color-iron) !important;
     &.no-border {
         border-bottom: 0px !important;
     }
@@ -196,7 +194,7 @@ input.mat-input-element {
 
 .switch-currency {
     font-size: 14px;
-    color: $night-rider;
+    color: var(--color-nero);
     max-width: 1000px;
     text-align: right;
     margin-bottom: 10px;

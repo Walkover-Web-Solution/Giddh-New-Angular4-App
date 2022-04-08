@@ -1,5 +1,3 @@
-@import "../../../assets/css/color.scss";
-
 .form-horizontal .control-label {
     text-align: left;
 }
@@ -21,7 +19,7 @@
 }
 
 .bunch-list li:hover {
-    background: $solitude;
+    background: var(--color-wild-sand);
 }
 
 .company-action {
@@ -51,7 +49,7 @@
     text-align: right;
     right: 0;
     left: 0;
-    background: $solitude;
+    background: var(--color-wild-sand);
 }
 
 .bunch-list li:hover .company-action {

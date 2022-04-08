@@ -245,6 +245,7 @@
                                             dropdownToggle
                                             type="button"
                                             class="form-control text-left btn-block dropdown-toggle"
+                                            [ngClass]="{ 'select-tax-placeholder': !selectedTaxes?.length }"
                                         >
                                             {{ localeData?.select_taxes }}
                                             <span class="select-drop pull-right mr-t1"></span>

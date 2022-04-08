@@ -1,5 +1,3 @@
-@import "../../assets/css/color.scss";
-
 @mixin all-table {
     td {
         .mat-cell {
@@ -55,7 +53,7 @@
 
 .icon-pointer.icon-class-search {
     top: 30%;
-    color: $dim-gray;
+    color: var(--color-gray);
 }
 
 .icon-pointer .d-block.font-xxs.glyphicon.glyphicon-triangle-top {
@@ -74,10 +72,10 @@
     right: auto;
     z-index: 1;
     margin: 0;
-    background: $white;
+    background: var(--color-white);
     width: 50%;
     padding: 1px;
-    box-shadow: 1px 0 9px $gray;
+    box-shadow: 1px 0 9px var(--color-abbey);
 }
 
 .account-detail-modal-header-div {
@@ -93,9 +91,14 @@
 .account-detail-custom-header {
     border-right: 0;
     padding: 11px 10px 10px 10px;
-    background: $lavender;
+    color: var(--color-dropdown-list);
+    background: var(--color-dropdown-secondary-background);
     width: 260px;
     margin-top: -8px;
+}
+
+button.mat-menu-item {
+    color: var(--color-dropdown-list);
 }
 
 .account-detail-custom-title {
@@ -108,28 +111,31 @@
 .account-detail-padding {
     padding: 1px;
     text-transform: none !important;
+    img {
+        filter: var(--color-image-filter);
+    }
 }
 
 .custom-detail h4 {
-    color: $dark-gray;
+    color: var(--color-abbey);
     margin-top: 7px;
     font-size: 14px !important;
     font-family: opensans-regular !important;
 }
 
 ul.list-unstyled li a {
-    color: $black;
+    color: var(--color-dropdown-list-quaternary);
 }
 
 .p-modal-tooltip {
     display: block;
     position: absolute;
-    background-color: $white;
+    background-color: var(--color-dropdown-primary-background);
     z-index: 1000;
     width: 257px;
-    border: 1px solid $pink-swan;
+    border: 1px solid var(--color-primary-contact-p-modal-tooltip-border);
     border-radius: 4px;
-    box-shadow: 0 7px 24px $black-russian;
+    box-shadow: 0 7px 24px var(--color-iron);
     top: -2px;
 }
 
@@ -158,8 +164,8 @@ ul.list-unstyled li a {
     }
 
     a:hover {
-        color: $chetwode-blue !important;
-        background-color: $lavender;
+        color: var(--color-dropdown-list-hover-text) !important;
+        background-color: var(--color-dropdown-list-hover-background);
     }
 }
 
@@ -206,7 +212,7 @@ td.position-relative.word-wrap.customer-name.vendor-customer-name.cursor-pointer
 
 tr:last-child td.position-relative.word-wrap.customer-name.cursor-pointer,
 tr:last-child td.position-relative.word-wrap.vendor-customer-name.cursor-pointer {
-    border-bottom: 1px solid $gainsboro !important;
+    border-bottom: 1px solid var(--color-iron) !important;
 }
 
 .position-relative.word-wrap {
@@ -214,7 +220,7 @@ tr:last-child td.position-relative.word-wrap.vendor-customer-name.cursor-pointer
         font-size: 14px;
         vertical-align: middle;
         display: none;
-        color: $omiod;
+        color: var(--color-primary-contact-icon-dots-three-vertical);
         position: absolute;
         right: 0;
     }
@@ -248,8 +254,7 @@ tr.aging-table-top td {
     }
 
     .text-lowercase.word-wrap {
-        color: $grey-chateau !important;
-
+        color: var(--color-primary-contact-aging-table-text-lowercase-word-wrap) !important;
         div {
             line-height: 14px;
         }
@@ -263,7 +268,7 @@ tr.aging-table-top td {
 
 #dropdown-basics {
     position: fixed !important;
-    background: $red;
+    background: var(--color-danger);
     bottom: initial;
 }
 
@@ -283,25 +288,25 @@ tr.aging-table-top td {
 }
 
 .more-button li:hover {
-    background-color: $lavender;
-    color: $jacksons-purple;
+    background-color: var(--color-dark-fog);
+    color: var(--color-giddh-blue);
 }
 
 .btn-primary.active,
 .btn-primary:active,
 .open > .dropdown-toggle.btn-primary {
-    color: $night-rider;
-    background-color: $lavender;
-    border-color: $lavender;
+    color: var(--color-nero);
+    background-color: var(--color-dark-fog);
+    border-color: var(--color-dark-fog);
     box-shadow: none !important;
 }
 
 i.icon-options {
     width: 36px;
     height: 36px;
-    border: 1px solid $gainsboro;
-    background-color: $white;
-    color: $midnight-blue;
+    border: 1px solid var(--color-secondary-input-bar-border);
+    background-color: var(--color-white);
+    color: var(--color-primary-input-bar-text);
     font-size: 20px;
     padding: 0;
     display: flex;
@@ -314,9 +319,9 @@ i.icon-options {
 }
 
 i.icon-options:hover {
-    background: $chetwode-blue;
-    color: $white;
-    border-color: $chetwode-blue;
+    background: var(--color-filter-background-hover);
+    color: var(--color-filter-text-hover);
+    border-color: var(--color-filter-background-hover);
 }
 
 .search-field {
@@ -326,21 +331,21 @@ i.icon-options:hover {
 
 .search-field input {
     width: 235px;
-    background-color: $whisper !important;
-    border-color: $whisper !important;
+    background-color: var(--color-dark-fog) !important;
+    border-color: var(--color-dark-fog) !important;
 }
 
 .search-field input:focus {
-    background-color: $white !important;
-    border-color: $midnight-express !important;
+    background-color: var(--color-white) !important;
+    border-color: var(--color-common-primary-blue-border) !important;
 }
 
 span.input-addon {
     position: absolute;
     right: 0px;
     padding: 4px 9px;
-    background-color: $chetwode-blue;
-    color: $white;
+    background-color: var(--color-blue);
+    color: var(--color-white);
     font-size: 18px;
     border-radius: 5px;
     height: 36px;
@@ -352,7 +357,7 @@ span.input-addon {
 }
 
 .aging-table thead tr th {
-    border-bottom: 1px solid $link-water !important;
+    border-bottom: 1px solid var(--color-primary-contact-aging-table-thead-tr-th-border) !important;
     position: relative;
     padding-right: 10px !important;
 }
@@ -398,11 +403,11 @@ span.input-addon {
 }
 
 button.btn.btn-filter {
-    background: $whisper-color;
-    border: 1px solid $whisper-color;
+    background: var(--color-dark-fog);
+    border: 1px solid var(--color-dark-fog);
     font-size: 14px;
-    color: $midnight-blue;
-    display: block;
+    color: var(--color-giddh-blue);
+    display: inline-flex;
     justify-content: space-between;
     width: 140px !important;
     margin: 0 auto !important;
@@ -454,20 +459,20 @@ button.btn.btn-filter span.icon-cross {
         min-width: 100%;
         padding: 11px;
         padding-right: 40px;
-        color: $nero;
+        color: var(--color-nero);
         border: none;
-        background-color: $gray-95;
+        background-color: var(--color-input-tertiary-background) !important;
     }
 }
 
 .total-customer-vendor-count {
-    color: $omiod !important;
+    color: var(--color-primary-contact-total-customer-vendor-count) !important;
     font-weight: 400 !important;
     font-size: 12px !important;
     letter-spacing: 1px;
 
     strong {
-        color: $midnight-blue !important;
+        color: var(--color-giddh-blue) !important;
         font-size: 16px;
     }
 }
@@ -509,13 +514,13 @@ button.btn.btn-filter span.icon-cross {
 }
 
 .pending-approval-button {
-    background-color: $solitude;
+    background-color: var(--color-secondary-button-background);
     width: 140px;
     height: 37px;
 }
 
 .pending-approval-button:hover {
-    background-color: $grayscale;
+    background-color: var(--color-secondary-button-background-hover);
 }
 
 .all-table {
@@ -526,7 +531,7 @@ button.btn.btn-filter span.icon-cross {
         }
     }
     .mat-header-row {
-        border-bottom: 1.5px solid $link-water;
+        border-bottom: 1.5px solid var(--color-table-primary-content-bar-border);
     }
     .icon-search:before {
         position: relative;
@@ -546,6 +551,10 @@ button.btn.btn-filter span.icon-cross {
             left: 3px;
         }
     }
+}
+
+.sticky-table {
+    height: 200px;
 }
 
 /*responsive*/
@@ -842,7 +851,7 @@ button.btn.btn-filter span.icon-cross {
 }
 
 .negative-balance {
-    color: $red !important;
+    color: var(--color-danger);
 }
 
 @media (min-width: 769px) {
@@ -868,13 +877,14 @@ button.btn.btn-filter span.icon-cross {
 }
 
 ::ng-deep.search-table {
-    background-color: $white-smoke !important;
     position: relative;
     right: 8px;
+    border-color: var(--color-sidebar-primary-search-bar-background);
+    background-color: var(--color-sidebar-primary-search-bar-background) !important;
 }
 
 :hover.menu-table-item {
-    color: $chetwode-blue;
+    color: var(--color-blue);
 }
 
 ::ng-deep.mail-model-container {
@@ -892,6 +902,7 @@ button.btn.btn-filter span.icon-cross {
     right: 9px;
     top: 9px;
     font-size: 25px;
+    color: var(--color-popup-list-head-text);
 }
 .min-width-230 {
     min-width: 230px;
@@ -900,14 +911,14 @@ button.btn.btn-filter span.icon-cross {
     right: -3px;
     width: 30px;
     height: 30px;
-    border: 2px solid $gainsboro;
+    border: 2px solid var(--color-primary-button-border);
     display: flex;
     justify-content: center;
     align-items: center;
 }
 .arrow-icon:hover {
-    color: $white;
-    background-color: $chetwode-blue;
+    color: var(--color-wild-sand);
+    background-color: var(--color-blue);
 }
 .select-all-checkbox-wrapper {
     align-items: center;
@@ -926,4 +937,15 @@ button.btn.btn-filter span.icon-cross {
 }
 .min-width-137 {
     min-width: 137px;
+    color: var(--color-denary-button-text);
+    background-color: var(--color-denary-button-background);
+    border: 1px solid var(--color-primary-button-border);
+}
+
+.btn-light:not(:disabled):not(.disabled).active,
+.btn-light:not(:disabled):not(.disabled):active,
+.show > .btn-light.dropdown-toggle {
+    color: var(--color-denary-button-text);
+    background-color: var(--color-denary-button-background);
+    border: 1px solid var(--color-primary-button-border);
 }
