@@ -253,6 +253,8 @@ export class ContactComponent implements OnInit, OnDestroy {
         count: 0,
         moduleUniqueName: 'account'
     };
+    /** True, if custom date filter is selected or custom searching or sorting is performed */
+    public showClearFilter: boolean = false;
 
     constructor(public dialog: MatDialog, private store: Store<AppState>, private router: Router, private companyServices: CompanyService, private commonActions: CommonActions, private toaster: ToasterService,
         private contactService: ContactService, private settingsIntegrationActions: SettingsIntegrationActions, private companyActions: CompanyActions, private componentFactoryResolver: ComponentFactoryResolver,
@@ -460,7 +462,8 @@ export class ContactComponent implements OnInit, OnDestroy {
             distinctUntilChanged(),
             takeUntil(this.destroyed$),
         ).subscribe(searchedText => {
-            if (searchedText !== null && searchedText !== undefined) {
+            if (searchedText !== null && searchedText !== undefined ) {
+                this.showClearFilter = true;
                 this.searchStr$.next(searchedText);
             }
         });
@@ -1004,6 +1007,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     }
 
     public resetAdvanceSearch() {
+        this.showClearFilter = false;
         this.advanceSearchRequestModal = new ContactAdvanceSearchModal();
         this.commonRequest = new ContactAdvanceSearchCommonModal();
         this.isAdvanceSearchApplied = false;
@@ -1011,6 +1015,9 @@ export class ContactComponent implements OnInit, OnDestroy {
         this.order = (this.activeTab === "vendor") ? "desc" : "asc";
         this.getAccounts(this.fromDate, this.toDate,
             null, "true", PAGINATION_LIMIT, "", "", null, (this.currentBranch ? this.currentBranch.uniqueName : ""));
+        this.searchedName?.reset();
+        this.searchStr = "";
+        this.showNameSearch = false;    
     }
 
     public applyAdvanceSearch(request: ContactAdvanceSearchCommonModal) {
@@ -1634,6 +1641,7 @@ export class ContactComponent implements OnInit, OnDestroy {
      * @memberof ContactComponent
      */
     public handleClickOutside(event: any, element: any, searchedFieldName: string): void {
+        this.showClearFilter = false;
         if (searchedFieldName === "name") {
             if (this.searchedName.value) {
                 return;
@@ -1727,9 +1735,9 @@ export class ContactComponent implements OnInit, OnDestroy {
     }
 
     public sort(key, ord = "asc") {
+        this.showClearFilter = true;
         this.key = key;
         this.order = ord;
-
         this.getAccounts(this.fromDate, this.toDate, null, "false", PAGINATION_LIMIT, this.searchStr, key, ord, (this.currentBranch ? this.currentBranch.uniqueName : ""));
     }
 
