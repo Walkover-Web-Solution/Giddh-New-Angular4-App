@@ -10706,11 +10706,11 @@ input[type="checkbox"].cdk-visually-hidden::after {
                 input {
                     width: 100%;
                     height: auto;
-                    // border: none;
+                    border: 1px solid var(--color-secondary-input-bar-border);
                     background-color: var(--color-secondary-input-bar-background);
 
                     &::placeholder {
-                        color: var(--color-primary-input-placeholder);
+                        color: var(--color-common-primary-input-placeholder);
                     }
                 }
             }
@@ -10718,7 +10718,7 @@ input[type="checkbox"].cdk-visually-hidden::after {
         .mat-select {
             .mat-select-placeholder {
                 font-size: 14px;
-                color: var(--color-primary-dropdown-placeholder);
+                color: var(--color-common-primary-input-placeholder);
             }
         }
         .minMaxField-wrapper {
@@ -10731,6 +10731,11 @@ input[type="checkbox"].cdk-visually-hidden::after {
                         margin-right: 10px;
                     }
                 }
+            }
+        }
+        select-field {
+            input.mat-form-field-autofill-control {
+                border: 1px solid var(--color-secondary-input-bar-border);
             }
         }
     }
