@@ -5547,6 +5547,9 @@ footer#footer.absolute-footer {
     border: none;
     background-color: transparent !important;
 }
+.modal-open {
+    overflow: hidden !important;
+}
 .fixed.modal-open .modal-backdrop {
     z-index: 99999;
 }
@@ -7317,6 +7320,7 @@ giddh-datepicker {
     .cdk-global-overlay-wrapper {
         z-index: 1000 !important;
     }
+    overflow-y: auto !important;
 }
 
 .cdk-overlay-container,
