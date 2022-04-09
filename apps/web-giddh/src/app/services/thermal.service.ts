@@ -20,13 +20,10 @@ export class ThermalService {
 
         this.maxLength = 46;
         this.maxLength = +this.maxLength;
+        
         if (!this.maxLength) {
             this.maxLength = 46;
         }
-        console.log('res', request);
-
-
-
 
         /**
          * This will use for hide/show for QR Code
@@ -39,7 +36,6 @@ export class ThermalService {
         let itemsQrTaxData = "";
         /** This will use for intialized entry tax */
         let entryTaxesQR = [];
-
         if (defaultTemplate?.sections?.header?.data?.showQrCode?.display) {
 
             for (let entry of request.entries) {
@@ -55,7 +51,6 @@ export class ThermalService {
                     }
                 }
             }
-
             Object.keys(entryTaxesQR)?.forEach(key => {
                 let entryTax = entryTaxesQR[key];
                 if (entryTax.amount > 0) {
@@ -63,16 +58,15 @@ export class ThermalService {
                         entryTax.amount
                     ).toFixed(2);
 
-                    itemsQrTaxData += 
-                            entryTax.name +
-                            " - " +
-                            taxAmount + this.printerFormat.lineBreak;
-                        }
+                    itemsQrTaxData +=
+                        entryTax.name +
+                        " - " +
+                        taxAmount;
+                }
             });
-
             // The QR data
             qr = "SELLER DETAILS" + this.printerFormat.lineBreak + "GSTIN - " + request?.company?.billingDetails?.taxNumber + this.printerFormat.lineBreak + this.printerFormat.lineBreak + "INVOICE DETAILS" + this.printerFormat.lineBreak + "Number - " + request?.number + this.printerFormat.lineBreak + "Date - " + request?.date + this.printerFormat.lineBreak + "Amount - " + request?.subTotal?.amountForCompany + this.printerFormat.lineBreak + itemsQrTaxData + this.printerFormat.lineBreak + "Total - " + request?.taxTotal?.amountForCompany + this.printerFormat.lineBreak;
-            
+
             // The dot size of the QR code
             dots = "\x03";
 
@@ -98,7 +92,6 @@ export class ThermalService {
         /** This will use for intialized items field */
         let itemsField = "";
 
-        console.log(defaultTemplate);
         /** This will use for intialized tax */
         let tax = "";
 
@@ -176,7 +169,7 @@ export class ThermalService {
         let companyGstin;
         if (defaultTemplate?.sections?.header?.data?.gstin?.display) {
             companyGstNumberField = defaultTemplate?.sections?.header?.data?.gstin?.label;
-            companyGstin = request?.company?.taxNumber;
+            companyGstin = request?.company?.billingDetails?.taxNumber;
         } else {
             companyGstNumberField = "";
             companyGstin = "";
@@ -239,7 +232,7 @@ export class ThermalService {
         if (defaultTemplate?.sections?.table?.data?.item?.display) {
             productsField = defaultTemplate?.sections?.table?.data?.item?.label;
         } else {
-            productsField = ""
+            productsField = "";
         }
 
         /**
@@ -340,13 +333,59 @@ export class ThermalService {
         } else {
             footerCompanyName = "";
         }
+        let qtyPadding;
+        let ratePadding;
+        let amountPadding;
+
+
+        if (defaultTemplate?.sections?.table?.data?.quantity?.display) {
+            qtyPadding = 7;
+            ratePadding = 16;
+            amountPadding = 13;
+        } else {
+            qtyPadding = 0;
+            ratePadding = 16;
+            amountPadding = 13;
+        }
+
+
+        if (defaultTemplate?.sections?.table?.data?.rate?.display) {
+            qtyPadding = 7;
+            ratePadding = 16;
+            amountPadding = 13;
+        } else {
+            qtyPadding = 7;
+            ratePadding = 0;
+            amountPadding = 16;
+        }
+
+
+        if (defaultTemplate?.sections?.table?.data?.amount?.display) {
+            qtyPadding = 7;
+            ratePadding = 16;
+            amountPadding = 13;
+        } else {
+            qtyPadding = 7;
+            ratePadding = 16;
+            amountPadding = 0;
+        }
+
+        if (!defaultTemplate?.sections?.table?.data?.item?.display) {
+            qtyPadding = 2;
+            ratePadding = 22;
+            amountPadding = 22;
+        } else {
+            qtyPadding = 7;
+            ratePadding = 16;
+            amountPadding = 13;
+        }
 
         let itemDetailsField =
-            quantityField?.padStart(7) +
+            quantityField?.padStart(qtyPadding) +
             "" +
-            rateField?.padStart(16) +
+            rateField?.padStart(ratePadding) +
             "" +
-            netAmountField?.padStart(13);
+            netAmountField?.padStart(amountPadding);
 
         let itemFieldLength = this.maxLength - itemDetailsField.length;
 
@@ -356,11 +395,10 @@ export class ThermalService {
             let lastIndex = itemFieldName.lastIndexOf(" ");
             itemFieldName = itemFieldName.substring(0, lastIndex);
         }
-
         if (itemFieldName.length === 0) {
             itemsField =
                 this.printerFormat.formatCenter(
-                    this.printerFormat.formatBold(this.justifyText(productsField))
+                    this.printerFormat.formatBold(productsField)
                 ) +
                 this.printerFormat.formatCenter(
                     this.printerFormat.formatBold(this.justifyText("", itemDetailsField))
@@ -379,6 +417,7 @@ export class ThermalService {
             let productName =
                 entry.transactions[0].stock?.name ||
                 entry.transactions[0].account?.name;
+
             let quantity
             if (defaultTemplate?.sections?.table?.data?.quantity?.display) {
                 quantity =
@@ -406,12 +445,14 @@ export class ThermalService {
             else {
                 amount = "";
             }
+
             let itemDetails =
-                quantity?.padStart(7) +
+                quantity?.padStart(qtyPadding) +
                 "" +
-                rate?.padStart(16) +
+                rate?.padStart(ratePadding) +
                 "" +
-                amount?.padStart(13);
+                amount?.padStart(amountPadding);
+
             let itemLength = this.maxLength - itemDetails.length;
             let itemName = productName.substr(0, itemLength);
             let remainingName = "";
@@ -447,12 +488,13 @@ export class ThermalService {
                 if (defaultTemplate?.sections?.table?.data?.item?.display) {
                     itemNameShow = itemName;
                 } else {
-                    itemNameShow = "";
+                    itemNameShow = '';
                 }
+                const itemNameShowHide = itemNameShow?.length ? this.justifyText(itemNameShow, itemDetails) : this.justifyText(itemDetails)
                 items +=
                     this.printerFormat.formatCenter(
                         this.printerFormat.formatBold(
-                            this.justifyText(itemNameShow, itemDetails)
+                            itemNameShowHide
                         )
                     ) +
                     this.printerFormat.leftAlign +
@@ -520,10 +562,13 @@ export class ThermalService {
                     (accountGstNumberField + " ") + biilingGstinNumber,
                     (numberField + " ") + voucherNumber
                 ) + this.printerFormat.lineBreak;
+
+            const productsFieldShowHide = productsField?.length ? this.justifyText(productsField, itemDetailsField) : this.justifyText(itemDetailsField)
+
             let table =
                 this.blankDash() + this.printerFormat.lineBreak +
                 this.printerFormat.formatBold(
-                    this.justifyText(productsField, itemDetailsField)
+                    productsFieldShowHide
                 ) + this.printerFormat.lineBreak +
                 this.printerFormat.formatCenter(this.blankDash()) +
                 items +
@@ -620,12 +665,6 @@ export class ThermalService {
                         this.printerFormat.endPrinter +
                         this.printerFormat.fullCut,
                     ];
-                    // var txt = [{
-                    //     type: 'pixel',
-                    //     format: 'pdf',
-                    //     flavor: 'file',
-                    //     data: 'https://www.adobe.com/support/products/enterprise/knowledgecenter/media/c4611_sample_explain.pdf'
-                    // }];
                     return qz.print(config, txt);
                 })
                 .catch(function (e: any) {
@@ -647,6 +686,7 @@ export class ThermalService {
      * @memberof ThermalComponent
      */
     public justifyText(a: any, b: any = "") {
+
         let lengthOfA = a?.length;
         let qty = b + "";
         let lengthOfB = qty?.length;
