@@ -130,6 +130,8 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     public agingReportDataSource = new MatTableDataSource<Result>([]);
     /** Mat menu instance reference */
     @ViewChild(MatMenuTrigger) menu: MatMenuTrigger;
+    /** True, if custom date filter is selected or custom searching or sorting is performed */
+    public showClearFilter: boolean = false;
 
     constructor(
         public dialog: MatDialog,
@@ -204,8 +206,11 @@ export class AgingReportComponent implements OnInit, OnDestroy {
             distinctUntilChanged(),
             takeUntil(this.destroyed$),
         ).subscribe(term => {
-            this.dueAmountReportRequest.q = term;
-            this.getDueReport();
+            if (term !== null && term !== undefined) {
+                this.showClearFilter = true;
+                this.dueAmountReportRequest.q = term;
+                this.getDueReport();
+            }
         });
 
         this.breakpointObserver
@@ -368,6 +373,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     }
 
     public sort(key: string, ord: "asc" | "desc" = "asc") {
+        this.showClearFilter = true;
         if (key.includes("range")) {
             this.dueAmountReportRequest.rangeCol = parseInt(key.replace("range", ""));
             this.dueAmountReportRequest.sortBy = "range";
@@ -478,6 +484,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
      * @memberof AgingReportComponent
      */
     public handleClickOutside(event: any, element: any, searchedFieldName: string): void {
+        this.showClearFilter = false ;
         if (searchedFieldName === "name") {
             if (this.searchedName.value) {
                 return;
