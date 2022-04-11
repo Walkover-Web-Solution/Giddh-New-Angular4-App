@@ -1858,11 +1858,15 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         }
         customerUniqueName.push(this.baseAcc);
         customerUniqueName = _.union(customerUniqueName);
+
+        let tcsTotal = (this.vm.selectedLedger.otherTaxType === "tcs") ? this.vm.selectedLedger.otherTaxesSum : 0;
+        let tdsTotal = (this.vm.selectedLedger.otherTaxType === "tds") ? this.vm.selectedLedger.otherTaxesSum : 0;
+
         this.adjustVoucherConfiguration = {
             voucherDetails: {
                 voucherDate: this.vm.selectedLedger.entryDate,
-                tcsTotal: 0,
-                tdsTotal: 0,
+                tcsTotal: tcsTotal,
+                tdsTotal: tdsTotal,
                 balanceDue: this.vm.selectedLedger.total.amount,
                 grandTotal: this.vm.selectedLedger?.entryVoucherTotals?.amountForAccount,
                 customerName: this.vm.selectedLedger && this.vm.selectedLedger.particular ? this.vm.selectedLedger.particular.name : '',
