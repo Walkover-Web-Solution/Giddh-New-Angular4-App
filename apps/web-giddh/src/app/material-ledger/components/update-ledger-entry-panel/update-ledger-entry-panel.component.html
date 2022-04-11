@@ -1561,13 +1561,12 @@
                                                                 <div class="item-unique">
                                                                     ({{ localeData?.dated }}:
                                                                     {{
-                                                                        this.voucherApiVersion === 2
-                                                                            ? option.additional?.date
-                                                                            : option.additional?.voucherDate
+                                                                        option.additional?.date ??
+                                                                            option.additional?.voucherDate
                                                                     }})
                                                                 </div>
                                                                 <div class="item-unique">
-                                                                    ({{ commonLocaleData?.app_due }}:
+                                                                    ({{ commonLocaleData?.app_amount }}:
                                                                     <span class="d-inline-flex">
                                                                         <amount-field
                                                                             [amount]="
