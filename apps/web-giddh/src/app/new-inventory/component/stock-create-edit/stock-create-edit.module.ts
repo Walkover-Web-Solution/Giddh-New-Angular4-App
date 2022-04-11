@@ -20,6 +20,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MainComponent } from "./main.component";
 import { GiddhPageLoaderModule } from "../../../shared/giddh-page-loader/giddh-page-loader.module";
 import { InventorySidebarModule } from "../inventory-sidebar/inventory-sidebar.module";
+import { TranslateDirectiveModule } from "../../../theme/translate/translate.directive.module";
 
 @NgModule({
     declarations: [
@@ -46,7 +47,8 @@ import { InventorySidebarModule } from "../inventory-sidebar/inventory-sidebar.m
         FormFieldsModule,
         MatAutocompleteModule,
         GiddhPageLoaderModule,
-        InventorySidebarModule
+        InventorySidebarModule,
+        TranslateDirectiveModule
     ],
     exports: [
         StockCreateEditComponent
