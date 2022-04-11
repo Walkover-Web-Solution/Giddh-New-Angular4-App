@@ -324,14 +324,18 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     }
 
     public resetAdvanceSearch() {
-        this.agingAdvanceSearchModal = new AgingAdvanceSearchModal();
-        this.commonRequest = new ContactAdvanceSearchCommonModal();
+        this.searchedName?.reset();
+        this.searchStr = "";
+        this.showNameSearch = false;  
         this.isAdvanceSearchApplied = false;
-        this.getDueReport();
-
+        this.dueAmountReportRequest.q = '';
+        this.sort("name", "asc") ;
+        this.commonRequest = new ContactAdvanceSearchCommonModal();
+        this.agingAdvanceSearchModal = new AgingAdvanceSearchModal();
         if (this.agingReportAdvanceSearch) {
             this.agingReportAdvanceSearch.reset();
         }
+        this.showClearFilter = false;
     }
 
     public applyAdvanceSearch(request: ContactAdvanceSearchCommonModal) {

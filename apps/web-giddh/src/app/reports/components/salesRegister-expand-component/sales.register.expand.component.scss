@@ -1,3 +1,4 @@
+@import "../../../../assets/css/mixin-common.scss";
 .flex-fill {
     flex: 1 1 auto;
 }
@@ -324,26 +325,10 @@ table th {
 }
 
 .btn-filters {
+    @include common-filters;
     background: var(--color-primary-filter-background);
     border: 1px solid var(--color-primary-button-border);
-    font-size: 14px;
     color: var(--color-giddh-blue);
-    display: inline-flex;
-    justify-content: space-between;
-    -webkit-box-align: center;
-    align-items: center;
-    padding: 7px 10px !important;
-    .icon-cross {
-        margin-right: 5px;
-    }
-    &:focus {
-        box-shadow: none;
-        outline: none;
-    }
-    &:active {
-        box-shadow: none;
-        outline: none;
-    }
 }
 
 @media screen and (max-width: 768px) {
