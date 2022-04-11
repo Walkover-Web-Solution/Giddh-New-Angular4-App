@@ -49,7 +49,7 @@
 
     <div class="modal-body p-0">
         <tabset #staticTabs class="custom-tabs master-custom-tabs">
-            <tab heading="{{ localeData?.master }}" id="tab1" (selectTab)="onTabChange('master')">
+            <tab heading="{{ localeData?.master }}" id="tab1">
                 <div class="clearfix">
                     <div
                         class="grp-col p-0"
@@ -120,16 +120,10 @@
                             [commonLocaleData]="commonLocaleData"
                             #form
                             *ngIf="localeData?.page_heading"
-                            (goToCustomFields)="showCustomFieldsTab($event)"
-                            [reloadCustomFields]="reloadCustomFields"
                         >
                         </account-operations>
                     </div>
                 </div>
-            </tab>
-            <!--           new -->
-            <tab heading="{{ commonLocaleData?.app_custom }}" (selectTab)="onTabChange('custom')">
-                <custom-fields></custom-fields>
             </tab>
         </tabset>
     </div>

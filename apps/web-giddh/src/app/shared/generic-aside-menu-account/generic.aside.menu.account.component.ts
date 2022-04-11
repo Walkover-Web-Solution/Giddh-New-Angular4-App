@@ -68,8 +68,6 @@ export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnCh
     public commonLocaleData: any = {};
     /** This will hold account action text */
     public actionAccount: string = "";
-    /** Holds true if we need to recall custom field api in create/update account */
-    public reloadCustomFields: boolean = false;
     /** Holds true if master is open */
     private isMasterOpen: boolean = false;
 
@@ -87,13 +85,11 @@ export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnCh
         this.showBankDetail = this.activeGroupUniqueName === 'sundrycreditors';
 
         this.store.pipe(select(state => state.groupwithaccounts.activeTab), takeUntil(this.destroyed$)).subscribe(activeTab => {
-            if (activeTab === 1) {
-                this.reloadCustomFields = false;
+            if(activeTab === 1) {
                 this.isMasterOpen = true;
             } else {
                 if (this.isMasterOpen) {
                     this.isMasterOpen = false;
-                    this.reloadCustomFields = true;
                 }
             }
         });
@@ -161,19 +157,6 @@ export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnCh
     public translationComplete(event: any): void {
         if (event) {
             this.actionAccount = this.selectedAccountUniqueName ? this.commonLocaleData?.app_update_account : this.commonLocaleData?.app_create_account;
-        }
-    }
-
-    /**
-     * This will show custom fields tab if clicked create custom field from add/update account
-     *
-     * @param {boolean} event
-     * @memberof GenericAsideMenuAccountComponent
-     */
-    public showCustomFieldsTab(event: boolean) {
-        if (event) {
-            this.store.dispatch(this.groupWithAccountsAction.updateActiveTabOpenAddAndManage(1));
-            this.store.dispatch(this.groupWithAccountsAction.OpenAddAndManageFromOutside(''));
         }
     }
 }

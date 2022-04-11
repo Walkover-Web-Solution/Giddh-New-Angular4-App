@@ -51,8 +51,6 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
     public initialLoad: boolean = true;
     /** This holds active tab */
     public activeTab: string = "master";
-    /** True if custom fields api needs to be called again */
-    public reloadCustomFields: boolean = false;
 
     // tslint:disable-next-line:no-empty
     constructor(
@@ -185,32 +183,5 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
     public breadcrumbPathChanged(obj) {
         this.breadcrumbUniquePath = obj.breadcrumbUniqueNamePath;
         this.breadcrumbPath = obj.breadcrumbPath;
-    }
-
-    /**
-     * This will show custom fields tab if clicked create custom field from add/update account
-     *
-     * @param {boolean} event
-     * @memberof ManageGroupsAccountsComponent
-     */
-    public showCustomFieldsTab(event: boolean) {
-        if (event) {
-            this.staticTabs.tabs[1].active = true;
-        }
-    }
-
-    /**
-     * Callback for tab change
-     *
-     * @param {string} tab
-     * @memberof ManageGroupsAccountsComponent
-     */
-    public onTabChange(tab: string): void {
-        if (tab === "master" && this.activeTab === "custom") {
-            this.reloadCustomFields = true;
-        } else {
-            this.reloadCustomFields = false;
-        }
-        this.activeTab = tab;
     }
 }

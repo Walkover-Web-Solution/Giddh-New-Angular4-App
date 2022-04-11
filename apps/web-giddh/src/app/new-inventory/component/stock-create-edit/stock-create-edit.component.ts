@@ -16,10 +16,10 @@ import { cloneDeep, findIndex, forEach } from "../../../lodash-optimized";
 import { NgForm } from "@angular/forms";
 import { INVALID_STOCK_ERROR_MESSAGE } from "../../../app.constant";
 import { CustomFieldsService } from "../../../services/custom-fields.service";
-import { FieldTypes } from "../../../shared/header/components/custom-fields/custom-fields.constant";
 import { CompanyActions } from "../../../actions/company.actions";
 import { MatDialog } from "@angular/material/dialog";
 import { ConfirmModalComponent } from "../../../theme/new-confirm-modal/confirm-modal.component";
+import { FieldTypes } from "../../../custom-fields/custom-fields.constant";
 
 @Component({
     selector: "stock-create-edit",
