@@ -1,3 +1,4 @@
+@import "../../../assets/css/mixin-common.scss";
 .dropdown-menu > li > a {
     padding: 2px 10px;
 }
@@ -220,6 +221,13 @@ th.mat-header-cell:first-of-type {
         background-color: var(--color-secondary-button-background);
         border-color: var(--color-secondary-button-background);
     }
+}
+
+.btn-filters {
+    @include common-filters;
+    background: var(--color-primary-filter-background);
+    border: 1px solid var(--color-primary-button-border);
+    color: var(--color-giddh-blue);
 }
 
 // responsive
