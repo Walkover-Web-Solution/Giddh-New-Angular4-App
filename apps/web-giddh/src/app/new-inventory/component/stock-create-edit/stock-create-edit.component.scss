@@ -50,7 +50,6 @@
 
     .sales-purchase-details {
         background-color: var(--color-white);
-        //margin: 0 -15px;
         padding: 15px 15px;
         border-radius: 7px;
 
@@ -677,4 +676,8 @@ table.stock-table th {
         top: -28px;
         left: 21px;
     }
+}
+.move-stock {
+    position: absolute;
+    margin-left: 10px;
 }
