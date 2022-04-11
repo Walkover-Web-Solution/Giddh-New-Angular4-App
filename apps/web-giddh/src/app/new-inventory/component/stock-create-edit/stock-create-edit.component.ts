@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { ReplaySubject } from "rxjs";
-import { distinctUntilChanged, takeUntil } from "rxjs/operators";
+import { distinctUntilChanged, take, takeUntil } from "rxjs/operators";
 import { COMMA, ENTER } from "@angular/cdk/keycodes";
 import { MatChipInputEvent } from "@angular/material/chips";
 import { InventoryService } from "../../../services/inventory.service";
@@ -18,6 +18,8 @@ import { INVALID_STOCK_ERROR_MESSAGE } from "../../../app.constant";
 import { CustomFieldsService } from "../../../services/custom-fields.service";
 import { FieldTypes } from "../../../shared/header/components/custom-fields/custom-fields.constant";
 import { CompanyActions } from "../../../actions/company.actions";
+import { MatDialog } from "@angular/material/dialog";
+import { ConfirmModalComponent } from "../../../theme/new-confirm-modal/confirm-modal.component";
 
 @Component({
     selector: "stock-create-edit",
@@ -90,6 +92,8 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
     };
     /** Holds stock group unique name */
     public stockGroupUniqueName: string = "";
+    /** Holds stock group unique name */
+    public defaultStockGroupUniqueName: string = "";
     /** True if purchase information is enabled */
     public isPurchaseInformationEnabled: boolean = false;
     /** True if sales information is enabled */
@@ -128,6 +132,8 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
     private customFieldsData: any[] = [];
     /** Holds stock type from url */
     private stockType: string = "";
+    /** This will hold common JSON data */
+    public commonLocaleData: any = {};
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -141,7 +147,8 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         private route: ActivatedRoute,
         private router: Router,
         private changeDetection: ChangeDetectorRef,
-        private customFieldsService: CustomFieldsService
+        private customFieldsService: CustomFieldsService,
+        private dialog: MatDialog
     ) {
     }
 
@@ -652,6 +659,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                     this.stockForm.salesAccountDetails = response.body.salesAccountDetails;
                 }
                 this.stockGroupUniqueName = response.body.stockGroup?.uniqueName;
+                this.defaultStockGroupUniqueName = response.body.stockGroup?.uniqueName;
                 this.isPurchaseInformationEnabled = this.stockForm?.purchaseAccountDetails?.accountUniqueName;
                 this.isSalesInformationEnabled = this.stockForm?.salesAccountDetails?.accountUniqueName;
                 this.isVariantAvailable = (this.stockForm?.variants?.length) ? true : false;
@@ -913,7 +921,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
      * @memberof StockCreateEditComponent
      */
     public resetForm(stockCreateEditForm: NgForm): void {
-        stockCreateEditForm?.reset();
+        stockCreateEditForm?.form?.reset();
 
         this.stockForm = {
             type: this.stockType,
@@ -1028,5 +1036,57 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
             }
             this.changeDetection.detectChanges();
         }
+    }
+
+    /**
+     * Delete stock
+     *
+     * @memberof StockCreateEditComponent
+     */
+    public deleteStock(): void {
+        let dialogRef = this.dialog.open(ConfirmModalComponent, {
+            width: '40%',
+            data: {
+                title: this.commonLocaleData?.app_delete,
+                body: "Deleting this stock will un-link & delete it forever. Are you sure you want to delete the stock?",
+                permanentlyDeleteMessage: "It will be deleted permanently and will no longer be accessible from any other module.",
+                ok: this.commonLocaleData?.app_yes,
+                cancel: this.commonLocaleData?.app_no
+            }
+        });
+
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            if (response) {
+                this.toggleLoader(true);
+                this.inventoryService.DeleteStock(this.defaultStockGroupUniqueName, this.queryParams?.stockUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                    this.toggleLoader(false);
+                    if (response?.status === "success") {
+                        this.toaster.showSnackBar("success", "Stock deleted successfully.");
+                        this.cancelEdit();
+                    } else {
+                        this.toaster.showSnackBar("error", response?.message);
+                    }
+                });
+            }
+        });
+    }
+
+    /**
+     * Move stock in new group
+     *
+     * @memberof StockCreateEditComponent
+     */
+    public moveStock(): void {
+        this.toggleLoader(true);
+        this.inventoryService.MoveStock(this.defaultStockGroupUniqueName, this.queryParams?.stockUniqueName, this.stockGroupUniqueName).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
+            this.toggleLoader(false);
+            if (response?.status === "success") {
+                this.defaultStockGroupUniqueName = cloneDeep(this.stockGroupUniqueName);
+                this.toaster.showSnackBar("success", response?.body);
+                this.changeDetection.detectChanges();
+            } else {
+                this.toaster.showSnackBar("error", response?.message);
+            }
+        });
     }
 }
