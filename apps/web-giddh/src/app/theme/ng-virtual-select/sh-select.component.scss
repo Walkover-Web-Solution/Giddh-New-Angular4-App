@@ -25,6 +25,7 @@
 div {
     display: block;
     background-color: var(--color-common-primary-background-for-all-components) !important;
+    border-color: var(--color-secondary-input-bar-border) !important;
 }
 
 input[type="text"] {
@@ -139,14 +140,14 @@ i.close.icon.clear:hover::after {
     border: 0;
 }
 .header .bdr > input[type="text"]::-webkit-input-placeholder {
-    color: var(--color-gray) !important;
+    color: var(--color-common-primary-input-placeholder) !important;
 }
 .header .bdr > input[type="text"]::-moz-placeholder {
-    color: var(--color-gray) !important;
+    color: var(--color-common-primary-input-placeholder) !important;
 }
 .header .bdr > input[type="text"]:-ms-input-placeholder {
-    color: var(--color-gray) !important;
+    color: var(--color-common-primary-input-placeholder) !important;
 }
 .header .bdr > input[type="text"]:-moz-placeholder {
-    color: var(--color-gray) !important;
+    color: var(--color-common-primary-input-placeholder) !important;
 }

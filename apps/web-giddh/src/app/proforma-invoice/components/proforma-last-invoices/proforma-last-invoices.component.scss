@@ -2,7 +2,7 @@
     ul {
         list-style: none !important;
         background-color: var(--color-white);
-        box-shadow: 0 0 6px rgba(0, 0, 0, 0.2);
+        box-shadow: 0 0 6px var(--color-primary-common-box-shadow);
         padding: 5px;
         height: auto;
         max-height: calc(210px);

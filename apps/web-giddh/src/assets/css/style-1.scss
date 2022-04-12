@@ -3187,4 +3187,7 @@ td.mat-footer-cell {
     .popover {
         z-index: 1000 !important;
     }
+    .popover-content.popover-body {
+        background-color: var(--color-common-primary-background-for-all-components);
+    }
 }

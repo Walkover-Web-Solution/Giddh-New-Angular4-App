@@ -114,18 +114,21 @@ i.close.icon.clear:hover::after {
 
 .header .bdr > input[type="text"] {
     border: 0;
+    &::placeholder {
+        color: var(--color-common-primary-input-placeholder) !important;
+    }
 }
 .header .bdr > input[type="text"]::-webkit-input-placeholder {
-    color: var(--color-gray) !important;
+    color: var(--color-common-primary-input-placeholder) !important;
 }
 .header .bdr > input[type="text"]::-moz-placeholder {
-    color: var(--color-gray) !important;
+    color: var(--color-common-primary-input-placeholder) !important;
 }
 .header .bdr > input[type="text"]:-ms-input-placeholder {
-    color: var(--color-gray) !important;
+    color: var(--color-common-primary-input-placeholder) !important;
 }
 .header .bdr > input[type="text"]:-moz-placeholder {
-    color: var(--color-gray) !important;
+    color: var(--color-common-primary-input-placeholder) !important;
 }
 
 .toggle {

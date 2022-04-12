@@ -544,6 +544,15 @@ input {
             border: 1px solid var(--color-secondary-input-bar-border) !important;
         }
     }
+    .reverse-table-report {
+        .clear-filter-applicable {
+            .clear-filter {
+                button {
+                    border-color: var(--color-tertiary-button-border);
+                }
+            }
+        }
+    }
 }
 .invoice-control .nav.nav-tabs {
     margin-bottom: 15px;
@@ -6231,6 +6240,17 @@ button.ladda-button .ladda-label {
     background: transparent;
     color: var(--color-primary-right-side-popup-header-text);
 }
+.setting-container {
+    .settings-profile-tabs {
+        #giddh-page-heading {
+            create-address {
+                #close {
+                    top: 17px;
+                }
+            }
+        }
+    }
+}
 .ng-select-wrap.select-list.select-group .below {
     border: 1px solid var(--color-secondary-input-bar-border);
     height: 36px;
@@ -7303,6 +7323,11 @@ giddh-datepicker {
     input.mat-input-element {
         margin-top: 0;
         padding: 9px 6px;
+        font-size: 14px;
+
+        &::placeholder {
+            color: var(--color-common-primary-input-placeholder) !important;
+        }
     }
 
     .mat-form-field-wrapper {
@@ -7341,6 +7366,22 @@ giddh-datepicker {
     }
 }
 
+.invoice-control {
+    #setting-tab {
+        .tab-content {
+            .invoice-container {
+                .modal-content {
+                    sh-select {
+                        input::placeholder {
+                            color: var(--color-common-primary-input-placeholder) !important;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
 .ledger-body {
     .cdk-overlay-container {
         z-index: 1000 !important;
@@ -7361,6 +7402,13 @@ giddh-datepicker {
 .cmd-k {
     .cdk-overlay-container {
         z-index: 999 !important;
+    }
+}
+.cdk-overlay-container {
+    .cdk-global-overlay-wrapper {
+        .mat-dialog-container {
+            overflow: visible;
+        }
     }
 }
 giddh-datepicker {

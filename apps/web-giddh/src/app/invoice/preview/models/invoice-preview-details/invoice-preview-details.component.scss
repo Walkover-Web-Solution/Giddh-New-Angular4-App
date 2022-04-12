@@ -530,7 +530,7 @@ label.labeled {
     border: 1px solid var(--color-iron);
     .send-email-modal-wrapper {
         background-color: var(--color-white);
-        box-shadow: 0 0 6px rgba(0, 0, 0, 0.2);
+        box-shadow: 0 0 6px var(--color-primary-common-box-shadow);
         height: 200px;
         .send-email-modal-header {
             background-color: var(--color-dark-fog);
@@ -687,7 +687,7 @@ p {
     font-size: 14px;
     max-width: 760px;
     margin: 20px auto 120px;
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 3px 6px var(--color-primary-common-box-shadow);
 }
 
 #default::-webkit-scrollbar {

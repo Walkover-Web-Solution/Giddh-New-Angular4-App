@@ -188,7 +188,7 @@ table.ledger-footer-1 td[class*="col-"] {
     background: var(--color-white);
     color: var(--color-abbey);
     font-size: 18px;
-    box-shadow: 0px 2px 6px var(--color-primary-ledger-box-shadow);
+    box-shadow: 0px 2px 6px var(--color-primary-common-box-shadow);
 }
 .ledger-stat .row {
     display: flex;
@@ -199,7 +199,7 @@ table.ledger-footer-1 td[class*="col-"] {
     margin-right: 8px;
 }
 .account_Name {
-    color: rgba(0, 0, 0, 0.8);
+    color: var(--color-common-primary-text);
     font-family: " opensans-semibold ";
     text-transform: capitalize;
 }
@@ -300,7 +300,7 @@ table.ledger-footer-1 td[class*="col-"] {
     width: 100%;
     margin-bottom: 16px;
     background: var(--color-white);
-    box-shadow: 0 0 6px var(--color-primary-ledger-box-shadow);
+    box-shadow: 0 0 6px var(--color-primary-common-box-shadow);
 }
 .Width600 {
     position: absolute;
