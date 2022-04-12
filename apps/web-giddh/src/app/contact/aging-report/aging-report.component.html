@@ -66,6 +66,14 @@
                 </div>
             </form>
         </div>
+        <div
+            class="clear-filter align-items-center d-flex justify-content-xl-center justify-content-lg-start w-50"
+            *ngIf="showClearFilter"
+        >
+            <button class="btn btn-filters mr-0" (click)="resetAdvanceSearch()">
+                <span class="icon-cross"></span> {{ commonLocaleData?.app_clear_filter }}
+            </button>
+        </div>
         <div class="d-flex justify-content-between">
             <div class="pull-left d-flex wrap-searching-aging">
                 <div

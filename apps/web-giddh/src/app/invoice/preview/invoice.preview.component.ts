@@ -461,8 +461,11 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             distinctUntilChanged(),
             takeUntil(this.destroyed$)
         ).subscribe(s => {
-            this.invoiceSearchRequest.q = s;
-            this.getVoucher(this.isUniversalDateApplicable);
+            if (s !== null && s !== undefined) {
+                this.showAdvanceSearchIcon = true;
+                this.invoiceSearchRequest.q = s;
+                this.getVoucher(this.isUniversalDateApplicable);
+            }
         });
 
         this.accountUniqueNameInput.valueChanges.pipe(
@@ -470,8 +473,11 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             distinctUntilChanged(),
             takeUntil(this.destroyed$)
         ).subscribe(s => {
+            if (s !== null && s !== undefined) {
+            this.showAdvanceSearchIcon = true;
             this.invoiceSearchRequest.q = s;
             this.getVoucher(this.isUniversalDateApplicable);
+            }
         });
 
         this.purchaseOrderNumbersInput.valueChanges.pipe(
@@ -835,6 +841,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     public sortButtonClicked(type: 'asc' | 'desc', columnName: string) {
+        this.showAdvanceSearchIcon = true;
         if (this.showAdvanceSearchIcon) {
             this.advanceSearchFilter.sort = type;
             this.advanceSearchFilter.sortBy = columnName;
@@ -1195,6 +1202,9 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             this.advanceSearchComponent.allShSelect.forEach(f => {
                 f?.clear();
             });
+            this.voucherNumberInput.reset();
+            this.invoiceSearchRequest.q = '';
+            this.accountUniqueNameInput.reset();
         }
 
         if (this.advanceSearchComponent) {
