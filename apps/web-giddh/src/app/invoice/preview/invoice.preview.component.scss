@@ -563,10 +563,7 @@ span.icon-export-icon {
 }
 
 .btn-filter {
-    @include common-filters;
-    background: var(--color-dark-fog);
-    border: 1px solid var(--color-iron);
-    color: var(--color-giddh-blue);
+    @include common-filters(var(--color-giddh-blue), var(--color-dark-fog), 1px solid var(--color-iron));
 }
 
 /* responsive */

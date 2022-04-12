@@ -224,10 +224,11 @@ th.mat-header-cell:first-of-type {
 }
 
 .btn-filters {
-    @include common-filters;
-    background: var(--color-primary-filter-background);
-    border: 1px solid var(--color-primary-button-border);
-    color: var(--color-giddh-blue);
+    @include common-filters(
+        var(--color-giddh-blue),
+        var(--color-primary-filter-background),
+        1px solid var(--color-primary-button-border)
+    );
 }
 
 // responsive
