@@ -37,7 +37,7 @@ export class CustomFieldsListComponent implements OnInit, OnDestroy {
     public customFieldsRequest: any = {
         page: 1,
         count: PAGINATION_LIMIT,
-        moduleUniqueName: 'stock'
+        moduleUniqueName: 'account'
     };
     /** Holds get all custom fields api response */
     public customFieldsList: any = {};

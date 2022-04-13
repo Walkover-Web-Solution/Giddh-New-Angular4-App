@@ -1799,6 +1799,11 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         });
     }
 
+    /**
+     * Closes Master
+     *
+     * @memberof AccountUpdateNewDetailsComponent
+     */
     public closeMaster(): void {
         this.store.dispatch(this.groupWithAccountsAction.HideAddAndManageFromOutside());
     }

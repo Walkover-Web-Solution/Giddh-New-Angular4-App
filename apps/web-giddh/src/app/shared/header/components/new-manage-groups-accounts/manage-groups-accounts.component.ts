@@ -27,8 +27,6 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
     @ViewChild('groupsidebar', { static: true }) public groupsidebar: GroupsAccountSidebarComponent;
     public config: PerfectScrollbarConfigInterface = { suppressScrollX: false, suppressScrollY: false };
     @ViewChild('perfectdirective', { static: true }) public directiveScroll: PerfectScrollbarComponent;
-    /** Tabset instance */
-    @ViewChild('staticTabs', { static: true }) public staticTabs: TabsetComponent;
     public breadcrumbPath: string[] = [];
     public breadcrumbUniquePath: string[] = [];
     public myModelRect: any;
@@ -48,8 +46,6 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
     public commonLocaleData: any = {};
     /** True if initial component load */
     public initialLoad: boolean = true;
-    /** This holds active tab */
-    public activeTab: string = "master";
 
     // tslint:disable-next-line:no-empty
     constructor(
@@ -126,12 +122,6 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
                 setTimeout(() => {
                     this.groupSrch?.nativeElement.focus();
                 }, 200);
-            }
-        });
-
-        this.store.pipe(select(state => state.groupwithaccounts.activeTab), takeUntil(this.destroyed$)).subscribe(activeTab => {
-            if(activeTab !== null && activeTab !== undefined) {
-                this.staticTabs.tabs[activeTab].active = true;
             }
         });
     }

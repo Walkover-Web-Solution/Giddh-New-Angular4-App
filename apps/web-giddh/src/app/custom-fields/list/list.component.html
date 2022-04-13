@@ -32,7 +32,7 @@
             </div>
         </div>
         <div class="custom-field-list mr-t15">
-            <div class="table-responsive">
+            <div [ngClass]="{ 'table-responsive': dataSource?.length }">
                 <table mat-table [dataSource]="dataSource" class="giddh-table" *ngIf="dataSource?.length">
                     <ng-container matColumnDef="serialNo">
                         <th mat-header-cell *matHeaderCellDef>{{ localeData?.s_no }}</th>
