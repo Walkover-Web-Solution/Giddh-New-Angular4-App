@@ -1238,6 +1238,11 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         }
     }
 
+    /**
+     * Closes Master
+     *
+     * @memberof AccountAddNewDetailsComponent
+     */
     public closeMaster(): void {
         this.store.dispatch(this.groupWithAccountsAction.HideAddAndManageFromOutside());
     }

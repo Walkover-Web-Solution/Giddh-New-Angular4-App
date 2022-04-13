@@ -620,7 +620,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 this.loadAddManageComponent();
                 this.manageGroupsAccountsModal.show();
             } else {
-                this.manageGroupsAccountsModal.hide();
+                this.manageGroupsAccountsModal?.hide();
             }
         });
 
