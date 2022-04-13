@@ -158,6 +158,7 @@
     }
     .all-feature-button {
         margin-right: 0 !important;
+        background-color: var(--color-nonary-button-background);
     }
     .grid-list {
         border-bottom: 1px solid var(--color-iron);
@@ -477,14 +478,17 @@
     border: 1px solid var(--color-iron);
 }
 .btn-cancel {
-    background: var(--color-iron);
-    border-color: var(--color-iron);
-    color: var(--color-nero);
+    background: var(--color-secondary-button-background);
+    border-color: var(--color-secondary-button-background);
+    color: var(--color-secondary-button-text);
     font-family: "opensans-semibold" !important;
     margin-bottom: 15px !important;
     padding-left: 12px !important;
     padding-right: 18px !important;
     height: 37px;
+    &:hover {
+        background-color: var(--color-secondary-button-background-hover);
+    }
     .back-left {
         font-size: 21px;
         float: left;
