@@ -118,7 +118,7 @@ export class ThermalTemplateComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     /**
-     * Lifecycle hook use for on destroy compoenent
+     * Lifecycle hook use for on destroy component
      *
      * @memberof ThermalTemplateComponent
      */

@@ -672,22 +672,22 @@ export class ThermalService {
     /**
      * This will use for justify text formatted in template
      *
-     * @param {*} a
+     * @param {*} textA
      * @param {*} [b='']
      * @return {*}
      * @memberof ThermalComponent
      */
-    public justifyText(characterA: any, characterB: any = "") : any {
-        let lengthOfA = characterA?.length;
-        let qty = characterB + "";
+    public justifyText(textA: any, textB: any = "") : any {
+        let lengthOfA = textA?.length;
+        let qty = textB + "";
         let lengthOfB = qty?.length;
-        let z = +lengthOfA + lengthOfB;
-        let noOfSpacesRequired = this.maxLength - z;
+        let textC = +lengthOfA + lengthOfB;
+        let noOfSpacesRequired = this.maxLength - textC;
         let spaces = "";
         for (let i = 0; i <= noOfSpacesRequired; i++) {
             spaces += " ";
         }
-        let newTxt = characterA + spaces + characterB;
+        let newTxt = textA + spaces + textB;
         return newTxt;
     }
 

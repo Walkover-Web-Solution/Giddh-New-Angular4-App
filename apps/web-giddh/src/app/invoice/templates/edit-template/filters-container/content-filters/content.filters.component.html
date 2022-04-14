@@ -1052,7 +1052,11 @@
                                 </ng-container>
                             </td>
                         </tr>
-                        <tr *ngIf="customTemplate.templateType !== 'thermal_template'">
+                        <tr
+                            *ngIf="
+                                customTemplate.templateType !== 'thermal_template' && fieldsAndVisibility?.table.date
+                            "
+                        >
                             <td>
                                 <label>
                                     <input
