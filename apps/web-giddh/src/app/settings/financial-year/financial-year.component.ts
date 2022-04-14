@@ -64,6 +64,12 @@ export class FinancialYearComponent implements OnInit, OnDestroy {
                 });
             }
         });
+
+        this.store.pipe(select(state => state.settings.refreshCompany), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.store.dispatch(this.settingsFinancialYearActions.GetAllFinancialYears());
+            }
+        });
     }
 
     public setYearRange() {
