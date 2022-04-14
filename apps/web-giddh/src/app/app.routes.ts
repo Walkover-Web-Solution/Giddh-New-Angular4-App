@@ -66,7 +66,6 @@ export const ROUTES: Routes = [
         children: [
             { path: 'home', loadChildren: () => import('./home/home.module').then(module => module.HomeModule), canActivate: [NeedsAuthorization] },
             { path: 'invoice', loadChildren: () => import('./invoice/invoice.module').then(module => module.InvoiceModule), canActivate: [NeedsAuthorization] },
-            { path: 'thermal', loadChildren: () => import('./invoice/thermal-pdf/thermal-pdf.module').then(module => module.ThermalModule) },
             {
                 path: 'daybook',
                 loadChildren: () => import('./daybook/daybook.module').then(module => module.DaybookModule),

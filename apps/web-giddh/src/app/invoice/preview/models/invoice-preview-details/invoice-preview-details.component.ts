@@ -669,8 +669,6 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
      */
     public printThermal() {
         this.voucherDetails$.subscribe((res) => {
-            console.log(res);
-            
             if (res) {
                 this.thermalService.print(this.defaultTemplate, res);
             } else {
