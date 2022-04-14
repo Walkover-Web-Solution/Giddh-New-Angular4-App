@@ -158,6 +158,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     private isSidebarExpanded: boolean = false;
     /** Observable to get observable store data of voucher */
     public voucherDetails$: Observable<any>;
+    /** This will use for default template */
     public defaultTemplate: any;
 
     constructor(
@@ -180,7 +181,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         private domSanitizer: DomSanitizer,
         private commonService: CommonService,
         private thermalService: ThermalService,
-        private _invoiceTemplatesService: InvoiceTemplatesService) {
+        private invoiceTemplatesService: InvoiceTemplatesService) {
         this._breakPointObservar.observe([
             '(max-width: 1023px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
@@ -190,7 +191,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         this.companyName$ = this.store.pipe(select(p => p.session.companyUniqueName), takeUntil(this.destroyed$));
         this.isUpdateVoucherActionSuccess$ = this.store.pipe(select(s => s.proforma.isUpdateProformaActionSuccess), takeUntil(this.destroyed$));
         this.voucherDetails$ = this.store.pipe(
-            select((s) => s.receipt.voucher),
+            select((res) => res.receipt.voucher),
             takeUntil(this.destroyed$)
         );
     }
@@ -210,14 +211,13 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     }
 
     ngOnInit() {
-        this._invoiceTemplatesService.getAllCreatedTemplates("sales").pipe(takeUntil(this.destroyed$)).subscribe((res) => { 
+        this.invoiceTemplatesService.getAllCreatedTemplates("sales").pipe(takeUntil(this.destroyed$)).subscribe((res) => { 
             if(res) {
                 const defaultTemplate = res.body?.filter(res => res.isDefault);
                 if(defaultTemplate?.length > 0) {
                     this.defaultTemplate = defaultTemplate[0];
                 }
-            }
-           
+            }      
         });
         if (document.getElementsByClassName("sidebar-collapse")?.length > 0) {
             this.isSidebarExpanded = false;
@@ -664,7 +664,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
      *
      * @memberof InvoicePreviewDetailsComponent
      */
-    public printThermal() {
+    public printThermal() : void {
         this.voucherDetails$.subscribe((res) => {
             if (res) {
                 this.thermalService.print(this.defaultTemplate, res);
@@ -688,6 +688,11 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         }
     }
 
+    /**
+     * Lifecycle hook for component destroy
+     *
+     * @memberof InvoicePreviewDetailsComponent
+     */
     public ngOnDestroy(): void {
         if (this.isSidebarExpanded) {
             this.isSidebarExpanded = false;

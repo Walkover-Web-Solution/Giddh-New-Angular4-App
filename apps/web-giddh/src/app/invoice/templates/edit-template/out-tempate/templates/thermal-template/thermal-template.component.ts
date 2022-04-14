@@ -7,30 +7,39 @@ import { CustomTemplateResponse } from '../../../../../../models/api-models/Invo
 import { AppState } from 'apps/web-giddh/src/app/store';
 import { SettingsProfileActions } from 'apps/web-giddh/src/app/actions/settings/profile/settings.profile.action';
 import { cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
-
 @Component({
     selector: 'thermal-template',
     templateUrl: './thermal-template.component.html',
     styleUrls: ['./thermal-template.component.scss']
 })
-
 export class ThermalTemplateComponent implements OnInit, OnDestroy, OnChanges {
-
+    /** This will use for field visibility */
     @Input() public fieldsAndVisibility: any = null;
+    /** This will use preview mode */
     @Input() public isPreviewMode: boolean = false;
+    /** This will use for field visibility */
     @Input() public showCompanyName: boolean;
+    /** This will use for company GSTIN */
     @Input() public companyGSTIN: string;
+    /** This will use input teplate response */
     @Input() public inputTemplate: CustomTemplateResponse = new CustomTemplateResponse();
+    /** This will use for template UI section visibility */
     @Input() public templateUISectionVisibility: TemplateContentUISectionVisibility = new TemplateContentUISectionVisibility();
     /* This will hold the value if Gst Composition will show/hide */
     @Input() public showGstComposition: boolean = false;
+    /** This will use for voucher type */
     @Input() public voucherType = '';
+    /** This will use for image signature */
     @Input() public imageSignatureSrc: string;
-
+    /** This will use for section name */
     @Output() public sectionName: EventEmitter<string> = new EventEmitter();
+    /** This will hold input for company address */
     public companyAddress: string = '';
+    /** This will use for company settings */
     public companySetting$: Observable<any> = observableOf(null);
+    /** This will use for column visibililty */
     public columnsVisibled: number;
+    /** This will use for on destroy component */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(private store: Store<AppState>,
@@ -38,7 +47,12 @@ export class ThermalTemplateComponent implements OnInit, OnDestroy, OnChanges {
         this.companySetting$ = this.store.pipe(select(s => s.settings.profile), takeUntil(this.destroyed$));
     }
 
-    public ngOnInit() {
+    /**
+     * Lifecycle hook use for initialization
+     *
+     * @memberof ThermalTemplateComponent
+     */
+    public ngOnInit() : void {
         this.companySetting$.subscribe(a => {
             if (a && a.address) {
                 this.companyAddress = cloneDeep(a.address);
@@ -47,8 +61,13 @@ export class ThermalTemplateComponent implements OnInit, OnDestroy, OnChanges {
             }
         });
     }
-
-    public ngOnChanges(changes: SimpleChanges) {
+    /**
+     * Lifecycle hook use for on changes
+     *
+     * @param {SimpleChanges} changes
+     * @memberof ThermalTemplateComponent
+     */
+    public ngOnChanges(changes: SimpleChanges) : void {
         if ((changes.fieldsAndVisibility && changes.fieldsAndVisibility.previousValue && changes.fieldsAndVisibility.currentValue !== changes.fieldsAndVisibility.previousValue) || changes.fieldsAndVisibility && changes.fieldsAndVisibility.firstChange) {
             this.columnsVisibled = 0;
             if (changes.fieldsAndVisibility.currentValue.table) {
@@ -86,13 +105,24 @@ export class ThermalTemplateComponent implements OnInit, OnDestroy, OnChanges {
         }
     }
 
-    public onClickSection(sectionName: string) {
+    /**
+     * This will use for section click preview
+     *
+     * @param {string} sectionName
+     * @memberof ThermalTemplateComponent
+     */
+    public onClickSection(sectionName: string) : void {
         if (!this.isPreviewMode) {
             this.sectionName.emit(sectionName);
         }
     }
 
-    public ngOnDestroy() {
+    /**
+     * Lifecycle hook use for on destroy compoenent
+     *
+     * @memberof ThermalTemplateComponent
+     */
+    public ngOnDestroy() : void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }

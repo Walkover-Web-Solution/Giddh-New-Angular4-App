@@ -203,9 +203,6 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
      * onDesignChange
      */
     public onDesignChange(fieldName, value) {
-        console.log('field name', fieldName);
-        console.log('value', value);
-        
         let template;
         if (fieldName === 'uniqueName') { // change whole template
             const selectedTemplate = cloneDeep(this.sampleTemplates.find((t: CustomTemplateResponse) => (t.uniqueName === value)));
