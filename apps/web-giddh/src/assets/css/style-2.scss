@@ -7397,21 +7397,6 @@ giddh-datepicker {
 .cdk-global-overlay-wrapper {
     z-index: 9999;
 }
-.contact-body {
-    .cdk-global-overlay-wrapper {
-        .modal-body {
-            sh-select-menu {
-                .menu {
-                    virtual-scroll {
-                        .total-padding {
-                            height: auto;
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
 .cdk-overlay-connected-position-bounding-box {
     z-index: 9999;
 }
@@ -7448,18 +7433,6 @@ giddh-datepicker {
         li {
             a {
                 padding-top: 5px;
-            }
-        }
-    }
-}
-
-.contact-body {
-    .cdk-overlay-container {
-        .cdk-global-overlay-wrapper {
-            #cdk-overlay-1 {
-                .mat-dialog-container {
-                    overflow: visible;
-                }
             }
         }
     }
@@ -7932,6 +7905,7 @@ body.update-scroll-hidden {
         display: none;
     }
 }
+
 .contact-body {
     .contact-modal {
         height: 375px !important;
@@ -7943,17 +7917,36 @@ body.update-scroll-hidden {
     }
     .cdk-overlay-container {
         .cdk-global-overlay-wrapper {
-            .mat-dialog-container {
-                .modal-body {
-                    input,
-                    textarea {
-                        border: 1px solid var(--color-secondary-input-bar-border);
+            .cdk-overlay-pane {
+                .mat-dialog-container {
+                    overflow: visible;
+                }
+            }
+            .mail-model-container {
+                .mat-dialog-container {
+                    .modal-body {
+                        input,
+                        textarea {
+                            border: 1px solid var(--color-secondary-input-bar-border);
+                        }
+                    }
+                }
+            }
+            .modal-body {
+                sh-select-menu {
+                    .menu {
+                        virtual-scroll {
+                            .total-padding {
+                                height: auto;
+                            }
+                        }
                     }
                 }
             }
         }
     }
 }
+
 .cdk-overlay-pane {
     height: auto !important;
 }
