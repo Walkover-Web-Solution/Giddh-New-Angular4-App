@@ -1746,6 +1746,13 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
 
                     if (this.currentFinancialYearUniqueName && this.currentFinancialYearUniqueName === key.uniqueName) {
                         currentFinancialYear = moment(moment(key.financialYearStarts.split("-").reverse().join("-")).toDate());
+                        if (currentFinancialYear.diff(moment(), "days") > 1) {
+                            const yearDifference = Number(currentFinancialYear.format("YYYY")) - Number(moment().format("YYYY"));
+                            currentFinancialYear = currentFinancialYear.subtract(yearDifference, 'year');
+                            if (currentFinancialYear.diff(moment(), "days") > 1) {
+                                currentFinancialYear = currentFinancialYear.subtract(1, 'year');
+                            }
+                        }
 
                         lastFinancialYear = { start: moment(moment(key.financialYearStarts.split("-").reverse().join("-")).subtract(1, 'year').toDate()), end: moment(moment(key.financialYearEnds.split("-").reverse().join("-")).subtract(1, 'year').toDate()) };
                     }
