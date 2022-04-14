@@ -285,7 +285,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
         });
 
         this.store.pipe(select(state => state.session.currentLocale), takeUntil(this.destroyed$)).subscribe(response => {
-            if(this.activeLocale && this.activeLocale !== response?.value) {
+            if (this.activeLocale && this.activeLocale !== response?.value) {
                 this.localeService.getLocale('all-items', response?.value).subscribe(response => {
                     this.localeData = response;
                     this.translationComplete(true);
@@ -300,9 +300,9 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
             }
         });
 
-        if(this.router.url.includes("/ledger")) {
+        if (this.router.url.includes("/ledger")) {
             this.activeAccount$.pipe(takeUntil(this.destroyed$)).subscribe(account => {
-                if(account && !this.isItemAdded) {
+                if (account && !this.isItemAdded) {
                     this.isItemAdded = true;
                     // save data to db
                     let item: any = {};
@@ -367,9 +367,9 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
      */
     public handleNewTeamCreationEmitter(e: any): void {
         this.modelRef.hide();
-        if(e[0] === "group") {
+        if (e[0] === "group") {
             this.showManageGroupsModal(e[1]?.name);
-        } else if(e[0] === "account") {
+        } else if (e[0] === "account") {
             this.selectedGroupForCreateAccount = e[1]?.uniqueName;
             this.toggleAccountAsidePane();
         }
@@ -419,7 +419,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof PrimarySidebarComponent
      */
     public showManageGroupsModal(search: any = ""): void {
-        if(search) {
+        if (search) {
             this.store.dispatch(this.groupWithAction.getGroupWithAccounts());
         }
         this.store.dispatch(this.groupWithAction.OpenAddAndManageFromOutside(search));
@@ -647,7 +647,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     public toggleBodyClass() {
         if (this.accountAsideMenuState === 'in') {
             document.querySelector('body')?.classList?.add('fixed');
-            if(document.getElementsByClassName("gst-sidebar-open")?.length > 0) {
+            if (document.getElementsByClassName("gst-sidebar-open")?.length > 0) {
                 document.querySelector(".nav-left-bar").classList.add("create-account");
             }
             document.querySelector(".sidebar-slide-right")?.classList?.add("z-index-990");
@@ -664,7 +664,21 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
      * @param {AddAccountRequest} item
      * @memberof PrimarySidebarComponent
      */
-     public addNewAccount(item: AddAccountRequest) {
+    public addNewAccount(item: AddAccountRequest) {
         this.store.dispatch(this.salesAction.addAccountDetailsForSales(item));
+    }
+
+    /**
+     * Closes account modal
+     *
+     * @param {*} event
+     * @memberof PrimarySidebarComponent
+     */
+    public closeAccountModal(event: any): void {
+        console.log(event);
+        if (event) {
+            this.accountAsideMenuState = 'out';
+            this.toggleBodyClass();
+        }
     }
 }
