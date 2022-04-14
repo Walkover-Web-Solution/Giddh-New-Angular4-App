@@ -28,6 +28,7 @@
                     [showBankDetail]="showBankDetail"
                     [isServiceCreation]="isServiceCreation"
                     [isCustomerCreation]="isCustomerCreation"
+                    (closeAccountModal)="closeAccountModal?.emit($event)"
                 >
                 </account-add-new-details>
             </ng-container>
@@ -44,6 +45,7 @@
                     [showDeleteButton]="false"
                     [showBankDetail]="showBankDetail"
                     (submitClicked)="updateAccount($event)"
+                    (closeAccountModal)="closeAccountModal?.emit($event)"
                 >
                 </account-update-new-details>
             </ng-container>
@@ -62,6 +64,7 @@
                     [isServiceCreation]="isServiceCreation"
                     [isCustomerCreation]="isCustomerCreation"
                     [fromCommandK]="true"
+                    (closeAccountModal)="closeAccountModal?.emit($event)"
                 >
                 </account-add-new-details>
             </ng-container>
