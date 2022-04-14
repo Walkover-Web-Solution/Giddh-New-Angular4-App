@@ -15,8 +15,10 @@ import { AppState } from "../../store";
 export class ThermalComponent implements OnInit {
     /** Observable to get observable store data of voucher */
     public voucherDetails$: Observable<any>;
+    /** This will use for on component destroy */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
+    /** This will use for max length of characters for thermal */
     public maxLength = localStorage.getItem("printer")
         ? JSON.parse(localStorage.getItem("printer") || "{}").no_of_character
         : "46";
