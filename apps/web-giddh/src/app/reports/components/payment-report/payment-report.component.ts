@@ -463,9 +463,13 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
         requestObject.balanceLessThan = false;
         requestObject.balanceEqual = false;
 
-        if (this.advanceSearchModel.unusedAmountFilter.selectedValue === 'GREATER_THAN' || this.advanceSearchModel.unusedAmountFilter.selectedValue === 'GREATER_THAN_OR_EQUALS') {
+        if (this.advanceSearchModel.unusedAmountFilter.selectedValue === 'GREATER_THAN') {
+            requestObject.balanceMoreThan = true;
+        } else if(this.advanceSearchModel.unusedAmountFilter.selectedValue === 'GREATER_THAN_OR_EQUALS') {
+            requestObject.balanceEqual = true;
             requestObject.balanceMoreThan = true;
         } else if (this.advanceSearchModel.unusedAmountFilter.selectedValue === 'LESS_THAN_OR_EQUALS') {
+            requestObject.balanceEqual = true;
             requestObject.balanceLessThan = true;
         } else if (this.advanceSearchModel.unusedAmountFilter.selectedValue === 'EQUALS') {
             requestObject.balanceEqual = true;
@@ -475,9 +479,13 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
         requestObject.totalLessThan = false;
         requestObject.totalEqual = false;
 
-        if (this.advanceSearchModel.totalAmountFilter.selectedValue === 'GREATER_THAN' || this.advanceSearchModel.totalAmountFilter.selectedValue === 'GREATER_THAN_OR_EQUALS') {
+        if (this.advanceSearchModel.totalAmountFilter.selectedValue === 'GREATER_THAN') {
+            requestObject.totalMoreThan = true;
+        } else if(this.advanceSearchModel.totalAmountFilter.selectedValue === 'GREATER_THAN_OR_EQUALS') {
+            requestObject.totalEqual = true;
             requestObject.totalMoreThan = true;
         } else if (this.advanceSearchModel.totalAmountFilter.selectedValue === 'LESS_THAN_OR_EQUALS') {
+            requestObject.totalEqual = true;
             requestObject.totalLessThan = true;
         } else if (this.advanceSearchModel.totalAmountFilter.selectedValue === 'EQUALS') {
             requestObject.totalEqual = true;

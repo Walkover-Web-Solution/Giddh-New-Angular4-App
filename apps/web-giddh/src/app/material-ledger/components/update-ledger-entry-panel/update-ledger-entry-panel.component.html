@@ -1547,7 +1547,17 @@
                                                     >
                                                         <ng-template #optionTemplate let-option="option">
                                                             <a href="javascript:void(0)" class="list-item sh-template">
-                                                                <div class="item">{{ option.label }}</div>
+                                                                <div class="item">
+                                                                    {{
+                                                                        (vm.selectedLedger?.voucher?.shortCode ===
+                                                                            "pur" ||
+                                                                            vm.selectedLedger?.voucher?.shortCode ===
+                                                                                "purchase") &&
+                                                                        !option.label
+                                                                            ? commonLocaleData?.app_not_available
+                                                                            : option.label
+                                                                    }}
+                                                                </div>
                                                                 <div class="item-unique">
                                                                     ({{ localeData?.dated }}:
                                                                     {{
@@ -1587,10 +1597,7 @@
                                                 (click)="removeSelectedInvoice()"
                                             >
                                                 <div class="mr-t1">
-                                                    <span class="remove-invoice-icon">×</span>
-                                                    <span class="remove-invoice-label">{{
-                                                        commonLocaleData?.app_remove
-                                                    }}</span>
+                                                    <span class="remove-invoice-icon"><i class="icon-trash"></i></span>
                                                 </div>
                                             </td>
                                             <td class="pd-r1">
@@ -1910,11 +1917,10 @@
                                             *ngIf="vm.selectedLedger?.attachedFile?.length > 0"
                                         >
                                             <span>{{ vm.selectedLedger?.attachedFileName }}</span>
-                                            <span class="delete-attachment cursor-pointer">
-                                                <img
-                                                    (click)="showDeleteAttachedFileModal()"
-                                                    src="assets/images/multiply.svg"
-                                                />
+                                            <span class="delete-attachment">
+                                                <a class="cursor-pointer" (click)="showDeleteAttachedFileModal()">
+                                                    <i class="icon-trash"></i>
+                                                </a>
                                             </span>
                                         </div>
 

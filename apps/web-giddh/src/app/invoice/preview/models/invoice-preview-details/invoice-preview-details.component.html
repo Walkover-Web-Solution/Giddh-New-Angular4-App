@@ -422,7 +422,8 @@
                                                 <span
                                                     *ngIf="
                                                         selectedItem?.voucherType === 'purchase' &&
-                                                        attachedDocumentType?.type
+                                                        attachedDocumentType?.type &&
+                                                        voucherApiVersion !== 2
                                                     "
                                                     [ngClass]="{
                                                         'disabled':
@@ -437,7 +438,7 @@
                                                         [tooltip]="localeData?.download_attachment"
                                                         placement="top"
                                                         (click)="downloadFile()"
-                                                        ><i class="icon-download"></i
+                                                        ><i class="icon-download-new"></i
                                                     ></a>
                                                 </span>
 
@@ -451,7 +452,16 @@
                                                     ></a>
                                                 </span>
                                             </div>
-                                            <div class="history-btn" *ngIf="selectedItem?.voucherType === 'purchase'">
+                                            <div
+                                                class="history-btn"
+                                                *ngIf="
+                                                    (voucherApiVersion !== 2 &&
+                                                        selectedItem?.voucherType === 'purchase') ||
+                                                    (voucherApiVersion === 2 &&
+                                                        selectedItem?.voucherType !== 'proformas' &&
+                                                        selectedItem?.voucherType !== 'estimates')
+                                                "
+                                            >
                                                 <button
                                                     class="btn btn-primary"
                                                     (click)="toggleActivityHistoryAsidePane()"
@@ -739,7 +749,7 @@
     <aside-revision-history
         (closeAsideEvent)="toggleActivityHistoryAsidePane()"
         [companyUniqueName]="companyUniqueName"
-        [purchaseBill]="selectedItem"
+        [selectedVoucher]="selectedItem"
     ></aside-revision-history>
 </div>
 

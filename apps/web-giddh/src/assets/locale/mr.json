@@ -148,7 +148,7 @@
     "app_invalid_transporter_name_message": "ट्रान्सपोर्टरच्या नावामध्ये किमान 5 वर्ण असावेत आणि त्यामध्ये कोणतेही विशेष वर्ण नसावेत.",
     "app_transporter_id": "ट्रान्सपोर्टर आयडी",
     "app_transporter_id_placeholder": "क्रमांक सांगा",
-    "app_invalid_transporter_id_message": "ट्रान्सपोर्टर आयडीमध्ये किमान 4 वर्ण असले पाहिजेत आणि फक्त अंक असावेत.",
+    "app_invalid_transporter_id_message": "ट्रान्सपोर्टर आयडीमध्ये किमान 4 वर्ण असले पाहिजेत.",
     "app_transporter_table_name": "नाव",
     "app_transporter_table_id": "ट्रान्सपोर्टर आयडी",
     "app_transporter": "ट्रान्सपोर्टर",
@@ -668,5 +668,7 @@
     "app_unarchived": "सक्रिय",
     "app_not_available": "N/A",
     "app_true": "खरे",
-    "app_false": "खोटे"
+    "app_false": "खोटे",
+    "app_preview": "पूर्वावलोकन",
+    "app_purchase_bill": "खरेदी बिल"
 }

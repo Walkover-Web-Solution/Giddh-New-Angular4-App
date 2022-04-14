@@ -57,7 +57,6 @@ import { ProformaListComponent } from '../../../proforma/proforma-list.component
     styleUrls: [`./invoice-preview-details.component.scss`],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-
 export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
     @ViewChild('searchElement', { static: true }) public searchElement: ElementRef;
     @ViewChild('showEmailSendModal', { static: true }) public showEmailSendModal: ModalDirective;
@@ -86,7 +85,6 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     @Input() public localeData: any = {};
     /* This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
-
     @Output() public deleteVoucher: EventEmitter<any> = new EventEmitter();
     @Output() public updateVoucherAction: EventEmitter<string> = new EventEmitter();
     @Output() public closeEvent: EventEmitter<boolean> = new EventEmitter();
@@ -114,7 +112,6 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     public isMobileView = false;
     public fileUploadOptions: UploaderOptions;
     public uploadInput: EventEmitter<UploadInput>;
-
     public sessionKey$: Observable<string>;
     public companyName$: Observable<string>;
     public isFileUploading: boolean = false;
@@ -163,6 +160,8 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     public voucherDetails$: Observable<any>;
     /** This will use for default template */
     public defaultTemplate: any;
+    /** Stores the voucher API version of company */
+    public voucherApiVersion: 1 | 2;
 
     constructor(
         private _cdr: ChangeDetectorRef,
@@ -213,16 +212,17 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                 (this.attachedDocumentType.type === 'pdf' || this.attachedDocumentType.type === 'image')));
     }
 
-    ngOnInit() {
-        this.invoiceTemplatesService.getAllCreatedTemplates("sales").pipe(takeUntil(this.destroyed$)).subscribe((res) => { 
-            if(res) {
+    public ngOnInit(): void {
+        this.voucherApiVersion = this._generalService.voucherApiVersion;
+        this.invoiceTemplatesService.getAllCreatedTemplates("sales").pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+            if (res) {
                 const defaultTemplate = res.body?.filter(res => res.isDefault);
-                if(defaultTemplate?.length > 0) {
+                if (defaultTemplate?.length > 0) {
                     this.defaultTemplate = defaultTemplate[0];
                 }
-            }      
+            }
         });
-        if (document.getElementsByClassName("sidebar-collapse")?.length > 0) {
+        if(document.getElementsByClassName("sidebar-collapse")?.length > 0) {
             this.isSidebarExpanded = false;
         } else {
             this.isSidebarExpanded = true;
@@ -259,10 +259,12 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         });
         this.uploadInput = new EventEmitter<UploadInput>();
         this.fileUploadOptions = { concurrency: 0 };
+
+        this.companyName$.pipe(take(1)).subscribe(companyUniqueName => this.companyUniqueName = companyUniqueName);
     }
 
-    ngOnChanges(changes: SimpleChanges): void {
-        if ('items' in changes && changes.items.currentValue.filter(newItem => (!changes?.items?.previousValue || changes?.items?.previousValue?.every(oldItem => oldItem.uniqueName !== newItem?.uniqueName)))?.length) {
+    public ngOnChanges(changes: SimpleChanges): void {
+        if ('items' in changes && changes.items.currentValue.filter(newItem => (!changes?.items?.previousValue || changes?.items?.previousValue?.every(oldItem => oldItem?.uniqueName !== newItem?.uniqueName)))?.length) {
             this.filteredData = changes.items.currentValue;
             if (this.selectedItem && this.selectedItem.uniqueName) {
                 this.selectedItem = this.filteredData.filter(item => {
@@ -299,7 +301,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         }
     }
 
-    ngAfterViewInit(): void {
+    public ngAfterViewInit(): void {
         this.searchElement?.nativeElement.focus();
         fromEvent(this.searchElement?.nativeElement, 'input')
             .pipe(
@@ -544,8 +546,6 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                 this.pdfPreviewHasError = false;
                 this.pdfPreviewLoaded = false;
 
-                this.companyName$.pipe(take(1)).subscribe(companyUniqueName => this.companyUniqueName = companyUniqueName);
-
                 let getRequest = { companyUniqueName: this.companyUniqueName, accountUniqueName: this.selectedItem?.account?.uniqueName, uniqueName: this.selectedItem?.uniqueName };
 
                 this.sanitizedPdfFileUrl = null;
@@ -614,7 +614,11 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
             }
         } else if (this.selectedItem?.voucherType === VoucherTypeEnum.creditNote || this.selectedItem?.voucherType === VoucherTypeEnum.debitNote) {
             if (this._generalService.voucherApiVersion === 2) {
-                return saveAs(this.selectedItem.blob, `${this.selectedItem.voucherNumber}.pdf`);
+                if (this.selectedItem.hasAttachment) {
+                    this.downloadVoucherModal.show();
+                } else {
+                    return saveAs(this.selectedItem.blob, `${this.selectedItem.voucherNumber}.pdf`);
+                }
             } else {
                 this.downloadCreditDebitNotePdf();
             }
@@ -906,7 +910,12 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         if (this.pdfPreviewHasError || !this.pdfPreviewLoaded) {
             return;
         }
-        saveAs(this.attachedDocumentBlob, 'purchasebill.pdf');
+        if (this._generalService.voucherApiVersion === 2 && this.selectedItem.hasAttachment) {
+            this.downloadVoucherModal.show();
+        } else {
+            let voucherNumber = (this.selectedItem?.voucherNumber) ? this.selectedItem?.voucherNumber : this.commonLocaleData?.app_not_available;
+            saveAs(this.attachedDocumentBlob, voucherNumber + '.pdf');
+        }
     }
 
     /**

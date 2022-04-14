@@ -10,11 +10,13 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 import { DbService } from './services/db.service';
 import { reassignNavigationalArray } from './models/defaultMenus'
 import { Configuration } from "./app.constant";
-import { take, takeUntil } from 'rxjs/operators';
+import { filter, take, takeUntil } from 'rxjs/operators';
 import { LoaderService } from './loader/loader.service';
 import { CompanyActions } from './actions/company.actions';
 import { OrganizationType } from './models/user-login-state';
 import { CommonActions } from './actions/common.actions';
+import { MatDialog } from '@angular/material/dialog';
+import { BsModalService } from 'ngx-bootstrap/modal';
 
 /**
  * App Component
@@ -48,7 +50,9 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         private dbServices: DbService,
         private loadingService: LoaderService,
         private companyActions: CompanyActions,
-        private commonActions: CommonActions
+        private commonActions: CommonActions,
+        public dialog: MatDialog,
+        private modalService: BsModalService
     ) {
         this.isProdMode = PRODUCTION_ENV;
         this.isElectron = isElectron;
@@ -95,7 +99,18 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
                 APP_FOLDER
             });
         }
+
+        /** This will be use for dialog close on route event */
+        this.router.events.pipe(filter(event => event instanceof NavigationStart), takeUntil(this.destroyed$)).subscribe((event: any) => {
+            if (event) {
+                this.dialog?.closeAll();
+                for (let i = 1; i <= this.modalService.getModalsCount(); i++) {
+                    this.modalService.hide(i);
+                }
+            }
+        });
     }
+    
 
     public sidebarStatusChange(event) {
         this.sideMenu.isopen = event;
@@ -144,6 +159,17 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             } else {
                 let supportedLocales = this._generalService.getSupportedLocales();
                 this.store.dispatch(this.commonActions.setActiveLocale(supportedLocales[0]));
+            }
+        });
+
+        this.store.pipe(select(state => state.session.activeTheme), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.value) {
+                document.querySelector("body")?.classList?.remove("dark-theme");
+                document.querySelector("body")?.classList?.remove("default-theme");
+                document.querySelector("body")?.classList?.add(response?.value);
+            } else {
+                let availableThemes = this._generalService.getAvailableThemes();
+                this.store.dispatch(this.commonActions.setActiveTheme(availableThemes[0]));
             }
         });
     }

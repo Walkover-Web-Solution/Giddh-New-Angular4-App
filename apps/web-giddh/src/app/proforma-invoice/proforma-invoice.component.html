@@ -77,7 +77,10 @@
         </ng-container>
         <!--endregion-->
         <!-- region main form -->
-        <div [hidden]="(isUpdateMode && isUpdateDataInProcess) || (isLastInvoiceCopied && isUpdateDataInProcess)">
+        <div
+            [hidden]="(isUpdateMode && isUpdateDataInProcess) || (isLastInvoiceCopied && isUpdateDataInProcess)"
+            id="button-focus-proforma"
+        >
             <form
                 #invoiceForm="ngForm"
                 novalidate
@@ -892,6 +895,7 @@
                                                     adjustPaymentBalanceDueData === 0 &&
                                                     invFormData.voucherDetails.balanceDue === 0) ||
                                                 (voucherApiVersion === 2 &&
+                                                    invFormData.voucherDetails.gainLoss &&
                                                     invFormData.voucherDetails.gainLoss !== 0 &&
                                                     invFormData.voucherDetails.balanceDue === 0)
                                             "
@@ -909,7 +913,7 @@
                                         >
                                         <span
                                             class="sp-rupees d-flex justify-content-end"
-                                            *ngIf="isMulticurrencyAccount"
+                                            *ngIf="isMulticurrencyAccount && voucherApiVersion !== 2"
                                         >
                                             <amount-field
                                                 [amount]="
@@ -944,6 +948,7 @@
                                             class="sp-rupees d-flex justify-content-end"
                                             *ngIf="
                                                 voucherApiVersion === 2 &&
+                                                invFormData.voucherDetails.gainLoss &&
                                                 invFormData.voucherDetails.gainLoss !== 0 &&
                                                 invFormData.voucherDetails.balanceDue === 0
                                             "
@@ -1525,10 +1530,9 @@
                                                 class="cp for-mobile-screen remove-invoice"
                                                 (click)="removeSelectedInvoice()"
                                             >
-                                                <span class="remove-invoice-icon mr-r05">×</span>
-                                                <span class="remove-invoice-label">{{
-                                                    commonLocaleData?.app_remove
-                                                }}</span>
+                                                <span class="remove-invoice-icon mr-r05"
+                                                    ><i class="icon-trash"></i
+                                                ></span>
                                             </div>
                                         </div>
                                         <div
@@ -1541,10 +1545,9 @@
                                                     class="cp remove-invoice"
                                                     (click)="removeSelectedInvoice()"
                                                 >
-                                                    <span class="remove-invoice-icon mr-r05">×</span>
-                                                    <span class="remove-invoice-label">{{
-                                                        commonLocaleData?.app_remove
-                                                    }}</span>
+                                                    <span class="remove-invoice-icon mr-r05"
+                                                        ><i class="icon-trash"></i
+                                                    ></span>
                                                 </div>
                                                 <div class="form-group">
                                                     <label>{{ invoiceDateLabel }}</label>
@@ -2896,7 +2899,10 @@
                                             <div class="ico-head">{{ commonLocaleData?.app_other_details }}</div>
                                         </div>
 
-                                        <div [collapse]="isOthrDtlCollapsed" class="clearfix max-width-600 pd-l3 m-0">
+                                        <div
+                                            [collapse]="isOthrDtlCollapsed"
+                                            class="clearfix max-width-600 pd-l3 m-0 other-details-section-list"
+                                        >
                                             <div class="row">
                                                 <div class="form-group col-xs-4 col-sm-4 mb-0">
                                                     <giddh-datepicker
@@ -3414,6 +3420,7 @@
                                                                                     <amount-field
                                                                                         [amount]="
                                                                                             adjustPaymentData.totalAdjustedAmount
+                                                                                                | replace: '-':''
                                                                                         "
                                                                                         [currencySymbol]="
                                                                                             isMulticurrencyAccount

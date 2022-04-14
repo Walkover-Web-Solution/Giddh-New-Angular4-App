@@ -1,8 +1,7 @@
-@import "../../../../../assets/css/color.scss";
 .receipt-entry-content {
     .receipt-entry-top-detail {
         text-align: center;
-        border-bottom: 1px solid $gainsboro;
+        border-bottom: 1px solid var(--color-iron);
         margin-bottom: 15px;
         padding: 0 0 15px;
         h5 {
@@ -60,7 +59,7 @@
                     position: absolute;
                     right: 5px;
                     top: 12px;
-                    color: $nero;
+                    color: var(--color-nero);
                 }
             }
             .to-cr-field {
@@ -69,12 +68,12 @@
             }
             .delete-row {
                 display: flex;
-                color: $nero;
+                color: var(--color-nero);
                 min-width: 18px;
                 max-width: 18px;
                 i.icon-cross {
                     font-size: 14px;
-                    color: $nero;
+                    color: var(--color-nero);
                     line-height: 2;
                 }
             }

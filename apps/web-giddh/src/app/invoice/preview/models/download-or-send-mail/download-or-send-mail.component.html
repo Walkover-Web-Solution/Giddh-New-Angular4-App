@@ -93,6 +93,19 @@
                                 }}</label
                             >
                         </div>
+                        <div
+                            class="checkbox"
+                            *ngIf="voucherApiVersion === 2 && voucherHasAttachments && downloadTabActive"
+                        >
+                            <label
+                                ><input
+                                    name="attachment"
+                                    type="checkbox"
+                                    value="Attachment"
+                                    [(ngModel)]="isAttachment"
+                                />{{ localeData?.attachment }}</label
+                            >
+                        </div>
                     </div>
                 </ng-container>
 
@@ -109,7 +122,7 @@
                         type="button"
                         class="btn btn-sm btn-success"
                         (click)="downloadInvoice()"
-                        [disabled]="!invoiceType.length"
+                        [disabled]="!invoiceType.length && !isAttachment"
                         [hidden]="emailTabActive || smsTabActive"
                     >
                         {{ localeData?.download_invoice }}
@@ -219,7 +232,7 @@
                     type="button"
                     class="btn btn-sm btn-success"
                     (click)="downloadInvoice()"
-                    [disabled]="!invoiceType.length && currentVoucherFilter === 'invoices'"
+                    [disabled]="!invoiceType.length && !isAttachment && currentVoucherFilter === 'invoices'"
                     [hidden]="emailTabActive || smsTabActive"
                 >
                     {{ localeData?.download_invoice }}

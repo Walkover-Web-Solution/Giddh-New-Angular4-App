@@ -1018,10 +1018,9 @@
                                     <div
                                         (click)="onSelectInvoice(item)"
                                         [ngClass]="{
-                                            'remove-capitalize': selectedVoucher === 'purchase',
                                             'cp': selectedVoucher === 'purchase' && !item.voucherNumber
                                         }"
-                                        class="d-flex position-relative"
+                                        class="d-flex position-relative remove-capitalize"
                                     >
                                         <a href="javascript:void(0);" class="btn-link-2">{{
                                             item.voucherNumber
@@ -1320,6 +1319,7 @@
                                             ? localeData?.dr_note_no
                                             : localeData?.cr_note_no
                                     "
+                                    class="remove-capitalize"
                                 >
                                     <a class="cursor-pointer" (click)="onSelectInvoice(item)">
                                         {{ item.voucherNumber || commonLocaleData?.app_not_available }}</a
@@ -1357,11 +1357,12 @@
                                     {{
                                         voucherApiVersion === 2
                                             ? item.referenceVoucher
-                                                ? item.referenceVoucher.number
-                                                : commonLocaleData?.app_not_available
+                                                ? item.referenceVoucher?.number || commonLocaleData?.app_not_available
+                                                : ""
                                             : item.invoiceLinkingRequest?.linkedInvoices?.length
-                                            ? item.invoiceLinkingRequest?.linkedInvoices[0].invoiceNumber
-                                            : commonLocaleData?.app_not_available
+                                            ? item.invoiceLinkingRequest?.linkedInvoices[0].invoiceNumber ||
+                                              commonLocaleData?.app_not_available
+                                            : ""
                                     }}
                                 </td>
 

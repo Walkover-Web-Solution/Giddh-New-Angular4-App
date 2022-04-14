@@ -134,6 +134,7 @@ export class AdjustmentUtilityService {
         const purchaseParentGroups = ['operatingcost', 'indirectexpenses'];
         const debtorCreditorParentGroups = ['sundrydebtors', 'sundrycreditors'];
         const cashBankParentGroups = ['cash', 'bankaccounts'];
+        const fixedAssetsGroups = ['fixedassets'];
 
         if (data?.particularAccount?.parentGroups?.length > 0) {
             if (data?.particularAccount?.parentGroups[0].uniqueName) {
@@ -145,6 +146,7 @@ export class AdjustmentUtilityService {
         let isPurchaseLedger = false;
         let isDebtorCreditorLedger = false;
         let isCashBankLedger = false;
+        let isFixedAssetsLedger = false;
 
         data?.ledgerAccount?.parentGroups?.forEach(group => {
             if (salesParentGroups.includes(group?.uniqueName)) {
@@ -155,6 +157,8 @@ export class AdjustmentUtilityService {
                 isDebtorCreditorLedger = true;
             } else if (cashBankParentGroups.includes(group?.uniqueName)) {
                 isCashBankLedger = true;
+            } else if (fixedAssetsGroups.includes(group?.uniqueName)) {
+                isFixedAssetsLedger = true;
             }
         });
 
@@ -162,6 +166,7 @@ export class AdjustmentUtilityService {
         let isPurchaseAccount = false;
         let isDebtorCreditorAccount = false;
         let isCashBankAccount = false;
+        let isFixedAssetsAccount = false;
 
         data?.particularAccount?.parentGroups?.forEach(groupUniqueName => {
             if (salesParentGroups.includes(groupUniqueName)) {
@@ -172,6 +177,8 @@ export class AdjustmentUtilityService {
                 isDebtorCreditorAccount = true;
             } else if (cashBankParentGroups.includes(groupUniqueName)) {
                 isCashBankAccount = true;
+            } else if (fixedAssetsGroups.includes(groupUniqueName)) {
+                isFixedAssetsAccount = true;
             }
         });
 
@@ -191,6 +198,16 @@ export class AdjustmentUtilityService {
             } else {
                 request = undefined;
             }
+        } else if (isFixedAssetsLedger) {
+            if (isDebtorCreditorAccount) {
+                request = {
+                    accountUniqueName: data?.particularAccount?.uniqueName,
+                    voucherType: data?.voucherType,
+                    noteVoucherType: (data?.voucherType === creditNoteVoucher) ? "sales" : (data?.voucherType === debitNoteVoucher) ? "purchase" : undefined
+                };
+            } else {
+                request = undefined;
+            }
         } else if (isDebtorCreditorLedger) {
             request.accountUniqueName = data?.ledgerAccount?.uniqueName;
             request.voucherType = data?.voucherType;
@@ -201,13 +218,15 @@ export class AdjustmentUtilityService {
                 request.noteVoucherType = (data?.voucherType === debitNoteVoucher || data?.voucherType === creditNoteVoucher) ? "purchase" : undefined;
             } else if (isCashBankAccount) {
                 request.noteVoucherType = undefined;
+            } else if (isFixedAssetsAccount) {
+                request.noteVoucherType = (data?.voucherType === creditNoteVoucher) ? "sales" : (data?.voucherType === debitNoteVoucher) ? "purchase" : undefined;
             } else {
                 request = undefined;
             }
         } else if (isCashBankLedger) {
             if (isDebtorCreditorAccount) {
                 request = {
-                    accountUniqueName: data?.ledgerAccount?.uniqueName,
+                    accountUniqueName: data?.particularAccount?.uniqueName,
                     voucherType: data?.voucherType,
                     noteVoucherType: undefined
                 };

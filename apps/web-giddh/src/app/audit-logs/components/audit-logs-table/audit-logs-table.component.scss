@@ -1,6 +1,5 @@
-@import "../../../../assets/css/color.scss";
 .audit-log-detail {
-    border-top: 1px solid $gainsboro;
+    border-top: 1px solid var(--color-iron);
     padding: 8px 0;
     .user-basic-detail {
         align-items: center;

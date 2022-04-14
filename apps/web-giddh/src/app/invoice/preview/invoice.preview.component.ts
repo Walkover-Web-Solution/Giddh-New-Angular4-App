@@ -290,6 +290,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     public ngOnInit() {
+        document.querySelector("body")?.classList?.add("invoice-preview-page");
         this._breakPointObservar.observe([
             '(max-width: 1023px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
@@ -1209,10 +1210,10 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         this.sortRequestForUi = { sortBy: '', sort: '' };
         this.invoiceSearchRequest.sort = '';
         this.invoiceSearchRequest.sortBy = '';
-        this.invoiceSearchRequest.q = '';
         this.invoiceSearchRequest.page = 1;
         this.invoiceSearchRequest.count = PAGINATION_LIMIT;
         this.invoiceSearchRequest.voucherNumber = '';
+        this.selectedRangeLabel = "";
 
         let universalDate;
         // get application date
@@ -1222,6 +1223,9 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
         // set date picker date as application date
         if (universalDate.length > 1) {
+            this.selectedDateRange = { startDate: moment(universalDate[0]), endDate: moment(universalDate[1]) };
+            this.selectedDateRangeUi = moment(universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+
             this.invoiceSearchRequest.from = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
             this.invoiceSearchRequest.to = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
         }
@@ -1282,6 +1286,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             }
         });
         document.querySelector('body').classList.remove('fixed');
+        document.querySelector('body').classList.remove('invoice-preview-page');
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }

@@ -120,6 +120,10 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
         this.isActionSuccess$.subscribe(a => {
             if (a) {
                 this.resetFrom();
+                
+                if (this.selectedInvoiceForPayment) {
+                    this.assignAmount(this.selectedInvoiceForPayment?.balanceDue?.amountForAccount, this.selectedInvoiceForPayment?.account?.currency?.symbol);
+                }
             }
         });
 

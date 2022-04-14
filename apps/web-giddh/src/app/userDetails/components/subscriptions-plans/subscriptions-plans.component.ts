@@ -1,4 +1,4 @@
-import { takeUntil } from 'rxjs/operators';
+import { filter, takeUntil } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 import { Component, OnDestroy, OnInit, Output, EventEmitter, Input, ChangeDetectorRef, ElementRef, ViewChild } from '@angular/core';
 import { ReplaySubject, Observable } from 'rxjs';
@@ -9,9 +9,8 @@ import { AuthenticationService } from '../../../services/authentication.service'
 import { AppState } from '../../../store';
 import { SettingsProfileActions } from '../../../actions/settings/profile/settings.profile.action';
 import { CompanyActions } from '../../../actions/company.actions';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, NavigationStart} from '@angular/router';
 import { FormControl } from '@angular/forms';
-import { DEFAULT_SIGNUP_TRIAL_PLAN } from '../../../app.constant';
 import { SettingsProfileService } from '../../../services/settings.profile.service';
 import { ToasterService } from '../../../services/toaster.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -73,8 +72,6 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
     public unlimitedUsersTooltipContent: string = "";
     /** This will contain the tooltip content of unlimited customers */
     public unlimitedCustomersVendorsTooltipContent: string = "";
-    /** This will contain the plan unique name of default trial plan */
-    public defaultTrialPlan: string = DEFAULT_SIGNUP_TRIAL_PLAN;
     /** This will hold if plans are showing */
     public isShowPlans: boolean = false;
     /** This will hold the object of active company */

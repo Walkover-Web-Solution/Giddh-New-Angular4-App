@@ -279,7 +279,7 @@ var app = new Vue({
             if (id) {
                 var voucherVersion = this.voucherVersion;
                 var apiObservable;
-                if(voucherVersion === 2) {
+                if (voucherVersion === 2) {
                     apiObservable = axios.post(apiBaseUrl + 'magic-link/' + id + '/download-voucher?voucherVersion=' + voucherVersion + '&downloadOption=VOUCHER', {
                         voucherType: entry.voucherName,
                         uniqueName: (entry.voucherUniqueName) ? entry.voucherUniqueName : undefined,
@@ -294,7 +294,12 @@ var app = new Vue({
                 apiObservable.then(response => {
                     // JSON responses are automatically parsed.
                     if (response?.data?.status !== "error") {
-                        return saveAs(response?.data, entry.voucherNumber + '.pdf');
+                        if (voucherVersion === 2) {
+                            return saveAs(response?.data, entry.voucherNumber + '.pdf');
+                        } else {
+                            var blobData = this.base64ToBlob(response.data.body, 'application/pdf', 512);
+                            return saveAs(blobData, entry.voucherNumber + '.pdf');
+                        }
                     } else {
                         this.$toaster.error('Invoice for ' + entry.voucherNumber + ' cannot be downloaded now.');
                     }
@@ -312,7 +317,7 @@ var app = new Vue({
             if (id) {
                 var voucherVersion = this.voucherVersion;
                 var apiObservable;
-                if(voucherVersion === 2) {
+                if (voucherVersion === 2) {
                     apiObservable = axios.post(apiBaseUrl + 'magic-link/' + id + '/download-voucher?voucherVersion=' + voucherVersion + '&downloadOption=ATTACHMENT', {
                         voucherType: entry.voucherName,
                         uniqueName: (entry.voucherUniqueName) ? entry.voucherUniqueName : undefined,
@@ -327,7 +332,7 @@ var app = new Vue({
                 apiObservable.then(response => {
                     // JSON responses are automatically parsed.
                     if (response?.data?.status !== "error") {
-                        if(voucherVersion === 2) {
+                        if (voucherVersion === 2) {
                             return saveAs(response?.data, attachedFileName);
                         } else {
                             var blobData = this.base64ToBlob(response.data.body.uploadedFile, 'image/' + response.data.body.fileType, 512);
@@ -337,9 +342,9 @@ var app = new Vue({
                         this.$toaster.error('Attachment ' + attachedFileName + ' cannot be downloaded now.');
                     }
                 })
-                .catch(e => {
-                    this.$toaster.error('Attachment ' + attachedFileName + ' cannot be downloaded now.');
-                })
+                    .catch(e => {
+                        this.$toaster.error('Attachment ' + attachedFileName + ' cannot be downloaded now.');
+                    })
             } else {
                 this.$toaster.error('Magic link ID not found.');
             }
@@ -407,7 +412,7 @@ var app = new Vue({
                     apiBaseUrl = 'https://apidev.giddh.com/';
                     break;
                 case 'stage.giddh.com':
-                    apiBaseUrl = 'https://apirelease.giddh.com/';
+                    apiBaseUrl = 'https://apitest.giddh.com/';
                     break;
                 case 'giddh.com':
                 case 'app.giddh.com':
