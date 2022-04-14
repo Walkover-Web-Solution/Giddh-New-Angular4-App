@@ -1,6 +1,4 @@
-@import "../../../../../../../assets/css/color.scss";
-
-.companyTitle {
+.company-title {
     text-align: center;
 }
 .qr-footer {
@@ -43,7 +41,6 @@
 * {
     border: 0;
     box-sizing: content-box;
-    color: $nero;
     font-family: inherit;
     font-style: inherit;
     font-weight: inherit;
@@ -66,10 +63,6 @@
     font-size: 10px !important;
 }
 
-/*
-  .font-12 {
-  font-size: 12px !important;
-  } */
 .pb-1 {
     padding-bottom: 10px;
 }
@@ -82,12 +75,10 @@ p {
 }
 /* heading */
 #thermal_template header h1 {
-    /* color: #df4927; */
     font-size: 14px;
 }
 
 #thermal_template header h2 {
-    /* color: #df4927; */
     font-size: 14px;
     font-weight: bold;
 }
@@ -104,7 +95,6 @@ p {
 }
 /* table */
 #thermal_template table {
-    /* font-size: 93%; */
     table-layout: fixed;
     width: 100%;
     border-collapse: inherit;
@@ -165,7 +155,6 @@ p {
 
 #thermal_template .meta {
     padding: 0 10px;
-    /* margin-bottom: 10px; */
 }
 
 #thermal_template .meta tbody tr td,
@@ -179,7 +168,6 @@ p {
     border: 0;
     padding: 0;
     text-align: left;
-    color: $nero;
 }
 
 .hidden-label {
@@ -190,8 +178,6 @@ p {
     padding: 6px 0;
     line-height: 1.3rem;
 }
-
-/*#thermal_template .meta tbody tr td:nth-child(2)>table tbody tr td{background: #f2f2f2;padding: 0 10px;line-height: 2rem;margin: 4px 0; display: -webkit-box;}*/
 
 #thermal_template header figure {
     margin: 0 0 0.3em 0;
@@ -293,50 +279,7 @@ header img {
 }
 #thermal_template table.item tfoot tr th {
     padding-right: 7px;
-    border-top: 1px solid $light-gray;
-}
-/* tcs */
-.tcs hr {
-    margin-top: 50px;
-    width: 100%;
-    border-bottom: 1px solid $cinnabar-orange;
-}
-.tcs table {
-    margin: 50px 0px;
-    clear: both;
-    width: 100%;
-    border-collapse: collapse !important;
-}
-.tcs table td,
-.tcs table th {
-    border-radius: 0;
-    padding: 5px;
-    border: 1px solid $light-gray;
-    vertical-align: top;
-    text-align: right;
-}
-
-.tcs table td:first-child {
-    text-align: left;
-}
-
-.tcs table th,
-.tcs table tfoot tr th {
-    position: relative;
-    padding: 5px;
-    font-weight: bold;
-}
-
-.tcs table th,
-.tcs table tfoot tr th {
-    position: relative;
-    padding: 5px;
-    text-align: right;
-}
-
-.tcs table th:first-child,
-.tcs table tfoot tr th:first-child {
-    text-align: left;
+    border-top: 1px solid #0000;
 }
 
 .br0 {
@@ -356,10 +299,6 @@ header img {
 
 .tax-gst {
     margin-bottom: 8px !important;
-}
-
-#thermal_template table.item td p {
-    color: $zambezi;
 }
 
 #thermal_template table.balance {
@@ -537,17 +476,6 @@ strong {
     background: #fff;
     width: 20px;
 }
-
-.edit-template i {
-    background: url("data:image/svg+xml;utf8;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pgo8IS0tIEdlbmVyYXRvcjogQWRvYmUgSWxsdXN0cmF0b3IgMTkuMS4wLCBTVkcgRXhwb3J0IFBsdWctSW4gLiBTVkcgVmVyc2lvbjogNi4wMCBCdWlsZCAwKSAgLS0+CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgdmVyc2lvbj0iMS4xIiBpZD0iQ2FwYV8xIiB4PSIwcHgiIHk9IjBweCIgdmlld0JveD0iMCAwIDQ2OS4zMzEgNDY5LjMzMSIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAwIDAgNDY5LjMzMSA0NjkuMzMxOyIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSIgd2lkdGg9IjE2cHgiIGhlaWdodD0iMTZweCI+CjxnPgoJPHBhdGggZD0iTTQzOC45MzEsMzAuNDAzYy00MC40LTQwLjUtMTA2LjEtNDAuNS0xNDYuNSwwbC0yNjguNiwyNjguNWMtMi4xLDIuMS0zLjQsNC44LTMuOCw3LjdsLTE5LjksMTQ3LjQgICBjLTAuNiw0LjIsMC45LDguNCwzLjgsMTEuM2MyLjUsMi41LDYsNCw5LjUsNGMwLjYsMCwxLjIsMCwxLjgtMC4xbDg4LjgtMTJjNy40LTEsMTIuNi03LjgsMTEuNi0xNS4yYy0xLTcuNC03LjgtMTIuNi0xNS4yLTExLjYgICBsLTcxLjIsOS42bDEzLjktMTAyLjhsMTA4LjIsMTA4LjJjMi41LDIuNSw2LDQsOS41LDRzNy0xLjQsOS41LTRsMjY4LjYtMjY4LjVjMTkuNi0xOS42LDMwLjQtNDUuNiwzMC40LTczLjMgICBTNDU4LjUzMSw0OS45MDMsNDM4LjkzMSwzMC40MDN6IE0yOTcuNjMxLDYzLjQwM2w0NS4xLDQ1LjFsLTI0NS4xLDI0NS4xbC00NS4xLTQ1LjFMMjk3LjYzMSw2My40MDN6IE0xNjAuOTMxLDQxNi44MDNsLTQ0LjEtNDQuMSAgIGwyNDUuMS0yNDUuMWw0NC4xLDQ0LjFMMTYwLjkzMSw0MTYuODAzeiBNNDI0LjgzMSwxNTIuNDAzbC0xMDcuOS0xMDcuOWMxMy43LTExLjMsMzAuOC0xNy41LDQ4LjgtMTcuNWMyMC41LDAsMzkuNyw4LDU0LjIsMjIuNCAgIHMyMi40LDMzLjcsMjIuNCw1NC4yQzQ0Mi4zMzEsMTIxLjcwMyw0MzYuMTMxLDEzOC43MDMsNDI0LjgzMSwxNTIuNDAzeiIgZmlsbD0iIzAwMDAwMCIvPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+Cjwvc3ZnPgo=")
-        no-repeat;
-    width: 17px;
-    position: absolute;
-    right: 1px;
-    background-size: 14px;
-    height: 18px;
-}
-
 .slogan-pre-line {
     display: block;
     white-space: pre-line;
@@ -567,10 +495,6 @@ strong {
     border-bottom: solid 1px rgb(121, 189, 88);
     padding: 6px 16px;
 }
-.tax-table p {
-    color: $zambezi;
-}
-
 .tax-table tfoot th {
     font-weight: bold;
 }
@@ -587,7 +511,6 @@ strong {
 .tax-table tbody tr td,
 .tax-table tfoot tr th {
     padding: 6px;
-    border-right: 1px solid $light-gray;
 }
 
 .tax-table thead tr th:last-child,
@@ -599,9 +522,7 @@ strong {
 table.tax-table.item {
     padding-top: 0px !important;
 }
-.tax-table.item tfoot tr th {
-    border-bottom: 1px solid $light-gray;
-}
+
 .tax-table tbody tr td {
     border-top: 0px solid;
 }
@@ -612,9 +533,7 @@ table.tax-table.item {
     padding-right: 0px;
     padding-left: 0px;
 }
-// .thermal-table tbody tr td {
-//     padding: 0px 17px 5px 10px;
-// }
+
 .img-signature {
     text-align: center;
     vertical-align: bottom;

@@ -39,7 +39,7 @@
                             [title]="fieldsAndVisibility.header.formNameTaxInvoice?.label"
                         ></h2>
                     </div>
-                    <div class="companyTitle" *ngIf="fieldsAndVisibility.header.companyName?.display">
+                    <div class="company-title" *ngIf="fieldsAndVisibility.header.companyName?.display">
                         <h2
                             [ngStyle]="{
                                 'color': 'black',
@@ -105,10 +105,6 @@
                                                 <td class="invoice-head text-right invdate-td">20170911-1</td>
                                             </tr>
                                         </ng-container>
-                                        <!-- <tr *ngIf="fieldsAndVisibility.header.dueDate?.display">
-      <td><strong>{{(fieldsAndVisibility.header.dueDate?.label?.length > 0) ? fieldsAndVisibility.header.dueDate?.label : 'Due Date'}}</strong></td>
-      <td>30/06/2017</td>
-      </tr> -->
                                         <ng-container
                                             *ngIf="voucherType === 'credit note' || voucherType === 'debit note'"
                                         >
@@ -381,8 +377,6 @@
                                     </p>
                                 </div>
                                 <div class="right-footer">
-                                    <!-- *ngIf="fieldsAndVisibility.footer.message1?.display" -->
-
                                     <p *ngIf="fieldsAndVisibility.footer.companyName?.display" class="font-16">
                                         {{ fieldsAndVisibility.header.companyName?.label }}
                                     </p>

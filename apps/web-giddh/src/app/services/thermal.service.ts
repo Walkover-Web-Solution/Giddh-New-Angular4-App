@@ -2,7 +2,6 @@
 import { Injectable } from '@angular/core';
 import { PrinterFormatService } from './printer.format.service';
 import * as qz from "qz-tray";
-
 @Injectable()
 export class ThermalService {
 
@@ -10,7 +9,6 @@ export class ThermalService {
     private maxLength: number = 46;
 
     constructor(private printerFormat: PrinterFormatService) { }
-
     /**
     * This will use for pos commands formatted
     *
@@ -19,11 +17,6 @@ export class ThermalService {
     public print(defaultTemplate: any, request: any): void {
 
         this.maxLength = 46;
-        this.maxLength = +this.maxLength;
-        
-        if (!this.maxLength) {
-            this.maxLength = 46;
-        }
 
         /**
          * This will use for hide/show for QR Code
@@ -34,36 +27,36 @@ export class ThermalService {
         let size0;
         let qrLength;
         let itemsQrTaxData = "";
-        /** This will use for intialized entry tax */
+        /** This will use for initialized entry tax */
         let entryTaxesQR = [];
         if (defaultTemplate?.sections?.header?.data?.showQrCode?.display) {
-
             for (let entry of request.entries) {
                 if (entry?.taxes?.length > 0) {
                     for (let taxApp of entry.taxes) {
                         if (entryTaxesQR[taxApp.accountUniqueName] === undefined) {
                             entryTaxesQR[taxApp.accountUniqueName] = [];
-                            entryTaxesQR[taxApp.accountUniqueName]['name'] = taxApp.accountName;
-                            entryTaxesQR[taxApp.accountUniqueName]['amount'] = taxApp.amount?.amountForAccount;
+                            entryTaxesQR[taxApp.accountUniqueName]['name'] = taxApp?.accountName;
+                            entryTaxesQR[taxApp.accountUniqueName]['amount'] = taxApp?.amount?.amountForAccount;
                         } else {
-                            entryTaxesQR[taxApp.accountUniqueName]['amount'] = Number(entryTaxesQR[taxApp.accountUniqueName]['amount']) + Number(taxApp.amount?.amountForAccount);
+                            entryTaxesQR[taxApp.accountUniqueName]['amount'] = Number(entryTaxesQR[taxApp?.accountUniqueName]['amount']) + Number(taxApp?.amount?.amountForAccount);
                         }
                     }
                 }
             }
             Object.keys(entryTaxesQR)?.forEach(key => {
                 let entryTax = entryTaxesQR[key];
-                if (entryTax.amount > 0) {
+                if (entryTax?.amount > 0) {
                     let taxAmount = parseFloat(
-                        entryTax.amount
+                        entryTax?.amount
                     ).toFixed(2);
 
                     itemsQrTaxData +=
-                        entryTax.name +
+                        entryTax?.name +
                         " - " +
                         taxAmount;
                 }
             });
+
             // The QR data
             qr = "SELLER DETAILS" + this.printerFormat.lineBreak + "GSTIN - " + request?.company?.billingDetails?.taxNumber + this.printerFormat.lineBreak + this.printerFormat.lineBreak + "INVOICE DETAILS" + this.printerFormat.lineBreak + "Number - " + request?.number + this.printerFormat.lineBreak + "Date - " + request?.date + this.printerFormat.lineBreak + "Amount - " + request?.subTotal?.amountForCompany + this.printerFormat.lineBreak + itemsQrTaxData + this.printerFormat.lineBreak + "Total Tax - " + request?.taxTotal?.amountForCompany + this.printerFormat.lineBreak;
 
@@ -83,16 +76,16 @@ export class ThermalService {
             qrLength = 0;
         }
 
-        /** This will use for intialized entry tax */
+        /** This will use for initialized entry tax */
         let entryTaxes = [];
 
-        /** This will use for intialized items */
+        /** This will use for initialized items */
         let items = "";
 
-        /** This will use for intialized items field */
+        /** This will use for initialized items field */
         let itemsField = "";
 
-        /** This will use for intialized tax */
+        /** This will use for initialized tax */
         let tax = "";
 
         /**
@@ -141,7 +134,7 @@ export class ThermalService {
          */
         let headerCompanyAddress;
         if (defaultTemplate?.sections?.header?.data?.showCompanyAddress?.display) {
-            headerCompanyAddress = request.company?.billingDetails?.address[0];
+            headerCompanyAddress = request?.company?.billingDetails?.address[0];
         } else {
             headerCompanyAddress = "";
         }
@@ -149,17 +142,17 @@ export class ThermalService {
         /**
          * This will use for hide/show for customer billing address
          */
-        let accountAddress
+        let accountAddress;
         let accountGstNumberField;
-        let biilingGstinNumber;
+        let billingGstinNumber;
         if (defaultTemplate?.sections?.header?.data?.billingGstin?.display && defaultTemplate?.sections?.header?.data?.billingAddress?.display) {
             accountGstNumberField = defaultTemplate?.sections?.header?.data?.billingGstin?.label;
             accountAddress = request?.account?.billingDetails?.address.join(" ");
-            biilingGstinNumber = request.account?.billingDetails?.taxNumber
+            billingGstinNumber = request?.account?.billingDetails?.taxNumber;
         } else {
             accountGstNumberField = "";
             accountAddress = "";
-            biilingGstinNumber = "";
+            billingGstinNumber = "";
         }
 
         /**
@@ -242,7 +235,7 @@ export class ThermalService {
         let noOfItems;
         if (defaultTemplate?.sections?.table?.data?.totalQuantity?.display) {
             noOfItemsField = defaultTemplate?.sections?.table?.data?.totalQuantity?.label;
-            noOfItems = request.entries.length;
+            noOfItems = request?.entries.length;
         } else {
             noOfItemsField = "";
             noOfItems = "";
@@ -267,17 +260,17 @@ export class ThermalService {
         /**
          * This will use for hide/show for discount total
          */
-        let discAmountField;
+        let discountAmountField;
         let discount: any;
         if (defaultTemplate?.sections?.table?.data?.discount?.display) {
-            discAmountField = defaultTemplate?.sections?.table?.data?.discount?.label;
+            discountAmountField = defaultTemplate?.sections?.table?.data?.discount?.label;
             if (!request?.discountTotal) {
                 discount = "0";
             } else {
                 discount = parseFloat(request?.discountTotal).toFixed(2);
             }
         } else {
-            discAmountField = "";
+            discountAmountField = "";
             discount = "";
         }
 
@@ -333,11 +326,18 @@ export class ThermalService {
         } else {
             footerCompanyName = "";
         }
+        /**
+         * This will use for hide/show for quantity  
+         */
         let qtyPadding;
+        /**
+         * This will use for hide/show for rate  
+         */
         let ratePadding;
+        /**
+         * This will use for hide/show for amount
+         */
         let amountPadding;
-
-
         if (defaultTemplate?.sections?.table?.data?.quantity?.display) {
             qtyPadding = 7;
             ratePadding = 16;
@@ -347,8 +347,6 @@ export class ThermalService {
             ratePadding = 16;
             amountPadding = 13;
         }
-
-
         if (defaultTemplate?.sections?.table?.data?.rate?.display) {
             qtyPadding = 7;
             ratePadding = 16;
@@ -358,8 +356,6 @@ export class ThermalService {
             ratePadding = 0;
             amountPadding = 16;
         }
-
-
         if (defaultTemplate?.sections?.table?.data?.amount?.display) {
             qtyPadding = 7;
             ratePadding = 16;
@@ -369,7 +365,6 @@ export class ThermalService {
             ratePadding = 16;
             amountPadding = 0;
         }
-
         if (!defaultTemplate?.sections?.table?.data?.item?.display) {
             qtyPadding = 2;
             ratePadding = 22;
@@ -380,6 +375,9 @@ export class ThermalService {
             amountPadding = 13;
         }
 
+        /**
+         * This will use for hide/show for item details
+         */
         let itemDetailsField =
             quantityField?.padStart(qtyPadding) +
             "" +
@@ -387,15 +385,15 @@ export class ThermalService {
             "" +
             netAmountField?.padStart(amountPadding);
 
-        let itemFieldLength = this.maxLength - itemDetailsField.length;
+        let itemFieldLength = this.maxLength - itemDetailsField?.length;
 
-        let itemFieldName = productsField.substring(0, itemFieldLength);
+        let itemFieldName = productsField?.substring(0, itemFieldLength);
 
-        if (itemFieldName.length < productsField.length) {
-            let lastIndex = itemFieldName.lastIndexOf(" ");
-            itemFieldName = itemFieldName.substring(0, lastIndex);
+        if (itemFieldName?.length < productsField?.length) {
+            let lastIndex = itemFieldName?.lastIndexOf(" ");
+            itemFieldName = itemFieldName?.substring(0, lastIndex);
         }
-        if (itemFieldName.length === 0) {
+        if (itemFieldName?.length === 0) {
             itemsField =
                 this.printerFormat.formatCenter(
                     this.printerFormat.formatBold(productsField)
@@ -412,16 +410,16 @@ export class ThermalService {
                 ) + this.printerFormat.lineBreak;
         }
         let totalQty = 0;
-        for (let entry of request.entries) {
+        for (let entry of request?.entries) {
 
             let productName =
-                entry.transactions[0].stock?.name ||
-                entry.transactions[0].account?.name;
+                entry?.transactions[0].stock?.name ||
+                entry?.transactions[0].account?.name;
 
-            let quantity
+            let quantity;
             if (defaultTemplate?.sections?.table?.data?.quantity?.display) {
                 quantity =
-                    parseFloat(entry.transactions[0].stock?.quantity || 1).toFixed(2) +
+                    parseFloat(entry?.transactions[0].stock?.quantity || 1).toFixed(2) +
                     " ";
             } else {
                 quantity = "";
@@ -430,7 +428,7 @@ export class ThermalService {
             if (defaultTemplate?.sections?.table?.data?.rate?.display) {
                 rate =
                     parseFloat(
-                        entry.transactions[0].stock?.rate?.rateForAccount || 1
+                        entry?.transactions[0].stock?.rate?.rateForAccount || 1
                     ).toFixed(2) + " ";
             } else {
                 rate = "";
@@ -438,7 +436,7 @@ export class ThermalService {
             let amount;
             if (defaultTemplate?.sections?.table?.data?.total?.display) {
                 amount =
-                    parseFloat(entry.transactions[0].amount?.amountForAccount).toFixed(
+                    parseFloat(entry?.transactions[0].amount?.amountForAccount).toFixed(
                         2
                     ) + " ";
             }
@@ -453,23 +451,23 @@ export class ThermalService {
                 "" +
                 amount?.padStart(amountPadding);
 
-            let itemLength = this.maxLength - itemDetails.length;
-            let itemName = productName.substr(0, itemLength);
+            let itemLength = this.maxLength - itemDetails?.length;
+            let itemName = productName?.substr(0, itemLength);
             let remainingName = "";
-            totalQty += +quantity;
+            totalQty += quantity;
 
-            if (itemName.length < productName.length) {
-                let lastIndex = itemName.lastIndexOf(" ");
+            if (itemName?.length < productName?.length) {
+                let lastIndex = itemName?.lastIndexOf(" ");
                 itemName = itemName.substr(0, lastIndex);
-                remainingName = "" + productName.substr(lastIndex);
+                remainingName = "" + productName?.substr(lastIndex);
             }
-            if (remainingName.length > 0) {
+            if (remainingName?.length > 0) {
                 remainingName = this.printerFormat.formatCenter(
                     this.justifyText(this.printerFormat.leftAlign + remainingName)
                 );
             }
 
-            if (itemName.length === 0) {
+            if (itemName?.length === 0) {
                 let productNameShow;
                 if (defaultTemplate?.sections?.table?.data?.item?.display) {
                     productNameShow = this.printerFormat.formatCenter(
@@ -490,7 +488,7 @@ export class ThermalService {
                 } else {
                     itemNameShow = '';
                 }
-                const itemNameShowHide = itemNameShow?.length ? this.justifyText(itemNameShow, itemDetails) : this.justifyText(itemDetails)
+                const itemNameShowHide = itemNameShow?.length ? this.justifyText(itemNameShow, itemDetails) : this.justifyText(itemDetails);
                 items +=
                     this.printerFormat.formatCenter(
                         this.printerFormat.formatBold(
@@ -500,16 +498,16 @@ export class ThermalService {
                     this.printerFormat.leftAlign +
                     remainingName;
             }
-            if (entry.taxes && entry.taxes.length > 0) {
-                for (let taxApp of entry.taxes) {
-                    if (entryTaxes[taxApp.accountUniqueName + "_" + taxApp.taxPercent] === undefined) {
-                        entryTaxes[taxApp.accountUniqueName + "_" + taxApp.taxPercent] = [];
-                        entryTaxes[taxApp.accountUniqueName + "_" + taxApp.taxPercent]['name'] = taxApp.accountName;
-                        entryTaxes[taxApp.accountUniqueName + "_" + taxApp.taxPercent]['percent'] = taxApp.taxPercent;
-                        entryTaxes[taxApp.accountUniqueName + "_" + taxApp.taxPercent]['amount'] = taxApp.amount?.amountForAccount;
+            if (entry?.taxes && entry?.taxes?.length > 0) {
+                for (let taxApp of entry?.taxes) {
+                    if (entryTaxes[taxApp?.accountUniqueName + "_" + taxApp?.taxPercent] === undefined) {
+                        entryTaxes[taxApp?.accountUniqueName + "_" + taxApp?.taxPercent] = [];
+                        entryTaxes[taxApp?.accountUniqueName + "_" + taxApp?.taxPercent]['name'] = taxApp?.accountName;
+                        entryTaxes[taxApp?.accountUniqueName + "_" + taxApp?.taxPercent]['percent'] = taxApp?.taxPercent;
+                        entryTaxes[taxApp?.accountUniqueName + "_" + taxApp?.taxPercent]['amount'] = taxApp?.amount?.amountForAccount;
                     } else {
-                        entryTaxes[taxApp.accountUniqueName + "_" + taxApp.taxPercent]['percent'] = entryTaxes[taxApp.accountUniqueName + "_" + taxApp.taxPercent]['percent'] + taxApp.taxPercent;
-                        entryTaxes[taxApp.accountUniqueName + "_" + taxApp.taxPercent]['amount'] = entryTaxes[taxApp.accountUniqueName + "_" + taxApp.taxPercent]['amount'] + taxApp.amount?.amountForAccount;
+                        entryTaxes[taxApp?.accountUniqueName + "_" + taxApp?.taxPercent]['percent'] = entryTaxes[taxApp?.accountUniqueName + "_" + taxApp?.taxPercent]['percent'] + taxApp?.taxPercent;
+                        entryTaxes[taxApp?.accountUniqueName + "_" + taxApp?.taxPercent]['amount'] = entryTaxes[taxApp?.accountUniqueName + "_" + taxApp?.taxPercent]['amount'] + taxApp?.amount?.amountForAccount;
                     }
                 }
             }
@@ -517,15 +515,15 @@ export class ThermalService {
 
         Object.keys(entryTaxes)?.forEach(key => {
             let entryTax = entryTaxes[key];
-            if (entryTax.amount > 0) {
+            if (entryTax?.amount > 0) {
                 let taxAmount = parseFloat(
-                    entryTax.amount
+                    entryTax?.amount
                 ).toFixed(2);
                 if (defaultTemplate?.sections?.footer?.data?.taxBifurcation?.display) {
                     tax += this.printerFormat.formatCenter(
                         this.justifyText(
-                            entryTax.name +
-                            entryTax.percent +
+                            entryTax?.name +
+                            entryTax?.percent +
                             "%" +
                             ": " +
                             "" +
@@ -559,11 +557,11 @@ export class ThermalService {
                 this.justifyText(accountAddress, "") +
                 this.printerFormat.lineBreak +
                 this.justifyText(
-                    (accountGstNumberField + " ") + biilingGstinNumber,
+                    (accountGstNumberField + " ") + billingGstinNumber,
                     (numberField + " ") + voucherNumber
                 ) + this.printerFormat.lineBreak;
 
-            const productsFieldShowHide = productsField?.length ? this.justifyText(productsField, itemDetailsField) : this.justifyText(itemDetailsField)
+            const productsFieldShowHide = productsField?.length ? this.justifyText(productsField, itemDetailsField) : this.justifyText(itemDetailsField);
 
             let table =
                 this.blankDash() + this.printerFormat.lineBreak +
@@ -576,7 +574,7 @@ export class ThermalService {
                 this.printerFormat.formatCenter(this.blankDash()) +
                 this.justifyText(
                     (noOfItemsField + " ") + noOfItems,
-                    (discAmountField + " ") + discount?.padStart(11)
+                    (discountAmountField + " ") + discount?.padStart(11)
                 ) +
                 this.justifyText('', (taxAmountField + " ") + '' + taxTotal?.padStart(11)) +
                 this.printerFormat.lineBreak +
@@ -654,8 +652,6 @@ export class ThermalService {
                     return qz.printers.find("Rugtek"); // Pass the printer name into the next Promise
                 })
                 .then((printer: any) => {
-
-
                     var config = qz.configs.create(printer, { encoding: 'ISO-8859-1', altPrinting: true }); // Create a default config for the found printer
                     let txt = [
                         this.printerFormat.initPrinter +
@@ -669,13 +665,9 @@ export class ThermalService {
                 })
                 .catch(function (e: any) {
                     console.error(e);
-                });
+            });
         }
-
     }
-
-
-
 
     /**
      * This will use for justify text formatted in template
@@ -685,10 +677,9 @@ export class ThermalService {
      * @return {*}
      * @memberof ThermalComponent
      */
-    public justifyText(a: any, b: any = "") {
-
-        let lengthOfA = a?.length;
-        let qty = b + "";
+    public justifyText(characterA: any, characterB: any = "") : any {
+        let lengthOfA = characterA?.length;
+        let qty = characterB + "";
         let lengthOfB = qty?.length;
         let z = +lengthOfA + lengthOfB;
         let noOfSpacesRequired = this.maxLength - z;
@@ -696,7 +687,7 @@ export class ThermalService {
         for (let i = 0; i <= noOfSpacesRequired; i++) {
             spaces += " ";
         }
-        let newTxt = a + spaces + b;
+        let newTxt = characterA + spaces + characterB;
         return newTxt;
     }
 
@@ -706,7 +697,7 @@ export class ThermalService {
      * @return {*}
      * @memberof ThermalComponent
      */
-    public blankDash() {
+    public blankDash() : string {
         let dash = "";
         for (let i = 0; i <= this.maxLength; i++) {
             dash += "-";
@@ -720,7 +711,7 @@ export class ThermalService {
      * @return {*}
      * @memberof ThermalComponent
      */
-    public blankRow() {
+    public blankRow() : string {
         let dash = "";
         for (let i = 0; i <= this.maxLength; i++) {
             dash += " ";

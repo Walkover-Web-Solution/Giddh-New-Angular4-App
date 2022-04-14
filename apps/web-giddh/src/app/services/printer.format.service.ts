@@ -45,7 +45,7 @@ export class PrinterFormatService {
    * @return {*} 
    * @memberof PrinterFormatService
    */
-  public formatCenter(data) {
+  public formatCenter(data: any): any {
     let text = this.centerText + data + this.endCenterText;
     return text;
   }
@@ -57,7 +57,7 @@ export class PrinterFormatService {
    * @return {*} 
    * @memberof PrinterFormatService
    */
-  public formatBold(data) {
+  public formatBold(data: any): any {
     let text = this.boldOn + data + this.boldOff;
     return text;
   }
@@ -69,7 +69,7 @@ export class PrinterFormatService {
    * @return {*} 
    * @memberof PrinterFormatService
    */
-  public formatLarge(data) {
+  public formatLarge(data: any): any {
     let text = this.largeOn + data + this.largeOff;
     return text;
   }
@@ -81,7 +81,7 @@ export class PrinterFormatService {
    * @return {*} 
    * @memberof PrinterFormatService
    */
-  public formatDouble(data) {
+  public formatDouble(data: any): any {
     let text = this.doubleFontSize + data + this.standardFontSize;
     return text;
   }
