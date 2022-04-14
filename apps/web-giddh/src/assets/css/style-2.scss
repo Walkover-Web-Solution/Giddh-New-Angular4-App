@@ -5568,9 +5568,6 @@ footer#footer.absolute-footer {
 .modal-open {
     overflow: hidden !important;
 }
-.fixed.modal-open .modal-backdrop {
-    z-index: 99999;
-}
 
 section.ledger-stat.sticky-footer.sticky-footer-sale-amount {
     text-align: left !important;
