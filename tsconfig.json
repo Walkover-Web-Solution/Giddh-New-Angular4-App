@@ -37,7 +37,7 @@
             "@giddh-workspaces/web/*": [
                 "xplat/web/*"
             ],
-            "path": [
+            "path":[
                 "./node_modules/path-browserify"
             ]
         }
