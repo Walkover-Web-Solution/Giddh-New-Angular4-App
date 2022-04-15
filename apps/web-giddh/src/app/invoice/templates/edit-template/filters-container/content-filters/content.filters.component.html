@@ -1467,7 +1467,8 @@
                         <tr
                             *ngIf="
                                 fieldsAndVisibility.table.previousDue &&
-                                customTemplate.templateType !== 'thermal_template'
+                                customTemplate.templateType !== 'thermal_template' &&
+                                voucherType === 'sales'
                             "
                         >
                             <td>

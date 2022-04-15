@@ -1,4 +1,3 @@
-
 import { Injectable } from '@angular/core';
 import { PrinterFormatService } from './printer.format.service';
 import * as qz from "qz-tray";

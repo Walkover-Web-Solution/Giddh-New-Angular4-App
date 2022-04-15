@@ -44,7 +44,7 @@ export class ThermalTemplateComponent implements OnInit, OnDestroy, OnChanges {
 
     constructor(private store: Store<AppState>,
         private settingsProfileActions: SettingsProfileActions) {
-        this.companySetting$ = this.store.pipe(select(s => s.settings.profile), takeUntil(this.destroyed$));
+        this.companySetting$ = this.store.pipe(select(response => response.settings.profile), takeUntil(this.destroyed$));
     }
 
     /**
@@ -53,10 +53,10 @@ export class ThermalTemplateComponent implements OnInit, OnDestroy, OnChanges {
      * @memberof ThermalTemplateComponent
      */
     public ngOnInit() : void {
-        this.companySetting$.subscribe(a => {
-            if (a && a.address) {
-                this.companyAddress = cloneDeep(a.address);
-            } else if (!a) {
+        this.companySetting$.subscribe(response => {
+            if (response && response.address) {
+                this.companyAddress = cloneDeep(response.address);
+            } else if (!response) {
                 this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
             }
         });
