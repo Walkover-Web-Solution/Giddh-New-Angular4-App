@@ -9,7 +9,7 @@ import { AuthenticationService } from '../../../services/authentication.service'
 import { AppState } from '../../../store';
 import { SettingsProfileActions } from '../../../actions/settings/profile/settings.profile.action';
 import { CompanyActions } from '../../../actions/company.actions';
-import { Router, ActivatedRoute} from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { FormControl } from '@angular/forms';
 import { SettingsProfileService } from '../../../services/settings.profile.service';
 import { ToasterService } from '../../../services/toaster.service';
@@ -167,8 +167,8 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
      */
     public openDialog(): void {
         this.dialog.open(AllFeaturesComponent, {
-            height:'40%',
-            width:'60%'
+            height: '40%',
+            width: '60%'
         });
     }
 
@@ -181,7 +181,7 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
         this.isSubscriptionPlanShow.emit(true);
         this.router.navigate(['/pages', 'user-details', 'subscription']);
     }
-    
+
     /**
      * This function will be use for buy plan
      *
@@ -195,13 +195,13 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
         } else {
             this.SubscriptionRequestObj.licenceKey = "";
         }
-        if(this.allSubscriptions[plan.uniqueName].planDetails.amount <= 0){
+        if (this.allSubscriptions[plan.uniqueName].planDetails.amount <= 0) {
             this.SubscriptionRequestObj.planUniqueName = plan.uniqueName;
             this.SubscriptionRequestObj.userUniqueName = this.logedInUser.uniqueName;
             this.patchProfile({ subscriptionRequest: this.SubscriptionRequestObj, callNewPlanApi: true });
         } else {
-        this.router.navigate(['pages', 'billing-detail', 'buy-plan']);
-        } 
+            this.router.navigate(['pages', 'billing-detail', 'buy-plan']);
+        }
         this.store.dispatch(this.companyActions.selectedPlan(this.allSubscriptions[plan.uniqueName]));
     }
 
@@ -318,8 +318,7 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
                 this.allSubscriptions[subscription.planDetails.uniqueName] = subscription;
             });
             this.inputData = [];
-            let allPlans = uniqBy(subscriptions.map(subscription => { return subscription.planDetails }), "name");
-            allPlans = allPlans?.filter(plan => (activeCompany?.countryV2?.alpha2CountryCode !== "IN" && plan?.uniqueName === "58x1579340958478") || plan?.amount > 0); // show plan if company country is not india and it's bonsai plan or plan amount is greater than 0
+            let allPlans = uniqBy(subscriptions?.filter(subscription => subscription?.planDetails.name !== "Trial Plan" && subscription.status !== "trial" && subscription?.planDetails?.isCommonPlan).map(subscription => { return subscription.planDetails }), "name");
             allPlans.forEach(plan => {
                 this.inputData.push(plan);
             });
