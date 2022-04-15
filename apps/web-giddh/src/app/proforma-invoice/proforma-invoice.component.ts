@@ -623,6 +623,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     private isDefaultLoad: boolean = true;
     /** True if selected customer is of cash/bank */
     public isCashBankAccount: boolean = false;
+    public particulars$: Observable<IOption[]> = observableOf(null);
+    public linkedParticulars$: Observable<IOption[]> = observableOf(null);
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -3463,6 +3465,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         /** To reset advance receipt data */
         this.resetAdvanceReceiptAdjustData();
         this.clickAdjustAmount(false);
+        this.onParticularSearchQueryChanged('');
     }
 
     public onSelectBankCash(item: IOption) {
@@ -7686,5 +7689,31 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 this._cdr.detectChanges();
             }, 500);
         });
+    }
+
+    public onParticularSearchQueryChanged(query?: any): void {
+        this.searchService.particularSearch(query).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.body?.results) {
+                this.noResultsFoundLabel = SearchResultText.NotFound;
+                this.particulars$ = observableOf(response.body.results);
+            } else {
+                this.particulars$ = observableOf([]);
+            }
+            this._cdr.detectChanges();
+        });
+    }
+
+    public onSelectParticular(event: any, transaction: any, entry: any, index: number): void {
+        if (event) {
+            const params = { particularType: event.type, particularUniqueName: event.uniqueName, particularNature: this.invoiceType };
+            this.searchService.getLinkedParticulars(params).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                if (response?.body) {
+                    this.linkedParticulars$ = (event.type === "ACCOUNT") ? observableOf(response?.body?.stocks) : observableOf(response?.body?.accounts);
+                } else {
+                    this.linkedParticulars$ = observableOf([]);
+                }
+                this._cdr.detectChanges();
+            });
+        }
     }
 }

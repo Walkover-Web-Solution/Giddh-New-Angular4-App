@@ -2317,25 +2317,17 @@
                                         <div class="product-name">
                                             <div class="ng-select-wrap">
                                                 <sh-select
-                                                    [options]="salesAccounts$ | async"
+                                                    [options]="particulars$ | async"
                                                     #selectAccount
                                                     [(ngModel)]="transaction.fakeAccForSelect2"
                                                     name="transaction.fakeAccForSelect2_{{ entryIdx }}"
                                                     (selected)="
-                                                        onSelectSalesAccount(
-                                                            $event,
-                                                            transaction,
-                                                            entry,
-                                                            false,
-                                                            false,
-                                                            entryIdx
-                                                        )
+                                                        onSelectParticular($event, transaction, entry, entryIdx)
                                                     "
                                                     [placeholder]="localeData?.select_acc"
                                                     [notFoundLink]="true"
-                                                    [isPaginationEnabled]="true"
-                                                    (scrollEnd)="handleScrollEnd('item')"
-                                                    (dynamicSearchedQuery)="onSearchQueryChanged($event, 1, 'item')"
+                                                    [isPaginationEnabled]="false"
+                                                    (dynamicSearchedQuery)="onParticularSearchQueryChanged($event)"
                                                     (onHide)="noResultsFoundLabel = localeData?.search_acc"
                                                     [notFoundMsg]="noResultsFoundLabel"
                                                     [enableDynamicSearch]="true"
@@ -2355,32 +2347,34 @@
                                                     [useInBuiltFilterForFlattenAc]="true"
                                                 >
                                                     <ng-template #optionTemplate let-option="option">
-                                                        <ng-container *ngIf="!option.additional?.stock">
-                                                            <a href="javascript:void(0)" class="list-item flex-column">
-                                                                <div class="item">{{ option?.label }}</div>
-                                                                <div class="item-unique">
-                                                                    {{ option.additional?.uniqueName }}
-                                                                </div>
-                                                            </a>
-                                                        </ng-container>
-                                                        <ng-container *ngIf="option.additional?.stock">
-                                                            <a href="javascript:void(0)" class="list-item flex-column">
-                                                                <div class="item">{{ option?.label }}</div>
-                                                                <div class="item-unique">
-                                                                    {{ option.additional?.uniqueName }}
-                                                                </div>
-                                                                <div class="item-stock">
-                                                                    {{ commonLocaleData?.app_stock }}:
-                                                                    {{ option.additional?.stock?.uniqueName }}
-                                                                </div>
-                                                            </a>
-                                                        </ng-container>
+                                                        <a href="javascript:void(0)" class="list-item flex-column">
+                                                            <div class="item">{{ option?.name }}</div>
+                                                            <div class="item-unique">
+                                                                {{ option?.uniqueName }}
+                                                            </div>
+                                                        </a>
                                                     </ng-template>
                                                 </sh-select>
                                             </div>
                                         </div>
 
                                         <div *ngIf="transaction.fakeAccForSelect2">
+                                            <sh-select
+                                                [options]="linkedParticulars$ | async"
+                                                [(ngModel)]="transaction.linkedParticulars"
+                                                name="transaction.linkedParticulars{{ entryIdx }}"
+                                                [placeholder]="'Select'"
+                                            >
+                                                <ng-template #optionTemplate let-option="option">
+                                                    <a href="javascript:void(0)" class="list-item flex-column">
+                                                        <div class="item">{{ option?.name }}</div>
+                                                        <div class="item-unique">
+                                                            {{ option?.uniqueName }}
+                                                        </div>
+                                                    </a>
+                                                </ng-template>
+                                            </sh-select>
+
                                             <div class="sku-number">
                                                 <label>{{ commonLocaleData?.app_sku }}:</label
                                                 >{{ commonLocaleData?.app_number }}
@@ -3934,7 +3928,7 @@
                                                     <div class="product-name">
                                                         <div class="ng-select-wrap">
                                                             <sh-select
-                                                                [options]="salesAccounts$ | async"
+                                                                [options]="particulars$ | async"
                                                                 #selectAccount
                                                                 [(ngModel)]="transaction.fakeAccForSelect2"
                                                                 name="transaction.fakeAccForSelect2_{{ entryIdx }}"
@@ -3953,7 +3947,7 @@
                                                                 [isPaginationEnabled]="true"
                                                                 (scrollEnd)="handleScrollEnd('item')"
                                                                 (dynamicSearchedQuery)="
-                                                                    onSearchQueryChanged($event, 1, 'item')
+                                                                    onParticularSearchQueryChanged($event)
                                                                 "
                                                                 [notFoundMsg]="noResultsFoundLabel"
                                                                 [enableDynamicSearch]="true"

@@ -211,7 +211,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
                     _.cloneDeep(item.additional.mergedAccounts.split(',').map(a => a.trim().toLocaleLowerCase())) : '';
                 let stockName = '';
                 let stockUnqName = '';
-                if (item.additional.stock && item.additional.stock.name) {
+                if (item.additional?.stock?.name) {
                     stockName = _.cloneDeep(item.additional.stock.name);
                     stockUnqName = _.cloneDeep(item.additional.stock.uniqueName);
                 }

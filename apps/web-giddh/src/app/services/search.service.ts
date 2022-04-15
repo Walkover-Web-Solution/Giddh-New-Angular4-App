@@ -122,4 +122,23 @@ export class SearchService {
             .pipe(catchError((error) => this.errorHandler.HandleCatch<SearchResponse[], SearchRequest>(error)));
     }
 
+    public particularSearch(query: any): Observable<any> {
+        let url = `${this.config.apiUrl}${SEARCH_API.PARTICULAR_SEARCH}`.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName));
+        if (query) {
+            url += `?q=${query}`
+        }
+        return this.http.get(url)
+            .pipe(catchError((error) => this.errorHandler.HandleCatch<any, any>(error)));
+    }
+
+    public getLinkedParticulars(params: any): Observable<any> {
+        let url = `${this.config.apiUrl}${SEARCH_API.LINKED_PARTICULARS}`;
+        url = url.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName));
+        url = url.replace(':particularType', params.particularType);
+        url = url.replace(':particularUniqueName', params.particularUniqueName);
+        url = url.replace(':particularNature', params.particularNature);
+
+        return this.http.get(url)
+            .pipe(catchError((error) => this.errorHandler.HandleCatch<any, any>(error)));
+    }
 }
