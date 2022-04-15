@@ -575,7 +575,7 @@ export class ThermalService {
                     (noOfItemsField + " ") + noOfItems,
                     (discountAmountField + " ") + discount?.padStart(11)
                 ) +
-                this.justifyText('', (taxAmountField + " ") + '' + taxTotal?.padStart(11)) +
+                this.justifyText('', (taxAmountField + " ") + '' + String(taxTotal?.padStart(11))) +
                 this.printerFormat.lineBreak +
                 tax +
                 this.justifyText(
