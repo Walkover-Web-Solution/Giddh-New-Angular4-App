@@ -7349,6 +7349,16 @@ giddh-datepicker {
     .cdk-global-overlay-wrapper {
         z-index: 1000 !important;
     }
+    overflow-y: auto !important;
+    .advance-search {
+        #export-body {
+            sh-select {
+                input::placeholder {
+                    color: var(--color-common-primary-input-placeholder) !important;
+                }
+            }
+        }
+    }
     #content-wrapper {
         .in {
             .aside-pane {
@@ -7361,12 +7371,10 @@ giddh-datepicker {
     &,
     .modal-open {
         .manage-account-popup.add-manage-group-acc {
-            .tab-content {
-                account-operations {
-                    div:nth-child(7) {
-                        .modal-dialog {
-                            margin-top: 80px;
-                        }
+            account-operations {
+                div:nth-child(7) {
+                    .modal-dialog {
+                        margin-top: 80px;
                     }
                 }
             }
