@@ -58,6 +58,12 @@
                                     <img src="./assets/images/templates/beta.png" alt="" />
                                 </div>
                             </li>
+                            <li (click)="onDesignChange('uniqueName', template?.uniqueName)">
+                                <img src="./assets/images/templates/{{ template.templateType }}.png" alt="" />
+                                <div class="beta-img">
+                                    <img src="./assets/images/templates/beta.png" alt="" />
+                                </div>
+                            </li>
                         </ng-container>
                         <!-- <li (click)="onDesignChange('thermal_template', 'thermal_template')">
                             <img src="./assets/images/templates/IMG_9592.png" alt="" />

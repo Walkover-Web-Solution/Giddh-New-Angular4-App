@@ -64,82 +64,79 @@
                         <strong>{{ fieldsAndVisibility.header.gstin?.label }}</strong>
                         {{ companyGSTIN ? companyGSTIN : "12BAUCS7548A1Z4THERMAL" }}
                     </div>
-                    <table class="thermal-table" cellspacing="0" cellpadding="0">
-                        <tbody>
-                            <tr>
-                                <td>
-                                    <p *ngIf="fieldsAndVisibility.header.customerName?.display">Customer Name</p>
-                                    <p *ngIf="fieldsAndVisibility.header.billingAddress?.display">
-                                        <strong>Walkover Web Solutions Pvt</strong>
-                                    </p>
-                                    <p *ngIf="fieldsAndVisibility.header.billingGstin?.display">
-                                        GSTIN:23AAAAAA000A1Z0
-                                    </p>
-                                </td>
-
-                                <td>
-                                    <ng-container *ngIf="voucherType === 'sales'">
-                                        <tr *ngIf="fieldsAndVisibility.header.invoiceDate?.display">
-                                            <td
-                                                [class.pull-left]="fieldsAndVisibility.header.showQrCode?.display"
-                                                class="word-break"
-                                            >
-                                                <strong>{{
-                                                    fieldsAndVisibility.header.invoiceDate?.label?.length > 0
-                                                        ? fieldsAndVisibility.header.invoiceDate?.label
-                                                        : "Invoice Date"
-                                                }}</strong>
-                                            </td>
-                                            <td>
-                                                <p>11/09/2017</p>
-                                            </td>
-                                        </tr>
-                                        <tr *ngIf="fieldsAndVisibility.header.invoiceNumber?.display">
-                                            <td
-                                                [class.pull-left]="fieldsAndVisibility.header.showQrCode?.display"
-                                                class="word-break"
-                                            >
-                                                <strong>{{
-                                                    fieldsAndVisibility.header.invoiceNumber?.label?.length > 0
-                                                        ? fieldsAndVisibility.header.invoiceNumber?.label
-                                                        : "Invoice No."
-                                                }}</strong>
-                                            </td>
-                                            <td class="invoice-head">20170911-1</td>
-                                        </tr>
-                                    </ng-container>
-                                    <!-- <tr *ngIf="fieldsAndVisibility.header.dueDate?.display">
-                                          <td><strong>{{(fieldsAndVisibility.header.dueDate?.label?.length > 0) ? fieldsAndVisibility.header.dueDate?.label : 'Due Date'}}</strong></td>
-                                          <td>30/06/2017</td>
-                                      </tr> -->
-                                    <ng-container *ngIf="voucherType === 'credit note' || voucherType === 'debit note'">
-                                        <tr *ngIf="fieldsAndVisibility.header.voucherDate?.display">
-                                            <td class="word-break">
-                                                <strong>{{
-                                                    fieldsAndVisibility.header.voucherDate?.label?.length > 0
-                                                        ? fieldsAndVisibility.header.voucherDate?.label
-                                                        : "Voucher Date"
-                                                }}</strong>
-                                            </td>
-                                            <td>
-                                                <p>11-09-2017</p>
-                                            </td>
-                                        </tr>
-                                        <tr *ngIf="fieldsAndVisibility.header.voucherNumber?.display">
-                                            <td class="word-break">
-                                                <strong>{{
-                                                    fieldsAndVisibility.header.voucherNumber?.label?.length > 0
-                                                        ? fieldsAndVisibility.header.voucherNumber?.label
-                                                        : "Voucher No."
-                                                }}</strong>
-                                            </td>
-                                            <td>20170911-1</td>
-                                        </tr>
-                                    </ng-container>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <div class="header-table-thermal">
+                        <table class="thermal-table" cellspacing="0" cellpadding="0">
+                            <tbody>
+                                <tr>
+                                    <td class="custAddress">
+                                        <p *ngIf="fieldsAndVisibility.header.customerName?.display">Customer Name</p>
+                                        <p *ngIf="fieldsAndVisibility.header.billingAddress?.display">
+                                            <strong>Walkover Web Solutions Pvt</strong>
+                                        </p>
+                                        <p class="gst-cust" *ngIf="fieldsAndVisibility.header.billingGstin?.display">
+                                            GSTIN:23AAAAAA000A1Z0
+                                        </p>
+                                    </td>
+                                    <td class="invdate">
+                                        <ng-container *ngIf="voucherType === 'sales'">
+                                            <tr *ngIf="fieldsAndVisibility.header.invoiceDate?.display">
+                                                <td>
+                                                    <strong>{{
+                                                        fieldsAndVisibility.header.invoiceDate?.label?.length > 0
+                                                            ? fieldsAndVisibility.header.invoiceDate?.label
+                                                            : "Invoice Date"
+                                                    }}</strong>
+                                                </td>
+                                                <td>
+                                                    <p>11/09/2017</p>
+                                                </td>
+                                            </tr>
+                                            <tr *ngIf="fieldsAndVisibility.header.invoiceNumber?.display">
+                                                <td>
+                                                    <strong>{{
+                                                        fieldsAndVisibility.header.invoiceNumber?.label?.length > 0
+                                                            ? fieldsAndVisibility.header.invoiceNumber?.label
+                                                            : "Invoice No."
+                                                    }}</strong>
+                                                </td>
+                                                <td class="invoice-head">20170911-1</td>
+                                            </tr>
+                                        </ng-container>
+                                        <!-- <tr *ngIf="fieldsAndVisibility.header.dueDate?.display">
+      <td><strong>{{(fieldsAndVisibility.header.dueDate?.label?.length > 0) ? fieldsAndVisibility.header.dueDate?.label : 'Due Date'}}</strong></td>
+      <td>30/06/2017</td>
+      </tr> -->
+                                        <ng-container
+                                            *ngIf="voucherType === 'credit note' || voucherType === 'debit note'"
+                                        >
+                                            <tr *ngIf="fieldsAndVisibility.header.voucherDate?.display">
+                                                <td>
+                                                    <strong>{{
+                                                        fieldsAndVisibility.header.voucherDate?.label?.length > 0
+                                                            ? fieldsAndVisibility.header.voucherDate?.label
+                                                            : "Voucher Date"
+                                                    }}</strong>
+                                                </td>
+                                                <td>
+                                                    <p>11-09-2017</p>
+                                                </td>
+                                            </tr>
+                                            <tr *ngIf="fieldsAndVisibility.header.voucherNumber?.display">
+                                                <td>
+                                                    <strong>{{
+                                                        fieldsAndVisibility.header.voucherNumber?.label?.length > 0
+                                                            ? fieldsAndVisibility.header.voucherNumber?.label
+                                                            : "Voucher No."
+                                                    }}</strong>
+                                                </td>
+                                                <td>20170911-1</td>
+                                            </tr>
+                                        </ng-container>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </header>
             </div>
             <div
@@ -155,34 +152,30 @@
                 </a>
                 <article class="table-item">
                     <table id="item " class="item" cellpadding="0 " cellspacing="0 ">
-                        <thead>
+                        <thead class="thermal-thead">
                             <tr>
                                 <th *ngIf="fieldsAndVisibility.table.item?.display" class="text-left word-break">
                                     {{
-                                        fieldsAndVisibility.table.item?.display &&
                                         fieldsAndVisibility.table.item?.label?.length > 0
                                             ? fieldsAndVisibility.table.item?.label
-                                            : fieldsAndVisibility.table.item?.display
-                                            ? "Item"
-                                            : ""
+                                            : "Item"
                                     }}
                                 </th>
-                                <th *ngIf="fieldsAndVisibility.table.quantity?.display" class="text-right word-break">
+                                <th *ngIf="fieldsAndVisibility.table.quantity?.display" class="word-break">
                                     {{
                                         fieldsAndVisibility.table.quantity?.label?.length > 0
                                             ? fieldsAndVisibility.table.quantity?.label
                                             : "Qty."
                                     }}
                                 </th>
-                                <th *ngIf="fieldsAndVisibility.table.rate?.display" class="text-right word-break">
+                                <th *ngIf="fieldsAndVisibility.table.rate?.display" class="word-break">
                                     {{
                                         fieldsAndVisibility.table.rate?.label?.length > 0
                                             ? fieldsAndVisibility.table.rate?.label
                                             : "Rate"
                                     }}
                                 </th>
-
-                                <th class="text-right word-break">
+                                <th class="text-right word-break" *ngIf="fieldsAndVisibility.table.total?.display">
                                     {{
                                         fieldsAndVisibility.table.total?.label?.length > 0
                                             ? fieldsAndVisibility.table.total?.label
@@ -193,48 +186,81 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <td class="text-left" *ngIf="fieldsAndVisibility.table.item?.display">
+                                <td *ngIf="fieldsAndVisibility.table.item?.display" class="text-left">
                                     <span *ngIf="fieldsAndVisibility.table.item?.display"
                                         >Dummy Product Edition 1
                                     </span>
                                 </td>
-
-                                <td *ngIf="fieldsAndVisibility.table.quantity?.display" class="text-right nowrap">
-                                    2 No.
-                                </td>
-                                <td *ngIf="fieldsAndVisibility.table.rate?.display" class="text-right">
+                                <td *ngIf="fieldsAndVisibility.table.quantity?.display">2 No.</td>
+                                <td *ngIf="fieldsAndVisibility.table.rate?.display">
                                     <span [innerHTML]="rupeeSymbol"></span>1000.00
                                 </td>
-                                <td colspan="3 " class="text-right"><span [innerHTML]="rupeeSymbol"></span>2006.00</td>
+                                <td *ngIf="fieldsAndVisibility.table.total?.display" class="text-right">
+                                    <span [innerHTML]="rupeeSymbol"></span>2006.00
+                                </td>
                             </tr>
                             <tr>
-                                <td class="text-left" *ngIf="fieldsAndVisibility.table.item?.display">
+                                <td *ngIf="fieldsAndVisibility.table.item?.display" class="text-left">
                                     <span *ngIf="fieldsAndVisibility.table.item?.display"
-                                        >Dummy Product Edition 2
+                                        >Dummy Product Edition 1
                                     </span>
                                 </td>
-                                <td *ngIf="fieldsAndVisibility.table.quantity?.display" class="text-right">2 No.</td>
-                                <td *ngIf="fieldsAndVisibility.table.rate?.display" class="text-right">
-                                    <span [innerHTML]="rupeeSymbol"></span>300.00
+                                <td *ngIf="fieldsAndVisibility.table.quantity?.display">2 No.</td>
+                                <td *ngIf="fieldsAndVisibility.table.rate?.display">
+                                    <span [innerHTML]="rupeeSymbol"></span>1000.00
                                 </td>
-                                <td colspan="3 " class="text-right"><span [innerHTML]="rupeeSymbol"></span>118.00</td>
+                                <td *ngIf="fieldsAndVisibility.table.total?.display" class="text-right">
+                                    <span [innerHTML]="rupeeSymbol"></span>2006.00
+                                </td>
+                            </tr>
+                            <tr>
+                                <td *ngIf="fieldsAndVisibility.table.item?.display" class="text-left">
+                                    <span *ngIf="fieldsAndVisibility.table.item?.display"
+                                        >Dummy Product Edition 1
+                                    </span>
+                                </td>
+                                <td *ngIf="fieldsAndVisibility.table.quantity?.display">2 No.</td>
+                                <td *ngIf="fieldsAndVisibility.table.rate?.display">
+                                    <span [innerHTML]="rupeeSymbol"></span>1000.00
+                                </td>
+                                <td *ngIf="fieldsAndVisibility.table.total?.display" class="text-right">
+                                    <span [innerHTML]="rupeeSymbol"></span>2006.00
+                                </td>
+                            </tr>
+                            <tr>
+                                <td *ngIf="fieldsAndVisibility.table.item?.display" class="text-left">
+                                    <span *ngIf="fieldsAndVisibility.table.item?.display"
+                                        >Dummy Product Edition 1
+                                    </span>
+                                </td>
+                                <td *ngIf="fieldsAndVisibility.table.quantity?.display">2 No.</td>
+                                <td *ngIf="fieldsAndVisibility.table.rate?.display">
+                                    <span [innerHTML]="rupeeSymbol"></span>1000.00
+                                </td>
+                                <td *ngIf="fieldsAndVisibility.table.total?.display" class="text-right">
+                                    <span [innerHTML]="rupeeSymbol"></span>2006.00
+                                </td>
+                            </tr>
+                            <tr>
+                                <td *ngIf="fieldsAndVisibility.table.item?.display" class="text-left">
+                                    <span *ngIf="fieldsAndVisibility.table.item?.display"
+                                        >Dummy Product Edition 1
+                                    </span>
+                                </td>
+                                <td *ngIf="fieldsAndVisibility.table.quantity?.display">2 No.</td>
+                                <td *ngIf="fieldsAndVisibility.table.rate?.display">
+                                    <span [innerHTML]="rupeeSymbol"></span>1000.00
+                                </td>
+                                <td *ngIf="fieldsAndVisibility.table.total?.display" class="text-right">
+                                    <span [innerHTML]="rupeeSymbol"></span>2006.00
+                                </td>
                             </tr>
                         </tbody>
-                        <tfoot>
-                            <tr *ngIf="fieldsAndVisibility.table.total?.display">
-                                <th *ngIf="fieldsAndVisibility.table.item?.display" class="text-left">&nbsp;</th>
-
-                                <!-- added by sadique -->
-                                <th *ngIf="fieldsAndVisibility.table.rate?.display" class="text-right"></th>
-                                <th class="text-right"></th>
-                                <th *ngIf="fieldsAndVisibility.table.discount?.display" class="text-right"></th>
-                            </tr>
-                        </tfoot>
                     </table>
                 </article>
             </div>
             <div
-                id="template-footer "
+                id="template-footer"
                 [ngClass]="{
                     'disabled-area': !templateUISectionVisibility.footer,
                     ' ': templateUISectionVisibility.footer
@@ -247,164 +273,115 @@
                     </a>
                     <article>
                         <table class="balance">
-                            <tr
-                                *ngIf="fieldsAndVisibility.table.totalQuantity?.display"
-                                class="text-right text-right nowrap"
-                            >
-                                &nbsp;
-                                <span>4 No.</span>
-                                <h2
-                                    [ngStyle]="{
-                                        'color': 'black',
-                                        'font-size': inputTemplate.fontDefault + 'px'
-                                    }"
-                                >
-                                    {{ fieldsAndVisibility.table.totalQuantity.label }}
-                                </h2>
-                            </tr>
-                            <tr *ngIf="fieldsAndVisibility.table.discount?.display" class="word-break">
-                                <th *ngIf="fieldsAndVisibility.table.discount?.label">Disc Amt</th>
-                                <td><span [innerHTML]="rupeeSymbol"></span> 20000.00</td>
-                            </tr>
-                            <tr *ngIf="fieldsAndVisibility.footer.taxableAmount?.display">
-                                <th>
-                                    <!-- {{fieldsAndVisibility.footer.taxableAmount?.label}}-->
-                                    Taxable Amount
-                                </th>
-                                <td><span [innerHTML]="rupeeSymbol"></span> 1800.00</td>
-                            </tr>
+                            <tr>
+                                <td>
+                                    <p
+                                        *ngIf="fieldsAndVisibility.table.totalQuantity?.display"
+                                        class="nowrap text-left"
+                                    >
+                                        {{ fieldsAndVisibility.table.totalQuantity.label }}
+                                    </p>
+                                </td>
+                                <td class="text-right">
+                                    <p *ngIf="fieldsAndVisibility.table.totalQuantity?.display">4 No.</p>
+                                </td>
 
-                            <tr *ngIf="fieldsAndVisibility.footer.grandTotal?.display">
-                                <th class="strong">{{ fieldsAndVisibility.footer.grandTotal?.label }} (INR)</th>
-                                <td class="strong"><span [innerHTML]="rupeeSymbol"></span>2124.00</td>
+                                <td class="word-break text-right">
+                                    <p *ngIf="fieldsAndVisibility.table.discount?.display">
+                                        {{ fieldsAndVisibility.table.discount?.label }}
+                                    </p>
+                                </td>
+                                <td class="last-balance-td text-right">
+                                    <p *ngIf="fieldsAndVisibility.table.discount?.display">20000.00</p>
+                                </td>
                             </tr>
-                            <tr *ngIf="fieldsAndVisibility.footer.totalInWords?.display">
-                                <div class="totalInWords" style="text-align: center">
-                                    Two Thousand One Hundred Twenty Four Only
-                                </div>
+                            <tr class="taxAmountVal" *ngIf="fieldsAndVisibility.footer.taxableAmount?.display">
+                                <td></td>
+                                <td></td>
+                                <td>{{ fieldsAndVisibility.table.taxableValue?.label }}</td>
+                                <td>1800.00</td>
+                            </tr>
+                            <tr *ngIf="fieldsAndVisibility.footer.taxBifurcation?.display">
+                                <td class="text-left tax-gst">CGST9%</td>
+                                <td class="text-right">4500000.00</td>
+                                <td></td>
+                                <td></td>
+                                <!-- <p class="tax-gst"> CGST9% </p><p class="text-right">: 4500000.00</p>
+                                        <p class="tax-gst"> SGST9% : <p class="text-right">: 4500000.00</p> -->
+                            </tr>
+                            <tr *ngIf="fieldsAndVisibility.footer.taxBifurcation?.display">
+                                <td class="text-left tax-gst">SGST9%</td>
+                                <td class="text-right">4500000.00</td>
+                                <td></td>
+                                <td></td>
+
+                                <!-- <p class="tax-gst"> CGST9% </p><p class="text-right">: 4500000.00</p>
+                                                                        <p class="tax-gst"> SGST9% : <p class="text-right">: 4500000.00</p> -->
+                            </tr>
+                            <tr *ngIf="fieldsAndVisibility.footer.totalDue?.display">
+                                <td></td>
+                                <td></td>
+                                <td>{{ fieldsAndVisibility.footer.totalDue?.label }}</td>
+                                <td>2124.00</td>
                             </tr>
                         </table>
-                        <table
-                            class="tax-table item text-right"
-                            cellspacing="0"
-                            cellpadding="0"
-                            *ngIf="fieldsAndVisibility.footer.taxBifurcation?.display"
-                        ></table>
+                        <div
+                            [ngStyle]="{ 'margin-top': '10px !important' }"
+                            class="totalInWords"
+                            style="text-align: center"
+                        >
+                            <p *ngIf="fieldsAndVisibility.footer.totalInWords?.display">
+                                Two Thousand One Hundred Twenty Four Only
+                            </p>
+                        </div>
                     </article>
                 </div>
-
+                <div class="qr-footer">
+                    <tr>
+                        <td *ngIf="fieldsAndVisibility.header.showQrCode?.display" class="qr-thermal">
+                            <div class="qr-image">
+                                <img
+                                    src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/QR_code_for_mobile_English_Wikipedia.svg/1200px-QR_code_for_mobile_English_Wikipedia.svg.png"
+                                />
+                            </div>
+                        </td>
+                    </tr>
+                </div>
                 <div class="clearfix">
                     <a href="javascript:void(0); " class="edit-template" *ngIf="!templateUISectionVisibility.footer">
                         <i class="icon-edit-pencil"></i>
                     </a>
                     <aside>
-                        <p
-                            class="pd-1"
-                            [ngStyle]="{ 'font-size': inputTemplate.fontMedium + 'px', 'white-space': 'pre-line' }"
-                            *ngIf="fieldsAndVisibility.footer.showNotesAtLastPage?.display"
-                        >
-                            {{ fieldsAndVisibility.footer.message1?.label }}
-                        </p>
-                        <p
-                            class="pd-1"
-                            [ngStyle]="{ 'font-size': inputTemplate.fontMedium + 'px', 'white-space': 'pre-line' }"
-                            *ngIf="voucherType === 'sales' && fieldsAndVisibility.footer.showNotesAtLastPage?.display"
-                        >
-                            Notes provided in the invoice will appear here
-                        </p>
-                        <table cellpadding="0" cellspacing="0" class="subfooter">
-                            <tbody>
-                                <tr>
-                                    <td class="accc">
-                                        <!-- <ng-container *ngIf="
-                                                !fieldsAndVisibility.footer.showNotesAtLastPage?.display &&
-                                                fieldsAndVisibility.footer.message1?.display
-                                            ">
-                                        <p *ngIf="fieldsAndVisibility.footer.message1?.display">
-                                            <span><br />
-                                                <strong>Notes</strong> <br />
-                                                <span style="white-space: pre-line">
-                                                    <ng-container *ngIf="fieldsAndVisibility?.footer?.message1?.label">
-                                                        {{ fieldsAndVisibility.footer.message1?.label }}
-                                                    </ng-container>
-                                                </span>
-                                            </span>
-                                        </p>
-                                    </ng-container> -->
-                                        <p
-                                            *ngIf="
-                                                voucherType === 'sales' &&
-                                                !fieldsAndVisibility.footer.showNotesAtLastPage?.display &&
-                                                fieldsAndVisibility.footer.showMessage2?.display
-                                            "
-                                        >
-                                            <span
-                                                ><br />
-                                                <strong>Notes 2</strong> <br />
-                                                <span class="notes2-default-text">
-                                                    Notes provided in the invoice will appear here
-                                                </span>
-                                            </span>
-                                        </p>
-                                        <!--<p *ngIf="fieldsAndVisibility.footer.thanks?.display " style="white-space:pre-line; " [innerHTML]="fieldsAndVisibility.footer.thanks?.label "></p>-->
-                                    </td>
-                                    <td>&nbsp;</td>
-                                    <td
-                                        class="text-center"
-                                        [ngStyle]="{
-                                            'font-size': inputTemplate.fontMedium,
-                                            'vertical-align': 'bottom',
-                                            'width': '35%'
-                                        }"
-                                        *ngIf="!showImageSignature"
-                                    >
-                                        <strong class="slogan-pre-line">
-                                            <small
-                                                *ngIf="
-                                                    fieldsAndVisibility.footer.slogan?.label ||
-                                                    fieldsAndVisibility.footer.slogan?.label === ''
-                                                "
-                                            >
-                                                {{ fieldsAndVisibility.footer.slogan?.label }}
-                                            </small>
-                                        </strong>
-                                        <ng-container *ngIf="fieldsAndVisibility.footer.textUnderSlogan?.display">
-                                            <strong>
-                                                <small class="word-break">
-                                                    {{ fieldsAndVisibility.footer.textUnderSlogan?.label }}
-                                                </small>
-                                            </strong>
-                                        </ng-container>
-                                    </td>
-                                </tr>
-                                <tr *ngIf="fieldsAndVisibility.footer.thanks?.display">
-                                    <td>
-                                        <strong>
-                                            <h4
-                                                *ngIf="fieldsAndVisibility.footer.thanks?.label"
-                                                [innerHTML]="fieldsAndVisibility.footer.thanks?.label"
-                                            ></h4>
-                                            <h4 *ngIf="!fieldsAndVisibility.footer.thanks?.label">
-                                                Thank You for your business.
-                                            </h4>
-                                        </strong>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        <div class="subfooter">
+                            <div class="thermal-footer">
+                                <div class="accc left-footer">
+                                    <div *ngIf="fieldsAndVisibility.footer.thanks?.display">
+                                        <h4
+                                            *ngIf="fieldsAndVisibility.footer.thanks?.label"
+                                            [innerHTML]="fieldsAndVisibility.footer.thanks?.label"
+                                        ></h4>
+                                        <h4 *ngIf="!fieldsAndVisibility.footer.thanks?.label">
+                                            Thank You for your business.
+                                        </h4>
+                                    </div>
+                                    <p *ngIf="fieldsAndVisibility.footer.message1?.display">
+                                        <span style="white-space: pre-line" class="font-16">
+                                            <ng-container *ngIf="fieldsAndVisibility?.footer?.message1?.label">
+                                                {{ fieldsAndVisibility.footer.message1?.label }}
+                                            </ng-container>
+                                        </span>
+                                    </p>
+                                </div>
+                                <div class="right-footer">
+                                    <!-- *ngIf="fieldsAndVisibility.footer.message1?.display" -->
+
+                                    <p *ngIf="fieldsAndVisibility.footer.companyName?.display" class="font-16">
+                                        {{ fieldsAndVisibility.header.companyName?.label }}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
                     </aside>
-                    <footer style="text-align: center">
-                        <p class="font-10" *ngIf="fieldsAndVisibility.footer.companyName?.display" class="font-10">
-                            <strong>{{ fieldsAndVisibility.header.companyName?.label }}</strong>
-                        </p>
-                        <p class="abc" *ngIf="fieldsAndVisibility.footer.companyAddress?.display">
-                            {{
-                                fieldsAndVisibility.footer.companyAddress?.label
-                                    ? fieldsAndVisibility.footer.companyAddress?.label
-                                    : ""
-                            }}
-                        </p>
-                    </footer>
                 </div>
             </div>
         </div>
