@@ -24,7 +24,8 @@ export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnCh
     @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
     @Output() public addEvent: EventEmitter<AddAccountRequest> = new EventEmitter();
     @Output() public updateEvent: EventEmitter<UpdateAccountRequest> = new EventEmitter();
-
+    /** Emiting true if account modal needs to be closed */
+    @Output() public closeAccountModal: EventEmitter<boolean> = new EventEmitter(false);
     public flatAccountWGroupsList$: Observable<IOption[]>;
     public flatAccountWGroupsList: IOption[];
     public activeGroupUniqueName: string;
