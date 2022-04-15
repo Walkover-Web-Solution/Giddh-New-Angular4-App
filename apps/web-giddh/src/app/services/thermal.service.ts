@@ -279,8 +279,12 @@ export class ThermalService {
         let taxAmountField;
         let taxTotal;
         if (defaultTemplate?.sections?.table?.data?.taxableValue?.display) {
-            taxTotal = Number(parseFloat(request?.taxTotal?.amountForAccount).toFixed(2));
             taxAmountField = defaultTemplate?.sections?.table?.data?.taxableValue?.label;
+            if (!request?.taxTotal) {
+                taxTotal = "0";
+            } else {
+                taxTotal = parseFloat(request?.taxTotal?.amountForAccount).toFixed(2);
+            }
         } else {
             taxAmountField = "";
             taxTotal = "";
@@ -575,7 +579,7 @@ export class ThermalService {
                     (noOfItemsField + " ") + noOfItems,
                     (discountAmountField + " ") + discount?.padStart(11)
                 ) +
-                this.justifyText('', (taxAmountField + " ") + '' + taxTotal.toString().padStart(11)) +
+                this.justifyText('', (taxAmountField + " ") + '' + taxTotal?.padStart(11)) +
                 this.printerFormat.lineBreak +
                 tax +
                 this.justifyText(
