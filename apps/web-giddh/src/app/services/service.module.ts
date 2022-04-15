@@ -61,6 +61,7 @@ import { LocaleService } from './locale.service';
 import { BulkVoucherExportService } from './bulkvoucherexport.service';
 import { CustomFieldsService } from "./custom-fields.service";
 import { ThermalService } from "./thermal.service";
+import { PrinterFormatService } from "./printer.format.service";
 
 /**
  * Do not specify providers for modules that might be imported by a lazy loaded module.
@@ -133,7 +134,8 @@ export class ServiceModule {
                 BulkVoucherExportService,
                 LocaleService,
                 CustomFieldsService,
-                ThermalService
+                ThermalService,
+                PrinterFormatService
             ]
         };
     }
