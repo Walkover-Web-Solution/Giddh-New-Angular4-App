@@ -1,3 +1,4 @@
+
 import { Injectable } from '@angular/core';
 import { PrinterFormatService } from './printer.format.service';
 import * as qz from "qz-tray";
@@ -160,8 +161,8 @@ export class ThermalService {
         let companyGstNumberField;
         let companyGstin;
         if (defaultTemplate?.sections?.header?.data?.gstin?.display) {
-            companyGstNumberField = defaultTemplate?.sections?.header?.data?.gstin?.label;
-            companyGstin = request?.company?.billingDetails?.taxNumber;
+            companyGstNumberField = defaultTemplate?.sections?.header?.data?.gstin?.label || '';
+            companyGstin = request?.company?.billingDetails?.taxNumber || '';
         } else {
             companyGstNumberField = "";
             companyGstin = "";
