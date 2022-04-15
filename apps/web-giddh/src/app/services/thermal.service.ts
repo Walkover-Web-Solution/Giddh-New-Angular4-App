@@ -133,7 +133,7 @@ export class ThermalService {
          */
         let headerCompanyAddress;
         if (defaultTemplate?.sections?.header?.data?.showCompanyAddress?.display) {
-            headerCompanyAddress = request?.company?.billingDetails?.address[0] ?? '';
+            headerCompanyAddress = request?.company?.billingDetails?.address[0];
         } else {
             headerCompanyAddress = "";
         }
@@ -161,7 +161,7 @@ export class ThermalService {
         let companyGstin;
         if (defaultTemplate?.sections?.header?.data?.gstin?.display) {
             companyGstNumberField = defaultTemplate?.sections?.header?.data?.gstin?.label;
-            companyGstin = request?.company?.billingDetails?.taxNumber ?? '';
+            companyGstin = request?.company?.billingDetails?.taxNumber;
         } else {
             companyGstNumberField = "";
             companyGstin = "";
@@ -279,12 +279,8 @@ export class ThermalService {
         let taxAmountField;
         let taxTotal;
         if (defaultTemplate?.sections?.table?.data?.taxableValue?.display) {
+            taxTotal = parseFloat(request?.taxTotal?.amountForAccount).toFixed(2);
             taxAmountField = defaultTemplate?.sections?.table?.data?.taxableValue?.label;
-            if (!request?.taxTotal) {
-                taxTotal = "0";
-            } else {
-                taxTotal = parseFloat(request?.taxTotal?.amountForAccount).toFixed(2);
-            }
         } else {
             taxAmountField = "";
             taxTotal = "";
