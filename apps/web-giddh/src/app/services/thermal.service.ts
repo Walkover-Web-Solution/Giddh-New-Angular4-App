@@ -161,7 +161,7 @@ export class ThermalService {
         let companyGstin;
         if (defaultTemplate?.sections?.header?.data?.gstin?.display) {
             companyGstNumberField = defaultTemplate?.sections?.header?.data?.gstin?.label;
-            companyGstin = request?.company?.billingDetails?.taxNumber;
+            companyGstin = request?.company?.billingDetails?.taxNumber || '';
         } else {
             companyGstNumberField = "";
             companyGstin = "";
