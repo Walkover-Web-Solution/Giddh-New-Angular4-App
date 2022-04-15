@@ -359,7 +359,10 @@
                                                 </span>
 
                                                 <span
-                                                    *ngIf="shouldShowPrintDocument"
+                                                    *ngIf="
+                                                        shouldShowPrintDocument &&
+                                                        defaultTemplate?.templateType !== 'thermal_template'
+                                                    "
                                                     [ngClass]="{
                                                         'disabled':
                                                             isVoucherDownloading ||
@@ -372,6 +375,15 @@
                                                         [tooltip]="commonLocaleData?.app_print"
                                                         placement="top"
                                                         (click)="printVoucher()"
+                                                        ><i class="fa fa-print"></i
+                                                    ></a>
+                                                </span>
+                                                <span *ngIf="defaultTemplate?.templateType === 'thermal_template'">
+                                                    <a
+                                                        href="javascript:;"
+                                                        [tooltip]="commonLocaleData?.app_print"
+                                                        placement="top"
+                                                        (click)="printThermal()"
                                                         ><i class="fa fa-print"></i
                                                     ></a>
                                                 </span>
