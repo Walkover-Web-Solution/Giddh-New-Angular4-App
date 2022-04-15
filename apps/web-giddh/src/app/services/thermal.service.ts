@@ -645,7 +645,7 @@ export class ThermalService {
                 this.printerFormat.lineBreak +
                 this.justifyText(thankYouMsgField, footerCompanyName) +
                 this.printerFormat.lineBreak + this.printerFormat.lineBreak +
-                this.justifyText(firmNameField, "");
+                this.printerFormat.leftAlign + this.justifyText(firmNameField, "");
             qz.websocket
                 .connect()
                 .then(function () {

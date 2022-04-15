@@ -368,18 +368,18 @@
                                             Thank You for your business.
                                         </h4>
                                     </div>
-                                    <p *ngIf="fieldsAndVisibility.footer.message1?.display">
-                                        <span style="white-space: pre-line" class="font-16">
-                                            <ng-container *ngIf="fieldsAndVisibility?.footer?.message1?.label">
-                                                {{ fieldsAndVisibility.footer.message1?.label }}
-                                            </ng-container>
-                                        </span>
-                                    </p>
                                 </div>
                                 <div class="right-footer">
                                     <p *ngIf="fieldsAndVisibility.footer.companyName?.display" class="font-16">
                                         {{ fieldsAndVisibility.header.companyName?.label }}
                                     </p>
+                                </div>
+                                <div class="full-bottom" *ngIf="fieldsAndVisibility.footer.message1?.display">
+                                    <span style="white-space: pre-line" class="font-16">
+                                        <ng-container *ngIf="fieldsAndVisibility?.footer?.message1?.label">
+                                            {{ fieldsAndVisibility.footer.message1?.label }}
+                                        </ng-container>
+                                    </span>
                                 </div>
                             </div>
                         </div>
