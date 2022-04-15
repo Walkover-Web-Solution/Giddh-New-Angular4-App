@@ -1464,73 +1464,50 @@
                                 </ng-container>
                             </td>
                         </tr>
-                        <ng-container
+                        <tr
                             *ngIf="
-                                (customTemplate?.templateType === 'gst_template_a' ||
-                                    customTemplate?.templateType === 'gst_template_e') &&
-                                voucherType === 'sales'
+                                fieldsAndVisibility.table.previousDue &&
+                                customTemplate.templateType !== 'thermal_template'
                             "
                         >
-                            <tr *ngIf="fieldsAndVisibility.table.previousDue">
-                                <td>
-                                    <label>
-                                        <input
-                                            type="checkbox"
-                                            name="preDue"
-                                            [(ngModel)]="customTemplate.sections['table'].data['previousDue'].display"
-                                            (ngModelChange)="onChangeFieldVisibility(null, null, null)"
-                                            checked
-                                        />
-                                        Previous Due</label
-                                    >
-                                </td>
-                                <td>
-                                    <tr
-                                        *ngIf="
-                                            fieldsAndVisibility.table.previousDue &&
-                                            customTemplate.templateType !== 'thermal_template'
-                                        "
-                                    >
-                                        <td>
-                                            <label>
-                                                <input
-                                                    type="text"
-                                                    hasFocus
-                                                    #previousDue="hasFocus"
-                                                    maxlength="14"
-                                                    [class.error-box]="
-                                                        contentForm?.controls['previousDue']?.errors?.maxlength
-                                                    "
-                                                    class="form-control"
-                                                    name="previousDue"
-                                                    [(ngModel)]="
-                                                        customTemplate.sections['table'].data['previousDue'].label
-                                                    "
-                                                    (ngModelChange)="onFieldChange(null, null, null)"
-                                                    [disabled]="
-                                                        !customTemplate.sections['table'].data['previousDue'].display
-                                                    "
-                                                />
-                                            </label>
-                                            <ng-container
-                                                *ngIf="
-                                                    previousDue?.isFocused ||
-                                                    contentForm?.controls['previousDue']?.errors?.maxlength
-                                                "
-                                            >
-                                                <span class="max-character-label">Characters left:&nbsp;</span
-                                                ><span class="max-character-value">{{
-                                                    14 -
-                                                        customTemplate.sections["table"].data["previousDue"].label
-                                                            .length
-                                                }}</span>
-                                            </ng-container>
-                                        </td>
-                                    </tr>
-                                </td>
-                            </tr></ng-container
-                        >
-
+                            <td>
+                                <label>
+                                    <input
+                                        type="checkbox"
+                                        name="preDue"
+                                        [(ngModel)]="customTemplate.sections['table'].data['previousDue'].display"
+                                        (ngModelChange)="onChangeFieldVisibility(null, null, null)"
+                                        checked
+                                    />
+                                    Previous Due</label
+                                >
+                            </td>
+                            <td>
+                                <input
+                                    type="text"
+                                    hasFocus
+                                    #previousDue="hasFocus"
+                                    maxlength="14"
+                                    [class.error-box]="contentForm?.controls['previousDue']?.errors?.maxlength"
+                                    class="form-control"
+                                    name="previousDue"
+                                    [(ngModel)]="customTemplate.sections['table'].data['previousDue'].label"
+                                    (ngModelChange)="onFieldChange(null, null, null)"
+                                    [disabled]="!customTemplate.sections['table'].data['previousDue'].display"
+                                />
+                                <ng-container
+                                    *ngIf="
+                                        previousDue?.isFocused ||
+                                        contentForm?.controls['previousDue']?.errors?.maxlength
+                                    "
+                                >
+                                    <span class="max-character-label">Characters left:&nbsp;</span
+                                    ><span class="max-character-value">{{
+                                        14 - customTemplate.sections["table"].data["previousDue"].label.length
+                                    }}</span>
+                                </ng-container>
+                            </td>
+                        </tr>
                         <!--<tr *ngIf="fieldsAndVisibility.table.otherTaxBifurcation">
             <td>
                 <label>

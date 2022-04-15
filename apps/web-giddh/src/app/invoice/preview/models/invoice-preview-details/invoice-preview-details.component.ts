@@ -212,15 +212,15 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                 (this.attachedDocumentType.type === 'pdf' || this.attachedDocumentType.type === 'image')));
     }
 
-    ngOnInit() {
+    public ngOnInit(): void {
         this.voucherApiVersion = this._generalService.voucherApiVersion;
-        this.invoiceTemplatesService.getAllCreatedTemplates("sales").pipe(takeUntil(this.destroyed$)).subscribe((res) => { 
-            if(res) {
+        this.invoiceTemplatesService.getAllCreatedTemplates("sales").pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+            if (res) {
                 const defaultTemplate = res.body?.filter(res => res.isDefault);
-                if(defaultTemplate?.length > 0) {
+                if (defaultTemplate?.length > 0) {
                     this.defaultTemplate = defaultTemplate[0];
                 }
-            }      
+            }
         });
         if (document.getElementsByClassName("sidebar-collapse")?.length > 0) {
             this.isSidebarExpanded = false;
@@ -667,11 +667,11 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     }
 
     /**
-     * This will use for print thermal pdf document
+     * This will use for print thermal print
      *
      * @memberof InvoicePreviewDetailsComponent
      */
-    public printThermal() : void {
+    public printThermal(): void {
         this.voucherDetails$.subscribe((res) => {
             if (res) {
                 this.thermalService.print(this.defaultTemplate, res);
