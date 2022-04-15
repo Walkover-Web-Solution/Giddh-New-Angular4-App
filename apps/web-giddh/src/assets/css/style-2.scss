@@ -6176,6 +6176,11 @@ button.btn.btn-filter {
         z-index: 9999 !important;
     }
 }
+.modal-open.cmd-k {
+    .modal-backdrop + .modal {
+        z-index: 999999 !important;
+    }
+}
 .modal-backdrop + .modal.fade .modal-dialog {
     transform: translate(0);
 }
