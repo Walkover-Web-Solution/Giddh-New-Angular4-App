@@ -7,8 +7,8 @@
     overflow: auto;
     box-sizing: border-box;
     z-index: 999;
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
-    border: 1px solid rgba(0, 0, 0, 0.15);
+    box-shadow: 0 6px 12px var(--color-primary-common-box-shadow);
+    border: 1px solid var(--color-common-secondary-border);
     border-radius: 0 0 2px 2px;
     min-width: max-content;
     margin-top: 1px;
