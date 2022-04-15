@@ -133,7 +133,7 @@ export class ThermalService {
          */
         let headerCompanyAddress;
         if (defaultTemplate?.sections?.header?.data?.showCompanyAddress?.display) {
-            headerCompanyAddress = request?.company?.billingDetails?.address[0];
+            headerCompanyAddress = request?.company?.billingDetails?.address[0] ?? '';
         } else {
             headerCompanyAddress = "";
         }
@@ -161,7 +161,7 @@ export class ThermalService {
         let companyGstin;
         if (defaultTemplate?.sections?.header?.data?.gstin?.display) {
             companyGstNumberField = defaultTemplate?.sections?.header?.data?.gstin?.label;
-            companyGstin = request?.company?.billingDetails?.taxNumber || '';
+            companyGstin = request?.company?.billingDetails?.taxNumber ?? '';
         } else {
             companyGstNumberField = "";
             companyGstin = "";
@@ -279,7 +279,7 @@ export class ThermalService {
         let taxAmountField;
         let taxTotal;
         if (defaultTemplate?.sections?.table?.data?.taxableValue?.display) {
-            taxTotal = parseFloat(request?.taxTotal?.amountForAccount).toFixed(2);
+            taxTotal = Number(parseFloat(request?.taxTotal?.amountForAccount).toFixed(2));
             taxAmountField = defaultTemplate?.sections?.table?.data?.taxableValue?.label;
         } else {
             taxAmountField = "";
@@ -664,7 +664,7 @@ export class ThermalService {
                 })
                 .catch(function (e: any) {
                     console.error(e);
-            });
+                });
         }
     }
 
@@ -676,7 +676,7 @@ export class ThermalService {
      * @return {*}
      * @memberof ThermalComponent
      */
-    public justifyText(textA: any, textB: any = "") : any {
+    public justifyText(textA: any, textB: any = ""): any {
         let lengthOfA = textA?.length;
         let qty = textB + "";
         let lengthOfB = qty?.length;
@@ -696,7 +696,7 @@ export class ThermalService {
      * @return {*}
      * @memberof ThermalComponent
      */
-    public blankDash() : string {
+    public blankDash(): string {
         let dash = "";
         for (let i = 0; i <= this.maxLength; i++) {
             dash += "-";
@@ -710,7 +710,7 @@ export class ThermalService {
      * @return {*}
      * @memberof ThermalComponent
      */
-    public blankRow() : string {
+    public blankRow(): string {
         let dash = "";
         for (let i = 0; i <= this.maxLength; i++) {
             dash += " ";
