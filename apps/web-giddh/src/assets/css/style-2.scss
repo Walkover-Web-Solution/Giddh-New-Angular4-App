@@ -2958,7 +2958,7 @@ label {
     color: var(--color-master-page-input-label) !important;
 }
 .isParent {
-    background: var(--color-wild-sand);
+    background: var(--color-master-page-sidebar-active-list-background);
 }
 .isActive {
     color: var(--color-secondary-button-text) !important;
@@ -7387,6 +7387,29 @@ giddh-datepicker {
             sh-select {
                 input::placeholder {
                     color: var(--color-common-primary-input-placeholder) !important;
+                    #content-wrapper {
+                        .in {
+                            .aside-pane {
+                                #close {
+                                    color: var(--color-primary-right-side-popup-header-text);
+                                }
+                            }
+                        }
+                    }
+                    &,
+                    .modal-open {
+                        .manage-account-popup.add-manage-group-acc {
+                            .tab-content {
+                                account-operations {
+                                    div:nth-child(7) {
+                                        .modal-dialog {
+                                            margin-top: 80px;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }

@@ -28,7 +28,7 @@
 
 .header.open {
     border-radius: 2px 2px 0 0;
-    box-shadow: 0 2px 3px 0 rgba(34, 36, 38, 0.15);
+    box-shadow: 0 2px 3px 0 var(--color-primary-common-box-shadow);
     border-bottom: none;
 }
 
