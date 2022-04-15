@@ -43,11 +43,6 @@
                     ]
                 },
                 {
-                    "label": "Linked Accounts",
-                    "link": "/pages/settings/linked-accounts",
-                    "icon": "<i class='icon-linked-account'></i>"
-                },
-                {
                     "label": "Tags",
                     "link": "/pages/settings/tag",
                     "icon": "<i class='icon-tag-new'></i>"
@@ -132,11 +127,6 @@
                         "/pages/settings/integration/ecommerce",
                         "/pages/settings/integration/payment"
                     ]
-                },
-                {
-                    "label": "Linked Accounts",
-                    "link": "/pages/settings/linked-accounts",
-                    "icon": "<i class='icon-linked-account'></i>"
                 },
                 {
                     "label": "Tags",
