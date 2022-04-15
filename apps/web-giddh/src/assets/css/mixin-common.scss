@@ -1,0 +1,24 @@
+@charset "utf-8";
+
+@mixin common-filters($color, $background-color, $border) {
+    font-size: 14px;
+    display: inline-flex;
+    justify-content: space-between;
+    -webkit-box-align: center;
+    align-items: center;
+    padding: 7px 10px !important;
+    .icon-cross {
+        margin-right: 5px;
+    }
+    &:focus {
+        box-shadow: none;
+        outline: none;
+    }
+    &:active {
+        box-shadow: none;
+        outline: none;
+    }
+    background-color: $background-color;
+    color: $color;
+    border-color: $border;
+}
