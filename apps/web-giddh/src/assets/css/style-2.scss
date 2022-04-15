@@ -7387,28 +7387,26 @@ giddh-datepicker {
             sh-select {
                 input::placeholder {
                     color: var(--color-common-primary-input-placeholder) !important;
-                    #content-wrapper {
-                        .in {
-                            .aside-pane {
-                                #close {
-                                    color: var(--color-primary-right-side-popup-header-text);
-                                }
-                            }
-                        }
-                    }
-                    &,
-                    .modal-open {
-                        .manage-account-popup.add-manage-group-acc {
-                            .tab-content {
-                                account-operations {
-                                    div:nth-child(7) {
-                                        .modal-dialog {
-                                            margin-top: 80px;
-                                        }
-                                    }
-                                }
-                            }
-                        }
+                }
+            }
+        }
+    }
+    #content-wrapper {
+        .in {
+            .aside-pane {
+                #close {
+                    color: var(--color-primary-right-side-popup-header-text);
+                }
+            }
+        }
+    }
+    &,
+    .modal-open {
+        .manage-account-popup.add-manage-group-acc {
+            account-operations {
+                div:nth-child(7) {
+                    .modal-dialog {
+                        margin-top: 80px;
                     }
                 }
             }
