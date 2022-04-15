@@ -279,8 +279,12 @@ export class ThermalService {
         let taxAmountField;
         let taxTotal;
         if (defaultTemplate?.sections?.table?.data?.taxableValue?.display) {
-            taxTotal = Number(parseFloat(request?.taxTotal?.amountForAccount).toFixed(2));
             taxAmountField = defaultTemplate?.sections?.table?.data?.taxableValue?.label;
+            if (!request?.taxTotal) {
+                taxTotal = "0";
+            } else {
+                taxTotal = parseFloat(request?.taxTotal?.amountForAccount).toFixed(2);
+            }
         } else {
             taxAmountField = "";
             taxTotal = "";
