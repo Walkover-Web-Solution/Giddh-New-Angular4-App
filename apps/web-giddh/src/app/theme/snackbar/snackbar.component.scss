@@ -35,7 +35,8 @@
         width: 26px;
         height: 26px;
         background-color: var(--color-primary-toast-cross-background);
-        top: 8px;
+        top: 50%;
+        transform: translateY(-42%);
         right: -5px;
         border-radius: 50%;
         text-align: center;
