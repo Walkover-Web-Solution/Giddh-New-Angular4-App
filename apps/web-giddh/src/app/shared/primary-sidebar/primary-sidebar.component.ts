@@ -686,7 +686,6 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof PrimarySidebarComponent
      */
     public closeAccountModal(event: any): void {
-        console.log(event);
         if (event) {
             this.accountAsideMenuState = 'out';
             this.toggleBodyClass();
