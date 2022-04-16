@@ -303,7 +303,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public modalRef: BsModalRef;
     public message: string;
     public isDropup: boolean = true;
-
     public exceptTaxTypes: string[];
     /** Stores warehouses for a company */
     public warehouses: Array<any>;
@@ -342,7 +341,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public invoiceForceClearReactive$: Observable<IForceClear> = observableOf({ status: false });
     public selectedCompany: any;
     public formFields: any[] = [];
-
     //Multi-currency changes
     /** Ng model of exchange rate field */
     public newExchangeRate = 1;
@@ -366,7 +364,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public originalReverseExchangeRate: number;
     /** to check is tourist scheme applicable(Note true if voucher type will be sales invoice)  */
     public isTouristScheme: boolean = false;
-
     public isValidGstinNumber: boolean = false;
     /** Allowed taxes list contains the unique name of all
      * tax types within a company and count upto which they are allowed
@@ -625,6 +622,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public isCashBankAccount: boolean = false;
     public particulars$: Observable<IOption[]> = observableOf(null);
     public linkedParticulars$: Observable<IOption[]> = observableOf(null);
+    public forceClearLinkedParticulars$: Observable<IForceClear> = observableOf({ status: false });
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -3273,7 +3271,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
             transaction.sku_and_customfields = description.join(', ');
         }
-        //------------------------
 
         // assign taxes and create fluctuation
         if (o.stock && o.stock.taxes && o.stock.taxes.length) {
@@ -3302,7 +3299,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             transaction.applicableTaxes = o.applicableTaxes;
         }
 
-        transaction.accountName = o?.name;
+        transaction.accountName = o.name || o.label;
         transaction.accountUniqueName = o.uniqueName;
 
         if (o.stock) {
@@ -4819,17 +4816,22 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 salesEntryClass.sacNumber = (tr.showCodeType === 'sac') ? tr.sacNumber : "";
                 salesEntryClass.description = tr.description;
                 if (tr.isStockTxn) {
-                    let saalesAddBulkStockItems = new SalesAddBulkStockItems();
-                    saalesAddBulkStockItems.name = tr.stockDetails?.name;
-                    saalesAddBulkStockItems.uniqueName = tr.stockDetails.uniqueName;
-                    saalesAddBulkStockItems.quantity = tr.quantity;
-                    saalesAddBulkStockItems.rate = {};
-                    saalesAddBulkStockItems.rate.amountForAccount = tr.rate;
-                    saalesAddBulkStockItems.sku = tr.stockDetails.skuCode;
-                    saalesAddBulkStockItems.stockUnit = new CodeStockMulticurrency();
-                    saalesAddBulkStockItems.stockUnit.code = tr.stockUnit;
+                    let salesAddBulkStockItems = new SalesAddBulkStockItems();
+                    salesAddBulkStockItems.name = tr.stockDetails?.name;
+                    salesAddBulkStockItems.uniqueName = tr.stockDetails.uniqueName;
+                    salesAddBulkStockItems.quantity = tr.quantity;
+                    salesAddBulkStockItems.rate = {};
+                    salesAddBulkStockItems.rate.amountForAccount = tr.rate;
+                    salesAddBulkStockItems.sku = tr.stockDetails.skuCode;
+                    salesAddBulkStockItems.stockUnit = new CodeStockMulticurrency();
+                    salesAddBulkStockItems.stockUnit.code = tr.stockUnit;
+                    salesAddBulkStockItems.variant = {};
 
-                    transactionClassMul.stock = saalesAddBulkStockItems;
+                    if(tr.linkedVariant) {
+                        salesAddBulkStockItems.variant = tr.linkedVariant;
+                    }
+
+                    transactionClassMul.stock = salesAddBulkStockItems;
                 }
                 salesEntryClass.transactions.push(transactionClassMul);
             });
@@ -4945,6 +4947,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     salesTransactionItemClass.stockDetails.skuCode = t.stock.sku;
                     salesTransactionItemClass.stockUnit = t.stock.stockUnit.code;
                     salesTransactionItemClass.fakeAccForSelect2 = t.account.uniqueName + '#' + t.stock.uniqueName;
+                    salesTransactionItemClass.linkedVariant = t.stock.variant;
                 }
 
                 if (this.isPurchaseInvoice && entry.purchaseOrderLinkSummaries && entry.purchaseOrderLinkSummaries.length > 0) {
@@ -7695,7 +7698,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.searchService.particularSearch(query).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.body?.results) {
                 this.noResultsFoundLabel = SearchResultText.NotFound;
-                this.particulars$ = observableOf(response.body.results);
+                let particulars = [];
+                response.body.results.forEach(particular => {
+                    particulars.push({ label: particular?.name, value: particular?.uniqueName, additional: particular });
+                });
+                this.particulars$ = observableOf(particulars);
             } else {
                 this.particulars$ = observableOf([]);
             }
@@ -7705,15 +7712,103 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
     public onSelectParticular(event: any, transaction: any, entry: any, index: number): void {
         if (event) {
-            const params = { particularType: event.type, particularUniqueName: event.uniqueName, particularNature: this.invoiceType };
+            transaction.fakeAccForSelect2 = event.value;
+            if (event.additional.type === "ACCOUNT") {
+                transaction.accountName = event.label;
+                transaction.accountUniqueName = event.value;
+            } else {
+                if (!transaction.stockDetails) {
+                    transaction.stockDetails = {};
+                }
+                transaction.stockDetails.name = event.label;
+                transaction.stockDetails.uniqueName = event.value;
+            }
+
+            transaction.linkedParticularType = event.additional.type;
+            transaction.linkedParticular = { name: '', uniqueName: '' };
+            transaction.linkedVariant = { name: '', uniqueName: '' };
+            this.forceClearLinkedParticulars$ = observableOf({ status: true });
+
+            const params = { particularType: event.additional.type, particularUniqueName: event.value, particularNature: this.invoiceType };
             this.searchService.getLinkedParticulars(params).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 if (response?.body) {
-                    this.linkedParticulars$ = (event.type === "ACCOUNT") ? observableOf(response?.body?.stocks) : observableOf(response?.body?.accounts);
+                    let particulars = [];
+                    const results = (response?.body?.stocks?.length) ? response?.body?.stocks : response?.body?.accounts;
+                    results.forEach(particular => {
+                        particulars.push({ label: particular?.name, value: particular?.uniqueName, additional: particular });
+                    });
+                    this.linkedParticulars$ = observableOf(particulars);
+
+                    /** Selecting account automatically if particular was stock and there is only 1 account */
+                    if (transaction.linkedParticularType === "STOCK" && particulars?.length === 1) {
+                        this.onSelectLinkedParticular(particulars[0], transaction, entry, index);
+                    }
+
+                    let variants = [];
+                    response?.body?.variants?.forEach(variant => {
+                        variants.push({ label: variant?.name, value: variant?.uniqueName, additional: variant });
+                    });
+                    transaction.variantsList = variants;
+
+                    /** Selecting variant automatically if particular was stock and there is only 1 variant */
+                    if (transaction.linkedParticularType === "STOCK" && variants?.length === 1) {
+                        this.onSelectLinkedVariant(variants[0], transaction, entry, index);
+                    }
                 } else {
                     this.linkedParticulars$ = observableOf([]);
                 }
                 this._cdr.detectChanges();
             });
         }
+    }
+
+    public onSelectLinkedParticular(event: any, transaction: any, entry: any, index: number): void {
+        transaction.linkedParticular = { name: event?.label, uniqueName: event.value };
+        transaction.linkedVariant = { name: '', uniqueName: '' };
+
+        if (event && transaction.linkedParticularType === "ACCOUNT") {
+            const params = { particularType: "STOCK", particularUniqueName: event.value, particularNature: this.invoiceType };
+            this.searchService.getLinkedParticulars(params).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                if (response?.body) {
+                    let variants = [];
+                    response?.body?.variants?.forEach(variant => {
+                        variants.push({ label: variant?.name, value: variant?.uniqueName, additional: variant });
+                    });
+                    transaction.variantsList = variants;
+
+                    /** Selecting variant automatically if there is only 1 variant */
+                    if (variants?.length === 1) {
+                        this.onSelectLinkedVariant(variants[0], transaction, entry, index);
+                    }
+                } else {
+                    transaction.variantsList = [];
+                }
+                this._cdr.detectChanges();
+            });
+        }
+
+        if (transaction.linkedParticularType === "ACCOUNT") {
+            let account = {
+                label: transaction.accountName,
+                value: transaction.accountUniqueName,
+                additional: { uniqueName: transaction.accountUniqueName, stock: { name: event?.label, uniqueName: event.value } }
+            };
+            this.onSelectSalesAccount(account, transaction, entry, false, false, index);
+        } else {
+            transaction.accountName = event.label;
+            transaction.accountUniqueName = event.value;
+
+            let account = {
+                label: event.label,
+                value: event.value,
+                additional: { uniqueName: event.value, stock: { name: transaction.stockDetails.name, uniqueName: transaction.stockDetails.uniqueName } }
+            };
+            this.onSelectSalesAccount(account, transaction, entry, false, false, index);
+        }
+    }
+
+    public onSelectLinkedVariant(event: any, transaction: any, entry: any, index: number): void {
+        transaction.linkedVariant = { name: event?.label, uniqueName: event.value };
+        transaction.stock.variant = { name: event?.label, uniqueName: event.value };
     }
 }

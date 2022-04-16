@@ -7,6 +7,7 @@ import { TaxControlData } from '../../theme/tax-control/tax-control.component';
 import * as moment from 'moment';
 import { VoucherAdjustments } from './AdvanceReceiptsAdjust';
 import { ReferenceVoucher } from '../../material-ledger/ledger.vm';
+import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
 
 export enum VoucherTypeEnum {
     'sales' = 'sales',
@@ -245,6 +246,10 @@ export class SalesTransactionItemClass extends ICommonItemOfTransaction {
     public purchaseOrderItemMapping?: { uniqueName: string; entryUniqueName: any; };
     public showCodeType: string;
     public highPrecisionAmount?: number;
+    public linkedParticularType?: string;
+    public linkedParticular?: { name: string, uniqueName: string };
+    public linkedVariant?: { name: string, uniqueName: string };
+    public variantsList?: IOption[] = [];
 
     constructor() {
         super();
@@ -254,6 +259,8 @@ export class SalesTransactionItemClass extends ICommonItemOfTransaction {
         this.hsnOrSac = 'hsn';
         this.taxableValue = 0;
         this.showCodeType = "";
+        this.linkedParticular = { name: '', uniqueName: '' };
+        this.linkedVariant = { name: '', uniqueName: '' };
     }
 
     // basic check for valid transaction
@@ -608,6 +615,7 @@ export class SalesAddBulkStockItems {
     stockUnitCode?: CodeStockMulticurrency;
     stockUnit?: CodeStockMulticurrency;
     additional?: any;
+    variant?: any;
 }
 
 export class CodeStockMulticurrency {

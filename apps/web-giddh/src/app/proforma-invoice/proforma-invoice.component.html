@@ -1987,6 +1987,9 @@
                                             <span *ngIf="transaction.stockDetails?.uniqueName"
                                                 >({{ transaction.stockDetails?.name }})</span
                                             >
+                                            <span class="mr-l05" *ngIf="transaction.linkedVariant?.uniqueName"
+                                                >({{ transaction.linkedVariant?.name }})</span
+                                            >
                                         </div>
 
                                         <div class="sku-number">
@@ -2332,11 +2335,8 @@
                                                     [notFoundMsg]="noResultsFoundLabel"
                                                     [enableDynamicSearch]="true"
                                                     [fixedValue]="
-                                                        transaction.stockDetails && transaction.stockDetails.name
-                                                            ? transaction.accountName +
-                                                              ' (' +
-                                                              transaction.stockDetails?.name +
-                                                              ')'
+                                                        transaction.stockDetails?.name
+                                                            ? transaction.stockDetails?.name
                                                             : transaction.accountName
                                                     "
                                                     [forceClearReactive]="forceClear$ | async"
@@ -2348,9 +2348,9 @@
                                                 >
                                                     <ng-template #optionTemplate let-option="option">
                                                         <a href="javascript:void(0)" class="list-item flex-column">
-                                                            <div class="item">{{ option?.name }}</div>
+                                                            <div class="item">{{ option?.label }}</div>
                                                             <div class="item-unique">
-                                                                {{ option?.uniqueName }}
+                                                                {{ option?.value }}
                                                             </div>
                                                         </a>
                                                     </ng-template>
@@ -2360,20 +2360,64 @@
 
                                         <div *ngIf="transaction.fakeAccForSelect2">
                                             <sh-select
+                                                *ngIf="(linkedParticulars$ | async)?.length > 1"
                                                 [options]="linkedParticulars$ | async"
-                                                [(ngModel)]="transaction.linkedParticulars"
-                                                name="transaction.linkedParticulars{{ entryIdx }}"
-                                                [placeholder]="'Select'"
+                                                [(ngModel)]="transaction.linkedParticular.uniqueName"
+                                                name="transaction.linkedParticular{{ entryIdx }}"
+                                                [placeholder]="
+                                                    transaction.linkedParticularType === 'ACCOUNT'
+                                                        ? commonLocaleData?.app_select_stock
+                                                        : commonLocaleData?.app_select_account
+                                                "
+                                                (selected)="
+                                                    onSelectLinkedParticular($event, transaction, entry, entryIdx)
+                                                "
+                                                [fixedValue]="transaction.linkedParticular.name"
+                                                class="mt-2"
                                             >
                                                 <ng-template #optionTemplate let-option="option">
                                                     <a href="javascript:void(0)" class="list-item flex-column">
-                                                        <div class="item">{{ option?.name }}</div>
+                                                        <div class="item">{{ option?.label }}</div>
                                                         <div class="item-unique">
-                                                            {{ option?.uniqueName }}
+                                                            {{ option?.value }}
                                                         </div>
                                                     </a>
                                                 </ng-template>
                                             </sh-select>
+
+                                            <div
+                                                class="linked-particular font-12 mt-1"
+                                                *ngIf="(linkedParticulars$ | async)?.length === 1"
+                                            >
+                                                Account: {{ transaction.linkedParticular.name }}
+                                            </div>
+
+                                            <sh-select
+                                                *ngIf="transaction.variantsList?.length > 1"
+                                                [options]="transaction.variantsList"
+                                                [(ngModel)]="transaction.linkedVariant.uniqueName"
+                                                name="transaction.linkedVariant{{ entryIdx }}"
+                                                [placeholder]="'Select Variant'"
+                                                (selected)="onSelectLinkedVariant($event, transaction, entry, entryIdx)"
+                                                [fixedValue]="transaction.linkedVariant.name"
+                                                class="mt-2"
+                                            >
+                                                <ng-template #optionTemplate let-option="option">
+                                                    <a href="javascript:void(0)" class="list-item flex-column">
+                                                        <div class="item">{{ option?.label }}</div>
+                                                        <div class="item-unique">
+                                                            {{ option?.value }}
+                                                        </div>
+                                                    </a>
+                                                </ng-template>
+                                            </sh-select>
+
+                                            <div
+                                                class="linked-variant font-12 mt-1"
+                                                *ngIf="transaction.variantsList?.length === 1"
+                                            >
+                                                Variant: {{ transaction.linkedVariant.name }}
+                                            </div>
 
                                             <div class="sku-number">
                                                 <label>{{ commonLocaleData?.app_sku }}:</label
