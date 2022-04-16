@@ -279,12 +279,10 @@
                                         class="nowrap text-left"
                                     >
                                         {{ fieldsAndVisibility.table.totalQuantity.label }}
+                                        <span class="qty-number">4 No.</span>
                                     </p>
                                 </td>
-                                <td class="text-left">
-                                    <p *ngIf="fieldsAndVisibility.table.totalQuantity?.display">4 No.</p>
-                                </td>
-
+                                <td></td>
                                 <td class="word-break text-right">
                                     <p *ngIf="fieldsAndVisibility.table.discount?.display">
                                         {{ fieldsAndVisibility.table.discount?.label }}
@@ -320,7 +318,7 @@
                             >
                                 <td></td>
                                 <td></td>
-                                <td>{{ fieldsAndVisibility.footer.totalDue?.label }}</td>
+                                <td>{{ fieldsAndVisibility.footer.totalDue?.label }} (INR)</td>
                                 <td>2124.00</td>
                             </tr>
                         </table>

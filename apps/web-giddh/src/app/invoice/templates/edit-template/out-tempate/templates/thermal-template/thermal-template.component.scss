@@ -95,7 +95,6 @@ p {
 }
 /* table */
 #thermal_template table {
-    table-layout: fixed;
     width: 100%;
     border-collapse: inherit;
     border-top: 1px dashed;
@@ -112,7 +111,7 @@ p {
     background: #fff;
     border: 1px solid #bfbfbf;
     padding: 0;
-    max-width: 6.3in;
+    max-width: 5.3in;
     width: 100%;
     margin: 0 auto;
 }
@@ -560,4 +559,7 @@ table.tax-table.item {
 .full-bottom {
     float: left;
     margin-top: 10px;
+}
+.qty-number {
+    padding-left: 21px;
 }

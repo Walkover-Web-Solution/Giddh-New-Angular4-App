@@ -674,6 +674,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     public printThermal() : void {
         this.voucherDetails$.subscribe((res) => {
             if (res) {
+                res = this._generalService.convertV1ResponseInV2(res);
                 this.thermalService.print(this.defaultTemplate, res);
             } else {
                 this.store.dispatch(this._invoiceReceiptActions.getVoucherDetailsV4(this.selectedItem.account?.uniqueName, {

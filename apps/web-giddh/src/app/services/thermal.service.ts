@@ -15,7 +15,7 @@ export class ThermalService {
     * @memberof ThermalComponent
     */
     public print(defaultTemplate: any, request: any): void {
-
+        
         this.maxLength = 46;
 
         /**
@@ -240,6 +240,7 @@ export class ThermalService {
             noOfItemsField = "";
             noOfItems = "";
         }
+        console.log(request?.company?.currency?.code);
 
         /**
          * This will use for hide/show for total amount and total amount in words
@@ -247,14 +248,17 @@ export class ThermalService {
         let subTotal;
         let totalAmountField;
         let totalWords;
+        let companyCurrencyCode;
         if (defaultTemplate?.sections?.footer?.data?.totalDue?.display && defaultTemplate?.sections?.footer?.data?.totalInWords?.display) {
             totalAmountField = defaultTemplate?.sections?.footer?.data?.totalDue?.label;
             totalWords = request.totalAsWords?.amountForAccount;
             subTotal = parseFloat(request?.subTotal?.amountForAccount).toFixed(2);
+            companyCurrencyCode = request?.company?.currency?.code;
         } else {
             totalAmountField = "";
             subTotal = "";
             totalWords = "";
+            companyCurrencyCode = "";
         }
 
         /**
@@ -311,6 +315,7 @@ export class ThermalService {
          * This will use for hide/show for footer total
          */
         let netAmountField;
+  
         if (defaultTemplate?.sections?.table?.data?.total?.display) {
             netAmountField = defaultTemplate?.sections?.table?.data?.total?.label;
         } else {
@@ -419,7 +424,7 @@ export class ThermalService {
             let quantity;
             if (defaultTemplate?.sections?.table?.data?.quantity?.display) {
                 quantity =
-                    parseFloat(entry?.transactions[0].stock?.quantity || 1).toFixed(2) +
+                    parseFloat(entry?.transactions[0].stock?.quantity || '-' ).toFixed(2) +
                     " ";
             } else {
                 quantity = "";
@@ -428,7 +433,7 @@ export class ThermalService {
             if (defaultTemplate?.sections?.table?.data?.rate?.display) {
                 rate =
                     parseFloat(
-                        entry?.transactions[0].stock?.rate?.rateForAccount || 1
+                        entry?.transactions[0].stock?.rate?.rateForAccount || '-'
                     ).toFixed(2) + " ";
             } else {
                 rate = "";
@@ -581,7 +586,7 @@ export class ThermalService {
                 tax +
                 this.justifyText(
                     "",
-                    (totalAmountField + " ") + "" + subTotal?.padStart(11)
+                    (totalAmountField + "("+companyCurrencyCode+")" + " ") + "" + subTotal?.padStart(11)
                 ) +
                 this.printerFormat.lineBreak +
                 this.printerFormat.lineBreak +

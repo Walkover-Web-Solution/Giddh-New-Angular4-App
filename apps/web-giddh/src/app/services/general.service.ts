@@ -1040,4 +1040,12 @@ export class GeneralService {
 
         return voucherNumber;
     }
+
+    public convertV1ResponseInV2(data : any) : any {
+        console.log('data',data);
+        if (data?.company?.billingDetails?.taxNumber){
+   
+        }
+        return data;
+    }
 }
