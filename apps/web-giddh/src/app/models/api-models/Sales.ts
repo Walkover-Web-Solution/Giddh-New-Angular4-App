@@ -248,7 +248,7 @@ export class SalesTransactionItemClass extends ICommonItemOfTransaction {
     public highPrecisionAmount?: number;
     public linkedParticularType?: string;
     public linkedParticular?: { name: string, uniqueName: string };
-    public linkedVariant?: { name: string, uniqueName: string };
+    public variant?: { name: string, uniqueName: string };
     public variantsList?: IOption[] = [];
 
     constructor() {
@@ -260,7 +260,7 @@ export class SalesTransactionItemClass extends ICommonItemOfTransaction {
         this.taxableValue = 0;
         this.showCodeType = "";
         this.linkedParticular = { name: '', uniqueName: '' };
-        this.linkedVariant = { name: '', uniqueName: '' };
+        this.variant = { name: '', uniqueName: '' };
     }
 
     // basic check for valid transaction

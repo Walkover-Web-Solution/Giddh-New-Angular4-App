@@ -1423,6 +1423,28 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     this.getAllAdvanceReceipts(this.invFormData.voucherDetails.customerUniquename, this.invFormData.voucherDetails.voucherDate)
                 }
 
+                let particular = (this.invFormData.entries[0]?.transactions[0]?.linkedParticularType === "ACCOUNT") ? this.invFormData.entries[0]?.transactions[0]?.accountUniqueName : this.invFormData.entries[0]?.transactions[0]?.stockDetails?.uniqueName;
+                let particularArray = particular?.split("#");
+                if(particularArray?.length) {
+                    const params = { particularType: this.invFormData.entries[0]?.transactions[0]?.linkedParticularType, particularUniqueName: particularArray[0], particularNature: this.invoiceType };
+                    this.searchLinkedParticulars(params, response => {
+                        if (response?.body) {
+                            let particulars = [];
+                            const results = (response?.body?.stocks?.length) ? response?.body?.stocks : response?.body?.accounts;
+                            results.forEach(particular => {
+                                particulars.push({ label: particular?.name, value: particular?.uniqueName, additional: particular });
+                            });
+                            this.linkedParticulars$ = observableOf(particulars);
+
+                            let variants = [];
+                            response?.body?.variants?.forEach(variant => {
+                                variants.push({ label: variant?.name, value: variant?.uniqueName, additional: variant });
+                            });
+                            this.invFormData.entries[0].transactions[0].variantsList = variants;
+                        }
+                    });
+                }
+
                 this.calculateBalanceDue();
                 this.calculateTotalDiscount();
                 this.calculateTotalTaxSum();
@@ -4605,11 +4627,14 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 newTrxObj.showCodeType = trx.hsnNumber ? "hsn" : "sac";
                 newTrxObj.isStockTxn = trx.isStockTxn;
                 newTrxObj.applicableTaxes = entry.taxList;
+                newTrxObj.variant = trx.variant;
 
                 // check if stock details is available then assign uniquename as we have done while creating option
                 if (trx.isStockTxn) {
                     newTrxObj.accountUniqueName = `${trx.accountUniqueName}#${trx.stockDetails?.uniqueName}`;
                     newTrxObj.fakeAccForSelect2 = `${trx.accountUniqueName}#${trx.stockDetails?.uniqueName}`;
+                    newTrxObj.linkedParticularType = "STOCK";
+                    newTrxObj.linkedParticular = { name: trx.stockDetails?.name, uniqueName: trx.stockDetails?.uniqueName };
 
                     let stock = trx.stockDetails;
 
@@ -4659,6 +4684,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 } else {
                     newTrxObj.accountUniqueName = trx.accountUniqueName;
                     newTrxObj.fakeAccForSelect2 = trx.accountUniqueName;
+                    newTrxObj.linkedParticularType = "ACCOUNT";
+                    newTrxObj.linkedParticular = { name: trx.accountName, uniqueName: trx.accountUniqueName };
                 }
 
                 this.calculateTotalDiscountOfEntry(entry, newTrxObj, false);
@@ -4827,8 +4854,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     salesAddBulkStockItems.stockUnit.code = tr.stockUnit;
                     salesAddBulkStockItems.variant = {};
 
-                    if(tr.linkedVariant) {
-                        salesAddBulkStockItems.variant = tr.linkedVariant;
+                    if(tr.variant) {
+                        salesAddBulkStockItems.variant = tr.variant;
                     }
 
                     transactionClassMul.stock = salesAddBulkStockItems;
@@ -4947,7 +4974,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     salesTransactionItemClass.stockDetails.skuCode = t.stock.sku;
                     salesTransactionItemClass.stockUnit = t.stock.stockUnit.code;
                     salesTransactionItemClass.fakeAccForSelect2 = t.account.uniqueName + '#' + t.stock.uniqueName;
-                    salesTransactionItemClass.linkedVariant = t.stock.variant;
+                    salesTransactionItemClass.variant = t.stock.variant;
+                    salesTransactionItemClass.linkedParticularType = "STOCK";
+                    salesTransactionItemClass.linkedParticular = { name: t.stock.name, uniqueName: t.stock.uniqueName };
+                } else {
+                    salesTransactionItemClass.linkedParticularType = "ACCOUNT";
+                    salesTransactionItemClass.linkedParticular = { name: t.accountName, uniqueName: t.accountUniqueName };
                 }
 
                 if (this.isPurchaseInvoice && entry.purchaseOrderLinkSummaries && entry.purchaseOrderLinkSummaries.length > 0) {
@@ -7726,11 +7758,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
             transaction.linkedParticularType = event.additional.type;
             transaction.linkedParticular = { name: '', uniqueName: '' };
-            transaction.linkedVariant = { name: '', uniqueName: '' };
+            transaction.variant = { name: '', uniqueName: '' };
             this.forceClearLinkedParticulars$ = observableOf({ status: true });
 
             const params = { particularType: event.additional.type, particularUniqueName: event.value, particularNature: this.invoiceType };
-            this.searchService.getLinkedParticulars(params).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            this.searchLinkedParticulars(params, response => {
                 if (response?.body) {
                     let particulars = [];
                     const results = (response?.body?.stocks?.length) ? response?.body?.stocks : response?.body?.accounts;
@@ -7764,7 +7796,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
     public onSelectLinkedParticular(event: any, transaction: any, entry: any, index: number): void {
         transaction.linkedParticular = { name: event?.label, uniqueName: event.value };
-        transaction.linkedVariant = { name: '', uniqueName: '' };
+        transaction.variant = { name: '', uniqueName: '' };
 
         if (event && transaction.linkedParticularType === "ACCOUNT") {
             const params = { particularType: "STOCK", particularUniqueName: event.value, particularNature: this.invoiceType };
@@ -7808,7 +7840,17 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     public onSelectLinkedVariant(event: any, transaction: any, entry: any, index: number): void {
-        transaction.linkedVariant = { name: event?.label, uniqueName: event.value };
+        transaction.variant = { name: event?.label, uniqueName: event.value };
         transaction.stock.variant = { name: event?.label, uniqueName: event.value };
+    }
+
+    public searchLinkedParticulars(params: any, successCallback?: Function): void {
+        this.searchService.getLinkedParticulars(params).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.body) {
+                if (successCallback) {
+                    successCallback(response?.body);
+                }
+            }
+        });
     }
 }

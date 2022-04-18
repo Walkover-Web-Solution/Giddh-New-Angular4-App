@@ -1987,8 +1987,8 @@
                                             <span *ngIf="transaction.stockDetails?.uniqueName"
                                                 >({{ transaction.stockDetails?.name }})</span
                                             >
-                                            <span class="mr-l05" *ngIf="transaction.linkedVariant?.uniqueName"
-                                                >({{ transaction.linkedVariant?.name }})</span
+                                            <span class="mr-l05" *ngIf="transaction.variant?.uniqueName"
+                                                >({{ transaction.variant?.name }})</span
                                             >
                                         </div>
 
@@ -2395,11 +2395,11 @@
                                             <sh-select
                                                 *ngIf="transaction.variantsList?.length > 1"
                                                 [options]="transaction.variantsList"
-                                                [(ngModel)]="transaction.linkedVariant.uniqueName"
-                                                name="transaction.linkedVariant{{ entryIdx }}"
+                                                [(ngModel)]="transaction.variant.uniqueName"
+                                                name="transaction.variant{{ entryIdx }}"
                                                 [placeholder]="'Select Variant'"
                                                 (selected)="onSelectLinkedVariant($event, transaction, entry, entryIdx)"
-                                                [fixedValue]="transaction.linkedVariant.name"
+                                                [fixedValue]="transaction.variant.name"
                                                 class="mt-2"
                                             >
                                                 <ng-template #optionTemplate let-option="option">
@@ -2416,7 +2416,7 @@
                                                 class="linked-variant font-12 mt-1"
                                                 *ngIf="transaction.variantsList?.length === 1"
                                             >
-                                                Variant: {{ transaction.linkedVariant.name }}
+                                                Variant: {{ transaction.variant.name }}
                                             </div>
 
                                             <div class="sku-number">
