@@ -5573,6 +5573,15 @@ footer#footer.absolute-footer {
 }
 .modal-open {
     overflow: hidden !important;
+    .manage-account-popup.add-manage-group-acc {
+        account-operations {
+            div:nth-child(7) {
+                .modal-dialog {
+                    margin-top: 80px;
+                }
+            }
+        }
+    }
 }
 .fixed.modal-open .modal-backdrop {
     z-index: 99999;
@@ -7364,18 +7373,6 @@ giddh-datepicker {
             .aside-pane {
                 #close {
                     color: var(--color-primary-right-side-popup-header-text);
-                }
-            }
-        }
-    }
-    &,
-    .modal-open {
-        .manage-account-popup.add-manage-group-acc {
-            account-operations {
-                div:nth-child(7) {
-                    .modal-dialog {
-                        margin-top: 80px;
-                    }
                 }
             }
         }
