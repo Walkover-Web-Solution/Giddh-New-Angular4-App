@@ -1423,10 +1423,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     this.getAllAdvanceReceipts(this.invFormData.voucherDetails.customerUniquename, this.invFormData.voucherDetails.voucherDate)
                 }
 
-                let particular = (this.invFormData.entries[0]?.transactions[0]?.linkedParticularType === "ACCOUNT") ? this.invFormData.entries[0]?.transactions[0]?.accountUniqueName : this.invFormData.entries[0]?.transactions[0]?.stockDetails?.uniqueName;
+
+                const lastEntryIndex = this.invFormData.entries?.length - 1;
+                let particular = (this.invFormData.entries[lastEntryIndex]?.transactions[0]?.linkedParticularType === "ACCOUNT") ? this.invFormData.entries[lastEntryIndex]?.transactions[0]?.accountUniqueName : this.invFormData.entries[lastEntryIndex]?.transactions[0]?.stockDetails?.uniqueName;
                 let particularArray = particular?.split("#");
                 if(particularArray?.length) {
-                    const params = { particularType: this.invFormData.entries[0]?.transactions[0]?.linkedParticularType, particularUniqueName: particularArray[0], particularNature: this.invoiceType };
+                    const params = { particularType: this.invFormData.entries[lastEntryIndex]?.transactions[0]?.linkedParticularType, particularUniqueName: particularArray[0], particularNature: this.invoiceType };
                     this.searchLinkedParticulars(params, response => {
                         if (response?.body) {
                             let particulars = [];
@@ -1440,7 +1442,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                             response?.body?.variants?.forEach(variant => {
                                 variants.push({ label: variant?.name, value: variant?.uniqueName, additional: variant });
                             });
-                            this.invFormData.entries[0].transactions[0].variantsList = variants;
+                            this.invFormData.entries[lastEntryIndex].transactions[0].variantsList = variants;
+                            this._cdr.detectChanges();
                         }
                     });
                 }
@@ -7848,7 +7851,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.searchService.getLinkedParticulars(params).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.body) {
                 if (successCallback) {
-                    successCallback(response?.body);
+                    successCallback(response);
                 }
             }
         });
