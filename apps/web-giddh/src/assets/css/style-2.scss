@@ -5596,6 +5596,15 @@ footer#footer.absolute-footer {
 }
 .modal-open {
     overflow: hidden !important;
+    .manage-account-popup.add-manage-group-acc {
+        account-operations {
+            div:nth-child(7) {
+                .modal-dialog {
+                    margin-top: 80px;
+                }
+            }
+        }
+    }
 }
 
 section.ledger-stat.sticky-footer.sticky-footer-sale-amount {
@@ -7387,6 +7396,7 @@ giddh-datepicker {
         z-index: 1000 !important;
     }
     overflow-y: auto !important;
+    height: auto;
     .advance-search {
         #export-body {
             sh-select {
@@ -7405,19 +7415,6 @@ giddh-datepicker {
             }
         }
     }
-    &,
-    .modal-open {
-        .manage-account-popup.add-manage-group-acc {
-            account-operations {
-                div:nth-child(7) {
-                    .modal-dialog {
-                        margin-top: 80px;
-                    }
-                }
-            }
-        }
-    }
-    height: auto;
 }
 
 .cdk-overlay-container,
