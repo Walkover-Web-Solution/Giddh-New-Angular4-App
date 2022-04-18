@@ -309,7 +309,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     }
 
     public ngOnInit() {
-        document.querySelector('body').classList.add('ledger-body');
+        if (this.isPettyCash) {
+            document.querySelector('body').classList.add('ledger-body');
+        }
         if(this.searchResultsPaginationPage) {
             this.searchResultsPaginationData.page = this.searchResultsPaginationPage;
         }
@@ -940,7 +942,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @memberof UpdateLedgerEntryPanelComponent
      */
     public ngOnDestroy(): void {
-        document.querySelector('body').classList.remove('ledger-body');
+        if (this.isPettyCash) {
+            document.querySelector('body').classList.remove('ledger-body');
+        }
         this.vm.resetVM();
         this.destroyed$.next(true);
         this.destroyed$.complete();
@@ -1857,11 +1861,15 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         }
         customerUniqueName.push(this.baseAcc);
         customerUniqueName = _.union(customerUniqueName);
+
+        let tcsTotal = (this.vm.selectedLedger.otherTaxType === "tcs") ? this.vm.selectedLedger.otherTaxesSum : 0;
+        let tdsTotal = (this.vm.selectedLedger.otherTaxType === "tds") ? this.vm.selectedLedger.otherTaxesSum : 0;
+
         this.adjustVoucherConfiguration = {
             voucherDetails: {
                 voucherDate: this.vm.selectedLedger.entryDate,
-                tcsTotal: 0,
-                tdsTotal: 0,
+                tcsTotal: tcsTotal,
+                tdsTotal: tdsTotal,
                 balanceDue: this.vm.selectedLedger.total.amount,
                 grandTotal: this.vm.selectedLedger?.entryVoucherTotals?.amountForAccount,
                 customerName: this.vm.selectedLedger && this.vm.selectedLedger.particular ? this.vm.selectedLedger.particular.name : '',
@@ -2116,7 +2124,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.vm.selectedLedger = resp[0];
         this.originalVoucherAdjustments = cloneDeep(this.vm.selectedLedger?.voucherAdjustments);
         this.formatAdjustments();
-        const voucherGeneratedType = this.vm.selectedLedger.voucherGeneratedType || this.vm.selectedLedger.voucher.shortCode;
+        const voucherGeneratedType = this.vm.selectedLedger.voucherGeneratedType || this.vm.selectedLedger.voucher?.shortCode;
         if (this.vm.selectedLedger && !this.invoiceList?.length && (voucherGeneratedType === VoucherTypeEnum.creditNote ||
             voucherGeneratedType === VoucherTypeEnum.debitNote)) {
             this.getInvoiceListsForCreditNote();
@@ -2230,7 +2238,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     }];
                 }
                 initialAccounts.push({
-                    label: `${t.particular?.name} (${t.inventory.stock?.uniqueName})`,
+                    label: `${t.particular?.name} (${t.inventory.stock?.name})`,
                     value: `${t.particular?.uniqueName}#${t.inventory.stock?.uniqueName}`,
                     additional: {
                         stock: {

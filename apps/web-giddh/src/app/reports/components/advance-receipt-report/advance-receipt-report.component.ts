@@ -514,7 +514,9 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
 
             if (additionalRequestParameters.receiptTypes?.length > 0) {
                 if (additionalRequestParameters.receiptTypes[0] === "advance receipt") {
-                    requestObject.subVoucher = SubVoucher.AdvanceReceipt;
+                    requestObject.receiptType = SubVoucher.AdvanceReceipt;
+                } else {
+                    requestObject.receiptType = "NORMAL_RECEIPT";
                 }
             }
             delete additionalRequestParameters['receiptTypes'];
