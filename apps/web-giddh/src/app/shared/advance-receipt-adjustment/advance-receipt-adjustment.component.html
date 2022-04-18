@@ -214,11 +214,7 @@
                                         name="amount{{ entry.uniqueName }}"
                                         [(ngModel)]="entry.adjustmentAmount.amountForAccount"
                                         (ngModelChange)="calculateTax(entry, entryIdx)"
-                                        [prefix]="
-                                            enableVoucherAdjustmentMultiCurrency
-                                                ? entry.accountCurrency?.symbol
-                                                : currencySymbol
-                                        "
+                                        [prefix]="currencySymbol"
                                         [mask]="inputMaskFormat"
                                     />
                                     <span
