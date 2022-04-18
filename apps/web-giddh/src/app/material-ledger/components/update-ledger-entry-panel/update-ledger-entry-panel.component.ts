@@ -2125,7 +2125,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.vm.selectedLedger = resp[0];
         this.originalVoucherAdjustments = cloneDeep(this.vm.selectedLedger?.voucherAdjustments);
         this.formatAdjustments();
-        const voucherGeneratedType = this.vm.selectedLedger.voucherGeneratedType || this.vm.selectedLedger.voucher.shortCode;
+        const voucherGeneratedType = this.vm.selectedLedger.voucherGeneratedType || this.vm.selectedLedger.voucher?.shortCode;
         if (this.vm.selectedLedger && !this.invoiceList?.length && (voucherGeneratedType === VoucherTypeEnum.creditNote ||
             voucherGeneratedType === VoucherTypeEnum.debitNote)) {
             this.getInvoiceListsForCreditNote();
