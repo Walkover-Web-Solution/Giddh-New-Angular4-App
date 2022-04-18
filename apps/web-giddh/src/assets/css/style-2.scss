@@ -7313,6 +7313,7 @@ giddh-datepicker {
     .cdk-global-overlay-wrapper {
         z-index: 1000 !important;
     }
+    overflow-y: auto !important;
 }
 
 .cdk-overlay-container,
