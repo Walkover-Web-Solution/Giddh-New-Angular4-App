@@ -309,6 +309,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     }
 
     public ngOnInit() {
+        if (this.isPettyCash) {
+            document.querySelector('body').classList.add('ledger-body');
+        }
         if(this.searchResultsPaginationPage) {
             this.searchResultsPaginationData.page = this.searchResultsPaginationPage;
         }
@@ -939,6 +942,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @memberof UpdateLedgerEntryPanelComponent
      */
     public ngOnDestroy(): void {
+        if (this.isPettyCash) {
+            document.querySelector('body').classList.remove('ledger-body');
+        }
         this.vm.resetVM();
         this.destroyed$.next(true);
         this.destroyed$.complete();
