@@ -1,16 +1,14 @@
-@import "../../../assets/css/color.scss";
-
 .appearance-none {
     background: none !important;
     border: 0 !important;
     font-size: 16px;
-    color: $night-rider;
+    color: var(--color-nero);
 }
 
 .sidebar-menu {
     min-height: 100vh;
-    background: $nero;
-    color: $white;
+    background: var(--color-nero);
+    color: var(--color-white);
     float: right;
     position: relative;
 }
@@ -24,26 +22,26 @@
 }
 
 .menu-list li a {
-    color: $white;
+    color: var(--color-right-sidebar-primary-journal-voucher-list);
     padding: 7px 12px;
     display: block;
     font-size: 14px;
 }
 
 .menu-list li a:hover {
-    background: $night-rider;
+    background: var(--color-right-sidebar-primary-journal-voucher-list-hover);
 }
 
 .menu-list li a.isHidden {
-    color: $matterhorn;
+    color: var(--color-abbey);
 }
 
 .active-child {
-    background: $night-rider;
+    background: var(--color-right-sidebar-primary-journal-voucher-list-hover);
     padding-left: 20px;
 }
 .active-parent {
-    background: $night-rider;
+    background: var(--color-right-sidebar-primary-journal-voucher-list-hover);
 }
 .active-child > span {
     margin-right: 2px;

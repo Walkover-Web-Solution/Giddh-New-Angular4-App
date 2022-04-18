@@ -1,16 +1,15 @@
-@import "../../../assets/css/color.scss";
 input {
     width: 100% !important;
 }
 input.form-control.date-range-picker {
     text-align: left;
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--color-secondary-input-bar-border);
 }
 .custom-datepicker {
     i {
         left: 15px;
         top: 0;
-        color: $gray;
+        color: var(--color-abbey);
     }
 }
 .icon-calender {
@@ -20,12 +19,11 @@ input.form-control.date-range-picker {
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    border-right: 1px solid $gainsboro !important;
     cursor: pointer;
 }
 .collapse-icons {
     font-size: 10px;
-    border: 1px solid $chetwode-blue;
+    border: 1px solid var(--color-blue);
     border-radius: 4px;
     padding: 2px;
     top: 0px !important;

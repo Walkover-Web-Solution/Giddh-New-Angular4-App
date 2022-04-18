@@ -1,5 +1,3 @@
-@import "../../../../assets/css/color.scss";
-
 .input-search {
     width: 100%;
 }
@@ -11,7 +9,7 @@
 }
 
 .filter-list .inner-filter-list .mat-list-item:hover {
-    background: $whisper-light;
+    background: var(--color-dark-fog);
     transition: 0.5s all ease;
 }
 
@@ -25,7 +23,7 @@
 }
 
 .filter-list .inner-filter-list .mat-list-item .right-item i {
-    color: $nobel;
+    color: var(--color-gray);
     margin-left: 5px;
 }
 
@@ -34,5 +32,5 @@
 }
 
 .filter-list .activeItem {
-    background-color: $whisper-light;
+    background-color: var(--color-dark-fog);
 }

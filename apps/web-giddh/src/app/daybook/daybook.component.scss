@@ -1,4 +1,3 @@
-@import "../../assets/css/color.scss";
 .date-range-picker {
     background-size: 17px !important;
     background-position: 9px 8px !important;
@@ -7,19 +6,19 @@
     position: relative;
     z-index: 1;
     cursor: default;
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--color-common-secondary-border);
     text-align: center;
     max-width: 230px;
     width: 230px;
 }
 
 .date-range-picker:focus {
-    border-color: $gainsboro !important;
+    border-color: var(--color-primary-button-border) !important;
 }
 .input-wrapper {
     position: relative;
     display: block;
-    background-color: $white;
+    background-color: var(--color-white);
 }
 .input-wrapper:before {
     position: absolute;
@@ -27,7 +26,7 @@
     display: block;
     height: 36px;
     width: 1px;
-    background-color: $gainsboro;
+    background-color: var(--color-iron);
     left: 37px !important;
     z-index: 2;
     top: 0;
@@ -44,7 +43,7 @@
     align-items: center;
     font-size: 14px;
     margin-left: 15px;
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--color-primary-button-border);
     border-radius: 5px;
     margin-right: 15px;
     cursor: pointer;
@@ -69,7 +68,6 @@
     justify-content: center;
     align-items: center;
     height: 36px !important;
-    border-right: 1px solid $gainsboro !important;
     cursor: pointer;
 }
 .linked-entities {
@@ -82,17 +80,17 @@
 .expand-collapse-btn a {
     width: 36px;
     height: 36px;
-    background-color: $white;
-    border: 1px solid $gainsboro;
+    background-color: var(--color-white);
+    border: 1px solid var(--color-common-secondary-border);
     border-radius: 5px;
     display: flex;
     justify-content: center;
     align-items: center;
     font-size: 18px;
-    color: $midnight-blue;
+    color: var(--color-giddh-blue);
     &:hover {
-        background: $chetwode-blue;
-        color: $white;
+        background: var(--color-blue);
+        color: var(--color-white);
     }
 }
 
@@ -101,10 +99,10 @@
 }
 
 button.btn.btn-filter {
-    background: $whisper;
-    border: 1px solid $whisper;
+    background: var(--color-dark-fog);
+    border: 1px solid var(--color-dark-fog);
     font-size: 14px;
-    color: $midnight-blue;
+    color: var(--color-giddh-blue);
     align-items: center;
 }
 

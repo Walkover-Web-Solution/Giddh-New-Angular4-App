@@ -66,6 +66,14 @@
                 </div>
             </form>
         </div>
+        <div
+            class="clear-filter align-items-center d-flex justify-content-xl-center justify-content-lg-start w-50"
+            *ngIf="showClearFilter"
+        >
+            <button class="btn btn-filters mr-0" (click)="resetAdvanceSearch()">
+                <span class="icon-cross"></span> {{ commonLocaleData?.app_clear_filter }}
+            </button>
+        </div>
         <div class="d-flex justify-content-between">
             <div class="pull-left d-flex wrap-searching-aging">
                 <div
@@ -149,7 +157,7 @@
         </div>
     </div>
     <div class="contact-main aging-page">
-        <div class="pd-b2 mr-b1 mr-t1 on-mobile-view mobile-card-wrapper">
+        <div class="pd-b2 mr-b1 on-mobile-view mobile-card-wrapper">
             <div *ngIf="!isMobileScreen" class="table-responsive">
                 <ng-container *ngTemplateOutlet="mainTable"></ng-container>
             </div>

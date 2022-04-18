@@ -1,5 +1,4 @@
-@import "../../../assets/css/color.scss";
-
+@import "../../../assets/css/mixin-common.scss";
 .dropdown-menu > li > a {
     padding: 2px 10px;
 }
@@ -59,6 +58,8 @@
     width: 73px;
     position: relative;
     right: 1px;
+    border-color: var(--color-solitude-light);
+    color: var(--color-primary-filter-button-text);
 }
 
 .search-field {
@@ -68,21 +69,21 @@
 
 .search-field input {
     width: 235px;
-    background-color: $whisper !important;
-    border-color: $whisper !important;
+    background-color: var(--color-dark-fog) !important;
+    border-color: var(--color-dark-fog) !important;
 }
 
 .search-field input:focus {
-    background-color: $white !important;
-    border-color: $midnight-express !important;
+    background-color: var(--color-white) !important;
+    border-color: var(--color-common-primary-blue-border) !important;
 }
 
 span.input-addon {
     position: absolute;
     right: 0px;
     padding: 4px 9px;
-    background-color: $chetwode-blue;
-    color: $white;
+    background-color: var(--color-blue);
+    color: var(--color-white);
     font-size: 18px;
     border-radius: 5px;
     top: 0;
@@ -90,6 +91,7 @@ span.input-addon {
 
 tr.aging-table-top td {
     padding: 8px 0;
+    background-color: var(--color-common-primary-background-for-all-components) !important;
 }
 
 .refresh-btn {
@@ -98,8 +100,8 @@ tr.aging-table-top td {
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    background-color: $white;
-    border: 1px solid $gainsboro;
+    background-color: var(--color-white);
+    border: 1px solid var(--color-iron);
     margin-left: 10px !important;
 }
 
@@ -121,9 +123,9 @@ tr.aging-table-top td {
         min-width: 100%;
         padding: 11px;
         padding-right: 40px;
-        color: $nero;
+        color: var(--color-nero);
         border: none;
-        background-color: $gray-95;
+        background-color: var(--color-input-tertiary-background) !important;
         border-radius: 5px;
     }
 }
@@ -151,10 +153,6 @@ th.mat-header-cell:first-of-type {
     padding-left: 5px !important;
 }
 
-.main-table {
-    margin-top: 18px;
-}
-
 .pull-left {
     button {
         width: auto;
@@ -166,7 +164,7 @@ th.mat-header-cell:first-of-type {
     .mat-customer-name {
         .icon-pointer {
             .font-xxs {
-                color: $deep-sky-blue !important;
+                color: var(--color-blue) !important;
             }
         }
     }
@@ -195,6 +193,20 @@ th.mat-header-cell:first-of-type {
     .search-table {
         margin-left: 21px;
     }
+    .ng-untouched {
+        .pull-right {
+            display: flex;
+            // width: 191.3px;
+            button {
+                min-width: 88px;
+                padding-right: 10px;
+                padding-left: 10px !important;
+            }
+        }
+    }
+    .total-padding {
+        height: 130px !important;
+    }
     .mat-customer-name span:nth-child(2) {
         position: relative;
         right: 3px;
@@ -203,6 +215,22 @@ th.mat-header-cell:first-of-type {
         font-weight: 600;
     }
 }
+::ng-deep {
+    .btn-sky-blue {
+        color: var(--color-secondary-button-text);
+        background-color: var(--color-secondary-button-background);
+        border-color: var(--color-secondary-button-background);
+    }
+}
+
+.btn-filters {
+    @include common-filters(
+        var(--color-giddh-blue),
+        var(--color-primary-filter-background),
+        1px solid var(--color-primary-button-border)
+    );
+}
+
 // responsive
 @media (min-width: 769px) {
     .on-mobile-view > .top-aging-table-top {
@@ -265,7 +293,7 @@ th.mat-header-cell:first-of-type {
             display: flex;
 
             i {
-                color: $gray;
+                color: var(--color-abbey);
             }
         }
     }
@@ -292,7 +320,7 @@ th.mat-header-cell:first-of-type {
         display: flex !important;
 
         a {
-            color: $gray;
+            color: var(--color-abbey);
         }
 
         .max-width-250 {
@@ -381,7 +409,7 @@ th.mat-header-cell:first-of-type {
     justify-content: center;
     align-items: center;
     height: 36px !important;
-    // border-right: 1px solid $gainsboro !important;
+    // border-right: 1px solid var(--color-iron) !important;
     cursor: pointer;
 }
 

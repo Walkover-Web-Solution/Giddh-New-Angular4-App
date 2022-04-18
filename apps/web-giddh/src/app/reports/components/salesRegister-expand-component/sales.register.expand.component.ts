@@ -60,6 +60,9 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
     public commonLocaleData: any = {};
     /* This will hold if it's mobile screen or not */
     public isMobileScreen: boolean = false;
+    /** True, if custom date filter is selected or custom searching or sorting is performed */
+    public showClearFilter: boolean = false;
+
 
     constructor(private store: Store<AppState>, private invoiceReceiptActions: InvoiceReceiptActions, private activeRoute: ActivatedRoute, private router: Router, private _cd: ChangeDetectorRef, private breakPointObservar: BreakpointObserver) {
         this.salesRegisteDetailedResponse$ = this.store.pipe(select(appState => appState.receipt.SalesRegisteDetailedResponse), takeUntil(this.destroyed$));
@@ -117,11 +120,12 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
             distinctUntilChanged(),
             takeUntil(this.destroyed$)
         ).subscribe(s => {
+            if (s !== null && s !== undefined) {
+            this.showClearFilter = true ;
             this.getDetailedsalesRequestFilter.sort = null;
             this.getDetailedsalesRequestFilter.sortBy = null;
             this.getDetailedsalesRequestFilter.q = s;
             this.getDetailedSalesReport(this.getDetailedsalesRequestFilter);
-            if (s === '') {
                 this.showSearchInvoiceNo = false;
             }
         });
@@ -140,10 +144,21 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
         this.getDetailedSalesReport(this.getDetailedsalesRequestFilter);
     }
     public sortbyApi(ord, key) {
+        this.showClearFilter = true;
         this.getDetailedsalesRequestFilter.sortBy = key;
         this.getDetailedsalesRequestFilter.sort = ord;
         this.getDetailedSalesReport(this.getDetailedsalesRequestFilter);
     }
+
+    /**
+     * Redirects to Sales Register Page
+     *
+     * @memberof SalesRegisterExpandComponent
+     */
+    public gotoSalesRegister(): void {
+        this.router.navigate(['/pages/reports/sales-register']);
+    }
+
     /**
     * emitExpand
     */
@@ -266,6 +281,22 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
             this.getCurrentMonthYear();
         }
     }
+    /**
+     * Resets the advance search when user clicks on Clear Filter
+     *
+     * @memberof SalesRegisterExpandComponent
+     */
+    public resetAdvanceSearch() {
+            this.showClearFilter = false;
+            this.voucherNumberInput?.reset();
+            this.showSearchInvoiceNo = false;
+            this.getDetailedsalesRequestFilter.page = 1;
+            this.getDetailedsalesRequestFilter.count = this.paginationLimit;
+            this.getDetailedsalesRequestFilter.q = '';
+            this.getDetailedsalesRequestFilter.sort = null;
+            this.getDetailedsalesRequestFilter.sortBy = null;
+            this.getDetailedSalesReport(this.getDetailedsalesRequestFilter);
+        }
 
     /**
      * This function will destroy the subscribers

@@ -1,15 +1,14 @@
-@import "../../../../assets/css/color.scss";
 .ratio-analysis-panel-body {
     padding-left: 0;
     padding-right: 0;
 }
 .ratio-analysis-panel-body h1 {
     font-size: 14px;
-    color: $nero;
+    color: var(--color-nero);
 }
 
 .ratio-analysis-panel-body small {
-    color: $dark-gray;
+    color: var(--color-abbey);
     font-size: 14px;
 }
 .ratio-chart-block {
@@ -26,7 +25,7 @@
         &:after {
             position: absolute;
             content: "";
-            border-bottom: 1px solid $gainsboro;
+            border-bottom: 1px solid var(--color-iron);
             bottom: 0;
             height: 1px;
             width: 90%;
