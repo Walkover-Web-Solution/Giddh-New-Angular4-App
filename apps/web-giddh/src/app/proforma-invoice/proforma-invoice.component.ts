@@ -1423,31 +1423,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     this.getAllAdvanceReceipts(this.invFormData.voucherDetails.customerUniquename, this.invFormData.voucherDetails.voucherDate)
                 }
 
-
                 const lastEntryIndex = this.invFormData.entries?.length - 1;
-                let particular = (this.invFormData.entries[lastEntryIndex]?.transactions[0]?.linkedParticularType === "ACCOUNT") ? this.invFormData.entries[lastEntryIndex]?.transactions[0]?.accountUniqueName : this.invFormData.entries[lastEntryIndex]?.transactions[0]?.stockDetails?.uniqueName;
-                let particularArray = particular?.split("#");
-                if(particularArray?.length) {
-                    const params = { particularType: this.invFormData.entries[lastEntryIndex]?.transactions[0]?.linkedParticularType, particularUniqueName: particularArray[0], particularNature: this.invoiceType };
-                    this.searchLinkedParticulars(params, response => {
-                        if (response?.body) {
-                            let particulars = [];
-                            const results = (response?.body?.stocks?.length) ? response?.body?.stocks : response?.body?.accounts;
-                            results.forEach(particular => {
-                                particulars.push({ label: particular?.name, value: particular?.uniqueName, additional: particular });
-                            });
-                            this.linkedParticulars$ = observableOf(particulars);
-
-                            let variants = [];
-                            response?.body?.variants?.forEach(variant => {
-                                variants.push({ label: variant?.name, value: variant?.uniqueName, additional: variant });
-                            });
-                            this.invFormData.entries[lastEntryIndex].transactions[0].variantsList = variants;
-                            this._cdr.detectChanges();
-                        }
-                    });
-                }
-
+                this.loadParticularAndVariant(lastEntryIndex, "ACCOUNT");
                 this.calculateBalanceDue();
                 this.calculateTotalDiscount();
                 this.calculateTotalTaxSum();
@@ -3852,6 +3829,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public addBulkStockItems(items: SalesAddBulkStockItems[]) {
         const startIndex = this.invFormData.entries.length;
         let isBlankItemPresent;
+        console.log(items);
         this.ngZone.runOutsideAngular(() => {
             for (const item of items) {
                 // add quantity to additional because we are using quantity from bulk modal so we have to pass it to onSelectSalesAccount
@@ -4631,12 +4609,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 newTrxObj.isStockTxn = trx.isStockTxn;
                 newTrxObj.applicableTaxes = entry.taxList;
                 newTrxObj.variant = trx.variant;
+                newTrxObj.linkedParticularType = "ACCOUNT";
 
                 // check if stock details is available then assign uniquename as we have done while creating option
                 if (trx.isStockTxn) {
                     newTrxObj.accountUniqueName = `${trx.accountUniqueName}#${trx.stockDetails?.uniqueName}`;
                     newTrxObj.fakeAccForSelect2 = `${trx.accountUniqueName}#${trx.stockDetails?.uniqueName}`;
-                    newTrxObj.linkedParticularType = "STOCK";
                     newTrxObj.linkedParticular = { name: trx.stockDetails?.name, uniqueName: trx.stockDetails?.uniqueName };
 
                     let stock = trx.stockDetails;
@@ -4687,7 +4665,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 } else {
                     newTrxObj.accountUniqueName = trx.accountUniqueName;
                     newTrxObj.fakeAccForSelect2 = trx.accountUniqueName;
-                    newTrxObj.linkedParticularType = "ACCOUNT";
                     newTrxObj.linkedParticular = { name: trx.accountName, uniqueName: trx.accountUniqueName };
                 }
 
@@ -4934,6 +4911,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 salesTransactionItemClass.fakeAccForSelect2 = t.account?.uniqueName;
                 salesTransactionItemClass.description = entry.description;
                 salesTransactionItemClass.date = t.date;
+                salesTransactionItemClass.linkedParticularType = "ACCOUNT";
 
                 entry.taxes?.forEach(ta => {
                     let taxTypeArr = ['tdsrc', 'tdspay', 'tcspay', 'tcsrc'];
@@ -4978,10 +4956,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     salesTransactionItemClass.stockUnit = t.stock.stockUnit.code;
                     salesTransactionItemClass.fakeAccForSelect2 = t.account.uniqueName + '#' + t.stock.uniqueName;
                     salesTransactionItemClass.variant = t.stock.variant;
-                    salesTransactionItemClass.linkedParticularType = "STOCK";
                     salesTransactionItemClass.linkedParticular = { name: t.stock.name, uniqueName: t.stock.uniqueName };
                 } else {
-                    salesTransactionItemClass.linkedParticularType = "ACCOUNT";
                     salesTransactionItemClass.linkedParticular = { name: t.accountName, uniqueName: t.accountUniqueName };
                 }
 
@@ -7855,5 +7831,38 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 }
             }
         });
+    }
+
+    public loadParticularAndVariant(index: number, linkedParticularType: string): void {
+        let particular = this.invFormData.entries[index]?.transactions[0]?.accountUniqueName;
+        let particularArray = particular?.split("#");
+        if (particularArray?.length) {
+            const particularParams = { particularType: linkedParticularType, particularUniqueName: particularArray[0], particularNature: this.invoiceType };
+            this.searchLinkedParticulars(particularParams, response => {
+                if (response?.body) {
+                    let particulars = [];
+                    const results = (response?.body?.stocks?.length) ? response?.body?.stocks : response?.body?.accounts;
+                    results.forEach(particular => {
+                        particulars.push({ label: particular?.name, value: particular?.uniqueName, additional: particular });
+                    });
+                    this.linkedParticulars$ = observableOf(particulars);
+                    this._cdr.detectChanges();
+                }
+            });
+
+            if (this.invFormData.entries[index]?.transactions[0]?.stockDetails?.uniqueName && !this.invFormData.entries[index].transactions[0].variantsList?.length) {
+                const variantParams = { particularType: "STOCK", particularUniqueName: this.invFormData.entries[index]?.transactions[0]?.stockDetails?.uniqueName, particularNature: this.invoiceType };
+                this.searchService.getLinkedParticulars(variantParams).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                    if (response?.body) {
+                        let variants = [];
+                        response?.body?.variants?.forEach(variant => {
+                            variants.push({ label: variant?.name, value: variant?.uniqueName, additional: variant });
+                        });
+                        this.invFormData.entries[index].transactions[0].variantsList = variants;
+                    }
+                    this._cdr.detectChanges();
+                });
+            }
+        }
     }
 }

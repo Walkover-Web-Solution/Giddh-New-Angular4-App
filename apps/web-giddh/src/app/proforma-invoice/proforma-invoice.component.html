@@ -2335,7 +2335,7 @@
                                                     [notFoundMsg]="noResultsFoundLabel"
                                                     [enableDynamicSearch]="true"
                                                     [fixedValue]="
-                                                        transaction.stockDetails?.name
+                                                        transaction.stockDetails?.name && !isUpdateMode
                                                             ? transaction.stockDetails?.name
                                                             : transaction.accountName
                                                     "
