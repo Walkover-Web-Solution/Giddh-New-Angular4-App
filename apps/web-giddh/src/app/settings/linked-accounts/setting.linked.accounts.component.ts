@@ -16,6 +16,7 @@ import { GeneralService } from '../../services/general.service';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { SearchService } from '../../services/search.service';
 import { cloneDeep } from '../../lodash-optimized';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'setting-linked-accounts',
@@ -75,12 +76,15 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
         @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs,
         private _generalService: GeneralService,
         private searchService: SearchService,
+        private router: Router
     ) {
         this.companyUniqueName = this._generalService.companyUniqueName;
         this.needReloadingLinkedAccounts$ = this.store.pipe(select(s => s.settings.linkedAccounts.needReloadingLinkedAccounts), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
+        /** Temporarily redirecting to home until we fix the working of this module */
+        this.router.navigate(['/pages/home']);
 
         this.yodleeForm = this._fb.group({
             rsession: ['', [Validators.required]],
