@@ -216,7 +216,7 @@ table.ledger-footer-1 td[class*="col-"] {
     margin-right: 8px !important;
 }
 .account_Name {
-    color: var(--color-common-primary-text);
+    color: rgba(0, 0, 0, 0.8);
     font-family: " opensans-semibold ";
     text-transform: capitalize;
 }
@@ -782,7 +782,6 @@ sh-select:focus {
 
 .ledger-row {
     .text-ellipsis {
-        min-width: 160px;
         max-width: 400px;
         width: 100%;
     }
