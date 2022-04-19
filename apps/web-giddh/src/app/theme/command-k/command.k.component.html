@@ -35,7 +35,7 @@
                                     *ngFor="let r of searchedItems; let i = index; trackBy: trackByFn"
                                     (mouseover)="highlightItem(i)"
                                     (mouseout)="unhighlightItem()"
-                                    (click)="itemSelected(r); closeMaster()"
+                                    (click)="itemSelected(r)"
                                     [ngClass]="{ 'selected': r.loop === highlightedItem, 'active': r.isSelected }"
                                 >
                                     <a href="javascript:void(0)" class="d-flex flex-row align-items-center">
