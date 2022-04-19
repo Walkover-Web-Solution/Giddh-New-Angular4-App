@@ -1,4 +1,3 @@
-
 import { Injectable } from '@angular/core';
 import { PrinterFormatService } from './printer.format.service';
 import * as qz from "qz-tray";
@@ -16,7 +15,6 @@ export class ThermalService {
     */
     public print(defaultTemplate: any, request: any): void {
         this.maxLength = 46;
-
         /**
          * This will use for hide/show for QR Code
          */
@@ -329,7 +327,6 @@ export class ThermalService {
          * This will use for hide/show for footer total
          */
         let netAmountField;
-
         if (defaultTemplate?.sections?.table?.data?.total?.display) {
             netAmountField = defaultTemplate?.sections?.table?.data?.total?.label;
         } else {
@@ -557,11 +554,6 @@ export class ThermalService {
                 }
             }
         });
-
-
-
-
-
         if (request) {
             let header =
                 this.printerFormat.formatCenter(invoiceHeadingField) +
@@ -607,7 +599,7 @@ export class ThermalService {
                 tax +
                 this.justifyText(
                     "",
-                    (totalAmountField + "("+companyCurrencyCode+")" + " ") + "" + subTotal?.padStart(11)
+                    (totalAmountField + "(" + companyCurrencyCode + ")" + " ") + "" + subTotal?.padStart(11)
                 ) +
                 this.printerFormat.lineBreak +
                 this.printerFormat.lineBreak +
@@ -688,12 +680,12 @@ export class ThermalService {
                         this.printerFormat.fullCut,
                     ];
                     console.log(txt);
-                    
+
                     return qz.print(config, txt);
                 })
                 .catch(function (e: any) {
                     console.error(e);
-            });
+                });
         }
     }
 
@@ -705,7 +697,7 @@ export class ThermalService {
      * @return {*}
      * @memberof ThermalComponent
      */
-    public justifyText(textA: any, textB: any = "") : any {
+    public justifyText(textA: any, textB: any = ""): any {
         let lengthOfA = textA?.length;
         let qty = textB + "";
         let lengthOfB = qty?.length;
@@ -725,7 +717,7 @@ export class ThermalService {
      * @return {*}
      * @memberof ThermalComponent
      */
-    public blankDash() : string {
+    public blankDash(): string {
         let dash = "";
         for (let i = 0; i <= this.maxLength; i++) {
             dash += "-";
@@ -739,7 +731,7 @@ export class ThermalService {
      * @return {*}
      * @memberof ThermalComponent
      */
-    public blankRow() : string {
+    public blankRow(): string {
         let dash = "";
         for (let i = 0; i <= this.maxLength; i++) {
             dash += " ";

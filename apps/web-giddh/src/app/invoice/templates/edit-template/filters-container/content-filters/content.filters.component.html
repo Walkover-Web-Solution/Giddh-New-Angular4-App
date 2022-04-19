@@ -1453,7 +1453,13 @@
                                 </ng-container>
                             </td>
                         </tr>
-                        <tr *ngIf="fieldsAndVisibility.table.previousDue && customTemplate.templateType !== 'thermal'">
+                        <tr
+                            *ngIf="
+                                fieldsAndVisibility.table.previousDue &&
+                                customTemplate.templateType !== 'thermal' &&
+                                voucherType === 'sales'
+                            "
+                        >
                             <td>
                                 <label>
                                     <input
