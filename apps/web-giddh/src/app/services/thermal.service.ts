@@ -58,7 +58,7 @@ export class ThermalService {
             });
 
             // The QR data
-            qr = "SELLER DETAILS" + this.printerFormat.lineBreak + "GSTIN - " + request?.company?.billingDetails?.taxNumber + this.printerFormat.lineBreak + this.printerFormat.lineBreak + "INVOICE DETAILS" + this.printerFormat.lineBreak + "Number - " + request?.number + this.printerFormat.lineBreak + "Date - " + request?.date + this.printerFormat.lineBreak + "Amount - " + request?.subTotal?.amountForCompany + this.printerFormat.lineBreak + itemsQrTaxData + this.printerFormat.lineBreak + "Total Tax - " + request?.taxableAmount?.amountForCompany + this.printerFormat.lineBreak;
+            qr = "SELLER DETAILS" + this.printerFormat.lineBreak + "GSTIN - " + request?.company?.billingDetails?.taxNumber + this.printerFormat.lineBreak + this.printerFormat.lineBreak + "INVOICE DETAILS" + this.printerFormat.lineBreak + "Number - " + request?.number + this.printerFormat.lineBreak + "Date - " + request?.date + this.printerFormat.lineBreak + "Amount - " + request?.grandTotal?.amountForCompany + this.printerFormat.lineBreak + itemsQrTaxData + this.printerFormat.lineBreak + "Total Tax - " + request?.taxableAmount?.amountForCompany + this.printerFormat.lineBreak;
 
             // The dot size of the QR code
             dots = "\x03";
@@ -244,7 +244,6 @@ export class ThermalService {
         } else {
             noOfItemsField = "";
         }
-        console.log(request?.company?.currency?.code);
 
         /**
          * This will use for hide/show for total amount and total amount in words
@@ -256,13 +255,12 @@ export class ThermalService {
         if (defaultTemplate?.sections?.footer?.data?.totalDue?.display && defaultTemplate?.sections?.footer?.data?.totalInWords?.display) {
             totalAmountField = 'Invoice Total';
             totalWords = request.totalAsWords?.amountForAccount;
-            subTotal = parseFloat(request?.subTotal?.amountForAccount).toFixed(2);
+            subTotal = parseFloat(request?.grandTotal?.amountForAccount).toFixed(2);
             companyCurrencyCode = request?.company?.currency?.code;
         } else {
             totalAmountField = "";
             subTotal = "";
             totalWords = "";
-            companyCurrencyCode = "";
         }
 
         /**
@@ -435,7 +433,7 @@ export class ThermalService {
             let quantity;
             if (defaultTemplate?.sections?.table?.data?.quantity?.display) {
                 quantity =
-                    parseFloat(entry?.transactions[0].stock?.quantity || '-').toFixed(2) +
+                    parseFloat(entry?.transactions[0].stock?.quantity ?? '-').toFixed(2) +
                     " ";
             } else {
                 quantity = "";
@@ -444,7 +442,7 @@ export class ThermalService {
             if (defaultTemplate?.sections?.table?.data?.rate?.display) {
                 rate =
                     parseFloat(
-                        entry?.transactions[0].stock?.rate?.rateForAccount || '-'
+                        entry?.transactions[0].stock?.rate?.rateForAccount ?? '-'
                     ).toFixed(2) + " ";
             } else {
                 rate = "";
@@ -514,44 +512,24 @@ export class ThermalService {
                     this.printerFormat.leftAlign +
                     remainingName;
             }
-            if (entry?.taxes && entry?.taxes?.length > 0) {
-                for (let taxApp of entry?.taxes) {
-                    if (entryTaxes[taxApp?.accountUniqueName + "_" + taxApp?.taxPercent] === undefined) {
-                        entryTaxes[taxApp?.accountUniqueName + "_" + taxApp?.taxPercent] = [];
-                        entryTaxes[taxApp?.accountUniqueName + "_" + taxApp?.taxPercent]['name'] = taxApp?.accountName;
-                        entryTaxes[taxApp?.accountUniqueName + "_" + taxApp?.taxPercent]['percent'] = taxApp?.taxPercent;
-                        entryTaxes[taxApp?.accountUniqueName + "_" + taxApp?.taxPercent]['amount'] = taxApp?.amount?.amountForAccount;
-                    } else {
-                        entryTaxes[taxApp?.accountUniqueName + "_" + taxApp?.taxPercent]['percent'] = entryTaxes[taxApp?.accountUniqueName + "_" + taxApp?.taxPercent]['percent'] + taxApp?.taxPercent;
-                        entryTaxes[taxApp?.accountUniqueName + "_" + taxApp?.taxPercent]['amount'] = entryTaxes[taxApp?.accountUniqueName + "_" + taxApp?.taxPercent]['amount'] + taxApp?.amount?.amountForAccount;
-                    }
-                }
-            }
         }
-        Object.keys(entryTaxes)?.forEach(key => {
-            let entryTax = entryTaxes[key];
-            if (entryTax?.amount > 0) {
-                let taxAmount = parseFloat(
-                    entryTax?.amount
-                ).toFixed(2);
-                if (defaultTemplate?.sections?.footer?.data?.taxBifurcation?.display) {
-                    tax += this.printerFormat.formatCenter(
-                        this.justifyText(
-                            entryTax?.name +
-                            entryTax?.percent +
-                            "%" +
-                            ": " +
-                            "" +
-                            taxAmount
-                        )
-                    );
-                }
-                else {
-                    tax = ""
-                }
-            }
-        });
-        if (request) {
+        // let gstAmount = '';
+        // let taxType ='';
+        // for (tax of request?.taxRateBifurcation){
+        //     console.log(tax);
+            
+        //     // gstAmount = tax?.iamt + tax?.camt + tax?.samt;
+        //     // taxType = tax?.taxName;
+        //     if (defaultTemplate?.sections?.footer?.data?.taxBifurcation?.display) {
+        //         tax += this.printerFormat.formatCenter(
+        //             this.justifyText(taxType +":" + gstAmount)
+        //         );
+        //     }
+        //     else {
+        //         tax = ""
+        //     }
+        // }    
+if (request) {
             let header =
                 this.printerFormat.formatCenter(invoiceHeadingField) +
                 this.printerFormat.formatCenter(
@@ -596,7 +574,7 @@ export class ThermalService {
                 tax +
                 this.justifyText(
                     "",
-                    (totalAmountField + "(" + companyCurrencyCode + ")" + " ") + "" + subTotal?.padStart(11)
+                    (totalAmountField + " ") + "" + subTotal?.padStart(11)
                 ) +
                 this.printerFormat.lineBreak +
                 this.printerFormat.lineBreak +
@@ -677,7 +655,7 @@ export class ThermalService {
                         this.printerFormat.fullCut,
                     ];
                     console.log(txt);
-
+                    
                     return qz.print(config, txt);
                 })
                 .catch(function (e: any) {
