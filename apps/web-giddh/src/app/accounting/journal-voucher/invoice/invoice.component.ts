@@ -17,7 +17,7 @@ import {
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
-import { BlankLedgerVM } from 'apps/web-giddh/src/app/ledger/ledger.vm';
+import { BlankLedgerVM } from 'apps/web-giddh/src/app/material-ledger/ledger.vm';
 import { cloneDeep, forEach, isEqual, sumBy, concat, find, without, orderBy } from 'apps/web-giddh/src/app/lodash-optimized';
 import { TaxResponse } from 'apps/web-giddh/src/app/models/api-models/Company';
 import * as moment from 'moment';
