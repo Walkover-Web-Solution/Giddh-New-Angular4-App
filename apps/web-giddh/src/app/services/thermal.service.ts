@@ -237,8 +237,8 @@ export class ThermalService {
         if (defaultTemplate?.sections?.table?.data?.totalQuantity?.display) {
             noOfItemsField = defaultTemplate?.sections?.table?.data?.totalQuantity?.label;
             for (let entry of request.entries) {
-                for (let entryss of entry.transactions) {
-                    noOfItems = noOfItems + entryss?.stock?.quantity;
+                for (let transaction of entry.transactions) {
+                    noOfItems = noOfItems + transaction?.stock?.quantity;
                 }
             }
         } else {
@@ -290,11 +290,11 @@ export class ThermalService {
         let taxableAmount = 0;
         if (defaultTemplate?.sections?.table?.data?.taxableValue?.display) {
             for (let entry of request.entries) {
-                for (let entryss of entry.transactions) {
-                    if (!entryss?.taxableValue?.amountForAccount) {
+                for (let transaction of entry.transactions) {
+                    if (!transaction?.taxableValue?.amountForAccount) {
                         taxableAmount = 0;
                     } else {
-                        taxableAmount = taxableAmount + entryss?.taxableValue?.amountForAccount;
+                        taxableAmount = taxableAmount + transaction?.taxableValue?.amountForAccount;
                     }
                 }
             }
