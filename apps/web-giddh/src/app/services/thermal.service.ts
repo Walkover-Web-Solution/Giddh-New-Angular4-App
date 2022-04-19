@@ -14,12 +14,7 @@ export class ThermalService {
     * @memberof ThermalComponent
     */
     public print(defaultTemplate: any, request: any): void {
-<<<<<<< HEAD
-
-=======
->>>>>>> 886301f97b... fixed thermal cards
         this.maxLength = 46;
-
         /**
          * This will use for hide/show for QR Code
          */
@@ -328,10 +323,6 @@ export class ThermalService {
          * This will use for hide/show for footer total
          */
         let netAmountField;
-<<<<<<< HEAD
-=======
-
->>>>>>> 886301f97b... fixed thermal cards
         if (defaultTemplate?.sections?.table?.data?.total?.display) {
             netAmountField = defaultTemplate?.sections?.table?.data?.total?.label;
         } else {
@@ -519,8 +510,6 @@ export class ThermalService {
                     this.printerFormat.leftAlign +
                     remainingName;
             }
-
-
             if (entry?.taxes && entry?.taxes?.length > 0) {
                 for (let taxApp of entry?.taxes) {
                     if (entryTaxes[taxApp?.accountUniqueName + "_" + taxApp?.taxPercent] === undefined) {
@@ -535,7 +524,6 @@ export class ThermalService {
                 }
             }
         }
-
         Object.keys(entryTaxes)?.forEach(key => {
             let entryTax = entryTaxes[key];
             if (entryTax?.amount > 0) {
@@ -559,12 +547,7 @@ export class ThermalService {
                 }
             }
         });
-
-
-
-
-
-        if (request) {
+if (request) {
             let header =
                 this.printerFormat.formatCenter(invoiceHeadingField) +
                 this.printerFormat.formatCenter(

@@ -112,7 +112,7 @@ p {
     background: #fff;
     border: 1px solid #bfbfbf;
     padding: 0;
-    max-width: 6.3in;
+    max-width: 5.3in;
     width: 100%;
     margin: 0 auto;
 }
@@ -555,9 +555,14 @@ table.tax-table.item {
     margin-top: 20px;
 }
 .right-tax-amount {
-    padding-left: 10px;
+    padding-left: 0px;
 }
 .full-bottom {
+    margin-top: 10px;
     float: left;
     margin-top: 10px;
+    width: 100%;
+    span {
+        word-break: break-all;
+    }
 }

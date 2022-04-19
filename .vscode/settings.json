@@ -18,8 +18,7 @@
     "typescript.tsdk": "node_modules/typescript/lib/",
     "search.exclude": {
         "**/dist": true
-    },
-    "angular.enable-strict-mode-prompt": false,
+    }
     // "[scss]": {
     //     "editor.defaultFormatter": "esbenp.prettier-vscode"
     // },
