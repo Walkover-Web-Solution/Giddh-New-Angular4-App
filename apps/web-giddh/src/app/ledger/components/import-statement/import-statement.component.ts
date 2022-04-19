@@ -1,9 +1,10 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Inject, OnDestroy } from '@angular/core';
 import { LedgerService } from '../../../services/ledger.service';
 import { ToasterService } from '../../../services/toaster.service';
 import { GeneralService } from '../../../services/general.service';
 import { takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
     selector: 'import-statement',
@@ -13,26 +14,21 @@ import { ReplaySubject } from 'rxjs';
 })
 
 export class ImportStatementComponent implements OnDestroy {
-    /* This will hold local JSON data */
-    @Input() public localeData: any = {};
-    /** Account unique name */
-    @Input() public accountUniqueName: string = '';
-    /** Directives to emit true if API call successful */
-    @Output() public closeModal: EventEmitter<boolean> = new EventEmitter();
     /** Variable for File Upload */
     public selectedFile: any;
     /** Object for API request parameters */
     public getRequest: any = { entity: 'pdf', companyUniqueName: '', accountUniqueName: '' };
     /** Object for API post parameters */
     public postRequest: any = { file: '', password: '' };
-
     /** Subject to release subscription memory */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(
         private ledgerService: LedgerService,
         public generalService: GeneralService,
-        private toaster: ToasterService) {
+        private toaster: ToasterService,
+        @Inject(MAT_DIALOG_DATA) public inputData,
+        public dialogRef: MatDialogRef<any>) {
 
     }
 
@@ -50,7 +46,7 @@ export class ImportStatementComponent implements OnDestroy {
 
         if (!isValidFileType) {
             if (file && file.length > 0) {
-                this.toaster.errorToast(this.localeData?.import_error);
+                this.toaster.showSnackBar("error", this.inputData?.localeData?.import_error);
             }
             this.selectedFile = null;
             this.postRequest.file = null;
@@ -67,14 +63,14 @@ export class ImportStatementComponent implements OnDestroy {
      */
     public importStatement(): void {
         this.getRequest.companyUniqueName = this.generalService.companyUniqueName;
-        this.getRequest.accountUniqueName = this.accountUniqueName;
+        this.getRequest.accountUniqueName = this.inputData?.accountUniqueName;
 
         this.ledgerService.importStatement(this.getRequest, this.postRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response.status === 'success') {
-                this.toaster.successToast(this.localeData?.import_success);
-                this.closeModal.emit(true);
+            if (response?.status === 'success') {
+                this.toaster.showSnackBar("success", this.inputData?.localeData?.import_success);
+                this.dialogRef.close(true);
             } else {
-                this.toaster.errorToast(response.message, response.code);
+                this.toaster.showSnackBar("error", response?.message, response?.code);
             }
         });
     }

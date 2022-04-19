@@ -7,6 +7,10 @@
 .show-columnar-button {
     display: inline-block;
 }
+textarea.receipient-email {
+    width: 98%;
+    height: 42px;
+}
 @media (max-width: 767px) {
     .descendingRadioBtn {
         display: block !important;

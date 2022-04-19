@@ -14,13 +14,10 @@ import { ClipboardModule } from 'ngx-clipboard';
 import { NgxUploaderModule } from 'ngx-uploader';
 import { InventoryAddStockModule } from '../inventory/components/add-stock-components/inventory.addstock.module';
 import { AsideMenuSalesOtherTaxesModule } from '../sales/aside-menu-sales-other-taxes/aside-menu-sales-other-taxes.module';
-
 import { AdvanceReceiptAdjustmentModule } from '../shared/advance-receipt-adjustment/advance-receipt-adjustment.module';
 import { AmountFieldComponentModule } from '../shared/amount-field/amount-field.module';
 import { DatepickerWrapperModule } from '../shared/datepicker-wrapper/datepicker.wrapper.module';
-import {
-    AccountAddNewDetailsModule,
-} from '../shared/header/components/account-add-new-details/account-add-new-details.module';
+import { AccountAddNewDetailsModule } from '../shared/header/components/account-add-new-details/account-add-new-details.module';
 import { HamburgerMenuModule } from '../shared/header/components/hamburger-menu/hamburger-menu.module';
 import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/decimalDigits.module';
 import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
@@ -41,12 +38,8 @@ import { TranslateDirectiveModule } from '../theme/translate/translate.directive
 import { AdvanceSearchModelComponent } from './components/advance-search/advance-search.component';
 import { ExportLedgerComponent } from './components/export-ledger/export-ledger.component';
 import { ImportStatementComponent } from './components/import-statement/import-statement.component';
-import {
-    LedgerColumnarReportTableComponent,
-} from './components/ledger-columnar-report-table/ledger-columnar-report-table.component';
-import {
-    LedgerAsidePaneAccountComponent,
-} from './components/ledger-aside-pane/component/ledger-aside-pane-account/ledger-aside.pane.account.component';
+import { LedgerColumnarReportTableComponent } from './components/ledger-columnar-report-table/ledger-columnar-report-table.component';
+import { LedgerAsidePaneAccountComponent } from './components/ledger-aside-pane/component/ledger-aside-pane-account/ledger-aside.pane.account.component';
 import { LedgerAsidePaneComponent } from './components/ledger-aside-pane/ledger-aside-pane.component';
 import { LedgerDiscountModule } from './components/ledger-discount/ledger-discount.module';
 import { NewLedgerEntryPanelComponent } from './components/new-ledger-entry-panel/new-ledger-entry-panel.component';
@@ -58,6 +51,24 @@ import { ParticularPipeModule } from './pipes/particular/particular.module';
 import { PopoverModule } from 'ngx-bootstrap/popover';
 import { ConfirmationModalModule } from '../common/confirmation-modal/confirmation-modal.module';
 import { NoDataModule } from '../shared/no-data/no-data.module';
+import { GiddhDatepickerModule } from '../theme/giddh-datepicker/giddh-datepicker.module';
+import { GiddhPageLoaderModule } from '../shared/giddh-page-loader/giddh-page-loader.module';
+import { NewConfirmModalModule } from '../theme/new-confirm-modal';
+import { GenerateVoucherConfirmationModalComponent } from './components/generate-voucher-confirm-modal/generate-voucher-confirm-modal.component';
+import { MatInputModule } from '@angular/material/input';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatButtonModule } from '@angular/material/button';
+import { MatTableModule } from '@angular/material/table';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatSelectModule } from '@angular/material/select';
+import { NewConfirmationModalModule } from '../theme/new-confirmation-modal/confirmation-modal.module';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { AttachmentsModule } from '../theme/attachments/attachments.module';
 
 @NgModule({
     declarations: [
@@ -69,7 +80,8 @@ import { NoDataModule } from '../shared/no-data/no-data.module';
         LedgerAsidePaneComponent,
         LedgerAsidePaneAccountComponent,
         LedgerColumnarReportTableComponent,
-        ImportStatementComponent
+        ImportStatementComponent,
+        GenerateVoucherConfirmationModalComponent
     ],
     exports: [
         LedgerComponent
@@ -121,7 +133,24 @@ import { NoDataModule } from '../shared/no-data/no-data.module';
         PopoverModule,
         ConfirmationModalModule,
         ValidateSectionPermissionDirectiveModule,
-        NoDataModule
+        NoDataModule,
+        GiddhDatepickerModule,
+        GiddhPageLoaderModule,
+        MatInputModule,
+        MatTooltipModule,
+        MatSlideToggleModule,
+        MatButtonModule,
+        MatTableModule,
+        MatCheckboxModule,
+        MatDialogModule,
+        MatRadioModule,
+        MatMenuModule,
+        NewConfirmModalModule,
+        MatSelectModule,
+        NewConfirmationModalModule,
+        MatGridListModule,
+        MatExpansionModule,
+        AttachmentsModule
     ],
 })
 export class LedgerModule {

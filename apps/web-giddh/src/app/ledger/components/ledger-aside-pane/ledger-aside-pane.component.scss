@@ -27,14 +27,14 @@
 :host.in #close {
     position: absolute;
     left: auto;
-    right: 10px !important;
     z-index: 9999999;
     background-color: transparent;
     color: var(--color-primary-right-side-popup-header-text);
     font-size: 17px;
-    top: 18px !important;
-    margin-right: 0;
+    top: 10px !important;
+    margin-right: 0 !important;
     border: 0;
+    right: 0;
     display: block;
 }
 
@@ -85,7 +85,7 @@
     display: block;
     position: absolute;
     left: auto;
-    top: 15px;
+    top: 12px;
     z-index: 999999;
     border: 0;
     border-radius: 0;
@@ -103,6 +103,7 @@
 }
 .btn-lg {
     min-width: 130px;
+    height: auto !important;
 }
 
 @media (max-width: 991px) {

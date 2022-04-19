@@ -18,7 +18,7 @@
     color: var(--color-gray);
     margin-bottom: 10px;
 }
-.my-dropdown-menu {
+.my-dropdown-men {
     padding: 10px;
 }
 .percent-label,
@@ -27,8 +27,9 @@
 }
 .percent-wrapper {
     .form-control {
-        width: 110px;
+        width: 100px;
         padding-right: 20px !important;
+        height: 34px;
     }
     .fa-percent {
         top: 9px;
@@ -38,7 +39,9 @@
 }
 .value-box {
     .form-control {
-        width: 110px;
+        width: 100px;
+        padding-right: 10px !important;
+        height: 34px;
     }
 }
 .discount-list {

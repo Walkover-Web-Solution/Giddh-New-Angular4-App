@@ -5,7 +5,6 @@ import { ClickOutsideModule } from 'ng-click-outside';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { PopoverModule } from 'ngx-bootstrap/popover';
-
 import { ConfirmationModalModule } from '../../../common/confirmation-modal/confirmation-modal.module';
 import { AdvanceReceiptAdjustmentModule } from '../../../shared/advance-receipt-adjustment/advance-receipt-adjustment.module';
 import { AmountFieldComponentModule } from '../../../shared/amount-field/amount-field.module';
@@ -21,7 +20,16 @@ import { UpdateLedgerDiscountComponent } from '../update-ledger-discount/update-
 import { UpdateLedgerEntryPanelComponent } from './update-ledger-entry-panel.component';
 import { NgxUploaderModule } from 'ngx-uploader';
 import { AsideMenuSalesOtherTaxesModule } from '../../../sales/aside-menu-sales-other-taxes/aside-menu-sales-other-taxes.module';
-import { TooltipModule } from 'ngx-bootstrap/tooltip';
+import { MatInputModule } from '@angular/material/input';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { GiddhDatepickerModule } from '../../../theme/giddh-datepicker/giddh-datepicker.module';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatSelectModule } from '@angular/material/select';
+import { DeleteTemplateConfirmationModalModule } from '../../../invoice/templates/edit-template/modals/confirmation-modal/confirmation.modal.module';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { AttachmentsModule } from '../../../theme/attachments/attachments.module';
 
 @NgModule({
     declarations: [
@@ -48,7 +56,16 @@ import { TooltipModule } from 'ngx-bootstrap/tooltip';
         ReplacePipeModule,
         NgxUploaderModule,
         AsideMenuSalesOtherTaxesModule,
-        TooltipModule
+        MatInputModule,
+        MatCheckboxModule,
+        GiddhDatepickerModule,
+        MatTooltipModule,
+        MatButtonModule,
+        MatDialogModule,
+        MatSelectModule,
+        DeleteTemplateConfirmationModalModule,
+        MatExpansionModule,
+        AttachmentsModule
     ],
     exports: [UpdateLedgerEntryPanelComponent, UpdateLedgerTaxControlComponent, UpdateLedgerDiscountComponent]
 })

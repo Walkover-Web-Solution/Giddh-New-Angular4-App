@@ -5,9 +5,7 @@
 .height-30 {
     height: 30px;
 }
-.min-h-32 {
-    min-height: 32px;
-}
+
 .ledg-head.entry-popup table td.select2-ledger > sh-select {
     position: initial;
     margin-top: 1px;
@@ -70,16 +68,19 @@ ng-select .select-drop i.fa.fa-caret-up::before {
 
 .transaction-particular-name {
     width: 100%;
-    height: 38px;
     background: transparent;
     border: none !important;
     padding: 5px;
-    color: var(--color-gray);
+    color: var(--color-abbey);
 }
 
 .notfound-option.active {
     background: var(--color-dark-fog) !important;
     padding: 2px 5px !important;
+}
+
+.p-0 {
+    padding: 0px !important;
 }
 
 .amount-total {
@@ -136,11 +137,14 @@ ng-select .select-drop i.fa.fa-caret-up::before {
 }
 
 .icon-box {
-    text-align: center;
     display: flex;
-    -webkit-box-align: end;
-    align-items: flex-end;
-    padding: 8px 10px 10px;
+    align-items: center;
+    padding: 10px 10px 0 10px;
+    font-size: 12px;
+    height: 60px;
+    label {
+        margin-top: 10px;
+    }
 }
 
 .add-multicurrency .icon-box {
@@ -188,6 +192,14 @@ span.eligible-ITC {
     position: relative;
 }
 
+.pd-r05 {
+    padding-right: 5px;
+}
+
+.pd-l05 {
+    padding-left: 5px;
+}
+
 .ledger-bottom {
     display: flex;
 }
@@ -202,18 +214,19 @@ span.eligible-ITC {
     align-items: center;
     span {
         padding-left: 5px;
+        padding-top: 4px;
     }
     sh-select {
         width: 100%;
     }
 }
 .advanced {
-    background: var(--color-tab-primary-background);
+    background: var(--color-dropdown-primary-background);
     table.xs-table-block {
-        tbody tr {
+        tr {
             td.remove-invoice {
                 span:first-child {
-                    font-size: 25px;
+                    font-size: 16px;
                     vertical-align: middle;
                     color: var(--color-abbey);
                     padding-right: 8px;
@@ -291,6 +304,24 @@ p.edit-message {
     border: 1px solid;
     padding: 2px;
 }
+
+.amount-width {
+    width: 125px;
+}
+
+.tax-width {
+    width: 100px;
+}
+.delete-attachment {
+    margin-right: 14px;
+    margin-left: 7px;
+    float: right;
+    margin-top: 1px;
+    a {
+        color: var(--color-dark-gray);
+        font-size: 15px;
+    }
+}
 /* responsive */
 
 @media only screen and (max-width: 1359px) {
@@ -323,7 +354,6 @@ p.edit-message {
     .total-detail-table .table-amount {
         width: 100%;
         flex: 0 0 30%;
-        max-width: 30%;
         white-space: initial;
     }
 }
@@ -367,7 +397,7 @@ p.edit-message {
         width: 100%;
         display: block;
     }
-    .xs-table-block tbody tr td {
+    .xs-table-block tr td {
         display: block;
     }
     .ledg-head .ledger-book .left-col-new.bd-rr {
@@ -463,5 +493,41 @@ p.edit-message {
     100% {
         -webkit-transform: rotate(360deg);
         transform: rotate(360deg);
+    }
+}
+.mat-expansion-panel,
+.total-detail-table {
+    .mat-input-element {
+        box-sizing: border-box !important;
+    }
+}
+
+@media (max-width: 1075px) {
+    .icon-box {
+        padding: 10px 0px 0 0px;
+    }
+}
+
+@media (max-width: 991px) {
+    .ledger-head {
+        display: none !important;
+    }
+    .ledg-head {
+        .custom-tabs {
+            .nav.nav-tabs {
+                width: 100%;
+                top: 0px !important;
+                padding-top: 0px !important;
+                left: 0px !important;
+            }
+        }
+    }
+    .ledger-book {
+        padding-top: 15px;
+    }
+}
+@media (min-width: 1301px) and (max-width: 1386px) {
+    .reference-invoice {
+        width: 150px;
     }
 }

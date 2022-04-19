@@ -17,7 +17,7 @@
 .or-line {
     display: flex;
     align-items: center;
-    color: var(--color-gray);
+    color: var(--color-iron);
     margin-bottom: 10px;
 }
 .discount-item {
@@ -34,7 +34,7 @@
 }
 .percent-wrapper {
     .form-control {
-        width: 110px;
+        width: 120px;
         padding-right: 20px !important;
     }
     .fa-percent {
@@ -45,7 +45,8 @@
 }
 .value-box {
     .form-control {
-        width: 110px;
+        width: 120px;
+        padding-right: 10px !important;
     }
 }
 .discount-list {
@@ -55,5 +56,10 @@
     .discount-item {
         padding: 5px;
         margin-bottom: 5px;
+    }
+}
+.adjust {
+    .mat-input-element {
+        box-sizing: border-box !important;
     }
 }

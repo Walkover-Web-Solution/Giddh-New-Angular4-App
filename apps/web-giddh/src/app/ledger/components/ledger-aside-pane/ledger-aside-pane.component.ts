@@ -27,13 +27,13 @@ export class LedgerAsidePaneComponent implements OnInit, OnDestroy {
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor(private store: Store<AppState>, private _inventorySidebarAction: SidebarAction) {
+    constructor(private store: Store<AppState>, private inventorySidebarAction: SidebarAction) {
         this.createStockSuccess$ = this.store.pipe(select(s => s.inventory.createStockSuccess), takeUntil(this.destroyed$));
         this.createAccountIsSuccess$ = this.store.pipe(select(s => s.groupwithaccounts.createAccountIsSuccess), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
-        this.store.dispatch(this._inventorySidebarAction.GetGroupsWithStocksHierarchyMin());
+        this.store.dispatch(this.inventorySidebarAction.GetGroupsWithStocksHierarchyMin());
         // subscribe createStockSuccess for resting form
         this.createStockSuccess$.subscribe(s => {
             if (s) {

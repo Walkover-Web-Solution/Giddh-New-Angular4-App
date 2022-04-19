@@ -1,22 +1,7 @@
-import {
-    ChangeDetectionStrategy,
-    Component,
-    ElementRef,
-    EventEmitter,
-    Input,
-    OnChanges,
-    OnDestroy,
-    OnInit,
-    Output,
-    QueryList,
-    SimpleChanges,
-    ViewChild,
-    ViewChildren,
-} from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ShSelectComponent } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-select.component';
 import * as moment from 'moment';
-import { BsDaterangepickerConfig } from 'ngx-bootstrap/datepicker';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -29,6 +14,8 @@ import { IOption } from '../../../theme/ng-select/option.interface';
 import { API_COUNT_LIMIT, GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
 import { SearchService } from '../../../services/search.service';
 import { InventoryService } from '../../../services/inventory.service';
+import { MatAccordion } from '@angular/material/expansion';
+import { cloneDeep } from '../../../lodash-optimized';
 
 @Component({
     selector: 'advance-search-model',
@@ -38,16 +25,17 @@ import { InventoryService } from '../../../services/inventory.service';
 })
 
 export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges {
-
+    /** Instance of mat accordion */
+    @ViewChild(MatAccordion) accordion: MatAccordion;
     @ViewChildren(ShSelectComponent) public dropDowns: QueryList<ShSelectComponent>;
     public bsRangeValue: string[];
+    /** Taking advance search params as input */
     @Input() public advanceSearchRequest: AdvanceSearchRequest;
+    /** Output emitter for close modal event */
     @Output() public closeModelEvent: EventEmitter<{ advanceSearchData, isClose }> = new EventEmitter(null);
     public advanceSearchObject: ILedgerAdvanceSearchRequest = null;
     public advanceSearchForm: FormGroup;
-    public showOtherDetails: boolean = false;
     public showChequeDatePicker: boolean = false;
-    public bsConfig: Partial<BsDaterangepickerConfig> = { showWeekNumbers: false, dateInputFormat: GIDDH_DATE_FORMAT, rangeInputFormat: GIDDH_DATE_FORMAT };
     public accounts$: Observable<IOption[]>;
     public groups$: Observable<IOption[]>;
     public voucherTypeList: Observable<IOption[]>;
@@ -77,7 +65,6 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
     /* This will hold the groups */
     public groups: IOption[] = [];
     public groupUniqueNames: any[] = [];
-
     /** Stores the search results pagination details */
     public accountsSearchResultsPaginationData = {
         page: 0,
@@ -136,46 +123,61 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** True if default accounts api call in progress */
+    public isDefaultAccountsLoading: boolean = true;
+    /** True if default stocks api call in progress */
+    public isDefaultStocksLoading: boolean = true;
+    /** True if default groups api call in progress */
+    public isDefaultGroupsLoading: boolean = true;
+    /** True if other details should be expanded by default */
+    public isExpanded: boolean = false;
+    /** Cloning advance search params to use in case of reset filters */
+    public advanceSearchRequestClone: AdvanceSearchRequest;
 
     constructor(
-        private _groupService: GroupService,
+        private groupService: GroupService,
         private inventoryService: InventoryService,
         private fb: FormBuilder,
         private modalService: BsModalService,
         private generalService: GeneralService,
         private searchService: SearchService,
+        private changeDetectionRef: ChangeDetectorRef
     ) {
 
     }
 
     public ngOnInit() {
+        this.setAdvanceSearchForm();
+
         this.loadDefaultAccountsSuggestions();
         this.loadDefaultStocksSuggestions();
         this.loadDefaultGroupsSuggestions();
-
-        if (!this.advanceSearchForm) {
-            this.setAdvanceSearchForm();
-        }
     }
 
-    public ngOnChanges(s: SimpleChanges) {
+    /**
+     * Lifecycle hook which updates input data if data has updated
+     *
+     * @param {SimpleChanges} changes
+     * @memberof AdvanceSearchModelComponent
+     */
+    public ngOnChanges(changes: SimpleChanges): void {
         if (!this.advanceSearchForm) {
             this.setAdvanceSearchForm();
         }
 
-        if ('advanceSearchRequest' in s && s.advanceSearchRequest.currentValue && s.advanceSearchRequest.currentValue !== s.advanceSearchRequest.previousValue && s.advanceSearchRequest.currentValue.dataToSend.bsRangeValue) {
-            this.fromDate = moment((s.advanceSearchRequest.currentValue as AdvanceSearchRequest).dataToSend.bsRangeValue[0], GIDDH_DATE_FORMAT).toDate();
-            this.toDate = moment((s.advanceSearchRequest.currentValue as AdvanceSearchRequest).dataToSend.bsRangeValue[1], GIDDH_DATE_FORMAT).toDate();
-            this.selectedDateRange = { startDate: s.advanceSearchRequest.currentValue.dataToSend.bsRangeValue[0], endDate: s.advanceSearchRequest.currentValue.dataToSend.bsRangeValue[1] };
-            this.selectedDateRangeUi = moment(s.advanceSearchRequest.currentValue.dataToSend.bsRangeValue[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(s.advanceSearchRequest.currentValue.dataToSend.bsRangeValue[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+        if ('advanceSearchRequest' in changes && changes.advanceSearchRequest.currentValue && changes.advanceSearchRequest.currentValue !== changes.advanceSearchRequest.previousValue && changes.advanceSearchRequest.currentValue.dataToSend?.bsRangeValue) {
+            this.fromDate = moment((changes.advanceSearchRequest.currentValue as AdvanceSearchRequest).dataToSend.bsRangeValue[0], GIDDH_DATE_FORMAT).toDate();
+            this.toDate = moment((changes.advanceSearchRequest.currentValue as AdvanceSearchRequest).dataToSend.bsRangeValue[1], GIDDH_DATE_FORMAT).toDate();
+            this.selectedDateRange = { startDate: changes.advanceSearchRequest.currentValue.dataToSend.bsRangeValue[0], endDate: changes.advanceSearchRequest.currentValue.dataToSend.bsRangeValue[1] };
+            this.selectedDateRangeUi = moment(changes.advanceSearchRequest.currentValue.dataToSend.bsRangeValue[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(changes.advanceSearchRequest.currentValue.dataToSend.bsRangeValue[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
             if (this.advanceSearchForm) {
                 let bsDaterangepicker = this.advanceSearchForm.get('bsRangeValue');
                 bsDaterangepicker?.patchValue(this.selectedDateRangeUi);
             }
         }
 
-        if (this.advanceSearchForm && 'advanceSearchRequest' in s && s.advanceSearchRequest.currentValue && s.advanceSearchRequest.currentValue.dataToSend) {
-            let dataToSend = s.advanceSearchRequest.currentValue.dataToSend;
+        if (this.advanceSearchForm && 'advanceSearchRequest' in changes && changes.advanceSearchRequest.currentValue && changes.advanceSearchRequest.currentValue.dataToSend) {
+            let dataToSend = changes.advanceSearchRequest.currentValue.dataToSend;
 
             this.groupUniqueNames = [];
 
@@ -185,10 +187,7 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
                 }
 
                 if (dataToSend.groupUniqueNames) {
-                    if (this.groups && this.groups.length > 0) {
-                        this.advanceSearchForm.get('groupUniqueNames')?.patchValue(dataToSend.groupUniqueNames);
-                    }
-
+                    this.advanceSearchForm.get('groupUniqueNames')?.patchValue(dataToSend.groupUniqueNames);
                     this.groupUniqueNames = dataToSend.groupUniqueNames;
                 }
 
@@ -203,22 +202,21 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
                 if (dataToSend.inventory) {
                     this.advanceSearchForm.get('inventory')?.patchValue(dataToSend.inventory);
                 }
+
+                if (dataToSend.amountOption) {
+                    this.advanceSearchForm.get('amountOption')?.patchValue(dataToSend.amountOption);
+                }
+
+                this.changeDetectionRef.detectChanges();
             }, 500);
         }
+
+        this.advanceSearchRequestClone = cloneDeep(this.advanceSearchRequest);
+        this.changeDetectionRef.detectChanges();
     }
 
-    /**
-     * Calls the API on component load when component is visible
-     *
-     * @memberof AdvanceSearchModelComponent
-     */
-    public loadComponent(): void {
-        this.loadDefaultAccountsSuggestions();
-        this.loadDefaultStocksSuggestions();
-        this.loadDefaultGroupsSuggestions();
-    }
     public resetAdvanceSearchModal() {
-        this.advanceSearchRequest.dataToSend.bsRangeValue = [moment().toDate(), moment().subtract(30, 'days').toDate()];
+        this.advanceSearchRequest.dataToSend.bsRangeValue = this.advanceSearchRequestClone.dataToSend.bsRangeValue;
         if (this.dropDowns) {
             this.dropDowns.forEach((el) => {
                 el.clear();
@@ -230,8 +228,8 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
         this.bsRangeValue.push(f._d);
         this.bsRangeValue.push(t._d);
         this.advanceSearchRequest.dataToSend = new AdvanceSearchModel();
+        this.advanceSearchRequest.dataToSend.bsRangeValue = this.advanceSearchRequestClone.dataToSend.bsRangeValue;
         this.advanceSearchRequest.page = 1;
-        this.showOtherDetails = false;
         this.setAdvanceSearchForm();
     }
 
@@ -247,6 +245,7 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
             amountEqualTo: [false],
             amountGreaterThan: [false],
             amount: ['', Validators.required],
+            amountOption: [false],
             includeDescription: [false, Validators.required],
             description: [null, Validators.required],
             includeTag: [false, Validators.required],
@@ -262,6 +261,8 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
                 includeInventory: true,
                 inventories: [[]],
                 quantity: null,
+                inventoryQty: false,
+                inventoryVal: false,
                 includeQuantity: false,
                 quantityLessThan: false,
                 quantityEqualTo: false,
@@ -276,6 +277,12 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
 
         if (this.advanceSearchRequest) {
             this.advanceSearchForm?.patchValue(this.advanceSearchRequest.dataToSend);
+
+            if(this.advanceSearchForm.get('includeDescription').value) {
+                this.isExpanded = true;
+            } else {
+                this.isExpanded = false;
+            }
         }
     }
 
@@ -332,13 +339,9 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
             this.advanceSearchRequest.dataToSend.bsRangeValue = [this.fromDate, this.toDate];
         }
         if (this.advanceSearchRequest.dataToSend && this.advanceSearchRequest.dataToSend.dateOnCheque) {
-            this.advanceSearchRequest.dataToSend.dateOnCheque = moment(this.advanceSearchRequest.dataToSend.dateOnCheque).format(GIDDH_DATE_FORMAT);
+            this.advanceSearchRequest.dataToSend.dateOnCheque = (moment(this.advanceSearchRequest.dataToSend.dateOnCheque).format('dddd') !== 'Invalid date') ? moment(this.advanceSearchRequest.dataToSend.dateOnCheque).format(GIDDH_DATE_FORMAT) : this.advanceSearchRequest.dataToSend.dateOnCheque;
         }
         this.closeModelEvent.emit({ advanceSearchData: this.advanceSearchRequest, isClose: false });
-    }
-
-    public resetAndSearch() {
-        this.resetAdvanceSearchModal();
     }
 
     public prepareRequest() {
@@ -507,7 +510,6 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
      * @memberof AdvanceSearchModelComponent
      */
     public toggleOtherDetails() {
-        this.showOtherDetails = !this.showOtherDetails;
         let val: boolean = !this.advanceSearchForm.get('includeDescription').value;
         this.advanceSearchForm.get('includeDescription')?.patchValue(val);
         if (!val) {
@@ -536,7 +538,7 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
 
         this.modalService.onHidden.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             setTimeout(() => {
-                document.querySelector('body').classList.add('modal-open');
+                document.querySelector('body')?.classList?.add('modal-open');
             }, 500);
         });
     }
@@ -746,7 +748,7 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
             if (this.advanceSearchRequest.branchUniqueName) {
                 requestObject.branchUniqueName = encodeURIComponent(this.advanceSearchRequest.branchUniqueName);
             }
-            this._groupService.searchGroups(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
+            this.groupService.searchGroups(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
                 if (data && data.body && data.body.results) {
                     const searchResults = data.body.results.map(result => {
                         return {
@@ -855,6 +857,8 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
             this.defaultStockPaginationData.page = this.stocksSearchResultsPaginationData.page;
             this.defaultStockPaginationData.totalPages = this.stocksSearchResultsPaginationData.totalPages;
             this.stocks = [...this.defaultStockSuggestions];
+            this.isDefaultStocksLoading = false;
+            this.changeDetectionRef.detectChanges();
         });
     }
 
@@ -875,6 +879,8 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
             this.defaultGroupPaginationData.page = this.groupsSearchResultsPaginationData.page;
             this.defaultGroupPaginationData.totalPages = this.groupsSearchResultsPaginationData.totalPages;
             this.searchedGroups = [...this.defaultGroupSuggestions];
+            this.isDefaultGroupsLoading = false;
+            this.changeDetectionRef.detectChanges();
         });
     }
 
@@ -895,6 +901,8 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
             this.defaultAccountPaginationData.page = this.accountsSearchResultsPaginationData.page;
             this.defaultAccountPaginationData.totalPages = this.accountsSearchResultsPaginationData.totalPages;
             this.accounts = [...this.defaultAccountSuggestions];
+            this.isDefaultAccountsLoading = false;
+            this.changeDetectionRef.detectChanges();
         });
     }
 

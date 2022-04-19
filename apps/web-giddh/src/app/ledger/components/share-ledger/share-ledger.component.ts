@@ -1,6 +1,6 @@
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 import { AccountsAction } from '../../../actions/accounts.actions';
-import { Component, EventEmitter, Input, Output, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, Inject, OnInit } from '@angular/core';
 import { LedgerService } from '../../../services/ledger.service';
 import { MagicLinkRequest } from '../../../models/api-models/Ledger';
 import { Store, select } from '@ngrx/store';
@@ -9,6 +9,7 @@ import { LedgerActions } from '../../../actions/ledger/ledger.actions';
 import * as moment from 'moment/moment';
 import { takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
     selector: 'share-ledger',
@@ -17,12 +18,7 @@ import { ReplaySubject } from 'rxjs';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class ShareLedgerComponent implements OnDestroy {
-    @Input() public accountUniqueName: string = '';
-    @Input() public from: string = '';
-    @Input() public to: string = '';
-    @Input() public advanceSearchRequest: any;
-    @Output() public closeShareLedgerModal: EventEmitter<boolean> = new EventEmitter();
+export class ShareLedgerComponent implements OnInit, OnDestroy {
     public email: string;
     public magicLink: string = '';
     public isCopied: boolean = false;
@@ -35,28 +31,35 @@ export class ShareLedgerComponent implements OnDestroy {
     public commonLocaleData: any = {};
 
     constructor(
-        private _ledgerService: LedgerService,
+        private ledgerService: LedgerService,
         private store: Store<AppState>,
-        private _ledgerActions: LedgerActions,
+        private ledgerActions: LedgerActions,
         private accountActions: AccountsAction,
-        private changeDetectorRef: ChangeDetectorRef) {
+        private changeDetectorRef: ChangeDetectorRef,
+        @Inject(MAT_DIALOG_DATA) public inputData) {
     }
 
-    public checkAccountSharedWith() {
-        this.store.dispatch(this._ledgerActions.sharedAccountWith(this.accountUniqueName));
+    /**
+     * Initializes the component
+     *
+     * @memberof ShareLedgerComponent
+     */
+    public ngOnInit() {
+        this.store.dispatch(this.ledgerActions.sharedAccountWith(this.inputData?.accountUniqueName));
         this.store.pipe(select(state => state.ledger.activeAccountSharedWith), takeUntil(this.destroyed$)).subscribe((data) => {
             this.activeAccountSharedWith = _.cloneDeep(data);
+            this.changeDetectorRef.detectChanges();
         });
     }
 
     public getMagicLink() {
         let magicLinkRequest = new MagicLinkRequest();
-        const data = _.cloneDeep(this.advanceSearchRequest);
-        data.dataToSend.bsRangeValue = [moment(this.from, GIDDH_DATE_FORMAT).toDate(), moment(this.to, GIDDH_DATE_FORMAT).toDate()];
+        const data = _.cloneDeep(this.inputData?.advanceSearchRequest);
+        data.dataToSend.bsRangeValue = [moment(this.inputData?.from, GIDDH_DATE_FORMAT).toDate(), moment(this.inputData?.to, GIDDH_DATE_FORMAT).toDate()];
         magicLinkRequest.from = moment(data.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT) ? moment(data.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT) : moment().add(-1, 'month').format(GIDDH_DATE_FORMAT);
         magicLinkRequest.to = moment(data.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT) ? moment(data.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT) : moment().format(GIDDH_DATE_FORMAT);
-        magicLinkRequest.branchUniqueName = this.advanceSearchRequest.branchUniqueName || '';
-        this._ledgerService.GenerateMagicLink(magicLinkRequest, this.accountUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(resp => {
+        magicLinkRequest.branchUniqueName = this.inputData?.advanceSearchRequest.branchUniqueName || '';
+        this.ledgerService.GenerateMagicLink(magicLinkRequest, this.inputData?.accountUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(resp => {
             if (resp.status === 'success') {
                 this.magicLink = resp.body.magicLink;
             } else {
@@ -77,28 +80,21 @@ export class ShareLedgerComponent implements OnDestroy {
         let userRole = {
             emailId: this.email,
             entity: 'account',
-            entityUniqueName: this.accountUniqueName,
+            entityUniqueName: this.inputData?.accountUniqueName,
         };
         let selectedPermission = 'view';
         this.store.dispatch(this.accountActions.shareEntity(userRole, selectedPermission.toLowerCase()));
         this.email = '';
         setTimeout(() => {
-            this.store.dispatch(this._ledgerActions.sharedAccountWith(this.accountUniqueName));
+            this.store.dispatch(this.ledgerActions.sharedAccountWith(this.inputData?.accountUniqueName));
         }, 1000);
     }
 
-    public unShareAccount(entryUniqueName, val) {
-        this.store.dispatch(this.accountActions.unShareEntity(entryUniqueName, 'account', this.accountUniqueName));
+    public unShareAccount(entryUniqueName) {
+        this.store.dispatch(this.accountActions.unShareEntity(entryUniqueName, 'account', this.inputData?.accountUniqueName));
         setTimeout(() => {
-            this.store.dispatch(this._ledgerActions.sharedAccountWith(this.accountUniqueName));
+            this.store.dispatch(this.ledgerActions.sharedAccountWith(this.inputData?.accountUniqueName));
         }, 1000);
-    }
-
-    public clear() {
-        this.email = '';
-        this.magicLink = '';
-        this.isCopied = false;
-        this.changeDetectorRef.detectChanges();
     }
 
     /**

@@ -1,7 +1,7 @@
 import { takeUntil } from 'rxjs/operators';
 import { Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { ReplaySubject } from 'rxjs';
-import { IDiscountList, LedgerDiscountClass } from '../../../models/api-models/SettingsDiscount';
+import { LedgerDiscountClass } from '../../../models/api-models/SettingsDiscount';
 import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
 import { SettingsDiscountService } from '../../../services/settings.discount.service';
 
@@ -10,6 +10,7 @@ import { SettingsDiscountService } from '../../../services/settings.discount.ser
     templateUrl: 'ledger-discount.component.html',
     styleUrls: [`./ledger-discount.component.scss`]
 })
+
 export class LedgerDiscountComponent implements OnInit, OnDestroy, OnChanges {
 
     public get defaultDiscount(): LedgerDiscountClass {
@@ -23,7 +24,6 @@ export class LedgerDiscountComponent implements OnInit, OnDestroy, OnChanges {
     @Output() public discountTotalUpdated: EventEmitter<{ discountTotal: number, isActive: any, discount: any }> = new EventEmitter();
     @Output() public hideOtherPopups: EventEmitter<boolean> = new EventEmitter<boolean>();
     public discountTotal: number;
-    public discountAccountsList: IDiscountList[] = [];
     public discountFromPer: boolean = true;
     public discountFromVal: boolean = true;
     public discountPercentageModal: number = 0;
@@ -36,15 +36,14 @@ export class LedgerDiscountComponent implements OnInit, OnDestroy, OnChanges {
     @Input() public suffixInput: string;
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    /** List of discounts */
-    private discountsList: any[] = [];
-    /** True if get discounts list api call in progress */
-    private getDiscountsLoading: boolean = false;
-
+    /** List of discounts */	
+    private discountsList: any[] = [];	
+    /** True if get discounts list api call in progress */	
+    private getDiscountsLoading: boolean = false;	
     constructor(
-        private settingsDiscountService: SettingsDiscountService
-    ) {
-        
+        private settingsDiscountService: SettingsDiscountService	
+    ) {	
+        	
     }
 
     public onFocusLastDiv(el) {
@@ -97,7 +96,7 @@ export class LedgerDiscountComponent implements OnInit, OnDestroy, OnChanges {
     /**
      * prepare discount obj
      */
-    public prepareDiscountList() {
+     public prepareDiscountList() {
         if (this.discountsList?.length > 0) {
             this.processDiscountList();
         } else {
