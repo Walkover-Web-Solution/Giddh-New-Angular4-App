@@ -54,7 +54,7 @@
                         *ngIf="fieldsAndVisibility?.header?.showCompanyAddress?.display"
                         [ngStyle]="{ 'text-align': 'center' }"
                     >
-                        <p>Ltd. 405-406, Capt. C. S. Naydu Arcade, 10/2, Indore 452001(M. P.)</p>
+                        <p>Walkover Web Solutions Indore-452018, MP, India</p>
                     </div>
                     <div
                         class="companyGstin"
@@ -62,7 +62,7 @@
                         [ngStyle]="{ 'text-align': 'center' }"
                     >
                         <strong>{{ fieldsAndVisibility.header.gstin?.label }}</strong>
-                        {{ companyGSTIN ? companyGSTIN : "12BAUCS7548A1Z4" }}
+                        {{ companyGSTIN ? companyGSTIN : "2344ACM9769L1Z0" }}
                     </div>
                     <div class="header-table-thermal">
                         <table class="thermal-table" cellspacing="0" cellpadding="0">
@@ -79,7 +79,7 @@
                                                     ? fieldsAndVisibility.header.billingGstin?.label
                                                     : "GSTIN"
                                             }}
-                                            11AAAAAA000Z0A1
+                                            2344ACM9769L1Z0
                                         </p>
                                     </td>
                                     <td class="invdate">
@@ -92,7 +92,7 @@
                                                             : "Invoice Date"
                                                     }}</strong>
                                                 </td>
-                                                <td class="text-right invdate-td">11/09/2017</td>
+                                                <td class="text-right invdate-td">02-03-2022</td>
                                             </tr>
                                             <tr *ngIf="fieldsAndVisibility.header.invoiceNumber?.display">
                                                 <td class="text-left invdate-td">
@@ -102,7 +102,7 @@
                                                             : "Invoice No."
                                                     }}</strong>
                                                 </td>
-                                                <td class="invoice-head text-right invdate-td">20170911-1</td>
+                                                <td class="invoice-head text-right invdate-td">K59</td>
                                             </tr>
                                         </ng-container>
                                         <ng-container
@@ -117,7 +117,7 @@
                                                     }}</strong>
                                                 </td>
                                                 <td>
-                                                    <p>11-09-2017</p>
+                                                    <p>02-03-2022</p>
                                                 </td>
                                             </tr>
                                             <tr *ngIf="fieldsAndVisibility.header.voucherNumber?.display">
@@ -128,7 +128,7 @@
                                                             : "Voucher No."
                                                     }}</strong>
                                                 </td>
-                                                <td>20170911-1</td>
+                                                <td>K59</td>
                                             </tr>
                                         </ng-container>
                                     </td>
@@ -186,72 +186,26 @@
                         <tbody>
                             <tr>
                                 <td *ngIf="fieldsAndVisibility.table.item?.display" class="text-left">
-                                    <span *ngIf="fieldsAndVisibility.table.item?.display"
-                                        >Dummy Product Edition 1
-                                    </span>
+                                    <span *ngIf="fieldsAndVisibility.table.item?.display">Stock Name Edition 1 </span>
                                 </td>
-                                <td *ngIf="fieldsAndVisibility.table.quantity?.display">2 No.</td>
+                                <td *ngIf="fieldsAndVisibility.table.quantity?.display">2,000</td>
                                 <td *ngIf="fieldsAndVisibility.table.rate?.display">
-                                    <span [innerHTML]="rupeeSymbol"></span>1000.00
+                                    <span [innerHTML]="rupeeSymbol"></span>500.00
                                 </td>
                                 <td *ngIf="fieldsAndVisibility.table.total?.display" class="text-right">
-                                    <span [innerHTML]="rupeeSymbol"></span>2006.00
+                                    <span [innerHTML]="rupeeSymbol"></span>10,00,000.00
                                 </td>
                             </tr>
                             <tr>
                                 <td *ngIf="fieldsAndVisibility.table.item?.display" class="text-left">
-                                    <span *ngIf="fieldsAndVisibility.table.item?.display"
-                                        >Dummy Product Edition 1
-                                    </span>
+                                    <span *ngIf="fieldsAndVisibility.table.item?.display">Stock Name Edition 2 </span>
                                 </td>
-                                <td *ngIf="fieldsAndVisibility.table.quantity?.display">2 No.</td>
+                                <td *ngIf="fieldsAndVisibility.table.quantity?.display">10</td>
                                 <td *ngIf="fieldsAndVisibility.table.rate?.display">
-                                    <span [innerHTML]="rupeeSymbol"></span>1000.00
+                                    <span [innerHTML]="rupeeSymbol"></span>500.00
                                 </td>
                                 <td *ngIf="fieldsAndVisibility.table.total?.display" class="text-right">
-                                    <span [innerHTML]="rupeeSymbol"></span>2006.00
-                                </td>
-                            </tr>
-                            <tr>
-                                <td *ngIf="fieldsAndVisibility.table.item?.display" class="text-left">
-                                    <span *ngIf="fieldsAndVisibility.table.item?.display"
-                                        >Dummy Product Edition 1
-                                    </span>
-                                </td>
-                                <td *ngIf="fieldsAndVisibility.table.quantity?.display">2 No.</td>
-                                <td *ngIf="fieldsAndVisibility.table.rate?.display">
-                                    <span [innerHTML]="rupeeSymbol"></span>1000.00
-                                </td>
-                                <td *ngIf="fieldsAndVisibility.table.total?.display" class="text-right">
-                                    <span [innerHTML]="rupeeSymbol"></span>2006.00
-                                </td>
-                            </tr>
-                            <tr>
-                                <td *ngIf="fieldsAndVisibility.table.item?.display" class="text-left">
-                                    <span *ngIf="fieldsAndVisibility.table.item?.display"
-                                        >Dummy Product Edition 1
-                                    </span>
-                                </td>
-                                <td *ngIf="fieldsAndVisibility.table.quantity?.display">2 No.</td>
-                                <td *ngIf="fieldsAndVisibility.table.rate?.display">
-                                    <span [innerHTML]="rupeeSymbol"></span>1000.00
-                                </td>
-                                <td *ngIf="fieldsAndVisibility.table.total?.display" class="text-right">
-                                    <span [innerHTML]="rupeeSymbol"></span>2006.00
-                                </td>
-                            </tr>
-                            <tr>
-                                <td *ngIf="fieldsAndVisibility.table.item?.display" class="text-left">
-                                    <span *ngIf="fieldsAndVisibility.table.item?.display"
-                                        >Dummy Product Edition 1
-                                    </span>
-                                </td>
-                                <td *ngIf="fieldsAndVisibility.table.quantity?.display">2 No.</td>
-                                <td *ngIf="fieldsAndVisibility.table.rate?.display">
-                                    <span [innerHTML]="rupeeSymbol"></span>1000.00
-                                </td>
-                                <td *ngIf="fieldsAndVisibility.table.total?.display" class="text-right">
-                                    <span [innerHTML]="rupeeSymbol"></span>2006.00
+                                    <span [innerHTML]="rupeeSymbol"></span>5,000.00
                                 </td>
                             </tr>
                         </tbody>
@@ -282,7 +236,7 @@
                                     </p>
                                 </td>
                                 <td class="text-left">
-                                    <p *ngIf="fieldsAndVisibility.table.totalQuantity?.display">4 No.</p>
+                                    <p *ngIf="fieldsAndVisibility.table.totalQuantity?.display">2010</p>
                                 </td>
 
                                 <td class="word-break text-right">
@@ -291,24 +245,24 @@
                                     </p>
                                 </td>
                                 <td class="last-balance-td text-right">
-                                    <p *ngIf="fieldsAndVisibility.table.discount?.display">20000.00</p>
+                                    <p *ngIf="fieldsAndVisibility.table.discount?.display">5,04,750.00</p>
                                 </td>
                             </tr>
                             <tr class="taxAmountVal" *ngIf="fieldsAndVisibility.footer.taxableAmount?.display">
                                 <td></td>
                                 <td></td>
                                 <td>{{ fieldsAndVisibility.table.taxableValue?.label }}</td>
-                                <td>1800.00</td>
+                                <td>90,000.00</td>
                             </tr>
                             <tr *ngIf="fieldsAndVisibility.footer.taxBifurcation?.display">
                                 <td class="text-left tax-gst">
-                                    CGST9% <span class="right-tax-amount">4500000.00</span>
+                                    GST9% <span class="right-tax-amount"> 45,000.00 </span>
                                 </td>
                                 <td></td>
                             </tr>
                             <tr *ngIf="fieldsAndVisibility.footer.taxBifurcation?.display">
                                 <td class="text-left tax-gst">
-                                    SGST9% <span class="right-tax-amount">4500000.00</span>
+                                    GST12% <span class="right-tax-amount">45,000.00</span>
                                 </td>
                                 <td></td>
                             </tr>
@@ -320,8 +274,8 @@
                             >
                                 <td></td>
                                 <td></td>
-                                <td>{{ fieldsAndVisibility.footer.totalDue?.label }}</td>
-                                <td>2124.00</td>
+                                <td>Invoice Total (INR)</td>
+                                <td>10,05,000.00</td>
                             </tr>
                         </table>
                         <div
@@ -335,7 +289,7 @@
                                     fieldsAndVisibility.footer.totalDue?.display
                                 "
                             >
-                                Two Thousand One Hundred Twenty Four Only
+                                Five Lakh Ninty Thousand Two Hundred Fifty Only
                             </p>
                         </div>
                     </article>

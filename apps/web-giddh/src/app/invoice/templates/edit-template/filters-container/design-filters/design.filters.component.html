@@ -60,7 +60,7 @@
                             </li>
                             <li
                                 (click)="onDesignChange('uniqueName', template?.uniqueName)"
-                                *ngIf="template?.templateType === 'thermal_template'"
+                                *ngIf="template?.templateType === 'thermal'"
                             >
                                 <img src="./assets/images/templates/{{ template.templateType }}.png" alt="" />
                                 <div class="beta-img">
@@ -101,11 +101,11 @@
             <li
                 [hidden]="templateUISectionVisibility.logo"
                 (click)="onChangeVisibility('logo')"
-                *ngIf="customTemplate.templateType !== 'thermal_template'"
+                *ngIf="customTemplate.templateType !== 'thermal'"
             >
                 <i class="ico-edit"></i> <label>Make logo edit</label>
             </li>
-            <li [hidden]="!templateUISectionVisibility.logo" *ngIf="customTemplate.templateType !== 'thermal_template'">
+            <li [hidden]="!templateUISectionVisibility.logo" *ngIf="customTemplate.templateType !== 'thermal'">
                 <i class="ico-edit"></i> <label>Make logo edit</label>
                 <div class="clearfix mr-t1">
                     <div class="logo-tool">
@@ -200,12 +200,12 @@
             <li
                 [hidden]="templateUISectionVisibility.color"
                 (click)="onChangeVisibility('color')"
-                *ngIf="customTemplate.templateType !== 'thermal_template'"
+                *ngIf="customTemplate.templateType !== 'thermal'"
             >
                 <i class="ico-swatch"></i> <label>Try other colour</label>
             </li>
             <!--<li *ngIf="ifColorSelected">-->
-            <li [hidden]="!templateUISectionVisibility.color" *ngIf="templateType !== 'thermal_template'">
+            <li [hidden]="!templateUISectionVisibility.color" *ngIf="templateType !== 'thermal'">
                 <i class="ico-swatch"></i> <label>Try other colour</label>
                 <!-- edit color  start -->
                 <div class="clearfix mr-t1">
@@ -242,12 +242,12 @@
             </li>
 
             <li
-                *ngIf="!templateUISectionVisibility.font && customTemplate.templateType !== 'thermal_template'"
+                *ngIf="!templateUISectionVisibility.font && customTemplate.templateType !== 'thermal'"
                 (click)="onChangeVisibility('font')"
             >
                 <i class="ico-txt"></i> <label>Select different fonts</label>
             </li>
-            <li *ngIf="templateUISectionVisibility.font && customTemplate.templateType !== 'thermal_template'">
+            <li *ngIf="templateUISectionVisibility.font && customTemplate.templateType !== 'thermal'">
                 <i class="ico-txt"></i> <label>Select different fonts</label>
                 <div class="row font-selector mr-t1 form-group">
                     <div class="col-9">
@@ -264,7 +264,7 @@
             </li>
             <ng-container>
                 <li
-                    *ngIf="!templateUISectionVisibility.fontSize && customTemplate.templateType !== 'thermal_template'"
+                    *ngIf="!templateUISectionVisibility.fontSize && customTemplate.templateType !== 'thermal'"
                     (click)="onChangeVisibility('fontSize')"
                 >
                     <i class="ico-txt"></i> <label>Select different fonts size</label>
@@ -288,7 +288,7 @@
             <li
                 [hidden]="templateUISectionVisibility.print"
                 (click)="onChangeVisibility('print')"
-                *ngIf="customTemplate.templateType !== 'thermal_template'"
+                *ngIf="customTemplate.templateType !== 'thermal'"
             >
                 <i class="ico-print"></i> <label>Edit print setting</label>
             </li>
