@@ -249,7 +249,7 @@
                                     <span class="max-character-value">{{
                                         customTemplate.templateType === "gst_template_a" ||
                                         customTemplate.templateType === "gst_template_e"
-                                            ? 15
+                                            ? 15 - customTemplate.sections["header"].data["invoiceDate"].label.length
                                             : 12 - customTemplate.sections["header"].data["invoiceDate"].label.length
                                     }}</span>
                                 </ng-container>
@@ -291,7 +291,7 @@
                                     <span class="max-character-value">{{
                                         customTemplate.templateType === "gst_template_a" ||
                                         customTemplate.templateType === "gst_template_e"
-                                            ? 15
+                                            ? 15 - customTemplate.sections["header"].data["invoiceNumber"].label.length
                                             : 14 - customTemplate.sections["header"].data["invoiceNumber"].label.length
                                     }}</span>
                                 </ng-container>
@@ -1108,7 +1108,7 @@
                                     ><span class="max-character-value">{{
                                         customTemplate.templateType === "gst_template_a" ||
                                         customTemplate.templateType === "gst_template_e"
-                                            ? 12
+                                            ? 12 - customTemplate.sections["table"].data["item"].label.length
                                             : 8 - customTemplate.sections["table"].data["item"].label.length
                                     }}</span>
                                 </ng-container>
@@ -1280,8 +1280,8 @@
                                     [maxlength]="
                                         customTemplate.templateType === 'gst_template_a' ||
                                         customTemplate.templateType === 'gst_template_e'
-                                            ? 12
-                                            : 5
+                                            ? 10
+                                            : 9
                                     "
                                     [class.error-box]="contentForm?.controls['rt1']?.errors?.maxlength"
                                     class="form-control"
@@ -1297,8 +1297,8 @@
                                     ><span class="max-character-value">{{
                                         customTemplate.templateType === "gst_template_a" ||
                                         customTemplate.templateType === "gst_template_e"
-                                            ? 12
-                                            : 5 - customTemplate.sections["table"].data["rate"].label.length
+                                            ? 10 - customTemplate.sections["table"].data["rate"].label.length
+                                            : 9 - customTemplate.sections["table"].data["rate"].label.length
                                     }}</span>
                                 </ng-container>
                             </td>
@@ -1447,7 +1447,7 @@
                                     ><span class="max-character-value">{{
                                         customTemplate.templateType === "gst_template_a" ||
                                         customTemplate.templateType === "gst_template_e"
-                                            ? 6
+                                            ? 6 - customTemplate.sections["table"].data["total"].label.length
                                             : 5 - customTemplate.sections["table"].data["total"].label.length
                                     }}</span>
                                 </ng-container>
@@ -2015,19 +2015,6 @@
                         />
                         Invoice Total
                         <div class="ml-3">
-                            <input
-                                type="text"
-                                value="Invoice Total"
-                                name="totalDue"
-                                maxlength="15"
-                                [class.error-box]="contentForm?.controls['totalDue']?.errors?.maxlength"
-                                hasFocus
-                                #totalDue="hasFocus"
-                                class="form-control"
-                                [(ngModel)]="customTemplate.sections['footer'].data['totalDue'].label"
-                                (ngModelChange)="onFieldChange(null, null, null)"
-                                [disabled]="!customTemplate.sections['footer'].data['totalDue'].display"
-                            />
                             <ng-container
                                 *ngIf="totalDue?.isFocused || contentForm?.controls['totalDue']?.errors?.maxlength"
                             >
