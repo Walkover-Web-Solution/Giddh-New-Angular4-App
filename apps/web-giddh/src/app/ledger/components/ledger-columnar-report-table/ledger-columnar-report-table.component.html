@@ -7,102 +7,191 @@
     <div class="reverse-table-report" *ngIf="!isLoading">
         <div class="container-fluid">
             <div class="invoice-preview table-responsive">
-                <table class="table basic giddh-table on-mobile-view">
-                    <thead [hidden]="!reportResponseResult?.length" class="thead-background1">
-                        <tr>
-                            <th class="text-center">#</th>
-                            <th>{{ commonLocaleData?.app_date }}</th>
-                            <th>{{ commonLocaleData?.app_particulars }}</th>
-                            <th>{{ commonLocaleData?.app_address }}</th>
-                            <th>{{ commonLocaleData?.app_voucher_type }}</th>
-                            <th>{{ commonLocaleData?.app_voucher_number }}</th>
-                            <th>{{ localeData?.voucher_refno }}</th>
-                            <th>{{ localeData?.voucher_refdate }}</th>
-                            <th>{{ commonLocaleData?.app_tax_number }}</th>
-                            <th>{{ localeData?.narration }}</th>
-                            <th>{{ commonLocaleData?.app_stock_name }}</th>
-                            <th>{{ commonLocaleData?.app_quantity }}</th>
-                            <th>{{ commonLocaleData?.app_unit }}</th>
-                            <th>{{ commonLocaleData?.app_rate }}</th>
-                            <th>{{ commonLocaleData?.app_value }}</th>
-                            <th>{{ localeData?.gross_total }}</th>
-                            <ng-container *ngFor="let item of columnarTableColumn">
-                                <th>
-                                    {{ item }}
-                                </th>
-                            </ng-container>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr
-                            *ngFor="
-                                let item of reportResponseResult;
-                                let itemIndexOfElement = index;
-                                trackBy: trackByEntryId
-                            "
+                <table mat-table [dataSource]="reportResponseResult" class="table basic giddh-table on-mobile-view">
+                    <ng-container matColumnDef="sno">
+                        <th mat-header-cell *matHeaderCellDef class="text-center">#</th>
+                        <td mat-cell *matCellDef="let item; let i = index">{{ i + 1 }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="date">
+                        <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_date }}</th>
+                        <td
+                            mat-cell
+                            *matCellDef="let item"
+                            [attr.data-title]="commonLocaleData?.app_date"
+                            class="text-center"
                         >
-                            <td data-title="#" class="text-center">{{ itemIndexOfElement + 1 }}</td>
-                            <td [attr.data-title]="commonLocaleData?.app_date" class="text-center">{{ item.date }}</td>
-                            <td [attr.data-title]="commonLocaleData?.app_particulars" class="text-center">
-                                {{ item.baseAccount }}
-                            </td>
-                            <td [attr.data-title]="commonLocaleData?.app_address" class="text-center">
-                                {{ item.address }}
-                            </td>
-                            <td [attr.data-title]="commonLocaleData?.app_voucher_type" class="text-center">
-                                {{ item.voucherType }}
-                            </td>
-                            <td [attr.data-title]="commonLocaleData?.app_voucher_number" class="text-center">
-                                {{ item.voucherNumber }}
-                            </td>
-                            <td [attr.data-title]="localeData?.voucher_refno" class="text-center">
-                                {{ item.voucherRefNo }}
-                            </td>
-                            <td [attr.data-title]="localeData?.voucher_refdate" class="text-center">
-                                {{ item.voucherRefDate }}
-                            </td>
-                            <td [attr.data-title]="commonLocaleData?.app_tax_number" class="text-center">
-                                {{ item.taxNumber }}
-                            </td>
-                            <td [attr.data-title]="localeData?.narration" class="text-center">{{ item.narration }}</td>
-                            <td [attr.data-title]="commonLocaleData?.app_stock_name" class="text-center">
-                                {{ item.stockName }}
-                            </td>
-                            <td [attr.data-title]="commonLocaleData?.app_quantity" class="text-center">
-                                {{ item.quantity }}
-                            </td>
-                            <td [attr.data-title]="commonLocaleData?.app_unit" class="text-center">
-                                {{ item.stockUnitCode }}
-                            </td>
-                            <td [attr.data-title]="commonLocaleData?.app_rate" class="text-center">
-                                <span class="d-inline-flex">
-                                    <amount-field [amount]="item.rate" [currencySymbol]="false" [currencyCode]="false">
-                                    </amount-field>
-                                </span>
-                            </td>
-                            <td [attr.data-title]="commonLocaleData?.app_value" class="text-center">
-                                <span class="d-inline-flex">
-                                    <amount-field [amount]="item.value" [currencySymbol]="false" [currencyCode]="false">
-                                    </amount-field>
-                                </span>
-                            </td>
-                            <td [attr.data-title]="localeData?.gross_total" class="text-center">
-                                <span class="d-inline-flex">
-                                    <amount-field
-                                        [amount]="item.grossTotal"
-                                        [currencySymbol]="false"
-                                        [currencyCode]="false"
-                                    >
-                                    </amount-field>
-                                </span>
-                            </td>
-                            <ng-container *ngFor="let key of columnarTableColumn">
-                                <td>
-                                    {{ item.accountNameAndBalanceMap[key] }}
-                                </td>
-                            </ng-container>
-                        </tr>
-                    </tbody>
+                            {{ item.date }}
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="particular">
+                        <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_particulars }}</th>
+                        <td
+                            mat-cell
+                            *matCellDef="let item"
+                            [attr.data-title]="commonLocaleData?.app_particulars"
+                            class="text-center"
+                        >
+                            {{ item.baseAccount }}
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="address">
+                        <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_address }}</th>
+                        <td
+                            mat-cell
+                            *matCellDef="let item"
+                            [attr.data-title]="commonLocaleData?.app_address"
+                            class="text-center"
+                        >
+                            {{ item.address }}
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="voucher_type">
+                        <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_voucher_type }}</th>
+                        <td
+                            mat-cell
+                            *matCellDef="let item"
+                            [attr.data-title]="commonLocaleData?.app_voucher_type"
+                            class="text-center"
+                        >
+                            {{ item.voucherType }}
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="voucher_number">
+                        <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_voucher_number }}</th>
+                        <td
+                            mat-cell
+                            *matCellDef="let item"
+                            [attr.data-title]="commonLocaleData?.app_voucher_number"
+                            class="text-center"
+                        >
+                            {{ item.voucherNumber || commonLocaleData?.app_not_available }}
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="voucher_refno">
+                        <th mat-header-cell *matHeaderCellDef>{{ localeData?.voucher_refno }}</th>
+                        <td
+                            mat-cell
+                            *matCellDef="let item"
+                            [attr.data-title]="localeData?.voucher_refno"
+                            class="text-center"
+                        >
+                            {{ item.voucherRefNo || commonLocaleData?.app_not_available }}
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="voucher_refdate">
+                        <th mat-header-cell *matHeaderCellDef>{{ localeData?.voucher_refdate }}</th>
+                        <td
+                            mat-cell
+                            *matCellDef="let item"
+                            [attr.data-title]="localeData?.voucher_refdate"
+                            class="text-center"
+                        >
+                            {{ item.voucherRefDate }}
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="tax_number">
+                        <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_tax_number }}</th>
+                        <td
+                            mat-cell
+                            *matCellDef="let item"
+                            [attr.data-title]="commonLocaleData?.app_tax_number"
+                            class="text-center"
+                        >
+                            {{ item.taxNumber }}
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="narration">
+                        <th mat-header-cell *matHeaderCellDef>{{ localeData?.narration }}</th>
+                        <td
+                            mat-cell
+                            *matCellDef="let item"
+                            [attr.data-title]="localeData?.narration"
+                            class="text-center"
+                        >
+                            {{ item.narration }}
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="stock_name">
+                        <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_stock_name }}</th>
+                        <td
+                            mat-cell
+                            *matCellDef="let item"
+                            [attr.data-title]="commonLocaleData?.app_stock_name"
+                            class="text-center"
+                        >
+                            {{ item.stockName }}
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="quantity">
+                        <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_quantity }}</th>
+                        <td
+                            mat-cell
+                            *matCellDef="let item"
+                            [attr.data-title]="commonLocaleData?.app_quantity"
+                            class="text-center"
+                        >
+                            {{ item.quantity }}
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="unit">
+                        <th mat-header-cell *matHeaderCellDef>{{ localeData?.unit }}</th>
+                        <td mat-cell *matCellDef="let item" [attr.data-title]="localeData?.unit" class="text-center">
+                            {{ item.stockUnitCode }}
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="rate">
+                        <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_rate }}</th>
+                        <td
+                            mat-cell
+                            *matCellDef="let item"
+                            [attr.data-title]="commonLocaleData?.app_rate"
+                            class="text-center"
+                        >
+                            <span class="d-inline-flex">
+                                <amount-field [amount]="item.rate" [currencySymbol]="false" [currencyCode]="false">
+                                </amount-field>
+                            </span>
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="value">
+                        <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_value }}</th>
+                        <td
+                            mat-cell
+                            *matCellDef="let item"
+                            [attr.data-title]="commonLocaleData?.app_value"
+                            class="text-center"
+                        >
+                            <span class="d-inline-flex">
+                                <amount-field [amount]="item.value" [currencySymbol]="false" [currencyCode]="false">
+                                </amount-field>
+                            </span>
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="gross_total">
+                        <th mat-header-cell *matHeaderCellDef>{{ localeData?.gross_total }}</th>
+                        <td
+                            mat-cell
+                            *matCellDef="let item"
+                            [attr.data-title]="localeData?.gross_total"
+                            class="text-center"
+                        >
+                            <span class="d-inline-flex">
+                                <amount-field
+                                    [amount]="item.grossTotal"
+                                    [currencySymbol]="false"
+                                    [currencyCode]="false"
+                                ></amount-field>
+                            </span>
+                        </td>
+                    </ng-container>
+                    <ng-container *ngFor="let key of columnarTableColumn">
+                        <ng-container [matColumnDef]="key">
+                            <th mat-header-cell *matHeaderCellDef>{{ key }}</th>
+                            <td mat-cell *matCellDef="let item">{{ item.accountNameAndBalanceMap[key] }}</td>
+                        </ng-container>
+                    </ng-container>
+                    <tr mat-header-row *matHeaderRowDef="tableHeadingColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: tableHeadingColumns"></tr>
                 </table>
             </div>
             <div class="pagination-wrapper" *ngIf="reportResponse && reportResponse?.totalPages > 1">

@@ -52,7 +52,8 @@ export class LedgerVM {
     };
     // bank transaction related
     public showEledger: boolean = false;
-    public bankTransactionsData: BlankLedgerVM[] = [];
+    public bankTransactionsCreditData: BlankLedgerVM[] = [];
+    public bankTransactionsDebitData: BlankLedgerVM[] = [];
     public selectedBankTxnUniqueName: string;
     public showBankLedgerPanel: boolean = false;
     public currentBankEntry: BlankLedgerVM;
@@ -63,45 +64,7 @@ export class LedgerVM {
 
     constructor() {
         this.noAccountChosenForNewEntry = false;
-        this.blankLedger = {
-            transactions: [
-                {
-                    ...new TransactionVM(),
-                    id: uuidv4(),
-                    type: 'DEBIT',
-                    discounts: [this.staticDefaultDiscount()],
-                    selectedAccount: null,
-                    isInclusiveTax: true,
-                },
-                {
-                    ...new TransactionVM(),
-                    id: uuidv4(),
-                    type: 'CREDIT',
-                    discounts: [this.staticDefaultDiscount()],
-                    selectedAccount: null,
-                    isInclusiveTax: true,
-                }],
-            voucherType: 'sal',
-            entryDate: moment().format(GIDDH_DATE_FORMAT),
-            unconfirmedEntry: false,
-            attachedFile: '',
-            attachedFileName: '',
-            tag: null,
-            description: '',
-            generateInvoice: false,
-            chequeNumber: '',
-            chequeClearanceDate: '',
-            invoiceNumberAgainstVoucher: '',
-            compoundTotal: 0,
-            convertedCompoundTotal: 0,
-            invoicesToBePaid: [],
-            otherTaxModal: new SalesOtherTaxesModal(),
-            tdsTcsTaxesSum: 0,
-            otherTaxesSum: 0,
-            otherTaxType: 'tcs',
-            exchangeRate: 1,
-            valuesInAccountCurrency: true
-        };
+        this.blankLedger = this.getBlankLedger();
     }
 
     public calculateReckonging(transactions: any) {
@@ -173,7 +136,7 @@ export class LedgerVM {
             bl.particular = bl.selectedAccount ? bl.selectedAccount.uniqueName : bl.particular;
             bl.isInclusiveTax = false;
             // filter taxes uniqueNames
-            bl.taxes = [...bl.taxesVm.filter(p => p.isChecked).map(p => p.uniqueName)];
+            bl.taxes = [...bl.taxesVm.filter(p => p.isChecked).map(p => p?.uniqueName)];
             // filter discount
             bl.discounts = bl.discounts.filter(p => p.amount && p.isActive);
             // delete local id
@@ -218,7 +181,7 @@ export class LedgerVM {
 
             if (parentGroups) {
                 parentGroups.forEach(key => {
-                    if (key.uniqueName === "reversecharge") {
+                    if (key?.uniqueName === "reversecharge") {
                         isReverseChargeAccount = true;
                     }
                 });
@@ -258,15 +221,18 @@ export class LedgerVM {
      * default CREDIT & DEBIT transactions to ledger when in company mode so as to open the ledger in READ only mode
      * but for ICICI banking ledger it requires the two default transaction to show the mapped transactions
      * and therefore isCompany is used to add the two default transaction manually at runtime if found true
-     * @returns {bankTransactionsData} array
+     * @returns void
      */
     public getReadyBankTransactionsForUI(data: IELedgerResponse[], isCompany?: boolean) {
         if (data && data.length > 0) {
-            this.bankTransactionsData = [];
+            this.bankTransactionsCreditData = [];
+            this.bankTransactionsDebitData = [];
             this.showEledger = true;
+            let creditLoop = 0, debitLoop = 0;
+            let blankLedger = this.getBlankLedger();
             forEach(data, (txn: IELedgerResponse) => {
                 let item: BlankLedgerVM;
-                item = cloneDeep(this.blankLedger);
+                item = cloneDeep(blankLedger);
                 if (isCompany) {
                     item.transactions = [
                         this.addNewTransaction('DEBIT'),
@@ -298,10 +264,19 @@ export class LedgerVM {
                         return n.type === bankTxn.type;
                     });
                 });
-                this.bankTransactionsData.push(item);
+                if(item.transactions[0].type === "CREDIT") {
+                    item.index = creditLoop;
+                    this.bankTransactionsCreditData.push(item);
+                    creditLoop++;
+                } else {
+                    item.index = debitLoop;
+                    this.bankTransactionsDebitData.push(item);
+                    debitLoop++;
+                }
             });
         } else {
-            this.bankTransactionsData = [];
+            this.bankTransactionsCreditData = [];
+            this.bankTransactionsDebitData = [];
             this.showEledger = false;
         }
     }
@@ -322,7 +297,7 @@ export class LedgerVM {
             // set transaction.particular to selectedAccount uniqueName
             bl.particular = bl.selectedAccount ? bl.selectedAccount.uniqueName : bl.particular;
             // filter taxes uniqueNames
-            bl.taxes = [...bl.taxesVm.filter(p => p.isChecked).map(p => p.uniqueName)];
+            bl.taxes = [...bl.taxesVm.filter(p => p.isChecked).map(p => p?.uniqueName)];
             // filter discount
             bl.discounts = bl.discounts.filter(p => p.amount && p.isActive);
             // delete local id
@@ -347,6 +322,54 @@ export class LedgerVM {
             name: '',
             particular: '',
             isActive: true
+        };
+    }
+
+    /**
+     * Returns blank ledger object
+     *
+     * @returns {*}
+     * @memberof LedgerVM
+     */
+    public getBlankLedger(): any {
+        return {
+            transactions: [
+                {
+                    ...new TransactionVM(),
+                    id: uuidv4(),
+                    type: 'DEBIT',
+                    discounts: [this.staticDefaultDiscount()],
+                    selectedAccount: null,
+                    isInclusiveTax: true,
+                },
+                {
+                    ...new TransactionVM(),
+                    id: uuidv4(),
+                    type: 'CREDIT',
+                    discounts: [this.staticDefaultDiscount()],
+                    selectedAccount: null,
+                    isInclusiveTax: true,
+                }],
+            voucherType: 'sal',
+            entryDate: moment().format(GIDDH_DATE_FORMAT),
+            unconfirmedEntry: false,
+            attachedFile: '',
+            attachedFileName: '',
+            tag: null,
+            description: '',
+            generateInvoice: false,
+            chequeNumber: '',
+            chequeClearanceDate: '',
+            invoiceNumberAgainstVoucher: '',
+            compoundTotal: 0,
+            convertedCompoundTotal: 0,
+            invoicesToBePaid: [],
+            otherTaxModal: new SalesOtherTaxesModal(),
+            tdsTcsTaxesSum: 0,
+            otherTaxesSum: 0,
+            otherTaxType: 'tcs',
+            exchangeRate: 1,
+            valuesInAccountCurrency: true
         };
     }
 }
@@ -385,7 +408,9 @@ export class BlankLedgerVM {
     public selectedCurrencyToDisplay?: 0 | 1 = 0;
     public passportNumber?: string;
     public touristSchemeApplicable?: boolean;
+    public index?: number;
     public mergePB?: boolean;
+    public referenceVoucher?: ReferenceVoucher;
 }
 
 export class IInvoiceLinkingRequest {
@@ -395,6 +420,13 @@ export class IInvoiceLinkingRequest {
 export class ILinkedInvoice {
     public invoiceUniqueName: string;
     public voucherType: string;
+}
+
+export class ReferenceVoucher {
+    public uniqueName: string;
+    public number?: any;
+    public voucherType?: string;
+    public date?: string;
 }
 
 export class TransactionVM {
@@ -429,6 +461,7 @@ export class TransactionVM {
     public invoiceLinkingRequest?: IInvoiceLinkingRequest;
     public voucherAdjustments?: VoucherAdjustments;
     public showDropdown?: boolean = false;
+    public referenceVoucher?: ReferenceVoucher;
 }
 
 export interface IInventory {

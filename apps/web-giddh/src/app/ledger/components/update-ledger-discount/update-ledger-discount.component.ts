@@ -1,8 +1,10 @@
 import { takeUntil } from 'rxjs/operators';
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
-import { ReplaySubject } from 'rxjs';
+import { Store, select } from '@ngrx/store';
+import { AppState } from '../../../store';
+import { Observable, ReplaySubject } from 'rxjs';
 import { INameUniqueName } from '../../../models/api-models/Inventory';
-import { LedgerDiscountClass } from '../../../models/api-models/SettingsDiscount';
+import { IDiscountList, LedgerDiscountClass } from '../../../models/api-models/SettingsDiscount';
 import { SettingsDiscountService } from '../../../services/settings.discount.service';
 
 export class UpdateLedgerDiscountData {
@@ -28,7 +30,8 @@ export class UpdateLedgerDiscountComponent implements OnInit, OnChanges, OnDestr
     @Input() public maskInput: string;
     @Input() public prefixInput: string;
     @Input() public suffixInput: string;
-
+    /** True if discount menu should not open */
+    @Input() public disabled: boolean = false;
     public discountTotal: number;
     public appliedDiscount: UpdateLedgerDiscountData[] = [];
     public discountFromPer: boolean = true;
@@ -41,15 +44,15 @@ export class UpdateLedgerDiscountComponent implements OnInit, OnChanges, OnDestr
     }
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    /** List of discounts */
-    private discountsList: any[] = [];
-    /** True if get discounts list api call in progress */
+    /** List of discounts */	
+    private discountsList: any[] = [];	
+    /** True if get discounts list api call in progress */	
     private getDiscountsLoading: boolean = false;
 
-    constructor(
-        private settingsDiscountService: SettingsDiscountService
-    ) {
-        
+    constructor(	
+        private settingsDiscountService: SettingsDiscountService	
+    ) {	
+        	
     }
 
     public ngOnInit() {
@@ -86,7 +89,7 @@ export class UpdateLedgerDiscountComponent implements OnInit, OnChanges, OnDestr
     /**
      * prepare discount obj
      */
-    public prepareDiscountList() {
+     public prepareDiscountList() {
         if (this.discountsList?.length > 0) {
             this.processDiscountList();
         } else {

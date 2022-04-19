@@ -1,5 +1,5 @@
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/core';
 import { LedgerService } from '../../../services/ledger.service';
 import { ExportLedgerRequest, MailLedgerRequest } from '../../../models/api-models/Ledger';
 import { validateEmail } from '../../../shared/helpers/helperFunctions';
@@ -13,6 +13,7 @@ import { Store, select } from '@ngrx/store';
 import { take, takeUntil } from 'rxjs/operators';
 import { download } from '@giddh-workspaces/utils';
 import { GeneralService } from '../../../services/general.service';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
     selector: 'export-ledger',
@@ -22,11 +23,6 @@ import { GeneralService } from '../../../services/general.service';
 })
 
 export class ExportLedgerComponent implements OnInit {
-    @Input() public accountUniqueName: string = '';
-    @Input() public advanceSearchRequest: any;
-    @Output() public closeExportLedgerModal: EventEmitter<boolean> = new EventEmitter();
-    /** Event emitter to show columnar report table */
-    @Output() public showColumnarTable: EventEmitter<{ isShowColumnarTable: boolean, exportRequest: ExportLedgerRequest }> = new EventEmitter();
     public emailTypeSelected: string = '';
     public exportAs: string = 'xlsx';
     public order: string = 'asc';
@@ -45,13 +41,13 @@ export class ExportLedgerComponent implements OnInit {
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
 
-    constructor(private _ledgerService: LedgerService, private _toaster: ToasterService, private _permissionDataService: PermissionDataService, private store: Store<AppState>, private generalService: GeneralService) {
+    constructor(private ledgerService: LedgerService, private toaster: ToasterService, private permissionDataService: PermissionDataService, private store: Store<AppState>, private generalService: GeneralService, @Inject(MAT_DIALOG_DATA) public inputData, public dialogRef: MatDialogRef<any>) {
         this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
-        if (this._permissionDataService.getData && this._permissionDataService.getData.length > 0) {
-            this._permissionDataService.getData.forEach(f => {
+        if (this.permissionDataService.getData && this.permissionDataService.getData.length > 0) {
+            this.permissionDataService.getData.forEach(f => {
                 if (f.name === 'LEDGER') {
                     let isAdmin = some(f.permissions, (prm) => prm.code === 'UPDT');
                     this.emailTypeSelected = isAdmin ? 'admin-detailed' : 'view-detailed';
@@ -70,8 +66,8 @@ export class ExportLedgerComponent implements OnInit {
         exportRequest.sort = this.order;
         exportRequest.format = this.exportAs;
         exportRequest.balanceTypeAsSign = this.balanceTypeAsSign;
-        exportRequest.branchUniqueName = this.advanceSearchRequest.branchUniqueName;
-        const body = _.cloneDeep(this.advanceSearchRequest);
+        exportRequest.branchUniqueName = this.inputData?.advanceSearchRequest.branchUniqueName;
+        const body = _.cloneDeep(this.inputData?.advanceSearchRequest);
         if (body && body.dataToSend) {
             body.dataToSend.balanceTypeAsSign = this.balanceTypeAsSign;
         }
@@ -86,29 +82,28 @@ export class ExportLedgerComponent implements OnInit {
         exportRequest.from = moment(body.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT) ? moment(body.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT) : moment().add(-1, 'month').format(GIDDH_DATE_FORMAT);
         exportRequest.to = moment(body.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT) ? moment(body.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT) : moment().format(GIDDH_DATE_FORMAT);
 
-        this._ledgerService.ExportLedger(exportRequest, this.accountUniqueName, body.dataToSend, exportByInvoiceNumber).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.ledgerService.ExportLedger(exportRequest, this.inputData?.accountUniqueName, body.dataToSend, exportByInvoiceNumber).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response.status === 'success') {
                 if (response.body) {
                     if (response.body.status === "success") {
                         if (response.queryString.fileType === 'xlsx') {
                             let blob = this.generalService.base64ToBlob(response.body.response, 'application/vnd.ms-excel', 512);
-                            return download(`${this.accountUniqueName}.xlsx`, blob, 'application/vnd.ms-excel');
+                            return download(`${this.inputData?.accountUniqueName}.xlsx`, blob, 'application/vnd.ms-excel');
                         } else if (response.queryString.fileType === 'pdf') {
                             let blob = this.generalService.base64ToBlob(response.body.response, 'application/pdf', 512);
-                            return download(`${this.accountUniqueName}.pdf`, blob, 'application/pdf');
+                            return download(`${this.inputData?.accountUniqueName}.pdf`, blob, 'application/pdf');
                         }
                     } else if (response.body.message) {
-                        this._toaster.infoToast(response.body.message);
+                        this.toaster.showSnackBar("info", response.body.message);
                     }
                 }
             } else {
-                this._toaster.errorToast(response.message, response.code);
+                this.toaster.showSnackBar("error", response.message, response.code);
             }
         });
     }
 
     public sendLedgEmail() {
-        this._toaster.clearAllToaster();
         let data = this.emailData;
         const sendData = new MailLedgerRequest();
         data = (data) ? data.replace(RegExp(' ', 'g'), '') : "";
@@ -119,7 +114,7 @@ export class ExportLedgerComponent implements OnInit {
                 if (validateEmail(cdata[i])) {
                     sendData.recipients.push(cdata[i]);
                 } else {
-                    this._toaster.warningToast(this.localeData?.email_error, 'Warning');
+                    this.toaster.showSnackBar("warning", this.localeData?.email_error, this.commonLocaleData?.app_warning);
                     data = '';
                     sendData.recipients = [];
                     break;
@@ -128,7 +123,7 @@ export class ExportLedgerComponent implements OnInit {
         }
 
         if (sendData && sendData.recipients && sendData.recipients.length > 0) {
-            const body = _.cloneDeep(this.advanceSearchRequest);
+            const body = _.cloneDeep(this.inputData?.advanceSearchRequest);
             if (!body.dataToSend.bsRangeValue) {
                 this.universalDate$.pipe(take(1)).subscribe(a => {
                     if (a) {
@@ -145,13 +140,13 @@ export class ExportLedgerComponent implements OnInit {
             emailRequestParams.format = this.exportAs;
             emailRequestParams.sort = this.order;
             emailRequestParams.withInvoice = this.withInvoiceNumber;
-            emailRequestParams.branchUniqueName = this.advanceSearchRequest.branchUniqueName;
-            this._ledgerService.MailLedger(sendData, this.accountUniqueName, emailRequestParams).pipe(takeUntil(this.destroyed$)).subscribe(sent => {
+            emailRequestParams.branchUniqueName = this.inputData?.advanceSearchRequest.branchUniqueName;
+            this.ledgerService.MailLedger(sendData, this.inputData?.accountUniqueName, emailRequestParams).pipe(takeUntil(this.destroyed$)).subscribe(sent => {
                 if (sent.status === 'success') {
-                    this._toaster.successToast(sent.body, sent.status);
+                    this.toaster.showSnackBar("success", sent.body, sent.status);
                     this.emailData = '';
                 } else {
-                    this._toaster.errorToast(sent.message, sent.status);
+                    this.toaster.showSnackBar("error", sent.message, sent.status);
                 }
             });
         }
@@ -180,8 +175,9 @@ export class ExportLedgerComponent implements OnInit {
         exportRequest.sort = this.order;
         exportRequest.format = this.exportAs;
         exportRequest.balanceTypeAsSign = this.balanceTypeAsSign;
-        exportRequest.branchUniqueName = this.advanceSearchRequest.branchUniqueName;
-        this.showColumnarTable.emit({
+        exportRequest.branchUniqueName = this.inputData?.advanceSearchRequest.branchUniqueName;
+
+        this.dialogRef.close({
             isShowColumnarTable: true,
             exportRequest: exportRequest
         });

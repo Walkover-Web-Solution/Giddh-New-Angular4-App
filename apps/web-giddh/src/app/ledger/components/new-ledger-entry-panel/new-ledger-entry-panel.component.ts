@@ -13,6 +13,7 @@ import {
     OnInit,
     Output,
     SimpleChanges,
+    TemplateRef,
     ViewChild,
 } from '@angular/core';
 import { select, Store } from '@ngrx/store';
@@ -24,9 +25,6 @@ import {
     SubVoucher,
 } from 'apps/web-giddh/src/app/app.constant';
 import { AccountResponse, AccountResponseV2 } from 'apps/web-giddh/src/app/models/api-models/Account';
-import { BsDatepickerDirective } from 'ngx-bootstrap/datepicker';
-import { ModalDirective } from 'ngx-bootstrap/modal';
-import { PopoverDirective } from 'ngx-bootstrap/popover';
 import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
 import { BehaviorSubject, Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
@@ -46,7 +44,6 @@ import {
     SalesOtherTaxesModal,
     VoucherTypeEnum,
 } from '../../../models/api-models/Sales';
-import { IDiscountList } from '../../../models/api-models/SettingsDiscount';
 import { TagRequest } from '../../../models/api-models/settingsTags';
 import { AdvanceSearchRequest } from '../../../models/interfaces/AdvanceSearchRequest';
 import { ILedgerTransactionItem } from '../../../models/interfaces/ledger.interface';
@@ -65,6 +62,10 @@ import { TaxControlComponent } from '../../../theme/tax-control/tax-control.comp
 import { AVAILABLE_ITC_LIST, BlankLedgerVM, TransactionVM } from '../../ledger.vm';
 import { LedgerDiscountComponent } from '../ledger-discount/ledger-discount.component';
 import { SettingsTagService } from '../../../services/settings.tag.service';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmModalComponent } from '../../../theme/new-confirm-modal/confirm-modal.component';
+import { NewConfirmationModalComponent } from '../../../theme/new-confirmation-modal/confirmation-modal.component';
+import { MatAccordion } from '@angular/material/expansion';
 
 /** New ledger entries */
 const NEW_LEDGER_ENTRIES = [
@@ -94,6 +95,10 @@ const NEW_LEDGER_ENTRIES = [
 })
 
 export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit {
+    /** Instance of mat accordion */
+    @ViewChild(MatAccordion) accordion: MatAccordion;
+    /** Instance of RCM checkbox */
+    @ViewChild("rcmCheckbox") public rcmCheckbox: ElementRef;
     /* This will hold local JSON data */
     @Input() public localeData: any = {};
     /* This will hold common JSON data */
@@ -140,14 +145,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     @Output() public saveOtherTax: EventEmitter<any> = new EventEmitter();
     @ViewChild('entryContent', { static: true }) public entryContent: ElementRef;
     @ViewChild('sh', { static: true }) public sh: ShSelectComponent;
-    @ViewChild(BsDatepickerDirective, { static: true }) public datepickers: BsDatepickerDirective;
-
-    @ViewChild('deleteAttachedFileModal', { static: true }) public deleteAttachedFileModal: ModalDirective;
     @ViewChild('discount', { static: false }) public discountControl: LedgerDiscountComponent;
     @ViewChild('tax', { static: false }) public taxControll: TaxControlComponent;
-
-    /** RCM popup instance */
-    @ViewChild('rcmPopup', { static: false }) public rcmPopup: PopoverDirective;
 
     public sourceWarehouse: true;
     public uploadInput: EventEmitter<UploadInput>;
@@ -156,12 +155,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public sessionKey$: Observable<string>;
     public companyName$: Observable<string>;
     public voucherTypeList: Observable<IOption[]>;
-    public showAdvanced: boolean;
     public dateMask = [/\d/, /\d/, '-', /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
     public isFileUploading: boolean = false;
     public isLedgerCreateInProcess$: Observable<boolean>;
-    // bank map eledger related
-    @ViewChild('confirmBankTxnMapModal', { static: true }) public confirmBankTxnMapModal: ModalDirective;
     public matchingEntriesData: ReconcileResponse[] = [];
     public showMatchingEntries: boolean = false;
     public mapBodyContent: string;
@@ -225,24 +221,38 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     /** account other applicable discount list which contains account's discount else immediate group's discount(inherited) */
     public accountOtherApplicableDiscount: any[] = [];
     /** Adjustment modal */
-    @ViewChild('adjustPaymentModal', { static: true }) public adjustPaymentModal: ModalDirective;
+    @ViewChild('adjustPaymentModal', { static: true }) public adjustPaymentModal: TemplateRef<any>;
     /** Stores the multi-lingual label of current voucher */
     public currentVoucherLabel: string;
-
     // private below
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** True, if exchange rate is swapped */
     private isExchangeRateSwapped: boolean = false;
     /** True if entry value is calculated inclusively */
     private isInclusiveEntry: boolean = false;
+    /** Dialog reference for adjustment modal */
+    public adjustmentDialogRef: any;
+    /** True if datepicker is open */
+    public isDatepickerOpen: boolean = false;
+    /** True if more details is open */
+    public isMoreDetailsOpen: boolean;
+    /** Stores the voucher API version of current company */
+    public voucherApiVersion: 1 | 2;
+    /** True if user itself checked the generate voucher  */
+    public manualGenerateVoucherChecked: boolean = false;
+    /** Holds input to get invoice list request params */
+    public invoiceListRequestParams: any = {};
+    /** Round off amount */
+    public calculatedRoundOff: number = 0;
 
     constructor(private store: Store<AppState>,
         private cdRef: ChangeDetectorRef,
         private generalService: GeneralService,
-        private _ledgerService: LedgerService,
-        private _loaderService: LoaderService,
+        private ledgerService: LedgerService,
+        private loaderService: LoaderService,
         private settingsUtilityService: SettingsUtilityService,
-        private _toasty: ToasterService,
+        private toaster: ToasterService,
+        public dialog: MatDialog,
         private settingsTagService: SettingsTagService
     ) {
         this.companyTaxesList$ = this.store.pipe(select(p => p.company && p.company.taxes), takeUntil(this.destroyed$));
@@ -283,7 +293,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             subVoucher: SubVoucher.AdvanceReceipt
         }]);
 
-        this.showAdvanced = false;
         this.uploadInput = new EventEmitter<UploadInput>();
         this.fileUploadOptions = { concurrency: 0 };
         this.currentTxn.advanceReceiptAmount = this.currentTxn.amount;
@@ -294,8 +303,10 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         });
 
         this.store.pipe(select(appState => appState.warehouse.warehouses), take(1)).subscribe((warehouses: any) => {
-            if (warehouses) {
-                const warehouseData = this.settingsUtilityService.getFormattedWarehouseData(warehouses.results);
+            if (warehouses?.results) {
+                let warehouseResults = cloneDeep(warehouses.results);
+                warehouseResults = warehouseResults?.filter(warehouse => !warehouse.isArchived);
+                const warehouseData = this.settingsUtilityService.getFormattedWarehouseData(warehouseResults);
                 this.warehouses = warehouseData.formattedWarehouses;
                 this.defaultWarehouse = (warehouseData.defaultWarehouse) ? warehouseData.defaultWarehouse.uniqueName : '';
                 this.selectedWarehouse = String(this.defaultWarehouse);
@@ -349,6 +360,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             this.availableItcList[1].label = this.localeData?.import_services;
             this.availableItcList[2].label = this.localeData?.others;
         }
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
     }
 
     @HostListener('click', ['$event'])
@@ -359,14 +371,14 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     }
 
     public ngOnChanges(changes: SimpleChanges): void {
-        if (this.currentTxn && this.currentTxn.selectedAccount) {
+        if (changes?.currentTxn?.currentValue?.selectedAccount) {
             this.currentTxn.advanceReceiptAmount = giddhRoundOff(this.currentTxn.amount, this.giddhBalanceDecimalPlaces);
             if (!this.currentTxn.selectedAccount.stock) {
                 this.selectedWarehouse = String(this.defaultWarehouse);
             }
             this.calculatePreAppliedTax();
             this.preparePreAppliedDiscounts();
-            if (this.blankLedger.otherTaxModal.appliedOtherTax && this.blankLedger.otherTaxModal.appliedOtherTax.uniqueName) {
+            if (this.blankLedger?.otherTaxModal?.appliedOtherTax && this.blankLedger?.otherTaxModal?.appliedOtherTax?.uniqueName) {
                 this.blankLedger.isOtherTaxesApplicable = true;
             }
         }
@@ -380,9 +392,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public calculatePreAppliedTax(): void {
         let activeAccountTaxes = [];
         if (this.activeAccount && this.activeAccount.applicableTaxes) {
-            activeAccountTaxes = this.activeAccount.applicableTaxes.map((tax) => tax.uniqueName);
-            if (this.activeAccount.otherApplicableTaxes && this.activeAccount.otherApplicableTaxes.length && activeAccountTaxes && activeAccountTaxes.length) {
-                if (this.activeAccount.otherApplicableTaxes[0].uniqueName !== activeAccountTaxes[0] && activeAccountTaxes.includes(this.activeAccount.otherApplicableTaxes[0].uniqueName)) {
+            activeAccountTaxes = this.activeAccount.applicableTaxes.map((tax) => tax?.uniqueName);
+            if (this.activeAccount.otherApplicableTaxes?.length && activeAccountTaxes?.length) {
+                if (this.activeAccount.otherApplicableTaxes[0]?.uniqueName !== activeAccountTaxes[0] && activeAccountTaxes.includes(this.activeAccount.otherApplicableTaxes[0]?.uniqueName)) {
                     activeAccountTaxes = activeAccountTaxes.reverse();
                 }
             }
@@ -404,7 +416,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
         if (this.taxListForStock && this.taxListForStock.length > 0) {
             this.taxListForStock.forEach(tl => {
-                let tax = (companyTaxes && companyTaxes.length > 0) ? companyTaxes.find(f => f.uniqueName === tl) : undefined;
+                let tax = (companyTaxes && companyTaxes.length > 0) ? companyTaxes.find(f => f?.uniqueName === tl) : undefined;
                 if (tax) {
                     switch (tax.taxType) {
                         case 'tcsrc':
@@ -469,14 +481,14 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         if (this.accountOtherApplicableDiscount && this.accountOtherApplicableDiscount.length > 0) {
             this.accountOtherApplicableDiscount.forEach(item => {
                 if (item && event.discount && item.uniqueName === event.discount.discountUniqueName) {
-                    item.isActive = event.isActive.target.checked;
+                    item.isActive = event.isActive.target?.checked;
                 }
             });
         }
         if (this.currentTxn && this.currentTxn.selectedAccount && this.currentTxn.selectedAccount.accountApplicableDiscounts) {
             this.currentTxn.selectedAccount.accountApplicableDiscounts.forEach(item => {
                 if (item && event.discount && item.uniqueName === event.discount.discountUniqueName) {
-                    item.isActive = event.isActive.target.checked;
+                    item.isActive = event.isActive.target?.checked;
                 }
             });
         }
@@ -507,7 +519,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 /** apply account's discount (default) */
                 if (this.currentTxn.discounts && this.currentTxn.discounts.length && this.accountOtherApplicableDiscount && this.accountOtherApplicableDiscount.length) {
                     this.currentTxn.discounts.map(item => {
-                        let discountItem = this.accountOtherApplicableDiscount.find(element => element.uniqueName === item.discountUniqueName);
+                        let discountItem = this.accountOtherApplicableDiscount.find(element => element?.uniqueName === item?.discountUniqueName);
                         if (discountItem && discountItem.uniqueName) {
                             item.isActive = discountItem.isActive;
                         }
@@ -688,6 +700,14 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         } else {
             this.blankLedger.compoundTotal = giddhRoundOff((creditTotal - debitTotal), this.giddhBalanceDecimalPlaces);
         }
+
+        if (this.voucherApiVersion === 2 && (this.blankLedger.voucherType === "sal" || this.blankLedger.voucherType === "pur" || this.blankLedger.voucherType === "credit note" || this.blankLedger.voucherType === "debit note")) {
+            this.calculatedRoundOff = Number(Math.round(this.blankLedger.compoundTotal) - this.blankLedger.compoundTotal);
+            this.blankLedger.compoundTotal = Number(((this.blankLedger.compoundTotal) + this.calculatedRoundOff).toFixed(2));
+        } else {
+            this.calculatedRoundOff = 0;
+        }
+
         this.blankLedger.convertedCompoundTotal = this.calculateConversionRate(this.blankLedger.compoundTotal);
     }
 
@@ -742,29 +762,40 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             this.uploadInput.emit(event);
         } else if (output.type === 'start') {
             this.isFileUploading = true;
-            this._loaderService.show();
+            this.loaderService.show();
         } else if (output.type === 'done') {
-            this._loaderService.hide();
+            this.loaderService.hide();
             if (output.file.response.status === 'success') {
                 this.isFileUploading = false;
-                this.blankLedger.attachedFile = output.file.response.body.uniqueName;
-                this.blankLedger.attachedFileName = output.file.response.body.name;
-                this._toasty.successToast(this.localeData?.file_uploaded);
+                this.blankLedger.attachedFile = output.file.response.body?.uniqueName;
+                this.blankLedger.attachedFileName = output.file.response.body?.name;
+                this.toaster.showSnackBar("success", this.localeData?.file_uploaded);
             } else {
                 this.isFileUploading = false;
                 this.blankLedger.attachedFile = '';
                 this.blankLedger.attachedFileName = '';
-                this._toasty.errorToast(output.file.response.message);
+                this.toaster.showSnackBar("error", output.file.response.message);
             }
         }
     }
 
     public showDeleteAttachedFileModal() {
-        this.deleteAttachedFileModal.show();
-    }
+        let dialogRef = this.dialog.open(ConfirmModalComponent, {
+            width: '630px',
+            data: {
+                title: this.commonLocaleData?.app_delete,
+                body: this.localeData?.confirm_delete_file,
+                ok: this.commonLocaleData?.app_yes,
+                cancel: this.commonLocaleData?.app_no,
+                permanentlyDeleteMessage: this.localeData?.delete_entries_content
+            }
+        });
 
-    public hideDeleteAttachedFileModal() {
-        this.deleteAttachedFileModal.hide();
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            if(response) {
+                this.deleteAttachedFile();
+            }
+        });
     }
 
     public unitChanged(stockUnitCode: string) {
@@ -776,18 +807,17 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     }
 
     public deleteAttachedFile() {
-        this._ledgerService.removeAttachment(this.blankLedger.attachedFile).subscribe((response) => {
+        this.ledgerService.removeAttachment(this.blankLedger?.attachedFile).subscribe((response) => {
             if (response?.status === 'success') {
                 this.blankLedger.attachedFile = '';
                 this.blankLedger.attachedFileName = '';
-                this.hideDeleteAttachedFileModal();
                 if (this.webFileInput && this.webFileInput.nativeElement) {
                     this.webFileInput.nativeElement.value = '';
                 }
                 this.detectChanges();
-                this._toasty.successToast(this.localeData?.remove_file);
+                this.toaster.showSnackBar("success", this.localeData?.remove_file);
             } else {
-                this._toasty.errorToast(response?.message)
+                this.toaster.showSnackBar("error", response?.message)
             }
         });
     }
@@ -804,7 +834,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         o.accountUniqueName = this.trxRequest.accountUniqueName;
         o.from = (this.trxRequest.from) ? moment(this.trxRequest.from).format(GIDDH_DATE_FORMAT) : "";
         o.to = (this.trxRequest.to) ? moment(this.trxRequest.to).format(GIDDH_DATE_FORMAT) : "";
-        this._ledgerService.GetReconcile(o.accountUniqueName, o.from, o.to, o.chequeNumber).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+        this.ledgerService.GetReconcile(o.accountUniqueName, o.from, o.to, o.chequeNumber).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             let data: BaseResponse<ReconcileResponse[], string> = res;
             if (data.status === 'success') {
                 if (data.body && data.body.length) {
@@ -826,29 +856,40 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                     this.showErrMsgOnUI();
                 }
             } else {
-                this._toasty.errorToast(data.message, data.code);
+                this.toaster.showSnackBar("error", data.message, data.code);
             }
         });
     }
 
     public showErrMsgOnUI() {
-        this._toasty.warningToast(this.localeData?.no_matching_entry_found);
+        this.toaster.showSnackBar("warning", this.localeData?.no_matching_entry_found);
     }
 
     public confirmBankTransactionMap(item: ReconcileResponse) {
         this.selectedItemToMap = item;
         this.mapBodyContent = this.localeData?.map_cheque_bank_transaction;
         this.mapBodyContent = this.mapBodyContent.replace("[CHEQUE_NUMBER]", item.chequeNumber);
-        this.confirmBankTxnMapModal.show();
-    }
 
-    public hideConfirmBankTxnMapModal() {
-        this.confirmBankTxnMapModal.hide();
+        let dialogRef = this.dialog.open(ConfirmModalComponent, {
+            width: '630px',
+            data: {
+                title: this.commonLocaleData?.map_bank_entry,
+                body: this.mapBodyContent,
+                ok: this.commonLocaleData?.app_yes,
+                cancel: this.commonLocaleData?.app_no
+            }
+        });
+
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            if(response) {
+                this.mapBankTransaction();
+            }
+        });
     }
 
     public mapBankTransaction() {
 
-        if (this.blankLedger.transactionId && this.selectedItemToMap.uniqueName) {
+        if (this.blankLedger.transactionId && this.selectedItemToMap?.uniqueName) {
             let model = {
                 uniqueName: this.selectedItemToMap.uniqueName
             };
@@ -856,17 +897,16 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 accountUniqueName: this.trxRequest.accountUniqueName,
                 transactionId: this.blankLedger.transactionId
             };
-            this._ledgerService.MapBankTransactions(model, unqObj).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+            this.ledgerService.MapBankTransactions(model, unqObj).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                 if (res.status === 'success') {
                     if (typeof (res.body) === 'string') {
-                        this._toasty.successToast(res.body);
+                        this.toaster.showSnackBar("success", res.body);
                     } else {
-                        this._toasty.successToast(this.localeData?.entry_mapped);
+                        this.toaster.showSnackBar("success", this.localeData?.entry_mapped);
                     }
-                    this.hideConfirmBankTxnMapModal();
                     this.clickedOutsideEvent.emit(false);
                 } else {
-                    this._toasty.errorToast(res.message, res.code);
+                    this.toaster.showSnackBar("error", res.message, res.code);
                 }
             });
         }
@@ -909,10 +949,28 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         }
     }
 
+    /**
+     * This maintains state of datepicker (open/closed)
+     *
+     * @param {*} event
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    public datepickerState(event: any): void {
+        this.isDatepickerOpen = event;
+    }
+
     @HostListener('window:click', ['$event'])
-    public clickedOutsideOfComponent(e) {
-        let classList = e.path.map(m => {
-            return m.classList;
+    public clickedOutsideOfComponent(event) {
+        this.clickedOutside(event);
+    }
+
+    public clickedOutside(event: any): void {
+        if(this.isDatepickerOpen) {
+            return;
+        }
+
+        let classList = event.path.map(m => {
+            return m?.classList;
         });
 
         if (classList && classList instanceof Array) {
@@ -920,21 +978,22 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 if (!className) {
                     return;
                 }
-                return className.contains('chkclrbsdp') || className.contains('currencyToggler') || className.contains('bs-datepicker');
+                return className.contains('currency-toggler') || className.contains("cdk-overlay-container") || className.contains('mat-calendar');
             });
 
             if (shouldNotClose) {
                 return;
             }
         }
-        if (!e.relatedTarget || !this.entryContent?.nativeElement.contains(e.relatedTarget)) {
-            this.clickedOutsideEvent.emit(e);
+
+        if (!event.relatedTarget || !this.entryContent?.nativeElement.contains(event.relatedTarget)) {
+            this.clickedOutsideEvent.emit(event);
         }
     }
 
     public selectInvoice(invoiceNo, ev) {
-        invoiceNo.isSelected = ev.target.checked;
-        if (ev.target.checked) {
+        invoiceNo.isSelected = ev?.target?.checked;
+        if (ev?.target?.checked) {
             this.blankLedger.invoicesToBePaid.push(invoiceNo.label);
         } else {
             let indx = this.blankLedger.invoicesToBePaid.indexOf(invoiceNo.label);
@@ -951,16 +1010,23 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public creditNoteInvoiceSelected(event: any): void {
         if (event && event.value && event.additional) {
             if (this.currentTxn) {
-                this.currentTxn.invoiceLinkingRequest = {
-                    linkedInvoices: [
-                        {
-                            invoiceUniqueName: event.value,
-                            voucherType: event.additional.voucherType
-                        }
-                    ]
+                if (this.voucherApiVersion === 2) {
+                    this.currentTxn.referenceVoucher = {
+                        uniqueName: event.value
+                    }
+                    this.selectedInvoiceAmount = event.additional.unadjustedAmount.amountForAccount;
+                } else {
+                    this.currentTxn.invoiceLinkingRequest = {
+                        linkedInvoices: [
+                            {
+                                invoiceUniqueName: event.value,
+                                voucherType: event.additional.voucherType
+                            }
+                        ]
+                    }
+                    this.selectedInvoiceAmount = event.additional.balanceDue.amountForAccount;
                 }
             }
-            this.selectedInvoiceAmount = event.additional.balanceDue.amountForAccount;
             this.blankLedger.generateInvoice = true;
         }
     }
@@ -974,9 +1040,13 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         this.forceClear$ = observableOf({ status: true });
         if (this.currentTxn) {
             this.currentTxn.invoiceLinkingRequest = null;
+            this.currentTxn.referenceVoucher = null;
         }
         this.selectedInvoiceForCreditNote = null;
-        this.blankLedger.generateInvoice = false;
+
+        if(!this.currentTxn?.voucherAdjustments?.adjustments?.length) {
+            this.blankLedger.generateInvoice = this.manualGenerateVoucherChecked;
+        }
     }
 
     /**
@@ -993,13 +1063,17 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         } else if (event.value === VoucherTypeEnum.creditNote || event.value === VoucherTypeEnum.debitNote) {
             this.shouldShowAdvanceReceipt = false;
             this.removeSelectedInvoice();
-            this.getInvoiceListsForCreditNote.emit(event.value);
-            this.blankLedger.generateInvoice = true;
+            this.getInvoiceListsForCreditNote.emit([this.currentTxn, event.value]);
             this.isAdvanceReceipt = false;
         } else {
             this.shouldShowAdvanceReceipt = false;
             this.isAdvanceReceipt = false;
         }
+
+        if (this.voucherApiVersion === 2 && this.isAdvanceReceipt) {
+            this.blankLedger.generateInvoice = true;
+        }
+
         this.handleAdvanceReceiptChange();
         this.currentVoucherLabel = this.generalService.getCurrentVoucherLabel(this.blankLedger?.voucherType, this.commonLocaleData);
     }
@@ -1019,6 +1093,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             this.blankLedger.tdsTcsTaxesSum = 0;
             this.blankLedger.otherTaxModal.itemLabel = '';
             return;
+        }
+        if(!this.blankLedger?.otherTaxModal) {
+            this.blankLedger.otherTaxModal = new SalesOtherTaxesModal();
         }
         this.blankLedger.otherTaxModal.itemLabel = this.currentTxn && this.currentTxn.selectedAccount ?
             this.currentTxn.selectedAccount.stock ? `${this.currentTxn.selectedAccount.name}(${this.currentTxn.selectedAccount.stock.name})` :
@@ -1043,7 +1120,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             return;
         }
 
-        if (modal.appliedOtherTax && modal.appliedOtherTax.uniqueName) {
+        if (modal?.appliedOtherTax && modal?.appliedOtherTax?.uniqueName) {
             const amount = (this.isAdvanceReceipt) ? transaction.advanceReceiptAmount : transaction.amount;
             if (modal.tcsCalculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount) {
                 taxableValue = Number(amount) - transaction.discount;
@@ -1052,7 +1129,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 taxableValue = (rawAmount + transaction.tax);
             }
 
-            let tax = companyTaxes.find(ct => ct.uniqueName === modal.appliedOtherTax.uniqueName);
+            let tax = companyTaxes.find(ct => ct?.uniqueName === modal?.appliedOtherTax?.uniqueName);
             if (tax) {
                 this.blankLedger.otherTaxType = ['tcsrc', 'tcspay'].includes(tax.taxType) ? 'tcs' : 'tds';
             }
@@ -1162,14 +1239,44 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     }
 
     /**
+     * This will reset the state of checkbox and ngModel to make sure we update it based on user confirmation later
+     *
+     * @param {*} event
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    public changeRcmCheckboxState(event: any): void {
+        this.isRcmEntry = !this.isRcmEntry;
+        this.toggleRcmCheckbox(event, 'checkbox');
+    }
+
+    /**
      * Toggle the RCM checkbox based on user confirmation
      *
      * @param {*} event Click event
      * @memberof NewLedgerEntryPanelComponent
      */
-    public toggleRcmCheckbox(event: any): void {
-        event.preventDefault();
-        this.rcmConfiguration = this.generalService.getRcmConfiguration(event.target.checked, this.commonLocaleData);
+    public toggleRcmCheckbox(event: any, element: string): void {
+        let isChecked;
+
+        if(element === "checkbox") {
+            isChecked = event?.checked;
+            this.rcmCheckbox['checked'] = !isChecked;
+        } else {
+            isChecked = !event?._checked;
+        }
+
+        this.rcmConfiguration = this.generalService.getRcmConfiguration(isChecked, this.commonLocaleData);
+
+        let dialogRef = this.dialog.open(NewConfirmationModalComponent, {
+            width: '630px',
+            data: {
+                configuration: this.rcmConfiguration
+            }
+        });
+
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            this.handleRcmChange(response);
+        });
     }
 
     /**
@@ -1183,12 +1290,11 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         if (action === this.commonLocaleData?.app_yes) {
             // Toggle the state of RCM as user accepted the terms of RCM modal
             this.isRcmEntry = !this.isRcmEntry;
+            this.rcmCheckbox['checked'] = this.isRcmEntry;
             this.calculateTotal();
         }
         this.currentTxn['subVoucher'] = this.isRcmEntry ? SubVoucher.ReverseCharge : '';
-        if (this.rcmPopup) {
-            this.rcmPopup.hide();
-        }
+        this.cdRef.detectChanges();
     }
 
     /**
@@ -1251,7 +1357,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             const adjustments = cloneDeep(event.adjustVoucherData.adjustments);
             if (adjustments && adjustments.length > 0) {
                 adjustments.forEach(adjustment => {
-                    adjustment.voucherNumber = adjustment.voucherNumber === '-' ? '' : adjustment.voucherNumber;
+                    adjustment.voucherNumber = this.generalService.getVoucherNumberLabel(adjustment.voucherType, adjustment.voucherNumber, this.commonLocaleData);
                 });
             }
             this.currentTxn.voucherAdjustments = {
@@ -1269,10 +1375,16 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                     this.isAdjustReceiptSelected = false;
                 }
                 this.isAdjustVoucherSelected = false;
+
+                if(!this.selectedInvoiceForCreditNote) {
+                    this.blankLedger.generateInvoice = this.manualGenerateVoucherChecked;
+                }
+            } else {
+                this.blankLedger.generateInvoice = true;
             }
         }
 
-        this.adjustPaymentModal.hide();
+        this.adjustmentDialogRef.close();
     }
 
     /**
@@ -1289,18 +1401,12 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 this.isAdjustReceiptSelected = false;
             }
             this.isAdjustVoucherSelected = false;
-        }
-        this.adjustPaymentModal.hide();
-    }
 
-    /**
-     * Toggles the more detail section
-     *
-     * @memberof NewLedgerEntryPanelComponent
-     */
-    public toggleMoreDetail(): void {
-        this.showAdvanced = !this.showAdvanced;
-        this.moreDetailOpen.emit(this.showAdvanced);
+            if(!this.selectedInvoiceForCreditNote) {
+                this.blankLedger.generateInvoice = this.manualGenerateVoucherChecked;
+            }
+        }
+        this.adjustmentDialogRef.close();
     }
 
     /**
@@ -1314,6 +1420,10 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         this.isAdjustAdvanceReceiptSelected = false;
         this.isAdjustReceiptSelected = false;
         this.isAdjustVoucherSelected = false;
+        
+        if(!this.selectedInvoiceForCreditNote) {
+            this.blankLedger.generateInvoice = this.manualGenerateVoucherChecked;
+        }
     }
 
     /**
@@ -1324,9 +1434,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      * @memberof NewLedgerEntryPanelComponent
      */
     private assignPrefixAndSuffixForCurrency(): void {
-        const isPrefixAppliedForCurrency = !(['AED'].includes(this.selectedCurrency === 0 ? this.baseCurrencyDetails.code : this.foreignCurrencyDetails.code));
-        this.selectedPrefixForCurrency = isPrefixAppliedForCurrency ? this.selectedCurrency === 0 ? this.baseCurrencyDetails.symbol : this.foreignCurrencyDetails.symbol : '';
-        this.selectedSuffixForCurrency = isPrefixAppliedForCurrency ? '' : this.selectedCurrency === 0 ? this.baseCurrencyDetails.symbol : this.foreignCurrencyDetails.symbol;
+        const isPrefixAppliedForCurrency = !(['AED'].includes(this.selectedCurrency === 0 ? this.baseCurrencyDetails?.code : this.foreignCurrencyDetails?.code));
+        this.selectedPrefixForCurrency = isPrefixAppliedForCurrency ? this.selectedCurrency === 0 ? this.baseCurrencyDetails?.symbol : this.foreignCurrencyDetails?.symbol : '';
+        this.selectedSuffixForCurrency = isPrefixAppliedForCurrency ? '' : this.selectedCurrency === 0 ? this.baseCurrencyDetails?.symbol : this.foreignCurrencyDetails?.symbol;
     }
 
     /**
@@ -1337,7 +1447,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      * @memberof NewLedgerEntryPanelComponent
      */
     private validateTaxes(): boolean {
-        const taxes = [...this.currentTxn.taxesVm.filter(p => p.isChecked).map(p => p.uniqueName)];
+        const taxes = [...this.currentTxn.taxesVm.filter(p => p.isChecked).map(p => p?.uniqueName)];
         return taxes && taxes.length > 0;
     }
 
@@ -1376,19 +1486,19 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 voucherDate: this.blankLedger.entryDate,
                 tcsTotal: 0,
                 tdsTotal: 0,
-                balanceDue: this.currentTxn.total,
-                grandTotal: this.currentTxn.total,
+                balanceDue: this.blankLedger.compoundTotal,
+                grandTotal: this.blankLedger.compoundTotal,
                 customerName: this.currentTxn.selectedAccount ? this.currentTxn.selectedAccount.name : '',
                 customerUniquename: this.currentTxn.selectedAccount ? this.currentTxn.selectedAccount.uniqueName : '',
-                totalTaxableValue: this.currentTxn.total,
-                subTotal: this.currentTxn.total,
+                totalTaxableValue: this.blankLedger.compoundTotal,
+                subTotal: this.blankLedger.compoundTotal,
                 exchangeRate: this.blankLedger.exchangeRate ?? 1
             },
             accountDetails: {
                 currencySymbol: enableVoucherAdjustmentMultiCurrency ? this.baseCurrencyDetails?.symbol ?? this.blankLedger.baseCurrencyToDisplay?.symbol ?? '' : this.blankLedger.baseCurrencyToDisplay?.symbol,
                 currencyCode: enableVoucherAdjustmentMultiCurrency ? this.baseCurrencyDetails?.code ?? this.blankLedger.baseCurrencyToDisplay?.code ?? '' : this.blankLedger.baseCurrencyToDisplay?.code
             },
-            activeAccountUniqueName: this.activeAccount.uniqueName
+            activeAccountUniqueName: this.activeAccount?.uniqueName
         };
     }
 
@@ -1399,7 +1509,13 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      * @memberof NewLedgerEntryPanelComponent
      */
     private openAdjustPaymentModal(): void {
-        this.adjustPaymentModal.show();
+        if (this.voucherApiVersion === 2) {
+            this.invoiceListRequestParams = { particularAccount: this.currentTxn?.selectedAccount, voucherType: this.blankLedger.voucherType, ledgerAccount: this.activeAccount };
+        }
+        this.adjustmentDialogRef = this.dialog.open(this.adjustPaymentModal, {
+            width: '980px',
+            panelClass: 'container-modal-class'
+        });
     }
 
     /**
@@ -1411,7 +1527,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public assignUpdateActiveAccount(accountDetails: AccountResponse | AccountResponseV2): void {
         this.accountOtherApplicableDiscount = [];
         this.activeAccount = accountDetails;
-        let parentAcc = (accountDetails && accountDetails.parentGroups && accountDetails.parentGroups.length > 0) ? accountDetails.parentGroups[0].uniqueName : "";
+        let parentAcc = (accountDetails?.parentGroups?.length > 0) ? accountDetails.parentGroups[0].uniqueName : "";
         let incomeAccArray = ['revenuefromoperations', 'otherincome'];
         let expensesAccArray = ['operatingcost', 'indirectexpenses'];
         let assetsAccArray = ['assets'];
@@ -1419,7 +1535,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         if (incomeAndExpensesAccArray.indexOf(parentAcc) > -1) {
             let appTaxes = [];
             if (accountDetails && accountDetails.applicableTaxes && accountDetails.applicableTaxes.length > 0) {
-                accountDetails.applicableTaxes.forEach(app => appTaxes.push(app.uniqueName));
+                accountDetails.applicableTaxes.forEach(app => appTaxes.push(app?.uniqueName));
             }
             this.currentAccountApplicableTaxes = appTaxes;
         }
@@ -1450,7 +1566,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 setTimeout(() => {
                     this.currentTxn.selectedAccount.accountApplicableDiscounts.forEach(element => {
                         this.currentTxn.discounts.map(item => {
-                            if (element.uniqueName === item.discountUniqueName) {
+                            if (element?.uniqueName === item?.discountUniqueName) {
                                 item.isActive = true;
                             }
                             return item;
@@ -1460,7 +1576,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             } else {
                 this.currentTxn.selectedAccount.accountApplicableDiscounts.forEach(element => {
                     this.currentTxn.discounts.map(item => {
-                        if (element.uniqueName === item.discountUniqueName) {
+                        if (element?.uniqueName === item?.discountUniqueName) {
                             item.isActive = true;
                         }
                         return item;
@@ -1471,7 +1587,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             this.currentTxn.discounts.map(item => { item.isActive = false });
             this.accountOtherApplicableDiscount.forEach(element => {
                 this.currentTxn.discounts.map(item => {
-                    if (element.uniqueName === item.discountUniqueName) {
+                    if (element?.uniqueName === item?.discountUniqueName) {
                         item.isActive = true;
                     }
                     return item;
@@ -1510,4 +1626,13 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         this.saveOtherTax.emit(this.blankLedger);
     }
 
+    /**
+     * Toggles the more detail section
+     *
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    public toggleMoreDetail(): void {
+        this.isMoreDetailsOpen = !this.isMoreDetailsOpen;
+        this.moreDetailOpen.emit(this.isMoreDetailsOpen);
+    }
 }

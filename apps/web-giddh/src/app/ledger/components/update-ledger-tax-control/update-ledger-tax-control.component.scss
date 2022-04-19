@@ -21,3 +21,13 @@
     max-height: 102px;
     min-height: 80px;
 }
+.checkbox {
+    .text-ellipsis {
+        margin-left: -20px;
+    }
+}
+.clearfix {
+    .mat-input-element {
+        box-sizing: border-box !important;
+    }
+}

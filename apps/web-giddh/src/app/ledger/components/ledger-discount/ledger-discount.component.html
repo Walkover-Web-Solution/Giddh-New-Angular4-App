@@ -3,13 +3,13 @@
     <a id="discount">
         <div class="multi-select adjust text-right">
             <input
-                type="text"
+                matInput
                 [prefix]="prefixInput"
                 id="ledger-discount"
                 [suffix]="suffixInput"
                 [mask]="maskInput"
-                name=""
-                class="form-control cursor-pointer text-right"
+                name="discountTotal"
+                class="form-control cursor-pointer text-right mat-field-border"
                 (focus)="discountMenu = true; hideOtherPopups.emit(true)"
                 [(ngModel)]="discountTotal"
                 readonly
@@ -30,12 +30,13 @@
                 }}</label>
                 <div class="position-relative percent-wrapper">
                     <input
-                        type="text"
+                        matInput
                         id="ledger-discount-percent"
-                        class="form-control text-right cursor-pointer"
+                        class="form-control text-right cursor-pointer mat-field-border"
                         [disabled]="!discountFromPer"
                         decimalDigitsDirective
                         [DecimalPlaces]="2"
+                        name="discountPercentageModal"
                         [(ngModel)]="discountPercentageModal"
                         (input)="discountFromInput('PERCENTAGE', $event.target.value)"
                     />
@@ -46,12 +47,13 @@
                 <label class="mr-1 ml-1 align-items-center d-flex value-label">{{ commonLocaleData?.app_value }}</label>
                 <div class="position-relative">
                     <input
-                        type="text"
+                        matInput
                         id="ledger-discount-value"
-                        class="form-control text-right cursor-pointer"
+                        class="form-control text-right cursor-pointer mat-field-border"
                         [disabled]="!discountFromVal"
                         decimalDigitsDirective
                         [DecimalPlaces]="2"
+                        name="discountFixedValueModal"
                         [(ngModel)]="discountFixedValueModal"
                         (input)="discountFromInput('FIX_AMOUNT', $event.target.value)"
                     />
@@ -64,18 +66,18 @@
         <div *ngIf="discountAccountsDetails?.length > 1">
             <ul class="discount-list">
                 <ng-container *ngFor="let discount of discountAccountsDetails; trackBy: trackByFn; let idx = index">
-                    <li *ngIf="idx > 0" class="custom-item pd mr-b05">
+                    <li *ngIf="idx > 0" class="custom-item">
                         <label class="checkbox overflow-hidden width-100 p-0 m-0" (click)="$event.stopPropagation()">
-                            <input
-                                id="{{ 'discount-checkbox-' + idx }}"
+                            <mat-checkbox
+                                color="primary"
+                                [id]="'discount-checkbox-' + idx"
                                 class="pull-left"
                                 name="tax_{{ idx }}"
-                                type="checkbox"
                                 [(ngModel)]="discount.isActive"
                                 (change)="change($event, discount)"
                                 (click)="$event.stopPropagation()"
-                            />
-                            <span class="pull-left text-ellipsis">{{ discount.name }}</span>
+                            ></mat-checkbox>
+                            <span class="pull-left mr-l1 text-ellipsis">{{ discount.name }}</span>
                         </label>
                     </li>
                 </ng-container>

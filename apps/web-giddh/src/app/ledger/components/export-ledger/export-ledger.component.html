@@ -4,123 +4,84 @@
     (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event"
 >
-    <div id="exportModal">
+    <div id="exportModal" class="disable-ripple">
         <div class="modal-header flex-row-reverse">
             <span
                 aria-hidden="true"
                 class="close"
-                data-dismiss="modal"
-                (click)="closeExportLedgerModal.emit()"
-                aria-label="Close"
+                mat-button
+                mat-dialog-close
+                [attr.aria-label]="commonLocaleData?.app_close"
                 >×</span
             >
-            <h3>{{ localeData?.page_heading }}</h3>
+            <h3 class="unbold" mat-dialog-title>{{ localeData?.page_heading }}</h3>
         </div>
-        <div class="modal-body mr-b4" id="export-body">
+        <div class="modal-body" id="export-body">
             <form name="addShareEmailForm" novalidate autocomplete="off">
                 <div class="pd-b2 clearfix export-type">
                     <label class="w125">{{ commonLocaleData?.app_type }}:</label>
                     <div>
-                        <span class="p-0 mr-3">
-                            <input
+                        <mat-radio-group
+                            color="primary"
+                            [attr.aria-label]="commonLocaleData?.app_type"
+                            name="emailTypeSelected"
+                            [(ngModel)]="emailTypeSelected"
+                        >
+                            <mat-radio-button
                                 id="mini"
-                                class="radio-custom cp ml-0"
-                                type="radio"
-                                name="emailTypeSelected"
-                                (ngModelChange)="handleReportTypeChange($event)"
-                                [(ngModel)]="emailTypeSelected"
+                                (change)="handleReportTypeChange($event)"
                                 [value]="emailTypeMini"
-                            />
-                            <label for="mini" class="radio-custom-label">{{ commonLocaleData?.app_mini }}</label>
-                        </span>
-
-                        <span class="p-0 mr-3">
-                            <input
+                                >{{ commonLocaleData?.app_mini }}</mat-radio-button
+                            >
+                            <mat-radio-button
                                 id="detailed"
-                                class="radio-custom cp ml-0"
-                                type="radio"
-                                name="emailTypeSelected"
-                                (ngModelChange)="handleReportTypeChange($event)"
-                                [(ngModel)]="emailTypeSelected"
+                                (change)="handleReportTypeChange($event)"
                                 [value]="emailTypeDetail"
-                            />
-                            <label for="detailed" class="radio-custom-label">{{
-                                commonLocaleData?.app_detailed
-                            }}</label>
-                        </span>
-
-                        <span class="p-0 mr-3 columnar-radio">
-                            <input
+                                >{{ commonLocaleData?.app_detailed }}</mat-radio-button
+                            >
+                            <mat-radio-button
                                 id="columnar"
-                                class="radio-custom cp ml-0"
-                                type="radio"
-                                name="emailTypeSelected"
-                                (ngModelChange)="handleReportTypeChange($event)"
-                                [(ngModel)]="emailTypeSelected"
+                                (change)="handleReportTypeChange($event)"
                                 [value]="emailTypeColumnar"
-                            />
-                            <label for="columnar" class="radio-custom-label">{{ localeData?.columnar }}</label>
-                        </span>
+                                >{{ localeData?.columnar }}</mat-radio-button
+                            >
+                        </mat-radio-group>
                     </div>
                 </div>
                 <div class="pd-b2 clearfix export-type">
                     <label class="w125">{{ commonLocaleData?.app_export_as }}:</label>
                     <div>
-                        <span class="p-0 mr-3" [hidden]="emailTypeSelected === 'columnar'">
-                            <input
-                                id="pdf"
-                                class="radio-custom cp ml-0"
-                                type="radio"
-                                name="exportAs"
-                                [(ngModel)]="exportAs"
-                                [value]="'pdf'"
-                            />
-                            <label for="pdf" class="radio-custom-label">{{ commonLocaleData?.app_pdf }}</label>
-                        </span>
-
-                        <span class="p-0 mr-3">
-                            <input
-                                id="excel"
-                                class="radio-custom cp ml-0"
-                                type="radio"
-                                name="exportAs"
-                                [(ngModel)]="exportAs"
-                                [value]="'xlsx'"
-                            />
-                            <label for="excel" class="radio-custom-label">{{ commonLocaleData?.app_excel }}</label>
-                        </span>
+                        <mat-radio-group
+                            color="primary"
+                            [attr.aria-label]="commonLocaleData?.app_export_as"
+                            name="exportAs"
+                            [(ngModel)]="exportAs"
+                        >
+                            <mat-radio-button [hidden]="emailTypeSelected === 'columnar'" id="pdf" [value]="'pdf'">
+                                {{ commonLocaleData?.app_pdf }}</mat-radio-button
+                            >
+                            <mat-radio-button id="excel" [value]="'xlsx'"
+                                >{{ commonLocaleData?.app_excel }}
+                            </mat-radio-button>
+                        </mat-radio-group>
                     </div>
                 </div>
                 <div class="pd-b2 clearfix export-type">
                     <label class="w125">{{ commonLocaleData?.app_order }}:</label>
                     <div>
-                        <span class="p-0 mr-3">
-                            <input
-                                id="ascending"
-                                class="radio-custom cp ml-0"
-                                type="radio"
-                                name="order"
-                                [(ngModel)]="order"
-                                [value]="'asc'"
-                            />
-                            <label for="ascending" class="radio-custom-label">{{
-                                commonLocaleData?.app_ascending
-                            }}</label>
-                        </span>
-
-                        <span class="p-0 mr-3">
-                            <input
-                                id="descending"
-                                class="radio-custom cp ml-0"
-                                type="radio"
-                                name="order"
-                                [(ngModel)]="order"
-                                [value]="'desc'"
-                            />
-                            <label for="descending" class="radio-custom-label">{{
-                                commonLocaleData?.app_descending
-                            }}</label>
-                        </span>
+                        <mat-radio-group
+                            color="primary"
+                            [attr.aria-label]="commonLocaleData?.app_order"
+                            name="order"
+                            [(ngModel)]="order"
+                        >
+                            <mat-radio-button id="ascending" [value]="'asc'"
+                                >{{ commonLocaleData?.app_ascending }}
+                            </mat-radio-button>
+                            <mat-radio-button id="descending" [value]="'desc'"
+                                >{{ commonLocaleData?.app_descending }}
+                            </mat-radio-button>
+                        </mat-radio-group>
                     </div>
                 </div>
                 <div
@@ -129,18 +90,29 @@
                 >
                     <label class="w125">{{ commonLocaleData?.app_invoice_no }}:</label>
                     <label class="radio-inline p-0">
-                        <input type="checkbox" name="withInvoiceNumber" [(ngModel)]="withInvoiceNumber" />
+                        <mat-checkbox
+                            color="primary"
+                            name="withInvoiceNumber"
+                            [(ngModel)]="withInvoiceNumber"
+                        ></mat-checkbox>
                     </label>
                 </div>
                 <div class="pd-b2 clearfix" [hidden]="emailTypeSelected !== 'columnar'">
                     <label class="w125">{{ localeData?.cr_dr }}</label>
                     <label class="radio-inline p-0">
-                        <input type="checkbox" name="balanceTypeAsSign" [(ngModel)]="balanceTypeAsSign" />
+                        <mat-checkbox
+                            color="primary"
+                            name="balanceTypeAsSign"
+                            [(ngModel)]="balanceTypeAsSign"
+                        ></mat-checkbox>
                     </label>
                 </div>
-                <button class="btn-success btn" (click)="exportLedger()">{{ commonLocaleData?.app_download }}</button>
+                <button mat-button class="btn-success btn unbold" (click)="exportLedger()">
+                    {{ commonLocaleData?.app_download }}
+                </button>
                 <button
-                    class="btn-success btn show-columnar-button"
+                    mat-button
+                    class="btn-success btn show-columnar-button unbold mr-l1"
                     [hidden]="emailTypeSelected !== 'columnar'"
                     (click)="showColumnarReport()"
                 >
@@ -151,14 +123,17 @@
                     <h3 class="pd-t1 pd-b1">{{ commonLocaleData?.app_or | titlecase }}</h3>
                     <div>
                         <h3 class="light-gray pd-b05 size-xs">{{ localeData?.add_multiple_id }}</h3>
-                        <textarea
-                            [(ngModel)]="emailData"
-                            required
-                            name="email"
-                            class="form-control"
-                            [placeholder]="localeData?.receipient_email_ids"
-                        ></textarea>
-                        <button class="btn btn-success mr-t1" (click)="sendLedgEmail()">
+                        <mat-form-field appearance="fill" class="w-100">
+                            <textarea
+                                matInput
+                                [(ngModel)]="emailData"
+                                required
+                                name="email"
+                                class="form-control mat-field-border receipient-email"
+                                [placeholder]="localeData?.receipient_email_ids"
+                            ></textarea>
+                        </mat-form-field>
+                        <button mat-button class="btn btn-success mr-t2 unbold" (click)="sendLedgEmail()">
                             {{ commonLocaleData?.app_send_email }}
                         </button>
                     </div>

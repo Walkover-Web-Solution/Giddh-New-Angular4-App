@@ -6,7 +6,7 @@ import { INameUniqueName } from '../interfaces/nameUniqueName.interface';
 import { TaxControlData } from '../../theme/tax-control/tax-control.component';
 import * as moment from 'moment';
 import { VoucherAdjustments } from './AdvanceReceiptsAdjust';
-import { ReferenceVoucher } from '../../material-ledger/ledger.vm';
+import { ReferenceVoucher } from '../../ledger/ledger.vm';
 
 export enum VoucherTypeEnum {
     'sales' = 'sales',

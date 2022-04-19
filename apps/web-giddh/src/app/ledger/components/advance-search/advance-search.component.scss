@@ -10,6 +10,7 @@
 .modal-header {
     display: flex;
     justify-content: space-between;
+    padding: 16px !important;
 }
 .modal-header .close {
     color: var(--color-popup-list-head-text);
@@ -26,16 +27,19 @@
     padding: 2px;
     top: 0 !important;
 }
-.input-group {
-    input {
-        border-top-right-radius: 0px !important;
-        border-bottom-right-radius: 0px !important;
-    }
-    .input-group-addon {
-        border-top-left-radius: 0px !important;
-        border-bottom-left-radius: 0px !important;
+.mat-switch {
+    margin-left: 16px;
+    margin-top: 9px;
+}
+
+::ng-deep {
+    .advance-search {
+        .clearfix {
+            background-color: var(--color-popup-background) !important;
+        }
     }
 }
+
 @media (min-width: 1200px) {
     .container {
         width: 100%;

@@ -2,11 +2,12 @@
     overflow: visible;
     .more-details {
         background-color: var(--color-white);
+        padding: 15px;
         .cheq {
             table {
                 td.remove-invoice {
                     span:first-child {
-                        font-size: 25px;
+                        font-size: 16px;
                         vertical-align: middle;
                         color: var(--color-abbey);
                     }
@@ -24,9 +25,6 @@
 .ledger-panel table tbody tr td a {
     color: var(--color-nero);
 }
-.item-padding {
-    padding: 0 4px;
-}
 
 .dropdown-menu-2 {
     max-height: 190px;
@@ -39,22 +37,9 @@
     padding-left: 5px;
 }
 
-.total-detail-table tbody tr td {
-    vertical-align: top;
-}
-
 .width-70 {
     width: 70px;
     min-width: 70px;
-}
-
-.equal-2,
-.table-minus {
-    line-height: 1.6;
-}
-
-.pd-t04 {
-    padding-top: 4px;
 }
 
 .table-minus label {
@@ -112,6 +97,37 @@ span.eligible-ITC {
     border: 1px solid var(--color-nero);
     padding: 2px;
 }
+
+.mat-expansion-panel-header.mat-expanded {
+    background-color: var(--color-tab-primary-background) !important;
+}
+
+.icon-box {
+    display: flex;
+    align-items: center;
+    padding: 10px 10px 0 10px;
+    font-size: 12px;
+    height: 60px;
+    label {
+        margin-top: 10px;
+    }
+}
+
+#saveLedger {
+    margin-right: 0 !important;
+}
+.delete-attachment {
+    margin-right: 14px;
+    margin-left: 7px;
+    float: right;
+    margin-top: -6px;
+    a {
+        color: var(--color-dark-gray);
+        i {
+            font-size: 15px;
+        }
+    }
+}
 @media only screen and (max-width: 767px) {
     .ledger-panel .btn {
         margin-bottom: 13px;
@@ -139,11 +155,6 @@ span.eligible-ITC {
     .amount {
         width: 40%;
     }
-    .equal-2,
-    .table-minus {
-        width: 10%;
-        text-align: center;
-    }
     .total-amount-ledger {
         width: 100%;
     }
@@ -168,13 +179,12 @@ span.eligible-ITC {
 .sh-template {
     border-bottom: 1px solid var(--color-iron);
 }
+.min-width-auto {
+    min-width: auto !important;
+}
 
 /* Rotate animation for spinner in uploading file */
-.more-details td,
-.ledger-panel td {
-    padding: 0;
-    border-top: none;
-}
+
 .rotate {
     -webkit-animation: spin 4s linear infinite;
     -moz-animation: spin 4s linear infinite;
@@ -194,5 +204,22 @@ span.eligible-ITC {
     100% {
         -webkit-transform: rotate(360deg);
         transform: rotate(360deg);
+    }
+}
+
+@media (max-width: 1075px) {
+    .icon-box {
+        padding: 10px 0px 0 0px;
+    }
+
+    .more-details {
+        .cheque-no-clear {
+            .default-color {
+                white-space: nowrap;
+            }
+            giddh-datepicker {
+                min-width: auto !important;
+            }
+        }
     }
 }

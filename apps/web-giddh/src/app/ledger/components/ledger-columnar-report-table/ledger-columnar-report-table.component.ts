@@ -46,6 +46,8 @@ export class LedgerColumnarReportTableComponent implements OnInit, OnDestroy, On
     public commonLocaleData: any = {};
     /** Stores the dynamic colspan value */
     public colspanValue: number = 0;
+    /** Columns to display in table */
+    public tableHeadingColumns: string[] = [];
 
     constructor(
         public settingsFinancialYearService: SettingsFinancialYearService,
@@ -54,6 +56,7 @@ export class LedgerColumnarReportTableComponent implements OnInit, OnDestroy, On
         private ledgerService: LedgerService,
         private changeDetectorRef: ChangeDetectorRef
     ) {
+        this.tableHeadingColumns = this.getDefaultColumns();
         this.store.pipe(takeUntil(this.destroyed$)).subscribe(state => {
             if (state && state.session && state.session.companyUniqueName) {
                 this.companyUniqueName = _.cloneDeep(state.session.companyUniqueName);
@@ -127,7 +130,7 @@ export class LedgerColumnarReportTableComponent implements OnInit, OnDestroy, On
                 }
             } else {
                 this.backClick.emit(true);
-                this.toaster.errorToast(response.message);
+                this.toaster.showSnackBar("error", response.message);
             }
         });
     }
@@ -140,6 +143,7 @@ export class LedgerColumnarReportTableComponent implements OnInit, OnDestroy, On
      */
     public prepareColumnForTable(): void {
         this.columnarTableColumn = [];
+        this.tableHeadingColumns = this.getDefaultColumns();
         if (this.reportResponseResult && this.reportResponseResult.length > 0) {
             this.reportResponseResult.forEach((item, index) => {
                 if (item && item.accountNameAndBalanceMap) {
@@ -148,6 +152,7 @@ export class LedgerColumnarReportTableComponent implements OnInit, OnDestroy, On
                         columns.forEach((element) => {
                             if (this.columnarTableColumn.indexOf(element) === -1) {
                                 this.columnarTableColumn.push(element);
+                                this.tableHeadingColumns.push(element);
                             }
                         });
                     }
@@ -196,4 +201,14 @@ export class LedgerColumnarReportTableComponent implements OnInit, OnDestroy, On
         return entry?.entryId;
     }
 
+    /**
+     * Returns the default columns for report
+     *
+     * @private
+     * @return {*}  {Array<string>}
+     * @memberof LedgerColumnarReportTableComponent
+     */
+    private getDefaultColumns(): Array<string> {
+        return ['sno', 'date', 'particular', 'address', 'voucher_type', 'voucher_number', 'voucher_refno', 'voucher_refdate', 'tax_number', 'narration', 'stock_name', 'quantity', 'unit', 'rate', 'value', 'gross_total'];
+    }
 }
