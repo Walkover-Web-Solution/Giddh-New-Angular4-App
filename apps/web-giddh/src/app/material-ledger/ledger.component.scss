@@ -314,6 +314,7 @@ table.ledger-footer-1 td[class*="col-"] {
     float: left;
     width: 100%;
     margin-bottom: 16px;
+    z-index: 0;
     background: var(--color-common-primary-background-for-all-components);
     box-shadow: 0 0 6px var(--color-primary-ledger-box-shadow);
 }
