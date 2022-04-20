@@ -40,9 +40,6 @@ export class ThermalService {
                     }
                 }
             }
-            //             for (let tax of request?.taxRateBifurcation){
-            //     console.log(tax);
-            // }
             Object.keys(entryTaxesQR)?.forEach(key => {
                 let entryTax = entryTaxesQR[key];
                 if (entryTax?.amount > 0) {
@@ -58,7 +55,7 @@ export class ThermalService {
             });
 
             // The QR data
-            qr = "SELLER DETAILS" + this.printerFormat.lineBreak + "GSTIN - " + request?.company?.billingDetails?.taxNumber + this.printerFormat.lineBreak + this.printerFormat.lineBreak + "INVOICE DETAILS" + this.printerFormat.lineBreak + "Number - " + request?.number + this.printerFormat.lineBreak + "Date - " + request?.date + this.printerFormat.lineBreak + "Amount - " + (request?.grandTotal?.amountForCompany?.length > 0 ? request?.grandTotal?.amountForCompany : 0) + this.printerFormat.lineBreak + itemsQrTaxData + this.printerFormat.lineBreak + "Total Tax - " + (request?.taxableAmount?.amountForCompany?.length > 0 ? request?.taxableAmount?.amountForCompany : 0) + this.printerFormat.lineBreak;
+            qr = "SELLER DETAILS" + this.printerFormat.lineBreak + "GSTIN - " + request?.company?.billingDetails?.taxNumber + this.printerFormat.lineBreak + this.printerFormat.lineBreak + "INVOICE DETAILS" + this.printerFormat.lineBreak + "Number - " + request?.number + this.printerFormat.lineBreak + "Date - " + request?.date + this.printerFormat.lineBreak + "Amount - " + (request?.grandTotal?.amountForCompany ? request?.grandTotal?.amountForCompany : 0) + this.printerFormat.lineBreak + itemsQrTaxData + this.printerFormat.lineBreak + "Total Tax - " + (request?.taxableAmount?.amountForCompany ? request?.taxableAmount?.amountForCompany : 0) + this.printerFormat.lineBreak;
 
             // The dot size of the QR code
             dots = "\x03";
@@ -125,7 +122,7 @@ export class ThermalService {
         let headerCompanyName;
         if (defaultTemplate?.sections?.header?.data?.companyName?.display) {
             headerCompanyName = request?.company?.name;
-            if (!request?.company?.name?.length) {
+            if (!request?.company?.name) {
                 headerCompanyName = '';
             }
         } else {
@@ -138,7 +135,7 @@ export class ThermalService {
         let headerCompanyAddress;
         if (defaultTemplate?.sections?.header?.data?.showCompanyAddress?.display) {
             headerCompanyAddress = request?.company?.billingDetails?.address[0];
-            if (!request?.company?.billingDetails?.address[0]?.length){
+            if (!request?.company?.billingDetails?.address[0]) {
                 headerCompanyAddress = '';
             }
         } else {
@@ -155,7 +152,7 @@ export class ThermalService {
             accountGstNumberField = defaultTemplate?.sections?.header?.data?.billingGstin?.label;
             accountAddress = request?.account?.billingDetails?.address.join(" ");
             billingGstinNumber = request?.account?.billingDetails?.taxNumber;
-            if (!request?.account?.billingDetails?.taxNumber?.length){
+            if (!request?.account?.billingDetails?.taxNumber) {
                 billingGstinNumber = '';
                 accountGstNumberField = '';
             }
@@ -173,7 +170,7 @@ export class ThermalService {
         if (defaultTemplate?.sections?.header?.data?.gstin?.display) {
             companyGstNumberField = defaultTemplate?.sections?.header?.data?.gstin?.label;
             companyGstin = request?.company?.billingDetails?.taxNumber;
-            if (!request?.company?.billingDetails?.taxNumber?.length) {
+            if (!request?.company?.billingDetails?.taxNumber) {
                 companyGstNumberField = '';
                 companyGstin = '';
             }
@@ -188,7 +185,7 @@ export class ThermalService {
         let accountName;
         if (defaultTemplate?.sections?.header?.data?.customerName?.display) {
             accountName = request?.account?.name;
-            if (!request?.account?.name?.length) {
+            if (!request?.account?.name) {
                 accountName = '';
             }
         } else {
@@ -249,17 +246,22 @@ export class ThermalService {
          * This will use for hide/show for no of items
          */
         let noOfItemsField;
-        let noOfItems = 0;
+        let noOfItems: any;
 
         if (defaultTemplate?.sections?.table?.data?.totalQuantity?.display) {
             noOfItemsField = defaultTemplate?.sections?.table?.data?.totalQuantity?.label;
             for (let entry of request.entries) {
                 for (let transaction of entry.transactions) {
-                    noOfItems = noOfItems + transaction?.stock?.quantity;
+                    if (transaction?.stock?.quantity) {
+                        noOfItems = Number(noOfItems) + transaction?.stock?.quantity;
+                    } else {
+                        noOfItems = '-';
+                    }
+                
                 }
             }
         } else {
-            noOfItemsField = "";
+            noOfItemsField = '';
         }
 
         /**
@@ -442,27 +444,34 @@ export class ThermalService {
         }
         let totalQty = 0;
         for (let entry of request?.entries) {
-
             let productName =
                 entry?.transactions[0].stock?.name ||
                 entry?.transactions[0].account?.name;
-
             let quantity;
             if (defaultTemplate?.sections?.table?.data?.quantity?.display) {
-                quantity =
-                    parseFloat(entry?.transactions[0].stock?.quantity ?? '-').toFixed(2) +
-                    " ";
+                if (entry?.transactions[0].stock?.quantity) {
+                    quantity =
+                        parseFloat(
+                            entry?.transactions[0].stock?.quantity
+                        ).toFixed(2) + ' ';
+                } else {
+                    quantity = '-';
+                }
             } else {
-                quantity = "";
+                quantity = '';
             }
             let rate;
             if (defaultTemplate?.sections?.table?.data?.rate?.display) {
-                rate =
-                    parseFloat(
-                        entry?.transactions[0].stock?.rate?.rateForAccount ?? '-'
-                    ).toFixed(2) + " ";
+                if (entry?.transactions[0].stock?.rate?.rateForAccount) {
+                    rate =
+                        parseFloat(
+                            entry?.transactions[0].stock?.rate?.rateForAccount
+                        ).toFixed(2) + ' ';
+                } else {
+                    rate = '-';
+                }
             } else {
-                rate = "";
+                rate = '';
             }
             let amount;
             if (defaultTemplate?.sections?.table?.data?.total?.display) {
@@ -534,7 +543,7 @@ export class ThermalService {
         // let taxType ='';
         // for (tax of request?.taxRateBifurcation){
         //     console.log(tax);
-            
+
         //     // gstAmount = tax?.iamt + tax?.camt + tax?.samt;
         //     // taxType = tax?.taxName;
         //     if (defaultTemplate?.sections?.footer?.data?.taxBifurcation?.display) {
@@ -546,7 +555,7 @@ export class ThermalService {
         //         tax = ""
         //     }
         // }    
-if (request) {
+        if (request) {
             let header =
                 this.printerFormat.formatCenter(invoiceHeadingField) +
                 this.printerFormat.formatCenter(
@@ -591,7 +600,7 @@ if (request) {
                 tax +
                 this.justifyText(
                     "",
-                    (totalAmountField +"("+ companyCurrencyCode+ ")" +" " ) + "" + subTotal?.padStart(11)
+                    (totalAmountField + "(" + companyCurrencyCode + ")" + " ") + "" + subTotal?.padStart(11)
                 ) +
                 this.printerFormat.lineBreak +
                 this.printerFormat.lineBreak +
@@ -672,7 +681,7 @@ if (request) {
                         this.printerFormat.fullCut,
                     ];
                     console.log(txt);
-                    
+
                     return qz.print(config, txt);
                 })
                 .catch(function (e: any) {
