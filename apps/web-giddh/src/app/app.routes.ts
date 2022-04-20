@@ -80,7 +80,6 @@ export const ROUTES: Routes = [
             { path: 'search', loadChildren: () => import('./search/search.module').then(module => module.SearchModule) },
             { path: 'trial-balance-and-profit-loss', loadChildren: () => import('./financial-reports/financial-reports.module').then(module => module.FinancialReportsModule), canActivate: [NeedsAuthentication, NeedsAuthorization] },
             { path: 'audit-logs', loadChildren: () => import('./audit-logs/audit-logs.module').then(module => module.AuditLogsModule), canActivate: [NeedsAuthorization] },
-            { path: 'old-ledger', loadChildren: () => import('./ledger/ledger.module').then(module => module.LedgerModule), canActivate: [NeedsAuthorization] },
             { path: 'ledger', loadChildren: () => import('./material-ledger/ledger.module').then(module => module.LedgerModule), canActivate: [NeedsAuthorization] },
             { path: 'permissions', loadChildren: () => import('./permissions/permission.module').then(module => module.PermissionModule), canActivate: [NeedsAuthorization] },
             { path: 'settings', loadChildren: () => import('./settings/settings.module').then(module => module.SettingsModule), canActivate: [NeedsAuthorization] },

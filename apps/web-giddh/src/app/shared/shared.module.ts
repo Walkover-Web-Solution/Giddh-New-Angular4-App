@@ -57,7 +57,7 @@ import { TranslateDirectiveModule } from '../theme/translate/translate.directive
 import { CompanyBranchComponent } from './primary-sidebar/company-branch/company-branch.component';
 import { AmountFieldComponentModule } from './amount-field/amount-field.module';
 import { AccountAddNewDetailsModule } from './header/components/account-add-new-details/account-add-new-details.module';
-import { LedgerDiscountModule } from '../ledger/components/ledger-discount/ledger-discount.module';
+import { LedgerDiscountModule } from '../material-ledger/components/ledger-discount/ledger-discount.module';
 import { ConfirmationModalModule } from '../common/confirmation-modal/confirmation-modal.module';
 import { DatepickerWrapperModule } from './datepicker-wrapper/datepicker.wrapper.module';
 import { ValidateSectionPermissionDirectiveModule } from './validate-section-permission/validate-section-permission.module';
