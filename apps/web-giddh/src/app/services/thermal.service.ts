@@ -484,8 +484,6 @@ export class ThermalService {
             
             if (entry?.transactions[0]?.stock?.quantity){
                 totalQty = totalQty + Number(quantity);
-            } else {
-                totalQty = '-';
             }
 
             if (itemName?.length < productName?.length) {
@@ -531,16 +529,16 @@ export class ThermalService {
                     remainingName;
             }
         
-            if (entry.taxes && entry.taxes.length > 0) {
-                for (let taxApp of entry.taxes) {
-                    if (entryTaxes[taxApp.accountUniqueName + "_" + taxApp.taxPercent] === undefined) {
-                        entryTaxes[taxApp.accountUniqueName + "_" + taxApp.taxPercent] = [];
-                        entryTaxes[taxApp.accountUniqueName + "_" + taxApp.taxPercent]['name'] = taxApp.accountName;
-                        entryTaxes[taxApp.accountUniqueName + "_" + taxApp.taxPercent]['percent'] = taxApp.taxPercent;
-                        entryTaxes[taxApp.accountUniqueName + "_" + taxApp.taxPercent]['amount'] = taxApp.amount?.amountForAccount;
+            if (entry?.taxes && entry?.taxes.length > 0) {
+                for (let taxApp of entry?.taxes) {
+                    if (entryTaxes[taxApp.accountUniqueName + "_" + taxApp?.taxPercent] === undefined) {
+                        entryTaxes[taxApp.accountUniqueName + "_" + taxApp?.taxPercent] = [];
+                        entryTaxes[taxApp.accountUniqueName + "_" + taxApp?.taxPercent]['name'] = taxApp?.accountName;
+                        entryTaxes[taxApp.accountUniqueName + "_" + taxApp?.taxPercent]['percent'] = taxApp?.taxPercent;
+                        entryTaxes[taxApp.accountUniqueName + "_" + taxApp?.taxPercent]['amount'] = taxApp?.amount?.amountForAccount;
                     } else {
-                        entryTaxes[taxApp.accountUniqueName + "_" + taxApp.taxPercent]['percent'] = entryTaxes[taxApp.accountUniqueName + "_" + taxApp.taxPercent]['percent'] + taxApp.taxPercent;
-                        entryTaxes[taxApp.accountUniqueName + "_" + taxApp.taxPercent]['amount'] = entryTaxes[taxApp.accountUniqueName + "_" + taxApp.taxPercent]['amount'] + taxApp.amount?.amountForAccount;
+                        entryTaxes[taxApp?.accountUniqueName + "_" + taxApp?.taxPercent]['percent'] = entryTaxes[taxApp?.accountUniqueName + "_" + taxApp?.taxPercent]['percent'] + taxApp?.taxPercent;
+                        entryTaxes[taxApp?.accountUniqueName + "_" + taxApp?.taxPercent]['amount'] = entryTaxes[taxApp?.accountUniqueName + "_" + taxApp?.taxPercent]['amount'] + taxApp?.amount?.amountForAccount;
                     }
                 }
             }
@@ -548,15 +546,15 @@ export class ThermalService {
     
         Object.keys(entryTaxes)?.forEach(key => {
             let entryTax = entryTaxes[key];
-            if (entryTax.amount > 0) {
+            if (entryTax?.amount > 0) {
                 let taxAmount = parseFloat(
-                    entryTax.amount
+                    entryTax?.amount
                 ).toFixed(2);
                 if (defaultTemplate?.sections?.footer?.data?.taxBifurcation?.display) {
                     tax += this.printerFormat.formatCenter(
                         this.justifyText(
-                            entryTax.name +
-                            entryTax.percent +
+                            entryTax?.name +
+                            entryTax?.percent +
                             "%" +
                             ": " +
                             "" +
@@ -607,7 +605,7 @@ export class ThermalService {
 
                 this.printerFormat.formatCenter(this.blankDash()) +
                 this.justifyText(
-                    (noOfItemsField + " ") + totalQty,
+                    (noOfItemsField + " ") + (totalQty ? totalQty : '-'),
                     (discountAmountField + " ") + discount?.padStart(11)
                 ) +
                 this.justifyText('', (taxAmountField + " ") + '' + taxableAmount?.toFixed(2).padStart(11)) +
@@ -695,6 +693,7 @@ export class ThermalService {
                         this.printerFormat.endPrinter +
                         this.printerFormat.fullCut,
                     ];
+                    console.log(txt);
                     return qz.print(config, txt);
                 })
                 .catch(function (e: any) {
