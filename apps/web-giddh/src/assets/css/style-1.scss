@@ -1998,6 +1998,13 @@ bs-daterangepicker-container,
 bs-datepicker-container {
     z-index: 99999;
 }
+
+.setting-sidebar-open.voucher-preview-edit {
+    bs-datepicker-container {
+        z-index: 99;
+    }
+}
+
 .stock-grp-list li:focus,
 .stock-grp-list li div:focus {
     outline: 0;
