@@ -123,7 +123,7 @@ export class ThermalService {
         if (defaultTemplate?.sections?.header?.data?.companyName?.display) {
             if (request?.company?.name) {
                 headerCompanyName = request?.company?.name;
-            }else {
+            } else {
                 headerCompanyName = '';
             }
         } else {
@@ -137,7 +137,7 @@ export class ThermalService {
         if (defaultTemplate?.sections?.header?.data?.showCompanyAddress?.display) {
             if (request?.company?.billingDetails?.address[0]) {
                 headerCompanyAddress = request?.company?.billingDetails?.address[0];
-            }else {
+            } else {
                 headerCompanyAddress = '';
             }
         } else {
@@ -156,8 +156,8 @@ export class ThermalService {
             billingGstinNumber = request?.account?.billingDetails?.taxNumber;
             if (request?.account?.billingDetails?.taxNumber) {
                 billingGstinNumber = request?.account?.billingDetails?.taxNumber;
-                  accountGstNumberField = defaultTemplate?.sections?.header?.data?.billingGstin?.label;
-             } else {
+                accountGstNumberField = defaultTemplate?.sections?.header?.data?.billingGstin?.label;
+            } else {
                 billingGstinNumber = '';
                 accountGstNumberField = '';
             }
@@ -174,9 +174,9 @@ export class ThermalService {
         let companyGstin;
         if (defaultTemplate?.sections?.header?.data?.gstin?.display) {
             companyGstNumberField = defaultTemplate?.sections?.header?.data?.gstin?.label;
-            if (request?.company?.billingDetails?.taxNumber){
+            if (request?.company?.billingDetails?.taxNumber) {
                 companyGstin = request?.company?.billingDetails?.taxNumber;
-            }else {
+            } else {
                 companyGstNumberField = '';
                 companyGstin = '';
             }
@@ -188,7 +188,7 @@ export class ThermalService {
         if (defaultTemplate?.sections?.header?.data?.customerName?.display) {
             if (request?.account?.name) {
                 accountName = request?.account?.name;
-            }else {
+            } else {
                 accountName = '';
             }
         } else {
@@ -280,7 +280,7 @@ export class ThermalService {
         let discountAmountField;
         let discount: any;
         if (defaultTemplate?.sections?.table?.data?.discount?.display) {
-            discountAmountField = defaultTemplate?.sections?.table?.data?.discount?.label;  
+            discountAmountField = defaultTemplate?.sections?.table?.data?.discount?.label;
             discount = request?.discountTotal ? parseFloat(request?.discountTotal?.amountForCompany).toFixed(2) : "0";
         } else {
             discountAmountField = "";
@@ -429,7 +429,7 @@ export class ThermalService {
                     )
                 ) + this.printerFormat.lineBreak;
         }
-        let totalQty : any;
+        let totalQty: any;
         for (let entry of request?.entries) {
             let productName =
                 entry?.transactions[0]?.stock?.name ||
@@ -481,8 +481,8 @@ export class ThermalService {
             let itemLength = this.maxLength - itemDetails?.length;
             let itemName = productName?.substr(0, itemLength);
             let remainingName = "";
-            
-            if (entry?.transactions[0]?.stock?.quantity){
+
+            if (entry?.transactions[0]?.stock?.quantity) {
                 totalQty = totalQty + Number(quantity);
             }
 
@@ -528,7 +528,7 @@ export class ThermalService {
                     this.printerFormat.leftAlign +
                     remainingName;
             }
-        
+
             if (entry?.taxes && entry?.taxes.length > 0) {
                 for (let taxApp of entry?.taxes) {
                     if (entryTaxes[taxApp.accountUniqueName + "_" + taxApp?.taxPercent] === undefined) {
@@ -543,7 +543,7 @@ export class ThermalService {
                 }
             }
         }
-    
+
         Object.keys(entryTaxes)?.forEach(key => {
             let entryTax = entryTaxes[key];
             if (entryTax?.amount > 0) {
@@ -613,7 +613,7 @@ export class ThermalService {
                 tax +
                 this.justifyText(
                     "",
-                    (totalAmountField + "(" + companyCurrencyCode + ")" + " ") + "" + subTotal?.padStart(11)
+                    (totalAmountField + "(" + companyCurrencyCode + ")" + " ") + subTotal?.padStart(11)
                 ) +
                 this.printerFormat.lineBreak +
                 this.printerFormat.lineBreak +
