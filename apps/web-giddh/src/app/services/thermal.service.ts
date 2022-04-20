@@ -22,20 +22,20 @@ export class ThermalService {
         let dots;
         let size1;
         let size0;
-        let qrLength;
-        let itemsQrTaxData = "";
+              let qrLength;
+            let itemsQrTaxData = "";
         /** This will use for initialized entry tax */
         let entryTaxesQR = [];
         if (defaultTemplate?.sections?.header?.data?.showQrCode?.display) {
-            for (let entry of request.entries) {
+                    for (let entry of request.entries) {
                 if (entry?.taxes?.length > 0) {
                     for (let taxApp of entry.taxes) {
-                        if (entryTaxesQR[taxApp.accountUniqueName] === undefined) {
+                                    if (entryTaxesQR[taxApp.accountUniqueName] === undefined) {
                             entryTaxesQR[taxApp.accountUniqueName] = [];
-                            entryTaxesQR[taxApp.accountUniqueName]['name'] = taxApp?.accountName;
+                                 entryTaxesQR[taxApp.accountUniqueName]['name'] = taxApp?.accountName;
                             entryTaxesQR[taxApp.accountUniqueName]['amount'] = taxApp?.amount?.amountForAccount;
                         } else {
-                            entryTaxesQR[taxApp.accountUniqueName]['amount'] = Number(entryTaxesQR[taxApp?.accountUniqueName]['amount']) + Number(taxApp?.amount?.amountForAccount);
+                    entryTaxesQR[taxApp.accountUniqueName]['amount'] = Number(entryTaxesQR[taxApp?.accountUniqueName]['amount']) + Number                   (taxApp?.amount?.amountForAccount);
                         }
                     }
                 }
@@ -65,14 +65,14 @@ export class ThermalService {
 
             // Some proprietary size calculation
             qrLength = qr.length + 3;
-            size1 = String.fromCharCode(qrLength % 500);
+                     size1 = String.fromCharCode(qrLength % 500);
             size0 = String.fromCharCode(Math.floor(qrLength / 500));
         }
         else {
             qr = "";
-            dots = 0;
+                dots = 0;
             size1 = 0;
-            size0 = 0;
+                size0 = 0;
             qrLength = 0;
         }
 
@@ -93,7 +93,7 @@ export class ThermalService {
          */
         let thankYouMsgField;
         if (defaultTemplate?.sections?.footer?.data?.thanks?.display) {
-            thankYouMsgField = defaultTemplate?.sections?.footer?.data?.thanks?.label;
+             thankYouMsgField = defaultTemplate?.sections?.footer?.data?.thanks?.label;
         } else {
             thankYouMsgField = "";
         }
@@ -103,7 +103,7 @@ export class ThermalService {
          */
         let firmNameField;
         if (defaultTemplate?.sections?.footer?.data?.message1?.display) {
-            firmNameField = defaultTemplate?.sections?.footer?.data?.message1?.label;
+                firmNameField = defaultTemplate?.sections?.footer?.data?.message1?.label;
         }
         else {
             firmNameField = "";
@@ -114,7 +114,7 @@ export class ThermalService {
          */
         let invoiceHeadingField;
         if (defaultTemplate?.sections?.header?.data?.formNameTaxInvoice?.display) {
-            invoiceHeadingField = defaultTemplate?.sections?.header?.data?.formNameTaxInvoice?.label;
+              invoiceHeadingField = defaultTemplate?.sections?.header?.data?.formNameTaxInvoice?.label;
         } else {
             invoiceHeadingField = "";
         }
