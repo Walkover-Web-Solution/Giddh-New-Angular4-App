@@ -693,7 +693,6 @@ export class ThermalService {
                         this.printerFormat.endPrinter +
                         this.printerFormat.fullCut,
                     ];
-                    console.log(txt);
                     return qz.print(config, txt);
                 })
                 .catch(function (e: any) {
