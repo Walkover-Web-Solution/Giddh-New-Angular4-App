@@ -12,7 +12,7 @@ import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { AppState } from '../../store/roots';
 import { LEDGER } from './ledger.const';
 import { LedgerService } from '../../services/ledger.service';
-import { BlankLedgerVM } from '../../ledger/ledger.vm';
+import { BlankLedgerVM } from '../../material-ledger/ledger.vm';
 import { GenerateBulkInvoiceRequest, IBulkInvoiceGenerationFalingError } from '../../models/api-models/Invoice';
 import { InvoiceService } from '../../services/invoice.service';
 import { DaybookQueryRequest } from '../../models/api-models/DaybookRequest';

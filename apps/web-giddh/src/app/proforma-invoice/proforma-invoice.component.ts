@@ -95,7 +95,7 @@ import { LedgerResponseDiscountClass } from "../models/api-models/Ledger";
 import { OnboardingFormRequest } from '../models/api-models/Common';
 import { WarehouseActions } from '../settings/warehouse/action/warehouse.action';
 import { SettingsUtilityService } from '../settings/services/settings-utility.service';
-import { WarehouseDetails } from '../ledger/ledger.vm';
+import { WarehouseDetails } from '../material-ledger/ledger.vm';
 import { ConfirmationModalConfiguration } from '../common/confirmation-modal/confirmation-modal.interface';
 import { GeneralService } from '../services/general.service';
 import { ProformaInvoiceUtilityService } from './services/proforma-invoice-utility.service';

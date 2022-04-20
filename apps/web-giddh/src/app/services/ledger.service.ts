@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { GiddhErrorHandler } from './catchManager/catchmanger';
 import { LEDGER_API } from './apiurls/ledger.api';
-import { BlankLedgerVM } from '../ledger/ledger.vm';
+import { BlankLedgerVM } from '../material-ledger/ledger.vm';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { DaybookQueryRequest, DayBookRequestModel } from '../models/api-models/DaybookRequest';
