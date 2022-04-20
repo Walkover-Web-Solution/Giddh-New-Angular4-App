@@ -1468,9 +1468,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                             obj.accountDetails.currencySymbol = '';
                         }
                         if (this.currentVoucherFormDetails?.depositAllowed || (this.isPendingVoucherType && obj.accountDetails && obj.voucherDetails)) {
-                            if(!this.isLastInvoiceCopied) {
-                                obj.accountDetails.name = results[0].account.name;
-                                obj.voucherDetails.customerName = results[0].account.name;
+                            if (!this.isLastInvoiceCopied) {
+                                obj.accountDetails.name = (this.voucherApiVersion === 2 && this.isCashInvoice && results[0].account.customerName) ? results[0].account.customerName : results[0].account.name;
+                                obj.voucherDetails.customerName = (this.voucherApiVersion === 2 && this.isCashInvoice && results[0].account.customerName) ? results[0].account.customerName : results[0].account.name;
                             }
                             this.loadBankCashAccounts(obj?.accountDetails?.currency?.code);
                         }
