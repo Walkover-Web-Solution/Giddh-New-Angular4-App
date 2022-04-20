@@ -268,6 +268,7 @@ export class ThermalService {
         let subTotal;
         let totalAmountField;
         let totalWords;
+        let companyCurrencyCode;
         if (defaultTemplate?.sections?.footer?.data?.totalDue?.display && defaultTemplate?.sections?.footer?.data?.totalInWords?.display) {
             totalAmountField = 'Invoice Total';
             totalWords = request.totalAsWords?.amountForAccount;
