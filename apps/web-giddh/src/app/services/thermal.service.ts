@@ -58,7 +58,7 @@ export class ThermalService {
             });
 
             // The QR data
-            qr = "SELLER DETAILS" + this.printerFormat.lineBreak + "GSTIN - " + request?.company?.billingDetails?.taxNumber + this.printerFormat.lineBreak + this.printerFormat.lineBreak + "INVOICE DETAILS" + this.printerFormat.lineBreak + "Number - " + request?.number + this.printerFormat.lineBreak + "Date - " + request?.date + this.printerFormat.lineBreak + "Amount - " + request?.grandTotal?.amountForCompany + this.printerFormat.lineBreak + itemsQrTaxData + this.printerFormat.lineBreak + "Total Tax - " + request?.taxableAmount?.amountForCompany + this.printerFormat.lineBreak;
+            qr = "SELLER DETAILS" + this.printerFormat.lineBreak + "GSTIN - " + request?.company?.billingDetails?.taxNumber + this.printerFormat.lineBreak + this.printerFormat.lineBreak + "INVOICE DETAILS" + this.printerFormat.lineBreak + "Number - " + request?.number + this.printerFormat.lineBreak + "Date - " + request?.date + this.printerFormat.lineBreak + "Amount - " + (request?.grandTotal?.amountForCompany?.length > 0 ? request?.grandTotal?.amountForCompany : 0) + this.printerFormat.lineBreak + itemsQrTaxData + this.printerFormat.lineBreak + "Total Tax - " + (request?.taxableAmount?.amountForCompany?.length > 0 ? request?.taxableAmount?.amountForCompany : 0) + this.printerFormat.lineBreak;
 
             // The dot size of the QR code
             dots = "\x03";
@@ -125,6 +125,9 @@ export class ThermalService {
         let headerCompanyName;
         if (defaultTemplate?.sections?.header?.data?.companyName?.display) {
             headerCompanyName = request?.company?.name;
+            if (!request?.company?.name?.length) {
+                headerCompanyName = '';
+            }
         } else {
             headerCompanyName = "";
         }
@@ -135,6 +138,9 @@ export class ThermalService {
         let headerCompanyAddress;
         if (defaultTemplate?.sections?.header?.data?.showCompanyAddress?.display) {
             headerCompanyAddress = request?.company?.billingDetails?.address[0];
+            if (!request?.company?.billingDetails?.address[0]?.length){
+                headerCompanyAddress = '';
+            }
         } else {
             headerCompanyAddress = "";
         }
@@ -149,6 +155,10 @@ export class ThermalService {
             accountGstNumberField = defaultTemplate?.sections?.header?.data?.billingGstin?.label;
             accountAddress = request?.account?.billingDetails?.address.join(" ");
             billingGstinNumber = request?.account?.billingDetails?.taxNumber;
+            if (!request?.account?.billingDetails?.taxNumber?.length){
+                billingGstinNumber = '';
+                accountGstNumberField = '';
+            }
         } else {
             accountGstNumberField = "";
             accountAddress = "";
@@ -163,6 +173,10 @@ export class ThermalService {
         if (defaultTemplate?.sections?.header?.data?.gstin?.display) {
             companyGstNumberField = defaultTemplate?.sections?.header?.data?.gstin?.label;
             companyGstin = request?.company?.billingDetails?.taxNumber;
+            if (!request?.company?.billingDetails?.taxNumber?.length) {
+                companyGstNumberField = '';
+                companyGstin = '';
+            }
         } else {
             companyGstNumberField = "";
             companyGstin = "";
@@ -174,6 +188,9 @@ export class ThermalService {
         let accountName;
         if (defaultTemplate?.sections?.header?.data?.customerName?.display) {
             accountName = request?.account?.name;
+            if (!request?.account?.name?.length) {
+                accountName = '';
+            }
         } else {
             accountName = "";
         }
@@ -574,7 +591,7 @@ if (request) {
                 tax +
                 this.justifyText(
                     "",
-                    (totalAmountField + " ") + "" + subTotal?.padStart(11)
+                    (totalAmountField +"("+ companyCurrencyCode+ ")" +" " ) + "" + subTotal?.padStart(11)
                 ) +
                 this.printerFormat.lineBreak +
                 this.printerFormat.lineBreak +
