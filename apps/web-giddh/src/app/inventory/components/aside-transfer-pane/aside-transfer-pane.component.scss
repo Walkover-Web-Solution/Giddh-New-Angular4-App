@@ -99,13 +99,13 @@
 .btn-lg:hover {
     background: var(--color-dark-fog);
     color: var(--color-blue);
-    box-shadow: 0px 4px 4px -3px var(--color-gray);
+    box-shadow: 0px 4px 4px -3px var(--color-primary-common-box-shadow);
     border-radius: 0px;
     border-color: var(--color-blue);
 }
 .aside-pane-form {
     background-color: var(--color-white);
-    box-shadow: 0 3px 6px var(--color-iron);
+    box-shadow: 0 3px 6px var(--color-primary-common-box-shadow);
     padding: 15px;
     height: calc(100vh - 90px);
     overflow: auto;
