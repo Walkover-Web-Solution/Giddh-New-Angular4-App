@@ -250,6 +250,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public voucherApiVersion: 1 | 2;
     /** Selected entry details */
     public selectedItem: any;
+    /** List of variants of selected stock */
+    public variants: IOption[] = [];
 
     constructor(
         private store: Store<AppState>,
@@ -415,6 +417,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 if (txn.selectedAccount && txn.selectedAccount.stock) {
                     txn.selectedAccount.stock.rate = Number((txn.selectedAccount.stock.rate / this.lc.blankLedger.exchangeRate).toFixed(RATE_FIELD_PRECISION));
                 }
+
+                txn.variantsList = [{
+                    label: 'Blue / 256GB',
+                    value: 'blue256gb1648290351038o127bkauks'
+                }];
+
                 this.lc.currentBlankTxn = txn;
                 let rate = 0;
                 let unitCode = '';

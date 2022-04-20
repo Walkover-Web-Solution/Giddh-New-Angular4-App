@@ -12,6 +12,34 @@
         <!--  tourist scheme template start      -->
         <ng-container *ngTemplateOutlet="touristSchemeTemplate"></ng-container>
         <!--        tourist scheme template end-->
+        <div class="row warehouse-field">
+            <div class="col-md-4">
+                <div class="variant" *ngIf="currentTxn?.selectedAccount?.stock">
+                    <label>{{ localeData?.select_variant }}</label>
+                    <sh-select
+                        [disabled]="isReadOnly"
+                        [class.disabled-ledger]="isReadOnly"
+                        id="ledger-select-variant"
+                        [(ngModel)]="selectedVariant"
+                        [placeholder]="localeData?.select_variant"
+                        [options]="currentTxn?.variantsList"
+                    ></sh-select>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="source-warehouse" *ngIf="currentTxn?.selectedAccount?.stock && warehouses?.length > 1">
+                    <label>{{ localeData?.select_warehouse }}</label>
+                    <sh-select
+                        [disabled]="isReadOnly"
+                        [class.disabled-ledger]="isReadOnly"
+                        id="ledger-select-warehouse"
+                        [(ngModel)]="selectedWarehouse"
+                        [placeholder]="localeData?.select_warehouse"
+                        [options]="warehouses"
+                    ></sh-select>
+                </div>
+            </div>
+        </div>
         <div class="basic-detail mr-b1" *ngIf="showTaxationDiscountBox || shouldShowAdvanceReceiptMandatoryFields">
             <table class="width-100 total-detail-table">
                 <tbody>
@@ -333,20 +361,7 @@
             </table>
         </div>
         <div class="row warehouse-field">
-            <div class="col-md-4">
-                <div class="source-warehouse" *ngIf="currentTxn?.selectedAccount?.stock && warehouses?.length > 1">
-                    <label>{{ localeData?.select_warehouse }}</label>
-                    <sh-select
-                        [disabled]="isReadOnly"
-                        [class.disabled-ledger]="isReadOnly"
-                        id="ledger-select-warehouse"
-                        [(ngModel)]="selectedWarehouse"
-                        [placeholder]="localeData?.select_warehouse"
-                        [options]="warehouses"
-                    ></sh-select>
-                </div>
-            </div>
-            <div class="col-md-8" [ngClass]="{ 'offset-md-4': !currentTxn?.selectedAccount?.stock }">
+            <div class="col-md-12" [ngClass]="{ 'offset-md-4': !currentTxn?.selectedAccount?.stock }">
                 <div class="text-right mr-b1" *ngIf="currentTxn?.selectedAccount && showTaxationDiscountBox">
                     <ng-container *ngIf="isTcsTdsApplicable">
                         <mat-checkbox

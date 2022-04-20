@@ -200,5 +200,6 @@
     "remove_file": "सफलतापूर्वक मिटाया गया",
     "delete_bank_transactions": "बैंक लेनदेन हटाएं",
     "delete_bank_transactions_title": "क्या आप चयनित बैंक लेनदेन को हटाना चाहते हैं?",
-    "reload_bank_transactions": "बैंक लेनदेन पुनः लोड करें"
+    "reload_bank_transactions": "बैंक लेनदेन पुनः लोड करें",
+    "select_variant": "Select Variant"
 }

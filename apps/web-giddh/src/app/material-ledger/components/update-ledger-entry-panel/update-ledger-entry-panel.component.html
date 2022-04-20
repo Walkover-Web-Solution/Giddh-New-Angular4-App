@@ -778,6 +778,41 @@
                 <ng-container *ngTemplateOutlet="touristSchemeTemplate"></ng-container>
                 <!--        tourist scheme template end-->
                 <!-- region amount and discount container -->
+                <div class="row ledger-bottom">
+                    <div class="row mr-b1">
+                        <div class="col-md-4">
+                            <div class="variant" *ngIf="vm.stockTrxEntry?.inventory?.stock">
+                                <label>{{ localeData?.select_variant }}</label>
+                                <sh-select
+                                    [disabled]="isReadOnly"
+                                    [class.disabled-ledger]="isReadOnly"
+                                    id="ledger-select-variant"
+                                    [(ngModel)]="selectedVariant"
+                                    [placeholder]="localeData?.select_variant"
+                                    [options]="variantsList"
+                                ></sh-select>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 pd-r1" *ngIf="shouldShowWarehouse && warehouses?.length > 1">
+                            <div class="select-warehouse">
+                                <label class="font-12">{{ localeData?.select_warehouse }}</label>
+                                <sh-select
+                                    id="update-ledger-select-warehouse"
+                                    [(ngModel)]="selectedWarehouse"
+                                    [placeholder]="localeData?.select_warehouse"
+                                    [options]="warehouses"
+                                    [disabled]="
+                                        !isPettyCash && currentOrganizationType === 'COMPANY' && branches?.length > 1
+                                    "
+                                    [class.disabled-ledger]="
+                                        !isPettyCash && currentOrganizationType === 'COMPANY' && branches?.length > 1
+                                    "
+                                >
+                                </sh-select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="clearfix">
                     <ng-container *ngIf="vm.showNewEntryPanel || shouldShowAdvanceReceiptMandatoryFields">
                         <div
@@ -1173,32 +1208,6 @@
 
                 <div class="row ledger-bottom">
                     <div class="col-md-6 pd-t1 accordion-expansion">
-                        <!-- make it functional (Developer end) -->
-                        <div *ngIf="shouldShowWarehouse && warehouses?.length > 1" class="row mr-b1">
-                            <div class="col-sm-6 pd-r1">
-                                <div class="select-warehouse">
-                                    <label class="font-12">{{ localeData?.select_warehouse }}</label>
-                                    <sh-select
-                                        id="update-ledger-select-warehouse"
-                                        [(ngModel)]="selectedWarehouse"
-                                        [placeholder]="localeData?.select_warehouse"
-                                        [options]="warehouses"
-                                        [disabled]="
-                                            !isPettyCash &&
-                                            currentOrganizationType === 'COMPANY' &&
-                                            branches?.length > 1
-                                        "
-                                        [class.disabled-ledger]="
-                                            !isPettyCash &&
-                                            currentOrganizationType === 'COMPANY' &&
-                                            branches?.length > 1
-                                        "
-                                    >
-                                    </sh-select>
-                                </div>
-                            </div>
-                        </div>
-
                         <ng-container *ngIf="shouldShowRcmTaxableAmount">
                             <div class="taxable-amount-section">
                                 <label class="primary-color">{{ localeData?.taxable_amount }}</label>

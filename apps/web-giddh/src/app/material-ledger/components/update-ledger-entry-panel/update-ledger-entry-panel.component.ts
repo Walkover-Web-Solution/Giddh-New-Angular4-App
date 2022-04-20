@@ -272,6 +272,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public manualGenerateVoucherChecked: boolean = false;
     /** Holds input to get invoice list request params */
     public invoiceListRequestParams: any = {};
+    /** Currently selected variant */
+    public selectedVariant: any;
+    /** List of variants */
+    public variantsList: IOption[] = [];
 
     constructor(
         private accountService: AccountService,
@@ -2268,6 +2272,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         initialAccounts.push(...this.defaultSuggestions);
         this.searchResults = orderBy(uniqBy(initialAccounts, 'value'), 'label');
         this.vm.isInvoiceGeneratedAlready = this.vm.selectedLedger.voucherGenerated;
+        this.getVariants();
 
         this.store.pipe(select(appState => appState.warehouse.warehouses), takeUntil(this.destroyed$)).subscribe((warehouses: any) => {
             if (warehouses) {
@@ -2358,7 +2363,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @param {TemplateRef<any>} templateRef
      * @memberof UpdateLedgerEntryPanelComponent
      */
-     public openAttachmentsDialog(templateRef: TemplateRef<any>): void {
+    public openAttachmentsDialog(templateRef: TemplateRef<any>): void {
         document.querySelector(".cdk-global-overlay-wrapper")?.classList?.add("double-popup-zindex");
         
         let dialogRef = this.dialog.open(templateRef, {
@@ -2370,6 +2375,19 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             document.querySelector(".cdk-global-overlay-wrapper")?.classList?.remove("double-popup-zindex");
             if (response) {
                 this.store.dispatch(this.ledgerAction.getLedgerTrxDetails(this.accountUniqueName, this.entryUniqueName));
+            }
+        });
+    }
+
+    public getVariants(): void {
+        const variantParams = { particularType: "STOCK", particularUniqueName: this.vm.stockTrxEntry.inventory.stock.uniqueName };
+        this.searchService.getLinkedParticulars(variantParams).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.body) {
+                let variants = [];
+                response?.body?.variants?.forEach(variant => {
+                    variants.push({ label: variant?.name, value: variant?.uniqueName, additional: variant });
+                });
+                this.variantsList = variants;
             }
         });
     }

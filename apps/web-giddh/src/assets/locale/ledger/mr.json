@@ -200,5 +200,6 @@
     "remove_file": "यशस्वीरित्या हटविला",
     "delete_bank_transactions": "बँक व्यवहार हटवा",
     "delete_bank_transactions_title": "तुम्हाला निवडलेले बँक व्यवहार (डिलिट) हटवायचे आहेत का?",
-    "reload_bank_transactions": "बँक व्यवहार रीलोड करा"
+    "reload_bank_transactions": "बँक व्यवहार रीलोड करा",
+    "select_variant": "Select Variant"
 }

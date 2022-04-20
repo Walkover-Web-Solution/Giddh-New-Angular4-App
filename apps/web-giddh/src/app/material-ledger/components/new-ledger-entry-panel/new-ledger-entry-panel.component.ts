@@ -244,6 +244,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public invoiceListRequestParams: any = {};
     /** Round off amount */
     public calculatedRoundOff: number = 0;
+    /** Currently selected variant */
+    public selectedVariant: any;
 
     constructor(private store: Store<AppState>,
         private cdRef: ChangeDetectorRef,
@@ -723,6 +725,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         /* Add warehouse to the stock entry if the user hits 'Save' button without clicking on 'Add to CR/DR' button
             This will add the warehouse to the entered item */
         this.blankLedger.transactions.map((transaction) => {
+            if (this.selectedVariant && transaction.inventory) {
+                transaction.inventory.variant = { name: '', uniqueName: this.selectedVariant };
+            }
             if (transaction.inventory && !transaction.inventory.warehouse) {
                 transaction.inventory.warehouse = { name: '', uniqueName: this.selectedWarehouse };
             }

@@ -462,6 +462,7 @@ export class TransactionVM {
     public voucherAdjustments?: VoucherAdjustments;
     public showDropdown?: boolean = false;
     public referenceVoucher?: ReferenceVoucher;
+    public variantsList?: any[];
 }
 
 export interface IInventory {
@@ -469,6 +470,7 @@ export interface IInventory {
     quantity: number;
     stock: INameUniqueName;
     warehouse: WarehouseDetails;
+    variant?: INameUniqueName;
 }
 
 export interface IInventoryUnit {
