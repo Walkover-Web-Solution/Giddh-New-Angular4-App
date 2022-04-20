@@ -55,7 +55,7 @@ export class ThermalService {
             });
 
             // The QR data
-            qr = "SELLER DETAILS" + this.printerFormat.lineBreak + "GSTIN - " + request?.company?.billingDetails?.taxNumber + this.printerFormat.lineBreak + this.printerFormat.lineBreak + "INVOICE DETAILS" + this.printerFormat.lineBreak + "Number - " + request?.number + this.printerFormat.lineBreak + "Date - " + request?.date + this.printerFormat.lineBreak + "Amount - " + (request?.grandTotal?.amountForCompany ? request?.grandTotal?.amountForCompany : 0) + this.printerFormat.lineBreak + itemsQrTaxData + this.printerFormat.lineBreak + "Total Tax - " + (request?.taxableAmount?.amountForCompany ? request?.taxableAmount?.amountForCompany : 0) + this.printerFormat.lineBreak;
+            qr = "SELLER DETAILS" + this.printerFormat.lineBreak + "GSTIN - " + request?.company?.billingDetails?.taxNumber + this.printerFormat.lineBreak + this.printerFormat.lineBreak + "INVOICE DETAILS" + this.printerFormat.lineBreak + "Number - " + request?.number + this.printerFormat.lineBreak + "Date - " + request?.date + this.printerFormat.lineBreak + "Amount - " + (request?.grandTotal?.amountForCompany ? request?.grandTotal?.amountForCompany : 0) + this.printerFormat.lineBreak + itemsQrTaxData + this.printerFormat.lineBreak + "Total Tax - " + (request?.taxTotal ? request?.taxTotal : 0) + this.printerFormat.lineBreak;
 
             // The dot size of the QR code
             dots = "\x03";
@@ -299,7 +299,6 @@ export class ThermalService {
             discount = "";
         }
 
-
         /**
          * This will use for hide/show for tax amount
          */
@@ -538,23 +537,43 @@ export class ThermalService {
                     this.printerFormat.leftAlign +
                     remainingName;
             }
+            if (entry.taxes && entry.taxes.length > 0) {
+                for (let taxApp of entry.taxes) {
+                    if (entryTaxes[taxApp.accountUniqueName + "_" + taxApp.taxPercent] === undefined) {
+                        entryTaxes[taxApp.accountUniqueName + "_" + taxApp.taxPercent] = [];
+                        entryTaxes[taxApp.accountUniqueName + "_" + taxApp.taxPercent]['name'] = taxApp.accountName;
+                        entryTaxes[taxApp.accountUniqueName + "_" + taxApp.taxPercent]['percent'] = taxApp.taxPercent;
+                        entryTaxes[taxApp.accountUniqueName + "_" + taxApp.taxPercent]['amount'] = taxApp.amount?.amountForAccount;
+                    } else {
+                        entryTaxes[taxApp.accountUniqueName + "_" + taxApp.taxPercent]['percent'] = entryTaxes[taxApp.accountUniqueName + "_" + taxApp.taxPercent]['percent'] + taxApp.taxPercent;
+                        entryTaxes[taxApp.accountUniqueName + "_" + taxApp.taxPercent]['amount'] = entryTaxes[taxApp.accountUniqueName + "_" + taxApp.taxPercent]['amount'] + taxApp.amount?.amountForAccount;
+                    }
+                }
+            }
         }
-        // let gstAmount = '';
-        // let taxType ='';
-        // for (tax of request?.taxRateBifurcation){
-        //     console.log(tax);
-
-        //     // gstAmount = tax?.iamt + tax?.camt + tax?.samt;
-        //     // taxType = tax?.taxName;
-        //     if (defaultTemplate?.sections?.footer?.data?.taxBifurcation?.display) {
-        //         tax += this.printerFormat.formatCenter(
-        //             this.justifyText(taxType +":" + gstAmount)
-        //         );
-        //     }
-        //     else {
-        //         tax = ""
-        //     }
-        // }    
+        Object.keys(entryTaxes)?.forEach(key => {
+            let entryTax = entryTaxes[key];
+            if (entryTax.amount > 0) {
+                let taxAmount = parseFloat(
+                    entryTax.amount
+                ).toFixed(2);
+                if (defaultTemplate?.sections?.footer?.data?.taxBifurcation?.display) {
+                    tax += this.printerFormat.formatCenter(
+                        this.justifyText(
+                            entryTax.name +
+                            entryTax.percent +
+                            "%" +
+                            ": " +
+                            "" +
+                            taxAmount
+                        )
+                    );
+                }
+                else {
+                    tax = ""
+                }
+            }
+        });
         if (request) {
             let header =
                 this.printerFormat.formatCenter(invoiceHeadingField) +
@@ -680,8 +699,6 @@ export class ThermalService {
                         this.printerFormat.endPrinter +
                         this.printerFormat.fullCut,
                     ];
-                    console.log(txt);
-
                     return qz.print(config, txt);
                 })
                 .catch(function (e: any) {
