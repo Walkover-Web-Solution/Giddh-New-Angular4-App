@@ -196,7 +196,6 @@ th.mat-header-cell:first-of-type {
     .ng-untouched {
         .pull-right {
             display: flex;
-            // width: 191.3px;
             button {
                 min-width: 88px;
                 padding-right: 10px;
@@ -205,7 +204,7 @@ th.mat-header-cell:first-of-type {
         }
     }
     .total-padding {
-        height: 130px !important;
+        height: 130px;
     }
     .mat-customer-name span:nth-child(2) {
         position: relative;
@@ -423,5 +422,5 @@ th.mat-header-cell:first-of-type {
     height: 93px;
     padding-top: 10px;
     margin-top: 17px;
-    box-shadow: 0 0 19px rgb(0 0 0 / 20%);
+    box-shadow: 0 0 19px var(--color-primary-common-box-shadow);
 }
