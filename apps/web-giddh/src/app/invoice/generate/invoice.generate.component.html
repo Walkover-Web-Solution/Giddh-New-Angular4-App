@@ -5,6 +5,7 @@
     (commonLocaleData)="commonLocaleData = $event"
     (translationComplete)="translationComplete($event)"
 >
+    <giddh-page-loader *ngIf="isLoading"></giddh-page-loader>
     <div validateSectionPermission [hasPermission]="hasPendingVouchersListPermissions">
         <ng-container *ngIf="!showEditMode">
             <div class="invoice-generate-container">
