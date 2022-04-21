@@ -1,3 +1,6 @@
+<div *ngIf="isLoading">
+    <giddh-page-loader></giddh-page-loader>
+</div>
 <ng-container
     appTranslate
     [file]="'invoice'"
@@ -5,8 +8,7 @@
     (commonLocaleData)="commonLocaleData = $event"
     (translationComplete)="translationComplete($event)"
 >
-    <giddh-page-loader *ngIf="isLoading"></giddh-page-loader>
-    <div validateSectionPermission [hasPermission]="hasPendingVouchersListPermissions">
+    <div validateSectionPermission [hasPermission]="hasPendingVouchersListPermissions" *ngIf="!isLoading">
         <ng-container *ngIf="!showEditMode">
             <div class="invoice-generate-container">
                 <div
