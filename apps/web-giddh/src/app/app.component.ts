@@ -99,6 +99,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
                 APP_FOLDER
             });
         }
+
         /** This will be use for dialog close on route event */
         this.router.events.pipe(filter(event => event instanceof NavigationStart), takeUntil(this.destroyed$)).subscribe((event: any) => {
             if (event) {

@@ -3126,6 +3126,15 @@ td.mat-footer-cell {
 .mat-menu-item-highlighted:not([disabled]) {
     background-color: var(--color-dropdown-list-hover-background) !important;
 }
+.mat-menu-panel {
+    background-color: var(--color-dropdown-primary-background) !important;
+}
+.mat-menu-item:hover:not([disabled]),
+.mat-menu-item.cdk-program-focused:not([disabled]),
+.mat-menu-item.cdk-keyboard-focused:not([disabled]),
+.mat-menu-item-highlighted:not([disabled]) {
+    background-color: var(--color-dropdown-list-hover-background) !important;
+}
 .change-address-mat-menu {
     .mat-menu-content {
         .mat-menu-item {
