@@ -138,8 +138,6 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
     private voucherApiVersion: 1 | 2;
     /** True if voucher generate in process */
     public generateVoucherInProcess: boolean = false;
-    /** True if response is completed */
-    public isLoading: boolean = false;
 
     constructor(
         private store: Store<AppState>,
@@ -183,7 +181,6 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
         this.store.pipe(select(p => p.invoice.ledgers),
             takeUntil(this.destroyed$))
             .subscribe((res: GetAllLedgersForInvoiceResponse) => {
-                this.isLoading = true;
                 if (res && res.results) {
                     let response = cloneDeep(res);
 
@@ -197,7 +194,6 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
                             item.isSelected = this.generalService.checkIfValueExistsInArray(this.selectedInvoices, item?.uniqueName);
                         });
                     }
-                    this.isLoading = false;
                     this.ledgersData = response;
                     this.isGetAllRequestInProcess$ = of(false);
 
