@@ -956,19 +956,6 @@ export class GeneralService {
         return amount?.replace(/,/g, "")?.replace(/ /g, "")?.replace(/'/g, "").trim();
     }
 
-    /*
-     * This will return available themes
-     *
-     * @returns {*}
-     * @memberof GeneralService
-     */
-    public getAvailableThemes(): any {
-        return [
-            { label: 'Default', value: 'default-theme' },
-            { label: 'Dark', value: 'dark-theme' }
-        ];
-    }
-
     /**
      * This will return available themes
      *

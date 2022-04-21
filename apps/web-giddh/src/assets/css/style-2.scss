@@ -2673,7 +2673,6 @@ a.btn.btn-xs.btn-link.pull-right {
     height: 65px;
     display: flex;
     align-items: center;
-    border-color: var(--color-primary-popup-list-header-bottom-border);
 }
 
 .modal-body {
@@ -6329,15 +6328,6 @@ highcharts-chart {
 }
 .panel {
     border-radius: 2px;
-}
-
-.mat-chip-list {
-    .mat-chip-list-wrapper {
-        .mat-chip.mat-standard-chip {
-            color: var(--color-chips-primary);
-            background-color: var(--color-chips-secondary-background);
-        }
-    }
 }
 
 .mat-chip-list {
