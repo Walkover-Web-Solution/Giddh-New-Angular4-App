@@ -2258,6 +2258,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     this.selectedWarehouse = String(this.defaultWarehouse);
                 }
                 this.shouldShowWarehouse = true;
+
+                if (t.inventory.variant) {
+                    this.selectedVariant = t.inventory.variant?.uniqueName;
+                }
             } else {
                 initialAccounts.push({
                     label: t.particular?.name,

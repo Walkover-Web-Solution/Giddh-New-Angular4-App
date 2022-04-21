@@ -34,6 +34,7 @@ export interface IInventory {
     stock?: INameUniqueName;
     unit: IInventoryUnit;
     warehouse?: WarehouseDetails;
+    variant?: any;
 }
 
 export interface IUnit {

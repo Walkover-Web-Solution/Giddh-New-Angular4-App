@@ -780,9 +780,9 @@
                 <!-- region amount and discount container -->
                 <div class="row ledger-bottom">
                     <div class="row mr-b1">
-                        <div class="col-md-4">
-                            <div class="variant" *ngIf="vm.stockTrxEntry?.inventory?.stock">
-                                <label>{{ localeData?.select_variant }}</label>
+                        <div class="col-md-6 pd-r1">
+                            <div class="variant mr-l15" *ngIf="vm.stockTrxEntry?.inventory?.stock">
+                                <label class="font-12">{{ localeData?.select_variant }}</label>
                                 <sh-select
                                     [disabled]="isReadOnly"
                                     [class.disabled-ledger]="isReadOnly"
@@ -793,7 +793,7 @@
                                 ></sh-select>
                             </div>
                         </div>
-                        <div class="col-sm-6 pd-r1" *ngIf="shouldShowWarehouse && warehouses?.length > 1">
+                        <div class="col-sm-6 pd-l1" *ngIf="shouldShowWarehouse && warehouses?.length > 1">
                             <div class="select-warehouse">
                                 <label class="font-12">{{ localeData?.select_warehouse }}</label>
                                 <sh-select
