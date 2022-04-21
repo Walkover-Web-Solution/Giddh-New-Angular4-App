@@ -183,10 +183,8 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
         this.store.pipe(select(p => p.invoice.ledgers),
             takeUntil(this.destroyed$))
             .subscribe((res: GetAllLedgersForInvoiceResponse) => {
-                this.isLoading = true;
                 if (res && res.results) {
                     let response = cloneDeep(res);
-
                     response.results = orderBy(response.results, (item: ILedgersInvoiceResult) => {
                         return moment(item.entryDate, GIDDH_DATE_FORMAT);
                     }, 'desc');
@@ -504,6 +502,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
         if (this.ledgersData && this.ledgersData.results && this.ledgersData.results.length === 0) {
             this.ledgerSearchRequest.page = (this.ledgerSearchRequest.page > 1) ? this.ledgerSearchRequest.page - 1 : this.ledgerSearchRequest.page;
             this.store.dispatch(this.invoiceActions.GetAllLedgersForInvoice(this.prepareQueryParamsForLedgerApi(), this.prepareModelForLedgerApi()));
+            this.isLoading = true;
         }
         this.selectedLedgerItems = [];
         this.selectedCountOfAccounts = [];
