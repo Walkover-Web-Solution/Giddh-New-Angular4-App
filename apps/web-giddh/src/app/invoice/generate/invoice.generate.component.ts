@@ -138,8 +138,6 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
     private voucherApiVersion: 1 | 2;
     /** True if voucher generate in process */
     public generateVoucherInProcess: boolean = false;
-    /** True if response is completed */
-    public isLoading: boolean = false;
 
     constructor(
         private store: Store<AppState>,
@@ -184,6 +182,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
             takeUntil(this.destroyed$))
             .subscribe((res: GetAllLedgersForInvoiceResponse) => {
                 if (res && res.results) {
+
                     let response = cloneDeep(res);
                     response.results = orderBy(response.results, (item: ILedgersInvoiceResult) => {
                         return moment(item.entryDate, GIDDH_DATE_FORMAT);
@@ -195,10 +194,8 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
                             item.isSelected = this.generalService.checkIfValueExistsInArray(this.selectedInvoices, item?.uniqueName);
                         });
                     }
-                    this.isLoading = false;
                     this.ledgersData = response;
                     this.isGetAllRequestInProcess$ = of(false);
-
                     if(this.todaySelected) {
                         this.ledgerSearchRequest.dateRange = [response.fromDate, response.toDate];
                         this.ledgerSearchRequest.from = response.fromDate;
@@ -502,7 +499,6 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
         if (this.ledgersData && this.ledgersData.results && this.ledgersData.results.length === 0) {
             this.ledgerSearchRequest.page = (this.ledgerSearchRequest.page > 1) ? this.ledgerSearchRequest.page - 1 : this.ledgerSearchRequest.page;
             this.store.dispatch(this.invoiceActions.GetAllLedgersForInvoice(this.prepareQueryParamsForLedgerApi(), this.prepareModelForLedgerApi()));
-            this.isLoading = true;
         }
         this.selectedLedgerItems = [];
         this.selectedCountOfAccounts = [];
