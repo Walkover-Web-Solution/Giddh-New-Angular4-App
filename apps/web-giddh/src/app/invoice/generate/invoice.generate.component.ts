@@ -182,6 +182,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
             takeUntil(this.destroyed$))
             .subscribe((res: GetAllLedgersForInvoiceResponse) => {
                 if (res && res.results) {
+                    this.isGetAllRequestInProcess$ = of(false);
                     let response = cloneDeep(res);
                     response.results = orderBy(response.results, (item: ILedgersInvoiceResult) => {
                         return moment(item.entryDate, GIDDH_DATE_FORMAT);
@@ -194,7 +195,6 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
                         });
                     }
                     this.ledgersData = response;
-                    this.isGetAllRequestInProcess$ = of(false);
 
                     if(this.todaySelected) {
                         this.ledgerSearchRequest.dateRange = [response.fromDate, response.toDate];
