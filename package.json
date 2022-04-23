@@ -70,7 +70,7 @@
   },
   "private": true,
   "dependencies": {
-    "@angular/animations": "12.1.1",
+    "@angular/animations": "^12.1.1",
     "@angular/cdk": "12.0.4",
     "@angular/common": "12.1.1",
     "@angular/compiler": "12.1.1",
@@ -116,6 +116,7 @@
     "ngrx-store-localstorage": "9.0.0",
     "ngrx-store-logger": "0.2.2",
     "ngx-bootstrap": "^5.6.1",
+    "ngx-bootstrap-switch": "0.0.3",
     "ngx-clipboard": "13.0.1",
     "ngx-font-picker": "^9.0.0",
     "ngx-lightbox": "2.4.1",

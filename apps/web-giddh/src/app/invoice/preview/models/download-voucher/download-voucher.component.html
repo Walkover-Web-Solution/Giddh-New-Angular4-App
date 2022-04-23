@@ -72,14 +72,22 @@
 
         <div class="checkbox" *ngIf="voucherApiVersion === 2">
             <label>
-                <input
+                <!-- <input
                     name="originalCopy"
                     type="checkbox"
                     value="Original"
                     checked
                     [(ngModel)]="isOriginal"
                     (change)="invoiceTypeChanged($event)"
-                />
+                /> -->
+                <ngx-switch [status]="true"
+                    name="originalCopy"
+                    [onText]="'On'"
+                    [offText]="'Off'"
+                    [onColor]="'blue'"
+                    [offColor]="'gray'"
+                    [size]="'mini'">
+                </ngx-switch>
                 {{
                     selectedItem.voucherType === "purchase"
                         ? commonLocaleData?.app_purchase_bill
@@ -89,24 +97,38 @@
         </div>
         <div class="checkbox" *ngIf="selectedItem.voucherType === 'sales'">
             <label>
-                <input
+                <!-- <input
                     type="checkbox"
                     value="Transport"
                     (change)="invoiceTypeChanged($event)"
                     [(ngModel)]="isTransport"
-                />
+                /> -->
+                <ngx-switch [status]="true"
+                    [onText]="'On'"
+                    [offText]="'Off'"
+                    [onColor]="'blue'"
+                    [offColor]="'gray'"
+                    [size]="'mini'">
+                </ngx-switch>
                 {{ localeData?.transport }}
             </label>
         </div>
 
         <div class="checkbox" *ngIf="selectedItem.voucherType === 'sales'">
             <label>
-                <input
+                <!-- <input
                     type="checkbox"
                     value="Customer"
                     (change)="invoiceTypeChanged($event)"
                     [(ngModel)]="isCustomer"
-                />
+                /> -->
+                <ngx-switch [status]="true"
+                    [onText]="'On'"
+                    [offText]="'Off'"
+                    [onColor]="'blue'"
+                    [offColor]="'gray'"
+                    [size]="'mini'">
+                </ngx-switch>
                 {{ commonLocaleData?.app_customer }}
             </label>
         </div>

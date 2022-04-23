@@ -262,14 +262,22 @@
                                                         <i class="icon-cross"> </i> {{ commonLocaleData?.app_remove }}
                                                     </a>
                                                 </span>
-                                                <input
+                                                <!-- <input
                                                     type="checkbox"
                                                     name="defaultGst_{{ i }}"
                                                     formControlName="isDefault"
                                                     (change)="isDefaultAddressSelected(gst.get('isDefault').value, i)"
                                                     [tooltip]="localeData?.address_tooltip"
                                                     placement="left"
-                                                />
+                                                /> -->
+                                                <ngx-switch [status]=""
+                                                            [onText]="'On'"
+                                                            [offText]="'Off'"
+                                                            [onColor]="'blue'"
+                                                            [offColor]="'gray'"
+                                                            [size]="'mini'"
+                                                            (statusChange)="isDefaultAddressSelected(gst.get('isDefault').value, i)">
+                                                </ngx-switch>
                                             </div>
                                         </div>
                                         <div class="form-group">
