@@ -529,6 +529,35 @@ input {
         }
     }
 }
+.on-setting-page.setting-sidebar-open {
+    .settings-profile-tabs {
+        .profile-tab-container {
+            .account-aside-menu-state {
+                .aside-pane {
+                    #close {
+                        top: 18px;
+                    }
+                }
+            }
+        }
+    }
+}
+.invoice-preview-page {
+    #content-wrapper {
+        .invoice-container {
+            .modal-content {
+                #export-body {
+                    sh-select {
+                        input::placeholder {
+                            color: var(--color-common-primary-input-placeholder) !important;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
 .invoice-control .nav.nav-tabs {
     margin-bottom: 15px;
     padding: 0 0px 0 15px !important;
@@ -2910,7 +2939,7 @@ label {
     color: var(--color-master-page-input-label) !important;
 }
 .isParent {
-    background: var(--color-wild-sand);
+    background: var(--color-master-page-sidebar-active-list-background);
 }
 .isActive {
     color: var(--color-secondary-button-text) !important;
@@ -5567,6 +5596,13 @@ footer#footer.absolute-footer {
                 }
             }
         }
+        account-operations {
+            div:nth-child(7) {
+                .modal-dialog {
+                    margin-top: 80px;
+                }
+            }
+        }
     }
 }
 
@@ -6146,6 +6182,11 @@ button.btn.btn-filter {
 .new-branch-list-page {
     .modal-backdrop + .modal {
         z-index: 9999 !important;
+    }
+}
+.modal-open.cmd-k {
+    .modal-backdrop + .modal {
+        z-index: 999999 !important;
     }
 }
 .modal-backdrop + .modal.fade .modal-dialog {
@@ -7291,6 +7332,11 @@ giddh-datepicker {
     input.mat-input-element {
         margin-top: 0;
         padding: 9px 6px;
+        font-size: 14px;
+
+        &::placeholder {
+            color: var(--color-common-primary-input-placeholder) !important;
+        }
     }
 
     .mat-form-field-wrapper {
@@ -7337,6 +7383,24 @@ giddh-datepicker {
         z-index: 1000 !important;
     }
     overflow-y: auto !important;
+    .advance-search {
+        #export-body {
+            sh-select {
+                input::placeholder {
+                    color: var(--color-common-primary-input-placeholder) !important;
+                }
+            }
+        }
+    }
+    #content-wrapper {
+        .in {
+            .aside-pane {
+                #close {
+                    color: var(--color-primary-right-side-popup-header-text);
+                }
+            }
+        }
+    }
     height: auto;
 }
 
@@ -7852,6 +7916,7 @@ body.update-scroll-hidden {
         display: none;
     }
 }
+
 .contact-body {
     .contact-modal {
         height: 375px !important;
@@ -7861,7 +7926,38 @@ body.update-scroll-hidden {
             overflow: hidden;
         }
     }
+    .cdk-overlay-container {
+        .cdk-global-overlay-wrapper {
+            .cdk-overlay-pane {
+                .mat-dialog-container {
+                    overflow: visible;
+                }
+            }
+            .mail-model-container {
+                .mat-dialog-container {
+                    .modal-body {
+                        input,
+                        textarea {
+                            border: 1px solid var(--color-secondary-input-bar-border);
+                        }
+                    }
+                }
+            }
+            .modal-body {
+                sh-select-menu {
+                    .menu {
+                        virtual-scroll {
+                            .total-padding {
+                                height: auto;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
+
 .cdk-overlay-pane {
     height: auto !important;
 }

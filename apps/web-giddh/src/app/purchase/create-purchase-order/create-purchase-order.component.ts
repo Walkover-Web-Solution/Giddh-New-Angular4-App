@@ -12,7 +12,7 @@ import { AccountResponseV2, AddAccountRequest, UpdateAccountRequest } from '../.
 import { PurchaseOrder, StateCode, Address } from '../../models/api-models/Purchase';
 import { SalesService } from '../../services/sales.service';
 import { WarehouseActions } from '../../settings/warehouse/action/warehouse.action';
-import { WarehouseDetails } from '../../ledger/ledger.vm';
+import { WarehouseDetails } from '../../material-ledger/ledger.vm';
 import { SettingsUtilityService } from '../../settings/services/settings-utility.service';
 import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
 import { trigger, state, style, transition, animate } from '@angular/animations';

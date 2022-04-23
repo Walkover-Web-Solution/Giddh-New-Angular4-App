@@ -30,12 +30,12 @@
 }
 .form-header {
     padding: 20px 15px;
-    background: var(--color-giddh-blue);
+    background: var(--color-primary-right-side-popup-header-background);
     color: var(--color-popup-list-head-text);
 }
 .aside-pane-form {
     background-color: var(--color-white);
-    box-shadow: 0px 3px 6px var(--color-iron);
+    box-shadow: 0px 3px 6px var(--color-primary-common-box-shadow);
     padding: 15px 15px;
     height: calc(100vh - 90px);
     overflow: auto;
