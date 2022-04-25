@@ -68,5 +68,6 @@
     "select_payor": "पेअर निवडा",
     "connect_icici_bank": "आईसीआईसीआई बँक कनेक्ट करा",
     "pending_approval": "मंजूरीसाठी प्रलंबित",
-    "due": "देय"
+    "due": "देय",
+    "bulk_payment_unsupported_error": "मोठ्या प्रमाणात पेमेंट समर्थित नाही."
 }
