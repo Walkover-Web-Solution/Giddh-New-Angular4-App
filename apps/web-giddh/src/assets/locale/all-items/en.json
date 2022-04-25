@@ -345,7 +345,10 @@
                     "label": "Audit Logs New",
                     "link": "/pages/audit-logs/new",
                     "icon": "icon-audit-log",
-                    "description": "Chronological data of entries"
+                    "description": "Chronological data of entries",
+                    "additional": {
+                        "voucherVersion": 1
+                    }
                 },
                 {
                     "label": "Cash Flow",
@@ -378,7 +381,8 @@
                     "description": "Manage petty cash & transaction",
                     "additional": {
                         "tab": "pending",
-                        "tabIndex": 0
+                        "tabIndex": 0,
+                        "voucherVersion": 1
                     }
                 },
                 {

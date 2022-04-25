@@ -1727,12 +1727,17 @@ export class ContactComponent implements OnInit, OnDestroy {
             message = message.replace("[TOTAL]", this.selectedCheckedContacts.length);
 
             this.toaster.showSnackBar("info", message);
+            return;
         }
-        if (this.selectedAccountsList?.length || this.selectedAccForPayment) {
-            this.dialog.open(this.bulkPaymentModalRef ,{
-                width: '980px',
-                panelClass:'contact-modal'
-            });
+        if (this.selectedAccountsList?.length > 1) {
+            this.toaster.showSnackBar("warning", this.localeData?.bulk_payment_unsupported_error);
+        } else {
+            if (this.selectedAccountsList?.length || this.selectedAccForPayment) {
+                this.dialog.open(this.bulkPaymentModalRef, {
+                    width: '980px',
+                    panelClass: 'contact-modal'
+                });
+            }
         }
     }
 
