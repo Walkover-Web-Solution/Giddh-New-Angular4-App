@@ -3,6 +3,7 @@
     [formGroup]="permissionForm"
     [ngClass]="{ 'permission-form': isHorizntl }"
     (ngSubmit)="submitPermissionForm()"
+    autocomplete="off"
 >
     <div class="row">
         <div class="col-xl-10 col-md-12">
@@ -102,6 +103,7 @@
                                                 class="form-control"
                                                 bsDaterangepicker
                                                 container="body"
+                                                autocomplete="off"
                                             />
                                         </div>
                                     </div>
