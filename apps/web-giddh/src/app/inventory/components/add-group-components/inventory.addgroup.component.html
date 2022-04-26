@@ -82,12 +82,24 @@
                                 <div class="col-xs-6 col-sm-6">
                                     <div class="pd-b1" [hidden]="defaultGrpActive">
                                         <label for="isSelfParentUpdt">
-                                            <input
+                                            <!-- <input
                                                 type="checkbox"
                                                 formControlName="isSubGroup"
                                                 id="isSelfParentUpdt"
                                                 name="parentStockGroup"
-                                            />Is it a sub group?</label
+                                            /> -->
+                                            <ngx-switch
+                                                [status]="addGroupForm.get('isSubGroup').value"
+                                                id="isSelfParentUpdt"
+                                                name="parentStockGroup"
+                                                [onText]="'On'"
+                                                [offText]="'Off'"
+                                                [onColor]="'blue'"
+                                                [offColor]="'gray'"
+                                                [size]="'mini'"
+                                            >
+                                            </ngx-switch>
+                                            Is it a sub group?</label
                                         >
                                     </div>
                                     <div class="form-group">

@@ -64,23 +64,46 @@
             </div>
             <div class="row">
                 <div class="col-xl-3 col-md-8 col-sm-12 col-12 mr-b15 clear-both">
-                    <input
+                    <!-- <input
                         type="checkbox"
                         name="showHideOpeningClosingBalance"
                         id="showHideOpeningClosingBalance"
                         [(ngModel)]="exportRequest.showHideOpeningClosingBalance"
-                    />&nbsp;<label for="showHideOpeningClosingBalance">{{ localeData?.opening_closing_balance }}</label>
+                    /> -->
+                    <ngx-switch
+                        [status]="exportRequest.showHideOpeningClosingBalance"
+                        name="showHideOpeningClosingBalance"
+                        id="showHideOpeningClosingBalance"
+                        [onText]="'On'"
+                        [offText]="'Off'"
+                        [onColor]="'blue'"
+                        [offColor]="'gray'"
+                        [size]="'mini'"
+                    ></ngx-switch>
+                    &nbsp;<label for="showHideOpeningClosingBalance">{{ localeData?.opening_closing_balance }}</label>
                 </div>
             </div>
             <div class="row">
                 <div class="col-xl-3 col-md-8 col-sm-12 col-12 mr-b15 clear-both">
-                    <input
+                    <!-- <input
                         type="checkbox"
                         name="balanceTypeAsSign"
                         id="balanceTypeAsSign"
                         [(ngModel)]="exportRequest.balanceTypeAsSign"
                         (ngModelChange)="onBalanceTypeAsSignChanged($event)"
-                    />&nbsp;<label for="balanceTypeAsSign">{{ localeData?.cr_dr }}</label>
+                    /> -->
+                    <ngx-switch
+                        [status]="exportRequest.balanceTypeAsSign"
+                        name="balanceTypeAsSign"
+                        id="balanceTypeAsSign"
+                        [onText]="'On'"
+                        [offText]="'Off'"
+                        [onColor]="'blue'"
+                        [offColor]="'gray'"
+                        [size]="'mini'"
+                        (statusChange)="onBalanceTypeAsSignChanged($event)"
+                    ></ngx-switch>
+                    &nbsp;<label for="balanceTypeAsSign">{{ localeData?.cr_dr }}</label>
                 </div>
             </div>
             <div class="row">

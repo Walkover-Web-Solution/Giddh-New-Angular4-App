@@ -31,6 +31,7 @@ import { ProformaInvoiceRoutingModule } from './proforma-invoice.routing.module'
 import { AdvanceReceiptAdjustmentModule } from '../shared/advance-receipt-adjustment/advance-receipt-adjustment.module';
 import { HasFocusDirectiveModule } from '../shared/helpers/directives/has-focus/has-focus.module';
 import { ReplacePipeModule } from '../shared/helpers/pipes/replace/replace.module';
+import { NgxBootstrapSwitchModule } from 'ngx-bootstrap-switch';
 
 @NgModule({
     imports: [
@@ -59,7 +60,8 @@ import { ReplacePipeModule } from '../shared/helpers/pipes/replace/replace.modul
         NgxMaskModule.forRoot(),
         AdvanceReceiptAdjustmentModule,
         HasFocusDirectiveModule,
-        ReplacePipeModule
+        ReplacePipeModule,
+        NgxBootstrapSwitchModule.forRoot()
     ],
     exports: [ProformaInvoiceComponent, SalesAddStockComponent, AsideMenuProductServiceComponent],
     declarations: [

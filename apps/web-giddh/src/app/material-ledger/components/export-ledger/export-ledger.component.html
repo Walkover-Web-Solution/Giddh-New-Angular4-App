@@ -95,20 +95,11 @@
                             name="withInvoiceNumber"
                             [(ngModel)]="withInvoiceNumber"
                         ></mat-checkbox> -->
-                        <mat-slide-toggle 
-                        color="primary"
-                        name="withInvoiceNumber"
-                        [(ngModel)]="withInvoiceNumber">
-                            <span
-                                class="pull-left"
-                                *ngIf="withInvoiceNumber"
-                                >{{ commonLocaleData?.app_include }}</span
-                            >
-                            <span
-                                class="pull-right"
-                                *ngIf="!withInvoiceNumber"
-                                >{{ commonLocaleData?.app_exclude }}</span
-                            >
+                        <mat-slide-toggle color="primary" name="withInvoiceNumber" [(ngModel)]="withInvoiceNumber">
+                            <span class="pull-left" *ngIf="withInvoiceNumber">{{ commonLocaleData?.app_include }}</span>
+                            <span class="pull-right" *ngIf="!withInvoiceNumber">{{
+                                commonLocaleData?.app_exclude
+                            }}</span>
                         </mat-slide-toggle>
                     </label>
                 </div>
@@ -120,19 +111,11 @@
                             name="balanceTypeAsSign"
                             [(ngModel)]="balanceTypeAsSign"
                         ></mat-checkbox> -->
-                        <mat-slide-toggle color="primary"
-                        name="balanceTypeAsSign"
-                        [(ngModel)]="balanceTypeAsSign">
-                            <span
-                                class="pull-left"
-                                *ngIf="balanceTypeAsSign"
-                            >{{ commonLocaleData?.app_include }}</span
-                            >
-                            <span
-                                class="pull-right"
-                                *ngIf="!balanceTypeAsSign"
-                            >{{ commonLocaleData?.app_exclude }}</span
-                            >
+                        <mat-slide-toggle color="primary" name="balanceTypeAsSign" [(ngModel)]="balanceTypeAsSign">
+                            <span class="pull-left" *ngIf="balanceTypeAsSign">{{ commonLocaleData?.app_include }}</span>
+                            <span class="pull-right" *ngIf="!balanceTypeAsSign">{{
+                                commonLocaleData?.app_exclude
+                            }}</span>
                         </mat-slide-toggle>
                     </label>
                 </div>

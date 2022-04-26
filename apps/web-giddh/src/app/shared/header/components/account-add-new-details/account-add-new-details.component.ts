@@ -404,6 +404,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         });
         return gstFields;
     }
+    public varTest = this.initialGstDetailsForm;
 
     public resetGstStateForm() {
         this.forceClear$ = observableOf({ status: true });

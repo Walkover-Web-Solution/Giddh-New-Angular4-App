@@ -617,13 +617,23 @@
                                                             <div class="form-group p-0 width-100">
                                                                 <div class="d-flex align-items-center pb-1">
                                                                     <span class="pb-0 pd-r15">
-                                                                        <input
+                                                                        <!-- <input
                                                                             type="checkbox"
                                                                             (change)="autoFillShippingDetails()"
                                                                             name="autoFillShipping"
                                                                             [ngModelOptions]="{ standalone: true }"
                                                                             [(ngModel)]="autoFillShipping"
-                                                                        />
+                                                                        /> -->
+                                                                        <ngx-switch
+                                                                            [status]="autoFillShipping"
+                                                                            [onText]="'On'"
+                                                                            [offText]="'Off'"
+                                                                            [onColor]="'blue'"
+                                                                            [offColor]="'gray'"
+                                                                            [size]="'mini'"
+                                                                            (statusChange)="autoFillShippingDetails()"
+                                                                        >
+                                                                        </ngx-switch>
                                                                         {{ localeData?.shipping_billing_same }}
                                                                     </span>
                                                                     <span>
@@ -1742,14 +1752,25 @@
                                     </div>
                                     <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12">
                                         <div class="col-sm-6 col-xl-6 col-lg-10 col-md-10 pl-0">
-                                            <input
+                                            <!-- <input
                                                 id="reverse-charge"
                                                 name="rcmEntry"
                                                 class="checkbox-custom"
                                                 type="checkbox"
                                                 [ngModel]="isRcmEntry"
                                                 (click)="toggleRcmCheckbox($event)"
-                                            />
+                                            /> -->
+                                            <ngx-switch
+                                                [status]="isRcmEntry"
+                                                [onText]="'On'"
+                                                [offText]="'Off'"
+                                                [onColor]="'blue'"
+                                                [offColor]="'gray'"
+                                                [size]="'mini'"
+                                                id="reverse-charge"
+                                                (click)="toggleRcmCheckbox($event)"
+                                            >
+                                            </ngx-switch>
                                             <label
                                                 #rcmPopup="bs-popover"
                                                 [popover]="rcmTemplate"
@@ -2768,7 +2789,7 @@
                                                 />
 
                                                 <div *ngIf="isTcsTdsApplicable" class="wrap-other-tax">
-                                                    <input
+                                                    <!-- <input
                                                         type="checkbox"
                                                         class="other-taxes-checkbox"
                                                         [(ngModel)]="entry.isOtherTaxApplicable"
@@ -2782,7 +2803,27 @@
                                                                 entryIdx
                                                             )
                                                         "
-                                                    />
+                                                    /> -->
+                                                    <ngx-switch
+                                                        [status]="entry.isOtherTaxApplicable"
+                                                        class="other-taxes-checkbox"
+                                                        (click)="tcsTdsIndex = entryIdx"
+                                                        *ngIf="!entry.isOtherTaxApplicable"
+                                                        name="entry.isOtherTaxApplicable_{{ entryIdx }}"
+                                                        id="entry.isOtherTaxApplicable_{{ entryIdx }}"
+                                                        [onText]="'On'"
+                                                        [offText]="'off'"
+                                                        [onColor]="'blue'"
+                                                        [offColor]="'gray'"
+                                                        [size]="'mini'"
+                                                        (statusChange)="
+                                                            toggleOtherTaxesAsidePane(
+                                                                entry.isOtherTaxApplicable,
+                                                                entryIdx
+                                                            )
+                                                        "
+                                                    >
+                                                    </ngx-switch>
                                                     <label
                                                         for="entry.isOtherTaxApplicable_{{ entryIdx }}"
                                                         *ngIf="!entry.isOtherTaxApplicable"

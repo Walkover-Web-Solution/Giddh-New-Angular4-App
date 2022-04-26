@@ -81,6 +81,7 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
     ) {
         this.exportRequest.fileType = 'xls';
         this.exportRequest.balanceTypeAsSign = false;
+        this.exportRequest.showHideOpeningClosingBalance = false;
     }
 
     /**
@@ -347,6 +348,7 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
         this.selectActiveFinancialYear();
         this.columnarReportResponse = null;
         this.exportRequest.balanceTypeAsSign = false;
+        this.exportRequest.showHideOpeningClosingBalance = false;
         this.isBalanceTypeAsSign = false;
     }
 

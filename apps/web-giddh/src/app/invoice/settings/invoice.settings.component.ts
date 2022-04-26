@@ -85,6 +85,11 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
         private router: Router,
         private generalService: GeneralService
     ) {
+        this.invoiceSetting.showSeal = false;
+        this.invoiceSetting.autoMail = false;
+        this.invoiceSetting.useCustomInvoiceNumber = false;
+        this.invoiceSetting.autoDeleteEntries = false;
+        this.invoiceSetting.gstEInvoiceEnable = false;
         this.gmailAuthCodeStaticUrl = this.gmailAuthCodeStaticUrl.replace(':redirect_url', this.getRedirectUrl(AppUrl)).replace(':client_id', GOOGLE_CLIENT_ID);
         this.gmailAuthCodeUrl$ = observableOf(this.gmailAuthCodeStaticUrl);
     }
@@ -145,6 +150,8 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
                 this.invoiceSetting = cloneDeep(setting.invoiceSettings);
                 this.proformaSetting = cloneDeep(setting.proformaSettings);
                 this.invoiceSetting.autoPaid = this.invoiceSetting.autoPaid === 'runtime';
+                
+                
 
                 // using last state to compare data before dispatching action
                 this.invoiceLastState = cloneDeep(setting.invoiceSettings);
@@ -203,8 +210,11 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
             } else if (!setting || !setting.webhooks) {
                 this.store.dispatch(this.invoiceActions.getInvoiceSetting());
             }
+            
         });
+        
     }
+    
 
     // public onChangeSendInvoiceViaSms(isChecked) {
     //     if (!isChecked) {

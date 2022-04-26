@@ -80,13 +80,17 @@
                     [(ngModel)]="isOriginal"
                     (change)="invoiceTypeChanged($event)"
                 /> -->
-                <ngx-switch [status]="true"
+                <ngx-switch
+                    [status]="isOriginal"
                     name="originalCopy"
+                    value="Original"
                     [onText]="'On'"
                     [offText]="'Off'"
                     [onColor]="'blue'"
                     [offColor]="'gray'"
-                    [size]="'mini'">
+                    [size]="'mini'"
+                    (changeStatus)="invoiceTypeChanged($event)"
+                >
                 </ngx-switch>
                 {{
                     selectedItem.voucherType === "purchase"
@@ -103,12 +107,16 @@
                     (change)="invoiceTypeChanged($event)"
                     [(ngModel)]="isTransport"
                 /> -->
-                <ngx-switch [status]="true"
+                <ngx-switch
+                    [status]="isTransport"
+                    value="Transport"
                     [onText]="'On'"
                     [offText]="'Off'"
                     [onColor]="'blue'"
                     [offColor]="'gray'"
-                    [size]="'mini'">
+                    [size]="'mini'"
+                    (statusChange)="invoiceTypeChanged($event)"
+                >
                 </ngx-switch>
                 {{ localeData?.transport }}
             </label>
@@ -122,12 +130,16 @@
                     (change)="invoiceTypeChanged($event)"
                     [(ngModel)]="isCustomer"
                 /> -->
-                <ngx-switch [status]="true"
+                <ngx-switch
+                    [status]="isCustomer"
+                    value="Customer"
                     [onText]="'On'"
                     [offText]="'Off'"
                     [onColor]="'blue'"
                     [offColor]="'gray'"
-                    [size]="'mini'">
+                    [size]="'mini'"
+                    (statusChange)="invoiceTypeChanged($event)"
+                >
                 </ngx-switch>
                 {{ commonLocaleData?.app_customer }}
             </label>
