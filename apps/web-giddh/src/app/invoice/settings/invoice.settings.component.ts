@@ -93,7 +93,6 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
-        this.store.dispatch(this.invoiceActions.getInvoiceSetting());
         this.store.dispatch(this.settingsIntegrationActions.GetGmailIntegrationStatus());
         this.activeCompany$ = this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$));
         this.store.pipe(select(s => s.settings.isGmailIntegrated), takeUntil(this.destroyed$)).subscribe(result => {
@@ -140,7 +139,8 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
 
     public initSettingObj() {
         this.store.pipe(select(p => p.invoice.settings), takeUntil(this.destroyed$)).subscribe((setting: InvoiceSetting) => {
-            if (setting && setting.invoiceSettings && setting.webhooks) {
+            if (setting && setting.invoiceSettings) {
+
                 this.originalEmail = cloneDeep(setting.invoiceSettings.email);
 
                 this.settingResponse = setting;
@@ -151,9 +151,9 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
 
                 // using last state to compare data before dispatching action
                 this.invoiceLastState = cloneDeep(setting.invoiceSettings);
-                this.webhookLastState = cloneDeep(setting.webhooks);
+                this.webhookLastState = cloneDeep(setting.webhooks ?? []);
 
-                let webhookArray = cloneDeep(setting.webhooks);
+                let webhookArray = cloneDeep(setting.webhooks ?? []);
 
                 // using filter to get webhooks for 'invoice' only
                 this.invoiceWebhook = webhookArray.filter((obj) => obj.entity === 'invoice');
@@ -203,7 +203,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
                 }
                 this.companyCashFreeSettings = cloneDeep(setting.companyCashFreeSettings);
                 this.cdr.detectChanges();
-            } else if (!setting || !setting.webhooks) {
+            } else if (!setting) {
                 this.store.dispatch(this.invoiceActions.getInvoiceSetting());
             }
         });
