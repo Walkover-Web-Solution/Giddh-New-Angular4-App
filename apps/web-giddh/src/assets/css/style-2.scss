@@ -7435,6 +7435,59 @@ giddh-datepicker {
                 }
             }
         }
+        .container.ledger-section {
+            .ledg-head.transactions-page {
+                #eledgerwrap {
+                    .ledger-book {
+                        .wrap-transaction-map {
+                            .ledger-head {
+                                z-index: 11;
+                            }
+                            .ledger-book {
+                                .entry-modal-height {
+                                    .entry-modal {
+                                        .ledger-panel {
+                                            z-index: 9;
+                                        }
+                                    }
+                                }
+                            }
+                            #ledger-transaction-left-list,
+                            #ledger-transaction-right-list {
+                                .transaction-list-sh-select {
+                                    sh-select-menu {
+                                        .menu {
+                                            z-index: 10;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                .mat-grid-list.ledger-head {
+                    z-index: 8;
+                }
+                .ledger-book {
+                    .entry-modal {
+                        .ledger-panel {
+                            z-index: 6;
+                        }
+                    }
+                    .ledger-main {
+                        .new-entry-ledger {
+                            .ledger-account-label {
+                                sh-select-menu {
+                                    .menu {
+                                        z-index: 7;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 
