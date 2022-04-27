@@ -5626,6 +5626,19 @@ footer#footer.absolute-footer {
             }
         }
     }
+    login {
+        .modal.fade {
+            .modal-body.clearfix {
+                #authModal {
+                    button[type="login"].ladda-button {
+                        .ladda-label {
+                            color: var(--color-secondary-button-text);
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 section.ledger-stat.sticky-footer.sticky-footer-sale-amount {
