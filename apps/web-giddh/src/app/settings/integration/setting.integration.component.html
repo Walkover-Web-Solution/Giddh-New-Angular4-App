@@ -212,11 +212,22 @@
                                 <div class="form-group col-lg-4 col-md-6 col-xs-12 mr-t1 empty-label" id="inlnImg">
                                     <label>&nbsp;</label>
                                     <br />
-                                    <input
+                                    <!-- <input
                                         type="checkbox"
                                         [(ngModel)]="razorPayObj.autoCapturePayment"
                                         name="autoCapturePayment"
-                                    />
+                                    /> -->
+                                    <ngx-switch
+                                        [status]="razorPayObj.autoCapturePayment"
+                                        [onText]="'On'"
+                                        [offText]="'Off'"
+                                        [onColor]="'blue'"
+                                        [offColor]="'gray'"
+                                        [size]="'mini'"
+                                        (statusChange)="toggleCheckBox()"
+                                    >
+                                    </ngx-switch>
+
                                     {{ localeData?.collection?.automatic_capture_on_payment }}
                                 </div>
                             </div>

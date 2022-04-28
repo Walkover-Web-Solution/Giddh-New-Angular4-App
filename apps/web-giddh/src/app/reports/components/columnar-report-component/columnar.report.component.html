@@ -71,7 +71,7 @@
                         [(ngModel)]="exportRequest.showHideOpeningClosingBalance"
                     /> -->
                     <ngx-switch
-                        [status]="exportRequest.showHideOpeningClosingBalance"
+                        [(status)]="exportRequest.showHideOpeningClosingBalance"
                         name="showHideOpeningClosingBalance"
                         id="showHideOpeningClosingBalance"
                         [onText]="'On'"
@@ -93,7 +93,7 @@
                         (ngModelChange)="onBalanceTypeAsSignChanged($event)"
                     /> -->
                     <ngx-switch
-                        [status]="exportRequest.balanceTypeAsSign"
+                        [(status)]="exportRequest.balanceTypeAsSign"
                         name="balanceTypeAsSign"
                         id="balanceTypeAsSign"
                         [onText]="'On'"

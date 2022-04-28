@@ -90,6 +90,12 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
         this.invoiceSetting.useCustomInvoiceNumber = false;
         this.invoiceSetting.autoDeleteEntries = false;
         this.invoiceSetting.gstEInvoiceEnable = false;
+        this.proformaSetting.autoMail = false;
+        this.proformaSetting.autoChangeStatusOnExp = false;
+        this.estimateSetting.autoMail = false;
+        this.estimateSetting.autoChangeStatusOnExp = false;
+        this.companyEmailSettings.sendThroughGmail = false;
+        this.invoiceSetting.enableNarrationOnInvAndVoucher = false;
         this.gmailAuthCodeStaticUrl = this.gmailAuthCodeStaticUrl.replace(':redirect_url', this.getRedirectUrl(AppUrl)).replace(':client_id', GOOGLE_CLIENT_ID);
         this.gmailAuthCodeUrl$ = observableOf(this.gmailAuthCodeStaticUrl);
     }

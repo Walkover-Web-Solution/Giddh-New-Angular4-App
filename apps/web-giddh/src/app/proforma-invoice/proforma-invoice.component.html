@@ -625,7 +625,8 @@
                                                                             [(ngModel)]="autoFillShipping"
                                                                         /> -->
                                                                         <ngx-switch
-                                                                            [status]="autoFillShipping"
+                                                                            [(status)]="autoFillShipping"
+                                                                            name="autoFillShipping"
                                                                             [onText]="'On'"
                                                                             [offText]="'Off'"
                                                                             [onColor]="'blue'"
@@ -1265,13 +1266,26 @@
                                                         <div class="form-group p-0 width-100">
                                                             <div class="d-flex align-items-center pb-1">
                                                                 <span class="pd-r15">
-                                                                    <input
+                                                                    <!-- <input
                                                                         type="checkbox"
                                                                         autocomplete="None"
                                                                         name="autoFillCompanyShipping"
                                                                         [(ngModel)]="autoFillCompanyShipping"
                                                                         (change)="autoFillCompanyShippingDetails()"
-                                                                    />
+                                                                    /> -->
+                                                                    <ngx-switch
+                                                                        [(status)]="autoFillCompanyShipping"
+                                                                        name="autoFillCompanyShipping"
+                                                                        [onText]="'On'"
+                                                                        [offText]="'Off'"
+                                                                        [onColor]="'blue'"
+                                                                        [offColor]="'gray'"
+                                                                        [size]="'mini'"
+                                                                        (statusChange)="
+                                                                            autoFillCompanyShippingDetails()
+                                                                        "
+                                                                    >
+                                                                    </ngx-switch>
                                                                     {{ localeData?.shipping_billing_same }}
                                                                 </span>
                                                             </div>
@@ -1760,28 +1774,29 @@
                                                 [ngModel]="isRcmEntry"
                                                 (click)="toggleRcmCheckbox($event)"
                                             /> -->
-                                            <ngx-switch
-                                                [status]="isRcmEntry"
-                                                [onText]="'On'"
-                                                [offText]="'Off'"
-                                                [onColor]="'blue'"
-                                                [offColor]="'gray'"
-                                                [size]="'mini'"
-                                                id="reverse-charge"
-                                                (click)="toggleRcmCheckbox($event)"
-                                            >
-                                            </ngx-switch>
-                                            <label
-                                                #rcmPopup="bs-popover"
-                                                [popover]="rcmTemplate"
-                                                container="body"
-                                                placement="bottom right"
-                                                containerClass="purchase-invoice-rcm"
-                                                for="reverse-charge"
-                                                class="checkbox-custom-label"
-                                            >
-                                                {{ localeData?.transaction_reverse_charge }}
-                                            </label>
+                                            <span (click)="toggleRcmCheckbox($event)">
+                                                <ngx-switch
+                                                    [(status)]="isRcmEntry"
+                                                    [onText]="'On'"
+                                                    [offText]="'Off'"
+                                                    [onColor]="'blue'"
+                                                    [offColor]="'gray'"
+                                                    [size]="'mini'"
+                                                    id="reverse-charge"
+                                                >
+                                                </ngx-switch>
+                                                <label
+                                                    #rcmPopup="bs-popover"
+                                                    [popover]="rcmTemplate"
+                                                    container="body"
+                                                    placement="bottom right"
+                                                    containerClass="purchase-invoice-rcm"
+                                                    for="reverse-charge"
+                                                    class="checkbox-custom-label"
+                                                >
+                                                    {{ localeData?.transaction_reverse_charge }}
+                                                </label>
+                                            </span>
                                         </div>
                                     </div>
                                     <ng-template #rcmTemplate>
@@ -2805,7 +2820,7 @@
                                                         "
                                                     /> -->
                                                     <ngx-switch
-                                                        [status]="entry.isOtherTaxApplicable"
+                                                        [(status)]="entry.isOtherTaxApplicable"
                                                         class="other-taxes-checkbox"
                                                         (click)="tcsTdsIndex = entryIdx"
                                                         *ngIf="!entry.isOtherTaxApplicable"

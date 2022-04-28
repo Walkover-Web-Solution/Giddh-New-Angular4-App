@@ -24,12 +24,23 @@
                                     <div class="clearfix pd-t1">
                                         <div class="row">
                                             <div class="col-sm-12 col-md-12 col-lg-3">
-                                                <input
+                                                <!-- <input
                                                     type="checkbox"
                                                     [(ngModel)]="invoiceSetting.enableNarrationOnInvAndVoucher"
                                                     name="enableNarrationOnInvAndVoucher"
                                                     class="show-on-mobile"
-                                                />
+                                                /> -->
+                                                <ngx-switch
+                                                    [(status)]="invoiceSetting.enableNarrationOnInvAndVoucher"
+                                                    name="enableNarrationOnInvAndVoucher"
+                                                    class="show-on-mobile"
+                                                    [onText]="'On'"
+                                                    [offText]="'Off'"
+                                                    [onColor]="'blue'"
+                                                    [offColor]="'gray'"
+                                                    [size]="'mini'"
+                                                >
+                                                </ngx-switch>
                                                 <label>{{ localeData?.narration_on_mobile }}</label>
                                             </div>
 
@@ -41,7 +52,7 @@
                                                     class="hide-on-mobile"
                                                 /> -->
                                                 <ngx-switch
-                                                    [status]="!invoiceSetting.enableNarrationOnInvAndVoucher"
+                                                    [(status)]="invoiceSetting.enableNarrationOnInvAndVoucher"
                                                     name="enableNarrationOnInvAndVoucher"
                                                     class="hide-on-mobile"
                                                     [onText]="'On'"
@@ -159,13 +170,24 @@
                             <div class="clearfix pd-t1">
                                 <div class="row">
                                     <div class="col-lg-3 col-md-12 col-sm-12">
-                                        <input
+                                        <!-- <input
                                             type="checkbox"
                                             [(ngModel)]="companyEmailSettings.sendThroughGmail"
                                             name="sendThroughGmail"
                                             [disabled]="!isGmailIntegrated"
                                             class="show-on-mobile"
-                                        />
+                                        /> -->
+                                        <ngx-switch
+                                            [(status)]="companyEmailSettings.sendThroughGmail"
+                                            name="sendThroughGmail"
+                                            class="show-on-mobile"
+                                            [onText]="'On'"
+                                            [offText]="'Off'"
+                                            [onColor]="'blue'"
+                                            [offColor]="'gray'"
+                                            [size]="'mini'"
+                                        >
+                                        </ngx-switch>
                                         <label>{{ localeData?.send_email_gmail }}</label>
                                     </div>
 
@@ -178,7 +200,7 @@
                                             class="hide-on-mobile"
                                         /> -->
                                         <ngx-switch
-                                            [status]=""
+                                            [(status)]="companyEmailSettings.sendThroughGmail"
                                             name="sendThroughGmail"
                                             class="hide-on-mobile"
                                             [onText]="'On'"
@@ -310,12 +332,23 @@
                                 <div class="clearfix pd-t1">
                                     <div class="row">
                                         <div class="col-sm-12 col-md-12 col-lg-3">
-                                            <input
+                                            <!-- <input
                                                 type="checkbox"
                                                 [(ngModel)]="estimateSetting.autoChangeStatusOnExp"
                                                 name="estimateAutoChange"
                                                 class="show-on-mobile"
-                                            />
+                                            /> -->
+                                            <ngx-switch
+                                                [(status)]="estimateSetting.autoChangeStatusOnExp"
+                                                name="estimateAutoChange"
+                                                class="show-on-mobile"
+                                                [onText]="'On'"
+                                                [offText]="'Off'"
+                                                [onColor]="'blue'"
+                                                [offColor]="'gray'"
+                                                [size]="'mini'"
+                                            >
+                                            </ngx-switch>
                                             <label>{{ localeData?.auto_change_status_expiry }}</label>
                                         </div>
 
@@ -327,7 +360,7 @@
                                                 class="hide-on-mobile"
                                             /> -->
                                             <ngx-switch
-                                                [status]="false"
+                                                [(status)]="estimateSetting.autoChangeStatusOnExp"
                                                 name="estimateAutoChange"
                                                 class="hide-on-mobile"
                                                 [onText]="'On'"
@@ -350,6 +383,17 @@
                                                 name="estimateAutomail"
                                                 class="show-on-mobile"
                                             /> -->
+                                            <ngx-switch
+                                                [(status)]="estimateSetting.autoMail"
+                                                name="estimateAutomail"
+                                                class="show-on-mobile"
+                                                [onText]="'On'"
+                                                [offText]="'Off'"
+                                                [onColor]="'blue'"
+                                                [offColor]="'gray'"
+                                                [size]="'mini'"
+                                            >
+                                            </ngx-switch>
                                             <label>{{ localeData?.auto_email_generate }}</label>
                                         </div>
                                         <div class="col-sm-12 col-md-12 col-lg-9 form-group">
@@ -360,7 +404,7 @@
                                                 class="hide-on-mobile"
                                             /> -->
                                             <ngx-switch
-                                                [status]="false"
+                                                [(status)]="estimateSetting.autoMail"
                                                 name="estimateAutomail"
                                                 class="hide-on-mobile"
                                                 [onText]="'On'"
@@ -462,12 +506,23 @@
                                 <div class="clearfix pd-t1">
                                     <div class="row">
                                         <div class="col-sm-12 col-md-12 col-lg-3">
-                                            <input
+                                            <!-- <input
                                                 type="checkbox"
                                                 [(ngModel)]="proformaSetting.autoChangeStatusOnExp"
                                                 name="proformaAutoChange"
                                                 class="show-on-mobile"
-                                            />
+                                            /> -->
+                                            <ngx-switch
+                                                [(status)]="proformaSetting.autoChangeStatusOnExp"
+                                                name="proformaAutoChange"
+                                                class="show-on-mobile"
+                                                [onText]="'On'"
+                                                [offText]="'Off'"
+                                                [onColor]="'blue'"
+                                                [offColor]="'gray'"
+                                                [size]="'mini'"
+                                            >
+                                            </ngx-switch>
                                             <label>{{ localeData?.auto_change_status_expiry }}</label>
                                         </div>
                                         <div class="col-sm-12 col-md-12 col-lg-9 form-group">
@@ -478,7 +533,7 @@
                                                 class="hide-on-mobile"
                                             /> -->
                                             <ngx-switch
-                                                [status]="false"
+                                                [(status)]="proformaSetting.autoChangeStatusOnExp"
                                                 name="proformaAutoChange"
                                                 class="hide-on-mobile"
                                                 [onText]="'On'"
@@ -495,12 +550,23 @@
                                 <div class="clearfix pd-t1">
                                     <div class="row">
                                         <div class="col-sm-12 col-md-12 col-lg-3">
-                                            <input
+                                            <!-- <input
                                                 type="checkbox"
                                                 [(ngModel)]="proformaSetting.autoMail"
                                                 name="proformaAutomail"
                                                 class="show-on-mobile"
-                                            />
+                                            /> -->
+                                            <ngx-switch
+                                                [(status)]="proformaSetting.autoMail"
+                                                name="proformaAutomail"
+                                                class="show-on-mobile"
+                                                [onText]="'On'"
+                                                [offText]="'Off'"
+                                                [onColor]="'blue'"
+                                                [offColor]="'gray'"
+                                                [size]="'mini'"
+                                            >
+                                            </ngx-switch>
                                             <label>{{ localeData?.auto_mail_generate_update }}</label>
                                         </div>
                                         <div class="col-sm-12 col-md-12 col-lg-9 form-group">
@@ -511,7 +577,7 @@
                                                 class="hide-on-mobile"
                                             /> -->
                                             <ngx-switch
-                                                [status]="false"
+                                                [(status)]="proformaSetting.autoMail"
                                                 name="proformaAutomail"
                                                 class="hide-on-mobile"
                                                 [onText]="'On'"
@@ -614,7 +680,7 @@
                                                 class="show-on-mobile"
                                             /> -->
                                             <ngx-switch
-                                                [status]="invoiceSetting.showSeal"
+                                                [(status)]="invoiceSetting.showSeal"
                                                 name="invoiceStatusPayment"
                                                 class="show-on-mobile"
                                                 [onText]="'On'"
@@ -627,14 +693,14 @@
                                             <label>{{ localeData?.show_seal }}</label>
                                         </div>
                                         <div class="col-sm-12 col-md-9 form-group">
-                                            <input
+                                            <!-- <input
                                                 type="checkbox"
                                                 name="invoiceStatusPayment"
                                                 [(ngModel)]="invoiceSetting.showSeal"
                                                 class="hide-on-mobile"
-                                            />
-                                            <!-- <ngx-switch
-                                                [status]="invoiceSetting.showSeal"
+                                            /> -->
+                                            <ngx-switch
+                                                [(status)]="invoiceSetting.showSeal"
                                                 name="invoiceStatusPayment"
                                                 class="hide-on-mobile"
                                                 [onText]="'On'"
@@ -643,7 +709,7 @@
                                                 [offColor]="'gray'"
                                                 [size]="'mini'"
                                             >
-                                            </ngx-switch> -->
+                                            </ngx-switch>
                                         </div>
                                     </div>
                                 </div>
@@ -651,14 +717,14 @@
                                 <div class="clearfix pd-t1">
                                     <div class="row">
                                         <div class="col-sm-12 col-md-12 col-lg-3">
-                                            <input
+                                            <!-- <input
                                                 type="checkbox"
                                                 [(ngModel)]="invoiceSetting.autoMail"
                                                 name="invoiceAutomail"
                                                 class="show-on-mobile"
-                                            />
-                                            <!-- <ngx-switch
-                                                [status]="invoiceSetting.autoMail"
+                                            /> -->
+                                            <ngx-switch
+                                                [(status)]="invoiceSetting.autoMail"
                                                 name="invoiceAutomail"
                                                 class="show-on-mobile"
                                                 [onText]="'On'"
@@ -667,18 +733,18 @@
                                                 [offColor]="'gray'"
                                                 [size]="'mini'"
                                             >
-                                            </ngx-switch> -->
+                                            </ngx-switch>
                                             <label>{{ localeData?.auto_mail_update }}</label>
                                         </div>
                                         <div class="col-sm-12 col-md-9 form-group">
-                                            <input
+                                            <!-- <input
                                                 type="checkbox"
                                                 [(ngModel)]="invoiceSetting.autoMail"
                                                 name="invoiceAutomail"
                                                 class="hide-on-mobile"
-                                            />
-                                            <!-- <ngx-switch
-                                                [status]="invoiceSetting.autoMail"
+                                            /> -->
+                                            <ngx-switch
+                                                [(status)]="invoiceSetting.autoMail"
                                                 name="invoiceAutomail"
                                                 class="hide-on-mobile"
                                                 [onText]="'On'"
@@ -687,7 +753,7 @@
                                                 [offColor]="'gray'"
                                                 [size]="'mini'"
                                             >
-                                            </ngx-switch> -->
+                                            </ngx-switch>
                                         </div>
                                     </div>
                                 </div>
@@ -727,14 +793,14 @@
                                 <div class="clearfix pd-t1">
                                     <div class="row">
                                         <div class="col-sm-12 col-md-12 col-lg-3">
-                                            <input
+                                            <!-- <input
                                                 type="checkbox"
                                                 [(ngModel)]="invoiceSetting.useCustomInvoiceNumber"
                                                 class="pull-left estimation-check show-on-mobile"
                                                 name="customInvoice"
-                                            />
-                                            <!-- <ngx-switch
-                                                [status]="invoiceSetting.useCustomInvoiceNumber"
+                                            /> -->
+                                            <ngx-switch
+                                                [(status)]="invoiceSetting.useCustomInvoiceNumber"
                                                 name="customInvoice"
                                                 class="pull-left estimation-check show-on-mobile"
                                                 [onText]="'On'"
@@ -743,19 +809,19 @@
                                                 [offColor]="'gray'"
                                                 [size]="'mini'"
                                             >
-                                            </ngx-switch> -->
+                                            </ngx-switch>
                                             <label>{{ localeData?.custom_invoice_no }}</label>
                                         </div>
                                         <div class="col-sm-12 col-md-9">
                                             <div class="form-group clearfix">
-                                                <input
+                                                <!-- <input
                                                     type="checkbox"
                                                     [(ngModel)]="invoiceSetting.useCustomInvoiceNumber"
                                                     class="pull-left estimation-check hide-on-mobile"
                                                     name="customInvoice"
-                                                />
-                                                <!-- <ngx-switch
-                                                    [status]="invoiceSetting.useCustomInvoiceNumber"
+                                                /> -->
+                                                <ngx-switch
+                                                    [(status)]="invoiceSetting.useCustomInvoiceNumber"
                                                     name="customInvoice"
                                                     class="pull-left estimation-check hide-on-mobile"
                                                     [onText]="'On'"
@@ -764,7 +830,7 @@
                                                     [offColor]="'gray'"
                                                     [size]="'mini'"
                                                 >
-                                                </ngx-switch> -->
+                                                </ngx-switch>
                                                 <div
                                                     class="d-inline-flex custom-estimation"
                                                     *ngIf="invoiceSetting.useCustomInvoiceNumber"
@@ -805,14 +871,14 @@
                                 <div class="clearfix pt-1">
                                     <div class="row">
                                         <div class="col-sm-12 col-md-12 col-lg-3">
-                                            <input
+                                            <!-- <input
                                                 type="checkbox"
                                                 [(ngModel)]="invoiceSetting.autoDeleteEntries"
                                                 name="invoiceAutoDeleteEntries"
                                                 class="show-on-mobile"
-                                            />
-                                            <!-- <ngx-switch
-                                                [status]="invoiceSetting.autoDeleteEntries"
+                                            /> -->
+                                            <ngx-switch
+                                                [(status)]="invoiceSetting.autoDeleteEntries"
                                                 name="invoiceAutoDeleteEntries"
                                                 class="show-on-mobile"
                                                 [onText]="'On'"
@@ -821,18 +887,18 @@
                                                 [offColor]="'gray'"
                                                 [size]="'mini'"
                                             >
-                                            </ngx-switch> -->
+                                            </ngx-switch>
                                             <label>{{ localeData?.auto_delete_entries }}</label>
                                         </div>
                                         <div class="col-sm-12 col-md-9 form-group">
-                                            <input
+                                            <!-- <input
                                                 type="checkbox"
                                                 [(ngModel)]="invoiceSetting.autoDeleteEntries"
                                                 name="invoiceAutoDeleteEntries"
                                                 class="hide-on-mobile"
-                                            />
-                                            <!-- <ngx-switch
-                                                [status]="invoiceSetting.autoDeleteEntries"
+                                            /> -->
+                                            <ngx-switch
+                                                [(status)]="invoiceSetting.autoDeleteEntries"
                                                 name="invoiceAutoDeleteEntries"
                                                 class="hide-on-mobile"
                                                 [onText]="'On'"
@@ -841,7 +907,7 @@
                                                 [offColor]="'gray'"
                                                 [size]="'mini'"
                                             >
-                                            </ngx-switch> -->
+                                            </ngx-switch>
                                         </div>
                                     </div>
                                 </div>
@@ -851,14 +917,14 @@
                                 >
                                     <div class="row">
                                         <div class="col-sm-12 col-md-12 col-lg-3">
-                                            <input
+                                            <!-- <input
                                                 [(ngModel)]="invoiceSetting.gstEInvoiceEnable"
                                                 (ngModelChange)="handleEInvoiceChange($event)"
                                                 type="checkbox"
                                                 class="show-on-mobile"
-                                            />
-                                            <!-- <ngx-switch
-                                                [status]="invoiceSetting.gstEInvoiceEnable"
+                                            /> -->
+                                            <ngx-switch
+                                                [(status)]="invoiceSetting.gstEInvoiceEnable"
                                                 class="show-on-mobile"
                                                 [onText]="'On'"
                                                 [offText]="'Off'"
@@ -867,18 +933,18 @@
                                                 [size]="'mini'"
                                                 (statusChange)="handleEInvoiceChange($event)"
                                             >
-                                            </ngx-switch> -->
+                                            </ngx-switch>
                                             <label>E-invoicing Authentication</label>
                                         </div>
                                         <div class="col-sm-12 col-md-9 form-group user-authenticate">
-                                            <input
+                                            <!-- <input
                                                 [(ngModel)]="invoiceSetting.gstEInvoiceEnable"
                                                 (ngModelChange)="handleEInvoiceChange($event)"
                                                 type="checkbox"
                                                 class="hide-on-mobile"
-                                            />
+                                            /> -->
                                             <ngx-switch
-                                                [status]="invoiceSetting.gstEInvoiceEnable"
+                                                [(status)]="invoiceSetting.gstEInvoiceEnable"
                                                 class="hide-on-mobile"
                                                 [onText]="'On'"
                                                 [offText]="'Off'"

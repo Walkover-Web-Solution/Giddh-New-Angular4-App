@@ -19,6 +19,7 @@ import { BsModalRef } from 'ngx-bootstrap/modal';
 import { GeneralActions } from '../actions/general/general.actions';
 import { API_POSTMAN_DOC_URL } from '../app.constant';
 import { BreakpointObserver } from '@angular/cdk/layout';
+import { fakeAsync } from '@angular/core/testing';
 
 @Component({
     selector: 'user-details',
@@ -204,6 +205,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
         this.isUpdateCompanyInProgress$.pipe(takeUntil(this.destroyed$)).subscribe(inProcess => {
             this.isCreateAndSwitchCompanyInProcess = inProcess;
         });
+        this.twoWayAuth = false;
     }
 
     /**
