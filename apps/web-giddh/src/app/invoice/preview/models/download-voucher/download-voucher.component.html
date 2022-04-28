@@ -72,26 +72,14 @@
 
         <div class="checkbox" *ngIf="voucherApiVersion === 2">
             <label>
-                <!-- <input
+                <input
                     name="originalCopy"
                     type="checkbox"
                     value="Original"
                     checked
                     [(ngModel)]="isOriginal"
                     (change)="invoiceTypeChanged($event)"
-                /> -->
-                <ngx-switch
-                    [(status)]="isOriginal"
-                    name="originalCopy"
-                    value="Original"
-                    [onText]="'On'"
-                    [offText]="'Off'"
-                    [onColor]="'blue'"
-                    [offColor]="'gray'"
-                    [size]="'mini'"
-                    (changeStatus)="invoiceTypeChanged($event)"
-                >
-                </ngx-switch>
+                />
                 {{
                     selectedItem.voucherType === "purchase"
                         ? commonLocaleData?.app_purchase_bill
@@ -101,64 +89,30 @@
         </div>
         <div class="checkbox" *ngIf="selectedItem.voucherType === 'sales'">
             <label>
-                <!-- <input
+                <input
                     type="checkbox"
                     value="Transport"
                     (change)="invoiceTypeChanged($event)"
                     [(ngModel)]="isTransport"
-                /> -->
-                <ngx-switch
-                    [(status)]="isTransport"
-                    value="Transport"
-                    [onText]="'On'"
-                    [offText]="'Off'"
-                    [onColor]="'blue'"
-                    [offColor]="'gray'"
-                    [size]="'mini'"
-                    (statusChange)="invoiceTypeChanged($event)"
-                >
-                </ngx-switch>
+                />
                 {{ localeData?.transport }}
             </label>
         </div>
 
         <div class="checkbox" *ngIf="selectedItem.voucherType === 'sales'">
             <label>
-                <!-- <input
+                <input
                     type="checkbox"
                     value="Customer"
                     (change)="invoiceTypeChanged($event)"
                     [(ngModel)]="isCustomer"
-                /> -->
-                <ngx-switch
-                    [(status)]="isCustomer"
-                    value="Customer"
-                    [onText]="'On'"
-                    [offText]="'Off'"
-                    [onColor]="'blue'"
-                    [offColor]="'gray'"
-                    [size]="'mini'"
-                    (statusChange)="invoiceTypeChanged($event)"
-                >
-                </ngx-switch>
+                />
                 {{ commonLocaleData?.app_customer }}
             </label>
         </div>
         <div class="checkbox" *ngIf="voucherApiVersion === 2 && selectedItem?.hasAttachment">
             <label>
-                <!-- <input name="attachment" type="checkbox" value="Attachment" [(ngModel)]="isAttachment" /> -->
-                <ngx-switch
-                    [(status)]="isAttachment"
-                    name="attachment"
-                    value="Attachment"
-                    [onText]="'On'"
-                    [offText]="'Off'"
-                    [onColor]="'blue'"
-                    [offColor]="'gray'"
-                    [size]="'mini'"
-                    (statusChange)="invoiceTypeChanged($event)"
-                >
-                </ngx-switch>
+                <input name="attachment" type="checkbox" value="Attachment" [(ngModel)]="isAttachment" />
                 {{ localeData?.invoice_copy_options?.attachment }}
             </label>
         </div>

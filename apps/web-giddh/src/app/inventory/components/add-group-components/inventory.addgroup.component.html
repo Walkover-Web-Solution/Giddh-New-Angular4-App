@@ -89,7 +89,7 @@
                                                 name="parentStockGroup"
                                             /> -->
                                             <ngx-switch
-                                                [(status)]="addGroupForm.controls?.['isSubGroup'].value"
+                                                [status]="addGroupForm.get('isSubGroup').value"
                                                 id="isSelfParentUpdt"
                                                 name="parentStockGroup"
                                                 [onText]="'On'"
@@ -97,6 +97,7 @@
                                                 [onColor]="'blue'"
                                                 [offColor]="'gray'"
                                                 [size]="'mini'"
+                                                (statusChange)="addGroupForm.get('isSubGroup').setValue($event)"
                                             >
                                             </ngx-switch>
                                             Is it a sub group?</label

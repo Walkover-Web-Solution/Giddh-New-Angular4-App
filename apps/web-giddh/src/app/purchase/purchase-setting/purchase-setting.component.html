@@ -109,23 +109,47 @@
                             <div class="clearfix pd-t1">
                                 <div class="row">
                                     <div class="col-sm-12 col-md-12 col-lg-3">
-                                        <input
+                                        <!-- <input
                                             type="checkbox"
                                             class="show-on-mobile"
                                             name="sendThroughGmail"
                                             [(ngModel)]="invoiceSettings.purchaseBillSettings.sendThroughGmail"
                                             [disabled]="!isGmailIntegrated"
-                                        />
+                                        /> -->
+                                        <ngx-switch
+                                            [(status)]="invoiceSettings.purchaseBillSettings.sendThroughGmail"
+                                            class="show-on-mobile"
+                                            name="sendThroughGmail"
+                                            [onText]="'On'"
+                                            [offText]="'Off'"
+                                            [onColor]="'blue'"
+                                            [offColor]="'gray'"
+                                            [size]="'mini'"
+                                            [disabled]="!isGmailIntegrated"
+                                        >
+                                        </ngx-switch>
                                         <label>{{ localeData?.send_email_gmail }}</label>
                                     </div>
                                     <div class="col-sm-12 col-md-12 col-lg-9 form-group d-flex align-items-center">
-                                        <input
+                                        <!-- <input
                                             type="checkbox"
                                             class="hide-on-mobile"
                                             name="sendThroughGmail"
                                             [(ngModel)]="invoiceSettings.purchaseBillSettings.sendThroughGmail"
                                             [disabled]="!isGmailIntegrated"
-                                        />
+                                        /> -->
+                                        <ngx-switch
+                                            [(status)]="invoiceSettings.purchaseBillSettings.sendThroughGmail"
+                                            class="hide-on-mobile"
+                                            name="sendThroughGmail"
+                                            [onText]="'On'"
+                                            [offText]="'Off'"
+                                            [onColor]="'blue'"
+                                            [offColor]="'gray'"
+                                            [size]="'mini'"
+                                            [disabled]="!isGmailIntegrated"
+                                        >
+                                        </ngx-switch>
                                         <span class="ml-1 integrated-email" *ngIf="!isGmailIntegrated">
                                             <a [href]="gmailAuthCodeUrl$ | async">{{ localeData?.integrate_gmail }}</a>
                                         </span>
@@ -174,25 +198,47 @@
                                 <div class="clearfix pd-t1">
                                     <div class="row">
                                         <div class="col-sm-12 col-md-12 col-lg-3">
-                                            <input
+                                            <!-- <input
                                                 type="checkbox"
                                                 class="show-on-mobile"
                                                 name="changePOStatusOnExpiry"
                                                 [(ngModel)]="
                                                     invoiceSettings.purchaseBillSettings.changePOStatusOnExpiry
                                                 "
-                                            />
+                                            /> -->
+                                            <ngx-switch
+                                                [(status)]="invoiceSettings.purchaseBillSettings.changePOStatusOnExpiry"
+                                                class="show-on-mobile"
+                                                name="changePOStatusOnExpiry"
+                                                [onText]="'On'"
+                                                [offText]="'Off'"
+                                                [onColor]="'blue'"
+                                                [offColor]="'gray'"
+                                                [size]="'mini'"
+                                            >
+                                            </ngx-switch>
                                             <label>{{ localeData?.auto_change_status }}</label>
                                         </div>
                                         <div class="col-sm-12 col-md-12 col-lg-9 form-group">
-                                            <input
+                                            <!-- <input
                                                 type="checkbox"
                                                 class="hide-on-mobile"
                                                 name="changePOStatusOnExpiry"
                                                 [(ngModel)]="
                                                     invoiceSettings.purchaseBillSettings.changePOStatusOnExpiry
                                                 "
-                                            />
+                                            /> -->
+                                            <ngx-switch
+                                                [(status)]="invoiceSettings.purchaseBillSettings.changePOStatusOnExpiry"
+                                                class="hide-on-mobile"
+                                                name="changePOStatusOnExpiry"
+                                                [onText]="'On'"
+                                                [offText]="'Off'"
+                                                [onColor]="'blue'"
+                                                [offColor]="'gray'"
+                                                [size]="'mini'"
+                                            >
+                                            </ngx-switch>
                                         </div>
                                     </div>
                                 </div>
@@ -222,22 +268,44 @@
                                 <div class="clearfix pd-t1">
                                     <div class="row">
                                         <div class="col-sm-12 col-md-12 col-lg-3">
-                                            <input
+                                            <!-- <input
                                                 type="checkbox"
                                                 class="show-on-mobile"
                                                 name="useCustomPONumber"
                                                 [(ngModel)]="invoiceSettings.purchaseBillSettings.useCustomPONumber"
-                                            />
+                                            /> -->
+                                            <ngx-switch
+                                                [(status)]="invoiceSettings.purchaseBillSettings.useCustomPONumber"
+                                                class="show-on-mobile"
+                                                name="useCustomPONumber"
+                                                [onText]="'On'"
+                                                [offText]="'Off'"
+                                                [onColor]="'blue'"
+                                                [offColor]="'gray'"
+                                                [size]="'mini'"
+                                            >
+                                            </ngx-switch>
                                             <label>{{ localeData?.custom_po_number }}</label>
                                         </div>
                                         <div class="col-sm-12 col-md-12 col-lg-9">
                                             <div class="form-group clearfix">
-                                                <input
+                                                <!-- <input
                                                     type="checkbox"
                                                     class="hide-on-mobile"
                                                     name="useCustomPONumber"
                                                     [(ngModel)]="invoiceSettings.purchaseBillSettings.useCustomPONumber"
-                                                />
+                                                /> -->
+                                                <ngx-switch
+                                                    [(status)]="invoiceSettings.purchaseBillSettings.useCustomPONumber"
+                                                    class="hide-on-mobile"
+                                                    name="useCustomPONumber"
+                                                    [onText]="'On'"
+                                                    [offText]="'Off'"
+                                                    [onColor]="'blue'"
+                                                    [offColor]="'gray'"
+                                                    [size]="'mini'"
+                                                >
+                                                </ngx-switch>
                                                 <div
                                                     class="d-inline-flex custom-estimation"
                                                     *ngIf="invoiceSettings.purchaseBillSettings.useCustomPONumber"
@@ -310,21 +378,43 @@
                                 <div class="clearfix pd-t1">
                                     <div class="row">
                                         <div class="col-sm-12 col-md-12 col-lg-3">
-                                            <input
+                                            <!-- <input
                                                 type="checkbox"
                                                 class="show-on-mobile"
                                                 name="enableNarration"
                                                 [(ngModel)]="invoiceSettings.purchaseBillSettings.enableNarration"
-                                            />
+                                            /> -->
+                                            <ngx-switch
+                                                [(status)]="invoiceSettings.purchaseBillSettings.enableNarration"
+                                                class="show-on-mobile"
+                                                name="enableNarration"
+                                                [onText]="'On'"
+                                                [offText]="'Off'"
+                                                [onColor]="'blue'"
+                                                [offColor]="'gray'"
+                                                [size]="'mini'"
+                                            >
+                                            </ngx-switch>
                                             <label>{{ localeData?.show_narration_ledger }}</label>
                                         </div>
                                         <div class="col-sm-12 col-md-12 col-lg-9 form-group">
-                                            <input
+                                            <!-- <input
                                                 type="checkbox"
                                                 class="hide-on-mobile"
                                                 name="enableNarration"
                                                 [(ngModel)]="invoiceSettings.purchaseBillSettings.enableNarration"
-                                            />
+                                            /> -->
+                                            <ngx-switch
+                                                [(status)]="invoiceSettings.purchaseBillSettings.enableNarration"
+                                                class="hide-on-mobile"
+                                                name="enableNarration"
+                                                [onText]="'On'"
+                                                [offText]="'Off'"
+                                                [onColor]="'blue'"
+                                                [offColor]="'gray'"
+                                                [size]="'mini'"
+                                            >
+                                            </ngx-switch>
                                         </div>
                                     </div>
                                 </div>
