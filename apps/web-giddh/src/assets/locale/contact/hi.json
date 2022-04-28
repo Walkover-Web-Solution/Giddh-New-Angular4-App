@@ -68,5 +68,6 @@
     "select_payor": "भुगतानकर्ता का चयन करें",
     "connect_icici_bank": "आईसीआईसीआई बैंक कनेक्ट करें",
     "pending_approval": "लंबित अनुमोदन",
-    "due": "देय"
+    "due": "देय",
+    "bulk_payment_unsupported_error": "थोक भुगतान समर्थित नहीं है।"
 }
