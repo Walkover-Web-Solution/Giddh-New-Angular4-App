@@ -218,13 +218,12 @@
                                         name="autoCapturePayment"
                                     /> -->
                                     <ngx-switch
-                                        [status]="razorPayObj.autoCapturePayment"
-                                        [onText]="'On'"
-                                        [offText]="'Off'"
-                                        [onColor]="'blue'"
-                                        [offColor]="'gray'"
-                                        [size]="'mini'"
-                                        (statusChange)="toggleCheckBox()"
+                                        [(status)]="razorPayObj.autoCapturePayment"
+                                        [onText]="commonLocaleData?.app_on"
+                                        [offText]="commonLocaleData?.app_off"
+                                        [onColor]="bootstrapToggleSwitch?.On"
+                                        [offColor]="bootstrapToggleSwitch?.Off"
+                                        [size]="bootstrapToggleSwitch?.Size"
                                     >
                                     </ngx-switch>
 

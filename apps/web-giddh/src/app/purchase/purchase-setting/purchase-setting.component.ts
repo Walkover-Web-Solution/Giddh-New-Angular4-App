@@ -6,6 +6,7 @@ import * as moment from 'moment/moment';
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { SettingsIntegrationActions } from '../../actions/settings/settings.integration.action';
+import { BOOTSTRAP_TOGGLE_SWITCH } from '../../app.constant';
 import { AuthenticationService } from '../../services/authentication.service';
 import { InvoiceService } from '../../services/invoice.service';
 import { PurchaseOrderService } from '../../services/purchase-order.service';
@@ -46,6 +47,7 @@ export class PurchaseSettingComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    public bootstrapToggleSwitch = BOOTSTRAP_TOGGLE_SWITCH;
 
     constructor(private store: Store<AppState>, private toaster: ToasterService, private settingsIntegrationActions: SettingsIntegrationActions, private invoiceService: InvoiceService, public purchaseOrderService: PurchaseOrderService, private generalService: GeneralService, public authenticationService: AuthenticationService, private route: ActivatedRoute) {
         this.activeCompanyUniqueName$ = this.store.pipe(select(state => state.session.companyUniqueName), (takeUntil(this.destroyed$)));

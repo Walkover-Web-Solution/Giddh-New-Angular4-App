@@ -174,11 +174,11 @@
                                 <!-- <input type="checkbox" (change)="changeTwoWayAuth()" [(ngModel)]="twoWayAuth" /> -->
                                 <ngx-switch
                                     [(status)]="twoWayAuth"
-                                    [onText]="'On'"
-                                    [offText]="'Off'"
-                                    [onColor]="'blue'"
-                                    [offColor]="'gray'"
-                                    [size]="'mini'"
+                                    [onText]="commonLocaleData?.app_on"
+                                    [offText]="commonLocaleData?.app_off"
+                                    [onColor]="bootstrapToggleSwitch?.On"
+                                    [offColor]="bootstrapToggleSwitch?.Off"
+                                    [size]="bootstrapToggleSwitch?.Size"
                                     (statusChange)="changeTwoWayAuth()"
                                 >
                                 </ngx-switch>

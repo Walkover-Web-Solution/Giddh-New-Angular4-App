@@ -34,11 +34,11 @@
                                                     [(status)]="invoiceSetting.enableNarrationOnInvAndVoucher"
                                                     name="enableNarrationOnInvAndVoucher"
                                                     class="show-on-mobile"
-                                                    [onText]="'On'"
-                                                    [offText]="'Off'"
-                                                    [onColor]="'blue'"
-                                                    [offColor]="'gray'"
-                                                    [size]="'mini'"
+                                                    [onText]="commonLocaleData?.app_on"
+                                                    [offText]="commonLocaleData?.app_off"
+                                                    [onColor]="bootstrapToggleSwitch?.On"
+                                                    [offColor]="bootstrapToggleSwitch?.Off"
+                                                    [size]="bootstrapToggleSwitch?.Size"
                                                 >
                                                 </ngx-switch>
                                                 <label>{{ localeData?.narration_on_mobile }}</label>
@@ -55,11 +55,11 @@
                                                     [(status)]="invoiceSetting.enableNarrationOnInvAndVoucher"
                                                     name="enableNarrationOnInvAndVoucher"
                                                     class="hide-on-mobile"
-                                                    [onText]="'On'"
-                                                    [offText]="'Off'"
-                                                    [onColor]="'blue'"
-                                                    [offColor]="'gray'"
-                                                    [size]="'mini'"
+                                                    [onText]="commonLocaleData?.app_on"
+                                                    [offText]="commonLocaleData?.app_off"
+                                                    [onColor]="bootstrapToggleSwitch?.On"
+                                                    [offColor]="bootstrapToggleSwitch?.Off"
+                                                    [size]="bootstrapToggleSwitch?.Size"
                                                 >
                                                 </ngx-switch>
                                             </div>
@@ -181,11 +181,12 @@
                                             [(status)]="companyEmailSettings.sendThroughGmail"
                                             name="sendThroughGmail"
                                             class="show-on-mobile"
-                                            [onText]="'On'"
-                                            [offText]="'Off'"
-                                            [onColor]="'blue'"
-                                            [offColor]="'gray'"
-                                            [size]="'mini'"
+                                            [disabled]="!isGmailIntegrated"
+                                            [onText]="commonLocaleData?.app_on"
+                                            [offText]="commonLocaleData?.app_off"
+                                            [onColor]="bootstrapToggleSwitch?.On"
+                                            [offColor]="bootstrapToggleSwitch?.Off"
+                                            [size]="bootstrapToggleSwitch?.Size"
                                         >
                                         </ngx-switch>
                                         <label>{{ localeData?.send_email_gmail }}</label>
@@ -203,11 +204,12 @@
                                             [(status)]="companyEmailSettings.sendThroughGmail"
                                             name="sendThroughGmail"
                                             class="hide-on-mobile"
-                                            [onText]="'On'"
-                                            [offText]="'Off'"
-                                            [onColor]="'blue'"
-                                            [offColor]="'gray'"
-                                            [size]="'mini'"
+                                            [disabled]="!isGmailIntegrated"
+                                            [onText]="commonLocaleData?.app_on"
+                                            [offText]="commonLocaleData?.app_off"
+                                            [onColor]="bootstrapToggleSwitch?.On"
+                                            [offColor]="bootstrapToggleSwitch?.Off"
+                                            [size]="bootstrapToggleSwitch?.Size"
                                         >
                                         </ngx-switch>
 
@@ -342,11 +344,11 @@
                                                 [(status)]="estimateSetting.autoChangeStatusOnExp"
                                                 name="estimateAutoChange"
                                                 class="show-on-mobile"
-                                                [onText]="'On'"
-                                                [offText]="'Off'"
-                                                [onColor]="'blue'"
-                                                [offColor]="'gray'"
-                                                [size]="'mini'"
+                                                [onText]="commonLocaleData?.app_on"
+                                                [offText]="commonLocaleData?.app_off"
+                                                [onColor]="bootstrapToggleSwitch?.On"
+                                                [offColor]="bootstrapToggleSwitch?.Off"
+                                                [size]="bootstrapToggleSwitch?.Size"
                                             >
                                             </ngx-switch>
                                             <label>{{ localeData?.auto_change_status_expiry }}</label>
@@ -363,11 +365,11 @@
                                                 [(status)]="estimateSetting.autoChangeStatusOnExp"
                                                 name="estimateAutoChange"
                                                 class="hide-on-mobile"
-                                                [onText]="'On'"
-                                                [offText]="'Off'"
-                                                [onColor]="'blue'"
-                                                [offColor]="'gray'"
-                                                [size]="'mini'"
+                                                [onText]="commonLocaleData?.app_on"
+                                                [offText]="commonLocaleData?.app_off"
+                                                [onColor]="bootstrapToggleSwitch?.On"
+                                                [offColor]="bootstrapToggleSwitch?.Off"
+                                                [size]="bootstrapToggleSwitch?.Size"
                                             >
                                             </ngx-switch>
                                         </div>
@@ -387,11 +389,11 @@
                                                 [(status)]="estimateSetting.autoMail"
                                                 name="estimateAutomail"
                                                 class="show-on-mobile"
-                                                [onText]="'On'"
-                                                [offText]="'Off'"
-                                                [onColor]="'blue'"
-                                                [offColor]="'gray'"
-                                                [size]="'mini'"
+                                                [onText]="commonLocaleData?.app_on"
+                                                [offText]="commonLocaleData?.app_off"
+                                                [onColor]="bootstrapToggleSwitch?.On"
+                                                [offColor]="bootstrapToggleSwitch?.Off"
+                                                [size]="bootstrapToggleSwitch?.Size"
                                             >
                                             </ngx-switch>
                                             <label>{{ localeData?.auto_email_generate }}</label>
@@ -407,11 +409,11 @@
                                                 [(status)]="estimateSetting.autoMail"
                                                 name="estimateAutomail"
                                                 class="hide-on-mobile"
-                                                [onText]="'On'"
-                                                [offText]="'Off'"
-                                                [onColor]="'blue'"
-                                                [offColor]="'gray'"
-                                                [size]="'mini'"
+                                                [onText]="commonLocaleData?.app_on"
+                                                [offText]="commonLocaleData?.app_off"
+                                                [onColor]="bootstrapToggleSwitch?.On"
+                                                [offColor]="bootstrapToggleSwitch?.Off"
+                                                [size]="bootstrapToggleSwitch?.Size"
                                             >
                                             </ngx-switch>
                                         </div>
@@ -516,11 +518,11 @@
                                                 [(status)]="proformaSetting.autoChangeStatusOnExp"
                                                 name="proformaAutoChange"
                                                 class="show-on-mobile"
-                                                [onText]="'On'"
-                                                [offText]="'Off'"
-                                                [onColor]="'blue'"
-                                                [offColor]="'gray'"
-                                                [size]="'mini'"
+                                                [onText]="commonLocaleData?.app_on"
+                                                [offText]="commonLocaleData?.app_off"
+                                                [onColor]="bootstrapToggleSwitch?.On"
+                                                [offColor]="bootstrapToggleSwitch?.Off"
+                                                [size]="bootstrapToggleSwitch?.Size"
                                             >
                                             </ngx-switch>
                                             <label>{{ localeData?.auto_change_status_expiry }}</label>
@@ -536,11 +538,11 @@
                                                 [(status)]="proformaSetting.autoChangeStatusOnExp"
                                                 name="proformaAutoChange"
                                                 class="hide-on-mobile"
-                                                [onText]="'On'"
-                                                [offText]="'Off'"
-                                                [onColor]="'blue'"
-                                                [offColor]="'gray'"
-                                                [size]="'mini'"
+                                                [onText]="commonLocaleData?.app_on"
+                                                [offText]="commonLocaleData?.app_off"
+                                                [onColor]="bootstrapToggleSwitch?.On"
+                                                [offColor]="bootstrapToggleSwitch?.Off"
+                                                [size]="bootstrapToggleSwitch?.Size"
                                             >
                                             </ngx-switch>
                                         </div>
@@ -560,11 +562,11 @@
                                                 [(status)]="proformaSetting.autoMail"
                                                 name="proformaAutomail"
                                                 class="show-on-mobile"
-                                                [onText]="'On'"
-                                                [offText]="'Off'"
-                                                [onColor]="'blue'"
-                                                [offColor]="'gray'"
-                                                [size]="'mini'"
+                                                [onText]="commonLocaleData?.app_on"
+                                                [offText]="commonLocaleData?.app_off"
+                                                [onColor]="bootstrapToggleSwitch?.On"
+                                                [offColor]="bootstrapToggleSwitch?.Off"
+                                                [size]="bootstrapToggleSwitch?.Size"
                                             >
                                             </ngx-switch>
                                             <label>{{ localeData?.auto_mail_generate_update }}</label>
@@ -580,11 +582,11 @@
                                                 [(status)]="proformaSetting.autoMail"
                                                 name="proformaAutomail"
                                                 class="hide-on-mobile"
-                                                [onText]="'On'"
-                                                [offText]="'Off'"
-                                                [onColor]="'blue'"
-                                                [offColor]="'gray'"
-                                                [size]="'mini'"
+                                                [onText]="commonLocaleData?.app_on"
+                                                [offText]="commonLocaleData?.app_off"
+                                                [onColor]="bootstrapToggleSwitch?.On"
+                                                [offColor]="bootstrapToggleSwitch?.Off"
+                                                [size]="bootstrapToggleSwitch?.Size"
                                             >
                                             </ngx-switch>
                                         </div>
@@ -683,11 +685,11 @@
                                                 [(status)]="invoiceSetting.showSeal"
                                                 name="invoiceStatusPayment"
                                                 class="show-on-mobile"
-                                                [onText]="'On'"
-                                                [offText]="'Off'"
-                                                [onColor]="'blue'"
-                                                [offColor]="'gray'"
-                                                [size]="'mini'"
+                                                [onText]="commonLocaleData?.app_on"
+                                                [offText]="commonLocaleData?.app_off"
+                                                [onColor]="bootstrapToggleSwitch?.On"
+                                                [offColor]="bootstrapToggleSwitch?.Off"
+                                                [size]="bootstrapToggleSwitch?.Size"
                                             >
                                             </ngx-switch>
                                             <label>{{ localeData?.show_seal }}</label>
@@ -703,11 +705,11 @@
                                                 [(status)]="invoiceSetting.showSeal"
                                                 name="invoiceStatusPayment"
                                                 class="hide-on-mobile"
-                                                [onText]="'On'"
-                                                [offText]="'Off'"
-                                                [onColor]="'blue'"
-                                                [offColor]="'gray'"
-                                                [size]="'mini'"
+                                                [onText]="commonLocaleData?.app_on"
+                                                [offText]="commonLocaleData?.app_off"
+                                                [onColor]="bootstrapToggleSwitch?.On"
+                                                [offColor]="bootstrapToggleSwitch?.Off"
+                                                [size]="bootstrapToggleSwitch?.Size"
                                             >
                                             </ngx-switch>
                                         </div>
@@ -727,11 +729,11 @@
                                                 [(status)]="invoiceSetting.autoMail"
                                                 name="invoiceAutomail"
                                                 class="show-on-mobile"
-                                                [onText]="'On'"
-                                                [offText]="'Off'"
-                                                [onColor]="'blue'"
-                                                [offColor]="'gray'"
-                                                [size]="'mini'"
+                                                [onText]="commonLocaleData?.app_on"
+                                                [offText]="commonLocaleData?.app_off"
+                                                [onColor]="bootstrapToggleSwitch?.On"
+                                                [offColor]="bootstrapToggleSwitch?.Off"
+                                                [size]="bootstrapToggleSwitch?.Size"
                                             >
                                             </ngx-switch>
                                             <label>{{ localeData?.auto_mail_update }}</label>
@@ -747,11 +749,11 @@
                                                 [(status)]="invoiceSetting.autoMail"
                                                 name="invoiceAutomail"
                                                 class="hide-on-mobile"
-                                                [onText]="'On'"
-                                                [offText]="'Off'"
-                                                [onColor]="'blue'"
-                                                [offColor]="'gray'"
-                                                [size]="'mini'"
+                                                [onText]="commonLocaleData?.app_on"
+                                                [offText]="commonLocaleData?.app_off"
+                                                [onColor]="bootstrapToggleSwitch?.On"
+                                                [offColor]="bootstrapToggleSwitch?.Off"
+                                                [size]="bootstrapToggleSwitch?.Size"
                                             >
                                             </ngx-switch>
                                         </div>
@@ -803,11 +805,11 @@
                                                 [(status)]="invoiceSetting.useCustomInvoiceNumber"
                                                 name="customInvoice"
                                                 class="pull-left estimation-check show-on-mobile"
-                                                [onText]="'On'"
-                                                [offText]="'Off'"
-                                                [onColor]="'blue'"
-                                                [offColor]="'gray'"
-                                                [size]="'mini'"
+                                                [onText]="commonLocaleData?.app_on"
+                                                [offText]="commonLocaleData?.app_off"
+                                                [onColor]="bootstrapToggleSwitch?.On"
+                                                [offColor]="bootstrapToggleSwitch?.Off"
+                                                [size]="bootstrapToggleSwitch?.Size"
                                             >
                                             </ngx-switch>
                                             <label>{{ localeData?.custom_invoice_no }}</label>
@@ -824,11 +826,11 @@
                                                     [(status)]="invoiceSetting.useCustomInvoiceNumber"
                                                     name="customInvoice"
                                                     class="pull-left estimation-check hide-on-mobile"
-                                                    [onText]="'On'"
-                                                    [offText]="'Off'"
-                                                    [onColor]="'blue'"
-                                                    [offColor]="'gray'"
-                                                    [size]="'mini'"
+                                                    [onText]="commonLocaleData?.app_on"
+                                                    [offText]="commonLocaleData?.app_off"
+                                                    [onColor]="bootstrapToggleSwitch?.On"
+                                                    [offColor]="bootstrapToggleSwitch?.Off"
+                                                    [size]="bootstrapToggleSwitch?.Size"
                                                 >
                                                 </ngx-switch>
                                                 <div
@@ -881,11 +883,11 @@
                                                 [(status)]="invoiceSetting.autoDeleteEntries"
                                                 name="invoiceAutoDeleteEntries"
                                                 class="show-on-mobile"
-                                                [onText]="'On'"
-                                                [offText]="'Off'"
-                                                [onColor]="'blue'"
-                                                [offColor]="'gray'"
-                                                [size]="'mini'"
+                                                [onText]="commonLocaleData?.app_on"
+                                                [offText]="commonLocaleData?.app_off"
+                                                [onColor]="bootstrapToggleSwitch?.On"
+                                                [offColor]="bootstrapToggleSwitch?.Off"
+                                                [size]="bootstrapToggleSwitch?.Size"
                                             >
                                             </ngx-switch>
                                             <label>{{ localeData?.auto_delete_entries }}</label>
@@ -901,11 +903,11 @@
                                                 [(status)]="invoiceSetting.autoDeleteEntries"
                                                 name="invoiceAutoDeleteEntries"
                                                 class="hide-on-mobile"
-                                                [onText]="'On'"
-                                                [offText]="'Off'"
-                                                [onColor]="'blue'"
-                                                [offColor]="'gray'"
-                                                [size]="'mini'"
+                                                [onText]="commonLocaleData?.app_on"
+                                                [offText]="commonLocaleData?.app_off"
+                                                [onColor]="bootstrapToggleSwitch?.On"
+                                                [offColor]="bootstrapToggleSwitch?.Off"
+                                                [size]="bootstrapToggleSwitch?.Size"
                                             >
                                             </ngx-switch>
                                         </div>
@@ -926,11 +928,11 @@
                                             <ngx-switch
                                                 [(status)]="invoiceSetting.gstEInvoiceEnable"
                                                 class="show-on-mobile"
-                                                [onText]="'On'"
-                                                [offText]="'Off'"
-                                                [onColor]="'blue'"
-                                                [offColor]="'gray'"
-                                                [size]="'mini'"
+                                                [onText]="commonLocaleData?.app_on"
+                                                [offText]="commonLocaleData?.app_off"
+                                                [onColor]="bootstrapToggleSwitch?.On"
+                                                [offColor]="bootstrapToggleSwitch?.Off"
+                                                [size]="bootstrapToggleSwitch?.Size"
                                                 (statusChange)="handleEInvoiceChange($event)"
                                             >
                                             </ngx-switch>
@@ -946,11 +948,11 @@
                                             <ngx-switch
                                                 [(status)]="invoiceSetting.gstEInvoiceEnable"
                                                 class="hide-on-mobile"
-                                                [onText]="'On'"
-                                                [offText]="'Off'"
-                                                [onColor]="'blue'"
-                                                [offColor]="'gray'"
-                                                [size]="'mini'"
+                                                [onText]="commonLocaleData?.app_on"
+                                                [offText]="commonLocaleData?.app_off"
+                                                [onColor]="bootstrapToggleSwitch?.On"
+                                                [offColor]="bootstrapToggleSwitch?.Off"
+                                                [size]="bootstrapToggleSwitch?.Size"
                                                 (statusChange)="handleEInvoiceChange($event)"
                                             >
                                             </ngx-switch>

@@ -29,9 +29,8 @@ import { GeneralActions } from "../../../../actions/general/general.actions";
 import { parsePhoneNumberFromString, CountryCode } from 'libphonenumber-js/min';
 import { GroupService } from 'apps/web-giddh/src/app/services/group.service';
 import { GroupWithAccountsAction } from 'apps/web-giddh/src/app/actions/groupwithaccounts.actions';
-import { API_COUNT_LIMIT } from 'apps/web-giddh/src/app/app.constant';
+import { API_COUNT_LIMIT, BOOTSTRAP_TOGGLE_SWITCH, EMAIL_VALIDATION_REGEX } from 'apps/web-giddh/src/app/app.constant';
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
-import { EMAIL_VALIDATION_REGEX } from 'apps/web-giddh/src/app/app.constant';
 import { InvoiceService } from 'apps/web-giddh/src/app/services/invoice.service';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { clone, cloneDeep, uniqBy } from 'apps/web-giddh/src/app/lodash-optimized';
@@ -171,6 +170,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     };
     /** Available field types list */
     public availableFieldTypes: any = FieldTypes;
+    public bootstrapToggleSwitch = BOOTSTRAP_TOGGLE_SWITCH;
 
     constructor(
         private _fb: FormBuilder,
@@ -404,7 +404,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         });
         return gstFields;
     }
-    public varTest = this.initialGstDetailsForm;
 
     public resetGstStateForm() {
         this.forceClear$ = observableOf({ status: true });

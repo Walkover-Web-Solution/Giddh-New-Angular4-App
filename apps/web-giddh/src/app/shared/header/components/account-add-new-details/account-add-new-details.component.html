@@ -272,17 +272,22 @@
                                                 /> -->
                                                 <span [tooltip]="localeData?.address_tooltip" placement="left">
                                                     <ngx-switch
-                                                        [(status)]="
+                                                        [status]="
                                                             addAccountForm.get('addresses').controls[i].get('isDefault')
                                                                 .value
                                                         "
                                                         name="defaultGst_{{ i }}"
-                                                        [onText]="'On'"
-                                                        [offText]="'Off'"
-                                                        [onColor]="'blue'"
-                                                        [offColor]="'gray'"
-                                                        [size]="'mini'"
+                                                        [onText]="commonLocaleData?.app_on"
+                                                        [offText]="commonLocaleData?.app_off"
+                                                        [onColor]="bootstrapToggleSwitch?.On"
+                                                        [offColor]="bootstrapToggleSwitch?.Off"
+                                                        [size]="bootstrapToggleSwitch?.Size"
                                                         (statusChange)="
+                                                            addAccountForm
+                                                                .get('addresses')
+                                                                .controls[i].get('isDefault').value = !addAccountForm
+                                                                .get('addresses')
+                                                                .controls[i].get('isDefault').value;
                                                             isDefaultAddressSelected(gst.get('isDefault').value, i)
                                                         "
                                                     >

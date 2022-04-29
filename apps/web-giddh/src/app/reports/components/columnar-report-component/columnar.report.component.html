@@ -74,11 +74,11 @@
                         [(status)]="exportRequest.showHideOpeningClosingBalance"
                         name="showHideOpeningClosingBalance"
                         id="showHideOpeningClosingBalance"
-                        [onText]="'On'"
-                        [offText]="'Off'"
-                        [onColor]="'blue'"
-                        [offColor]="'gray'"
-                        [size]="'mini'"
+                        [onText]="commonLocaleData?.app_on"
+                        [offText]="commonLocaleData?.app_off"
+                        [onColor]="bootstrapToggleSwitch?.On"
+                        [offColor]="bootstrapToggleSwitch?.Off"
+                        [size]="bootstrapToggleSwitch?.Size"
                     ></ngx-switch>
                     &nbsp;<label for="showHideOpeningClosingBalance">{{ localeData?.opening_closing_balance }}</label>
                 </div>
@@ -96,11 +96,11 @@
                         [(status)]="exportRequest.balanceTypeAsSign"
                         name="balanceTypeAsSign"
                         id="balanceTypeAsSign"
-                        [onText]="'On'"
-                        [offText]="'Off'"
-                        [onColor]="'blue'"
-                        [offColor]="'gray'"
-                        [size]="'mini'"
+                        [onText]="commonLocaleData?.app_on"
+                        [offText]="commonLocaleData?.app_off"
+                        [onColor]="bootstrapToggleSwitch?.On"
+                        [offColor]="bootstrapToggleSwitch?.Off"
+                        [size]="bootstrapToggleSwitch?.Size"
                         (statusChange)="onBalanceTypeAsSignChanged($event)"
                     ></ngx-switch>
                     &nbsp;<label for="balanceTypeAsSign">{{ localeData?.cr_dr }}</label>
