@@ -12,7 +12,7 @@ import * as moment from 'moment/moment';
 import { saveAs } from "file-saver";
 import { IForceClear } from '../../../models/api-models/Sales';
 import { ReportsDetailedRequestFilter } from '../../../models/api-models/Reports';
-import { API_COUNT_LIMIT, PAGINATION_LIMIT } from '../../../app.constant';
+import { API_COUNT_LIMIT, BOOTSTRAP_TOGGLE_SWITCH, PAGINATION_LIMIT } from '../../../app.constant';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { GroupService } from '../../../services/group.service';
 
@@ -70,6 +70,7 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    public bootstrapToggleSwitch = BOOTSTRAP_TOGGLE_SWITCH;
 
     constructor(
         public settingsFinancialYearService: SettingsFinancialYearService,

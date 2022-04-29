@@ -120,11 +120,11 @@
                                             [(status)]="invoiceSettings.purchaseBillSettings.sendThroughGmail"
                                             class="show-on-mobile"
                                             name="sendThroughGmail"
-                                            [onText]="'On'"
-                                            [offText]="'Off'"
-                                            [onColor]="'blue'"
-                                            [offColor]="'gray'"
-                                            [size]="'mini'"
+                                            [onText]="commonLocaleData?.app_on"
+                                            [offText]="commonLocaleData?.app_off"
+                                            [onColor]="bootstrapToggleSwitch?.On"
+                                            [offColor]="bootstrapToggleSwitch?.Off"
+                                            [size]="bootstrapToggleSwitch?.Size"
                                             [disabled]="!isGmailIntegrated"
                                         >
                                         </ngx-switch>
@@ -142,11 +142,11 @@
                                             [(status)]="invoiceSettings.purchaseBillSettings.sendThroughGmail"
                                             class="hide-on-mobile"
                                             name="sendThroughGmail"
-                                            [onText]="'On'"
-                                            [offText]="'Off'"
-                                            [onColor]="'blue'"
-                                            [offColor]="'gray'"
-                                            [size]="'mini'"
+                                            [onText]="commonLocaleData?.app_on"
+                                            [offText]="commonLocaleData?.app_off"
+                                            [onColor]="bootstrapToggleSwitch?.On"
+                                            [offColor]="bootstrapToggleSwitch?.Off"
+                                            [size]="bootstrapToggleSwitch?.Size"
                                             [disabled]="!isGmailIntegrated"
                                         >
                                         </ngx-switch>
@@ -210,11 +210,11 @@
                                                 [(status)]="invoiceSettings.purchaseBillSettings.changePOStatusOnExpiry"
                                                 class="show-on-mobile"
                                                 name="changePOStatusOnExpiry"
-                                                [onText]="'On'"
-                                                [offText]="'Off'"
-                                                [onColor]="'blue'"
-                                                [offColor]="'gray'"
-                                                [size]="'mini'"
+                                                [onText]="commonLocaleData?.app_on"
+                                                [offText]="commonLocaleData?.app_off"
+                                                [onColor]="bootstrapToggleSwitch?.On"
+                                                [offColor]="bootstrapToggleSwitch?.Off"
+                                                [size]="bootstrapToggleSwitch?.Size"
                                             >
                                             </ngx-switch>
                                             <label>{{ localeData?.auto_change_status }}</label>
@@ -232,11 +232,11 @@
                                                 [(status)]="invoiceSettings.purchaseBillSettings.changePOStatusOnExpiry"
                                                 class="hide-on-mobile"
                                                 name="changePOStatusOnExpiry"
-                                                [onText]="'On'"
-                                                [offText]="'Off'"
-                                                [onColor]="'blue'"
-                                                [offColor]="'gray'"
-                                                [size]="'mini'"
+                                                [onText]="commonLocaleData?.app_on"
+                                                [offText]="commonLocaleData?.app_off"
+                                                [onColor]="bootstrapToggleSwitch?.On"
+                                                [offColor]="bootstrapToggleSwitch?.Off"
+                                                [size]="bootstrapToggleSwitch?.Size"
                                             >
                                             </ngx-switch>
                                         </div>
@@ -278,11 +278,11 @@
                                                 [(status)]="invoiceSettings.purchaseBillSettings.useCustomPONumber"
                                                 class="show-on-mobile"
                                                 name="useCustomPONumber"
-                                                [onText]="'On'"
-                                                [offText]="'Off'"
-                                                [onColor]="'blue'"
-                                                [offColor]="'gray'"
-                                                [size]="'mini'"
+                                                [onText]="commonLocaleData?.app_on"
+                                                [offText]="commonLocaleData?.app_off"
+                                                [onColor]="bootstrapToggleSwitch?.On"
+                                                [offColor]="bootstrapToggleSwitch?.Off"
+                                                [size]="bootstrapToggleSwitch?.Size"
                                             >
                                             </ngx-switch>
                                             <label>{{ localeData?.custom_po_number }}</label>
@@ -299,11 +299,11 @@
                                                     [(status)]="invoiceSettings.purchaseBillSettings.useCustomPONumber"
                                                     class="hide-on-mobile"
                                                     name="useCustomPONumber"
-                                                    [onText]="'On'"
-                                                    [offText]="'Off'"
-                                                    [onColor]="'blue'"
-                                                    [offColor]="'gray'"
-                                                    [size]="'mini'"
+                                                    [onText]="commonLocaleData?.app_on"
+                                                    [offText]="commonLocaleData?.app_off"
+                                                    [onColor]="bootstrapToggleSwitch?.On"
+                                                    [offColor]="bootstrapToggleSwitch?.Off"
+                                                    [size]="bootstrapToggleSwitch?.Size"
                                                 >
                                                 </ngx-switch>
                                                 <div
@@ -388,11 +388,11 @@
                                                 [(status)]="invoiceSettings.purchaseBillSettings.enableNarration"
                                                 class="show-on-mobile"
                                                 name="enableNarration"
-                                                [onText]="'On'"
-                                                [offText]="'Off'"
-                                                [onColor]="'blue'"
-                                                [offColor]="'gray'"
-                                                [size]="'mini'"
+                                                [onText]="commonLocaleData?.app_on"
+                                                [offText]="commonLocaleData?.app_off"
+                                                [onColor]="bootstrapToggleSwitch?.On"
+                                                [offColor]="bootstrapToggleSwitch?.Off"
+                                                [size]="bootstrapToggleSwitch?.Size"
                                             >
                                             </ngx-switch>
                                             <label>{{ localeData?.show_narration_ledger }}</label>
@@ -408,11 +408,11 @@
                                                 [(status)]="invoiceSettings.purchaseBillSettings.enableNarration"
                                                 class="hide-on-mobile"
                                                 name="enableNarration"
-                                                [onText]="'On'"
-                                                [offText]="'Off'"
-                                                [onColor]="'blue'"
-                                                [offColor]="'gray'"
-                                                [size]="'mini'"
+                                                [onText]="commonLocaleData?.app_on"
+                                                [offText]="commonLocaleData?.app_off"
+                                                [onColor]="bootstrapToggleSwitch?.On"
+                                                [offColor]="bootstrapToggleSwitch?.Off"
+                                                [size]="bootstrapToggleSwitch?.Size"
                                             >
                                             </ngx-switch>
                                         </div>

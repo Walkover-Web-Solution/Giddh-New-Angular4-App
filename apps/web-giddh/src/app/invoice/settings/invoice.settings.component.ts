@@ -17,6 +17,7 @@ import { CommonActions } from '../../actions/common.actions';
 import { GeneralService } from '../../services/general.service';
 import { OrganizationType } from '../../models/user-login-state';
 import { cloneDeep, concat, isEmpty, isEqual } from '../../lodash-optimized';
+import { BOOTSTRAP_TOGGLE_SWITCH } from '../../app.constant'
 
 @Component({
     selector: 'app-invoice-setting',
@@ -75,6 +76,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
     public hasInvoiceSettingPermissions: boolean = true;
     /** Stores the voucher API version of company */
     public voucherApiVersion: 1 | 2;
+    public bootstrapToggleSwitch = BOOTSTRAP_TOGGLE_SWITCH;
 
     constructor(
         private commonActions: CommonActions,
@@ -159,8 +161,6 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
                 this.invoiceSetting = cloneDeep(setting.invoiceSettings);
                 this.proformaSetting = cloneDeep(setting.proformaSettings);
                 this.invoiceSetting.autoPaid = this.invoiceSetting.autoPaid === 'runtime';
-                
-                
 
                 // using last state to compare data before dispatching action
                 this.invoiceLastState = cloneDeep(setting.invoiceSettings);

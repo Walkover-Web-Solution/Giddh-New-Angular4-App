@@ -94,9 +94,9 @@
                                                 name="parentStockGroup"
                                                 [onText]="'On'"
                                                 [offText]="'Off'"
-                                                [onColor]="'blue'"
-                                                [offColor]="'gray'"
-                                                [size]="'mini'"
+                                                [onColor]="bootstrapToggleSwitch?.On"
+                                                [offColor]="bootstrapToggleSwitch?.Off"
+                                                [size]="bootstrapToggleSwitch?.Size"
                                                 (statusChange)="addGroupForm.get('isSubGroup').setValue($event)"
                                             >
                                             </ngx-switch>

@@ -673,5 +673,7 @@
     "app_true": "True",
     "app_false": "False",
     "app_preview": "Preview",
-    "app_purchase_bill": "Purchase Bill"
+    "app_purchase_bill": "Purchase Bill",
+    "app_on": "On",
+    "app_off": "Off"
 }

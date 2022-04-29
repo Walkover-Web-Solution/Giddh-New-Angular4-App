@@ -758,10 +758,6 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
                 this.addStockForm?.patchValue({ isFsStock: false });
             }
         }
-
-        this.addStockForm.controls['enablePurchase']?.patchValue(false);
-        this.addStockForm.controls['enableSales']?.patchValue(false);
-        this.addStockForm.controls['isFsStock']?.patchValue(false);
     }
 
     // submit form

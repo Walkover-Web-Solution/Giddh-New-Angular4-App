@@ -441,3 +441,8 @@ export const JOURNAL_VOUCHER_ALLOWED_DOMAINS = [
     'muneem.co',
     'whozzat.com',
 ];
+export enum BOOTSTRAP_TOGGLE_SWITCH {
+    On = 'blue',
+    Off = 'gray',
+    Size = 'mini'
+}
