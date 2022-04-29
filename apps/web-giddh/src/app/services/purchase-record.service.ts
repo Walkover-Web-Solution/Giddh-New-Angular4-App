@@ -158,7 +158,6 @@ export class PurchaseRecordService {
             let url: string = this.config.apiUrl + PURCHASE_RECORD_API.V2.GET_PDF;
             url = url.replace(':companyUniqueName', this.generalService.companyUniqueName);
             url = url.replace(':accountUniqueName', encodeURIComponent(requestObject.accountUniqueName));
-
             url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
 
             return this.http.post(url, { uniqueName: requestObject.uniqueName }).pipe(

@@ -151,15 +151,15 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
                     prevTab = se;
                 });
                 let stateDetailsRequest = new StateDetailsRequest();
-                stateDetailsRequest.companyUniqueName = this.company.uniqueName;
+                stateDetailsRequest.companyUniqueName = this.company?.uniqueName;
                 stateDetailsRequest.lastState = this.isNewUser ? 'welcome' : 'onboarding';
-                this._generalService.companyUniqueName = this.company.uniqueName;
+                this._generalService.companyUniqueName = this.company?.uniqueName;
                 if (prevTab !== 'user-details') {
                     this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
                 }
                 setTimeout(() => {
                     if (prevTab !== 'user-details') {
-                        this.store.dispatch(this._loginAction.ChangeCompany(this.company.uniqueName));
+                        this.store.dispatch(this._loginAction.ChangeCompany(this.company?.uniqueName));
                         this._route.navigate([this.isNewUser ? 'welcome' : 'onboarding']);
                     }
                     this.closeModal();
@@ -167,7 +167,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
             }
         });
         this.store.pipe(select(p => p.session.companyUniqueName), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(a => {
-            if (a && a !== '' && this.company.uniqueName) {
+            if (a && a !== '' && this.company?.uniqueName) {
                 if (a.includes(this.company.uniqueName.substring(0, 8))) {
                     this.company.name = '';
                     this.company.country = '';
@@ -457,8 +457,8 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
      */
     public updateBranch(): void {
         this._companyService.updateBranch({
-            companyUniqueName: this.activeCompanyDetails.uniqueName,
-            branchUniqueName: this.entityDetails.uniqueName,
+            companyUniqueName: this.activeCompanyDetails?.uniqueName,
+            branchUniqueName: this.entityDetails?.uniqueName,
             name: this.company.name,
             alias: this.company.nameAlias
         }).pipe(takeUntil(this.destroyed$)).subscribe(data => {

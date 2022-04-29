@@ -98,7 +98,6 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
         });
         this.isUpdateCompanyInProgress$ = this.store.pipe(select(s => s.settings.updateProfileInProgress), takeUntil(this.destroyed$));
         this.isUpdateCompanySuccess$ = this.store.pipe(select(s => s.settings.updateProfileSuccess), takeUntil(this.destroyed$));
-
     }
 
     public ngOnInit() {

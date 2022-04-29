@@ -1,0 +1,36 @@
+<div class="aside-pane">
+    <div class="header-create-new">
+        <button id="close" (click)="closeAsidePane($event)"><i class="icon-cross"></i></button>
+        <div class="form-header">
+            <h3>Add Adjustment</h3>
+        </div>
+    </div>
+    <div class="aside-body flexy-child-1">
+        <div class="create-product-wrapper">
+            <div class="create-one-item pd-b15 pd-t15 d-flex">
+                <div class="wrapper-create-item">
+                    <div class="circle-icon"></div>
+                    <div class="create-item" [routerLink]="['/pages/new-inventory/adjust-inventory-group']">
+                        <h4>Adjust Group</h4>
+                        <p>
+                            (Dummy text Lorem Ipsum Dummy text Lorem Ipsum Dummy text Lorem Ipsum Dummy text Lorem
+                            Ipsum)
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="create-one-item pd-b15 pd-t15 d-flex">
+                <div class="wrapper-create-item">
+                    <div class="circle-icon"></div>
+                    <div class="create-item" [routerLink]="['/pages/new-inventory/adjust-product-and-service']">
+                        <h4>Adjust Product/Service</h4>
+                        <p>
+                            (A bundle of products or/and services that you sell together. For instance, a basket of
+                            chocolates, Fruits and Wine)
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

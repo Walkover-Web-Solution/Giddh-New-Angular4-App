@@ -380,6 +380,7 @@
 </div>
 
 <div class="aside-overlay" (click)="closeCreateStock($event)" *ngIf="asideMenuStateForProductService === 'in'"></div>
+
 <aside-inventory-stock-group
     *ngIf="asideMenuStateForProductService === 'in'"
     [autoFocus]="autoFocusStockGroupField"

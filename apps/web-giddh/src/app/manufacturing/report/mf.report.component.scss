@@ -59,6 +59,10 @@
     font-family: "opensans-semibold";
     color: var(--color-abbey);
     padding: 6px 0;
+    outline: none !important;
+    &:focus {
+        outline: none !important;
+    }
 }
 .manufacture-table {
     .bd-rl {

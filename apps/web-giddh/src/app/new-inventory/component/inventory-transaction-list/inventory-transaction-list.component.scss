@@ -1,0 +1,64 @@
+.custom-datepicker {
+    margin-bottom: 0;
+    input {
+        text-align: left;
+        padding-left: 40px !important;
+    }
+}
+.stock-group-footer {
+    background-color: var(--color-white);
+    z-index: 3;
+    width: calc(100% - 240px);
+    padding-right: 15px;
+    line-height: 1.8;
+    box-shadow: 0 0 6px var(--color-primary-common-box-shadow);
+    padding-top: 5px;
+    .stock-value {
+        padding-right: 80px;
+        .total-stock-value {
+            padding-left: 30px;
+        }
+    }
+}
+@media (max-width: 1019px) {
+    .stock-group-footer {
+        width: 100% !important;
+        position: fixed !important;
+        margin-top: 15px;
+        .stock-value {
+            justify-content: space-between !important;
+        }
+        .by-date {
+            display: flex;
+        }
+    }
+}
+@media (max-width: 767px) {
+    .stock-group-footer {
+        position: static !important;
+        .stock-value {
+            padding-right: 0 !important;
+        }
+    }
+}
+@media (max-width: 575px) {
+    .stock-group-footer {
+        text-align: left;
+        p,
+        label {
+            padding-left: 15px;
+        }
+        .pd-l15 {
+            padding-left: 0 !important;
+        }
+        .stock-value {
+            justify-content: flex-start !important;
+            text-align: left;
+            padding-left: 0;
+            flex-direction: column;
+            .total-stock-value {
+                padding-left: 0;
+            }
+        }
+    }
+}

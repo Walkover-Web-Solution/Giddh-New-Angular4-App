@@ -125,18 +125,6 @@
     .setting-profile-container {
         padding-top: 15px;
     }
-    .linked-with {
-        width: 100% !important;
-        .wrap-linked-company {
-            flex-direction: column;
-            .ml-auto {
-                margin-left: 0 !important;
-                .action-icon {
-                    width: 70px;
-                }
-            }
-        }
-    }
 }
 
 @media (max-width: 445px) {

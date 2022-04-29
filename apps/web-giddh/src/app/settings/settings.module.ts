@@ -35,8 +35,8 @@ import { CreateAddressComponent } from './create-address/create-address.componen
 import { CreateBranchComponent } from './branch/create-branch/create-branch.component';
 import { SalesShSelectModule } from '../theme/sales-ng-virtual-select/sh-select.module';
 import { TaxSidebarModule } from '../shared/tax-sidebar/tax-sidebar.module';
-import { NoDataModule } from '../shared/no-data/no-data.module';
 import { ReplacePipeModule } from '../shared/helpers/pipes/replace/replace.module';
+import { NoDataModule } from '../shared/no-data/no-data.module';
 import { SettingIntegrationPaymentModule } from './integration/payment/setting.integration.payment.module';
 import { ConfirmModalModule } from '../theme/confirm-modal/confirm-modal.module';
 import { NgxBootstrapSwitchModule } from 'ngx-bootstrap-switch';
