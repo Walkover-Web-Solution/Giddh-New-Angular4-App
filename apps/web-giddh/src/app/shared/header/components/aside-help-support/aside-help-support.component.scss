@@ -50,7 +50,7 @@
         display: flex;
         justify-content: space-between;
         padding: 18px 15px;
-        border-bottom: 1px solid var(--color-iron);
+        border-bottom: 1px solid var(--color-common-secondary-border);
         position: sticky;
         top: 0;
         background-color: inherit;
@@ -63,7 +63,7 @@
     .help-aside-body {
         .faq-block {
             padding: 15px;
-            border-bottom: 1px solid var(--color-iron);
+            border-bottom: 1px solid var(--color-common-secondary-border);
             a {
                 display: block;
                 color: var(--color-nero);
@@ -79,7 +79,7 @@
         }
         .feature-block {
             padding: 15px;
-            border-bottom: 1px solid var(--color-iron);
+            border-bottom: 1px solid var(--color-common-secondary-border);
             ul {
                 list-style: none;
                 li {
@@ -96,7 +96,7 @@
         }
         .download-block {
             padding: 15px;
-            border-bottom: 1px solid var(--color-iron);
+            border-bottom: 1px solid var(--color-common-secondary-border);
             h4 {
                 padding-bottom: 15px;
                 font-size: 14px;
