@@ -485,7 +485,6 @@ export class ThermalService {
             if (entry?.transactions[0]?.stock) {
                 if (entry?.transactions[0]?.stock?.quantity) {
                     totalQty = totalQty + Number(quantity);
-                    console.log(totalQty);
                 }
             }
 
