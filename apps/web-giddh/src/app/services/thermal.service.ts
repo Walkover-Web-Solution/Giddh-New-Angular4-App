@@ -482,25 +482,16 @@ export class ThermalService {
             let itemName = productName?.substr(0, itemLength);
             let remainingName = "";
 
-
-
             if (entry?.transactions[0]?.stock) {
                 if (entry?.transactions[0]?.stock?.quantity) {
                     totalQty = totalQty + Number(quantity);
                     console.log(totalQty);
-                    console.log("if");
-                } 
+                }
             }
 
-                if (!entry?.transactions[0]?.stock?.quantity) {
-                    totalQty = '-';
-                    console.log("else");
-                } 
-
-
-
-
-
+            if (!entry?.transactions[0]?.stock?.quantity) {
+                totalQty = '-';
+            }
 
             if (itemName?.length < productName?.length) {
                 let lastIndex = itemName?.lastIndexOf(" ");
@@ -709,7 +700,6 @@ export class ThermalService {
                         this.printerFormat.endPrinter +
                         this.printerFormat.fullCut,
                     ];
-                    console.log(txt);
                     return qz.print(config, txt);
                 })
                 .catch(function (e: any) {
