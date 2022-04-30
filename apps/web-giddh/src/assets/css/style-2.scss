@@ -5575,6 +5575,27 @@ footer#footer.absolute-footer {
 .modal-open {
     overflow: hidden !important;
     .manage-account-popup.add-manage-group-acc {
+        .scroll-container {
+            .wrap-account-sidebar {
+                .grp-wrapper {
+                    .col-wrapper {
+                        border-color: var(--color-common-secondary-border);
+                        &:nth-child(1) {
+                            background-color: var(--color-common-primary-background-for-all-components);
+                        }
+                    }
+                }
+            }
+        }
+        .manage-group-acc {
+            account-operations {
+                #middleBody {
+                    .top-bar {
+                        border-color: var(--color-common-secondary-border) !important;
+                    }
+                }
+            }
+        }
         account-operations {
             div:nth-child(7) {
                 .modal-dialog {
@@ -7375,6 +7396,59 @@ giddh-datepicker {
             .aside-pane {
                 #close {
                     color: var(--color-primary-right-side-popup-header-text);
+                }
+            }
+        }
+        .container.ledger-section {
+            .ledg-head.transactions-page {
+                #eledgerwrap {
+                    .ledger-book {
+                        .wrap-transaction-map {
+                            .ledger-head {
+                                z-index: 11;
+                            }
+                            .ledger-book {
+                                .entry-modal-height {
+                                    .entry-modal {
+                                        .ledger-panel {
+                                            z-index: 9;
+                                        }
+                                    }
+                                }
+                            }
+                            #ledger-transaction-left-list,
+                            #ledger-transaction-right-list {
+                                .transaction-list-sh-select {
+                                    sh-select-menu {
+                                        .menu {
+                                            z-index: 10;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                .mat-grid-list.ledger-head {
+                    z-index: 8;
+                }
+                .ledger-book {
+                    .entry-modal {
+                        .ledger-panel {
+                            z-index: 6;
+                        }
+                    }
+                    .ledger-main {
+                        .new-entry-ledger {
+                            .ledger-account-label {
+                                sh-select-menu {
+                                    .menu {
+                                        z-index: 7;
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
