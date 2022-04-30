@@ -118,6 +118,9 @@ table {
     .btn-dropdown-dr-cr {
         height: 44px;
     }
+    .table.nested-table {
+        background-color: var(--color-table-body-primary-background);
+    }
 }
 
 .input-group {
