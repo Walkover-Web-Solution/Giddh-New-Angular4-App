@@ -10649,6 +10649,10 @@ input[type="checkbox"].cdk-visually-hidden::after {
         border-radius: 5px !important;
     }
 }
+.stock-group-search input {
+    padding-left: 30px !important;
+    padding-top: 20px !important;
+}
 .stock-balance-wrapper {
     .search-warehouse-bar {
         .mat-form-field-infix {
@@ -10659,7 +10663,6 @@ input[type="checkbox"].cdk-visually-hidden::after {
 
             .mat-select-placeholder,
             mat-select-trigger {
-                padding-left: 23px;
                 color: var(--color-secondary-search-bar-placeholder);
             }
 
