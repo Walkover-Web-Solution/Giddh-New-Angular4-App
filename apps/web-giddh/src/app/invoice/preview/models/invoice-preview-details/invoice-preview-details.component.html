@@ -361,7 +361,7 @@
                                                 <span
                                                     *ngIf="
                                                         shouldShowPrintDocument &&
-                                                        defaultTemplate?.templateType !== 'thermal'
+                                                        defaultTemplate?.templateType !== 'thermal_template'
                                                     "
                                                     [ngClass]="{
                                                         'disabled':
@@ -378,7 +378,7 @@
                                                         ><i class="fa fa-print"></i
                                                     ></a>
                                                 </span>
-                                                <span *ngIf="defaultTemplate?.templateType === 'thermal'">
+                                                <span *ngIf="defaultTemplate?.templateType === 'thermal_template'">
                                                     <a
                                                         href="javascript:;"
                                                         [tooltip]="commonLocaleData?.app_print"
