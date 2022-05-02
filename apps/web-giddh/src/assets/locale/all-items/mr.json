@@ -335,10 +335,7 @@
                     "label": "ऑडिट नोंदी नवीन",
                     "link": "/pages/audit-logs/new",
                     "icon": "icon-audit-log",
-                    "description": "प्रविष्टींचा कालक्रमानुसार डेटा",
-                    "additional": {
-                        "voucherVersion": 1
-                    }
+                    "description": "प्रविष्टींचा कालक्रमानुसार डेटा"
                 },
                 {
                     "label": "रोख प्रवाह",

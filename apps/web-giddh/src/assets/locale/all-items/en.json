@@ -339,10 +339,7 @@
                     "label": "Audit Logs New",
                     "link": "/pages/audit-logs/new",
                     "icon": "icon-audit-log",
-                    "description": "Chronological data of entries",
-                    "additional": {
-                        "voucherVersion": 1
-                    }
+                    "description": "Chronological data of entries"
                 },
                 {
                     "label": "Cash Flow",
