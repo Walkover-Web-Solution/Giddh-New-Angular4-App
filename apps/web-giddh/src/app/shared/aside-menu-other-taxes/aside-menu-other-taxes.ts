@@ -68,12 +68,14 @@ export class AsideMenuOtherTaxes implements OnInit, OnChanges, OnDestroy {
     public applyTax(tax: IOption): void {
         if (tax && tax.value) {
             this.otherTaxesModal.appliedOtherTax = { name: tax.label, uniqueName: tax.value };
-            let taxType = this.taxes.find(f => f.uniqueName === tax.value).taxType;
-            const isTdsTax = ['tdsrc', 'tdspay'].includes(taxType);
-            if (!isTdsTax) {
-                this.otherTaxesModal.tcsCalculationMethod = SalesOtherTaxesCalculationMethodEnum.OnTotalAmount;
-            } else {
-                this.otherTaxesModal.tcsCalculationMethod = SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount;
+            if (!this.selectedTaxUniqueName) {
+                let taxType = this.taxes.find(f => f.uniqueName === tax.value).taxType;
+                const isTdsTax = ['tdsrc', 'tdspay'].includes(taxType);
+                if (!isTdsTax) {
+                    this.otherTaxesModal.tcsCalculationMethod = SalesOtherTaxesCalculationMethodEnum.OnTotalAmount;
+                } else {
+                    this.otherTaxesModal.tcsCalculationMethod = SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount;
+                }
             }
         }
     }
