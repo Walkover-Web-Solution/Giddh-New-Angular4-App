@@ -4431,7 +4431,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 entry.otherTaxModal.appliedOtherTax.name = tax?.name;
             }
             if (['tcsrc', 'tcspay'].includes(tax?.taxType)) {
-
                 if (modal.tcsCalculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount) {
                     taxableValue = Number(entry.transactions[0].amount) - entry.discountSum;
                 } else if (modal.tcsCalculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTotalAmount) {
@@ -4440,7 +4439,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 }
                 entry.otherTaxType = 'tcs';
             } else {
-                taxableValue = Number(entry.transactions[0].amount) - entry.discountSum;
+                if (modal.tcsCalculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount) {
+                    taxableValue = Number(entry.transactions[0].amount) - entry.discountSum;
+                } else if (modal.tcsCalculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTotalAmount) {
+                    let rawAmount = Number(entry.transactions[0].amount) - entry.discountSum;
+                    taxableValue = (rawAmount + entry.taxSum + entry.cessSum);
+                }
                 entry.otherTaxType = 'tds';
             }
 
@@ -4687,13 +4691,19 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             } else if (entry.tdsTaxList && entry.tdsTaxList.length) {
                 // tds tax calculation
                 entry.isOtherTaxApplicable = true;
-                entry.otherTaxModal.tcsCalculationMethod = SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount;
                 entry.otherTaxType = 'tds';
 
                 let tax = this.companyTaxesList.find(f => f.uniqueName === entry.tdsTaxList[0]);
                 if (tax) {
                     entry.otherTaxModal.appliedOtherTax = { name: tax.name, uniqueName: tax.uniqueName };
-                    let taxableValue = Number(entry.transactions[0].amount) - entry.discountSum;
+                    let taxableValue = 0;
+                    if (entry.otherTaxModal.tcsCalculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount) {
+                        taxableValue = Number(entry.transactions[0].amount) - entry.discountSum;
+                    } else if (entry.otherTaxModal.tcsCalculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTotalAmount) {
+                        let rawAmount = Number(entry.transactions[0].amount) - entry.discountSum;
+                        taxableValue = (rawAmount + entry.taxSum + entry.cessSum);
+                    }
+
                     entry.otherTaxSum = giddhRoundOff(((taxableValue * tax.taxDetail[0].taxValue) / 100), 2);
                 }
             }
