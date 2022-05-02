@@ -59,7 +59,7 @@ export class PurchaseSendEmailModalComponent implements OnInit, OnDestroy {
      * @memberof PurchaseSendEmailModalComponent
      */
     public sendEmail(): void {
-        let getRequest = { companyUniqueName: this.sendEmailRequest.companyUniqueName, accountUniqueName: this.sendEmailRequest.accountUniqueName, uniqueName: this.sendEmailRequest.uniqueName };
+        let getRequest = { companyUniqueName: this.sendEmailRequest?.companyUniqueName, accountUniqueName: this.sendEmailRequest?.accountUniqueName, uniqueName: this.sendEmailRequest?.uniqueName };
         let postRequest = { emailId: [this.emailId] };
 
         if (this.module === "purchase-order") {

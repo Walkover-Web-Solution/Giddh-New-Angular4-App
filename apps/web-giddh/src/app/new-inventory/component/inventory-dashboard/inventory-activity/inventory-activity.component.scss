@@ -1,0 +1,137 @@
+.activity-block {
+    h4 {
+        font-family: "opensans-semibold";
+    }
+    .custom-datepicker {
+        min-width: 230px;
+        input {
+            width: 100% !important;
+            max-width: 100%;
+            text-align: left;
+            padding-left: 40px !important;
+        }
+    }
+    .left-active-data,
+    .right-active-data {
+        .activity-box {
+            width: 25%;
+            padding: 26px 20px;
+            justify-content: center;
+            align-items: center;
+            display: flex;
+            flex-direction: column;
+            text-align: center;
+            &.packed {
+                background-color: var(--color-chardon);
+                p {
+                    &.value {
+                        color: var(--color-red);
+                        font-size: 20px;
+                    }
+                }
+            }
+            &.shipped {
+                background-color: var(--color-foam);
+                p {
+                    &.value {
+                        color: var(--color-teal);
+                        font-size: 20px;
+                    }
+                }
+            }
+            &.delivered {
+                background-color: var(--color-foam);
+                p {
+                    &.value {
+                        color: var(--color-teal);
+                        font-size: 20px;
+                    }
+                }
+            }
+            &.received {
+                background-color: var(--color-tutu);
+                p {
+                    &.value {
+                        color: var(--color-red);
+                        font-size: 20px;
+                    }
+                }
+            }
+            &.stock-qty {
+                background-color: var(--color-solitude-light);
+                p {
+                    &.value {
+                        color: var(--color-blue);
+                        font-size: 20px;
+                    }
+                }
+            }
+            &.job-work-contract {
+                background-color: var(--color-solitude-light);
+                p {
+                    &.value {
+                        color: var(--color-blue);
+                        font-size: 20px;
+                    }
+                }
+            }
+        }
+    }
+    .right-active-data {
+        position: relative;
+        &:after {
+            position: absolute;
+            content: "";
+            width: 1px;
+            height: 100%;
+            background-color: var(--color-iron);
+            left: -27px;
+        }
+        .activity-box {
+            width: 50%;
+        }
+    }
+}
+/*responsive*/
+
+@media (max-width: 991px) {
+    .activity-block {
+        .left-active-data {
+            margin-bottom: 15px;
+            .activity-box.received {
+                margin-right: 0 !important;
+            }
+        }
+    }
+}
+@media (max-width: 767px) {
+    .activity-block {
+        .left-active-data {
+            margin-bottom: 0;
+            flex-wrap: wrap;
+            .activity-box {
+                width: 47% !important;
+                margin-bottom: 15px;
+                &:nth-child(2n) {
+                    margin-right: 0 !important;
+                }
+            }
+        }
+    }
+}
+@media (max-width: 575px) {
+    .activity-block {
+        .custom-datepicker {
+            margin-top: 15px;
+        }
+        .left-active-data,
+        .right-active-data {
+            flex-wrap: wrap;
+            .activity-box {
+                width: 100% !important;
+                margin-bottom: 15px;
+                margin-right: 0 !important;
+            }
+        }
+    }
+}

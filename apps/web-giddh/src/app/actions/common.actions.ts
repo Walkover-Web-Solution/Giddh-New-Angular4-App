@@ -139,7 +139,7 @@ export class CommonActions {
             payload: value
         };
     }
-    
+
     public resetOnboardingForm(): CustomActions {
         return {
             type: CommonActions.RESET_ONBOARDING_FORM_RESPONSE

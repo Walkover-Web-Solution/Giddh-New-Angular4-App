@@ -188,12 +188,10 @@ export class AgingReportComponent implements OnInit, OnDestroy {
         this.universalDate$.pipe(takeUntil(this.destroyed$)).subscribe(dateObj => {
             if (dateObj) {
                 let universalDate = cloneDeep(dateObj);
-
                 this.dueAmountReportRequest.from = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
                 this.dueAmountReportRequest.to = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
                 this.selectedDateRange = { startDate: moment(universalDate[0]), endDate: moment(universalDate[1]) };
                 this.selectedDateRangeUi = moment(universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-
                 this.getDueReport();
             }
         });

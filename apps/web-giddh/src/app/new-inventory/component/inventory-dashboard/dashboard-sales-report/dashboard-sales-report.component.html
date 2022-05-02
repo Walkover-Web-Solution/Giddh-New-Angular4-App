@@ -1,0 +1,102 @@
+<div class="purchase-report-block mr-t15">
+    <div class="box">
+        <div class="purchase-report-head d-flex justify-content-between flex-sm-row flex-column">
+            <h4>Sales Report</h4>
+            <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
+                <i class="icon-calender calendar-addon bdr-radius-50"></i>
+                <input
+                    type="text"
+                    id="select-date-selling"
+                    name="selectedDateRange"
+                    [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
+                    class="giddh-datepicker date-range-picker bdr-radius-50"
+                    placeholder="Enter Date"
+                />
+            </div>
+        </div>
+        <!-- div will show if no any data on list -->
+        <div class="no-data-contain" hidden>
+            <img src="{{ imgPath }}error.svg" />
+            <p class="text-gray mr-t15">No items were invoiced in this time frame</p>
+        </div>
+        <div class="purchase-report-container d-flex justify-content-between mr-t15">
+            <div class="purchase-summary-wrapper">
+                <div class="purchase-summary">
+                    <div class="about-purchase-report">
+                        <div class="mt-4 purchase-qty">
+                            <h4 class="font-14 pb-1">Quantity Sold</h4>
+                            <p class="text-blue">23</p>
+                        </div>
+                        <div class="mt-4 purchase-qty">
+                            <h4 class="font-14 pb-1">Yet to Deliver</h4>
+                            <p class="text-blue">23</p>
+                        </div>
+                        <div class="mt-4 purchase-qty">
+                            <h4 class="font-14 pb-1">Amt to be received</h4>
+                            <p class="text-blue">₹12,000</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="table-wrapper">
+                <div class="table-responsive">
+                    <table class="table giddh-table purchase-report-table on-mobile-view">
+                        <thead>
+                            <th>Date</th>
+                            <th>Inv #</th>
+                            <th>Customer</th>
+                            <th>Total Amt.</th>
+                            <th>Packed</th>
+                            <th>Shipped</th>
+                            <th>Delivered</th>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td data-title="Date">2-11-2020</td>
+                                <td data-title="Bill">20181030-6</td>
+                                <td data-title="Vendor">CA Abhay Sharma</td>
+                                <td data-title="Total Amount">₹12,300</td>
+                                <td data-title="Packed"><input type="checkbox" id="checkbox-packed" /></td>
+                                <td data-title="Shipped"><input type="checkbox" id="checkbox-shipped" /></td>
+                                <td data-title="Delivered"><input type="checkbox" id="checkbox-delivered" /></td>
+                            </tr>
+                            <tr>
+                                <td data-title="Date">2-11-2020</td>
+                                <td data-title="Bill">20181030-6</td>
+                                <td data-title="Vendor">CA Abhay Sharma</td>
+                                <td data-title="Total Amount">₹12,300</td>
+                                <td data-title="Packed"><input type="checkbox" id="checkbox-packed" /></td>
+                                <td data-title="Shipped"><input type="checkbox" id="checkbox-shipped" /></td>
+                                <td data-title="Delivered"><input type="checkbox" id="checkbox-delivered" /></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- datepicker template -->
+<ng-template #datepickerTemplate>
+    <div class="datepicker-modal">
+        <div class="modal-body">
+            <app-datepicker-wrapper
+                [inputStartDate]="selectedDateRange?.startDate"
+                [inputEndDate]="selectedDateRange?.endDate"
+                [alwaysShowCalendars]="true"
+                [ranges]="datePickerOption"
+                [selectedRangeLabel]="selectedRangeLabel"
+                [showCustomRangeLabel]="true"
+                [showClearButton]="false"
+                [showCancel]="true"
+                [linkedCalendars]="true"
+                [showDropdowns]="true"
+                (rangeClicked)="dateSelectedCallback($event)"
+                (datesUpdated)="dateSelectedCallback($event)"
+                [keepCalendarOpeningWithRange]="false"
+                [showRangeLabelOnInput]="false"
+                [dateFieldPosition]="dateFieldPosition"
+            ></app-datepicker-wrapper>
+        </div>
+    </div>
+</ng-template>

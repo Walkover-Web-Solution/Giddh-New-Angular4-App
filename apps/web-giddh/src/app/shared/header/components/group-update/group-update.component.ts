@@ -94,6 +94,8 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     };
     /** Stores the value of groups */
     public searchedGroups: IOption[];
+    /** True if we need to show discount field */
+    public showDiscountField: boolean = false;
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     constructor(
@@ -111,11 +113,11 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
         this.activeGroupSelected$ = this.store.pipe(select(state => {
             if (state.groupwithaccounts.activeAccount) {
                 if (state.groupwithaccounts.activeAccountTaxHierarchy) {
-                    return difference(state.groupwithaccounts.activeAccountTaxHierarchy.applicableTaxes.map(p => p.uniqueName), state.groupwithaccounts.activeAccountTaxHierarchy.inheritedTaxes.map(p => p.uniqueName));
+                    return difference(state.groupwithaccounts.activeAccountTaxHierarchy.applicableTaxes.map(p => p?.uniqueName), state.groupwithaccounts.activeAccountTaxHierarchy.inheritedTaxes.map(p => p?.uniqueName));
                 }
             } else {
                 if (state.groupwithaccounts.activeGroupTaxHierarchy) {
-                    return difference(state.groupwithaccounts.activeGroupTaxHierarchy.applicableTaxes.map(p => p.uniqueName), state.groupwithaccounts.activeGroupTaxHierarchy.inheritedTaxes.map(p => p.uniqueName));
+                    return difference(state.groupwithaccounts.activeGroupTaxHierarchy.applicableTaxes.map(p => p?.uniqueName), state.groupwithaccounts.activeGroupTaxHierarchy.inheritedTaxes.map(p => p?.uniqueName));
                 }
             }
 
@@ -128,7 +130,6 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
 
     public ngOnInit() {
         this.taxPopOverTemplate = '<div class="popover-content"><label>' + this.localeData?.tax_inherited + ':</label><ul><li>@inTax.name</li></ul></div>';
-        // this.store.dispatch(this._generalActions.getGroupWithAccounts());
         this.groupDetailForm = this._fb.group({
             name: ['', Validators.required],
             uniqueName: ['', Validators.required],
@@ -186,17 +187,17 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
                 let arr: IOption[] = [];
                 if (taxes) {
                     if (activeGroup) {
-                        let applicableTaxes = activeGroupTaxHierarchy?.applicableTaxes.map(p => p.uniqueName);
+                        let applicableTaxes = activeGroupTaxHierarchy?.applicableTaxes.map(p => p?.uniqueName);
                         if (activeGroupTaxHierarchy) {
                             // prepare drop down options
                             this.companyTaxDropDown = differenceBy(taxes.map(p => {
-                                return { label: p.name, value: p.uniqueName, additional: p };
+                                return { label: p?.name, value: p?.uniqueName, additional: p };
                             }), flattenDeep(activeGroupTaxHierarchy.inheritedTaxes.map(p => p.applicableTaxes)).map((p: any) => {
-                                return { label: p.name, value: p.uniqueName, additional: p };
+                                return { label: p?.name, value: p?.uniqueName, additional: p };
                             }), 'value');
 
                             if (activeGroupTaxHierarchy.inheritedTaxes && activeGroupTaxHierarchy.inheritedTaxes.length) {
-                                let inheritedTaxes = flattenDeep(activeGroupTaxHierarchy.inheritedTaxes.map(p => p.applicableTaxes)).map((j: any) => j.uniqueName);
+                                let inheritedTaxes = flattenDeep(activeGroupTaxHierarchy.inheritedTaxes.map(p => p.applicableTaxes)).map((j: any) => j?.uniqueName);
                                 let allTaxes = applicableTaxes?.filter(f => inheritedTaxes.indexOf(f) === -1);
                                 // set value in tax group form
                                 setTimeout(() => {
@@ -210,7 +211,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
 
                         } else {
                             this.companyTaxDropDown = taxes.map(p => {
-                                return { label: p.name, value: p.uniqueName, additional: p };
+                                return { label: p?.name, value: p?.uniqueName, additional: p };
                             });
                             // set value in tax group form
                             setTimeout(() => {
@@ -468,13 +469,13 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
             if (t) {
                 t.inheritedTaxes.forEach(tt => {
                     tt.applicableTaxes.forEach(ttt => {
-                        data.taxes.push(ttt.uniqueName);
+                        data.taxes.push(ttt?.uniqueName);
                     });
                 });
             }
         });
         data.taxes.push.apply(data.taxes, this.taxGroupForm.value.taxes);
-        data.uniqueName = activeGroup.uniqueName;
+        data.uniqueName = activeGroup?.uniqueName;
         this.store.dispatch(this.groupWithAccountsAction.applyGroupTax(data));
         this.showEditTaxSection = false;
     }
@@ -528,7 +529,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
      */
     public applyDiscounts(): void {
         let activeGroupUniqueName: string;
-        this.activeGroup$.pipe(take(1)).subscribe(grp => activeGroupUniqueName = grp.uniqueName);
+        this.activeGroup$.pipe(take(1)).subscribe(grp => activeGroupUniqueName = grp?.uniqueName);
 
         if (activeGroupUniqueName) {
             uniq(this.selectedDiscounts);
@@ -548,14 +549,16 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     public getDiscountList(): void {
         this.settingsDiscountService.GetDiscounts().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success" && response?.body?.length > 0) {
+                this.showDiscountField = false;
                 this.discountList = [];
                 Object.keys(response?.body).forEach(key => {
                     this.discountList.push({
-                        label: response?.body[key].name,
-                        value: response?.body[key].uniqueName,
+                        label: response?.body[key]?.name,
+                        value: response?.body[key]?.uniqueName,
                         isSelected: false
                     });
                 });
+                this.showDiscountField = true;
             }
         });
     }
@@ -604,7 +607,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
                 if (data && data.body && data.body.results) {
                     let activeGroupUniqueName: string;
                     this.activeGroupUniqueName$.pipe(take(1)).subscribe(uniqueName => activeGroupUniqueName = uniqueName);
-                    data.body.results = data.body.results.filter(group => group.uniqueName !== activeGroupUniqueName);
+                    data.body.results = data.body.results.filter(group => group?.uniqueName !== activeGroupUniqueName);
                     const searchResults = data.body.results.map(result => {
                         return {
                             value: result.uniqueName,

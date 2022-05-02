@@ -481,7 +481,24 @@ tfoot td .table-sec.form-group {
 }
 @media (max-width: 767px) {
     .date-advance-search {
-        margin-top: 15px;
+        margin-top: 5px;
+    }
+    .branch-transfer-report {
+        padding-top: 10px;
+    }
+}
+@media (max-width: 575px) {
+    .branch-transfer-flex {
+        width: 100%;
+        .input-group.linked-entities {
+            width: 100%;
+            sh-select {
+                margin-right: 0;
+            }
+        }
+    }
+    .custom-datepicker {
+        margin-top: 10px;
     }
     .table-delivery {
         width: 100%;
