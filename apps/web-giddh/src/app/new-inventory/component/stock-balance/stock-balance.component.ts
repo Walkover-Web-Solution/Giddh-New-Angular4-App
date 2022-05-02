@@ -15,6 +15,8 @@ import { StockReportActions } from "../../../actions/inventory/stocks-report.act
 import { GroupStockReportRequest, StockReportRequest } from "../../../models/api-models/Inventory";
 import { SettingsFinancialYearActions } from "../../../actions/settings/financial-year/financial-year.action";
 import { GeneralService } from "../../../services/general.service";
+import { ToasterService } from "../../../services/toaster.service";
+import { Router } from "@angular/router";
 
 interface quantity {
   value: string;
@@ -65,13 +67,13 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
   public productUniqueNameInput: FormControl = new FormControl();
   /** Hold warehouse checked  */
   public selectedWarehouse: any[] = [];
+  public warehouse: FormControl = new FormControl();
 
 
   @ViewChild('select') select: MatSelect;
   public allSelected = false;
 
 
-  public warehouse = new FormControl();
   toppingList: string[] = ['Warehouse 1'];
 
   quantites: quantity[] = [
@@ -84,7 +86,9 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
     private warehouseActions: WarehouseActions,
     private stockReportActions: StockReportActions,
     private generalService: GeneralService,
-    private settingsFinancialYearActions: SettingsFinancialYearActions
+    private settingsFinancialYearActions: SettingsFinancialYearActions,
+    private toaster: ToasterService,
+    private router: Router,
   ) {
     this.store.dispatch(this.settingsFinancialYearActions.getFinancialYearLimits());
   }
@@ -117,6 +121,7 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
           this.GroupStockReportRequest.from = financialYearLimits;
           this.GroupStockReportRequest.to = financialYearLimits;
           this.getStocks();
+
         }
       }
     });
@@ -174,7 +179,6 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
         if (response[0]) {
           this.stocksList = response[0]?.body?.stockReport;
           this.stockGroupName = response[0]?.body?.stockGroupName;
-
           this.stocksList?.forEach(stock => {
             stock.warehouses = [];
             this.warehouses?.forEach(warehouse => {
@@ -208,10 +212,27 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
    */
   public getWarehouses(): void {
     this.store.pipe(select(state => state.warehouse.warehouses), takeUntil(this.destroyed$)).subscribe((warehouses: any) => {
+      this.checkSelectedWarehouse();
       if (!warehouses?.results) {
         this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: 0 }));
       }
     });
+  }
+
+  /**
+ * Prefill selected taxes
+ *
+ * @private
+ * @memberof StockBalanceComponent
+ */
+  private checkSelectedWarehouse(): void {
+    if (this.warehouses?.length > 0) {
+      this.warehouses?.forEach(warehouse => {
+        if (this.selectedWarehouse?.includes(warehouse.uniqueName)) {
+          this.optionClick(warehouse);
+        }
+      });
+    }
   }
 
   /**
@@ -227,7 +248,7 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
       } else {
         this.selectedWarehouse.push(uniqueName);
       }
-      console.log(this.selectedWarehouse);
+
       this.GroupStockReportRequest.warehouseUniqueName = uniqueName;
       this.inventoryService.GetGroupStocksReport_V3(this.GroupStockReportRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
         if (response) {
@@ -240,7 +261,6 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
                   const warehouseFound = stockFound[0]?.warehouses?.filter(warehouse => warehouse.uniqueName === this.GroupStockReportRequest.warehouseUniqueName);
                   if (warehouseFound?.length > 0) {
                     warehouseFound[0].openingBalance = warehouseStock.openingBalance;
-                    console.log(warehouseFound);
                   }
                 }
               }
@@ -291,8 +311,16 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
    *
    * @memberof StockBalanceComponent
    */
-  public hideActiveRow(): void {
+  public hideActiveRow(stock:any): void {
     this.activeRow = null;
+    this.inventoryService.updateStock(this.GroupStockReportRequest, this.GroupStockReportRequest.stockGroupUniqueName, this.GroupStockReportRequest?.stockUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+      if (response?.status === "success") {
+        this.toaster.showSnackBar("success", "Stock updated successfully");
+        this.router.navigate(['/pages/inventory']);
+      } else {
+        this.toaster.showSnackBar("error", response?.message);
+      }
+    });
   }
 
   /**
