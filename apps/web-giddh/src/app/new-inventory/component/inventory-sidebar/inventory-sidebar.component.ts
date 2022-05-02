@@ -3,6 +3,45 @@ import { Component, EventEmitter, Output, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import {FlatTreeControl} from '@angular/cdk/tree';
+import {MatTreeFlatDataSource, MatTreeFlattener} from '@angular/material/tree';
+
+/**
+ * Food data with nested structure.
+ * Each node has a name and an optional list of children.
+ */
+ interface SidebarNode {
+  name: string;
+  children?: SidebarNode[];
+}
+
+const TREE_DATA: SidebarNode[] = [
+  {
+    name: 'Stock',
+    children: [{name: 'Itemwise'}, {name: 'Group-wise'}, {name: 'Varient-wise'}, {name: 'Transactions'}],
+  },
+  {
+    name: 'Services',
+    children: [{name: 'Itemwise'}, {name: 'Group-wise'}, {name: 'Varient-wise'}, {name: 'Transactions'}],
+  },
+  {
+    name: 'Fixed Assets',
+    children: [{name: 'Itemwise'}, {name: 'Group-wise'}, {name: 'Varient-wise'}, {name: 'Transactions'}],
+  },
+  {
+    name: 'Branch Transfer',
+  },
+  {
+    name: 'Manufacturing',
+  },
+];
+
+/** Flat node with expandable and level information */
+interface ExampleFlatNode {
+  expandable: boolean;
+  name: string;
+  level: number;
+}
 
 @Component({
     selector: 'inventory-sidebar',
@@ -17,6 +56,28 @@ export class InventorySidebarComponent implements OnDestroy {
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
+    private _transformer = (node: SidebarNode, level: number) => {
+    return {
+      expandable: !!node.children && node.children.length > 0,
+      name: node.name,
+      level: level,
+    };
+  };
+
+  treeControl = new FlatTreeControl<ExampleFlatNode>(
+    node => node.level,
+    node => node.expandable,
+  );
+
+  treeFlattener = new MatTreeFlattener(
+    this._transformer,
+    node => node.level,
+    node => node.expandable,
+    node => node.children,
+  );
+
+  dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
+
     constructor(
         private router: Router,
         private breakPointObserver: BreakpointObserver
@@ -26,7 +87,10 @@ export class InventorySidebarComponent implements OnDestroy {
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             this.isMobileScreen = result.matches;
         });
+        this.dataSource.data = TREE_DATA;
     }
+
+    hasChild = (_: number, node: ExampleFlatNode) => node.expandable;
 
     /**
      * Releases the memory
