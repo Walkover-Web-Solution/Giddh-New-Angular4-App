@@ -2257,6 +2257,13 @@
                                                             "
                                                         >
                                                         </amount-field>
+                                                        <amount-field
+                                                            *ngIf="!isMulticurrencyAccount"
+                                                            [amount]="entry.otherTaxSum"
+                                                            [currencySymbol]="false"
+                                                            [currencyCode]="false"
+                                                        >
+                                                        </amount-field>
                                                     </span>
                                                 </div>
                                                 <div
