@@ -313,14 +313,14 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
    */
   public hideActiveRow(stock:any): void {
     this.activeRow = null;
-    this.inventoryService.updateStock(this.GroupStockReportRequest, this.GroupStockReportRequest.stockGroupUniqueName, this.GroupStockReportRequest?.stockUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-      if (response?.status === "success") {
-        this.toaster.showSnackBar("success", "Stock updated successfully");
-        this.router.navigate(['/pages/inventory']);
-      } else {
-        this.toaster.showSnackBar("error", response?.message);
-      }
-    });
+    // this.inventoryService.updateStock(this.GroupStockReportRequest, this.GroupStockReportRequest.stockGroupUniqueName, this.GroupStockReportRequest?.stockUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+    //   if (response?.status === "success") {
+    //     this.toaster.showSnackBar("success", "Stock updated successfully");
+    //     this.router.navigate(['/pages/inventory']);
+    //   } else {
+    //     this.toaster.showSnackBar("error", response?.message);
+    //   }
+    // });
   }
 
   /**
