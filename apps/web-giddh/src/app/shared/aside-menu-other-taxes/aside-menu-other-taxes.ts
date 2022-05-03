@@ -5,6 +5,7 @@ import { IOption } from '../../theme/ng-select/option.interface';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
+import { cloneDeep } from '../../lodash-optimized';
 
 @Component({
     selector: 'app-aside-menu-other-taxes',
@@ -26,6 +27,8 @@ export class AsideMenuOtherTaxes implements OnInit, OnChanges, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /* This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
+    /** This will hold default data of other taxes */
+    public defaultOtherTaxesModal: SalesOtherTaxesModal;
 
     constructor(
         private breakPointObservar: BreakpointObserver
@@ -62,6 +65,8 @@ export class AsideMenuOtherTaxes implements OnInit, OnChanges, OnDestroy {
                 this.selectedTaxUniqueName = this.otherTaxesModal.appliedOtherTax.uniqueName;
                 this.applyTax({ label: this.otherTaxesModal.appliedOtherTax.name, value: this.otherTaxesModal.appliedOtherTax.uniqueName });
             }
+
+            this.defaultOtherTaxesModal = cloneDeep(changes.otherTaxesModal.currentValue);
         }
     }
 
@@ -98,5 +103,15 @@ export class AsideMenuOtherTaxes implements OnInit, OnChanges, OnDestroy {
         document.querySelector('body').classList.remove('aside-menu-othertax-open');
         this.destroyed$.next(true);
         this.destroyed$.complete();
+    }
+
+    /**
+     * Closes other tax modal
+     *
+     * @memberof AsideMenuOtherTaxes
+     */
+    public closeOtherTaxModal(): void {
+        this.otherTaxesModal = cloneDeep(this.defaultOtherTaxesModal);
+        this.saveTaxes();
     }
 }

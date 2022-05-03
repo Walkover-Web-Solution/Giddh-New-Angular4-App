@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, OnI
 import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
 import { SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal } from '../../models/api-models/Sales';
 import { TaxResponse } from '../../models/api-models/Company';
+import { cloneDeep } from '../../lodash-optimized';
 
 @Component({
     selector: 'app-aside-menu-sales-other-taxes',
@@ -20,6 +21,8 @@ export class AsideMenuSalesOtherTaxes implements OnInit, OnChanges {
     public taxesOptions: IOption[] = [];
     public selectedTaxUniqueName: string;
     public calculationMethodOptions: IOption[];
+    /** This will hold default data of other taxes */
+    public defaultOtherTaxesModal: SalesOtherTaxesModal;
 
     constructor() {
     }
@@ -44,19 +47,22 @@ export class AsideMenuSalesOtherTaxes implements OnInit, OnChanges {
                 this.selectedTaxUniqueName = this.otherTaxesModal.appliedOtherTax.uniqueName;
                 this.applyTax({ label: this.otherTaxesModal.appliedOtherTax.name, value: this.otherTaxesModal.appliedOtherTax.uniqueName });
             }
-        }
 
+            this.defaultOtherTaxesModal = cloneDeep(changes.otherTaxesModal.currentValue);
+        }
     }
 
     public applyTax(tax: IOption): void {
         if (tax && tax.value) {
             this.otherTaxesModal.appliedOtherTax = { name: tax.label, uniqueName: tax.value };
-            let taxType = this.taxes.find(f => f.uniqueName === tax.value).taxType;
-            const isTdsTax = ['tdsrc', 'tdspay'].includes(taxType);
-            if(!isTdsTax) {
-                this.otherTaxesModal.tcsCalculationMethod = SalesOtherTaxesCalculationMethodEnum.OnTotalAmount;
-            } else {
-                this.otherTaxesModal.tcsCalculationMethod = SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount;
+            if (!this.selectedTaxUniqueName) {
+                let taxType = this.taxes.find(f => f.uniqueName === tax.value).taxType;
+                const isTdsTax = ['tdsrc', 'tdspay'].includes(taxType);
+                if (!isTdsTax) {
+                    this.otherTaxesModal.tcsCalculationMethod = SalesOtherTaxesCalculationMethodEnum.OnTotalAmount;
+                } else {
+                    this.otherTaxesModal.tcsCalculationMethod = SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount;
+                }
             }
         }
     }
@@ -68,5 +74,15 @@ export class AsideMenuSalesOtherTaxes implements OnInit, OnChanges {
 
     public saveTaxes(): void {
         this.applyTaxes.emit(this.otherTaxesModal);
+    }
+
+    /**
+     * Closes other tax modal
+     *
+     * @memberof AsideMenuSalesOtherTaxes
+     */
+     public closeOtherTaxModal(): void {
+        this.otherTaxesModal = cloneDeep(this.defaultOtherTaxesModal);
+        this.saveTaxes();
     }
 }
