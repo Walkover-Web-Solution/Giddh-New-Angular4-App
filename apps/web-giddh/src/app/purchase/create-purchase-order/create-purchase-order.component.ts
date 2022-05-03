@@ -2142,10 +2142,6 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
             if (entry.isOtherTaxApplicable) {
                 entry.taxList.push(entry.otherTaxModal.appliedOtherTax.uniqueName);
             }
-
-            if (entry.otherTaxType === 'tds') {
-                delete entry['tcsCalculationMethod'];
-            }
             return entry;
         });
 
