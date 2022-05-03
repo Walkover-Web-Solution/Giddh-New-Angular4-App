@@ -2792,7 +2792,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     public toggleOtherTaxesAsidePane(modalBool: boolean, index: number = null) {
-
         if (!modalBool) {
             let entry = this.invFormData.entries[this.activeIndx];
             if (entry) {

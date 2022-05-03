@@ -3,9 +3,9 @@
     (clickOutside)="hideListItems()"
     [clickOutsideEnabled]="!isMobileScreen"
     [keyboardShortcut]="'esc'"
-    (onShortcutPress)="saveTaxes()"
+    (onShortcutPress)="closeOtherTaxModal()"
 >
-    <button id="close" type="button" (click)="saveTaxes()"><i class="icon-cross"></i></button>
+    <button id="close" type="button" (click)="closeOtherTaxModal()"><i class="icon-cross"></i></button>
 
     <div class="form-header">
         <h3 class="aside-title">{{commonLocaleData?.app_tax_applicable}}</h3>
@@ -56,7 +56,7 @@
                 <button
                     class="btn btn-success"
                     type="button"
-                    [disabled]="!otherTaxesModal.tcsCalculationMethod"
+                    [disabled]="!otherTaxesModal?.tcsCalculationMethod"
                     (click)="saveTaxes()"
                 >
                     {{commonLocaleData?.app_apply}}
