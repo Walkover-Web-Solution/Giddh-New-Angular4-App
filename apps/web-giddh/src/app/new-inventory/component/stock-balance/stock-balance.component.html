@@ -22,179 +22,210 @@
                     </mat-select>
                 </mat-form-field>
             </div>
-            <div class="stock-balance-top-bar-right-side">
-                <button mat-flat-button [matMenuTriggerFor]="menu" class="filter-btn">
-                    <img src="{{ imgPath }}filter.svg" alt="filter-button" />
-                    <mat-menu #menu="matMenu">
-                        <button mat-menu-item>
-                            <mat-checkbox
-                                color="primary"
-                                (click)="showUniqueName = !showUniqueName; $event.stopPropagation()"
-                                >Unique Name
-                            </mat-checkbox>
-                        </button>
-                        <button mat-menu-item (click)="showGroupName = !showGroupName; $event.stopPropagation()">
-                            <mat-checkbox color="primary">Stock Group</mat-checkbox>
-                        </button>
-                    </mat-menu>
-                </button>
-            </div>
+        </div>
+        <div class="stock-balance-top-bar-right-side">
+            <!-- <button mat-flat-button class="export-btn">
+                <img src="{{ imgPath }}download-blue.svg" alt="" /> Export
+            </button> -->
+            <button mat-flat-button [matMenuTriggerFor]="menu" class="filter-btn">
+                <img src="{{ imgPath }}filter.svg" alt="filter-button" />
+                <mat-menu #menu="matMenu">
+                    <button mat-menu-item>
+                        <mat-checkbox
+                            color="primary"
+                            (click)="showUniqueName = !showUniqueName; $event.stopPropagation()"
+                            >Unique Name
+                        </mat-checkbox>
+                    </button>
+                    <button mat-menu-item (click)="showGroupName = !showGroupName; $event.stopPropagation()">
+                        <mat-checkbox color="primary">Stock Group</mat-checkbox>
+                    </button>
+                </mat-menu>
+            </button>
         </div>
     </div>
-    <div class="searching-stocks" style="float: left; width: 100%">
-        <div class="custom-material-search-bar stock-searchbar" style="float: left; width: 23%">
-            <img src="{{ imgPath }}search-new.svg" class="search-icon" />
-            <mat-form-field appearance="outline">
-                <input matInput placeholder="Stocks" #productName [formControl]="productUniqueNameInput" />
-            </mat-form-field>
-        </div>
-        <div class="group-list-head group-searchbar" style="width: 19%; margin-left: 20px; float: left">
-            <img src="{{ imgPath }}search-new.svg" class="search-icon" />
-            <select-field
-                [cssClass]="'form-control'"
-                class=""
-                [name]="'stockGroup'"
-                [placeholder]="'Group'"
-                [options]="stockGroups"
-                (selectedOption)="selectFieldType($event)"
-                [defaultValue]="stockGroupName"
-            >
-            </select-field>
-        </div>
-        <div class="wrapper-warehouse">
-            <div class="warehouse-list warehouse-odd">
-                <ng-container *ngFor="let warehouse of warehouses">
-                    <div class="warehouse-list-head" *ngIf="selectedWarehouse?.indexOf(warehouse?.uniqueName) > -1">
-                        <p class="warehouse-list-head-num">{{ warehouse?.name }}</p>
-                        <div class="warehouse-list-head-options">
-                            <div class="d-flex">
-                                <div class="flex-fill">Opening Bal</div>
-                                <div class="icon-pointer">
-                                    <!-- default -->
-                                    <div
-                                        class="icon-sort-asc text-right"
-                                        *ngIf="GroupStockReportRequest.sortBy !== 'OPENING_STOCK_VALUE'"
-                                        (click)="sortButtonClicked('asc', 'OPENING_STOCK_VALUE')"
-                                        [ngClass]="{
-                                            'active-text-color':
-                                                GroupStockReportRequest.sortBy === 'OPENING_STOCK_VALUE' &&
-                                                GroupStockReportRequest.sort === 'asc'
-                                        }"
-                                    ></div>
-                                    <!-- after sort click -->
-                                    <div
-                                        class="icon-sort-asc text-right"
-                                        *ngIf="
-                                            GroupStockReportRequest.sortBy === 'OPENING_STOCK_VALUE' &&
-                                            GroupStockReportRequest.sort === 'desc'
-                                        "
-                                        (click)="sortButtonClicked('asc', 'OPENING_STOCK_VALUE')"
-                                        [ngClass]="{
-                                            'active-text-color':
+    <div class="searching-stocks">
+        <div class="list-head">
+            <div class="custom-material-search-bar stock-searchbar">
+                <img src="{{ imgPath }}search-new.svg" class="search-icon" />
+                <mat-form-field appearance="outline">
+                    <input matInput placeholder="Stocks" #productName [formControl]="productUniqueNameInput" />
+                </mat-form-field>
+            </div>
+            <div class="unique-name-wrapper">
+                <h2 class="unique-name">Unique Name</h2>
+            </div>
+            <div class="group-list-head group-searchbar">
+                <img src="{{ imgPath }}search-new.svg" class="search-icon" />
+                <select-field
+                    [cssClass]="'form-control'"
+                    class=""
+                    [name]="'stockGroup'"
+                    [placeholder]="'Group'"
+                    [options]="stockGroups"
+                    (selectedOption)="selectFieldType($event)"
+                    [defaultValue]="stockGroupName"
+                >
+                </select-field>
+            </div>
+            <div class="wrapper-warehouse">
+                <div class="warehouse-list">
+                    <ng-container *ngFor="let warehouse of warehouses">
+                        <div
+                            class="warehouse-list-head odd-even-shade"
+                            *ngIf="selectedWarehouse?.indexOf(warehouse?.uniqueName) > -1"
+                        >
+                            <p class="warehouse-list-head-num">{{ warehouse?.name }}</p>
+                            <div class="warehouse-list-head-options">
+                                <div class="d-flex">
+                                    <div class="flex-fill">Opening Bal</div>
+                                    <div class="icon-pointer">
+                                        <!-- default -->
+                                        <div
+                                            class="icon-sort-asc text-right"
+                                            *ngIf="GroupStockReportRequest.sortBy !== 'OPENING_STOCK_VALUE'"
+                                            (click)="sortButtonClicked('asc', 'OPENING_STOCK_VALUE')"
+                                            [ngClass]="{
+                                                'active-text-color':
+                                                    GroupStockReportRequest.sortBy === 'OPENING_STOCK_VALUE' &&
+                                                    GroupStockReportRequest.sort === 'asc'
+                                            }"
+                                        ></div>
+                                        <!-- after sort click -->
+                                        <div
+                                            class="icon-sort-asc text-right"
+                                            *ngIf="
                                                 GroupStockReportRequest.sortBy === 'OPENING_STOCK_VALUE' &&
                                                 GroupStockReportRequest.sort === 'desc'
-                                        }"
-                                    ></div>
-                                    <div
-                                        class="icon-sort-asc text-right"
-                                        *ngIf="
-                                            GroupStockReportRequest.sortBy === 'OPENING_STOCK_VALUE' &&
-                                            GroupStockReportRequest.sort === 'asc'
-                                        "
-                                        (click)="sortButtonClicked('desc', 'OPENING_STOCK_VALUE')"
-                                        [ngClass]="{
-                                            'active-text-color':
+                                            "
+                                            (click)="sortButtonClicked('asc', 'OPENING_STOCK_VALUE')"
+                                            [ngClass]="{
+                                                'active-text-color':
+                                                    GroupStockReportRequest.sortBy === 'OPENING_STOCK_VALUE' &&
+                                                    GroupStockReportRequest.sort === 'desc'
+                                            }"
+                                        ></div>
+                                        <div
+                                            class="icon-sort-asc text-right"
+                                            *ngIf="
                                                 GroupStockReportRequest.sortBy === 'OPENING_STOCK_VALUE' &&
                                                 GroupStockReportRequest.sort === 'asc'
-                                        }"
-                                    ></div>
+                                            "
+                                            (click)="sortButtonClicked('desc', 'OPENING_STOCK_VALUE')"
+                                            [ngClass]="{
+                                                'active-text-color':
+                                                    GroupStockReportRequest.sortBy === 'OPENING_STOCK_VALUE' &&
+                                                    GroupStockReportRequest.sort === 'asc'
+                                            }"
+                                        ></div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="d-flex">
-                                <div class="flex-fill">Quantity</div>
-                                <div class="icon-pointer">
-                                    <div
-                                        class="icon-sort-asc text-right"
-                                        *ngIf="GroupStockReportRequest.sortBy !== 'OPENING_STOCK_QTY'"
-                                        (click)="sortButtonClicked('asc', 'OPENING_STOCK_QTY')"
-                                        [ngClass]="{
-                                            'active-text-color':
-                                                GroupStockReportRequest.sortBy === 'OPENING_STOCK_QTY' &&
-                                                GroupStockReportRequest.sort === 'asc'
-                                        }"
-                                    ></div>
+                                <div class="d-flex">
+                                    <div class="flex-fill">Quantity</div>
+                                    <div class="icon-pointer">
+                                        <div
+                                            class="icon-sort-asc text-right"
+                                            *ngIf="GroupStockReportRequest.sortBy !== 'OPENING_STOCK_QTY'"
+                                            (click)="sortButtonClicked('asc', 'OPENING_STOCK_QTY')"
+                                            [ngClass]="{
+                                                'active-text-color':
+                                                    GroupStockReportRequest.sortBy === 'OPENING_STOCK_QTY' &&
+                                                    GroupStockReportRequest.sort === 'asc'
+                                            }"
+                                        ></div>
 
-                                    <div
-                                        class="icon-sort-asc text-right"
-                                        *ngIf="
-                                            GroupStockReportRequest.sortBy === 'OPENING_STOCK_QTY' &&
-                                            GroupStockReportRequest.sort === 'desc'
-                                        "
-                                        (click)="sortButtonClicked('asc', 'OPENING_STOCK_QTY')"
-                                        [ngClass]="{
-                                            'active-text-color':
+                                        <div
+                                            class="icon-sort-asc text-right"
+                                            *ngIf="
                                                 GroupStockReportRequest.sortBy === 'OPENING_STOCK_QTY' &&
                                                 GroupStockReportRequest.sort === 'desc'
-                                        }"
-                                    ></div>
-                                    <div
-                                        class="icon-sort-asc text-right"
-                                        *ngIf="
-                                            GroupStockReportRequest.sortBy === 'OPENING_STOCK_QTY' &&
-                                            GroupStockReportRequest.sort === 'asc'
-                                        "
-                                        (click)="sortButtonClicked('desc', 'OPENING_STOCK_QTY')"
-                                        [ngClass]="{
-                                            'active-text-color':
+                                            "
+                                            (click)="sortButtonClicked('asc', 'OPENING_STOCK_QTY')"
+                                            [ngClass]="{
+                                                'active-text-color':
+                                                    GroupStockReportRequest.sortBy === 'OPENING_STOCK_QTY' &&
+                                                    GroupStockReportRequest.sort === 'desc'
+                                            }"
+                                        ></div>
+                                        <div
+                                            class="icon-sort-asc text-right"
+                                            *ngIf="
                                                 GroupStockReportRequest.sortBy === 'OPENING_STOCK_QTY' &&
                                                 GroupStockReportRequest.sort === 'asc'
-                                        }"
-                                    ></div>
+                                            "
+                                            (click)="sortButtonClicked('desc', 'OPENING_STOCK_QTY')"
+                                            [ngClass]="{
+                                                'active-text-color':
+                                                    GroupStockReportRequest.sortBy === 'OPENING_STOCK_QTY' &&
+                                                    GroupStockReportRequest.sort === 'asc'
+                                            }"
+                                        ></div>
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div class="d-flex">
-                                <div class="flex-fill">Unit</div>
+                                <div class="d-flex">
+                                    <div class="flex-fill">Unit</div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </ng-container>
+                    </ng-container>
+                </div>
             </div>
         </div>
 
-        <div
-            class="stock-table mat-elevation-z8"
-            *ngFor="let stock of stocksList"
-            (click)="stock.display = !stock.display"
-        >
+        <div class="stock-table" *ngFor="let stock of stocksList" (click)="stock.display = !stock.display">
             <div class="grid-list-div list-grid stock-list-unexpanded">
                 <div class="grid-title-left" (click)="getStockVariants(stock)">
                     <p class="inner-name mat-table-sticky">{{ stock?.stockName }}</p>
-                    <p class="stock-details" style="word-spacing: 39px">
-                        <span class="ob" style="color: mediumblue">O/B </span>
-                        <span class="stock-ob">{{ stock?.openingBalance?.amount }} </span>
+                    <p class="stock-details">
+                        <span class="stock-ob">{{ stock?.openingBalance?.amount }} <span class="dot">. </span> </span>
                         <span class="stock-ob"
-                            >{{ stock?.openingBalance?.quantity }} {{ stock?.openingBalance?.stockUnit }}</span
+                            >{{ stock?.openingBalance?.quantity }} <span class="dot">.</span>
+                            {{ stock?.openingBalance?.stockUnit }}</span
                         >
                     </p>
                 </div>
 
                 <div class="grid-title-list list-grid-title" *ngIf="showUniqueName">
-                    <span>{{ stock?.stockUniqueName }}</span>
+                    <span class="unique-name-wrap">{{ stock?.stockUniqueName }}</span>
                 </div>
                 <div class="grid-title-list list-grid-title" *ngIf="showGroupName">
                     <span>{{ stockGroupName }}</span>
                 </div>
             </div>
+
+            <div class="warehouse-list-wrapper">
+                <ng-container *ngFor="let warehouse of stock?.warehouses">
+                    <div class="warehouse-list" *ngIf="selectedWarehouse?.indexOf(warehouse?.uniqueName) > -1">
+                        <div class="stock-list-body" (click)="stock.display = !stock.display">
+                            <div class="stock-list-box">
+                                <div class="stock-list-unexpanded">
+                                    <p class="stock-list-box-heading proper-spacing-list">
+                                        <span class="opening-bal-value bg-color-hover">{{
+                                            warehouse?.openingBalance?.amount
+                                        }}</span>
+                                        <span class="quantity-value bg-color-hover">{{
+                                            warehouse?.openingBalance?.quantity
+                                        }}</span>
+                                        <span class="unit-value bg-color-hover">{{
+                                            warehouse?.openingBalance?.stockUnit
+                                        }}</span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </ng-container>
+            </div>
             <div *ngIf="stock.display">
-                <div class="grid-list-div list-grid" *ngFor="let variant of stock?.stock?.variants">
-                    <div class="grid-title-left" style="background-color: gray">
+                <div class="grid-list-div list-grid unexpanded-list" *ngFor="let variant of stock?.variants">
+                    <div class="grid-title-left">
                         <p class="inner-name mat-table-sticky">{{ variant?.name }}</p>
                     </div>
-                    <div class="grid-title-list list-grid-title" style="background-color: gray" *ngIf="showUniqueName">
-                        <span>{{ variant?.uniqueName }}</span>
+                    <div class="grid-title-list list-grid-title" *ngIf="showUniqueName">
+                        <span class="unique-name-wrap">{{ variant?.uniqueName }}</span>
                     </div>
-                    <div class="grid-title-list list-grid-title" style="background-color: gray" *ngIf="showGroupName">
+                    <div class="grid-title-list list-grid-title" *ngIf="showGroupName">
                         <span>{{ stockGroupName }}</span>
                     </div>
                     <ng-container *ngFor="let warehouseVariant of variant?.warehouseBalance; let i = index">
@@ -202,29 +233,21 @@
                             class="grid-title-list list-grid-title"
                             *ngIf="selectedWarehouse?.indexOf(warehouseVariant?.warehouse?.uniqueName) > -1"
                         >
-                            <div
-                                class="stock-list-expanded-content"
-                                (click)="warehouseVariant.display = !warehouseVariant.display; $event.stopPropagation()"
-                            >
-                                <p class="stock-list-box-heading proper-spacing-list" *ngIf="!warehouseVariant.display">
-                                    <span class="opening-bal-value bg-color-hover" style="margin-left: 15px">{{
+                            <div class="stock-list-expanded-content" *ngIf="activeRow !== i">
+                                <p class="stock-list-box-heading proper-spacing-list">
+                                    <span class="opening-bal-value bg-color-hover">{{
                                         warehouseVariant?.openingAmount
                                     }}</span>
-                                    <span class="quantity-value bg-color-hover" style="margin-left: 15px">{{
+                                    <span class="quantity-value bg-color-hover">{{
                                         warehouseVariant?.openingQuantity
                                     }}</span>
-                                    <span class="unit-value bg-color-hover" style="margin-left: 15px">{{
+                                    <span class="unit-value bg-color-hover">{{
                                         warehouseVariant?.stockUnit?.code
                                     }}</span>
                                 </p>
                             </div>
-                            <div
-                                *ngIf="warehouseVariant.display"
-                                (click)="$event.stopPropagation()"
-                                class="editable-input"
-                                style="margin: 0 auto; width: 89%"
-                            >
-                                <p class="edit-p" style="float: left; width: 100%">
+                            <div *ngIf="activeRow === i">
+                                <p class="input-select-wrapper">
                                     <input
                                         style="width: 30%"
                                         matInput
@@ -263,32 +286,6 @@
                         </div>
                     </ng-container>
                 </div>
-            </div>
-            <div class="warehouse-list-wrapper">
-                <ng-container *ngFor="let stockWarehouse of stock?.warehouses">
-                    <div
-                        class="warehouse-list warehouse-even"
-                        *ngIf="selectedWarehouse?.indexOf(stockWarehouse?.uniqueName) > -1"
-                    >
-                        <div class="stock-list-body" (click)="stock.display = !stock.display">
-                            <div class="stock-list-box">
-                                <div class="stock-list-unexpanded">
-                                    <p class="stock-list-box-heading proper-spacing-list">
-                                        <span class="opening-bal-value bg-color-hover">{{
-                                            stockWarehouse?.openingBalance?.amount
-                                        }}</span>
-                                        <span class="quantity-value bg-color-hover">{{
-                                            stockWarehouse?.openingBalance?.quantity
-                                        }}</span>
-                                        <span class="unit-value bg-color-hover">{{
-                                            stockWarehouse?.openingBalance?.stockUnit
-                                        }}</span>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </ng-container>
             </div>
         </div>
     </div>
