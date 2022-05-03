@@ -7,29 +7,15 @@
             <div class="warehouse-select-bar">
                 <mat-form-field class="search-warehouse-bar" appearance="outline">
                     <mat-select
-                        #select
                         placeholder="Warehouses"
-                        [formControl]="warehouse"
                         multiple
-                        [value]=""
                         class="select-warehouse-bar"
                         [(value)]="selectedWarehouse"
                     >
-                        <!-- <div class="select-all">
-                            <mat-checkbox
-                                [(ngModel)]="allSelected"
-                                name="allSelected"
-                                (ngModelChange)="toggleAllSelection()"
-                                [color]="'primary'"
-                                >Select All</mat-checkbox
-                            >
-                        </div> -->
-
                         <mat-option
-                            (click)="optionClick(warehouse.uniqueName)"
+                            (click)="selectWarehouse(warehouse.uniqueName)"
                             *ngFor="let warehouse of warehouses"
                             [value]="warehouse.uniqueName"
-                            [selected]="warehouse.isChecked"
                         >
                             {{ warehouse.name }}
                         </mat-option>
@@ -37,9 +23,6 @@
                 </mat-form-field>
             </div>
             <div class="stock-balance-top-bar-right-side">
-                <!-- <button mat-flat-button class="export-btn">
-                <img src="{{ imgPath }}download-blue.svg" alt="" /> Export
-            </button> -->
                 <button mat-flat-button [matMenuTriggerFor]="menu" class="filter-btn">
                     <img src="{{ imgPath }}filter.svg" alt="filter-button" />
                     <mat-menu #menu="matMenu">
@@ -185,7 +168,7 @@
             (click)="stock.display = !stock.display"
         >
             <div class="grid-list-div list-grid stock-list-unexpanded">
-                <div class="grid-title-left" (click)="getStockVarients(stock?.stockUniqueName)">
+                <div class="grid-title-left" (click)="getStockVariants(stock)">
                     <p class="inner-name mat-table-sticky">{{ stock?.stockName }}</p>
                     <p class="stock-details" style="word-spacing: 39px">
                         <span class="ob" style="color: mediumblue">O/B </span>
@@ -204,7 +187,7 @@
                 </div>
             </div>
             <div *ngIf="stock.display">
-                <div class="grid-list-div list-grid" *ngFor="let variant of stock?.variants">
+                <div class="grid-list-div list-grid" *ngFor="let variant of stock?.stock?.variants">
                     <div class="grid-title-left" style="background-color: gray">
                         <p class="inner-name mat-table-sticky">{{ variant?.name }}</p>
                     </div>
@@ -218,11 +201,12 @@
                         <div
                             class="grid-title-list list-grid-title"
                             *ngIf="selectedWarehouse?.indexOf(warehouseVariant?.warehouse?.uniqueName) > -1"
-                            (click)="setActiveRow(i); $event.stopPropagation()"
-                            (clickOutside)="hideActiveRow(warehouseVariant)"
                         >
-                            <div class="stock-list-expanded-content" *ngIf="activeRow !== i">
-                                <p class="stock-list-box-heading proper-spacing-list">
+                            <div
+                                class="stock-list-expanded-content"
+                                (click)="warehouseVariant.display = !warehouseVariant.display; $event.stopPropagation()"
+                            >
+                                <p class="stock-list-box-heading proper-spacing-list" *ngIf="!warehouseVariant.display">
                                     <span class="opening-bal-value bg-color-hover" style="margin-left: 15px">{{
                                         warehouseVariant?.openingAmount
                                     }}</span>
@@ -234,28 +218,44 @@
                                     }}</span>
                                 </p>
                             </div>
-                            <div *ngIf="activeRow === i">
-                                <p class="" style="float: left; width: 38%">
+                            <div
+                                *ngIf="warehouseVariant.display"
+                                (click)="$event.stopPropagation()"
+                                class="editable-input"
+                                style="margin: 0 auto; width: 89%"
+                            >
+                                <p class="edit-p" style="float: left; width: 100%">
                                     <input
+                                        style="width: 30%"
                                         matInput
                                         class="opening-bal-input"
-                                        placeholder="{{ warehouseVariant?.openingAmount }}"
+                                        placeholder=""
                                         type="text"
+                                        (change)="stockUpdate(stock)"
+                                        [(ngModel)]="warehouseVariant.openingAmount"
                                     />
                                     <input
+                                        style="width: 30%"
                                         matInput
                                         class="quantity-input"
-                                        placeholder="{{ warehouseVariant?.openingQuantity }}"
+                                        placeholder=""
                                         type="text"
+                                        (change)="stockUpdate(stock)"
+                                        [(ngModel)]="warehouseVariant.openingQuantity"
                                     />
+
                                     <select-field
+                                        style="width: 30%"
                                         [cssClass]="'form-control'"
                                         class="unit-dropdown"
                                         [name]="'stockUnitCode'"
-                                        [placeholder]="'Unit'"
+                                        [placeholder]="Unit"
                                         [options]="stockUnits"
-                                        (selectedOption)="stockUnitName = $event.label"
-                                        [defaultValue]="warehouseVariant?.stockUnit?.code"
+                                        (selectedOption)="
+                                            stock.stock.stockUnitCode = $event.value;
+                                            stock.stock.stockUnitName = $event.label
+                                        "
+                                        [defaultValue]="stock.stock?.stockUnitName"
                                     >
                                     </select-field>
                                 </p>
@@ -265,23 +265,23 @@
                 </div>
             </div>
             <div class="warehouse-list-wrapper">
-                <ng-container *ngFor="let warehouse of stock?.warehouses">
+                <ng-container *ngFor="let stockWarehouse of stock?.warehouses">
                     <div
                         class="warehouse-list warehouse-even"
-                        *ngIf="selectedWarehouse?.indexOf(warehouse?.uniqueName) > -1"
+                        *ngIf="selectedWarehouse?.indexOf(stockWarehouse?.uniqueName) > -1"
                     >
                         <div class="stock-list-body" (click)="stock.display = !stock.display">
                             <div class="stock-list-box">
                                 <div class="stock-list-unexpanded">
                                     <p class="stock-list-box-heading proper-spacing-list">
                                         <span class="opening-bal-value bg-color-hover">{{
-                                            warehouse?.openingBalance?.amount
+                                            stockWarehouse?.openingBalance?.amount
                                         }}</span>
                                         <span class="quantity-value bg-color-hover">{{
-                                            warehouse?.openingBalance?.quantity
+                                            stockWarehouse?.openingBalance?.quantity
                                         }}</span>
                                         <span class="unit-value bg-color-hover">{{
-                                            warehouse?.openingBalance?.stockUnit
+                                            stockWarehouse?.openingBalance?.stockUnit
                                         }}</span>
                                     </p>
                                 </div>
