@@ -5,7 +5,7 @@ import { Component, OnDestroy, OnInit, ViewChild, ElementRef } from '@angular/co
 import { StateDetailsRequest } from '../models/api-models/Company';
 import { CompanyActions } from '../actions/company.actions';
 import { ReplaySubject, Observable } from 'rxjs';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { GIDDH_NEW_DATE_FORMAT_UI, GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import * as moment from 'moment';
@@ -57,12 +57,15 @@ export class AuditLogsComponent implements OnInit, OnDestroy {
     /** This will hold common JSON data */
     public commonLocaleData: any = {};
 
-    constructor(private store: Store<AppState>, private companyActions: CompanyActions, private route: ActivatedRoute, private generalService: GeneralService, private modalService: BsModalService) {
+    constructor(private store: Store<AppState>, private companyActions: CompanyActions, private route: ActivatedRoute, private generalService: GeneralService, private modalService: BsModalService, private router: Router) {
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
         this.auditLogsRequest$ = this.store.pipe(select(state => state.auditlog.auditLogsRequest), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
+        if (this.generalService.voucherApiVersion === 2) {
+            this.router.navigate(['/pages/home']);
+        }
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.isNewVersion = false;

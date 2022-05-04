@@ -335,7 +335,11 @@
                     "label": "ऑडिट लॉग नया",
                     "link": "/pages/audit-logs/new",
                     "icon": "icon-audit-log",
-                    "description": "प्रविष्टियों का कालानुक्रमिक डेटा"
+                    "description": "प्रविष्टियों का कालानुक्रमिक डेटा",
+                    "additional": {
+                        "voucherVersion": 1
+                    }
+                    
                 },
                 {
                     "label": "नकदी प्रवाह",
