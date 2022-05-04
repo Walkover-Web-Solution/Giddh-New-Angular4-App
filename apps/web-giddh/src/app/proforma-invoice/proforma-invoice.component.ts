@@ -2662,9 +2662,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public closeAsideMenuStateForOtherTaxes(): void {
         if (this.asideMenuStateForOtherTaxes === 'in') {
             this.toggleOtherTaxesAsidePane(true, null);
-            if (this.invFormData.entries[this.tcsTdsIndex]) {
-                this.invFormData.entries[this.tcsTdsIndex].isOtherTaxApplicable = false;
-            }
         }
     }
 
