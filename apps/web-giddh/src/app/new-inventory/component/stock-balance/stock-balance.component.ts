@@ -61,6 +61,8 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
   public productUniqueNameInput: FormControl = new FormControl();
   /** Hold warehouse checked  */
   public selectedWarehouse: any[] = [];
+  /** Holded all selected warehouse checked  */
+  public allSelectedWarehouse: any[] = [];
 
   constructor(
     private inventoryService: InventoryService,
@@ -68,8 +70,7 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
     private warehouseActions: WarehouseActions,
     private generalService: GeneralService,
     private settingsFinancialYearActions: SettingsFinancialYearActions,
-    private toaster: ToasterService,
-
+    private toaster: ToasterService
   ) {
     this.store.dispatch(this.settingsFinancialYearActions.getFinancialYearLimits());
   }
@@ -103,6 +104,7 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
           this.getStocks();
         }
       }
+
     });
 
     this.productUniqueNameInput.valueChanges.pipe(
@@ -137,7 +139,6 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
    * @memberof StockBalanceComponent
    */
   public getStockVariants(stock: any) {
-
     if (!stock?.stock) {
       this.inventoryService.getStock(stock?.stockUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
         if (response?.status === "success") {
@@ -146,7 +147,9 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
             this.warehouses.forEach(warehouse => {
               const warehouseFound = variant?.warehouseBalance?.filter(balance => balance.warehouse.uniqueName === warehouse.uniqueName);
               if (!warehouseFound?.length) {
-                variant.warehouseBalance.push({ openingAmount: 0, openingQuantity: 0, stockUnit: stock.stock.stockUnit, warehouse: { name: warehouse.name, uniqueName: warehouse.uniqueName } });
+                variant.warehouseBalance.push({
+                  openingAmount: 0, openingQuantity: 0, stockUnit: stock.stock.stockUnit, warehouse: { name: warehouse.name, uniqueName: warehouse.uniqueName }
+                });
               }
             });
           });
@@ -164,21 +167,29 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
     */
   public getStocks(): void {
     if (this.GroupStockReportRequest.stockGroupUniqueName && this.GroupStockReportRequest.warehouseUniqueName) {
-      this.selectedWarehouse.push(this.GroupStockReportRequest.warehouseUniqueName);
+      if (!this.selectedWarehouse.includes(this.GroupStockReportRequest.warehouseUniqueName)) {
+        this.selectedWarehouse.push(this.GroupStockReportRequest.warehouseUniqueName);
+      }
+      if (!this.allSelectedWarehouse.includes(this.GroupStockReportRequest.warehouseUniqueName)) {
+        this.allSelectedWarehouse.push(this.GroupStockReportRequest.warehouseUniqueName);
+      }
       let groupStockReportRequest = cloneDeep(this.GroupStockReportRequest);
       delete groupStockReportRequest.warehouseUniqueName;
       this.inventoryService.GetGroupStocksReport_V3(groupStockReportRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
         if (response) {
           this.stocksList = response?.body?.stockReport;
           this.stockGroupName = response?.body?.stockGroupName;
-
           this.stocksList?.forEach(stock => {
             stock.warehouses = [];
             this.warehouses?.forEach(warehouse => {
               stock.warehouses.push({ name: warehouse.name, uniqueName: warehouse.uniqueName });
             });
           });
-          this.selectWarehouse(this.selectedWarehouse[0]);
+     
+          this.allSelectedWarehouse.forEach(warehouse => {
+            console.log('all selectedWarehouse',warehouse)
+            this.selectWarehouse(warehouse);
+          });
         }
       });
     }
@@ -204,13 +215,8 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
    * @memberof StockBalanceComponent
    */
   public selectWarehouse(uniqueName: any): void {
+    console.log(uniqueName);
     if (uniqueName) {
-      // if (this.selectedWarehouse?.includes(uniqueName)) {
-      //   this.selectedWarehouse = this.generalService.removeValueFromArray(this.selectedWarehouse, uniqueName);
-      // } else {
-      //   this.selectedWarehouse.push(uniqueName);
-      // }
-
       this.GroupStockReportRequest.warehouseUniqueName = uniqueName;
       this.inventoryService.GetGroupStocksReport_V3(this.GroupStockReportRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
         if (response) {
@@ -234,16 +240,34 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
   }
 
   /**
-* Callback for selection of field type
-*
-* @param {*} field
-* @memberof CustomFieldsCreateEditComponent
-*/
-  public selectFieldType(event: any): void {
+   * This function will use for update selected warehouse
+   *
+   * @memberof StockBalanceComponent
+   */
+  public updateSeletedWarehouse(uniqueName:any): void {
+    console.log("Update Selected",uniqueName);
+    console.log('all Selected', this.allSelectedWarehouse)
+
+    if (this.allSelectedWarehouse?.includes(uniqueName)) {
+      console.log('include name',this.allSelectedWarehouse?.includes(uniqueName));
+      console.log('all Selected',this.allSelectedWarehouse)
+      this.allSelectedWarehouse = this.generalService.removeValueFromArray(this.allSelectedWarehouse, uniqueName);
+    } else {
+      this.allSelectedWarehouse.push(uniqueName);
+    }
+  }
+
+
+  /**
+  * Callback for selection of group name
+  *
+  * @param {*} field
+  * @memberof CustomFieldsCreateEditComponent
+  */
+  public selectGroupName(event: any): void {
     this.GroupStockReportRequest.stockGroupUniqueName = event.value;
     this.getStocks();
   }
-
 
   /**
    * Update a stock according to warehouse
@@ -297,13 +321,13 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
   }
 
   /**
- * Arrange stock groups
- *
- * @private
- * @param {IGroupsWithStocksHierarchyMinItem[]} groups
- * @param {IOption[]} [parents=[]]
- * @memberof StockCreateEditComponent
- */
+   * Arrange stock groups
+   *
+   * @private
+   * @param {IGroupsWithStocksHierarchyMinItem[]} groups
+   * @param {IOption[]} [parents=[]]
+   * @memberof StockCreateEditComponent
+   */
   private arrangeStockGroups(groups: IGroupsWithStocksHierarchyMinItem[], parents: IOption[] = []): void {
     groups.map(group => {
       if (group) {
@@ -320,10 +344,10 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
   }
 
   /**
- * Lifecycle hook for destroy
- *
- * @memberof StockCreateEditComponent
- */
+   * Lifecycle hook for destroy
+   *
+   * @memberof StockCreateEditComponent
+   */
   public ngOnDestroy(): void {
     this.destroyed$.next(true);
     this.destroyed$.complete();

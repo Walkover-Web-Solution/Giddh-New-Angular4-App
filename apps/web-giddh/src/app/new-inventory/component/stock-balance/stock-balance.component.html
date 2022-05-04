@@ -13,7 +13,9 @@
                         [(value)]="selectedWarehouse"
                     >
                         <mat-option
-                            (click)="selectWarehouse(warehouse.uniqueName)"
+                            (click)="
+                                selectWarehouse(warehouse.uniqueName); this.updateSeletedWarehouse(warehouse.uniqueName)
+                            "
                             *ngFor="let warehouse of warehouses"
                             [value]="warehouse.uniqueName"
                         >
@@ -63,7 +65,7 @@
                     [name]="'stockGroup'"
                     [placeholder]="'Group'"
                     [options]="stockGroups"
-                    (selectedOption)="selectFieldType($event)"
+                    (selectedOption)="selectGroupName($event)"
                     [defaultValue]="stockGroupName"
                 >
                 </select-field>
@@ -192,33 +194,8 @@
                     <span>{{ stockGroupName }}</span>
                 </div>
             </div>
-            <div class="warehouse-list-wrapper">
-                <ng-container *ngFor="let stockWarehouse of stock?.warehouses">
-                    <div
-                        class="warehouse-list warehouse-even"
-                        *ngIf="selectedWarehouse?.indexOf(stockWarehouse?.uniqueName) > -1"
-                    >
-                        <div class="stock-list-body" (click)="stock.display = !stock.display">
-                            <div class="stock-list-box">
-                                <div class="stock-list-unexpanded">
-                                    <p class="stock-list-box-heading proper-spacing-list">
-                                        <span class="opening-bal-value bg-color-hover">{{
-                                            stockWarehouse?.openingBalance?.amount
-                                        }}</span>
-                                        <span class="quantity-value bg-color-hover">{{
-                                            stockWarehouse?.openingBalance?.quantity
-                                        }}</span>
-                                        <span class="unit-value bg-color-hover">{{
-                                            stockWarehouse?.openingBalance?.stockUnit
-                                        }}</span>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </ng-container>
-            </div>
-            <div *ngIf="stock.display" class="stock-display-wrapper">
+
+            <div class="stock-variant" *ngIf="stock.display">
                 <div class="grid-list-div list-grid unexpanded-list" *ngFor="let variant of stock?.stock?.variants">
                     <div class="grid-title-left">
                         <p class="inner-name mat-table-sticky">{{ variant?.name }}</p>
@@ -250,7 +227,6 @@
                             <div *ngIf="activeRow === i">
                                 <p class="input-select-wrapper">
                                     <input
-                                        style="width: 30%"
                                         matInput
                                         class="opening-bal-input"
                                         placeholder=""
@@ -259,7 +235,6 @@
                                         [(ngModel)]="warehouseVariant.openingAmount"
                                     />
                                     <input
-                                        style="width: 30%"
                                         matInput
                                         class="quantity-input"
                                         placeholder=""
@@ -269,7 +244,6 @@
                                     />
 
                                     <select-field
-                                        style="width: 30%"
                                         [cssClass]="'form-control'"
                                         class="unit-dropdown"
                                         [name]="'stockUnitCode'"

@@ -79,14 +79,14 @@
     }
     /**/
     .stock-table {
+        cursor: pointer;
         width: 100%;
         float: left !important;
         white-space: nowrap;
         box-shadow: none !important;
         border-bottom: 1px solid var(--color-common-primary-border);
-        width: min-content;
-        display: grid;
-        grid-template-columns: 240px 280px auto;
+        width: max-content;
+        display: inline-grid;
 
         &:hover {
             background-color: #e8eeff;
