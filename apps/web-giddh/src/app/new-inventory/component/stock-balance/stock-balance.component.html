@@ -174,18 +174,17 @@
         </div>
 
         <div class="stock-table" *ngFor="let stock of stocksList" (click)="stock.display = !stock.display">
+            <div class="grid-title-left" (click)="getStockVariants(stock)">
+                <p class="inner-name mat-table-sticky">{{ stock?.stockName }}</p>
+                <p class="stock-details">
+                    <span class="stock-ob">{{ stock?.openingBalance?.amount }} <span class="dot">. </span> </span>
+                    <span class="stock-ob"
+                        >{{ stock?.openingBalance?.quantity }} <span class="dot">.</span>
+                        {{ stock?.openingBalance?.stockUnit }}</span
+                    >
+                </p>
+            </div>
             <div class="grid-list-div list-grid stock-list-unexpanded">
-                <div class="grid-title-left" (click)="getStockVariants(stock)">
-                    <p class="inner-name mat-table-sticky">{{ stock?.stockName }}</p>
-                    <p class="stock-details">
-                        <span class="stock-ob">{{ stock?.openingBalance?.amount }} <span class="dot">. </span> </span>
-                        <span class="stock-ob"
-                            >{{ stock?.openingBalance?.quantity }} <span class="dot">.</span>
-                            {{ stock?.openingBalance?.stockUnit }}</span
-                        >
-                    </p>
-                </div>
-
                 <div class="grid-title-list list-grid-title" *ngIf="showUniqueName">
                     <span class="unique-name-wrap">{{ stock?.stockUniqueName }}</span>
                 </div>
@@ -193,22 +192,24 @@
                     <span>{{ stockGroupName }}</span>
                 </div>
             </div>
-
             <div class="warehouse-list-wrapper">
-                <ng-container *ngFor="let warehouse of stock?.warehouses">
-                    <div class="warehouse-list" *ngIf="selectedWarehouse?.indexOf(warehouse?.uniqueName) > -1">
+                <ng-container *ngFor="let stockWarehouse of stock?.warehouses">
+                    <div
+                        class="warehouse-list warehouse-even"
+                        *ngIf="selectedWarehouse?.indexOf(stockWarehouse?.uniqueName) > -1"
+                    >
                         <div class="stock-list-body" (click)="stock.display = !stock.display">
                             <div class="stock-list-box">
                                 <div class="stock-list-unexpanded">
                                     <p class="stock-list-box-heading proper-spacing-list">
                                         <span class="opening-bal-value bg-color-hover">{{
-                                            warehouse?.openingBalance?.amount
+                                            stockWarehouse?.openingBalance?.amount
                                         }}</span>
                                         <span class="quantity-value bg-color-hover">{{
-                                            warehouse?.openingBalance?.quantity
+                                            stockWarehouse?.openingBalance?.quantity
                                         }}</span>
                                         <span class="unit-value bg-color-hover">{{
-                                            warehouse?.openingBalance?.stockUnit
+                                            stockWarehouse?.openingBalance?.stockUnit
                                         }}</span>
                                     </p>
                                 </div>
@@ -217,8 +218,8 @@
                     </div>
                 </ng-container>
             </div>
-            <div *ngIf="stock.display">
-                <div class="grid-list-div list-grid unexpanded-list" *ngFor="let variant of stock?.variants">
+            <div *ngIf="stock.display" class="stock-display-wrapper">
+                <div class="grid-list-div list-grid unexpanded-list" *ngFor="let variant of stock?.stock?.variants">
                     <div class="grid-title-left">
                         <p class="inner-name mat-table-sticky">{{ variant?.name }}</p>
                     </div>
@@ -230,7 +231,7 @@
                     </div>
                     <ng-container *ngFor="let warehouseVariant of variant?.warehouseBalance; let i = index">
                         <div
-                            class="grid-title-list list-grid-title"
+                            class="grid-title-list list-grid-title warehouse-expanded-box"
                             *ngIf="selectedWarehouse?.indexOf(warehouseVariant?.warehouse?.uniqueName) > -1"
                         >
                             <div class="stock-list-expanded-content" *ngIf="activeRow !== i">
