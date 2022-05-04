@@ -175,8 +175,17 @@
             </div>
         </div>
 
-        <div class="stock-table" *ngFor="let stock of stocksList" (click)="stock.display = !stock.display">
-            <div class="grid-title-left" (click)="getStockVariants(stock)">
+        <div
+            class="stock-table"
+            *ngFor="let stock of stocksList"
+            (click)="stock.display = !stock.display"
+            [ngClass]="{ 'expanded-stock-table-without-opacity': stock.display }"
+        >
+            <div
+                class="grid-title-left"
+                (click)="getStockVariants(stock)"
+                [ngClass]="{ 'expanded-stock-table-without-opacity': stock.display }"
+            >
                 <p class="inner-name mat-table-sticky">{{ stock?.stockName }}</p>
                 <p class="stock-details">
                     <span class="stock-ob">{{ stock?.openingBalance?.amount }} <span class="dot">. </span> </span>
@@ -194,10 +203,36 @@
                     <span>{{ stockGroupName }}</span>
                 </div>
             </div>
-
-            <div class="stock-variant" *ngIf="stock.display">
+            <div class="warehouse-list-wrapper">
+                <ng-container *ngFor="let stockWarehouse of stock?.warehouses">
+                    <div
+                        class="warehouse-list warehouse-even"
+                        *ngIf="selectedWarehouse?.indexOf(stockWarehouse?.uniqueName) > -1"
+                        [ngClass]="{ 'expanded-stock-table-with-opacity': stock.display }"
+                    >
+                        <div class="stock-list-body" (click)="stock.display = !stock.display">
+                            <div class="stock-list-box">
+                                <div class="stock-list-unexpanded">
+                                    <p class="stock-list-box-heading proper-spacing-list">
+                                        <span class="opening-bal-value bg-color-hover">{{
+                                            stockWarehouse?.openingBalance?.amount
+                                        }}</span>
+                                        <span class="quantity-value bg-color-hover">{{
+                                            stockWarehouse?.openingBalance?.quantity
+                                        }}</span>
+                                        <span class="unit-value bg-color-hover">{{
+                                            stockWarehouse?.openingBalance?.stockUnit
+                                        }}</span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </ng-container>
+            </div>
+            <div *ngIf="stock.display" class="stock-display-wrapper">
                 <div class="grid-list-div list-grid unexpanded-list" *ngFor="let variant of stock?.stock?.variants">
-                    <div class="grid-title-left">
+                    <div class="grid-title-left" [ngClass]="{ 'expanded-stock-table-without-opacity': stock.display }">
                         <p class="inner-name mat-table-sticky">{{ variant?.name }}</p>
                     </div>
                     <div class="grid-title-list list-grid-title" *ngIf="showUniqueName">
@@ -206,60 +241,75 @@
                     <div class="grid-title-list list-grid-title" *ngIf="showGroupName">
                         <span>{{ stockGroupName }}</span>
                     </div>
-                    <ng-container *ngFor="let warehouseVariant of variant?.warehouseBalance; let i = index">
-                        <div
-                            class="grid-title-list list-grid-title warehouse-expanded-box"
-                            *ngIf="selectedWarehouse?.indexOf(warehouseVariant?.warehouse?.uniqueName) > -1"
-                        >
-                            <div class="stock-list-expanded-content" *ngIf="activeRow !== i">
-                                <p class="stock-list-box-heading proper-spacing-list">
-                                    <span class="opening-bal-value bg-color-hover">{{
-                                        warehouseVariant?.openingAmount
-                                    }}</span>
-                                    <span class="quantity-value bg-color-hover">{{
-                                        warehouseVariant?.openingQuantity
-                                    }}</span>
-                                    <span class="unit-value bg-color-hover">{{
-                                        warehouseVariant?.stockUnit?.code
-                                    }}</span>
-                                </p>
-                            </div>
-                            <div *ngIf="activeRow === i">
-                                <p class="input-select-wrapper">
-                                    <input
-                                        matInput
-                                        class="opening-bal-input"
-                                        placeholder=""
-                                        type="text"
-                                        (change)="stockUpdate(stock)"
-                                        [(ngModel)]="warehouseVariant.openingAmount"
-                                    />
-                                    <input
-                                        matInput
-                                        class="quantity-input"
-                                        placeholder=""
-                                        type="text"
-                                        (change)="stockUpdate(stock)"
-                                        [(ngModel)]="warehouseVariant.openingQuantity"
-                                    />
-
-                                    <select-field
-                                        [cssClass]="'form-control'"
-                                        class="unit-dropdown"
-                                        [name]="'stockUnitCode'"
-                                        [placeholder]="Unit"
-                                        [options]="stockUnits"
-                                        (selectedOption)="
-                                            stock.stock.stockUnitCode = $event.value;
-                                            stock.stock.stockUnitName = $event.label
-                                        "
-                                        [defaultValue]="stock.stock?.stockUnitName"
+                    <div class="warehouse-expanded-box-wrapper">
+                        <ng-container *ngFor="let warehouseVariant of variant?.warehouseBalance; let i = index">
+                            <div
+                                class="grid-title-list list-grid-title warehouse-expanded-box"
+                                *ngIf="selectedWarehouse?.indexOf(warehouseVariant?.warehouse?.uniqueName) > -1"
+                                [ngClass]="{ 'expanded-stock-table-with-opacity': stock.display }"
+                            >
+                                <div
+                                    class="stock-list-expanded-content"
+                                    (click)="
+                                        warehouseVariant.display = !warehouseVariant.display; $event.stopPropagation()
+                                    "
+                                >
+                                    <p
+                                        class="stock-list-box-heading proper-spacing-list"
+                                        *ngIf="!warehouseVariant.display"
                                     >
-                                    </select-field>
-                                </p>
+                                        <span class="opening-bal-value bg-color-hover">{{
+                                            warehouseVariant?.openingAmount
+                                        }}</span>
+                                        <span class="quantity-value bg-color-hover">{{
+                                            warehouseVariant?.openingQuantity
+                                        }}</span>
+                                        <span class="unit-value bg-color-hover">{{
+                                            warehouseVariant?.stockUnit?.code
+                                        }}</span>
+                                    </p>
+                                </div>
+                                <div
+                                    *ngIf="warehouseVariant.display"
+                                    (click)="$event.stopPropagation()"
+                                    class="editable-input"
+                                >
+                                    <p class="input-select-wrapper">
+                                        <input
+                                            matInput
+                                            class="opening-bal-input"
+                                            placeholder=""
+                                            type="text"
+                                            (change)="stockUpdate(stock)"
+                                            [(ngModel)]="warehouseVariant.openingAmount"
+                                        />
+                                        <input
+                                            matInput
+                                            class="quantity-input"
+                                            placeholder=""
+                                            type="text"
+                                            (change)="stockUpdate(stock)"
+                                            [(ngModel)]="warehouseVariant.openingQuantity"
+                                        />
+
+                                        <select-field
+                                            [cssClass]="'form-control'"
+                                            class="unit-dropdown"
+                                            [name]="'stockUnitCode'"
+                                            [placeholder]="Unit"
+                                            [options]="stockUnits"
+                                            (selectedOption)="
+                                                stock.stock.stockUnitCode = $event.value;
+                                                stock.stock.stockUnitName = $event.label
+                                            "
+                                            [defaultValue]="stock.stock?.stockUnitName"
+                                        >
+                                        </select-field>
+                                    </p>
+                                </div>
                             </div>
-                        </div>
-                    </ng-container>
+                        </ng-container>
+                    </div>
                 </div>
             </div>
         </div>
