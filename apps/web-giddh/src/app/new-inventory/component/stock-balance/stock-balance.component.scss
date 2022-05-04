@@ -307,6 +307,9 @@
                     white-space: normal;
                     padding-left: 20px;
                 }
+                .stock-group-name {
+                    padding-left: 10px;
+                }
             }
             .unexpanded-list {
                 width: 100%;
@@ -317,20 +320,57 @@
                         display: flex;
                         justify-content: space-between;
                         padding: 0px 0px 0px 22px;
+                        .opening-bal-value,
+                        .quantity-value,
+                        .unit-value {
+                            display: flex;
+                            align-items: center;
+                            position: relative;
+                            background: #668cff36;
+                        }
+                        .opening-bal-value {
+                            height: 36px;
+                            width: 110px;
+                            padding-left: 5px;
+                            border-radius: 5px;
+                            right: 10px;
+                        }
+                        .quantity-value {
+                            height: 36px;
+                            width: 95px;
+                            padding-left: 5px;
+                            border-radius: 5px;
+                            left: 25px;
+                        }
+                        .unit-value {
+                            height: 36px;
+                            width: 77px;
+                            border-radius: 5px;
+                            padding-left: 5px;
+                            left: 18px;
+                        }
                     }
                 }
                 .input-select-wrapper {
                     display: flex;
-                    margin-left: 53px;
+                    width: 392px;
+                    padding: 0px 6px 0px 30px;
                     .opening-bal-input {
-                        margin-right: 20px;
+                        width: 110px;
+                        padding-left: 5px;
+                        border-radius: 5px;
+                        margin-right: 55px;
+                        background-color: #668cff26;
                     }
                     .quantity-input {
-                        width: 80px;
-                        margin-right: 55px;
+                        width: 95px;
+                        margin-right: 15px;
+                        padding-left: 5px;
+                        border-radius: 5px;
+                        background-color: #668cff26;
                     }
                     .unit-dropdown {
-                        width: 50px;
+                        width: 77px;
                     }
                 }
                 .warehouse-expanded-box-wrapper {
@@ -341,13 +381,6 @@
                         width: 392px;
                         &:nth-child(odd) {
                             background-color: #f5f5f5;
-                        }
-                    }
-                    .stock-list-box-heading {
-                        .quantity-value {
-                            &.bg-color-hover {
-                                padding-left: 15px;
-                            }
                         }
                     }
                 }
@@ -457,6 +490,12 @@
             color: var(--color-blue);
         }
     }
+}
+.white-color {
+    background-color: white !important;
+}
+.gray-color {
+    background-color: #f5f5f5 !important;
 }
 .expanded-stock-table-with-opacity {
     background-color: #668cff26 !important;
