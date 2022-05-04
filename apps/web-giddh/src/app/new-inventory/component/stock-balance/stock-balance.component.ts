@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { FormControl } from "@angular/forms";
 import { select, Store } from "@ngrx/store";
 import { combineLatest, ReplaySubject } from "rxjs";
@@ -18,7 +18,6 @@ import { ToasterService } from "../../../services/toaster.service";
   selector: 'stock-balance',
   templateUrl: './stock-balance.component.html',
   styleUrls: ['./stock-balance.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class StockBalanceComponent implements OnInit, OnDestroy {
