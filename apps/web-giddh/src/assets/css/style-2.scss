@@ -10748,8 +10748,8 @@ input[type="checkbox"].cdk-visually-hidden::after {
                 .input-select-wrapper {
                     .unit-dropdown {
                         input {
-                            padding-left: 10px !important;
-                            background-color: #668cff26 !important;
+                            padding: 0px 5px !important;
+                            background-color: var(--color-primary-input-bar-background-focus) !important;
                         }
                     }
                 }
