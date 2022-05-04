@@ -183,7 +183,6 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
           });
      
           this.allSelectedWarehouse.forEach(warehouse => {
-            console.log('all selectedWarehouse',warehouse)
             this.selectWarehouse(warehouse);
           });
         }
@@ -211,7 +210,6 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
    * @memberof StockBalanceComponent
    */
   public selectWarehouse(uniqueName: any): void {
-    console.log(uniqueName);
     if (uniqueName) {
       this.GroupStockReportRequest.warehouseUniqueName = uniqueName;
       this.inventoryService.GetGroupStocksReport_V3(this.GroupStockReportRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
@@ -222,7 +220,7 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
               const stockFound = this.stocksList?.filter(stock => stock.stockUniqueName === warehouseStock?.stockUniqueName);
               if (stockFound?.length > 0) {
                 if (stockFound[0]?.warehouses?.length > 0) {
-                  const warehouseFound = stockFound[0]?.warehouses?.filter(warehouse => warehouse.uniqueName === this.GroupStockReportRequest.warehouseUniqueName);
+                  const warehouseFound = stockFound[0]?.warehouses?.filter(warehouse => warehouse.uniqueName === uniqueName);
                   if (warehouseFound?.length > 0) {
                     warehouseFound[0].openingBalance = warehouseStock.openingBalance;
                   }
@@ -240,13 +238,8 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
    *
    * @memberof StockBalanceComponent
    */
-  public updateSeletedWarehouse(uniqueName:any): void {
-    console.log("Update Selected",uniqueName);
-    console.log('all Selected', this.allSelectedWarehouse)
-
+  public updateSelectedWarehouse(uniqueName:any): void {
     if (this.allSelectedWarehouse?.includes(uniqueName)) {
-      console.log('include name',this.allSelectedWarehouse?.includes(uniqueName));
-      console.log('all Selected',this.allSelectedWarehouse)
       this.allSelectedWarehouse = this.generalService.removeValueFromArray(this.allSelectedWarehouse, uniqueName);
     } else {
       this.allSelectedWarehouse.push(uniqueName);
@@ -279,7 +272,7 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
           this.toaster.showSnackBar("error", response?.message);
         }
       });
-    }, 3000);
+    }, 300);
   }
 
   /**
