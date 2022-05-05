@@ -31,10 +31,6 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
   public stockUnitName: string = "";
   /** Warehouse data for warehouse drop down */
   public warehouses: Array<any>;
-  /** toggle all collapse */
-  public isStockLlistCollapsed: boolean = false;
-  /** Active row of warehouse stock list */
-  public activeRow: number = 0;
   /** Stock groups list */
   public stockGroups: IOption[] = [];
   /** Holds stock group unique name */
@@ -54,7 +50,7 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
   /** Hold stocks variants  */
   public stocksVariants: any[] = [];
   /** Thsi will use for searching for stock */
-  public productNameInput: FormControl = new FormControl();
+  public productNameSearching: FormControl = new FormControl();
   /** Hold warehouse checked  */
   public selectedWarehouse: any[] = [];
   /** Holded all selected warehouse checked  */
@@ -79,9 +75,9 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
    * @memberof StockBalanceComponent
    */
   public ngOnInit(): void {
+
     this.isLoading = true;
     this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
-
     this.getStockUnits();
     this.getStockGroups();
     this.getWarehouses();
@@ -103,10 +99,9 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
           this.getStocks();
         }
       }
-
     });
 
-    this.productNameInput.valueChanges.pipe(
+    this.productNameSearching.valueChanges.pipe(
       debounceTime(700),
       distinctUntilChanged(),
       takeUntil(this.destroyed$)
@@ -114,21 +109,6 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
       this.GroupStockReportRequest.stockName = s;
       this.getStocks();
     });
-  }
-
-  /**
-   * Sorting of warehouse per quantity and amount
-   *
-   * @param {('asc' | 'desc')} type
-   * @param {string} columnName
-   * @memberof StockBalanceComponent
-   */
-  public sortButtonClicked(type: 'asc' | 'desc', columnName: string) {
-    if (this.GroupStockReportRequest.sort !== type || this.GroupStockReportRequest.sortBy !== columnName) {
-      this.GroupStockReportRequest.sort = type;
-      this.GroupStockReportRequest.sortBy = columnName;
-    }
-    this.getStocks();
   }
 
   /**
@@ -344,5 +324,4 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
     this.destroyed$.next(true);
     this.destroyed$.complete();
   }
-
 }
