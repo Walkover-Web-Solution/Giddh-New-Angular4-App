@@ -15,6 +15,7 @@
         justify-content: space-between;
         align-items: center;
         width: 1320px;
+        height: 68px;
 
         .stock-balance-top-bar-left-side {
             display: flex;
@@ -86,8 +87,9 @@
         white-space: nowrap;
         box-shadow: none !important;
         border-bottom: 1px solid var(--color-common-primary-border);
-        width: max-content;
-        display: inline-grid;
+        width: min-content;
+        display: grid;
+        grid-template-columns: 240px auto;
 
         &:hover {
             background-color: var(--color-primary-common-without-opacity-list-hover);
@@ -115,7 +117,6 @@
             height: 70px;
             display: flex;
             width: 97%;
-            margin-left: 41px;
 
             .warehouse-list {
                 font-size: 14px;
@@ -315,7 +316,7 @@
                 }
                 .unexpanded-list,
                 .stock-list-unexpanded {
-                    width: 100%;
+                    width: fit-content;
                     .unique-name-wrap {
                         word-wrap: break-word;
                         width: 97px;
@@ -440,6 +441,9 @@
                         padding-left: 20px;
                     }
                 }
+                .stock-warehouse-list-container {
+                    display: flex;
+                }
             }
         }
     }
@@ -541,7 +545,7 @@
     .icon-sort-asc {
         line-height: 20px;
         width: 15px;
-        color: var(--color-blue);
+        color: var(--color-table-icon-sort-asc);
         .active-text-color {
             color: var(--color-blue);
         }
@@ -558,4 +562,18 @@
 }
 .expanded-stock-table-without-opacity {
     background-color: var(--color-primary-common-without-opacity-list-hover) !important;
+}
+
+@media (max-width: 1180px) {
+    .stock-balance-wrapper {
+        .searching-stocks,
+        .stock-balance-top-bar {
+            width: 101%;
+        }
+        .stock-balance-top-bar {
+            .stock-balance-top-bar-right-side {
+                margin-top: 0;
+            }
+        }
+    }
 }
