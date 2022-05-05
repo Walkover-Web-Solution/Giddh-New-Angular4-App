@@ -44,6 +44,9 @@
                     </button>
                 </mat-menu>
             </button>
+            <button mat-icon-button>
+                <mat-icon>close</mat-icon>
+            </button>
         </div>
     </div>
     <div class="searching-stocks">
@@ -54,10 +57,10 @@
                     <input matInput placeholder="Stocks" #productName [formControl]="productUniqueNameInput" />
                 </mat-form-field>
             </div>
-            <div class="unique-name-wrapper">
+            <div class="unique-name-wrapper" *ngIf="showUniqueName">
                 <h2 class="unique-name">Unique Name</h2>
             </div>
-            <div class="group-list-head group-searchbar">
+            <div class="group-list-head group-searchbar" *ngIf="showGroupName">
                 <img src="{{ imgPath }}search-new.svg" class="search-icon" />
                 <select-field
                     [cssClass]="'form-control'"
@@ -188,46 +191,52 @@
                 >
                     <p class="inner-name mat-table-sticky">{{ stock?.stockName }}</p>
                     <p class="stock-details">
-                        <span class="stock-ob">{{ stock?.openingBalance?.amount }} <span class="dot">. </span> </span>
                         <span class="stock-ob"
-                            >{{ stock?.openingBalance?.quantity }} <span class="dot">.</span>
+                            >{{ stock?.openingBalance?.amount }}
+                            <span class="dot" *ngIf="stock?.openingBalance?.amount">. </span>
+                        </span>
+                        <span class="stock-ob"
+                            >{{ stock?.openingBalance?.quantity }}
+                            <span class="dot" *ngIf="stock?.openingBalance?.quantity">.</span>
                             {{ stock?.openingBalance?.stockUnit }}</span
                         >
                     </p>
                 </div>
-                <div class="grid-list-div list-grid stock-list-unexpanded">
-                    <div class="grid-title-list list-grid-title" *ngIf="showUniqueName">
-                        <span class="unique-name-wrap">{{ stock?.stockUniqueName }}</span>
+                <div class="stock-warehouse-list-container">
+                    <div class="grid-list-div list-grid stock-list-unexpanded">
+                        <div class="grid-title-list list-grid-title" *ngIf="showUniqueName">
+                            <span class="unique-name-wrap">{{ stock?.stockUniqueName }}</span>
+                        </div>
+                        <div class="grid-title-list list-grid-title stock-group-name-container" *ngIf="showGroupName">
+                            <span class="stock-group-name">{{ stockGroupName }}</span>
+                        </div>
                     </div>
-                    <div class="grid-title-list list-grid-title" *ngIf="showGroupName">
-                        <span class="stock-group-name">{{ stockGroupName }}</span>
-                    </div>
-                </div>
-                <div class="warehouse-list-wrapper">
-                    <ng-container *ngFor="let stockWarehouse of stock?.warehouses">
-                        <div
-                            class="warehouse-list warehouse-even"
-                            *ngIf="selectedWarehouse?.indexOf(stockWarehouse?.uniqueName) > -1"
-                        >
-                            <div class="stock-list-body" (click)="stock.display = !stock.display">
-                                <div class="stock-list-box">
-                                    <div class="stock-list-unexpanded">
-                                        <p class="stock-list-box-heading proper-spacing-list">
-                                            <span class="opening-bal-value bg-color-hover">{{
-                                                stockWarehouse?.openingBalance?.amount
-                                            }}</span>
-                                            <span class="quantity-value bg-color-hover">{{
-                                                stockWarehouse?.openingBalance?.quantity
-                                            }}</span>
-                                            <span class="unit-value bg-color-hover">{{
-                                                stockWarehouse?.openingBalance?.stockUnit
-                                            }}</span>
-                                        </p>
+                    <div class="warehouse-list-wrapper">
+                        <ng-container *ngFor="let stockWarehouse of stock?.warehouses">
+                            <div
+                                class="warehouse-list warehouse-even"
+                                *ngIf="selectedWarehouse?.indexOf(stockWarehouse?.uniqueName) > -1"
+                            >
+                                <div class="stock-list-body" (click)="stock.display = !stock.display">
+                                    <div class="stock-list-box">
+                                        <div class="stock-list-unexpanded">
+                                            <p class="stock-list-box-heading proper-spacing-list">
+                                                <span class="opening-bal-value bg-color-hover">{{
+                                                    stockWarehouse?.openingBalance?.amount
+                                                }}</span>
+                                                <span class="quantity-value bg-color-hover">{{
+                                                    stockWarehouse?.openingBalance?.quantity
+                                                }}</span>
+                                                <span class="unit-value bg-color-hover">{{
+                                                    stockWarehouse?.openingBalance?.stockUnit
+                                                }}</span>
+                                            </p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </ng-container>
+                        </ng-container>
+                    </div>
                 </div>
                 <div
                     *ngIf="stock.display"
