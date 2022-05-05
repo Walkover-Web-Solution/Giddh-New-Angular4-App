@@ -47,7 +47,13 @@
             <div class="custom-material-search-bar stock-searchbar">
                 <img src="{{ imgPath }}search-new.svg" class="search-icon" />
                 <mat-form-field appearance="outline">
-                    <input matInput placeholder="Stocks" #productName [formControl]="productNameInput" />
+                    <input
+                        matInput
+                        placeholder="Stocks"
+                        autocomplete="off"
+                        #productName
+                        [formControl]="productNameInput"
+                    />
                 </mat-form-field>
             </div>
             <div class="unique-name-wrapper" *ngIf="showUniqueName">
