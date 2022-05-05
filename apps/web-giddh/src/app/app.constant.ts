@@ -449,7 +449,7 @@ export const JOURNAL_VOUCHER_ALLOWED_DOMAINS = [
  * @export
  * @enum {string}
  */
-export enum BOOTSTRAP_TOGGLE_SWITCH {
+export enum BootstrapToggleSwitch {
     On = 'blue',
     Off = 'gray',
     Size = 'mini'
