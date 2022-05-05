@@ -19,7 +19,7 @@
                             *ngFor="let warehouse of warehouses"
                             [value]="warehouse.uniqueName"
                         >
-                            {{ warehouse.name }}
+                            {{ warehouse.name ?? "-" }}
                         </mat-option>
                     </mat-select>
                 </mat-form-field>
@@ -32,20 +32,13 @@
             <button mat-flat-button [matMenuTriggerFor]="menu" class="filter-btn">
                 <img src="{{ imgPath }}filter.svg" alt="filter-button" />
                 <mat-menu #menu="matMenu">
-                    <button mat-menu-item>
-                        <mat-checkbox
-                            color="primary"
-                            (click)="showUniqueName = !showUniqueName; $event.stopPropagation()"
-                            >Unique Name
-                        </mat-checkbox>
+                    <button mat-menu-item (click)="showUniqueName = !showUniqueName; $event.stopPropagation()">
+                        <mat-checkbox color="primary" (change)="(showUniqueName)">Unique Name </mat-checkbox>
                     </button>
                     <button mat-menu-item (click)="showGroupName = !showGroupName; $event.stopPropagation()">
-                        <mat-checkbox color="primary">Stock Group</mat-checkbox>
+                        <mat-checkbox color="primary" (change)="(showGroupName)">Stock Group</mat-checkbox>
                     </button>
                 </mat-menu>
-            </button>
-            <button mat-icon-button>
-                <mat-icon>close</mat-icon>
             </button>
         </div>
     </div>
@@ -54,7 +47,7 @@
             <div class="custom-material-search-bar stock-searchbar">
                 <img src="{{ imgPath }}search-new.svg" class="search-icon" />
                 <mat-form-field appearance="outline">
-                    <input matInput placeholder="Stocks" #productName [formControl]="productUniqueNameInput" />
+                    <input matInput placeholder="Stocks" #productName [formControl]="productNameInput" />
                 </mat-form-field>
             </div>
             <div class="unique-name-wrapper" *ngIf="showUniqueName">
@@ -80,7 +73,7 @@
                             class="warehouse-list-head odd-even-shade"
                             *ngIf="selectedWarehouse?.indexOf(warehouse?.uniqueName) > -1"
                         >
-                            <p class="warehouse-list-head-num">{{ warehouse?.name }}</p>
+                            <p class="warehouse-list-head-num">{{ warehouse?.name ?? "-" }}</p>
                             <div class="warehouse-list-head-options">
                                 <div class="d-flex">
                                     <div class="flex-fill">Opening Bal</div>
@@ -189,7 +182,7 @@
                     (click)="getStockVariants(stock)"
                     [ngClass]="{ 'white-color': stock.display }"
                 >
-                    <p class="inner-name mat-table-sticky">{{ stock?.stockName }}</p>
+                    <p class="inner-name mat-table-sticky">{{ stock?.stockName ?? "-" }}</p>
                     <p class="stock-details">
                         <span class="stock-ob"
                             >{{ stock?.openingBalance?.amount }}
@@ -222,13 +215,13 @@
                                         <div class="stock-list-unexpanded">
                                             <p class="stock-list-box-heading proper-spacing-list">
                                                 <span class="opening-bal-value bg-color-hover">{{
-                                                    stockWarehouse?.openingBalance?.amount
+                                                    stockWarehouse?.openingBalance?.amount ?? "-"
                                                 }}</span>
                                                 <span class="quantity-value bg-color-hover">{{
-                                                    stockWarehouse?.openingBalance?.quantity
+                                                    stockWarehouse?.openingBalance?.quantity ?? "-"
                                                 }}</span>
                                                 <span class="unit-value bg-color-hover">{{
-                                                    stockWarehouse?.openingBalance?.stockUnit
+                                                    stockWarehouse?.openingBalance?.stockUnit ?? "-"
                                                 }}</span>
                                             </p>
                                         </div>
@@ -248,13 +241,13 @@
                             class="grid-title-left"
                             [ngClass]="{ 'expanded-stock-table-without-opacity': stock.display }"
                         >
-                            <p class="inner-name mat-table-sticky">{{ variant?.name }}</p>
+                            <p class="inner-name mat-table-sticky">{{ variant?.name ?? "-" }}</p>
                         </div>
                         <div class="grid-title-list list-grid-title" *ngIf="showUniqueName">
-                            <span class="unique-name-wrap">{{ variant?.uniqueName }}</span>
+                            <span class="unique-name-wrap">{{ variant?.uniqueName ?? "-" }}</span>
                         </div>
                         <div class="grid-title-list list-grid-title stock-group-name" *ngIf="showGroupName">
-                            <span>{{ stockGroupName }}</span>
+                            <span>{{ stockGroupName ?? "-" }}</span>
                         </div>
                         <div class="warehouse-expanded-box-wrapper">
                             <ng-container *ngFor="let warehouseVariant of variant?.warehouseBalance; let i = index">
@@ -275,13 +268,13 @@
                                             *ngIf="!warehouseVariant.display"
                                         >
                                             <span class="opening-bal-value bg-color-hover">{{
-                                                warehouseVariant?.openingAmount
+                                                warehouseVariant?.openingAmount ?? "-"
                                             }}</span>
                                             <span class="quantity-value bg-color-hover">{{
-                                                warehouseVariant?.openingQuantity
+                                                warehouseVariant?.openingQuantity ?? "-"
                                             }}</span>
                                             <span class="unit-value bg-color-hover"
-                                                >{{ warehouseVariant?.stockUnit?.code }}
+                                                >{{ warehouseVariant?.stockUnit?.code ?? "-" }}
                                                 <img src="{{ imgPath }}caret-light.svg" class="dropdown-icon" />
                                             </span>
                                         </p>
@@ -317,9 +310,10 @@
                                                 [options]="stockUnits"
                                                 (selectedOption)="
                                                     stock.stock.stockUnitCode = $event.value;
-                                                    stock.stock.stockUnitName = $event.label
+                                                    stock.stock.stockUnitName = $event.label;
+                                                    stockUpdate(stock)
                                                 "
-                                                [defaultValue]="stock.stock?.stockUnitName"
+                                                [defaultValue]="stock.stock?.stockUnitCode"
                                             >
                                             </select-field>
                                             <img src="{{ imgPath }}caret-light.svg" class="dropdown-icon" />
