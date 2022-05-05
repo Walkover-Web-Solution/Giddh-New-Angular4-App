@@ -1,7 +1,7 @@
 .stock-balance-wrapper {
     padding: 0px 20px 0px 20px;
     float: left;
-    width: 84vw;
+    width: 100%;
     overflow: hidden;
 
     .stocks-list-head {
@@ -14,7 +14,7 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        width: 1320px;
+        width: 100%;
         height: 68px;
 
         .stock-balance-top-bar-left-side {
@@ -236,7 +236,7 @@
         }
     }
     .searching-stocks {
-        width: 1320px;
+        width: 100%;
         overflow-x: auto;
         .search-icon {
             position: absolute;
@@ -359,17 +359,17 @@
                             }
                             .quantity-value {
                                 height: 36px;
-                                width: 95px;
+                                width: 69px;
                                 padding-left: 5px;
                                 border-radius: 5px;
-                                left: 25px;
+                                left: 13px;
                             }
                             .unit-value {
                                 height: 36px;
-                                width: 77px;
+                                width: 79px;
                                 border-radius: 5px;
                                 padding-left: 5px;
-                                left: 18px;
+                                left: 19px;
                                 .dropdown-icon {
                                     position: absolute;
                                     height: 11px;
@@ -404,8 +404,8 @@
                             right: 5px;
                         }
                         .quantity-input {
-                            width: 95px;
-                            margin-right: 15px;
+                            width: 69px;
+                            margin-right: 41px;
                             padding: 0px 5px;
                             border-radius: 5px;
                             background-color: var(--color-primary-input-bar-background-focus);
@@ -413,7 +413,7 @@
                             right: 2px;
                         }
                         .unit-dropdown {
-                            width: 85px;
+                            width: 81px;
                             position: relative;
                             right: 4px;
                         }
