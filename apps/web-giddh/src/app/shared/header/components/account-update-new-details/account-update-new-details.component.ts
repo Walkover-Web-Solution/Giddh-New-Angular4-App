@@ -213,6 +213,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     };
     /** Available field types list */
     public availableFieldTypes: any = FieldTypes;
+    /** This will hold toggle buttons value and size */
     public bootstrapToggleSwitch = BOOTSTRAP_TOGGLE_SWITCH;
 
     constructor(

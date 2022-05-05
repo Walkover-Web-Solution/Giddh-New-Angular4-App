@@ -154,6 +154,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public activeCompany: any;
     /** Holds image path */
     public imgPath: string = '';
+    /** This will hold toggle buttons value and size */
     public bootstrapToggleSwitch = BOOTSTRAP_TOGGLE_SWITCH;
 
     constructor(

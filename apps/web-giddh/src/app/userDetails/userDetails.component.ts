@@ -74,6 +74,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
     public localeData: any = {};
     /** This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** This will hold toggle buttons value and size */
     public bootstrapToggleSwitch = BOOTSTRAP_TOGGLE_SWITCH;
 
     constructor(private store: Store<AppState>,

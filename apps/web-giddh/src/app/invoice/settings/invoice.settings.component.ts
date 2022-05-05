@@ -76,6 +76,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
     public hasInvoiceSettingPermissions: boolean = true;
     /** Stores the voucher API version of company */
     public voucherApiVersion: 1 | 2;
+    /** This will hold toggle buttons value and size */
     public bootstrapToggleSwitch = BOOTSTRAP_TOGGLE_SWITCH;
 
     constructor(

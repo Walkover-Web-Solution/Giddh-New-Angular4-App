@@ -53,6 +53,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
     public inventorySettings: any;
     /** This will hold modal reference */
     public modalRef: BsModalRef;
+    /** This will hold toggle buttons value and size */
     public bootstrapToggleSwitch = BOOTSTRAP_TOGGLE_SWITCH;
 
     /**
