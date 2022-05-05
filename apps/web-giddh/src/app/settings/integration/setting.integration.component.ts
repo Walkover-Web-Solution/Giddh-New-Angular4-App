@@ -20,7 +20,7 @@ import { TabsetComponent, TabDirective } from "ngx-bootstrap/tabs";
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { CompanyActions } from "../../actions/company.actions";
 import { ShSelectComponent } from '../../theme/ng-virtual-select/sh-select.component';
-import { BOOTSTRAP_TOGGLE_SWITCH, Configuration, SELECT_ALL_RECORDS } from "../../app.constant";
+import { BootstrapToggleSwitch, Configuration, SELECT_ALL_RECORDS } from "../../app.constant";
 import { AuthenticationService } from "../../services/authentication.service";
 import { IForceClear } from '../../models/api-models/Sales';
 import { EcommerceService } from '../../services/ecommerce.service';
@@ -155,7 +155,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     /** Holds image path */
     public imgPath: string = '';
     /** This will hold toggle buttons value and size */
-    public bootstrapToggleSwitch = BOOTSTRAP_TOGGLE_SWITCH;
+    public bootstrapToggleSwitch = BootstrapToggleSwitch;
 
     constructor(
         private router: Router,

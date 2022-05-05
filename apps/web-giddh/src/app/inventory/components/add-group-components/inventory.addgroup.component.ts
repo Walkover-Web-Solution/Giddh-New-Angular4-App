@@ -17,7 +17,7 @@ import { isObject, cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
 import { TaxResponse } from '../../../models/api-models/Company';
 import { InvoiceService } from '../../../services/invoice.service';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
-import { BOOTSTRAP_TOGGLE_SWITCH } from '../../../app.constant';
+import { BootstrapToggleSwitch } from '../../../app.constant';
 @Component({
     selector: 'inventory-add-group',
     templateUrl: './inventory.addgroup.component.html',
@@ -54,7 +54,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
     /** This will hold modal reference */
     public modalRef: BsModalRef;
     /** This will hold toggle buttons value and size */
-    public bootstrapToggleSwitch = BOOTSTRAP_TOGGLE_SWITCH;
+    public bootstrapToggleSwitch = BootstrapToggleSwitch;
 
     /**
      * TypeScript public modifiers

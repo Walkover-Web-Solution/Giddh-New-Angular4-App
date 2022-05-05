@@ -17,7 +17,7 @@ import { CommonActions } from '../../actions/common.actions';
 import { GeneralService } from '../../services/general.service';
 import { OrganizationType } from '../../models/user-login-state';
 import { cloneDeep, concat, isEmpty, isEqual } from '../../lodash-optimized';
-import { BOOTSTRAP_TOGGLE_SWITCH } from '../../app.constant'
+import { BootstrapToggleSwitch } from '../../app.constant'
 
 @Component({
     selector: 'app-invoice-setting',
@@ -77,7 +77,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
     /** Stores the voucher API version of company */
     public voucherApiVersion: 1 | 2;
     /** This will hold toggle buttons value and size */
-    public bootstrapToggleSwitch = BOOTSTRAP_TOGGLE_SWITCH;
+    public bootstrapToggleSwitch = BootstrapToggleSwitch;
 
     constructor(
         private commonActions: CommonActions,
@@ -90,17 +90,6 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
         private router: Router,
         private generalService: GeneralService
     ) {
-        this.invoiceSetting.showSeal = false;
-        this.invoiceSetting.autoMail = false;
-        this.invoiceSetting.useCustomInvoiceNumber = false;
-        this.invoiceSetting.autoDeleteEntries = false;
-        this.invoiceSetting.gstEInvoiceEnable = false;
-        this.proformaSetting.autoMail = false;
-        this.proformaSetting.autoChangeStatusOnExp = false;
-        this.estimateSetting.autoMail = false;
-        this.estimateSetting.autoChangeStatusOnExp = false;
-        this.companyEmailSettings.sendThroughGmail = false;
-        this.invoiceSetting.enableNarrationOnInvAndVoucher = false;
         this.gmailAuthCodeStaticUrl = this.gmailAuthCodeStaticUrl.replace(':redirect_url', this.getRedirectUrl(AppUrl)).replace(':client_id', GOOGLE_CLIENT_ID);
         this.gmailAuthCodeUrl$ = observableOf(this.gmailAuthCodeStaticUrl);
     }
