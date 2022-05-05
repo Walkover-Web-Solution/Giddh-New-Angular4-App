@@ -465,7 +465,14 @@ export class LedgerService {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let url = this.config.apiUrl + LEDGER_API.GET_VOUCHER_INVOICE_LIST
         .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-        .replace(':voucherDate', encodeURIComponent(date));
+        .replace(':voucherDate', encodeURIComponent(date))
+        .replace(':number', encodeURIComponent((model.number || "")))
+        .replace(':count', (model.count || 50))
+        .replace(':page', (model.page || 1));
+
+        delete model.page;
+        delete model.count;
+
         if (this.generalService.voucherApiVersion === 2) {
             url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
         }
