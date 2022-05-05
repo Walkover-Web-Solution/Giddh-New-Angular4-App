@@ -58,7 +58,7 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
   /** Hold stocks variants  */
   public stocksVariants: any[] = [];
   /** Thsi will use for searching for stock */
-  public productUniqueNameInput: FormControl = new FormControl();
+  public productNameInput: FormControl = new FormControl();
   /** Hold warehouse checked  */
   public selectedWarehouse: any[] = [];
   /** Holded all selected warehouse checked  */
@@ -107,7 +107,7 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
 
     });
 
-    this.productUniqueNameInput.valueChanges.pipe(
+    this.productNameInput.valueChanges.pipe(
       debounceTime(700),
       distinctUntilChanged(),
       takeUntil(this.destroyed$)
