@@ -44,9 +44,9 @@
                     </button>
                 </mat-menu>
             </button>
-            <!-- <button mat-icon-button color="primary">
+            <button mat-icon-button>
                 <mat-icon>close</mat-icon>
-            </button> -->
+            </button>
         </div>
     </div>
     <div class="searching-stocks">
@@ -191,9 +191,13 @@
                 >
                     <p class="inner-name mat-table-sticky">{{ stock?.stockName }}</p>
                     <p class="stock-details">
-                        <span class="stock-ob">{{ stock?.openingBalance?.amount }} <span class="dot">. </span> </span>
                         <span class="stock-ob"
-                            >{{ stock?.openingBalance?.quantity }} <span class="dot">.</span>
+                            >{{ stock?.openingBalance?.amount }}
+                            <span class="dot" *ngIf="stock?.openingBalance?.amount">. </span>
+                        </span>
+                        <span class="stock-ob"
+                            >{{ stock?.openingBalance?.quantity }}
+                            <span class="dot" *ngIf="stock?.openingBalance?.quantity">.</span>
                             {{ stock?.openingBalance?.stockUnit }}</span
                         >
                     </p>

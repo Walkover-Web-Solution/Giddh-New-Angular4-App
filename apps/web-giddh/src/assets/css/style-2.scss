@@ -10750,6 +10750,10 @@ input[type="checkbox"].cdk-visually-hidden::after {
                         input {
                             padding: 0px 5px !important;
                             background-color: var(--color-primary-input-bar-background-focus) !important;
+                            &:active,
+                            &:focus {
+                                background-color: var(--color-common-primary-background-for-all-components) !important;
+                            }
                         }
                     }
                 }

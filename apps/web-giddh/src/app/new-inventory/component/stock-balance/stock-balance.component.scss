@@ -122,6 +122,8 @@
                 font-size: 14px;
                 min-width: 392px;
                 align-items: center;
+                position: relative;
+                left: 1px;
                 &:nth-child(odd) {
                     background-color: var(--color-common-primary-background-color);
                 }
@@ -346,7 +348,7 @@
                                 display: flex;
                                 align-items: center;
                                 position: relative;
-                                background: #668cff36;
+                                background: #668cff26;
                             }
                             .opening-bal-value {
                                 height: 36px;
