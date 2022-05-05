@@ -54,10 +54,10 @@
                     <input matInput placeholder="Stocks" #productName [formControl]="productUniqueNameInput" />
                 </mat-form-field>
             </div>
-            <div class="unique-name-wrapper">
+            <div class="unique-name-wrapper" *ngIf="showUniqueName">
                 <h2 class="unique-name">Unique Name</h2>
             </div>
-            <div class="group-list-head group-searchbar">
+            <div class="group-list-head group-searchbar" *ngIf="showGroupName">
                 <img src="{{ imgPath }}search-new.svg" class="search-icon" />
                 <select-field
                     [cssClass]="'form-control'"
@@ -199,7 +199,7 @@
                     <div class="grid-title-list list-grid-title" *ngIf="showUniqueName">
                         <span class="unique-name-wrap">{{ stock?.stockUniqueName }}</span>
                     </div>
-                    <div class="grid-title-list list-grid-title" *ngIf="showGroupName">
+                    <div class="grid-title-list list-grid-title stock-group-name-container" *ngIf="showGroupName">
                         <span class="stock-group-name">{{ stockGroupName }}</span>
                     </div>
                 </div>
