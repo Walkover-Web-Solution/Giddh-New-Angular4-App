@@ -14,6 +14,7 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
+        width: 1320px;
 
         .stock-balance-top-bar-left-side {
             display: flex;
@@ -113,7 +114,7 @@
         .warehouse-list-wrapper {
             height: 70px;
             display: flex;
-            width: 100%;
+            width: 97%;
             margin-left: 41px;
 
             .warehouse-list {
@@ -278,6 +279,7 @@
             .group-searchbar {
                 position: relative;
                 margin-right: 14px;
+                left: 6px;
             }
             .wrapper-warehouse {
                 .warehouse-list-head {
@@ -321,8 +323,11 @@
                         padding-left: 20px;
                         line-height: 20px;
                     }
-                    .stock-group-name {
-                        padding-left: 10px;
+                    .stock-group-name-container {
+                        min-width: 180px;
+                        .stock-group-name {
+                            padding-left: 20px;
+                        }
                     }
                 }
                 .unexpanded-list {
@@ -412,7 +417,7 @@
                     }
                     .warehouse-expanded-box-wrapper {
                         display: flex;
-                        margin-left: 41px;
+                        margin-left: 1px;
                         .warehouse-expanded-box {
                             height: 100%;
                             width: 392px;
@@ -429,6 +434,10 @@
                                 filter: var(--color-image-filter);
                             }
                         }
+                    }
+                    .stock-group-name {
+                        min-width: 180px;
+                        padding-left: 20px;
                     }
                 }
             }
