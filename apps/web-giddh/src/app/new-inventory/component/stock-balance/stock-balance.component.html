@@ -1,4 +1,5 @@
-<div class="stock-balance-wrapper">
+<giddh-page-loader *ngIf="isLoading"></giddh-page-loader>
+<div class="stock-balance-wrapper" *ngIf="!isLoading">
     <div class="stock-balance-top-bar">
         <div class="stock-balance-top-bar-left-side">
             <button mat-flat-button class="new-stock-btn" [routerLink]="'/pages/new-inventory/stock/product/create'">
@@ -33,10 +34,10 @@
                 <img src="{{ imgPath }}filter.svg" alt="filter-button" />
                 <mat-menu #menu="matMenu">
                     <button mat-menu-item (click)="showUniqueName = !showUniqueName; $event.stopPropagation()">
-                        <mat-checkbox color="primary" (change)="(showUniqueName)">Unique Name </mat-checkbox>
+                        <mat-checkbox color="primary" [(ngModel)]="showUniqueName">Unique Name </mat-checkbox>
                     </button>
                     <button mat-menu-item (click)="showGroupName = !showGroupName; $event.stopPropagation()">
-                        <mat-checkbox color="primary" (change)="(showGroupName)">Stock Group</mat-checkbox>
+                        <mat-checkbox color="primary" [(ngModel)]="showGroupName">Stock Group</mat-checkbox>
                     </button>
                 </mat-menu>
             </button>
@@ -201,6 +202,7 @@
                         >
                     </p>
                 </div>
+
                 <div class="stock-warehouse-list-container">
                     <div class="grid-list-div list-grid stock-list-unexpanded">
                         <div class="grid-title-list list-grid-title" *ngIf="showUniqueName">
@@ -330,6 +332,10 @@
                         </div>
                     </div>
                 </div>
+            </div>
+            <div class="grid-title-left" *ngIf="stocksList.length <= 0">
+                <img src="assets/images/search-data-not-found.svg" /><br />
+                No Data Found
             </div>
         </div>
     </div>

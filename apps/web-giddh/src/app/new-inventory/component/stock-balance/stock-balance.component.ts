@@ -63,6 +63,8 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
   public selectedWarehouse: any[] = [];
   /** Holded all selected warehouse checked  */
   public allSelectedWarehouse: any[] = [];
+  /** True if api call in progress */
+  public isLoading: boolean = false;
 
   constructor(
     private inventoryService: InventoryService,
@@ -81,7 +83,7 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
    * @memberof StockBalanceComponent
    */
   public ngOnInit(): void {
-
+    this.isLoading = true;
     this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
 
     this.getStockUnits();
@@ -92,6 +94,7 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
 
     combineLatest([this.inventoryService.GetGroupsWithStocksFlatten(), this.store.pipe(select(state => state.warehouse.warehouses)), this.store.pipe(select(state => state.settings.financialYearLimits))]).pipe(takeUntil(this.destroyed$)).subscribe((resp: any[]) => {
       if (resp[0] && resp[1] && resp[2]) {
+        this.isLoading = false;
         this.warehouses = resp[1]?.results;
         let stockGroupUniqueName = resp[0]?.body?.results[0]?.uniqueName;
         let warehouseUniqueName = resp[1]?.results[0]?.uniqueName;
