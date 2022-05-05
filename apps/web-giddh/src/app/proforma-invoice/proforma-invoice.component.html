@@ -2235,7 +2235,10 @@
 
                                                     <span
                                                         class="d-flex justify-content-end"
-                                                        *ngIf="entry.isOtherTaxApplicable"
+                                                        *ngIf="
+                                                            entry.isOtherTaxApplicable &&
+                                                            entry.otherTaxModal?.appliedOtherTax?.name
+                                                        "
                                                     >
                                                         {{ entry.otherTaxModal?.appliedOtherTax?.name }} :
                                                         <amount-field
@@ -2253,11 +2256,22 @@
                                                             "
                                                         >
                                                         </amount-field>
+                                                        <amount-field
+                                                            *ngIf="!isMulticurrencyAccount"
+                                                            [amount]="entry.otherTaxSum"
+                                                            [currencySymbol]="false"
+                                                            [currencyCode]="false"
+                                                        >
+                                                        </amount-field>
                                                     </span>
                                                 </div>
                                                 <div
                                                     class="tax-in-currency"
-                                                    *ngIf="entry.isOtherTaxApplicable && isMulticurrencyAccount"
+                                                    *ngIf="
+                                                        entry.isOtherTaxApplicable &&
+                                                        isMulticurrencyAccount &&
+                                                        entry.otherTaxModal?.appliedOtherTax?.name
+                                                    "
                                                 >
                                                     {{ entry.otherTaxModal?.appliedOtherTax?.name }} :
                                                     <span
@@ -2816,7 +2830,11 @@
                                                 </div>
                                             </div>
                                             <div
-                                                *ngIf="entry.isOtherTaxApplicable && isMulticurrencyAccount"
+                                                *ngIf="
+                                                    entry.isOtherTaxApplicable &&
+                                                    isMulticurrencyAccount &&
+                                                    entry.otherTaxModal?.appliedOtherTax?.name
+                                                "
                                                 class="tax-in-currency"
                                             >
                                                 {{ entry.otherTaxModal?.appliedOtherTax?.name }}
@@ -4547,7 +4565,11 @@
                                                         </div>
                                                     </div>
                                                     <div
-                                                        *ngIf="entry.isOtherTaxApplicable && isMulticurrencyAccount"
+                                                        *ngIf="
+                                                            entry.isOtherTaxApplicable &&
+                                                            isMulticurrencyAccount &&
+                                                            entry.otherTaxModal?.appliedOtherTax?.name
+                                                        "
                                                         class="tax-in-currency d-flex"
                                                     >
                                                         {{ entry.otherTaxModal?.appliedOtherTax?.name }}

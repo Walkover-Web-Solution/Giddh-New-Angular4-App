@@ -5597,6 +5597,27 @@ footer#footer.absolute-footer {
 .modal-open {
     overflow: hidden !important;
     .manage-account-popup.add-manage-group-acc {
+        .scroll-container {
+            .wrap-account-sidebar {
+                .grp-wrapper {
+                    .col-wrapper {
+                        border-color: var(--color-common-secondary-border);
+                        &:nth-child(1) {
+                            background-color: var(--color-common-primary-background-for-all-components);
+                        }
+                    }
+                }
+            }
+        }
+        .manage-group-acc {
+            account-operations {
+                #middleBody {
+                    .top-bar {
+                        border-color: var(--color-common-secondary-border) !important;
+                    }
+                }
+            }
+        }
         account-operations {
             div:nth-child(7) {
                 .modal-dialog {
@@ -7592,7 +7613,7 @@ giddh-datepicker {
 }
 
 .change-address-dropdown li {
-    border-bottom: 1px solid var(--color-iron);
+    border-bottom: 1px solid var(--color-common-secondary-border);
     padding-bottom: 4px;
 }
 

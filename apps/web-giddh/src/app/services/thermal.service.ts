@@ -55,7 +55,7 @@ export class ThermalService {
             });
 
             // The QR data
-            qr = "SELLER DETAILS" + this.printerFormat.lineBreak + "GSTIN - " + request?.company?.billingDetails?.taxNumber + this.printerFormat.lineBreak + this.printerFormat.lineBreak + "INVOICE DETAILS" + this.printerFormat.lineBreak + "Number - " + request?.number + this.printerFormat.lineBreak + "Date - " + request?.date + this.printerFormat.lineBreak + "Amount - " + (request?.grandTotal?.amountForCompany ? request?.grandTotal?.amountForCompany : 0) + this.printerFormat.lineBreak + itemsQrTaxData + this.printerFormat.lineBreak + "Total Tax - " + (request?.taxTotal ? request?.taxTotal : 0) + this.printerFormat.lineBreak;
+            qr = "SELLER DETAILS" + this.printerFormat.lineBreak + "GSTIN - " + request?.company?.billingDetails?.taxNumber + this.printerFormat.lineBreak + this.printerFormat.lineBreak + "INVOICE DETAILS" + this.printerFormat.lineBreak + "Number - " + request?.number + this.printerFormat.lineBreak + "Date - " + request?.date + this.printerFormat.lineBreak + "Amount - " + (request?.grandTotal?.amountForCompany ? request?.grandTotal?.amountForCompany : 0) + this.printerFormat.lineBreak + itemsQrTaxData + this.printerFormat.lineBreak + "Total Tax - " + (request?.taxTotal?.amountForAccount ? request?.taxTotal?.amountForAccount : 0) + this.printerFormat.lineBreak;
 
             // The dot size of the QR code
             dots = "\x03";
@@ -429,7 +429,7 @@ export class ThermalService {
                     )
                 ) + this.printerFormat.lineBreak;
         }
-        let totalQty: any;
+        let totalQty: any = 0;
         for (let entry of request?.entries) {
             let productName =
                 entry?.transactions[0]?.stock?.name ||
@@ -482,8 +482,14 @@ export class ThermalService {
             let itemName = productName?.substr(0, itemLength);
             let remainingName = "";
 
-            if (entry?.transactions[0]?.stock?.quantity) {
-                totalQty = totalQty + Number(quantity);
+            if (entry?.transactions[0]?.stock) {
+                if (entry?.transactions[0]?.stock?.quantity) {
+                    totalQty = totalQty + Number(quantity);
+                }
+            }
+
+            if (!entry?.transactions[0]?.stock?.quantity) {
+                totalQty = '-';
             }
 
             if (itemName?.length < productName?.length) {
@@ -605,7 +611,7 @@ export class ThermalService {
 
                 this.printerFormat.formatCenter(this.blankDash()) +
                 this.justifyText(
-                    (noOfItemsField + " ") + (totalQty ? totalQty : '-'),
+                    (noOfItemsField + " ") + totalQty,
                     (discountAmountField + " ") + discount?.padStart(11)
                 ) +
                 this.justifyText('', (taxAmountField + " ") + '' + taxableAmount?.toFixed(2).padStart(11)) +

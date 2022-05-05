@@ -1804,7 +1804,12 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                     }
                     entry.otherTaxType = 'tcs';
                 } else {
-                    taxableValue = Number(entry.transactions[0].amount) - entry.discountSum;
+                    if (modal.tcsCalculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount) {
+                        taxableValue = Number(entry.transactions[0].amount) - entry.discountSum;
+                    } else if (modal.tcsCalculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTotalAmount) {
+                        let rawAmount = Number(entry.transactions[0].amount) - entry.discountSum;
+                        taxableValue = (rawAmount + entry.taxSum + entry.cessSum);
+                    }
                     entry.otherTaxType = 'tds';
                 }
 
@@ -2136,10 +2141,6 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
 
             if (entry.isOtherTaxApplicable) {
                 entry.taxList.push(entry.otherTaxModal.appliedOtherTax.uniqueName);
-            }
-
-            if (entry.otherTaxType === 'tds') {
-                delete entry['tcsCalculationMethod'];
             }
             return entry;
         });

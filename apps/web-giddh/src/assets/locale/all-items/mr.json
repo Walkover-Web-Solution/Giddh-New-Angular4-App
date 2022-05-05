@@ -377,8 +377,7 @@
                     "description": "क्षुल्लक रोख आणि व्यवहार व्यवस्थापित करा",
                     "additional": {
                         "tab": "pending",
-                        "tabIndex": 0,
-                        "voucherVersion": 1
+                        "tabIndex": 0
                     }
                 },
                 {
