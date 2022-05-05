@@ -272,7 +272,7 @@
                                                 /> -->
                                                 <span [tooltip]="localeData?.address_tooltip" placement="left">
                                                     <ngx-switch
-                                                        [status]="
+                                                        [(status)]="
                                                             addAccountForm.get('addresses').controls[i].get('isDefault')
                                                                 .value
                                                         "
@@ -283,11 +283,6 @@
                                                         [offColor]="bootstrapToggleSwitch?.Off"
                                                         [size]="bootstrapToggleSwitch?.Size"
                                                         (statusChange)="
-                                                            addAccountForm
-                                                                .get('addresses')
-                                                                .controls[i].get('isDefault').value = !addAccountForm
-                                                                .get('addresses')
-                                                                .controls[i].get('isDefault').value;
                                                             isDefaultAddressSelected(gst.get('isDefault').value, i)
                                                         "
                                                     >
