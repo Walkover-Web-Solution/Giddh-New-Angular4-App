@@ -9,6 +9,7 @@ import { TabsModule } from 'ngx-bootstrap/tabs';
 
 import { AccountAddNewDetailsComponent } from './account-add-new-details.component';
 import { NgxBootstrapSwitchModule } from 'ngx-bootstrap-switch';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
     declarations: [AccountAddNewDetailsComponent],
@@ -22,6 +23,7 @@ import { NgxBootstrapSwitchModule } from 'ngx-bootstrap-switch';
         TabsModule,
         TranslateDirectiveModule,
         NgxBootstrapSwitchModule.forRoot(),
+        RouterModule
     ]
 })
 export class AccountAddNewDetailsModule { }

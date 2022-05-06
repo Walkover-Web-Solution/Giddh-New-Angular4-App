@@ -19,7 +19,6 @@ import { BsModalRef } from 'ngx-bootstrap/modal';
 import { GeneralActions } from '../actions/general/general.actions';
 import { API_POSTMAN_DOC_URL } from '../app.constant';
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { fakeAsync } from '@angular/core/testing';
 
 @Component({
     selector: 'user-details',
