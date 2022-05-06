@@ -10,6 +10,8 @@ import { AppState } from 'apps/web-giddh/src/app/store';
 export class BalanceSheetExportXlsComponent implements OnInit {
     @Input() public fy: number;
     @Input() public filters: any = {};
+    /** This will hold expandAll values for balance sheet export */
+    @Input() public expandAll : boolean;
     public enableDownload: boolean = true;
     public imgPath: string = '';
     @Output() public plBsExportPdfEvent = new EventEmitter<boolean>();
@@ -23,8 +25,16 @@ export class BalanceSheetExportXlsComponent implements OnInit {
     }
 
     public downloadBsXls() {
-        let request = { from: this.filters.from, to: this.filters.to, branchUniqueName: this.filters.branchUniqueName, filename: this.localeData?.xls.balance_sheet.download_filename };
-        this.store.dispatch(this.tbPlActions.DownloadBalanceSheetExcel(request));
+        let expanded = this.expandAll;
+        if(expanded === true){
+            const expand = "expanded"
+            let request = { from: this.filters.from, to: this.filters.to, branchUniqueName: this.filters.branchUniqueName, filename: this.localeData?.xls.balance_sheet.download_filename, view: expand };
+            this.store.dispatch(this.tbPlActions.DownloadBalanceSheetExcel(request));
+        }else if(expanded === false) {
+            const collapse = "collapsed"
+            let request = { from: this.filters.from, to: this.filters.to, branchUniqueName: this.filters.branchUniqueName, filename: this.localeData?.xls.balance_sheet.download_filename, view: collapse };
+            this.store.dispatch(this.tbPlActions.DownloadBalanceSheetExcel(request));
+        }
     }
 
     public ngOnInit() {
