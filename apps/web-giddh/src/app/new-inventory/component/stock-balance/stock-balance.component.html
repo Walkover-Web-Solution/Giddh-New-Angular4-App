@@ -1,627 +1,265 @@
-<div class="stock-balance-wrapper">
+<giddh-page-loader *ngIf="isLoading"></giddh-page-loader>
+<div class="stock-balance-wrapper" *ngIf="!isLoading">
     <div class="stock-balance-top-bar">
         <div class="stock-balance-top-bar-left-side">
-            <button mat-flat-button class="new-stock-btn">
-                <img src="{{ imgPath }}add-icon-white.svg" alt="add-icon-white" /> New Stock
+            <button class="new-stock-btn" mat-button [matMenuTriggerFor]="menu">
+                + New Stock
+                <span class="caret"></span>
             </button>
+            <mat-menu #menu="matMenu">
+                <button mat-menu-item [routerLink]="'/pages/new-inventory/stock/product/create'">Product</button>
+                <button mat-menu-item [routerLink]="'/pages/new-inventory/stock/service/create'">Service</button>
+            </mat-menu>
             <div class="warehouse-select-bar">
                 <mat-form-field class="search-warehouse-bar" appearance="outline">
-                    <img class="search-img" src="{{ imgPath }}search-new.svg" />
                     <mat-select
-                        placeholder="Search Warehouse"
-                        [formControl]="toppings"
+                        placeholder="Warehouses"
                         multiple
                         class="select-warehouse-bar"
+                        [(value)]="selectedWarehouse"
                     >
-                        <button mat-flat-button disableRipple class="create-warehouse-btn">
-                            <img src="{{ imgPath }}add-icon-blue.svg" alt="add-icon-blue" /> Create Warehouse
-                        </button>
-                        <mat-select-trigger>
-                            {{ toppings.value ? toppings.value[0] : "" }}
-                            <span *ngIf="toppings.value?.length > 1"> (+{{ toppings.value.length - 1 }}) </span>
-                        </mat-select-trigger>
-                        <mat-option *ngFor="let topping of toppingList" [value]="topping">{{ topping }}</mat-option>
+                        <mat-option
+                            (click)="
+                                selectWarehouse(warehouse.uniqueName); updateSelectedWarehouse(warehouse.uniqueName)
+                            "
+                            *ngFor="let warehouse of warehouses"
+                            [value]="warehouse.uniqueName"
+                        >
+                            {{ warehouse.name ?? "-" }}
+                        </mat-option>
                     </mat-select>
                 </mat-form-field>
             </div>
         </div>
         <div class="stock-balance-top-bar-right-side">
-            <button mat-flat-button class="export-btn">
+            <!-- <button mat-flat-button class="export-btn">
                 <img src="{{ imgPath }}download-blue.svg" alt="" /> Export
-            </button>
-
+            </button> -->
             <button mat-flat-button [matMenuTriggerFor]="menu" class="filter-btn">
                 <img src="{{ imgPath }}filter.svg" alt="filter-button" />
                 <mat-menu #menu="matMenu">
-                    <button mat-menu-item><mat-checkbox color="primary">Dummy 1</mat-checkbox></button>
-                    <button mat-menu-item><mat-checkbox color="primary">Dummy 2</mat-checkbox></button>
+                    <button mat-menu-item (click)="showUniqueName = !showUniqueName; $event.stopPropagation()">
+                        <mat-checkbox color="primary" [(ngModel)]="showUniqueName">Unique Name </mat-checkbox>
+                    </button>
+                    <button mat-menu-item (click)="showGroupName = !showGroupName; $event.stopPropagation()">
+                        <mat-checkbox color="primary" [(ngModel)]="showGroupName">Stock Group</mat-checkbox>
+                    </button>
                 </mat-menu>
             </button>
         </div>
     </div>
-    <div class="stock-balance-main-list-table">
-        <div class="stocks-list">
-            <div class="stocks-list-head custom-material-search-bar stock-searchbar">
+    <div class="searching-stocks">
+        <div class="list-head">
+            <div class="custom-material-search-bar stock-searchbar">
                 <img src="{{ imgPath }}search-new.svg" class="search-icon" />
                 <mat-form-field appearance="outline">
-                    <input matInput placeholder="Stocks" />
+                    <input
+                        matInput
+                        placeholder="Stocks"
+                        autocomplete="off"
+                        #productName
+                        [formControl]="productNameSearching"
+                    />
                 </mat-form-field>
             </div>
-            <div class="stock-list-body">
-                <div class="stock-list-box">
-                    <div class="stock-list-unexpanded">
-                        <p class="stock-list-box-heading">Denim Jeans</p>
-                        <p class="stock-list-box-content">
-                            ₹2,150,000 <span class="dot">.</span> 10,000 Pc <span class="dot">.</span> 3 Variants
-                        </p>
-                    </div>
-                    <div class="stock-list-unexpanded">
-                        <p class="stock-list-box-heading">Jake T-Shirt</p>
-                        <p class="stock-list-box-content">
-                            ₹2,150,000 <span class="dot">.</span> 10,000 Pc <span class="dot">.</span> 3 Variants
-                        </p>
-                    </div>
-                </div>
-                <div class="stock-list-box">
-                    <div class="stock-list-expanded">
-                        <div class="stock-list-expanded-content">
-                            <p class="stock-list-expanded-content-head">T-Shirt</p>
-                            <mat-form-field appearance="fill">
-                                <mat-select
-                                    placeholder="Select"
-                                    [disableOptionCentering]="true"
-                                    panelClass="myPanelClass"
-                                >
-                                    <button class="create-varient-btn" mat-button disableRipple>
-                                        <img src="{{ imgPath }}add-icon-blue.svg" alt="add-icon-blue" /> Create Varient
-                                    </button>
-                                    <mat-option *ngFor="let food of foods" [value]="food.value">
-                                        {{ food.viewValue }}
-                                    </mat-option>
-                                </mat-select>
-                            </mat-form-field>
-                        </div>
+            <div class="unique-name-wrapper" *ngIf="showUniqueName">
+                <h2 class="unique-name">Unique Name</h2>
+            </div>
+            <div class="group-list-head group-searchbar" *ngIf="showGroupName">
+                <img src="{{ imgPath }}search-new.svg" class="search-icon" />
+                <select-field
+                    [cssClass]="'form-control'"
+                    [name]="'stockGroup'"
+                    [placeholder]="'Group'"
+                    [options]="stockGroups"
+                    (selectedOption)="selectGroupName($event)"
+                    [defaultValue]="stockGroupName"
+                >
+                </select-field>
+            </div>
+            <div class="wrapper-warehouse">
+                <div class="warehouse-list">
+                    <ng-container *ngFor="let warehouse of warehouses">
+                        <div
+                            class="warehouse-list-head odd-even-shade"
+                            *ngIf="selectedWarehouse?.indexOf(warehouse?.uniqueName) > -1"
+                        >
+                            <p class="warehouse-list-head-num">{{ warehouse?.name ?? "-" }}</p>
+                            <div class="warehouse-list-head-options">
+                                <div class="d-flex">
+                                    <div class="flex-fill">Opening Bal</div>
+                                </div>
+                                <div class="d-flex">
+                                    <div class="flex-fill">Quantity</div>
+                                </div>
 
-                        <div class="stock-list-expanded-content">
-                            <p class="stock-list-expanded-content-head">T-Shirt</p>
-                            <mat-form-field appearance="fill">
-                                <mat-select
-                                    placeholder="Select"
-                                    [disableOptionCentering]="true"
-                                    panelClass="myPanelClass"
-                                >
-                                    <button mat-button disableRipple>
-                                        <img src="{{ imgPath }}add-icon-blue.svg" alt="add-icon-blue" /> Create Varient
-                                    </button>
-                                    <mat-option *ngFor="let food of foods" [value]="food.value">
-                                        {{ food.viewValue }}
-                                    </mat-option>
-                                </mat-select>
-                            </mat-form-field>
+                                <div class="d-flex">
+                                    <div class="flex-fill">Unit</div>
+                                </div>
+                            </div>
                         </div>
-
-                        <div class="stock-list-expanded-content">
-                            <p class="stock-list-expanded-content-head">T-Shirt</p>
-                            <mat-form-field appearance="fill">
-                                <mat-select
-                                    placeholder="Select"
-                                    [disableOptionCentering]="true"
-                                    panelClass="myPanelClass"
-                                >
-                                    <button mat-button disableRipple>
-                                        <img src="{{ imgPath }}add-icon-blue.svg" alt="add-icon-blue" /> Create Varient
-                                    </button>
-                                    <mat-option *ngFor="let food of foods" [value]="food.value">
-                                        {{ food.viewValue }}
-                                    </mat-option>
-                                </mat-select>
-                            </mat-form-field>
-                        </div>
-
-                        <div class="stock-list-expanded-content">
-                            <p class="stock-list-expanded-content-head">T-Shirt</p>
-                            <mat-form-field appearance="fill">
-                                <mat-select
-                                    placeholder="Select"
-                                    [disableOptionCentering]="true"
-                                    panelClass="myPanelClass"
-                                >
-                                    <button mat-button disableRipple>
-                                        <img src="{{ imgPath }}add-icon-blue.svg" alt="add-icon-blue" /> Create Varient
-                                    </button>
-                                    <mat-option *ngFor="let food of foods" [value]="food.value">
-                                        {{ food.viewValue }}
-                                    </mat-option>
-                                </mat-select>
-                            </mat-form-field>
-                        </div>
-                        <button mat-button disableRipple class="add-new-variant-btn">+Add New Variant</button>
-                    </div>
+                    </ng-container>
                 </div>
             </div>
         </div>
-        <div class="scroll-list-wrapper">
-            <div class="unique-name-list">
-                <div class="unique-name-list-head custom-material-search-bar unique-name-searchbar">
-                    <img src="{{ imgPath }}search-new.svg" class="search-icon" />
-                    <mat-form-field appearance="outline">
-                        <input matInput placeholder="Unique Name" />
-                    </mat-form-field>
+        <div class="stock-table-wrapper">
+            <div
+                class="stock-table"
+                *ngFor="let stock of stocksList"
+                (click)="stock.display = !stock.display"
+                [ngClass]="{ 'white-color': stock.display }"
+            >
+                <div
+                    class="grid-title-left"
+                    (click)="getStockVariants(stock)"
+                    [ngClass]="{ 'white-color': stock.display }"
+                >
+                    <p class="inner-name mat-table-sticky">{{ stock?.stockName ?? "-" }}</p>
+                    <p class="stock-details">
+                        <span class="stock-ob"
+                            >{{ stock?.openingBalance?.amount }}
+                            <span class="dot" *ngIf="stock?.openingBalance?.amount">. </span>
+                        </span>
+                        <span class="stock-ob"
+                            >{{ stock?.openingBalance?.quantity }}
+                            <span class="dot" *ngIf="stock?.openingBalance?.quantity">.</span>
+                            {{ stock?.openingBalance?.stockUnit }}</span
+                        >
+                    </p>
                 </div>
-                <div class="stock-list-body">
-                    <div class="stock-list-box">
-                        <div class="stock-list-unexpanded">
-                            <p class="stock-list-box-heading">Denim T-Shirt</p>
+                <div class="stock-warehouse-list-container">
+                    <div class="grid-list-div list-grid stock-list-unexpanded">
+                        <div class="grid-title-list list-grid-title" *ngIf="showUniqueName">
+                            <span class="unique-name-wrap">{{ stock?.stockUniqueName }}</span>
                         </div>
-                        <div class="stock-list-unexpanded">
-                            <p class="stock-list-box-heading">T-Shirt</p>
+                        <div class="grid-title-list list-grid-title stock-group-name-container" *ngIf="showGroupName">
+                            <span class="stock-group-name">{{ stockGroupName }}</span>
                         </div>
                     </div>
-                    <div class="stock-list-box">
-                        <div class="stock-list-expanded">
-                            <div class="stock-list-expanded-content">
-                                <p class="stock-list-expanded-content-head">T-Shirt</p>
+                    <div class="warehouse-list-wrapper">
+                        <ng-container *ngFor="let stockWarehouse of stock?.warehouses">
+                            <div
+                                class="warehouse-list warehouse-even"
+                                *ngIf="selectedWarehouse?.indexOf(stockWarehouse?.uniqueName) > -1"
+                            >
+                                <div class="stock-list-body" (click)="stock.display = !stock.display">
+                                    <div class="stock-list-box">
+                                        <div class="stock-list-unexpanded">
+                                            <p class="stock-list-box-heading proper-spacing-list">
+                                                <span class="opening-bal-value bg-color-hover">{{
+                                                    stockWarehouse?.openingBalance?.amount ?? "-"
+                                                }}</span>
+                                                <span class="quantity-value bg-color-hover">{{
+                                                    stockWarehouse?.openingBalance?.quantity ?? "-"
+                                                }}</span>
+                                                <span class="unit-value bg-color-hover">{{
+                                                    stockWarehouse?.openingBalance?.stockUnit ?? "-"
+                                                }}</span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
+                        </ng-container>
+                    </div>
+                </div>
+                <div
+                    *ngIf="stock.display"
+                    class="stock-display-wrapper"
+                    [ngClass]="{ 'expanded-stock-table-with-opacity': stock.display }"
+                >
+                    <div class="grid-list-div list-grid unexpanded-list" *ngFor="let variant of stock?.stock?.variants">
+                        <div
+                            class="grid-title-left"
+                            [ngClass]="{ 'expanded-stock-table-without-opacity': stock.display }"
+                        >
+                            <p class="inner-name mat-table-sticky">{{ variant?.name ?? "-" }}</p>
+                        </div>
+                        <div class="grid-title-list list-grid-title" *ngIf="showUniqueName">
+                            <span class="unique-name-wrap">{{ variant?.uniqueName ?? "-" }}</span>
+                        </div>
+                        <div class="grid-title-list list-grid-title stock-group-name" *ngIf="showGroupName">
+                            <span>{{ stockGroupName ?? "-" }}</span>
+                        </div>
+                        <div class="warehouse-expanded-box-wrapper">
+                            <ng-container *ngFor="let warehouseVariant of variant?.warehouseBalance; let i = index">
+                                <div
+                                    class="grid-title-list list-grid-title warehouse-expanded-box"
+                                    *ngIf="selectedWarehouse?.indexOf(warehouseVariant?.warehouse?.uniqueName) > -1"
+                                    [ngClass]="{ 'expanded-stock-table-with-opacity': stock.display }"
+                                >
+                                    <div
+                                        class="stock-list-expanded-content"
+                                        (click)="
+                                            warehouseVariant.display = !warehouseVariant.display;
+                                            $event.stopPropagation()
+                                        "
+                                    >
+                                        <p
+                                            class="stock-list-box-heading proper-spacing-list"
+                                            *ngIf="!warehouseVariant.display"
+                                        >
+                                            <span class="opening-bal-value bg-color-hover">{{
+                                                warehouseVariant?.openingAmount ?? "-"
+                                            }}</span>
+                                            <span class="quantity-value bg-color-hover">{{
+                                                warehouseVariant?.openingQuantity ?? "-"
+                                            }}</span>
+                                            <span class="unit-value bg-color-hover"
+                                                >{{ warehouseVariant?.stockUnit?.code ?? "-" }}
+                                                <img src="{{ imgPath }}caret-light.svg" class="dropdown-icon" />
+                                            </span>
+                                        </p>
+                                    </div>
+                                    <div
+                                        *ngIf="warehouseVariant.display"
+                                        (click)="$event.stopPropagation()"
+                                        class="editable-input"
+                                    >
+                                        <p class="input-select-wrapper">
+                                            <input
+                                                matInput
+                                                class="opening-bal-input"
+                                                placeholder="Opening Bal"
+                                                type="text"
+                                                (change)="stockUpdate(stock)"
+                                                [(ngModel)]="warehouseVariant.openingAmount"
+                                            />
+                                            <input
+                                                matInput
+                                                class="quantity-input"
+                                                placeholder="Qty"
+                                                type="text"
+                                                (change)="stockUpdate(stock)"
+                                                [(ngModel)]="warehouseVariant.openingQuantity"
+                                            />
 
-                            <div class="stock-list-expanded-content">
-                                <p class="stock-list-expanded-content-head">T-Shirt</p>
-                            </div>
-
-                            <div class="stock-list-expanded-content">
-                                <p class="stock-list-expanded-content-head">T-Shirt</p>
-                            </div>
-
-                            <div class="stock-list-expanded-content">
-                                <p class="stock-list-expanded-content-head">T-Shirt</p>
-                            </div>
+                                            <select-field
+                                                [cssClass]="'form-control'"
+                                                class="unit-dropdown"
+                                                [name]="'stockUnitCode'"
+                                                [placeholder]="Unit"
+                                                [options]="stockUnits"
+                                                (selectedOption)="
+                                                    stock.stock.stockUnitCode = $event.value;
+                                                    stock.stock.stockUnitName = $event.label;
+                                                    stockUpdate(stock)
+                                                "
+                                                [defaultValue]="stock.stock?.stockUnitCode"
+                                            >
+                                            </select-field>
+                                            <img src="{{ imgPath }}caret-light.svg" class="dropdown-icon" />
+                                        </p>
+                                    </div>
+                                </div>
+                            </ng-container>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="group-list">
-                <div class="group-list-head custom-material-search-bar group-searchbar">
-                    <img src="{{ imgPath }}search-new.svg" class="search-icon" />
-                    <mat-form-field appearance="outline">
-                        <input matInput placeholder="Group" />
-                    </mat-form-field>
-                </div>
-                <div class="stock-list-body">
-                    <div class="stock-list-box">
-                        <div class="stock-list-unexpanded">
-                            <p class="stock-list-box-heading">Cloths</p>
-                        </div>
-                        <div class="stock-list-unexpanded">
-                            <p class="stock-list-box-heading">Cloths</p>
-                        </div>
-                    </div>
-                    <div class="stock-list-box">
-                        <div class="stock-list-expanded">
-                            <div class="stock-list-expanded-content">
-                                <p class="stock-list-expanded-content-head">Cloths</p>
-                            </div>
-
-                            <div class="stock-list-expanded-content">
-                                <p class="stock-list-expanded-content-head">Cloths</p>
-                            </div>
-
-                            <div class="stock-list-expanded-content">
-                                <p class="stock-list-expanded-content-head">Cloths</p>
-                            </div>
-
-                            <div class="stock-list-expanded-content">
-                                <p class="stock-list-expanded-content-head">Cloths</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="warehouse-list-wrapper">
-                <div class="warehouse-list warehouse-odd">
-                    <div class="warehouse-list-head">
-                        <p class="warehouse-list-head-num">Warehouse 1</p>
-                        <div class="warehouse-list-head-options">
-                            <p class="opening-bal">
-                                Opening Bal
-                                <img class="sort-img opening-bal-sort-img" src="{{ imgPath }}sort.png" alt="sort" />
-                            </p>
-                            <p class="quantity">
-                                Quantity
-                                <img class="sort-img quantity-sort-img" src="{{ imgPath }}sort.png" alt="sort" />
-                            </p>
-                            <p class="unit">
-                                Unit <img class="sort-img unit-sort-img" src="{{ imgPath }}sort.png" alt="sort" />
-                            </p>
-                        </div>
-                    </div>
-                    <div class="stock-list-body">
-                        <div class="stock-list-box">
-                            <div class="stock-list-unexpanded">
-                                <p class="stock-list-box-heading proper-spacing-list">
-                                    <span class="opening-bal-value">₹150,000</span>
-                                    <span class="quantity-value">120</span>
-                                    <span class="unit-value">PC</span>
-                                </p>
-                            </div>
-                            <div class="stock-list-unexpanded">
-                                <p class="stock-list-box-heading proper-spacing-list">
-                                    <span class="opening-bal-value">₹150,000</span>
-                                    <span class="quantity-value">120</span>
-                                    <span class="unit-value">PC</span>
-                                </p>
-                            </div>
-                        </div>
-                        <div class="stock-list-box">
-                            <div class="stock-list-expanded">
-                                <div class="stock-list-expanded-content">
-                                    <p class="stock-list-expanded-content-head proper-spacing-list opening-bal-val">
-                                        ₹150,000
-                                    </p>
-                                    <p class="stock-list-expanded-content-head proper-spacing-list quantity-val">120</p>
-                                    <p class="stock-list-expanded-content-head proper-spacing-list unit-val">PC</p>
-                                </div>
-
-                                <div class="stock-list-expanded-content">
-                                    <p class="stock-list-expanded-content-head proper-spacing-list opening-bal-val">
-                                        ₹150,000
-                                    </p>
-                                    <p class="stock-list-expanded-content-head proper-spacing-list quantity-val">120</p>
-                                    <p class="stock-list-expanded-content-head proper-spacing-list unit-val">PC</p>
-                                </div>
-
-                                <div class="stock-list-expanded-content">
-                                    <p class="stock-list-expanded-content-head proper-spacing-list opening-bal-val">
-                                        ₹150,000
-                                    </p>
-                                    <p class="stock-list-expanded-content-head proper-spacing-list quantity-val">120</p>
-                                    <p class="stock-list-expanded-content-head proper-spacing-list unit-val">PC</p>
-                                </div>
-
-                                <div class="stock-list-expanded-content">
-                                    <p class="stock-list-expanded-content-head proper-spacing-list">
-                                        <input
-                                            matInput
-                                            class="opening-bal-input"
-                                            placeholder="Opening Bal"
-                                            type="text"
-                                        />
-
-                                        <mat-form-field appearance="fill" class="quantity-dropdown">
-                                            <mat-select
-                                                placeholder="Qty"
-                                                [disableOptionCentering]="true"
-                                                panelClass="myPanelClass"
-                                            >
-                                                <button mat-button disableRipple>
-                                                    <img src="{{ imgPath }}add-icon-blue.svg" alt="add-icon-blue" />
-                                                    Create Qty
-                                                </button>
-                                                <mat-option *ngFor="let quantity of quantites" [value]="quantity.value">
-                                                    {{ quantity.viewValue }}
-                                                </mat-option>
-                                            </mat-select>
-                                        </mat-form-field>
-
-                                        <mat-form-field appearance="fill" class="unit-dropdown">
-                                            <mat-select
-                                                placeholder="Unit"
-                                                [disableOptionCentering]="true"
-                                                panelClass="myPanelClass"
-                                            >
-                                                <button mat-button disableRipple>
-                                                    <img src="{{ imgPath }}add-icon-blue.svg" alt="add-icon-blue" />
-                                                    Create Unit
-                                                </button>
-                                                <mat-option *ngFor="let unit of units" [value]="unit.value">
-                                                    {{ unit.viewValue }}
-                                                </mat-option>
-                                            </mat-select>
-                                        </mat-form-field>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="warehouse-list warehouse-even">
-                    <div class="warehouse-list-head">
-                        <p class="warehouse-list-head-num">Warehouse 1</p>
-                        <div class="warehouse-list-head-options">
-                            <p class="opening-bal">
-                                Opening Bal
-                                <img class="sort-img opening-bal-sort-img" src="{{ imgPath }}sort.png" alt="sort" />
-                            </p>
-                            <p class="quantity">
-                                Quantity
-                                <img class="sort-img quantity-sort-img" src="{{ imgPath }}sort.png" alt="sort" />
-                            </p>
-                            <p class="unit">
-                                Unit <img class="sort-img unit-sort-img" src="{{ imgPath }}sort.png" alt="sort" />
-                            </p>
-                        </div>
-                    </div>
-                    <div class="stock-list-body">
-                        <div class="stock-list-box">
-                            <div class="stock-list-unexpanded">
-                                <p class="stock-list-box-heading proper-spacing-list">
-                                    <span class="opening-bal-value">₹150,000</span>
-                                    <span class="quantity-value">120</span>
-                                    <span class="unit-value">PC</span>
-                                </p>
-                            </div>
-                            <div class="stock-list-unexpanded">
-                                <p class="stock-list-box-heading proper-spacing-list">
-                                    <span class="opening-bal-value">₹150,000</span>
-                                    <span class="quantity-value">120</span>
-                                    <span class="unit-value">PC</span>
-                                </p>
-                            </div>
-                        </div>
-                        <div class="stock-list-box">
-                            <div class="stock-list-expanded">
-                                <div class="stock-list-expanded-content">
-                                    <p class="stock-list-expanded-content-head proper-spacing-list opening-bal-val">
-                                        ₹150,000
-                                    </p>
-                                    <p class="stock-list-expanded-content-head proper-spacing-list quantity-val">120</p>
-                                    <p class="stock-list-expanded-content-head proper-spacing-list unit-val">PC</p>
-                                </div>
-
-                                <div class="stock-list-expanded-content">
-                                    <p class="stock-list-expanded-content-head proper-spacing-list opening-bal-val">
-                                        ₹150,000
-                                    </p>
-                                    <p class="stock-list-expanded-content-head proper-spacing-list quantity-val">120</p>
-                                    <p class="stock-list-expanded-content-head proper-spacing-list unit-val">PC</p>
-                                </div>
-
-                                <div class="stock-list-expanded-content">
-                                    <p class="stock-list-expanded-content-head proper-spacing-list opening-bal-val">
-                                        ₹150,000
-                                    </p>
-                                    <p class="stock-list-expanded-content-head proper-spacing-list quantity-val">120</p>
-                                    <p class="stock-list-expanded-content-head proper-spacing-list unit-val">PC</p>
-                                </div>
-
-                                <div class="stock-list-expanded-content">
-                                    <p class="stock-list-expanded-content-head proper-spacing-list">
-                                        <input
-                                            matInput
-                                            class="opening-bal-input"
-                                            placeholder="Opening Bal"
-                                            type="text"
-                                        />
-
-                                        <mat-form-field appearance="fill" class="quantity-dropdown">
-                                            <mat-select
-                                                placeholder="Qty"
-                                                [disableOptionCentering]="true"
-                                                panelClass="myPanelClass"
-                                            >
-                                                <button mat-button disableRipple>+ Create Qty</button>
-                                                <mat-option *ngFor="let quantity of quantites" [value]="quantity.value">
-                                                    {{ quantity.viewValue }}
-                                                </mat-option>
-                                            </mat-select>
-                                        </mat-form-field>
-
-                                        <mat-form-field appearance="fill" class="unit-dropdown">
-                                            <mat-select
-                                                placeholder="Unit"
-                                                [disableOptionCentering]="true"
-                                                panelClass="myPanelClass"
-                                            >
-                                                <button mat-button disableRipple>+ Create Unit</button>
-                                                <mat-option *ngFor="let unit of units" [value]="unit.value">
-                                                    {{ unit.viewValue }}
-                                                </mat-option>
-                                            </mat-select>
-                                        </mat-form-field>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="warehouse-list warehouse-odd">
-                    <div class="warehouse-list-head">
-                        <p class="warehouse-list-head-num">Warehouse 1</p>
-                        <div class="warehouse-list-head-options">
-                            <p class="opening-bal">
-                                Opening Bal
-                                <img class="sort-img opening-bal-sort-img" src="{{ imgPath }}sort.png" alt="sort" />
-                            </p>
-                            <p class="quantity">
-                                Quantity
-                                <img class="sort-img quantity-sort-img" src="{{ imgPath }}sort.png" alt="sort" />
-                            </p>
-                            <p class="unit">
-                                Unit <img class="sort-img unit-sort-img" src="{{ imgPath }}sort.png" alt="sort" />
-                            </p>
-                        </div>
-                    </div>
-                    <div class="stock-list-body">
-                        <div class="stock-list-box">
-                            <div class="stock-list-unexpanded">
-                                <p class="stock-list-box-heading proper-spacing-list">
-                                    <span class="opening-bal-value">₹150,000</span>
-                                    <span class="quantity-value">120</span>
-                                    <span class="unit-value">PC</span>
-                                </p>
-                            </div>
-                            <div class="stock-list-unexpanded">
-                                <p class="stock-list-box-heading proper-spacing-list">
-                                    <span class="opening-bal-value">₹150,000</span>
-                                    <span class="quantity-value">120</span>
-                                    <span class="unit-value">PC</span>
-                                </p>
-                            </div>
-                        </div>
-                        <div class="stock-list-box">
-                            <div class="stock-list-expanded">
-                                <div class="stock-list-expanded-content">
-                                    <p class="stock-list-expanded-content-head proper-spacing-list opening-bal-val">
-                                        ₹150,000
-                                    </p>
-                                    <p class="stock-list-expanded-content-head proper-spacing-list quantity-val">120</p>
-                                    <p class="stock-list-expanded-content-head proper-spacing-list unit-val">PC</p>
-                                </div>
-
-                                <div class="stock-list-expanded-content">
-                                    <p class="stock-list-expanded-content-head proper-spacing-list opening-bal-val">
-                                        ₹150,000
-                                    </p>
-                                    <p class="stock-list-expanded-content-head proper-spacing-list quantity-val">120</p>
-                                    <p class="stock-list-expanded-content-head proper-spacing-list unit-val">PC</p>
-                                </div>
-
-                                <div class="stock-list-expanded-content">
-                                    <p class="stock-list-expanded-content-head proper-spacing-list opening-bal-val">
-                                        ₹150,000
-                                    </p>
-                                    <p class="stock-list-expanded-content-head proper-spacing-list quantity-val">120</p>
-                                    <p class="stock-list-expanded-content-head proper-spacing-list unit-val">PC</p>
-                                </div>
-
-                                <div class="stock-list-expanded-content">
-                                    <p class="stock-list-expanded-content-head proper-spacing-list">
-                                        <input
-                                            matInput
-                                            class="opening-bal-input"
-                                            placeholder="Opening Bal"
-                                            type="text"
-                                        />
-
-                                        <mat-form-field appearance="fill" class="quantity-dropdown">
-                                            <mat-select
-                                                placeholder="Qty"
-                                                [disableOptionCentering]="true"
-                                                panelClass="myPanelClass"
-                                            >
-                                                <button mat-button disableRipple>+ Create Qty</button>
-                                                <mat-option *ngFor="let quantity of quantites" [value]="quantity.value">
-                                                    {{ quantity.viewValue }}
-                                                </mat-option>
-                                            </mat-select>
-                                        </mat-form-field>
-
-                                        <mat-form-field appearance="fill" class="unit-dropdown">
-                                            <mat-select
-                                                placeholder="Unit"
-                                                [disableOptionCentering]="true"
-                                                panelClass="myPanelClass"
-                                            >
-                                                <button mat-button disableRipple>+ Create Unit</button>
-                                                <mat-option *ngFor="let unit of units" [value]="unit.value">
-                                                    {{ unit.viewValue }}
-                                                </mat-option>
-                                            </mat-select>
-                                        </mat-form-field>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="warehouse-list warehouse-even">
-                    <div class="warehouse-list-head">
-                        <p class="warehouse-list-head-num">Warehouse 1</p>
-                        <div class="warehouse-list-head-options">
-                            <p class="opening-bal">
-                                Opening Bal
-                                <img class="sort-img opening-bal-sort-img" src="{{ imgPath }}sort.png" alt="sort" />
-                            </p>
-                            <p class="quantity">
-                                Quantity
-                                <img class="sort-img quantity-sort-img" src="{{ imgPath }}sort.png" alt="sort" />
-                            </p>
-                            <p class="unit">
-                                Unit <img class="sort-img unit-sort-img" src="{{ imgPath }}sort.png" alt="sort" />
-                            </p>
-                        </div>
-                    </div>
-                    <div class="stock-list-body">
-                        <div class="stock-list-box">
-                            <div class="stock-list-unexpanded">
-                                <p class="stock-list-box-heading proper-spacing-list">
-                                    <span class="opening-bal-value">₹150,000</span>
-                                    <span class="quantity-value">120</span>
-                                    <span class="unit-value">PC</span>
-                                </p>
-                            </div>
-                            <div class="stock-list-unexpanded">
-                                <p class="stock-list-box-heading proper-spacing-list">
-                                    <span class="opening-bal-value">₹150,000</span>
-                                    <span class="quantity-value">120</span>
-                                    <span class="unit-value">PC</span>
-                                </p>
-                            </div>
-                        </div>
-                        <div class="stock-list-box">
-                            <div class="stock-list-expanded">
-                                <div class="stock-list-expanded-content">
-                                    <p class="stock-list-expanded-content-head proper-spacing-list opening-bal-val">
-                                        ₹150,000
-                                    </p>
-                                    <p class="stock-list-expanded-content-head proper-spacing-list quantity-val">120</p>
-                                    <p class="stock-list-expanded-content-head proper-spacing-list unit-val">PC</p>
-                                </div>
-
-                                <div class="stock-list-expanded-content">
-                                    <p class="stock-list-expanded-content-head proper-spacing-list opening-bal-val">
-                                        ₹150,000
-                                    </p>
-                                    <p class="stock-list-expanded-content-head proper-spacing-list quantity-val">120</p>
-                                    <p class="stock-list-expanded-content-head proper-spacing-list unit-val">PC</p>
-                                </div>
-
-                                <div class="stock-list-expanded-content">
-                                    <p class="stock-list-expanded-content-head proper-spacing-list opening-bal-val">
-                                        ₹150,000
-                                    </p>
-                                    <p class="stock-list-expanded-content-head proper-spacing-list quantity-val">120</p>
-                                    <p class="stock-list-expanded-content-head proper-spacing-list unit-val">PC</p>
-                                </div>
-
-                                <div class="stock-list-expanded-content">
-                                    <p class="stock-list-expanded-content-head proper-spacing-list">
-                                        <input
-                                            matInput
-                                            class="opening-bal-input"
-                                            placeholder="Opening Bal"
-                                            type="text"
-                                        />
-
-                                        <mat-form-field appearance="fill" class="quantity-dropdown">
-                                            <mat-select
-                                                placeholder="Qty"
-                                                [disableOptionCentering]="true"
-                                                panelClass="myPanelClass"
-                                            >
-                                                <button mat-button disableRipple>+ Create Qty</button>
-                                                <mat-option *ngFor="let quantity of quantites" [value]="quantity.value">
-                                                    {{ quantity.viewValue }}
-                                                </mat-option>
-                                            </mat-select>
-                                        </mat-form-field>
-
-                                        <mat-form-field appearance="fill" class="unit-dropdown">
-                                            <mat-select
-                                                placeholder="Unit"
-                                                [disableOptionCentering]="true"
-                                                panelClass="myPanelClass"
-                                            >
-                                                <button mat-button disableRipple>+ Create Unit</button>
-                                                <mat-option *ngFor="let unit of units" [value]="unit.value">
-                                                    {{ unit.viewValue }}
-                                                </mat-option>
-                                            </mat-select>
-                                        </mat-form-field>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div class="no-data-found" *ngIf="stocksList.length <= 0">
+                <img src="assets/images/search-data-not-found.svg" /><br />
+                No Data Found
             </div>
         </div>
     </div>

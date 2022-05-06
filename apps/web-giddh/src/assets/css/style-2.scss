@@ -10216,6 +10216,10 @@ input[type="checkbox"].cdk-visually-hidden::after {
         }
     }
 }
+.stock-group-search input {
+    padding-left: 30px !important;
+    padding-top: 20px !important;
+}
 .stock-balance-wrapper {
     .search-warehouse-bar {
         .mat-form-field-infix {
@@ -10226,7 +10230,6 @@ input[type="checkbox"].cdk-visually-hidden::after {
 
             .mat-select-placeholder,
             mat-select-trigger {
-                padding-left: 23px;
                 color: var(--color-secondary-search-bar-placeholder);
             }
 
@@ -10242,35 +10245,6 @@ input[type="checkbox"].cdk-visually-hidden::after {
         }
     }
     .stock-balance-main-list-table {
-        .custom-material-search-bar {
-            .mat-form-field-outline {
-                height: 32px;
-                background-color: var(--color-sidebar-primary-search-bar-background);
-                border-radius: 5px;
-            }
-            input {
-                position: absolute;
-                bottom: 17.5px;
-                padding-left: 15px;
-            }
-        }
-        .stock-searchbar {
-            .mat-form-field-outline {
-                width: 230px;
-                color: var(--color-sidebar-primary-search-bar-background);
-            }
-        }
-        .unique-name-searchbar {
-            .mat-form-field-outline {
-                width: 127px;
-                color: var(--color-sidebar-primary-search-bar-background);
-            }
-        }
-        .group-searchbar {
-            .mat-form-field-outline {
-                color: var(--color-sidebar-primary-search-bar-background);
-            }
-        }
     }
 
     .stock-list-body {
@@ -10296,6 +10270,59 @@ input[type="checkbox"].cdk-visually-hidden::after {
                 }
                 .mat-select-placeholder {
                     color: var(--color-secondary-search-bar-placeholder);
+                }
+            }
+        }
+    }
+    .searching-stocks {
+        .custom-material-search-bar {
+            .mat-form-field-outline {
+                height: 32px;
+                background-color: var(--color-sidebar-primary-search-bar-background);
+                border-radius: 5px;
+            }
+            input {
+                position: absolute;
+                bottom: 17.5px;
+                padding-left: 15px;
+            }
+        }
+        .stock-searchbar {
+            .mat-form-field-outline {
+                width: 230px;
+                color: var(--color-sidebar-primary-search-bar-background);
+            }
+        }
+        .group-searchbar {
+            .mat-form-field-outline {
+                color: var(--color-sidebar-primary-search-bar-background);
+            }
+        }
+        select-field {
+            input {
+                &.mat-form-field-autofill-control {
+                    width: 167px;
+                    padding-left: 28px !important;
+                    background-color: var(--color-sidebar-primary-search-bar-background) !important;
+                    &::placeholder {
+                        color: var(--color-primary-search-bar-placeholder) !important;
+                    }
+                }
+            }
+        }
+        .stock-table {
+            .unexpanded-list {
+                .input-select-wrapper {
+                    .unit-dropdown {
+                        input {
+                            padding: 0px 5px !important;
+                            background-color: var(--color-primary-input-bar-background-focus) !important;
+                            &:active,
+                            &:focus {
+                                background-color: var(--color-common-primary-background-for-all-components) !important;
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -10367,11 +10394,6 @@ input[type="checkbox"].cdk-visually-hidden::after {
                         margin-right: 10px;
                     }
                 }
-            }
-        }
-        select-field {
-            input.mat-form-field-autofill-control {
-                border: 1px solid var(--color-secondary-input-bar-border);
             }
         }
     }
