@@ -262,14 +262,32 @@
                                                         <i class="icon-cross"> </i> {{ commonLocaleData?.app_remove }}
                                                     </a>
                                                 </span>
-                                                <input
+                                                <!-- <input
                                                     type="checkbox"
                                                     name="defaultGst_{{ i }}"
                                                     formControlName="isDefault"
                                                     (change)="isDefaultAddressSelected(gst.get('isDefault').value, i)"
                                                     [tooltip]="localeData?.address_tooltip"
                                                     placement="left"
-                                                />
+                                                /> -->
+                                                <span [tooltip]="localeData?.address_tooltip" placement="left">
+                                                    <ngx-switch
+                                                        [(status)]="
+                                                            addAccountForm.get('addresses').controls[i].get('isDefault')
+                                                                .value
+                                                        "
+                                                        name="defaultGst_{{ i }}"
+                                                        [onText]="commonLocaleData?.app_on"
+                                                        [offText]="commonLocaleData?.app_off"
+                                                        [onColor]="bootstrapToggleSwitch?.On"
+                                                        [offColor]="bootstrapToggleSwitch?.Off"
+                                                        [size]="bootstrapToggleSwitch?.Size"
+                                                        (statusChange)="
+                                                            isDefaultAddressSelected(gst.get('isDefault').value, i)
+                                                        "
+                                                    >
+                                                    </ngx-switch>
+                                                </span>
                                             </div>
                                         </div>
                                         <div class="form-group">
