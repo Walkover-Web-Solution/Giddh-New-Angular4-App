@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, OnI
 import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
 import { SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal } from '../../models/api-models/Sales';
 import { TaxResponse } from '../../models/api-models/Company';
+import { cloneDeep } from '../../lodash-optimized';
 
 @Component({
     selector: 'app-aside-menu-sales-other-taxes',
@@ -17,10 +18,11 @@ export class AsideMenuSalesOtherTaxes implements OnInit, OnChanges {
     @Input() public otherTaxesModal: SalesOtherTaxesModal;
     @Input() public taxes: TaxResponse[] = [];
     @Output() public applyTaxes: EventEmitter<SalesOtherTaxesModal> = new EventEmitter();
-    public isDisabledCalMethod: boolean = false;
     public taxesOptions: IOption[] = [];
     public selectedTaxUniqueName: string;
     public calculationMethodOptions: IOption[];
+    /** This will hold default data of other taxes */
+    public defaultOtherTaxesModal: SalesOtherTaxesModal;
 
     constructor() {
     }
@@ -41,34 +43,37 @@ export class AsideMenuSalesOtherTaxes implements OnInit, OnChanges {
     public ngOnChanges(changes: SimpleChanges): void {
         if ('otherTaxesModal' in changes && changes.otherTaxesModal.currentValue !== changes.otherTaxesModal.previousValue) {
             this.otherTaxesModal = changes.otherTaxesModal.currentValue;
-            if (this.otherTaxesModal.appliedOtherTax) {
-                this.selectedTaxUniqueName = this.otherTaxesModal.appliedOtherTax.uniqueName;
-                this.applyTax({ label: this.otherTaxesModal.appliedOtherTax.name, value: this.otherTaxesModal.appliedOtherTax.uniqueName });
+            this.defaultOtherTaxesModal = cloneDeep(changes.otherTaxesModal.currentValue);
+
+            if (this.defaultOtherTaxesModal.appliedOtherTax) {
+                this.selectedTaxUniqueName = this.defaultOtherTaxesModal.appliedOtherTax.uniqueName;
+                this.applyTax({ label: this.defaultOtherTaxesModal.appliedOtherTax.name, value: this.defaultOtherTaxesModal.appliedOtherTax.uniqueName });
             }
         }
-
     }
 
     public applyTax(tax: IOption): void {
         if (tax && tax.value) {
-            this.otherTaxesModal.appliedOtherTax = { name: tax.label, uniqueName: tax.value };
-            let taxType = this.taxes.find(f => f.uniqueName === tax.value).taxType;
-            this.isDisabledCalMethod = ['tdsrc', 'tdspay'].includes(taxType);
-            if(!this.isDisabledCalMethod) {
-                this.otherTaxesModal.tcsCalculationMethod = SalesOtherTaxesCalculationMethodEnum.OnTotalAmount;
-            } else {
-                this.otherTaxesModal.tcsCalculationMethod = SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount;
+            this.defaultOtherTaxesModal.appliedOtherTax = { name: tax.label, uniqueName: tax.value };
+            if (!this.selectedTaxUniqueName) {
+                let taxType = this.taxes.find(f => f.uniqueName === tax.value).taxType;
+                const isTdsTax = ['tdsrc', 'tdspay'].includes(taxType);
+                if (!isTdsTax) {
+                    this.defaultOtherTaxesModal.tcsCalculationMethod = SalesOtherTaxesCalculationMethodEnum.OnTotalAmount;
+                } else {
+                    this.defaultOtherTaxesModal.tcsCalculationMethod = SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount;
+                }
             }
         }
     }
 
     public onClear(): void {
-        this.otherTaxesModal.appliedOtherTax = null;
-        this.isDisabledCalMethod = false;
-        this.otherTaxesModal.tcsCalculationMethod = SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount;
+        this.defaultOtherTaxesModal.appliedOtherTax = null;
+        this.defaultOtherTaxesModal.tcsCalculationMethod = SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount;
     }
 
     public saveTaxes(): void {
+        this.otherTaxesModal = cloneDeep(this.defaultOtherTaxesModal);
         this.applyTaxes.emit(this.otherTaxesModal);
     }
 }

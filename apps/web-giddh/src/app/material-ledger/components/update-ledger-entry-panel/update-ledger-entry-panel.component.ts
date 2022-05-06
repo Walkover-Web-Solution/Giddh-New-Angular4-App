@@ -884,9 +884,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 delete adjustment.balanceDue;
             });
         }
-        if (this.tcsOrTds === 'tds') {
-            delete requestObj['tcsCalculationMethod'];
-        }
         delete requestObj['tdsTaxes'];
         delete requestObj['tcsTaxes'];
 
