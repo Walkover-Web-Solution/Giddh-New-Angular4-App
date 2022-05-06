@@ -233,9 +233,17 @@ span.viasocket a {
         margin-top: 5px;
     }
 
-    #invoice-setting label {
-        float: left;
-        width: 88%;
+    #invoice-setting {
+        ngx-switch + label {
+            margin-left: 39px;
+        }
+        label {
+            float: left;
+            width: 88%;
+        }
+        .flex-container {
+            display: flex;
+        }
     }
 
     .form-group.clearfix.max-width-150 {

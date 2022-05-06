@@ -75,10 +75,6 @@ export class PurchaseSettingComponent implements OnInit, OnDestroy {
 
         this.store.dispatch(this.settingsIntegrationActions.GetGmailIntegrationStatus());
         this.initSettings();
-        // this.invoiceSettings.purchaseBillSettings.sendThroughGmail = false;
-        // this.invoiceSettings.purchaseBillSettings.changePOStatusOnExpiry = false;
-        // this.invoiceSettings.purchaseBillSettings.useCustomPONumber = false;
-        // this.invoiceSettings.purchaseBillSettings.enableNarration = false;
     }
 
     /**
