@@ -2,9 +2,14 @@
 <div class="stock-balance-wrapper" *ngIf="!isLoading">
     <div class="stock-balance-top-bar">
         <div class="stock-balance-top-bar-left-side">
-            <button mat-flat-button class="new-stock-btn" [routerLink]="'/pages/new-inventory/stock/product/create'">
-                <img src="{{ imgPath }}add-icon-white.svg" alt="add-icon-white" /> New Stock
+            <button class="new-stock-btn" mat-button [matMenuTriggerFor]="menu">
+                + New Stock
+                <span class="caret"></span>
             </button>
+            <mat-menu #menu="matMenu">
+                <button mat-menu-item [routerLink]="'/pages/new-inventory/stock/product/create'">Product</button>
+                <button mat-menu-item [routerLink]="'/pages/new-inventory/stock/service/create'">Service</button>
+            </mat-menu>
             <div class="warehouse-select-bar">
                 <mat-form-field class="search-warehouse-bar" appearance="outline">
                     <mat-select
@@ -64,7 +69,6 @@
                 <img src="{{ imgPath }}search-new.svg" class="search-icon" />
                 <select-field
                     [cssClass]="'form-control'"
-                    class=""
                     [name]="'stockGroup'"
                     [placeholder]="'Group'"
                     [options]="stockGroups"

@@ -56,6 +56,8 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
 	public allSelectedWarehouse: any[] = [];
 	/** True if api call in progress */
 	public isLoading: boolean = false;
+	/** This will hold common JSON data */
+	public commonLocaleData: any = {};
 
 	constructor(
 		private inventoryService: InventoryService,
@@ -116,7 +118,7 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
 	* @param {string} uniquename
 	* @memberof StockBalanceComponent
 	*/
-	public getStockVariants(stock: any) {
+	public getStockVariants(stock: any) : void {
 		if (!stock?.stock) {
 			this.inventoryService.getStock(stock?.stockUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
 				if (response?.status === "success") {
@@ -232,7 +234,7 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
 	* Callback for selection of group name
 	*
 	* @param {*} field
-	* @memberof CustomFieldsCreateEditComponent
+	* @memberof StockBalanceComponent
 	*/
 	public selectGroupName(event: any): void {
 		this.GroupStockReportRequest.stockGroupUniqueName = event.value;
@@ -253,7 +255,7 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
 					this.toaster.showSnackBar("error", response?.message);
 				}
 			});
-		}, 300);
+		}, 3000);
 	}
 
 	/**
@@ -296,7 +298,7 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
 	* @private
 	* @param {IGroupsWithStocksHierarchyMinItem[]} groups
 	* @param {IOption[]} [parents=[]]
-	* @memberof StockCreateEditComponent
+	* @memberof StockBalanceComponent
 	*/
 	private arrangeStockGroups(groups: IGroupsWithStocksHierarchyMinItem[], parents: IOption[] = []): void {
 		groups.map(group => {
@@ -316,7 +318,7 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
 	/**
 	* Lifecycle hook for destroy
 	*
-	* @memberof StockCreateEditComponent
+	* @memberof StockBalanceComponent
 	*/
 	public ngOnDestroy(): void {
 		this.destroyed$.next(true);
