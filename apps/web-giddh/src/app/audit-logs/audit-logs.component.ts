@@ -1,9 +1,7 @@
-import { take, takeUntil } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../store/roots';
 import { Component, OnDestroy, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { StateDetailsRequest } from '../models/api-models/Company';
-import { CompanyActions } from '../actions/company.actions';
 import { ReplaySubject, Observable } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GIDDH_NEW_DATE_FORMAT_UI, GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
@@ -57,7 +55,7 @@ export class AuditLogsComponent implements OnInit, OnDestroy {
     /** This will hold common JSON data */
     public commonLocaleData: any = {};
 
-    constructor(private store: Store<AppState>, private companyActions: CompanyActions, private route: ActivatedRoute, private generalService: GeneralService, private modalService: BsModalService, private router: Router) {
+    constructor(private store: Store<AppState>, private route: ActivatedRoute, private generalService: GeneralService, private modalService: BsModalService, private router: Router) {
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
         this.auditLogsRequest$ = this.store.pipe(select(state => state.auditlog.auditLogsRequest), takeUntil(this.destroyed$));
     }
@@ -76,13 +74,6 @@ export class AuditLogsComponent implements OnInit, OnDestroy {
                 this.isNewVersion = false;
             }
         });
-        let companyUniqueName = null;
-        this.store.pipe(select(c => c.session.companyUniqueName), take(1)).subscribe(s => companyUniqueName = s);
-        let stateDetailsRequest = new StateDetailsRequest();
-        stateDetailsRequest.companyUniqueName = companyUniqueName;
-        stateDetailsRequest.lastState = 'audit-logs';
-
-        this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
 
         /** Universal date observer */
         this.universalDate$.subscribe(dateObj => {
