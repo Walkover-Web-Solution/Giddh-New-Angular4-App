@@ -11,8 +11,6 @@ import { VatService } from "../services/vat.service";
 import * as moment from 'moment/moment';
 import { GIDDH_DATE_FORMAT } from "../shared/helpers/defaultDateFormat";
 import { saveAs } from "file-saver";
-import { StateDetailsRequest } from "../models/api-models/Company";
-import { CompanyActions } from "../actions/company.actions";
 import { BsDropdownDirective } from "ngx-bootstrap/dropdown";
 import { IOption } from '../theme/ng-select/ng-select';
 import { GstReconcileService } from '../services/GstReconcile.service';
@@ -76,7 +74,6 @@ export class VatReportComponent implements OnInit, OnDestroy {
         private generalService: GeneralService,
         private toasty: ToasterService,
         private cdRef: ChangeDetectorRef,
-        private companyActions: CompanyActions,
         private route: Router,
         private settingsBranchAction: SettingsBranchActions,
         private breakpointObserver: BreakpointObserver
@@ -107,7 +104,6 @@ export class VatReportComponent implements OnInit, OnDestroy {
 
         this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.loadTaxDetails();
-        this.saveLastState(this.generalService.companyUniqueName);
         this.currentPeriod = {
             from: moment().startOf('month').format(GIDDH_DATE_FORMAT),
             to: moment().endOf('month').format(GIDDH_DATE_FORMAT)
@@ -220,13 +216,6 @@ export class VatReportComponent implements OnInit, OnDestroy {
                 this.toasty.errorToast(res.message);
             }
         });
-    }
-
-    public saveLastState(companyUniqueName) {
-        let stateDetailsRequest = new StateDetailsRequest();
-        stateDetailsRequest.companyUniqueName = companyUniqueName;
-        stateDetailsRequest.lastState = 'pages/vat-report';
-        this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
     }
 
     public onOpenChange(data: boolean) {

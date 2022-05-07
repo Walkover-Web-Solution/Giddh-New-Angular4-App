@@ -1,11 +1,8 @@
 import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { ReplaySubject } from 'rxjs';
-import { take, takeUntil } from 'rxjs/operators';
-
-import { CompanyActions } from '../../actions/company.actions';
+import { takeUntil } from 'rxjs/operators';
 import { SidebarAction } from '../../actions/inventory/sidebar.actions';
-import { StateDetailsRequest } from '../../models/api-models/Company';
 import { OrganizationType } from '../../models/user-login-state';
 import { GeneralService } from '../../services/general.service';
 import { AppState } from '../../store';
@@ -35,8 +32,6 @@ export const KEYS = {
     TAB: 'Tab',
     ESC: 'Escape'
 };
-
-
 
 /** Voucher page shortcut mapping */
 export const PAGE_SHORTCUT_MAPPING = [
@@ -145,7 +140,6 @@ export class JournalVoucherComponent implements OnInit, OnDestroy {
     /** @ignore */
     constructor(
         private store: Store<AppState>,
-        private companyActions: CompanyActions,
         private tallyModuleService: TallyModuleService,
         private sidebarAction: SidebarAction,
         private generalService: GeneralService
@@ -236,22 +230,12 @@ export class JournalVoucherComponent implements OnInit, OnDestroy {
      * @memberof JournalVoucherComponent
      */
     public ngOnInit(): void {
-        let companyUniqueName = null;
-        this.store.pipe(select(appState => appState.session.companyUniqueName), take(1)).subscribe(company => companyUniqueName = company);
-        let stateDetailsRequest = new StateDetailsRequest();
-        stateDetailsRequest.companyUniqueName = companyUniqueName;
-        stateDetailsRequest.lastState = 'journal-voucher';
-
         this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.branches = response || [];
                 this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && this.branches.length > 1;
             }
         });
-
-        this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
-
-
         this.store.dispatch(this.sidebarAction.GetGroupsWithStocksHierarchyMin());
     }
 
