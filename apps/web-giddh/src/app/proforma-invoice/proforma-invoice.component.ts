@@ -624,6 +624,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     private isDefaultLoad: boolean = true;
     /** True if selected customer is of cash/bank */
     public isCashBankAccount: boolean = false;
+    /** Current page for reference vouchers */
+    private referenceVouchersCurrentPage: number = 1;
+    /** Reference voucher search field */
+    private searchReferenceVoucher: any = "";
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -1898,13 +1902,23 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             if (this.voucherApiVersion === 2) {
                 request = {
                     accountUniqueName: this.invFormData.voucherDetails.customerUniquename,
-                    voucherType: this.isCreditNote ? VoucherTypeEnum.creditNote : VoucherTypeEnum.debitNote
+                    voucherType: this.isCreditNote ? VoucherTypeEnum.creditNote : VoucherTypeEnum.debitNote,
+                    number: '',
+                    page: 1
                 }
+
+                request.number = this.searchReferenceVoucher;
+                request.page = this.referenceVouchersCurrentPage;
+                this.referenceVouchersCurrentPage++;
             } else {
                 request = {
                     accountUniqueNames: [this.invFormData.voucherDetails.customerUniquename, 'sales'],
                     voucherType: this.isCreditNote ? VoucherTypeEnum.creditNote : VoucherTypeEnum.debitNote
                 }
+            }
+
+            if (request.page === 1) {
+                this.invoiceList = [];
             }
 
             let date;
@@ -1915,7 +1929,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             } else {
                 date = moment(this.invFormData.voucherDetails.voucherDate).format(GIDDH_DATE_FORMAT);
             }
-            this.invoiceList = [];
+            
             this._ledgerService.getInvoiceListsForCreditNote(request, date).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
                 if (response && response.body) {
                     if (response.body.results || response.body.items) {
@@ -7834,5 +7848,15 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 this._cdr.detectChanges();
             }, 500);
         });
+    }
+
+    /**
+     * Resets invoice list and current page
+     *
+     * @memberof ProformaInvoiceComponent
+     */
+    public resetInvoiceList(): void {
+        this.invoiceList = [];
+        this.referenceVouchersCurrentPage = 1;
     }
 }

@@ -188,13 +188,15 @@ export class SalesService {
      * @returns {Observable<BaseResponse<any, any>>}
      * @memberof LedgerService
      */
-    public getInvoiceList(model: any, date: string, count: number = 20): Observable<BaseResponse<any, any>> {
+    public getInvoiceList(model: any, date: string, count: number = 50): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let contextPath = SALES_API_V2.GET_VOUCHER_INVOICE_LIST
             .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             .replace(':voucherDate', encodeURIComponent(date))
             .replace(':adjustmentRequest', String(true))
-            .replace(':count', String(count));
+            .replace(':count', String(count))
+            .replace(':number', encodeURIComponent((model.number || "")))
+            .replace(':page', (model.page || 1));
         if (this.generalService.voucherApiVersion === 2) {
             contextPath = this.generalService.addVoucherVersion(contextPath, this.generalService.voucherApiVersion);
         }
