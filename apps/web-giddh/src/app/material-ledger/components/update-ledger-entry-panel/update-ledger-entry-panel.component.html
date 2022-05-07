@@ -140,7 +140,8 @@
                                             [attr.data-title]="commonLocaleData?.app_particular"
                                             [id]="'debit-id-' + i"
                                             [ngClass]="{
-                                                'other-account-entry': txn?.particular?.uniqueName === 'others'
+                                                'other-account-entry':
+                                                    isPettyCash && txn?.particular?.uniqueName === 'others'
                                             }"
                                             class="
                                                 col-5
@@ -474,7 +475,8 @@
                                                 justify-content-between
                                             "
                                             [ngClass]="{
-                                                'other-account-entry': txn?.particular?.uniqueName === 'others'
+                                                'other-account-entry':
+                                                    isPettyCash && txn?.particular?.uniqueName === 'others'
                                             }"
                                         >
                                             <ng-template [ngIf]="!txn?.isDiscount">

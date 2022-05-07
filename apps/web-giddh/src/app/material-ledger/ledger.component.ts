@@ -1318,10 +1318,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
         let blankTransactionObj: BlankLedgerVM = this.lc.prepareBlankLedgerRequestObject();
 
         if (blankTransactionObj && blankTransactionObj.transactions && blankTransactionObj.transactions.length > 0) {
-            if (blankTransactionObj.otherTaxType === 'tds') {
-                delete blankTransactionObj['tcsCalculationMethod'];
-            }
-
             if(this.voucherApiVersion === 2) {
                 blankTransactionObj = this.adjustmentUtilityService.getAdjustmentObject(blankTransactionObj);
             }
