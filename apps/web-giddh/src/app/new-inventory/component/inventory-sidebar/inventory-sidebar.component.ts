@@ -168,7 +168,7 @@ export class InventorySidebarComponent implements OnDestroy {
    * @memberof InventorySidebarComponent
    */
   public gotoPage(node :any): void {
-    if(node.name){
+    if(node.link){
       this.router.navigate([node.link]);
     } 
   }

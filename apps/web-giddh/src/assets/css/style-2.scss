@@ -7867,11 +7867,11 @@ giddh-datepicker {
                             text-field,
                             select-field {
                                 input {
-                                    width: 320px;
+                                    min-width: 320px;
                                 }
                             }
                             mat-select {
-                                width: 320px;
+                                min-width: 320px;
                             }
                         }
                     }
