@@ -7832,6 +7832,80 @@ giddh-datepicker {
     }
 }
 
+.new-inventory-create-stock {
+    #main {
+        #content-wrapper {
+            background-color: var(--color-common-septenary-background-for-all-components);
+            .create-new-inventory-page {
+                .select-physical-product {
+                    .product-detail-content {
+                        .account-inventory-other-tab {
+                            .mat-tab-labels {
+                                margin-left: 20px;
+                            }
+                            .sales-purchase-details {
+                                #purchase-info-check,
+                                #sales-info-check {
+                                    .mat-checkbox-label {
+                                        font: normal normal 600 14px/17px Open Sans;
+                                        letter-spacing: 0px;
+                                        position: relative;
+                                        bottom: 1px;
+                                    }
+                                }
+                                .sales-information,
+                                .purchase-information {
+                                    .add-new-field {
+                                        select-field {
+                                            input {
+                                                width: 150px;
+                                                height: 32px;
+                                            }
+                                        }
+                                        text-field {
+                                            position: relative;
+                                            left: 7px;
+                                            input {
+                                                width: 112px;
+                                                height: 32px;
+                                            }
+                                        }
+                                        .icon-button-add {
+                                            .mat-ripple {
+                                                display: none;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        .upper-common-form-label-field {
+                            text-field,
+                            select-field {
+                                input {
+                                    width: 320px;
+                                }
+                            }
+                            mat-select {
+                                width: 320px;
+                            }
+                        }
+                    }
+                }
+                text-field,
+                select-field {
+                    input {
+                        border-radius: 2px !important;
+                    }
+                }
+                mat-select {
+                    border-radius: 2px !important;
+                }
+            }
+        }
+    }
+}
+
 .invoice-modal-content {
     left: 60px !important;
     width: calc(100% - 60px) !important;

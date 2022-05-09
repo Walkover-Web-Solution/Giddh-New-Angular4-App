@@ -5,13 +5,13 @@
     top: 46px;
     bottom: 0;
     min-height: 100vh;
-    background: $white;
+    background-color: var(--color-white);
     width: 240px;
     left: -240px;
     z-index: 999;
 
     .aside-pane {
-        background: var(--color-white);
+        background-color: var(--color-white) !important;
         overflow-x: hidden;
         overflow-y: auto;
         z-index: unset;
@@ -57,10 +57,15 @@
                 }
                 mat-tree {
                     width: 240px;
-                    background-color: var(--color-sidebar-secondary-company-background);
+                    background-color: var(--color-white);
 
                     mat-tree-node {
                         min-height: 42px;
+                        .sidebar-menu-icons {
+                            position: relative;
+                            right: 7px;
+                            filter: var(--color-image-filter-quaternary);
+                        }
                     }
 
                     .sidebar-list-icon {
@@ -71,18 +76,32 @@
                     .subOption {
                         cursor: pointer;
                         color: var(--color-sidebar-content-text);
+                        letter-spacing: 0.14px;
+                        height: 27px;
+                        font: normal normal 600 14px/30px Open Sans;
                         &:hover {
                             transition: color 300ms, background-color 300ms;
                             color: var(--color-white-tertiary);
                             background-color: var(--color-sidebar-anchor-text-hover);
+                            .sidebar-menu-icons {
+                                transition: filter 300ms;
+                                filter: invert(100%) sepia(1%) saturate(2%) hue-rotate(1deg) brightness(135%)
+                                    contrast(100%);
+                            }
                         }
                         &.subOption[aria-level="1"] {
                             position: relative;
                             left: 20px;
+                            height: 27px;
                             &:hover {
                                 transition: color 300ms;
                                 color: var(--color-sidebar-anchor-text-hover);
-                                background-color: var(--color-sidebar-secondary-company-background);
+                                background-color: var(--color-white);
+                                .sidebar-menu-icons {
+                                    transition: filter 300ms;
+                                    filter: invert(52%) sepia(83%) saturate(2500%) hue-rotate(205deg) brightness(101%)
+                                        contrast(101%);
+                                }
                             }
                         }
                     }
@@ -91,6 +110,9 @@
                         position: relative;
                         right: 20px;
                         cursor: pointer;
+                        letter-spacing: 0.14px;
+                        height: 27px;
+                        font: normal normal 600 14px/30px Open Sans;
                         color: var(--color-sidebar-content-text);
                         &:hover {
                             transition: color 300ms;
@@ -98,6 +120,11 @@
                             .sidebar-list-icon {
                                 transition: color 300ms;
                                 color: var(--color-sidebar-anchor-text-hover);
+                            }
+                            .sidebar-menu-icons {
+                                transition: filter 300ms;
+                                filter: invert(52%) sepia(83%) saturate(2500%) hue-rotate(205deg) brightness(101%)
+                                    contrast(101%);
                             }
                         }
                     }
@@ -172,12 +199,12 @@
             padding-left: 50px !important;
 
             &:hover {
-                background: var(--color-dark-fog);
+                background-color: var(--color-dark-fog);
                 color: var(--color-giddh-blue) !important;
             }
 
             &.active {
-                background: var(--color-dark-fog);
+                background-color: var(--color-dark-fog);
                 color: var(--color-giddh-blue) !important;
             }
         }

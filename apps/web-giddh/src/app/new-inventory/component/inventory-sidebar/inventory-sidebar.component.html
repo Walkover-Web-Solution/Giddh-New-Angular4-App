@@ -139,7 +139,13 @@
                 </li> -->
             </ul>
             <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
-                <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding class="subOption">
+                <mat-tree-node
+                    *matTreeNodeDef="let node"
+                    matTreeNodePadding
+                    class="subOption"
+                    (click)="gotoPage(node.name, node.index)"
+                >
+                    <img src="{{ imgPath }}{{ node.icons }}" class="sidebar-menu-icons" alt="" />
                     {{ node.name }}
                 </mat-tree-node>
                 <mat-tree-node
@@ -153,6 +159,7 @@
                             {{ treeControl.isExpanded(node) ? "expand_less" : "expand_more" }}
                         </mat-icon>
                     </button>
+                    <img src="{{ imgPath }}{{ node.icons }}" class="sidebar-menu-icons" alt="" />
                     {{ node.name }}
                 </mat-tree-node>
             </mat-tree>

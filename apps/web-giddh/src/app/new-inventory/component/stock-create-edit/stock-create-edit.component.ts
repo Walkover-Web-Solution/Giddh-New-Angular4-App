@@ -160,6 +160,8 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         /* added image path */
         this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+        /** added parent class to body after entering new-inventory page */
+        document.querySelector("body").classList.add("new-inventory-create-stock");
 
         this.getTaxes();
         this.getStockUnits();
@@ -195,6 +197,8 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+        /** remove parent class from body after exiting new-inventory page */
+        document.querySelector("body").classList.remove("new-inventory-create-stock");
     }
 
     /**

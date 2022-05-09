@@ -3147,17 +3147,20 @@ td.mat-footer-cell {
     .product-detail-content {
         mat-select {
             .mat-select-placeholder {
-                color: var(--color-secondary-input-bar-button);
+                color: var(--color-common-primary-input-placeholder);
             }
         }
         .mat-tab-label {
             .mat-tab-label-content {
-                font-weight: 600;
+                letter-spacing: 0px;
+                font: normal normal normal 16px/22px Open Sans;
                 color: var(--color-tab-primary-inactive) !important;
             }
             &:focus,
             :active {
                 .mat-tab-label-content {
+                    letter-spacing: 0px;
+                    font: normal normal 600 16px/22px Open Sans;
                     color: var(--color-tab-primary-active) !important;
                 }
             }
