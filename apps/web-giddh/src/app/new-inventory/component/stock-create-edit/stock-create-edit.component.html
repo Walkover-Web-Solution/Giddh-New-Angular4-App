@@ -28,17 +28,17 @@
                         *ngIf="stockForm.type === 'PRODUCT' || stockForm.type === 'SERVICE'"
                     >
                         <div class="row flex-column-reverse flex-md-row">
-                            <div class="col-xl-8 col-lg-12">
+                            <div class="col-xl-8 col-lg-12 upper-common-form-container">
                                 <div class="row flex-column-reverse flex-md-row">
-                                    <div class="col-md-8 col-lg-8 col-xl-6 col-12">
+                                    <div class="col-md-8 col-lg-8 col-xl-6 col-12 upper-common-form-label-field">
                                         <div class="row mr-b15">
-                                            <div class="col-sm-6 col-lg-6">
+                                            <div class="col-sm-6 col-lg-3">
                                                 <label
                                                     >{{ stockForm.type | titlecase }} Name
                                                     <span class="red-text">*</span></label
                                                 >
                                             </div>
-                                            <div class="col-sm-6 col-lg-6">
+                                            <div class="col-sm-6 col-lg-6 ml-lg-2">
                                                 <text-field
                                                     [cssClass]="'form-control'"
                                                     [name]="'productName'"
@@ -51,13 +51,13 @@
                                             </div>
                                         </div>
                                         <div class="row mr-b15">
-                                            <div class="col-sm-6 col-lg-6">
+                                            <div class="col-sm-6 col-lg-3">
                                                 <label
                                                     >{{ stockForm.type | titlecase }} Unit
                                                     <span class="red-text">*</span></label
                                                 >
                                             </div>
-                                            <div class="col-sm-6 col-lg-6">
+                                            <div class="col-sm-6 col-lg-6 ml-lg-2">
                                                 <select-field
                                                     [cssClass]="'form-control'"
                                                     [name]="'stockUnitCode'"
@@ -72,10 +72,10 @@
                                             </div>
                                         </div>
                                         <div class="row mr-b15">
-                                            <div class="col-sm-6 col-lg-6">
+                                            <div class="col-sm-6 col-lg-3">
                                                 <label>Under Group</label>
                                             </div>
-                                            <div class="col-sm-6 col-lg-6">
+                                            <div class="col-sm-6 col-lg-6 ml-lg-2">
                                                 <select-field
                                                     [cssClass]="'form-control'"
                                                     [name]="'stockGroup'"
@@ -99,13 +99,13 @@
                                             </div>
                                         </div>
                                         <div class="row mr-b15">
-                                            <div class="col-sm-6 col-lg-6">
+                                            <div class="col-sm-6 col-lg-3">
                                                 <label
                                                     >Unique Name
                                                     <!-- <i class="icon-info text-gray"></i> -->
                                                 </label>
                                             </div>
-                                            <div class="col-sm-6 col-lg-6">
+                                            <div class="col-sm-6 col-lg-6 ml-lg-2">
                                                 <text-field
                                                     [cssClass]="'form-control'"
                                                     [name]="'uniqueName'"
@@ -116,10 +116,10 @@
                                             </div>
                                         </div>
                                         <div class="row mr-b15">
-                                            <div class="col-sm-6 col-lg-6">
+                                            <div class="col-sm-6 col-lg-3">
                                                 <label>Applicable Tax</label>
                                             </div>
-                                            <div class="col-sm-6 col-lg-6">
+                                            <div class="col-sm-6 col-lg-6 ml-lg-2">
                                                 <mat-select
                                                     name="taxes"
                                                     class="form-control"
@@ -149,8 +149,8 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="other-group mt-3">
-                            <mat-tab-group mat-align-tabs="start" class="mat-tab-them">
+                        <div class="other-group mt-2">
+                            <mat-tab-group mat-align-tabs="start" class="mat-tab-them account-inventory-other-tab">
                                 <mat-tab label="Account">
                                     <div class="tab-container-new">
                                         <!-- <form>
@@ -339,7 +339,7 @@
                                                 </mat-checkbox>
                                             </div> -->
                                             <div class="row">
-                                                <div class="col-12">
+                                                <div class="col-12 col-lg-11">
                                                     <div class="row">
                                                         <div class="col-xl-6 col-12">
                                                             <div class="purchase-information">
@@ -431,6 +431,12 @@
                                                                                 class="icon-button-remove"
                                                                                 type="button"
                                                                                 (click)="deletePurchaseUnitPrice(i)"
+                                                                                *ngIf="
+                                                                                    i !==
+                                                                                    stockForm.purchaseAccountDetails
+                                                                                        .unitRates?.length -
+                                                                                        1
+                                                                                "
                                                                                 [disabled]="
                                                                                     !isPurchaseInformationEnabled
                                                                                 "
@@ -453,7 +459,9 @@
                                                                                     !isPurchaseInformationEnabled
                                                                                 "
                                                                             >
-                                                                                <i class="icon-plus"></i>
+                                                                                <span class="add-new-text-container">
+                                                                                    + Add New
+                                                                                </span>
                                                                             </button>
                                                                         </div>
                                                                     </div>
@@ -551,6 +559,12 @@
                                                                                 class="icon-button-remove"
                                                                                 type="button"
                                                                                 (click)="deleteSalesUnitPrice(i)"
+                                                                                *ngIf="
+                                                                                    i !==
+                                                                                    stockForm.salesAccountDetails
+                                                                                        .unitRates?.length -
+                                                                                        1
+                                                                                "
                                                                                 [disabled]="!isSalesInformationEnabled"
                                                                             >
                                                                                 <i class="icon-trash"></i>
@@ -569,7 +583,9 @@
                                                                                 "
                                                                                 [disabled]="!isSalesInformationEnabled"
                                                                             >
-                                                                                <i class="icon-plus"></i>
+                                                                                <span class="add-new-text-container">
+                                                                                    + Add New
+                                                                                </span>
                                                                             </button>
                                                                         </div>
                                                                     </div>
@@ -4168,20 +4184,20 @@
                     <div class="button-group">
                         <button
                             *ngIf="!queryParams?.stockUniqueName"
-                            mat-raised-button
-                            class="btn-primary min-width-100 bdr-radius-50"
+                            mat-flat-button
+                            class="clear-btn"
                             (click)="resetForm(stockCreateEditForm)"
                         >
                             Clear
                         </button>
                         <button
                             *ngIf="!queryParams?.stockUniqueName"
-                            mat-raised-button
-                            class="btn-success min-width-100 bdr-radius-50"
+                            mat-flat-button
+                            class="create-inventory-btn"
                             (click)="createStock(stockCreateEditForm)"
                             [disabled]="stockCreateEditForm.invalid || !stockForm.stockUnitCode"
                         >
-                            Create New
+                            Create Inventory
                         </button>
                         <button
                             *ngIf="queryParams?.stockUniqueName"
