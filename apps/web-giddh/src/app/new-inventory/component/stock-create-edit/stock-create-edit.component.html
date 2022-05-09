@@ -432,10 +432,8 @@
                                                                                 type="button"
                                                                                 (click)="deletePurchaseUnitPrice(i)"
                                                                                 *ngIf="
-                                                                                    i !==
                                                                                     stockForm.purchaseAccountDetails
-                                                                                        .unitRates?.length -
-                                                                                        1
+                                                                                        .unitRates?.length > 1
                                                                                 "
                                                                                 [disabled]="
                                                                                     !isPurchaseInformationEnabled
@@ -448,6 +446,7 @@
                                                                                 class="icon-button-add"
                                                                                 role="button"
                                                                                 type="button"
+                                                                                disableRipple
                                                                                 (click)="addNewPurchaseUnitPrice()"
                                                                                 *ngIf="
                                                                                     i ===
@@ -560,10 +559,8 @@
                                                                                 type="button"
                                                                                 (click)="deleteSalesUnitPrice(i)"
                                                                                 *ngIf="
-                                                                                    i !==
                                                                                     stockForm.salesAccountDetails
-                                                                                        .unitRates?.length -
-                                                                                        1
+                                                                                        .unitRates?.length > 1
                                                                                 "
                                                                                 [disabled]="!isSalesInformationEnabled"
                                                                             >
@@ -574,6 +571,7 @@
                                                                                 class="icon-button-add"
                                                                                 role="button"
                                                                                 type="button"
+                                                                                disableRipple
                                                                                 (click)="addNewSalesUnitPrice()"
                                                                                 *ngIf="
                                                                                     i ===

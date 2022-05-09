@@ -73,7 +73,7 @@
                         bottom: 9px;
                         left: 220px;
                     }
-                    .subOption {
+                    .sub-option {
                         cursor: pointer;
                         color: var(--color-sidebar-content-text);
                         letter-spacing: 0.14px;
@@ -87,7 +87,7 @@
                                     contrast(100%);
                             }
                         }
-                        &.subOption[aria-level="1"] {
+                        &.sub-option[aria-level="1"] {
                             position: relative;
                             left: 20px;
                             height: 27px;

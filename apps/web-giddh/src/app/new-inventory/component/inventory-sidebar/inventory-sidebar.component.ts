@@ -13,7 +13,7 @@ import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree'
 interface SidebarNode {
   icons?: string;
   name: string;
-  index?: number;
+  link?: string;
   children?: SidebarNode[];
 }
 
@@ -21,17 +21,17 @@ const TREE_DATA: SidebarNode[] = [
   {
     name: 'Stock',
     icons: 'stock.svg',
-    children: [{  index: 0, name: 'Create New', icons: 'create-new.svg'}, { name: 'Itemwise', icons:'item-wise.svg' }, { name: 'Group-wise' , icons: 'group-wise.svg' }, { name: 'Varient-wise', icons: 'varient-wise.svg' }, { name: 'Transactions', icons: 'transactions.svg' }],
+    children: [{ name: 'Create New', icons: 'create-new.svg', link: '/pages/new-inventory/stock/product/create'}, { name: 'Itemwise', icons:'item-wise.svg' }, { name: 'Group-wise' , icons: 'group-wise.svg' }, { name: 'Varient-wise', icons: 'varient-wise.svg' }, { name: 'Transactions', icons: 'transactions.svg' }],
   },
   {
     name: 'Services',
     icons: 'service.svg',
-    children: [{ index: 1 ,name: 'Create New', icons: 'create-new.svg'}, { name: 'Itemwise', icons:'item-wise.svg' }, { name: 'Group-wise', icons: 'group-wise.svg' }, { name: 'Varient-wise',icons: 'varient-wise.svg' }, { name: 'Transactions', icons: 'transactions.svg' }],
+    children: [{ name: 'Create New', icons: 'create-new.svg', link: '/pages/new-inventory/stock/service/create'}, { name: 'Itemwise', icons:'item-wise.svg' }, { name: 'Group-wise', icons: 'group-wise.svg' }, { name: 'Varient-wise',icons: 'varient-wise.svg' }, { name: 'Transactions', icons: 'transactions.svg' }],
   },
   {
     name: 'Fixed Assets',
     icons: 'fixed-assets.svg',
-    children: [{ index: 2 ,name: 'Create New', icons: 'create-new.svg'}, { name: 'Itemwise', icons:'item-wise.svg' }, { name: 'Group-wise', icons: 'group-wise.svg' }, { name: 'Varient-wise',icons: 'varient-wise.svg' }, { name: 'Transactions', icons: 'transactions.svg' }],
+    children: [{ name: 'Create New', icons: 'create-new.svg', link: '/pages/new-inventory/stock-balance'}, { name: 'Itemwise', icons:'item-wise.svg' }, { name: 'Group-wise', icons: 'group-wise.svg' }, { name: 'Varient-wise',icons: 'varient-wise.svg' }, { name: 'Transactions', icons: 'transactions.svg' }],
   },
   {
     name: 'Branch Transfer',
@@ -43,12 +43,13 @@ const TREE_DATA: SidebarNode[] = [
   },
   {
     name: 'Warehouse Opening Balance',
+    link: '/pages/new-inventory/stock-balance',
     icons: 'warehouse-opening-balance.svg'
   },
 ];
 
 /** Flat node with expandable and level information */
-interface ExampleFlatNode {
+interface SidebarFlatNode {
   expandable: boolean;
   name: string;
   level: number;
@@ -71,23 +72,23 @@ export class InventorySidebarComponent implements OnDestroy {
   /** Holds images folder path */
   public imgPath: string = "";
 
-  private _transformer = (node: SidebarNode, level: number) => {
+  private transformer = (node: SidebarNode, level: number) => {
     return {
       expandable: !!node.children && node.children.length > 0,
       name: node.name,
       level: level,
-      index: node.index,
-      icons: node.icons
+      icons: node.icons,
+      link: node.link
     };
   };
 
-  treeControl = new FlatTreeControl<ExampleFlatNode>(
+  treeControl = new FlatTreeControl<SidebarFlatNode>(
     node => node.level,
     node => node.expandable,
   );
 
   treeFlattener = new MatTreeFlattener(
-    this._transformer,
+    this.transformer,
     node => node.level,
     node => node.expandable,
     node => node.children,
@@ -107,7 +108,7 @@ export class InventorySidebarComponent implements OnDestroy {
     this.dataSource.data = TREE_DATA;
   }
 
-  hasChild = (_: number, node: ExampleFlatNode) => node.expandable;
+  hasChild = (_: number, node: SidebarFlatNode) => node.expandable;
 
   /**
    * Initializes the component
@@ -166,19 +167,10 @@ export class InventorySidebarComponent implements OnDestroy {
    * @param {number} index is the index of the item
    * @memberof InventorySidebarComponent
    */
-  public gotoPage(listName: string, index: number): void {
-    // for Create New under Stock
-    if (listName == this.dataList[0].children[0].name && index == this.dataList[0].children[0].index) {
-      this.router.navigate(['/pages/new-inventory/stock/product/create'])
-    }
-    // for Create New under Services
-    else if(listName == this.dataList[1].children[0].name && index == this.dataList[1].children[0].index){
-      this.router.navigate(['/pages/new-inventory/stock/service/create'])
-    }
-    // for Warehouse Opening Balance
-    else if (listName === this.dataList[5].name){
-      this.router.navigate(['/pages/new-inventory/stock-balance'])
-    }
+  public gotoPage(node :any): void {
+    if(node.name){
+      this.router.navigate([node.link]);
+    } 
   }
 }
 

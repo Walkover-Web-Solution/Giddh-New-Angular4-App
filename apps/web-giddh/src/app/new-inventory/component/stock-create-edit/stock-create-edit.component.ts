@@ -161,7 +161,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         /* added image path */
         this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         /** added parent class to body after entering new-inventory page */
-        document.querySelector("body").classList.add("new-inventory-create-stock");
+        document.querySelector("body").classList.add("stock-create-edit");
 
         this.getTaxes();
         this.getStockUnits();
@@ -198,7 +198,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         this.destroyed$.next(true);
         this.destroyed$.complete();
         /** remove parent class from body after exiting new-inventory page */
-        document.querySelector("body").classList.remove("new-inventory-create-stock");
+        document.querySelector("body").classList.remove("stock-create-edit");
     }
 
     /**

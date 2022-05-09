@@ -759,6 +759,10 @@
     content: "\e9a3";
 }
 
+.icon-download-new:before {
+    content: "\e90c";
+}
+
 .icon-company-HO:before {
     content: "\e9a4";
 }
