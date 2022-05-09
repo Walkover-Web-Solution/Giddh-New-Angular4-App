@@ -1487,7 +1487,7 @@
                                                 <ng-container *ngIf="isCreditNote || isDebitNote">
                                                     <sh-select
                                                         *ngIf="voucherApiVersion === 2"
-                                                        [options]="invoiceList"
+                                                        [options]="invoiceList$ | async"
                                                         [placeholder]="commonLocaleData?.app_select_accounts"
                                                         [fixedValue]="invoiceSelected?.label"
                                                         [forceClearReactive]="invoiceForceClearReactive$ | async"
@@ -1511,7 +1511,6 @@
                                                             resetInvoiceList();
                                                             getInvoiceListsForCreditNote()
                                                         "
-                                                        [useInBuiltFilterForFlattenAc]="true"
                                                     >
                                                         <ng-template #optionTemplate let-option="option">
                                                             <a

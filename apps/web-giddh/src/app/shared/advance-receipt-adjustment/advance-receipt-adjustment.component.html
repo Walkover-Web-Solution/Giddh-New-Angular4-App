@@ -166,7 +166,7 @@
                                             [placeholder]="localeData?.select_voucher"
                                             [(ngModel)]="entry.uniqueName"
                                             (selected)="selectVoucher($event, entry, entryIdx)"
-                                            [options]="adjustVoucherOptions"
+                                            [options]="adjustVoucherOptions$ | async"
                                             [multiple]="false"
                                             [isPaginationEnabled]="true"
                                             (scrollEnd)="!searchReferenceVoucher ? loadVouchers() : ''"

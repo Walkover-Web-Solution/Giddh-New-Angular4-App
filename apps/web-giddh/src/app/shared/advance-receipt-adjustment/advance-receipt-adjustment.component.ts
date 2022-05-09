@@ -7,7 +7,7 @@ import { IOption } from '../../theme/ng-select/ng-select';
 import { AppState } from '../../store';
 import { Store, select } from '@ngrx/store';
 import { takeUntil } from 'rxjs/operators';
-import { Observable, ReplaySubject } from 'rxjs';
+import { Observable, of, ReplaySubject } from 'rxjs';
 import { NgForm } from '@angular/forms';
 import { ToasterService } from '../../services/toaster.service';
 import { cloneDeep } from '../../lodash-optimized';
@@ -107,6 +107,8 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
     private referenceVouchersCurrentPage: number = 1;
     /** Reference voucher search field */
     private searchReferenceVoucher: any = "";
+    /** Invoice list observable */
+    public adjustVoucherOptions$: Observable<any[]>;
 
     constructor(
         private store: Store<AppState>,
@@ -346,6 +348,8 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
                             }
                         }
                     }
+
+                    this.adjustVoucherOptions$ = of(this.adjustVoucherOptions);
                 }
             });
         }
@@ -1117,6 +1121,8 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
                         }
                     }
                 }
+
+                this.adjustVoucherOptions$ = of(this.adjustVoucherOptions);
             }
         });
     }

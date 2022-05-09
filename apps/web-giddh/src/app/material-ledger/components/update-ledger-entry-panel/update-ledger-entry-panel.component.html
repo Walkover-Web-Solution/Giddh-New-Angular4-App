@@ -1528,7 +1528,7 @@
                                                     <sh-select
                                                         *ngIf="voucherApiVersion === 2"
                                                         id="update-ledger-invoice-voucher-number"
-                                                        [options]="invoiceList"
+                                                        [options]="invoiceList$ | async"
                                                         [placeholder]="commonLocaleData?.app_select_accounts"
                                                         [(ngModel)]="selectedInvoice"
                                                         [notFoundLink]="false"

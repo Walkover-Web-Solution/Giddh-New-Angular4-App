@@ -237,6 +237,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public invFormData: VoucherClass;
     /** Invoice list array */
     public invoiceList: any[];
+    /** Invoice list observable */
+    public invoiceList$: Observable<any[]>;
     /** Selected invoice for credit note */
     public selectedInvoice: any = null;
     public customerAcList$: Observable<IOption[]>;
@@ -1978,6 +1980,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         }
                     }
                     uniqBy(this.invoiceList, 'value');
+                    this.invoiceList$ = observableOf(this.invoiceList);
                     this.invoiceSelected = invoiceSelected;
                     this.selectedInvoice = (invoiceSelected) ? invoiceSelected.value : '';
                     this._cdr.detectChanges();
@@ -3601,6 +3604,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
     public onSelectCustomer(item: IOption): void {
         this.typeaheadNoResultsOfCustomer = false;
+        this.referenceVouchersCurrentPage = 1;
         if (item.value) {
             this.invFormData.voucherDetails.customerName = item.label;
             this.getAccountDetails(item.value);
@@ -7857,6 +7861,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      */
     public resetInvoiceList(): void {
         this.invoiceList = [];
+        this.invoiceList$ = observableOf([]);
         this.referenceVouchersCurrentPage = 1;
     }
 }

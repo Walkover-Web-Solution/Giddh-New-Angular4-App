@@ -523,7 +523,7 @@
                                                 [disabled]="isReadOnly"
                                                 [class.disabled-ledger]="isReadOnly"
                                                 id="ledger-voucher-type-debit-note"
-                                                [options]="invoiceList"
+                                                [options]="invoiceList$ | async"
                                                 #invoice
                                                 [placeholder]="localeData?.select_invoice"
                                                 [(ngModel)]="selectedInvoiceForCreditNote"

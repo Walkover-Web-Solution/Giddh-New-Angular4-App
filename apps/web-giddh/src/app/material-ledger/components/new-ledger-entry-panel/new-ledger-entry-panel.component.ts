@@ -249,6 +249,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     private referenceVouchersCurrentPage: number = 2;
     /** Reference voucher search field */
     private searchReferenceVoucher: any = "";
+    /** Invoice list observable */
+    public invoiceList$: Observable<any[]>;
 
     constructor(private store: Store<AppState>,
         private cdRef: ChangeDetectorRef,
@@ -389,6 +391,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             }
         }
         if (this.voucherApiVersion === 2 && changes?.invoiceList?.currentValue) {
+            this.invoiceList$ = observableOf(this.invoiceList);
             this.referenceVouchersCurrentPage = 2;
         }
     }
@@ -1708,6 +1711,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                         this.invoiceList.push({ label: invoice?.voucherNumber ? invoice.voucherNumber : '-', value: invoice?.uniqueName, additional: invoice })
                     });
 
+                    this.invoiceList$ = observableOf(this.invoiceList);
+
                     this.cdRef.detectChanges();
 
                 } else if (request.number) {
@@ -1724,6 +1729,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      */
     public resetInvoiceList(): void {
         this.invoiceList = [];
+        this.invoiceList$ = observableOf([]);
         this.referenceVouchersCurrentPage = 2;
     }
 }

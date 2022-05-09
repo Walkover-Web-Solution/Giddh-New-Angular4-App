@@ -276,6 +276,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     private referenceVouchersCurrentPage: number = 1;
     /** Reference voucher search field */
     private searchReferenceVoucher: any = "";
+    /** Invoice list observable */
+    public invoiceList$: Observable<any[]>;
 
     constructor(
         private accountService: AccountService,
@@ -1188,6 +1190,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     }
                 }
                 this.invoiceList = _.uniqBy(this.invoiceList, 'value');
+                this.invoiceList$ = observableOf(this.invoiceList);
                 this.selectedInvoice = (invoiceSelected) ? invoiceSelected.value : '';
             } else if (request.number) {
                 this.resetInvoiceList();
@@ -2400,6 +2403,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      */
     public resetInvoiceList(): void {
         this.invoiceList = [];
+        this.invoiceList$ = observableOf([]);
         this.referenceVouchersCurrentPage = 1;
     }
 }
