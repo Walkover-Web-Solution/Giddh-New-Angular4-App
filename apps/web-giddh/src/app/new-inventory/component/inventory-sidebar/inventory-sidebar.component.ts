@@ -31,7 +31,7 @@ const TREE_DATA: SidebarNode[] = [
   {
     name: 'Fixed Assets',
     icons: 'fixed-assets.svg',
-    children: [{ name: 'Create New', icons: 'create-new.svg', link: '/pages/new-inventory/stock-balance'}, { name: 'Itemwise', icons:'item-wise.svg' }, { name: 'Group-wise', icons: 'group-wise.svg' }, { name: 'Varient-wise',icons: 'varient-wise.svg' }, { name: 'Transactions', icons: 'transactions.svg' }],
+    children: [{ name: 'Create New', icons: 'create-new.svg' }, { name: 'Itemwise', icons:'item-wise.svg' }, { name: 'Group-wise', icons: 'group-wise.svg' }, { name: 'Varient-wise',icons: 'varient-wise.svg' }, { name: 'Transactions', icons: 'transactions.svg' }],
   },
   {
     name: 'Branch Transfer',
