@@ -1919,7 +1919,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 }
             }
 
-            if (request.page === 1) {
+            if (this.voucherApiVersion === 2 && request.page === 1) {
                 this.invoiceList = [];
             }
 
@@ -1930,6 +1930,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 date = this.invFormData.voucherDetails.voucherDate;
             } else {
                 date = moment(this.invFormData.voucherDetails.voucherDate).format(GIDDH_DATE_FORMAT);
+            }
+
+            if (this.voucherApiVersion !== 2) {
+                this.invoiceList = [];
             }
             
             this._ledgerService.getInvoiceListsForCreditNote(request, date).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {

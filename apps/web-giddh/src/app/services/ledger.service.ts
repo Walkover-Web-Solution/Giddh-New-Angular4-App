@@ -13,6 +13,7 @@ import { DaybookQueryRequest, DayBookRequestModel } from '../models/api-models/D
 import { ToasterService } from './toaster.service';
 import { ReportsDetailedRequestFilter } from '../models/api-models/Reports';
 import { cloneDeep } from '../lodash-optimized';
+import { PAGINATION_LIMIT } from '../app.constant';
 
 @Injectable({
     providedIn: 'any'
@@ -467,7 +468,7 @@ export class LedgerService {
         .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
         .replace(':voucherDate', encodeURIComponent(date))
         .replace(':number', encodeURIComponent((model.number || "")))
-        .replace(':count', (model.count || 50))
+        .replace(':count', (model.count || PAGINATION_LIMIT))
         .replace(':page', (model.page || 1));
 
         delete model.page;

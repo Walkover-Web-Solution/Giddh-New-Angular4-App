@@ -968,7 +968,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 return;
             }
 
-            request.page = 1;
+            if (this.voucherApiVersion === 2) {
+                request.page = 1;
+            }
 
             let date;
             if (this.lc && this.lc.blankLedger && this.lc.blankLedger.entryDate) {

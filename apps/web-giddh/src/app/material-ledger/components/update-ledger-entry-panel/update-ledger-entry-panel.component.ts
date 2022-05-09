@@ -1140,6 +1140,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             date = moment(this.vm.selectedLedger.entryDate).format(GIDDH_DATE_FORMAT);
         }
 
+        if (this.voucherApiVersion !== 2) {
+            this.invoiceList = [];
+        }
+
         this.ledgerService.getInvoiceListsForCreditNote(request, date).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
             if (response && response.body) {
                 if (response.body.results || response.body.items) {
