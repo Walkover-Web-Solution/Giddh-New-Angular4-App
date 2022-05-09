@@ -1483,6 +1483,58 @@
 
                                                 <ng-container *ngIf="isCreditNote || isDebitNote">
                                                     <sh-select
+                                                        *ngIf="voucherApiVersion === 2"
+                                                        [options]="invoiceList$ | async"
+                                                        [placeholder]="commonLocaleData?.app_select_accounts"
+                                                        [fixedValue]="invoiceSelected?.label"
+                                                        [forceClearReactive]="invoiceForceClearReactive$ | async"
+                                                        class="linking-dropdown"
+                                                        [notFoundLink]="false"
+                                                        [(ngModel)]="selectedInvoice"
+                                                        name="invoiceLinking"
+                                                        (selected)="creditNoteInvoiceSelected($event)"
+                                                        [multiple]="false"
+                                                        [ItemHeight]="67"
+                                                        [showClear]="false"
+                                                        [isPaginationEnabled]="true"
+                                                        (scrollEnd)="
+                                                            !searchReferenceVoucher
+                                                                ? getInvoiceListsForCreditNote()
+                                                                : ''
+                                                        "
+                                                        [enableDynamicSearch]="true"
+                                                        (dynamicSearchedQuery)="
+                                                            searchReferenceVoucher = $event;
+                                                            resetInvoiceList();
+                                                            getInvoiceListsForCreditNote()
+                                                        "
+                                                    >
+                                                        <ng-template #optionTemplate let-option="option">
+                                                            <a
+                                                                *ngIf="option"
+                                                                href="javascript:void(0)"
+                                                                class="linking-item list-item sh-template"
+                                                            >
+                                                                <div class="item">{{ option?.label }}</div>
+                                                                <div class="item-unique">
+                                                                    ({{ commonLocaleData?.app_dated }}:
+                                                                    {{ option.additional?.voucherDate }})
+                                                                </div>
+                                                                <div class="item-unique">
+                                                                    ({{ commonLocaleData?.app_amount }}:
+                                                                    {{
+                                                                        voucherApiVersion === 2
+                                                                            ? (option.additional?.unadjustedAmount
+                                                                                  ?.amountForAccount | giddhCurrency)
+                                                                            : (option.additional?.balanceDue
+                                                                                  ?.amountForAccount | giddhCurrency)
+                                                                    }})
+                                                                </div>
+                                                            </a>
+                                                        </ng-template>
+                                                    </sh-select>
+                                                    <sh-select
+                                                        *ngIf="voucherApiVersion !== 2"
                                                         [options]="invoiceList"
                                                         [placeholder]="commonLocaleData?.app_select_accounts"
                                                         [fixedValue]="invoiceSelected?.label"

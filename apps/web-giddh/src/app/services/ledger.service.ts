@@ -13,6 +13,7 @@ import { DaybookQueryRequest, DayBookRequestModel } from '../models/api-models/D
 import { ToasterService } from './toaster.service';
 import { ReportsDetailedRequestFilter } from '../models/api-models/Reports';
 import { cloneDeep } from '../lodash-optimized';
+import { PAGINATION_LIMIT } from '../app.constant';
 
 @Injectable({
     providedIn: 'any'
@@ -466,7 +467,14 @@ export class LedgerService {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let url = this.config.apiUrl + LEDGER_API.GET_VOUCHER_INVOICE_LIST
         .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-        .replace(':voucherDate', encodeURIComponent(date));
+        .replace(':voucherDate', encodeURIComponent(date))
+        .replace(':number', encodeURIComponent((model.number || "")))
+        .replace(':count', (model.count || PAGINATION_LIMIT))
+        .replace(':page', (model.page || 1));
+
+        delete model.page;
+        delete model.count;
+
         if (this.generalService.voucherApiVersion === 2) {
             url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
         }
