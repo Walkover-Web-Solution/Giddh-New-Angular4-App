@@ -13,11 +13,9 @@ import { select, Store } from '@ngrx/store';
 import * as moment from 'moment';
 import { Observable, of, ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
-import { CompanyActions } from '../actions/company.actions';
 import { GeneralActions } from '../actions/general/general.actions';
 import { GroupWithAccountsAction } from '../actions/groupwithaccounts.actions';
 import { GstReport } from '../gst/constants/gst.constant';
-import { StateDetailsRequest } from '../models/api-models/Company';
 import { OrganizationType } from '../models/user-login-state';
 import { GeneralService } from '../services/general.service';
 import { GstReconcileService } from '../services/GstReconcile.service';
@@ -60,7 +58,6 @@ export class AllGiddhItemComponent implements OnInit, OnDestroy {
 
     constructor(
         private changeDetectorRef: ChangeDetectorRef,
-        private companyActions: CompanyActions,
         private generalService: GeneralService,
         private generalActions: GeneralActions,
         private groupWithAction: GroupWithAccountsAction,
@@ -145,7 +142,6 @@ export class AllGiddhItemComponent implements OnInit, OnDestroy {
 
         this.store.dispatch(this.generalActions.getSideMenuItems());
         this.searchField?.nativeElement?.focus();
-        this.saveLastState();
     }
 
     /**
@@ -220,21 +216,6 @@ export class AllGiddhItemComponent implements OnInit, OnDestroy {
         } else if(item?.additional?.isGstMenu === true) {
             this.navigate(item?.additional?.type);
         }
-    }
-
-    /**
-     * Saves the last state
-     *
-     * @private
-     * @memberof AllGiddhItemComponent
-     */
-    private saveLastState(): void {
-        let state = 'giddh-all-items';
-        let stateDetailsRequest = new StateDetailsRequest();
-        stateDetailsRequest.companyUniqueName = this.generalService.companyUniqueName;
-        stateDetailsRequest.lastState = `/pages/${state}`;
-
-        this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
     }
 
     /**
