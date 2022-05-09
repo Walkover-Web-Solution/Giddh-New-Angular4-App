@@ -142,8 +142,8 @@
                 <mat-tree-node
                     *matTreeNodeDef="let node"
                     matTreeNodePadding
-                    class="subOption"
-                    (click)="gotoPage(node.name, node.index)"
+                    class="sub-option"
+                    (click)="gotoPage(node)"
                 >
                     <img src="{{ imgPath }}{{ node.icons }}" class="sidebar-menu-icons" alt="" />
                     {{ node.name }}
@@ -154,7 +154,7 @@
                     matTreeNodeToggle
                     class="list"
                 >
-                    <button mat-icon-button matTreeNodeToggle class="arrow-btn">
+                    <button mat-icon-button disableRipple matTreeNodeToggle class="arrow-btn">
                         <mat-icon class="sidebar-list-icon">
                             {{ treeControl.isExpanded(node) ? "expand_less" : "expand_more" }}
                         </mat-icon>
