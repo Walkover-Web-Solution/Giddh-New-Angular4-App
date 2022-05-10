@@ -15,7 +15,6 @@ export interface TrialBalanceRequest {
     tagName?: string;
     branchUniqueName?: string;
     filename?: string;
-    view?: string;
 }
 
 export interface ProfitLossRequest extends TrialBalanceRequest {

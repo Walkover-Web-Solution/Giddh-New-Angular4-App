@@ -8,8 +8,6 @@ import { AppState } from 'apps/web-giddh/src/app/store';
     templateUrl: './export-xls.component.html'
 })
 export class BalanceSheetExportXlsComponent implements OnInit {
-    /** This will hold expandAll values for balance sheet export */
-    @Input() public expandAll: boolean;
     @Input() public fy: number;
     @Input() public filters: any = {};
     public enableDownload: boolean = true;
@@ -24,7 +22,7 @@ export class BalanceSheetExportXlsComponent implements OnInit {
     }
 
     public downloadBsXls() {
-        let request = { from: this.filters.from, to: this.filters.to, branchUniqueName: this.filters.branchUniqueName, filename: this.localeData?.xls.balance_sheet.download_filename, view: this.expandAll ? "expanded" : "collapsed" };
+        let request = { from: this.filters.from, to: this.filters.to, branchUniqueName: this.filters.branchUniqueName, filename: this.localeData?.xls.balance_sheet.download_filename };
         this.store.dispatch(this.tbPlActions.DownloadBalanceSheetExcel(request));
     }
 
