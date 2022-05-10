@@ -368,16 +368,18 @@ export class ContactComponent implements OnInit, OnDestroy {
                             this.fromDate = "";
                             this.toDate = "";
                         }
-                      
+
                         this.getAccounts(this.fromDate, this.toDate, null, "true", PAGINATION_LIMIT, this.searchStr, this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
                     });
                 }, 100);
             }
         });
 
-        this.createAccountIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((yes: boolean) => {
-            if (yes && this.accountAsideMenuState === "in") {
-                this.toggleAccountAsidePane();
+        this.createAccountIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                if (this.accountAsideMenuState === "in") {
+                    this.toggleAccountAsidePane();
+                }
                 this.getAccounts(this.fromDate, this.toDate, null, "true", PAGINATION_LIMIT, this.searchStr, this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
             }
         });
@@ -647,12 +649,14 @@ export class ContactComponent implements OnInit, OnDestroy {
         this.toggleBodyClass();
     }
 
-    public getUpdatedList(grpName?): void {
+    public getUpdatedList(grpName?: any): void {
         if (grpName) {
-            if (this.accountAsideMenuState === "in") {
-                this.toggleAccountAsidePane();
-                this.getAccounts(this.fromDate, this.toDate, null, "true", PAGINATION_LIMIT, this.searchStr, this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
-            }
+            this.store.pipe(select(state => state.groupwithaccounts.createAccountInProcess), takeUntil(this.destroyed$)).subscribe(response => {
+                if (!response && this.accountAsideMenuState === "in") {
+                    this.toggleAccountAsidePane();
+                    this.getAccounts(this.fromDate, this.toDate, null, "true", PAGINATION_LIMIT, this.searchStr, this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
+                }
+            });
         }
     }
 
