@@ -250,7 +250,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 this.stockUnits = response?.body?.map(result => {
                     return {
                         value: result.code,
-                        label: result.name,
+                        label: result.name +" ("+result.code+")",
                         additional: result
                     };
                 }) || [];
@@ -512,8 +512,10 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
      */
     public getTaxes(): void {
         this.store.pipe(select(state => state?.company?.taxes), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(response => {
+            console.log(response);
             if (response?.length > 0) {
                 this.taxes = response || [];
+                console.log(this.taxes);
                 this.checkSelectedTaxes();
             } else {
                 this.store.dispatch(this.companyAction.getTax());
