@@ -12,7 +12,7 @@ import { AppState } from '../../store';
 import { LoginActions } from '../../actions/login.action';
 import { CompanyActions } from '../../actions/company.actions';
 import { CommonActions } from '../../actions/common.actions';
-import { CompanyCountry, CompanyCreateRequest, CompanyResponse, StatesRequest, Organization } from '../../models/api-models/Company';
+import { CompanyCountry, CompanyCreateRequest, CompanyResponse, StatesRequest, Organization, StateDetailsRequest } from '../../models/api-models/Company';
 import { UserDetails } from '../../models/api-models/loginModels';
 import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
 import { ActivatedRoute, NavigationEnd, NavigationError, NavigationStart, RouteConfigLoadEnd, Router } from '@angular/router';
@@ -313,6 +313,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 }
 
                 this.toggleSidebarPane(false, false);
+                this.saveLastState();
             }
             if (event instanceof NavigationStart) {
                 this.navigationEnd = false;
@@ -1817,5 +1818,22 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      */
     public hideScheduleCalendlyModel(): void {
         this.store.dispatch(this._generalActions.isOpenCalendlyModel(false));
+    }
+
+    /**
+     * Saves last state
+     *
+     * @private
+     * @memberof HeaderComponent
+     */
+    private saveLastState(): void {
+        let companyUniqueName = null;
+        let lastState = this.router.url;
+        lastState = lastState.replace("/pages", "pages");
+        this.store.pipe(select(state => state.session.companyUniqueName), take(1)).subscribe(response => companyUniqueName = response);
+        let stateDetailsRequest = new StateDetailsRequest();
+        stateDetailsRequest.companyUniqueName = companyUniqueName;
+        stateDetailsRequest.lastState = lastState;
+        this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
     }
 }
