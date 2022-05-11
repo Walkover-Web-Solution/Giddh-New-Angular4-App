@@ -8,8 +8,6 @@ import { AppState } from 'apps/web-giddh/src/app/store';
     templateUrl: './export-xls.component.html'
 })
 export class BalanceSheetExportXlsComponent implements OnInit {
-    /** This will hold expandAll values for balance sheet export */
-    @Input() public expandAll: boolean;
     @Input() public fy: number;
     @Input() public filters: any = {};
     public enableDownload: boolean = true;
