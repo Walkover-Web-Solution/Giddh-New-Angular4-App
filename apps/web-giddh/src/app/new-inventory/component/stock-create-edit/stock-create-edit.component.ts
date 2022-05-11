@@ -511,14 +511,11 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
      * @memberof StockCreateEditComponent
      */
     public getTaxes(): void {
+        this.store.dispatch(this.companyAction.getTax());
         this.store.pipe(select(state => state?.company?.taxes), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(response => {
-            console.log(response);
             if (response?.length > 0) {
                 this.taxes = response || [];
-                console.log(this.taxes);
                 this.checkSelectedTaxes();
-            } else {
-                this.store.dispatch(this.companyAction.getTax());
             }
         });
     }
@@ -595,6 +592,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 };
                 this.inventoryService.CreateStockGroup(stockRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     if (response?.status === "success") {
+                        this.stockGroupUniqueName = "maingroup";
                         this.saveStock();
                     } else {
                         this.toaster.showSnackBar("error", response?.message);
@@ -615,7 +613,6 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
     private saveStock(): void {
         this.toggleLoader(true);
         const request = this.formatRequest();
-
         this.inventoryService.createStock(request, this.stockGroupUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.toggleLoader(false);
             if (response?.status === "success") {
