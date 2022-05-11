@@ -7,7 +7,7 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Observable, ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import { CompanyActions } from '../actions/company.actions';
-import { StateDetailsRequest, TaxResponse } from '../models/api-models/Company';
+import { TaxResponse } from '../models/api-models/Company';
 import { DaybookQueryRequest } from '../models/api-models/DaybookRequest';
 import { DaterangePickerComponent } from '../theme/ng2-daterangepicker/daterangepicker.component';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../shared/helpers/defaultDateFormat';
@@ -151,12 +151,6 @@ export class DaybookComponent implements OnInit, OnDestroy {
     public ngOnInit() {
         this.lc = new LedgerVM();
         this.currentOrganizationType = this.generalService.currentOrganizationType;
-        let companyUniqueName = null;
-        this.store.pipe(select(c => c.session.companyUniqueName), take(1)).subscribe(s => companyUniqueName = s);
-        let stateDetailsRequest = new StateDetailsRequest();
-        stateDetailsRequest.companyUniqueName = companyUniqueName;
-        stateDetailsRequest.lastState = 'daybook';
-        this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
 
         this.store.pipe(
             select(appState => appState.session.activeCompany), takeUntil(this.destroyed$)

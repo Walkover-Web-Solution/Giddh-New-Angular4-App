@@ -8,8 +8,6 @@ import { SettingProfileComponent } from './profile/setting.profile.component';
 import { SettingIntegrationComponent } from './integration/setting.integration.component';
 import { PermissionDataService } from 'apps/web-giddh/src/app/permissions/permission-data.service';
 import { Component, OnInit, Output, ViewChild, OnDestroy, EventEmitter } from '@angular/core';
-import { StateDetailsRequest } from '../models/api-models/Company';
-import { CompanyActions } from '../actions/company.actions';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../store/roots';
 import { SettingsTagsComponent } from './tags/tags.component';
@@ -63,7 +61,6 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
     constructor(
         private store: Store<AppState>,
-        private companyActions: CompanyActions,
         private _permissionDataService: PermissionDataService,
         public _route: ActivatedRoute,
         private router: Router,
@@ -102,7 +99,6 @@ export class SettingsComponent implements OnInit, OnDestroy {
             } else {
                 this.integrationtab = params['referrer'];
             }
-            this.setStateDetails(params['type'], params['referrer']);
 
             this.tabChanged(this.activeTab);
 
@@ -255,20 +251,6 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
     private getRedirectUrl(baseHref: string) {
         return `${baseHref}pages/settings?tab=integration`;
-    }
-
-    private setStateDetails(type, referer?: string) {
-        let companyUniqueName = null;
-        this.store.pipe(select(c => c.session.companyUniqueName), take(1)).subscribe(s => companyUniqueName = s);
-        let stateDetailsRequest = new StateDetailsRequest();
-        stateDetailsRequest.companyUniqueName = companyUniqueName;
-        if (referer) {
-            stateDetailsRequest.lastState = 'pages/settings/' + type + '/' + referer;
-        } else {
-            stateDetailsRequest.lastState = 'pages/settings/' + type;
-        }
-
-        this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
     }
 
     /**

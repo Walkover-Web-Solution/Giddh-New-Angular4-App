@@ -1,35 +1,12 @@
-import { take } from 'rxjs/operators';
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { CompanyActions } from '../actions/company.actions';
-import { AppState } from '../store/roots';
-import { Store, select } from '@ngrx/store';
-import { StateDetailsRequest } from '../models/api-models/Company';
-import { ReplaySubject } from 'rxjs';
+import { Component } from '@angular/core';
 
 @Component({
     template: '<router-outlet></router-outlet>'
 })
 
-export class ManufacturingComponent implements OnInit, OnDestroy {
+export class ManufacturingComponent {
 
-    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-
-    constructor(private store: Store<AppState>, private companyActions: CompanyActions) {
+    constructor() {
         
-    }
-
-    public ngOnInit(): void {
-        let companyUniqueName = null;
-        this.store.pipe(select(c => c.session.companyUniqueName), take(1)).subscribe(s => companyUniqueName = s);
-        let stateDetailsRequest = new StateDetailsRequest();
-        stateDetailsRequest.companyUniqueName = companyUniqueName;
-        stateDetailsRequest.lastState = 'manufacturing';
-
-        this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
-    }
-
-    public ngOnDestroy() {
-        this.destroyed$.next(true);
-        this.destroyed$.complete();
     }
 }

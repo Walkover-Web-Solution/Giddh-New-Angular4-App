@@ -1,26 +1,12 @@
-import { Component, OnInit } from '@angular/core';
-import { AppState } from 'apps/web-giddh/src/app/store';
-import { Store, select } from '@ngrx/store';
-import { take } from 'rxjs/operators';
-import { StateDetailsRequest } from 'apps/web-giddh/src/app/models/api-models/Company';
-import { CompanyActions } from 'apps/web-giddh/src/app/actions/company.actions';
+import { Component } from '@angular/core';
 
 @Component({
     selector: 'inventory-in-out',
     templateUrl: './inventory-in-out.component.html'
 })
-export class InventoryInOutComponent implements OnInit {
+export class InventoryInOutComponent {
 
-    constructor(private store: Store<AppState>, private companyActions: CompanyActions) {
+    constructor() {
 
-    }
-
-    public ngOnInit() {
-        let companyUniqueName = null;
-        this.store.pipe(select(c => c.session.companyUniqueName), take(1)).subscribe(s => companyUniqueName = s);
-        let stateDetailsRequest = new StateDetailsRequest();
-        stateDetailsRequest.companyUniqueName = companyUniqueName;
-        stateDetailsRequest.lastState = 'inventory-in-out';
-        this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
     }
 }
