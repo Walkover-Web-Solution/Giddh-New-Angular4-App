@@ -6339,6 +6339,15 @@ highcharts-chart {
     .nav-left-bar {
         z-index: 99 !important;
     }
+    #main {
+        app-header {
+            .fixed-padding {
+                #primary-new-header {
+                    z-index: 99 !important;
+                }
+            }
+        }
+    }
 }
 .aside-panel-ledger {
     display: flex !important;
