@@ -189,6 +189,7 @@
                         *ngIf="BsExportXLS"
                         [fy]="filterForm.controls['fy'].value"
                         [filters]="filterForm.value"
+                        [expandAll]="expandAll"
                         class="pull-right"
                     ></balance-sheet-export-xls>
                 </div>
@@ -373,6 +374,7 @@
             <balance-sheet-export-xls
                 *ngIf="BsExportXLS"
                 [fy]="filterForm.controls['fy'].value"
+                [expandAll]="expandAll"
                 [filters]="filterForm.value"
                 class="pull-left"
             ></balance-sheet-export-xls>
