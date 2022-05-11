@@ -250,7 +250,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 this.stockUnits = response?.body?.map(result => {
                     return {
                         value: result.code,
-                        label: result.name,
+                        label: `${result.name} (${result.code})`,
                         additional: result
                     };
                 }) || [];
@@ -511,12 +511,11 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
      * @memberof StockCreateEditComponent
      */
     public getTaxes(): void {
+        this.store.dispatch(this.companyAction.getTax());
         this.store.pipe(select(state => state?.company?.taxes), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.length > 0) {
                 this.taxes = response || [];
                 this.checkSelectedTaxes();
-            } else {
-                this.store.dispatch(this.companyAction.getTax());
             }
         });
     }
@@ -580,7 +579,9 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         }
 
         if (!this.stockGroupUniqueName) {
-            let mainGroupExists = this.stockGroups?.filter(group => group?.value === "maingroup");
+            let mainGroupExists = this.stockGroups?.filter(group => {
+                group?.value === "maingroup"
+            });
             if (mainGroupExists?.length > 0) {
                 this.stockGroupUniqueName = "maingroup";
                 this.saveStock();
@@ -593,6 +594,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 };
                 this.inventoryService.CreateStockGroup(stockRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     if (response?.status === "success") {
+                        this.stockGroupUniqueName = "maingroup";
                         this.saveStock();
                     } else {
                         this.toaster.showSnackBar("error", response?.message);
@@ -613,7 +615,6 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
     private saveStock(): void {
         this.toggleLoader(true);
         const request = this.formatRequest();
-
         this.inventoryService.createStock(request, this.stockGroupUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.toggleLoader(false);
             if (response?.status === "success") {
