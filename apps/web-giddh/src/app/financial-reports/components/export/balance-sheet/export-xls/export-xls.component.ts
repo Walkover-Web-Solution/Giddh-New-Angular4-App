@@ -19,7 +19,6 @@ export class BalanceSheetExportXlsComponent implements OnInit {
     constructor(
         private store: Store<AppState>,
         private tbPlActions: TBPlBsActions) {
-
     }
 
     public downloadBsXls() {

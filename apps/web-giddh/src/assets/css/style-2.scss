@@ -529,6 +529,35 @@ input {
         }
     }
 }
+.on-setting-page.setting-sidebar-open {
+    .settings-profile-tabs {
+        .profile-tab-container {
+            .account-aside-menu-state {
+                .aside-pane {
+                    #close {
+                        top: 18px;
+                    }
+                }
+            }
+        }
+    }
+}
+.invoice-preview-page {
+    #content-wrapper {
+        .invoice-container {
+            .modal-content {
+                #export-body {
+                    sh-select {
+                        input::placeholder {
+                            color: var(--color-common-primary-input-placeholder) !important;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
 .invoice-control .nav.nav-tabs {
     margin-bottom: 15px;
     padding: 0 0px 0 15px !important;
@@ -866,14 +895,10 @@ ul.sub-list {
 }
 .top-aging-table-top1 {
     background: var(--color-white);
-    position: absolute;
-    left: 0;
-    right: 0;
-    border: 1px solid var(--color-iron);
     padding: 20px;
-    box-shadow: 0 0 19px var(--color-primary-common-box-shadow);
-    top: 75px;
     z-index: 1;
+    height: 0;
+    padding-top: 0;
 }
 .top-aging-table-top1 p {
     font-size: 12px;
@@ -2914,7 +2939,7 @@ label {
     color: var(--color-master-page-input-label) !important;
 }
 .isParent {
-    background: var(--color-wild-sand);
+    background: var(--color-master-page-sidebar-active-list-background);
 }
 .isActive {
     color: var(--color-secondary-button-text) !important;
@@ -5549,9 +5574,36 @@ footer#footer.absolute-footer {
 }
 .modal-open {
     overflow: hidden !important;
-}
-.fixed.modal-open .modal-backdrop {
-    z-index: 99999;
+    .manage-account-popup.add-manage-group-acc {
+        .scroll-container {
+            .wrap-account-sidebar {
+                .grp-wrapper {
+                    .col-wrapper {
+                        border-color: var(--color-common-secondary-border);
+                        &:nth-child(1) {
+                            background-color: var(--color-common-primary-background-for-all-components);
+                        }
+                    }
+                }
+            }
+        }
+        .manage-group-acc {
+            account-operations {
+                #middleBody {
+                    .top-bar {
+                        border-color: var(--color-common-secondary-border) !important;
+                    }
+                }
+            }
+        }
+        account-operations {
+            div:nth-child(7) {
+                .modal-dialog {
+                    margin-top: 80px;
+                }
+            }
+        }
+    }
 }
 
 section.ledger-stat.sticky-footer.sticky-footer-sale-amount {
@@ -6132,6 +6184,11 @@ button.btn.btn-filter {
         z-index: 9999 !important;
     }
 }
+.modal-open.cmd-k {
+    .modal-backdrop + .modal {
+        z-index: 999999 !important;
+    }
+}
 .modal-backdrop + .modal.fade .modal-dialog {
     transform: translate(0);
 }
@@ -6281,6 +6338,15 @@ highcharts-chart {
 .aside-menu-othertax-open {
     .nav-left-bar {
         z-index: 99 !important;
+    }
+    #main {
+        app-header {
+            .fixed-padding {
+                #primary-new-header {
+                    z-index: 99 !important;
+                }
+            }
+        }
     }
 }
 .aside-panel-ledger {
@@ -7281,6 +7347,11 @@ giddh-datepicker {
     input.mat-input-element {
         margin-top: 0;
         padding: 9px 6px;
+        font-size: 14px;
+
+        &::placeholder {
+            color: var(--color-common-primary-input-placeholder) !important;
+        }
     }
 
     .mat-form-field-wrapper {
@@ -7326,6 +7397,7 @@ giddh-datepicker {
     .cdk-global-overlay-wrapper {
         z-index: 1000 !important;
     }
+    overflow-y: auto !important;
     .advance-search {
         #export-body {
             sh-select {
@@ -7335,6 +7407,69 @@ giddh-datepicker {
             }
         }
     }
+    #content-wrapper {
+        .in {
+            .aside-pane {
+                #close {
+                    color: var(--color-primary-right-side-popup-header-text);
+                }
+            }
+        }
+        .container.ledger-section {
+            .ledg-head.transactions-page {
+                #eledgerwrap {
+                    .ledger-book {
+                        .wrap-transaction-map {
+                            .ledger-head {
+                                z-index: 11;
+                            }
+                            .ledger-book {
+                                .entry-modal-height {
+                                    .entry-modal {
+                                        .ledger-panel {
+                                            z-index: 9;
+                                        }
+                                    }
+                                }
+                            }
+                            #ledger-transaction-left-list,
+                            #ledger-transaction-right-list {
+                                .transaction-list-sh-select {
+                                    sh-select-menu {
+                                        .menu {
+                                            z-index: 10;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                .mat-grid-list.ledger-head {
+                    z-index: 8;
+                }
+                .ledger-book {
+                    .entry-modal {
+                        .ledger-panel {
+                            z-index: 6;
+                        }
+                    }
+                    .ledger-main {
+                        .new-entry-ledger {
+                            .ledger-account-label {
+                                sh-select-menu {
+                                    .menu {
+                                        z-index: 7;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    height: auto;
 }
 
 .cdk-overlay-container,
@@ -7425,7 +7560,7 @@ giddh-datepicker {
 }
 
 .change-address-dropdown li {
-    border-bottom: 1px solid var(--color-iron);
+    border-bottom: 1px solid var(--color-common-secondary-border);
     padding-bottom: 4px;
 }
 
@@ -7825,10 +7960,6 @@ body.update-scroll-hidden {
     }
 }
 
-.manage-account-popup.full-screen-modal {
-    z-index: 999999;
-}
-
 .trial-balance-viewport {
     height: 500px;
 }
@@ -7853,6 +7984,7 @@ body.update-scroll-hidden {
         display: none;
     }
 }
+
 .contact-body {
     .contact-modal {
         height: 375px !important;
@@ -7869,12 +8001,39 @@ body.update-scroll-hidden {
                     input,
                     textarea {
                         border: 1px solid var(--color-secondary-input-bar-border);
+                        .cdk-overlay-pane {
+                            .mat-dialog-container {
+                                overflow: visible;
+                            }
+                        }
+                        .mail-model-container {
+                            .mat-dialog-container {
+                                .modal-body {
+                                    input,
+                                    textarea {
+                                        border: 1px solid var(--color-secondary-input-bar-border);
+                                    }
+                                }
+                            }
+                        }
+                        .modal-body {
+                            sh-select-menu {
+                                .menu {
+                                    virtual-scroll {
+                                        .total-padding {
+                                            height: auto;
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }
         }
     }
 }
+
 .cdk-overlay-pane {
     height: auto !important;
 }

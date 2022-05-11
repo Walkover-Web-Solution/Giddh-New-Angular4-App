@@ -209,7 +209,7 @@ body.dark-theme {
     --color-primary-aside-pane-unactive-background: #000000;
 
     // Aside Setting and Aside Help Support Color Variables
-    --color-primary-aside-host-after-background: #f5f5f5;
+    --color-primary-aside-host-after-background: #212528;
     --color-primary-aside-help-support-aside-header-pane-background: #f5f5f5;
 
     // All In One Menu Color Variables
@@ -615,6 +615,7 @@ body.dark-theme {
     --color-warning-toast: #e58a00;
     --color-info-toast: #668cff;
     --color-toast-primary-text: #ffffff;
+    --color-primary-toast-cross-background: #668cff26;
 
     // Common Leftout Background Color Variables
     --color-common-primary-blue-border: #f5f5f5;
@@ -681,6 +682,7 @@ body.dark-theme {
     --color-skeleton-loading-gradient-inner: #212528;
     --color-white: #212528;
     --color-white-secondary: #212528;
+    --color-white-tertiary: #ffffff;
     --color-dark-fog: #668cff26;
     --color-lavender: #e7e9eb;
     --color-iron: #9b9b9e;

@@ -338,7 +338,7 @@ a[vr-item]:focus {
     display: block;
     clear: both;
     float: none;
-    box-shadow: 0 0 3px var(--color-iron);
+    box-shadow: 0 0 3px var(--color-primary-common-box-shadow);
     border-radius: 2px;
     padding: 5px 0;
     visibility: hidden;
@@ -710,7 +710,7 @@ ul.sub-list {
     margin-left: 240px;
 }
 .setting-sidebar {
-    box-shadow: -2px -2px 15px rgba(0, 0, 0, 0.2);
+    box-shadow: -2px -2px 15px --color-primary-common-box-shadow;
 }
 .desktop-header .hamburger-menu {
     display: flex;
@@ -796,7 +796,7 @@ ul.sub-list {
             transform: translateY(0px);
             bottom: auto;
             border: 1px solid var(--color-iron);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+            box-shadow: 0 6px 12px var(--color-primary-common-box-shadow);
             min-width: 270px;
             max-width: 270px;
             max-height: 315px;
@@ -892,7 +892,7 @@ ul.sub-list {
     width: 100%;
     top: 0;
     background-color: var(--color-primary-header-background);
-    z-index: 990;
+    z-index: 990 !important;
     padding-top: 12px;
     padding-bottom: 12px;
     .universal-date {
@@ -1239,9 +1239,9 @@ aside-setting {
         -webkit-background-clip: padding-box;
         background-clip: padding-box;
         border: 1px solid var(--color-iron);
-        border: 1px solid rgba(0, 0, 0, 0.15);
+        border: 1px solid var(--color-common-secondary-border);
         border-radius: 4px;
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+        box-shadow: 0 6px 12px var(--color-primary-common-box-shadow);
     }
 
     .lower-layer-header {

@@ -116,6 +116,20 @@
                                     </div>
                                 </form>
                             </div>
+                            <div
+                                class="
+                                    clear-filter
+                                    align-items-center
+                                    d-flex
+                                    justify-content-xl-center justify-content-lg-start
+                                    w-50
+                                "
+                                *ngIf="showClearFilter"
+                            >
+                                <button class="btn btn-filters mr-0" (click)="resetAdvanceSearch()">
+                                    <span class="icon-cross"></span> {{ commonLocaleData?.app_clear_filter }}
+                                </button>
+                            </div>
                             <!-- Invoice filter section ends -->
                             <div class="button-content">
                                 <button
@@ -286,13 +300,13 @@
                                         <button mat-menu-item (click)="downloadCSV()">
                                             {{ commonLocaleData?.app_download_csv }}
                                         </button>
-                                        <button
+                                        <!-- <button
                                             mat-menu-item
                                             *ngIf="selectedAccountsList?.length > 0 && activeTab === 'vendor'"
                                             (click)="openBulkPaymentModal()"
                                         >
                                             {{ localeData?.bulk_payment }}
-                                        </button>
+                                        </button> -->
                                     </mat-menu>
                                 </div>
                             </div>

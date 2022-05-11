@@ -1,3 +1,4 @@
+@import "../../../assets/css/mixin-common.scss";
 .flex-container {
     display: flex;
     flex-direction: row;
@@ -111,7 +112,7 @@
     left: -114px;
     background-color: var(--color-white);
     width: 131px;
-    box-shadow: 0px 4px 7px var(--color-gray);
+    box-shadow: 0px 4px 7px var(--color-primary-common-box-shadow);
     border-radius: 3px;
     z-index: 100;
     border: 1px solid var(--color-iron);
@@ -560,6 +561,11 @@ span.icon-export-icon {
         }
     }
 }
+
+.btn-filter {
+    @include common-filters(var(--color-giddh-blue), var(--color-dark-fog), 1px solid var(--color-iron));
+}
+
 /* responsive */
 @media (max-width: 1024px) {
     .perform-payment {

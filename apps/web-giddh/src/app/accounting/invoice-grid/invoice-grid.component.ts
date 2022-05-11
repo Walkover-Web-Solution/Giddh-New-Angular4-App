@@ -13,7 +13,7 @@ import { AppState } from '../../store/roots';
 import { AfterViewInit, Component, ComponentFactoryResolver, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
 import { cloneDeep, forEach, isEqual, sumBy, concat, find, without, orderBy } from 'apps/web-giddh/src/app/lodash-optimized';
 import * as moment from 'moment';
-import { BlankLedgerVM } from 'apps/web-giddh/src/app/ledger/ledger.vm';
+import { BlankLedgerVM } from 'apps/web-giddh/src/app/material-ledger/ledger.vm';
 import { Router } from '@angular/router';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { AccountResponse } from '../../models/api-models/Account';

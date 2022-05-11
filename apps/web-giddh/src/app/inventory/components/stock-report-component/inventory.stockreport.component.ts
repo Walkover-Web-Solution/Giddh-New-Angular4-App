@@ -245,7 +245,6 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public advanceSearchModalShow: boolean = false;
     public updateStockSuccess$: Observable<boolean>;
-    public activeStockUniqueName$: Observable<string>;
     /** Hold the state of new transfer side pan */
     public asideTransferPaneState: string = 'out';
     /** Hold branch transfer mode */
@@ -292,6 +291,11 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
             selectedTransactionType: ['all']
         });
         this.updateStockSuccess$ = this.store.pipe(select(s => s.inventory.UpdateStockSuccess), takeUntil(this.destroyed$));
+        this.store.pipe(select(s => s.inventory.activeStockUniqueName), takeUntil(this.destroyed$)).subscribe(activeStockUniqueName => {
+            if (activeStockUniqueName) {
+                this.stockUniqueName = activeStockUniqueName;
+            }
+        });
         this.currentOrganizationType = this.generalService.currentOrganizationType;
     }
 

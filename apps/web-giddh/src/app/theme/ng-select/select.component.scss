@@ -43,7 +43,7 @@ ng-select {
                 white-space: nowrap;
             }
             > div.placeholder {
-                color: rgba(0, 0, 0, 0.3);
+                color: var(--color-common-primary-input-placeholder);
             }
             > div.clear,
             > div.toggle {
