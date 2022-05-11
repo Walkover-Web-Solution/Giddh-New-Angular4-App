@@ -3616,7 +3616,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     public getAccountDetails(accountUniqueName: string) {
-        if (this.voucherApiVersion !== 2 && this.isPurchaseInvoice) {
+        if (this.isPurchaseInvoice) {
             this.getVendorPurchaseOrders(accountUniqueName);
         }
         this.store.dispatch(this.salesAction.getAccountDetailsForSales(accountUniqueName));
