@@ -250,7 +250,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 this.stockUnits = response?.body?.map(result => {
                     return {
                         value: result.code,
-                        label: result.name +" ("+result.code+")",
+                        label: `${result.name} (${result.code})`,
                         additional: result
                     };
                 }) || [];
@@ -579,7 +579,9 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         }
 
         if (!this.stockGroupUniqueName) {
-            let mainGroupExists = this.stockGroups?.filter(group => group?.value === "maingroup");
+            let mainGroupExists = this.stockGroups?.filter(group =>{
+                group?.value === "maingroup"
+                });
             if (mainGroupExists?.length > 0) {
                 this.stockGroupUniqueName = "maingroup";
                 this.saveStock();
