@@ -345,6 +345,15 @@
                     }
                 },
                 {
+                    "label": "Activity Logs New",
+                    "link": "/pages/activity-logs",
+                    "icon": "icon-audit-log",
+                    "description": "Chronological data of entries",
+                    "additional": {
+                        "voucherVersion": 1
+                    }
+                },
+                {
                     "label": "Cash Flow",
                     "link": "/pages/reports/cash-flow-statement",
                     "icon": "icon-cash-flow-statement",

@@ -1,0 +1,239 @@
+<ng-container *ngIf="isLoading">
+    <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
+</ng-container>
+<ng-container *ngIf="!isLoading">
+    <h1 class="page-title" *ngIf="(logs$ | async)?.length > 0">{{ localeData?.audit_logs }}</h1>
+    <br />
+    <section class="audit-log" *ngFor="let log of logs$ | async; let i = index">
+        <h1 class="audit-log-heading">
+            {{ log.operationType }}
+            <span *ngIf="log && log.accountName && log.accountName != null">
+                - {{ log.accountName }} ({{ log.accountUniqueName }})</span
+            >
+        </h1>
+        <div class="mr-t05 border-top-btm clearfix">
+            <div>
+                <label class="pull-left">{{ commonLocaleData?.app_entity }}:</label>
+                <p class="pull-left mr-l05">{{ log.entityType }}</p>
+            </div>
+            <div>
+                <label class="pull-left mr-l2">{{ localeData?.date }}:</label>
+                <p class="pull-left mr-l05">{{ log.createdAt }}</p>
+            </div>
+            <div>
+                <label class="pull-left mr-l2">{{ localeData?.user }}:</label>
+                <p class="pull-left mr-l05">{{ log.user?.name }}</p>
+            </div>
+            <div *ngIf="log && log.groupName && log.groupName != null">
+                <label class="pull-left mr-l2">{{ localeData?.group }}:</label>
+                <p class="pull-left mr-l05">{{ log.groupName }}</p>
+            </div>
+            <div>
+                <label class="pull-left mr-l2">{{ localeData?.company }}:</label>
+                <p class="pull-left mr-l05">{{ log.companyName }}</p>
+            </div>
+            <div
+                *ngIf="
+                    log.log &&
+                    log.log?.sharedWith &&
+                    log.log?.sharedWith != undefined &&
+                    log.log?.sharedWith?.name.length > 0
+                "
+            >
+                <label class="pull-left mr-l2">{{ localeData?.shared_with }}:</label>
+                <p class="pull-left mr-l05">
+                    {{ log.log?.sharedWith?.name }}
+                    <span
+                        *ngIf="
+                            log.log?.sharedWith?.email &&
+                            log.log?.sharedWith?.email != null &&
+                            log.log?.sharedWith?.email?.length > 0
+                        "
+                    >
+                        | {{ log.log?.sharedWith?.email }}</span
+                    >
+                </p>
+            </div>
+            <div *ngIf="log && log.log && log.log?.description != undefined && log.log?.description?.length > 0">
+                <label class="pull-left mr-l2">{{ localeData?.description }}:</label>
+                <p class="pull-left mr-l05">{{ log.log?.description }}</p>
+            </div>
+        </div>
+
+        <div
+            class="mr-t05 table-container"
+            *ngIf="log.log != null && log.log?.transactions != undefined && log.log?.transactions?.length > 0"
+        >
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th class="col-3 text-center">#</th>
+                        <th class="col-3 text-center">{{ localeData?.date }}</th>
+                        <th class="col-3 text-center">{{ localeData?.particular }}</th>
+                        <th class="col-3 text-center">{{ localeData?.amount }}</th>
+                        <th class="col-3 text-center">{{ localeData?.type }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let transaction of log.log.transactions; let i = index">
+                        <td>{{ i + 1 }}</td>
+                        <td>{{ log.log?.entryDate }}</td>
+                        <td>{{ transaction.particular?.name }} ({{ transaction.particular?.uniqueName }})</td>
+                        <td>
+                            <span class="d-inline-flex">
+                                <amount-field
+                                    [amount]="transaction.amount"
+                                    [currencySymbol]="false"
+                                    [currencyCode]="false"
+                                >
+                                </amount-field>
+                            </span>
+                        </td>
+                        <td>{{ transaction.type }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div
+            class="mr-t05 text-center table-container"
+            *ngIf="
+                log &&
+                log.log &&
+                log.log.old != undefined &&
+                log.log.updated != undefined &&
+                log.log.updated.transactions != undefined
+            "
+        >
+            <label>{{ localeData?.updated }}</label>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th class="col-3 text-center">#</th>
+                        <th class="col-3 text-center">{{ localeData?.date }}</th>
+                        <th class="col-3 text-center">{{ localeData?.particular }}</th>
+                        <th class="col-3 text-center">{{ localeData?.amount }}</th>
+                        <th class="col-3 text-center">{{ localeData?.type }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let transaction of log.log.updated.transactions; let i = index">
+                        <td>{{ i + 1 }}</td>
+                        <td>{{ log.log.updated.entryDate }}</td>
+                        <td>{{ transaction.particular?.name }} ({{ transaction.particular?.uniqueName }})</td>
+                        <td>
+                            <span class="d-inline-flex">
+                                <amount-field
+                                    [amount]="transaction.amount"
+                                    [currencySymbol]="false"
+                                    [currencyCode]="false"
+                                >
+                                </amount-field>
+                            </span>
+                        </td>
+                        <td>{{ transaction.type }}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <br />
+            <label>{{ localeData?.old }}</label>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th class="col-3 text-center">#</th>
+                        <th class="col-3 text-center">{{ localeData?.date }}</th>
+                        <th class="col-3 text-center">{{ localeData?.particular }}</th>
+                        <th class="col-3 text-center">{{ localeData?.amount }}</th>
+                        <th class="col-3 text-center">{{ localeData?.type }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let transaction of log.log.old.transactions; let i = index">
+                        <td>{{ i + 1 }}</td>
+                        <td>{{ log.log.old.entryDate }}</td>
+                        <td>{{ transaction.particular?.name }} ({{ transaction.particular?.uniqueName }})</td>
+                        <td>
+                            <span class="d-inline-flex">
+                                <amount-field
+                                    [amount]="transaction.amount"
+                                    [currencySymbol]="false"
+                                    [currencyCode]="false"
+                                >
+                                </amount-field>
+                            </span>
+                        </td>
+                        <td>{{ transaction.type }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div
+            class="mr-t05 text-center table-container"
+            *ngIf="
+                log &&
+                log.log &&
+                log.log.old != undefined &&
+                log.log.updated != undefined &&
+                log.log.old.transactions == undefined &&
+                log.log.updated.transactions == undefined
+            "
+        >
+            <label>{{ localeData?.updated }}</label>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th class="col-3 text-center">{{ localeData?.opening_balance_date }}</th>
+                        <th class="col-2 text-center">{{ localeData?.opening_balance }}</th>
+                        <th class="col-3 text-center">{{ localeData?.email }}</th>
+                        <th class="col-3 text-center">{{ localeData?.name }}</th>
+                        <th class="col-4 text-center">{{ localeData?.unique_name }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{{ log.log.updated?.openingBalanceDate }}</td>
+                        <td>{{ log.log.updated?.openingBalance }}</td>
+                        <td>{{ log.log.updated?.email }}</td>
+                        <td>{{ log.log.updated?.name }}</td>
+                        <td>{{ log.log.updated?.uniqueName }}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <br />
+            <label>{{ localeData?.old }}</label>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th class="col-3 text-center">{{ localeData?.opening_balance_date }}</th>
+                        <th class="col-2 text-center">{{ localeData?.opening_balance }}</th>
+                        <th class="col-3 text-center">{{ localeData?.email }}</th>
+                        <th class="col-3 text-center">{{ localeData?.name }}</th>
+                        <th class="col-4 text-center">{{ localeData?.unique_name }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{{ log.log.old?.openingBalanceDate }}</td>
+                        <td>{{ log.log.old?.openingBalance }}</td>
+                        <td>{{ log.log.old?.email }}</td>
+                        <td>{{ log.log.old?.name }}</td>
+                        <td>{{ log.log.old?.uniqueName }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+    <section class="no-logs" *ngIf="(logs$ | async)?.length < 1">
+        <div class="no-data">
+            <h1>{{ localeData?.no_results_found }}</h1>
+            <p>{{ localeData?.no_results_note }}</p>
+        </div>
+    </section>
+    <button
+        class="btn btn-success pull-left mr-t2 mr-b2"
+        [ladda]="loadMoreInProcess$ | async"
+        (click)="loadMoreLogs()"
+        *ngIf="(page$ | async) > 0 && (page$ | async) < (totalPages$ | async)"
+    >
+        {{ localeData?.load_more }}
+    </button>
+</ng-container>
