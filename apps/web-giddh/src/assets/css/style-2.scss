@@ -1638,9 +1638,9 @@ fieldset[disabled] .btn-primary:hover {
     border-radius: 90px;
 }
 #actionPane .btn-default {
-    background: var(--color-nonary-button-background) !important;
-    color: var(--color-nonary-button-text) !important;
-    border-color: var(--color-nonary-button-background) !important;
+    background: var(--color-dark-fog) !important;
+    color: var(--color-nero) !important;
+    border-color: var(--color-dark-fog) !important;
     border-radius: 5px !important;
 } /*btn end*/
 .ledger-main .form-control {
@@ -7970,19 +7970,6 @@ body.update-scroll-hidden {
 
         &::after {
             display: none;
-        }
-    }
-}
-.on-user-page {
-    #giddh-page-heading {
-        subscriptions-plans {
-            .activation-key-wrapper {
-                .activation-btn {
-                    .mat-button-disabled {
-                        background-color: var(--color-foam);
-                    }
-                }
-            }
         }
     }
 }
