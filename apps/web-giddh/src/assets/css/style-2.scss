@@ -82,6 +82,10 @@ $custom-typography: mat-typography-config(
     float: left !important;
     width: auto !important;
 }
+.mat-grid-tile-content {
+    display: grid !important;
+    overflow-x: scroll !important;
+}
 @media screen and (max-width: 1366px) and (orientation: portrait) {
     .subscription-form-select {
         float: left !important;

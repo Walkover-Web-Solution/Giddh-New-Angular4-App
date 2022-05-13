@@ -11,152 +11,242 @@ import { GeneralService } from '../services/general.service';
 import { ActivityLogsFormComponent } from './components/activity-logs-form/activity-logs-form.component';
 import { GetAuditLogsRequest } from '../models/api-models/Logs';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../app.constant';
+import { KeyValue } from '@angular/common';
+import { MatDialog } from '@angular/material/dialog';
+import { ActivityLogsTableComponent } from './components/activity-logs-table/activity-logs-table.component';
 @Component({
     selector: 'activity-logs',
     templateUrl: './activity-logs.component.html',
     styleUrls: [`./activity-logs.component.scss`],
 })
 export class ActivityLogsComponent implements OnInit, OnDestroy {
-    /** To check module for new version  */
-    public isNewVersion: boolean = false;
-    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    /** Date format type */
-    public giddhDateFormat: string = GIDDH_DATE_FORMAT;
-    /** directive to get reference of element */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
-    /** This will store modal reference */
-    public modalRef: BsModalRef;
-    /** This will store selected date range to use in api */
-    public selectedDateRange: any;
-    /** This will store selected date range to show on UI */
-    public selectedDateRangeUi: any;
-    /** This will store available date ranges */
-    public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
-    /** Moment object */
-    public moment = moment;
-    /** Selected from date */
-    public fromDate: string;
-    /** Selected to date */
-    public toDate: string;
-    /** Selected range label */
-    public selectedRangeLabel: any = "";
-    /** Universal date observer */
-    public universalDate$: Observable<any>;
-    /** This will store the x/y position of the field to show datepicker under it */
-    public dateFieldPosition: any = { x: 0, y: 0 };
-    /** Audit log form component reference */
-    @ViewChild('auditLogFormComponent', { static: false }) public auditLogFormComponent: ActivityLogsFormComponent;
-    /** Audit log request */
-    public auditLogsRequest$: Observable<GetAuditLogsRequest>;
-    /** To show clear filter */
-    public showClearFilter: boolean = false;
-    /** This will hold local JSON data */
-    public localeData: any = {};
-    /** This will hold common JSON data */
-    public commonLocaleData: any = {};
+     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor(private store: Store<AppState>, private route: ActivatedRoute, private generalService: GeneralService, private modalService: BsModalService, private router: Router) {
-        this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
-        this.auditLogsRequest$ = this.store.pipe(select(state => state.auditlog.auditLogsRequest), takeUntil(this.destroyed$));
-    }
-
-    public ngOnInit() {
-        if (this.generalService.voucherApiVersion === 2) {
-            this.router.navigate(['/pages/home']);
-        }
-        this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
-                this.isNewVersion = false;
-                if (response.version && String(response.version).toLocaleLowerCase() === 'new') {
-                    this.isNewVersion = true;
+    public results =
+        [
+            {
+                "operationType": "CREATE",
+                "user": {
+                    "name": "Kriti Jain",
+                    "uniqueName": "kriti@giddh.com",
+                    "email": "kriti@giddh.com",
+                    "mobile": "919479575256",
+                    "isVerified": true
+                },
+                "date": 1649918740953,
+                "dateString": "14-04-2022 06:45:40",
+                "details": {
+                    "uniqueName": "3jr1649918740457",
+                    "entryDate": [
+                        2022,
+                        4,
+                        14,
+                        0,
+                        0,
+                        0,
+                        0
+                    ],
+                    "entryDateString": "14-04-2022",
+                    "baseAccount": {
+                        "name": "test5",
+                        "uniqueName": "test5",
+                        "id": 2166950
+                    },
+                    "subTotal": "2",
+                    "total": "2",
+                    "taxTotal": "0",
+                    "otherAccounts": [
+                        {
+                            "name": "test5",
+                            "uniqueName": "test5",
+                            "id": 2166950
+                        },
+                        {
+                            "name": "Cash",
+                            "uniqueName": "cash",
+                            "id": 2165992
+                        }
+                    ],
+                    "description": "",
+                    "voucher": "receipt",
+                    "hasAttachment": false
                 }
-            } else {
-                this.isNewVersion = false;
-            }
-        });
+            },
+            {
+                "operationType": "EDIT",
+                "user": {
+                    "name": "Kriti Jain",
+                    "uniqueName": "kriti@giddh.com",
+                    "email": "kriti@giddh.com",
+                    "mobile": "919479575256",
+                    "isVerified": true
+                },
+                "date": 1652256907794,
+                "dateString": "11-05-2022 08:15:07",
+                "details": {
+                    "name": "d1",
+                    "uniqueName": "d1",
+                    "stockGroup": {
+                        "name": "demo",
+                        "uniqueName": "demo",
+                        "id": 53196
+                    },
+                    "stockUnit": {
+                        "name": "Number",
+                        "code": "nos"
+                    },
+                    "purchases": null,
+                    "sales": null
+                },
+                "old": {
+                    "operationType": "EDIT",
+                    "user": {
+                        "name": "Kriti Jain",
+                        "uniqueName": "kriti@giddh.com",
+                        "email": "kriti@giddh.com",
+                        "mobile": "919479575256",
+                        "isVerified": true
+                    },
+                    "date": 1652256899151,
+                    "dateString": "11-05-2022 08:14:59",
+                    "details": {
+                        "name": "d1",
+                        "uniqueName": "d1",
+                        "stockGroup": {
+                            "name": "demo",
+                            "uniqueName": "demo",
+                            "id": 53196
+                        },
+                        "stockUnit": {
+                            "name": "Number",
+                            "code": "nos"
+                        },
+                        "purchases": null,
+                        "sales": null
+                    }
+                }
+            },
+            {
+                "operationType": "CREATE",
+                "user": {
+                    "name": "Kriti Jain",
+                    "uniqueName": "kriti@giddh.com",
+                    "email": "kriti@giddh.com",
+                    "mobile": "919479575256",
+                    "isVerified": true
+                },
+                "date": 1652436240732,
+                "dateString": "13-05-2022 10:04:00",
+                "details": {
+                    "uniqueName": "bpf1652436240241",
+                    "entryDate": [
+                        2022,
+                        5,
+                        13,
+                        0,
+                        0,
+                        0,
+                        0
+                    ],
+                    "entryDateString": "13-05-2022",
+                    "baseAccount": {
+                        "name": "PhonePay",
+                        "uniqueName": "phonepay",
+                        "id": 3352446
+                    },
+                    "subTotal": "88",
+                    "total": "88",
+                    "taxTotal": "0",
+                    "otherAccounts": [
+                        {
+                            "name": "Demo Banck",
+                            "uniqueName": "demobanck",
+                            "id": 3352449
+                        },
+                        {
+                            "name": "PhonePay",
+                            "uniqueName": "phonepay",
+                            "id": 3352446
+                        }
+                    ],
+                    "description": null,
+                    "voucher": "contra",
+                    "hasAttachment": false
+                }
+            },
+            {
+                "operationType": "EDIT",
+                "user": {
+                    "name": "Kriti Jain",
+                    "uniqueName": "kriti@giddh.com",
+                    "email": "kriti@giddh.com",
+                    "mobile": "919479575256",
+                    "isVerified": true
+                },
+                "date": 1651837660725,
+                "dateString": "06-05-2022 11:47:40",
+                "details": {
+                    "name": "hardik  ",
+                    "uniqueName": "hardik",
+                    "group": {
+                        "name": "Sundry Debtors",
+                        "uniqueName": "sundrydebtors",
+                        "id": 314121
+                    },
+                    "bankDetails": null,
+                    "addresses": [
+                        {
+                            "address": " ",
+                            "gstIn": "",
+                            "state": {
+                                "name": "Haryana",
+                                "code": "HR",
+                                "alias": null,
+                                "pincode": null
+                            },
+                            "country": {
+                                "countryName": "India",
+                                "countryCode": "IN"
+                            },
+                            "default": true
+                        }
+                    ]
+                }
+            }];
 
-        /** Universal date observer */
-        this.universalDate$.subscribe(dateObj => {
-            if (dateObj) {
-                let universalDate = _.cloneDeep(dateObj);
-                this.selectedDateRange = { startDate: moment(dateObj[0]), endDate: moment(dateObj[1]) };
-                this.selectedDateRangeUi = moment(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-                this.fromDate = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
-                this.toDate = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
-            }
-        });
+    public originalOrder = (a: KeyValue<number, string>, b: KeyValue<number, string>): number => {
+        return 0;
+    }
 
-        this.auditLogsRequest$.subscribe(response => {
-            if (response && response.entity) {
-                this.showClearFilter = true;
-            }
+    public reverseKeyOrder = (a: KeyValue<number, string>, b: KeyValue<number, string>): number => {
+        return a.key > b.key ? -1 : (b.key > a.key ? 1 : 0);
+    }
+
+    public valueOrder = (a: KeyValue<number, string>, b: KeyValue<number, string>): number => {
+        return a.value.localeCompare(b.value);
+    }
+
+    public showJson: boolean = false;
+    constructor(public dialog: MatDialog) {
+
+    }
+
+    public openDialog() {
+        this.dialog.open(ActivityLogsTableComponent, {
+            data: {
+                json: this.results,
+            },
+            width: '50%'
         });
     }
 
+    public ngOnInit(): void {
+        
+    }
+    
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
 
-    /**
-     *To show the datepicker
-     *
-     * @param {*} element
-     * @memberof AuditLogsFormComponent
-     */
-    public showGiddhDatepicker(element: any): void {
-        if (element) {
-            this.dateFieldPosition = this.generalService.getPosition(element.target);
-        }
-        this.modalRef = this.modalService.show(
-            this.datepickerTemplate,
-            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: false })
-        );
-    }
-
-    /**
-     * This will hide the datepicker
-     *
-     * @memberof AuditLogsFormComponent
-     */
-    public hideGiddhDatepicker(): void {
-        this.modalRef.hide();
-    }
-
-    /**
-     * Call back function for date/range selection in datepicker
-     *
-     * @param {*} value
-     * @memberof AuditLogsFormComponent
-     */
-    public dateSelectedCallback(value?: any): void {
-        if (value && value.event === "cancel") {
-            this.hideGiddhDatepicker();
-            return;
-        }
-        this.selectedRangeLabel = "";
-
-        if (value && value.name) {
-            this.selectedRangeLabel = value.name;
-        }
-        this.hideGiddhDatepicker();
-        if (value && value.startDate && value.endDate) {
-            this.selectedDateRange = { startDate: moment(value.startDate), endDate: moment(value.endDate) };
-            this.selectedDateRangeUi = moment(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
-            this.fromDate = moment(value.startDate).format(GIDDH_DATE_FORMAT);
-            this.toDate = moment(value.endDate).format(GIDDH_DATE_FORMAT);
-        }
-    }
-
-    /**
-     * To reset applied filter
-     *
-     * @memberof AuditLogsComponent
-     */
-    public resetFilter(): void {
-        if (this.isNewVersion && this.auditLogFormComponent) {
-            this.auditLogFormComponent.resetFilters();
-            this.showClearFilter = false;
-        }
-    }
 }

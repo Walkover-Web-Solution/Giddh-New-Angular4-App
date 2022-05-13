@@ -1306,6 +1306,10 @@ table:focus {
         }
     }
 }
+.mat-grid-tile-content {
+    display: grid !important;
+    overflow-x: scroll !important;
+}
 @media only screen and (max-width: 1440px) {
     body.unresponsive {
         width: 100%;

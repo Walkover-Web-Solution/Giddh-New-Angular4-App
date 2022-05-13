@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { LaddaModule } from 'angular2-ladda';
 import { DatepickerModule } from 'ngx-bootstrap/datepicker';
@@ -9,24 +10,19 @@ import { SharedModule } from '../shared/shared.module';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { ActivityLogsComponent } from './activity-logs.component';
 import { ActivityLogsRoutingModule } from './activity-logs.routing.module';
-import { ActivityLogsFormComponent } from './components/activity-logs-form/activity-logs-form.component';
-import { ActivityLogsGridComponent } from './components/activity-logs-grid/activity-logs-grid.component';
 import { ActivityLogsTableComponent } from './components/activity-logs-table/activity-logs-table.component';
-import { ActivityLogsSidebarComponent } from './components/sidebar-components/activity-logs.sidebar.component';
-import { ActivityLogsServiceModule } from './services/activity-logs.service.module';
+import { DataTypePipe } from './data-type.pipe';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
     declarations: [
         // Components / Directives/ Pipes
-        ActivityLogsComponent,
-        ActivityLogsSidebarComponent,
-        ActivityLogsGridComponent,
         ActivityLogsTableComponent,
-        ActivityLogsFormComponent
+        ActivityLogsComponent,
+        DataTypePipe
     ],
     exports: [
-        ActivityLogsComponent,
-        ActivityLogsSidebarComponent
+        ActivityLogsComponent
     ],
     providers: [],
     imports: [
@@ -37,10 +33,11 @@ import { ActivityLogsServiceModule } from './services/activity-logs.service.modu
         DatepickerModule,
         LaddaModule,
         ShSelectModule,
-        ActivityLogsServiceModule,
         CurrencyModule,
         SharedModule,
-        MatGridListModule
+        MatGridListModule,
+        MatButtonModule,
+        MatDialogModule
     ],
 })
 export class ActivityLogsModule {
