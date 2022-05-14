@@ -78,8 +78,6 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
                     }
                 }
             },
-
-
             {
                 "operationType": "CREATE",
                 "user": {
@@ -128,8 +126,6 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
                     "hasAttachment": false
                 }
             },
-
-
             {
                 "operationType": "CREATE",
                 "user": {
@@ -152,8 +148,6 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
                     "description": ""
                 }
             },
-
-
             {
                 "operationType": "EDIT",
                 "user": {
@@ -193,7 +187,6 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
                     ]
                 }
             },
-
             {
                 "operationType": "CREATE",
                 "user": {
@@ -237,7 +230,6 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
                     }
                 }
             },
-
             {
                 "operationType": "CREATE",
                 "user": {
