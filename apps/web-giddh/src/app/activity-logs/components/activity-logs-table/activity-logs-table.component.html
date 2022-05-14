@@ -1,3 +1,9 @@
-<div mat-dialog-content>
-    <pre> {{ inputData.json | json }} </pre>
-</div>
+<ng-container appTranslate [file]="'all-features'">
+    <div class="modal-header d-flex align-items-center">
+        <h3>Activity Logs</h3>
+        <span aria-hidden="true" class="close" mat-dialog-close>×</span>
+    </div>
+    <mat-dialog-content class="all-features-content">
+        <pre> {{ inputData.json | json }} </pre>
+    </mat-dialog-content>
+</ng-container>

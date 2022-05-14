@@ -5,20 +5,48 @@
     (commonLocaleData)="commonLocaleData = $event"
 > -->
 <ng-container *ngFor="let result of results">
-    <mat-grid-list [cols]="(result | keyvalue)?.length + 1" rowHeight="7:1" *ngIf="!showJson">
-        <mat-grid-tile style="border-bottom: 1px solid black" *ngFor="let item of result | keyvalue: originalOrder">
+    <mat-grid-list [cols]="(result | keyvalue)?.length + 1" rowHeight="8:1" *ngIf="!showJson">
+        <mat-grid-tile
+            style="
+                border-top: 1px solid var(--color-primary-header-background);
+                border-bottom: 1px solid var(--color-primary-header-background);
+            "
+            *ngFor="let item of result | keyvalue: originalOrder"
+        >
             <h2>{{ item.key | uppercase }}</h2>
         </mat-grid-tile>
-        <mat-grid-tile style="border-bottom: 1px solid black"> &nbsp; </mat-grid-tile>
+        <mat-grid-tile
+            style="
+                border-top: 1px solid var(--color-primary-header-background);
+                border-bottom: 1px solid var(--color-primary-header-background);
+            "
+        >
+            &nbsp;
+        </mat-grid-tile>
     </mat-grid-list>
-    <mat-grid-list [cols]="(result | keyvalue)?.length + 1" rowHeight="7:2" *ngIf="!showJson">
+    <mat-grid-list
+        style="margin-bottom: 50px"
+        [cols]="(result | keyvalue)?.length + 1"
+        rowHeight="8:2"
+        *ngIf="!showJson"
+    >
         <mat-grid-tile style="border-bottom: 1px solid gray" *ngFor="let item of result | keyvalue: originalOrder">
             <ng-container *ngIf="(item.value | datatype) !== 'object'">
                 {{ item.value }}
             </ng-container>
         </mat-grid-tile>
         <mat-grid-tile style="border-bottom: 1px solid gray">
-            <a style="cursor: pointer" href="javascript:void(0)" (click)="openDialog()">View</a>
+            <!-- <button mat-button  >View</button> -->
+            <button
+                (click)="openDialog()"
+                mat-raised-button=""
+                color="primary"
+                class="mat-focus-indicator all-feature-button mat-raised-button mat-button-base mat-primary"
+            >
+                <span class="mat-button-wrapper"> View </span
+                ><span matripple="" class="mat-ripple mat-button-ripple"></span
+                ><span class="mat-button-focus-overlay"></span>
+            </button>
         </mat-grid-tile>
     </mat-grid-list>
     <div *ngIf="showJson" class="hidden">

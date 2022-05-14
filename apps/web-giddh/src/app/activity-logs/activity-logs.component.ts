@@ -25,54 +25,6 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
     public results =
         [
             {
-                "operationType": "CREATE",
-                "user": {
-                    "name": "Kriti Jain",
-                    "uniqueName": "kriti@giddh.com",
-                    "email": "kriti@giddh.com",
-                    "mobile": "919479575256",
-                    "isVerified": true
-                },
-                "date": 1649918740953,
-                "dateString": "14-04-2022 06:45:40",
-                "details": {
-                    "uniqueName": "3jr1649918740457",
-                    "entryDate": [
-                        2022,
-                        4,
-                        14,
-                        0,
-                        0,
-                        0,
-                        0
-                    ],
-                    "entryDateString": "14-04-2022",
-                    "baseAccount": {
-                        "name": "test5",
-                        "uniqueName": "test5",
-                        "id": 2166950
-                    },
-                    "subTotal": "2",
-                    "total": "2",
-                    "taxTotal": "0",
-                    "otherAccounts": [
-                        {
-                            "name": "test5",
-                            "uniqueName": "test5",
-                            "id": 2166950
-                        },
-                        {
-                            "name": "Cash",
-                            "uniqueName": "cash",
-                            "id": 2165992
-                        }
-                    ],
-                    "description": "",
-                    "voucher": "receipt",
-                    "hasAttachment": false
-                }
-            },
-            {
                 "operationType": "EDIT",
                 "user": {
                     "name": "Kriti Jain",
@@ -126,6 +78,8 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
                     }
                 }
             },
+
+
             {
                 "operationType": "CREATE",
                 "user": {
@@ -174,6 +128,32 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
                     "hasAttachment": false
                 }
             },
+
+
+            {
+                "operationType": "CREATE",
+                "user": {
+                    "name": "Kriti Jain",
+                    "uniqueName": "kriti@giddh.com",
+                    "email": "kriti@giddh.com",
+                    "mobile": "919479575256",
+                    "isVerified": true
+                },
+                "date": 1650118532844,
+                "dateString": "16-04-2022 14:15:32",
+                "details": {
+                    "name": "Interest income 1",
+                    "uniqueName": "interestincome1",
+                    "parentGroup": {
+                        "name": "Interest Income",
+                        "uniqueName": "interestincome",
+                        "id": 314142
+                    },
+                    "description": ""
+                }
+            },
+
+
             {
                 "operationType": "EDIT",
                 "user": {
@@ -212,7 +192,75 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
                         }
                     ]
                 }
-            }];
+            },
+
+            {
+                "operationType": "CREATE",
+                "user": {
+                    "name": "Kriti Jain",
+                    "uniqueName": "kriti@giddh.com",
+                    "email": "kriti@giddh.com",
+                    "mobile": "919479575256",
+                    "isVerified": true
+                },
+                "date": 1652176487930,
+                "dateString": "10-05-2022 09:54:47",
+                "details": {
+                    "voucherNumber": "54",
+                    "voucherType": "INVOICE",
+                    "subTotal": {
+                        "amountForAccount": 0,
+                        "amountForCompany": 0,
+                        "type": "DEBIT"
+                    },
+                    "totalTax": {
+                        "amountForAccount": 0,
+                        "amountForCompany": 0
+                    },
+                    "grandTotal": {
+                        "amountForAccount": 0,
+                        "amountForCompany": 0,
+                        "type": "DEBIT"
+                    },
+                    "voucherAccount": {
+                        "name": "KRiti ",
+                        "uniqueName": "kriti",
+                        "id": null
+                    },
+                    "currencyForAccount": {
+                        "code": "INR",
+                        "symbol": "₹"
+                    },
+                    "currencyForCompany": {
+                        "code": "INR",
+                        "symbol": "₹"
+                    }
+                }
+            },
+
+            {
+                "operationType": "CREATE",
+                "user": {
+                    "name": "vinayak@whozzat.com",
+                    "uniqueName": "vinayak@whozzat.com",
+                    "email": "vinayak@whozzat.com",
+                    "isVerified": true
+                },
+                "date": 1621490968462,
+                "dateString": "20-05-2021 06:09:28",
+                "details": {
+                    "name": "c",
+                    "uniqueName": "c",
+                    "hsn": null,
+                    "sac": null,
+                    "parentGroup": {
+                        "name": "a",
+                        "uniqueName": "a",
+                        "id": 53214
+                    }
+                }
+            }
+        ];
 
     public originalOrder = (a: KeyValue<number, string>, b: KeyValue<number, string>): number => {
         return 0;
