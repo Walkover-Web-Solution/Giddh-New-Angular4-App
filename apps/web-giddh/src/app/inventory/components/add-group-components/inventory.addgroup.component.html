@@ -89,7 +89,7 @@
                                                 name="parentStockGroup"
                                             /> -->
                                             <ngx-switch
-                                                [status]="addGroupForm.get('isSubGroup').value"
+                                                [status]="addGroupForm.get('isSubGroup').value ? true : false"
                                                 id="isSelfParentUpdt"
                                                 name="parentStockGroup"
                                                 [onText]="'On'"
