@@ -114,7 +114,8 @@
             }
         }
         .warehouse-list-wrapper {
-            height: 70px;
+            min-height: 70px;
+            height: auto;
             display: flex;
             width: 97%;
 
@@ -204,7 +205,7 @@
             height: 110px !important;
         }
         .grid-title-left {
-            min-width: 240px;
+            width: 240px;
             left: 0;
             z-index: 1;
             position: sticky;
@@ -213,7 +214,9 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
-            padding-left: 7px;
+            padding: 7px;
+            word-break: break-word;
+            white-space: normal;
             background-color: var(--color-common-primary-background-for-all-components);
         }
         .grid-title-left-top {
@@ -318,6 +321,7 @@
                 }
                 .unexpanded-list,
                 .stock-list-unexpanded {
+                    height: auto;
                     width: fit-content;
                     .unique-name-wrap {
                         word-wrap: break-word;
@@ -325,11 +329,17 @@
                         white-space: normal;
                         padding-left: 20px;
                         line-height: 20px;
+                        padding-top: 7px;
+                        padding-bottom: 7px;
                     }
                     .stock-group-name-container {
-                        min-width: 180px;
+                        width: 180px;
+                        white-space: normal;
+                        word-break: break-word;
+                        padding-right: 10px;
                         .stock-group-name {
                             padding-left: 20px;
+                            white-space: normal;
                         }
                     }
                 }
@@ -439,8 +449,11 @@
                         }
                     }
                     .stock-group-name {
-                        min-width: 180px;
+                        width: 180px;
                         padding-left: 20px;
+                        padding-right: 10px;
+                        word-break: break-word;
+                        white-space: normal;
                     }
                 }
                 .stock-warehouse-list-container {
