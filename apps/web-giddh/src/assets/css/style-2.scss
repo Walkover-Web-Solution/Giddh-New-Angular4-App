@@ -7888,6 +7888,18 @@ giddh-datepicker {
             }
         }
     }
+    .cdk-overlay-connected-position-bounding-box {
+        .mat-select-panel {
+            .mat-option-disabled {
+                cursor: not-allowed;
+                color: var(--color-common-primary-disabled) !important;
+                .mat-pseudo-checkbox {
+                    cursor: not-allowed;
+                    color: var(--color-common-primary-disabled) !important;
+                }
+            }
+        }
+    }
 }
 
 .invoice-modal-content {

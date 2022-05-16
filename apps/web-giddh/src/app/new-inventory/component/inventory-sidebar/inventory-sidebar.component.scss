@@ -91,6 +91,8 @@
                             position: relative;
                             left: 20px;
                             height: 27px;
+                            width: 180px;
+                            line-height: 15px;
                             &:hover {
                                 color: var(--color-sidebar-anchor-text-hover);
                                 background-color: var(--color-white);
