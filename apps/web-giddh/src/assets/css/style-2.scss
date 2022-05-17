@@ -7902,6 +7902,19 @@ giddh-datepicker {
     }
 }
 
+.stock-balance {
+    .cdk-overlay-connected-position-bounding-box {
+        .mat-menu-content {
+            .mat-menu-item {
+                height: 42px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+        }
+    }
+}
+
 .invoice-modal-content {
     left: 60px !important;
     width: calc(100% - 60px) !important;
@@ -10722,7 +10735,7 @@ input[type="checkbox"].cdk-visually-hidden::after {
     .searching-stocks {
         .custom-material-search-bar {
             .mat-form-field-outline {
-                height: 32px;
+                height: 33px;
                 background-color: var(--color-sidebar-primary-search-bar-background);
                 border-radius: 5px;
             }

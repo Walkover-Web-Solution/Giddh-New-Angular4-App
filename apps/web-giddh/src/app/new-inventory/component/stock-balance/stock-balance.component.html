@@ -2,11 +2,11 @@
 <div class="stock-balance-wrapper" *ngIf="!isLoading">
     <div class="stock-balance-top-bar">
         <div class="stock-balance-top-bar-left-side">
-            <button class="new-stock-btn" mat-button [matMenuTriggerFor]="menu">
+            <button class="new-stock-btn" mat-button [matMenuTriggerFor]="newStock">
                 + New Stock
                 <span class="caret"></span>
             </button>
-            <mat-menu #menu="matMenu">
+            <mat-menu #newStock="matMenu">
                 <button mat-menu-item [routerLink]="'/pages/new-inventory/stock/product/create'">Product</button>
                 <button mat-menu-item [routerLink]="'/pages/new-inventory/stock/service/create'">Service</button>
             </mat-menu>
@@ -200,13 +200,11 @@
                             <span class="dot" *ngIf="stock?.openingBalance?.amount">. </span>
                         </span>
                         <span class="stock-ob"
-                            >{{ stock?.openingBalance?.quantity }}
-                            <span class="dot" *ngIf="stock?.openingBalance?.quantity">.</span>
-                            {{ stock?.openingBalance?.stockUnit }}</span
+                            >{{ stock?.openingBalance?.quantity }} {{ stock?.openingBalance?.stockUnit }}</span
                         >
                     </p>
                 </div>
-                <div class="stock-warehouse-list-container">
+                <div class="stock-warehouse-list-container" (click)="getStockVariants(stock)">
                     <div class="grid-list-div list-grid stock-list-unexpanded">
                         <div class="grid-title-list list-grid-title" *ngIf="showUniqueName">
                             <span class="unique-name-wrap">{{ stock?.stockUniqueName }}</span>

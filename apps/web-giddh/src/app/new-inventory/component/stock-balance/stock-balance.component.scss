@@ -275,7 +275,10 @@
                 align-items: center;
                 justify-content: center;
                 .unique-name {
+                    border-radius: 5px;
+                    padding: 8px 10px;
                     color: var(--color-giddh-blue);
+                    background-color: var(--color-sidebar-primary-search-bar-background) !important;
                 }
             }
             .group-list-head {
@@ -313,7 +316,8 @@
                         .stock-ob {
                             .dot {
                                 position: relative;
-                                bottom: 5px;
+                                font-size: 18px;
+                                bottom: 3px;
                                 color: var(--color-common-secondary-text);
                             }
                         }

@@ -84,6 +84,7 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
 		this.getWarehouses();
 		this.GroupStockReportRequest = new GroupStockReportRequest();
 		this.stockReportRequest = new StockReportRequest();
+		document.querySelector('body').classList.add('stock-balance');
 
 		combineLatest([this.inventoryService.GetGroupsWithStocksFlatten(), this.store.pipe(select(state => state.warehouse.warehouses)), this.store.pipe(select(state => state.settings.financialYearLimits))]).pipe(takeUntil(this.destroyed$)).subscribe((resp: any[]) => {
 			if (resp[0] && resp[1] && resp[2]) {
@@ -323,5 +324,6 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
 	public ngOnDestroy(): void {
 		this.destroyed$.next(true);
 		this.destroyed$.complete();
+		document.querySelector('body').classList.remove('stock-balance');
 	}
 }
