@@ -5604,6 +5604,22 @@ footer#footer.absolute-footer {
             }
         }
     }
+    app-manage-groups-accounts {
+        account-update-new-details {
+            .button-group {
+                .update-btn-zindex {
+                    .ladda-label {
+                        color: var(--color-septenary-button-text);
+                    }
+                    &:hover {
+                        .ladda-label {
+                            color: var(--color-secondary-button-text) !important;
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 section.ledger-stat.sticky-footer.sticky-footer-sale-amount {
@@ -7007,6 +7023,19 @@ span#HW_badge_cont:nth-child(3) {
     .daterangepicker {
         z-index: 9992 !important;
     }
+    .inventory-main {
+        #giddh-page-heading {
+            aside-inventory-stock-group {
+                .aside-pane-form {
+                    .btn-danger {
+                        .ladda-label {
+                            color: var(--color-danger);
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 .new-ledger-text-right ul li {
@@ -7994,6 +8023,20 @@ body.update-scroll-hidden {
                                 height: auto;
                             }
                         }
+                    }
+                }
+            }
+        }
+    }
+    account-update-new-details {
+        .button-group {
+            .update-btn-zindex {
+                .ladda-label {
+                    color: var(--color-septenary-button-text);
+                }
+                &:hover {
+                    .ladda-label {
+                        color: var(--color-secondary-button-text);
                     }
                 }
             }
@@ -9681,6 +9724,19 @@ body.prevent-body-scroll {
 
 .sky-blue-bg {
     background-color: var(--color-primary-sky-blue-bg-background);
+}
+
+.btn-success:disabled {
+    color: var(--color-common-secondary-disabled) !important;
+    .ladda-label {
+        color: var(--color-common-secondary-disabled) !important;
+    }
+    &:hover {
+        color: var(--color-common-secondary-disabled) !important;
+        .ladda-label {
+            color: var(--color-common-secondary-disabled) !important;
+        }
+    }
 }
 
 .giddh-no-permissions {
