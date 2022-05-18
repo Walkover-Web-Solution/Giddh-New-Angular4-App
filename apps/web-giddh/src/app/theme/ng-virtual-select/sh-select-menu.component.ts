@@ -96,6 +96,7 @@ export class ShSelectMenuComponent implements OnChanges {
      * @memberof ShSelectMenuComponent
      */
     public reachedEnd(): void {
+        console.log("Reached end sh muenu")
         this.scrollEnd.emit();
     }
 

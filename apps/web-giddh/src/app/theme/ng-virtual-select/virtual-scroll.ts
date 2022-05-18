@@ -113,10 +113,15 @@ export class VirtualScrollComponent implements OnInit, OnDestroy, OnChanges, Aft
      * @memberof VirtualScrollComponent
      */
     handleScroll(): void {
+        console.log("handleScroll virtual scroll 1");
+
         this.refresh();
         if (this.element && this.element.nativeElement && this.isPaginationEnabled) {
+            console.log("handleScroll virtual scroll 2");
+
             // Scrolled to bottom
             if ((this.element.nativeElement.scrollHeight - this.element.nativeElement.scrollTop) === this.element.nativeElement.clientHeight) {
+                console.log("handleScroll virtual scroll 3");
                 this.scrollEnd.emit();
             }
         }
@@ -124,6 +129,8 @@ export class VirtualScrollComponent implements OnInit, OnDestroy, OnChanges, Aft
 
     public ngOnInit() {
         this.onScrollListener = this.renderer.listen(this.element?.nativeElement, 'scroll', () => {
+            console.log("handleScroll virtual scroll 4");
+
             this.handleScroll();
         });
         this.scrollbarWidth = 0; // this.element.nativeElement.offsetWidth - this.element.nativeElement.clientWidth;
@@ -151,6 +158,7 @@ export class VirtualScrollComponent implements OnInit, OnDestroy, OnChanges, Aft
         // not initialized properly but destroy may be called anyways (e.g. in testing).
         if (this.onScrollListener !== undefined) {
             // this removes the listener
+            console.log("listener ")
             this.onScrollListener();
         }
     }
@@ -165,6 +173,8 @@ export class VirtualScrollComponent implements OnInit, OnDestroy, OnChanges, Aft
     }
 
     public refresh() {
+        console.log("refresh");
+        
         requestAnimationFrame(this.calculateItems.bind(this));
     }
 
