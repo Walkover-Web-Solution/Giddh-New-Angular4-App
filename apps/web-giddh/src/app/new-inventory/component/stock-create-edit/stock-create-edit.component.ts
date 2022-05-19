@@ -13,7 +13,7 @@ import { AppState } from "../../../store";
 import { WarehouseActions } from "../../../settings/warehouse/action/warehouse.action";
 import { ActivatedRoute, Router } from "@angular/router";
 import { cloneDeep, findIndex, forEach } from "../../../lodash-optimized";
-import { NgForm } from "@angular/forms";
+import { FormControl, NgForm } from "@angular/forms";
 import { INVALID_STOCK_ERROR_MESSAGE } from "../../../app.constant";
 import { CustomFieldsService } from "../../../services/custom-fields.service";
 import { CompanyActions } from "../../../actions/company.actions";
@@ -348,7 +348,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
     public addVariantOption(): void {
         if (this.isVariantAvailable) {
             const optionIndex = this.stockForm.options?.length + 1;
-            this.stockForm.options.push({ name: "Option " + optionIndex, values: [], order: optionIndex });
+            this.stockForm.options.push({ name: "", values: [], order: optionIndex });
         } else {
             this.stockForm.options = [];
             this.generateVariants();
