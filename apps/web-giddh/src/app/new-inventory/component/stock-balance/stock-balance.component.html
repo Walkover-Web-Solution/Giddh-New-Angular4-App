@@ -271,7 +271,34 @@
                                     *ngIf="selectedWarehouse?.indexOf(warehouseVariant?.warehouse?.uniqueName) > -1"
                                     [ngClass]="{ 'expanded-stock-table-with-opacity': stock.display }"
                                 >
-                                    <div (click)="$event.stopPropagation()" class="editable-input">
+                                    <div
+                                        class="stock-list-expanded-content"
+                                        (click)="
+                                            warehouseVariant.display = !warehouseVariant.display;
+                                            $event.stopPropagation()
+                                        "
+                                    >
+                                        <p
+                                            class="stock-list-box-heading proper-spacing-list"
+                                            *ngIf="!warehouseVariant.display"
+                                        >
+                                            <span class="opening-bal-value bg-color-hover">{{
+                                                warehouseVariant?.openingAmount ?? "-"
+                                            }}</span>
+                                            <span class="quantity-value bg-color-hover">{{
+                                                warehouseVariant?.openingQuantity ?? "-"
+                                            }}</span>
+                                            <span class="unit-value bg-color-hover"
+                                                >{{ warehouseVariant?.stockUnit?.code ?? "-" }}
+                                                <img src="{{ imgPath }}caret-light.svg" class="dropdown-icon" />
+                                            </span>
+                                        </p>
+                                    </div>
+                                    <div
+                                        *ngIf="warehouseVariant.display"
+                                        (click)="$event.stopPropagation()"
+                                        class="editable-input"
+                                    >
                                         <p class="input-select-wrapper">
                                             <input
                                                 matInput
