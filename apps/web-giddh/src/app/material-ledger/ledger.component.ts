@@ -20,7 +20,7 @@ import { LoaderService } from '../loader/loader.service';
 import { cloneDeep, filter, find, uniq } from '../lodash-optimized';
 import { AccountResponse, AccountResponseV2 } from '../models/api-models/Account';
 import { BaseResponse } from '../models/api-models/BaseResponse';
-import { ICurrencyResponse, StateDetailsRequest, TaxResponse } from '../models/api-models/Company';
+import { ICurrencyResponse, TaxResponse } from '../models/api-models/Company';
 import { DownloadLedgerRequest, TransactionsRequest, TransactionsResponse, ExportLedgerRequest, } from '../models/api-models/Ledger';
 import { SalesOtherTaxesModal } from '../models/api-models/Sales';
 import { AdvanceSearchRequest } from '../models/interfaces/AdvanceSearchRequest';
@@ -657,13 +657,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 this.searchText = '';
                 this.resetBlankTransaction();
 
-                // set state details
-                let companyUniqueName = null;
-                this.store.pipe(select(c => c.session.companyUniqueName), take(1)).subscribe(s => companyUniqueName = s);
-                let stateDetailsRequest = new StateDetailsRequest();
-                stateDetailsRequest.companyUniqueName = companyUniqueName;
-                stateDetailsRequest.lastState = 'ledger/' + this.lc.accountUnq;
-                this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
                 this.isCompanyCreated$.pipe(take(1)).subscribe(s => {
                     if (!s) {
                         this.store.dispatch(this.ledgerActions.GetLedgerAccount(this.lc.accountUnq));

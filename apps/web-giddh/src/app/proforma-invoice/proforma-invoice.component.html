@@ -5271,7 +5271,7 @@
                                         [disabled]="
                                             !hasVoucherEntry || invoiceForm?.controls['message2']?.errors?.maxlength
                                         "
-                                        (click)="triggerSubmitInvoiceForm(invoiceForm, true)"
+                                        (click)="doAction(0); triggerSubmitInvoiceForm(invoiceForm, true)"
                                         class="btn btn-default"
                                         *ngIf="!isCompany && isCustomerSelected && !isPendingVoucherType"
                                     >

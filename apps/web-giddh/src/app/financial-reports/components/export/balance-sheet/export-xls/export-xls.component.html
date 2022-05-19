@@ -4,5 +4,22 @@
     [file]="'trial-profit-balance/export'"
     (localeData)="localeData = $event"
 >
-    <a (click)="downloadBsXls()" *ngIf="enableDownload" class="cp new-icon-img"><img src="{{ imgPath }}" /></a>
+    <div class="btn-group" dropdown>
+        <a dropdownToggle *ngIf="enableDownload" class="cp new-icon-img"><img src="{{ imgPath }}" /></a>
+        <ul
+            id="dropdown-xls"
+            *dropdownMenu
+            class="dropdown-menu dropdown-menu-right cp tbpl-dropdown"
+            role="menu"
+            aria-labelledby="button-basic"
+        >
+            <span class="caret"></span>
+            <li>
+                <a (click)="downloadBsXls(false)">{{ localeData?.xls?.main_group_report }}</a>
+            </li>
+            <li>
+                <a (click)="downloadBsXls(true)">{{ localeData?.xls?.complete_report }}</a>
+            </li>
+        </ul>
+    </div>
 </div>

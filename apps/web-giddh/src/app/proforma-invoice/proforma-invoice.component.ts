@@ -70,7 +70,7 @@ import { ElementViewContainerRef } from '../shared/helpers/directives/elementVie
 import { NgForm } from '@angular/forms';
 import { DiscountListComponent } from '../sales/discount-list/discountList.component';
 import { IContentCommon, InvoicePreviewDetailsVm } from '../models/api-models/Invoice';
-import { StateDetailsRequest, TaxResponse } from '../models/api-models/Company';
+import { TaxResponse } from '../models/api-models/Company';
 import { INameUniqueName } from '../models/interfaces/nameUniqueName.interface';
 import { AccountResponseV2, AddAccountRequest, UpdateAccountRequest } from '../models/api-models/Account';
 import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
@@ -856,7 +856,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 if (this.invoiceType !== params['invoiceType']) {
                     this.invoiceType = decodeURI(params['invoiceType']) as VoucherTypeEnum;
                     this.prepareInvoiceTypeFlags();
-                    this.saveStateDetails();
                     this.resetInvoiceForm(this.invoiceForm);
 
                     // reset customer company when invoice type changes, re-check for company currency and country
@@ -869,7 +868,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 this.invoiceType = decodeURI(params['invoiceType']) as VoucherTypeEnum;
                 this.getDefaultTemplateData();
                 this.prepareInvoiceTypeFlags();
-                this.saveStateDetails();
                 this.initializeCurrentVoucherForm();
                 if (this.isCashInvoice || this.currentVoucherFormDetails?.depositAllowed) {
                     this.loadBankCashAccounts('');
@@ -4921,16 +4919,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         } else if (!this.isPurchaseInvoice) {
             this.store.dispatch(this.invoiceReceiptActions.setVoucherForDetails(voucherNo, action));
         }
-    }
-
-    private saveStateDetails() {
-        let companyUniqueName = null;
-        this.store.pipe(select(c => c.session.companyUniqueName), take(1)).subscribe(s => companyUniqueName = s);
-        let stateDetailsRequest = new StateDetailsRequest();
-        stateDetailsRequest.companyUniqueName = companyUniqueName;
-        stateDetailsRequest.lastState = 'proforma-invoice/invoice/' + this.invoiceType;
-        this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
-        this.store.dispatch(this._generalActions.setAppTitle('/pages/proforma-invoice/invoice/' + this.invoiceType));
     }
 
     public ngOnDestroy() {

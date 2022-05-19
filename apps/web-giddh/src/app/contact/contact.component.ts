@@ -31,7 +31,6 @@ import { SettingsProfileActions } from "../actions/settings/profile/settings.pro
 import { SettingsIntegrationActions } from "../actions/settings/settings.integration.action";
 import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from "../app.constant";
 import { OnboardingFormRequest } from "../models/api-models/Common";
-import { StateDetailsRequest } from "../models/api-models/Company";
 import {
     ContactAdvanceSearchCommonModal,
     ContactAdvanceSearchModal,
@@ -368,16 +367,18 @@ export class ContactComponent implements OnInit, OnDestroy {
                             this.fromDate = "";
                             this.toDate = "";
                         }
-                      
+
                         this.getAccounts(this.fromDate, this.toDate, null, "true", PAGINATION_LIMIT, this.searchStr, this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
                     });
                 }, 100);
             }
         });
 
-        this.createAccountIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((yes: boolean) => {
-            if (yes && this.accountAsideMenuState === "in") {
-                this.toggleAccountAsidePane();
+        this.createAccountIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                if (this.accountAsideMenuState === "in") {
+                    this.toggleAccountAsidePane();
+                }
                 this.getAccounts(this.fromDate, this.toDate, null, "true", PAGINATION_LIMIT, this.searchStr, this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
             }
         });
@@ -584,12 +585,6 @@ export class ContactComponent implements OnInit, OnDestroy {
             }
 
             this.store.dispatch(this.generalAction.setAppTitle(`/pages/contact/${tabName}`));
-
-            if (this.activeTab !== "aging-report") {
-                this.setStateDetails(`${this.activeTab}?tab=${this.activeTab}&tabIndex=0`);
-            } else {
-                this.setStateDetails(`${this.activeTab}?tab=${this.activeTab}&tabIndex=1`);
-            }
             this.router.navigate(["/pages/contact/", tabName], { replaceUrl: true });
         }
     }
@@ -647,12 +642,14 @@ export class ContactComponent implements OnInit, OnDestroy {
         this.toggleBodyClass();
     }
 
-    public getUpdatedList(grpName?): void {
+    public getUpdatedList(grpName?: any): void {
         if (grpName) {
-            if (this.accountAsideMenuState === "in") {
-                this.toggleAccountAsidePane();
-                this.getAccounts(this.fromDate, this.toDate, null, "true", PAGINATION_LIMIT, this.searchStr, this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
-            }
+            this.store.pipe(select(state => state.groupwithaccounts.createAccountInProcess), takeUntil(this.destroyed$)).subscribe(response => {
+                if (!response && this.accountAsideMenuState === "in") {
+                    this.toggleAccountAsidePane();
+                    this.getAccounts(this.fromDate, this.toDate, null, "true", PAGINATION_LIMIT, this.searchStr, this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
+                }
+            });
         }
     }
 
@@ -1300,23 +1297,6 @@ export class ContactComponent implements OnInit, OnDestroy {
         let balancesColsArr = ['openingBalance'];
         let length = Object.keys(this.showFieldFilter).filter(f => this.showFieldFilter[f]).filter(f => balancesColsArr.includes(f))?.length;
         this.tableColsPan = length > 0 ? 4 : 3;
-    }
-
-    /**
-     * save last state with active tab
-     *
-     * @private
-     * @param {*} url
-     * @memberof ContactComponent
-     */
-    private setStateDetails(url) {
-        let companyUniqueName = null;
-        this.store.pipe(select(c => c.session.companyUniqueName), take(1)).subscribe(s => companyUniqueName = s);
-        let stateDetailsRequest = new StateDetailsRequest();
-        stateDetailsRequest.companyUniqueName = companyUniqueName;
-        stateDetailsRequest.lastState = `contact/${url}`;
-
-        this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
     }
 
     /**
