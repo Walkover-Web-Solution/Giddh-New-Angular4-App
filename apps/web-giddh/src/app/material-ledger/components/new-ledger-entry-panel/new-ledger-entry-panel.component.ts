@@ -587,7 +587,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 }
             }
             if (this.discountControl) {
-
                 this.discountControl.change();
             }
 
