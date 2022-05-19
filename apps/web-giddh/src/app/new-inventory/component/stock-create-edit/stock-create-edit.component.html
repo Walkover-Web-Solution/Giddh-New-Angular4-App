@@ -458,7 +458,10 @@
                                                                                     !isPurchaseInformationEnabled
                                                                                 "
                                                                             >
-                                                                                <span class="add-new-text-container">
+                                                                                <span
+                                                                                    *ngIf="isPurchaseInformationEnabled"
+                                                                                    class="add-new-text-container"
+                                                                                >
                                                                                     + Add New
                                                                                 </span>
                                                                             </button>
@@ -581,7 +584,10 @@
                                                                                 "
                                                                                 [disabled]="!isSalesInformationEnabled"
                                                                             >
-                                                                                <span class="add-new-text-container">
+                                                                                <span
+                                                                                    *ngIf="isSalesInformationEnabled"
+                                                                                    class="add-new-text-container"
+                                                                                >
                                                                                     + Add New
                                                                                 </span>
                                                                             </button>

@@ -70,7 +70,7 @@
 
                     .sidebar-list-icon {
                         position: absolute;
-                        bottom: 9px;
+                        bottom: 1px;
                         left: 220px;
                     }
                     .sub-option {
@@ -120,6 +120,9 @@
                             .sidebar-menu-icons {
                                 filter: invert(52%) sepia(83%) saturate(2500%) hue-rotate(205deg) brightness(101%)
                                     contrast(101%);
+                            }
+                            .sidebar-icon {
+                                color: var(--color-sidebar-anchor-text-hover);
                             }
                         }
                     }

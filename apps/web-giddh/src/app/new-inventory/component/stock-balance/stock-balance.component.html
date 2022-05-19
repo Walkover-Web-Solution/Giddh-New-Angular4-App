@@ -195,13 +195,19 @@
                 >
                     <p class="inner-name mat-table-sticky">{{ stock?.stockName ?? "-" }}</p>
                     <p class="stock-details">
-                        <span class="stock-ob"
-                            >{{ stock?.openingBalance?.amount }}
+                        <span class="stock-ob">
+                            {{ stock?.openingBalance?.amount }}
                             <span class="dot" *ngIf="stock?.openingBalance?.amount">. </span>
                         </span>
                         <span class="stock-ob"
-                            >{{ stock?.openingBalance?.quantity }} {{ stock?.openingBalance?.stockUnit }}</span
-                        >
+                            >{{ stock?.openingBalance?.quantity }} {{ stock?.openingBalance?.stockUnit }}
+                        </span>
+                        <span class="stock-ob" *ngIf="stock.display"
+                            ><span *ngIf="stock?.stock?.variants?.length">
+                                <span class="dot">. </span>{{ stock?.stock?.variants?.length }}
+                                {{ stock?.stock?.variants?.length < 2 ? "Variant" : "Variants" }}
+                            </span>
+                        </span>
                     </p>
                 </div>
                 <div class="stock-warehouse-list-container" (click)="getStockVariants(stock)">
@@ -265,34 +271,7 @@
                                     *ngIf="selectedWarehouse?.indexOf(warehouseVariant?.warehouse?.uniqueName) > -1"
                                     [ngClass]="{ 'expanded-stock-table-with-opacity': stock.display }"
                                 >
-                                    <div
-                                        class="stock-list-expanded-content"
-                                        (click)="
-                                            warehouseVariant.display = !warehouseVariant.display;
-                                            $event.stopPropagation()
-                                        "
-                                    >
-                                        <p
-                                            class="stock-list-box-heading proper-spacing-list"
-                                            *ngIf="!warehouseVariant.display"
-                                        >
-                                            <span class="opening-bal-value bg-color-hover">{{
-                                                warehouseVariant?.openingAmount ?? "-"
-                                            }}</span>
-                                            <span class="quantity-value bg-color-hover">{{
-                                                warehouseVariant?.openingQuantity ?? "-"
-                                            }}</span>
-                                            <span class="unit-value bg-color-hover"
-                                                >{{ warehouseVariant?.stockUnit?.code ?? "-" }}
-                                                <img src="{{ imgPath }}caret-light.svg" class="dropdown-icon" />
-                                            </span>
-                                        </p>
-                                    </div>
-                                    <div
-                                        *ngIf="warehouseVariant.display"
-                                        (click)="$event.stopPropagation()"
-                                        class="editable-input"
-                                    >
+                                    <div (click)="$event.stopPropagation()" class="editable-input">
                                         <p class="input-select-wrapper">
                                             <input
                                                 matInput

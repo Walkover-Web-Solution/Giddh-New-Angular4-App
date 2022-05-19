@@ -1,5 +1,5 @@
 .stock-balance-wrapper {
-    padding: 0px 20px 0px 20px;
+    padding: 0px 20px 100px 20px;
     float: left;
     width: 100%;
     overflow: hidden;
@@ -114,8 +114,7 @@
             }
         }
         .warehouse-list-wrapper {
-            min-height: 70px;
-            height: auto;
+            height: 56px;
             display: flex;
             width: 97%;
 
@@ -125,6 +124,7 @@
                 align-items: center;
                 position: relative;
                 left: 1px;
+                height: 56px;
                 &:nth-child(odd) {
                     background-color: var(--color-common-primary-background-color);
                 }
@@ -236,11 +236,13 @@
             font-size: 13px;
             display: flex;
             align-items: center;
+            height: 56px;
         }
     }
     .searching-stocks {
         width: 100%;
         overflow-x: auto;
+        overflow-y: hidden;
         .search-icon {
             position: absolute;
             z-index: 1;
@@ -349,6 +351,7 @@
                 }
                 .unexpanded-list {
                     width: 100%;
+                    height: 56px;
                     .stock-list-expanded-content {
                         .proper-spacing-list {
                             margin-left: 15px;
@@ -462,6 +465,7 @@
                 }
                 .stock-warehouse-list-container {
                     display: flex;
+                    height: 56px;
                 }
             }
         }

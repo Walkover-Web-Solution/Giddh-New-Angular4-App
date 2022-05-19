@@ -7904,12 +7904,26 @@ giddh-datepicker {
 
 .stock-balance {
     .cdk-overlay-connected-position-bounding-box {
-        .mat-menu-content {
-            .mat-menu-item {
-                height: 42px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
+        #mat-menu-panel-0 {
+            .mat-menu-content {
+                .mat-menu-item {
+                    height: 37px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+            }
+        }
+        .mat-autocomplete-panel {
+            min-width: fit-content;
+            .mat-option {
+                height: 40px;
+            }
+        }
+        .mat-menu-panel {
+            .mat-menu-content {
+                padding-top: 0;
+                padding-bottom: 0;
             }
         }
     }
