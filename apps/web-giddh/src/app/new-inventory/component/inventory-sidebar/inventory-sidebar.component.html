@@ -155,9 +155,13 @@
                     class="list"
                 >
                     <button mat-icon-button disableRipple matTreeNodeToggle class="arrow-btn">
-                        <mat-icon class="sidebar-list-icon">
-                            {{ treeControl.isExpanded(node) ? "expand_less" : "expand_more" }}
-                        </mat-icon>
+                        <span class="sidebar-list-icon">
+                            <i *ngIf="treeControl.isExpanded(node)" class="icon-up mr-l1 font-14 sidebar-icon"></i>
+                            <i
+                                *ngIf="!treeControl.isExpanded(node)"
+                                class="icon-down-new mr-l1 font-14 sidebar-icon"
+                            ></i>
+                        </span>
                     </button>
                     <img src="{{ imgPath }}{{ node.icons }}" class="sidebar-menu-icons" alt="" />
                     {{ node.name }}

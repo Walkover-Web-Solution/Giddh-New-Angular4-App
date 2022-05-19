@@ -270,7 +270,7 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
 				this.stockUnits = response?.body?.map(result => {
 					return {
 						value: result.code,
-						label: result.name,
+						label: result.name + ` (${result.code})`,
 						additional: result
 					};
 				}) || [];
