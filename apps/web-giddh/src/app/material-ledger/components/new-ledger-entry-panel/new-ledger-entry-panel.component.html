@@ -178,6 +178,7 @@
                                 [prefixInput]="selectedPrefixForCurrency"
                                 [suffixInput]="selectedSuffixForCurrency"
                                 [ledgerAmount]="currentTxn.amount"
+                                [discountsList]="discountsList"
                                 [commonLocaleData]="commonLocaleData"
                                 (hideOtherPopups)="hideTax()"
                                 (discountTotalUpdated)="calculateDiscount($event)"
