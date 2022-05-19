@@ -947,11 +947,14 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
      * This will emit true to show next record in preview mode
      *
      * @private
+     * @param {*} [event]
      * @memberof ExpenseDetailsComponent
      */
-    private processNextRecord(): void {
+    private processNextRecord(event?: any): void {
         this.modalRef?.close();
-        this.previewNextItem.emit(true);
+        if (event) {
+            this.previewNextItem.emit(true);
+        }
     }
 
     /**
