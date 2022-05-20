@@ -371,8 +371,7 @@
                     "description": "क्षुद्र नकद और लेनदेन प्रबंधित करें",
                     "additional": {
                         "tab": "pending",
-                        "tabIndex": 0,
-                        "voucherVersion": 1
+                        "tabIndex": 0
                     }
                 },
                 {

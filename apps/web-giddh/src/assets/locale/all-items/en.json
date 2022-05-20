@@ -375,8 +375,7 @@
                     "description": "Manage petty cash & transaction",
                     "additional": {
                         "tab": "pending",
-                        "tabIndex": 0,
-                        "voucherVersion": 1
+                        "tabIndex": 0
                     }
                 },
                 {

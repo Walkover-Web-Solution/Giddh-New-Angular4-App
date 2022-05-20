@@ -71,8 +71,6 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
     public formFields: any[] = [];
     /** True if user has invoice setting permissions */
     public hasInvoiceSettingPermissions: boolean = true;
-    /** Stores the voucher API version of company */
-    public voucherApiVersion: 1 | 2;
 
     constructor(
         private commonActions: CommonActions,
@@ -90,7 +88,6 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
-        this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.store.dispatch(this.settingsIntegrationActions.GetGmailIntegrationStatus());
         this.activeCompany$ = this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$));
         this.store.pipe(select(s => s.settings.isGmailIntegrated), takeUntil(this.destroyed$)).subscribe(result => {
