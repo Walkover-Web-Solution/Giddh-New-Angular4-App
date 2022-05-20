@@ -660,7 +660,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 if (response.body.purchaseAccountDetails) {
                     this.stockForm.purchaseAccountDetails = response.body.purchaseAccountDetails;
                 }
-                if (!this.stockForm.purchaseAccountDetails?.unitRates.length) {
+                if (!this.stockForm.purchaseAccountDetails?.unitRates?.length) {
                     this.stockForm.purchaseAccountDetails.unitRates.push({
                         rate: null,
                         stockUnitCode: null
@@ -669,7 +669,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 if (response.body.salesAccountDetails) {
                     this.stockForm.salesAccountDetails = response.body.salesAccountDetails;
                 }
-                if (!this.stockForm.salesAccountDetails?.unitRates.length) {
+                if (!this.stockForm.salesAccountDetails?.unitRates?.length) {
                     this.stockForm.salesAccountDetails.unitRates.push({
                         rate: null,
                         stockUnitCode: null
