@@ -111,9 +111,6 @@ export class ExpensesComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
-        if (this.generalService.voucherApiVersion === 2) {
-            this.router.navigate(['/pages/home']);
-        }
         this.getActiveTab();
 
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
