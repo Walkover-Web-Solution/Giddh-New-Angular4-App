@@ -83,7 +83,7 @@
                                     <div class="pd-b1" [hidden]="defaultGrpActive">
                                         <label for="isSelfParentUpdt">
                                             <ngx-switch
-                                                [status]="addGroupForm.get('isSubGroup').value"
+                                                [status]="addGroupForm.get('isSubGroup').value ? true : false"
                                                 id="isSelfParentUpdt"
                                                 name="parentStockGroup"
                                                 [onText]="'On'"

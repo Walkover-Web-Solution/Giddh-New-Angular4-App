@@ -10,6 +10,7 @@ import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { AdvanceReceiptRequest, VoucherAdjustments } from '../models/api-models/AdvanceReceiptsAdjust';
 import { ADVANCE_RECEIPTS_API } from './apiurls/advance-receipt-adjustment.api';
+import { PAGINATION_LIMIT } from '../app.constant';
 
 @Injectable()
 export class SalesService {
@@ -190,13 +191,15 @@ export class SalesService {
      * @returns {Observable<BaseResponse<any, any>>}
      * @memberof LedgerService
      */
-    public getInvoiceList(model: any, date: string, count: number = 20): Observable<BaseResponse<any, any>> {
+    public getInvoiceList(model: any, date: string, count: number = PAGINATION_LIMIT): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let contextPath = SALES_API_V2.GET_VOUCHER_INVOICE_LIST
             .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             .replace(':voucherDate', encodeURIComponent(date))
             .replace(':adjustmentRequest', String(true))
-            .replace(':count', String(count));
+            .replace(':count', String(count))
+            .replace(':number', encodeURIComponent((model.number || "")))
+            .replace(':page', (model.page || 1));
         if (this.generalService.voucherApiVersion === 2) {
             contextPath = this.generalService.addVoucherVersion(contextPath, this.generalService.voucherApiVersion);
         }

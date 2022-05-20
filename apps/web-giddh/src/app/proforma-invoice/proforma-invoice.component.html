@@ -1400,11 +1400,7 @@
                                 </div>
                                 <div
                                     class="row mt-1"
-                                    *ngIf="
-                                        voucherApiVersion !== 2 &&
-                                        isPurchaseInvoice &&
-                                        (!isUpdateMode || (isUpdateMode && poLinkUpdated))
-                                    "
+                                    *ngIf="isPurchaseInvoice && (!isUpdateMode || (isUpdateMode && poLinkUpdated))"
                                 >
                                     <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3">
                                         <label>{{ localeData?.link_purchase_order }}</label>
@@ -1483,6 +1479,58 @@
 
                                                 <ng-container *ngIf="isCreditNote || isDebitNote">
                                                     <sh-select
+                                                        *ngIf="voucherApiVersion === 2"
+                                                        [options]="invoiceList$ | async"
+                                                        [placeholder]="commonLocaleData?.app_select_accounts"
+                                                        [fixedValue]="invoiceSelected?.label"
+                                                        [forceClearReactive]="invoiceForceClearReactive$ | async"
+                                                        class="linking-dropdown"
+                                                        [notFoundLink]="false"
+                                                        [(ngModel)]="selectedInvoice"
+                                                        name="invoiceLinking"
+                                                        (selected)="creditNoteInvoiceSelected($event)"
+                                                        [multiple]="false"
+                                                        [ItemHeight]="67"
+                                                        [showClear]="false"
+                                                        [isPaginationEnabled]="true"
+                                                        (scrollEnd)="
+                                                            !searchReferenceVoucher
+                                                                ? getInvoiceListsForCreditNote()
+                                                                : ''
+                                                        "
+                                                        [enableDynamicSearch]="true"
+                                                        (dynamicSearchedQuery)="
+                                                            searchReferenceVoucher = $event;
+                                                            resetInvoiceList();
+                                                            getInvoiceListsForCreditNote()
+                                                        "
+                                                    >
+                                                        <ng-template #optionTemplate let-option="option">
+                                                            <a
+                                                                *ngIf="option"
+                                                                href="javascript:void(0)"
+                                                                class="linking-item list-item sh-template"
+                                                            >
+                                                                <div class="item">{{ option?.label }}</div>
+                                                                <div class="item-unique">
+                                                                    ({{ commonLocaleData?.app_dated }}:
+                                                                    {{ option.additional?.voucherDate }})
+                                                                </div>
+                                                                <div class="item-unique">
+                                                                    ({{ commonLocaleData?.app_amount }}:
+                                                                    {{
+                                                                        voucherApiVersion === 2
+                                                                            ? (option.additional?.unadjustedAmount
+                                                                                  ?.amountForAccount | giddhCurrency)
+                                                                            : (option.additional?.balanceDue
+                                                                                  ?.amountForAccount | giddhCurrency)
+                                                                    }})
+                                                                </div>
+                                                            </a>
+                                                        </ng-template>
+                                                    </sh-select>
+                                                    <sh-select
+                                                        *ngIf="voucherApiVersion !== 2"
                                                         [options]="invoiceList"
                                                         [placeholder]="commonLocaleData?.app_select_accounts"
                                                         [fixedValue]="invoiceSelected?.label"
@@ -5217,7 +5265,7 @@
                                         [disabled]="
                                             !hasVoucherEntry || invoiceForm?.controls['message2']?.errors?.maxlength
                                         "
-                                        (click)="triggerSubmitInvoiceForm(invoiceForm, true)"
+                                        (click)="doAction(0); triggerSubmitInvoiceForm(invoiceForm, true)"
                                         class="btn btn-default"
                                         *ngIf="!isCompany && isCustomerSelected && !isPendingVoucherType"
                                     >

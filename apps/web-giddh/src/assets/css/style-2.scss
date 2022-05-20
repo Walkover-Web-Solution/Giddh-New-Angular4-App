@@ -1578,7 +1578,7 @@ header .navbar {
 .open > .dropdown-toggle.btn-primary:focus,
 .btn-primary:not(:disabled):not(.disabled):active {
     color: var(--color-secondary-button-text) !important;
-    border-color: var(--color-common-secondary-border) !important;
+    border-color: var(--color-secondary-button-background) !important;
     background: var(--color-secondary-button-background) !important;
 }
 .btn-primary.disabled.focus,
@@ -6309,7 +6309,7 @@ button.ladda-button,
 button.ladda-button .ladda-spinner,
 button.ladda-button .ladda-label {
     transition: none !important;
-    color: var(--color-septenary-button-text);
+    color: var(--color-secondary-button-text);
 }
 .account-aside-menu-state #close {
     display: block;
@@ -6391,6 +6391,15 @@ highcharts-chart {
 .aside-menu-othertax-open {
     .nav-left-bar {
         z-index: 99 !important;
+    }
+    #main {
+        app-header {
+            .fixed-padding {
+                #primary-new-header {
+                    z-index: 99 !important;
+                }
+            }
+        }
     }
 }
 .aside-panel-ledger {
@@ -7757,6 +7766,87 @@ giddh-datepicker {
     }
 }
 
+.stock-create-edit {
+    #main {
+        #content-wrapper {
+            background-color: var(--color-common-septenary-background-for-all-components);
+            .create-new-inventory-page {
+                .select-physical-product {
+                    .product-detail-content {
+                        .account-inventory-other-tab {
+                            .mat-tab-labels {
+                                margin-left: 20px;
+                            }
+                            .sales-purchase-details {
+                                #purchase-info-check,
+                                #sales-info-check {
+                                    .mat-checkbox-label {
+                                        font: normal normal 600 14px/17px Open Sans;
+                                        letter-spacing: 0px;
+                                        position: relative;
+                                        bottom: 1px;
+                                    }
+                                }
+                                .sales-information,
+                                .purchase-information {
+                                    .add-new-field {
+                                        select-field {
+                                            input {
+                                                width: 150px;
+                                                height: 32px;
+                                            }
+                                        }
+                                        text-field {
+                                            position: relative;
+                                            left: 7px;
+                                            input {
+                                                width: 112px;
+                                                height: 32px;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        .upper-common-form-label-field {
+                            text-field,
+                            select-field {
+                                input {
+                                    min-width: 320px;
+                                }
+                            }
+                            mat-select {
+                                min-width: 320px;
+                            }
+                        }
+                    }
+                }
+                text-field,
+                select-field {
+                    input {
+                        border-radius: 2px !important;
+                    }
+                }
+                mat-select {
+                    border-radius: 2px !important;
+                }
+            }
+        }
+    }
+    .cdk-overlay-connected-position-bounding-box {
+        .mat-select-panel {
+            .mat-option-disabled {
+                cursor: not-allowed;
+                color: var(--color-common-primary-disabled) !important;
+                .mat-pseudo-checkbox {
+                    cursor: not-allowed;
+                    color: var(--color-common-primary-disabled) !important;
+                }
+            }
+        }
+    }
+}
+
 .invoice-modal-content {
     left: 60px !important;
     width: calc(100% - 60px) !important;
@@ -7896,25 +7986,6 @@ body.update-scroll-hidden {
     }
 }
 
-.on-setting-page,
-.on-user-page {
-    aside-setting {
-        .aside-pane {
-            .back-to-main-slider {
-                display: block !important;
-                padding: 0 12px;
-            }
-
-            h4 {
-                display: none;
-            }
-        }
-
-        &::after {
-            display: none;
-        }
-    }
-}
 .gst-sidebar-open.on-setting-page.aside-setting {
     #content-wrapper {
         padding-right: 0;
@@ -10216,6 +10287,10 @@ input[type="checkbox"].cdk-visually-hidden::after {
         }
     }
 }
+.stock-group-search input {
+    padding-left: 30px !important;
+    padding-top: 20px !important;
+}
 .stock-balance-wrapper {
     .search-warehouse-bar {
         .mat-form-field-infix {
@@ -10226,7 +10301,6 @@ input[type="checkbox"].cdk-visually-hidden::after {
 
             .mat-select-placeholder,
             mat-select-trigger {
-                padding-left: 23px;
                 color: var(--color-secondary-search-bar-placeholder);
             }
 
@@ -10242,35 +10316,6 @@ input[type="checkbox"].cdk-visually-hidden::after {
         }
     }
     .stock-balance-main-list-table {
-        .custom-material-search-bar {
-            .mat-form-field-outline {
-                height: 32px;
-                background-color: var(--color-sidebar-primary-search-bar-background);
-                border-radius: 5px;
-            }
-            input {
-                position: absolute;
-                bottom: 17.5px;
-                padding-left: 15px;
-            }
-        }
-        .stock-searchbar {
-            .mat-form-field-outline {
-                width: 230px;
-                color: var(--color-sidebar-primary-search-bar-background);
-            }
-        }
-        .unique-name-searchbar {
-            .mat-form-field-outline {
-                width: 127px;
-                color: var(--color-sidebar-primary-search-bar-background);
-            }
-        }
-        .group-searchbar {
-            .mat-form-field-outline {
-                color: var(--color-sidebar-primary-search-bar-background);
-            }
-        }
     }
 
     .stock-list-body {
@@ -10296,6 +10341,59 @@ input[type="checkbox"].cdk-visually-hidden::after {
                 }
                 .mat-select-placeholder {
                     color: var(--color-secondary-search-bar-placeholder);
+                }
+            }
+        }
+    }
+    .searching-stocks {
+        .custom-material-search-bar {
+            .mat-form-field-outline {
+                height: 32px;
+                background-color: var(--color-sidebar-primary-search-bar-background);
+                border-radius: 5px;
+            }
+            input {
+                position: absolute;
+                bottom: 17.5px;
+                padding-left: 15px;
+            }
+        }
+        .stock-searchbar {
+            .mat-form-field-outline {
+                width: 230px;
+                color: var(--color-sidebar-primary-search-bar-background);
+            }
+        }
+        .group-searchbar {
+            .mat-form-field-outline {
+                color: var(--color-sidebar-primary-search-bar-background);
+            }
+        }
+        select-field {
+            input {
+                &.mat-form-field-autofill-control {
+                    width: 167px;
+                    padding-left: 28px !important;
+                    background-color: var(--color-sidebar-primary-search-bar-background) !important;
+                    &::placeholder {
+                        color: var(--color-primary-search-bar-placeholder) !important;
+                    }
+                }
+            }
+        }
+        .stock-table {
+            .unexpanded-list {
+                .input-select-wrapper {
+                    .unit-dropdown {
+                        input {
+                            padding: 0px 5px !important;
+                            background-color: var(--color-primary-input-bar-background-focus) !important;
+                            &:active,
+                            &:focus {
+                                background-color: var(--color-common-primary-background-for-all-components) !important;
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -10367,11 +10465,6 @@ input[type="checkbox"].cdk-visually-hidden::after {
                         margin-right: 10px;
                     }
                 }
-            }
-        }
-        select-field {
-            input.mat-form-field-autofill-control {
-                border: 1px solid var(--color-secondary-input-bar-border);
             }
         }
     }

@@ -171,7 +171,7 @@
                     <span class="icon-advance-filter"></span>
                 </div>
             </div>
-            <div class="clear-filter" *ngIf="isFilterCorrect">
+            <div class="clear-filter" *ngIf="isFilterCorrect && productName?.value?.length > 0">
                 <button class="btn btn-filter" (click)="resetFilter()">
                     <span class="icon-cross"></span> Clear Filter
                 </button>
@@ -259,14 +259,14 @@
                                 />
                             </div>
                         </th>
-                        <ng-container *ngIf="groupStockReport?.count && !GroupStockReportRequest?.stockName">
+                        <ng-container *ngIf="groupStockReport?.count">
                             <th class="text-center bd-rr bd-rb" width="20%" colspan="2">Opening stock</th>
                             <th class="text-center bd-rr bd-rb" width="20%" colspan="2">Inwards</th>
                             <th class="text-center bd-rr bd-rb" width="20%" colspan="2">Outwards</th>
                             <th class="text-center bd-rb" width="20%" colspan="2">Closing Stock</th>
                         </ng-container>
                     </tr>
-                    <tr class="bd-rt" [hidden]="!groupStockReport?.count && !GroupStockReportRequest?.stockName">
+                    <tr class="bd-rt" [hidden]="!groupStockReport?.count">
                         <th
                             colspan="2"
                             class="bd-rr td-search-box max-width-140"

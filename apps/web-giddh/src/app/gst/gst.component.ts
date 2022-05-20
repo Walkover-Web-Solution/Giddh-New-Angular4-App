@@ -7,10 +7,9 @@ import { AlertConfig } from 'ngx-bootstrap/alert';
 import { BsDropdownDirective } from 'ngx-bootstrap/dropdown';
 import { Observable, of, ReplaySubject } from 'rxjs';
 import { filter, take, takeUntil } from 'rxjs/operators';
-import { CompanyActions } from '../actions/company.actions';
 import { GstReconcileActions } from '../actions/gst-reconcile/GstReconcile.actions';
 import { InvoicePurchaseActions } from '../actions/purchase-invoice/purchase-invoice.action';
-import { CompanyResponse, StateDetailsRequest } from '../models/api-models/Company';
+import { CompanyResponse } from '../models/api-models/Company';
 import { GstOverViewRequest } from '../models/api-models/GstReconcile';
 import { OrganizationType } from '../models/user-login-state';
 import { GeneralService } from '../services/general.service';
@@ -94,8 +93,8 @@ export class GstComponent implements OnInit, OnDestroy {
     /** This will hold common JSON data */
     public commonLocaleData: any = {};
 
-    constructor(private store: Store<AppState>,
-        private companyActions: CompanyActions,
+    constructor(
+        private store: Store<AppState>,
         private route: Router,
         private gstAction: GstReconcileActions,
         private invoicePurchaseActions: InvoicePurchaseActions,
@@ -133,13 +132,6 @@ export class GstComponent implements OnInit, OnDestroy {
             }
         });
         this.loadTaxDetails();
-        let companyUniqueName = null;
-        this.store.pipe(select(c => c.session.companyUniqueName), take(1)).subscribe(s => companyUniqueName = s);
-        let stateDetailsRequest = new StateDetailsRequest();
-        stateDetailsRequest.companyUniqueName = companyUniqueName;
-        stateDetailsRequest.lastState = 'gstfiling';
-
-        this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
 
         this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch;
 

@@ -20,7 +20,7 @@ import { LoaderService } from '../loader/loader.service';
 import { cloneDeep, filter, find, uniq } from '../lodash-optimized';
 import { AccountResponse, AccountResponseV2 } from '../models/api-models/Account';
 import { BaseResponse } from '../models/api-models/BaseResponse';
-import { ICurrencyResponse, StateDetailsRequest, TaxResponse } from '../models/api-models/Company';
+import { ICurrencyResponse, TaxResponse } from '../models/api-models/Company';
 import { DownloadLedgerRequest, TransactionsRequest, TransactionsResponse, ExportLedgerRequest, } from '../models/api-models/Ledger';
 import { SalesOtherTaxesModal } from '../models/api-models/Sales';
 import { AdvanceSearchRequest } from '../models/interfaces/AdvanceSearchRequest';
@@ -290,7 +290,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.companyName$ = this.store.pipe(select(p => p.session.companyUniqueName), takeUntil(this.destroyed$));
         this.isCompanyCreated$ = this.store.pipe(select(s => s.session.isCompanyCreated), takeUntil(this.destroyed$));
         this.failedBulkEntries$ = this.store.pipe(select(p => p.ledger.ledgerBulkActionFailedEntries), takeUntil(this.destroyed$));
-
     }
 
     public toggleShow() {
@@ -657,13 +656,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 this.searchText = '';
                 this.resetBlankTransaction();
 
-                // set state details
-                let companyUniqueName = null;
-                this.store.pipe(select(c => c.session.companyUniqueName), take(1)).subscribe(s => companyUniqueName = s);
-                let stateDetailsRequest = new StateDetailsRequest();
-                stateDetailsRequest.companyUniqueName = companyUniqueName;
-                stateDetailsRequest.lastState = 'ledger/' + this.lc.accountUnq;
-                this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
                 this.isCompanyCreated$.pipe(take(1)).subscribe(s => {
                     if (!s) {
                         this.store.dispatch(this.ledgerActions.GetLedgerAccount(this.lc.accountUnq));
@@ -966,6 +958,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
             // don't call api if it's invalid case
             if (!request) {
                 return;
+            }
+
+            if (this.voucherApiVersion === 2) {
+                request.page = 1;
             }
 
             let date;

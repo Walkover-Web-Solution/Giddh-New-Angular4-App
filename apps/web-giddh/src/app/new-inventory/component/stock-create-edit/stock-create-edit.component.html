@@ -27,22 +27,22 @@
                         class="product-detail-content px-3 mt-2"
                         *ngIf="stockForm.type === 'PRODUCT' || stockForm.type === 'SERVICE'"
                     >
-                        <div class="row flex-column-reverse flex-md-row">
+                        <div class="row flex-column-reverse flex-md-row upper-common-form-container">
                             <div class="col-xl-8 col-lg-12">
                                 <div class="row flex-column-reverse flex-md-row">
-                                    <div class="col-md-8 col-lg-8 col-xl-6 col-12">
+                                    <div class="col-md-8 col-lg-8 col-xl-6 col-12 upper-common-form-label-field">
                                         <div class="row mr-b15">
-                                            <div class="col-sm-6 col-lg-6">
-                                                <label
+                                            <div class="col-sm-6 col-lg-3">
+                                                <label class="product-name-label"
                                                     >{{ stockForm.type | titlecase }} Name
-                                                    <span class="red-text">*</span></label
+                                                    <span class="red-text product-name-star">*</span></label
                                                 >
                                             </div>
-                                            <div class="col-sm-6 col-lg-6">
+                                            <div class="col-sm-6 col-lg-6 ml-lg-2">
                                                 <text-field
                                                     [cssClass]="'form-control'"
                                                     [name]="'productName'"
-                                                    [placeholder]="'Enter Name'"
+                                                    [placeholder]="'Enter Product'"
                                                     [type]="'text'"
                                                     [(ngModel)]="stockForm.name"
                                                     [required]="true"
@@ -51,13 +51,13 @@
                                             </div>
                                         </div>
                                         <div class="row mr-b15">
-                                            <div class="col-sm-6 col-lg-6">
+                                            <div class="col-sm-6 col-lg-3">
                                                 <label
                                                     >{{ stockForm.type | titlecase }} Unit
                                                     <span class="red-text">*</span></label
                                                 >
                                             </div>
-                                            <div class="col-sm-6 col-lg-6">
+                                            <div class="col-sm-6 col-lg-6 ml-lg-2">
                                                 <select-field
                                                     [cssClass]="'form-control'"
                                                     [name]="'stockUnitCode'"
@@ -72,14 +72,14 @@
                                             </div>
                                         </div>
                                         <div class="row mr-b15">
-                                            <div class="col-sm-6 col-lg-6">
+                                            <div class="col-sm-6 col-lg-3">
                                                 <label>Under Group</label>
                                             </div>
-                                            <div class="col-sm-6 col-lg-6">
+                                            <div class="col-sm-6 col-lg-6 ml-lg-2 under-group-field-button-wrapper">
                                                 <select-field
                                                     [cssClass]="'form-control'"
                                                     [name]="'stockGroup'"
-                                                    [placeholder]="'Under Group'"
+                                                    [placeholder]="'Select Group'"
                                                     [options]="stockGroups"
                                                     (selectedOption)="
                                                         stockGroupUniqueName = $event?.value;
@@ -90,7 +90,7 @@
                                                 <button
                                                     *ngIf="queryParams?.stockUniqueName"
                                                     mat-raised-button
-                                                    class="btn-success min-width-100 bdr-radius-50 move-stock"
+                                                    class="btn-success min-width-100 move-stock"
                                                     (click)="moveStock()"
                                                     [disabled]="defaultStockGroupUniqueName === stockGroupUniqueName"
                                                 >
@@ -99,13 +99,13 @@
                                             </div>
                                         </div>
                                         <div class="row mr-b15">
-                                            <div class="col-sm-6 col-lg-6">
+                                            <div class="col-sm-6 col-lg-3">
                                                 <label
                                                     >Unique Name
                                                     <!-- <i class="icon-info text-gray"></i> -->
                                                 </label>
                                             </div>
-                                            <div class="col-sm-6 col-lg-6">
+                                            <div class="col-sm-6 col-lg-6 ml-lg-2">
                                                 <text-field
                                                     [cssClass]="'form-control'"
                                                     [name]="'uniqueName'"
@@ -116,10 +116,10 @@
                                             </div>
                                         </div>
                                         <div class="row mr-b15">
-                                            <div class="col-sm-6 col-lg-6">
+                                            <div class="col-sm-6 col-lg-3">
                                                 <label>Applicable Tax</label>
                                             </div>
-                                            <div class="col-sm-6 col-lg-6">
+                                            <div class="col-sm-6 col-lg-6 ml-lg-2">
                                                 <mat-select
                                                     name="taxes"
                                                     class="form-control"
@@ -132,7 +132,7 @@
                                                         [value]="tax.uniqueName"
                                                         [disabled]="tax.isDisabled"
                                                         [selected]="tax.isChecked"
-                                                        (click)="!tax.isDisabled ? selectTax(tax) : ''"
+                                                        (onSelectionChange)="!tax.isDisabled ? selectTax(tax) : ''"
                                                         >{{ tax.name }}</mat-option
                                                     >
                                                 </mat-select>
@@ -149,8 +149,8 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="other-group mt-3">
-                            <mat-tab-group mat-align-tabs="start" class="mat-tab-them">
+                        <div class="other-group mt-2">
+                            <mat-tab-group mat-align-tabs="start" class="mat-tab-them account-inventory-other-tab">
                                 <mat-tab label="Account">
                                     <div class="tab-container-new">
                                         <!-- <form>
@@ -339,7 +339,7 @@
                                                 </mat-checkbox>
                                             </div> -->
                                             <div class="row">
-                                                <div class="col-12">
+                                                <div class="col-12 col-lg-11">
                                                     <div class="row">
                                                         <div class="col-xl-6 col-12">
                                                             <div class="purchase-information">
@@ -431,6 +431,10 @@
                                                                                 class="icon-button-remove"
                                                                                 type="button"
                                                                                 (click)="deletePurchaseUnitPrice(i)"
+                                                                                *ngIf="
+                                                                                    stockForm.purchaseAccountDetails
+                                                                                        .unitRates?.length > 1
+                                                                                "
                                                                                 [disabled]="
                                                                                     !isPurchaseInformationEnabled
                                                                                 "
@@ -442,6 +446,7 @@
                                                                                 class="icon-button-add"
                                                                                 role="button"
                                                                                 type="button"
+                                                                                disableRipple
                                                                                 (click)="addNewPurchaseUnitPrice()"
                                                                                 *ngIf="
                                                                                     i ===
@@ -453,7 +458,9 @@
                                                                                     !isPurchaseInformationEnabled
                                                                                 "
                                                                             >
-                                                                                <i class="icon-plus"></i>
+                                                                                <span class="add-new-text-container">
+                                                                                    + Add New
+                                                                                </span>
                                                                             </button>
                                                                         </div>
                                                                     </div>
@@ -551,6 +558,10 @@
                                                                                 class="icon-button-remove"
                                                                                 type="button"
                                                                                 (click)="deleteSalesUnitPrice(i)"
+                                                                                *ngIf="
+                                                                                    stockForm.salesAccountDetails
+                                                                                        .unitRates?.length > 1
+                                                                                "
                                                                                 [disabled]="!isSalesInformationEnabled"
                                                                             >
                                                                                 <i class="icon-trash"></i>
@@ -560,6 +571,7 @@
                                                                                 class="icon-button-add"
                                                                                 role="button"
                                                                                 type="button"
+                                                                                disableRipple
                                                                                 (click)="addNewSalesUnitPrice()"
                                                                                 *ngIf="
                                                                                     i ===
@@ -569,7 +581,9 @@
                                                                                 "
                                                                                 [disabled]="!isSalesInformationEnabled"
                                                                             >
-                                                                                <i class="icon-plus"></i>
+                                                                                <span class="add-new-text-container">
+                                                                                    + Add New
+                                                                                </span>
                                                                             </button>
                                                                         </div>
                                                                     </div>
@@ -717,17 +731,17 @@
                                                             *ngFor="let option of stockForm.options; let i = index"
                                                         >
                                                             <div class="col-sm-6 col-lg-4">
-                                                                <label>Option Name</label>
+                                                                <label>Option {{ i + 1 }}</label>
                                                                 <text-field
                                                                     [cssClass]="'form-control'"
-                                                                    [placeholder]="'Size'"
+                                                                    [placeholder]="'Ex: Size , Color'"
                                                                     [name]="'option-' + i"
                                                                     [(ngModel)]="option.name"
                                                                     [type]="'text'"
                                                                 ></text-field>
                                                             </div>
-                                                            <div class="col-sm-6 col-lg-6">
-                                                                <label>Option Values</label>
+                                                            <div class="col-sm-6 col-lg-8">
+                                                                <label>Category</label>
                                                                 <div class="multi-select-input">
                                                                     <mat-chip-list #chipList>
                                                                         <mat-chip
@@ -756,6 +770,8 @@
                                                                             (matChipInputTokenEnd)="
                                                                                 addOption($event, i)
                                                                             "
+                                                                            class="inventory-category-field-input"
+                                                                            placeholder="Separate options with a comma"
                                                                         />
                                                                     </mat-chip-list>
                                                                 </div>
@@ -2479,7 +2495,7 @@
                                                                 <textarea
                                                                     type="text"
                                                                     class="form-control"
-                                                                    placeholder="xs, x, m"
+                                                                    placeholder="'xs, x, m'"
                                                                     id="select-category"
                                                                 ></textarea>
                                                             </div>
@@ -4168,25 +4184,25 @@
                     <div class="button-group">
                         <button
                             *ngIf="!queryParams?.stockUniqueName"
-                            mat-raised-button
-                            class="btn-primary min-width-100 bdr-radius-50"
+                            mat-flat-button
+                            class="clear-btn"
                             (click)="resetForm(stockCreateEditForm)"
                         >
                             Clear
                         </button>
                         <button
                             *ngIf="!queryParams?.stockUniqueName"
-                            mat-raised-button
-                            class="btn-success min-width-100 bdr-radius-50"
+                            mat-flat-button
+                            class="create-inventory-btn"
                             (click)="createStock(stockCreateEditForm)"
                             [disabled]="stockCreateEditForm.invalid || !stockForm.stockUnitCode"
                         >
-                            Create New
+                            Create Inventory
                         </button>
                         <button
                             *ngIf="queryParams?.stockUniqueName"
                             mat-raised-button
-                            class="btn-primary min-width-100 bdr-radius-50"
+                            class="btn-primary min-width-100"
                             (click)="cancelEdit()"
                         >
                             Cancel
@@ -4194,19 +4210,19 @@
                         <button
                             *ngIf="queryParams?.stockUniqueName"
                             mat-raised-button
-                            class="btn-success min-width-100 bdr-radius-50"
-                            (click)="updateStock(stockCreateEditForm)"
-                            [disabled]="stockCreateEditForm.invalid || !stockForm.stockUnitCode"
+                            class="btn-danger min-width-100"
+                            (click)="deleteStock()"
                         >
-                            Update
+                            Delete
                         </button>
                         <button
                             *ngIf="queryParams?.stockUniqueName"
                             mat-raised-button
-                            class="btn-danger min-width-100 bdr-radius-50"
-                            (click)="deleteStock()"
+                            class="btn-success min-width-100"
+                            (click)="updateStock(stockCreateEditForm)"
+                            [disabled]="stockCreateEditForm.invalid || !stockForm.stockUnitCode"
                         >
-                            Delete
+                            Update
                         </button>
                     </div>
                 </div>

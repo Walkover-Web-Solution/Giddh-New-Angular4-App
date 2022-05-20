@@ -13,7 +13,7 @@ import { AppState } from "../../../store";
 import { WarehouseActions } from "../../../settings/warehouse/action/warehouse.action";
 import { ActivatedRoute, Router } from "@angular/router";
 import { cloneDeep, findIndex, forEach } from "../../../lodash-optimized";
-import { NgForm } from "@angular/forms";
+import { FormControl, NgForm } from "@angular/forms";
 import { INVALID_STOCK_ERROR_MESSAGE } from "../../../app.constant";
 import { CustomFieldsService } from "../../../services/custom-fields.service";
 import { CompanyActions } from "../../../actions/company.actions";
@@ -160,6 +160,8 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         /* added image path */
         this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+        /** added parent class to body after entering new-inventory page */
+        document.querySelector("body").classList.add("stock-create-edit");
 
         this.getTaxes();
         this.getStockUnits();
@@ -195,6 +197,8 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+        /** remove parent class from body after exiting new-inventory page */
+        document.querySelector("body").classList.remove("stock-create-edit");
     }
 
     /**
@@ -246,7 +250,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 this.stockUnits = response?.body?.map(result => {
                     return {
                         value: result.code,
-                        label: result.name,
+                        label: `${result.name} (${result.code})`,
                         additional: result
                     };
                 }) || [];
@@ -344,7 +348,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
     public addVariantOption(): void {
         if (this.isVariantAvailable) {
             const optionIndex = this.stockForm.options?.length + 1;
-            this.stockForm.options.push({ name: "Option " + optionIndex, values: [], order: optionIndex });
+            this.stockForm.options.push({ name: "", values: [], order: optionIndex });
         } else {
             this.stockForm.options = [];
             this.generateVariants();
@@ -507,12 +511,11 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
      * @memberof StockCreateEditComponent
      */
     public getTaxes(): void {
+        this.store.dispatch(this.companyAction.getTax());
         this.store.pipe(select(state => state?.company?.taxes), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.length > 0) {
                 this.taxes = response || [];
                 this.checkSelectedTaxes();
-            } else {
-                this.store.dispatch(this.companyAction.getTax());
             }
         });
     }
@@ -576,7 +579,9 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         }
 
         if (!this.stockGroupUniqueName) {
-            let mainGroupExists = this.stockGroups?.filter(group => group?.value === "maingroup");
+            let mainGroupExists = this.stockGroups?.filter(group => {
+                group?.value === "maingroup"
+            });
             if (mainGroupExists?.length > 0) {
                 this.stockGroupUniqueName = "maingroup";
                 this.saveStock();
@@ -589,6 +594,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 };
                 this.inventoryService.CreateStockGroup(stockRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     if (response?.status === "success") {
+                        this.stockGroupUniqueName = "maingroup";
                         this.saveStock();
                     } else {
                         this.toaster.showSnackBar("error", response?.message);
@@ -609,7 +615,6 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
     private saveStock(): void {
         this.toggleLoader(true);
         const request = this.formatRequest();
-
         this.inventoryService.createStock(request, this.stockGroupUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.toggleLoader(false);
             if (response?.status === "success") {
