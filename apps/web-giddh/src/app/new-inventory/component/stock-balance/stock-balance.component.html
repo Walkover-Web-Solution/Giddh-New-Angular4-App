@@ -197,14 +197,20 @@
                     <p class="stock-details">
                         <span class="stock-ob">
                             {{ stock?.openingBalance?.amount }}
-                            <span class="dot" *ngIf="stock?.openingBalance?.amount">. </span>
+                            <img
+                                class="dot first-dot"
+                                *ngIf="stock?.openingBalance?.amount"
+                                src="{{ imgPath }}dot.png"
+                                alt="dot"
+                            />
                         </span>
                         <span class="stock-ob"
                             >{{ stock?.openingBalance?.quantity }} {{ stock?.openingBalance?.stockUnit }}
                         </span>
-                        <span class="stock-ob" *ngIf="stock.display"
-                            ><span *ngIf="stock?.stock?.variants?.length">
-                                <span class="dot">. </span>{{ stock?.stock?.variants?.length }}
+                        <span class="stock-ob" *ngIf="stock.display && stock?.stock?.variants?.length">
+                            <img class="dot second-dot" src="{{ imgPath }}dot.png" alt="dot" />
+                            <span>
+                                {{ stock?.stock?.variants?.length }}
                                 {{ stock?.stock?.variants?.length < 2 ? "Variant" : "Variants" }}
                             </span>
                         </span>
@@ -225,7 +231,7 @@
                                 class="warehouse-list warehouse-even"
                                 *ngIf="selectedWarehouse?.indexOf(stockWarehouse?.uniqueName) > -1"
                             >
-                                <div class="stock-list-body" (click)="stock.display = !stock.display">
+                                <div class="stock-list-body">
                                     <div class="stock-list-box">
                                         <div class="stock-list-unexpanded">
                                             <p class="stock-list-box-heading proper-spacing-list">
@@ -273,10 +279,8 @@
                                 >
                                     <div
                                         class="stock-list-expanded-content"
-                                        (click)="
-                                            warehouseVariant.display = !warehouseVariant.display;
-                                            $event.stopPropagation()
-                                        "
+                                        (click)="$event.stopPropagation()"
+                                        (mouseenter)="warehouseVariant.display = true"
                                     >
                                         <p
                                             class="stock-list-box-heading proper-spacing-list"
@@ -340,8 +344,8 @@
                     </div>
                 </div>
             </div>
-            <div class="grid-title-left" *ngIf="stocksList.length <= 0">
-                <img src="assets/images/search-data-not-found.svg" /><br />
+            <div class="no-data-found" *ngIf="stocksList.length <= 0">
+                <img src="{{ imgPath }}search-data-not-found.svg" /><br />
                 No Data Found
             </div>
         </div>

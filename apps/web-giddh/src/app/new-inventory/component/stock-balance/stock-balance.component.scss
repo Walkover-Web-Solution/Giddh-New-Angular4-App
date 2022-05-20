@@ -319,8 +319,17 @@
                             .dot {
                                 position: relative;
                                 font-size: 18px;
-                                bottom: 3px;
-                                color: var(--color-common-secondary-text);
+                                height: 3px;
+                                bottom: 1px;
+                                filter: var(--color-image-filter-senary);
+                                border-radius: 50%;
+                            }
+                            .first-dot {
+                                margin-left: 2px;
+                                margin-right: 5px;
+                            }
+                            .second-dot {
+                                margin: 0px 1.4px;
                             }
                         }
                     }
@@ -372,26 +381,27 @@
                                 width: 110px;
                                 padding-left: 5px;
                                 border-radius: 5px;
-                                right: 10px;
+                                right: 12px;
                             }
                             .quantity-value {
                                 height: 36px;
                                 width: 69px;
-                                padding-left: 5px;
+                                padding-left: 5.5px;
                                 border-radius: 5px;
-                                left: 13px;
+                                left: 11px;
                             }
                             .unit-value {
                                 height: 36px;
-                                width: 79px;
+                                width: 81px;
                                 border-radius: 5px;
                                 padding-left: 5px;
-                                left: 19px;
+                                left: 20px;
+                                font-size: 14px;
                                 .dropdown-icon {
                                     position: absolute;
                                     height: 11px;
-                                    right: 7px;
-                                    top: 14px;
+                                    right: 5px;
+                                    top: 13px;
                                     filter: var(--color-image-filter);
                                 }
                             }
@@ -427,7 +437,7 @@
                             border-radius: 5px;
                             background-color: var(--color-primary-input-bar-background-focus);
                             position: relative;
-                            right: 2px;
+                            right: 4px;
                         }
                         .unit-dropdown {
                             width: 81px;
