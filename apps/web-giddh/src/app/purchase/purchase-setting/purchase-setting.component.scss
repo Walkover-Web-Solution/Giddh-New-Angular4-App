@@ -150,6 +150,12 @@
             padding: 0 15px;
         }
     }
+
+    .sales-order-tab {
+        .custom-purchase-order-input-fields {
+            margin-top: 8px;
+        }
+    }
 }
 @media screen and (max-width: 767px) {
     #invoice-setting {
