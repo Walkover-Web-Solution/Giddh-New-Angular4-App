@@ -2,6 +2,7 @@
 @import "~@angular/material/theming";
 @import "../css/giddh-common.scss";
 @import "@angular/material/prebuilt-themes/indigo-pink.css";
+@import "./json-tree.scss";
 $custom-typography: mat-typography-config(
     $font-family: "opensans-regular",
 );
@@ -81,6 +82,19 @@ $custom-typography: mat-typography-config(
 .branch-profile-wrapper {
     float: left !important;
     width: auto !important;
+}
+.logs-sidebar {
+    min-height: 100% !important;
+    height: 100% !important;
+    width: 760px !important;
+    .mat-dialog-content {
+        margin: 0 !important;
+        padding: 0 !important;
+        max-height: 100%;
+    }
+    .mat-dialog-container {
+        overflow: hidden;
+    }
 }
 @media screen and (max-width: 1366px) and (orientation: portrait) {
     .subscription-form-select {
