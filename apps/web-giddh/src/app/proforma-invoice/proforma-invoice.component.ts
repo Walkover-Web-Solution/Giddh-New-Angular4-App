@@ -1428,6 +1428,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 }
 
                 const lastEntryIndex = this.invFormData.entries?.length - 1;
+
+                console.log(this.invFormData.entries);
+                
                 this.loadParticularAndVariant(lastEntryIndex, "ACCOUNT");
                 this.calculateBalanceDue();
                 this.calculateTotalDiscount();
@@ -3120,7 +3123,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         return res;
     }
 
-    public onSelectSalesAccount(selectedAcc: any, txn: SalesTransactionItemClass, entry: SalesEntryClass, isBulkItem: boolean = false, isLinkedPoItem: boolean = false, entryIndex: number): any {
+    public onSelectSalesAccount(selectedAcc: any, txn: SalesTransactionItemClass, entry: SalesEntryClass, isBulkItem: boolean = false, isLinkedPoItem: boolean = false, entryIndex: number, successCallback?: Function): any {
         this.invFormData.entries[entryIndex] = entry;
         this.invFormData.entries[entryIndex].transactions[0] = txn;
         if ((selectedAcc.value || isBulkItem) && selectedAcc.additional && selectedAcc.additional?.uniqueName) {
@@ -3207,6 +3210,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                             this.linkedPoItemsAdded++;
                         }
                         this.focusOnDescription();
+
+                        if (successCallback) {
+                            successCallback(txn);
+                        }
                     }
                 }, () => {
                     txn.isStockTxn = false;
@@ -3841,7 +3848,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public addBulkStockItems(items: SalesAddBulkStockItems[]) {
         const startIndex = this.invFormData.entries.length;
         let isBlankItemPresent;
-        console.log(items);
         this.ngZone.runOutsideAngular(() => {
             for (const item of items) {
                 // add quantity to additional because we are using quantity from bulk modal so we have to pass it to onSelectSalesAccount
@@ -7784,46 +7790,51 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public onSelectLinkedParticular(event: any, transaction: any, entry: any, index: number): void {
         transaction.linkedParticular = { name: event?.label, uniqueName: event.value };
         transaction.variant = { name: '', uniqueName: '' };
-
-        if (event && transaction.linkedParticularType === "ACCOUNT") {
-            const params = { particularType: "STOCK", particularUniqueName: event.value, particularNature: this.invoiceType };
-            this.searchService.getLinkedParticulars(params).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-                if (response?.body) {
-                    let variants = [];
-                    response?.body?.variants?.forEach(variant => {
-                        variants.push({ label: variant?.name, value: variant?.uniqueName, additional: variant });
-                    });
-                    transaction.variantsList = variants;
-
-                    /** Selecting variant automatically if there is only 1 variant */
-                    if (variants?.length === 1) {
-                        this.onSelectLinkedVariant(variants[0], transaction, entry, index);
-                    }
-                } else {
-                    transaction.variantsList = [];
-                }
-                this._cdr.detectChanges();
-            });
+        let account = {
+            label: null,
+            value: null,
+            additional: null
         }
 
         if (transaction.linkedParticularType === "ACCOUNT") {
-            let account = {
+            account = {
                 label: transaction.accountName,
                 value: transaction.accountUniqueName,
                 additional: { uniqueName: transaction.accountUniqueName, stock: { name: event?.label, uniqueName: event.value } }
             };
-            this.onSelectSalesAccount(account, transaction, entry, false, false, index);
         } else {
             transaction.accountName = event.label;
             transaction.accountUniqueName = event.value;
-
-            let account = {
+            account = {
                 label: event.label,
                 value: event.value,
                 additional: { uniqueName: event.value, stock: { name: transaction.stockDetails.name, uniqueName: transaction.stockDetails.uniqueName } }
             };
-            this.onSelectSalesAccount(account, transaction, entry, false, false, index);
         }
+
+        this.onSelectSalesAccount(account, transaction, entry, false, false, index, (transaction: any) => {
+            transaction.stock = transaction.stockDetails;
+            if (event && transaction.linkedParticularType === "ACCOUNT") {
+                const params = { particularType: "STOCK", particularUniqueName: event.value, particularNature: this.invoiceType };
+                this.searchService.getLinkedParticulars(params).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                    if (response?.body) {
+                        let variants = [];
+                        response?.body?.variants?.forEach(variant => {
+                            variants.push({ label: variant?.name, value: variant?.uniqueName, additional: variant });
+                        });
+                        transaction.variantsList = variants;
+
+                        /** Selecting variant automatically if there is only 1 variant */
+                        if (variants?.length === 1) {
+                            this.onSelectLinkedVariant(variants[0], transaction, entry, index);
+                        }
+                    } else {
+                        transaction.variantsList = [];
+                    }
+                    this._cdr.detectChanges();
+                });
+            }
+        });
     }
 
     public onSelectLinkedVariant(event: any, transaction: any, entry: any, index: number): void {
