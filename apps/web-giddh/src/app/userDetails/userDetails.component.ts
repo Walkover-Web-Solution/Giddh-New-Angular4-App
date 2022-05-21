@@ -17,7 +17,7 @@ import { GIDDH_DATE_FORMAT_DD_MM_YYYY, GIDDH_DATE_FORMAT_UI } from '../shared/he
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { BsModalRef } from 'ngx-bootstrap/modal';
 import { GeneralActions } from '../actions/general/general.actions';
-import { API_POSTMAN_DOC_URL } from '../app.constant';
+import { API_POSTMAN_DOC_URL, BootstrapToggleSwitch } from '../app.constant';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { SettingsProfileActions } from '../actions/settings/profile/settings.profile.action';
 
@@ -74,6 +74,8 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
     public localeData: any = {};
     /** This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** This will hold toggle buttons value and size */
+    public bootstrapToggleSwitch = BootstrapToggleSwitch;
 
     constructor(private store: Store<AppState>,
         private toasty: ToasterService,
@@ -129,10 +131,8 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
 
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             if (params['type'] && this.activeTab !== params['type']) {
-                this.setStateDetails(params['type']);
                 this.activeTab = params['type'];
             } else if (!params['type'] && !this.activeTab) {
-                this.setStateDetails("auth-key");
                 this.activeTab = "auth-key";
             }
         });
@@ -207,6 +207,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
         this.isUpdateCompanyInProgress$.pipe(takeUntil(this.destroyed$)).subscribe(inProcess => {
             this.isCreateAndSwitchCompanyInProcess = inProcess;
         });
+        this.twoWayAuth = false;
     }
 
     /**
@@ -314,22 +315,6 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     /**
-     * Sets the state for selected page
-     * which is used by header component
-     *
-     * @private
-     * @param {string} tabName Current selected tab
-     * @memberof UserDetailsComponent
-     */
-    private setStateDetails(tabName: string): void {
-        let companyUniqueName = null;
-        this.store.pipe(select(c => c.session.companyUniqueName), take(1)).subscribe(s => companyUniqueName = s);
-        let stateDetailsRequest = new StateDetailsRequest();
-        stateDetailsRequest.companyUniqueName = companyUniqueName;
-        stateDetailsRequest.lastState = `pages/user-details/${tabName}`;
-        this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
-    }
-     /**
      * This will return page heading based on active tab
      *
      * @param {boolean} event

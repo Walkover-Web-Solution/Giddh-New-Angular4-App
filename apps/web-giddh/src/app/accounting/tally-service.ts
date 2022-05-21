@@ -4,7 +4,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 
 import { HttpWrapperService } from '../services/httpWrapper.service';
 import { IServiceConfigArgs, ServiceConfig } from '../services/service.config';
-import { BlankLedgerVM } from './../ledger/ledger.vm';
+import { BlankLedgerVM } from './../material-ledger/ledger.vm';
 import { LEDGER_API } from '../services/apiurls/ledger.api';
 import { VOUCHERS } from './constants/accounting.constant';
 

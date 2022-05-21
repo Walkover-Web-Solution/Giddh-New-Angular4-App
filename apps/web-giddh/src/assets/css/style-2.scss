@@ -1578,7 +1578,7 @@ header .navbar {
 .open > .dropdown-toggle.btn-primary:focus,
 .btn-primary:not(:disabled):not(.disabled):active {
     color: var(--color-secondary-button-text) !important;
-    border-color: var(--color-common-secondary-border) !important;
+    border-color: var(--color-secondary-button-background) !important;
     background: var(--color-secondary-button-background) !important;
 }
 .btn-primary.disabled.focus,
@@ -2958,7 +2958,7 @@ label {
     color: var(--color-master-page-input-label) !important;
 }
 .isParent {
-    background: var(--color-wild-sand);
+    background: var(--color-master-page-sidebar-active-list-background);
 }
 .isActive {
     color: var(--color-secondary-button-text) !important;
@@ -5596,6 +5596,70 @@ footer#footer.absolute-footer {
 }
 .modal-open {
     overflow: hidden !important;
+    .manage-account-popup.add-manage-group-acc {
+        .scroll-container {
+            .wrap-account-sidebar {
+                .grp-wrapper {
+                    .col-wrapper {
+                        border-color: var(--color-common-secondary-border);
+                        &:nth-child(1) {
+                            background-color: var(--color-common-primary-background-for-all-components);
+                        }
+                    }
+                }
+            }
+        }
+        .manage-group-acc {
+            account-operations {
+                #middleBody {
+                    .top-bar {
+                        border-color: var(--color-common-secondary-border) !important;
+                    }
+                }
+            }
+        }
+        account-operations {
+            div:nth-child(7) {
+                .modal-dialog {
+                    margin-top: 80px;
+                }
+            }
+        }
+        .scroll-container {
+            .wrap-account-sidebar {
+                .grp-wrapper {
+                    .col-wrapper {
+                        border-color: var(--color-common-secondary-border);
+                        &:nth-child(1) {
+                            background-color: var(--color-common-primary-background-for-all-components);
+                        }
+                    }
+                }
+            }
+        }
+        .manage-group-acc {
+            account-operations {
+                #middleBody {
+                    .top-bar {
+                        border-color: var(--color-common-secondary-border) !important;
+                    }
+                }
+            }
+        }
+    }
+    login {
+        .modal.fade {
+            .modal-body.clearfix {
+                #authModal {
+                    button[type="login"].ladda-button {
+                        .ladda-label {
+                            color: var(--color-secondary-button-text);
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 section.ledger-stat.sticky-footer.sticky-footer-sale-amount {
@@ -6176,6 +6240,11 @@ button.btn.btn-filter {
         z-index: 9999 !important;
     }
 }
+.modal-open.cmd-k {
+    .modal-backdrop + .modal {
+        z-index: 999999 !important;
+    }
+}
 .modal-backdrop + .modal.fade .modal-dialog {
     transform: translate(0);
 }
@@ -6240,7 +6309,7 @@ button.ladda-button,
 button.ladda-button .ladda-spinner,
 button.ladda-button .ladda-label {
     transition: none !important;
-    color: var(--color-septenary-button-text);
+    color: var(--color-secondary-button-text);
 }
 .account-aside-menu-state #close {
     display: block;
@@ -6322,6 +6391,15 @@ highcharts-chart {
 .aside-menu-othertax-open {
     .nav-left-bar {
         z-index: 99 !important;
+    }
+    #main {
+        app-header {
+            .fixed-padding {
+                #primary-new-header {
+                    z-index: 99 !important;
+                }
+            }
+        }
     }
 }
 .aside-panel-ledger {
@@ -7382,11 +7460,74 @@ giddh-datepicker {
         z-index: 1000 !important;
     }
     overflow-y: auto !important;
+    height: auto;
     .advance-search {
         #export-body {
             sh-select {
                 input::placeholder {
                     color: var(--color-common-primary-input-placeholder) !important;
+                }
+            }
+        }
+    }
+    #content-wrapper {
+        .in {
+            .aside-pane {
+                #close {
+                    color: var(--color-primary-right-side-popup-header-text);
+                }
+            }
+        }
+        .container.ledger-section {
+            .ledg-head.transactions-page {
+                #eledgerwrap {
+                    .ledger-book {
+                        .wrap-transaction-map {
+                            .ledger-head {
+                                z-index: 11;
+                            }
+                            .ledger-book {
+                                .entry-modal-height {
+                                    .entry-modal {
+                                        .ledger-panel {
+                                            z-index: 9;
+                                        }
+                                    }
+                                }
+                            }
+                            #ledger-transaction-left-list,
+                            #ledger-transaction-right-list {
+                                .transaction-list-sh-select {
+                                    sh-select-menu {
+                                        .menu {
+                                            z-index: 10;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                .mat-grid-list.ledger-head {
+                    z-index: 8;
+                }
+                .ledger-book {
+                    .entry-modal {
+                        .ledger-panel {
+                            z-index: 6;
+                        }
+                    }
+                    .ledger-main {
+                        .new-entry-ledger {
+                            .ledger-account-label {
+                                sh-select-menu {
+                                    .menu {
+                                        z-index: 7;
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -7481,7 +7622,7 @@ giddh-datepicker {
 }
 
 .change-address-dropdown li {
-    border-bottom: 1px solid var(--color-iron);
+    border-bottom: 1px solid var(--color-common-secondary-border);
     padding-bottom: 4px;
 }
 
@@ -7620,6 +7761,87 @@ giddh-datepicker {
 
             .btn-share {
                 width: 110px;
+            }
+        }
+    }
+}
+
+.stock-create-edit {
+    #main {
+        #content-wrapper {
+            background-color: var(--color-common-septenary-background-for-all-components);
+            .create-new-inventory-page {
+                .select-physical-product {
+                    .product-detail-content {
+                        .account-inventory-other-tab {
+                            .mat-tab-labels {
+                                margin-left: 20px;
+                            }
+                            .sales-purchase-details {
+                                #purchase-info-check,
+                                #sales-info-check {
+                                    .mat-checkbox-label {
+                                        font: normal normal 600 14px/17px Open Sans;
+                                        letter-spacing: 0px;
+                                        position: relative;
+                                        bottom: 1px;
+                                    }
+                                }
+                                .sales-information,
+                                .purchase-information {
+                                    .add-new-field {
+                                        select-field {
+                                            input {
+                                                width: 150px;
+                                                height: 32px;
+                                            }
+                                        }
+                                        text-field {
+                                            position: relative;
+                                            left: 7px;
+                                            input {
+                                                width: 112px;
+                                                height: 32px;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        .upper-common-form-label-field {
+                            text-field,
+                            select-field {
+                                input {
+                                    min-width: 320px;
+                                }
+                            }
+                            mat-select {
+                                min-width: 320px;
+                            }
+                        }
+                    }
+                }
+                text-field,
+                select-field {
+                    input {
+                        border-radius: 2px !important;
+                    }
+                }
+                mat-select {
+                    border-radius: 2px !important;
+                }
+            }
+        }
+    }
+    .cdk-overlay-connected-position-bounding-box {
+        .mat-select-panel {
+            .mat-option-disabled {
+                cursor: not-allowed;
+                color: var(--color-common-primary-disabled) !important;
+                .mat-pseudo-checkbox {
+                    cursor: not-allowed;
+                    color: var(--color-common-primary-disabled) !important;
+                }
             }
         }
     }
@@ -7764,25 +7986,6 @@ body.update-scroll-hidden {
     }
 }
 
-.on-setting-page,
-.on-user-page {
-    aside-setting {
-        .aside-pane {
-            .back-to-main-slider {
-                display: block !important;
-                padding: 0 12px;
-            }
-
-            h4 {
-                display: none;
-            }
-        }
-
-        &::after {
-            display: none;
-        }
-    }
-}
 .gst-sidebar-open.on-setting-page.aside-setting {
     #content-wrapper {
         padding-right: 0;
@@ -10084,6 +10287,10 @@ input[type="checkbox"].cdk-visually-hidden::after {
         }
     }
 }
+.stock-group-search input {
+    padding-left: 30px !important;
+    padding-top: 20px !important;
+}
 .stock-balance-wrapper {
     .search-warehouse-bar {
         .mat-form-field-infix {
@@ -10094,7 +10301,6 @@ input[type="checkbox"].cdk-visually-hidden::after {
 
             .mat-select-placeholder,
             mat-select-trigger {
-                padding-left: 23px;
                 color: var(--color-secondary-search-bar-placeholder);
             }
 
@@ -10110,35 +10316,6 @@ input[type="checkbox"].cdk-visually-hidden::after {
         }
     }
     .stock-balance-main-list-table {
-        .custom-material-search-bar {
-            .mat-form-field-outline {
-                height: 32px;
-                background-color: var(--color-sidebar-primary-search-bar-background);
-                border-radius: 5px;
-            }
-            input {
-                position: absolute;
-                bottom: 17.5px;
-                padding-left: 15px;
-            }
-        }
-        .stock-searchbar {
-            .mat-form-field-outline {
-                width: 230px;
-                color: var(--color-sidebar-primary-search-bar-background);
-            }
-        }
-        .unique-name-searchbar {
-            .mat-form-field-outline {
-                width: 127px;
-                color: var(--color-sidebar-primary-search-bar-background);
-            }
-        }
-        .group-searchbar {
-            .mat-form-field-outline {
-                color: var(--color-sidebar-primary-search-bar-background);
-            }
-        }
     }
 
     .stock-list-body {
@@ -10164,6 +10341,59 @@ input[type="checkbox"].cdk-visually-hidden::after {
                 }
                 .mat-select-placeholder {
                     color: var(--color-secondary-search-bar-placeholder);
+                }
+            }
+        }
+    }
+    .searching-stocks {
+        .custom-material-search-bar {
+            .mat-form-field-outline {
+                height: 32px;
+                background-color: var(--color-sidebar-primary-search-bar-background);
+                border-radius: 5px;
+            }
+            input {
+                position: absolute;
+                bottom: 17.5px;
+                padding-left: 15px;
+            }
+        }
+        .stock-searchbar {
+            .mat-form-field-outline {
+                width: 230px;
+                color: var(--color-sidebar-primary-search-bar-background);
+            }
+        }
+        .group-searchbar {
+            .mat-form-field-outline {
+                color: var(--color-sidebar-primary-search-bar-background);
+            }
+        }
+        select-field {
+            input {
+                &.mat-form-field-autofill-control {
+                    width: 167px;
+                    padding-left: 28px !important;
+                    background-color: var(--color-sidebar-primary-search-bar-background) !important;
+                    &::placeholder {
+                        color: var(--color-primary-search-bar-placeholder) !important;
+                    }
+                }
+            }
+        }
+        .stock-table {
+            .unexpanded-list {
+                .input-select-wrapper {
+                    .unit-dropdown {
+                        input {
+                            padding: 0px 5px !important;
+                            background-color: var(--color-primary-input-bar-background-focus) !important;
+                            &:active,
+                            &:focus {
+                                background-color: var(--color-common-primary-background-for-all-components) !important;
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -10235,11 +10465,6 @@ input[type="checkbox"].cdk-visually-hidden::after {
                         margin-right: 10px;
                     }
                 }
-            }
-        }
-        select-field {
-            input.mat-form-field-autofill-control {
-                border: 1px solid var(--color-secondary-input-bar-border);
             }
         }
     }

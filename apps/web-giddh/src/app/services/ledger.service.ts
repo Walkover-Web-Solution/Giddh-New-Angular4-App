@@ -6,13 +6,14 @@ import { Observable } from 'rxjs';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { GiddhErrorHandler } from './catchManager/catchmanger';
 import { LEDGER_API } from './apiurls/ledger.api';
-import { BlankLedgerVM } from '../ledger/ledger.vm';
+import { BlankLedgerVM } from '../material-ledger/ledger.vm';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { DaybookQueryRequest, DayBookRequestModel } from '../models/api-models/DaybookRequest';
 import { ToasterService } from './toaster.service';
 import { ReportsDetailedRequestFilter } from '../models/api-models/Reports';
 import { cloneDeep } from '../lodash-optimized';
+import { PAGINATION_LIMIT } from '../app.constant';
 
 @Injectable({
     providedIn: 'any'
@@ -466,7 +467,14 @@ export class LedgerService {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let url = this.config.apiUrl + LEDGER_API.GET_VOUCHER_INVOICE_LIST
         .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-        .replace(':voucherDate', encodeURIComponent(date));
+        .replace(':voucherDate', encodeURIComponent(date))
+        .replace(':number', encodeURIComponent((model.number || "")))
+        .replace(':count', (model.count || PAGINATION_LIMIT))
+        .replace(':page', (model.page || 1));
+
+        delete model.page;
+        delete model.count;
+
         if (this.generalService.voucherApiVersion === 2) {
             url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
         }

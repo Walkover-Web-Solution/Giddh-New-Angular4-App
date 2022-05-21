@@ -933,7 +933,7 @@ span.edit-icon {
 
 .btn-group .dropdown-toggle {
     margin-right: 0;
-    color: var(--color-table-quinary-content);
+    color: var(--color-blue);
 }
 
 .wrap-customer {
@@ -1098,7 +1098,7 @@ section.new-table {
     background-color: var(--color-white);
     margin: 20px 0;
     border-radius: 3px;
-    box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 6px var(--color-primary-common-box-shadow);
 }
 
 .single-card-row label.card-label {
@@ -1694,7 +1694,7 @@ span.eligible-ITC {
         &:focus {
             z-index: 3 !important;
             outline: 0 !important;
-            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25) !important;
+            box-shadow: 0 0 0 0.2rem var(--color-primary-common-box-shadow) !important;
         }
     }
 }

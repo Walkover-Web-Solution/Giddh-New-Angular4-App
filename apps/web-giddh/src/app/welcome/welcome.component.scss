@@ -118,6 +118,9 @@ fieldset[disabled] {
     cursor: pointer;
     color: var(--color-blue);
 }
+.position-relative {
+    position: relative;
+}
 .custom-multi-select {
     li {
         background: var(--color-chips-primary-background);

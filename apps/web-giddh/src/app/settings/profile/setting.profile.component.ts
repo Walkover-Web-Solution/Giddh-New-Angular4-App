@@ -304,7 +304,11 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
 
         this.store.pipe(select(appState => appState.settings.profile), takeUntil(this.destroyed$)).subscribe((response) => {
             if (response) {
+                const loadTabChangeApi = (this.currentCompanyDetails?.countryV2) ? false : true;
                 this.currentCompanyDetails = response;
+                if (loadTabChangeApi && this.currentTab === "address") {
+                    this.handleTabChanged("address");
+                }
                 if (this.currentOrganizationType === OrganizationType.Company) {
                     this.handleCompanyProfileResponse(response);
                 } else if (this.currentOrganizationType === OrganizationType.Branch) {

@@ -70,7 +70,7 @@ import { ElementViewContainerRef } from '../shared/helpers/directives/elementVie
 import { NgForm } from '@angular/forms';
 import { DiscountListComponent } from '../sales/discount-list/discountList.component';
 import { IContentCommon, InvoicePreviewDetailsVm } from '../models/api-models/Invoice';
-import { StateDetailsRequest, TaxResponse } from '../models/api-models/Company';
+import { TaxResponse } from '../models/api-models/Company';
 import { INameUniqueName } from '../models/interfaces/nameUniqueName.interface';
 import { AccountResponseV2, AddAccountRequest, UpdateAccountRequest } from '../models/api-models/Account';
 import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
@@ -95,7 +95,7 @@ import { LedgerResponseDiscountClass } from "../models/api-models/Ledger";
 import { OnboardingFormRequest } from '../models/api-models/Common';
 import { WarehouseActions } from '../settings/warehouse/action/warehouse.action';
 import { SettingsUtilityService } from '../settings/services/settings-utility.service';
-import { WarehouseDetails } from '../ledger/ledger.vm';
+import { WarehouseDetails } from '../material-ledger/ledger.vm';
 import { ConfirmationModalConfiguration } from '../common/confirmation-modal/confirmation-modal.interface';
 import { GeneralService } from '../services/general.service';
 import { ProformaInvoiceUtilityService } from './services/proforma-invoice-utility.service';
@@ -236,6 +236,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public invFormData: VoucherClass;
     /** Invoice list array */
     public invoiceList: any[];
+    /** Invoice list observable */
+    public invoiceList$: Observable<any[]>;
     /** Selected invoice for credit note */
     public selectedInvoice: any = null;
     public customerAcList$: Observable<IOption[]>;
@@ -623,6 +625,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public particulars$: Observable<IOption[]> = observableOf(null);
     public linkedParticulars$: Observable<IOption[]> = observableOf(null);
     public forceClearLinkedParticulars$: Observable<IForceClear> = observableOf({ status: false });
+    /** Current page for reference vouchers */
+    private referenceVouchersCurrentPage: number = 1;
+    /** Reference voucher search field */
+    private searchReferenceVoucher: any = "";
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -849,7 +855,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 if (this.invoiceType !== params['invoiceType']) {
                     this.invoiceType = decodeURI(params['invoiceType']) as VoucherTypeEnum;
                     this.prepareInvoiceTypeFlags();
-                    this.saveStateDetails();
                     this.resetInvoiceForm(this.invoiceForm);
 
                     // reset customer company when invoice type changes, re-check for company currency and country
@@ -862,7 +867,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 this.invoiceType = decodeURI(params['invoiceType']) as VoucherTypeEnum;
                 this.getDefaultTemplateData();
                 this.prepareInvoiceTypeFlags();
-                this.saveStateDetails();
                 this.initializeCurrentVoucherForm();
                 if (this.isCashInvoice || this.currentVoucherFormDetails?.depositAllowed) {
                     this.loadBankCashAccounts('');
@@ -1314,9 +1318,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                             obj.accountDetails.currencySymbol = '';
                         }
                         if (this.currentVoucherFormDetails?.depositAllowed || (this.isPendingVoucherType && obj.accountDetails && obj.voucherDetails)) {
-                            if(!this.isLastInvoiceCopied) {
-                                obj.accountDetails.name = results[0].account?.name;
-                                obj.voucherDetails.customerName = results[0].account?.name;
+                            if (!this.isLastInvoiceCopied) {
+                                obj.accountDetails.name = (this.voucherApiVersion === 2 && this.isCashInvoice && results[0].account.customerName) ? results[0].account.customerName : results[0].account.name;
+                                obj.voucherDetails.customerName = (this.voucherApiVersion === 2 && this.isCashInvoice && results[0].account.customerName) ? results[0].account.customerName : results[0].account.name;
                             }
                             this.loadBankCashAccounts(obj?.accountDetails?.currency?.code);
                         }
@@ -1746,13 +1750,23 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             if (this.voucherApiVersion === 2) {
                 request = {
                     accountUniqueName: this.invFormData.voucherDetails.customerUniquename,
-                    voucherType: this.isCreditNote ? VoucherTypeEnum.creditNote : VoucherTypeEnum.debitNote
+                    voucherType: this.isCreditNote ? VoucherTypeEnum.creditNote : VoucherTypeEnum.debitNote,
+                    number: '',
+                    page: 1
                 }
+
+                request.number = this.searchReferenceVoucher;
+                request.page = this.referenceVouchersCurrentPage;
+                this.referenceVouchersCurrentPage++;
             } else {
                 request = {
                     accountUniqueNames: [this.invFormData.voucherDetails.customerUniquename, 'sales'],
                     voucherType: this.isCreditNote ? VoucherTypeEnum.creditNote : VoucherTypeEnum.debitNote
                 }
+            }
+
+            if (this.voucherApiVersion === 2 && request.page === 1) {
+                this.invoiceList = [];
             }
 
             let date;
@@ -1763,7 +1777,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             } else {
                 date = moment(this.invFormData.voucherDetails.voucherDate).format(GIDDH_DATE_FORMAT);
             }
-            this.invoiceList = [];
+
+            if (this.voucherApiVersion !== 2) {
+                this.invoiceList = [];
+            }
+            
             this._ledgerService.getInvoiceListsForCreditNote(request, date).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
                 if (response && response.body) {
                     if (response.body.results || response.body.items) {
@@ -1812,6 +1830,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         }
                     }
                     uniqBy(this.invoiceList, 'value');
+                    this.invoiceList$ = observableOf(this.invoiceList);
                     this.invoiceSelected = invoiceSelected;
                     this.selectedInvoice = (invoiceSelected) ? invoiceSelected.value : '';
                     this._cdr.detectChanges();
@@ -2380,10 +2399,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             if (entry.isOtherTaxApplicable) {
                 entry.taxList.push(entry.otherTaxModal.appliedOtherTax?.uniqueName);
             }
-
-            if (entry.otherTaxType === 'tds') {
-                delete entry['tcsCalculationMethod'];
-            }
             return entry;
         });
 
@@ -2644,7 +2659,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     public toggleOtherTaxesAsidePane(modalBool: boolean, index: number = null) {
-
         if (!modalBool) {
             let entry = this.invFormData.entries[this.activeIndx];
             if (entry) {
@@ -2669,9 +2683,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public closeAsideMenuStateForOtherTaxes(): void {
         if (this.asideMenuStateForOtherTaxes === 'in') {
             this.toggleOtherTaxesAsidePane(true, null);
-            if (this.invFormData.entries[this.tcsTdsIndex]) {
-                this.invFormData.entries[this.tcsTdsIndex].isOtherTaxApplicable = false;
-            }
         }
     }
 
@@ -3445,6 +3456,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
     public onSelectCustomer(item: IOption): void {
         this.typeaheadNoResultsOfCustomer = false;
+        this.referenceVouchersCurrentPage = 1;
         if (item.value) {
             this.invFormData.voucherDetails.customerName = item.label;
             this.getAccountDetails(item.value);
@@ -3475,7 +3487,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     public getAccountDetails(accountUniqueName: string) {
-        if (this.voucherApiVersion !== 2 && this.isPurchaseInvoice) {
+        if (this.isPurchaseInvoice) {
             this.getVendorPurchaseOrders(accountUniqueName);
         }
         this.store.dispatch(this.salesAction.getAccountDetailsForSales(accountUniqueName));
@@ -4356,10 +4368,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             if (entry.isOtherTaxApplicable) {
                 entry.taxList.push(entry.otherTaxModal.appliedOtherTax?.uniqueName);
             }
-
-            if (entry.otherTaxType === 'tds') {
-                delete entry['tcsCalculationMethod'];
-            }
             return entry;
         });
 
@@ -4434,7 +4442,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 entry.otherTaxModal.appliedOtherTax.name = tax?.name;
             }
             if (['tcsrc', 'tcspay'].includes(tax?.taxType)) {
-
                 if (modal.tcsCalculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount) {
                     taxableValue = Number(entry.transactions[0].amount) - entry.discountSum;
                 } else if (modal.tcsCalculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTotalAmount) {
@@ -4443,7 +4450,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 }
                 entry.otherTaxType = 'tcs';
             } else {
-                taxableValue = Number(entry.transactions[0].amount) - entry.discountSum;
+                if (modal.tcsCalculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount) {
+                    taxableValue = Number(entry.transactions[0].amount) - entry.discountSum;
+                } else if (modal.tcsCalculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTotalAmount) {
+                    let rawAmount = Number(entry.transactions[0].amount) - entry.discountSum;
+                    taxableValue = (rawAmount + entry.taxSum + entry.cessSum);
+                }
                 entry.otherTaxType = 'tds';
             }
 
@@ -4694,13 +4706,19 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             } else if (entry.tdsTaxList && entry.tdsTaxList.length) {
                 // tds tax calculation
                 entry.isOtherTaxApplicable = true;
-                entry.otherTaxModal.tcsCalculationMethod = SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount;
                 entry.otherTaxType = 'tds';
 
                 let tax = this.companyTaxesList.find(f => f.uniqueName === entry.tdsTaxList[0]);
                 if (tax) {
                     entry.otherTaxModal.appliedOtherTax = { name: tax.name, uniqueName: tax.uniqueName };
-                    let taxableValue = Number(entry.transactions[0].amount) - entry.discountSum;
+                    let taxableValue = 0;
+                    if (entry.otherTaxModal.tcsCalculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount) {
+                        taxableValue = Number(entry.transactions[0].amount) - entry.discountSum;
+                    } else if (entry.otherTaxModal.tcsCalculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTotalAmount) {
+                        let rawAmount = Number(entry.transactions[0].amount) - entry.discountSum;
+                        taxableValue = (rawAmount + entry.taxSum + entry.cessSum);
+                    }
+
                     entry.otherTaxSum = giddhRoundOff(((taxableValue * tax.taxDetail[0].taxValue) / 100), 2);
                 }
             }
@@ -4757,16 +4775,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         } else if (!this.isPurchaseInvoice) {
             this.store.dispatch(this.invoiceReceiptActions.setVoucherForDetails(voucherNo, action));
         }
-    }
-
-    private saveStateDetails() {
-        let companyUniqueName = null;
-        this.store.pipe(select(c => c.session.companyUniqueName), take(1)).subscribe(s => companyUniqueName = s);
-        let stateDetailsRequest = new StateDetailsRequest();
-        stateDetailsRequest.companyUniqueName = companyUniqueName;
-        stateDetailsRequest.lastState = 'proforma-invoice/invoice/' + this.invoiceType;
-        this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
-        this.store.dispatch(this._generalActions.setAppTitle('/pages/proforma-invoice/invoice/' + this.invoiceType));
     }
 
     public ngOnDestroy() {
@@ -7864,5 +7872,16 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 });
             }
         }
+    }
+    
+    /**
+     * Resets invoice list and current page
+     *
+     * @memberof ProformaInvoiceComponent
+     */
+    public resetInvoiceList(): void {
+        this.invoiceList = [];
+        this.invoiceList$ = observableOf([]);
+        this.referenceVouchersCurrentPage = 1;
     }
 }

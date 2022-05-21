@@ -90,21 +90,33 @@
                 >
                     <label class="w125">{{ commonLocaleData?.app_invoice_no }}:</label>
                     <label class="radio-inline p-0">
-                        <mat-checkbox
+                        <!-- <mat-checkbox
                             color="primary"
                             name="withInvoiceNumber"
                             [(ngModel)]="withInvoiceNumber"
-                        ></mat-checkbox>
+                        ></mat-checkbox> -->
+                        <mat-slide-toggle color="primary" name="withInvoiceNumber" [(ngModel)]="withInvoiceNumber">
+                            <span class="pull-left" *ngIf="withInvoiceNumber">{{ commonLocaleData?.app_include }}</span>
+                            <span class="pull-right" *ngIf="!withInvoiceNumber">{{
+                                commonLocaleData?.app_exclude
+                            }}</span>
+                        </mat-slide-toggle>
                     </label>
                 </div>
                 <div class="pd-b2 clearfix" [hidden]="emailTypeSelected !== 'columnar'">
                     <label class="w125">{{ localeData?.cr_dr }}</label>
                     <label class="radio-inline p-0">
-                        <mat-checkbox
+                        <!-- <mat-checkbox
                             color="primary"
                             name="balanceTypeAsSign"
                             [(ngModel)]="balanceTypeAsSign"
-                        ></mat-checkbox>
+                        ></mat-checkbox> -->
+                        <mat-slide-toggle color="primary" name="balanceTypeAsSign" [(ngModel)]="balanceTypeAsSign">
+                            <span class="pull-left" *ngIf="balanceTypeAsSign">{{ commonLocaleData?.app_include }}</span>
+                            <span class="pull-right" *ngIf="!balanceTypeAsSign">{{
+                                commonLocaleData?.app_exclude
+                            }}</span>
+                        </mat-slide-toggle>
                     </label>
                 </div>
                 <button mat-button class="btn-success btn unbold" (click)="exportLedger()">

@@ -671,5 +671,7 @@
     "app_false": "गलत",
     "app_preview": "पूर्वावलोकन",
     "app_purchase_bill": "खरीद बिल",
-    "app_select_stock": "Select Stock"
+    "app_select_stock": "Select Stock",
+    "app_on": "On",
+    "app_off": "Off"
 }

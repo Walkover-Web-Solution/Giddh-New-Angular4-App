@@ -171,7 +171,16 @@
                         <div class="mr-t2">
                             <!--two way auth-->
                             <h1 class="section-head">
-                                <input type="checkbox" (change)="changeTwoWayAuth()" [(ngModel)]="twoWayAuth" />
+                                <ngx-switch
+                                    [(status)]="twoWayAuth"
+                                    [onText]="commonLocaleData?.app_on"
+                                    [offText]="commonLocaleData?.app_off"
+                                    [onColor]="bootstrapToggleSwitch?.On"
+                                    [offColor]="bootstrapToggleSwitch?.Off"
+                                    [size]="bootstrapToggleSwitch?.Size"
+                                    (statusChange)="changeTwoWayAuth()"
+                                >
+                                </ngx-switch>
                                 {{ localeData?.mobile_number?.two_way_auth_label }}
                             </h1>
                             <p class="grey" *ngIf="twoWayAuth">{{ localeData?.mobile_number?.two_way_auth_content }}</p>

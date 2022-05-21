@@ -31,11 +31,18 @@ export class CompanyCashFreeSettings {
 }
 
 export class CompanyEmailSettings {
+    constructor(){
+        this.sendThroughGmail = false;
+    }
     sendThroughSendgrid: boolean;
     sendThroughGmail: boolean;
 }
 
 export class EstimateSettings {
+    constructor() {
+        this.autoMail = false;
+        this.autoChangeStatusOnExp = false;
+    }
     headerName: string;
     nextStepToEstimate: string;
     autoChangeStatusOnExp: boolean;
@@ -46,6 +53,10 @@ export class EstimateSettings {
 }
 
 export class ProformaSettings {
+    constructor(){
+        this.autoMail = false;
+        this.autoChangeStatusOnExp = false;
+    }
     duePeriod?: any;
     autoMail: boolean;
     autoEntryAndInvoice: boolean;
@@ -61,6 +72,14 @@ export class ProformaSettings {
 }
 
 export class InvoiceSettings {
+    constructor(){
+        this.showSeal = false;
+        this.autoMail = false;
+        this.useCustomInvoiceNumber = false;
+        this.autoDeleteEntries = false;
+        this.gstEInvoiceEnable = false;
+        this.enableNarrationOnInvAndVoucher = false;
+    }
     duePeriod?: any;
     autoMail: boolean;
     autoEntryAndInvoice: boolean;

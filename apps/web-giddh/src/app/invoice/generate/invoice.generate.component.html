@@ -7,7 +7,10 @@
 >
     <div validateSectionPermission [hasPermission]="hasPendingVouchersListPermissions">
         <ng-container *ngIf="!showEditMode">
-            <div class="invoice-generate-container">
+            <div *ngIf="isGetAllRequestInProcess$ | async">
+                <giddh-page-loader></giddh-page-loader>
+            </div>
+            <div class="invoice-generate-container" *ngIf="!(isGetAllRequestInProcess$ | async)">
                 <div
                     class="btn-dropdown-dr-cr"
                     *ngIf="selectedVoucher === 'debit note' || selectedVoucher === 'credit note'"
@@ -406,7 +409,7 @@
                 </div>
             </div>
 
-            <div class="no-data" *ngIf="!ledgersData?.results?.length">
+            <div class="no-data" *ngIf="!ledgersData?.results?.length && !(isGetAllRequestInProcess$ | async)">
                 <no-data></no-data>
             </div>
         </ng-container>
