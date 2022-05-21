@@ -709,7 +709,7 @@
                                             <label>{{ localeData?.custom_invoice_no }}</label>
                                         </div>
                                         <div class="col-sm-12 col-md-9">
-                                            <div class="form-group clearfix">
+                                            <div class="form-group clearfix d-flex">
                                                 <ngx-switch
                                                     [(status)]="invoiceSetting.useCustomInvoiceNumber"
                                                     name="customInvoice"
@@ -807,7 +807,7 @@
                                             </ngx-switch>
                                             <label>{{ localeData?.e_invoice_authentication_label }}</label>
                                         </div>
-                                        <div class="col-sm-12 col-md-9 form-group user-authenticate">
+                                        <div class="col-sm-12 col-md-9 form-group user-authenticate d-flex">
                                             <ngx-switch
                                                 [(status)]="invoiceSetting.gstEInvoiceEnable"
                                                 class="hide-on-mobile"
