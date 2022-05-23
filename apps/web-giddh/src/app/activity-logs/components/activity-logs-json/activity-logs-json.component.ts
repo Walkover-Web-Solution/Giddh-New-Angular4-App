@@ -1,11 +1,10 @@
-import { Component, OnInit, Inject, ViewChild, ElementRef, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, Inject, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import * as jsonTreeViewer from 'json-tree-viewer';
 @Component({
     selector: 'activity-logs-json',
     templateUrl: './activity-logs-json.component.html',
-    styleUrls: ['activity-logs-json.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    styleUrls: ['activity-logs-json.component.scss']
 })
 export class ActivityLogsJsonComponent implements OnInit {
     /** Instance of activity logs json */
