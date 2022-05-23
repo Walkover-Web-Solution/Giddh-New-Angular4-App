@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { ReplaySubject } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivityLogsService } from '../services/activity-logs.service';
@@ -36,20 +36,18 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
     public displayedColumns: string[] = ['name', 'time', 'ip', 'entity', 'operation'];
     /** Hold the data of activity logs */
     public dataSource = ELEMENT_DATA;
-    /** Hold acitivity logs data  */
-    public activityLogs: any = {
-        totalItems: 0
-    };
     /** This will use for activity logs object */
     public activityObj = {
         count: PAGINATION_LIMIT,
-        page: 1
+        page: 1,
+        totalItems: 0
     }
 
     constructor(public activityService: ActivityLogsService,
         public dialog: MatDialog,
         private generalService: GeneralService,
-        private router: Router) { }
+        private router: Router,
+        private changeDetection: ChangeDetectorRef) { }
 
     /**
      * This function will use for on initialization
@@ -71,10 +69,10 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
     * @memberof ActivityLogsComponent
     */
     public pageChanged(event: any): void {
-        if (this.activityObj.page !== event.page) {
+        if (this.activityObj.page !== event.page ) {
             this.activityObj.page = event.page;
             this.getActivityLogs();
-        }
+        } 
     }
     /**
      * This function will be called when get the activity log
@@ -91,11 +89,12 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
                     result.time = moment(result.time, GIDDH_DATE_FORMAT + " HH:mm:ss").format(GIDDH_DATE_FORMAT);
                 });
                 this.dataSource = response.body.results;
-                this.activityLogs.totalItems = response.body.totalItems;
+                this.activityObj.totalItems = response.body.totalItems;
             } else {
                 this.dataSource = [];
-                this.activityLogs.totalItems = 0;
+                this.activityObj.totalItems = 0;
             }
+            this.changeDetection.detectChanges();
         });
     }
 

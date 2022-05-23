@@ -1,9 +1,9 @@
 <div *ngIf="isLoading">
     <giddh-page-loader></giddh-page-loader>
 </div>
-<ng-container *ngIf="!isLoading" appTranslate [file]="'activity-logs'" (localeData)="localeData = $event">
+<ng-container appTranslate [file]="'activity-logs'" (localeData)="localeData = $event">
     <div class="activity-container">
-        <div class="table-content" *ngIf="dataSource?.length > 1">
+        <div class="table-content" *ngIf="!isLoading">
             <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 giddh-table table">
                 <!-- UserName Column -->
                 <ng-container matColumnDef="name">
@@ -48,12 +48,11 @@
                 ></tr>
             </table>
         </div>
-        <div class="pagination-wrapper">
+        <div class="pagination-wrapper" *ngIf="activityObj?.totalItems > activityObj.count">
             <pagination
-                *ngIf="activityLogs?.totalItems > 1"
-                [totalItems]="activityLogs?.totalItems"
+                [totalItems]="activityObj?.totalItems"
                 [(ngModel)]="activityObj.page"
-                [maxSize]="20"
+                [maxSize]="5"
                 class="pagination-sm"
                 [boundaryLinks]="true"
                 [itemsPerPage]="activityObj.count"
@@ -67,6 +66,6 @@
         </div>
     </div>
 </ng-container>
-<div class="no-data" *ngIf="!dataSource?.length">
+<div class="no-data" *ngIf="!dataSource?.length && !isLoading">
     <no-data></no-data>
 </div>
