@@ -1,0 +1,20 @@
+.custom-datepicker-wrapper {
+    display: flex;
+    text-align: center;
+    justify-content: center;
+}
+
+.clear-filter {
+    color: var(--color-giddh-blue);
+    cursor: pointer;
+}
+.activity-filter-wrap {
+    display: flex;
+    align-items: center;
+    padding-left: 9px;
+    padding-top: 9px;
+}
+.filter-button {
+    float: left;
+    width: 10%;
+}
