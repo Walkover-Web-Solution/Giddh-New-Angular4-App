@@ -1122,9 +1122,15 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
                 }
 
                 this.adjustVoucherOptions$ = of(this.adjustVoucherOptions);
-
-                this.changeDetectionRef.detectChanges();
+            } else {
+                if (this.voucherApiVersion === 2 && requestObject.page === 1) {
+                    this.adjustVoucherOptions = [];
+                    // Since no vouchers available for adjustment, fill the suggestions with already adjusted vouchers
+                    this.pushExistingAdjustments();
+                    this.adjustVoucherOptions$ = of(this.adjustVoucherOptions);
+                }
             }
+            this.changeDetectionRef.detectChanges();
         });
     }
 }
