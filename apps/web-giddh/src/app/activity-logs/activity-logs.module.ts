@@ -12,6 +12,10 @@ import { NoDataModule } from '../shared/no-data/no-data.module';
 import { GiddhPageLoaderModule } from '../shared/giddh-page-loader/giddh-page-loader.module';
 import { TranslateDirectiveModule } from '../theme/translate/translate.directive.module';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
+import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
+import { HamburgerMenuModule } from '../shared/header/components/hamburger-menu/hamburger-menu.module';
+import { DatepickerModule } from 'ngx-bootstrap/datepicker';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
     declarations: [
@@ -33,7 +37,11 @@ import { PaginationModule } from 'ngx-bootstrap/pagination';
         NoDataModule,
         GiddhPageLoaderModule,
         TranslateDirectiveModule,
-        PaginationModule
+        PaginationModule,
+        FormFieldsModule,
+        HamburgerMenuModule,
+        DatepickerModule,
+        SharedModule
     ],
 })
 export class ActivityLogsModule {
