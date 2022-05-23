@@ -18,6 +18,10 @@ export class ActivityLogsService {
 
     /**
      * This function will use for get activity logs
+     *
+     * @param {*} model
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof ActivityLogsService
      */
     public GetActivityLogs(model: any): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
