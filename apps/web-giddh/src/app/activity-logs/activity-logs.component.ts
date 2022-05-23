@@ -1,5 +1,4 @@
-
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import { ReplaySubject } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivityLogsService } from '../services/activity-logs.service';
@@ -23,14 +22,12 @@ const ELEMENT_DATA: GetActivityLogs[] = [];
 @Component({
     selector: 'activity-logs',
     templateUrl: './activity-logs.component.html',
-    styleUrls: [`./activity-logs.component.scss`]
+    styleUrls: [`./activity-logs.component.scss`],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ActivityLogsComponent implements OnInit, OnDestroy {
-
     /** This will hold local JSON data */
     public localeData: any = {};
-    /** This will hold common JSON data */
-    public commonLocaleData: any = {};
     /** True if api call in progress */
     public isLoading: boolean = false;
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
@@ -50,8 +47,8 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
     }
 
     constructor(public activityService: ActivityLogsService,
-         public dialog: MatDialog,
-          private generalService: GeneralService,
+        public dialog: MatDialog,
+        private generalService: GeneralService,
         private router: Router) { }
 
     /**
@@ -62,8 +59,9 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         if (this.generalService.voucherApiVersion === 1) {
             this.router.navigate(['/pages/home']);
+        } else {
+            this.getActivityLogs();
         }
-        this.getActivityLogs();
     }
 
     /**

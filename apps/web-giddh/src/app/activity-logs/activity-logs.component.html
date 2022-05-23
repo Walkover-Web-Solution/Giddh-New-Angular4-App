@@ -1,13 +1,7 @@
 <div *ngIf="isLoading">
     <giddh-page-loader></giddh-page-loader>
 </div>
-<ng-container
-    *ngIf="!isLoading"
-    appTranslate
-    [file]="'activity-logs'"
-    (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event"
->
+<ng-container *ngIf="!isLoading" appTranslate [file]="'activity-logs'" (localeData)="localeData = $event">
     <div class="activity-container">
         <div class="table-content" *ngIf="dataSource?.length > 1">
             <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 giddh-table table">
