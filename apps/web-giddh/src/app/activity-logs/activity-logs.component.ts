@@ -41,12 +41,12 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
     public dataSource = ELEMENT_DATA;
     /** Hold acitivity logs data  */
     public activityLogs: any = {
-        totalPages: 0,
+        totalItems: 0
     };
     /** This will use for activity logs object */
     public activityObj = {
         count: PAGINATION_LIMIT,
-        page: 1,
+        page: 1
     }
 
     constructor(public activityService: ActivityLogsService,
@@ -93,10 +93,10 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
                     result.time = moment(result.time, GIDDH_DATE_FORMAT + " HH:mm:ss").format(GIDDH_DATE_FORMAT);
                 });
                 this.dataSource = response.body.results;
-                this.activityLogs.totalPages = response.body.totalPages;
+                this.activityLogs.totalItems = response.body.totalItems;
             } else {
                 this.dataSource = [];
-                this.activityLogs.totalPages = 0;
+                this.activityLogs.totalItems = 0;
             }
         });
     }
