@@ -23,7 +23,7 @@ export class ActivityLogsService {
      * @return {*}  {Observable<BaseResponse<any, any>>}
      * @memberof ActivityLogsService
      */
-    public GetActivityLogs(model: any): Observable<BaseResponse<any, any>> {
+    public getActivityLogs(model: any): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.post(this.config.apiUrl + ACTIVITY_LOGS_API.GET_ACTIVITY_LOGS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(
             map((res) => {

@@ -81,7 +81,7 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
      */
     public getActivityLogs(): void {
         this.isLoading = true;
-        this.activityService.GetActivityLogs(this.activityObj).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+        this.activityService.getActivityLogs(this.activityObj).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             this.isLoading = false;
             if (response && response.status === 'success') {
                 response.body?.results?.forEach(result => {
