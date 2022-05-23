@@ -1,0 +1,8 @@
+{
+    "name": "Name",
+    "date":"Date",
+    "ip": "IP",
+    "entity": "Entity",
+    "operation": "Operation",
+    "activity_logs": "Activity Logs"
+}

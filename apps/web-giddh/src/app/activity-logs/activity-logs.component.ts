@@ -8,6 +8,8 @@ import { takeUntil } from 'rxjs/operators';
 import { ActivityLogsJsonComponent } from './components/activity-logs-json/activity-logs-json.component';
 import * as moment from 'moment';
 import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
+import { GeneralService } from '../services/general.service';
+import { Router } from '@angular/router';
 /** This will use for interface */
 export interface GetActivityLogs {
     name: any;
@@ -25,13 +27,13 @@ const ELEMENT_DATA: GetActivityLogs[] = [];
 })
 export class ActivityLogsComponent implements OnInit, OnDestroy {
 
-    /* This will hold local JSON data */
+    /** This will hold local JSON data */
     public localeData: any = {};
-    /* This will hold common JSON data */
+    /** This will hold common JSON data */
     public commonLocaleData: any = {};
     /** True if api call in progress */
     public isLoading: boolean = false;
-    /* Observable to unsubscribe all the store listeners to avoid memory leaks */
+    /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** This will use for table heading */
     public displayedColumns: string[] = ['name', 'time', 'ip', 'entity', 'operation'];
@@ -47,7 +49,10 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
         page: 1,
     }
 
-    constructor(public activityService: ActivityLogsService, public dialog: MatDialog) { }
+    constructor(public activityService: ActivityLogsService,
+         public dialog: MatDialog,
+          private generalService: GeneralService,
+        private router: Router) { }
 
     /**
      * This function will use for on initialization
@@ -55,6 +60,9 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
      * @memberof ActivityLogsComponent
      */
     public ngOnInit(): void {
+        if (this.generalService.voucherApiVersion === 1) {
+            this.router.navigate(['/pages/home']);
+        }
         this.getActivityLogs();
     }
 
@@ -65,9 +73,7 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
     * @memberof ActivityLogsComponent
     */
     public pageChanged(event: any): void {
-        console.log(event);
         if (this.activityObj.page !== event.page) {
-            this.activityLogs.results = [];
             this.activityObj.page = event.page;
             this.getActivityLogs();
         }
@@ -80,20 +86,18 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
     public getActivityLogs(): void {
         this.isLoading = true;
         this.activityService.GetActivityLogs(this.activityObj).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
-            setTimeout(() => {
-                if (response && response.status === 'success') {
-                    this.isLoading = false;
-                    console.log(response);
-                    response.body.results.forEach(result => {
-                        result.time2 = moment(result.time, GIDDH_DATE_FORMAT + " HH:mm:ss").format("HH:mm:ss");
-                        result.time = moment(result.time, GIDDH_DATE_FORMAT + " HH:mm:ss").format(GIDDH_DATE_FORMAT);
-                    });
-                    console.log(response);
-                    this.dataSource = response.body.results;
-                    this.activityLogs.totalPages = response.body.totalPages;
-                }
-            }, 300);
-
+            this.isLoading = false;
+            if (response && response.status === 'success') {
+                response.body?.results?.forEach(result => {
+                    result.timeonly = moment(result.time, GIDDH_DATE_FORMAT + " HH:mm:ss").format("HH:mm:ss");
+                    result.time = moment(result.time, GIDDH_DATE_FORMAT + " HH:mm:ss").format(GIDDH_DATE_FORMAT);
+                });
+                this.dataSource = response.body.results;
+                this.activityLogs.totalPages = response.body.totalPages;
+            } else {
+                this.dataSource = [];
+                this.activityLogs.totalPages = 0;
+            }
         });
     }
 
@@ -103,9 +107,9 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
      * @param {*} element
      * @memberof ActivityLogsComponent
      */
-    public openDialog(element: any) {
+    public openDialog(element: any): void {
         this.dialog.open(ActivityLogsJsonComponent, {
-            data: element.details,
+            data: element?.details,
             panelClass: 'logs-sidebar'
         });
     }
@@ -115,7 +119,7 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
      *
      * @memberof ActivityLogsComponent
      */
-    public ngOnDestroy() {
+    public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }

@@ -9,13 +9,18 @@ import * as jsonTreeViewer from 'json-tree-viewer';
 })
 
 export class ActivityLogsJsonComponent implements OnInit {
+
     /** Instance of rejected activity log component */
     @ViewChild('activityLogs', { static: false }) public activityLogs: ElementRef;
+    /** This will hold local JSON data */
+    public localeData: any = {};
+    /** This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor(@Inject(MAT_DIALOG_DATA) public inputData,
         public dialogRef: MatDialogRef<any>) {
     }
-    
+
     /**
      * This will use for call intialization component
      *
@@ -24,7 +29,7 @@ export class ActivityLogsJsonComponent implements OnInit {
     public ngOnInit(): void {
         this.dialogRef.updatePosition({ top: '0px', right: '0px' });
         setTimeout(() => {
-            jsonTreeViewer?.create(this.inputData, this.activityLogs.nativeElement);
+            jsonTreeViewer?.create(this.inputData, this.activityLogs?.nativeElement);
         }, 100);
     }
 }
