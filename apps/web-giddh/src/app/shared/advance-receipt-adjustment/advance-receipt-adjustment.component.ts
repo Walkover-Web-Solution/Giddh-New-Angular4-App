@@ -16,7 +16,6 @@ import { giddhRoundOff } from '../helpers/helperFunctions';
 import { GeneralService } from '../../services/general.service';
 import { AdjustmentUtilityService } from './services/adjustment-utility.service';
 import { VoucherTypeEnum } from '../../models/api-models/Sales';
-import { ShSelectComponent } from '../../theme/ng-virtual-select/sh-select.component';
 
 /** Toast message when no advance receipt is found */
 const NO_ADVANCE_RECEIPT_FOUND = 'There is no advanced receipt for adjustment.';
