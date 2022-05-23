@@ -129,10 +129,8 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
 
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             if (params['type'] && this.activeTab !== params['type']) {
-                this.setStateDetails(params['type']);
                 this.activeTab = params['type'];
             } else if (!params['type'] && !this.activeTab) {
-                this.setStateDetails("auth-key");
                 this.activeTab = "auth-key";
             }
         });
@@ -315,22 +313,6 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     /**
-     * Sets the state for selected page
-     * which is used by header component
-     *
-     * @private
-     * @param {string} tabName Current selected tab
-     * @memberof UserDetailsComponent
-     */
-    private setStateDetails(tabName: string): void {
-        let companyUniqueName = null;
-        this.store.pipe(select(c => c.session.companyUniqueName), take(1)).subscribe(s => companyUniqueName = s);
-        let stateDetailsRequest = new StateDetailsRequest();
-        stateDetailsRequest.companyUniqueName = companyUniqueName;
-        stateDetailsRequest.lastState = `pages/user-details/${tabName}`;
-        this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
-    }
-     /**
      * This will return page heading based on active tab
      *
      * @param {boolean} event

@@ -66,6 +66,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ConfirmModalComponent } from '../../../theme/new-confirm-modal/confirm-modal.component';
 import { NewConfirmationModalComponent } from '../../../theme/new-confirmation-modal/confirmation-modal.component';
 import { MatAccordion } from '@angular/material/expansion';
+import { SettingsDiscountService } from '../../../services/settings.discount.service';
 
 /** New ledger entries */
 const NEW_LEDGER_ENTRIES = [
@@ -244,6 +245,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public invoiceListRequestParams: any = {};
     /** Round off amount */
     public calculatedRoundOff: number = 0;
+    /** List of discounts */	
+    public discountsList: any[] = [];
 
     constructor(private store: Store<AppState>,
         private cdRef: ChangeDetectorRef,
@@ -253,7 +256,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         private settingsUtilityService: SettingsUtilityService,
         private toaster: ToasterService,
         public dialog: MatDialog,
-        private settingsTagService: SettingsTagService
+        private settingsTagService: SettingsTagService,
+        private settingsDiscountService: SettingsDiscountService
     ) {
         this.companyTaxesList$ = this.store.pipe(select(p => p.company && p.company.taxes), takeUntil(this.destroyed$));
         this.sessionKey$ = this.store.pipe(select(p => p.session.user.session.id), takeUntil(this.destroyed$));
@@ -361,6 +365,12 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             this.availableItcList[2].label = this.localeData?.others;
         }
         this.voucherApiVersion = this.generalService.voucherApiVersion;
+
+        this.settingsDiscountService.GetDiscounts().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.status === "success" && response?.body?.length > 0) {
+                this.discountsList = response?.body;
+            }
+        });
     }
 
     @HostListener('click', ['$event'])

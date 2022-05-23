@@ -1,12 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AppState } from '../../../store';
 import { GeneralActions } from '../../../actions/general/general.actions';
-import { select, Store } from '@ngrx/store';
+import { Store } from '@ngrx/store';
 import { ActivatedRoute, Router } from '@angular/router';
-import { take, takeUntil } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
-import { StateDetailsRequest } from '../../../models/api-models/Company';
-import { CompanyActions } from '../../../actions/company.actions';
 import { BreakpointObserver } from '@angular/cdk/layout';
 
 @Component({
@@ -31,7 +29,6 @@ export class PurchaseRecordComponent implements OnInit, OnDestroy {
         private generalAction: GeneralActions,
         public route: ActivatedRoute,
         private breakPointObservar: BreakpointObserver,
-        private companyActions: CompanyActions,
         public router: Router
     ) {
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
@@ -48,7 +45,6 @@ export class PurchaseRecordComponent implements OnInit, OnDestroy {
      */
     public ngOnInit(): void {
         this.store.dispatch(this.generalAction.setAppTitle('/pages/purchase-management/purchase'));
-        this.saveLastState(this.activeTab);
 
         this.breakPointObservar.observe([
             '(max-width: 767px)'
@@ -76,7 +72,6 @@ export class PurchaseRecordComponent implements OnInit, OnDestroy {
      */
     public onTabChanged(tabName: string): void {
         this.router.navigate(['pages/purchase-management/purchase/', tabName], { replaceUrl: true });
-        this.saveLastState(tabName);
     }
 
     /**
@@ -109,21 +104,5 @@ export class PurchaseRecordComponent implements OnInit, OnDestroy {
         else {
             return "" ;
         }
-    }
-
-    /**
-     * Saves the last state for purchase module
-     *
-     * @private
-     * @param {string} tabName Current tab name
-     * @memberof PurchaseRecordComponent
-     */
-    private saveLastState(tabName: string): void {
-        let companyUniqueName = null;
-        this.store.pipe(select(appState => appState.session.companyUniqueName), take(1)).subscribe(response => companyUniqueName = response);
-        let stateDetailsRequest = new StateDetailsRequest();
-        stateDetailsRequest.companyUniqueName = companyUniqueName;
-        stateDetailsRequest.lastState = `pages/purchase-management/purchase/${tabName}`;
-        this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
     }
 }

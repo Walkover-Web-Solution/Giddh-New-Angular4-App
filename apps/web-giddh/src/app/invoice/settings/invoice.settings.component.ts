@@ -33,8 +33,6 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
     public webhooks: InvoiceWebhooks[];
     public invoiceWebhook: InvoiceWebhooks[];
     public estimateWebhook: InvoiceWebhooks[];
-    public invoiceLastState: InvoiceSettings;
-    public webhookLastState: InvoiceWebhooks[];
     public webhookIsValidate: boolean = false;
     public settingResponse: any;
     public formToSave: any;
@@ -95,7 +93,6 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
-        this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.store.dispatch(this.settingsIntegrationActions.GetGmailIntegrationStatus());
         this.activeCompany$ = this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$));
         this.store.pipe(select(s => s.settings.isGmailIntegrated), takeUntil(this.destroyed$)).subscribe(result => {
@@ -151,10 +148,6 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
                 this.invoiceSetting = cloneDeep(setting.invoiceSettings);
                 this.proformaSetting = cloneDeep(setting.proformaSettings);
                 this.invoiceSetting.autoPaid = this.invoiceSetting.autoPaid === 'runtime';
-
-                // using last state to compare data before dispatching action
-                this.invoiceLastState = cloneDeep(setting.invoiceSettings);
-                this.webhookLastState = cloneDeep(setting.webhooks ?? []);
 
                 let webhookArray = cloneDeep(setting.webhooks ?? []);
 

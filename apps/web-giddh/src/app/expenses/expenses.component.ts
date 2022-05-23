@@ -8,9 +8,7 @@ import * as moment from 'moment/moment';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../shared/helpers/defaultDateFormat';
 import { ExpenseResults, PettyCashReportResponse } from '../models/api-models/Expences';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
-import { CompanyActions } from '../actions/company.actions';
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
-import { StateDetailsRequest } from '../models/api-models/Company';
 import { GeneralService } from '../services/general.service';
 import { PendingListComponent } from './components/pending-list/pending-list.component';
 import { RejectedListComponent } from './components/rejected-list/rejected-list.component';
@@ -95,7 +93,6 @@ export class ExpensesComponent implements OnInit, OnDestroy {
         private store: Store<AppState>,
         private route: ActivatedRoute,
         private modalService: BsModalService,
-        private companyActions: CompanyActions,
         private cdRf: ChangeDetectorRef,
         private generalService: GeneralService,
         private router: Router,
@@ -114,9 +111,6 @@ export class ExpensesComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
-        if (this.generalService.voucherApiVersion === 2) {
-            this.router.navigate(['/pages/home']);
-        }
         this.getActiveTab();
 
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
@@ -173,8 +167,6 @@ export class ExpensesComponent implements OnInit, OnDestroy {
                 }, 100);
             }
         });
-
-        this.saveLastState('');
     }
 
     public selectedRowToggle(e) {
@@ -312,9 +304,9 @@ export class ExpensesComponent implements OnInit, OnDestroy {
      */
     public tabChanged(event: any): void {
         let tab = (event?.index === 0) ? "pending" : "rejected";
-        if (event && !event.target) {
-            this.saveLastState(tab);
-        }
+        let tabIndex = (event?.index === 0) ? 0 : 1;
+
+        this.router.navigate(['pages', 'expenses-manager'], { queryParams: { tab: tab, tabIndex: tabIndex } } );
 
         if (tab === "pending" && this.rejectedListComponent && this.rejectedListComponent.pettycashRequest) {
             this.rejectedTabSortOptions.sort = this.rejectedListComponent.pettycashRequest.sort;
@@ -334,15 +326,6 @@ export class ExpensesComponent implements OnInit, OnDestroy {
                 this.rejectedListComponent.pettycashRequest.sortBy = this.rejectedTabSortOptions.sortBy;
             }
         }, 20);
-    }
-
-    private saveLastState(state: string) {
-        let companyUniqueName = null;
-        this.store.pipe(select(c => c.session.companyUniqueName), take(1)).subscribe(s => companyUniqueName = s);
-        let stateDetailsRequest = new StateDetailsRequest();
-        stateDetailsRequest.companyUniqueName = companyUniqueName;
-        stateDetailsRequest.lastState = `pages/expenses-manager${state ? +'/' + state : ''}`;
-        this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
     }
 
     detectChanges() {
