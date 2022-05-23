@@ -129,6 +129,7 @@
             + {
                 label {
                     line-height: 26px;
+                    margin-left: 36px;
                 }
             }
         }
@@ -147,6 +148,12 @@
         }
         .btn-wrapper {
             padding: 0 15px;
+        }
+    }
+
+    .sales-order-tab {
+        .custom-purchase-order-input-fields {
+            margin-top: 8px;
         }
     }
 }
