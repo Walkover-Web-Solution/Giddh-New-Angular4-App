@@ -8,9 +8,6 @@ import { ActivityLogsComponent } from './activity-logs.component';
         RouterModule.forChild([
             {
                 path: '', component: ActivityLogsComponent, canActivate: [NeedsAuthentication],
-            },
-            {
-                path: ':version', component: ActivityLogsComponent, canActivate: [NeedsAuthentication],
             }
         ])
     ],

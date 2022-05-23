@@ -1,6 +1,11 @@
-<ng-container appTranslate [file]="'activity-logs'">
+<ng-container
+    appTranslate
+    [file]="'activity-logs'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+>
     <div class="modal-header d-flex align-items-center">
-        <h3>Activity Logs</h3>
+        <h3>{{ localeData?.activity_logs }}</h3>
         <span aria-hidden="true" class="close" mat-dialog-close>×</span>
     </div>
     <mat-dialog-content class="all-activity-content">

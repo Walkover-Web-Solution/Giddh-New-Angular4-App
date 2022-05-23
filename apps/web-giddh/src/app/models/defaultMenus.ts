@@ -25,7 +25,6 @@ export let NAVIGATION_ITEM_LIST_ORIGINAL: IUlist[] = [
     { type: 'MENU', name: 'Balance Sheet', uniqueName: '/pages/trial-balance-and-profit-loss', additional: { tab: 'balance-sheet', tabIndex: 2 }, hasTabs: true },
 
     { type: 'MENU', name: 'Audit Logs', uniqueName: '/pages/audit-logs', hasTabs: false },
-    { type: 'MENU', name: 'Activity Logs', uniqueName: '/pages/activity-logs', hasTabs: false },
     { type: 'MENU', name: 'All Giddh Items', uniqueName: '/pages/giddh-all-items', hasTabs: false },
     // { type: 'MENU', name: 'Taxes', uniqueName: '/pages/purchase/invoice' },
     { type: 'MENU', name: 'Inventory', uniqueName: '/pages/inventory', hasTabs: true },

@@ -39,10 +39,6 @@ export const SCOPE_TO_ROUTE_MAPPING = [
         value: 'AUDIT_LOGS'
     },
     {
-        key: '/pages/activity-logs',
-        value: 'ACTIVITY_LOGS'
-    },
-    {
         key: '/pages/permissions',
         value: 'MANAGE'
     },
