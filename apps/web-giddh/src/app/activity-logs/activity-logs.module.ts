@@ -11,6 +11,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { NoDataModule } from '../shared/no-data/no-data.module';
 import { GiddhPageLoaderModule } from '../shared/giddh-page-loader/giddh-page-loader.module';
 import { TranslateDirectiveModule } from '../theme/translate/translate.directive.module';
+import { PaginationModule } from 'ngx-bootstrap/pagination';
 
 @NgModule({
     declarations: [
@@ -31,7 +32,8 @@ import { TranslateDirectiveModule } from '../theme/translate/translate.directive
         MatTooltipModule,
         NoDataModule,
         GiddhPageLoaderModule,
-        TranslateDirectiveModule
+        TranslateDirectiveModule,
+        PaginationModule
     ],
 })
 export class ActivityLogsModule {

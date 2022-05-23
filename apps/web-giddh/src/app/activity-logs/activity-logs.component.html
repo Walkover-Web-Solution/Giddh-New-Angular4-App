@@ -56,13 +56,13 @@
         </div>
         <div class="pagination-wrapper">
             <pagination
-                *ngIf="activityLogs?.totalPages > 1"
-                [totalItems]="activityLogs?.totalPages"
+                *ngIf="activityLogs?.totalItems > 1"
+                [totalItems]="activityLogs?.totalItems"
                 [(ngModel)]="activityObj.page"
-                [maxSize]="6"
+                [maxSize]="20"
                 class="pagination-sm"
                 [boundaryLinks]="true"
-                [itemsPerPage]="1"
+                [itemsPerPage]="activityObj.count"
                 [rotate]="false"
                 (pageChanged)="pageChanged($event)"
                 [firstText]="commonLocaleData?.app_first"
