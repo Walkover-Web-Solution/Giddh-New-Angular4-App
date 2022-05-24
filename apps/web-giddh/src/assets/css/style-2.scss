@@ -91,6 +91,8 @@ $custom-typography: mat-typography-config(
         margin: 0 !important;
         padding: 0 !important;
         max-height: 100%;
+        float: left;
+        width: 100%;
     }
     .mat-dialog-container {
         overflow: hidden;
