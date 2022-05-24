@@ -272,6 +272,12 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public manualGenerateVoucherChecked: boolean = false;
     /** Holds input to get invoice list request params */
     public invoiceListRequestParams: any = {};
+    /** Current page for reference vouchers */
+    private referenceVouchersCurrentPage: number = 1;
+    /** Reference voucher search field */
+    private searchReferenceVoucher: any = "";
+    /** Invoice list observable */
+    public invoiceList$: Observable<any[]>;
 
     constructor(
         private accountService: AccountService,
@@ -1041,6 +1047,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @memberof UpdateLedgerEntryPanelComponent
      */
     public getInvoiceListsData(event: any): void {
+        if (this.voucherApiVersion === 2) {
+            this.resetInvoiceList();
+        }
         if (event.value === VoucherTypeEnum.creditNote || event.value === VoucherTypeEnum.debitNote) {
             this.getInvoiceListsForCreditNote();
         }
@@ -1115,20 +1124,33 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             return;
         }
 
+        request.number = this.searchReferenceVoucher;
+
+        if (request.number) {
+            this.resetInvoiceList();
+        }
+
+        request.page = this.referenceVouchersCurrentPage;
+        this.referenceVouchersCurrentPage++;
+
         let date;
         if (typeof this.vm.selectedLedger.entryDate === 'string') {
             date = this.vm.selectedLedger.entryDate;
         } else {
             date = moment(this.vm.selectedLedger.entryDate).format(GIDDH_DATE_FORMAT);
         }
-        this.invoiceList = [];
+
+        if (this.voucherApiVersion !== 2) {
+            this.invoiceList = [];
+        }
+
         this.ledgerService.getInvoiceListsForCreditNote(request, date).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
             if (response && response.body) {
                 if (response.body.results || response.body.items) {
                     let items = [];
-                    if(response.body.results) {
+                    if (response.body.results) {
                         items = response.body.results;
-                    } else if(response.body.items) {
+                    } else if (response.body.items) {
                         items = response.body.items;
                     }
 
@@ -1149,7 +1171,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 }
 
                 if (selectedInvoice) {
-                    if(this.voucherApiVersion === 2) {
+                    if (this.voucherApiVersion === 2) {
                         selectedInvoice.number = this.generalService.getVoucherNumberLabel(selectedInvoice?.voucherType, selectedInvoice?.number, this.commonLocaleData);
 
                         invoiceSelected = {
@@ -1164,14 +1186,18 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                             value: selectedInvoice.invoiceUniqueName,
                             additional: selectedInvoice
                         };
-                    }
-                    const linkedInvoice = this.invoiceList.find(invoice => invoice.value === invoiceSelected.value);
-                    if (!linkedInvoice) {
-                        this.invoiceList.push(invoiceSelected);
+
+                        const linkedInvoice = this.invoiceList.find(invoice => invoice.value === invoiceSelected.value);
+                        if (!linkedInvoice) {
+                            this.invoiceList.push(invoiceSelected);
+                        }
                     }
                 }
                 this.invoiceList = _.uniqBy(this.invoiceList, 'value');
+                this.invoiceList$ = observableOf(this.invoiceList);
                 this.selectedInvoice = (invoiceSelected) ? invoiceSelected.value : '';
+            } else if (request.number) {
+                this.resetInvoiceList();
             }
         });
     }
@@ -2372,5 +2398,16 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 this.store.dispatch(this.ledgerAction.getLedgerTrxDetails(this.accountUniqueName, this.entryUniqueName));
             }
         });
+    }
+
+    /**
+     * Resets invoice list and current page
+     *
+     * @memberof UpdateLedgerEntryPanelComponent
+     */
+    public resetInvoiceList(): void {
+        this.invoiceList = [];
+        this.invoiceList$ = observableOf([]);
+        this.referenceVouchersCurrentPage = 1;
     }
 }
