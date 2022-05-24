@@ -1,6 +1,3 @@
-<!-- <div *ngIf="isLoading">
-    <giddh-page-loader></giddh-page-loader>
-</div> -->
 <ng-container
     appTranslate
     [file]="'activity-logs'"
@@ -67,6 +64,9 @@
             </div>
         </div>
         <button mat-raised-button class="btn-success min160 mr-l1" (click)="getActivityLogs(true)">Get Logs</button>
+        <div *ngIf="isLoading">
+            <giddh-page-loader></giddh-page-loader>
+        </div>
         <div class="table-content" *ngIf="!isLoading">
             <table mat-table [dataSource]="dataSource" class="giddh-table table">
                 <!-- UserName Column -->
