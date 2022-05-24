@@ -6421,6 +6421,12 @@ highcharts-chart {
     }
 }
 
+.purchase-invoice-rcm {
+    .popover-content {
+        background-color: var(--color-common-primary-background-for-all-components);
+    }
+}
+
 .popover.adjustment-popover {
     margin: 0;
 }
@@ -7990,27 +7996,35 @@ body.update-scroll-hidden {
     }
     .cdk-overlay-container {
         .cdk-global-overlay-wrapper {
-            .cdk-overlay-pane {
-                .mat-dialog-container {
-                    overflow: visible;
-                }
-            }
-            .mail-model-container {
-                .mat-dialog-container {
-                    .modal-body {
-                        input,
-                        textarea {
-                            border: 1px solid var(--color-secondary-input-bar-border);
+            .mat-dialog-container {
+                .modal-body {
+                    input,
+                    textarea {
+                        border: 1px solid var(--color-secondary-input-bar-border);
+                        .cdk-overlay-pane {
+                            .mat-dialog-container {
+                                overflow: visible;
+                            }
                         }
-                    }
-                }
-            }
-            .modal-body {
-                sh-select-menu {
-                    .menu {
-                        virtual-scroll {
-                            .total-padding {
-                                height: auto;
+                        .mail-model-container {
+                            .mat-dialog-container {
+                                .modal-body {
+                                    input,
+                                    textarea {
+                                        border: 1px solid var(--color-secondary-input-bar-border);
+                                    }
+                                }
+                            }
+                        }
+                        .modal-body {
+                            sh-select-menu {
+                                .menu {
+                                    virtual-scroll {
+                                        .total-padding {
+                                            height: auto;
+                                        }
+                                    }
+                                }
                             }
                         }
                     }

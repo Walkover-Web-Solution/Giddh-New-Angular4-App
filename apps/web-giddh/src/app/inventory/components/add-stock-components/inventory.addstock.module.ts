@@ -6,6 +6,7 @@ import { ConfirmModalModule } from '../../../theme';
 
 import { ShSelectModule } from '../../../theme/ng-virtual-select/sh-select.module';
 import { InventoryAddStockComponent } from './inventory.addstock.component';
+import { NgxBootstrapSwitchModule } from 'ngx-bootstrap-switch';
 
 @NgModule({
     declarations: [InventoryAddStockComponent],
@@ -15,7 +16,8 @@ import { InventoryAddStockComponent } from './inventory.addstock.component';
         ReactiveFormsModule,
         ShSelectModule,
         BsDropdownModule,
-        ConfirmModalModule
+        ConfirmModalModule,
+        NgxBootstrapSwitchModule.forRoot()
     ],
     exports: [InventoryAddStockComponent]
 })
