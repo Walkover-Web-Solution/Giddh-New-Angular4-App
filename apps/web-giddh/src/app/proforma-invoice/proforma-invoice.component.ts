@@ -201,6 +201,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     /** Billing state field instance */
     @ViewChild('statesShipping', { static: false }) statesShipping: SalesShSelectComponent;
     public showAdvanceReceiptAdjust: boolean = false;
+    /** This will reload voucher pdf and attachments on preview page */
     @Output() public reloadFiles: EventEmitter<boolean> = new EventEmitter<boolean>();
     @Output() public cancelVoucherUpdate: EventEmitter<boolean> = new EventEmitter<boolean>();
 
@@ -7721,7 +7722,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 this.selectedFileName = '';
                 this.invFormData.entries[0].attachedFile = '';
                 this._toasty.successToast(response?.body);
-                this.reloadFiles.emit(true);
+                if (!this.callFromOutside) {
+                    this.reloadFiles.emit(true);
+                }
                 this._cdr.detectChanges();
             } else {
                 this._toasty.errorToast(response?.message)
