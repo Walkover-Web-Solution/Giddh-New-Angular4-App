@@ -381,6 +381,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         this.attachedPdfFileUrl = null;
         this.imagePreviewSource = null;
         this.selectedItem.hasAttachment = false;
+        this.detectChanges();
 
         if(this._generalService.voucherApiVersion === 2 && ![VoucherTypeEnum.generateEstimate, VoucherTypeEnum.generateProforma].includes(this.voucherType)) {
             let getRequest = {
