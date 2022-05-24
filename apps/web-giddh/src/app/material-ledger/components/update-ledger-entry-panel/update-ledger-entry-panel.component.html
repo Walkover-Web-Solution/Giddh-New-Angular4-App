@@ -133,7 +133,7 @@
                                                 name="datess"
                                                 [(ngModel)]="vm.selectedLedger.entryDate"
                                                 (click)="addBlankTrx('DEBIT', txn, $event)"
-                                                (dateSelected)="getInvoiceListsForCreditNote()"
+                                                (dateSelected)="resetInvoiceList(); getInvoiceListsForCreditNote()"
                                             ></giddh-datepicker>
                                         </td>
                                         <td
@@ -1526,6 +1526,80 @@
                                                             : commonLocaleData?.app_invoice_no
                                                     }}</label>
                                                     <sh-select
+                                                        *ngIf="voucherApiVersion === 2"
+                                                        id="update-ledger-invoice-voucher-number"
+                                                        [options]="invoiceList$ | async"
+                                                        [placeholder]="commonLocaleData?.app_select_accounts"
+                                                        [(ngModel)]="selectedInvoice"
+                                                        [notFoundLink]="false"
+                                                        [forceClearReactive]="forceClear$ | async"
+                                                        [class.disabled-ledger]="
+                                                            !isPettyCash &&
+                                                            currentOrganizationType === 'COMPANY' &&
+                                                            branches?.length > 1
+                                                        "
+                                                        (selected)="creditNoteInvoiceSelected($event)"
+                                                        [multiple]="false"
+                                                        [disabled]="
+                                                            !isPettyCash &&
+                                                            currentOrganizationType === 'COMPANY' &&
+                                                            branches?.length > 1
+                                                        "
+                                                        [ItemHeight]="67"
+                                                        [showClear]="false"
+                                                        [isPaginationEnabled]="true"
+                                                        (scrollEnd)="
+                                                            !searchReferenceVoucher
+                                                                ? getInvoiceListsForCreditNote()
+                                                                : ''
+                                                        "
+                                                        [enableDynamicSearch]="true"
+                                                        (dynamicSearchedQuery)="
+                                                            searchReferenceVoucher = $event;
+                                                            getInvoiceListsForCreditNote()
+                                                        "
+                                                    >
+                                                        <ng-template #optionTemplate let-option="option">
+                                                            <a href="javascript:void(0)" class="list-item sh-template">
+                                                                <div class="item">
+                                                                    {{
+                                                                        (vm.selectedLedger?.voucher?.shortCode ===
+                                                                            "pur" ||
+                                                                            vm.selectedLedger?.voucher?.shortCode ===
+                                                                                "purchase") &&
+                                                                        !option.label
+                                                                            ? commonLocaleData?.app_not_available
+                                                                            : option.label
+                                                                    }}
+                                                                </div>
+                                                                <div class="item-unique">
+                                                                    ({{ localeData?.dated }}:
+                                                                    {{
+                                                                        option.additional?.date ??
+                                                                            option.additional?.voucherDate
+                                                                    }})
+                                                                </div>
+                                                                <div class="item-unique">
+                                                                    ({{ commonLocaleData?.app_amount }}:
+                                                                    <span class="d-inline-flex">
+                                                                        <amount-field
+                                                                            [amount]="
+                                                                                voucherApiVersion === 2
+                                                                                    ? option.additional
+                                                                                          ?.unadjustedAmount
+                                                                                          ?.amountForAccount
+                                                                                    : option.additional?.balanceDue
+                                                                                          ?.amountForAccount
+                                                                            "
+                                                                        >
+                                                                        </amount-field>
+                                                                    </span>
+                                                                </div>
+                                                            </a>
+                                                        </ng-template>
+                                                    </sh-select>
+                                                    <sh-select
+                                                        *ngIf="voucherApiVersion !== 2"
                                                         id="update-ledger-invoice-voucher-number"
                                                         [options]="invoiceList"
                                                         [placeholder]="commonLocaleData?.app_select_accounts"

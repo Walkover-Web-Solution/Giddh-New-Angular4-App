@@ -1,7 +1,7 @@
 let URL = 'company/:companyUniqueName/accounts/:accountUniqueName/';
 export const SALES_API_V2 = {
     GENERATE_GENERIC_ITEMS: `company/:companyUniqueName/accounts/:accountUniqueName/vouchers/generate`,
-    GET_VOUCHER_INVOICE_LIST: 'company/:companyUniqueName/vouchers/invoice-list?voucherDate=:voucherDate&adjustmentRequest=:adjustmentRequest&count=:count',
+    GET_VOUCHER_INVOICE_LIST: 'company/:companyUniqueName/vouchers/invoice-list?voucherDate=:voucherDate&adjustmentRequest=:adjustmentRequest&count=:count&page=:page&number=:number',
     UPDATE_VOUCHER: URL + 'vouchers',
     GET_ACCOUNTS_OF_GROUP_WITH_CURRENCY: 'company/:companyUniqueName/brief-accounts'
 };
