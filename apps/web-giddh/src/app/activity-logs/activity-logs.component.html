@@ -1,51 +1,15 @@
-<div *ngIf="isLoading">
+<!-- <div *ngIf="isLoading">
     <giddh-page-loader></giddh-page-loader>
-</div>
+</div> -->
 <ng-container
     appTranslate
     [file]="'activity-logs'"
     (commonLocaleData)="commonLocaleData = $event"
     (localeData)="localeData = $event"
 >
-    <hamburger-menu [pageHeading]="localeData?.activity_logs"></hamburger-menu>
+    <hamburger-menu></hamburger-menu>
     <div class="activity-container">
-        <div class="activity-filter-wrap" *ngIf="!isLoading">
-            <div class="entity-wrapper mr-l1 filter-button">
-                <select-field
-                    [cssClass]="'form-control'"
-                    [name]="'entity'"
-                    [placeholder]="'Entity'"
-                    [options]="entities"
-                    (selectedOption)="activityObj.entity = $event.value"
-                    [defaultValue]="selectedEntity"
-                >
-                </select-field>
-            </div>
-            <div class="operation-wrapper mr-l1 filter-button">
-                <select-field
-                    [cssClass]="'form-control'"
-                    [name]="'operation'"
-                    [placeholder]="'Operation'"
-                    [options]="filters"
-                    (selectedOption)="activityObj.operation = $event.value"
-                    [defaultValue]="selectedOperation"
-                >
-                </select-field>
-            </div>
-            <div class="user-wrapper mr-l1 filter-button">
-                <select-field
-                    [cssClass]="'form-control'"
-                    [name]="'user'"
-                    [placeholder]="'User'"
-                    [options]="users"
-                    (selectedOption)="selectedEntityType($event)"
-                    [defaultValue]="selectedUserUniqueName"
-                >
-                </select-field>
-            </div>
-            <button mat-raised-button class="btn-success min-width-100 mr-l1" (click)="getActivityLogs(true)">
-                Get Logs
-            </button>
+        <div class="activity-filter-wrap">
             <div class="mr-t15 mr-b15 custom-datepicker-wrapper">
                 <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
                     <i class="icon-calender calendar-addon"></i>
@@ -57,18 +21,57 @@
                     />
                 </div>
             </div>
+            <div class="entity-wrapper mr-l1 filter-button">
+                <select-field
+                    [cssClass]="'form-control'"
+                    [name]="'entity'"
+                    [placeholder]="'Entity'"
+                    [options]="entities"
+                    (selectedOption)="activityObj.entity = $event.value"
+                >
+                </select-field>
+            </div>
+            <div class="operation-wrapper mr-l1 filter-button">
+                <select-field
+                    [cssClass]="'form-control'"
+                    [name]="'operation'"
+                    [placeholder]="'Operation'"
+                    [options]="filters[activityObj.entity ? activityObj.entity : '']"
+                    (selectedOption)="activityObj.operation = $event.value"
+                >
+                </select-field>
+            </div>
+            <div class="user-wrapper mr-l1 filter-button">
+                <select-field
+                    [cssClass]="'form-control'"
+                    [name]="'user'"
+                    [placeholder]="'User'"
+                    [options]="users"
+                    (selectedOption)="selecteUserType($event)"
+                >
+                </select-field>
+            </div>
 
-            <div *ngIf="showClearFilter" class="clear-filter form-group mb-0">
+            <div
+                class="clear-filter form-group mb-0"
+                *ngIf="
+                    showDateReport ||
+                    activityObj.entity ||
+                    activityObj.operation ||
+                    activityObj.userUniqueNames?.length > 0
+                "
+            >
                 <button mat-raised-button class="btn-success min-width-100 mr-l1" (click)="resetFilter()">
                     <span class="icon-cross"></span> {{ commonLocaleData?.app_clear_filter }}
                 </button>
             </div>
         </div>
+        <button mat-raised-button class="btn-success min160 mr-l1" (click)="getActivityLogs(true)">Get Logs</button>
         <div class="table-content" *ngIf="!isLoading">
             <table mat-table [dataSource]="dataSource" class="giddh-table table">
                 <!-- UserName Column -->
                 <ng-container matColumnDef="name">
-                    <th mat-header-cell *matHeaderCellDef>{{ localeData?.name }}</th>
+                    <th mat-header-cell *matHeaderCellDef>{{ dataSource?.length ? localeData?.name : "" }}</th>
                     <td mat-cell *matCellDef="let element">
                         <span [matTooltip]="element.user.email">{{ element.user.name }}</span>
                     </td>
@@ -76,7 +79,7 @@
 
                 <!-- Date Column -->
                 <ng-container matColumnDef="time">
-                    <th mat-header-cell *matHeaderCellDef>{{ localeData?.date }}</th>
+                    <th mat-header-cell *matHeaderCellDef>{{ dataSource?.length ? localeData?.date : "" }}</th>
                     <td mat-cell *matCellDef="let element">
                         <span [matTooltip]="element.timeonly"> {{ element.time }}</span>
                     </td>
@@ -84,19 +87,19 @@
 
                 <!-- IP Column -->
                 <ng-container matColumnDef="ip">
-                    <th mat-header-cell *matHeaderCellDef>{{ localeData?.ip }}</th>
+                    <th mat-header-cell *matHeaderCellDef>{{ dataSource?.length ? localeData?.ip : "" }}</th>
                     <td mat-cell *matCellDef="let element">{{ element.ip }}</td>
                 </ng-container>
 
                 <!-- Entity Column -->
                 <ng-container matColumnDef="entity">
-                    <th mat-header-cell *matHeaderCellDef>{{ localeData?.entity }}</th>
+                    <th mat-header-cell *matHeaderCellDef>{{ dataSource?.length ? localeData?.entity : "" }}</th>
                     <td mat-cell *matCellDef="let element">{{ element.entity }}</td>
                 </ng-container>
 
                 <!-- Operation Column -->
                 <ng-container matColumnDef="operation">
-                    <th mat-header-cell *matHeaderCellDef>{{ localeData?.operation }}</th>
+                    <th mat-header-cell *matHeaderCellDef>{{ dataSource?.length ? localeData?.operation : "" }}</th>
                     <td mat-cell *matCellDef="let element">{{ element.operation }}</td>
                 </ng-container>
 
@@ -108,6 +111,9 @@
                     (click)="openDialog(row)"
                 ></tr>
             </table>
+            <div class="no-data" *ngIf="!dataSource?.length && !isLoading">
+                <no-data [secondaryMessage]="'You can use the filters to fetch logs '"></no-data>
+            </div>
         </div>
         <div class="pagination-wrapper" *ngIf="activityObj?.totalItems > activityObj.count && !isLoading">
             <pagination
@@ -127,9 +133,6 @@
         </div>
     </div>
 </ng-container>
-<div class="no-data" *ngIf="!dataSource?.length && !isLoading">
-    <no-data></no-data>
-</div>
 <ng-template #datepickerTemplate>
     <div class="datepicker-modal">
         <div class="modal-body">
