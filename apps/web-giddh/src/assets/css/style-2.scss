@@ -83,21 +83,6 @@ $custom-typography: mat-typography-config(
     float: left !important;
     width: auto !important;
 }
-.logs-sidebar {
-    min-height: 100% !important;
-    height: 100% !important;
-    width: 760px !important;
-    .mat-dialog-content {
-        margin: 0 !important;
-        padding: 0 !important;
-        max-height: 100%;
-        float: left;
-        width: 100%;
-    }
-    .mat-dialog-container {
-        overflow: hidden;
-    }
-}
 @media screen and (max-width: 1366px) and (orientation: portrait) {
     .subscription-form-select {
         float: left !important;
@@ -10495,5 +10480,20 @@ input[type="checkbox"].cdk-visually-hidden::after {
                 }
             }
         }
+    }
+}
+.logs-sidebar {
+    min-height: 100% !important;
+    height: 100% !important;
+    width: 760px !important;
+    .mat-dialog-content {
+        margin: 0 !important;
+        padding: 0 !important;
+        max-height: 100%;
+        float: left;
+        width: 100%;
+    }
+    .mat-dialog-container {
+        overflow: hidden;
     }
 }

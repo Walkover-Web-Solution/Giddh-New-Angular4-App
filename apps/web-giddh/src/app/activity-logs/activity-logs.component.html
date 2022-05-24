@@ -22,7 +22,7 @@
                 <select-field
                     [cssClass]="'form-control'"
                     [name]="'entity'"
-                    [placeholder]="'Entity'"
+                    [placeholder]="commonLocaleData?.app_entity"
                     [options]="entities"
                     (selectedOption)="activityObj.entity = $event.value"
                 >
@@ -32,7 +32,7 @@
                 <select-field
                     [cssClass]="'form-control'"
                     [name]="'operation'"
-                    [placeholder]="'Operation'"
+                    [placeholder]="localeData?.operation"
                     [options]="filters[activityObj.entity ? activityObj.entity : '']"
                     (selectedOption)="activityObj.operation = $event.value"
                 >
@@ -42,7 +42,7 @@
                 <select-field
                     [cssClass]="'form-control'"
                     [name]="'user'"
-                    [placeholder]="'User'"
+                    [placeholder]="localeData?.user"
                     [options]="users"
                     (selectedOption)="selecteUserType($event)"
                 >
@@ -63,7 +63,9 @@
                 </button>
             </div>
         </div>
-        <button mat-raised-button class="btn-success min160 mr-l1" (click)="getActivityLogs(true)">Get Logs</button>
+        <button mat-raised-button class="btn-success min160 mr-l1" (click)="getActivityLogs(true)">
+            {{ localeData?.get_logs }}
+        </button>
         <div *ngIf="isLoading">
             <giddh-page-loader></giddh-page-loader>
         </div>
@@ -71,7 +73,7 @@
             <table mat-table [dataSource]="dataSource" *ngIf="dataSource?.length" class="giddh-table table">
                 <!-- UserName Column -->
                 <ng-container matColumnDef="name">
-                    <th mat-header-cell *matHeaderCellDef>{{ localeData?.name }}</th>
+                    <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_name }}</th>
                     <td mat-cell *matCellDef="let element">
                         <span [matTooltip]="element.user.email" matTooltipPosition="above">{{
                             element.user.name
@@ -81,7 +83,7 @@
 
                 <!-- Date Column -->
                 <ng-container matColumnDef="time">
-                    <th mat-header-cell *matHeaderCellDef>{{ localeData?.date }}</th>
+                    <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_date }}</th>
                     <td mat-cell *matCellDef="let element">
                         <span [matTooltip]="element.timeonly" matTooltipPosition="above"> {{ element.time }}</span>
                     </td>
@@ -95,7 +97,7 @@
 
                 <!-- Entity Column -->
                 <ng-container matColumnDef="entity">
-                    <th mat-header-cell *matHeaderCellDef>{{ localeData?.entity }}</th>
+                    <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_entity }}</th>
                     <td mat-cell *matCellDef="let element">{{ element.entity }}</td>
                 </ng-container>
 
@@ -114,7 +116,7 @@
                 ></tr>
             </table>
             <div class="no-data" *ngIf="!dataSource?.length && !isLoading">
-                <no-data [secondaryMessage]="'You can use the filters to fetch logs '"></no-data>
+                <no-data [secondaryMessage]="localeData?.no_logs"></no-data>
             </div>
         </div>
         <div class="pagination-wrapper" *ngIf="activityObj?.totalItems > activityObj.count && !isLoading">
