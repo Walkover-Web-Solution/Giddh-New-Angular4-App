@@ -11,9 +11,6 @@ import { GeneralService } from '../services/general.service';
 import { Router } from '@angular/router';
 import { IOption } from '../theme/ng-virtual-select/sh-options.interface';
 import { LogsService } from '../services/logs.service';
-import { AuditLogsSidebarVM } from '../audit-logs/components/audit-logs-form/Vm';
-import { cloneDeep } from '../lodash-optimized';
-import { GetAuditLogsRequest } from '../models/api-models/Logs';
 import { CompanyService } from '../services/companyService.service';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../store';
@@ -54,28 +51,22 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
         totalItems: 0,
         entity: "",
         operation: "",
-        userUniqueNames: []
+        userUniqueNames: [],
+        fromDate: "",
+        toDate: ""
 
     }
-    /** Audit log form's company entity type list */
+    /** Activity log form's company entity type list */
     public entities: IOption[] = [];
-    /** Audit log form's company operations list */
-    public filters: IOption[] = [];
-    /** Audit log form's company operations list */
+    /** Activity log form's company operations list */
+    public filters: any[] = [];
+    /** Activity log form's company operations list */
     public users: IOption[] = [];
-    /** Selected operation type */
-    public selectedOperation: string = '';
-    /** Selected entry type */
-    public selectedEntity: string = '';
-    /** Selected user unique name */
-    public selectedUserUniqueName: string = '';
-    /** To show clear filter */
-    public showClearFilter: boolean = false;
     /** Selected from date */
     public selectedFromDate: Date;
     /** Selected to date */
     public selectedToDate: Date;
-    /** directive to get reference of element */
+    /** Directive to get reference of element */
     @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
     /** Universal date observer */
     public universalDate$: Observable<any>;
@@ -85,23 +76,24 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
     public selectedDateRangeUi: any;
     /** This will store available date ranges */
     public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
-    /** Selected from date */
-    public fromDate: string;
-    /** Selected to date */
-    public toDate: string;
     /** Selected range label */
     public selectedRangeLabel: any = "";
     /** This will store modal reference */
     public modalRef: BsModalRef;
     /** This will store the x/y position of the field to show datepicker under it */
     public dateFieldPosition: any = { x: 0, y: 0 };
+    /** This will store universalDate */
+    public universalDate: any;
+    /** To show clear filter */
+    public showDateReport: boolean = false;
 
-    constructor(public activityService: ActivityLogsService,
+    constructor(
+        public activityService: ActivityLogsService,
         public dialog: MatDialog,
         private generalService: GeneralService,
         private router: Router,
         private changeDetection: ChangeDetectorRef,
-        private auditLogsService: LogsService,
+        private ActivityLogsService: LogsService,
         private companyService: CompanyService,
         private modalService: BsModalService,
         private store: Store<AppState>) {
@@ -116,10 +108,8 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         if (this.generalService.voucherApiVersion === 1) {
             this.router.navigate(['/pages/home']);
-        } else {
-            this.getActivityLogs();
         }
-        // To get audit log form filter
+        // To get Activity log form filter
         this.getFormFilter();
 
         this.companyService.getComapnyUsers().pipe(takeUntil(this.destroyed$)).subscribe(data => {
@@ -136,11 +126,11 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
         /** Universal date observer */
         this.universalDate$.subscribe(dateObj => {
             if (dateObj) {
-                let universalDate = _.cloneDeep(dateObj);
+                this.universalDate = _.cloneDeep(dateObj);
                 this.selectedDateRange = { startDate: moment(dateObj[0]), endDate: moment(dateObj[1]) };
                 this.selectedDateRangeUi = moment(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-                this.fromDate = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
-                this.toDate = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
+                this.activityObj.fromDate = moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
+                this.activityObj.toDate = moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
             }
         });
     }
@@ -206,7 +196,7 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
      * @param {IOption} event Selected item object
      * @memberof ActivityLogsComponent
      */
-    public selectedEntityType(event: IOption): void {
+    public selecteUserType(event: IOption): void {
         if (event && event.value) {
             this.activityObj.userUniqueNames = [];
             this.activityObj.userUniqueNames.push(event.value);
@@ -214,19 +204,24 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * To get audit log form filter
+     * To get activity log form filter
      *
      * @memberof ActivityLogsComponent
      */
     public getFormFilter(): void {
-        this.showClearFilter = true;
-        this.auditLogsService.getAuditLogFormFilters().pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+        this.ActivityLogsService.getAuditLogFormFilters().pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response && response.status === 'success') {
                 this.entities = [];
                 this.filters = [];
+                this.filters[''] = [
+                    { label: "Create", value: "CREATE" },
+                    { label: "Update", value: "UPDATE" },
+                    { label: "Delete", value: "DELETE" }
+                ];
                 response.body.forEach(res => {
                     this.entities.push(res.entity);
-                    this.filters = res.operations;
+                    this.filters[res.entity?.value] = [];
+                    this.filters[res.entity?.value] = res.operations;
                 });
             }
         });
@@ -239,20 +234,24 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
      * @memberof ActivityLogsComponent
      */
     public resetFilter(): void {
-        this.selectedOperation = '';
-        this.selectedEntity = '';
-        this.selectedUserUniqueName = '';
-        this.selectedFromDate = moment().toDate();
-        this.selectedToDate = moment().toDate();
-        this.showClearFilter = false;
+        this.activityObj.entity = '';
+        this.activityObj.operation = '';
+        this.activityObj.userUniqueNames = [];
+        this.showDateReport = false;
+        this.selectedDateRange = { startDate: moment(this.universalDate[0]), endDate: moment(this.universalDate[1]) };
+        this.selectedDateRangeUi = moment(this.universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(this.universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+        this.activityObj.fromDate = moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
+        this.activityObj.toDate = moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
+        this.getActivityLogs(true);
+        this.changeDetection.detectChanges();
     }
 
     /**
- * Call back function for date/range selection in datepicker
- *
- * @param {*} value
- * @memberof AuditLogsFormComponent
- */
+     * Call back function for date/range selection in datepicker
+     *
+     * @param {*} value
+     * @memberof ActivityLogsComponent
+     */
     public dateSelectedCallback(value?: any): void {
         if (value && value.event === "cancel") {
             this.hideGiddhDatepicker();
@@ -265,28 +264,29 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
         }
         this.hideGiddhDatepicker();
         if (value && value.startDate && value.endDate) {
+            this.showDateReport = true;
             this.selectedDateRange = { startDate: moment(value.startDate), endDate: moment(value.endDate) };
             this.selectedDateRangeUi = moment(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
-            this.fromDate = moment(value.startDate).format(GIDDH_DATE_FORMAT);
-            this.toDate = moment(value.endDate).format(GIDDH_DATE_FORMAT);
+            this.activityObj.fromDate = moment(value.startDate).format(GIDDH_DATE_FORMAT);
+            this.activityObj.toDate = moment(value.endDate).format(GIDDH_DATE_FORMAT);
         }
     }
 
     /**
- * This will hide the datepicker
- *
- * @memberof AuditLogsFormComponent
- */
+    * This will hide the datepicker
+    *
+    * @memberof ActivityLogsComponent
+    */
     public hideGiddhDatepicker(): void {
         this.modalRef.hide();
     }
 
     /**
- *To show the datepicker
- *
- * @param {*} element
- * @memberof AuditLogsFormComponent
- */
+     *To show the datepicker
+     *
+     * @param {*} element
+     * @memberof ActivityLogsComponent
+     */
     public showGiddhDatepicker(element: any): void {
         if (element) {
             this.dateFieldPosition = this.generalService.getPosition(element.target);
