@@ -229,4 +229,19 @@ export class SalesService {
         return this.http.get(contextPath);
     }
 
+    /**
+     * Updates attachment in voucher
+     *
+     * @param {*} model
+     * @returns {Observable<BaseResponse<any, any>>}
+     * @memberof SalesService
+     */
+    public updateAttachmentInVoucher(model: any): Observable<BaseResponse<any, any>> {
+        let url: string = `${this.config.apiUrl}${SALES_API_V4.UPDATE_ATTACHMENT.replace(':companyUniqueName', this.generalService.companyUniqueName)}`;
+        if (this.generalService.voucherApiVersion === 2) {
+            url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
+        }
+        return this.http.patch(url, model).pipe(
+            catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)));
+    }
 }
