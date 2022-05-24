@@ -1,8 +1,8 @@
 {
-    "name": "Name",
-    "date":"Date",
     "ip": "IP",
-    "entity": "Entity",
     "operation": "Operation",
-    "activity_logs": "Activity Logs"
+    "activity_logs": "Activity Logs",
+    "get_logs": "Get Logs",
+    "no_logs": "You can use the filters to fetch logs",
+    "user":"User"
 }
