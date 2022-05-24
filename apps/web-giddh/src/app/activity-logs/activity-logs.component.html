@@ -74,7 +74,7 @@
                 <!-- UserName Column -->
                 <ng-container matColumnDef="name">
                     <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_name }}</th>
-                    <td mat-cell *matCellDef="let element">
+                    <td class="activity-td" mat-cell *matCellDef="let element">
                         <span [matTooltip]="element.user.email" matTooltipPosition="above">{{
                             element.user.name
                         }}</span>
@@ -84,7 +84,7 @@
                 <!-- Date Column -->
                 <ng-container matColumnDef="time">
                     <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_date }}</th>
-                    <td mat-cell *matCellDef="let element">
+                    <td class="activity-td" mat-cell *matCellDef="let element">
                         <span [matTooltip]="element.timeonly" matTooltipPosition="above"> {{ element.time }}</span>
                     </td>
                 </ng-container>
@@ -92,21 +92,88 @@
                 <!-- IP Column -->
                 <ng-container matColumnDef="ip">
                     <th mat-header-cell *matHeaderCellDef>{{ localeData?.ip }}</th>
-                    <td mat-cell *matCellDef="let element">{{ element.ip }}</td>
+                    <td class="activity-td" mat-cell *matCellDef="let element">{{ element.ip }}</td>
                 </ng-container>
 
                 <!-- Entity Column -->
                 <ng-container matColumnDef="entity">
                     <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_entity }}</th>
-                    <td mat-cell *matCellDef="let element">{{ element.entity }}</td>
+                    <td class="activity-td" mat-cell *matCellDef="let element">{{ element.entity }}</td>
                 </ng-container>
 
                 <!-- Operation Column -->
                 <ng-container matColumnDef="operation">
                     <th mat-header-cell *matHeaderCellDef>{{ localeData?.operation }}</th>
-                    <td mat-cell *matCellDef="let element">{{ element.operation }}</td>
+                    <td mat-cell *matCellDef="let element">
+                        {{ element.operation }}
+                        <button class="btn btn-primary history-btn" (click)="getHistory($event, element)">
+                            <i class="icon-history-icon font-12 pr-1"></i>
+                        </button>
+                    </td>
                 </ng-container>
-
+                <!-- <ng-container *ngIf="isEntryExpanded" matColumnDef="name">
+                    <th
+                        mat-header-cell
+                        [hidden]="!daybookData?.entries?.length"
+                        *matHeaderCellDef
+                        class="daybook-w-200"
+                    >
+                        Name
+                    </th>
+                    <td
+                        mat-cell
+                        *matCellDef="let entry"
+                        [attr.data-title]="localeData?.product_service"
+                        class="daybook-w-200"
+                    ></td>
+                </ng-container>
+                <ng-container *ngIf="isEntryExpanded" matColumnDef="time">
+                    <th
+                        mat-header-cell
+                        [hidden]="!daybookData?.entries?.length"
+                        class="text-right daybook-w-100"
+                        *matHeaderCellDef
+                    >
+                        Time
+                    </th>
+                    <td mat-cell *matCellDef="let entry" class="text-right" [attr.data-title]="localeData?.qty"></td>
+                </ng-container>
+                <ng-container *ngIf="isEntryExpanded" matColumnDef="ip">
+                    <th
+                        mat-header-cell
+                        [hidden]="!daybookData?.entries?.length"
+                        *matHeaderCellDef
+                        class="daybook-w-100"
+                    >
+                        Ip
+                    </th>
+                    <td mat-cell *matCellDef="let entry" [attr.data-title]="commonLocaleData?.app_unit"></td>
+                </ng-container>
+                <ng-container *ngIf="isEntryExpanded" matColumnDef="entity">
+                    <th
+                        mat-header-cell
+                        [hidden]="!daybookData?.entries?.length"
+                        class="text-right daybook-w-150"
+                        *matHeaderCellDef
+                    ></th>
+                    <td
+                        mat-cell
+                        *matCellDef="let entry"
+                        class="text-right"
+                        [attr.data-title]="commonLocaleData?.app_rate"
+                    ></td>
+                </ng-container>
+                <ng-container *ngIf="isEntryExpanded" matColumnDef="operation">
+                    <th
+                        mat-header-cell
+                        [hidden]="!daybookData?.entries?.length"
+                        *matHeaderCellDef
+                        class="daybook-w-100"
+                    >
+                        {{ commonLocaleData?.app_hsn_sac }}
+                    </th>
+                    <td mat-cell *matCellDef="let entry" [attr.data-title]="commonLocaleData?.app_hsn_sac"></td>
+                </ng-container> -->
                 <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                 <tr
                     class="cursor-pointer"

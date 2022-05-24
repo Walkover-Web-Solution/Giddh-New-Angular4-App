@@ -53,7 +53,8 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
         operation: "",
         userUniqueNames: [],
         fromDate: "",
-        toDate: ""
+        toDate: "",
+        entityId: ""
 
     }
     /** Activity log form's company entity type list */
@@ -86,6 +87,8 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
     public universalDate: any;
     /** To show clear filter */
     public showDateReport: boolean = false;
+    /** True, if entry expanded (at least one entry) */
+    public isEntryExpanded: boolean = false;
 
     constructor(
         public activityService: ActivityLogsService,
@@ -297,6 +300,17 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
         );
     }
 
+    public getHistory(event: any, element: any): void {
+        console.log(event);
+        console.log(element);
+        event.stopPropagation();
+        event.preventDefault();
+        this.activityObj.entityId = element.entityId;
+        this.activityObj.entity = element.entity;
+        this.isEntryExpanded = true;
+        this.getActivityLogs();
+    }
+
 
     /**
      *This function will use for component destroy
@@ -308,5 +322,4 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
-
 }

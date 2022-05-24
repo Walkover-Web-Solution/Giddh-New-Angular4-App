@@ -18,3 +18,28 @@
     float: left;
     width: 15%;
 }
+.history-btn {
+    display: none;
+}
+.giddh-table {
+    .activity-td {
+        width: 20%;
+    }
+    tr:hover {
+        .history-btn {
+            display: inline-block !important;
+            cursor: pointer;
+            z-index: 9999;
+        }
+    }
+    td {
+        .history-btn {
+            width: 30px;
+            padding: 0 5px;
+            cursor: pointer;
+            height: 30px;
+            align-items: center;
+            background-color: var(--color-white);
+        }
+    }
+}
