@@ -214,9 +214,9 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
                 this.entities = [];
                 this.filters = [];
                 this.filters[''] = [
-                    { label: "Create", value: "CREATE" },
-                    { label: "Update", value: "UPDATE" },
-                    { label: "Delete", value: "DELETE" }
+                    { label: this.commonLocaleData?.app_create, value: "CREATE" },
+                    { label: this.commonLocaleData?.app_update, value: "UPDATE" },
+                    { label: this.commonLocaleData?.app_delete, value: "DELETE" }
                 ];
                 response.body.forEach(res => {
                     this.entities.push(res.entity);

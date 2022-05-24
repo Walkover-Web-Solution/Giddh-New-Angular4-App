@@ -14,7 +14,6 @@ import { TranslateDirectiveModule } from '../theme/translate/translate.directive
 import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 import { HamburgerMenuModule } from '../shared/header/components/hamburger-menu/hamburger-menu.module';
-import { DatepickerModule } from 'ngx-bootstrap/datepicker';
 import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
@@ -40,7 +39,6 @@ import { SharedModule } from '../shared/shared.module';
         PaginationModule,
         FormFieldsModule,
         HamburgerMenuModule,
-        DatepickerModule,
         SharedModule
     ],
 })
