@@ -43,6 +43,7 @@ import { InventoryComponent } from './inventory.component';
 import { InventoryRoutingModule } from './inventory.routing.module';
 import { JobworkSidebarComponent } from './jobwork/sidebar-components/jobwork.sidebar.component';
 import { ManufacturingComponent } from './manufacturing/manufacturing.component';
+import { NgxBootstrapSwitchModule } from 'ngx-bootstrap-switch';
 
 @NgModule({
     declarations: [
@@ -120,7 +121,8 @@ import { ManufacturingComponent } from './manufacturing/manufacturing.component'
         ProformaInvoiceModule,
         GiddhRoundOffPipeModule,
         InventoryAddStockModule,
-        ConfirmModalModule
+        ConfirmModalModule,
+        NgxBootstrapSwitchModule.forRoot()
     ],
     entryComponents: [PaginationComponent]
 })

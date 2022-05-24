@@ -442,3 +442,15 @@ export const JOURNAL_VOUCHER_ALLOWED_DOMAINS = [
     'muneem.co',
     'whozzat.com',
 ];
+
+/**
+ * Enum for switching toggle button On and Off and changing its size
+ *
+ * @export
+ * @enum {string}
+ */
+export enum BootstrapToggleSwitch {
+    On = 'blue',
+    Off = 'gray',
+    Size = 'mini'
+}

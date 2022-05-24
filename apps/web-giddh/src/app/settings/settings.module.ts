@@ -39,6 +39,7 @@ import { NoDataModule } from '../shared/no-data/no-data.module';
 import { ReplacePipeModule } from '../shared/helpers/pipes/replace/replace.module';
 import { SettingIntegrationPaymentModule } from './integration/payment/setting.integration.payment.module';
 import { ConfirmModalModule } from '../theme/confirm-modal/confirm-modal.module';
+import { NgxBootstrapSwitchModule } from 'ngx-bootstrap-switch';
 
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
@@ -87,7 +88,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         ReplacePipeModule,
         NoDataModule,
         SettingIntegrationPaymentModule,
-        ConfirmModalModule
+        ConfirmModalModule,
+        NgxBootstrapSwitchModule.forRoot()
     ],
     providers: [
         {

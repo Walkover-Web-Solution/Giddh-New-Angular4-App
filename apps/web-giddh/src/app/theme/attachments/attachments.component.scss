@@ -2,8 +2,8 @@
     .header {
         display: flex;
         align-items: center;
-        background-color: var(--color-giddh-blue);
-        color: var(--color-white);
+        background-color: var(--color-primary-header-background);
+        color: var(--color-popup-list-head-text);
         width: 100%;
         padding-left: 10px;
         height: 50px;
@@ -12,7 +12,7 @@
         display: flex;
         height: 77vh;
         .left-side {
-            border-right: 1px solid var(--color-gray);
+            border-right: 1px solid var(--color-common-secondary-border);
             width: 35%;
             padding: 10px 10px 10px 13px;
             position: relative;
@@ -80,13 +80,13 @@
             .right-side-buttons {
                 display: flex;
                 background-color: var(--color-white);
-                border: 1px solid var(--color-iron);
+                border: 1px solid var(--color-common-secondary-border);
                 border-radius: 5px;
                 min-width: 67px;
                 float: right;
                 margin-right: 2px;
                 span {
-                    border-left: 1px solid var(--color-iron);
+                    border-left: 1px solid var(--color-common-secondary-border);
                     padding: 5px;
                     display: flex;
                     justify-content: center;

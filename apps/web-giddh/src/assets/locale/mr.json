@@ -670,5 +670,7 @@
     "app_true": "खरे",
     "app_false": "खोटे",
     "app_preview": "पूर्वावलोकन",
-    "app_purchase_bill": "खरेदी बिल"
+    "app_purchase_bill": "खरेदी बिल",
+    "app_on": "On",
+    "app_off": "Off"
 }

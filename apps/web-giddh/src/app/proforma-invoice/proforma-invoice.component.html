@@ -1751,13 +1751,13 @@
                                                 (click)="toggleRcmCheckbox($event)"
                                             />
                                             <label
+                                                class="checkbox-custom-label"
                                                 #rcmPopup="bs-popover"
                                                 [popover]="rcmTemplate"
                                                 container="body"
                                                 placement="bottom right"
                                                 containerClass="purchase-invoice-rcm"
                                                 for="reverse-charge"
-                                                class="checkbox-custom-label"
                                             >
                                                 {{ localeData?.transaction_reverse_charge }}
                                             </label>

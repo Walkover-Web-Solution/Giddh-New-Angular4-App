@@ -112,6 +112,15 @@ ng-select {
         font-size: 13px;
         padding: 4px 0;
     }
+    select-dropdown {
+        input {
+            border-radius: 5px;
+        }
+    }
+}
+
+.common-select-field {
+    border-radius: 5px;
 }
 
 .ng-select-wrap.select-list ng-select .below {
