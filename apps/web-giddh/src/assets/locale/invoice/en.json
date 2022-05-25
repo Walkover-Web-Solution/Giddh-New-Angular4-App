@@ -39,7 +39,6 @@
     "voucher_log": "[ACTION] for [TOTAL] by [USER]",
     "linked_po": "Linked Purchase Order(s):",
     "invoice_preview_unavailable": "Invoice Preview is not available right now! Please try again...",
-    "preview_formats": "These file formats are not supported for preview (xls, xlsx, gif, doc, CSV)",
     "upload_excel_csv": "Upload an EXCEL or CSV file",
     "drop_file": "Drop file to upload",
     "browse_file": "Browse file",

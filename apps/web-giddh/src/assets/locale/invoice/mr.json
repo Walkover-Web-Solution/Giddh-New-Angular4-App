@@ -39,7 +39,6 @@
     "voucher_log": "[USER] द्वारे [TOTAL] साठी [ACTION]",
     "linked_po": "दुवा साधलेला खरेदी ऑर्डर:",
     "invoice_preview_unavailable": "बीजक पूर्वावलोकन आत्ता उपलब्ध नाही! कृपया पुन्हा प्रयत्न करा...",
-    "preview_formats": "हे फाइल स्वरूप पूर्वावलोकनासाठी समर्थित नाहीत (xls, xlsx, gif, doc, CSV)",
     "upload_excel_csv": "एक EXCEL किंवा CSV फाईल अपलोड करा",
     "drop_file": "अपलोड करण्यासाठी फाइल ड्रॉप करा",
     "browse_file": "फाईल ब्राउझ करा",
