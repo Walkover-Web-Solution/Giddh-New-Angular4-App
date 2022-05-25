@@ -15,6 +15,7 @@ import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 import { HamburgerMenuModule } from '../shared/header/components/hamburger-menu/hamburger-menu.module';
 import { SharedModule } from '../shared/shared.module';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @NgModule({
     declarations: [
@@ -39,7 +40,8 @@ import { SharedModule } from '../shared/shared.module';
         PaginationModule,
         FormFieldsModule,
         HamburgerMenuModule,
-        SharedModule
+        SharedModule,
+        MatCheckboxModule
     ],
 })
 export class ActivityLogsModule {

@@ -15,6 +15,8 @@ import { CompanyService } from '../services/companyService.service';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../store';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { MatCheckboxChange } from '@angular/material/checkbox';
+import { diffString, diff } from 'json-diff';
 /** This will use for interface */
 export interface GetActivityLogs {
     name: any;
@@ -87,6 +89,8 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
     public universalDate: any;
     /** To show clear filter */
     public showDateReport: boolean = false;
+    /** To show clear filter */
+    public isDisabled: boolean = false;
 
     constructor(
         public activityService: ActivityLogsService,
@@ -330,6 +334,30 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
                 this.changeDetection.detectChanges();
             });
         }
+    }
+
+    public setAll(event: MatCheckboxChange, value: any, value2: any): void {
+        if (!value.selectedItems) {
+            value.selectedItems = [];
+        }
+        if (event.checked) {
+            console.log(value.selectedItems)
+            value.selectedItems.push(value2.details);
+            console.log(value.selectedItems);
+            if (value.selectedItems.length > 2) {
+                console.log('greater', event)
+
+                console.log(value.selectedItems)
+                let removeElement = value.selectedItems.shift(value.selectedItems[0]);
+                console.log(removeElement);
+                console.log(value.selectedItems[0]);
+                if (removeElement = value.selectedItems[0]) {
+                    console.log('match', event)
+                    removeElement.checked = false;
+                }
+            }
+        }
+
     }
 
 
