@@ -16,6 +16,7 @@
         overflow-y: auto;
         z-index: unset;
         padding-bottom: 60px;
+        box-shadow: 3px 3px 6px var(--color-primary-common-box-shadow);
 
         .back-to-main-slider {
             display: block;
@@ -60,17 +61,25 @@
                     background-color: var(--color-white);
 
                     mat-tree-node {
-                        min-height: 42px;
+                        min-height: 30px;
+                        align-items: baseline;
                         .sidebar-menu-icons {
                             position: relative;
                             right: 7px;
+                            height: 14px;
+                            width: 14px;
                             filter: var(--color-image-filter-quaternary);
+                        }
+                        &:first-child {
+                            .sidebar-menu-icons {
+                                top: 2px;
+                            }
                         }
                     }
 
                     .sidebar-list-icon {
                         position: absolute;
-                        bottom: 1px;
+                        bottom: 13px;
                         left: 220px;
                     }
                     .sub-option {
@@ -78,6 +87,7 @@
                         color: var(--color-sidebar-content-text);
                         letter-spacing: 0.14px;
                         height: 27px;
+                        align-items: center;
                         font: normal normal 600 14px/30px Open Sans;
                         &:hover {
                             color: var(--color-white-tertiary);
@@ -91,8 +101,13 @@
                             position: relative;
                             left: 20px;
                             height: 27px;
-                            width: 180px;
+                            width: 210px;
                             line-height: 15px;
+                            &:last-child {
+                                align-items: flex-start;
+                                position: relative;
+                                top: 8px;
+                            }
                             &:hover {
                                 color: var(--color-sidebar-anchor-text-hover);
                                 background-color: var(--color-white);
@@ -112,6 +127,9 @@
                         height: 27px;
                         font: normal normal 600 14px/30px Open Sans;
                         color: var(--color-sidebar-content-text);
+                        &:last-child {
+                            min-height: 37px;
+                        }
                         &:hover {
                             color: var(--color-sidebar-anchor-text-hover);
                             .sidebar-list-icon {

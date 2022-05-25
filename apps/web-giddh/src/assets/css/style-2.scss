@@ -7847,7 +7847,7 @@ giddh-datepicker {
                                     .add-new-field {
                                         select-field {
                                             input {
-                                                width: 150px;
+                                                width: 100%;
                                                 height: 32px;
                                             }
                                         }
@@ -7879,11 +7879,18 @@ giddh-datepicker {
                 text-field,
                 select-field {
                     input {
+                        width: 320px;
                         border-radius: 2px !important;
                     }
                 }
                 mat-select {
+                    width: 320px;
                     border-radius: 2px !important;
+                }
+                .common-custom-field-width {
+                    input {
+                        width: 100%;
+                    }
                 }
             }
         }

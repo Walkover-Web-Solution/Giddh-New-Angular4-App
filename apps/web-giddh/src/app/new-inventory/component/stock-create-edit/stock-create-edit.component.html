@@ -31,7 +31,7 @@
                             <div class="col-xl-8 col-lg-12">
                                 <div class="row flex-column-reverse flex-md-row">
                                     <div class="col-md-8 col-lg-8 col-xl-6 col-12 upper-common-form-label-field">
-                                        <div class="row mr-b15">
+                                        <div class="row mr-b1">
                                             <div class="col-sm-6 col-lg-3">
                                                 <label class="product-name-label"
                                                     >{{ stockForm.type | titlecase }} Name
@@ -50,7 +50,7 @@
                                                 </text-field>
                                             </div>
                                         </div>
-                                        <div class="row mr-b15">
+                                        <div class="row mr-b1">
                                             <div class="col-sm-6 col-lg-3">
                                                 <label
                                                     >{{ stockForm.type | titlecase }} Unit
@@ -71,7 +71,7 @@
                                                 ></select-field>
                                             </div>
                                         </div>
-                                        <div class="row mr-b15">
+                                        <div class="row mr-b1">
                                             <div class="col-sm-6 col-lg-3">
                                                 <label>Under Group</label>
                                             </div>
@@ -98,7 +98,7 @@
                                                 </button>
                                             </div>
                                         </div>
-                                        <div class="row mr-b15">
+                                        <div class="row mr-b1">
                                             <div class="col-sm-6 col-lg-3">
                                                 <label
                                                     >Unique Name
@@ -115,7 +115,7 @@
                                                 ></text-field>
                                             </div>
                                         </div>
-                                        <div class="row mr-b15">
+                                        <div class="row mr-b1">
                                             <div class="col-sm-6 col-lg-3">
                                                 <label>Applicable Tax</label>
                                             </div>
@@ -888,8 +888,8 @@
                                                 class="col-xl-6 col-md-12 col-lg-8 col-sm-12"
                                                 *ngIf="stockForm.type === 'PRODUCT'"
                                             >
-                                                <div class="row mr-b15">
-                                                    <div class="col-sm-6 col-lg-6">
+                                                <div class="row mr-b1">
+                                                    <div class="col-sm-6 col-lg-4">
                                                         <label>HSN Code</label>
                                                     </div>
                                                     <div class="col-sm-6 col-lg-6">
@@ -907,7 +907,7 @@
                                                 class="col-xl-6 col-md-12 col-lg-8 col-sm-12"
                                                 *ngIf="stockForm.type === 'SERVICE'"
                                             >
-                                                <div class="row mr-b15">
+                                                <div class="row mr-b1">
                                                     <div class="col-sm-6 col-lg-6">
                                                         <label>SAC Code</label>
                                                     </div>
@@ -924,8 +924,8 @@
                                             </div>
                                             <ng-container *ngIf="!isVariantAvailable">
                                                 <div class="col-xl-6 col-md-12 col-lg-8 col-sm-12">
-                                                    <div class="row mr-b15">
-                                                        <div class="col-sm-6 col-lg-6">
+                                                    <div class="row mr-b1">
+                                                        <div class="col-sm-6 col-lg-4">
                                                             <label>SKU Code</label>
                                                         </div>
                                                         <div class="col-sm-6 col-lg-6">
@@ -940,8 +940,8 @@
                                                     </div>
                                                 </div>
                                                 <div class="col-xl-6 col-md-12 col-lg-8 col-sm-12">
-                                                    <div class="row mr-b15">
-                                                        <div class="col-sm-6 col-lg-6">
+                                                    <div class="row mr-b1">
+                                                        <div class="col-sm-6 col-lg-4">
                                                             <label>Opening Quantity</label>
                                                         </div>
                                                         <div class="col-sm-6 col-lg-6">
@@ -956,8 +956,8 @@
                                                     </div>
                                                 </div>
                                                 <div class="col-xl-6 col-md-12 col-lg-8 col-sm-12">
-                                                    <div class="row mr-b15">
-                                                        <div class="col-sm-6 col-lg-6">
+                                                    <div class="row mr-b1">
+                                                        <div class="col-sm-6 col-lg-4">
                                                             <label>Opening Amount</label>
                                                         </div>
                                                         <div class="col-sm-6 col-lg-6">
@@ -973,8 +973,8 @@
                                                 </div>
                                             </ng-container>
                                             <div class="col-xl-6 col-md-12 col-lg-8 col-sm-12">
-                                                <div class="row mr-b15">
-                                                    <div class="col-sm-6 col-lg-6">
+                                                <div class="row mr-b1">
+                                                    <div class="col-sm-6 col-lg-4">
                                                         <label *ngIf="inlineEditCustomField !== 1"
                                                             >{{ stockForm.customField1Heading || "Custom Field" }}
 
@@ -994,6 +994,7 @@
                                                             [type]="'text'"
                                                             [(ngModel)]="stockForm.customField1Heading"
                                                             [autoFocus]="true"
+                                                            class="common-custom-field-width"
                                                         ></text-field>
                                                         <span
                                                             class="pull-right right-fix-save-icon"
@@ -1017,8 +1018,8 @@
                                                 </div>
                                             </div>
                                             <div class="col-xl-6 col-md-12 col-lg-8 col-sm-12">
-                                                <div class="row mr-b15">
-                                                    <div class="col-sm-6 col-lg-6">
+                                                <div class="row mr-b1">
+                                                    <div class="col-sm-6 col-lg-4">
                                                         <label *ngIf="inlineEditCustomField !== 2"
                                                             >{{ stockForm.customField2Heading || "Custom Field" }}
 
@@ -1038,6 +1039,7 @@
                                                             [type]="'text'"
                                                             [(ngModel)]="stockForm.customField2Heading"
                                                             [autoFocus]="true"
+                                                            class="common-custom-field-width"
                                                         ></text-field>
                                                         <span
                                                             class="pull-right right-fix-save-icon"
@@ -1065,8 +1067,8 @@
                                                     class="col-xl-6 col-md-12 col-lg-8 col-sm-12"
                                                     *ngFor="let customField of stockForm?.customFields; let i = index"
                                                 >
-                                                    <div class="row mr-b15">
-                                                        <div class="col-sm-6 col-lg-6">
+                                                    <div class="row mr-b1">
+                                                        <div class="col-sm-6 col-lg-4">
                                                             <label
                                                                 >{{ customField?.fieldName }}
                                                                 <span class="red-text" *ngIf="customField.isMandatory"
