@@ -199,7 +199,8 @@
                                     class="preview-not-supported-attachment"
                                     *ngIf="attachedDocumentType?.type === 'unsupported'"
                                 >
-                                    <span class="text-warning">{{ localeData?.preview_formats }} </span>
+                                    <p>{{ attachedDocumentType?.name }}</p>
+                                    <p>{{ localeData?.preview_formats }}</p>
                                 </div>
                                 <div
                                     *ngIf="attachedDocumentType?.type === 'image'"
