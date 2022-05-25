@@ -70,7 +70,13 @@
             <giddh-page-loader></giddh-page-loader>
         </div>
         <div class="table-content" *ngIf="!isLoading">
-            <table mat-table [dataSource]="dataSource" *ngIf="dataSource?.length" class="giddh-table table">
+            <table
+                mat-table
+                [dataSource]="dataSource"
+                multiTemplateDataRows
+                *ngIf="dataSource?.length"
+                class="giddh-table table"
+            >
                 <!-- UserName Column -->
                 <ng-container matColumnDef="name">
                     <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_name }}</th>
@@ -80,7 +86,6 @@
                         }}</span>
                     </td>
                 </ng-container>
-
                 <!-- Date Column -->
                 <ng-container matColumnDef="time">
                     <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_date }}</th>
@@ -88,19 +93,16 @@
                         <span [matTooltip]="element.timeonly" matTooltipPosition="above"> {{ element.time }}</span>
                     </td>
                 </ng-container>
-
                 <!-- IP Column -->
                 <ng-container matColumnDef="ip">
                     <th mat-header-cell *matHeaderCellDef>{{ localeData?.ip }}</th>
                     <td class="activity-td" mat-cell *matCellDef="let element">{{ element.ip }}</td>
                 </ng-container>
-
                 <!-- Entity Column -->
                 <ng-container matColumnDef="entity">
                     <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_entity }}</th>
                     <td class="activity-td" mat-cell *matCellDef="let element">{{ element.entity }}</td>
                 </ng-container>
-
                 <!-- Operation Column -->
                 <ng-container matColumnDef="operation">
                     <th mat-header-cell *matHeaderCellDef>{{ localeData?.operation }}</th>
@@ -111,75 +113,74 @@
                         </button>
                     </td>
                 </ng-container>
-                <!-- <ng-container *ngIf="isEntryExpanded" matColumnDef="name">
-                    <th
-                        mat-header-cell
-                        [hidden]="!daybookData?.entries?.length"
-                        *matHeaderCellDef
-                        class="daybook-w-200"
-                    >
-                        Name
-                    </th>
+                <ng-container matColumnDef="expandedDetail">
                     <td
                         mat-cell
-                        *matCellDef="let entry"
-                        [attr.data-title]="localeData?.product_service"
-                        class="daybook-w-200"
-                    ></td>
-                </ng-container>
-                <ng-container *ngIf="isEntryExpanded" matColumnDef="time">
-                    <th
-                        mat-header-cell
-                        [hidden]="!daybookData?.entries?.length"
-                        class="text-right daybook-w-100"
-                        *matHeaderCellDef
+                        class="p-0 w-100 child-td"
+                        *matCellDef="let row2"
+                        [hidden]="!row2.isExpanded"
+                        [attr.colspan]="5"
                     >
-                        Time
-                    </th>
-                    <td mat-cell *matCellDef="let entry" class="text-right" [attr.data-title]="localeData?.qty"></td>
-                </ng-container>
-                <ng-container *ngIf="isEntryExpanded" matColumnDef="ip">
-                    <th
-                        mat-header-cell
-                        [hidden]="!daybookData?.entries?.length"
-                        *matHeaderCellDef
-                        class="daybook-w-100"
-                    >
-                        Ip
-                    </th>
-                    <td mat-cell *matCellDef="let entry" [attr.data-title]="commonLocaleData?.app_unit"></td>
-                </ng-container>
-                <ng-container *ngIf="isEntryExpanded" matColumnDef="entity">
-                    <th
-                        mat-header-cell
-                        [hidden]="!daybookData?.entries?.length"
-                        class="text-right daybook-w-150"
-                        *matHeaderCellDef
-                    ></th>
-                    <td
-                        mat-cell
-                        *matCellDef="let entry"
-                        class="text-right"
-                        [attr.data-title]="commonLocaleData?.app_rate"
-                    ></td>
-                </ng-container>
-                <ng-container *ngIf="isEntryExpanded" matColumnDef="operation">
-                    <th
-                        mat-header-cell
-                        [hidden]="!daybookData?.entries?.length"
-                        *matHeaderCellDef
-                        class="daybook-w-100"
-                    >
-                        {{ commonLocaleData?.app_hsn_sac }}
-                    </th>
-                    <td mat-cell *matCellDef="let entry" [attr.data-title]="commonLocaleData?.app_hsn_sac"></td>
-                </ng-container> -->
-                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <div class="d-flex overflow-hidden">
+                            <div class="w-100" *ngIf="row2.isExpanded && row2.history?.length">
+                                <table class="giddh-table table" mat-table [dataSource]="row2.history">
+                                    <!-- UserName Column -->
+                                    <ng-container matColumnDef="name">
+                                        <th mat-header-cell *matHeaderCellDef></th>
+                                        <td class="activity-td" mat-cell *matCellDef="let details">
+                                            <span [matTooltip]="details.user.email" matTooltipPosition="above">{{
+                                                details.user.name
+                                            }}</span>
+                                        </td>
+                                    </ng-container>
+                                    <!-- Date Column -->
+                                    <ng-container matColumnDef="time">
+                                        <th mat-header-cell *matHeaderCellDef></th>
+                                        <td class="activity-td" mat-cell *matCellDef="let details">
+                                            <span [matTooltip]="details.timeonly" matTooltipPosition="above">
+                                                {{ details.time }}</span
+                                            >
+                                        </td>
+                                    </ng-container>
+                                    <!-- IP Column -->
+                                    <ng-container matColumnDef="ip">
+                                        <th mat-header-cell *matHeaderCellDef></th>
+                                        <td class="activity-td" mat-cell *matCellDef="let details">
+                                            {{ details.ip }}
+                                        </td>
+                                    </ng-container>
+                                    <!-- Entity Column -->
+                                    <ng-container matColumnDef="entity">
+                                        <th mat-header-cell *matHeaderCellDef></th>
+                                        <td class="activity-td" mat-cell *matCellDef="let details">
+                                            {{ details.entity }}
+                                        </td>
+                                    </ng-container>
+                                    <!-- Operation Column -->
+                                    <ng-container matColumnDef="operation">
+                                        <th mat-header-cell *matHeaderCellDef></th>
+                                        <td class="activity-td" mat-cell *matCellDef="let details">
+                                            {{ details.operation }}
+                                        </td>
+                                    </ng-container>
+                                    <tr mat-row *matRowDef="let row2; columns: displayedColumns"></tr>
+                                </table>
+                            </div>
+                        </div>
+                    </td> </ng-container
+                >>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
                 <tr
                     class="cursor-pointer"
                     mat-row
                     *matRowDef="let row; columns: displayedColumns"
                     (click)="openDialog(row)"
+                ></tr>
+                <tr
+                    mat-row
+                    *matRowDef="let row; columns: ['expandedDetail']"
+                    class="activity-history border-none"
+                    [hidden]="!row.isExpanded"
                 ></tr>
             </table>
             <div class="no-data" *ngIf="!dataSource?.length && !isLoading">

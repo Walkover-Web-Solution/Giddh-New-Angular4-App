@@ -87,8 +87,6 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
     public universalDate: any;
     /** To show clear filter */
     public showDateReport: boolean = false;
-    /** True, if entry expanded (at least one entry) */
-    public isEntryExpanded: boolean = false;
 
     constructor(
         public activityService: ActivityLogsService,
@@ -177,8 +175,9 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
         this.activityService.getActivityLogs(this.activityObj).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             this.isLoading = false;
             if (response && response.status === 'success') {
-                response.body?.results?.forEach(result => {
+                response.body?.results?.forEach((result, index) => {
                     if (result) {
+                        result.index = index;
                         result.timeonly = moment(result.time, GIDDH_DATE_FORMAT + " HH:mm:ss").format("HH:mm:ss");
                         result.time = moment(result.time, GIDDH_DATE_FORMAT + " HH:mm:ss").format(GIDDH_DATE_FORMAT);
                     }
@@ -300,15 +299,37 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
         );
     }
 
-    public getHistory(event: any, element: any): void {
-        console.log(event);
-        console.log(element);
+
+
+    /**
+     * To check is entry expanded
+     *
+     * @param {*} entry Transaction object
+     * @memberof ActivityLogsComponent
+     */
+    public getHistory(event: any, row: any): void {
         event.stopPropagation();
         event.preventDefault();
-        this.activityObj.entityId = element.entityId;
-        this.activityObj.entity = element.entity;
-        this.isEntryExpanded = true;
-        this.getActivityLogs();
+        row.isExpanded = !row.isExpanded;
+        if (!row.hasHistory) {
+            let activityObj = { entityId: row.entityId, entity: row.entity, count: 100 };
+            row.hasHistory = true;
+            this.activityService.getActivityLogs(activityObj).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+                this.isLoading = false;
+                if (response && response.status === 'success') {
+                    response.body?.results?.forEach(result => {
+                        if (result) {
+                            result.timeonly = moment(result.time, GIDDH_DATE_FORMAT + " HH:mm:ss").format("HH:mm:ss");
+                            result.time = moment(result.time, GIDDH_DATE_FORMAT + " HH:mm:ss").format(GIDDH_DATE_FORMAT);
+                        }
+                    });
+                    row.history = response.body.results;
+                } else {
+                    row.history = [];
+                }
+                this.changeDetection.detectChanges();
+            });
+        }
     }
 
 
