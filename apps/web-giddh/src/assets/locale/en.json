@@ -675,5 +675,5 @@
     "app_purchase_bill": "Purchase Bill",
     "app_on": "On",
     "app_off": "Off",
-    "app_preview_formats": "These file formats are not supported for preview (xls, xlsx, gif, doc, CSV)"
+    "app_preview_formats": "These file formats are not supported for preview (xls, xlsx, doc, CSV)"
 }
