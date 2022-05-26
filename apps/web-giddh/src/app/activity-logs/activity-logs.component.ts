@@ -16,7 +16,7 @@ import { select, Store } from '@ngrx/store';
 import { AppState } from '../store';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { MatCheckboxChange } from '@angular/material/checkbox';
-import { diffString, diff } from 'json-diff';
+import { ActivityCompareJsonComponent } from './components/activity-compare-json/activity-compare-json.component';
 /** This will use for interface */
 export interface GetActivityLogs {
     name: any;
@@ -56,7 +56,8 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
         userUniqueNames: [],
         fromDate: "",
         toDate: "",
-        entityId: ""
+        entityId: "",
+        isChecked: false,
 
     }
     /** Activity log form's company entity type list */
@@ -321,8 +322,9 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
             this.activityService.getActivityLogs(activityObj).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
                 this.isLoading = false;
                 if (response && response.status === 'success') {
-                    response.body?.results?.forEach(result => {
+                    response.body?.results?.forEach((result, index) => {
                         if (result) {
+                            result.index = index;
                             result.timeonly = moment(result.time, GIDDH_DATE_FORMAT + " HH:mm:ss").format("HH:mm:ss");
                             result.time = moment(result.time, GIDDH_DATE_FORMAT + " HH:mm:ss").format(GIDDH_DATE_FORMAT);
                         }
@@ -336,28 +338,51 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
         }
     }
 
-    public setAll(event: MatCheckboxChange, value: any, value2: any): void {
-        if (!value.selectedItems) {
-            value.selectedItems = [];
+    /**
+     * This function will use for selected items
+     *
+     * @param {MatCheckboxChange} event
+     * @param {*} row2
+     * @param {*} details
+     * @memberof ActivityLogsComponent
+     */
+    public selectedItems(event: MatCheckboxChange, row2: any, details: any): void {
+        if (!row2.selectedItems) {
+            row2.selectedItems = [];
         }
         if (event.checked) {
-            console.log(value.selectedItems)
-            value.selectedItems.push(value2.details);
-            console.log(value.selectedItems);
-            if (value.selectedItems.length > 2) {
-                console.log('greater', event)
-
-                console.log(value.selectedItems)
-                let removeElement = value.selectedItems.shift(value.selectedItems[0]);
-                console.log(removeElement);
-                console.log(value.selectedItems[0]);
-                if (removeElement = value.selectedItems[0]) {
-                    console.log('match', event)
-                    removeElement.checked = false;
-                }
+            details.isChecked = true;
+            this.changeDetection.detectChanges();
+            row2.selectedItems.push(details);
+            if (row2.selectedItems.length > 2) {
+                const firstElement = row2.selectedItems[0];
+                row2.selectedItems = row2.selectedItems.slice(1);
+                firstElement.isChecked = false;
+                this.changeDetection.detectChanges();
             }
+        } else {
+            row2.selectedItems.pop(details);
+            details.isChecked = false;
         }
+    }
 
+    /**
+     * This function will use for compare json key values
+     *
+     * @param {*} details
+     * @memberof ActivityLogsComponent
+     */
+    public compareJson(row2: any, details: any): void {
+        let data;
+        if (row2.selectedItems[0]?.index === details.index) {
+            data = [row2.selectedItems[0]?.details, row2.selectedItems[1]?.details];
+        } else {
+            data = [row2.selectedItems[1]?.details, row2.selectedItems[0]?.details];
+        }
+        this.dialog.open(ActivityCompareJsonComponent, {
+            data: data,
+            panelClass: 'json-sidebar'
+        });
     }
 
 

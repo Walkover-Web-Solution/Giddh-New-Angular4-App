@@ -16,12 +16,14 @@ import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 import { HamburgerMenuModule } from '../shared/header/components/hamburger-menu/hamburger-menu.module';
 import { SharedModule } from '../shared/shared.module';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { ActivityCompareJsonComponent } from './components/activity-compare-json/activity-compare-json.component';
 
 @NgModule({
     declarations: [
         // Components / Directives/ Pipes
         ActivityLogsJsonComponent,
-        ActivityLogsComponent
+        ActivityLogsComponent,
+        ActivityCompareJsonComponent
     ],
     exports: [
         ActivityLogsComponent],
