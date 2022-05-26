@@ -20,7 +20,7 @@ export class ActivityLogsJsonComponent implements OnInit {
     /**
      * This will use for call intialization component
      *
-     * @memberof ActivityLogsTableComponent
+     * @memberof ActivityLogsJsonComponent
      */
     public ngOnInit(): void {
         this.dialogRef.updatePosition({ top: '0px', right: '0px' });

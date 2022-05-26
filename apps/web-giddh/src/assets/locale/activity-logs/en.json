@@ -3,6 +3,7 @@
     "operation": "Operation",
     "activity_logs": "Activity Logs",
     "get_logs": "Get Logs",
-    "no_logs": "You can use the filters to fetch logs",
-    "user":"User"
+    "no_logs": "You can change the filters to fetch logs",
+    "user":"User",
+    "date":"Log Date"
 }
