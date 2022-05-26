@@ -5,6 +5,7 @@
     (commonLocaleData)="commonLocaleData = $event"
     (translationComplete)="translationComplete($event)"
 >
+    <hamburger-menu class="header-hamburger-menu"></hamburger-menu>
     <giddh-page-loader *ngIf="showLoader"></giddh-page-loader>
     <div [ngStyle]="{ 'display': !showLoader ? 'block' : 'none' }">
         <!-- region page change menu -->
