@@ -92,6 +92,12 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
     public showDateReport: boolean = false;
     /** To show clear filter */
     public isDisabled: boolean = false;
+    /** Holds label of selected values */
+    public activityObjLabels: any = {
+        entity: "",
+        operation: "",
+        user: ""
+    };
 
     constructor(
         public activityService: ActivityLogsService,
@@ -245,6 +251,11 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
         this.activityObj.operation = '';
         this.activityObj.userUniqueNames = [];
         this.showDateReport = false;
+        this.activityObjLabels = {
+            entity: "",
+            operation: "",
+            user: ""
+        };
         this.selectedDateRange = { startDate: moment(this.universalDate[0]), endDate: moment(this.universalDate[1]) };
         this.selectedDateRangeUi = moment(this.universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(this.universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
         this.activityObj.fromDate = moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
