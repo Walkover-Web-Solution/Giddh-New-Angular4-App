@@ -8,13 +8,12 @@
 
 /* Background for the tree. May use for <body> element */
 .jsontree_bg {
-    background: #fff;
+    background: var(--color-white);
 }
 
 /* Styles for the container of the tree (e.g. fonts, margins etc.) */
 .jsontree_tree {
     margin-left: 30px;
-    font-family: "PT Mono", monospace;
     font-size: 14px;
     list-style-type: none;
 }
@@ -39,14 +38,14 @@
 .jsontree_label {
     font-weight: normal;
     vertical-align: top;
-    color: #000;
+    color: var(--color-nero);
     position: relative;
     padding: 1px;
     border-radius: 4px;
     cursor: default;
 }
 .jsontree_node_marked > .jsontree_label-wrapper > .jsontree_label {
-    background: #fff2aa;
+    background: var(--color-chardon);
 }
 
 /* Styles for values */
@@ -62,19 +61,19 @@
     display: inline;
 }
 .jsontree_value_null {
-    color: #777;
+    color: var(--color-gray);
     font-weight: bold;
 }
 .jsontree_value_string {
-    color: #025900;
+    color: var(--color-success-enable);
     font-weight: bold;
 }
 .jsontree_value_number {
-    color: #000e59;
+    color: var(--color-giddh-blue);
     font-weight: bold;
 }
 .jsontree_value_boolean {
-    color: #600100;
+    color: var(--color-red);
     font-weight: bold;
 }
 
@@ -86,6 +85,7 @@
     display: block;
     width: 11px;
     height: 11px;
+    filter: var(--color-image-filter);
     background-image: url("../images/json-tree-icon.svg");
 }
 .jsontree_node_expanded > .jsontree_label-wrapper > .jsontree_label > .jsontree_expand-button {

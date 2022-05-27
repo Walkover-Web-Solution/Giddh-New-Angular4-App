@@ -36,7 +36,7 @@ const ELEMENT_DATA: GetActivityLogs[] = [];
 export class ActivityLogsComponent implements OnInit, OnDestroy {
     /** This will hold local JSON data */
     public localeData: any = {};
-    /* This will hold common JSON data */
+    /** This will hold common JSON data */
     public commonLocaleData: any = {};
     /** True if api call in progress */
     public isLoading: boolean = false;
@@ -89,8 +89,6 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
     public universalDate: any;
     /** To show clear filter */
     public showDateReport: boolean = false;
-    /** To show clear filter */
-    public isDisabled: boolean = false;
     /** Holds label of selected values */
     public activityObjLabels: any = {
         entity: "",
@@ -322,7 +320,7 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
         event.preventDefault();
         row.isExpanded = !row.isExpanded;
         if (!row.hasHistory) {
-            let activityObj = { entityId: row.entityId, entity: row.entity, count: 100 };
+            let activityObj = { entityId: row.entityId, entity: row.entity, count: 200 };
             row.hasHistory = true;
             this.activityService.getActivityLogs(activityObj).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
                 this.isLoading = false;
@@ -347,24 +345,24 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
      * This function will use for selected items
      *
      * @param {MatCheckboxChange} event
-     * @param {*} row2
+     * @param {*} rowHistory
      * @param {*} details
      * @memberof ActivityLogsComponent
      */
-    public selectedItems(event: MatCheckboxChange, row2: any, details: any): void {
-        if (!row2.selectedItems) {
-            row2.selectedItems = [];
+    public selectedItems(event: MatCheckboxChange, rowHistory: any, details: any): void {
+        if (!rowHistory.selectedItems) {
+            rowHistory.selectedItems = [];
         }
         if (event.checked) {
             details.isChecked = true;
-            row2.selectedItems.push(details);
-            if (row2.selectedItems.length > 2) {
-                const firstElement = row2.selectedItems[0];
-                row2.selectedItems = row2.selectedItems.slice(1);
+            rowHistory.selectedItems.push(details);
+            if (rowHistory.selectedItems.length > 2) {
+                const firstElement = rowHistory.selectedItems[0];
+                rowHistory.selectedItems = rowHistory.selectedItems.slice(1);
                 firstElement.isChecked = false;
             }
         } else {
-            row2.selectedItems.pop(details);
+            rowHistory.selectedItems.pop(details);
             details.isChecked = false;
         }
         this.changeDetection.detectChanges();
@@ -376,12 +374,12 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
      * @param {*} details
      * @memberof ActivityLogsComponent
      */
-    public compareHistoryJson(row2: any, details: any): void {
+    public compareHistoryJson(rowHistory: any, details: any): void {
         let data;
-        if (row2.selectedItems[0]?.index === details.index) {
-            data = [row2.selectedItems[0]?.details, row2.selectedItems[1]?.details];
+        if (rowHistory.selectedItems[0]?.index === details.index) {
+            data = [rowHistory.selectedItems[0]?.details, rowHistory.selectedItems[1]?.details];
         } else {
-            data = [row2.selectedItems[1]?.details, row2.selectedItems[0]?.details];
+            data = [rowHistory.selectedItems[1]?.details, rowHistory.selectedItems[0]?.details];
         }
         this.dialog.open(ActivityCompareJsonComponent, {
             data: data,

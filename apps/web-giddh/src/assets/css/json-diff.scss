@@ -1,15 +1,14 @@
 .jsondiffpatch-delta {
-    font-family: "Bitstream Vera Sans Mono", "DejaVu Sans Mono", Monaco, Courier, monospace;
     font-size: 12px;
     margin: 0;
     padding: 0 0 0 12px;
     display: inline-block;
 }
 .jsondiffpatch-delta pre {
-    font-family: "Bitstream Vera Sans Mono", "DejaVu Sans Mono", Monaco, Courier, monospace;
     font-size: 12px;
     margin: 0;
     padding: 0;
+    color: var(--color-gray);
     display: inline-block;
 }
 ul.jsondiffpatch-delta {
@@ -26,18 +25,20 @@ ul.jsondiffpatch-delta {
 .jsondiffpatch-added .jsondiffpatch-value pre,
 .jsondiffpatch-modified .jsondiffpatch-right-value pre,
 .jsondiffpatch-textdiff-added {
-    background: #bbffbb;
+    color: var(--color-wild-sand);
+    background: var(--color-success-enable);
 }
 .jsondiffpatch-deleted .jsondiffpatch-property-name,
 .jsondiffpatch-deleted pre,
 .jsondiffpatch-modified .jsondiffpatch-left-value pre,
 .jsondiffpatch-textdiff-deleted {
-    background: #ffbbbb;
+    background: var(--color-primary-onboarding-label-required);
     text-decoration: line-through;
+    color: var(--color-wild-sand);
 }
 .jsondiffpatch-unchanged,
 .jsondiffpatch-movedestination {
-    color: gray;
+    color: var(--color-gray);
 }
 .jsondiffpatch-unchanged,
 .jsondiffpatch-movedestination > .jsondiffpatch-value {
@@ -122,8 +123,8 @@ li:last-child > .jsondiffpatch-value pre:after,
 }
 .jsondiffpatch-moved .jsondiffpatch-moved-destination {
     display: inline-block;
-    background: #ffffbb;
-    color: #888;
+    background: var(--color-chardon);
+    color: var(--color-gray);
 }
 .jsondiffpatch-moved .jsondiffpatch-moved-destination:before {
     content: " => ";
@@ -132,7 +133,7 @@ ul.jsondiffpatch-textdiff {
     padding: 0;
 }
 .jsondiffpatch-textdiff-location {
-    color: #bbb;
+    color: var(--color-gray);
     display: inline-block;
     min-width: 60px;
 }
@@ -143,7 +144,7 @@ ul.jsondiffpatch-textdiff {
     content: ",";
 }
 .jsondiffpatch-error {
-    background: red;
-    color: white;
+    background: var(--color-red);
+    color: var(--color-white);
     font-weight: bold;
 }

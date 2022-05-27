@@ -28,10 +28,12 @@
         .activity-history {
             min-height: 0;
         }
-        tr:hover {
-            .history-btn {
-                display: inline-block !important;
-                z-index: 9999;
+        tr {
+            &:hover {
+                .history-btn {
+                    display: inline-block !important;
+                    z-index: 9999;
+                }
             }
         }
         td {
@@ -59,5 +61,9 @@
         left: 135px;
         top: 12px;
         text-decoration: underline;
+        color: var(--color-blue);
+        &:hover {
+            color: var(--color-blue);
+        }
     }
 }
