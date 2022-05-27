@@ -322,6 +322,7 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
      * @memberof ActivityLogsComponent
      */
     public getHistory(event: any, row: any): void {
+        console.log(row);
         event.stopPropagation();
         event.preventDefault();
         row.isExpanded = !row.isExpanded;
@@ -380,7 +381,9 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
      * @param {*} details
      * @memberof ActivityLogsComponent
      */
-    public compareHistoryJson(rowHistory: any, details: any): void {
+    public compareHistoryJson(rowHistory: any, details: any, event:any): void {
+        event.stopPropagation();
+        event.preventDefault();
         let data;
         if (rowHistory.selectedItems[0]?.index === details.index) {
             data = [rowHistory.selectedItems[0]?.details, rowHistory.selectedItems[1]?.details];

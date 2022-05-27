@@ -21,6 +21,7 @@
     .giddh-table {
         .activity-td {
             width: 20%;
+            position: relative;
         }
         .history-btn {
             display: none;
@@ -70,8 +71,11 @@
     }
     .activity-history-td {
         background: var(--color-sidebar-secondary-search-bar-background) !important ;
+        padding-left: 28px !important;
+    }
+    .activity-history {
         &:hover {
-            background-color: none !important;
+            background-color: none;
         }
     }
 }
