@@ -17,6 +17,7 @@ import { HamburgerMenuModule } from '../shared/header/components/hamburger-menu/
 import { SharedModule } from '../shared/shared.module';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { ActivityCompareJsonComponent } from './components/activity-compare-json/activity-compare-json.component';
+import { ActivityHistoryLogsJsonComponent } from './components/activity-history-logs-json/activity-history-logs-json.component';
 
 @NgModule({
     declarations: [

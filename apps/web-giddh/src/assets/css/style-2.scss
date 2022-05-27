@@ -10588,3 +10588,18 @@ input[type="checkbox"].cdk-visually-hidden::after {
         display: none;
     }
 }
+.history-sidebar {
+    min-height: 100% !important;
+    height: 100% !important;
+    width: 760px !important;
+    .mat-dialog-content {
+        margin: 0 !important;
+        padding: 0 !important;
+        max-height: 90%;
+        float: left;
+        width: 100%;
+    }
+    .mat-dialog-container {
+        overflow: hidden;
+    }
+}

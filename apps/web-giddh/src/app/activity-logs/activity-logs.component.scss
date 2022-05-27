@@ -58,12 +58,20 @@
     .compare-json {
         text-decoration: underline;
         position: absolute;
-        left: 135px;
-        top: 12px;
+        left: 120px;
+        top: 0px;
         text-decoration: underline;
         color: var(--color-blue);
+        z-index: 999;
+        padding: 13px;
         &:hover {
             color: var(--color-blue);
+        }
+    }
+    .activity-history-td {
+        background: var(--color-sidebar-secondary-search-bar-background) !important ;
+        &:hover {
+            background-color: none !important;
         }
     }
 }

@@ -17,6 +17,7 @@ import { AppState } from '../store';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { ActivityCompareJsonComponent } from './components/activity-compare-json/activity-compare-json.component';
+import { ActivityHistoryLogsJsonComponent } from './components/activity-history-logs-json/activity-history-logs-json.component';
 /** This will use for interface */
 export interface GetActivityLogs {
     name: any;
@@ -147,12 +148,17 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
      * @param {*} element
      * @memberof ActivityLogsComponent
      */
-    public getLogsDetails(element: any): void {
+    public getLogsDetails(event: any, element: any): void {
+        event.stopPropagation();
+        event.preventDefault();
+        console.log(element);
+
         this.dialog.open(ActivityLogsJsonComponent, {
             data: element?.details,
             panelClass: 'logs-sidebar'
         });
     }
+
 
     /**
     * This function will change the page of activity logs
