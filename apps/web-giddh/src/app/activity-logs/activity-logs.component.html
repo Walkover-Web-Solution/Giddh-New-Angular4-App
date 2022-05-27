@@ -175,14 +175,15 @@
                                             <mat-checkbox
                                                 [(ngModel)]="details.isChecked"
                                                 class="history-checkbox"
+                                                color="primary"
                                                 (change)="selectedItems($event, row2, details)"
                                             >
                                             </mat-checkbox>
                                             <a
                                                 class="compare-json cursor-pointer"
                                                 *ngIf="details.isChecked"
-                                                (click)="compareJson(row2, details)"
-                                                >Compare</a
+                                                (click)="compareHistoryJson(row2, details)"
+                                                >{{ localeData?.compare }}</a
                                             >
                                         </td>
                                     </ng-container>
@@ -197,7 +198,7 @@
                     class="cursor-pointer"
                     mat-row
                     *matRowDef="let row; columns: displayedColumns"
-                    (click)="openDialog(row)"
+                    (click)="getLogsDetails(row)"
                 ></tr>
                 <tr
                     mat-row

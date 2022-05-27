@@ -58,7 +58,6 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
         toDate: "",
         entityId: "",
         isChecked: false,
-
     }
     /** Activity log form's company entity type list */
     public entities: IOption[] = [];
@@ -121,9 +120,7 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
         if (this.generalService.voucherApiVersion === 1) {
             this.router.navigate(['/pages/home']);
         }
-        // To get Activity log form filter
         this.getFormFilter();
-
         this.companyService.getComapnyUsers().pipe(takeUntil(this.destroyed$)).subscribe(data => {
             if (data.status === 'success') {
                 let users: IOption[] = [];
@@ -134,7 +131,6 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
             } else {
             }
         });
-
         /** Universal date observer */
         this.universalDate$.subscribe(dateObj => {
             if (dateObj) {
@@ -148,12 +144,12 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * This function will use for open dialog 
+     * This function will use for get log details 
      *
      * @param {*} element
      * @memberof ActivityLogsComponent
      */
-    public openDialog(element: any): void {
+    public getLogsDetails(element: any): void {
         this.dialog.open(ActivityLogsJsonComponent, {
             data: element?.details,
             panelClass: 'logs-sidebar'
@@ -315,8 +311,6 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
         );
     }
 
-
-
     /**
      * To check is entry expanded
      *
@@ -363,18 +357,17 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
         }
         if (event.checked) {
             details.isChecked = true;
-            this.changeDetection.detectChanges();
             row2.selectedItems.push(details);
             if (row2.selectedItems.length > 2) {
                 const firstElement = row2.selectedItems[0];
                 row2.selectedItems = row2.selectedItems.slice(1);
                 firstElement.isChecked = false;
-                this.changeDetection.detectChanges();
             }
         } else {
             row2.selectedItems.pop(details);
             details.isChecked = false;
         }
+        this.changeDetection.detectChanges();
     }
 
     /**
@@ -383,7 +376,7 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
      * @param {*} details
      * @memberof ActivityLogsComponent
      */
-    public compareJson(row2: any, details: any): void {
+    public compareHistoryJson(row2: any, details: any): void {
         let data;
         if (row2.selectedItems[0]?.index === details.index) {
             data = [row2.selectedItems[0]?.details, row2.selectedItems[1]?.details];
@@ -395,7 +388,6 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
             panelClass: 'json-sidebar'
         });
     }
-
 
     /**
      *This function will use for component destroy
