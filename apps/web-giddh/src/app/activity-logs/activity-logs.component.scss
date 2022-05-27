@@ -1,20 +1,69 @@
-.custom-datepicker-wrapper {
-    display: flex;
-    text-align: center;
-    justify-content: center;
-}
-
-.clear-filter {
-    color: var(--color-giddh-blue);
-    cursor: pointer;
-}
-.activity-filter-wrap {
-    display: flex;
-    align-items: center;
-    padding-left: 9px;
-    padding-top: 9px;
-}
-.filter-button {
-    float: left;
-    width: 15%;
+.activity-container {
+    .custom-datepicker-wrapper {
+        display: flex;
+        text-align: center;
+        justify-content: center;
+    }
+    .clear-filter {
+        color: var(--color-giddh-blue);
+        cursor: pointer;
+    }
+    .activity-filter-wrap {
+        display: flex;
+        align-items: center;
+        padding-left: 9px;
+        padding-top: 9px;
+    }
+    .filter-button {
+        float: left;
+        width: 15%;
+    }
+    .giddh-table {
+        .activity-td {
+            width: 20%;
+        }
+        .history-btn {
+            display: none;
+        }
+        .activity-history {
+            min-height: 0;
+        }
+        tr {
+            &:hover {
+                .history-btn {
+                    display: inline-block !important;
+                    z-index: 9999;
+                }
+            }
+        }
+        td {
+            .history-btn {
+                width: 36px;
+                height: 36px;
+                align-items: center;
+                background-color: var(--color-white);
+                position: absolute;
+                left: 101px;
+                top: 6px;
+                right: 0;
+            }
+        }
+    }
+    .history-checkbox {
+        position: absolute;
+        left: 102px;
+        top: 11px;
+        right: 0;
+    }
+    .compare-json {
+        text-decoration: underline;
+        position: absolute;
+        left: 135px;
+        top: 12px;
+        text-decoration: underline;
+        color: var(--color-blue);
+        &:hover {
+            color: var(--color-blue);
+        }
+    }
 }
