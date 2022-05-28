@@ -384,9 +384,11 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * This function will use for compare json key values
+     *This function will use for compare json key values
      *
+     * @param {*} rowHistory
      * @param {*} details
+     * @param {*} event
      * @memberof ActivityLogsComponent
      */
     public compareHistoryJson(rowHistory: any, details: any, event: any): void {

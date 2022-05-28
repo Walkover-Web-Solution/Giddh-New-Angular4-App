@@ -23,9 +23,6 @@ export class ActivityLogsJsonComponent implements OnInit {
      * @memberof ActivityLogsJsonComponent
      */
     public ngOnInit(): void {
-        console.log(this.inputData);
-        console.log(jsonTreeViewer);
-
         this.dialogRef.updatePosition({ top: '0px', right: '0px' });
         setTimeout(() => {
             jsonTreeViewer?.create(this.inputData, this.activityLogs?.nativeElement);
