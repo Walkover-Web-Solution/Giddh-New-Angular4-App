@@ -10588,3 +10588,31 @@ input[type="checkbox"].cdk-visually-hidden::after {
         display: none;
     }
 }
+.history-sidebar {
+    min-height: 100% !important;
+    height: 100% !important;
+    width: 760px !important;
+    .mat-dialog-content {
+        margin: 0 !important;
+        padding: 0 !important;
+        max-height: 90%;
+        float: left;
+        width: 100%;
+    }
+    .mat-dialog-container {
+        overflow: hidden;
+    }
+}
+
+.giddh-table tbody > tr.history-child-row {
+    background-color: var(--color-sidebar-secondary-search-bar-background) !important;
+}
+.giddh-table tbody > tr.history-child-row > td {
+    background-color: transparent !important;
+}
+.giddh-table tbody > tr.history-child-row:hover {
+    background-color: #668cff26 !important;
+}
+.giddh-table tbody > tr.history-child-row:hover > td {
+    background-color: transparent !important;
+}

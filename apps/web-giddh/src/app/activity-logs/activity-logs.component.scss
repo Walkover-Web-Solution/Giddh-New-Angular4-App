@@ -18,15 +18,13 @@
         float: left;
         width: 15%;
     }
-    .giddh-table {
+    .activity-table {
         .activity-td {
             width: 20%;
+            position: relative;
         }
         .history-btn {
             display: none;
-        }
-        .activity-history {
-            min-height: 0;
         }
         tr {
             &:hover {
@@ -49,21 +47,31 @@
             }
         }
     }
-    .history-checkbox {
-        position: absolute;
-        left: 102px;
-        top: 11px;
-        right: 0;
-    }
-    .compare-json {
-        text-decoration: underline;
-        position: absolute;
-        left: 135px;
-        top: 12px;
-        text-decoration: underline;
-        color: var(--color-blue);
-        &:hover {
+    .activity-child-table {
+        .activity-history {
+            min-height: 0;
+        }
+        .history-checkbox {
+            position: absolute;
+            left: 102px;
+            top: 0px;
+            padding: 13px;
+        }
+        .compare-json {
+            text-decoration: underline;
+            position: absolute;
+            left: 130px;
+            top: 0px;
+            text-decoration: underline;
             color: var(--color-blue);
+            z-index: 999;
+            padding: 13px;
+            &:hover {
+                color: var(--color-blue);
+            }
+        }
+        .child-td-name {
+            padding-left: 30px !important;
         }
     }
 }
