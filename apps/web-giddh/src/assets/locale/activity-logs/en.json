@@ -9,5 +9,6 @@
     "compare": "Compare",
     "show_change_data": "Show Changed Data",
     "no_difference":"No difference",
-    "no_history":"No history available for this log"
+    "no_history":"No history available for this log",
+    "history": "History"
 }
