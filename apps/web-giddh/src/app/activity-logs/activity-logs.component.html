@@ -125,7 +125,7 @@
                         <a
                             [matTooltip]="
                                 element.hasHistory && !element.history?.length
-                                    ? 'No History Found'
+                                    ? localeData?.no_history_found
                                     : localeData?.history
                             "
                             matTooltipPosition="above"
