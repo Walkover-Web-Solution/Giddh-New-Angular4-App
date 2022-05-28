@@ -83,7 +83,7 @@
                 [dataSource]="dataSource"
                 multiTemplateDataRows
                 *ngIf="dataSource?.length"
-                class="giddh-table table"
+                class="giddh-table table parent-table"
             >
                 <!-- UserName Column -->
                 <ng-container matColumnDef="name">
@@ -117,22 +117,10 @@
                     <td mat-cell *matCellDef="let element" class="position-relative">
                         {{ element.operation }}
                         <button
-                            *ngIf="!element.history?.length < 2"
                             class="btn btn-primary cursor-pointer history-btn"
                             (click)="getHistory($event, element)"
                         >
                             <i class="icon-history-icon font-12 pr-1"></i>
-                        </button>
-                        <button
-                            disabled
-                            *ngIf="element.history?.length < 2"
-                            class="btn btn-primary cursor-pointer history-btn"
-                        >
-                            <i
-                                class="icon-history-icon font-12 pr-1"
-                                [matTooltip]="'No history'"
-                                matTooltipPosition="above"
-                            ></i>
                         </button>
                     </td>
                 </ng-container>
@@ -146,15 +134,15 @@
                     >
                         <div class="d-flex overflow-hidden">
                             <div class="w-100" *ngIf="rowHistory.isExpanded && rowHistory.history?.length">
-                                <table
-                                    class="giddh-table table activity-child-table"
-                                    mat-table
-                                    [dataSource]="rowHistory.history"
-                                >
+                                <table class="table activity-child-table" mat-table [dataSource]="rowHistory.history">
                                     <!-- UserName Column -->
                                     <ng-container matColumnDef="name">
                                         <th mat-header-cell *matHeaderCellDef></th>
-                                        <td class="activity-td activity-history-td" mat-cell *matCellDef="let details">
+                                        <td
+                                            class="activity-td activity-history-td child-td-name"
+                                            mat-cell
+                                            *matCellDef="let details"
+                                        >
                                             <span [matTooltip]="details.user.email" matTooltipPosition="above">{{
                                                 details.user.name
                                             }}</span>
@@ -214,17 +202,18 @@
                         </div>
                     </td>
                 </ng-container>
-                <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                 <tr
                     class="cursor-pointer"
                     mat-row
-                    *matRowDef="let row; columns: displayedColumns"
-                    (click)="getLogsDetails(row)"
+                    *matRowDef="let row; columns: displayedColumns; sticky: true"
+                    matRowDefSticky
+                    (click)="getLogsDetails($event, row)"
                 ></tr>
                 <tr
                     mat-row
                     *matRowDef="let row; columns: ['expandedDetail']"
-                    class="activity-history border-none"
+                    class="activity-history child-tr-activity border-none"
                     [hidden]="!row.isExpanded"
                 ></tr>
             </table>

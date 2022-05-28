@@ -18,6 +18,7 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { ActivityCompareJsonComponent } from './components/activity-compare-json/activity-compare-json.component';
 import { ActivityHistoryLogsJsonComponent } from './components/activity-history-logs-json/activity-history-logs-json.component';
+import { ToasterService } from '../services/toaster.service';
 /** This will use for interface */
 export interface GetActivityLogs {
     name: any;
@@ -106,6 +107,7 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
         private ActivityLogsService: LogsService,
         private companyService: CompanyService,
         private modalService: BsModalService,
+        private toaster: ToasterService,
         private store: Store<AppState>) {
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
     }
@@ -151,8 +153,6 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
     public getLogsDetails(event: any, element: any): void {
         event.stopPropagation();
         event.preventDefault();
-        console.log(element);
-
         this.dialog.open(ActivityLogsJsonComponent, {
             data: element?.details,
             panelClass: 'logs-sidebar'
@@ -322,29 +322,37 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
      * @memberof ActivityLogsComponent
      */
     public getHistory(event: any, row: any): void {
-        console.log(row);
         event.stopPropagation();
         event.preventDefault();
-        row.isExpanded = !row.isExpanded;
+
         if (!row.hasHistory) {
             let activityObj = { entityId: row.entityId, entity: row.entity, count: 200 };
             row.hasHistory = true;
             this.activityService.getActivityLogs(activityObj).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
                 this.isLoading = false;
                 if (response && response.status === 'success') {
-                    response.body?.results?.forEach((result, index) => {
-                        if (result) {
-                            result.index = index;
-                            result.timeonly = moment(result.time, GIDDH_DATE_FORMAT + " HH:mm:ss").format("HH:mm:ss");
-                            result.time = moment(result.time, GIDDH_DATE_FORMAT + " HH:mm:ss").format(GIDDH_DATE_FORMAT);
-                        }
-                    });
-                    row.history = response.body.results;
+                    if (response.body?.results.length > 1) {
+                        response.body?.results?.forEach((result, index) => {
+                            if (result) {
+                                result.index = index;
+                                result.timeonly = moment(result.time, GIDDH_DATE_FORMAT + " HH:mm:ss").format("HH:mm:ss");
+                                result.time = moment(result.time, GIDDH_DATE_FORMAT + " HH:mm:ss").format(GIDDH_DATE_FORMAT);
+                            }
+                        });
+                        row.history = response.body.results;
+                        row.isExpanded = !row.isExpanded;
+                    } else {
+                        this.toaster.showSnackBar('info', this.localeData?.no_history)
+                        row.history = [];
+                        row.isExpanded = false;
+                    }
                 } else {
                     row.history = [];
                 }
                 this.changeDetection.detectChanges();
             });
+        } else if (row.history?.length) {
+            row.isExpanded = !row.isExpanded;
         }
     }
 
@@ -381,7 +389,7 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
      * @param {*} details
      * @memberof ActivityLogsComponent
      */
-    public compareHistoryJson(rowHistory: any, details: any, event:any): void {
+    public compareHistoryJson(rowHistory: any, details: any, event: any): void {
         event.stopPropagation();
         event.preventDefault();
         let data;

@@ -10603,3 +10603,16 @@ input[type="checkbox"].cdk-visually-hidden::after {
         overflow: hidden;
     }
 }
+
+.giddh-table tbody > tr.history-child-row {
+    background-color: var(--color-sidebar-secondary-search-bar-background) !important;
+}
+.giddh-table tbody > tr.history-child-row > td {
+    background-color: transparent !important;
+}
+.giddh-table tbody > tr.history-child-row:hover {
+    background-color: #668cff26 !important;
+}
+.giddh-table tbody > tr.history-child-row:hover > td {
+    background-color: transparent !important;
+}

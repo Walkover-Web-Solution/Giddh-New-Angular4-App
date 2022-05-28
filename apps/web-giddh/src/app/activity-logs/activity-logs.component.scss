@@ -18,16 +18,13 @@
         float: left;
         width: 15%;
     }
-    .giddh-table {
+    .parent-table {
         .activity-td {
             width: 20%;
             position: relative;
         }
         .history-btn {
             display: none;
-        }
-        .activity-history {
-            min-height: 0;
         }
         tr {
             &:hover {
@@ -50,32 +47,31 @@
             }
         }
     }
-    .history-checkbox {
-        position: absolute;
-        left: 102px;
-        top: 11px;
-        right: 0;
-    }
-    .compare-json {
-        text-decoration: underline;
-        position: absolute;
-        left: 120px;
-        top: 0px;
-        text-decoration: underline;
-        color: var(--color-blue);
-        z-index: 999;
-        padding: 13px;
-        &:hover {
-            color: var(--color-blue);
+    .activity-child-table {
+        .activity-history {
+            min-height: 0;
         }
-    }
-    .activity-history-td {
-        background: var(--color-sidebar-secondary-search-bar-background) !important ;
-        padding-left: 28px !important;
-    }
-    .activity-history {
-        &:hover {
-            background-color: none;
+        .history-checkbox {
+            position: absolute;
+            left: 102px;
+            top: 11px;
+            right: 0;
+        }
+        .compare-json {
+            text-decoration: underline;
+            position: absolute;
+            left: 120px;
+            top: 0px;
+            text-decoration: underline;
+            color: var(--color-blue);
+            z-index: 999;
+            padding: 13px;
+            &:hover {
+                color: var(--color-blue);
+            }
+        }
+        .child-td-name {
+            padding-left: 30px !important;
         }
     }
 }
