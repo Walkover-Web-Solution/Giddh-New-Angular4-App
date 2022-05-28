@@ -44,7 +44,7 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** This will use for table heading */
-    public displayedColumns: string[] = ['name', 'time', 'ip', 'entity', 'operation'];
+    public displayedColumns: string[] = ['name', 'time', 'ip', 'entity', 'operation', 'history'];
     /** Hold the data of activity logs */
     public dataSource = ELEMENT_DATA;
     /** This will use for activity logs object */
@@ -326,9 +326,9 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
 
         if (!row.hasHistory) {
             let activityObj = { entityId: row.entityId, entity: row.entity, count: 200 };
-            row.hasHistory = true;
             this.activityService.getActivityLogs(activityObj).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
                 this.isLoading = false;
+                row.hasHistory = true;
                 if (response && response.status === 'success') {
                     if (response.body?.results.length > 1) {
                         response.body?.results?.forEach((result, index) => {
@@ -341,7 +341,7 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
                         row.history = response.body.results;
                         row.isExpanded = !row.isExpanded;
                     } else {
-                        this.toaster.showSnackBar('info', this.localeData?.no_history)
+                        this.toaster.showSnackBar('info', this.localeData?.no_history);
                         row.history = [];
                         row.isExpanded = false;
                     }
@@ -352,6 +352,8 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
             });
         } else if (row.history?.length) {
             row.isExpanded = !row.isExpanded;
+        } else {
+            this.toaster.showSnackBar('info', this.localeData?.no_history);
         }
     }
 
