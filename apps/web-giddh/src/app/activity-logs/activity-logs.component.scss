@@ -54,13 +54,13 @@
         .history-checkbox {
             position: absolute;
             left: 102px;
-            top: 11px;
-            right: 0;
+            top: 0px;
+            margin: 12px;
         }
         .compare-json {
             text-decoration: underline;
             position: absolute;
-            left: 120px;
+            left: 130px;
             top: 0px;
             text-decoration: underline;
             color: var(--color-blue);

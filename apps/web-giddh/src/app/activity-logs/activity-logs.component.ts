@@ -17,7 +17,6 @@ import { AppState } from '../store';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { ActivityCompareJsonComponent } from './components/activity-compare-json/activity-compare-json.component';
-import { ActivityHistoryLogsJsonComponent } from './components/activity-history-logs-json/activity-history-logs-json.component';
 import { ToasterService } from '../services/toaster.service';
 /** This will use for interface */
 export interface GetActivityLogs {
