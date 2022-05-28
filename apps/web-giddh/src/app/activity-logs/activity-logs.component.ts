@@ -117,6 +117,7 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
      * @memberof ActivityLogsComponent
      */
     public ngOnInit(): void {
+        document.body?.classList?.add("activity-log-page");
         if (this.generalService.voucherApiVersion === 1) {
             this.router.navigate(['/pages/home']);
         }
@@ -416,5 +417,6 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
         this.resetFilter();
         this.destroyed$.next(true);
         this.destroyed$.complete();
+        document.body?.classList?.remove("activity-log-page");
     }
 }

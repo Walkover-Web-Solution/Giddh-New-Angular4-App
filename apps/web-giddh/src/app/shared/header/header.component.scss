@@ -1045,6 +1045,13 @@ aside-setting {
     }
 }
 @media (max-width: 1024px) {
+    .activity-log-page {
+        .fixed-heading {
+            .primary-main-header {
+                z-index: 5 !important;
+            }
+        }
+    }
     .fixed-padding {
         #primary-new-header {
             z-index: 99999 !important;
