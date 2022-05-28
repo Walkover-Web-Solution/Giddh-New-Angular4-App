@@ -134,7 +134,11 @@
                     >
                         <div class="d-flex overflow-hidden">
                             <div class="w-100" *ngIf="rowHistory.isExpanded && rowHistory.history?.length">
-                                <table class="table activity-child-table" mat-table [dataSource]="rowHistory.history">
+                                <table
+                                    class="giddh-table table activity-child-table"
+                                    mat-table
+                                    [dataSource]="rowHistory.history"
+                                >
                                     <!-- UserName Column -->
                                     <ng-container matColumnDef="name">
                                         <th mat-header-cell *matHeaderCellDef></th>
