@@ -21,3 +21,9 @@
         display: inline-block !important;
     }
 }
+.navbar {
+    .header-hamburger-menu {
+        position: relative;
+        z-index: 999;
+    }
+}
