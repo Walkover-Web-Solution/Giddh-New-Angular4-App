@@ -24,7 +24,8 @@
                     [name]="'entity'"
                     [placeholder]="commonLocaleData?.app_entity"
                     [options]="entities"
-                    (selectedOption)="activityObj.entity = $event.value"
+                    (selectedOption)="activityObj.entity = $event.value; activityObjLabels.entity = $event.label"
+                    [defaultValue]="activityObjLabels?.entity"
                 >
                 </select-field>
             </div>
@@ -34,7 +35,8 @@
                     [name]="'operation'"
                     [placeholder]="localeData?.operation"
                     [options]="filters[activityObj.entity ? activityObj.entity : '']"
-                    (selectedOption)="activityObj.operation = $event.value"
+                    (selectedOption)="activityObj.operation = $event.value; activityObjLabels.operation = $event.label"
+                    [defaultValue]="activityObjLabels?.operation"
                 >
                 </select-field>
             </div>
@@ -44,7 +46,8 @@
                     [name]="'user'"
                     [placeholder]="localeData?.user"
                     [options]="users"
-                    (selectedOption)="selecteUserType($event)"
+                    (selectedOption)="selecteUserType($event); activityObjLabels.user = $event.label"
+                    [defaultValue]="activityObjLabels?.user"
                 >
                 </select-field>
             </div>
