@@ -17,6 +17,7 @@ import { CommonActions } from '../../actions/common.actions';
 import { GeneralService } from '../../services/general.service';
 import { OrganizationType } from '../../models/user-login-state';
 import { cloneDeep, concat, isEmpty, isEqual } from '../../lodash-optimized';
+import { BootstrapToggleSwitch } from '../../app.constant'
 
 @Component({
     selector: 'app-invoice-setting',
@@ -71,6 +72,10 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
     public formFields: any[] = [];
     /** True if user has invoice setting permissions */
     public hasInvoiceSettingPermissions: boolean = true;
+    /** Stores the voucher API version of company */
+    public voucherApiVersion: 1 | 2;
+    /** This will hold toggle buttons value and size */
+    public bootstrapToggleSwitch = BootstrapToggleSwitch;
 
     constructor(
         private commonActions: CommonActions,
@@ -197,8 +202,11 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
             } else if (!setting) {
                 this.store.dispatch(this.invoiceActions.getInvoiceSetting());
             }
+            
         });
+        
     }
+    
 
     // public onChangeSendInvoiceViaSms(isChecked) {
     //     if (!isChecked) {

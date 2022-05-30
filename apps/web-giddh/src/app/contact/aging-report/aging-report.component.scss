@@ -58,7 +58,7 @@
     width: 73px;
     position: relative;
     right: 1px;
-    border-color: var(--color-solitude-light);
+    border-color: var(--color-common-secondary-border);
     color: var(--color-primary-filter-button-text);
 }
 
@@ -101,8 +101,12 @@ tr.aging-table-top td {
     justify-content: center;
     align-items: center;
     background-color: var(--color-white);
-    border: 1px solid var(--color-iron);
+    border: 1px solid var(--color-common-secondary-border);
+    border-radius: 5px;
     margin-left: 10px !important;
+    .icon-refresh {
+        color: var(--color-abbey);
+    }
 }
 
 .name-width {

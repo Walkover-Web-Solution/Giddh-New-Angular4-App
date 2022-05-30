@@ -8,5 +8,8 @@
     "date":"लॉग तारीख",
     "compare": "तुलना करा",
     "show_change_data": "बदललेला डेटा दाखवा",
-    "no_difference":"फरक नाही"
+    "no_difference":"फरक नाही",
+    "no_history":"या लॉगसाठी कोणताही इतिहास उपलब्ध नाही",
+    "history": "इतिहास",
+    "no_history_found":"कोणताही इतिहास सापडला नाही"
 }

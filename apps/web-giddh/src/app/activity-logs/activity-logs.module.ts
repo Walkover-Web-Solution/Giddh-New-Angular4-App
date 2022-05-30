@@ -42,7 +42,8 @@ import { ActivityCompareJsonComponent } from './components/activity-compare-json
         PaginationModule,
         FormFieldsModule,
         HamburgerMenuModule,
-        SharedModule
+        SharedModule,
+        MatCheckboxModule
     ],
 })
 export class ActivityLogsModule {

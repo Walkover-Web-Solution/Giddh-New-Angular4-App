@@ -17,6 +17,7 @@ import { AppState } from '../store';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { ActivityCompareJsonComponent } from './components/activity-compare-json/activity-compare-json.component';
+import { ToasterService } from '../services/toaster.service';
 /** This will use for interface */
 export interface GetActivityLogs {
     name: any;
@@ -36,14 +37,14 @@ const ELEMENT_DATA: GetActivityLogs[] = [];
 export class ActivityLogsComponent implements OnInit, OnDestroy {
     /** This will hold local JSON data */
     public localeData: any = {};
-    /* This will hold common JSON data */
+    /** This will hold common JSON data */
     public commonLocaleData: any = {};
     /** True if api call in progress */
     public isLoading: boolean = false;
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** This will use for table heading */
-    public displayedColumns: string[] = ['name', 'time', 'ip', 'entity', 'operation'];
+    public displayedColumns: string[] = ['name', 'time', 'ip', 'entity', 'operation', 'history'];
     /** Hold the data of activity logs */
     public dataSource = ELEMENT_DATA;
     /** This will use for activity logs object */
@@ -105,6 +106,7 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
         private ActivityLogsService: LogsService,
         private companyService: CompanyService,
         private modalService: BsModalService,
+        private toaster: ToasterService,
         private store: Store<AppState>) {
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
     }
@@ -115,6 +117,7 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
      * @memberof ActivityLogsComponent
      */
     public ngOnInit(): void {
+        document.body?.classList?.add("activity-log-page");
         if (this.generalService.voucherApiVersion === 1) {
             this.router.navigate(['/pages/home']);
         }
@@ -147,12 +150,15 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
      * @param {*} element
      * @memberof ActivityLogsComponent
      */
-    public getLogsDetails(element: any): void {
+    public getLogsDetails(event: any, element: any): void {
+        event.stopPropagation();
+        event.preventDefault();
         this.dialog.open(ActivityLogsJsonComponent, {
             data: element?.details,
             panelClass: 'logs-sidebar'
         });
     }
+
 
     /**
     * This function will change the page of activity logs
@@ -180,8 +186,9 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
         this.activityService.getActivityLogs(this.activityObj).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             this.isLoading = false;
             if (response && response.status === 'success') {
-                response.body?.results?.forEach(result => {
+                response.body?.results?.forEach((result, index) => {
                     if (result) {
+                        result.index = index;
                         result.timeonly = moment(result.time, GIDDH_DATE_FORMAT + " HH:mm:ss").format("HH:mm:ss");
                         result.time = moment(result.time, GIDDH_DATE_FORMAT + " HH:mm:ss").format(GIDDH_DATE_FORMAT);
                     }
@@ -249,6 +256,11 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
             user: ""
         };
         this.showDateReport = false;
+        this.activityObjLabels = {
+            entity: "",
+            operation: "",
+            user: ""
+        };
         this.selectedDateRange = { startDate: moment(this.universalDate[0]), endDate: moment(this.universalDate[1]) };
         this.selectedDateRangeUi = moment(this.universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(this.universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
         this.activityObj.fromDate = moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
@@ -317,26 +329,37 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
     public getHistory(event: any, row: any): void {
         event.stopPropagation();
         event.preventDefault();
-        row.isExpanded = !row.isExpanded;
+
         if (!row.hasHistory) {
-            let activityObj = { entityId: row.entityId, entity: row.entity, count: 100 };
-            row.hasHistory = true;
+            let activityObj = { entityId: row.entityId, entity: row.entity, count: 200 };
             this.activityService.getActivityLogs(activityObj).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
                 this.isLoading = false;
+                row.hasHistory = true;
                 if (response && response.status === 'success') {
-                    response.body?.results?.forEach((result, index) => {
-                        if (result) {
-                            result.index = index;
-                            result.timeonly = moment(result.time, GIDDH_DATE_FORMAT + " HH:mm:ss").format("HH:mm:ss");
-                            result.time = moment(result.time, GIDDH_DATE_FORMAT + " HH:mm:ss").format(GIDDH_DATE_FORMAT);
-                        }
-                    });
-                    row.history = response.body.results;
+                    if (response.body?.results.length > 1) {
+                        response.body?.results?.forEach((result, index) => {
+                            if (result) {
+                                result.index = index;
+                                result.timeonly = moment(result.time, GIDDH_DATE_FORMAT + " HH:mm:ss").format("HH:mm:ss");
+                                result.time = moment(result.time, GIDDH_DATE_FORMAT + " HH:mm:ss").format(GIDDH_DATE_FORMAT);
+                            }
+                        });
+                        row.history = response.body.results;
+                        row.isExpanded = !row.isExpanded;
+                    } else {
+                        this.toaster.showSnackBar('info', this.localeData?.no_history);
+                        row.history = [];
+                        row.isExpanded = false;
+                    }
                 } else {
                     row.history = [];
                 }
                 this.changeDetection.detectChanges();
             });
+        } else if (row.history?.length) {
+            row.isExpanded = !row.isExpanded;
+        } else {
+            this.toaster.showSnackBar('info', this.localeData?.no_history);
         }
     }
 
@@ -344,42 +367,48 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
      * This function will use for selected items
      *
      * @param {MatCheckboxChange} event
-     * @param {*} row2
+     * @param {*} rowHistory
      * @param {*} details
      * @memberof ActivityLogsComponent
      */
-    public selectedItems(event: MatCheckboxChange, row2: any, details: any): void {
-        if (!row2.selectedItems) {
-            row2.selectedItems = [];
+    public selectedItems(event: MatCheckboxChange, rowHistory: any, details: any): void {
+        if (!rowHistory.selectedItems) {
+            rowHistory.selectedItems = [];
         }
         if (event.checked) {
             details.isChecked = true;
-            row2.selectedItems.push(details);
-            if (row2.selectedItems.length > 2) {
-                const firstElement = row2.selectedItems[0];
-                row2.selectedItems = row2.selectedItems.slice(1);
+            rowHistory.selectedItems.push(details);
+            if (rowHistory.selectedItems.length > 2) {
+                const firstElement = rowHistory.selectedItems[0];
+                rowHistory.selectedItems = rowHistory.selectedItems.slice(1);
                 firstElement.isChecked = false;
             }
         } else {
-            row2.selectedItems.pop(details);
+            rowHistory.selectedItems.pop(details);
             details.isChecked = false;
         }
         this.changeDetection.detectChanges();
     }
 
     /**
-     * This function will use for compare json key values
+     *This function will use for compare json key values
      *
+     * @param {*} rowHistory
      * @param {*} details
+     * @param {*} event
      * @memberof ActivityLogsComponent
      */
-    public compareHistoryJson(row2: any, details: any): void {
+    public compareHistoryJson(rowHistory: any, details: any, event: any): void {
+
+        event.stopPropagation();
+        event.preventDefault();
         let data;
-        if (row2.selectedItems[0]?.index === details.index) {
-            data = [row2.selectedItems[0]?.details, row2.selectedItems[1]?.details];
+        if (rowHistory.selectedItems[0]?.index === details.index) {
+            data = [rowHistory.selectedItems[1]?.details, rowHistory.selectedItems[0]?.details];
         } else {
-            data = [row2.selectedItems[1]?.details, row2.selectedItems[0]?.details];
+            data = [rowHistory.selectedItems[0]?.details, rowHistory.selectedItems[1]?.details];
         }
+
         this.dialog.open(ActivityCompareJsonComponent, {
             data: data,
             panelClass: 'json-sidebar'
@@ -395,6 +424,6 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
         this.resetFilter();
         this.destroyed$.next(true);
         this.destroyed$.complete();
+        document.body?.classList?.remove("activity-log-page");
     }
-
 }

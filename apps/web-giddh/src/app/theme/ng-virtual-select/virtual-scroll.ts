@@ -116,7 +116,7 @@ export class VirtualScrollComponent implements OnInit, OnDestroy, OnChanges, Aft
         this.refresh();
         if (this.element && this.element.nativeElement && this.isPaginationEnabled) {
             // Scrolled to bottom
-            if ((this.element.nativeElement.scrollHeight - this.element.nativeElement.scrollTop) === this.element.nativeElement.clientHeight) {
+            if (((this.element.nativeElement.scrollHeight - this.element.nativeElement.scrollTop) === this.element.nativeElement.clientHeight) || ((this.element.nativeElement.scrollHeight - this.element.nativeElement.scrollTop) - this.element.nativeElement.clientHeight <= 1)) {
                 this.scrollEnd.emit();
             }
         }

@@ -12,7 +12,7 @@ import * as moment from 'moment/moment';
 import { saveAs } from "file-saver";
 import { IForceClear } from '../../../models/api-models/Sales';
 import { ReportsDetailedRequestFilter } from '../../../models/api-models/Reports';
-import { API_COUNT_LIMIT, PAGINATION_LIMIT } from '../../../app.constant';
+import { API_COUNT_LIMIT, BootstrapToggleSwitch, PAGINATION_LIMIT } from '../../../app.constant';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { GroupService } from '../../../services/group.service';
 
@@ -70,6 +70,8 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** This will hold toggle buttons value and size */
+    public bootstrapToggleSwitch = BootstrapToggleSwitch;
 
     constructor(
         public settingsFinancialYearService: SettingsFinancialYearService,
@@ -81,6 +83,7 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
     ) {
         this.exportRequest.fileType = 'xls';
         this.exportRequest.balanceTypeAsSign = false;
+        this.exportRequest.showHideOpeningClosingBalance = false;
     }
 
     /**
@@ -347,6 +350,7 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
         this.selectActiveFinancialYear();
         this.columnarReportResponse = null;
         this.exportRequest.balanceTypeAsSign = false;
+        this.exportRequest.showHideOpeningClosingBalance = false;
         this.isBalanceTypeAsSign = false;
     }
 

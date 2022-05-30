@@ -5,6 +5,7 @@
     #selection
     [attr.tabindex]="disabled || isTypeAheadMode ? null : 0"
     [ngClass]="{ 'open': isOpen, 'focus': hasFocus, 'below': isBelow, 'disabled': disabled }"
+    class="common-select-field"
     (click)="onSelectContainerClick($event)"
     (focus)="onSelectContainerFocus()"
     (keydown)="onSelectContainerKeydown($event)"
