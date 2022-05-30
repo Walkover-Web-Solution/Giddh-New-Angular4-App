@@ -341,6 +341,15 @@
                     }
                 },
                 {
+                    "label": "क्रियाकलाप नोंदी",
+                    "link": "/pages/activity-logs",
+                    "icon": "icon-audit-log",
+                    "description": "प्रविष्टींचा कालक्रमानुसार डेटा",
+                    "additional": {
+                        "voucherVersion": 2
+                    }
+                },
+                {
                     "label": "रोख प्रवाह",
                     "link": "/pages/reports/cash-flow-statement",
                     "icon": "icon-cash-flow-statement",
