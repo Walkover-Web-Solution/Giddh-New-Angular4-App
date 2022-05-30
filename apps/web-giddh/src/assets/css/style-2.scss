@@ -2,6 +2,8 @@
 @import "~@angular/material/theming";
 @import "../css/giddh-common.scss";
 @import "@angular/material/prebuilt-themes/indigo-pink.css";
+@import "./json-tree.scss";
+@import "./json-diff.scss";
 $custom-typography: mat-typography-config(
     $font-family: "opensans-regular",
 );
@@ -8132,6 +8134,11 @@ body.update-scroll-hidden {
     .right-bar {
         width: 100% !important;
     }
+    .activity-log-page {
+        .cdk-overlay-container {
+            z-index: 99999;
+        }
+    }
 }
 
 @media (max-width: 1191px) and (min-width: 1024px) {
@@ -10002,6 +10009,87 @@ input[type="checkbox"].cdk-visually-hidden::after {
         .mat-select {
             margin-top: 0 !important;
             z-index: 9991 !important;
+        }
+    }
+}
+.logs-sidebar {
+    min-height: 100% !important;
+    height: 100% !important;
+    width: 760px !important;
+    .mat-dialog-content {
+        margin: 0 !important;
+        padding: 0 !important;
+        max-height: 90%;
+        float: left;
+        width: 100%;
+    }
+    .mat-dialog-container {
+        overflow: hidden;
+    }
+}
+.json-sidebar {
+    min-height: 100% !important;
+    height: 100% !important;
+    width: 760px !important;
+    .mat-dialog-content {
+        margin: 0 !important;
+        padding: 0 !important;
+        max-height: 90%;
+        float: left;
+        width: 100%;
+    }
+    .mat-dialog-container {
+        overflow: hidden;
+    }
+}
+.show-changed {
+    .jsondiffpatch-unchanged {
+        display: none;
+    }
+}
+.history-sidebar {
+    min-height: 100% !important;
+    height: 100% !important;
+    width: 760px !important;
+    .mat-dialog-content {
+        margin: 0 !important;
+        padding: 0 !important;
+        max-height: 90%;
+        float: left;
+        width: 100%;
+    }
+    .mat-dialog-container {
+        overflow: hidden;
+    }
+}
+
+.activity-log-page {
+    .hamburger-menu {
+        position: relative;
+        z-index: 99999;
+    }
+    .giddh-table.mat-table {
+        tbody {
+            > tr.history-child-row {
+                > td {
+                    background-color: var(--color-total-details-quaternary-background) !important;
+                }
+                &:hover {
+                    > td {
+                        background-color: var(--color-primary-common-without-opacity-list-hover) !important;
+                    }
+                }
+                .mat-column-history {
+                    .history-checkbox {
+                        .mat-checkbox-inner-container-no-side-margin {
+                            .mat-checkbox-input {
+                                padding: 15px !important;
+                                transform: translate(-7px, -9px);
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }
