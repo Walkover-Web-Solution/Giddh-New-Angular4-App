@@ -77,3 +77,22 @@
         }
     }
 }
+@media (max-width: 1180px) {
+    .activity-container {
+        .activity-table {
+            .activity-td {
+                width: 16.9%;
+            }
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    .activity-container {
+        .activity-table {
+            .activity-td {
+                width: 16%;
+            }
+        }
+    }
+}

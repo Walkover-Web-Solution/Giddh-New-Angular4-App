@@ -8134,6 +8134,11 @@ body.update-scroll-hidden {
     .right-bar {
         width: 100% !important;
     }
+    .activity-log-page {
+        .cdk-overlay-container {
+            z-index: 99999;
+        }
+    }
 }
 
 @media (max-width: 1191px) and (min-width: 1024px) {
@@ -10072,6 +10077,16 @@ input[type="checkbox"].cdk-visually-hidden::after {
                 &:hover {
                     > td {
                         background-color: var(--color-primary-common-without-opacity-list-hover) !important;
+                    }
+                }
+                .mat-column-history {
+                    .history-checkbox {
+                        .mat-checkbox-inner-container-no-side-margin {
+                            .mat-checkbox-input {
+                                padding: 15px !important;
+                                transform: translate(-7px, -9px);
+                            }
+                        }
                     }
                 }
             }
