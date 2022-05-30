@@ -117,6 +117,7 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
      * @memberof ActivityLogsComponent
      */
     public ngOnInit(): void {
+        document.body?.classList?.add("activity-log-page");
         if (this.generalService.voucherApiVersion === 1) {
             this.router.navigate(['/pages/home']);
         }
@@ -393,14 +394,16 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
      * @memberof ActivityLogsComponent
      */
     public compareHistoryJson(rowHistory: any, details: any, event: any): void {
+
         event.stopPropagation();
         event.preventDefault();
         let data;
         if (rowHistory.selectedItems[0]?.index === details.index) {
-            data = [rowHistory.selectedItems[0]?.details, rowHistory.selectedItems[1]?.details];
-        } else {
             data = [rowHistory.selectedItems[1]?.details, rowHistory.selectedItems[0]?.details];
+        } else {
+            data = [rowHistory.selectedItems[0]?.details, rowHistory.selectedItems[1]?.details];
         }
+
         this.dialog.open(ActivityCompareJsonComponent, {
             data: data,
             panelClass: 'json-sidebar'
@@ -416,5 +419,6 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
         this.resetFilter();
         this.destroyed$.next(true);
         this.destroyed$.complete();
+        document.body?.classList?.remove("activity-log-page");
     }
 }
