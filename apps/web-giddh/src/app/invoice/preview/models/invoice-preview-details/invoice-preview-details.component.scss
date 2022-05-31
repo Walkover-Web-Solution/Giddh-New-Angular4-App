@@ -1074,9 +1074,9 @@ strong {
         i.icon-history-icon {
             color: var(--color-abbey);
         }
-        &:hover {
+        .history-button:hover {
             i.icon-history-icon {
-                color: var(--color-white);
+                color: var(--color-white-tertiary);
             }
         }
     }
