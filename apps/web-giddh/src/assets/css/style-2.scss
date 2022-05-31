@@ -5662,17 +5662,18 @@ footer#footer.absolute-footer {
             }
         }
     }
-    app-manage-groups-accounts {
-        account-update-new-details {
-            .button-group {
-                .update-btn-zindex {
+}
+
+app-manage-groups-accounts {
+    account-update-new-details {
+        .button-group {
+            .update-btn-zindex {
+                .ladda-label {
+                    color: var(--color-septenary-button-text);
+                }
+                &:hover {
                     .ladda-label {
-                        color: var(--color-septenary-button-text);
-                    }
-                    &:hover {
-                        .ladda-label {
-                            color: var(--color-secondary-button-text) !important;
-                        }
+                        color: var(--color-secondary-button-text) !important;
                     }
                 }
             }
