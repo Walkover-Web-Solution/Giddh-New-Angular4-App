@@ -67,7 +67,7 @@ export class LedgerService {
     /**
      * get ledger transactions
      */
-    public GetLedgerTranscations(request: TransactionsRequest): Observable<BaseResponse<TransactionsResponse, TransactionsRequest>> {
+    public GetLedgerTransactions(request: TransactionsRequest): Observable<BaseResponse<TransactionsResponse, TransactionsRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
 
         let url = this.config.apiUrl + LEDGER_API.NEW_GET_LEDGER.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))

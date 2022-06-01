@@ -27,7 +27,7 @@ export class LedgerActions {
             ofType(LEDGER.GET_TRANSACTION),
             switchMap((action: CustomActions) => {
                 let req: TransactionsRequest = action.payload as TransactionsRequest;
-                return this.ledgerService.GetLedgerTranscations(req);
+                return this.ledgerService.GetLedgerTransactions(req);
             }), map(res => this.validateResponse<TransactionsResponse, TransactionsRequest>(res, {
                 type: LEDGER.GET_TRANSACTION_RESPONSE,
                 payload: res

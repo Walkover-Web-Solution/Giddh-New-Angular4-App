@@ -11,6 +11,7 @@ import { GroupAccountSidebarVM } from '../new-group-account-sidebar/VM';
 import { PerfectScrollbarComponent } from 'ngx-perfect-scrollbar';
 import { GeneralService } from "../../../../services/general.service";
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
+import { GeneralActions } from 'apps/web-giddh/src/app/actions/general/general.actions';
 
 @Component({
     selector: 'app-manage-groups-accounts',
@@ -53,7 +54,8 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
         private groupWithAccountsAction: GroupWithAccountsAction,
         private cdRef: ChangeDetectorRef,
         private renderer: Renderer2,
-        private _generalService: GeneralService
+        private _generalService: GeneralService,
+        private generalAction: GeneralActions
     ) {
         this.searchLoad = this.store.pipe(select(state => state.groupwithaccounts.isGroupWithAccountsLoading), takeUntil(this.destroyed$));
         this.groupAndAccountSearchString$ = this.store.pipe(select(s => s.groupwithaccounts.groupAndAccountSearchString), takeUntil(this.destroyed$));
@@ -84,6 +86,7 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
 
     // tslint:disable-next-line:no-empty
     public ngOnInit() {
+        this.store.dispatch(this.generalAction.addAndManageClosed());
         // search groups
         this.groupSearchTerms.pipe(
             debounceTime(700), takeUntil(this.destroyed$))
@@ -149,6 +152,7 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
     }
 
     public closePopupEvent() {
+        this.store.dispatch(this.generalAction.addAndManageClosed());
         this.store.dispatch(this.groupWithAccountsAction.HideAddAndManageFromOutside());
         this.closeEvent.emit(true);
     }
