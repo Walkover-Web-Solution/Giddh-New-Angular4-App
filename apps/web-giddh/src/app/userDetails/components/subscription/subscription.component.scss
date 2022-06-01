@@ -6,7 +6,7 @@
     width: 75.9%;
     button {
         float: right;
-        font-weight: bold;
+        font-weight: 500;
         color: var(--color-secondary-button-text);
         background-color: var(--color-secondary-button-background);
         &:hover {
@@ -81,7 +81,7 @@
             margin-top: 10px;
             margin-left: 0.5rem;
             height: 26px;
-            font-weight: bold;
+            font-weight: 500;
             font-size: 14px;
             padding: 5px 0px 0px 5px;
         }
@@ -131,7 +131,7 @@
         .side-bar-head {
             color: var(--color-giddh-blue);
             font-size: 13px;
-            font-weight: 600;
+            font-weight: 500;
             img {
                 position: relative;
                 bottom: 2px;
@@ -175,7 +175,7 @@
                 }
                 .warning {
                     color: var(--color-orange);
-                    font-weight: 600;
+                    font-weight: 500;
                     font-size: 12.5px;
                 }
                 span {
@@ -375,12 +375,12 @@
         .left-side {
             p {
                 font-size: 12px;
-                font-weight: 600;
+                font-weight: 500;
                 line-height: 19px;
                 color: var(--color-nero);
                 span {
                     font-size: 16px;
-                    font-weight: 700;
+                    font-weight: 500;
                     color: var(--color-nero);
                 }
             }
@@ -390,7 +390,7 @@
             align-items: center;
             p {
                 font-size: 12px;
-                font-weight: bold;
+                font-weight: 500;
                 color: var(--color-gray);
                 line-height: 19px;
                 span {
@@ -408,7 +408,7 @@
         margin-top: 2px;
         font-size: 12px;
         margin-left: 16px;
-        font-weight: 600;
+        font-weight: 500;
     }
     .balance-info {
         margin: 5px 17px 0px 17px;
@@ -459,6 +459,7 @@
                             top: 2px;
                             color: var(--color-abbey) !important;
                             font-size: 12px;
+                            font-weight: 500;
                         }
                     }
                     img {
@@ -467,6 +468,7 @@
                     }
                     p {
                         margin-top: 7px;
+                        font-weight: 500;
                     }
                 }
                 .item-1,
@@ -599,7 +601,7 @@
         }
         .mat-tab-label-content {
             color: var(--color-primary-tab-header-text);
-            font-weight: 700;
+            font-weight: 500;
         }
     }
     mat-expansion-panel-header {
