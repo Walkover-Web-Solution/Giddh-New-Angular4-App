@@ -1833,7 +1833,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.store.pipe(select(state => state.session.companyUniqueName), take(1)).subscribe(response => companyUniqueName = response);
         let stateDetailsRequest = new StateDetailsRequest();
         stateDetailsRequest.companyUniqueName = companyUniqueName;
-        stateDetailsRequest.lastState = lastState;
+        stateDetailsRequest.lastState = decodeURI(lastState);
         this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
     }
 }
