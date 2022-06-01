@@ -592,7 +592,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                     this.activeAccount$.pipe(takeUntil(isDestroyed)).subscribe(acc => {
                         if (acc) {
                             this.isLedgerAccSelected = true;
-                            this.selectedLedgerName = lastState.substr(lastState.indexOf('/') + 1);
+                            const lastStateArray = lastState.split('/');
+                            this.selectedLedgerName = lastStateArray[lastStateArray?.length - 1];
                             isDestroyed.next(true);
                             isDestroyed.complete();
                             return this.navigateToUser = false;
@@ -988,12 +989,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     public hideManageGroupsModal() {
         this.store.pipe(select(c => c.session.lastState), take(1)).subscribe((s: string) => {
-            if (s && (s.indexOf('ledger/') > -1 || s.indexOf('settings') > -1)) {
-                this.store.dispatch(this._generalActions.addAndManageClosed());
-                if (this.selectedLedgerName) {
-                    this.store.dispatch(this.ledgerAction.GetLedgerAccount(this.selectedLedgerName));
-                    this.store.dispatch(this.accountsAction.getAccountDetails(this.selectedLedgerName));
-                }
+            if (s && (s.indexOf('ledger/') > -1 || s.indexOf('settings') > -1) && this.selectedLedgerName) {
+                this.store.dispatch(this.ledgerAction.GetLedgerAccount(this.selectedLedgerName));
             }
         });
 
@@ -1833,7 +1830,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.store.pipe(select(state => state.session.companyUniqueName), take(1)).subscribe(response => companyUniqueName = response);
         let stateDetailsRequest = new StateDetailsRequest();
         stateDetailsRequest.companyUniqueName = companyUniqueName;
-        stateDetailsRequest.lastState = lastState;
+        stateDetailsRequest.lastState = decodeURI(lastState);
         this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
     }
 }
