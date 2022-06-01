@@ -19,7 +19,7 @@ interface SequenceConfig {
     // tslint:disable-next-line:component-selector
     selector: 'overview-summary',
     templateUrl: './summary.component.html',
-    styleUrls: ['summary.component.css'],
+    styleUrls: ['summary.component.scss'],
 })
 export class OverviewSummaryComponent implements OnInit, OnDestroy {
     @Input() public currentPeriod: any = null;

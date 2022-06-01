@@ -7486,9 +7486,7 @@ giddh-datepicker {
 }
 
 .ledger-body {
-    .cdk-overlay-container {
-        z-index: 1000 !important;
-    }
+    .cdk-overlay-container,
     .cdk-global-overlay-wrapper {
         z-index: 1000 !important;
     }
@@ -7559,6 +7557,16 @@ giddh-datepicker {
                                     }
                                 }
                             }
+                        }
+                    }
+                }
+                .ledger-head-top {
+                    #upload,
+                    #share,
+                    #export-ledger,
+                    #reload-bank-transaction {
+                        .mat-button-wrapper {
+                            display: flex;
                         }
                     }
                 }

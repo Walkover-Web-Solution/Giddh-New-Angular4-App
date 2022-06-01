@@ -102,12 +102,7 @@
                     </ng-container>
                     <ng-container matColumnDef="narration">
                         <th mat-header-cell *matHeaderCellDef>{{ localeData?.narration }}</th>
-                        <td
-                            mat-cell
-                            *matCellDef="let item"
-                            [attr.data-title]="localeData?.narration"
-                            class="text-center"
-                        >
+                        <td mat-cell *matCellDef="let item" [attr.data-title]="localeData?.narration">
                             {{ item.narration }}
                         </td>
                     </ng-container>

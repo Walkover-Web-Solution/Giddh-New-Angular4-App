@@ -558,7 +558,7 @@ aside-menu-account .container-fluid {
         color: var(--color-total-details-heading);
         .number-total {
             font-size: 16px;
-            font-weight: 800;
+            font-weight: 500;
             color: var(--color-total-details-primary-content);
         }
     }
@@ -2449,9 +2449,14 @@ form#groupDetailForm {
 .mat-dialog-container {
     padding: 0px !important;
     color: var(--color-table-septenary-content) !important;
-    background-color: var(--color-popup-background) !important;
+    background-color: var(--color-primary-header-background) !important;
     .modal-footer {
         background-color: var(--color-popup-background);
+    }
+}
+.modal-dialog {
+    .modal-content {
+        background-color: var(--color-primary-header-background) !important;
     }
 }
 .mat-dialog-title {
