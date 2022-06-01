@@ -18,6 +18,7 @@ import { BsModalRef } from 'ngx-bootstrap/modal';
 import { GeneralActions } from '../actions/general/general.actions';
 import { API_POSTMAN_DOC_URL, BootstrapToggleSwitch } from '../app.constant';
 import { BreakpointObserver } from '@angular/cdk/layout';
+import { SettingsProfileActions } from '../actions/settings/profile/settings.profile.action';
 
 @Component({
     selector: 'user-details',
