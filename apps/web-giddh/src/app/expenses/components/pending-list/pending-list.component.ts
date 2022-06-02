@@ -184,7 +184,12 @@ export class PendingListComponent implements OnInit, OnChanges {
             return;
         }
 
-        this.expenseService.actionPettycashReports(actionType, { ledgerRequest: ledgerRequest.body }).subscribe((res) => {
+        let model = ledgerRequest.body;
+        if (model.attachedFileUniqueNames?.length > 0) {
+            model.attachedFile = model.attachedFileUniqueNames[0];
+        }
+
+        this.expenseService.actionPettycashReports(actionType, { ledgerRequest: model }).subscribe((res) => {
             this.approveEntryRequestInProcess = false;
             if (res.status === 'success') {
                 this.toaster.showSnackBar("success", res.body);

@@ -66,6 +66,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { ConfirmModalComponent } from '../../../theme/new-confirm-modal/confirm-modal.component';
 import { NewConfirmationModalComponent } from '../../../theme/new-confirmation-modal/confirmation-modal.component';
 import { MatAccordion } from '@angular/material/expansion';
+import { AdjustmentUtilityService } from '../../../shared/advance-receipt-adjustment/services/adjustment-utility.service';
+import { SettingsDiscountService } from '../../../services/settings.discount.service';
 
 /** New ledger entries */
 const NEW_LEDGER_ENTRIES = [
@@ -244,6 +246,14 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public invoiceListRequestParams: any = {};
     /** Round off amount */
     public calculatedRoundOff: number = 0;
+    /** Current page for reference vouchers */
+    private referenceVouchersCurrentPage: number = 2;
+    /** Reference voucher search field */
+    private searchReferenceVoucher: any = "";
+    /** Invoice list observable */
+    public invoiceList$: Observable<any[]>;
+    /** List of discounts */	
+    public discountsList: any[] = [];
 
     constructor(private store: Store<AppState>,
         private cdRef: ChangeDetectorRef,
@@ -253,7 +263,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         private settingsUtilityService: SettingsUtilityService,
         private toaster: ToasterService,
         public dialog: MatDialog,
-        private settingsTagService: SettingsTagService
+        private settingsTagService: SettingsTagService,
+        private adjustmentUtilityService: AdjustmentUtilityService,
+        private settingsDiscountService: SettingsDiscountService
     ) {
         this.companyTaxesList$ = this.store.pipe(select(p => p.company && p.company.taxes), takeUntil(this.destroyed$));
         this.sessionKey$ = this.store.pipe(select(p => p.session.user.session.id), takeUntil(this.destroyed$));
@@ -361,6 +373,12 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             this.availableItcList[2].label = this.localeData?.others;
         }
         this.voucherApiVersion = this.generalService.voucherApiVersion;
+
+        this.settingsDiscountService.GetDiscounts().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.status === "success" && response?.body?.length > 0) {
+                this.discountsList = response?.body;
+            }
+        });
     }
 
     @HostListener('click', ['$event'])
@@ -381,6 +399,10 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             if (this.blankLedger?.otherTaxModal?.appliedOtherTax && this.blankLedger?.otherTaxModal?.appliedOtherTax?.uniqueName) {
                 this.blankLedger.isOtherTaxesApplicable = true;
             }
+        }
+        if (this.voucherApiVersion === 2 && changes?.invoiceList?.currentValue) {
+            this.invoiceList$ = observableOf(this.invoiceList);
+            this.referenceVouchersCurrentPage = 2;
         }
     }
 
@@ -1057,6 +1079,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      */
     public getInvoiceListsData(event: any): void {
         this.removeAdjustment();
+        if (this.voucherApiVersion === 2) {
+            this.resetInvoiceList();
+        }
         if (event.value === 'advance-receipt') {
             this.shouldShowAdvanceReceipt = true;
             this.isAdvanceReceipt = true;
@@ -1634,5 +1659,87 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public toggleMoreDetail(): void {
         this.isMoreDetailsOpen = !this.isMoreDetailsOpen;
         this.moreDetailOpen.emit(this.isMoreDetailsOpen);
+    }
+
+    /**
+     * Get Invoice list for credit note
+     *
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    public loadInvoiceListsForCreditNote(): void {
+        const voucherType = this.blankLedger.voucherType;
+        if (voucherType && this.currentTxn?.selectedAccount?.uniqueName && this.activeAccount?.uniqueName) {
+            let request;
+
+            let activeAccount = null;
+            this.activeAccount$.pipe(take(1)).subscribe(account => activeAccount = account);
+
+            if (this.voucherApiVersion === 2) {
+                request = this.adjustmentUtilityService.getInvoiceListRequest({ particularAccount: this.currentTxn?.selectedAccount, voucherType: voucherType, ledgerAccount: activeAccount });
+            } else {
+                request = {
+                    accountUniqueNames: [this.currentTxn?.selectedAccount?.uniqueName, this.activeAccount?.uniqueName],
+                    voucherType
+                };
+            }
+
+            // don't call api if it's invalid case
+            if (!request) {
+                return;
+            }
+
+            request.number = this.searchReferenceVoucher;
+
+            if (request.number) {
+                this.resetInvoiceList();
+            }
+
+            request.page = this.referenceVouchersCurrentPage;
+            this.referenceVouchersCurrentPage++;
+
+            let date;
+            if (this.blankLedger && this.blankLedger.entryDate) {
+                if (typeof this.blankLedger.entryDate === 'string') {
+                    date = this.blankLedger.entryDate;
+                } else {
+                    date = moment(this.blankLedger.entryDate).format(GIDDH_DATE_FORMAT);
+                }
+            }
+
+            this.ledgerService.getInvoiceListsForCreditNote(request, date).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
+                if (response && response.body) {
+                    let items = [];
+                    if (response.body.results) {
+                        items = response.body.results;
+                    } else if (response.body.items) {
+                        items = response.body.items;
+                    }
+
+                    items?.forEach(invoice => {
+                        invoice.voucherNumber = this.generalService.getVoucherNumberLabel(invoice?.voucherType, invoice?.voucherNumber, this.commonLocaleData);
+
+                        this.invoiceList.push({ label: invoice?.voucherNumber ? invoice.voucherNumber : '-', value: invoice?.uniqueName, additional: invoice })
+                    });
+
+                    this.invoiceList$ = observableOf(this.invoiceList);
+
+                    this.cdRef.detectChanges();
+
+                } else if (request.number) {
+                    this.resetInvoiceList();
+                }
+            });
+        }
+    }
+
+    /**
+     * Resets invoice list and current page
+     *
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    public resetInvoiceList(): void {
+        this.invoiceList = [];
+        this.invoiceList$ = observableOf([]);
+        this.referenceVouchersCurrentPage = 2;
     }
 }

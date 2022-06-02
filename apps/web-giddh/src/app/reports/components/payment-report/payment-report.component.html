@@ -310,7 +310,12 @@
                                     {{ localeData?.unused_amount }}
                                     <div class="icon-pointer pl-1 pointer">
                                         <ng-container
-                                            *ngTemplateOutlet="sortTemplate; context: { column: 'UNUSED_AMOUNT' }"
+                                            *ngTemplateOutlet="
+                                                sortTemplate;
+                                                context: {
+                                                    column: voucherApiVersion === 2 ? 'balanceDue' : 'UNUSED_AMOUNT'
+                                                }
+                                            "
                                         >
                                         </ng-container>
                                     </div>

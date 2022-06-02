@@ -341,6 +341,15 @@
                     }
                 },
                 {
+                    "label": "क्रियाकलाप नोंदी",
+                    "link": "/pages/activity-logs",
+                    "icon": "icon-audit-log",
+                    "description": "प्रविष्टींचा कालक्रमानुसार डेटा",
+                    "additional": {
+                        "voucherVersion": 2
+                    }
+                },
+                {
                     "label": "रोख प्रवाह",
                     "link": "/pages/reports/cash-flow-statement",
                     "icon": "icon-cash-flow-statement",
@@ -371,8 +380,7 @@
                     "description": "क्षुल्लक रोख आणि व्यवहार व्यवस्थापित करा",
                     "additional": {
                         "tab": "pending",
-                        "tabIndex": 0,
-                        "voucherVersion": 1
+                        "tabIndex": 0
                     }
                 },
                 {
