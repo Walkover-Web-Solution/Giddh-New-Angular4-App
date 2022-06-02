@@ -468,6 +468,10 @@
     .activation-btn {
         width: 27%;
         height: 55px;
+        .success-btn {
+            color: var(--color-nonary-button-text) !important;
+            border-color: var(--color-nonary-button-background);
+        }
     }
     .redeem-button {
         width: 73%;

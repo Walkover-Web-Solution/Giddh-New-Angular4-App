@@ -1561,7 +1561,7 @@ header .navbar {
 .open > .dropdown-toggle.btn-primary:focus,
 .btn-primary:not(:disabled):not(.disabled):active {
     color: var(--color-secondary-button-text) !important;
-    border-color: var(--color-common-secondary-border) !important;
+    border-color: var(--color-secondary-button-background) !important;
     background: var(--color-secondary-button-background) !important;
 }
 .btn-primary.disabled.focus,
@@ -5608,6 +5608,23 @@ footer#footer.absolute-footer {
     }
 }
 
+app-manage-groups-accounts {
+    account-update-new-details {
+        .button-group {
+            .update-btn-zindex {
+                .ladda-label {
+                    color: var(--color-septenary-button-text);
+                }
+                &:hover {
+                    .ladda-label {
+                        color: var(--color-secondary-button-text) !important;
+                    }
+                }
+            }
+        }
+    }
+}
+
 section.ledger-stat.sticky-footer.sticky-footer-sale-amount {
     text-align: left !important;
     margin-bottom: 0;
@@ -6255,7 +6272,7 @@ button.ladda-button,
 button.ladda-button .ladda-spinner,
 button.ladda-button .ladda-label {
     transition: none !important;
-    color: var(--color-septenary-button-text);
+    color: var(--color-secondary-button-text);
 }
 .account-aside-menu-state #close {
     display: block;
@@ -7014,6 +7031,19 @@ span#HW_badge_cont:nth-child(3) {
 .inventory-page {
     .daterangepicker {
         z-index: 9992 !important;
+    }
+    .inventory-main {
+        #giddh-page-heading {
+            aside-inventory-stock-group {
+                .aside-pane-form {
+                    .btn-danger {
+                        .ladda-label {
+                            color: var(--color-danger);
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -7845,25 +7875,6 @@ body.update-scroll-hidden {
     }
 }
 
-.on-setting-page,
-.on-user-page {
-    aside-setting {
-        .aside-pane {
-            .back-to-main-slider {
-                display: block !important;
-                padding: 0 12px;
-            }
-
-            h4 {
-                display: none;
-            }
-        }
-
-        &::after {
-            display: none;
-        }
-    }
-}
 .gst-sidebar-open.on-setting-page.aside-setting {
     #content-wrapper {
         padding-right: 0;
@@ -8029,6 +8040,20 @@ body.update-scroll-hidden {
                                 }
                             }
                         }
+                    }
+                }
+            }
+        }
+    }
+    account-update-new-details {
+        .button-group {
+            .update-btn-zindex {
+                .ladda-label {
+                    color: var(--color-septenary-button-text);
+                }
+                &:hover {
+                    .ladda-label {
+                        color: var(--color-secondary-button-text);
                     }
                 }
             }
@@ -9721,6 +9746,19 @@ body.prevent-body-scroll {
 
 .sky-blue-bg {
     background-color: var(--color-primary-sky-blue-bg-background);
+}
+
+.btn-success:disabled {
+    color: var(--color-common-secondary-disabled) !important;
+    .ladda-label {
+        color: var(--color-common-secondary-disabled) !important;
+    }
+    &:hover {
+        color: var(--color-common-secondary-disabled) !important;
+        .ladda-label {
+            color: var(--color-common-secondary-disabled) !important;
+        }
+    }
 }
 
 .giddh-no-permissions {
