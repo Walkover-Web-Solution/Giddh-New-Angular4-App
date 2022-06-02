@@ -197,7 +197,7 @@
             <div class="border-radius-0">
                 <div class="modal-header">
                     <h3>Sign Up with Giddh</h3>
-                    <span aria-hidden="true" class="close" data-dismiss="modal" (click)="hideEmailModal()">×</span>
+                    <button aria-hidden="true" class="close" data-dismiss="modal" (click)="hideEmailModal()">×</button>
                 </div>
                 <div class="modal-body clearfix">
                     <form class="col-xs-12" name="verifyEmailForm" novalidate [formGroup]="emailVerifyForm">
@@ -261,7 +261,7 @@
             <div class="border-radius-0">
                 <div class="modal-header">
                     <h3>Sign Up with Giddh</h3>
-                    <span aria-hidden="true" class="close" data-dismiss="modal" (click)="hideMobileModal()">×</span>
+                    <button aria-hidden="true" class="close" data-dismiss="modal" (click)="hideMobileModal()">×</button>
                 </div>
                 <div class="modal-body clearfix">
                     <form
@@ -335,9 +335,9 @@
             <div class="border-radius-0">
                 <div class="modal-header">
                     <h3>Sign Up with Giddh</h3>
-                    <span aria-hidden="true" class="close" data-dismiss="modal" (click)="resetTwoWayAuthModal()"
-                        >×</span
-                    >
+                    <button aria-hidden="true" class="close" data-dismiss="modal" (click)="resetTwoWayAuthModal()">
+                        ×
+                    </button>
                 </div>
                 <div class="modal-body clearfix">
                     <form

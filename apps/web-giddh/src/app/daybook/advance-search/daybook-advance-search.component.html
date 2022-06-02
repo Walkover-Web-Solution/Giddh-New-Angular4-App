@@ -1,7 +1,7 @@
 <div>
     <div class="modal-header theme-bg d-flex justify-content-between">
         <h3 class="modal-title bg" id="modal-title" mat-dialog-title>{{ commonLocaleData?.app_advance_search }}</h3>
-        <span aria-hidden="true" class="close" (click)="onCancel()">×</span>
+        <button aria-hidden="true" class="close" (click)="onCancel()">×</button>
     </div>
     <div class="modal-body clearfix" id="export-body">
         <form [formGroup]="advanceSearchForm" class="daybook-advance-search">

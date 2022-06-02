@@ -1,7 +1,7 @@
 <div>
     <div class="modal-header">
         <h3 class="modal-title bg" id="modal-title">{{ localeData?.bulk_update }}</h3>
-        <span class="close" aria-hidden="true" (click)="onCancel()">×</span>
+        <button class="close" aria-hidden="true" (click)="onCancel()">×</button>
     </div>
     <form #bulkUpdateForm="ngForm" autocomplete="off" (ngSubmit)="updateBulkInvoice()">
         <div class="modal-body pd-l2 pd-r2 clearfix" id="export-body">
@@ -233,13 +233,14 @@
             <div>
                 <div class="modal-header">
                     <h3 class="modal-title bg" id="modal-title">{{ commonLocaleData?.app_confirmation }}</h3>
-                    <span
+                    <button
                         aria-hidden="true"
                         class="close"
                         data-dismiss="modal"
                         (click)="onCancelBulkUpdateImageSloganModal()"
-                        >×</span
                     >
+                        ×
+                    </button>
                 </div>
                 <div class="model-body clearfix pd-2">
                     <h3>{{ localeData?.bulk_image_note }}</h3>
