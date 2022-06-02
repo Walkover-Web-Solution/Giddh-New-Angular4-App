@@ -788,7 +788,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.store.pipe(select(createSelector([(st: AppState) => st.general.addAndManageClosed], (yesOrNo: boolean) => {
             if (yesOrNo) {
                 this.getTransactionData();
-            } else {
+            } else if(this.trxRequest?.accountUniqueName) {
                 this.store.dispatch(this.ledgerActions.GetLedgerBalance(this.trxRequest));
             }
         })), debounceTime(300), takeUntil(this.destroyed$)).subscribe();
