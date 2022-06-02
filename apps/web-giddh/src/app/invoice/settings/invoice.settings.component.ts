@@ -17,6 +17,7 @@ import { CommonActions } from '../../actions/common.actions';
 import { GeneralService } from '../../services/general.service';
 import { OrganizationType } from '../../models/user-login-state';
 import { cloneDeep, concat, isEmpty, isEqual } from '../../lodash-optimized';
+import { BootstrapToggleSwitch } from '../../app.constant'
 
 @Component({
     selector: 'app-invoice-setting',
@@ -73,6 +74,8 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
     public hasInvoiceSettingPermissions: boolean = true;
     /** Stores the voucher API version of company */
     public voucherApiVersion: 1 | 2;
+    /** This will hold toggle buttons value and size */
+    public bootstrapToggleSwitch = BootstrapToggleSwitch;
 
     constructor(
         private commonActions: CommonActions,
@@ -90,7 +93,6 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
-        this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.store.dispatch(this.settingsIntegrationActions.GetGmailIntegrationStatus());
         this.activeCompany$ = this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$));
         this.store.pipe(select(s => s.settings.isGmailIntegrated), takeUntil(this.destroyed$)).subscribe(result => {
@@ -200,8 +202,11 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
             } else if (!setting) {
                 this.store.dispatch(this.invoiceActions.getInvoiceSetting());
             }
+            
         });
+        
     }
+    
 
     // public onChangeSendInvoiceViaSms(isChecked) {
     //     if (!isChecked) {

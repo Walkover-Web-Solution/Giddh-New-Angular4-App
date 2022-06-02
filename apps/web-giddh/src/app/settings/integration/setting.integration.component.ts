@@ -20,7 +20,7 @@ import { TabsetComponent, TabDirective } from "ngx-bootstrap/tabs";
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { CompanyActions } from "../../actions/company.actions";
 import { ShSelectComponent } from '../../theme/ng-virtual-select/sh-select.component';
-import { Configuration, SELECT_ALL_RECORDS } from "../../app.constant";
+import { BootstrapToggleSwitch, Configuration, SELECT_ALL_RECORDS } from "../../app.constant";
 import { AuthenticationService } from "../../services/authentication.service";
 import { IForceClear } from '../../models/api-models/Sales';
 import { EcommerceService } from '../../services/ecommerce.service';
@@ -144,6 +144,8 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public activeCompany: any;
     /** Holds image path */
     public imgPath: string = '';
+    /** This will hold toggle buttons value and size */
+    public bootstrapToggleSwitch = BootstrapToggleSwitch;
 
     constructor(
         private router: Router,
@@ -305,10 +307,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         if (f.valid) {
             this.store.dispatch(this.settingsIntegrationActions.SaveEmailKey(f.value));
         }
-    }
-
-    public toggleCheckBox() {
-        return this.razorPayObj.autoCapturePayment = !this.razorPayObj.autoCapturePayment;
     }
 
     public selectAccount(event: IOption) {

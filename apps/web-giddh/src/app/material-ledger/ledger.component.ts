@@ -789,6 +789,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.store.pipe(select(createSelector([(st: AppState) => st.general.addAndManageClosed], (yesOrNo: boolean) => {
             if (yesOrNo) {
                 this.getTransactionData();
+            } else {
+                this.store.dispatch(this.ledgerActions.GetLedgerBalance(this.trxRequest));
             }
         })), debounceTime(300), takeUntil(this.destroyed$)).subscribe();
 
@@ -959,6 +961,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
             // don't call api if it's invalid case
             if (!request) {
                 return;
+            }
+
+            if (this.voucherApiVersion === 2) {
+                request.page = 1;
             }
 
             let date;

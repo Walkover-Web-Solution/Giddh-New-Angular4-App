@@ -201,7 +201,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     /** Billing state field instance */
     @ViewChild('statesShipping', { static: false }) statesShipping: SalesShSelectComponent;
     public showAdvanceReceiptAdjust: boolean = false;
-
+    /** This will reload voucher pdf and attachments on preview page */
+    @Output() public reloadFiles: EventEmitter<boolean> = new EventEmitter<boolean>();
     @Output() public cancelVoucherUpdate: EventEmitter<boolean> = new EventEmitter<boolean>();
 
     public editCurrencyInputField: boolean = false;
@@ -237,6 +238,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public invFormData: VoucherClass;
     /** Invoice list array */
     public invoiceList: any[];
+    /** Invoice list observable */
+    public invoiceList$: Observable<any[]>;
     /** Selected invoice for credit note */
     public selectedInvoice: any = null;
     public customerAcList$: Observable<IOption[]>;
@@ -624,6 +627,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     private isDefaultLoad: boolean = true;
     /** True if selected customer is of cash/bank */
     public isCashBankAccount: boolean = false;
+    /** Current page for reference vouchers */
+    private referenceVouchersCurrentPage: number = 1;
+    /** Reference voucher search field */
+    private searchReferenceVoucher: any = "";
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -1896,13 +1903,23 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             if (this.voucherApiVersion === 2) {
                 request = {
                     accountUniqueName: this.invFormData.voucherDetails.customerUniquename,
-                    voucherType: this.isCreditNote ? VoucherTypeEnum.creditNote : VoucherTypeEnum.debitNote
+                    voucherType: this.isCreditNote ? VoucherTypeEnum.creditNote : VoucherTypeEnum.debitNote,
+                    number: '',
+                    page: 1
                 }
+
+                request.number = this.searchReferenceVoucher;
+                request.page = this.referenceVouchersCurrentPage;
+                this.referenceVouchersCurrentPage++;
             } else {
                 request = {
                     accountUniqueNames: [this.invFormData.voucherDetails.customerUniquename, 'sales'],
                     voucherType: this.isCreditNote ? VoucherTypeEnum.creditNote : VoucherTypeEnum.debitNote
                 }
+            }
+
+            if (this.voucherApiVersion === 2 && request.page === 1) {
+                this.invoiceList = [];
             }
 
             let date;
@@ -1913,7 +1930,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             } else {
                 date = moment(this.invFormData.voucherDetails.voucherDate).format(GIDDH_DATE_FORMAT);
             }
-            this.invoiceList = [];
+
+            if (this.voucherApiVersion !== 2) {
+                this.invoiceList = [];
+            }
+            
             this._ledgerService.getInvoiceListsForCreditNote(request, date).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
                 if (response && response.body) {
                     if (response.body.results || response.body.items) {
@@ -1962,6 +1983,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         }
                     }
                     uniqBy(this.invoiceList, 'value');
+                    this.invoiceList$ = observableOf(this.invoiceList);
                     this.invoiceSelected = invoiceSelected;
                     this.selectedInvoice = (invoiceSelected) ? invoiceSelected.value : '';
                     this._cdr.detectChanges();
@@ -3585,6 +3607,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
     public onSelectCustomer(item: IOption): void {
         this.typeaheadNoResultsOfCustomer = false;
+        this.referenceVouchersCurrentPage = 1;
         if (item.value) {
             this.invFormData.voucherDetails.customerName = item.label;
             this.getAccountDetails(item.value);
@@ -3929,6 +3952,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 this.isFileUploading = false;
                 this.invFormData.entries[0].attachedFile = '';
                 this.invFormData.entries[0].attachedFileName = '';
+                this.selectedFileName = '';
                 this._toasty.errorToast(output.file.response.message);
             }
         }
@@ -3940,7 +3964,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      * @memberof ProformaInvoiceComponent
      */
     public cancelUpdate(): void {
-        if(this.callFromOutside) {
+        if (this.callFromOutside) {
             this.location?.back();
         } else {
             if (this.invoiceForm) {
@@ -7721,6 +7745,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 this.selectedFileName = '';
                 this.invFormData.entries[0].attachedFile = '';
                 this._toasty.successToast(response?.body);
+                if (!this.callFromOutside) {
+                    this.reloadFiles.emit(true);
+                }
                 this._cdr.detectChanges();
             } else {
                 this._toasty.errorToast(response?.message)
@@ -7822,5 +7849,16 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 this._cdr.detectChanges();
             }, 500);
         });
+    }
+
+    /**
+     * Resets invoice list and current page
+     *
+     * @memberof ProformaInvoiceComponent
+     */
+    public resetInvoiceList(): void {
+        this.invoiceList = [];
+        this.invoiceList$ = observableOf([]);
+        this.referenceVouchersCurrentPage = 1;
     }
 }

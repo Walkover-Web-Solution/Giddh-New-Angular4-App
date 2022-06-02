@@ -252,8 +252,18 @@
                             <div class="row">
                                 <div class="col-6 col-md-6">
                                     <div class="form-group">
-                                        <mat-checkbox color="primary" formControlName="cancelledEntries">
-                                        </mat-checkbox>
+                                        <mat-slide-toggle color="primary" formControlName="cancelledEntries">
+                                            <span
+                                                class="pull-left"
+                                                *ngIf="advanceSearchForm.get('cancelledEntries').value"
+                                                >{{ commonLocaleData?.app_include }}</span
+                                            >
+                                            <span
+                                                class="pull-right"
+                                                *ngIf="!advanceSearchForm.get('cancelledEntries').value"
+                                                >{{ commonLocaleData?.app_exclude }}</span
+                                            >
+                                        </mat-slide-toggle>
                                     </div>
                                 </div>
                             </div>

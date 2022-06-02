@@ -1,9 +1,7 @@
-import { takeUntil } from 'rxjs/operators';
 import { Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { ReplaySubject } from 'rxjs';
 import { LedgerDiscountClass } from '../../../models/api-models/SettingsDiscount';
 import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
-import { SettingsDiscountService } from '../../../services/settings.discount.service';
 
 @Component({
     selector: 'ledger-discount',
@@ -37,11 +35,10 @@ export class LedgerDiscountComponent implements OnInit, OnDestroy, OnChanges {
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** List of discounts */	
-    private discountsList: any[] = [];	
-    /** True if get discounts list api call in progress */	
-    private getDiscountsLoading: boolean = false;	
+    @Input() private discountsList: any[] = [];
+
     constructor(
-        private settingsDiscountService: SettingsDiscountService	
+        
     ) {	
         	
     }
@@ -99,18 +96,6 @@ export class LedgerDiscountComponent implements OnInit, OnDestroy, OnChanges {
      public prepareDiscountList() {
         if (this.discountsList?.length > 0) {
             this.processDiscountList();
-        } else {
-            if (this.getDiscountsLoading) {
-                return;
-            }
-            this.getDiscountsLoading = true;
-            this.settingsDiscountService.GetDiscounts().pipe(takeUntil(this.destroyed$)).subscribe(response => {
-                if (response?.status === "success" && response?.body?.length > 0) {
-                    this.discountsList = response?.body;
-                    this.processDiscountList();
-                }
-                this.getDiscountsLoading = false;
-            });
         }
     }
 
