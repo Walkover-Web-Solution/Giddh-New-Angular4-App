@@ -31,7 +31,7 @@
 }
 .nav.navbar-nav {
     position: relative;
-    z-index: 999;
+    z-index: 999 !important;
 }
 @media screen and (max-width: 767px) {
     .hamburger-menu-icon.page-has-heading {
