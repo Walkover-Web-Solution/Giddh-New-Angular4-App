@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, Output, OnInit, OnDestroy } from '@angular/core';
 import { AppState } from '../../store';
 import { Store, select } from '@ngrx/store';
 import { take } from 'rxjs/operators';
@@ -8,7 +8,7 @@ import { take } from 'rxjs/operators';
     templateUrl: './confirm-modal.component.html',
     styleUrls: ['./confirm-modal.component.scss']
 })
-export class ConfirmModalComponent implements OnInit {
+export class ConfirmModalComponent implements OnInit, OnDestroy {
     @Input() public title: string = '';
     @Input() public body: string = '';
     @Input() public ok: string = '';
@@ -53,5 +53,14 @@ export class ConfirmModalComponent implements OnInit {
 
     public onCancel(e: Event) {
         this.cancelCallBack.emit(e);
+    }
+
+    /**
+     * Removes modal-open class on component destroy
+     * 
+     * @memberof ConfirmModalComponent
+     */
+    public ngOnDestroy(): void {
+        document.querySelector('body').classList.remove('modal-open');
     }
 }

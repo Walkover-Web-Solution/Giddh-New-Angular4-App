@@ -2,6 +2,8 @@
 @import "~@angular/material/theming";
 @import "../css/giddh-common.scss";
 @import "@angular/material/prebuilt-themes/indigo-pink.css";
+@import "./json-tree.scss";
+@import "./json-diff.scss";
 $custom-typography: mat-typography-config(
     $font-family: "opensans-regular",
 );
@@ -1559,7 +1561,7 @@ header .navbar {
 .open > .dropdown-toggle.btn-primary:focus,
 .btn-primary:not(:disabled):not(.disabled):active {
     color: var(--color-secondary-button-text) !important;
-    border-color: var(--color-common-secondary-border) !important;
+    border-color: var(--color-secondary-button-background) !important;
     background: var(--color-secondary-button-background) !important;
 }
 .btn-primary.disabled.focus,
@@ -5607,6 +5609,23 @@ footer#footer.absolute-footer {
     }
 }
 
+app-manage-groups-accounts {
+    account-update-new-details {
+        .button-group {
+            .update-btn-zindex {
+                .ladda-label {
+                    color: var(--color-septenary-button-text);
+                }
+                &:hover {
+                    .ladda-label {
+                        color: var(--color-secondary-button-text) !important;
+                    }
+                }
+            }
+        }
+    }
+}
+
 section.ledger-stat.sticky-footer.sticky-footer-sale-amount {
     text-align: left !important;
     margin-bottom: 0;
@@ -6254,7 +6273,7 @@ button.ladda-button,
 button.ladda-button .ladda-spinner,
 button.ladda-button .ladda-label {
     transition: none !important;
-    color: var(--color-septenary-button-text);
+    color: var(--color-secondary-button-text);
 }
 .account-aside-menu-state #close {
     display: block;
@@ -7013,6 +7032,19 @@ span#HW_badge_cont:nth-child(3) {
 .inventory-page {
     .daterangepicker {
         z-index: 9992 !important;
+    }
+    .inventory-main {
+        #giddh-page-heading {
+            aside-inventory-stock-group {
+                .aside-pane-form {
+                    .btn-danger {
+                        .ladda-label {
+                            color: var(--color-danger);
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -7852,25 +7884,6 @@ body.update-scroll-hidden {
     }
 }
 
-.on-setting-page,
-.on-user-page {
-    aside-setting {
-        .aside-pane {
-            .back-to-main-slider {
-                display: block !important;
-                padding: 0 12px;
-            }
-
-            h4 {
-                display: none;
-            }
-        }
-
-        &::after {
-            display: none;
-        }
-    }
-}
 .gst-sidebar-open.on-setting-page.aside-setting {
     #content-wrapper {
         padding-right: 0;
@@ -8041,6 +8054,20 @@ body.update-scroll-hidden {
             }
         }
     }
+    account-update-new-details {
+        .button-group {
+            .update-btn-zindex {
+                .ladda-label {
+                    color: var(--color-septenary-button-text);
+                }
+                &:hover {
+                    .ladda-label {
+                        color: var(--color-secondary-button-text);
+                    }
+                }
+            }
+        }
+    }
 }
 
 .cdk-overlay-pane {
@@ -8140,6 +8167,11 @@ body.update-scroll-hidden {
     }
     .right-bar {
         width: 100% !important;
+    }
+    .activity-log-page {
+        .cdk-overlay-container {
+            z-index: 99999;
+        }
     }
 }
 
@@ -9725,6 +9757,19 @@ body.prevent-body-scroll {
     background-color: var(--color-primary-sky-blue-bg-background);
 }
 
+.btn-success:disabled {
+    color: var(--color-common-secondary-disabled) !important;
+    .ladda-label {
+        color: var(--color-common-secondary-disabled) !important;
+    }
+    &:hover {
+        color: var(--color-common-secondary-disabled) !important;
+        .ladda-label {
+            color: var(--color-common-secondary-disabled) !important;
+        }
+    }
+}
+
 .giddh-no-permissions {
     display: none !important;
 } /** Angular material datepicker **/
@@ -10011,6 +10056,87 @@ input[type="checkbox"].cdk-visually-hidden::after {
         .mat-select {
             margin-top: 0 !important;
             z-index: 9991 !important;
+        }
+    }
+}
+.logs-sidebar {
+    min-height: 100% !important;
+    height: 100% !important;
+    width: 760px !important;
+    .mat-dialog-content {
+        margin: 0 !important;
+        padding: 0 !important;
+        max-height: 90%;
+        float: left;
+        width: 100%;
+    }
+    .mat-dialog-container {
+        overflow: hidden;
+    }
+}
+.json-sidebar {
+    min-height: 100% !important;
+    height: 100% !important;
+    width: 760px !important;
+    .mat-dialog-content {
+        margin: 0 !important;
+        padding: 0 !important;
+        max-height: 90%;
+        float: left;
+        width: 100%;
+    }
+    .mat-dialog-container {
+        overflow: hidden;
+    }
+}
+.show-changed {
+    .jsondiffpatch-unchanged {
+        display: none;
+    }
+}
+.history-sidebar {
+    min-height: 100% !important;
+    height: 100% !important;
+    width: 760px !important;
+    .mat-dialog-content {
+        margin: 0 !important;
+        padding: 0 !important;
+        max-height: 90%;
+        float: left;
+        width: 100%;
+    }
+    .mat-dialog-container {
+        overflow: hidden;
+    }
+}
+
+.activity-log-page {
+    .hamburger-menu {
+        position: relative;
+        z-index: 99999;
+    }
+    .giddh-table.mat-table {
+        tbody {
+            > tr.history-child-row {
+                > td {
+                    background-color: var(--color-total-details-quaternary-background) !important;
+                }
+                &:hover {
+                    > td {
+                        background-color: var(--color-primary-common-without-opacity-list-hover) !important;
+                    }
+                }
+                .mat-column-history {
+                    .history-checkbox {
+                        .mat-checkbox-inner-container-no-side-margin {
+                            .mat-checkbox-input {
+                                padding: 15px !important;
+                                transform: translate(-7px, -9px);
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }
