@@ -1,9 +1,14 @@
 <div id="share-modal" class="share-grp">
     <div class="modal-header">
         <h3>Create New {{ onBoardingType }}</h3>
-        <span aria-hidden="true" class="close" data-dismiss="modal" (click)="removeCompanySessionData(); closeModal()"
-            >×</span
+        <button
+            aria-hidden="true"
+            class="close"
+            data-dismiss="modal"
+            (click)="removeCompanySessionData(); closeModal()"
         >
+            ×
+        </button>
     </div>
     <div class="modal-body p-0" id="SharePop">
         <div class="welcome-wrapper">

@@ -72,14 +72,15 @@
                 <div class="border-radius-0">
                     <div class="modal-header theme-bg pd-l2 pd-r2">
                         <h3 class="modal-title bg" id="modal-title">{{ messageBody.header.set }}</h3>
-                        <span
+                        <button
                             aria-hidden="true"
                             class="close"
                             data-dismiss="modal"
                             [attr.aria-label]="commonLocaleData?.app_close"
                             (click)="mailModal.hide()"
-                            >×</span
                         >
+                            ×
+                        </button>
                     </div>
 
                     <div class="modal-body pd-l2 pd-r2 clearfix">
