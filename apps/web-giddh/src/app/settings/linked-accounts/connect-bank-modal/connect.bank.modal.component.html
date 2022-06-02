@@ -1,6 +1,6 @@
 <div class="modal-header d-flex align-items-center flex-row-reverse">
     <h3>{{ localeData?.connect_banks }}</h3>
-    <span aria-hidden="true" class="close" data-dismiss="modal" (click)="onCancel()">×</span>
+    <button aria-hidden="true" class="close" data-dismiss="modal" (click)="onCancel()">×</button>
 </div>
 <div id="my-frame" class="modal-body clearfix">
     <div *ngIf="step === 1">
