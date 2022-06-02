@@ -109,6 +109,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     @Input() public currentTxn: TransactionVM = null;
     @Input() public needToReCalculate: BehaviorSubject<boolean>;
     @Input() public showTaxationDiscountBox: boolean = true;
+    @Input() public showOtherTax: boolean = true;
     @Input() public isBankTransaction: boolean = false;
     @Input() public trxRequest: AdvanceSearchRequest;
     @Input() public invoiceList: any[];
@@ -175,7 +176,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public asideMenuStateForOtherTaxes: string = 'out';
     public tdsTcsTaxTypes: string[] = ['tcsrc', 'tcspay'];
     public companyTaxesList: TaxResponse[] = [];
-    public totalTdElementWidth: number = 0;
     /** Amount of invoice select for credit note */
     public selectedInvoiceAmount: number = 0;
     /** Selected invoice for credit note */
@@ -254,6 +254,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public invoiceList$: Observable<any[]>;
     /** List of discounts */	
     public discountsList: any[] = [];
+    /** Is advance receipt with tds/tcs */
+    public isAdvanceReceiptWithTds: boolean = false;
 
     constructor(private store: Store<AppState>,
         private cdRef: ChangeDetectorRef,
@@ -364,6 +366,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
         this.shouldShowAdvanceReceipt = (this.blankLedger) ? this.blankLedger.voucherType === 'rcpt' : false;
         this.isAdvanceReceipt = (this.currentTxn) ? this.currentTxn['subVoucher'] === SubVoucher.AdvanceReceipt : false;
+        this.isAdvanceReceiptWithTds = cloneDeep(this.isAdvanceReceipt);
         this.isRcmEntry = (this.currentTxn) ? this.currentTxn['subVoucher'] === SubVoucher.ReverseCharge : false;
         this.shouldShowAdvanceReceiptMandatoryFields = this.isAdvanceReceipt;
         this.currentVoucherLabel = this.generalService.getCurrentVoucherLabel(this.blankLedger?.voucherType, this.commonLocaleData);
@@ -470,10 +473,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         this.cdRef.markForCheck();
     }
 
-    public onResized(event: ResizedEvent) {
-        this.totalTdElementWidth = event.newWidth + 10;
-    }
-
     public addToDrOrCr(type: string, e: Event) {
         e.stopPropagation();
         if (this.isRcmEntry && !this.validateTaxes()) {
@@ -523,9 +522,11 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         totalPercentage = this.currentTxn.taxesVm.reduce((pv, cv) => {
             return cv.isChecked ? pv + cv.amount : pv;
         }, 0);
-        this.currentTxn.tax = giddhRoundOff(
-            this.generalService.calculateInclusiveOrExclusiveTaxes(this.isAdvanceReceipt, this.currentTxn.amount, totalPercentage, this.currentTxn.discount),
-            this.giddhBalanceDecimalPlaces);
+        if (!this.isAdvanceReceiptWithTds) {
+            this.currentTxn.tax = giddhRoundOff(this.generalService.calculateInclusiveOrExclusiveTaxes(false, this.currentTxn.advanceReceiptAmount, totalPercentage, this.currentTxn.discount), this.giddhBalanceDecimalPlaces);
+        } else {
+            this.currentTxn.tax = giddhRoundOff(this.generalService.calculateInclusiveOrExclusiveTaxes(this.isAdvanceReceiptWithTds, this.currentTxn.amount, totalPercentage, this.currentTxn.discount), this.giddhBalanceDecimalPlaces);
+        }
         this.currentTxn.convertedTax = this.calculateConversionRate(this.currentTxn.tax);
         this.calculateTotal();
     }
@@ -1095,6 +1096,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             this.isAdvanceReceipt = false;
         }
 
+        this.isAdvanceReceiptWithTds = cloneDeep(this.isAdvanceReceipt);
+
         if (this.voucherApiVersion === 2 && this.isAdvanceReceipt) {
             this.blankLedger.generateInvoice = true;
         }
@@ -1140,6 +1143,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         let companyTaxes: TaxResponse[] = [];
         let totalTaxes = 0;
 
+        this.isAdvanceReceiptWithTds = this.isAdvanceReceipt;
+
         this.companyTaxesList$.pipe(take(1)).subscribe(taxes => companyTaxes = taxes);
         if (!transaction) {
             return;
@@ -1147,19 +1152,40 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
         if (modal?.appliedOtherTax && modal?.appliedOtherTax?.uniqueName) {
             const amount = (this.isAdvanceReceipt) ? transaction.advanceReceiptAmount : transaction.amount;
-            if (modal.tcsCalculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount) {
-                taxableValue = Number(amount) - transaction.discount;
-            } else if (modal.tcsCalculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTotalAmount) {
-                let rawAmount = Number(amount) - transaction.discount;
-                taxableValue = (rawAmount + transaction.tax);
-            }
-
             let tax = companyTaxes.find(ct => ct?.uniqueName === modal?.appliedOtherTax?.uniqueName);
             if (tax) {
                 this.blankLedger.otherTaxType = ['tcsrc', 'tcspay'].includes(tax.taxType) ? 'tcs' : 'tds';
-            }
-            if (tax) {
                 totalTaxes += tax.taxDetail[0].taxValue;
+            }
+
+            if (this.generalService.isReceiptPaymentEntry(this.activeAccount, this.currentTxn.selectedAccount)) {
+                let mainTaxPercentage = this.currentTxn.taxesVm?.filter(p => p.isChecked)?.reduce((sum, current) => sum + current.amount, 0);
+                let tdsTaxPercentage = null;
+                let tcsTaxPercentage = null;
+                let totalAmount = Number(this.blankLedger.compoundTotal);
+
+                if (this.blankLedger.otherTaxType === "tcs") {
+                    tcsTaxPercentage = totalTaxes;
+                    this.isAdvanceReceiptWithTds = false;
+                } else if (this.blankLedger.otherTaxType === "tds") {
+                    tdsTaxPercentage = totalTaxes;
+                    this.isAdvanceReceiptWithTds = false;
+                }
+
+                taxableValue = this.generalService.getReceiptPaymentOtherTaxAmount(modal.tcsCalculationMethod, totalAmount, mainTaxPercentage, tdsTaxPercentage, tcsTaxPercentage);
+                this.currentTxn.advanceReceiptAmount = taxableValue;
+                this.totalForTax = taxableValue;
+                if (modal.tcsCalculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTotalAmount) {
+                    taxableValue = (taxableValue + transaction.tax);
+                }
+            } else {
+                if (modal.tcsCalculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount) {
+                    taxableValue = Number(amount) - transaction.discount;
+                } else if (modal.tcsCalculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTotalAmount) {
+                    let rawAmount = Number(amount) - transaction.discount;
+                    taxableValue = (rawAmount + transaction.tax);
+                }
+                this.calculateTotal();
             }
             this.blankLedger.tdsTcsTaxesSum = giddhRoundOff(((taxableValue * totalTaxes) / 100), this.giddhBalanceDecimalPlaces);
             this.blankLedger.otherTaxModal = modal;

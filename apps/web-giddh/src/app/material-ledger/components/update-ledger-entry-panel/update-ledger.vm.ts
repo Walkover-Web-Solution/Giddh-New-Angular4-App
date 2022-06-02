@@ -14,6 +14,7 @@ import { SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal } from '../.
 import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
 import { RATE_FIELD_PRECISION } from '../../../app.constant';
 import { take } from 'rxjs/operators';
+import { GeneralService } from '../../../services/general.service';
 
 export class UpdateLedgerVm {
     public otherAccountList: IFlattenAccountsResultItem[] = [];
@@ -77,8 +78,14 @@ export class UpdateLedgerVm {
     public compundTotalObserver = new BehaviorSubject(null);
     /** Rate should have precision up to 4 digits for better calculation */
     public ratePrecision = RATE_FIELD_PRECISION;
+    /** Holds active ledger account data */
+    public activeAccount: AccountResponse;
+    /** Is advance receipt with tds/tcs */
+    public isAdvanceReceiptWithTds: boolean = false;
 
-    constructor() {
+    constructor(
+        private generalService: GeneralService
+    ) {
 
     }
 
@@ -193,7 +200,7 @@ export class UpdateLedgerVm {
 
     public isThereIncomeOrExpenseEntry(): number {
         let isAvailable = filter(this.selectedLedger.transactions, (trx: ILedgerTransactionItem) => {
-            if (trx?.particular?.uniqueName) {
+            if (trx?.particular?.uniqueName && !trx.isTax) {
                 let category = this.accountCatgoryGetterFunc(trx.particular, trx.particular.uniqueName);
                 return this.isValidCategory(category) || trx.inventory;
             }
@@ -274,28 +281,51 @@ export class UpdateLedgerVm {
     }
 
     public calculateOtherTaxes(modal: SalesOtherTaxesModal) {
-
         let taxableValue = 0;
         let companyTaxes: TaxResponse[] = [];
         let totalTaxes = 0;
 
+        this.isAdvanceReceiptWithTds = this.isAdvanceReceipt;
+
         this.companyTaxesList$.pipe(take(1)).subscribe(taxes => companyTaxes = taxes);
 
         if (modal?.appliedOtherTax && modal?.appliedOtherTax?.uniqueName) {
-            const amount = (this.isAdvanceReceipt) ? this.advanceReceiptAmount : this.totalAmount;
-            if (modal.tcsCalculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount) {
-                taxableValue = Number(amount) - this.discountTrxTotal;
-            } else if (modal.tcsCalculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTotalAmount) {
-                let rawAmount = Number(amount) - this.discountTrxTotal;
-                taxableValue = (rawAmount + this.taxTrxTotal);
-            }
-
             let tax = companyTaxes.find(ct => ct?.uniqueName === modal?.appliedOtherTax?.uniqueName);
             if (tax && tax.taxDetail[0]) {
                 this.selectedLedger.otherTaxType = ['tcsrc', 'tcspay'].includes(tax.taxType) ? 'tcs' : 'tds';
                 totalTaxes += tax.taxDetail[0].taxValue;
             }
 
+            if (this.generalService.isReceiptPaymentEntry(this.activeAccount, this.selectedLedger.particular)) {
+                let mainTaxPercentage = this.selectedTaxes?.reduce((sum, current) => sum + current.amount, 0);
+                let tdsTaxPercentage = null;
+                let tcsTaxPercentage = null;
+                let totalAmount = Number(this.compoundTotal);
+
+                if (this.selectedLedger.otherTaxType === "tcs") {
+                    tcsTaxPercentage = totalTaxes;
+                    this.isAdvanceReceiptWithTds = false;
+                } else if (this.selectedLedger.otherTaxType === "tds") {
+                    tdsTaxPercentage = totalTaxes;
+                    this.isAdvanceReceiptWithTds = false;
+                }
+
+                taxableValue = this.generalService.getReceiptPaymentOtherTaxAmount(modal.tcsCalculationMethod, totalAmount, mainTaxPercentage, tdsTaxPercentage, tcsTaxPercentage);
+                this.advanceReceiptAmount = taxableValue;
+                this.totalForTax = taxableValue;
+                if (modal.tcsCalculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTotalAmount) {
+                    taxableValue = (taxableValue + this.taxTrxTotal);
+                }
+            } else {
+                const amount = (this.isAdvanceReceipt) ? this.advanceReceiptAmount : this.totalAmount;
+                if (modal.tcsCalculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount) {
+                    taxableValue = Number(amount) - this.discountTrxTotal;
+                } else if (modal.tcsCalculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTotalAmount) {
+                    let rawAmount = Number(amount) - this.discountTrxTotal;
+                    taxableValue = (rawAmount + this.taxTrxTotal);
+                }
+                this.generateGrandTotal();
+            }
             this.selectedLedger.tdsTcsTaxesSum = giddhRoundOff(((taxableValue * totalTaxes) / 100), this.giddhBalanceDecimalPlaces);
         } else {
             this.selectedLedger.tdsTcsTaxesSum = 0;

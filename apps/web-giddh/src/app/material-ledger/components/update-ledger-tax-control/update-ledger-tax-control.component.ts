@@ -319,6 +319,7 @@ export class UpdateLedgerTaxControlComponent implements OnDestroy, OnChanges {
      * @memberof UpdateLedgerTaxControlComponent
      */
     private calculateInclusiveOrExclusiveFormattedTax(): void {
+        console.log(this.isAdvanceReceipt, this.totalForTax, this.sum);
         if (this.isAdvanceReceipt) {
             // Inclusive tax calculation
             this.formattedTotal = `${giddhRoundOff((this.totalForTax * this.sum) / (100 + this.sum), 2)}`;

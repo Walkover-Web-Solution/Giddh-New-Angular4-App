@@ -267,7 +267,7 @@
                                 (taxAmountSumEvent)="calculateTax()"
                                 (hideOtherPopups)="hideDiscount()"
                                 (isApplicableTaxesEvent)="currentTxn.applyApplicableTaxes = $event"
-                                [isAdvanceReceipt]="isAdvanceReceipt"
+                                [isAdvanceReceipt]="isAdvanceReceiptWithTds"
                                 [allowedSelectionOfAType]="allowedSelectionOfAType"
                                 [commonLocaleData]="commonLocaleData"
                             >
@@ -300,7 +300,6 @@
                             *ngIf="currentTxn?.selectedAccount || shouldShowAdvanceReceiptMandatoryFields"
                             class="item-padding text-right total-amount-ledger"
                             id="totalTd"
-                            (resized)="onResized($event)"
                         >
                             <label class="primary-color font-12">{{ commonLocaleData?.app_total }}</label>
                             <input
@@ -348,7 +347,7 @@
                 </div>
             </div>
             <div class="col-md-8" [ngClass]="{ 'offset-md-4': !currentTxn?.selectedAccount?.stock }">
-                <div class="text-right mr-b1" *ngIf="currentTxn?.selectedAccount && showTaxationDiscountBox">
+                <div class="text-right mr-b1" *ngIf="currentTxn?.selectedAccount && showOtherTax">
                     <ng-container *ngIf="isTcsTdsApplicable">
                         <mat-checkbox
                             color="primary"
@@ -360,11 +359,7 @@
                             >{{ localeData?.other_tax }}</mat-checkbox
                         >
                         <div class="clearfix">
-                            <div
-                                *ngIf="blankLedger.isOtherTaxesApplicable"
-                                class="mr-t1 pull-right"
-                                [ngStyle]="{ 'width': totalTdElementWidth + 'px' }"
-                            >
+                            <div *ngIf="blankLedger.isOtherTaxesApplicable" class="mr-t1 pull-right">
                                 <label>{{ commonLocaleData?.app_other_tax }}</label>
                                 <span class="d-flex">
                                     <span class="d-flex align-item-center">

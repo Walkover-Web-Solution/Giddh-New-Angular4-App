@@ -298,7 +298,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         private adjustmentUtilityService: AdjustmentUtilityService
     ) {
 
-        this.vm = new UpdateLedgerVm();
+        this.vm = new UpdateLedgerVm(this.generalService);
 
         this.entryUniqueName$ = this.store.pipe(select(p => p.ledger.selectedTxnForEditUniqueName), takeUntil(this.destroyed$));
         this.editAccUniqueName$ = this.store.pipe(select(p => p.ledger.selectedAccForEditUniqueName), takeUntil(this.destroyed$));
@@ -1431,6 +1431,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public handleAdvanceReceiptChange(): void {
         this.shouldShowAdvanceReceiptMandatoryFields = this.isAdvanceReceipt;
         this.vm.isAdvanceReceipt = this.isAdvanceReceipt;
+        this.vm.isAdvanceReceiptWithTds = cloneDeep(this.isAdvanceReceipt);
         if (this.shouldShowAdvanceReceiptMandatoryFields) {
             this.vm.generatePanelAmount();
         }
@@ -2110,6 +2111,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
         this.baseAccountDetails = resp[0];
         this.activeAccount = cloneDeep(resp[1].body);
+        this.vm.activeAccount = this.activeAccount;
         // Decides whether to show the RCM entry
         this.shouldShowRcmEntry = this.isRcmEntryPresent(resp[0].transactions);
         this.isTouristSchemeApplicable = this.checkTouristSchemeApplicable(resp[0], resp[1], resp[2]);
@@ -2158,6 +2160,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.isAdvanceReceipt = (this.vm.selectedLedger.subVoucher === SubVoucher.AdvanceReceipt);
         this.vm.isRcmEntry = this.isRcmEntry;
         this.vm.isAdvanceReceipt = this.isAdvanceReceipt;
+        this.vm.isAdvanceReceiptWithTds = cloneDeep(this.isAdvanceReceipt);
         this.shouldShowAdvanceReceiptMandatoryFields = this.isAdvanceReceipt;
 
         if (this.vm.selectedLedger.voucher && this.vm.selectedLedger.voucher?.shortCode === 'rcpt' && this.isAdvanceReceipt) {
