@@ -175,7 +175,8 @@
                 </div>
             </div>
             <div class="scroll-y noscroll-x fill body scrollbox">
-                <div class="gstr3b-header hidden-print">
+                <!--Hide this feature (Approved by Shubhendra Sir )-->
+                <!-- <div class="gstr3b-header hidden-print">
                     <ul class="sel-tab" [class.no-border]="!isCompany || !showGstFiling">
                         <li class="text-center col-md-6" [ngClass]="{ active: selectedGstr3BTab === 'pushGSTN' }">
                             <div
@@ -258,7 +259,7 @@
                             </div>
                         </li>
                     </ul>
-                </div>
+                </div> -->
                 <div id="ember1220" class="ember-view" *ngIf="selectedGstr3BTab === 'pushGSTN'">
                     <div class="gstr3b-page-header">
                         <span class="font-xxxlarge">{{ localeData?.gstr3b?.summary }}</span>
