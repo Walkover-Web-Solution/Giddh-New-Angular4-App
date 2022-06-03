@@ -273,14 +273,14 @@
                         <div class="warehouse-expanded-box-wrapper">
                             <ng-container *ngFor="let warehouseVariant of variant?.warehouseBalance; let i = index">
                                 <div
+                                    (clickOutside)="warehouseVariant.display = false"
                                     class="grid-title-list list-grid-title warehouse-expanded-box"
                                     *ngIf="selectedWarehouse?.indexOf(warehouseVariant?.warehouse?.uniqueName) > -1"
                                     [ngClass]="{ 'expanded-stock-table-with-opacity': stock.display }"
                                 >
                                     <div
                                         class="stock-list-expanded-content"
-                                        (click)="$event.stopPropagation()"
-                                        (mouseenter)="warehouseVariant.display = true"
+                                        (click)="$event.stopPropagation(); warehouseVariant.display = true"
                                     >
                                         <p
                                             class="stock-list-box-heading proper-spacing-list"
@@ -303,7 +303,7 @@
                                         (click)="$event.stopPropagation()"
                                         class="editable-input"
                                     >
-                                        <p class="input-select-wrapper">
+                                        <ng-container class="input-select-wrapper">
                                             <input
                                                 matInput
                                                 class="opening-bal-input"
@@ -336,7 +336,7 @@
                                             >
                                             </select-field>
                                             <img src="{{ imgPath }}caret-light.svg" class="dropdown-icon" />
-                                        </p>
+                                        </ng-container>
                                     </div>
                                 </div>
                             </ng-container>
