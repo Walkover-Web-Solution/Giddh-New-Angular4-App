@@ -77,7 +77,6 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
 		private toaster: ToasterService
 	) {
 		this.store.dispatch(this.settingsFinancialYearActions.getFinancialYearLimits());
-		this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: 0 }));
 	}
 
 	/**
@@ -86,7 +85,7 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
 	* @memberof StockBalanceComponent
 	*/
 	public ngOnInit(): void {
-
+		this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: 0 }));
 		this.isLoading = true;
 		this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
 		this.getStockUnits();
