@@ -1029,14 +1029,16 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
                     }
                 }
 
-                requestObject.number = this.searchReferenceVoucher;
+                if (requestObject) {
+                    requestObject.number = this.searchReferenceVoucher;
 
-                if (requestObject.number) {
-                    this.resetInvoiceList();
+                    if (requestObject.number) {
+                        this.resetInvoiceList();
+                    }
+
+                    requestObject.page = this.referenceVouchersCurrentPage;
+                    this.referenceVouchersCurrentPage++;
                 }
-
-                requestObject.page = this.referenceVouchersCurrentPage;
-                this.referenceVouchersCurrentPage++;
             } else {
                 requestObject = {
                     accountUniqueNames: [customerUniqueName, this.invoiceFormDetails.activeAccountUniqueName ?? voucherType],
@@ -1062,14 +1064,16 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
                     }
                 }
 
-                requestObject.number = this.searchReferenceVoucher;
+                if (requestObject) {
+                    requestObject.number = this.searchReferenceVoucher;
 
-                if (requestObject.number) {
-                    this.resetInvoiceList();
+                    if (requestObject.number) {
+                        this.resetInvoiceList();
+                    }
+
+                    requestObject.page = this.referenceVouchersCurrentPage;
+                    this.referenceVouchersCurrentPage++;
                 }
-
-                requestObject.page = this.referenceVouchersCurrentPage;
-                this.referenceVouchersCurrentPage++;
             } else {
                 requestObject = {
                     accountUniqueNames: [...customerUniqueName, this.invoiceFormDetails.activeAccountUniqueName ?? voucherType],

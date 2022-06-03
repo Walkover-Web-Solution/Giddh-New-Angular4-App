@@ -34,3 +34,15 @@
     padding: 2px;
     top: 0 !important;
 }
+.manage-group-account-form {
+    .form-group {
+        .ladda-button[type="submit"] {
+            border-color: var(--color-secondary-button-background) !important;
+            background-color: var(--color-secondary-button-background) !important;
+            &:hover {
+                border-color: var(--color-secondary-button-background-hover) !important;
+                background-color: var(--color-secondary-button-background-hover) !important;
+            }
+        }
+    }
+}

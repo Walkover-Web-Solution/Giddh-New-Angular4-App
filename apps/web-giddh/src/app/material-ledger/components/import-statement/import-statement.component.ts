@@ -43,6 +43,7 @@ export class ImportStatementComponent implements OnDestroy {
         let validExtensions = ['pdf'];
         let type = (file && file.item(0)) ? this.generalService.getFileExtension(file.item(0).name) : 'null';
         let isValidFileType = validExtensions.some(extension => type === extension);
+        this.selectedFile = file.item(0).name;
 
         if (!isValidFileType) {
             if (file && file.length > 0) {

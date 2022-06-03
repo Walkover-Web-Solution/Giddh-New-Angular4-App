@@ -10,6 +10,7 @@ import { remove } from '../../lodash-optimized';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../store';
 import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
+import { GeneralActions } from '../../actions/general/general.actions';
 
 const DIRECTIONAL_KEYS = [
     LEFT_ARROW, RIGHT_ARROW, UP_ARROW, DOWN_ARROW
@@ -79,7 +80,8 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
         private _generalService: GeneralService,
         private _commandKService: CommandKService,
         private _cdref: ChangeDetectorRef,
-        private groupWithAccountsAction: GroupWithAccountsAction
+        private groupWithAccountsAction: GroupWithAccountsAction,
+        private generalAction: GeneralActions
     ) {
         this.store.pipe(select(p => p.session.companyUniqueName), takeUntil(this.destroyed$)).subscribe(res => {
             this.activeCompanyUniqueName = res;
@@ -135,6 +137,7 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
      * @memberof CommandKComponent
      */
     public closeMaster(): void {
+        this.store.dispatch(this.generalAction.addAndManageClosed());
         this.store.dispatch(this.groupWithAccountsAction.HideAddAndManageFromOutside());
     }
 
