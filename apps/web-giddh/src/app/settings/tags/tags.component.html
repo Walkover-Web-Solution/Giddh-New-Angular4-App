@@ -157,9 +157,9 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h3>{{ commonLocaleData?.app_confirmation }}</h3>
-                    <span aria-hidden="true" class="close" (click)="onUserConfirmation(false)" data-dismiss="modal"
-                        >×</span
-                    >
+                    <button aria-hidden="true" class="close" (click)="onUserConfirmation(false)" data-dismiss="modal">
+                        ×
+                    </button>
                 </div>
                 <div class="modal-body" [innerHTML]="confirmationMessage"></div>
                 <div class="modal-footer clearfix">

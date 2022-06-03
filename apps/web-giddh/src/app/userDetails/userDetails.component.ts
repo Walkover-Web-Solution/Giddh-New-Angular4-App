@@ -1,4 +1,4 @@
-import { take, takeUntil } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { Component, OnDestroy, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { Observable, ReplaySubject } from 'rxjs';
 import { Store, select } from '@ngrx/store';
@@ -7,9 +7,8 @@ import { ToasterService } from '../services/toaster.service';
 import { SignupWithMobile, UserDetails, VerifyMobileModel } from '../models/api-models/loginModels';
 import { LoginActions } from '../actions/login.action';
 import { AuthenticationService } from '../services/authentication.service';
-import { CompanyResponse, StateDetailsRequest } from '../models/api-models/Company';
+import { CompanyResponse } from '../models/api-models/Company';
 import { cloneDeep } from '../lodash-optimized';
-import { CompanyActions } from '../actions/company.actions';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SessionActions } from '../actions/session.action';
 import * as moment from 'moment';
@@ -81,7 +80,6 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
         private toasty: ToasterService,
         private loginService: AuthenticationService,
         private loginAction: LoginActions,
-        private companyActions: CompanyActions,
         private router: Router,
         private sessionAction: SessionActions,
         private route: ActivatedRoute,
@@ -188,6 +186,8 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
             }
         });
 
+        this.store.dispatch(this.sessionAction.getAllSession());
+
         this.userSessionResponse$.subscribe(s => {
             if (s && s.length) {
                 this.userSessionList = s.map(session => {
@@ -200,8 +200,6 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
                     session.sessionDuration = `${duration.days()}/${duration.hours()}/${duration.minutes()}/${duration.seconds()}`;
                     return session;
                 });
-            } else {
-                this.store.dispatch(this.sessionAction.getAllSession());
             }
         });
         this.isUpdateCompanyInProgress$.pipe(takeUntil(this.destroyed$)).subscribe(inProcess => {

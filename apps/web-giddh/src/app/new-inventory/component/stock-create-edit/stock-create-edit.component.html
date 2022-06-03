@@ -31,18 +31,18 @@
                             <div class="col-xl-8 col-lg-12">
                                 <div class="row flex-column-reverse flex-md-row">
                                     <div class="col-md-8 col-lg-8 col-xl-6 col-12 upper-common-form-label-field">
-                                        <div class="row mr-b15">
+                                        <div class="row mr-b1">
                                             <div class="col-sm-6 col-lg-3">
-                                                <label
+                                                <label class="product-name-label"
                                                     >{{ stockForm.type | titlecase }} Name
-                                                    <span class="red-text">*</span></label
+                                                    <span class="red-text product-name-star">*</span></label
                                                 >
                                             </div>
                                             <div class="col-sm-6 col-lg-6 ml-lg-2">
                                                 <text-field
                                                     [cssClass]="'form-control'"
                                                     [name]="'productName'"
-                                                    [placeholder]="'Enter Name'"
+                                                    [placeholder]="'Enter Product'"
                                                     [type]="'text'"
                                                     [(ngModel)]="stockForm.name"
                                                     [required]="true"
@@ -50,7 +50,7 @@
                                                 </text-field>
                                             </div>
                                         </div>
-                                        <div class="row mr-b15">
+                                        <div class="row mr-b1">
                                             <div class="col-sm-6 col-lg-3">
                                                 <label
                                                     >{{ stockForm.type | titlecase }} Unit
@@ -71,15 +71,15 @@
                                                 ></select-field>
                                             </div>
                                         </div>
-                                        <div class="row mr-b15">
+                                        <div class="row mr-b1">
                                             <div class="col-sm-6 col-lg-3">
                                                 <label>Under Group</label>
                                             </div>
-                                            <div class="col-sm-6 col-lg-6 ml-lg-2">
+                                            <div class="col-sm-6 col-lg-6 ml-lg-2 under-group-field-button-wrapper">
                                                 <select-field
                                                     [cssClass]="'form-control'"
                                                     [name]="'stockGroup'"
-                                                    [placeholder]="'Under Group'"
+                                                    [placeholder]="'Select Group'"
                                                     [options]="stockGroups"
                                                     (selectedOption)="
                                                         stockGroupUniqueName = $event?.value;
@@ -90,7 +90,7 @@
                                                 <button
                                                     *ngIf="queryParams?.stockUniqueName"
                                                     mat-raised-button
-                                                    class="btn-success min-width-100 bdr-radius-50 move-stock"
+                                                    class="btn-success min-width-100 move-stock"
                                                     (click)="moveStock()"
                                                     [disabled]="defaultStockGroupUniqueName === stockGroupUniqueName"
                                                 >
@@ -98,7 +98,7 @@
                                                 </button>
                                             </div>
                                         </div>
-                                        <div class="row mr-b15">
+                                        <div class="row mr-b1">
                                             <div class="col-sm-6 col-lg-3">
                                                 <label
                                                     >Unique Name
@@ -115,7 +115,7 @@
                                                 ></text-field>
                                             </div>
                                         </div>
-                                        <div class="row mr-b15">
+                                        <div class="row mr-b1">
                                             <div class="col-sm-6 col-lg-3">
                                                 <label>Applicable Tax</label>
                                             </div>
@@ -132,7 +132,7 @@
                                                         [value]="tax.uniqueName"
                                                         [disabled]="tax.isDisabled"
                                                         [selected]="tax.isChecked"
-                                                        (click)="!tax.isDisabled ? selectTax(tax) : ''"
+                                                        (onSelectionChange)="!tax.isDisabled ? selectTax(tax) : ''"
                                                         >{{ tax.name }}</mat-option
                                                     >
                                                 </mat-select>
@@ -737,17 +737,17 @@
                                                             *ngFor="let option of stockForm.options; let i = index"
                                                         >
                                                             <div class="col-sm-6 col-lg-4">
-                                                                <label>Option Name</label>
+                                                                <label>Option {{ i + 1 }}</label>
                                                                 <text-field
                                                                     [cssClass]="'form-control'"
-                                                                    [placeholder]="'Size'"
+                                                                    [placeholder]="'Ex: Size , Color'"
                                                                     [name]="'option-' + i"
                                                                     [(ngModel)]="option.name"
                                                                     [type]="'text'"
                                                                 ></text-field>
                                                             </div>
-                                                            <div class="col-sm-6 col-lg-6">
-                                                                <label>Option Values</label>
+                                                            <div class="col-sm-6 col-lg-8">
+                                                                <label class="category-label">Category</label>
                                                                 <div class="multi-select-input">
                                                                     <mat-chip-list #chipList>
                                                                         <mat-chip
@@ -776,6 +776,8 @@
                                                                             (matChipInputTokenEnd)="
                                                                                 addOption($event, i)
                                                                             "
+                                                                            class="inventory-category-field-input"
+                                                                            placeholder="Separate options with a comma"
                                                                         />
                                                                     </mat-chip-list>
                                                                 </div>
@@ -886,8 +888,8 @@
                                                 class="col-xl-6 col-md-12 col-lg-8 col-sm-12"
                                                 *ngIf="stockForm.type === 'PRODUCT'"
                                             >
-                                                <div class="row mr-b15">
-                                                    <div class="col-sm-6 col-lg-6">
+                                                <div class="row mr-b1">
+                                                    <div class="col-sm-6 col-lg-4">
                                                         <label>HSN Code</label>
                                                     </div>
                                                     <div class="col-sm-6 col-lg-6">
@@ -905,7 +907,7 @@
                                                 class="col-xl-6 col-md-12 col-lg-8 col-sm-12"
                                                 *ngIf="stockForm.type === 'SERVICE'"
                                             >
-                                                <div class="row mr-b15">
+                                                <div class="row mr-b1">
                                                     <div class="col-sm-6 col-lg-6">
                                                         <label>SAC Code</label>
                                                     </div>
@@ -922,8 +924,8 @@
                                             </div>
                                             <ng-container *ngIf="!isVariantAvailable">
                                                 <div class="col-xl-6 col-md-12 col-lg-8 col-sm-12">
-                                                    <div class="row mr-b15">
-                                                        <div class="col-sm-6 col-lg-6">
+                                                    <div class="row mr-b1">
+                                                        <div class="col-sm-6 col-lg-4">
                                                             <label>SKU Code</label>
                                                         </div>
                                                         <div class="col-sm-6 col-lg-6">
@@ -938,8 +940,8 @@
                                                     </div>
                                                 </div>
                                                 <div class="col-xl-6 col-md-12 col-lg-8 col-sm-12">
-                                                    <div class="row mr-b15">
-                                                        <div class="col-sm-6 col-lg-6">
+                                                    <div class="row mr-b1">
+                                                        <div class="col-sm-6 col-lg-4">
                                                             <label>Opening Quantity</label>
                                                         </div>
                                                         <div class="col-sm-6 col-lg-6">
@@ -954,8 +956,8 @@
                                                     </div>
                                                 </div>
                                                 <div class="col-xl-6 col-md-12 col-lg-8 col-sm-12">
-                                                    <div class="row mr-b15">
-                                                        <div class="col-sm-6 col-lg-6">
+                                                    <div class="row mr-b1">
+                                                        <div class="col-sm-6 col-lg-4">
                                                             <label>Opening Amount</label>
                                                         </div>
                                                         <div class="col-sm-6 col-lg-6">
@@ -971,8 +973,8 @@
                                                 </div>
                                             </ng-container>
                                             <div class="col-xl-6 col-md-12 col-lg-8 col-sm-12">
-                                                <div class="row mr-b15">
-                                                    <div class="col-sm-6 col-lg-6">
+                                                <div class="row mr-b1">
+                                                    <div class="col-sm-6 col-lg-4">
                                                         <label *ngIf="inlineEditCustomField !== 1"
                                                             >{{ stockForm.customField1Heading || "Custom Field" }}
 
@@ -992,6 +994,7 @@
                                                             [type]="'text'"
                                                             [(ngModel)]="stockForm.customField1Heading"
                                                             [autoFocus]="true"
+                                                            class="common-custom-field-width"
                                                         ></text-field>
                                                         <span
                                                             class="pull-right right-fix-save-icon"
@@ -1015,8 +1018,8 @@
                                                 </div>
                                             </div>
                                             <div class="col-xl-6 col-md-12 col-lg-8 col-sm-12">
-                                                <div class="row mr-b15">
-                                                    <div class="col-sm-6 col-lg-6">
+                                                <div class="row mr-b1">
+                                                    <div class="col-sm-6 col-lg-4">
                                                         <label *ngIf="inlineEditCustomField !== 2"
                                                             >{{ stockForm.customField2Heading || "Custom Field" }}
 
@@ -1036,6 +1039,7 @@
                                                             [type]="'text'"
                                                             [(ngModel)]="stockForm.customField2Heading"
                                                             [autoFocus]="true"
+                                                            class="common-custom-field-width"
                                                         ></text-field>
                                                         <span
                                                             class="pull-right right-fix-save-icon"
@@ -1063,8 +1067,8 @@
                                                     class="col-xl-6 col-md-12 col-lg-8 col-sm-12"
                                                     *ngFor="let customField of stockForm?.customFields; let i = index"
                                                 >
-                                                    <div class="row mr-b15">
-                                                        <div class="col-sm-6 col-lg-6">
+                                                    <div class="row mr-b1">
+                                                        <div class="col-sm-6 col-lg-4">
                                                             <label
                                                                 >{{ customField?.fieldName }}
                                                                 <span class="red-text" *ngIf="customField.isMandatory"
@@ -2499,7 +2503,7 @@
                                                                 <textarea
                                                                     type="text"
                                                                     class="form-control"
-                                                                    placeholder="xs, x, m"
+                                                                    placeholder="'xs, x, m'"
                                                                     id="select-category"
                                                                 ></textarea>
                                                             </div>
@@ -4206,7 +4210,7 @@
                         <button
                             *ngIf="queryParams?.stockUniqueName"
                             mat-raised-button
-                            class="btn-primary min-width-100 bdr-radius-50"
+                            class="btn-primary min-width-100"
                             (click)="cancelEdit()"
                         >
                             Cancel
@@ -4214,19 +4218,19 @@
                         <button
                             *ngIf="queryParams?.stockUniqueName"
                             mat-raised-button
-                            class="btn-success min-width-100 bdr-radius-50"
-                            (click)="updateStock(stockCreateEditForm)"
-                            [disabled]="stockCreateEditForm.invalid || !stockForm.stockUnitCode"
+                            class="btn-danger min-width-100"
+                            (click)="deleteStock()"
                         >
-                            Update
+                            Delete
                         </button>
                         <button
                             *ngIf="queryParams?.stockUniqueName"
                             mat-raised-button
-                            class="btn-danger min-width-100 bdr-radius-50"
-                            (click)="deleteStock()"
+                            class="btn-success min-width-100"
+                            (click)="updateStock(stockCreateEditForm)"
+                            [disabled]="stockCreateEditForm.invalid || !stockForm.stockUnitCode"
                         >
-                            Delete
+                            Update
                         </button>
                     </div>
                 </div>

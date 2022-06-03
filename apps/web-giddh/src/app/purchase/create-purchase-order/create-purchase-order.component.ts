@@ -407,11 +407,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
     public ngOnInit(): void {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.getInvoiceSettings();
-        this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
         this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: 0 }));
         this.store.dispatch(this.companyActions.getTax());
-        this.store.dispatch(this.settingsBranchAction.resetAllBranches());
-        this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '' }));
 
         this.breakPointObservar.observe([
             '(max-width: 1024px)'
@@ -538,6 +535,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                 }
 
                 this.changeDetection.detectChanges();
+            } else {
+                this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
             }
         });
 
@@ -2407,6 +2406,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         this.store.pipe(select(appStore => appStore.settings.branches), take(1)).subscribe(response => {
             if (response && response.length) {
                 branches = response;
+            } else {
+                this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '' }));
             }
         });
         if (this.generalService.currentOrganizationType === OrganizationType.Branch) {

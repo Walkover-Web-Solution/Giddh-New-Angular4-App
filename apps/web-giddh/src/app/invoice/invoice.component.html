@@ -4,7 +4,7 @@
             <div class="invoice-control w-100 white-bg">
                 <div class="row mr-0 ml-0">
                     <div id="setting-tab" class="w-100">
-                        <hamburger-menu *ngIf="localeData?.tabs" [pageHeading]="getPageHeading()"></hamburger-menu>
+                        <hamburger-menu class="header-hamburger-menu" *ngIf="localeData?.tabs"></hamburger-menu>
                         <ng-template
                             [ngIf]="selectedVoucherType === 'debit note' || selectedVoucherType === 'credit note'"
                         >

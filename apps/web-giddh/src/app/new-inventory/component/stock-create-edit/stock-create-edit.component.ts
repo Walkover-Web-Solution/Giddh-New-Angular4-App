@@ -13,7 +13,7 @@ import { AppState } from "../../../store";
 import { WarehouseActions } from "../../../settings/warehouse/action/warehouse.action";
 import { ActivatedRoute, Router } from "@angular/router";
 import { cloneDeep, findIndex, forEach } from "../../../lodash-optimized";
-import { NgForm } from "@angular/forms";
+import { FormControl, NgForm } from "@angular/forms";
 import { INVALID_STOCK_ERROR_MESSAGE } from "../../../app.constant";
 import { CustomFieldsService } from "../../../services/custom-fields.service";
 import { CompanyActions } from "../../../actions/company.actions";
@@ -348,7 +348,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
     public addVariantOption(): void {
         if (this.isVariantAvailable) {
             const optionIndex = this.stockForm.options?.length + 1;
-            this.stockForm.options.push({ name: "Option " + optionIndex, values: [], order: optionIndex });
+            this.stockForm.options.push({ name: "", values: [], order: optionIndex });
         } else {
             this.stockForm.options = [];
             this.generateVariants();
@@ -580,7 +580,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
 
         if (!this.stockGroupUniqueName) {
             let mainGroupExists = this.stockGroups?.filter(group => {
-                group?.value === "maingroup"
+                return group?.value === "maingroup"
             });
             if (mainGroupExists?.length > 0) {
                 this.stockGroupUniqueName = "maingroup";
@@ -660,8 +660,20 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
                 if (response.body.purchaseAccountDetails) {
                     this.stockForm.purchaseAccountDetails = response.body.purchaseAccountDetails;
                 }
+                if (!this.stockForm.purchaseAccountDetails?.unitRates?.length) {
+                    this.stockForm.purchaseAccountDetails.unitRates.push({
+                        rate: null,
+                        stockUnitCode: null
+                    });
+                }
                 if (response.body.salesAccountDetails) {
                     this.stockForm.salesAccountDetails = response.body.salesAccountDetails;
+                }
+                if (!this.stockForm.salesAccountDetails?.unitRates?.length) {
+                    this.stockForm.salesAccountDetails.unitRates.push({
+                        rate: null,
+                        stockUnitCode: null
+                    });
                 }
                 this.stockGroupUniqueName = response.body.stockGroup?.uniqueName;
                 this.defaultStockGroupUniqueName = response.body.stockGroup?.uniqueName;

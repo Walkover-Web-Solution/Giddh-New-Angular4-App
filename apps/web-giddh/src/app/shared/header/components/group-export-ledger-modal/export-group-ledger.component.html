@@ -1,13 +1,14 @@
 <div id="exportModal">
     <div class="modal-header d-flex align-items-center flex-row-reverse">
-        <span
+        <button
             aria-hidden="true"
             class="close"
             data-dismiss="modal"
             (click)="closeExportGroupLedgerModal.emit('close')"
             [attr.aria-label]="commonLocaleData?.app_close"
-            >×</span
         >
+            ×
+        </button>
         <h3>{{ localeData?.export_group_ledger }}</h3>
     </div>
     <div class="modal-body mr-b4" id="export-body">

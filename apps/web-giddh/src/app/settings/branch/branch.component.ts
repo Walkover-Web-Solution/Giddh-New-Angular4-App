@@ -133,6 +133,8 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
                 let companyInfo = cloneDeep(profile);
                 this.currentBranch = companyInfo.name;
                 this.currentBranchNameAlias = companyInfo.nameAlias;
+            } else {
+                this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
             }
         });
 
@@ -351,7 +353,6 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
 
         if (branchFilterRequest.from && branchFilterRequest.to) {
             this.showLoader = true;
-            this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
             this.store.dispatch(this.settingsBranchActions.GetALLBranches(branchFilterRequest));
             this.store.dispatch(this.settingsBranchActions.ResetBranchRemoveResponse());
         }

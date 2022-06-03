@@ -2,6 +2,8 @@
 @import "~@angular/material/theming";
 @import "../css/giddh-common.scss";
 @import "@angular/material/prebuilt-themes/indigo-pink.css";
+@import "./json-tree.scss";
+@import "./json-diff.scss";
 $custom-typography: mat-typography-config(
     $font-family: "opensans-regular",
 );
@@ -4976,7 +4978,7 @@ perfect-scrollbar > .ps > .ps-overlay {
     border-radius: 0px;
 }
 .tax-engine .nav-tabs > li.active a {
-    font-weight: bold;
+    font-weight: 500;
 }
 .tax-engine .nav-tabs > li {
     margin-bottom: 0;
@@ -5023,6 +5025,7 @@ perfect-scrollbar > .ps > .ps-overlay {
 .tax-engine .table.transactions-table thead:first-child tr:first-child th {
     padding: 16px 12px;
     font-size: 14px;
+    font-weight: 500;
     border-bottom: 1px solid var(--color-dark-fog);
 }
 .tax-engine .table thead:first-child tr:first-child th {
@@ -5282,7 +5285,7 @@ perfect-scrollbar > .ps > .ps-overlay {
 }
 .tax-engine .sub-filter-nav-band > ul > li.active > a {
     color: var(--color-nero);
-    font-weight: 600;
+    font-weight: 500;
     border: 0;
 }
 .tax-engine .sub-filter-nav-band.reconciliation-type-band ul > li:last-child {
@@ -5655,6 +5658,23 @@ footer#footer.absolute-footer {
                         .ladda-label {
                             color: var(--color-secondary-button-text);
                         }
+                    }
+                }
+            }
+        }
+    }
+}
+
+app-manage-groups-accounts {
+    account-update-new-details {
+        .button-group {
+            .update-btn-zindex {
+                .ladda-label {
+                    color: var(--color-septenary-button-text);
+                }
+                &:hover {
+                    .ladda-label {
+                        color: var(--color-secondary-button-text) !important;
                     }
                 }
             }
@@ -7073,6 +7093,19 @@ span#HW_badge_cont:nth-child(3) {
     .daterangepicker {
         z-index: 9992 !important;
     }
+    .inventory-main {
+        #giddh-page-heading {
+            aside-inventory-stock-group {
+                .aside-pane-form {
+                    .btn-danger {
+                        .ladda-label {
+                            color: var(--color-danger);
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 .new-ledger-text-right ul li {
@@ -7453,9 +7486,7 @@ giddh-datepicker {
 }
 
 .ledger-body {
-    .cdk-overlay-container {
-        z-index: 1000 !important;
-    }
+    .cdk-overlay-container,
     .cdk-global-overlay-wrapper {
         z-index: 1000 !important;
     }
@@ -7526,6 +7557,16 @@ giddh-datepicker {
                                     }
                                 }
                             }
+                        }
+                    }
+                }
+                .ledger-head-top {
+                    #upload,
+                    #share,
+                    #export-ledger,
+                    #reload-bank-transaction {
+                        .mat-button-wrapper {
+                            display: flex;
                         }
                     }
                 }
@@ -7792,7 +7833,7 @@ giddh-datepicker {
                                     .add-new-field {
                                         select-field {
                                             input {
-                                                width: 150px;
+                                                width: 100%;
                                                 height: 32px;
                                             }
                                         }
@@ -7824,11 +7865,30 @@ giddh-datepicker {
                 text-field,
                 select-field {
                     input {
+                        width: 320px;
                         border-radius: 2px !important;
                     }
                 }
                 mat-select {
+                    width: 320px;
                     border-radius: 2px !important;
+                }
+                .common-custom-field-width {
+                    input {
+                        width: 100%;
+                    }
+                }
+            }
+        }
+    }
+    .cdk-overlay-connected-position-bounding-box {
+        .mat-select-panel {
+            .mat-option-disabled {
+                cursor: not-allowed;
+                color: var(--color-common-primary-disabled) !important;
+                .mat-pseudo-checkbox {
+                    cursor: not-allowed;
+                    color: var(--color-common-primary-disabled) !important;
                 }
             }
         }
@@ -8166,13 +8226,34 @@ body.update-scroll-hidden {
                                 height: auto;
                             }
                         }
+                        .mat-dialog-container {
+                            .modal-body {
+                                input,
+                                textarea {
+                                    border: 1px solid var(--color-secondary-input-bar-border);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    account-update-new-details {
+        .button-group {
+            .update-btn-zindex {
+                .ladda-label {
+                    color: var(--color-septenary-button-text);
+                }
+                &:hover {
+                    .ladda-label {
+                        color: var(--color-secondary-button-text);
                     }
                 }
             }
         }
     }
 }
-
 .cdk-overlay-pane {
     height: auto !important;
 }
@@ -8276,6 +8357,11 @@ body.update-scroll-hidden {
     }
     .right-bar {
         width: 100% !important;
+    }
+    .activity-log-page {
+        .cdk-overlay-container {
+            z-index: 99999;
+        }
     }
 }
 
@@ -9869,6 +9955,19 @@ body.prevent-body-scroll {
     background-color: var(--color-primary-sky-blue-bg-background);
 }
 
+.btn-success:disabled {
+    color: var(--color-common-secondary-disabled) !important;
+    .ladda-label {
+        color: var(--color-common-secondary-disabled) !important;
+    }
+    &:hover {
+        color: var(--color-common-secondary-disabled) !important;
+        .ladda-label {
+            color: var(--color-common-secondary-disabled) !important;
+        }
+    }
+}
+
 .giddh-no-permissions {
     display: none !important;
 }
@@ -10500,6 +10599,100 @@ input[type="checkbox"].cdk-visually-hidden::after {
             .multi-select-input {
                 input {
                     background: var(--color-secondary-input-bar-background);
+                }
+            }
+        }
+    }
+}
+.logs-sidebar {
+    min-height: 100% !important;
+    height: 100% !important;
+    width: 760px !important;
+    .mat-dialog-content {
+        margin: 0 !important;
+        padding: 0 !important;
+        max-height: 90%;
+        float: left;
+        width: 100%;
+    }
+    .mat-dialog-container {
+        overflow: hidden;
+    }
+}
+.json-sidebar {
+    min-height: 100% !important;
+    height: 100% !important;
+    width: 760px !important;
+    .mat-dialog-content {
+        margin: 0 !important;
+        padding: 0 !important;
+        max-height: 90%;
+        float: left;
+        width: 100%;
+    }
+    .mat-dialog-container {
+        overflow: hidden;
+    }
+}
+.show-changed {
+    .jsondiffpatch-unchanged {
+        display: none;
+    }
+}
+.history-sidebar {
+    min-height: 100% !important;
+    height: 100% !important;
+    width: 760px !important;
+    .mat-dialog-content {
+        margin: 0 !important;
+        padding: 0 !important;
+        max-height: 90%;
+        float: left;
+        width: 100%;
+    }
+    .mat-dialog-container {
+        overflow: hidden;
+    }
+}
+
+.activity-log-page {
+    .hamburger-menu {
+        position: relative;
+        z-index: 99999;
+    }
+    .giddh-table.mat-table {
+        tbody {
+            > tr.history-child-row {
+                > td {
+                    background-color: var(--color-total-details-quaternary-background) !important;
+                }
+                &:hover {
+                    > td {
+                        background-color: var(--color-primary-common-without-opacity-list-hover) !important;
+                    }
+                }
+                .mat-column-history {
+                    .history-checkbox {
+                        .mat-checkbox-inner-container-no-side-margin {
+                            .mat-checkbox-input {
+                                padding: 15px !important;
+                                transform: translate(-7px, -9px);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    .activity-container {
+        .table-content {
+            .giddh-table {
+                tr.cursor-pointer {
+                    &:hover {
+                        td {
+                            background-color: var(--color-primary-common-without-opacity-list-hover) !important;
+                        }
+                    }
                 }
             }
         }

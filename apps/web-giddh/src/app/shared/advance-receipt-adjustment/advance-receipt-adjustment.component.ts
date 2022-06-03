@@ -600,6 +600,8 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
                 return item.value && item.label.trim();
             }
         });
+
+        this.adjustVoucherOptions$ = of(this.adjustVoucherOptions);
     }
 
     /**
@@ -912,8 +914,6 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
             if (itemPresentInExistingAdjustment && item.balanceDue?.amountForAccount) {
                 item.balanceDue.amountForAccount += itemPresentInExistingAdjustment.adjustmentAmount.amountForAccount;
                 item.adjustmentAmount.amountForAccount += itemPresentInExistingAdjustment.adjustmentAmount.amountForAccount;
-            } else {
-                this.pushExistingAdjustments(item);
             }
         }
     }
@@ -922,27 +922,24 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
      * Pushes the existing adjustments in dropdown
      *
      * @private
-     * @param {Adjustment} [item] If provied pushes only this individual item else pushes all the adjustments to dropdown
      * @memberof AdvanceReceiptAdjustmentComponent
      */
-    private pushExistingAdjustments(item?: Adjustment): void {
-        if (item) {
-            this.advanceReceiptAdjustmentUpdatedData?.adjustments?.forEach(item => {
+    private pushExistingAdjustments(): void {
+        if (this.advanceReceiptAdjustmentUpdatedData?.adjustments?.length) {
+            this.advanceReceiptAdjustmentUpdatedData.adjustments.forEach(item => {
                 item.voucherNumber = this.generalService.getVoucherNumberLabel(item.voucherType, item.voucherNumber, this.commonLocaleData);
-                this.adjustVoucherOptions.push({ value: item.uniqueName, label: item.voucherNumber, additional: item });
-                this.newAdjustVoucherOptions.push({ value: item.uniqueName, label: item.voucherNumber, additional: item });
-            });
-        } else {
-            if (this.advanceReceiptAdjustmentUpdatedData?.adjustments?.length) {
-                this.advanceReceiptAdjustmentUpdatedData.adjustments.forEach(item => {
-                    item.voucherNumber = this.generalService.getVoucherNumberLabel(item.voucherType, item.voucherNumber, this.commonLocaleData);
+                const itemPresentInVoucherOptions = this.adjustVoucherOptions.find(voucher => voucher.value === item.uniqueName);
+                if (!itemPresentInVoucherOptions) {
                     this.adjustVoucherOptions.push({ value: item.uniqueName, label: item.voucherNumber, additional: item });
-                    this.newAdjustVoucherOptions.push({ value: item.uniqueName, label: item.voucherNumber, additional: item });
-                });
-            }
+                }
 
-            this.assignCurrencyInAdjustVoucherForm();
+                const itemPresentInNewVoucherOptions = this.newAdjustVoucherOptions.find(voucher => voucher.value === item.uniqueName);
+                if (!itemPresentInNewVoucherOptions) {
+                    this.newAdjustVoucherOptions.push({ value: item.uniqueName, label: item.voucherNumber, additional: item });
+                }
+            });
         }
+        this.assignCurrencyInAdjustVoucherForm();
     }
 
     /**
@@ -1032,14 +1029,16 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
                     }
                 }
 
-                requestObject.number = this.searchReferenceVoucher;
+                if (requestObject) {
+                    requestObject.number = this.searchReferenceVoucher;
 
-                if (requestObject.number) {
-                    this.resetInvoiceList();
+                    if (requestObject.number) {
+                        this.resetInvoiceList();
+                    }
+
+                    requestObject.page = this.referenceVouchersCurrentPage;
+                    this.referenceVouchersCurrentPage++;
                 }
-
-                requestObject.page = this.referenceVouchersCurrentPage;
-                this.referenceVouchersCurrentPage++;
             } else {
                 requestObject = {
                     accountUniqueNames: [customerUniqueName, this.invoiceFormDetails.activeAccountUniqueName ?? voucherType],
@@ -1065,14 +1064,16 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
                     }
                 }
 
-                requestObject.number = this.searchReferenceVoucher;
+                if (requestObject) {
+                    requestObject.number = this.searchReferenceVoucher;
 
-                if (requestObject.number) {
-                    this.resetInvoiceList();
+                    if (requestObject.number) {
+                        this.resetInvoiceList();
+                    }
+
+                    requestObject.page = this.referenceVouchersCurrentPage;
+                    this.referenceVouchersCurrentPage++;
                 }
-
-                requestObject.page = this.referenceVouchersCurrentPage;
-                this.referenceVouchersCurrentPage++;
             } else {
                 requestObject = {
                     accountUniqueNames: [...customerUniqueName, this.invoiceFormDetails.activeAccountUniqueName ?? voucherType],
@@ -1087,7 +1088,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
         }
 
         this.salesService.getInvoiceList(requestObject, this.invoiceFormDetails.voucherDetails.voucherDate, 50).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
-            if (response && response.body) {
+            if (response && response.body && (this.voucherApiVersion !== 2 || (this.voucherApiVersion === 2 && response.body.page === requestObject.page))) {
                 let results = (response.body.results || response.body.items);
 
                 if (this.voucherApiVersion === 2) {
@@ -1095,7 +1096,12 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
                 }
 
                 this.allAdvanceReceiptResponse = results?.map(result => ({ ...result, adjustmentAmount: { amountForAccount: result.balanceDue?.amountForAccount, amountForCompany: result.balanceDue?.amountForCompany } }));
-                this.adjustVoucherOptions = [];
+                if (response.body.page === 1) {
+                    this.adjustVoucherOptions = [];
+                    // Fill the suggestions with already adjusted vouchers
+                    this.pushExistingAdjustments();
+                }
+
                 if (this.allAdvanceReceiptResponse && this.allAdvanceReceiptResponse.length) {
                     this.allAdvanceReceiptResponse.forEach(item => {
                         this.handlePartiallyAdjustedVoucher(item);
@@ -1110,9 +1116,6 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
 
                     this.assignCurrencyInAdjustVoucherForm();
                 } else {
-                    // Vouchers for new adjustment not found fill the suggestions with already adjusted vouchers
-                    this.pushExistingAdjustments();
-
                     if (!this.adjustVoucherForm?.adjustments?.length || !this.adjustVoucherForm?.adjustments[0]?.uniqueName) {
                         if (this.isVoucherModule) {
                             this.toaster.warningToast(NO_ADVANCE_RECEIPT_FOUND);
@@ -1123,7 +1126,15 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
                 }
 
                 this.adjustVoucherOptions$ = of(this.adjustVoucherOptions);
+            } else {
+                if (this.voucherApiVersion === 2 && requestObject.page === 1) {
+                    this.adjustVoucherOptions = [];
+                    // Since no vouchers available for adjustment, fill the suggestions with already adjusted vouchers
+                    this.pushExistingAdjustments();
+                    this.adjustVoucherOptions$ = of(this.adjustVoucherOptions);
+                }
             }
+            this.changeDetectionRef.detectChanges();
         });
     }
 }

@@ -5,6 +5,7 @@ import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import { CompanyActions } from '../../../actions/company.actions';
+import { InvoiceActions } from '../../../actions/invoice/invoice.actions';
 import { LoginActions } from '../../../actions/login.action';
 import { orderBy } from '../../../lodash-optimized';
 import { BranchFilterRequest, CompanyResponse, Organization, OrganizationDetails } from '../../../models/api-models/Company';
@@ -76,7 +77,8 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
         private settingsBranchService: SettingsBranchService,
         private changeDetectorRef: ChangeDetectorRef,
         private companyService: CompanyService,
-        private router: Router
+        private router: Router,
+        private invoiceAction: InvoiceActions
     ) {
 
     }
@@ -407,6 +409,7 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
                 }
             };
             this.setOrganizationDetails(OrganizationType.Branch, details);
+            this.store.dispatch(this.invoiceAction.getInvoiceSetting());
             this.companyService.getStateDetails(this.generalService.companyUniqueName).pipe(take(1)).subscribe(response => {
                 if (response && response.body) {
                     this.router.navigateByUrl('/dummy', { skipLocationChange: true }).then(() => {

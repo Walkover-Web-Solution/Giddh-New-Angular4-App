@@ -1,12 +1,13 @@
 <div id="exportModal" class="disable-ripple">
     <div class="modal-header d-flex flex-row-reverse">
-        <span
+        <button
             aria-hidden="true"
             class="close"
             (click)="closeExportDaybookModal.emit('close')"
             [attr.aria-label]="commonLocaleData?.app_close"
-            >×</span
         >
+            ×
+        </button>
         <h3 mat-dialog-title>{{ localeData?.export_daybook }}</h3>
     </div>
     <div class="modal-body" id="export-body">

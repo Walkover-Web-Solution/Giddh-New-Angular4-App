@@ -1,0 +1,18 @@
+<ng-container appTranslate [file]="'activity-logs'" (localeData)="localeData = $event">
+    <div class="modal-header d-flex align-items-center activity-header">
+        <h3>{{ localeData?.activity_logs }}</h3>
+        <button aria-hidden="true" class="close" mat-dialog-close>×</button>
+    </div>
+    <mat-dialog-content class="all-activity-content">
+        <mat-checkbox *ngIf="this.jsonDifference" class="changes-checkbox" color="primary" [(ngModel)]="showChanged">{{
+            localeData?.show_change_data
+        }}</mat-checkbox>
+        <div
+            class="logs-content"
+            *ngIf="this.jsonDifference"
+            [ngClass]="{ 'show-changed': showChanged }"
+            [innerHtml]="jsonDifference"
+        ></div>
+        <p class="no-diff" *ngIf="!this.jsonDifference">{{ localeData?.no_difference }}</p>
+    </mat-dialog-content>
+</ng-container>

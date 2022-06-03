@@ -1,7 +1,7 @@
 <div class="add-new-role-modal">
     <div class="modal-header d-flex justify-content-between">
         <h3>{{ localeData?.add_role }}</h3>
-        <span aria-hidden="true" class="close" data-dismiss="modal" (click)="closePopupEvent()">×</span>
+        <button aria-hidden="true" class="close" data-dismiss="modal" (click)="closePopupEvent()">×</button>
     </div>
     <div class="modal-body clearfix" id="export-body">
         <form #newRoleForm="ngForm" (submit)="addNewRole()" autocomplete="off">
