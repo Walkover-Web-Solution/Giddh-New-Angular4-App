@@ -68,6 +68,7 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
 		private toaster: ToasterService
 	) {
 		this.store.dispatch(this.settingsFinancialYearActions.getFinancialYearLimits());
+		this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: 0 }));
 	}
 
 	/**
@@ -118,7 +119,7 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
 	* @param {string} uniquename
 	* @memberof StockBalanceComponent
 	*/
-	public getStockVariants(stock: any) : void {
+	public getStockVariants(stock: any): void {
 		if (!stock?.stock) {
 			this.inventoryService.getStock(stock?.stockUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
 				if (response?.status === "success") {
