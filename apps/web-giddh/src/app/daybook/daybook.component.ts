@@ -201,7 +201,6 @@ export class DaybookComponent implements OnInit, OnDestroy {
                 }
             }
         });
-    
         this.breakpointObserver.observe([
             '(max-width: 767px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
@@ -319,6 +318,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
 
                 this.store.pipe(select(state => state.session.todaySelected), take(1)).subscribe(response => {
                     this.todaySelected = response;
+
                     if (!response) {
                         this.selectedDateRange = { startDate: moment(universalDate[0]), endDate: moment(universalDate[1]) };
                         this.selectedDateRangeUi = moment(universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
@@ -328,8 +328,15 @@ export class DaybookComponent implements OnInit, OnDestroy {
                         this.daybookQueryRequest.from = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
                         this.daybookQueryRequest.to = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
                     } else {
-                        this.daybookQueryRequest.from = "";
-                        this.daybookQueryRequest.to = "";
+
+                        this.selectedDateRange = { startDate: moment(dateObj.startDate), endDate: moment(dateObj.endDate) };
+                        this.selectedDateRangeUi = moment(dateObj.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dateObj.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
+                        this.fromDate = moment(dateObj.startDate).format(GIDDH_DATE_FORMAT);
+                        this.toDate = moment(dateObj.endDate).format(GIDDH_DATE_FORMAT);
+
+                        this.daybookQueryRequest.from = this.fromDate;
+                        this.daybookQueryRequest.to = this.toDate;
+
                     }
                     this.daybookQueryRequest.page = 0;
                     this.getDaybook();
@@ -493,7 +500,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
             this.selectedDateRangeUi = moment(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
             this.fromDate = moment(value.startDate).format(GIDDH_DATE_FORMAT);
             this.toDate = moment(value.endDate).format(GIDDH_DATE_FORMAT);
-            
+
             this.daybookQueryRequest.from = this.fromDate;
             this.daybookQueryRequest.to = this.toDate;
             this.daybookQueryRequest.page = 0;
@@ -594,7 +601,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
             this.companyTaxesList = res || [];
         });
     }
-    
+
     /**
      * This will keep the track of touch event and will check if double clicked on any transaction, it will open the update ledger modal
      *
@@ -602,7 +609,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
      * @memberof DaybookComponent
      */
     public showUpdateLedgerModalIpad(txn: any): void {
-        if (!this.isMobile){
+        if (!this.isMobile) {
             if (this.touchedTransaction?.uniqueName === txn?.uniqueName) {
                 this.showUpdateLedgerModal(txn);
             } else {
