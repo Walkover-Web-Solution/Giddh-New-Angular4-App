@@ -296,11 +296,13 @@ export class UpdateLedgerVm {
                 totalTaxes += tax.taxDetail[0].taxValue;
             }
 
-            if (this.generalService.isReceiptPaymentEntry(this.activeAccount, this.selectedLedger.particular)) {
+            if (this.generalService.isReceiptPaymentEntry(this.activeAccount, this.selectedLedger.particular, this.selectedLedger.voucher.shortCode)) {
                 let mainTaxPercentage = this.selectedTaxes?.reduce((sum, current) => sum + current.amount, 0);
                 let tdsTaxPercentage = null;
                 let tcsTaxPercentage = null;
-                let totalAmount = Number(this.compoundTotal);
+
+                let transactions = this.selectedLedger.transactions.filter(transaction => !transaction.isTax);
+                let totalAmount = (transactions?.length > 0) ? Number(transactions[0].amount) : Number(this.selectedLedger.actualAmount);
 
                 if (this.selectedLedger.otherTaxType === "tcs") {
                     tcsTaxPercentage = totalTaxes;
@@ -313,6 +315,12 @@ export class UpdateLedgerVm {
                 taxableValue = this.generalService.getReceiptPaymentOtherTaxAmount(modal.tcsCalculationMethod, totalAmount, mainTaxPercentage, tdsTaxPercentage, tcsTaxPercentage);
                 this.advanceReceiptAmount = taxableValue;
                 this.totalForTax = taxableValue;
+
+                const totalPercentage = this.selectedTaxes.reduce((pv, cv) => {
+                    return pv + cv.amount;
+                }, 0);
+                this.taxTrxTotal = (taxableValue * totalPercentage) / 100;
+
                 if (modal.tcsCalculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTotalAmount) {
                     taxableValue = (taxableValue + this.taxTrxTotal);
                 }
@@ -324,7 +332,6 @@ export class UpdateLedgerVm {
                     let rawAmount = Number(amount) - this.discountTrxTotal;
                     taxableValue = (rawAmount + this.taxTrxTotal);
                 }
-                this.generateGrandTotal();
             }
             this.selectedLedger.tdsTcsTaxesSum = giddhRoundOff(((taxableValue * totalTaxes) / 100), this.giddhBalanceDecimalPlaces);
         } else {
@@ -346,10 +353,8 @@ export class UpdateLedgerVm {
         this.totalForTax = total;
         if (this.isAdvanceReceipt) {
             this.taxTrxTotal = giddhRoundOff(this.getInclusiveTax(), this.giddhBalanceDecimalPlaces);
-            setTimeout(() => {
-                this.advanceReceiptAmount = giddhRoundOff(this.totalAmount - this.taxTrxTotal, this.giddhBalanceDecimalPlaces);
-                this.grandTotal = giddhRoundOff(this.advanceReceiptAmount + this.taxTrxTotal, this.giddhBalanceDecimalPlaces);
-            }, 200);
+            this.advanceReceiptAmount = giddhRoundOff(this.totalAmount - this.taxTrxTotal, this.giddhBalanceDecimalPlaces);
+            this.grandTotal = giddhRoundOff(this.advanceReceiptAmount + this.taxTrxTotal, this.giddhBalanceDecimalPlaces);
         } else {
             if (this.isRcmEntry) {
                 taxTotal = 0;

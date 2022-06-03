@@ -2413,4 +2413,13 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.invoiceList$ = observableOf([]);
         this.referenceVouchersCurrentPage = 1;
     }
+
+    /**
+     * Other tax updated callback
+     *
+     * @memberof UpdateLedgerEntryPanelComponent
+     */
+    public calculateTax(): void {
+        this.vm.generateGrandTotal();
+    }
 }

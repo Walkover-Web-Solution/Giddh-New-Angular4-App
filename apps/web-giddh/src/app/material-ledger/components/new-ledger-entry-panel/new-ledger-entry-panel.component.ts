@@ -1158,7 +1158,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 totalTaxes += tax.taxDetail[0].taxValue;
             }
 
-            if (this.generalService.isReceiptPaymentEntry(this.activeAccount, this.currentTxn.selectedAccount)) {
+            if (this.generalService.isReceiptPaymentEntry(this.activeAccount, this.currentTxn.selectedAccount, this.blankLedger.voucherType)) {
                 let mainTaxPercentage = this.currentTxn.taxesVm?.filter(p => p.isChecked)?.reduce((sum, current) => sum + current.amount, 0);
                 let tdsTaxPercentage = null;
                 let tcsTaxPercentage = null;
@@ -1185,7 +1185,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                     let rawAmount = Number(amount) - transaction.discount;
                     taxableValue = (rawAmount + transaction.tax);
                 }
-                this.calculateTotal();
             }
             this.blankLedger.tdsTcsTaxesSum = giddhRoundOff(((taxableValue * totalTaxes) / 100), this.giddhBalanceDecimalPlaces);
             this.blankLedger.otherTaxModal = modal;

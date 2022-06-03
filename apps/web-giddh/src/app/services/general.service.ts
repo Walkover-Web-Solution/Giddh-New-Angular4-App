@@ -1046,10 +1046,11 @@ export class GeneralService {
      *
      * @param {*} ledgerAccount
      * @param {*} entryAccount
+     * @param {*} [voucherType]
      * @returns {boolean}
      * @memberof GeneralService
      */
-    public isReceiptPaymentEntry(ledgerAccount: any, entryAccount: any): boolean {
+    public isReceiptPaymentEntry(ledgerAccount: any, entryAccount: any, voucherType?: any): boolean {
         if (entryAccount?.parentGroups?.length > 0 && !entryAccount?.parentGroups[0]?.uniqueName) {
             entryAccount.parentGroups = entryAccount?.parentGroups?.map(group => {
                 return {
@@ -1059,9 +1060,13 @@ export class GeneralService {
         }
 
         if (
-            ((ledgerAccount?.parentGroups[1]?.uniqueName === 'sundrydebtors' || ledgerAccount?.parentGroups[1]?.uniqueName === 'sundrycreditors') && (entryAccount?.parentGroups[1]?.uniqueName === 'cash' || entryAccount?.parentGroups[1]?.uniqueName === 'bankaccounts'))
+            this.voucherApiVersion === 2
+            &&
+            ((ledgerAccount?.parentGroups[1]?.uniqueName === 'sundrydebtors' || ledgerAccount?.parentGroups[1]?.uniqueName === 'sundrycreditors') && (entryAccount?.parentGroups[1]?.uniqueName === VoucherTypeEnum.cash || entryAccount?.parentGroups[1]?.uniqueName === 'bankaccounts'))
             ||
-            ((ledgerAccount?.parentGroups[1]?.uniqueName === 'cash' || ledgerAccount?.parentGroups[1]?.uniqueName === 'bankaccounts') && (entryAccount?.parentGroups[1]?.uniqueName === 'sundrydebtors' || entryAccount?.parentGroups[1]?.uniqueName === 'sundrycreditors'))
+            ((ledgerAccount?.parentGroups[1]?.uniqueName === VoucherTypeEnum.cash || ledgerAccount?.parentGroups[1]?.uniqueName === 'bankaccounts') && (entryAccount?.parentGroups[1]?.uniqueName === 'sundrydebtors' || entryAccount?.parentGroups[1]?.uniqueName === 'sundrycreditors'))
+            &&
+            (!voucherType || (["rcpt", "pay", "advance-receipt"].includes(voucherType)))
         ) {
             return true;
         }

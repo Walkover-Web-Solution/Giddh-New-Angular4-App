@@ -1046,6 +1046,7 @@
                                         [commonLocaleData]="commonLocaleData"
                                         (hideOtherPopups)="hideDiscount()"
                                         (selectedTaxEvent)="vm.taxTrxUpdated($event)"
+                                        (taxAmountSumEvent)="calculateTax()"
                                     >
                                     </update-ledger-tax-control>
                                 </span>
