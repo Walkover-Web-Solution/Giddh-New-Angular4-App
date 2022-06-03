@@ -2014,9 +2014,8 @@ bs-datepicker-container {
 }
 /* added by sarfaraz */
 .d-flex {
-    display: flex !important;
+    display: flex;
     display: -ms-flexbox !important;
-    display: -webkit-flex !important;
 }
 .flex-row {
     flex-direction: row;
