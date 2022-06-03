@@ -77,6 +77,7 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
 		private toaster: ToasterService
 	) {
 		this.store.dispatch(this.settingsFinancialYearActions.getFinancialYearLimits());
+		this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: 0 }));
 	}
 
 	/**
