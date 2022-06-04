@@ -824,6 +824,7 @@
                                                                     [showTaxationDiscountBox]="
                                                                         lc.currentBlankTxn.showTaxationDiscountBox
                                                                     "
+                                                                    [showOtherTax]="lc.currentBlankTxn.showOtherTax"
                                                                     (saveBlankLedger)="saveBankTransaction()"
                                                                     (clickedOutsideEvent)="hideBankLedgerPopup($event)"
                                                                     (clickUnpaidInvoiceList)="
@@ -1083,6 +1084,7 @@
                                                                     [showTaxationDiscountBox]="
                                                                         lc.currentBlankTxn.showTaxationDiscountBox
                                                                     "
+                                                                    [showOtherTax]="lc.currentBlankTxn.showOtherTax"
                                                                     (saveBlankLedger)="saveBankTransaction()"
                                                                     (clickedOutsideEvent)="hideBankLedgerPopup($event)"
                                                                     (clickUnpaidInvoiceList)="
@@ -1771,6 +1773,7 @@
                                                 (moreDetailOpen)="handleOpenMoreDetail($event)"
                                                 (changeTransactionType)="toggleTransactionType($event)"
                                                 [showTaxationDiscountBox]="lc.currentBlankTxn.showTaxationDiscountBox"
+                                                [showOtherTax]="lc.currentBlankTxn.showOtherTax"
                                                 (resetBlankLedger)="resetBlankTransaction()"
                                                 (saveBlankLedger)="saveBlankTransaction()"
                                                 (clickedOutsideEvent)="hideNewLedgerEntryPopup()"
@@ -2193,6 +2196,7 @@
                                                 (moreDetailOpen)="handleOpenMoreDetail($event)"
                                                 (changeTransactionType)="toggleTransactionType($event)"
                                                 [showTaxationDiscountBox]="lc.currentBlankTxn.showTaxationDiscountBox"
+                                                [showOtherTax]="lc.currentBlankTxn.showOtherTax"
                                                 (resetBlankLedger)="resetBlankTransaction()"
                                                 (saveBlankLedger)="saveBlankTransaction()"
                                                 (clickedOutsideEvent)="hideNewLedgerEntryPopup()"

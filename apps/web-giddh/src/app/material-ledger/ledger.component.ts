@@ -456,6 +456,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 // check if selected account category allows to show taxationDiscountBox in newEntry popup
                 this.needToReCalculate.next(true);
                 txn.showTaxationDiscountBox = this.getCategoryNameFromAccountUniqueName(txn);
+                txn.showOtherTax = this.showOtherTax(txn);
                 if (this.newLedgerComponent) {
                     this.newLedgerComponent.preparePreAppliedDiscounts();
                 }
@@ -1385,6 +1386,45 @@ export class LedgerComponent implements OnInit, OnDestroy {
         }
 
         return showDiscountAndTaxPopup;
+    }
+
+    public showOtherTax(txn: TransactionVM): boolean {
+        let activeAccount: AccountResponse | AccountResponseV2;
+        this.lc.activeAccount$.pipe(take(1)).subscribe(a => activeAccount = a);
+
+        let showOtherTaxOption: boolean = false;
+
+        // check url account category
+        if (activeAccount && (activeAccount.category === 'income' || activeAccount.category === 'expenses' || activeAccount.category === 'assets')) {
+            if (activeAccount.category === 'assets') {
+                showOtherTaxOption = activeAccount.parentGroups[0]?.uniqueName.includes('fixedassets');
+            } else {
+                showOtherTaxOption = true;
+            }
+        }
+
+        if (this.generalService.isReceiptPaymentEntry(activeAccount, txn.selectedAccount)) {
+            showOtherTaxOption = true;
+        }
+
+        // if url's account allows show discount and tax popup then don't check for selected account
+        if (showOtherTaxOption) {
+            return true;
+        }
+
+        // check selected account category
+        if (txn.selectedAccount) {
+            const category = txn.selectedAccount ? txn.selectedAccount.category : "";
+            if (category === 'income' || category === 'expenses' || category === 'assets') {
+                if (category === 'assets') {
+                    showOtherTaxOption = txn.selectedAccount.uNameStr.includes('fixedassets');
+                } else {
+                    showOtherTaxOption = true;
+                }
+            }
+        }
+
+        return showOtherTaxOption;
     }
 
     public ngOnDestroy(): void {

@@ -1041,12 +1041,13 @@
                                         [maskInput]="vm.inputMaskFormat"
                                         [suffixInput]="vm.selectedSuffixForCurrency"
                                         [exceptTaxTypes]="['tdsrc', 'tdspay', 'tcspay', 'tcsrc']"
-                                        [isAdvanceReceipt]="isAdvanceReceipt"
+                                        [isAdvanceReceipt]="vm.isAdvanceReceiptWithTds"
                                         [allowedSelectionOfAType]="allowedSelectionOfAType"
                                         [applicableTaxes]="vm.selectedLedger.taxes"
                                         [commonLocaleData]="commonLocaleData"
                                         (hideOtherPopups)="hideDiscount()"
                                         (selectedTaxEvent)="vm.taxTrxUpdated($event)"
+                                        (taxAmountSumEvent)="calculateTax()"
                                     >
                                     </update-ledger-tax-control>
                                 </span>
