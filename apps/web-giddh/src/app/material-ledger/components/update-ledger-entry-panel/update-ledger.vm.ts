@@ -82,6 +82,8 @@ export class UpdateLedgerVm {
     public activeAccount: AccountResponse;
     /** Is advance receipt with tds/tcs */
     public isAdvanceReceiptWithTds: boolean = false;
+    /** True if it's payment or receipt entry */
+    private isPaymentReceipt: boolean = false;
 
     constructor(
         private generalService: GeneralService
@@ -113,7 +115,7 @@ export class UpdateLedgerVm {
             this.selectedLedger.transactions = this.selectedLedger.transactions.filter(f => !f.isDiscount);
             let incomeExpenseEntryIndex = this.selectedLedger.transactions.findIndex((trx: ILedgerTransactionItem) => {
                 if (trx?.particular?.uniqueName) {
-                    let category = this.accountCatgoryGetterFunc(trx.particular, trx.particular.uniqueName);
+                    let category = this.getAccountCategory(trx.particular, trx.particular.uniqueName);
                     return this.isValidCategory(category);
                 }
             });
@@ -148,7 +150,7 @@ export class UpdateLedgerVm {
         return;
     }
 
-    public accountCatgoryGetterFunc(account, accountName): string {
+    public getAccountCategory(account: any, accountName: string): string {
         let parent = account && account.parentGroups && account.parentGroups.length > 0 ? account.parentGroups[0] : '';
         if (parent) {
             if (find(['shareholdersfunds', 'noncurrentliabilities', 'currentliabilities'], p => p === (parent.uniqueName || parent))) {
@@ -177,7 +179,7 @@ export class UpdateLedgerVm {
     }
 
     public isValidCategory(category: string): boolean {
-        return category === 'income' || category === 'expenses' || category === 'fixedassets' || this.isAdvanceReceipt || this.isRcmEntry;
+        return category === 'income' || category === 'expenses' || category === 'fixedassets' || this.isAdvanceReceipt || this.isRcmEntry || this.isPaymentReceipt;
     }
 
     public isThereStockEntry(uniqueName: string): boolean {
@@ -201,7 +203,7 @@ export class UpdateLedgerVm {
     public isThereIncomeOrExpenseEntry(): number {
         let isAvailable = filter(this.selectedLedger.transactions, (trx: ILedgerTransactionItem) => {
             if (trx?.particular?.uniqueName && !trx.isTax) {
-                let category = this.accountCatgoryGetterFunc(trx.particular, trx.particular.uniqueName);
+                let category = this.getAccountCategory(trx.particular, trx.particular.uniqueName);
                 return this.isValidCategory(category) || trx.inventory;
             }
         });
@@ -269,7 +271,7 @@ export class UpdateLedgerVm {
             } else {
                 let trx: ILedgerTransactionItem = find(this.selectedLedger.transactions, (t) => {
                     let particular = (t?.selectedAccount?.particular?.parentGroups?.length > 0 && !t?.particular.parentGroups?.length) ? t?.selectedAccount?.particular : t?.particular;
-                    let category = this.accountCatgoryGetterFunc(particular, particular?.uniqueName);
+                    let category = this.getAccountCategory(particular, particular?.uniqueName);
                     if (particular?.uniqueName) {
                         return this.isValidCategory(category);
                     }
@@ -297,6 +299,7 @@ export class UpdateLedgerVm {
             }
 
             if (this.generalService.isReceiptPaymentEntry(this.activeAccount, this.selectedLedger.particular, this.selectedLedger.voucher.shortCode)) {
+                this.isPaymentReceipt = true;
                 let mainTaxPercentage = this.selectedTaxes?.reduce((sum, current) => sum + current.amount, 0);
                 let tdsTaxPercentage = null;
                 let tcsTaxPercentage = null;
@@ -325,6 +328,7 @@ export class UpdateLedgerVm {
                     taxableValue = (taxableValue + this.taxTrxTotal);
                 }
             } else {
+                this.isPaymentReceipt = false;
                 const amount = (this.isAdvanceReceipt) ? this.advanceReceiptAmount : this.totalAmount;
                 if (modal.tcsCalculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount) {
                     taxableValue = Number(amount) - this.discountTrxTotal;
@@ -459,7 +463,7 @@ export class UpdateLedgerVm {
             // update every transaction conversion rates for multi-currency
             if (this.selectedLedger.transactions && this.selectedLedger.transactions.length > 0) {
                 this.selectedLedger.transactions = this.selectedLedger.transactions.map(t => {
-                    let category = this.accountCatgoryGetterFunc(t?.particular, t?.particular?.uniqueName);
+                    let category = this.getAccountCategory(t?.particular, t?.particular?.uniqueName);
 
                     // find account that's from category income || expenses || fixed assets and update it's amount too
                     if (category && this.isValidCategory(category)) {
@@ -529,7 +533,7 @@ export class UpdateLedgerVm {
         } else {
             // find account that's from category income || expenses || fixed assets
             let trx: ILedgerTransactionItem = find(this.selectedLedger.transactions, (t) => {
-                let category = this.accountCatgoryGetterFunc(t?.particular, t?.particular?.uniqueName);
+                let category = this.getAccountCategory(t?.particular, t?.particular?.uniqueName);
                 return this.isValidCategory(category);
             });
             if (trx) {

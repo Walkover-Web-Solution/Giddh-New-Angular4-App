@@ -2235,7 +2235,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             t.amount = giddhRoundOff(t.amount, this.vm.giddhBalanceDecimalPlaces);
 
             if (this.vm.selectedLedger.discounts && this.vm.selectedLedger.discounts.length > 0 && !t?.isTax && t?.particular?.uniqueName !== 'roundoff') {
-                let category = this.vm.accountCatgoryGetterFunc(t.particular, t.particular.uniqueName);
+                let category = this.vm.getAccountCategory(t.particular, t.particular.uniqueName);
                 if (this.vm.isValidCategory(category)) {
                     /**
                      * replace transaction amount with the actualAmount key that we got in response of get-ledger
@@ -2311,6 +2311,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: 0 }));
             }
         });
+
+        if (this.voucherApiVersion === 2) {
+            this.vm.calculateOtherTaxes(this.vm.selectedLedger.otherTaxModal);
+        }
 
         // check if entry allows to show discount and taxes box
         // first check with opened lager
