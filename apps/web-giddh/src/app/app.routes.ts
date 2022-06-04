@@ -21,6 +21,7 @@ import { MobileSearchCompanyComponent } from './mobile-home/mobile-search-compan
 import { MobileSearchBranchComponent } from './mobile-home/mobile-search-branch/mobile-search-branch.component';
 import { DownloadComponent } from './download/download.component';
 import { InventoryCreateUpdateGroupComponent } from './new-inventory/component/stock-group/create-update-group/create-update-group.component';
+import { MobileRestrictedComponent } from './mobile-restricted/mobile-restricted.component';
 
 export const ROUTES: Routes = [
     { path: 'download', component: DownloadComponent },
@@ -63,6 +64,7 @@ export const ROUTES: Routes = [
     { path: 'reports', redirectTo: 'pages/reports', pathMatch: 'full' },
     { path: 'proforma-invoice', redirectTo: 'pages/proforma-invoice' },
     { path: 'mobile-home', redirectTo: 'pages/mobile-home', pathMatch: 'full' },
+    { path: 'mobile-restricted', component: MobileRestrictedComponent },
     {
         path: 'pages', component: PageComponent, canActivate: [NeedsAuthentication],
         children: [
