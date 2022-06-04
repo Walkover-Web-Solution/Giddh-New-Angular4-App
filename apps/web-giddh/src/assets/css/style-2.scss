@@ -5665,6 +5665,23 @@ footer#footer.absolute-footer {
     }
 }
 
+app-manage-groups-accounts {
+    account-update-new-details {
+        .button-group {
+            .update-btn-zindex {
+                .ladda-label {
+                    color: var(--color-septenary-button-text);
+                }
+                &:hover {
+                    .ladda-label {
+                        color: var(--color-secondary-button-text) !important;
+                    }
+                }
+            }
+        }
+    }
+}
+
 section.ledger-stat.sticky-footer.sticky-footer-sale-amount {
     text-align: left !important;
     margin-bottom: 0;
@@ -8151,17 +8168,36 @@ body.update-scroll-hidden {
     }
     .cdk-overlay-container {
         .cdk-global-overlay-wrapper {
-            .cdk-overlay-pane {
-                .mat-dialog-container {
-                    overflow: visible;
-                }
-            }
-            .mail-model-container {
-                .mat-dialog-container {
-                    .modal-body {
-                        input,
-                        textarea {
-                            border: 1px solid var(--color-secondary-input-bar-border);
+            .mat-dialog-container {
+                .modal-body {
+                    input,
+                    textarea {
+                        border: 1px solid var(--color-secondary-input-bar-border);
+                        .cdk-overlay-pane {
+                            .mat-dialog-container {
+                                overflow: visible;
+                            }
+                        }
+                        .mail-model-container {
+                            .mat-dialog-container {
+                                .modal-body {
+                                    input,
+                                    textarea {
+                                        border: 1px solid var(--color-secondary-input-bar-border);
+                                    }
+                                }
+                            }
+                        }
+                        .modal-body {
+                            sh-select-menu {
+                                .menu {
+                                    virtual-scroll {
+                                        .total-padding {
+                                            height: auto;
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                 }

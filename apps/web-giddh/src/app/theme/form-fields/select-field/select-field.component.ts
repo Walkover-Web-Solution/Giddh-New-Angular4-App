@@ -131,4 +131,4 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy {
         this.selectedValue = event?.option?.value?.label;
         this.selectedOption.emit(event?.option?.value);
     }
-} 
+}
