@@ -45,6 +45,7 @@ export const ROUTES = [
     { path: 'mobile-home', redirectTo: 'pages/mobile-home', pathMatch: 'full' },
     { path: 'select-plan' },
     //{ path: 'new-inventory/create-group', component: InventoryCreateGroupComponent },
+    { path: 'mobile-restricted', redirectTo: 'mobile-restricted', pathMatch: 'full' },
     {
         path: 'pages',
         children: [
@@ -102,6 +103,7 @@ export const ROUTES = [
             { path: 'billing-detail' },
             { path: 'billing-detail/buy-plan' },
             { path: 'voucher', loadChildren: () => import('./payment-receipt/payment-receipt.module').then(module => module.PaymentReceiptModule) },
+            
             { path: '**', redirectTo: 'home', pathMatch: 'full' }
         ]
     },

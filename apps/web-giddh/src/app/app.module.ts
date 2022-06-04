@@ -56,6 +56,7 @@ import { DownloadComponent } from './download/download.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { SnackBarModule } from './theme/snackbar/snackbar.module';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MobileRestrictedComponent } from './mobile-restricted/mobile-restricted.component';
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -98,7 +99,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         MobileHomeSidebarComponent,
         MobileSearchCompanyComponent,
         MobileSearchBranchComponent,
-        DownloadComponent
+        DownloadComponent,
+        MobileRestrictedComponent
     ],
     /**
      * Import Angular's modules.
