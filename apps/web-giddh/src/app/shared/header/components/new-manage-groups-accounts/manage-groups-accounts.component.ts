@@ -99,14 +99,8 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
             .subscribe(term => {
                 if(!this.initialLoad) {
                     this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(term));
-                } else {
-                    this.searchLoad.subscribe(response => {
-                        if(!response && this.initialLoad) {
-                            this.initialLoad = false;
-                            this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(term));
-                        }
-                    });
                 }
+                this.initialLoad = false;
             });
 
         this.groupAndAccountSearchString$.subscribe(s => {
@@ -121,7 +115,6 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
             if (value[0] === "accountdeleted") {
                 if (this.searchString) {
                     this.store.dispatch(this.groupWithAccountsAction.resetAddAndMangePopup());
-                    this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(this.searchString));
                 }
             }
         });

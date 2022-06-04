@@ -252,7 +252,6 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
         if (companies) {
             if (companies.length > 0) {
                 let previousState;
-                this.store.dispatch(this._generalActions.getGroupWithAccounts());
                 this.store.pipe(select(ss => ss.session.lastState), take(1)).subscribe(se => {
                     previousState = se;
                 });

@@ -427,9 +427,6 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof PrimarySidebarComponent
      */
     public showManageGroupsModal(search: any = ""): void {
-        if(search) {
-            this.store.dispatch(this.groupWithAction.getGroupWithAccounts());
-        }
         this.store.dispatch(this.groupWithAction.OpenAddAndManageFromOutside(search));
     }
 
