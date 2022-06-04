@@ -253,7 +253,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     /** Invoice list observable */
     public invoiceList$: Observable<any[]>;
     /** List of discounts */	
-    public discountsList: any[] = [];	
+    public discountsList: any[] = [];
 
     constructor(private store: Store<AppState>,
         private cdRef: ChangeDetectorRef,
