@@ -5608,23 +5608,6 @@ footer#footer.absolute-footer {
     }
 }
 
-app-manage-groups-accounts {
-    account-update-new-details {
-        .button-group {
-            .update-btn-zindex {
-                .ladda-label {
-                    color: var(--color-septenary-button-text);
-                }
-                &:hover {
-                    .ladda-label {
-                        color: var(--color-secondary-button-text) !important;
-                    }
-                }
-            }
-        }
-    }
-}
-
 section.ledger-stat.sticky-footer.sticky-footer-sale-amount {
     text-align: left !important;
     margin-bottom: 0;
@@ -8040,20 +8023,6 @@ body.update-scroll-hidden {
                                 }
                             }
                         }
-                    }
-                }
-            }
-        }
-    }
-    account-update-new-details {
-        .button-group {
-            .update-btn-zindex {
-                .ladda-label {
-                    color: var(--color-septenary-button-text);
-                }
-                &:hover {
-                    .ladda-label {
-                        color: var(--color-secondary-button-text);
                     }
                 }
             }
