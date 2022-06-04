@@ -329,8 +329,8 @@ export class DaybookComponent implements OnInit, OnDestroy {
                         this.daybookQueryRequest.to = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
                     } else {
 
-                        this.selectedDateRange = { startDate: moment(dateObj.startDate), endDate: moment(dateObj.endDate) };
-                        this.selectedDateRangeUi = moment(dateObj.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dateObj.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
+                        // this.selectedDateRange = { startDate: moment(dateObj.startDate), endDate: moment(dateObj.endDate) };
+                        // this.selectedDateRangeUi = moment(dateObj.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dateObj.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
                         this.fromDate = moment(dateObj.startDate).format(GIDDH_DATE_FORMAT);
                         this.toDate = moment(dateObj.endDate).format(GIDDH_DATE_FORMAT);
 
