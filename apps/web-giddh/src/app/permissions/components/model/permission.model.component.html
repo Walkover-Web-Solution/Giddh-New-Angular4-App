@@ -33,7 +33,7 @@
                     <span class="select-drop"><i class="fa fa-caret-down"></i></span>
                 </div>
                 <div class="form-group select-page position-relative" *ngIf="newRoleObj.isFresh">
-                    <div class="btn-group btn-block" dropdown (onShown)="onDDShown()" (onHidden)="onDDHidden()">
+                    <!-- <div class="btn-group btn-block" dropdown (onShown)="onDDShown()" (onHidden)="onDDHidden()">
                         <button dropdownToggle type="button" class="form-control text-left btn-block dropdown-toggle">
                             {{ dropdownHeading }}
                             <span class="select-drop pull-right mr-t1"><i class="fa fa-caret-down"></i></span>
@@ -62,7 +62,31 @@
                                 </label>
                             </li>
                         </ul>
-                    </div>
+                    </div> -->
+                    <sh-select
+                        (selected)="selectPage($event)"
+                        [options]="newRoleObj?.pageList"
+                        [placeholder]="dropdownHeading"
+                        [multiple]="true"
+                        name="pageList"
+                        [(ngModel)]="newRoleObj?.pageList.isSelected"
+                    >
+                        <ng-template #optionTemplate let-option="option">
+                            <ng-container>
+                                <a href="javascript:void(0)" class="list-item d-flex">
+                                    <span
+                                        ><input
+                                            type="checkbox"
+                                            [checked]="newRolePageList && newRolePageList.includes(option.name)"
+                                            [value]="option?.name" /></span
+                                    >&nbsp;
+                                    <span>
+                                        <div class="item">{{ option?.name | capitalize }}</div>
+                                    </span>
+                                </a>
+                            </ng-container>
+                        </ng-template>
+                    </sh-select>
                 </div>
                 <div class="form-group custom-select position-relative" *ngIf="!newRoleObj.isFresh">
                     <label>{{ localeData?.copy_permission }}</label>
