@@ -298,7 +298,9 @@ export class UpdateLedgerVm {
                 totalTaxes += tax.taxDetail[0].taxValue;
             }
 
-            if (this.generalService.isReceiptPaymentEntry(this.activeAccount, this.selectedLedger.particular, this.selectedLedger.voucher.shortCode)) {
+            let particularAccount = (this.selectedLedger?.transactions[0]?.particular?.uniqueName === this.activeAccount?.uniqueName) ? this.selectedLedger?.particular : this.selectedLedger?.transactions[0]?.particular;
+
+            if (this.generalService.isReceiptPaymentEntry(this.activeAccount, particularAccount, this.selectedLedger.voucher.shortCode)) {
                 this.isPaymentReceipt = true;
                 let mainTaxPercentage = this.selectedTaxes?.reduce((sum, current) => sum + current.amount, 0);
                 let tdsTaxPercentage = null;
@@ -316,6 +318,7 @@ export class UpdateLedgerVm {
                 }
 
                 taxableValue = this.generalService.getReceiptPaymentOtherTaxAmount(modal.tcsCalculationMethod, totalAmount, mainTaxPercentage, tdsTaxPercentage, tcsTaxPercentage);
+
                 this.advanceReceiptAmount = taxableValue;
                 this.totalForTax = taxableValue;
 
