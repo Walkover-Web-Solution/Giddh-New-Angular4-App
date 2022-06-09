@@ -319,8 +319,6 @@ export class UpdateLedgerVm {
 
                 taxableValue = this.generalService.getReceiptPaymentOtherTaxAmount(modal.tcsCalculationMethod, totalAmount, mainTaxPercentage, tdsTaxPercentage, tcsTaxPercentage);
 
-                console.log(taxableValue, totalAmount, mainTaxPercentage, totalTaxes);
-
                 this.advanceReceiptAmount = taxableValue;
                 this.totalForTax = taxableValue;
 
