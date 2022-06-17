@@ -7573,6 +7573,21 @@ giddh-datepicker {
             }
         }
     }
+    height: auto;
+    attachments {
+        .attachment-back-button {
+            .mat-button-wrapper {
+                display: flex;
+                align-items: center;
+            }
+        }
+    }
+
+    .disabled-btn-color:disabled {
+        .mat-button-wrapper {
+            color: var(--color-common-secondary-disabled) !important;
+        }
+    }
 }
 
 .cdk-overlay-container,
