@@ -43,7 +43,12 @@
                                         <span class="input-group-btn mr-l1">
                                             <button
                                                 mat-button
-                                                class="btn btn-success btn-md d-flex align-items-center"
+                                                class="
+                                                    btn btn-success btn-md
+                                                    d-flex
+                                                    align-items-center
+                                                    disabled-btn-color
+                                                "
                                                 type="submit"
                                                 [disabled]="shareAccountForm.invalid"
                                                 (click)="shareAccount()"
@@ -104,7 +109,7 @@
                                     <button
                                         mat-button
                                         [disabled]="!magicLink ? 'disabled' : null"
-                                        class="btn btn-success d-flex align-items-center"
+                                        class="btn btn-success d-flex align-items-center disabled-btn-color"
                                         (click)="toggleIsCopied()"
                                         [ngxClipboard]="magicLinkInput"
                                     >
