@@ -59,7 +59,6 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     public dueAmountReportData$: Observable<DueAmountReportResponse>;
     public totalDueAmounts: number = 0;
     public totalFutureDueAmounts: number = 0;
-    public universalDate$: Observable<any>;
     public moment = moment;
     public key: string = "name";
     public order: string = "asc";
@@ -118,7 +117,6 @@ export class AgingReportComponent implements OnInit, OnDestroy {
         this.dueAmountReportRequest = new DueAmountReportQueryRequest();
         this.dueAmountReportRequest.count = PAGINATION_LIMIT;
         this.setDueRangeOpen$ = this.store.pipe(select(s => s.agingreport.setDueRangeOpen), takeUntil(this.destroyed$));
-        this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
         this.getAgingReportRequestInProcess$ = this.store.pipe(select(s => s.agingreport.getAgingReportRequestInFlight), takeUntil(this.destroyed$));
     }
 
