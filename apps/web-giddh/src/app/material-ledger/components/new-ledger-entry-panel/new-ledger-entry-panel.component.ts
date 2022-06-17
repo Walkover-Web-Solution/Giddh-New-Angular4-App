@@ -522,10 +522,14 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         totalPercentage = this.currentTxn.taxesVm.reduce((pv, cv) => {
             return cv.isChecked ? pv + cv.amount : pv;
         }, 0);
-        if (!this.isAdvanceReceiptWithTds) {
-            this.currentTxn.tax = giddhRoundOff(this.generalService.calculateInclusiveOrExclusiveTaxes(false, this.currentTxn.advanceReceiptAmount, totalPercentage, this.currentTxn.discount), this.giddhBalanceDecimalPlaces);
+        if (this.generalService.isReceiptPaymentEntry(this.activeAccount, this.currentTxn.selectedAccount, this.blankLedger.voucherType)) {
+            if (!this.isAdvanceReceiptWithTds) {
+                this.currentTxn.tax = giddhRoundOff(this.generalService.calculateInclusiveOrExclusiveTaxes(this.isAdvanceReceiptWithTds, this.currentTxn.advanceReceiptAmount, totalPercentage, this.currentTxn.discount), this.giddhBalanceDecimalPlaces);
+            } else {
+                this.currentTxn.tax = giddhRoundOff(this.generalService.calculateInclusiveOrExclusiveTaxes(this.isAdvanceReceiptWithTds, this.currentTxn.amount, totalPercentage, this.currentTxn.discount), this.giddhBalanceDecimalPlaces);
+            }
         } else {
-            this.currentTxn.tax = giddhRoundOff(this.generalService.calculateInclusiveOrExclusiveTaxes(this.isAdvanceReceiptWithTds, this.currentTxn.amount, totalPercentage, this.currentTxn.discount), this.giddhBalanceDecimalPlaces);
+            this.currentTxn.tax = giddhRoundOff(this.generalService.calculateInclusiveOrExclusiveTaxes(this.isAdvanceReceipt, this.currentTxn.amount, totalPercentage, this.currentTxn.discount), this.giddhBalanceDecimalPlaces);
         }
         this.currentTxn.convertedTax = this.calculateConversionRate(this.currentTxn.tax);
         this.calculateTotal();
