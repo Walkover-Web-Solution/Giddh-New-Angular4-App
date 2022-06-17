@@ -51,20 +51,6 @@
                     </sh-select>
                 </div>
             </div>
-            <form #invoiceForm="ngForm" novalidate class="form-inline input-grp-date-range-picker position-relative">
-                <div class="form-group mr-r15 d-flex flex-fill">
-                    <div class="form-group custom-datepicker mr-r15" (click)="showGiddhDatepicker($event)">
-                        <i class="icon-calender calendar-addon"></i>
-                        <input
-                            matInput
-                            type="text"
-                            name="selectedDateRange"
-                            [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
-                            class="giddh-datepicker form-control date-range-picker"
-                        />
-                    </div>
-                </div>
-            </form>
         </div>
         <div
             class="clear-filter align-items-center d-flex justify-content-xl-center justify-content-lg-start w-50"
@@ -496,29 +482,6 @@
             <div class="text-center unbold pagination-sm">
                 <div id="pagination" element-view-container-ref #paginationChild="elementviewcontainerref"></div>
             </div>
-        </div>
-    </div>
-</ng-template>
-<ng-template #datepickerTemplate>
-    <div class="datepicker-modal">
-        <div class="modal-body">
-            <app-datepicker-wrapper
-                [inputStartDate]="selectedDateRange?.startDate"
-                [inputEndDate]="selectedDateRange?.endDate"
-                [alwaysShowCalendars]="true"
-                [ranges]="datePickerOptions"
-                [selectedRangeLabel]="selectedRangeLabel"
-                [showCustomRangeLabel]="true"
-                [showClearButton]="false"
-                [showCancel]="true"
-                [linkedCalendars]="true"
-                [showDropdowns]="true"
-                (rangeClicked)="selectedDate($event)"
-                (datesUpdated)="selectedDate($event)"
-                [keepCalendarOpeningWithRange]="false"
-                [showRangeLabelOnInput]="false"
-                [dateFieldPosition]="dateFieldPosition"
-            ></app-datepicker-wrapper>
         </div>
     </div>
 </ng-template>
