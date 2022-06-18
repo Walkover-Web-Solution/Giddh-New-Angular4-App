@@ -1,5 +1,5 @@
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
-import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnInit } from '@angular/core';
 import { LedgerService } from '../../../services/ledger.service';
 import { ExportLedgerRequest, MailLedgerRequest } from '../../../models/api-models/Ledger';
 import { validateEmail } from '../../../shared/helpers/helperFunctions';
@@ -41,7 +41,7 @@ export class ExportLedgerComponent implements OnInit {
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
 
-    constructor(private ledgerService: LedgerService, private toaster: ToasterService, private permissionDataService: PermissionDataService, private store: Store<AppState>, private generalService: GeneralService, @Inject(MAT_DIALOG_DATA) public inputData, public dialogRef: MatDialogRef<any>) {
+    constructor(private ledgerService: LedgerService, private toaster: ToasterService, private permissionDataService: PermissionDataService, private store: Store<AppState>, private generalService: GeneralService, @Inject(MAT_DIALOG_DATA) public inputData, public dialogRef: MatDialogRef<any>, private changeDetectorRef: ChangeDetectorRef) {
         this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
     }
 
@@ -145,6 +145,7 @@ export class ExportLedgerComponent implements OnInit {
                 if (sent.status === 'success') {
                     this.toaster.showSnackBar("success", sent.body, sent.status);
                     this.emailData = '';
+                    this.changeDetectorRef.detectChanges();
                 } else {
                     this.toaster.showSnackBar("error", sent.message, sent.status);
                 }
