@@ -278,20 +278,21 @@
                                     *ngIf="selectedWarehouse?.indexOf(warehouseVariant?.warehouse?.uniqueName) > -1"
                                     [ngClass]="{ 'expanded-stock-table-with-opacity': stock.display }"
                                 >
-                                    <div
-                                        class="stock-list-expanded-content"
-                                        (click)="$event.stopPropagation(); warehouseVariant.display = true"
-                                    >
+                                    <div class="stock-list-expanded-content" (click)="$event.stopPropagation()">
                                         <p
                                             class="stock-list-box-heading proper-spacing-list"
                                             *ngIf="!warehouseVariant.display"
                                         >
-                                            <span class="opening-bal-value bg-color-hover">{{
-                                                warehouseVariant?.openingAmount ?? "-"
-                                            }}</span>
-                                            <span class="quantity-value bg-color-hover">{{
-                                                warehouseVariant?.openingQuantity ?? "-"
-                                            }}</span>
+                                            <span
+                                                class="opening-bal-value bg-color-hover"
+                                                (click)="warehouseVariant.display = true; setInputFocus(1)"
+                                                >{{ warehouseVariant?.openingAmount ?? "-" }}</span
+                                            >
+                                            <span
+                                                class="quantity-value bg-color-hover"
+                                                (click)="warehouseVariant.display = true; setInputFocus(2)"
+                                                >{{ warehouseVariant?.openingQuantity ?? "-" }}</span
+                                            >
                                             <span class="unit-value bg-color-hover"
                                                 >{{ warehouseVariant?.stockUnit?.code ?? "-" }}
                                                 <img src="{{ imgPath }}caret-light.svg" class="dropdown-icon" />
@@ -303,8 +304,9 @@
                                         (click)="$event.stopPropagation()"
                                         class="editable-input"
                                     >
-                                        <ng-container class="input-select-wrapper">
+                                        <span class="input-select-wrapper">
                                             <input
+                                                #warehouseInput1
                                                 matInput
                                                 class="opening-bal-input"
                                                 placeholder="Opening Bal"
@@ -313,6 +315,7 @@
                                                 [(ngModel)]="warehouseVariant.openingAmount"
                                             />
                                             <input
+                                                #warehouseInput2
                                                 matInput
                                                 class="quantity-input"
                                                 placeholder="Qty"
@@ -336,7 +339,7 @@
                                             >
                                             </select-field>
                                             <img src="{{ imgPath }}caret-light.svg" class="dropdown-icon" />
-                                        </ng-container>
+                                        </span>
                                     </div>
                                 </div>
                             </ng-container>

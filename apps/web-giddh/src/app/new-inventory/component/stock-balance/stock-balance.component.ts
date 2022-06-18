@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, Renderer2, ViewChild } from "@angular/core";
 import { FormControl } from "@angular/forms";
 import { select, Store } from "@ngrx/store";
 import { combineLatest, ReplaySubject } from "rxjs";
@@ -20,6 +20,10 @@ import { ToasterService } from "../../../services/toaster.service";
 })
 
 export class StockBalanceComponent implements OnInit, OnDestroy {
+	/**  Selector for warehouseInput1 input field */
+	@ViewChild('warehouseInput1', { static: false }) warehouseInput1: ElementRef;
+	/**  Selector for warehouseInput2 input field */
+	@ViewChild('warehouseInput2', { static: false }) warehouseInput2: ElementRef;
 	/** Image path variable */
 	public imgPath: string = '';
 	/** Observable to unsubscribe all the store listeners to avoid memory leaks */
@@ -60,6 +64,8 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
 	public commonLocaleData: any = {};
 
 	constructor(
+		private render: Renderer2,
+		private cdr: ChangeDetectorRef,
 		private inventoryService: InventoryService,
 		private store: Store<AppState>,
 		private warehouseActions: WarehouseActions,
@@ -119,7 +125,7 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
 	* @param {string} uniquename
 	* @memberof StockBalanceComponent
 	*/
-	public getStockVariants(stock: any) : void {
+	public getStockVariants(stock: any): void {
 		if (!stock?.stock) {
 			this.inventoryService.getStock(stock?.stockUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
 				if (response?.status === "success") {
@@ -317,6 +323,23 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
 	}
 
 	/**
+	 * This will use for focus on warehouse click
+	 *
+	 * @memberof StockBalanceComponent
+	 */
+	public setInputFocus(event: any) {
+		console.log(event);
+		setTimeout(() => {
+			if (event == 1) {
+				this.warehouseInput1.nativeElement.focus();
+			} else {
+				this.warehouseInput2.nativeElement.focus();
+			}
+			this.cdr.detectChanges();
+		}, 20);
+	}
+
+	/**
 	* Lifecycle hook for destroy
 	*
 	* @memberof StockBalanceComponent
@@ -327,3 +350,4 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
 		document.querySelector('body').classList.remove('stock-balance');
 	}
 }
+
