@@ -35,8 +35,8 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy {
     public fieldFilteredOptions: IOption[] = [];
     /** Selected value from option list */
     public selectedValue: any = '';
-    /** True if field is trigger */
-    @Input() public inputTrigger: boolean;
+    /** This will open the dropdown if true */
+    @Input() public openDropdown: boolean;
     /** Subject to release subscriptions */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -70,7 +70,7 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy {
             this.searchFormControl.setValue({ label: changes?.defaultValue.currentValue });
         }
 
-        if (changes?.inputTrigger.currentValue) {
+        if (changes?.openDropdown.currentValue) {
             setTimeout(() => {
                 this.trigger.openPanel();
             }, 20);
