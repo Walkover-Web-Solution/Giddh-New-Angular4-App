@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from "@angular/core";
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from "@angular/core";
 import { FormControl } from "@angular/forms";
 import { MatAutocompleteTrigger } from "@angular/material/autocomplete";
 import { ReplaySubject } from "rxjs";
@@ -13,6 +13,8 @@ import { IOption } from "../../ng-virtual-select/sh-options.interface";
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy {
+    /** Trigger instance for auto complete */
+    @ViewChild('trigger', { static: false, read: MatAutocompleteTrigger }) trigger: MatAutocompleteTrigger;
     /** CSS class name to add on the field */
     @Input() public cssClass: string = "";
     /** Placeholder of search field */
@@ -33,8 +35,8 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy {
     public fieldFilteredOptions: IOption[] = [];
     /** Selected value from option list */
     public selectedValue: any = '';
-    /** Trigger instance for auto complete */
-    public trigger: MatAutocompleteTrigger;
+    /** True if field is trigger */
+    @Input() public inputTrigger: boolean;
     /** Subject to release subscriptions */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -66,6 +68,12 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy {
 
         if (changes?.defaultValue) {
             this.searchFormControl.setValue({ label: changes?.defaultValue.currentValue });
+        }
+
+        if (changes?.inputTrigger.currentValue) {
+            setTimeout(() => {
+                this.trigger.openPanel();
+            }, 20);
         }
     }
 
