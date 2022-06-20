@@ -13,6 +13,7 @@ import { GroupStockReportRequest, StockReportRequest } from "../../../models/api
 import { SettingsFinancialYearActions } from "../../../actions/settings/financial-year/financial-year.action";
 import { GeneralService } from "../../../services/general.service";
 import { ToasterService } from "../../../services/toaster.service";
+import { MatAutocompleteTrigger } from "@angular/material/autocomplete";
 @Component({
 	selector: 'stock-balance',
 	templateUrl: './stock-balance.component.html',
@@ -62,6 +63,8 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
 	public isLoading: boolean = false;
 	/** This will hold common JSON data */
 	public commonLocaleData: any = {};
+	/** True if click on particular unit dropdown */
+	public isOpen: boolean = false;
 
 	constructor(
 		private render: Renderer2,
@@ -328,12 +331,15 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
 	 * @memberof StockBalanceComponent
 	 */
 	public setInputFocus(event: any) {
-		console.log(event);
 		setTimeout(() => {
-			if (event == 1) {
+			if (event === 1) {
 				this.warehouseInput1.nativeElement.focus();
-			} else {
+				this.isOpen = false;
+			} else if (event === 2) {
 				this.warehouseInput2.nativeElement.focus();
+				this.isOpen = false;
+			} else {
+				this.isOpen = true;
 			}
 			this.cdr.detectChanges();
 		}, 20);

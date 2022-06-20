@@ -293,7 +293,9 @@
                                                 (click)="warehouseVariant.display = true; setInputFocus(2)"
                                                 >{{ warehouseVariant?.openingQuantity ?? "-" }}</span
                                             >
-                                            <span class="unit-value bg-color-hover"
+                                            <span
+                                                class="unit-value bg-color-hover"
+                                                (click)="warehouseVariant.display = true; setInputFocus(3)"
                                                 >{{ warehouseVariant?.stockUnit?.code ?? "-" }}
                                                 <img src="{{ imgPath }}caret-light.svg" class="dropdown-icon" />
                                             </span>
@@ -336,6 +338,7 @@
                                                     stockUpdate(stock)
                                                 "
                                                 [defaultValue]="stock.stock?.stockUnitCode"
+                                                [inputTrigger]="isOpen"
                                             >
                                             </select-field>
                                             <img src="{{ imgPath }}caret-light.svg" class="dropdown-icon" />
