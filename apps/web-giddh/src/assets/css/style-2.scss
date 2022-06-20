@@ -7910,6 +7910,41 @@ giddh-datepicker {
     }
 }
 
+.stock-balance {
+    .cdk-overlay-connected-position-bounding-box {
+        #mat-menu-panel-0 {
+            .mat-menu-content {
+                .mat-menu-item {
+                    height: 37px;
+                    display: flex;
+                    align-items: center;
+                }
+            }
+        }
+        #mat-menu-panel-1 {
+            .mat-menu-content {
+                .mat-menu-item {
+                    height: 40px;
+                    display: flex;
+                    align-items: center;
+                }
+            }
+        }
+        .mat-autocomplete-panel {
+            min-width: fit-content;
+            .mat-option {
+                height: 40px;
+            }
+        }
+        .mat-menu-panel {
+            .mat-menu-content {
+                padding-top: 0;
+                padding-bottom: 0;
+            }
+        }
+    }
+}
+
 .invoice-modal-content {
     left: 60px !important;
     width: calc(100% - 60px) !important;
@@ -10455,7 +10490,7 @@ input[type="checkbox"].cdk-visually-hidden::after {
     .searching-stocks {
         .custom-material-search-bar {
             .mat-form-field-outline {
-                height: 32px;
+                height: 33px;
                 background-color: var(--color-sidebar-primary-search-bar-background);
                 border-radius: 5px;
             }
@@ -10493,7 +10528,8 @@ input[type="checkbox"].cdk-visually-hidden::after {
                 .input-select-wrapper {
                     .unit-dropdown {
                         input {
-                            padding: 0px 5px !important;
+                            padding-left: 5px !important;
+                            padding-right: 17px !important;
                             background-color: var(--color-primary-input-bar-background-focus) !important;
                             &:active,
                             &:focus {

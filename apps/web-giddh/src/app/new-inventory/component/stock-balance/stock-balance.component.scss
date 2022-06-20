@@ -1,5 +1,5 @@
 .stock-balance-wrapper {
-    padding: 0px 20px 0px 20px;
+    padding: 0px 20px 100px 20px;
     float: left;
     width: 100%;
     overflow: hidden;
@@ -119,8 +119,7 @@
             }
         }
         .warehouse-list-wrapper {
-            min-height: 70px;
-            height: auto;
+            min-height: 56px;
             display: flex;
             width: 97%;
 
@@ -130,6 +129,7 @@
                 align-items: center;
                 position: relative;
                 left: 1px;
+                min-height: 56px;
                 &:nth-child(odd) {
                     background-color: var(--color-common-primary-background-color);
                 }
@@ -204,13 +204,14 @@
         .grid-list-div {
             display: inline-flex;
             float: left;
-            height: 70px;
+            height: 56px;
         }
         .top-heading {
             height: 110px !important;
         }
         .grid-title-left {
             width: 240px;
+            min-height: 56px;
             left: 0;
             z-index: 1;
             position: sticky;
@@ -241,11 +242,13 @@
             font-size: 13px;
             display: flex;
             align-items: center;
+            min-height: 56px;
         }
     }
     .searching-stocks {
         width: 100%;
         overflow-x: auto;
+        overflow-y: hidden;
         .search-icon {
             position: absolute;
             z-index: 1;
@@ -280,7 +283,10 @@
                 align-items: center;
                 justify-content: center;
                 .unique-name {
+                    border-radius: 5px;
+                    padding: 8px 10px;
                     color: var(--color-giddh-blue);
+                    background-color: var(--color-sidebar-primary-search-bar-background) !important;
                 }
             }
             .group-list-head {
@@ -318,8 +324,18 @@
                         .stock-ob {
                             .dot {
                                 position: relative;
-                                bottom: 5px;
-                                color: var(--color-common-secondary-text);
+                                font-size: 18px;
+                                height: 3px;
+                                bottom: 1px;
+                                filter: var(--color-image-filter-senary);
+                                border-radius: 50%;
+                            }
+                            .first-dot {
+                                margin-left: 2px;
+                                margin-right: 5px;
+                            }
+                            .second-dot {
+                                margin: 0px 1.4px;
                             }
                         }
                     }
@@ -350,6 +366,7 @@
                 }
                 .unexpanded-list {
                     width: 100%;
+                    min-height: 56px;
                     .stock-list-expanded-content {
                         .proper-spacing-list {
                             margin-left: 15px;
@@ -370,26 +387,27 @@
                                 width: 110px;
                                 padding-left: 5px;
                                 border-radius: 5px;
-                                right: 10px;
+                                right: 12px;
                             }
                             .quantity-value {
                                 height: 36px;
                                 width: 69px;
-                                padding-left: 5px;
+                                padding-left: 5.5px;
                                 border-radius: 5px;
-                                left: 13px;
+                                left: 11px;
                             }
                             .unit-value {
                                 height: 36px;
-                                width: 79px;
+                                width: 81px;
                                 border-radius: 5px;
                                 padding-left: 5px;
-                                left: 19px;
+                                left: 20px;
+                                font-size: 14px;
                                 .dropdown-icon {
                                     position: absolute;
                                     height: 11px;
-                                    right: 7px;
-                                    top: 14px;
+                                    right: 5px;
+                                    top: 13px;
                                     filter: var(--color-image-filter);
                                 }
                             }
@@ -425,7 +443,7 @@
                             border-radius: 5px;
                             background-color: var(--color-primary-input-bar-background-focus);
                             position: relative;
-                            right: 2px;
+                            right: 4px;
                         }
                         .unit-dropdown {
                             width: 81px;
@@ -463,6 +481,7 @@
                 }
                 .stock-warehouse-list-container {
                     display: flex;
+                    min-height: 56px;
                 }
             }
         }

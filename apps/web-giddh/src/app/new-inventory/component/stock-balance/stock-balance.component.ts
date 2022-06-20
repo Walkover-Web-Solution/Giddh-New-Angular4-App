@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, Renderer2, ViewChild } from "@angular/core";
 import { FormControl } from "@angular/forms";
 import { select, Store } from "@ngrx/store";
 import { combineLatest, ReplaySubject } from "rxjs";
@@ -13,6 +13,7 @@ import { GroupStockReportRequest, StockReportRequest } from "../../../models/api
 import { SettingsFinancialYearActions } from "../../../actions/settings/financial-year/financial-year.action";
 import { GeneralService } from "../../../services/general.service";
 import { ToasterService } from "../../../services/toaster.service";
+import { MatAutocompleteTrigger } from "@angular/material/autocomplete";
 @Component({
 	selector: 'stock-balance',
 	templateUrl: './stock-balance.component.html',
@@ -20,6 +21,10 @@ import { ToasterService } from "../../../services/toaster.service";
 })
 
 export class StockBalanceComponent implements OnInit, OnDestroy {
+	/**  Selector for warehouseInput1 input field */
+	@ViewChild('warehouseInput1', { static: false }) warehouseInput1: ElementRef;
+	/**  Selector for warehouseInput2 input field */
+	@ViewChild('warehouseInput2', { static: false }) warehouseInput2: ElementRef;
 	/** Image path variable */
 	public imgPath: string = '';
 	/** Observable to unsubscribe all the store listeners to avoid memory leaks */
@@ -58,8 +63,12 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
 	public isLoading: boolean = false;
 	/** This will hold common JSON data */
 	public commonLocaleData: any = {};
+	/** True if click on particular unit dropdown */
+	public isOpen: boolean = false;
 
 	constructor(
+		private render: Renderer2,
+		private cdr: ChangeDetectorRef,
 		private inventoryService: InventoryService,
 		private store: Store<AppState>,
 		private warehouseActions: WarehouseActions,
@@ -84,6 +93,7 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
 		this.getWarehouses();
 		this.GroupStockReportRequest = new GroupStockReportRequest();
 		this.stockReportRequest = new StockReportRequest();
+		document.querySelector('body').classList.add('stock-balance');
 
 		combineLatest([this.inventoryService.GetGroupsWithStocksFlatten(), this.store.pipe(select(state => state.warehouse.warehouses)), this.store.pipe(select(state => state.settings.financialYearLimits))]).pipe(takeUntil(this.destroyed$)).subscribe((resp: any[]) => {
 			if (resp[0] && resp[1] && resp[2]) {
@@ -269,7 +279,7 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
 				this.stockUnits = response?.body?.map(result => {
 					return {
 						value: result.code,
-						label: result.name,
+						label: result.name + ` (${result.code})`,
 						additional: result
 					};
 				}) || [];
@@ -316,6 +326,26 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
 	}
 
 	/**
+	 * This will use for focus on warehouse click
+	 *
+	 * @memberof StockBalanceComponent
+	 */
+	public setInputFocus(event: any): void {
+		setTimeout(() => {
+			if (event === 1) {
+				this.warehouseInput1.nativeElement.focus();
+				this.isOpen = false;
+			} else if (event === 2) {
+				this.warehouseInput2.nativeElement.focus();
+				this.isOpen = false;
+			} else {
+				this.isOpen = true;
+			}
+			this.cdr.detectChanges();
+		}, 20);
+	}
+
+	/**
 	* Lifecycle hook for destroy
 	*
 	* @memberof StockBalanceComponent
@@ -323,5 +353,7 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
 	public ngOnDestroy(): void {
 		this.destroyed$.next(true);
 		this.destroyed$.complete();
+		document.querySelector('body').classList.remove('stock-balance');
 	}
 }
+
