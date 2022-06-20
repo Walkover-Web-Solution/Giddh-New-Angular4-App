@@ -330,7 +330,7 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
 	 *
 	 * @memberof StockBalanceComponent
 	 */
-	public setInputFocus(event: any) {
+	public setInputFocus(event: any): void {
 		setTimeout(() => {
 			if (event === 1) {
 				this.warehouseInput1.nativeElement.focus();
