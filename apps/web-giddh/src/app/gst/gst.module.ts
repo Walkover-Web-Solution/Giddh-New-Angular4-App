@@ -38,6 +38,10 @@ import { GstAsideMenuComponent } from './modals/gst-aside-menu/gst-aside-menu.co
 import { SharedModule } from '../shared/shared.module';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { TaxSidebarModule } from '../shared/tax-sidebar/tax-sidebar.module';
+import { UnitMappingComponent } from './unit-mapping/unit-mapping.component';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
+import { MatButtonModule } from '@angular/material/button';
 
 @NgModule({
     declarations: [FileGstR3Component,
@@ -45,7 +49,7 @@ import { TaxSidebarModule } from '../shared/tax-sidebar/tax-sidebar.module';
         ReconcileComponent, PushToGstInComponent, ViewTransactionsComponent,
         OverviewSummaryComponent, TransactionSummaryComponent,
         PushToGstInComponent, NilSummaryComponent, HsnSummaryComponent, B2csSummaryComponent,
-        DocumentIssuedComponent, FailedTransactionsComponent, GstAsideMenuComponent],
+        DocumentIssuedComponent, FailedTransactionsComponent, GstAsideMenuComponent, UnitMappingComponent],
     imports: [
         GstRoutingModule,
         CollapseModule,
@@ -69,7 +73,10 @@ import { TaxSidebarModule } from '../shared/tax-sidebar/tax-sidebar.module';
         ConfirmModalModule,
         SharedModule,
         ShSelectModule,
-        TaxSidebarModule
+        TaxSidebarModule,
+        MatGridListModule,
+        FormFieldsModule,
+        MatButtonModule,
     ],
     providers: [],
     entryComponents: [
