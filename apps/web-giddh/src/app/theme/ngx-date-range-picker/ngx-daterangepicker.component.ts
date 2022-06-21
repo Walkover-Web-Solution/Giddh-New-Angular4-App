@@ -1738,21 +1738,18 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
                     this.maxDate = moment(moment(res.body.financialYears[res.body.financialYears.length - 1].financialYearEnds, GIDDH_DATE_FORMAT).toDate());
                 }
 
+                const currentDate = moment().format(GIDDH_DATE_FORMAT);
                 res.body.financialYears.forEach(key => {
                     let financialYearStarts = moment(key.financialYearStarts, GIDDH_DATE_FORMAT).format("MMM-YYYY");
                     let financialYearEnds = moment(key.financialYearEnds, GIDDH_DATE_FORMAT).format("MMM-YYYY");
                     this.financialYears.push({ label: financialYearStarts + " - " + financialYearEnds, value: key });
-                    if (this.currentFinancialYearUniqueName && this.currentFinancialYearUniqueName === key.uniqueName) {
-                        currentFinancialYear = moment(moment(key.financialYearStarts.split("-").reverse().join("-")).toDate());
-                        if (currentFinancialYear.diff(moment(), "days") > 1) {
-                            const yearDifference = Number(currentFinancialYear.format("YYYY")) - Number(moment().format("YYYY"));
-                            currentFinancialYear = currentFinancialYear.subtract(yearDifference, 'year');
-                            if (currentFinancialYear.diff(moment(), "days") > 1) {
-                                currentFinancialYear = currentFinancialYear.subtract(1, 'year');
-                            }
-                        }
 
+                    if (this.currentFinancialYearUniqueName && this.currentFinancialYearUniqueName === key.uniqueName) {
                         lastFinancialYear = { start: moment(moment(key.financialYearStarts.split("-").reverse().join("-")).subtract(1, 'year').toDate()), end: moment(moment(key.financialYearEnds.split("-").reverse().join("-")).subtract(1, 'year').toDate()) };
+                    }
+
+                    if (moment(currentDate, GIDDH_DATE_FORMAT) >= moment(key.financialYearStarts, GIDDH_DATE_FORMAT) && moment(currentDate, GIDDH_DATE_FORMAT) <= moment(key.financialYearEnds, GIDDH_DATE_FORMAT)) {
+                        currentFinancialYear = moment(moment(key.financialYearStarts, GIDDH_DATE_FORMAT).toDate());
                     }
 
                     if (allFinancialYears.indexOf(moment(key.financialYearStarts, GIDDH_DATE_FORMAT).format("YYYY")) === -1) {
@@ -1762,6 +1759,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
                     if (allFinancialYears.indexOf(moment(key.financialYearEnds, GIDDH_DATE_FORMAT).format("YYYY")) === -1) {
                         allFinancialYears.push(moment(key.financialYearEnds, GIDDH_DATE_FORMAT).format("YYYY"));
                     }
+
                 });
                 if (this.ranges && this.ranges.length > 0) {
                     let loop = 0;
@@ -1769,24 +1767,18 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
                     this.ranges.forEach(key => {
                         if (key.name === DatePickerDefaultRangeEnum.AllTime) {
                             ranges[loop] = key;
-
                             ranges[loop].value = [
                                 moment(moment(res.body.financialYears[0].financialYearStarts, GIDDH_DATE_FORMAT).toDate()),
                                 moment()
                             ];
                             loop++;
                         } else if (key.name === DatePickerDefaultRangeEnum.ThisFinancialYearToDate) {
-                            const currentDate = moment().format(GIDDH_DATE_FORMAT);
-                            res.body.financialYears.forEach(res => {
-                                if (moment(currentDate, GIDDH_DATE_FORMAT) >= moment(res.financialYearStarts, GIDDH_DATE_FORMAT) && moment(currentDate, GIDDH_DATE_FORMAT) <= moment(res.financialYearEnds, GIDDH_DATE_FORMAT)) {
-                                    ranges[loop] = key;
-                                    ranges[loop].value = [
-                                        moment(moment(res.financialYearStarts, GIDDH_DATE_FORMAT).toDate()),
-                                        moment()
-                                    ];
-                                    loop++;
-                                }
-                            });
+                            ranges[loop] = key;
+                            ranges[loop].value = [
+                                currentFinancialYear,
+                                moment()
+                            ];
+                            loop++;
                         } else if (key.name === DatePickerDefaultRangeEnum.LastFinancialYear) {
                             if (lastFinancialYear && lastFinancialYear.start && lastFinancialYear.end && allFinancialYears.indexOf(lastFinancialYear.start.format("YYYY")) > -1) {
                                 ranges[loop] = key;
