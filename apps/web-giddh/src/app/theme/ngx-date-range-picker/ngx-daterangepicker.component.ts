@@ -15,6 +15,7 @@ import { Store, select } from '@ngrx/store';
 import { AppState } from '../../store';
 import { DatePickerDefaultRangeEnum } from '../../app.constant';
 import { SettingsFinancialYearActions } from '../../actions/settings/financial-year/financial-year.action';
+import { G } from '@angular/cdk/keycodes';
 
 const moment = _moment;
 
@@ -303,7 +304,6 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
 
     public ngOnInit(): void {
         this.store.dispatch(this.settingsFinancialYearActions.getFinancialYearLimits());
-        
         this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
 
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
@@ -1743,7 +1743,6 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
                     let financialYearStarts = moment(key.financialYearStarts, GIDDH_DATE_FORMAT).format("MMM-YYYY");
                     let financialYearEnds = moment(key.financialYearEnds, GIDDH_DATE_FORMAT).format("MMM-YYYY");
                     this.financialYears.push({ label: financialYearStarts + " - " + financialYearEnds, value: key });
-
                     if (this.currentFinancialYearUniqueName && this.currentFinancialYearUniqueName === key.uniqueName) {
                         currentFinancialYear = moment(moment(key.financialYearStarts.split("-").reverse().join("-")).toDate());
                         if (currentFinancialYear.diff(moment(), "days") > 1) {
@@ -1765,7 +1764,6 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
                         allFinancialYears.push(moment(key.financialYearEnds, GIDDH_DATE_FORMAT).format("YYYY"));
                     }
                 });
-
                 if (this.ranges && this.ranges.length > 0) {
                     let loop = 0;
                     let ranges = [];
@@ -1778,14 +1776,18 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
                                 moment()
                             ];
                             loop++;
-                        } else if (key.name === DatePickerDefaultRangeEnum.ThisFinancialYearToDate && currentFinancialYear) {
-                            ranges[loop] = key;
-
-                            ranges[loop].value = [
-                                currentFinancialYear,
-                                moment()
-                            ];
-                            loop++;
+                        } else if (key.name === DatePickerDefaultRangeEnum.ThisFinancialYearToDate) {
+                            const currentDate = moment().format(GIDDH_DATE_FORMAT);
+                            res.body.financialYears.forEach(res => {
+                                if (moment(currentDate, GIDDH_DATE_FORMAT) >= moment(res.financialYearStarts, GIDDH_DATE_FORMAT) && moment(currentDate, GIDDH_DATE_FORMAT) <= moment(res.financialYearEnds, GIDDH_DATE_FORMAT)) {
+                                    ranges[loop] = key;
+                                    ranges[loop].value = [
+                                        moment(moment(res.financialYearStarts, GIDDH_DATE_FORMAT).toDate()),
+                                        moment()
+                                    ];
+                                    loop++;
+                                }
+                            });
                         } else if (key.name === DatePickerDefaultRangeEnum.LastFinancialYear) {
                             if (lastFinancialYear && lastFinancialYear.start && lastFinancialYear.end && allFinancialYears.indexOf(lastFinancialYear.start.format("YYYY")) > -1) {
                                 ranges[loop] = key;
