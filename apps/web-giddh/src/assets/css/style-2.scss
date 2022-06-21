@@ -7823,6 +7823,14 @@ giddh-datepicker {
     }
 }
 
+.unit-mapping-page {
+    .grid-box {
+        .mat-grid-tile-content {
+            justify-content: space-around;
+        }
+    }
+}
+
 body.update-scroll-hidden {
     overflow-y: hidden;
 }
