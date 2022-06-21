@@ -1772,7 +1772,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
                                 moment()
                             ];
                             loop++;
-                        } else if (key.name === DatePickerDefaultRangeEnum.ThisFinancialYearToDate) {
+                        } else if (key.name === DatePickerDefaultRangeEnum.ThisFinancialYearToDate && currentFinancialYear) {
                             ranges[loop] = key;
                             ranges[loop].value = [
                                 currentFinancialYear,
