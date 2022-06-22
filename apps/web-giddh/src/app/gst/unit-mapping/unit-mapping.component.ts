@@ -4,6 +4,10 @@ import { ReplaySubject, Observable } from "rxjs";
 import { takeUntil, map, startWith } from "rxjs/operators";
 import { FormControl } from '@angular/forms';
 import { CommonService } from "../../services/common.service";
+import { StockUnitRequest } from "../../models/api-models/Inventory";
+import { select, Store } from "@ngrx/store";
+import { AppState } from "../../store";
+import { CustomStockUnitAction } from "../../actions/inventory/customStockUnit.actions";
 
 
 @Component({
@@ -12,55 +16,75 @@ import { CommonService } from "../../services/common.service";
     styleUrls: ['./unit-mapping.component.scss']
 })
 
-export class UnitMappingComponent implements OnInit{
+export class UnitMappingComponent implements OnInit {
     /** This will hold the value out/in to open/close setting sidebar popup */
     public asideGstSidebarMenuState: string = 'in';
     /** this will check mobile screen size */
     public isMobileScreen: boolean = false;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public activeCompanyGstNumber = '';
-     myControl = new FormControl('');
+    myControl = new FormControl('');
     options: string[] = ['One', 'Two', 'Three'];
     filteredOptions: Observable<string[]>;
     public units: any = [];
+    public stockUnit$: Observable<StockUnitRequest[]>;
 
-    constructor(private breakpointObserver: BreakpointObserver, private commonService: CommonService){}
+    constructor(private breakpointObserver: BreakpointObserver, private commonService: CommonService, private store: Store<AppState>, private customStockAction: CustomStockUnitAction) { 
+        this.stockUnit$ = this.store.pipe(select(state => state.inventory.stockUnits), takeUntil(this.destroyed$));
+    }
 
+    /**
+     * Lifecycle hook runs when component is initialized
+     * 
+     * @memberof UnitMappingComponent
+     */
     public ngOnInit(): void {
         this.getStockUnits();
+        this.store.dispatch(this.customStockAction.GetStockUnit());
         document.querySelector('body').classList.add('gst-sidebar-open');
         document.querySelector('body').classList.add('unit-mapping-page');
         this.breakpointObserver
-        .observe(['(max-width: 767px)'])
-        .pipe(takeUntil(this.destroyed$))
-        .subscribe((state: BreakpointState) => {
-            this.isMobileScreen = state.matches;
-            if (!this.isMobileScreen) {
-                this.asideGstSidebarMenuState = 'in';
-            }
-        });
+            .observe(['(max-width: 767px)'])
+            .pipe(takeUntil(this.destroyed$))
+            .subscribe((state: BreakpointState) => {
+                this.isMobileScreen = state.matches;
+                if (!this.isMobileScreen) {
+                    this.asideGstSidebarMenuState = 'in';
+                }
+            });
         this.filteredOptions = this.myControl.valueChanges.pipe(
-      startWith(''),
-      map(value => this._filter(value || '')),
-    );
+            startWith(''),
+            map(value => this.filter(value || '')),
+        );
     }
 
-    private _filter(value: string): string[] {
-    const filterValue = value.toLowerCase();
+    private filter(value: string): string[] {
+        const filterValue = value.toLowerCase();
+        return this.options.filter(option => option.toLowerCase().includes(filterValue));
+    }
 
-    return this.options.filter(option => option.toLowerCase().includes(filterValue));
-  }
-
+    /**
+     * Lifecycle hook runs when component is destroyed
+     * 
+     * @memberof UnitMappingComponent
+     */
     public ngDestroy(): void {
         document.querySelector('body').classList.remove('unit-mapping-page');
     }
 
+    /**
+     * Function for bringing units to select field
+     * 
+     * @memberof UnitMappingComponent
+     */
     public getStockUnits(): void {
         this.commonService.getStockUnits().pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            this.units = response;
-            console.log(this.units);
-            console.log(this.units.body.name);
-            
+            this.units = response.body.map((result: any) => {
+                return {
+                    value: result.code,
+                    label: result.code
+                }
+            });
         });
     }
 }

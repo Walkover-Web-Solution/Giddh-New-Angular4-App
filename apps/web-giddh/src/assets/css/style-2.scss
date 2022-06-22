@@ -7829,6 +7829,17 @@ giddh-datepicker {
             justify-content: space-around;
         }
     }
+    .unit-mapping-grid-list {
+        .grid-box-content {
+            .map-unit-value {
+                .map-unit-select-field {
+                    input {
+                        width: 160px;
+                    }
+                }
+            }
+        }
+    }
 }
 
 body.update-scroll-hidden {
@@ -8085,6 +8096,19 @@ body.update-scroll-hidden {
             }
         }
     }
+    .unit-mapping-page {
+        .unit-mapping-grid-list {
+            .grid-box-content {
+                .map-unit-value {
+                    .map-unit-select-field {
+                        input {
+                            width: 130px;
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 @media (max-width: 1024px) {
     .move-select {
@@ -8170,6 +8194,22 @@ body.update-scroll-hidden {
     .activity-log-page {
         .cdk-overlay-container {
             z-index: 99999;
+        }
+    }
+    .unit-mapping-page {
+        .unit-mapping-grid-list {
+            .grid-box-content {
+                .map-unit-value {
+                    .map-unit-select-field {
+                        input {
+                            width: 100px;
+                        }
+                    }
+                }
+            }
+        }
+        .mat-autocomplete-panel {
+            min-width: 99px;
         }
     }
 }
