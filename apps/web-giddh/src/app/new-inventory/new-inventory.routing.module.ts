@@ -18,6 +18,7 @@ import { InventoryCustomFieldComponent } from "./component/inventory-custom-fiel
 import { ListGroupComponent } from "./component/stock-group/list-group/list-group.component";
 import { StockCreateEditModule } from "./component/stock-create-edit/stock-create-edit.module";
 import { StockBalanceComponent } from "./component/stock-balance/stock-balance.component";
+import { GroupwiseComponent } from "./component/stock-group/group-wise/group-wise.component";
 
 const routes: Routes = [
     {
@@ -47,6 +48,10 @@ const routes: Routes = [
             },
 
         ],
+    },
+    {
+        path: "group-wise",
+        component: GroupwiseComponent,
     },
     {
         path: "stock-group/create",
