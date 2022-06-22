@@ -8,6 +8,7 @@ import { StockUnitRequest } from "../../models/api-models/Inventory";
 import { select, Store } from "@ngrx/store";
 import { AppState } from "../../store";
 import { CustomStockUnitAction } from "../../actions/inventory/customStockUnit.actions";
+import { Router } from "@angular/router";
 
 
 @Component({
@@ -29,8 +30,13 @@ export class UnitMappingComponent implements OnInit {
     public units: any = [];
     public stockUnit$: Observable<StockUnitRequest[]>;
 
-    constructor(private breakpointObserver: BreakpointObserver, private commonService: CommonService, private store: Store<AppState>, private customStockAction: CustomStockUnitAction) { 
+    constructor(private breakpointObserver: BreakpointObserver, private commonService: CommonService, private store: Store<AppState>, private customStockAction: CustomStockUnitAction, private router: Router) {
         this.stockUnit$ = this.store.pipe(select(state => state.inventory.stockUnits), takeUntil(this.destroyed$));
+        this.store.pipe(select(appState => appState.gstR.activeCompanyGst), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response && this.activeCompanyGstNumber !== response) {
+                this.activeCompanyGstNumber = response;
+            }
+        });
     }
 
     /**
@@ -69,7 +75,19 @@ export class UnitMappingComponent implements OnInit {
      * @memberof UnitMappingComponent
      */
     public ngDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
         document.querySelector('body').classList.remove('unit-mapping-page');
+        this.asideGstSidebarMenuState = 'out';
+    }
+
+    /**
+    * Handles GST Sidebar Navigation
+    *
+    * @memberof UnitMappingComponent
+    */
+    public handleNavigation(): void {
+        this.router.navigate(['pages', 'gstfiling']);
     }
 
     /**
