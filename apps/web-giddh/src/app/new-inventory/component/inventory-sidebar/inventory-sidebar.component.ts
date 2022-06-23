@@ -21,17 +21,17 @@ const TREE_DATA: SidebarNode[] = [
   {
     name: 'Stock',
     icons: 'stock.svg',
-    children: [{ name: 'Create New', icons: 'create-new.svg', link: '/pages/new-inventory/stock/product/create'}, { name: 'Item-wise', icons:'item-wise.svg' }, { name: 'Group-wise' , icons: 'group-wise.svg' }, { name: 'Varient-wise', icons: 'varient-wise.svg' }, { name: 'Transactions', icons: 'transactions.svg' }],
+    children: [{ name: 'Create New', icons: 'create-new.svg', link: '/pages/new-inventory/stock/product/create'}, { name: 'Item-wise', icons:'item-wise.svg' }, { name: 'Group-wise' , icons: 'group-wise.svg', link: '/pages/new-inventory/group-wise' }, { name: 'Varient-wise', icons: 'varient-wise.svg' }, { name: 'Transactions', icons: 'transactions.svg' }],
   },
   {
     name: 'Services',
     icons: 'service.svg',
-    children: [{ name: 'Create New', icons: 'create-new.svg', link: '/pages/new-inventory/stock/service/create'}, { name: 'Item-wise', icons:'item-wise.svg' }, { name: 'Group-wise', icons: 'group-wise.svg' }, { name: 'Varient-wise',icons: 'varient-wise.svg' }, { name: 'Transactions', icons: 'transactions.svg' }],
+    children: [{ name: 'Create New', icons: 'create-new.svg', link: '/pages/new-inventory/stock/service/create'}, { name: 'Item-wise', icons:'item-wise.svg' }, { name: 'Group-wise', icons: 'group-wise.svg', link: '/pages/new-inventory/group-wise' }, { name: 'Varient-wise',icons: 'varient-wise.svg' }, { name: 'Transactions', icons: 'transactions.svg' }],
   },
   {
     name: 'Fixed Assets',
     icons: 'fixed-assets.svg',
-    children: [{ name: 'Create New', icons: 'create-new.svg' }, { name: 'Item-wise', icons:'item-wise.svg' }, { name: 'Group-wise', icons: 'group-wise.svg' }, { name: 'Varient-wise',icons: 'varient-wise.svg' }, { name: 'Transactions', icons: 'transactions.svg' }],
+    children: [{ name: 'Create New', icons: 'create-new.svg', link: '/pages/new-inventory/stock/product/create' }, { name: 'Item-wise', icons:'item-wise.svg' }, { name: 'Group-wise', icons: 'group-wise.svg', link: '/pages/new-inventory/group-wise' }, { name: 'Varient-wise',icons: 'varient-wise.svg' }, { name: 'Transactions', icons: 'transactions.svg' }],
   },
   {
     name: 'Branch Transfer',
