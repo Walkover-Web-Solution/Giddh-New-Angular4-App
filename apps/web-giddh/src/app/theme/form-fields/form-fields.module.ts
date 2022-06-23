@@ -10,6 +10,7 @@ import { MatSelectModule } from "@angular/material/select";
 import { DecimalDigitsModule } from "../../shared/helpers/directives/decimalDigits/decimalDigits.module";
 import { SelectFieldComponent } from "./select-field/select-field.component";
 import { TextFieldComponent } from "./text-field/text-field.component";
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
     declarations: [
@@ -26,7 +27,8 @@ import { TextFieldComponent } from "./text-field/text-field.component";
         MatCheckboxModule,
         MatAutocompleteModule,
         ReactiveFormsModule,
-        DecimalDigitsModule
+        DecimalDigitsModule,
+        MatTooltipModule
     ],
     exports: [
         TextFieldComponent,
