@@ -107,7 +107,7 @@ export class UnitMappingComponent implements OnInit {
         this.commonService.getStockUnits().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.units = response.body.map((result: any) => {
                 return {
-                    value: `${result.code}-${result.name}`,
+                    value: result.code,
                     label: `${result.code}-${result.name}`
                 }
             });
