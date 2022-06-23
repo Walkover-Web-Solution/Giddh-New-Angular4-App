@@ -214,7 +214,7 @@ export class UpdateLedgerVm {
         if (!acc) {
             return false;
         }
-        let allowedUniqueNameArr = ['revenuefromoperations', 'otherincome', 'operatingcost', 'indirectexpenses', 'fixedassets'];
+        let allowedUniqueNameArr = ['revenuefromoperations', 'otherincome', 'operatingcost', 'indirectexpenses', 'fixedassets', 'currentassets'];
         return allowedUniqueNameArr.indexOf(acc.parentGroups[0]?.uniqueName) > -1;
     }
 
@@ -301,6 +301,8 @@ export class UpdateLedgerVm {
             let particularAccount = (this.selectedLedger?.transactions[0]?.particular?.uniqueName === this.activeAccount?.uniqueName) ? this.selectedLedger?.particular : this.selectedLedger?.transactions[0]?.particular;
 
             if (this.generalService.isReceiptPaymentEntry(this.activeAccount, particularAccount, this.selectedLedger.voucher.shortCode)) {
+                console.log("Receipt payment entry", this.activeAccount, particularAccount, this.selectedLedger.voucher.shortCode);
+
                 this.isPaymentReceipt = true;
                 let mainTaxPercentage = this.selectedTaxes?.reduce((sum, current) => sum + current.amount, 0);
                 let tdsTaxPercentage = null;
