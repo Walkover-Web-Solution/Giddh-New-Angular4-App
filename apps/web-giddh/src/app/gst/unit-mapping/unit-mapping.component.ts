@@ -64,6 +64,14 @@ export class UnitMappingComponent implements OnInit {
         );
     }
 
+    /**
+     * Function to filter Dropdown data
+     *
+     * @private
+     * @param {string} value
+     * @return {*}  {string[]}
+     * @memberof UnitMappingComponent
+     */
     private filter(value: string): string[] {
         const filterValue = value.toLowerCase();
         return this.options.filter(option => option.toLowerCase().includes(filterValue));
@@ -100,7 +108,7 @@ export class UnitMappingComponent implements OnInit {
             this.units = response.body.map((result: any) => {
                 return {
                     value: result.code,
-                    label: result.code
+                    label: `${result.code}-${result.name}`
                 }
             });
         });

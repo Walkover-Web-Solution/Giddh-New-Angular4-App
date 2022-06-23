@@ -8044,10 +8044,14 @@ giddh-datepicker {
                 .map-unit-select-field {
                     input {
                         width: 160px;
+                        min-width: 160px;
                     }
                 }
             }
         }
+    }
+    .cdk-overlay-container {
+        z-index: 99;
     }
 }
 
@@ -8316,6 +8320,7 @@ body.update-scroll-hidden {
                     .map-unit-select-field {
                         input {
                             width: 130px;
+                            min-width: 130px;
                         }
                     }
                 }
@@ -8421,14 +8426,15 @@ body.update-scroll-hidden {
                 .map-unit-value {
                     .map-unit-select-field {
                         input {
-                            width: 100px;
+                            width: 87px;
+                            min-width: 87px;
                         }
                     }
                 }
             }
         }
         .mat-autocomplete-panel {
-            min-width: 99px;
+            min-width: 87px;
         }
     }
 }
@@ -8837,6 +8843,23 @@ body.update-scroll-hidden {
     }
     .invoice-preview table {
         margin-top: 0 !important;
+    }
+    .unit-mapping-page {
+        .unit-mapping-grid-list {
+            .grid-box-content {
+                .map-unit-value {
+                    .map-unit-select-field {
+                        input {
+                            width: 83px;
+                            min-width: 83px;
+                        }
+                    }
+                }
+            }
+        }
+        .mat-autocomplete-panel {
+            min-width: 83px;
+        }
     }
 }
 

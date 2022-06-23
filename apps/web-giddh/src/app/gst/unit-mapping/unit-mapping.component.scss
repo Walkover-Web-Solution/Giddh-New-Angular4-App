@@ -19,6 +19,11 @@
         .unit-box {
             width: 82px;
         }
+        .unit-box,
+        .map-unit-box {
+            font-family: "opensans-semibold";
+            color: var(--color-table-secondary-heading);
+        }
     }
 }
 
