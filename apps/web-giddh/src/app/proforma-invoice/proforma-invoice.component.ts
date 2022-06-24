@@ -5173,7 +5173,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         voucherClassConversion.companyDetails = result.company;
 
         voucherClassConversion.accountDetails.billingDetails = new GstDetailsClass();
-        voucherClassConversion.accountDetails.billingDetails.panNumber = result.account.billingDetails.panNumber;
+        voucherClassConversion.accountDetails.billingDetails.panNumber = result?.account?.billingDetails?.panNumber;
+
         voucherClassConversion.accountDetails.billingDetails.pincode = result.account.billingDetails.pincode;
         voucherClassConversion.accountDetails.billingDetails.address = cloneDeep(result?.account?.billingDetails?.address);
         voucherClassConversion.accountDetails.billingDetails.gstNumber = result.account.billingDetails.gstNumber ?? result?.account?.billingDetails?.taxNumber;
@@ -5182,7 +5183,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         voucherClassConversion.accountDetails.mobileNumber = result.account.mobileNumber;
 
         voucherClassConversion.accountDetails.shippingDetails = new GstDetailsClass();
-        voucherClassConversion.accountDetails.shippingDetails.panNumber = result.account.shippingDetails.panNumber;
+        voucherClassConversion.accountDetails.shippingDetails.panNumber = result?.account?.shippingDetails?.panNumber;
+
         voucherClassConversion.accountDetails.shippingDetails.pincode = result.account.shippingDetails.pincode;
         voucherClassConversion.accountDetails.shippingDetails.address = cloneDeep(result?.account?.shippingDetails?.address);
         voucherClassConversion.accountDetails.shippingDetails.gstNumber = result.account.shippingDetails.gstNumber ?? result?.account?.shippingDetails?.taxNumber;
