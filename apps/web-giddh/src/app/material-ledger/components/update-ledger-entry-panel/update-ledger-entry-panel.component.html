@@ -942,7 +942,13 @@
                             </div>
 
                             <div
-                                *ngIf="vm.showNewEntryPanel && !shouldShowAdvanceReceiptMandatoryFields"
+                                *ngIf="
+                                    vm.showNewEntryPanel &&
+                                    !shouldShowAdvanceReceiptMandatoryFields &&
+                                    (!vm.isPaymentReceipt ||
+                                        (vm.isPaymentReceipt &&
+                                            vm.selectedLedger.voucher.shortCode === 'advance-receipt'))
+                                "
                                 class="icon-box"
                             >
                                 <label class="icon-minus"></label>
@@ -954,7 +960,13 @@
                                         ? 'disabled'
                                         : null
                                 "
-                                *ngIf="vm.showNewEntryPanel && !shouldShowAdvanceReceiptMandatoryFields"
+                                *ngIf="
+                                    vm.showNewEntryPanel &&
+                                    !shouldShowAdvanceReceiptMandatoryFields &&
+                                    (!vm.isPaymentReceipt ||
+                                        (vm.isPaymentReceipt &&
+                                            vm.selectedLedger.voucher.shortCode === 'advance-receipt'))
+                                "
                                 class="text-right table-amount"
                             >
                                 <span auto-close="outsideClick">
@@ -993,7 +1005,10 @@
                                 class="text-center icon-box"
                                 *ngIf="
                                     (vm.showNewEntryPanel || shouldShowAdvanceReceiptMandatoryFields) &&
-                                    (vm.companyTaxesList$ | async)?.length
+                                    (vm.companyTaxesList$ | async)?.length &&
+                                    (!vm.isPaymentReceipt ||
+                                        (vm.isPaymentReceipt &&
+                                            vm.selectedLedger.voucher.shortCode === 'advance-receipt'))
                                 "
                             >
                                 <label class="icon-plus"></label>
@@ -1018,7 +1033,10 @@
                                 class="dropdown-container dropdown-left text-right table-amount"
                                 *ngIf="
                                     (vm.showNewEntryPanel || shouldShowAdvanceReceiptMandatoryFields) &&
-                                    (vm.companyTaxesList$ | async)?.length
+                                    (vm.companyTaxesList$ | async)?.length &&
+                                    (!vm.isPaymentReceipt ||
+                                        (vm.isPaymentReceipt &&
+                                            vm.selectedLedger.voucher.shortCode === 'advance-receipt'))
                                 "
                             >
                                 <span auto-close="outsideClick">
@@ -1067,7 +1085,10 @@
                                 class="text-center icon-box"
                                 *ngIf="
                                     (vm.showNewEntryPanel || shouldShowAdvanceReceiptMandatoryFields) &&
-                                    (vm.companyTaxesList$ | async)?.length
+                                    (vm.companyTaxesList$ | async)?.length &&
+                                    (!vm.isPaymentReceipt ||
+                                        (vm.isPaymentReceipt &&
+                                            vm.selectedLedger.voucher.shortCode === 'advance-receipt'))
                                 "
                             >
                                 <label class="font-18 mr-t05">=</label>
@@ -2154,6 +2175,7 @@
                     [isUpdateMode]="true"
                     [invoiceListRequestParams]="invoiceListRequestParams"
                     [advanceReceiptAdjustmentUpdatedData]="vm.selectedLedger?.voucherAdjustments"
+                    [isPaymentReceipt]="vm.isPaymentReceipt"
                     (closeModelEvent)="closeAdjustmentModal($event)"
                     (submitClicked)="getAdjustedPaymentData($event)"
                 >

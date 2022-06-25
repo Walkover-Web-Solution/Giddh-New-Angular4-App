@@ -84,6 +84,8 @@ export class UpdateLedgerVm {
     public isAdvanceReceiptWithTds: boolean = false;
     /** True if it's payment or receipt entry */
     private isPaymentReceipt: boolean = false;
+    /** Is Initial Load */
+    private initialLoad: boolean = true;
 
     constructor(
         private generalService: GeneralService
@@ -114,7 +116,7 @@ export class UpdateLedgerVm {
         if (this.selectedLedger.transactions) {
             this.selectedLedger.transactions = this.selectedLedger.transactions.filter(f => !f.isDiscount);
             let incomeExpenseEntryIndex = this.selectedLedger.transactions.findIndex((trx: ILedgerTransactionItem) => {
-                if (trx?.particular?.uniqueName) {
+                if (trx?.particular?.uniqueName && !trx?.isTax) {
                     let category = this.getAccountCategory(trx.particular, trx.particular.uniqueName);
                     return this.isValidCategory(category);
                 }
@@ -202,7 +204,7 @@ export class UpdateLedgerVm {
 
     public isThereIncomeOrExpenseEntry(): number {
         let isAvailable = filter(this.selectedLedger.transactions, (trx: ILedgerTransactionItem) => {
-            if (trx?.particular?.uniqueName && !trx.isTax) {
+            if (trx?.particular?.uniqueName && !trx?.isTax) {
                 let category = this.getAccountCategory(trx.particular, trx.particular.uniqueName);
                 return this.isValidCategory(category) || trx.inventory;
             }
@@ -291,6 +293,14 @@ export class UpdateLedgerVm {
 
         this.companyTaxesList$.pipe(take(1)).subscribe(taxes => companyTaxes = taxes);
 
+        let particularAccount = (this.selectedLedger?.transactions?.length && this.selectedLedger?.transactions[0]?.particular?.uniqueName === this.activeAccount?.uniqueName) ? this.selectedLedger?.particular : this.selectedLedger?.transactions?.length ? this.selectedLedger?.transactions[0]?.particular : null;
+
+        let ledgerAccount = (this.selectedLedger?.particular?.uniqueName === particularAccount?.uniqueName) ? this.activeAccount : this.selectedLedger?.particular;
+
+        if (this.generalService.isReceiptPaymentEntry(ledgerAccount, particularAccount, this.selectedLedger.voucher.shortCode)) {
+            this.isPaymentReceipt = true;
+        }
+
         if (modal?.appliedOtherTax && modal?.appliedOtherTax?.uniqueName) {
             let tax = companyTaxes.find(ct => ct?.uniqueName === modal?.appliedOtherTax?.uniqueName);
             if (tax && tax.taxDetail[0]) {
@@ -298,10 +308,7 @@ export class UpdateLedgerVm {
                 totalTaxes += tax.taxDetail[0].taxValue;
             }
 
-            let particularAccount = (this.selectedLedger?.transactions[0]?.particular?.uniqueName === this.activeAccount?.uniqueName) ? this.selectedLedger?.particular : this.selectedLedger?.transactions[0]?.particular;
-
-            if (this.generalService.isReceiptPaymentEntry(this.activeAccount, particularAccount, this.selectedLedger.voucher.shortCode)) {
-                this.isPaymentReceipt = true;
+            if (this.isPaymentReceipt) {
                 let mainTaxPercentage = this.selectedTaxes?.reduce((sum, current) => sum + current.amount, 0);
                 let tdsTaxPercentage = null;
                 let tcsTaxPercentage = null;
@@ -350,6 +357,12 @@ export class UpdateLedgerVm {
         this.selectedLedger.otherTaxModal = modal;
         this.selectedLedger.tcsCalculationMethod = modal.tcsCalculationMethod;
         this.selectedLedger.otherTaxesSum = giddhRoundOff((this.selectedLedger.tdsTcsTaxesSum), this.giddhBalanceDecimalPlaces);
+
+        if (this.isPaymentReceipt && this.initialLoad) {
+            this.initialLoad = false;
+            this.generatePanelAmount();
+            this.inventoryAmountChanged();
+        }
     }
 
     // FIXME: fix total calculation
@@ -469,7 +482,7 @@ export class UpdateLedgerVm {
                     let category = this.getAccountCategory(t?.particular, t?.particular?.uniqueName);
 
                     // find account that's from category income || expenses || fixed assets and update it's amount too
-                    if (category && this.isValidCategory(category)) {
+                    if (category && this.isValidCategory(category) && !t.isTax) {
                         t.amount = giddhRoundOff(Number(this.totalAmount), this.giddhBalanceDecimalPlaces);
                         t.isUpdated = true;
                     }
@@ -537,7 +550,7 @@ export class UpdateLedgerVm {
             // find account that's from category income || expenses || fixed assets
             let trx: ILedgerTransactionItem = find(this.selectedLedger.transactions, (t) => {
                 let category = this.getAccountCategory(t?.particular, t?.particular?.uniqueName);
-                return this.isValidCategory(category);
+                return !t?.isTax && this.isValidCategory(category);
             });
             if (trx) {
                 trx.amount = this.totalAmount;
