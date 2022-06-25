@@ -57,6 +57,8 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
     public currentPeriod: any = {};
     /** Observable to get current GST period  */
     public getCurrentPeriod$: Observable<any> = of(null);
+    /** Holds images folder path */
+    public imgPath: string = "";
 
     constructor(
         private router: Router,
@@ -112,6 +114,7 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
                 this.isMonthSelected = true;
             }
         });
+        this.imgPath = isElectron ? "assets/images/" : AppUrl + APP_FOLDER + "assets/images/";
     }
 
     /**

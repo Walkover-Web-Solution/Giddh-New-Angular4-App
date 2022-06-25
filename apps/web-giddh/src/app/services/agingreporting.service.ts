@@ -48,8 +48,6 @@ export class AgingreportingService {
             .replace(':count', encodeURIComponent(queryRequest.count.toString()))
             .replace(':sort', encodeURIComponent(queryRequest.sort.toString()))
             .replace(':sortBy', encodeURIComponent(queryRequest.sortBy.toString()))
-            .replace(':fromDate', encodeURIComponent(queryRequest.from))
-            .replace(':toDate', encodeURIComponent(queryRequest.to))
             .replace(':rangeCol', encodeURIComponent(queryRequest.rangeCol ? queryRequest.rangeCol.toString() : ''));
         if (branchUniqueName) {
             branchUniqueName = branchUniqueName !== this.companyUniqueName ? branchUniqueName : '';
