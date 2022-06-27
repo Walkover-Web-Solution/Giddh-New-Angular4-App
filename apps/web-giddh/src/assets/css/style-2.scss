@@ -5608,23 +5608,6 @@ footer#footer.absolute-footer {
     }
 }
 
-app-manage-groups-accounts {
-    account-update-new-details {
-        .button-group {
-            .update-btn-zindex {
-                .ladda-label {
-                    color: var(--color-septenary-button-text);
-                }
-                &:hover {
-                    .ladda-label {
-                        color: var(--color-secondary-button-text) !important;
-                    }
-                }
-            }
-        }
-    }
-}
-
 section.ledger-stat.sticky-footer.sticky-footer-sale-amount {
     text-align: left !important;
     margin-bottom: 0;
@@ -7821,6 +7804,29 @@ giddh-datepicker {
     }
 }
 
+.unit-mapping-page {
+    .grid-box {
+        .mat-grid-tile-content {
+            justify-content: space-around;
+        }
+    }
+    .unit-mapping-grid-list {
+        .grid-box-content {
+            .map-unit-value {
+                .map-unit-select-field {
+                    input {
+                        width: 160px;
+                        min-width: 160px;
+                    }
+                }
+            }
+        }
+    }
+    .cdk-overlay-container {
+        z-index: 99;
+    }
+}
+
 body.update-scroll-hidden {
     overflow-y: hidden;
 }
@@ -8043,20 +8049,6 @@ body.update-scroll-hidden {
             }
         }
     }
-    account-update-new-details {
-        .button-group {
-            .update-btn-zindex {
-                .ladda-label {
-                    color: var(--color-septenary-button-text);
-                }
-                &:hover {
-                    .ladda-label {
-                        color: var(--color-secondary-button-text);
-                    }
-                }
-            }
-        }
-    }
 }
 
 .cdk-overlay-pane {
@@ -8072,6 +8064,20 @@ body.update-scroll-hidden {
             .amount-field-content {
                 font-size: 21px;
                 margin-top: 1%;
+            }
+        }
+    }
+    .unit-mapping-page {
+        .unit-mapping-grid-list {
+            .grid-box-content {
+                .map-unit-value {
+                    .map-unit-select-field {
+                        input {
+                            width: 130px;
+                            min-width: 130px;
+                        }
+                    }
+                }
             }
         }
     }
@@ -8160,6 +8166,23 @@ body.update-scroll-hidden {
     .activity-log-page {
         .cdk-overlay-container {
             z-index: 99999;
+        }
+    }
+    .unit-mapping-page {
+        .unit-mapping-grid-list {
+            .grid-box-content {
+                .map-unit-value {
+                    .map-unit-select-field {
+                        input {
+                            width: 87px;
+                            min-width: 87px;
+                        }
+                    }
+                }
+            }
+        }
+        .mat-autocomplete-panel {
+            min-width: 87px;
         }
     }
 }
@@ -8563,6 +8586,23 @@ body.update-scroll-hidden {
     }
     .invoice-preview table {
         margin-top: 0 !important;
+    }
+    .unit-mapping-page {
+        .unit-mapping-grid-list {
+            .grid-box-content {
+                .map-unit-value {
+                    .map-unit-select-field {
+                        input {
+                            width: 83px;
+                            min-width: 83px;
+                        }
+                    }
+                }
+            }
+        }
+        .mat-autocomplete-panel {
+            min-width: 83px;
+        }
     }
 }
 
