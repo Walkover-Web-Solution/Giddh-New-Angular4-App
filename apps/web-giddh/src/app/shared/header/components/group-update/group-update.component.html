@@ -233,10 +233,9 @@
     <div class="mb-2 select-box container-fluid mt-1">
         <div class="form-group">
             <label>{{ localeData?.default_discounts }} <span class="primary-color"></span></label>
-            <div class="clearfix">
+            <div class="clearfix" *ngIf="showDiscountField">
                 <span>
                     <sh-select
-                        *ngIf="showDiscountField"
                         class="pull-left calc-width"
                         [options]="discountList"
                         [isFilterEnabled]="true"

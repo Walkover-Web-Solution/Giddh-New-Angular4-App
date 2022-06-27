@@ -547,9 +547,9 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
      * @memberof GroupUpdateComponent
      */
     public getDiscountList(): void {
+        this.showDiscountField = false;
         this.settingsDiscountService.GetDiscounts().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success" && response?.body?.length > 0) {
-                this.showDiscountField = false;
                 this.discountList = [];
                 Object.keys(response?.body).forEach(key => {
                     this.discountList.push({
