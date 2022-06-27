@@ -468,6 +468,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             if (a) {
                 this.amountChanged();
                 this.calculateTotal();
+                this.calculateTax();
             }
         });
         this.cdRef.markForCheck();
@@ -523,7 +524,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             return cv.isChecked ? pv + cv.amount : pv;
         }, 0);
         if (this.generalService.isReceiptPaymentEntry(this.activeAccount, this.currentTxn.selectedAccount, this.blankLedger.voucherType) && !this.isAdvanceReceiptWithTds) {
-            this.currentTxn.tax = giddhRoundOff(this.generalService.calculateInclusiveOrExclusiveTaxes(true, this.currentTxn.advanceReceiptAmount, totalPercentage, this.currentTxn.discount), this.giddhBalanceDecimalPlaces);
+            this.currentTxn.tax = giddhRoundOff(this.generalService.calculateInclusiveOrExclusiveTaxes(false, this.currentTxn.advanceReceiptAmount, totalPercentage, this.currentTxn.discount), this.giddhBalanceDecimalPlaces);
         } else {
             this.currentTxn.tax = giddhRoundOff(this.generalService.calculateInclusiveOrExclusiveTaxes(this.isAdvanceReceipt, this.currentTxn.amount, totalPercentage, this.currentTxn.discount), this.giddhBalanceDecimalPlaces);
         }
