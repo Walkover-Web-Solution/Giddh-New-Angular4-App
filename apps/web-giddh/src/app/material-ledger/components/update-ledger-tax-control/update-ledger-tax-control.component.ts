@@ -101,6 +101,7 @@ export class UpdateLedgerTaxControlComponent implements OnDestroy, OnChanges {
         if (changes['totalForTax'] && changes['totalForTax'].currentValue !== changes['totalForTax'].previousValue ||
             changes['isAdvanceReceipt'] && changes['isAdvanceReceipt'].currentValue !== changes['isAdvanceReceipt'].previousValue) {
             this.calculateInclusiveOrExclusiveFormattedTax();
+            this.taxAmountSumEvent.emit(this.sum);
         }
     }
 
