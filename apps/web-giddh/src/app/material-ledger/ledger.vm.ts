@@ -462,6 +462,7 @@ export class TransactionVM {
     public voucherAdjustments?: VoucherAdjustments;
     public showDropdown?: boolean = false;
     public referenceVoucher?: ReferenceVoucher;
+    public showOtherTax: boolean = false;
 }
 
 export interface IInventory {
