@@ -10,7 +10,7 @@ import { OrganizationType } from '../models/user-login-state';
 import { AllItems } from '../shared/helpers/allItems';
 import { Router } from '@angular/router';
 import { AdjustedVoucherType, JOURNAL_VOUCHER_ALLOWED_DOMAINS } from '../app.constant';
-import { VoucherTypeEnum } from '../models/api-models/Sales';
+import { SalesOtherTaxesCalculationMethodEnum, VoucherTypeEnum } from '../models/api-models/Sales';
 
 @Injectable()
 export class GeneralService {
@@ -1039,5 +1039,72 @@ export class GeneralService {
         }
 
         return voucherNumber;
+    }
+
+    /**
+     * To check if it's receipt/payment entry
+     *
+     * @param {*} ledgerAccount
+     * @param {*} entryAccount
+     * @param {*} [voucherType]
+     * @returns {boolean}
+     * @memberof GeneralService
+     */
+    public isReceiptPaymentEntry(ledgerAccount: any, entryAccount: any, voucherType?: any): boolean {
+        if (entryAccount?.parentGroups?.length > 0 && !entryAccount?.parentGroups[0]?.uniqueName) {
+            entryAccount.parentGroups = entryAccount?.parentGroups?.map(group => {
+                return {
+                    uniqueName: group
+                }
+            });
+        }
+
+        if (
+            this.voucherApiVersion === 2
+            &&
+            ((ledgerAccount?.parentGroups[1]?.uniqueName === 'sundrydebtors' || ledgerAccount?.parentGroups[1]?.uniqueName === 'sundrycreditors') && (entryAccount?.parentGroups[1]?.uniqueName === VoucherTypeEnum.cash || entryAccount?.parentGroups[1]?.uniqueName === 'bankaccounts'))
+            ||
+            ((ledgerAccount?.parentGroups[1]?.uniqueName === VoucherTypeEnum.cash || ledgerAccount?.parentGroups[1]?.uniqueName === 'bankaccounts') && (entryAccount?.parentGroups[1]?.uniqueName === 'sundrydebtors' || entryAccount?.parentGroups[1]?.uniqueName === 'sundrycreditors'))
+            &&
+            (!voucherType || (["rcpt", "pay", "advance-receipt"].includes(voucherType)))
+        ) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Returns other tax amount for receipt/payment
+     *
+     * @param {string} tcsCalculationMethod
+     * @param {number} totalAmount
+     * @param {*} mainTaxPercentage
+     * @param {*} tdsTaxPercentage
+     * @param {*} tcsTaxPercentage
+     * @returns {number}
+     * @memberof GeneralService
+     */
+    public getReceiptPaymentOtherTaxAmount(tcsCalculationMethod: string, totalAmount: number, mainTaxPercentage: any, tdsTaxPercentage: any, tcsTaxPercentage: any): number {
+        let taxableValue = 0;
+
+        if (tcsCalculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount) {
+            if (tdsTaxPercentage) {
+                //Advance Received/1+{(Rate of GST - Rate of TDS)/100}
+                taxableValue = totalAmount / (1 + ((mainTaxPercentage - tdsTaxPercentage) / 100));
+            } else if (tcsTaxPercentage) {
+                //Advance Received/1+{(Rate of GST + Rate of TCS)/100}
+                taxableValue = totalAmount / (1 + ((mainTaxPercentage + tcsTaxPercentage) / 100));
+            }
+        } else if (tcsCalculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTotalAmount) {
+            if (tdsTaxPercentage) {
+                //{[{Advance received/(100-TDS Rate)}*100]/(100+GST rate)}*100
+                taxableValue = (((totalAmount / (100 - tdsTaxPercentage)) * 100) / (100 + mainTaxPercentage)) * 100;
+            } else if (tcsTaxPercentage) {
+                //{[{Advance received/(100+TCS Rate)}*100]/(100+GST rate)}*100
+                taxableValue = (((totalAmount / (100 + tcsTaxPercentage)) * 100) / (100 + mainTaxPercentage)) * 100;
+            }
+        }
+        return taxableValue;
     }
 }
