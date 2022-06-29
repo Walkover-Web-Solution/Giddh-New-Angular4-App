@@ -234,10 +234,10 @@ export class AgingReportComponent implements OnInit, OnDestroy {
         });
 
         this.store.pipe(select(state => state.agingreport.setDueRangeRequestInFlight), takeUntil(this.destroyed$)).subscribe(response => {
-            if(response) {
+            if (response) {
                 this.isDueRangeRequestInProgress = true;
             } else {
-                if(this.isDueRangeRequestInProgress) {
+                if (this.isDueRangeRequestInProgress) {
                     this.isDueRangeRequestInProgress = false;
                     this.getDueReport();
                 }
@@ -286,16 +286,17 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     public resetAdvanceSearch() {
         this.searchedName?.reset();
         this.searchStr = "";
-        this.showNameSearch = false;  
+        this.showNameSearch = false;
         this.isAdvanceSearchApplied = false;
         this.dueAmountReportRequest.q = '';
-        this.sort("name", "asc") ;
+        this.sort("name", "asc");
         this.commonRequest = new ContactAdvanceSearchCommonModal();
         this.agingAdvanceSearchModal = new AgingAdvanceSearchModal();
         if (this.agingReportAdvanceSearch) {
             this.agingReportAdvanceSearch.reset();
         }
         this.showClearFilter = false;
+        this.getDueReport();
     }
 
     public applyAdvanceSearch(request: ContactAdvanceSearchCommonModal) {
@@ -393,7 +394,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
      * @memberof AgingReportComponent
      */
     public handleClickOutside(event: any, element: any, searchedFieldName: string): void {
-        this.showClearFilter = false ;
+        this.showClearFilter = false;
         if (searchedFieldName === "name") {
             if (this.searchedName.value) {
                 return;
@@ -437,17 +438,17 @@ export class AgingReportComponent implements OnInit, OnDestroy {
      *
      * @memberof AgingReportComponent
      */
-    public ngOnDestroy(): void {      
+    public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
-    
+
     /**
      * This function will use for emit after click outside on component
      *
      * @memberof AgingReportComponent
      */
-     public onCloseMenu() {
+    public onCloseMenu() {
         this.menu?.closeMenu();
     }
 
