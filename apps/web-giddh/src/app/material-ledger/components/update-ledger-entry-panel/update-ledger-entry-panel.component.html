@@ -1107,7 +1107,7 @@
                                     "
                                     type="text"
                                     id="update-ledger-total-amount"
-                                    name=""
+                                    name="update-ledger-total-amount"
                                     class="form-control text-right mat-field-border"
                                     [(ngModel)]="vm.grandTotal"
                                     [mask]="vm.inputMaskFormat"
@@ -1115,6 +1115,8 @@
                                     [rawInputValue]="vm.grandTotal"
                                     [suffix]="vm.selectedSuffixForCurrency"
                                     (blur)="vm.inventoryTotalChanged()"
+                                    (keyup)="vm.inventoryTotalChanged()"
+                                    (keydown)="vm.inventoryTotalChanged()"
                                 />
                                 <p class="mb-0 amount-total pr-1 pb-1" *ngIf="vm.isMultiCurrencyAvailable">
                                     <ng-container
