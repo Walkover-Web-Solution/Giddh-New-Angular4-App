@@ -213,7 +213,7 @@ export class AllGiddhItemComponent implements OnInit, OnDestroy {
     public handleItemClick(item: AllItem): void {
         if (item.label === this.commonLocaleData?.app_master) {
             this.store.dispatch(this.groupWithAction.OpenAddAndManageFromOutside(''));
-        } else if(item?.additional?.isGstMenu === true) {
+        } else if (item?.additional?.isGstMenu === true) {
             this.navigate(item?.additional?.type);
         }
     }
@@ -244,12 +244,12 @@ export class AllGiddhItemComponent implements OnInit, OnDestroy {
      *
      * @memberof AllGiddhItemComponent
      */
-     public loadTaxDetails(): void {
+    public loadTaxDetails(): void {
         this.activeCompanyGstNumber = "";
         this.gstReconcileService.getTaxDetails().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.body) {
                 let taxes = response.body;
-                if(taxes?.length === 1) {
+                if (taxes?.length === 1) {
                     this.activeCompanyGstNumber = taxes[0];
                 }
             }
@@ -262,8 +262,8 @@ export class AllGiddhItemComponent implements OnInit, OnDestroy {
     * @param {string} type Type of GST module
     * @memberof AllGiddhItemComponent
     */
-     public navigate(type: string): void {
-        if(this.activeCompanyGstNumber) {
+    public navigate(type: string): void {
+        if (this.activeCompanyGstNumber) {
             switch (type) {
                 case GstReport.Gstr1: case GstReport.Gstr2:
                     this.navigateToOverview(type);
