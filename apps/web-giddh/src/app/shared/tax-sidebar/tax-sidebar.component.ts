@@ -11,6 +11,7 @@ import { GstReconcileService } from '../../services/GstReconcile.service';
 import { OrganizationType } from '../../models/user-login-state';
 import { GIDDH_DATE_FORMAT } from '../helpers/defaultDateFormat';
 import * as moment from 'moment';
+import { GstReconcileActions } from '../../actions/gst-reconcile/GstReconcile.actions';
 
 @Component({
     selector: 'tax-sidebar',
@@ -65,7 +66,8 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
         private generalService: GeneralService,
         private store: Store<AppState>,
         private gstReconcileService: GstReconcileService,
-        private changeDetectionRef: ChangeDetectorRef
+        private changeDetectionRef: ChangeDetectorRef,
+        private gstAction: GstReconcileActions
     ) { }
 
     /**
@@ -125,6 +127,8 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+        this.store.dispatch(this.gstAction.resetGstr1OverViewResponse());
+        this.store.dispatch(this.gstAction.resetGstr2OverViewResponse());
     }
 
     /**
@@ -161,7 +165,7 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
         this.gstReconcileService.getTaxDetails().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.body) {
                 let taxes = response.body;
-                if(!this.activeCompanyGstNumber && taxes?.length === 1) {
+                if (!this.activeCompanyGstNumber && taxes?.length === 1) {
                     this.activeCompanyGstNumber = taxes[0];
                 }
             }
