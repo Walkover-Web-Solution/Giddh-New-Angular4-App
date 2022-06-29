@@ -504,7 +504,6 @@ export class UpdateLedgerVm {
     }
 
     public inventoryTotalChanged() {
-
         let fixDiscount = 0;
         let percentageDiscount = 0;
 
@@ -562,6 +561,15 @@ export class UpdateLedgerVm {
                 this.discountComponent.ledgerAmount = this.totalAmount;
                 this.discountComponent.change();
             }
+        }
+
+        let particularAccount = (this.selectedLedger?.transactions?.length && this.selectedLedger?.transactions[0]?.particular?.uniqueName === this.activeAccount?.uniqueName) ? this.selectedLedger?.particular : this.selectedLedger?.transactions?.length ? this.selectedLedger?.transactions[0]?.particular : null;
+
+        let ledgerAccount = (this.selectedLedger?.particular?.uniqueName === particularAccount?.uniqueName) ? this.activeAccount : this.selectedLedger?.particular;
+
+        if (!this.isAdvanceReceipt || this.generalService.isReceiptPaymentEntry(ledgerAccount, particularAccount, this.selectedLedger.voucher.shortCode)) {
+            this.totalAmount = this.grandTotal;
+            this.generateGrandTotal();
         }
 
         this.getEntryTotal();
