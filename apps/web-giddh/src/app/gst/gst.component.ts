@@ -191,12 +191,12 @@ export class GstComponent implements OnInit, OnDestroy {
      * @memberof GstComponent
      */
     public ngOnDestroy(): void {
+        this.store.dispatch(this.gstAction.resetGstr1OverViewResponse());
+        this.store.dispatch(this.gstAction.resetGstr2OverViewResponse());
         this.destroyed$.next(true);
         this.destroyed$.complete();
         document.querySelector('body').classList.remove('gst-sidebar-open');
         this.asideGstSidebarMenuState = 'out';
-        this.store.dispatch(this.gstAction.resetGstr1OverViewResponse());
-        this.store.dispatch(this.gstAction.resetGstr2OverViewResponse());
     }
 
     /**
