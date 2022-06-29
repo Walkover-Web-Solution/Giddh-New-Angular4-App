@@ -416,6 +416,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 this.store.dispatch(this.ledgerAction.ResetUpdateLedger());
                 this.resetPreviousSearchResults();
                 this.baseAccountChanged = false;
+                setTimeout(() => {
+                    this.vm.inventoryTotalChanged();
+                }, 50);
             }
         });
         if (this.vm) {
