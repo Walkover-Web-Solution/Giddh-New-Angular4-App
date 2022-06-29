@@ -499,11 +499,11 @@ export class GstReconcileActions {
     }
 
     /**
- * Resets the gstr2 response
- *
- * @returns {CustomActions}
- * @memberof GstReconcileActions
- */
+     * Resets the gstr2 response
+     *
+     * @returns {CustomActions}
+     * @memberof GstReconcileActions
+     */
     public resetGstr2OverViewResponse(): CustomActions {
         return {
             type: GSTR_ACTIONS.RESET_GSTR2_OVERVIEW_RESPONSE

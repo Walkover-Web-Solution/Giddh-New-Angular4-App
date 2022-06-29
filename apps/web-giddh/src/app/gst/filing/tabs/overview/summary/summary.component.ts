@@ -116,10 +116,10 @@ export class OverviewSummaryComponent implements OnInit, OnDestroy {
     }
 
     public ngOnDestroy() {
-        this.destroyed$.next(true);
-        this.destroyed$.complete();
         this.store.dispatch(this.gstAction.resetGstr1OverViewResponse());
         this.store.dispatch(this.gstAction.resetGstr2OverViewResponse());
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 
     public mapResponseData(data: GstOverViewSummary[], sequencingList: SequenceConfig[]): GstOverViewSummary[] {

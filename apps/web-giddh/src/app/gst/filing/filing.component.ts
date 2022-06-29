@@ -156,11 +156,11 @@ export class FilingComponent implements OnInit, OnDestroy {
     }
 
     public ngOnDestroy(): void {
+        this.store.dispatch(this.gstAction.resetGstr1OverViewResponse());
+        this.store.dispatch(this.gstAction.resetGstr2OverViewResponse());
         this.destroyed$.next(true);
         this.destroyed$.complete();
         document.querySelector('body').classList.remove('gst-sidebar-open');
-        this.store.dispatch(this.gstAction.resetGstr1OverViewResponse());
-        this.store.dispatch(this.gstAction.resetGstr2OverViewResponse());
     }
 
     /**
