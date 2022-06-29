@@ -23,7 +23,7 @@ import { BsDatepickerDirective } from "ngx-bootstrap/datepicker";
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
 import { combineLatest as observableCombineLatest, Observable, of as observableOf, ReplaySubject, Subject } from 'rxjs';
-import { take, takeUntil } from 'rxjs/operators';
+import { debounceTime, take, takeUntil } from 'rxjs/operators';
 import { LedgerActions } from '../../../actions/ledger/ledger.actions';
 import { ConfirmationModalConfiguration } from '../../../common/confirmation-modal/confirmation-modal.interface';
 import { LoaderService } from '../../../loader/loader.service';
@@ -162,6 +162,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public activeAccount: AccountResponse;
     /** Emits the active ledger account data */
     public activeAccountSubject: Subject<any> = new Subject();
+    /** Observable for total amount changes */
+    public totalAmountChanged$: Subject<any> = new Subject();
     public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public baseCurrency: string = null;
     public isChangeAcc: boolean = false;
@@ -398,6 +400,12 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             if (response[0]) {
                 // set account details for multi currency account
                 this.prepareMultiCurrencyObject(this.vm.selectedLedger);
+            }
+        });
+
+        this.totalAmountChanged$.pipe(debounceTime(500), takeUntil(this.destroyed$)).subscribe((response) => {
+            if (response) {
+                this.vm.inventoryTotalChanged();
             }
         });
 
