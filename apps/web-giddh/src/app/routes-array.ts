@@ -45,6 +45,7 @@ export const ROUTES = [
     { path: 'mobile-home', redirectTo: 'pages/mobile-home', pathMatch: 'full' },
     { path: 'select-plan' },
     //{ path: 'new-inventory/create-group', component: InventoryCreateGroupComponent },
+    { path: 'mobile-restricted', redirectTo: 'mobile-restricted', pathMatch: 'full' },
     {
         path: 'pages',
         children: [
