@@ -289,14 +289,13 @@ export class AgingReportComponent implements OnInit, OnDestroy {
         this.showNameSearch = false;
         this.isAdvanceSearchApplied = false;
         this.dueAmountReportRequest.q = '';
-        this.sort("name", "asc");
         this.commonRequest = new ContactAdvanceSearchCommonModal();
         this.agingAdvanceSearchModal = new AgingAdvanceSearchModal();
         if (this.agingReportAdvanceSearch) {
             this.agingReportAdvanceSearch.reset();
         }
         this.showClearFilter = false;
-        this.getDueReport();
+        this.sort("name", "asc");
     }
 
     public applyAdvanceSearch(request: ContactAdvanceSearchCommonModal) {
