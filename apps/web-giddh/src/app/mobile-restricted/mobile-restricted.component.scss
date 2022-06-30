@@ -1,28 +1,24 @@
 .mobile-restriction-wrapper {
     height: 300px;
+    justify-content: space-around;
     .image-wrapper {
         .phone-image {
             height: 250px;
-            width: 150px;
         }
     }
     .text-content-wrapper {
         height: 100%;
         padding: 33px 15px;
-        .button-barcode-wrapper {
-            .button-wrapper {
-                .store-button {
-                    img {
-                        height: auto;
-                        margin-top: 5px;
-                        width: 85px;
-                    }
-                }
-            }
-            .barcode-wrapper {
+        .button-wrapper {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            .store-button {
                 img {
-                    height: 65px;
-                    width: auto;
+                    height: auto;
+                    margin-top: 5px;
+                    width: 100px;
                 }
             }
         }
