@@ -1,7 +1,7 @@
 <div class="help-support-aside setting-sidebar-wrapper">
     <inventory-sidebar class="inventory-sidebar"></inventory-sidebar>
 </div>
-<div class="varient-wise-wrapper">
+<div class="variant-wise-wrapper">
     <div class="fb-1-container mr-b1 mt-3 report-filter-button-container">
         <div class="head-report-wrapper d-flex justify-content-between w-100">
             <div class="d-flex left-head-report">
@@ -25,7 +25,7 @@
                     <span class="icon-advance-filter"></span>
                 </button>
                 <mat-menu #menu="matMenu">
-                    <button mat-menu-item><mat-checkbox color="primary">Varient Name</mat-checkbox></button>
+                    <button mat-menu-item><mat-checkbox color="primary">Variant Name</mat-checkbox></button>
                     <button mat-menu-item><mat-checkbox color="primary">Opening Stock</mat-checkbox></button>
                     <button mat-menu-item><mat-checkbox color="primary">Inward</mat-checkbox></button>
                     <button mat-menu-item><mat-checkbox color="primary">Outward</mat-checkbox></button>
@@ -99,10 +99,10 @@
     <div class="item-wise-table-wrapper">
         <table class="item-wise-table" mat-table [dataSource]="dataSource">
             <!-- Product Name Column -->
-            <ng-container matColumnDef="varientName">
+            <ng-container matColumnDef="variantName">
                 <th mat-header-cell *matHeaderCellDef>
                     <div class="product-heading">
-                        Varient Name
+                        Variant Name
                         <button class="search-btn pr" mat-mini-fab>
                             <span class="icon-search position-absolute"></span>
                         </button>
@@ -110,7 +110,7 @@
                 </th>
                 <td mat-cell *matCellDef="let element" class="product-name-cell">
                     <div class="product-name">
-                        {{ element.varientName }}
+                        {{ element.variantName }}
                     </div>
                 </td>
             </ng-container>
