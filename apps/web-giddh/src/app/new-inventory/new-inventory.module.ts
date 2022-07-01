@@ -58,6 +58,7 @@ import { StockCreateEditModule } from "./component/stock-create-edit/stock-creat
 import { InventorySidebarModule } from "./component/inventory-sidebar/inventory-sidebar.module";
 import { StockBalanceComponent } from "./component/stock-balance/stock-balance.component";
 import { GroupwiseComponent } from "./component/stock-group/group-wise/group-wise.component";
+import { ItemWiseComponent } from "./component/stock-group/item-wise/item-wise.component";
 
 @NgModule({
     declarations: [
@@ -96,7 +97,8 @@ import { GroupwiseComponent } from "./component/stock-group/group-wise/group-wis
         DashboardSellingReport,
         ListGroupComponent,
         StockBalanceComponent,
-        GroupwiseComponent
+        GroupwiseComponent,
+        ItemWiseComponent
     ],
     imports: [
         NewInventoryRoutingModule,
