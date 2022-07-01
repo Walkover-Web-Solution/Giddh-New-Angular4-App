@@ -1937,13 +1937,11 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     private openAdjustPaymentModal(): void {
         if (this.voucherApiVersion === 2) {
             let particularAccount;
+
             const mainTransaction = this.vm.selectedLedger?.transactions?.filter(transaction => !transaction.isDiscount && !transaction.isTax && transaction?.particular?.uniqueName && transaction?.particular?.uniqueName !== 'roundoff');
 
-            if (!mainTransaction[0].inventory) {
-                particularAccount = (mainTransaction[0]?.particular?.uniqueName === this.activeAccount?.uniqueName) ? this.vm.selectedLedger?.particular : mainTransaction[0]?.particular;
-            } else {
-                particularAccount = this.vm.selectedLedger?.particular;
-            }
+            particularAccount = (this.vm.selectedLedger?.particular?.uniqueName === this.activeAccount?.uniqueName) ? mainTransaction[0]?.particular : this.vm.selectedLedger?.particular;
+
             this.invoiceListRequestParams = { particularAccount: particularAccount, voucherType: this.vm.selectedLedger?.voucher?.name, ledgerAccount: this.activeAccount };
         }
         this.adjustmentDialogRef = this.dialog.open(this.adjustPaymentModal, {
