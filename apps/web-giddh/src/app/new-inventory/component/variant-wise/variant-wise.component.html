@@ -1,0 +1,251 @@
+<div class="help-support-aside setting-sidebar-wrapper">
+    <inventory-sidebar class="inventory-sidebar"></inventory-sidebar>
+</div>
+<div class="variant-wise-wrapper">
+    <div class="fb-1-container mr-b1 mt-3 report-filter-button-container">
+        <div class="head-report-wrapper d-flex justify-content-between w-100">
+            <div class="d-flex left-head-report">
+                <div class="select-dropdown-wrapper">
+                    <span class="select-dropdown">
+                        <select-field class="select-field" placeholder="Select Branch"> </select-field>
+                        <span class="caret"></span>
+                    </span>
+                    <span class="select-dropdown mr-l1">
+                        <select-field class="select-field" placeholder="Select Warehouse"> </select-field>
+                        <span class="caret"></span>
+                    </span>
+                </div>
+            </div>
+            <div class="right-head-report d-flex">
+                <button
+                    mat-mini-fab
+                    class="item-wise-common-btn d-flex align-items-center justify-content-center"
+                    [matMenuTriggerFor]="menu"
+                >
+                    <span class="icon-advance-filter"></span>
+                </button>
+                <mat-menu #menu="matMenu">
+                    <button mat-menu-item><mat-checkbox color="primary">Variant Name</mat-checkbox></button>
+                    <button mat-menu-item><mat-checkbox color="primary">Opening Stock</mat-checkbox></button>
+                    <button mat-menu-item><mat-checkbox color="primary">Inward</mat-checkbox></button>
+                    <button mat-menu-item><mat-checkbox color="primary">Outward</mat-checkbox></button>
+                    <button mat-menu-item><mat-checkbox color="primary">Opening Stock</mat-checkbox></button>
+                </mat-menu>
+                <button
+                    mat-mini-fab
+                    class="item-wise-common-btn d-flex align-items-center justify-content-center mr-l1"
+                >
+                    <span class="icon-edit-pencil"></span>
+                </button>
+                <button
+                    mat-mini-fab
+                    class="item-wise-common-btn d-flex align-items-center justify-content-center mr-l1"
+                >
+                    <span class="icon-download-circle strong"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="total-details-wrapper d-flex w-100 justify-content-between overflow-x-auto mr-t1 mr-b1">
+        <div class="total-details-box mr-r05 border-none sales-purchase min-width-230">
+            <h5>
+                <span>Varient Count</span>
+                <div>
+                    <span class="d-inline-flex number-total"> 14.00 </span>
+                </div>
+            </h5>
+        </div>
+        <div class="total-details-box mr-r05 border-none payment-receipt min-width-230">
+            <h5>
+                <span>Profit/Loss</span>
+                <div>
+                    <span class="d-inline-flex number-total"> 5'114'195.00 () </span>
+                </div>
+            </h5>
+        </div>
+        <div class="total-details-box border-none closing-box min-width-230">
+            <h5>
+                <span>Opening Value</span>
+                <div>
+                    <span class="d-inline-flex number-total"> 0.00 </span>
+                </div>
+            </h5>
+        </div>
+        <div class="total-details-box mr-l05 mr-r05 border-none sales-purchase min-width-230">
+            <h5>
+                <span>Inward Value</span>
+                <div>
+                    <span class="d-inline-flex number-total"> 50'009.00 </span>
+                </div>
+            </h5>
+        </div>
+        <div class="total-details-box mr-r05 border-none payment-receipt min-width-230">
+            <h5>
+                <span>Outward Value</span>
+                <div>
+                    <span class="d-inline-flex number-total"> 5'164'204.00 </span>
+                </div>
+            </h5>
+        </div>
+        <div class="total-details-box border-none closing-box min-width-230">
+            <h5>
+                <span>Closing Value</span>
+                <div>
+                    <span class="d-inline-flex number-total"> 0.00 </span>
+                </div>
+            </h5>
+        </div>
+    </div>
+    <div class="item-wise-table-wrapper">
+        <table class="item-wise-table" mat-table [dataSource]="dataSource">
+            <!-- Product Name Column -->
+            <ng-container matColumnDef="variantName">
+                <th mat-header-cell *matHeaderCellDef>
+                    <div class="product-heading">
+                        Variant Name
+                        <button class="search-btn pr" mat-mini-fab>
+                            <span class="icon-search position-absolute"></span>
+                        </button>
+                    </div>
+                </th>
+                <td mat-cell *matCellDef="let element" class="product-name-cell">
+                    <div class="product-name">
+                        {{ element.variantName }}
+                    </div>
+                </td>
+            </ng-container>
+
+            <!-- Varient Name Column -->
+            <ng-container matColumnDef="inventoryName">
+                <th mat-header-cell *matHeaderCellDef class="inventory-heading">
+                    Inventory Name
+                    <button class="search-btn pr" mat-mini-fab>
+                        <span class="icon-search position-absolute"></span>
+                    </button>
+                </th>
+                <td mat-cell *matCellDef="let element">{{ element.inventoryName }}</td>
+            </ng-container>
+
+            <!-- Opening Stock Qty Column -->
+            <ng-container matColumnDef="openingStockQty">
+                <th mat-header-cell *matHeaderCellDef>Qty</th>
+                <td mat-cell *matCellDef="let element">
+                    {{ element.openingStockQty }}
+                    <div class="unit">{{ element.unit }}</div>
+                </td>
+            </ng-container>
+
+            <!-- Opening Stock Value Column -->
+            <ng-container matColumnDef="openingStockValue">
+                <th mat-header-cell *matHeaderCellDef>Value</th>
+                <td mat-cell *matCellDef="let element">{{ element.openingStockValue }}</td>
+            </ng-container>
+
+            <!-- Inwards Qty Column -->
+            <ng-container matColumnDef="inwardsQty">
+                <th mat-header-cell *matHeaderCellDef>Qty</th>
+                <td mat-cell *matCellDef="let element">
+                    {{ element.inwardsQty }}
+                    <div class="unit">{{ element.unit }}</div>
+                </td>
+            </ng-container>
+
+            <!-- Inwards Value Column -->
+            <ng-container matColumnDef="inwardsValue">
+                <th mat-header-cell *matHeaderCellDef>Value</th>
+                <td mat-cell *matCellDef="let element">{{ element.inwardsValue }}</td>
+            </ng-container>
+
+            <!-- Outwards Qty Column -->
+            <ng-container matColumnDef="outwardsQty">
+                <th mat-header-cell *matHeaderCellDef>Qty</th>
+                <td mat-cell *matCellDef="let element">
+                    {{ element.outwardsQty }}
+                    <div class="unit">{{ element.unit }}</div>
+                </td>
+            </ng-container>
+
+            <!-- Outwards Value Column -->
+            <ng-container matColumnDef="outwardsValue">
+                <th mat-header-cell *matHeaderCellDef>Value</th>
+                <td mat-cell *matCellDef="let element">{{ element.outwardsValue }}</td>
+            </ng-container>
+
+            <!-- Closing Stock Qty Column -->
+            <ng-container matColumnDef="closingStockQty">
+                <th mat-header-cell *matHeaderCellDef>Qty</th>
+                <td mat-cell *matCellDef="let element">
+                    {{ element.closingStockQty }}
+                    <div class="unit">{{ element.unit }}</div>
+                </td>
+            </ng-container>
+
+            <!-- Closing Stock Value Column -->
+            <ng-container matColumnDef="closingStockValue">
+                <th mat-header-cell *matHeaderCellDef>Value</th>
+                <td mat-cell *matCellDef="let element">{{ element.closingStockValue }}</td>
+            </ng-container>
+
+            <!-- Datepicker group -->
+            <ng-container matColumnDef="datepicker">
+                <th mat-header-cell *matHeaderCellDef [style.text-align]="center" [attr.colspan]="2">
+                    <form
+                        #invoiceForm="ngForm"
+                        novalidate
+                        class="form-inline input-grp-date-range-picker position-relative"
+                    >
+                        <div class="form-group mr-r15 d-flex flex-fill">
+                            <div class="form-group custom-datepicker mr-r15" (click)="showGiddhDatepicker($event)">
+                                <i class="icon-calender calendar-addon"></i>
+                                <input
+                                    matInput
+                                    type="text"
+                                    name="selectedDateRange"
+                                    [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
+                                    class="giddh-datepicker form-control date-range-picker"
+                                />
+                            </div>
+                        </div>
+                    </form>
+                </th>
+            </ng-container>
+
+            <!-- Opening Stock group -->
+            <ng-container matColumnDef="opening-stock">
+                <th mat-header-cell *matHeaderCellDef [attr.colspan]="2">Opening Stock</th>
+            </ng-container>
+
+            <!-- Inwards group -->
+            <ng-container matColumnDef="inwards">
+                <th mat-header-cell *matHeaderCellDef [attr.colspan]="2">Inwards</th>
+            </ng-container>
+
+            <!-- Outwards group -->
+            <ng-container matColumnDef="outwards">
+                <th mat-header-cell *matHeaderCellDef [attr.colspan]="2">Outwards</th>
+            </ng-container>
+
+            <!-- Closing Stock group -->
+            <ng-container matColumnDef="closing-stock">
+                <th mat-header-cell *matHeaderCellDef [attr.colspan]="2">Closing Stock</th>
+            </ng-container>
+
+            <tr
+                mat-header-row
+                *matHeaderRowDef="['datepicker', 'opening-stock', 'inwards', 'outwards', 'closing-stock']"
+            ></tr>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+        <div class="text-center mr-t4 mb-4">
+            <pagination
+                [totalItems]="500"
+                [itemsPerPage]="50"
+                [firstText]="'First'"
+                [previousText]="'Previous'"
+                [nextText]="'Next'"
+                [lastText]="'Last'"
+            ></pagination>
+        </div>
+    </div>
+</div>

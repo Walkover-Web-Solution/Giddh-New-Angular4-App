@@ -38,7 +38,7 @@ export class ItemWiseComponent implements OnInit, OnDestroy {
     dataSource = ELEMENT_DATA;
 
     /**
-     *Initialized the component
+     * Initialized the component
      *
      * @memberof ItemWiseComponent
      */
