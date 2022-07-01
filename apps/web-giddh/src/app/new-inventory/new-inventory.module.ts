@@ -59,7 +59,7 @@ import { InventorySidebarModule } from "./component/inventory-sidebar/inventory-
 import { StockBalanceComponent } from "./component/stock-balance/stock-balance.component";
 import { GroupwiseComponent } from "./component/stock-group/group-wise/group-wise.component";
 import { ItemWiseComponent } from "./component/stock-group/item-wise/item-wise.component";
-import { VarientWiseComponent } from "./component/varient-wise/varient-wise.component";
+import { VariantWiseComponent } from "./component/variant-wise/variant-wise.component";
 
 @NgModule({
     declarations: [
@@ -100,7 +100,7 @@ import { VarientWiseComponent } from "./component/varient-wise/varient-wise.comp
         StockBalanceComponent,
         GroupwiseComponent,
         ItemWiseComponent,
-        VarientWiseComponent
+        VariantWiseComponent
     ],
     imports: [
         NewInventoryRoutingModule,
