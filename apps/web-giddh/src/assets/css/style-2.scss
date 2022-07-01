@@ -7071,8 +7071,10 @@ span#HW_badge_cont:nth-child(3) {
     }
 }
 
-.item-wise-page {
-    .item-wise-wrapper {
+.item-wise-page,
+.varient-wise-page {
+    .item-wise-wrapper,
+    .varient-wise-wrapper {
         .select-dropdown-wrapper {
             .select-field {
                 input {

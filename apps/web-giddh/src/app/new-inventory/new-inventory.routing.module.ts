@@ -20,6 +20,7 @@ import { StockCreateEditModule } from "./component/stock-create-edit/stock-creat
 import { StockBalanceComponent } from "./component/stock-balance/stock-balance.component";
 import { GroupwiseComponent } from "./component/stock-group/group-wise/group-wise.component";
 import { ItemWiseComponent } from "./component/stock-group/item-wise/item-wise.component";
+import { VarientWiseComponent } from "./component/varient-wise/varient-wise.component";
 
 const routes: Routes = [
     {
@@ -57,6 +58,10 @@ const routes: Routes = [
     {
         path: "item-wise",
         component: ItemWiseComponent,
+    },
+    {
+        path: "varient-wise",
+        component: VarientWiseComponent,
     },
     {
         path: "stock-group/create",
