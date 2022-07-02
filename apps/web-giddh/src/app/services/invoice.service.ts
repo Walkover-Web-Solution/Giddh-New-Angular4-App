@@ -141,7 +141,7 @@ export class InvoiceService {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let url = this.config.apiUrl;
 
-        if(this.generalService.voucherApiVersion === 2) {
+        if (this.generalService.voucherApiVersion === 2) {
             url = url + INVOICE_API_2.PREVIEW_VOUCHERS_V4;
         } else {
             url = url + INVOICE_API_2.PREVIEW_VOUCHERS;
@@ -400,15 +400,15 @@ export class InvoiceService {
     public DownloadInvoice(accountUniqueName: string, dataToSend: { voucherNumber: string[], typeOfInvoice?: string[], voucherType?: string }): Observable<any> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let url = this.config.apiUrl + INVOICE_API_2.DOWNLOAD_INVOICE.replace(':companyUniqueName', this.companyUniqueName)
-        .replace(':accountUniqueName', encodeURIComponent(accountUniqueName));
+            .replace(':accountUniqueName', encodeURIComponent(accountUniqueName));
 
         if (this.generalService.voucherApiVersion === 2) {
             url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
         }
 
         return this.http.post(url, dataToSend, { responseType: 'blob' }).pipe(map((res) => {
-                return res;
-            }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
+            return res;
+        }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
     }
 
     /*
@@ -486,7 +486,10 @@ export class InvoiceService {
         let url = this.createQueryStringForEway(this.config.apiUrl + EWAYBILL_API.GENERATE_EWAYBILL, {
             page: body.page, count: body.count, fromDate: body.fromDate, toDate: body.toDate, sort: body.sort, sortBy: body.sortBy, searchTerm: body.searchTerm, searchOn: body.searchOn,
         });
-
+        if (body.branchUniqueName) {
+            body.branchUniqueName = body.branchUniqueName !== this.companyUniqueName ? body.branchUniqueName : '';
+            url = url.concat(`&branchUniqueName=${body.branchUniqueName}`);
+        }
         return this.http.get(url.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(
             map((res) => {
                 let data: BaseResponse<IEwayBillAllList, IEwayBillfilter> = res;
