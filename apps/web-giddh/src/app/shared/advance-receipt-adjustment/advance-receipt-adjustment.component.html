@@ -161,7 +161,7 @@
                                             name="voucherName{{ entry.uniqueName }}"
                                             [defaultValue]="entry.voucherNumber"
                                             [fixedValue]="entry.voucherNumber"
-                                            (click)="clickSelectVoucher(entryIdx, adjustAdvancePaymentForm)"
+                                            (click)="clickSelectVoucher(entryIdx, adjustAdvancePaymentForm, entry)"
                                             required
                                             [placeholder]="localeData?.select_voucher"
                                             [(ngModel)]="entry.uniqueName"
