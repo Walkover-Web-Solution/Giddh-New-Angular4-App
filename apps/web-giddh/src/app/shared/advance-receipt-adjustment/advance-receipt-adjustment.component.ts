@@ -943,7 +943,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
                             this.adjustVoucherOptions.push({ value: item.uniqueName, label: item.voucherNumber, additional: item });
                         }
 
-                        const itemPresentInNewVoucherOptions = this.newAdjustVoucherOptions.find(voucher => voucher.value !== item.uniqueName);
+                        const itemPresentInNewVoucherOptions = this.newAdjustVoucherOptions.find(voucher => voucher.value === item.uniqueName);
                         if (!itemPresentInNewVoucherOptions) {
                             this.newAdjustVoucherOptions.push({ value: item.uniqueName, label: item.voucherNumber, additional: item });
                         }
