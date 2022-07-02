@@ -94,6 +94,7 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
         this.getDetailedPurchaseReport(this.getDetailedPurchaseRequestFilter);
         this.purchaseRegisteDetailedResponse$.pipe(takeUntil(this.destroyed$)).subscribe((res: PurchaseRegisteDetailedResponse) => {
             if (res) {
+                this.translationComplete(true);
                 this.PurchaseRegisteDetailedItems = res;
                 _.map(this.PurchaseRegisteDetailedItems.items, (obj: any) => {
                     obj.date = this.getDateToDMY(obj.date);
@@ -114,12 +115,12 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
             takeUntil(this.destroyed$)
         ).subscribe(s => {
             if (s !== null && s !== undefined) {
-            this.showClearFilter = true;
-            this.getDetailedPurchaseRequestFilter.sort = null;
-            this.getDetailedPurchaseRequestFilter.sortBy = null;
-            this.getDetailedPurchaseRequestFilter.q = s;
-            this.getDetailedPurchaseReport(this.getDetailedPurchaseRequestFilter);
-            this.showSearchInvoiceNo = false;
+                this.showClearFilter = true;
+                this.getDetailedPurchaseRequestFilter.sort = null;
+                this.getDetailedPurchaseRequestFilter.sortBy = null;
+                this.getDetailedPurchaseRequestFilter.q = s;
+                this.getDetailedPurchaseReport(this.getDetailedPurchaseRequestFilter);
+                this.showSearchInvoiceNo = false;
             }
         });
     }
