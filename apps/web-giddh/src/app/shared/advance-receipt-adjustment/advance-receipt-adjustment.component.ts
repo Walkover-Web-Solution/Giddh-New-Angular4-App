@@ -936,15 +936,17 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
         if (this.adjustVoucherForm.adjustments[this.currentAdjustmentRowIndex]?.uniqueName) {
             if (this.advanceReceiptAdjustmentUpdatedData?.adjustments?.length) {
                 this.advanceReceiptAdjustmentUpdatedData.adjustments.forEach(item => {
-                    item.voucherNumber = this.generalService.getVoucherNumberLabel(item.voucherType, item.voucherNumber, this.commonLocaleData);
-                    const itemPresentInVoucherOptions = this.adjustVoucherOptions.find(voucher => voucher.value === item.uniqueName);
-                    if (!itemPresentInVoucherOptions) {
-                        this.adjustVoucherOptions.push({ value: item.uniqueName, label: item.voucherNumber, additional: item });
-                    }
+                    if (this.adjustVoucherForm.adjustments[this.currentAdjustmentRowIndex]?.uniqueName === item.uniqueName) {
+                        item.voucherNumber = this.generalService.getVoucherNumberLabel(item.voucherType, item.voucherNumber, this.commonLocaleData);
+                        const itemPresentInVoucherOptions = this.adjustVoucherOptions.find(voucher => voucher.value === item.uniqueName);
+                        if (!itemPresentInVoucherOptions) {
+                            this.adjustVoucherOptions.push({ value: item.uniqueName, label: item.voucherNumber, additional: item });
+                        }
 
-                    const itemPresentInNewVoucherOptions = this.newAdjustVoucherOptions.find(voucher => voucher.value !== item.uniqueName);
-                    if (!itemPresentInNewVoucherOptions) {
-                        this.newAdjustVoucherOptions.push({ value: item.uniqueName, label: item.voucherNumber, additional: item });
+                        const itemPresentInNewVoucherOptions = this.newAdjustVoucherOptions.find(voucher => voucher.value !== item.uniqueName);
+                        if (!itemPresentInNewVoucherOptions) {
+                            this.newAdjustVoucherOptions.push({ value: item.uniqueName, label: item.voucherNumber, additional: item });
+                        }
                     }
                 });
             }
