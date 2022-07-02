@@ -1,0 +1,15 @@
+{
+    "ip": "IP",
+    "operation": "Operation",
+    "activity_logs": "Activity Logs",
+    "get_logs": "Get Logs",
+    "no_logs": "You can change the filters to fetch logs",
+    "user":"User",
+    "date":"Log Date",
+    "compare": "Compare",
+    "show_change_data": "Show Changed Data",
+    "no_difference":"No difference",
+    "no_history":"No history available for this log",
+    "history": "History",
+    "no_history_found":"No History Found"
+}

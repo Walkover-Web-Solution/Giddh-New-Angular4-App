@@ -12,7 +12,7 @@ import { AppState } from '../../store';
 import { LoginActions } from '../../actions/login.action';
 import { CompanyActions } from '../../actions/company.actions';
 import { CommonActions } from '../../actions/common.actions';
-import { CompanyCountry, CompanyCreateRequest, CompanyResponse, StatesRequest, Organization } from '../../models/api-models/Company';
+import { CompanyCountry, CompanyCreateRequest, CompanyResponse, StatesRequest, Organization, StateDetailsRequest } from '../../models/api-models/Company';
 import { UserDetails } from '../../models/api-models/loginModels';
 import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
 import { ActivatedRoute, NavigationEnd, NavigationError, NavigationStart, RouteConfigLoadEnd, Router } from '@angular/router';
@@ -313,6 +313,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 }
 
                 this.toggleSidebarPane(false, false);
+                this.saveLastState();
             }
             if (event instanceof NavigationStart) {
                 this.navigationEnd = false;
@@ -591,7 +592,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                     this.activeAccount$.pipe(takeUntil(isDestroyed)).subscribe(acc => {
                         if (acc) {
                             this.isLedgerAccSelected = true;
-                            this.selectedLedgerName = lastState.substr(lastState.indexOf('/') + 1);
+                            const lastStateArray = lastState.split('/');
+                            this.selectedLedgerName = lastStateArray[lastStateArray?.length - 1];
                             isDestroyed.next(true);
                             isDestroyed.complete();
                             return this.navigateToUser = false;
@@ -617,6 +619,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             if (s) {
                 this.loadAddManageComponent();
                 this.manageGroupsAccountsModal.show();
+            } else {
+                this.manageGroupsAccountsModal.hide();
             }
         });
 
@@ -985,12 +989,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     public hideManageGroupsModal() {
         this.store.pipe(select(c => c.session.lastState), take(1)).subscribe((s: string) => {
-            if (s && (s.indexOf('ledger/') > -1 || s.indexOf('settings') > -1)) {
-                this.store.dispatch(this._generalActions.addAndManageClosed());
-                if (this.selectedLedgerName) {
-                    this.store.dispatch(this.ledgerAction.GetLedgerAccount(this.selectedLedgerName));
-                    this.store.dispatch(this.accountsAction.getAccountDetails(this.selectedLedgerName));
-                }
+            if (s && (s.indexOf('ledger/') > -1 || s.indexOf('settings') > -1) && this.selectedLedgerName) {
+                this.store.dispatch(this.ledgerAction.GetLedgerAccount(this.selectedLedgerName));
             }
         });
 
@@ -1815,5 +1815,22 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      */
     public hideScheduleCalendlyModel(): void {
         this.store.dispatch(this._generalActions.isOpenCalendlyModel(false));
+    }
+
+    /**
+     * Saves last state
+     *
+     * @private
+     * @memberof HeaderComponent
+     */
+    private saveLastState(): void {
+        let companyUniqueName = null;
+        let lastState = this.router.url;
+        lastState = lastState.replace("/pages", "pages");
+        this.store.pipe(select(state => state.session.companyUniqueName), take(1)).subscribe(response => companyUniqueName = response);
+        let stateDetailsRequest = new StateDetailsRequest();
+        stateDetailsRequest.companyUniqueName = companyUniqueName;
+        stateDetailsRequest.lastState = decodeURI(lastState);
+        this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
     }
 }

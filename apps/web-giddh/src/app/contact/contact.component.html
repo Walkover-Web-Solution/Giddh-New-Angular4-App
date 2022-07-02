@@ -116,6 +116,20 @@
                                     </div>
                                 </form>
                             </div>
+                            <div
+                                class="
+                                    clear-filter
+                                    align-items-center
+                                    d-flex
+                                    justify-content-xl-center justify-content-lg-start
+                                    w-50
+                                "
+                                *ngIf="showClearFilter"
+                            >
+                                <button class="btn btn-filters mr-0" (click)="resetAdvanceSearch()">
+                                    <span class="icon-cross"></span> {{ commonLocaleData?.app_clear_filter }}
+                                </button>
+                            </div>
                             <!-- Invoice filter section ends -->
                             <div class="button-content">
                                 <button
@@ -286,13 +300,13 @@
                                         <button mat-menu-item (click)="downloadCSV()">
                                             {{ commonLocaleData?.app_download_csv }}
                                         </button>
-                                        <button
+                                        <!-- <button
                                             mat-menu-item
                                             *ngIf="selectedAccountsList?.length > 0 && activeTab === 'vendor'"
                                             (click)="openBulkPaymentModal()"
                                         >
                                             {{ localeData?.bulk_payment }}
-                                        </button>
+                                        </button> -->
                                     </mat-menu>
                                 </div>
                             </div>
@@ -439,7 +453,7 @@
                 </button>
             </div>
             <div class="modal-body pd-l2 pd-r2 clearfix">
-                <h1 class="mr-b1" *ngIf="messageBody.type == 'Email'">{{ localeData?.enter_subject }}:</h1>
+                <h1 class="mr-b1 font-14" *ngIf="messageBody.type == 'Email'">{{ localeData?.enter_subject }}:</h1>
                 <text-field
                     *ngIf="messageBody.type == 'Email'"
                     [cssClass]="'form-control mr-b1'"
@@ -449,7 +463,7 @@
                     [placeholder]="localeData?.enter_subject_placeholder"
                 >
                 </text-field>
-                <h1 class="mr-b1">{{ localeData?.type_message_body }}:</h1>
+                <h1 class="mr-b1 font-14">{{ localeData?.type_message_body }}:</h1>
                 <textarea
                     matInput
                     #messageBox
@@ -497,7 +511,7 @@
             </div>
 
             <div class="modal-body pd-l2 pd-r2 clearfix">
-                <h1 class="mr-b1" *ngIf="messageBody.type == 'Email'">{{ localeData?.enter_subject }}:</h1>
+                <h1 class="mr-b1 font-14" *ngIf="messageBody.type == 'Email'">{{ localeData?.enter_subject }}:</h1>
                 <text-field
                     *ngIf="messageBody.type == 'Email'"
                     [cssClass]="'form-control mr-b1'"
@@ -508,7 +522,7 @@
                 >
                 </text-field>
 
-                <h1 class="mr-b1">{{ localeData?.type_message_body }}:</h1>
+                <h1 class="mr-b1 font-14">{{ localeData?.type_message_body }}:</h1>
                 <textarea
                     matInput
                     #messageBox

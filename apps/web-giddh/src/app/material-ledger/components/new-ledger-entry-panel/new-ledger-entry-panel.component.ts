@@ -66,6 +66,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { ConfirmModalComponent } from '../../../theme/new-confirm-modal/confirm-modal.component';
 import { NewConfirmationModalComponent } from '../../../theme/new-confirmation-modal/confirmation-modal.component';
 import { MatAccordion } from '@angular/material/expansion';
+import { AdjustmentUtilityService } from '../../../shared/advance-receipt-adjustment/services/adjustment-utility.service';
+import { SettingsDiscountService } from '../../../services/settings.discount.service';
 
 /** New ledger entries */
 const NEW_LEDGER_ENTRIES = [
@@ -107,6 +109,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     @Input() public currentTxn: TransactionVM = null;
     @Input() public needToReCalculate: BehaviorSubject<boolean>;
     @Input() public showTaxationDiscountBox: boolean = true;
+    @Input() public showOtherTax: boolean = true;
     @Input() public isBankTransaction: boolean = false;
     @Input() public trxRequest: AdvanceSearchRequest;
     @Input() public invoiceList: any[];
@@ -173,7 +176,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public asideMenuStateForOtherTaxes: string = 'out';
     public tdsTcsTaxTypes: string[] = ['tcsrc', 'tcspay'];
     public companyTaxesList: TaxResponse[] = [];
-    public totalTdElementWidth: number = 0;
     /** Amount of invoice select for credit note */
     public selectedInvoiceAmount: number = 0;
     /** Selected invoice for credit note */
@@ -244,6 +246,16 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public invoiceListRequestParams: any = {};
     /** Round off amount */
     public calculatedRoundOff: number = 0;
+    /** Current page for reference vouchers */
+    private referenceVouchersCurrentPage: number = 2;
+    /** Reference voucher search field */
+    private searchReferenceVoucher: any = "";
+    /** Invoice list observable */
+    public invoiceList$: Observable<any[]>;
+    /** List of discounts */	
+    public discountsList: any[] = [];
+    /** Is advance receipt with tds/tcs */
+    public isAdvanceReceiptWithTds: boolean = false;
 
     constructor(private store: Store<AppState>,
         private cdRef: ChangeDetectorRef,
@@ -253,7 +265,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         private settingsUtilityService: SettingsUtilityService,
         private toaster: ToasterService,
         public dialog: MatDialog,
-        private settingsTagService: SettingsTagService
+        private settingsTagService: SettingsTagService,
+        private adjustmentUtilityService: AdjustmentUtilityService,
+        private settingsDiscountService: SettingsDiscountService
     ) {
         this.companyTaxesList$ = this.store.pipe(select(p => p.company && p.company.taxes), takeUntil(this.destroyed$));
         this.sessionKey$ = this.store.pipe(select(p => p.session.user.session.id), takeUntil(this.destroyed$));
@@ -263,7 +277,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     }
 
     public ngOnInit() {
-        document.querySelector('body').classList.add('ledger-body');
         this.voucherTypeList = observableOf([{
             label: this.commonLocaleData?.app_voucher_types.sales,
             value: 'sal'
@@ -353,6 +366,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
         this.shouldShowAdvanceReceipt = (this.blankLedger) ? this.blankLedger.voucherType === 'rcpt' : false;
         this.isAdvanceReceipt = (this.currentTxn) ? this.currentTxn['subVoucher'] === SubVoucher.AdvanceReceipt : false;
+        this.isAdvanceReceiptWithTds = cloneDeep(this.isAdvanceReceipt);
         this.isRcmEntry = (this.currentTxn) ? this.currentTxn['subVoucher'] === SubVoucher.ReverseCharge : false;
         this.shouldShowAdvanceReceiptMandatoryFields = this.isAdvanceReceipt;
         this.currentVoucherLabel = this.generalService.getCurrentVoucherLabel(this.blankLedger?.voucherType, this.commonLocaleData);
@@ -362,6 +376,12 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             this.availableItcList[2].label = this.localeData?.others;
         }
         this.voucherApiVersion = this.generalService.voucherApiVersion;
+
+        this.settingsDiscountService.GetDiscounts().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.status === "success" && response?.body?.length > 0) {
+                this.discountsList = response?.body;
+            }
+        });
     }
 
     @HostListener('click', ['$event'])
@@ -382,6 +402,10 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             if (this.blankLedger?.otherTaxModal?.appliedOtherTax && this.blankLedger?.otherTaxModal?.appliedOtherTax?.uniqueName) {
                 this.blankLedger.isOtherTaxesApplicable = true;
             }
+        }
+        if (this.voucherApiVersion === 2 && changes?.invoiceList?.currentValue) {
+            this.invoiceList$ = observableOf(this.invoiceList);
+            this.referenceVouchersCurrentPage = 2;
         }
     }
 
@@ -444,13 +468,10 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             if (a) {
                 this.amountChanged();
                 this.calculateTotal();
+                this.calculateTax();
             }
         });
         this.cdRef.markForCheck();
-    }
-
-    public onResized(event: ResizedEvent) {
-        this.totalTdElementWidth = event.newWidth + 10;
     }
 
     public addToDrOrCr(type: string, e: Event) {
@@ -502,9 +523,11 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         totalPercentage = this.currentTxn.taxesVm.reduce((pv, cv) => {
             return cv.isChecked ? pv + cv.amount : pv;
         }, 0);
-        this.currentTxn.tax = giddhRoundOff(
-            this.generalService.calculateInclusiveOrExclusiveTaxes(this.isAdvanceReceipt, this.currentTxn.amount, totalPercentage, this.currentTxn.discount),
-            this.giddhBalanceDecimalPlaces);
+        if (this.generalService.isReceiptPaymentEntry(this.activeAccount, this.currentTxn.selectedAccount, this.blankLedger.voucherType) && !this.isAdvanceReceiptWithTds) {
+            this.currentTxn.tax = giddhRoundOff(this.generalService.calculateInclusiveOrExclusiveTaxes(false, this.currentTxn.advanceReceiptAmount, totalPercentage, this.currentTxn.discount), this.giddhBalanceDecimalPlaces);
+        } else {
+            this.currentTxn.tax = giddhRoundOff(this.generalService.calculateInclusiveOrExclusiveTaxes(this.isAdvanceReceipt, this.currentTxn.amount, totalPercentage, this.currentTxn.discount), this.giddhBalanceDecimalPlaces);
+        }
         this.currentTxn.convertedTax = this.calculateConversionRate(this.currentTxn.tax);
         this.calculateTotal();
     }
@@ -551,8 +574,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 this.currentTxn.convertedTotal = this.calculateConversionRate(this.currentTxn.total);
             }
         }
-        this.calculateOtherTaxes(this.blankLedger.otherTaxModal);
         this.calculateCompoundTotal();
+        this.calculateOtherTaxes(this.blankLedger.otherTaxModal);
     }
 
     public amountChanged() {
@@ -824,7 +847,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     }
 
     public ngOnDestroy(): void {
-        document.querySelector('body').classList.remove('ledger-body');
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
@@ -1059,6 +1081,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      */
     public getInvoiceListsData(event: any): void {
         this.removeAdjustment();
+        if (this.voucherApiVersion === 2) {
+            this.resetInvoiceList();
+        }
         if (event.value === 'advance-receipt') {
             this.shouldShowAdvanceReceipt = true;
             this.isAdvanceReceipt = true;
@@ -1072,12 +1097,15 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             this.isAdvanceReceipt = false;
         }
 
+        this.isAdvanceReceiptWithTds = cloneDeep(this.isAdvanceReceipt);
+
         if (this.voucherApiVersion === 2 && this.isAdvanceReceipt) {
             this.blankLedger.generateInvoice = true;
         }
 
         this.handleAdvanceReceiptChange();
         this.currentVoucherLabel = this.generalService.getCurrentVoucherLabel(this.blankLedger?.voucherType, this.commonLocaleData);
+        this.calculateTotal();
     }
 
     public toggleBodyClass() {
@@ -1117,6 +1145,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         let companyTaxes: TaxResponse[] = [];
         let totalTaxes = 0;
 
+        this.isAdvanceReceiptWithTds = this.isAdvanceReceipt;
+
         this.companyTaxesList$.pipe(take(1)).subscribe(taxes => companyTaxes = taxes);
         if (!transaction) {
             return;
@@ -1124,19 +1154,39 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
         if (modal?.appliedOtherTax && modal?.appliedOtherTax?.uniqueName) {
             const amount = (this.isAdvanceReceipt) ? transaction.advanceReceiptAmount : transaction.amount;
-            if (modal.tcsCalculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount) {
-                taxableValue = Number(amount) - transaction.discount;
-            } else if (modal.tcsCalculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTotalAmount) {
-                let rawAmount = Number(amount) - transaction.discount;
-                taxableValue = (rawAmount + transaction.tax);
-            }
-
             let tax = companyTaxes.find(ct => ct?.uniqueName === modal?.appliedOtherTax?.uniqueName);
             if (tax) {
                 this.blankLedger.otherTaxType = ['tcsrc', 'tcspay'].includes(tax.taxType) ? 'tcs' : 'tds';
-            }
-            if (tax) {
                 totalTaxes += tax.taxDetail[0].taxValue;
+            }
+
+            if (this.generalService.isReceiptPaymentEntry(this.activeAccount, this.currentTxn.selectedAccount, this.blankLedger.voucherType)) {
+                let mainTaxPercentage = this.currentTxn.taxesVm?.filter(p => p.isChecked)?.reduce((sum, current) => sum + current.amount, 0);
+                let tdsTaxPercentage = null;
+                let tcsTaxPercentage = null;
+                let totalAmount = Number(this.blankLedger.compoundTotal);
+
+                if (this.blankLedger.otherTaxType === "tcs") {
+                    tcsTaxPercentage = totalTaxes;
+                    this.isAdvanceReceiptWithTds = false;
+                } else if (this.blankLedger.otherTaxType === "tds") {
+                    tdsTaxPercentage = totalTaxes;
+                    this.isAdvanceReceiptWithTds = false;
+                }
+
+                taxableValue = this.generalService.getReceiptPaymentOtherTaxAmount(modal.tcsCalculationMethod, totalAmount, mainTaxPercentage, tdsTaxPercentage, tcsTaxPercentage);
+                this.currentTxn.advanceReceiptAmount = taxableValue;
+                this.totalForTax = taxableValue;
+                if (modal.tcsCalculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTotalAmount) {
+                    taxableValue = (taxableValue + transaction.tax);
+                }
+            } else {
+                if (modal.tcsCalculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount) {
+                    taxableValue = Number(amount) - transaction.discount;
+                } else if (modal.tcsCalculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTotalAmount) {
+                    let rawAmount = Number(amount) - transaction.discount;
+                    taxableValue = (rawAmount + transaction.tax);
+                }
             }
             this.blankLedger.tdsTcsTaxesSum = giddhRoundOff(((taxableValue * totalTaxes) / 100), this.giddhBalanceDecimalPlaces);
             this.blankLedger.otherTaxModal = modal;
@@ -1636,5 +1686,87 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public toggleMoreDetail(): void {
         this.isMoreDetailsOpen = !this.isMoreDetailsOpen;
         this.moreDetailOpen.emit(this.isMoreDetailsOpen);
+    }
+
+    /**
+     * Get Invoice list for credit note
+     *
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    public loadInvoiceListsForCreditNote(): void {
+        const voucherType = this.blankLedger.voucherType;
+        if (voucherType && this.currentTxn?.selectedAccount?.uniqueName && this.activeAccount?.uniqueName) {
+            let request;
+
+            let activeAccount = null;
+            this.activeAccount$.pipe(take(1)).subscribe(account => activeAccount = account);
+
+            if (this.voucherApiVersion === 2) {
+                request = this.adjustmentUtilityService.getInvoiceListRequest({ particularAccount: this.currentTxn?.selectedAccount, voucherType: voucherType, ledgerAccount: activeAccount });
+            } else {
+                request = {
+                    accountUniqueNames: [this.currentTxn?.selectedAccount?.uniqueName, this.activeAccount?.uniqueName],
+                    voucherType
+                };
+            }
+
+            // don't call api if it's invalid case
+            if (!request) {
+                return;
+            }
+
+            request.number = this.searchReferenceVoucher;
+
+            if (request.number) {
+                this.resetInvoiceList();
+            }
+
+            request.page = this.referenceVouchersCurrentPage;
+            this.referenceVouchersCurrentPage++;
+
+            let date;
+            if (this.blankLedger && this.blankLedger.entryDate) {
+                if (typeof this.blankLedger.entryDate === 'string') {
+                    date = this.blankLedger.entryDate;
+                } else {
+                    date = moment(this.blankLedger.entryDate).format(GIDDH_DATE_FORMAT);
+                }
+            }
+
+            this.ledgerService.getInvoiceListsForCreditNote(request, date).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
+                if (response && response.body) {
+                    let items = [];
+                    if (response.body.results) {
+                        items = response.body.results;
+                    } else if (response.body.items) {
+                        items = response.body.items;
+                    }
+
+                    items?.forEach(invoice => {
+                        invoice.voucherNumber = this.generalService.getVoucherNumberLabel(invoice?.voucherType, invoice?.voucherNumber, this.commonLocaleData);
+
+                        this.invoiceList.push({ label: invoice?.voucherNumber ? invoice.voucherNumber : '-', value: invoice?.uniqueName, additional: invoice })
+                    });
+
+                    this.invoiceList$ = observableOf(this.invoiceList);
+
+                    this.cdRef.detectChanges();
+
+                } else if (request.number) {
+                    this.resetInvoiceList();
+                }
+            });
+        }
+    }
+
+    /**
+     * Resets invoice list and current page
+     *
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    public resetInvoiceList(): void {
+        this.invoiceList = [];
+        this.invoiceList$ = observableOf([]);
+        this.referenceVouchersCurrentPage = 2;
     }
 }

@@ -335,7 +335,19 @@
                     "label": "ऑडिट नोंदी नवीन",
                     "link": "/pages/audit-logs/new",
                     "icon": "icon-audit-log",
-                    "description": "प्रविष्टींचा कालक्रमानुसार डेटा"
+                    "description": "प्रविष्टींचा कालक्रमानुसार डेटा",
+                    "additional": {
+                        "voucherVersion": 1
+                    }
+                },
+                {
+                    "label": "क्रियाकलाप नोंदी",
+                    "link": "/pages/activity-logs",
+                    "icon": "icon-audit-log",
+                    "description": "प्रविष्टींचा कालक्रमानुसार डेटा",
+                    "additional": {
+                        "voucherVersion": 2
+                    }
                 },
                 {
                     "label": "रोख प्रवाह",

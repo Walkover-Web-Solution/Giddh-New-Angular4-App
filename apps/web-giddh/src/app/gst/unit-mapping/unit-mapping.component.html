@@ -1,0 +1,42 @@
+<div class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper" *ngIf="asideGstSidebarMenuState === 'in'">
+    <div
+        class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper"
+        *ngIf="asideGstSidebarMenuState === 'in'"
+    >
+        <tax-sidebar
+            (navigateEvent)="handleNavigation($event)"
+            [activeCompanyGstNumber]="activeCompanyGstNumber"
+            (clickOutside)="isMobileScreen ? (asideGstSidebarMenuState = 'out') : ''"
+            [exclude]="'#primary-new-header'"
+            [isMonthSelected]="false"
+            [isGstModule]="true"
+            class="gst-sidebar"
+        ></tax-sidebar>
+    </div>
+    <mat-grid-list class="unit-mapping-grid-list" cols="2" gutterSize="0px" rowHeight="70px">
+        <mat-grid-tile class="grid-box grid-box-head">
+            <div class="unit-box">Unit</div>
+            <div class="map-unit-box">Map Unit</div>
+        </mat-grid-tile>
+        <mat-grid-tile class="grid-box grid-box-head">
+            <div class="unit-box">Unit</div>
+            <div class="map-unit-box">Map Unit</div>
+        </mat-grid-tile>
+        <form class="map-unit-value-form">
+            <mat-grid-tile class="grid-box grid-box-content" *ngFor="let unit of stockUnit$ | async">
+                <div class="unit-value">{{ unit.name }} ({{ unit.code }})</div>
+                <div class="map-unit-value">
+                    <select-field
+                        [cssClass]="'form-control mat-field-border'"
+                        class="map-unit-select-field"
+                        [placeholder]="'Select Unit'"
+                        [options]="units"
+                    ></select-field>
+                </div>
+            </mat-grid-tile>
+        </form>
+    </mat-grid-list>
+    <div class="button-wrapper">
+        <button [ngClass]="{ 'mat-button-disabled': disabled, 'save-button': !disabled }" mat-flat-button>Save</button>
+    </div>
+</div>

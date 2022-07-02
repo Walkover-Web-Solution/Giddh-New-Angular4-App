@@ -178,6 +178,7 @@
                                 [prefixInput]="selectedPrefixForCurrency"
                                 [suffixInput]="selectedSuffixForCurrency"
                                 [ledgerAmount]="currentTxn.amount"
+                                [discountsList]="discountsList"
                                 [commonLocaleData]="commonLocaleData"
                                 (hideOtherPopups)="hideTax()"
                                 (discountTotalUpdated)="calculateDiscount($event)"
@@ -266,7 +267,7 @@
                                 (taxAmountSumEvent)="calculateTax()"
                                 (hideOtherPopups)="hideDiscount()"
                                 (isApplicableTaxesEvent)="currentTxn.applyApplicableTaxes = $event"
-                                [isAdvanceReceipt]="isAdvanceReceipt"
+                                [isAdvanceReceipt]="isAdvanceReceiptWithTds"
                                 [allowedSelectionOfAType]="allowedSelectionOfAType"
                                 [commonLocaleData]="commonLocaleData"
                             >
@@ -299,7 +300,6 @@
                             *ngIf="currentTxn?.selectedAccount || shouldShowAdvanceReceiptMandatoryFields"
                             class="item-padding text-right total-amount-ledger"
                             id="totalTd"
-                            (resized)="onResized($event)"
                         >
                             <label class="primary-color font-12">{{ commonLocaleData?.app_total }}</label>
                             <input
@@ -347,7 +347,7 @@
                 </div>
             </div>
             <div class="col-md-8" [ngClass]="{ 'offset-md-4': !currentTxn?.selectedAccount?.stock }">
-                <div class="text-right mr-b1" *ngIf="currentTxn?.selectedAccount && showTaxationDiscountBox">
+                <div class="text-right mr-b1" *ngIf="currentTxn?.selectedAccount && showOtherTax">
                     <ng-container *ngIf="isTcsTdsApplicable">
                         <mat-checkbox
                             color="primary"
@@ -359,11 +359,7 @@
                             >{{ localeData?.other_tax }}</mat-checkbox
                         >
                         <div class="clearfix">
-                            <div
-                                *ngIf="blankLedger.isOtherTaxesApplicable"
-                                class="mr-t1 pull-right"
-                                [ngStyle]="{ 'width': totalTdElementWidth + 'px' }"
-                            >
+                            <div *ngIf="blankLedger.isOtherTaxesApplicable" class="mr-t1 pull-right">
                                 <label>{{ commonLocaleData?.app_other_tax }}</label>
                                 <span class="d-flex">
                                     <span class="d-flex align-item-center">
@@ -519,6 +515,67 @@
                                                     : commonLocaleData?.app_voucher_no
                                             }}</label>
                                             <sh-select
+                                                *ngIf="voucherApiVersion === 2"
+                                                [disabled]="isReadOnly"
+                                                [class.disabled-ledger]="isReadOnly"
+                                                id="ledger-voucher-type-debit-note"
+                                                [options]="invoiceList$ | async"
+                                                #invoice
+                                                [placeholder]="localeData?.select_invoice"
+                                                [(ngModel)]="selectedInvoiceForCreditNote"
+                                                [notFoundLink]="false"
+                                                [forceClearReactive]="forceClear$ | async"
+                                                (selected)="creditNoteInvoiceSelected($event)"
+                                                [multiple]="false"
+                                                [ItemHeight]="67"
+                                                [showClear]="false"
+                                                [isPaginationEnabled]="true"
+                                                (scrollEnd)="loadInvoiceListsForCreditNote()"
+                                                [enableDynamicSearch]="true"
+                                                (dynamicSearchedQuery)="
+                                                    referenceVouchersCurrentPage = 1;
+                                                    searchReferenceVoucher = $event;
+                                                    loadInvoiceListsForCreditNote($event)
+                                                "
+                                            >
+                                                <ng-template #optionTemplate let-option="option">
+                                                    <a href="javascript:void(0)" class="list-item sh-template">
+                                                        <div class="item">
+                                                            {{
+                                                                (blankLedger.voucherType === "pur" ||
+                                                                    blankLedger.voucherType === "purchase") &&
+                                                                !option.label
+                                                                    ? commonLocaleData?.app_not_available
+                                                                    : option.label
+                                                            }}
+                                                        </div>
+                                                        <div class="item-unique">
+                                                            ({{ localeData?.dated }}:
+                                                            {{ option.additional?.voucherDate }})
+                                                        </div>
+                                                        <div class="item-unique">
+                                                            ({{ commonLocaleData?.app_amount }}:
+                                                            <span class="d-inline-flex">
+                                                                <amount-field
+                                                                    [amount]="
+                                                                        voucherApiVersion === 2
+                                                                            ? option.additional?.unadjustedAmount
+                                                                                  ?.amountForAccount
+                                                                            : option.additional?.balanceDue
+                                                                                  ?.amountForAccount
+                                                                    "
+                                                                    [currencySymbol]="false"
+                                                                    [currencyCode]="false"
+                                                                >
+                                                                </amount-field>
+                                                            </span>
+                                                            )
+                                                        </div>
+                                                    </a>
+                                                </ng-template>
+                                            </sh-select>
+                                            <sh-select
+                                                *ngIf="voucherApiVersion !== 2"
                                                 [disabled]="isReadOnly"
                                                 [class.disabled-ledger]="isReadOnly"
                                                 id="ledger-voucher-type-debit-note"
@@ -549,7 +606,7 @@
                                                             {{ option.additional?.voucherDate }})
                                                         </div>
                                                         <div class="item-unique">
-                                                            ({{ commonLocaleData?.app_due }}:
+                                                            ({{ commonLocaleData?.app_amount }}:
                                                             <span class="d-inline-flex">
                                                                 <amount-field
                                                                     [amount]="

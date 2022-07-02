@@ -401,6 +401,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         this.attachedPdfFileUrl = null;
         this.imagePreviewSource = null;
         this.selectedItem.hasAttachment = false;
+        this.detectChanges();
 
         if (this._generalService.voucherApiVersion === 2 && ![VoucherTypeEnum.generateEstimate, VoucherTypeEnum.generateProforma].includes(this.voucherType)) {
             let getRequest = {
@@ -452,11 +453,18 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                             this.attachedAttachmentBlob = this._generalService.base64ToBlob(result.body.attachments[0].encodedData, '', 512);
                             this.attachedDocumentType = { name: result.body.attachments[0].name, type: 'unsupported', value: fileExtention };
                         }
+                    } else {
+                        if (this.voucherType === VoucherTypeEnum.purchase) {
+                            this.shouldShowUploadAttachment = true;
+                        }
                     }
                     /** Creating attachment finish */
                 } else {
                     this.isVoucherDownloadError = true;
                     this.pdfPreviewHasError = true;
+                    if (this.voucherType === VoucherTypeEnum.purchase) {
+                        this.shouldShowUploadAttachment = true;
+                    }
                     this._toasty.errorToast(this.commonLocaleData?.app_something_went_wrong);
                 }
                 this.isVoucherDownloading = false;
@@ -744,16 +752,26 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                 this._toasty.successToast(this.localeData?.file_uploaded);
                 const response = output.file.response.body;
                 this.isFileUploading = false;
-                const requestObject = {
-                    account: {
-                        uniqueName: this.selectedItem?.account?.uniqueName
-                    },
-                    uniqueName: this.selectedItem?.uniqueName,
-                    attachedFiles: [response?.uniqueName]
-                };
-                this.purchaseRecordService.generatePurchaseRecord(requestObject, 'PATCH', true).pipe(takeUntil(this.destroyed$)).subscribe(() => {
-                    this.downloadVoucher('base64');
-                }, () => this._toasty.errorToast(this.commonLocaleData?.app_something_went_wrong));
+                if (this.voucherApiVersion === 2) {
+                    const requestObject = {
+                        uniqueName: this.selectedItem?.uniqueName,
+                        attachedFiles: [response?.uniqueName]
+                    };
+                    this.salesService.updateAttachmentInVoucher(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(() => {
+                        this.downloadVoucher('base64');
+                    }, () => this._toasty.errorToast(this.commonLocaleData?.app_something_went_wrong));
+                } else {
+                    const requestObject = {
+                        account: {
+                            uniqueName: this.selectedItem?.account?.uniqueName
+                        },
+                        uniqueName: this.selectedItem?.uniqueName,
+                        attachedFiles: [response?.uniqueName]
+                    };
+                    this.purchaseRecordService.generatePurchaseRecord(requestObject, 'PATCH', true).pipe(takeUntil(this.destroyed$)).subscribe(() => {
+                        this.downloadVoucher('base64');
+                    }, () => this._toasty.errorToast(this.commonLocaleData?.app_something_went_wrong));
+                }
             } else {
                 this.isFileUploading = false;
                 this._toasty.errorToast(output.file.response.message);

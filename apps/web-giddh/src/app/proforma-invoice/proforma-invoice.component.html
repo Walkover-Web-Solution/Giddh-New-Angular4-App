@@ -1486,6 +1486,58 @@
 
                                                 <ng-container *ngIf="isCreditNote || isDebitNote">
                                                     <sh-select
+                                                        *ngIf="voucherApiVersion === 2"
+                                                        [options]="invoiceList$ | async"
+                                                        [placeholder]="commonLocaleData?.app_select_accounts"
+                                                        [fixedValue]="invoiceSelected?.label"
+                                                        [forceClearReactive]="invoiceForceClearReactive$ | async"
+                                                        class="linking-dropdown"
+                                                        [notFoundLink]="false"
+                                                        [(ngModel)]="selectedInvoice"
+                                                        name="invoiceLinking"
+                                                        (selected)="creditNoteInvoiceSelected($event)"
+                                                        [multiple]="false"
+                                                        [ItemHeight]="67"
+                                                        [showClear]="false"
+                                                        [isPaginationEnabled]="true"
+                                                        (scrollEnd)="
+                                                            !searchReferenceVoucher
+                                                                ? getInvoiceListsForCreditNote()
+                                                                : ''
+                                                        "
+                                                        [enableDynamicSearch]="true"
+                                                        (dynamicSearchedQuery)="
+                                                            searchReferenceVoucher = $event;
+                                                            resetInvoiceList();
+                                                            getInvoiceListsForCreditNote()
+                                                        "
+                                                    >
+                                                        <ng-template #optionTemplate let-option="option">
+                                                            <a
+                                                                *ngIf="option"
+                                                                href="javascript:void(0)"
+                                                                class="linking-item list-item sh-template"
+                                                            >
+                                                                <div class="item">{{ option?.label }}</div>
+                                                                <div class="item-unique">
+                                                                    ({{ commonLocaleData?.app_dated }}:
+                                                                    {{ option.additional?.voucherDate }})
+                                                                </div>
+                                                                <div class="item-unique">
+                                                                    ({{ commonLocaleData?.app_amount }}:
+                                                                    {{
+                                                                        voucherApiVersion === 2
+                                                                            ? (option.additional?.unadjustedAmount
+                                                                                  ?.amountForAccount | giddhCurrency)
+                                                                            : (option.additional?.balanceDue
+                                                                                  ?.amountForAccount | giddhCurrency)
+                                                                    }})
+                                                                </div>
+                                                            </a>
+                                                        </ng-template>
+                                                    </sh-select>
+                                                    <sh-select
+                                                        *ngIf="voucherApiVersion !== 2"
                                                         [options]="invoiceList"
                                                         [placeholder]="commonLocaleData?.app_select_accounts"
                                                         [fixedValue]="invoiceSelected?.label"
@@ -1511,7 +1563,7 @@
                                                                     {{ option.additional?.voucherDate }})
                                                                 </div>
                                                                 <div class="item-unique">
-                                                                    ({{ commonLocaleData?.app_due }}:
+                                                                    ({{ commonLocaleData?.app_amount }}:
                                                                     {{
                                                                         voucherApiVersion === 2
                                                                             ? (option.additional?.unadjustedAmount
@@ -1751,13 +1803,13 @@
                                                 (click)="toggleRcmCheckbox($event)"
                                             />
                                             <label
+                                                class="checkbox-custom-label"
                                                 #rcmPopup="bs-popover"
                                                 [popover]="rcmTemplate"
                                                 container="body"
                                                 placement="bottom right"
                                                 containerClass="purchase-invoice-rcm"
                                                 for="reverse-charge"
-                                                class="checkbox-custom-label"
                                             >
                                                 {{ localeData?.transaction_reverse_charge }}
                                             </label>
@@ -2239,7 +2291,10 @@
 
                                                     <span
                                                         class="d-flex justify-content-end"
-                                                        *ngIf="entry.isOtherTaxApplicable"
+                                                        *ngIf="
+                                                            entry.isOtherTaxApplicable &&
+                                                            entry.otherTaxModal?.appliedOtherTax?.name
+                                                        "
                                                     >
                                                         {{ entry.otherTaxModal?.appliedOtherTax?.name }} :
                                                         <amount-field
@@ -2257,11 +2312,22 @@
                                                             "
                                                         >
                                                         </amount-field>
+                                                        <amount-field
+                                                            *ngIf="!isMulticurrencyAccount"
+                                                            [amount]="entry.otherTaxSum"
+                                                            [currencySymbol]="false"
+                                                            [currencyCode]="false"
+                                                        >
+                                                        </amount-field>
                                                     </span>
                                                 </div>
                                                 <div
                                                     class="tax-in-currency"
-                                                    *ngIf="entry.isOtherTaxApplicable && isMulticurrencyAccount"
+                                                    *ngIf="
+                                                        entry.isOtherTaxApplicable &&
+                                                        isMulticurrencyAccount &&
+                                                        entry.otherTaxModal?.appliedOtherTax?.name
+                                                    "
                                                 >
                                                     {{ entry.otherTaxModal?.appliedOtherTax?.name }} :
                                                     <span
@@ -2819,7 +2885,11 @@
                                                 </div>
                                             </div>
                                             <div
-                                                *ngIf="entry.isOtherTaxApplicable && isMulticurrencyAccount"
+                                                *ngIf="
+                                                    entry.isOtherTaxApplicable &&
+                                                    isMulticurrencyAccount &&
+                                                    entry.otherTaxModal?.appliedOtherTax?.name
+                                                "
                                                 class="tax-in-currency"
                                             >
                                                 {{ entry.otherTaxModal?.appliedOtherTax?.name }}
@@ -4549,7 +4619,11 @@
                                                         </div>
                                                     </div>
                                                     <div
-                                                        *ngIf="entry.isOtherTaxApplicable && isMulticurrencyAccount"
+                                                        *ngIf="
+                                                            entry.isOtherTaxApplicable &&
+                                                            isMulticurrencyAccount &&
+                                                            entry.otherTaxModal?.appliedOtherTax?.name
+                                                        "
                                                         class="tax-in-currency d-flex"
                                                     >
                                                         {{ entry.otherTaxModal?.appliedOtherTax?.name }}
@@ -5197,7 +5271,7 @@
                                         [disabled]="
                                             !hasVoucherEntry || invoiceForm?.controls['message2']?.errors?.maxlength
                                         "
-                                        (click)="triggerSubmitInvoiceForm(invoiceForm, true)"
+                                        (click)="doAction(0); triggerSubmitInvoiceForm(invoiceForm, true)"
                                         class="btn btn-default"
                                         *ngIf="!isCompany && isCustomerSelected && !isPendingVoucherType"
                                     >

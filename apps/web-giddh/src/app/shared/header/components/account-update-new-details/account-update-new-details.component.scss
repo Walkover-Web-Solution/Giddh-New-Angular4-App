@@ -6,7 +6,7 @@
 
 .aside-pane-form {
     background-color: var(--color-white);
-    box-shadow: 0px 3px 6px var(--color-iron);
+    box-shadow: 0px 3px 6px var(--color-primary-common-box-shadow);
     padding: 15px 15px;
     overflow: auto;
     scroll-behavior: smooth;
@@ -115,6 +115,13 @@ form.gstin-form {
 
 .update-btn-zindex {
     z-index: 0;
+    color: var(--color-secondary-button-text) !important;
+    border-color: var(--color-secondary-button-background) !important;
+    background-color: var(--color-secondary-button-background) !important;
+    &:hover {
+        border-color: var(--color-secondary-button-background-hover) !important;
+        background-color: var(--color-secondary-button-background-hover) !important;
+    }
 }
 
 .wd100 {

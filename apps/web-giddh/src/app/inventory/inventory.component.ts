@@ -1,5 +1,5 @@
 import { InventoryAction } from '../actions/inventory/inventory.actions';
-import { CompanyResponse, StateDetailsRequest, BranchFilterRequest } from '../models/api-models/Company';
+import { CompanyResponse, BranchFilterRequest } from '../models/api-models/Company';
 import { GroupStockReportRequest, StockDetailResponse, StockGroupResponse } from '../models/api-models/Inventory';
 import { InvoiceActions } from '../actions/invoice/invoice.actions';
 import { TabDirective, TabsetComponent } from 'ngx-bootstrap/tabs';
@@ -203,7 +203,6 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
 
         this.router.events.pipe(takeUntil(this.destroyed$)).subscribe(s => {
             if (s instanceof NavigationEnd) {
-                this.saveLastState();
                 this.activeTabIndex = this.router.url.indexOf('jobwork') > -1 ? 1 : this.router.url.indexOf('manufacturing') > -1 ? 2 : this.router.url.indexOf('inventory/report') > -1 ? 3 : 0;
             }
         });
@@ -226,7 +225,6 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     public ngAfterViewInit() {
-        this.saveLastState();
         if (!this.isMobileScreen) {
             this.setDefaultGroup();
         }
@@ -384,15 +382,6 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.isAllSelected$ = observableOf(false);
             }
         });
-    }
-
-    private saveLastState() {
-        let state = this.activeTabIndex === 0 ? 'inventory' : this.activeTabIndex === 1 ? 'inventory/jobwork' : this.activeTabIndex === 2 ? 'inventory/manufacturing' : 'inventory/report';
-        let stateDetailsRequest = new StateDetailsRequest();
-        stateDetailsRequest.companyUniqueName = this.generalService.companyUniqueName;
-        stateDetailsRequest.lastState = `/pages/${state}`;
-
-        this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
     }
 
     /**

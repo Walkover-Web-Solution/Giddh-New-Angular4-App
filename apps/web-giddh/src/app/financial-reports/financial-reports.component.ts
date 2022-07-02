@@ -4,9 +4,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { ReplaySubject } from 'rxjs';
-import { take, takeUntil } from 'rxjs/operators';
-import { CompanyActions } from '../actions/company.actions';
-import { CompanyResponse, StateDetailsRequest } from '../models/api-models/Company';
+import { takeUntil } from 'rxjs/operators';
+import { CompanyResponse } from '../models/api-models/Company';
 import { AppState } from '../store';
 
 @Component({
@@ -42,10 +41,9 @@ export class FinancialReportsComponent implements OnInit, OnDestroy {
 
     constructor(
         private store: Store<AppState>,
-        private companyActions: CompanyActions,
         private route: ActivatedRoute,
         private router: Router,
-        private breakPointObservar: BreakpointObserver,) {
+        private breakPointObservar: BreakpointObserver) {
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
                 this.selectedCompany = activeCompany;
@@ -97,7 +95,6 @@ export class FinancialReportsComponent implements OnInit, OnDestroy {
                 this.selectTab(val.tabIndex);
             }
         });
-        this.saveLastState(this.activeTab, this.activeTabIndex);
     }
 
     public selectTab(id: number) {
@@ -127,23 +124,5 @@ export class FinancialReportsComponent implements OnInit, OnDestroy {
         if (!this.preventTabChangeWithRoute) {
             this.router.navigate(['/pages/trial-balance-and-profit-loss'], { queryParams: { tab, tabIndex } });
         }
-        this.saveLastState(tab, tabIndex);
-    }
-
-    /**
-     * Saves the last state for purchase module
-     *
-     * @private
-     * @param {string} tabName Current tab name
-     * @param {number} tabIndex Current tab index
-     * @memberof FinancialReportsComponent
-     */
-    private saveLastState(tabName: string, tabIndex: number): void {
-        let companyUniqueName = null;
-        this.store.pipe(select(appState => appState.session.companyUniqueName), take(1)).subscribe(response => companyUniqueName = response);
-        let stateDetailsRequest = new StateDetailsRequest();
-        stateDetailsRequest.companyUniqueName = companyUniqueName;
-        stateDetailsRequest.lastState = `/pages/trial-balance-and-profit-loss?tab=${tabName}&tabIndex=${tabIndex}`;
-        this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
     }
 }

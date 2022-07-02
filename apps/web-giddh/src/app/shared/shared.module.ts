@@ -57,7 +57,7 @@ import { TranslateDirectiveModule } from '../theme/translate/translate.directive
 import { CompanyBranchComponent } from './primary-sidebar/company-branch/company-branch.component';
 import { AmountFieldComponentModule } from './amount-field/amount-field.module';
 import { AccountAddNewDetailsModule } from './header/components/account-add-new-details/account-add-new-details.module';
-import { LedgerDiscountModule } from '../ledger/components/ledger-discount/ledger-discount.module';
+import { LedgerDiscountModule } from '../material-ledger/components/ledger-discount/ledger-discount.module';
 import { ConfirmationModalModule } from '../common/confirmation-modal/confirmation-modal.module';
 import { DatepickerWrapperModule } from './datepicker-wrapper/datepicker.wrapper.module';
 import { ValidateSectionPermissionDirectiveModule } from './validate-section-permission/validate-section-permission.module';
@@ -68,6 +68,7 @@ import { GiddhDatepickerModule } from '../theme/giddh-datepicker/giddh-datepicke
 import { GiddhDateRangepickerModule } from '../theme/giddh-daterangepicker/giddh-daterangepicker.module';
 import { DeleteTemplateConfirmationModalModule } from '../invoice/templates/edit-template/modals/confirmation-modal/confirmation.modal.module';
 import { CustomFieldsModule } from './header/components/custom-fields/custom-fields.module';
+import { NgxBootstrapSwitchModule } from 'ngx-bootstrap-switch';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: true
@@ -159,7 +160,8 @@ export function provideConfig() {
         GiddhDatepickerModule,
         GiddhDateRangepickerModule,
         DeleteTemplateConfirmationModalModule,
-        CustomFieldsModule
+        CustomFieldsModule,
+        NgxBootstrapSwitchModule.forRoot()
     ],
     exports: [
         CommonModule,

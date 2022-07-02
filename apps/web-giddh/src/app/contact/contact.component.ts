@@ -31,7 +31,6 @@ import { SettingsProfileActions } from "../actions/settings/profile/settings.pro
 import { SettingsIntegrationActions } from "../actions/settings/settings.integration.action";
 import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from "../app.constant";
 import { OnboardingFormRequest } from "../models/api-models/Common";
-import { StateDetailsRequest } from "../models/api-models/Company";
 import {
     ContactAdvanceSearchCommonModal,
     ContactAdvanceSearchModal,
@@ -253,6 +252,8 @@ export class ContactComponent implements OnInit, OnDestroy {
         count: 0,
         moduleUniqueName: 'account'
     };
+    /** True, if custom date filter is selected or custom searching or sorting is performed */
+    public showClearFilter: boolean = false;
 
     constructor(public dialog: MatDialog, private store: Store<AppState>, private router: Router, private companyServices: CompanyService, private commonActions: CommonActions, private toaster: ToasterService,
         private contactService: ContactService, private settingsIntegrationActions: SettingsIntegrationActions, private companyActions: CompanyActions, private componentFactoryResolver: ComponentFactoryResolver,
@@ -366,16 +367,18 @@ export class ContactComponent implements OnInit, OnDestroy {
                             this.fromDate = "";
                             this.toDate = "";
                         }
-                      
+
                         this.getAccounts(this.fromDate, this.toDate, null, "true", PAGINATION_LIMIT, this.searchStr, this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
                     });
                 }, 100);
             }
         });
 
-        this.createAccountIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((yes: boolean) => {
-            if (yes && this.accountAsideMenuState === "in") {
-                this.toggleAccountAsidePane();
+        this.createAccountIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                if (this.accountAsideMenuState === "in") {
+                    this.toggleAccountAsidePane();
+                }
                 this.getAccounts(this.fromDate, this.toDate, null, "true", PAGINATION_LIMIT, this.searchStr, this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
             }
         });
@@ -460,7 +463,8 @@ export class ContactComponent implements OnInit, OnDestroy {
             distinctUntilChanged(),
             takeUntil(this.destroyed$),
         ).subscribe(searchedText => {
-            if (searchedText !== null && searchedText !== undefined) {
+            if (searchedText !== null && searchedText !== undefined ) {
+                this.showClearFilter = true;
                 this.searchStr$.next(searchedText);
             }
         });
@@ -581,12 +585,6 @@ export class ContactComponent implements OnInit, OnDestroy {
             }
 
             this.store.dispatch(this.generalAction.setAppTitle(`/pages/contact/${tabName}`));
-
-            if (this.activeTab !== "aging-report") {
-                this.setStateDetails(`${this.activeTab}?tab=${this.activeTab}&tabIndex=0`);
-            } else {
-                this.setStateDetails(`${this.activeTab}?tab=${this.activeTab}&tabIndex=1`);
-            }
             this.router.navigate(["/pages/contact/", tabName], { replaceUrl: true });
         }
     }
@@ -644,12 +642,14 @@ export class ContactComponent implements OnInit, OnDestroy {
         this.toggleBodyClass();
     }
 
-    public getUpdatedList(grpName?): void {
+    public getUpdatedList(grpName?: any): void {
         if (grpName) {
-            if (this.accountAsideMenuState === "in") {
-                this.toggleAccountAsidePane();
-                this.getAccounts(this.fromDate, this.toDate, null, "true", PAGINATION_LIMIT, this.searchStr, this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
-            }
+            this.store.pipe(select(state => state.groupwithaccounts.createAccountInProcess), takeUntil(this.destroyed$)).subscribe(response => {
+                if (!response && this.accountAsideMenuState === "in") {
+                    this.toggleAccountAsidePane();
+                    this.getAccounts(this.fromDate, this.toDate, null, "true", PAGINATION_LIMIT, this.searchStr, this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
+                }
+            });
         }
     }
 
@@ -1004,6 +1004,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     }
 
     public resetAdvanceSearch() {
+        this.showClearFilter = false;
         this.advanceSearchRequestModal = new ContactAdvanceSearchModal();
         this.commonRequest = new ContactAdvanceSearchCommonModal();
         this.isAdvanceSearchApplied = false;
@@ -1011,6 +1012,9 @@ export class ContactComponent implements OnInit, OnDestroy {
         this.order = (this.activeTab === "vendor") ? "desc" : "asc";
         this.getAccounts(this.fromDate, this.toDate,
             null, "true", PAGINATION_LIMIT, "", "", null, (this.currentBranch ? this.currentBranch.uniqueName : ""));
+        this.searchedName?.reset();
+        this.searchStr = "";
+        this.showNameSearch = false;    
     }
 
     public applyAdvanceSearch(request: ContactAdvanceSearchCommonModal) {
@@ -1293,23 +1297,6 @@ export class ContactComponent implements OnInit, OnDestroy {
         let balancesColsArr = ['openingBalance'];
         let length = Object.keys(this.showFieldFilter).filter(f => this.showFieldFilter[f]).filter(f => balancesColsArr.includes(f))?.length;
         this.tableColsPan = length > 0 ? 4 : 3;
-    }
-
-    /**
-     * save last state with active tab
-     *
-     * @private
-     * @param {*} url
-     * @memberof ContactComponent
-     */
-    private setStateDetails(url) {
-        let companyUniqueName = null;
-        this.store.pipe(select(c => c.session.companyUniqueName), take(1)).subscribe(s => companyUniqueName = s);
-        let stateDetailsRequest = new StateDetailsRequest();
-        stateDetailsRequest.companyUniqueName = companyUniqueName;
-        stateDetailsRequest.lastState = `contact/${url}`;
-
-        this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
     }
 
     /**
@@ -1634,6 +1621,7 @@ export class ContactComponent implements OnInit, OnDestroy {
      * @memberof ContactComponent
      */
     public handleClickOutside(event: any, element: any, searchedFieldName: string): void {
+        this.showClearFilter = false;
         if (searchedFieldName === "name") {
             if (this.searchedName.value) {
                 return;
@@ -1699,12 +1687,17 @@ export class ContactComponent implements OnInit, OnDestroy {
             message = message.replace("[TOTAL]", this.selectedCheckedContacts.length);
 
             this.toaster.showSnackBar("info", message);
+            return;
         }
-        if (this.selectedAccountsList?.length || this.selectedAccForPayment) {
-            this.dialog.open(this.bulkPaymentModalRef ,{
-                width: '980px',
-                panelClass:'contact-modal'
-            });
+        if (this.selectedAccountsList?.length > 1) {
+            this.toaster.showSnackBar("warning", this.localeData?.bulk_payment_unsupported_error);
+        } else {
+            if (this.selectedAccountsList?.length || this.selectedAccForPayment) {
+                this.dialog.open(this.bulkPaymentModalRef, {
+                    width: '980px',
+                    panelClass: 'contact-modal'
+                });
+            }
         }
     }
 
@@ -1727,9 +1720,9 @@ export class ContactComponent implements OnInit, OnDestroy {
     }
 
     public sort(key, ord = "asc") {
+        this.showClearFilter = true;
         this.key = key;
         this.order = ord;
-
         this.getAccounts(this.fromDate, this.toDate, null, "false", PAGINATION_LIMIT, this.searchStr, key, ord, (this.currentBranch ? this.currentBranch.uniqueName : ""));
     }
 

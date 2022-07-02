@@ -14,9 +14,9 @@ import { ApplyTaxRequest } from '../../../../models/api-models/ApplyTax';
 import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
 import { ShSelectComponent } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-select.component';
 import { digitsOnly } from '../../../helpers';
-import { BlankLedgerVM, TransactionVM } from '../../../../ledger/ledger.vm';
+import { BlankLedgerVM, TransactionVM } from '../../../../material-ledger/ledger.vm';
 import { cloneDeep, difference, differenceBy, flatten, flattenDeep, map, omit, union, uniq } from '../../../../lodash-optimized';
-import { LedgerDiscountComponent } from '../../../../ledger/components/ledger-discount/ledger-discount.component';
+import { LedgerDiscountComponent } from '../../../../material-ledger/components/ledger-discount/ledger-discount.component';
 import { TaxControlComponent } from '../../../../theme/tax-control/tax-control.component';
 import { ApplyDiscountRequestV2 } from 'apps/web-giddh/src/app/models/api-models/ApplyDiscount';
 import { GroupService } from 'apps/web-giddh/src/app/services/group.service';
@@ -94,6 +94,8 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     };
     /** Stores the value of groups */
     public searchedGroups: IOption[];
+    /** True if we need to show discount field */
+    public showDiscountField: boolean = false;
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     constructor(
@@ -546,6 +548,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
      * @memberof GroupUpdateComponent
      */
     public getDiscountList(): void {
+        this.showDiscountField = false;
         this.settingsDiscountService.GetDiscounts().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success" && response?.body?.length > 0) {
                 this.discountList = [];
@@ -556,6 +559,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
                         isSelected: false
                     });
                 });
+                this.showDiscountField = true;
             }
         });
     }

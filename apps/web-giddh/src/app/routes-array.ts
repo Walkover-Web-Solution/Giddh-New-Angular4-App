@@ -17,8 +17,8 @@ export const ROUTES = [
     { path: 'trial-balance-and-profit-loss', redirectTo: 'pages/trial-balance-and-profit-loss', pathMatch: 'full' },
     { path: 'giddh-all-items', redirectTo: 'pages/giddh-all-items', pathMatch: 'full' },
     { path: 'audit-logs', redirectTo: 'pages/audit-logs', pathMatch: 'full' },
+    { path: 'activity-logs', redirectTo: 'pages/activity-logs', pathMatch: 'full' },
     { path: 'ledger/:accountUniqueName', redirectTo: 'pages/ledger/:accountUniqueName', pathMatch: 'full' },
-    { path: 'old-ledger/:accountUniqueName', redirectTo: 'pages/old-ledger/:accountUniqueName', pathMatch: 'full' },
     { path: 'dummy' },
     { path: 'browser-support' },
     { path: 'proforma-invoice' },
@@ -65,11 +65,7 @@ export const ROUTES = [
                 data: { preload: true }
             },
             { path: 'audit-logs', loadChildren: () => import('./audit-logs/audit-logs.module').then(module => module.AuditLogsModule) },
-            {
-                path: 'old-ledger/:accountUniqueName',
-                loadChildren: () => import('./ledger/ledger.module').then(module => module.LedgerModule),
-                data: { preload: true }
-            },
+            { path: 'activity-logs', loadChildren: () => import('./activity-logs/activity-logs.module').then(module => module.ActivityLogsModule) },
             {
                 path: 'ledger/:accountUniqueName',
                 loadChildren: () => import('./material-ledger/ledger.module').then(module => module.LedgerModule),

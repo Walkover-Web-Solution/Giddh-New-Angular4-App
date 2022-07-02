@@ -153,6 +153,58 @@
                                 <div class="form-group">
                                     <div class="select-error select-caret relative">
                                         <sh-select
+                                            *ngIf="voucherApiVersion === 2"
+                                            [disabled]="
+                                                shouldDisableEdit(entry) || entry.linkingAdjustment ? 'disabled' : null
+                                            "
+                                            class="text-left"
+                                            name="voucherName{{ entry.uniqueName }}"
+                                            [defaultValue]="entry.voucherNumber"
+                                            [fixedValue]="entry.voucherNumber"
+                                            (click)="clickSelectVoucher(entryIdx, adjustAdvancePaymentForm)"
+                                            required
+                                            [placeholder]="localeData?.select_voucher"
+                                            [(ngModel)]="entry.uniqueName"
+                                            (selected)="selectVoucher($event, entry, entryIdx)"
+                                            [options]="adjustVoucherOptions$ | async"
+                                            [multiple]="false"
+                                            [isPaginationEnabled]="true"
+                                            (scrollEnd)="!searchReferenceVoucher ? loadVouchers() : ''"
+                                            [enableDynamicSearch]="true"
+                                            (dynamicSearchedQuery)="
+                                                searchReferenceVoucher = $event; resetInvoiceList(); loadVouchers()
+                                            "
+                                        >
+                                            <ng-template #optionTemplate let-option="option">
+                                                <a href="javascript:void(0)" class="list-item">
+                                                    <div class="item">
+                                                        {{ option.label }}
+                                                    </div>
+                                                    <div class="item-unique">
+                                                        <p class="font-12 text-gray mb-0">
+                                                            ({{ commonLocaleData?.app_dated }}:
+                                                            {{ option.additional.voucherDate }})
+                                                        </p>
+                                                        <p class="font-12 text-gray mb-0">
+                                                            ({{ commonLocaleData?.app_amount }}:
+                                                            {{ option?.additional?.currency?.symbol }}
+                                                            <span class="d-inline-flex">
+                                                                <amount-field
+                                                                    [amount]="
+                                                                        option?.additional?.balanceDue?.amountForAccount
+                                                                    "
+                                                                    [currencySymbol]="false"
+                                                                    [currencyCode]="false"
+                                                                >
+                                                                </amount-field>
+                                                            </span>
+                                                        </p>
+                                                    </div>
+                                                </a>
+                                            </ng-template>
+                                        </sh-select>
+                                        <sh-select
+                                            *ngIf="voucherApiVersion !== 2"
                                             [disabled]="
                                                 shouldDisableEdit(entry) || entry.linkingAdjustment ? 'disabled' : null
                                             "
@@ -214,11 +266,7 @@
                                         name="amount{{ entry.uniqueName }}"
                                         [(ngModel)]="entry.adjustmentAmount.amountForAccount"
                                         (ngModelChange)="calculateTax(entry, entryIdx)"
-                                        [prefix]="
-                                            enableVoucherAdjustmentMultiCurrency
-                                                ? entry.accountCurrency?.symbol
-                                                : currencySymbol
-                                        "
+                                        [prefix]="currencySymbol"
                                         [mask]="inputMaskFormat"
                                     />
                                     <span

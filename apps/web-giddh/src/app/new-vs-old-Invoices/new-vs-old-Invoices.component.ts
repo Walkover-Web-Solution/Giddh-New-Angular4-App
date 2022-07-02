@@ -4,11 +4,9 @@ import { NewVsOldInvoicesRequest, NewVsOldInvoicesResponse } from '../models/api
 import { AppState } from '../store';
 import { Store, select } from '@ngrx/store';
 import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
-import { CompanyActions } from '../actions/company.actions';
 import { ReplaySubject } from 'rxjs';
 import { ToasterService } from '../services/toaster.service';
-import { StateDetailsRequest } from 'apps/web-giddh/src/app/models/api-models/Company';
-import { take, takeUntil } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { SettingsFinancialYearActions } from '../actions/settings/financial-year/financial-year.action';
 import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
 import * as moment from 'moment';
@@ -60,7 +58,6 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
 
     constructor(
         private store: Store<AppState>, 
-        private companyActions: CompanyActions,
         private toaster: ToasterService, 
         private settingsFinancialYearActions: SettingsFinancialYearActions,
         private newVsOldInvoicesService: NewVsOldInvoicesService
@@ -98,14 +95,6 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
                 }
             }
         });
-
-        let companyUniqueName = null;
-        this.store.pipe(select(c => c.session.companyUniqueName), take(1)).subscribe(s => companyUniqueName = s);
-        let stateDetailsRequest = new StateDetailsRequest();
-        stateDetailsRequest.companyUniqueName = companyUniqueName;
-        stateDetailsRequest.lastState = 'new-vs-old-invoices';
-
-        this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
     }
 
     /**
