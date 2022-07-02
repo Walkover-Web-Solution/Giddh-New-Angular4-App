@@ -185,8 +185,6 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
     }
 
     public getDateToDMY(selecteddate) {
-        console.log(selecteddate, this.monthNames);
-
         let date = selecteddate.split('-');
         if (date.length === 3) {
             let month = this.monthNames[parseInt(date[1]) - 1]?.substr(0, 3);
