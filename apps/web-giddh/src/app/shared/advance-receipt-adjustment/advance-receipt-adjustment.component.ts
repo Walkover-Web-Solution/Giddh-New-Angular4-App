@@ -110,7 +110,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
     /** Reference voucher search field */
     private searchReferenceVoucher: any = "";
     /** Invoice list observable */
-    public adjustVoucherOptions$: Observable<any[]>;    
+    public adjustVoucherOptions$: Observable<any[]>;
 
     constructor(
         private store: Store<AppState>,
@@ -585,7 +585,6 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
         if (form.controls[`voucherName${index}`]) {
             form.controls[`voucherName${index}`].markAsTouched();
         }
-
         this.adjustVoucherOptions = this.getAdvanceReceiptUnselectedVoucher();
 
         if (this.adjustVoucherForm && this.adjustVoucherForm.adjustments && this.adjustVoucherForm.adjustments.length && this.adjustVoucherForm.adjustments[index] && this.adjustVoucherForm.adjustments[index].voucherNumber) {
@@ -939,7 +938,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
                     this.adjustVoucherOptions.push({ value: item.uniqueName, label: item.voucherNumber, additional: item });
                 }
 
-                const itemPresentInNewVoucherOptions = this.newAdjustVoucherOptions.find(voucher => voucher.value === item.uniqueName);
+                const itemPresentInNewVoucherOptions = this.newAdjustVoucherOptions.find(voucher => voucher.value !== item.uniqueName);
                 if (!itemPresentInNewVoucherOptions) {
                     this.newAdjustVoucherOptions.push({ value: item.uniqueName, label: item.voucherNumber, additional: item });
                 }
@@ -1094,6 +1093,8 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
         }
 
         this.salesService.getInvoiceList(requestObject, this.invoiceFormDetails.voucherDetails.voucherDate, 50).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+            console.log("yes");
+
             if (response && response.body && (this.voucherApiVersion !== 2 || (this.voucherApiVersion === 2 && response.body.page === requestObject.page))) {
                 let results = (response.body.results || response.body.items);
 
@@ -1136,8 +1137,15 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
                 if (this.voucherApiVersion === 2 && requestObject.page === 1) {
                     this.adjustVoucherOptions = [];
                     // Since no vouchers available for adjustment, fill the suggestions with already adjusted vouchers
+                    console.log(this.adjustVoucherOptions);
+
                     this.pushExistingAdjustments();
+
+
+                    console.log(this.adjustVoucherOptions);
+
                     this.adjustVoucherOptions$ = of(this.adjustVoucherOptions);
+
                 }
             }
             this.changeDetectionRef.detectChanges();
