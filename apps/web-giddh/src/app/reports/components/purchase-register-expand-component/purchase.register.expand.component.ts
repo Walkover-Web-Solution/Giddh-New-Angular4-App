@@ -94,7 +94,6 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
         this.getDetailedPurchaseReport(this.getDetailedPurchaseRequestFilter);
         this.purchaseRegisteDetailedResponse$.pipe(takeUntil(this.destroyed$)).subscribe((res: PurchaseRegisteDetailedResponse) => {
             if (res) {
-                this.translationComplete(true);
                 this.PurchaseRegisteDetailedItems = res;
                 _.map(this.PurchaseRegisteDetailedItems.items, (obj: any) => {
                     obj.date = this.getDateToDMY(obj.date);
@@ -184,6 +183,7 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
     public getDateToDMY(selecteddate) {
         let date = selecteddate.split('-');
         if (date.length === 3) {
+            this.translationComplete(true);
             let month = this.monthNames[parseInt(date[1]) - 1]?.substr(0, 3);
             let year = date[2]?.substr(2, 4);
             return date[0] + ' ' + month + ' ' + year;
