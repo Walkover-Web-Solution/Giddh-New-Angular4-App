@@ -99,6 +99,7 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
         this.getDetailedSalesReport(this.getDetailedsalesRequestFilter);
         this.salesRegisteDetailedResponse$.pipe(takeUntil(this.destroyed$)).subscribe((res: SalesRegisteDetailedResponse) => {
             if (res) {
+                this.translationComplete(true);
                 this.SalesRegisteDetailedItems = res;
                 _.map(this.SalesRegisteDetailedItems.items, (obj: any) => {
                     obj.date = this.getDateToDMY(obj.date);
@@ -121,11 +122,11 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
             takeUntil(this.destroyed$)
         ).subscribe(s => {
             if (s !== null && s !== undefined) {
-            this.showClearFilter = true ;
-            this.getDetailedsalesRequestFilter.sort = null;
-            this.getDetailedsalesRequestFilter.sortBy = null;
-            this.getDetailedsalesRequestFilter.q = s;
-            this.getDetailedSalesReport(this.getDetailedsalesRequestFilter);
+                this.showClearFilter = true;
+                this.getDetailedsalesRequestFilter.sort = null;
+                this.getDetailedsalesRequestFilter.sortBy = null;
+                this.getDetailedsalesRequestFilter.q = s;
+                this.getDetailedSalesReport(this.getDetailedsalesRequestFilter);
                 this.showSearchInvoiceNo = false;
             }
         });
@@ -287,16 +288,16 @@ export class SalesRegisterExpandComponent implements OnInit, OnDestroy {
      * @memberof SalesRegisterExpandComponent
      */
     public resetAdvanceSearch() {
-            this.showClearFilter = false;
-            this.voucherNumberInput?.reset();
-            this.showSearchInvoiceNo = false;
-            this.getDetailedsalesRequestFilter.page = 1;
-            this.getDetailedsalesRequestFilter.count = this.paginationLimit;
-            this.getDetailedsalesRequestFilter.q = '';
-            this.getDetailedsalesRequestFilter.sort = null;
-            this.getDetailedsalesRequestFilter.sortBy = null;
-            this.getDetailedSalesReport(this.getDetailedsalesRequestFilter);
-        }
+        this.showClearFilter = false;
+        this.voucherNumberInput?.reset();
+        this.showSearchInvoiceNo = false;
+        this.getDetailedsalesRequestFilter.page = 1;
+        this.getDetailedsalesRequestFilter.count = this.paginationLimit;
+        this.getDetailedsalesRequestFilter.q = '';
+        this.getDetailedsalesRequestFilter.sort = null;
+        this.getDetailedsalesRequestFilter.sortBy = null;
+        this.getDetailedSalesReport(this.getDetailedsalesRequestFilter);
+    }
 
     /**
      * This function will destroy the subscribers
