@@ -1040,7 +1040,13 @@ export class GeneralService {
 
         return voucherNumber;
     }
-
+    /**
+     * This will use for convert V1 response to V2 version
+     *
+     * @param {*} data
+     * @return {*}  {*}
+     * @memberof GeneralService
+     */
     public convertV1ResponseInV2(data: any): any {
         if (data?.company?.billingDetails?.taxNumber) {
         }
