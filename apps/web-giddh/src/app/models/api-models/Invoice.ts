@@ -669,6 +669,7 @@ export class IEwayBillfilter {
     toDate?: any;
     page?: number;
     count?: number;
+    branchUniqueName?: string;
 }
 
 export class InvoicePreviewDetailsVm {

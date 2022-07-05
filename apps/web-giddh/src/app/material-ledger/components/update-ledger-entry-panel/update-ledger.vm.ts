@@ -531,7 +531,7 @@ export class UpdateLedgerVm {
         }
 
         let taxTotal: number = sumBy(this.selectedTaxes, 'amount') || 0;
-        if (this.isAdvanceReceipt) {
+        if (this.isAdvanceReceipt || this.isRcmEntry) {
             this.totalAmount = this.grandTotal;
             this.generateGrandTotal();
         } else {
