@@ -1,0 +1,15 @@
+.download-table-container {
+    padding: 20px;
+    .download-table {
+        width: 100%;
+        .download-table-btn {
+            color: var(--color-tertiary-button-text);
+            background-color: var(--color-tertiary-button-background);
+            box-shadow: none;
+            border-radius: 4px;
+            i {
+                font-size: 16px;
+            }
+        }
+    }
+}

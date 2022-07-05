@@ -388,6 +388,11 @@
                     "link": "/pages/search",
                     "icon": "icon-search",
                     "description": "गट निवडा आणि कालावधीसाठी शोधा"
+                },
+                {
+                    "label": "डाउनलोड करा",
+                    "link": "/pages/download",
+                    "icon": "icon-download-circle"
                 }
             ]
         }

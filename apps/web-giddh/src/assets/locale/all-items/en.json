@@ -392,6 +392,11 @@
                     "link": "/pages/search",
                     "icon": "icon-search",
                     "description": "Select group and search for a time span"
+                },
+                {
+                    "label": "Download",
+                    "link": "/pages/download",
+                    "icon": "icon-download-circle"
                 }
             ]
         }
