@@ -117,6 +117,7 @@ export const ROUTES: Routes = [
             { path: 'verify-email', loadChildren: () => import('./verify-email/verify-email.module').then(module => module.VerifyEmailModule), canActivate: [NeedsAuthorization] },
             { path: 'voucher', loadChildren: () => import('./payment-receipt/payment-receipt.module').then(module => module.PaymentReceiptModule), canActivate: [NeedsAuthorization] },
             { path: 'custom-fields', loadChildren: () => import('./custom-fields/custom-fields.module').then(module => module.CustomFieldsModule), canActivate: [NeedsAuthorization] },
+            { path: 'downloads', loadChildren: () => import('./downloads/downloads.module').then(module => module.DownloadsModule), canActivate: [NeedsAuthorization] },
             { path: '**', redirectTo: 'home', pathMatch: 'full' }
         ]
     },
