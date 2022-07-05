@@ -334,19 +334,19 @@ export class UpdateLedgerTaxControlComponent implements OnDestroy, OnChanges {
      * Adds styling on focused Dropdown List
      *
      * @param {HTMLElement} taxLabel
-     * @memberof DiscountControlComponent
+     * @memberof UpdateLedgerTaxControlComponent
      */
     public taxLabelFocusing(taxLabel: HTMLElement): void {
-        this.generalService.DropdownFocusIn(taxLabel);
+        this.generalService.dropdownFocusIn(taxLabel);
     }
 
     /**
      * Removes styling from focused Dropdown List
      *
      * @param {HTMLElement} taxLabel
-     * @memberof DiscountControlComponent
+     * @memberof UpdateLedgerTaxControlComponent
      */
     public taxLabelBluring(taxLabel: HTMLElement): void {
-        this.generalService.DropdownFocusOut(taxLabel);
+        this.generalService.dropdownFocusOut(taxLabel);
     }
 }
