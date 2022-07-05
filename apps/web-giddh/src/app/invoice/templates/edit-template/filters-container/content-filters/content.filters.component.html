@@ -227,12 +227,7 @@
                                     hasFocus
                                     #invoiceDate="hasFocus"
                                     [class.error-box]="contentForm?.controls['invoiceDate']?.errors?.maxlength"
-                                    [maxlength]="
-                                        customTemplate.templateType === 'gst_template_a' ||
-                                        customTemplate.templateType === 'gst_template_e'
-                                            ? 15
-                                            : 12
-                                    "
+                                    [maxlength]="customTemplate.templateType === 'thermal_template' ? 12 : 15"
                                     class="form-control"
                                     name="invoiceDate"
                                     [(ngModel)]="customTemplate.sections['header'].data['invoiceDate'].label"
@@ -247,10 +242,9 @@
                                 >
                                     <span class="max-character-label">Characters left:&nbsp;</span>
                                     <span class="max-character-value">{{
-                                        customTemplate.templateType === "gst_template_a" ||
-                                        customTemplate.templateType === "gst_template_e"
-                                            ? 15 - customTemplate.sections["header"].data["invoiceDate"].label.length
-                                            : 12 - customTemplate.sections["header"].data["invoiceDate"].label.length
+                                        customTemplate.templateType === "thermal_template"
+                                            ? 12 - customTemplate.sections["header"].data["invoiceDate"].label.length
+                                            : 15 - customTemplate.sections["header"].data["invoiceDate"].label.length
                                     }}</span>
                                 </ng-container>
                             </div>
@@ -270,12 +264,7 @@
                                     hasFocus
                                     #invoiceNo="hasFocus"
                                     [class.error-box]="contentForm?.controls['invoiceNo']?.errors?.maxlength"
-                                    [maxlength]="
-                                        customTemplate.templateType === 'gst_template_a' ||
-                                        customTemplate.templateType === 'gst_template_e'
-                                            ? 15
-                                            : 14
-                                    "
+                                    [maxlength]="customTemplate.templateType === 'thermal_template' ? 14 : 15"
                                     class="form-control"
                                     name="invoiceNo"
                                     [(ngModel)]="customTemplate.sections['header'].data['invoiceNumber'].label"
@@ -289,10 +278,9 @@
                                 >
                                     <span class="max-character-label">Characters left:&nbsp;</span>
                                     <span class="max-character-value">{{
-                                        customTemplate.templateType === "gst_template_a" ||
-                                        customTemplate.templateType === "gst_template_e"
-                                            ? 15 - customTemplate.sections["header"].data["invoiceNumber"].label.length
-                                            : 14 - customTemplate.sections["header"].data["invoiceNumber"].label.length
+                                        customTemplate.templateType === "thermal_template"
+                                            ? 14 - customTemplate.sections["header"].data["invoiceNumber"].label.length
+                                            : 15 - customTemplate.sections["header"].data["invoiceNumber"].label.length
                                     }}</span>
                                 </ng-container>
                             </div>
@@ -1098,12 +1086,7 @@
                                     type="text"
                                     hasFocus
                                     #item="hasFocus"
-                                    [maxlength]="
-                                        customTemplate.templateType === 'gst_template_a' ||
-                                        customTemplate.templateType === 'gst_template_e'
-                                            ? 12
-                                            : 8
-                                    "
+                                    [maxlength]="customTemplate.templateType === 'thermal_template' ? 8 : 12"
                                     [class.error-box]="contentForm?.controls['it1']?.errors?.maxlength"
                                     class="form-control"
                                     name="it1"
@@ -1116,10 +1099,9 @@
                                 >
                                     <span class="max-character-label">Characters left:&nbsp;</span
                                     ><span class="max-character-value">{{
-                                        customTemplate.templateType === "gst_template_a" ||
-                                        customTemplate.templateType === "gst_template_e"
-                                            ? 12 - customTemplate.sections["table"].data["item"].label.length
-                                            : 8 - customTemplate.sections["table"].data["item"].label.length
+                                        customTemplate.templateType === "thermal_template"
+                                            ? 8 - customTemplate.sections["table"].data["item"].label.length
+                                            : 12 - customTemplate.sections["table"].data["item"].label.length
                                     }}</span>
                                 </ng-container>
                             </td>
@@ -1291,12 +1273,7 @@
                                     type="text"
                                     hasFocus
                                     #rate="hasFocus"
-                                    [maxlength]="
-                                        customTemplate.templateType === 'gst_template_a' ||
-                                        customTemplate.templateType === 'gst_template_e'
-                                            ? 10
-                                            : 9
-                                    "
+                                    [maxlength]="customTemplate.templateType === 'thermal_template' ? 9 : 10"
                                     [class.error-box]="contentForm?.controls['rt1']?.errors?.maxlength"
                                     class="form-control"
                                     name="rt1"
@@ -1309,10 +1286,9 @@
                                 >
                                     <span class="max-character-label">Characters left:&nbsp;</span
                                     ><span class="max-character-value">{{
-                                        customTemplate.templateType === "gst_template_a" ||
-                                        customTemplate.templateType === "gst_template_e"
-                                            ? 10 - customTemplate.sections["table"].data["rate"].label.length
-                                            : 9 - customTemplate.sections["table"].data["rate"].label.length
+                                        customTemplate.templateType === "thermal_template"
+                                            ? 9 - customTemplate.sections["table"].data["rate"].label.length
+                                            : 10 - customTemplate.sections["table"].data["rate"].label.length
                                     }}</span>
                                 </ng-container>
                             </td>
@@ -1450,12 +1426,7 @@
                                     type="text"
                                     hasFocus
                                     #total="hasFocus"
-                                    [maxlength]="
-                                        customTemplate.templateType === 'gst_template_a' ||
-                                        customTemplate.templateType === 'gst_template_e'
-                                            ? 6
-                                            : 5
-                                    "
+                                    [maxlength]="customTemplate.templateType === 'thermal_template' ? 5 : 6"
                                     [class.error-box]="contentForm?.controls['tot1']?.errors?.maxlength"
                                     class="form-control"
                                     name="tot1"
@@ -1468,10 +1439,9 @@
                                 >
                                     <span class="max-character-label">Characters left:&nbsp;</span
                                     ><span class="max-character-value">{{
-                                        customTemplate.templateType === "gst_template_a" ||
-                                        customTemplate.templateType === "gst_template_e"
-                                            ? 6 - customTemplate.sections["table"].data["total"].label.length
-                                            : 5 - customTemplate.sections["table"].data["total"].label.length
+                                        customTemplate.templateType === "thermal_template"
+                                            ? 5 - customTemplate.sections["table"].data["total"].label.length
+                                            : 6 - customTemplate.sections["table"].data["total"].label.length
                                     }}</span>
                                 </ng-container>
                             </td>
@@ -1618,12 +1588,7 @@
                                     </ng-container>
                                 </td>
                             </tr>
-                            <tr
-                                *ngIf="
-                                    customTemplate?.templateType === 'gst_template_a' ||
-                                    customTemplate?.templateType === 'gst_template_e'
-                                "
-                            >
+                            <tr *ngIf="customTemplate?.templateType !== 'thermal_template'">
                                 <td>
                                     <label
                                         ><input
@@ -2196,8 +2161,7 @@
                         class="clearfix mr-t1 form-group"
                         *ngIf="
                             customTemplate?.type === 'invoice' &&
-                            (customTemplate?.templateType === 'gst_template_a' ||
-                                customTemplate?.templateType === 'gst_template_e') &&
+                            customTemplate?.templateType !== 'thermal_template' &&
                             customTemplate.sections['footer'].data['showNotesAtLastPage']
                         "
                     >
@@ -2425,13 +2389,7 @@
                 </div>
             </div>
         </div> -->
-                    <div
-                        *ngIf="
-                            customTemplate?.templateType === 'gst_template_a' ||
-                            customTemplate?.templateType === 'gst_template_e'
-                        "
-                        class="clearfix mr-t1 row"
-                    >
+                    <div *ngIf="customTemplate?.templateType !== 'thermal_template'" class="clearfix mr-t1 row">
                         <div class="clearfix" class="col-lg-6 col-md-12">
                             <div class="mb-4px">
                                 <input
