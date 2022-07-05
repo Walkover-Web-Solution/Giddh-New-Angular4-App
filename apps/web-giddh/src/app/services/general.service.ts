@@ -82,7 +82,7 @@ export class GeneralService {
 
     constructor(
         private router: Router
-    ) {}
+    ) { }
 
     public SetIAmLoaded(iAmLoaded: boolean) {
         this.IAmLoaded.next(iAmLoaded);
@@ -834,7 +834,7 @@ export class GeneralService {
             } else {
                 this.router.navigate([route], parameter);
             }
-            if(isElectron && isSocialLogin) {
+            if (isElectron && isSocialLogin) {
                 setTimeout(() => {
                     window.location.reload();
                 }, 200);
@@ -884,8 +884,8 @@ export class GeneralService {
      * @return {string} Multi-lingual current voucher label
      * @memberof GeneralService
      */
-     public getCurrentVoucherLabel(voucherCode: string, commonLocaleData: any): string {
-        switch(voucherCode) {
+    public getCurrentVoucherLabel(voucherCode: string, commonLocaleData: any): string {
+        switch (voucherCode) {
             case AdjustedVoucherType.Sales: case AdjustedVoucherType.SalesInvoice: return commonLocaleData?.app_voucher_types.sales;
             case AdjustedVoucherType.Purchase: case AdjustedVoucherType.PurchaseInvoice: return commonLocaleData?.app_voucher_types.purchase;
             case AdjustedVoucherType.CreditNote: return commonLocaleData?.app_voucher_types.credit_note;
@@ -1106,5 +1106,25 @@ export class GeneralService {
             }
         }
         return taxableValue;
+    }
+
+    /**
+     * Adds class from the dropdown list item
+     *
+     * @param {HTMLElement} DropdownListItem
+     * @memberof GeneralService
+     */
+    public DropdownFocusIn(DropdownListItem: HTMLElement): void {
+        DropdownListItem.classList.add('custom-keyboard-dropdown-list-focus');
+    }
+
+    /**
+     * Removes class from the dropdown list item
+     *
+     * @param {HTMLElement} DropdownListItem
+     * @memberof GeneralService
+     */
+    public DropdownFocusOut(DropdownListItem: HTMLElement): void {
+        DropdownListItem.classList.remove('custom-keyboard-dropdown-list-focus');
     }
 }
