@@ -39,6 +39,7 @@
                     class="checkbox d-flex align-items-center width-100 p-0 m-0 bd-rb px-1 py-1 mr-b05"
                     (click)="$event.stopPropagation()"
                     [ngClass]="{ 'disabled-label': tax.isDisabled }"
+                    #taxLabel
                 >
                     <mat-checkbox
                         color="primary"
@@ -48,6 +49,8 @@
                         [disabled]="tax.isDisabled"
                         (change)="change()"
                         (click)="$event.stopPropagation()"
+                        (focusin)="taxLabelFocusing(taxLabel)"
+                        (focusout)="taxLabelBluring(taxLabel)"
                     ></mat-checkbox>
                     <span class="pull-left text-ellipsis">{{ tax.name }}</span>
                 </label>
