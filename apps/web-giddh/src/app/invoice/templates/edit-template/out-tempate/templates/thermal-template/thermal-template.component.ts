@@ -1,53 +1,58 @@
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
-import { select, Store } from '@ngrx/store';
-import { cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
-import { AppState } from 'apps/web-giddh/src/app/store';
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { SettingsProfileActions } from '../../../../../../actions/settings/profile/settings.profile.action';
-import { CustomTemplateResponse } from '../../../../../../models/api-models/Invoice';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Store, select } from '@ngrx/store';
 import { TemplateContentUISectionVisibility } from '../../../../../../services/invoice.ui.data.service';
-
+import { CustomTemplateResponse } from '../../../../../../models/api-models/Invoice';
+import { AppState } from 'apps/web-giddh/src/app/store';
+import { SettingsProfileActions } from 'apps/web-giddh/src/app/actions/settings/profile/settings.profile.action';
+import { cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
 @Component({
-    selector: 'gst-template-a',
-    templateUrl: './gst-template-a.component.html',
-    styleUrls: ['./gst-template-a.component.scss'],
-    // encapsulation: ViewEncapsulation.None
+    selector: 'thermal-template',
+    templateUrl: './thermal-template.component.html',
+    styleUrls: ['./thermal-template.component.scss']
 })
-
-export class GstTemplateAComponent implements OnInit, OnDestroy, OnChanges {
-
+export class ThermalTemplateComponent implements OnInit, OnDestroy, OnChanges {
+    /** This will use for field visibility */
     @Input() public fieldsAndVisibility: any = null;
+    /** This will use preview mode */
     @Input() public isPreviewMode: boolean = false;
-    @Input() public showLogo: boolean = true;
+    /** This will use for field visibility */
     @Input() public showCompanyName: boolean;
+    /** This will use for company GSTIN */
     @Input() public companyGSTIN: string;
-    @Input() public companyPAN: string;
+    /** This will use input teplate response */
     @Input() public inputTemplate: CustomTemplateResponse = new CustomTemplateResponse();
-    @Input() public logoSrc: string;
-    @Input() public imageSignatureSrc: string;
-    @Input() public showImageSignature: boolean;
+    /** This will use for template UI section visibility */
     @Input() public templateUISectionVisibility: TemplateContentUISectionVisibility = new TemplateContentUISectionVisibility();
     /* This will hold the value if Gst Composition will show/hide */
     @Input() public showGstComposition: boolean = false;
-    @Input() public voucherType: string;
-
+    /** This will use for voucher type */
+    @Input() public voucherType = '';
+    /** This will use for image signature */
+    @Input() public imageSignatureSrc: string;
+    /** This will use for section name */
     @Output() public sectionName: EventEmitter<string> = new EventEmitter();
-    public companySetting$: Observable<any> = observableOf(null);
+    /** This will hold input for company address */
     public companyAddress: string = '';
+    /** This will use for company settings */
+    public companySetting$: Observable<any> = observableOf(null);
+    /** This will use for column visibililty */
     public columnsVisibled: number;
+    /** This will use for on destroy component */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    public isBaseCurrencyRupee = true;
-    public dollarSymbol = '$';
-    public rupeeSymbol = '&#8377';
 
-    constructor(
-        private store: Store<AppState>,
+    constructor(private store: Store<AppState>,
         private settingsProfileActions: SettingsProfileActions) {
         this.companySetting$ = this.store.pipe(select(s => s.settings.profile), takeUntil(this.destroyed$));
     }
 
-    public ngOnInit() {
+    /**
+     * Lifecycle hook use for initialization
+     *
+     * @memberof ThermalTemplateComponent
+     */
+    public ngOnInit() : void {
         this.companySetting$.subscribe(a => {
             if (a && a.address) {
                 this.companyAddress = cloneDeep(a.address);
@@ -56,26 +61,20 @@ export class GstTemplateAComponent implements OnInit, OnDestroy, OnChanges {
             }
         });
     }
-
-    public onClickSection(sectionName: string) {
-        if (!this.isPreviewMode) {
-            this.sectionName.emit(sectionName);
-        }
-    }
-
-    public ngOnDestroy() {
-        this.destroyed$.next(true);
-        this.destroyed$.complete();
-    }
-
-    public ngOnChanges(changes: SimpleChanges) {
+    /**
+     * Lifecycle hook use for on changes
+     *
+     * @param {SimpleChanges} changes
+     * @memberof ThermalTemplateComponent
+     */
+    public ngOnChanges(changes: SimpleChanges) : void {
         if ((changes.fieldsAndVisibility && changes.fieldsAndVisibility.previousValue && changes.fieldsAndVisibility.currentValue !== changes.fieldsAndVisibility.previousValue) || changes.fieldsAndVisibility && changes.fieldsAndVisibility.firstChange) {
             this.columnsVisibled = 0;
             if (changes.fieldsAndVisibility.currentValue.table) {
                 if (changes.fieldsAndVisibility.currentValue.table.sNo && changes.fieldsAndVisibility.currentValue.table.sNo.display) {
                     this.columnsVisibled++;
                 }
-                if ((changes.fieldsAndVisibility.currentValue.table.item && changes.fieldsAndVisibility.currentValue.table.item.display) || (changes.fieldsAndVisibility.currentValue.table.date && changes.fieldsAndVisibility.currentValue.table.date.display)) {
+                if (changes.fieldsAndVisibility.currentValue.table.item && changes.fieldsAndVisibility.currentValue.table.item.display) {
                     this.columnsVisibled++;
                 }
                 if (changes.fieldsAndVisibility.currentValue.table.hsnSac && changes.fieldsAndVisibility.currentValue.table.hsnSac.display) {
@@ -96,13 +95,35 @@ export class GstTemplateAComponent implements OnInit, OnDestroy, OnChanges {
                 if (changes.fieldsAndVisibility.currentValue.table.taxes && changes.fieldsAndVisibility.currentValue.table.taxes.display) {
                     this.columnsVisibled++;
                 }
-                if (this.columnsVisibled) {
+                if (changes.fieldsAndVisibility.currentValue.table.total && changes.fieldsAndVisibility.currentValue.table.total.display) {
                     this.columnsVisibled++;
-                    this.columnsVisibled++;
-                    this.columnsVisibled++;
+                }
+                if (this.columnsVisibled && this.voucherType === 'sales') {
                     this.columnsVisibled++;
                 }
             }
         }
+    }
+
+    /**
+     * This will use for section click preview
+     *
+     * @param {string} sectionName
+     * @memberof ThermalTemplateComponent
+     */
+    public onClickSection(sectionName: string) : void {
+        if (!this.isPreviewMode) {
+            this.sectionName.emit(sectionName);
+        }
+    }
+
+    /**
+     * Lifecycle hook use for on destroy component
+     *
+     * @memberof ThermalTemplateComponent
+     */
+    public ngOnDestroy() : void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 }
