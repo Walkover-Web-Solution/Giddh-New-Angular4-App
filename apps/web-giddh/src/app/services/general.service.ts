@@ -1124,20 +1124,20 @@ export class GeneralService {
     /**
      * Adds class from the dropdown list item
      *
-     * @param {HTMLElement} DropdownListItem
+     * @param {HTMLElement} dropdownListItem
      * @memberof GeneralService
      */
-    public DropdownFocusIn(DropdownListItem: HTMLElement): void {
-        DropdownListItem.classList.add('custom-keyboard-dropdown-list-focus');
+    public dropdownFocusIn(dropdownListItem: HTMLElement): void {
+        dropdownListItem.classList.add('custom-keyboard-dropdown-list-focus');
     }
 
     /**
      * Removes class from the dropdown list item
      *
-     * @param {HTMLElement} DropdownListItem
+     * @param {HTMLElement} dropdownListItem
      * @memberof GeneralService
      */
-    public DropdownFocusOut(DropdownListItem: HTMLElement): void {
-        DropdownListItem.classList.remove('custom-keyboard-dropdown-list-focus');
+    public dropdownFocusOut(dropdownListItem: HTMLElement): void {
+        dropdownListItem.classList.remove('custom-keyboard-dropdown-list-focus');
     }
 }

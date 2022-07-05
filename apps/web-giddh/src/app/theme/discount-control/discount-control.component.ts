@@ -208,7 +208,7 @@ export class DiscountControlComponent implements OnInit, OnDestroy, OnChanges {
      * @memberof DiscountControlComponent
      */
     public discountDropdownFocus(discountDropdownListItem: HTMLElement): void {
-        this.generalService.DropdownFocusIn(discountDropdownListItem)
+        this.generalService.dropdownFocusIn(discountDropdownListItem);
     }
 
     /**
@@ -218,6 +218,6 @@ export class DiscountControlComponent implements OnInit, OnDestroy, OnChanges {
      * @memberof DiscountControlComponent
      */
     public discountDropdownBlur(discountDropdownListItem: HTMLElement): void {
-        this.generalService.DropdownFocusOut(discountDropdownListItem)
+        this.generalService.dropdownFocusOut(discountDropdownListItem);
     }
 }

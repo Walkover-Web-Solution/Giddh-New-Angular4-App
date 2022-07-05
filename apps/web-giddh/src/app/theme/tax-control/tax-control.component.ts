@@ -380,7 +380,7 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
      * @memberof TaxControlComponent
      */
     public taxLabelFocusing(taxLabel: HTMLElement): void {
-        this.generalService.DropdownFocusIn(taxLabel);
+        this.generalService.dropdownFocusIn(taxLabel);
     }
 
     /**
@@ -390,6 +390,6 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
      * @memberof TaxControlComponent
      */
     public taxLabelBluring(taxLabel: HTMLElement): void {
-        this.generalService.DropdownFocusOut(taxLabel);
+        this.generalService.dropdownFocusOut(taxLabel);
     }
 }
