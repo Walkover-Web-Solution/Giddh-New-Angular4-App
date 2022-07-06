@@ -279,7 +279,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
                     this.router.url.slice(0, queryParamsIndex);
                 this.isActiveRoute = baseUrl;
                 this.allItems.forEach(item => item.isActive = (item.link === decodeURI(baseUrl) || item?.items?.some((subItem: AllItem) => {
-                    if (subItem.link === decodeURI(baseUrl) || subItem?.additionalRoutes?.includes(baseUrl)) {
+                    if (subItem.link === decodeURI(baseUrl) || subItem?.additionalRoutes?.includes(decodeURI(baseUrl))) {
                         return true;
                     }
                 })));
