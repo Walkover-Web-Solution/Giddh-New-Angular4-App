@@ -6,6 +6,7 @@ export interface AllItem {
     alwaysPresent?: boolean;
     additional?: any;
     hide?: string;
+    additionalRoutes?: any;
 }
 
 export interface AllItems {
