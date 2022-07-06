@@ -225,7 +225,11 @@
                                             <a
                                                 *ngIf="item?.link"
                                                 href="javascript:void(0);"
-                                                [class.active]="rla?.isActive || isRouteWithParamsActive(item?.link)"
+                                                [class.active]="
+                                                    rla?.isActive ||
+                                                    isRouteWithParamsActive(item?.link) ||
+                                                    item?.additionalRoutes?.includes(isActiveRoute)
+                                                "
                                                 [routerLink]="[item?.link]"
                                                 routerLinkActive
                                                 #rla="routerLinkActive"

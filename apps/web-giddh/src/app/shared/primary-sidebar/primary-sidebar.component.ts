@@ -107,6 +107,8 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     public selectedGroupForCreateAccount: any = '';
     /* Observable for create account success */
     private createAccountIsSuccess$: Observable<boolean>;
+    /* This will hold the active route url */
+    public isActiveRoute: string;
 
     constructor(
         private changeDetectorRef: ChangeDetectorRef,
@@ -188,7 +190,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
             this.allItems = this.generalService.getVisibleMenuItems("sidebar", changes.apiMenuItems.currentValue, this.localeData?.items);
             this.allItems?.map(items => {
                 items?.items?.map(item => {
-                    if(item?.additional?.voucherVersion) {
+                    if (item?.additional?.voucherVersion) {
                         delete item?.additional?.voucherVersion;
                     }
                     return item;
@@ -275,8 +277,9 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
                 const queryParamsIndex = this.router.url.indexOf('?');
                 const baseUrl = queryParamsIndex === -1 ? this.router.url :
                     this.router.url.slice(0, queryParamsIndex);
+                this.isActiveRoute = baseUrl;
                 this.allItems.forEach(item => item.isActive = (item.link === decodeURI(baseUrl) || item?.items?.some((subItem: AllItem) => {
-                    if (subItem.link === decodeURI(baseUrl)) {
+                    if (subItem.link === decodeURI(baseUrl) || subItem?.additionalRoutes?.includes(decodeURI(baseUrl))) {
                         return true;
                     }
                 })));
