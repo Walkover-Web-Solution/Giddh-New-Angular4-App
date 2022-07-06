@@ -65,7 +65,10 @@
                     "label": "विक्री नोंदणी",
                     "link": "/pages/reports/sales-register",
                     "icon": "icon-register-new",
-                    "description": "निव्वळ व संचयी विक्री"
+                    "description": "निव्वळ व संचयी विक्री",
+                    "additionalRoutes":[
+                        "/pages/reports/sales-detailed-expand"
+                    ]
                 },
                 {
                     "label": "टेम्पलेट",
@@ -108,7 +111,10 @@
                     "label": "खरेदी नोंदणी",
                     "link": "/pages/reports/purchase-register",
                     "icon": "icon-register-new",
-                    "description": "निव्वळ आणि संचयी खरेदी"
+                    "description": "निव्वळ आणि संचयी खरेदी",
+                    "additionalRoutes":[
+                        "/pages/reports/purchase-detailed-expand"
+                    ]
                 },
                 {
                     "label": "विक्रेता",
