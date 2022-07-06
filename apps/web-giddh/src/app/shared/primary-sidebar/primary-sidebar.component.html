@@ -228,7 +228,7 @@
                                                 [class.active]="
                                                     rla?.isActive ||
                                                     isRouteWithParamsActive(item?.link) ||
-                                                    item?.additionalRoutes
+                                                    item?.additionalRoutes?.includes(isActiveRoute)
                                                 "
                                                 [routerLink]="[item?.link]"
                                                 routerLinkActive

@@ -107,6 +107,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     public selectedGroupForCreateAccount: any = '';
     /* Observable for create account success */
     private createAccountIsSuccess$: Observable<boolean>;
+    public isActiveRoute: string;
 
     constructor(
         private changeDetectorRef: ChangeDetectorRef,
@@ -275,6 +276,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
                 const queryParamsIndex = this.router.url.indexOf('?');
                 const baseUrl = queryParamsIndex === -1 ? this.router.url :
                     this.router.url.slice(0, queryParamsIndex);
+                this.isActiveRoute = baseUrl
                 this.allItems.forEach(item => item.isActive = (item.link === decodeURI(baseUrl) || item?.items?.some((subItem: AllItem) => {
                     if (subItem.link === decodeURI(baseUrl) || subItem?.additionalRoutes?.includes(baseUrl)) {
                         return true;
