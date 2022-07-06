@@ -155,7 +155,7 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
             data: element?.details,
             panelClass: 'logs-sidebar'
         });
-        document.querySelector('.cdk-overlay-container')?.classList?.add('cdk-overlay-container-z-index');
+        this.addZindexCdkOverlay();
     }
 
 
@@ -346,9 +346,9 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
                         this.toaster.showSnackBar('info', this.localeData?.no_history);
                         row.history = [];
                         row.isExpanded = false;
-                        document.querySelector('.cdk-overlay-container')?.classList?.add('cdk-overlay-container-z-index');
+                        this.addZindexCdkOverlay();
                         setTimeout(() => {
-                            document.querySelector('.cdk-overlay-container')?.classList?.remove('cdk-overlay-container-z-index');
+                            this.removeZindexCdkOverlay();
                         }, 3000);
                     }
                 } else {
@@ -358,12 +358,12 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
             });
         } else if (row.history?.length) {
             row.isExpanded = !row.isExpanded;
-            document.querySelector('.cdk-overlay-container')?.classList?.remove('cdk-overlay-container-z-index');
+            this.removeZindexCdkOverlay();
         } else {
             this.toaster.showSnackBar('info', this.localeData?.no_history);
-            document.querySelector('.cdk-overlay-container')?.classList?.add('cdk-overlay-container-z-index');
+            this.addZindexCdkOverlay();
             setTimeout(() => {
-                document.querySelector('.cdk-overlay-container')?.classList?.remove('cdk-overlay-container-z-index');
+                this.removeZindexCdkOverlay();
             }, 3000);
         }
     }
@@ -416,7 +416,7 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
             data: data,
             panelClass: 'json-sidebar'
         });
-        document.querySelector('.cdk-overlay-container')?.classList?.add('cdk-overlay-container-z-index');
+        this.addZindexCdkOverlay();
     }
 
     /**
@@ -429,5 +429,22 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
         this.destroyed$.next(true);
         this.destroyed$.complete();
         document.body?.classList?.remove("activity-log-page");
+    }
+    /**
+     * Adds Z-index class to cdk-overlay element
+     *
+     * @memberof ActivityLogsComponent
+     */
+    public addZindexCdkOverlay(): void {
+        document.querySelector('.cdk-overlay-container')?.classList?.add('cdk-overlay-container-z-index');
+    }
+
+    /**
+     * Removes Z-index class to cdk-overlay element
+     *
+     * @memberof ActivityLogsComponent
+     */
+    public removeZindexCdkOverlay(): void {
+        document.querySelector('.cdk-overlay-container')?.classList?.remove('cdk-overlay-container-z-index');
     }
 }
