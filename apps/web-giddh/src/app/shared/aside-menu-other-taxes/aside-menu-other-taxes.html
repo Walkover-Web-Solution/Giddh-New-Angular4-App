@@ -1,10 +1,10 @@
 <div
     class="aside-pane aside-pane-other-tax text-left"
-    (clickOutside)="saveTaxes()"
+    (clickOutside)="closeTaxesModal()"
     [keyboardShortcut]="'esc'"
     (onShortcutPress)="saveTaxes()"
 >
-    <button id="close" type="button" (click)="saveTaxes()"><i class="icon-cross"></i></button>
+    <button id="close" type="button" (click)="closeTaxesModal()"><i class="icon-cross"></i></button>
 
     <div class="form-header">
         <h3 class="aside-title">{{commonLocaleData?.app_tax_applicable}}</h3>

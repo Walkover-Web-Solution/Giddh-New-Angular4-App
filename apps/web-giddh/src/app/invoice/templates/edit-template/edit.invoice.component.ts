@@ -799,7 +799,7 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
                 }
             }
             delete data['uniqueName'];
-            if (data.templateType?.toLowerCase() !== 'gst_template_a' && data.templateType?.toLowerCase() !== 'gst_template_e') {
+            if (data.templateType?.toLowerCase() !== 'gst_template_a' && data.templateType?.toLowerCase() !== 'gst_template_e' && data.templateType?.toLowerCase() !== 'thermal_template') {
                 delete data?.sections?.header?.data?.showCompanyAddress;
                 delete data?.sections?.header?.data?.showQrCode;
                 delete data?.sections?.header?.data?.showIrnNumber;
