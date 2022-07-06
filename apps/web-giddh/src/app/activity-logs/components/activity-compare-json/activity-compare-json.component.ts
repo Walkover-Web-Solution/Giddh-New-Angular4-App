@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, ViewChild, ElementRef, ChangeDetectionStrategy, ChangeDetectorRef, Renderer2 } from '@angular/core';
+import { Component, OnInit, Inject, ViewChild, ElementRef, ChangeDetectionStrategy, ChangeDetectorRef, Renderer2, OnDestroy } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import * as jsondiffpatch from "jsondiffpatch"
 @Component({
@@ -7,7 +7,7 @@ import * as jsondiffpatch from "jsondiffpatch"
     styleUrls: ['activity-compare-json.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ActivityCompareJsonComponent implements OnInit {
+export class ActivityCompareJsonComponent implements OnInit, OnDestroy {
     /** This will hold local JSON data */
     public localeData: any = {};
     /** This will use for json difference */
@@ -32,5 +32,14 @@ export class ActivityCompareJsonComponent implements OnInit {
             this.jsonDifference = jsondiffpatch.formatters.html.format(delta, this.inputData[0]);
             this.changeDetection.detectChanges();
         }, 100);
+    }
+
+    /**
+     * Life cycle hook runs when the component is destroyed
+     *
+     * @memberof ActivityCompareJsonComponent
+     */
+    public ngOnDestroy(): void {
+        document.querySelector('.cdk-overlay-container')?.classList?.remove('cdk-overlay-container-z-index');
     }
 }
