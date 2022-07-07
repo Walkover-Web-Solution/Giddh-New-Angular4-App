@@ -644,12 +644,8 @@ export class UpdateLedgerVm {
         let requestObj: any = cloneDeep(this.selectedLedger);
         let discounts: LedgerDiscountClass[] = cloneDeep(this.discountArray);
         // Taxes checkbox will be false in case of receipt and payment voucher 
-        if (this.voucherApiVersion === 2) {
-            if (this.selectedLedger?.voucher?.shortCode === 'rcpt' || this.selectedLedger?.voucher?.shortCode === 'pay') {
-                if (!this.isAdvanceReceipt) {
-                    this.selectedTaxes = [];
-                }
-            }
+        if (this.voucherApiVersion === 2 && (this.selectedLedger?.voucher?.shortCode === 'rcpt' || this.selectedLedger?.voucher?.shortCode === 'pay') && !this.isAdvanceReceipt) {
+            this.selectedTaxes = [];
         }
         let taxes: UpdateLedgerTaxData[] = cloneDeep(this.selectedTaxes);
 
