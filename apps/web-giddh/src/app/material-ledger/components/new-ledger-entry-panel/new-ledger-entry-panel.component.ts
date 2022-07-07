@@ -748,7 +748,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             if (this.blankLedger.voucherType === 'rcpt' || this.blankLedger.voucherType === 'pay') {
                 if (!this.isAdvanceReceipt) {
                     this.currentTxn?.taxes === [];
-                    this.currentTxn?.taxesVm?.filter(p => {
+                    this.currentTxn?.taxesVm?.map(p => {
                         p.isChecked = false;
                     });
                 }

@@ -921,6 +921,12 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         }
 
         if (this.voucherApiVersion === 2) {
+            // Taxes checkbox will be false in case of receipt and payment voucher 
+            if (this.vm.selectedLedger?.voucher?.shortCode === 'rcpt' || this.vm.selectedLedger?.voucher?.shortCode === 'pay') {
+                if (!this.isAdvanceReceipt) {
+                    requestObj.taxes = [];
+                }
+            }
             requestObj = this.adjustmentUtilityService.getAdjustmentObject(requestObj);
         }
 
