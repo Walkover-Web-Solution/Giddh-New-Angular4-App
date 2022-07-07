@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output, Input, OnDestroy } from '@angular/core';
+import { Component, EventEmitter, Output, Input, OnDestroy, OnInit } from '@angular/core';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { AddAccountRequest } from '../../../models/api-models/Account';
 import { AccountService } from '../../../services/account.service';
@@ -24,7 +24,7 @@ import { ReplaySubject } from 'rxjs';
     ]
 })
 
-export class AsideMenuProductServiceComponent implements OnDestroy {
+export class AsideMenuProductServiceComponent implements OnInit, OnDestroy {
 
     @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
     @Input() public selectedVoucherType: string;
@@ -64,11 +64,19 @@ export class AsideMenuProductServiceComponent implements OnDestroy {
         this.isAddServiceOpen = false;
         this.closeAsideEvent.emit();
     }
-    
+
     public backButtonPressed() {
         this.hideFirstStep = false;
         this.isAddStockOpen = false;
         this.isAddServiceOpen = false;
+    }
+    /**
+     * Lifecycle hook runs on component initialization
+     *
+     * @memberof AsideMenuProductServiceComponent
+     */
+    public ngOnInit(): void {
+        document.querySelector('body')?.classList?.add('aside-menu-product-service-page');
     }
 
     /**
@@ -96,5 +104,6 @@ export class AsideMenuProductServiceComponent implements OnDestroy {
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+        document.querySelector('body')?.classList?.remove('aside-menu-product-service-page');
     }
 }
