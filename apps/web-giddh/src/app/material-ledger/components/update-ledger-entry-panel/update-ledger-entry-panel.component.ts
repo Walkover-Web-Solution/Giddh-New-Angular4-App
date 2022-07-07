@@ -1190,6 +1190,12 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                             value: selectedInvoice.uniqueName,
                             additional: selectedInvoice
                         };
+
+                        const linkedInvoice = this.invoiceList.find(invoice => invoice.value === invoiceSelected.value);
+                        if (!linkedInvoice) {
+                            this.invoiceList.push(invoiceSelected);
+                        }
+
                     } else {
                         selectedInvoice['voucherDate'] = selectedInvoice['invoiceDate'];
                         invoiceSelected = {
@@ -1257,6 +1263,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @memberof UpdateLedgerEntryPanelComponent
      */
     public creditNoteInvoiceSelected(event: any): void {
+
         if (event && event.value && event.additional) {
             if (this.vm.selectedLedger) {
                 if (this.voucherApiVersion === 2) {
