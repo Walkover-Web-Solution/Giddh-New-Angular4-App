@@ -743,6 +743,18 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 return;
             }
         }
+        if (this.voucherApiVersion === 2) {
+            if (this.blankLedger.voucherType === 'rcpt' || this.blankLedger.voucherType === 'pay') {
+                if (!this.isAdvanceReceipt) {
+                    this.currentTxn?.taxes === [];
+                    this.currentTxn?.taxesVm?.filter(p => {
+                        if (p.isChecked) {
+                            p.isChecked = false
+                        }
+                    })
+                }
+            }
+        }
         /* Add warehouse to the stock entry if the user hits 'Save' button without clicking on 'Add to CR/DR' button
             This will add the warehouse to the entered item */
         this.blankLedger.transactions.map((transaction) => {
