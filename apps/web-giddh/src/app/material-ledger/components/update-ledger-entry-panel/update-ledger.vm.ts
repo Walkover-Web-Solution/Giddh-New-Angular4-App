@@ -92,7 +92,7 @@ export class UpdateLedgerVm {
     constructor(
         private generalService: GeneralService
     ) {
-
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
     }
 
     public get stockTrxEntry(): ILedgerTransactionItem {
