@@ -6392,6 +6392,12 @@ highcharts-chart {
     }
 }
 
+.aside-menu-product-service-page {
+    app-header {
+        z-index: 9;
+    }
+}
+
 #top0,
 .no-top {
     top: 0 !important;
