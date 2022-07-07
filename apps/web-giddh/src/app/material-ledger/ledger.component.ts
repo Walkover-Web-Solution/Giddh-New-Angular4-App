@@ -1000,8 +1000,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     public saveBankTransaction() {
         let blankTransactionObj: BlankLedgerVM = this.lc.prepareBankLedgerRequestObject();
-        console.log(blankTransactionObj);
-
         blankTransactionObj.invoicesToBePaid = this.selectedInvoiceList;
         delete blankTransactionObj['voucherType'];
         if (blankTransactionObj && blankTransactionObj.transactions && blankTransactionObj.transactions.length > 0) {
@@ -1322,14 +1320,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
         if (blankTransactionObj && blankTransactionObj.transactions && blankTransactionObj.transactions.length > 0) {
             if (this.voucherApiVersion === 2) {
-                // console.log(blankTransactionObj);
-
-                // blankTransactionObj.transactions.filter((bl: TransactionVM) => {
-                //     if (!bl ? ['subVoucher'] : 'ADVANCE_RECEIPT') {
-                //         bl.taxes === [];
-                //     }
-                // });
-                // console.log(blankTransactionObj.transactions);
                 blankTransactionObj = this.adjustmentUtilityService.getAdjustmentObject(blankTransactionObj);
             }
 
