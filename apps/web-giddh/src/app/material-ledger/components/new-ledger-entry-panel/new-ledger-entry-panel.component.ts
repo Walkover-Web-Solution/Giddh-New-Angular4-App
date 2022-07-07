@@ -743,15 +743,14 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 return;
             }
         }
+        // Taxes checkbox will be false in case of receipt and payment voucher 
         if (this.voucherApiVersion === 2) {
             if (this.blankLedger.voucherType === 'rcpt' || this.blankLedger.voucherType === 'pay') {
                 if (!this.isAdvanceReceipt) {
                     this.currentTxn?.taxes === [];
                     this.currentTxn?.taxesVm?.filter(p => {
-                        if (p.isChecked) {
-                            p.isChecked = false
-                        }
-                    })
+                        p.isChecked = false;
+                    });
                 }
             }
         }
