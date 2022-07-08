@@ -1446,14 +1446,14 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      *
      * @memberof UpdateLedgerEntryPanelComponent
      */
-    public handleAdvanceReceiptChange(): void {
+    public handleAdvanceReceiptChange(restrictPopup: boolean = false): void {
         this.shouldShowAdvanceReceiptMandatoryFields = this.isAdvanceReceipt;
         this.vm.isAdvanceReceipt = this.isAdvanceReceipt;
         this.vm.isAdvanceReceiptWithTds = cloneDeep(this.isAdvanceReceipt);
         if (this.shouldShowAdvanceReceiptMandatoryFields) {
             this.vm.generatePanelAmount();
         }
-        if (!this.isAdvanceReceipt) {
+        if (!this.isAdvanceReceipt && !restrictPopup) {
             if (this.isAdjustedInvoicesWithAdvanceReceipt && this.vm.selectedLedger && this.vm.selectedLedger.voucherGeneratedType === VoucherTypeEnum.receipt) {
                 this.advanceReceiptRemoveDialogRef = this.dialog.open(this.advanceReceiptRemoveConfirmationModal);
             }
@@ -1806,7 +1806,12 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public onAdvanceReceiptRemoveCloseConfirmationModal(userResponse: any): void {
         if (userResponse) {
             this.isAdvanceReceipt = !userResponse.response;
-            this.handleAdvanceReceiptChange();
+            this.handleAdvanceReceiptChange(true);
+            if (this.isAdvanceReceipt) {
+                this.vm.selectedLedger.voucher.shortCode = "advance-receipt";
+            } else {
+                this.vm.selectedLedger.voucher.shortCode = "rcpt";
+            }
             this.advanceReceiptRemoveDialogRef.close();
         }
     }
