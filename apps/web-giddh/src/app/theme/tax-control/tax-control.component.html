@@ -58,6 +58,7 @@
                     *ngIf="taxRenderData.length - 1 !== idx"
                     (click)="$event.stopPropagation()"
                     [ngClass]="{ 'disabled-label': tax.isDisabled }"
+                    #taxLabel
                 >
                     <input
                         class="pull-left"
@@ -68,6 +69,8 @@
                         (change)="change($event)"
                         (click)="$event.stopPropagation()"
                         [disabled]="tax.isDisabled"
+                        (focus)="taxLabelFocusing(taxLabel)"
+                        (blur)="taxLabelBluring(taxLabel)"
                     />
                     <span class="pull-left text-ellipsis">{{ tax.name }}</span>
                 </label>

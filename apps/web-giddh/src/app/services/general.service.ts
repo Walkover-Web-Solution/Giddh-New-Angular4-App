@@ -1120,4 +1120,24 @@ export class GeneralService {
         }
         return taxableValue;
     }
+
+    /**
+     * Adds class from the dropdown list item
+     *
+     * @param {HTMLElement} dropdownListItem
+     * @memberof GeneralService
+     */
+    public dropdownFocusIn(dropdownListItem: HTMLElement): void {
+        dropdownListItem.classList.add('custom-keyboard-dropdown-list-focus');
+    }
+
+    /**
+     * Removes class from the dropdown list item
+     *
+     * @param {HTMLElement} dropdownListItem
+     * @memberof GeneralService
+     */
+    public dropdownFocusOut(dropdownListItem: HTMLElement): void {
+        dropdownListItem.classList.remove('custom-keyboard-dropdown-list-focus');
+    }
 }
