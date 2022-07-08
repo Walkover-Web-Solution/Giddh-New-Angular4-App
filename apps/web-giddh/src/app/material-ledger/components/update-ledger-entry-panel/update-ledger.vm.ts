@@ -86,11 +86,13 @@ export class UpdateLedgerVm {
     private isPaymentReceipt: boolean = false;
     /** Is Initial Load */
     private initialLoad: boolean = true;
+    /** Stores the voucher API version of current company */
+    public voucherApiVersion: 1 | 2;
 
     constructor(
         private generalService: GeneralService
     ) {
-
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
     }
 
     public get stockTrxEntry(): ILedgerTransactionItem {
@@ -641,6 +643,10 @@ export class UpdateLedgerVm {
     public prepare4Submit(): LedgerResponse {
         let requestObj: any = cloneDeep(this.selectedLedger);
         let discounts: LedgerDiscountClass[] = cloneDeep(this.discountArray);
+        // Taxes checkbox will be false in case of receipt and payment voucher 
+        if (this.voucherApiVersion === 2 && (this.selectedLedger?.voucher?.shortCode === 'rcpt' || this.selectedLedger?.voucher?.shortCode === 'pay') && !this.isAdvanceReceipt) {
+            this.selectedTaxes = [];
+        }
         let taxes: UpdateLedgerTaxData[] = cloneDeep(this.selectedTaxes);
 
 

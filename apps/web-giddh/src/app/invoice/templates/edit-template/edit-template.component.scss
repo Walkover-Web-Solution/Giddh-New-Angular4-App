@@ -4,12 +4,15 @@
     padding: 20px;
     min-height: 250px;
     border: 1px solid var(--color-common-secondary-border);
-    float: left;
+    display: inline-grid;
     border-radius: 4px;
     margin: 5px 15px 15px 0;
     position: relative;
     color: var(--color-common-primary-text);
     background: var(--color-common-primary-background-for-all-components);
+    .add-new-btn {
+        width: 81px;
+    }
 }
 
 .template-grid h3 {
