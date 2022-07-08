@@ -2257,9 +2257,14 @@ button:focus {
     outline: none !important;
 }
 
-.btn:focus,
-.btn.focus {
-    box-shadow: none !important;
+.btn.focus,
+button:focus,
+button.cdk-keyboard-focused,
+.mat-button:focus,
+.mat-flat-button:focus,
+.mat-raised-button:focus {
+    box-shadow: var(--color-primary-common-box-shadow) 0px 30px 60px -12px inset,
+        var(--color-primary-common-box-shadow) 0px 18px 36px -18px inset !important;
 }
 
 .Inpt_dwn {
