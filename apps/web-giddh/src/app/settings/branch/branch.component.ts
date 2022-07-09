@@ -585,7 +585,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
     public confirmStatusUpdate(branch: any): void {
         this.branches$.pipe(take(1)).subscribe((branches: any) => {
             const unarchivedBranches = branches?.filter(currentBranch => !currentBranch?.isArchived);
-            if (unarchivedBranches?.length > 1 || branch?.isArchived) {
+            if (unarchivedBranches?.length >= 1 || branch?.isArchived) {
                 this.branchStatusToUpdate = branch;
                 this.statusModal?.show();
             } else {
