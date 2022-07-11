@@ -583,15 +583,14 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
      * @memberof BranchComponent
      */
     public confirmStatusUpdate(branch: any): void {
-        this.branches$.pipe(take(1)).subscribe((branches: any) => {
-            const unarchivedBranches = branches?.filter(currentBranch => !currentBranch?.isArchived);
-            if (unarchivedBranches?.length > 1 || branch?.isArchived) {
-                this.branchStatusToUpdate = branch;
-                this.statusModal?.show();
-            } else {
-                this.toasterService.warningToast(this.localeData?.archive_notallowed);
-            }
-        });
+        const unarchivedBranches = this.unFilteredBranchList?.filter(currentBranch => !currentBranch?.isArchived);
+        if (unarchivedBranches?.length > 1 || branch?.isArchived) {
+            this.branchStatusToUpdate = branch;
+            this.statusModal?.show();
+        } else {
+            this.toasterService.warningToast(this.localeData?.archive_notallowed);
+        }
+
     }
 
     /**
