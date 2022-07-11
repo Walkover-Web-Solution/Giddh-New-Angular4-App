@@ -198,7 +198,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy, AfterViewIni
      */
     public ngAfterViewInit(): void {
         setTimeout(() => {
-            this.companyNameInputField.nativeElement.focus();
+            this.companyNameInputField?.nativeElement?.focus();
         }, 200);
     }
 
