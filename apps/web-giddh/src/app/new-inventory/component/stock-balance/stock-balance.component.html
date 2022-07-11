@@ -194,7 +194,6 @@
                         <div class="warehouse-expanded-box-wrapper">
                             <ng-container *ngFor="let warehouseVariant of variant?.warehouseBalance; let i = index">
                                 <div
-                                    (clickOutside)="warehouseVariant.display = false"
                                     class="grid-title-list list-grid-title warehouse-expanded-box"
                                     *ngIf="selectedWarehouse?.indexOf(warehouseVariant?.warehouse?.uniqueName) > -1"
                                     [ngClass]="{ 'expanded-stock-table-with-opacity': stock.display }"
