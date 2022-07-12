@@ -1214,10 +1214,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
      * @memberof AccountAddNewDetailsComponent
      */
     private showHideAddressTab(): void {
-        let addresses = this.addAccountForm.get('addresses') as FormArray;
-        for (let control of addresses.controls) {
-            control.get('isDefault')?.patchValue(false);
-        }
         if (!this.isHsnSacEnabledAcc) {
             setTimeout(() => {
                 if (this.staticTabs && this.staticTabs.tabs && this.staticTabs.tabs[0]) {
