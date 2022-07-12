@@ -723,7 +723,15 @@
         <div class="invoice-edit-wrapper">
             <div class="invoice-edit-header">
                 <span>
-                    <p>{{ getEditVoucherText(selectedItem?.voucherType | voucherTypeToNamePipe | titlecase) }}</p>
+                    <p>
+                        {{
+                            getEditVoucherText(
+                                (selectedItemVoucherType ? selectedItemVoucherType : selectedItem?.voucherType)
+                                    | voucherTypeToNamePipe
+                                    | titlecase
+                            )
+                        }}
+                    </p>
                 </span>
 
                 <span class="close-modal cp p-0" (click)="toggleEditMode()">

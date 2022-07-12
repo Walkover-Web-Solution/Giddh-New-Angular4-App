@@ -162,6 +162,8 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     public defaultTemplate: any;
     /** Stores the voucher API version of company */
     public voucherApiVersion: 1 | 2;
+    /** Holds voucher type */
+    private selectedItemVoucherType: any;
 
     constructor(
         private _cdr: ChangeDetectorRef,
@@ -336,6 +338,11 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     }
 
     public toggleEditMode() {
+        if (!this.showEditMode) {
+            this.selectedItemVoucherType = this.selectedItem?.voucherType;
+        } else {
+            this.selectedItem.voucherType = this.selectedItemVoucherType;
+        }
         this.store.dispatch(this._generalActions.setAppTitle('/pages/invoice/preview/' + this.voucherType));
         this.showEditMode = !this.showEditMode;
 
