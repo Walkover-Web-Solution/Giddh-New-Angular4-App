@@ -1,7 +1,20 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { DownloadsService } from '../../../services/downloads.service';
+import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
 import { DownloadsJsonComponent } from '../downloads-json/downloads-json.component';
-
+import { takeUntil } from 'rxjs/operators';
+import { Observable, ReplaySubject } from 'rxjs';
+import * as moment from 'moment';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { GeneralService } from '../../../services/general.service';
+import { select, Store } from '@ngrx/store';
+import { AppState } from '../../../store';
+import { DownloadsRequest } from '../../../models/api-models/downloads';
+import { cloneDeep } from '../../../lodash-optimized';
+import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from '../../../app.constant';
+import { Router } from '@angular/router';
+/** This will use for interface */
 export interface DownloadData {
     requestedDate: any;
     user: any;
@@ -10,20 +23,8 @@ export interface DownloadData {
     download: any;
     expiry: any;
 }
-
-const ELEMENT_DATA: DownloadData[] = [
-    { requestedDate: '04/07/2022', user: 'User 1', services: 'Services 1', filter: 'Filter 1', download: 'Download 1', expiry: 'Expired' },
-    { requestedDate: '04/07/2022', user: 'User 1', services: 'Services 1', filter: 'Filter 1', download: 'Download 1', expiry: '04/07/2022' },
-    { requestedDate: '04/07/2022', user: 'User 1', services: 'Services 1', filter: 'Filter 1', download: 'Download 1', expiry: 'Expired' },
-    { requestedDate: '04/07/2022', user: 'User 1', services: 'Services 1', filter: 'Filter 1', download: 'Download 1', expiry: '04/07/2022' },
-    { requestedDate: '04/07/2022', user: 'User 1', services: 'Services 1', filter: 'Filter 1', download: 'Download 1', expiry: '04/07/2022' },
-    { requestedDate: '04/07/2022', user: 'User 1', services: 'Services 1', filter: 'Filter 1', download: 'Download 1', expiry: 'Expired' },
-    { requestedDate: '04/07/2022', user: 'User 1', services: 'Services 1', filter: 'Filter 1', download: 'Download 1', expiry: 'Expired' },
-    { requestedDate: '04/07/2022', user: 'User 1', services: 'Services 1', filter: 'Filter 1', download: 'Download 1', expiry: '04/07/2022' },
-    { requestedDate: '04/07/2022', user: 'User 1', services: 'Services 1', filter: 'Filter 1', download: 'Download 1', expiry: '04/07/2022' }
-];
-
-
+/** Hold information of Download  */
+const ELEMENT_DATA: DownloadData[] = [];
 @Component({
     selector: 'downloads',
     templateUrl: './downloads.component.html',
@@ -31,44 +32,58 @@ const ELEMENT_DATA: DownloadData[] = [
 })
 
 export class DownloadsComponent implements OnInit, OnDestroy {
+    /** This will hold local JSON data */
+    public localeData: any = {};
+    /** This will hold common JSON data */
+    public commonLocaleData: any = {};
     /* it will store image path */
     public imgPath: string = '';
-    /* This will hold common JSON data */
-    public commonLocaleData: any = {};
-    public staticJson =
-        {
-            "ip": "IP",
-            "operation": "Operation",
-            "activity_logs": "Activity Logs",
-            "get_logs": "Get Logs",
-            "no_logs": "You can change the filters to fetch logs",
-            "user": "User",
-            "date": "Log Date",
-            "compare": "Compare",
-            "show_change_data": "Show Changed Data",
-            "no_difference": "No difference",
-            "no_history": "No history available for this log",
-            "history": "History",
-            "no_history_found": "No History Found",
-            "ip2": "IP",
-            "operation2": "Operation",
-            "activity_logs2": "Activity Logs",
-            "get_logs2": "Get Logs",
-            "no_logs2": "You can change the filters to fetch logs",
-            "user2": "User",
-            "date2": "Log Date",
-            "compare2": "Compare",
-            "show_change_data2": "Show Changed Data",
-            "no_difference2": "No difference",
-            "no_history2": "No history available for this log",
-            "history2": "History",
-            "no_history_found2": "No History Found"
-        }
+    /** True if api call in progress */
+    public isLoading: boolean = false;
+    /** Observable to unsubscribe all the store listeners to avoid memory leaks */
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Selected from date */
+    public selectedFromDate: Date;
+    /** Selected to date */
+    public selectedToDate: Date;
+    /** Directive to get reference of element */
+    @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
+    /** Universal date observer */
+    public universalDate$: Observable<any>;
+    /** This will store selected date range to use in api */
+    public selectedDateRange: any;
+    /** This will store selected date range to show on UI */
+    public selectedDateRangeUi: any;
+    /** This will store available date ranges */
+    public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
+    /** Selected range label */
+    public selectedRangeLabel: any = "";
+    /** This will store modal reference */
+    public modalRef: BsModalRef;
+    /** This will store the x/y position of the field to show datepicker under it */
+    public dateFieldPosition: any = { x: 0, y: 0 };
+    /** This will store universalDate */
+    public universalDate: any;
+    /** To show clear filter */
+    public showDateReport: boolean = false;
+    /** This will use for table heading */
+    public displayedColumns: string[] = ['requestedDate', 'user', 'services', 'filter', 'download', 'expiry'];
+    /** Hold the data of downloads */
+    public dataSource = ELEMENT_DATA;
+    /** This will use for download object */
+    public downloadRequest: DownloadsRequest = {
+        count: PAGINATION_LIMIT,
+        page: 1,
+        totalItems: 0,
+        from: "",
+        to: "",
+    };
+    public toDate: string;
+    public fromDate: string;
 
-    displayedColumns: string[] = ['requestedDate', 'user', 'services', 'filter', 'download', 'expiry'];
-    dataSource = ELEMENT_DATA;
-
-    constructor(public dialog: MatDialog) { }
+    constructor(public dialog: MatDialog, private downloadsService: DownloadsService, private changeDetection: ChangeDetectorRef, private generalService: GeneralService, private router: Router, private modalService: BsModalService, private store: Store<AppState>) {
+        this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
+    }
 
     /**
      * Initializes the component
@@ -78,6 +93,20 @@ export class DownloadsComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         document.querySelector('body')?.classList?.add('download-page');
+        if (this.generalService.voucherApiVersion === 1) {
+            this.router.navigate(['/pages/home']);
+        }
+        /** Universal date observer */
+        this.universalDate$.subscribe(a => {
+            if (a) {
+                let universalDate = cloneDeep(a);
+                this.selectedDateRange = { startDate: moment(a[0]), endDate: moment(a[1]) };
+                this.selectedDateRangeUi = moment(a[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(a[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                this.fromDate = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
+                this.toDate = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
+                this.getDownloads(true);
+            }
+        });
     }
 
     /**
@@ -85,10 +114,9 @@ export class DownloadsComponent implements OnInit, OnDestroy {
      *
      * @memberof DownloadsComponent
      */
-    public openDialog(): void {
-
+    public openDialog(row: any): void {
         const dialogRef = this.dialog.open(DownloadsJsonComponent, {
-            data: this.staticJson,
+            data: row?.filters,
             panelClass: 'download-json-panel'
         });
 
@@ -98,11 +126,147 @@ export class DownloadsComponent implements OnInit, OnDestroy {
     }
 
     /**
+  * This function will be called when get the activity log
+  *
+  * @memberof ActivityLogsComponent
+  */
+
+    public getDownloads(resetPage?: boolean) {
+        if (resetPage) {
+            this.downloadRequest.page = 1;
+        }
+        this.isLoading = true;
+        this.downloadsService.getDownloads(this.downloadRequest).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+            this.isLoading = false;
+            if (response && response.status === 'success') {
+                response.body?.items?.forEach((result, index) => {
+                    if (result) {
+                    }
+                });
+                this.dataSource = response.body.items;
+                this.downloadRequest.totalItems = response.body.totalItems;
+                this.downloadRequest.totalPages = response.body.totalPages;
+                this.downloadRequest.count = response.body.count;
+            } else {
+                this.dataSource = [];
+                this.downloadRequest.totalItems = 0;
+            }
+            this.changeDetection.detectChanges();
+        });
+    }
+
+    /**
+* This function will change the page of activity logs
+*
+* @param {*} event
+* @memberof DownloadsComponent
+*/
+    public pageChanged(event: any): void {
+        if (this.downloadRequest.page !== event.page) {
+            this.downloadRequest.page = event.page;
+            this.getDownloads();
+        }
+    }
+    /**
+     * To reset applied filter
+     *
+     * @memberof DownloadsComponent
+     */
+    public resetFilter(): void {
+        this.showDateReport = false;
+        this.selectedDateRange = { startDate: moment(this.universalDate[0]), endDate: moment(this.universalDate[1]) };
+        this.selectedDateRangeUi = moment(this.universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(this.universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+        this.downloadRequest.from = moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
+        this.downloadRequest.to = moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
+        this.getDownloads(true);
+        this.changeDetection.detectChanges();
+    }
+
+    /**
+         * Call back function for date/range selection in datepicker
+         *
+         * @param {*} value
+         * @memberof DownloadsComponent
+         */
+    // public dateSelectedCallback(value?: any): void {
+    //     if (value && value.event === "cancel") {
+    //         this.hideGiddhDatepicker();
+    //         return;
+    //     }
+    //     this.selectedRangeLabel = "";
+
+    //     if (value && value.name) {
+    //         this.selectedRangeLabel = value.name;
+    //     }
+    //     this.hideGiddhDatepicker();
+    //     if (value && value.startDate && value.endDate) {
+    //         this.showDateReport = true;
+    //         this.selectedDateRange = { startDate: moment(value.startDate), endDate: moment(value.endDate) };
+    //         this.selectedDateRangeUi = moment(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
+    //         this.downloadRequest.from = moment(value.startDate).format(GIDDH_DATE_FORMAT);
+    //         this.downloadRequest.to = moment(value.endDate).format(GIDDH_DATE_FORMAT);
+    //     }
+    // }
+    /**
+ * Call back function for date/range selection in datepicker
+ *
+ * @param {*} value
+ * @memberof InventoryGroupStockReportComponent
+ */
+    public dateSelectedCallback(value?: any, from?: any): void {
+        if (value && value.event === "cancel") {
+            this.hideGiddhDatepicker();
+            return;
+        }
+        this.selectedRangeLabel = "";
+
+        if (value && value.name) {
+            this.selectedRangeLabel = value.name;
+        }
+        this.hideGiddhDatepicker();
+        if (value && value.startDate && value.endDate) {
+            this.selectedDateRange = { startDate: moment(value.startDate), endDate: moment(value.endDate) };
+            this.selectedDateRangeUi = moment(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
+            this.fromDate = moment(value.startDate).format(GIDDH_DATE_FORMAT);
+            this.toDate = moment(value.endDate).format(GIDDH_DATE_FORMAT);
+            this.getDownloads(true);
+        }
+    }
+
+    /**
+    * This will hide the datepicker
+    *
+    * @memberof DownloadsComponent
+    */
+    public hideGiddhDatepicker(): void {
+        this.modalRef.hide();
+    }
+
+    /**
+     *To show the datepicker
+     *
+     * @param {*} element
+     * @memberof DownloadsComponent
+     */
+    public showGiddhDatepicker(element: any): void {
+        if (element) {
+            this.dateFieldPosition = this.generalService.getPosition(element.target);
+        }
+        this.modalRef = this.modalService.show(
+            this.datepickerTemplate,
+            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: false })
+        );
+    }
+
+    /**
      * Releases the memory
      *
      * @memberof DownloadsComponent
     */
     public ngOnDestroy(): void {
+        this.resetFilter();
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
         document.querySelector('body')?.classList?.remove('download-page');
     }
 }
