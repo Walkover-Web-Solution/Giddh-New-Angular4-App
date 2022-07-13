@@ -726,7 +726,10 @@
                     <p>
                         {{
                             getEditVoucherText(
-                                (selectedItemVoucherType ? selectedItemVoucherType : selectedItem?.voucherType)
+                                (selectedItemVoucher?.voucherType
+                                    ? selectedItemVoucher?.voucherType
+                                    : selectedItem?.voucherType
+                                )
                                     | voucherTypeToNamePipe
                                     | titlecase
                             )
