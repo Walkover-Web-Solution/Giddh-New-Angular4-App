@@ -12,6 +12,10 @@ import { CommonModule } from "@angular/common";
 import { NoDataModule } from "../shared/no-data/no-data.module";
 import { GiddhPageLoaderModule } from "../shared/giddh-page-loader/giddh-page-loader.module";
 import { SharedModule } from "../shared/shared.module";
+<<<<<<< HEAD
+=======
+
+>>>>>>> d1e2db52cb... API integration
 
 @NgModule({
     declarations: [DownloadsComponent, DownloadsJsonComponent],
