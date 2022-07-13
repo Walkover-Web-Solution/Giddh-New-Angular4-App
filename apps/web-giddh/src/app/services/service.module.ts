@@ -61,6 +61,7 @@ import { BulkVoucherExportService } from './bulkvoucherexport.service';
 import { LocaleService } from './locale.service';
 import { CustomFieldsService } from "./custom-fields.service";
 import { ActivityLogsService } from "./activity-logs.service";
+import { DownloadsService } from "./downloads.service";
 
 /**
  * Do not specify providers for modules that might be imported by a lazy loaded module.
@@ -133,7 +134,8 @@ export class ServiceModule {
                 PurchaseOrderService,
                 BulkVoucherExportService,
                 LocaleService,
-                CustomFieldsService
+                CustomFieldsService,
+                DownloadsService
             ]
         };
     }
