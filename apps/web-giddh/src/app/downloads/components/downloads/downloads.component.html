@@ -97,24 +97,24 @@
                 </div>
             </section>
         </div>
-        <div class="pagination-wrapper" *ngIf="downloadRequest?.totalItems > downloadRequest.count && !isLoading">
-            <pagination
-                [totalItems]="downloadRequest?.totalItems"
-                [(ngModel)]="downloadRequest.page"
-                [maxSize]="5"
-                class="pagination-sm"
-                [boundaryLinks]="true"
-                [itemsPerPage]="downloadRequest.count"
-                [rotate]="false"
-                (pageChanged)="pageChanged($event)"
-                [firstText]="commonLocaleData?.app_first"
-                [previousText]="commonLocaleData?.app_previous"
-                [nextText]="commonLocaleData?.app_next"
-                [lastText]="commonLocaleData?.app_last"
-            ></pagination>
-        </div>
     </div>
 </ng-container>
+<div class="pagination-wrapper" *ngIf="downloadRequest?.totalItems > downloadRequest.count && !isLoading">
+    <pagination
+        [totalItems]="downloadRequest?.totalItems"
+        [(ngModel)]="downloadRequest.page"
+        [maxSize]="5"
+        class="pagination-sm"
+        [boundaryLinks]="true"
+        [itemsPerPage]="downloadRequest.count"
+        [rotate]="false"
+        (pageChanged)="pageChanged($event)"
+        [firstText]="commonLocaleData?.app_first"
+        [previousText]="commonLocaleData?.app_previous"
+        [nextText]="commonLocaleData?.app_next"
+        [lastText]="commonLocaleData?.app_last"
+    ></pagination>
+</div>
 <ng-template #datepickerTemplate>
     <div class="datepicker-modal">
         <div class="modal-body">
