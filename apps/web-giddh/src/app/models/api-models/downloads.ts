@@ -8,7 +8,7 @@ export class DownloadsRequest {
 }
 export class DownloadsResponse {
     public page?: any;
-    count: number;
+    public count: number;
     public totalPages?: number;
     public totalItems?: number;
     public items?: [];

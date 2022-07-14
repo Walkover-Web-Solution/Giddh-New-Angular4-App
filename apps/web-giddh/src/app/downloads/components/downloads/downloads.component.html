@@ -32,25 +32,25 @@
             <table mat-table [dataSource]="dataSource" class="download-table">
                 <!-- Requested Date Column -->
                 <ng-container matColumnDef="requestedDate">
-                    <th mat-header-cell *matHeaderCellDef>Requested Date</th>
+                    <th mat-header-cell *matHeaderCellDef>{{ localeData.requested_date }}</th>
                     <td mat-cell *matCellDef="let element">{{ element.date }}</td>
                 </ng-container>
 
                 <!-- User Column -->
                 <ng-container matColumnDef="user">
-                    <th mat-header-cell *matHeaderCellDef>User</th>
+                    <th mat-header-cell *matHeaderCellDef>{{ localeData.user }}</th>
                     <td mat-cell *matCellDef="let element">{{ element.user.name }}</td>
                 </ng-container>
 
                 <!-- Services Column -->
                 <ng-container matColumnDef="services">
-                    <th mat-header-cell *matHeaderCellDef>Services</th>
+                    <th mat-header-cell *matHeaderCellDef>{{ localeData.services }}</th>
                     <td mat-cell *matCellDef="let element">{{ element.type }}</td>
                 </ng-container>
 
                 <!-- Filter Column -->
                 <ng-container matColumnDef="filter">
-                    <th mat-header-cell *matHeaderCellDef>Filter</th>
+                    <th mat-header-cell *matHeaderCellDef>{{ localeData.filter }}</th>
                     <td mat-cell *matCellDef="let element">
                         <button mat-mini-fab class="download-table-btn" (click)="openDialog(element)">
                             <i class="icon-info"></i>
@@ -60,17 +60,32 @@
 
                 <!-- Download Column -->
                 <ng-container matColumnDef="download">
-                    <th mat-header-cell *matHeaderCellDef>Download</th>
+                    <th mat-header-cell *matHeaderCellDef>{{ localeData.status }}</th>
                     <td mat-cell *matCellDef="let element">
-                        <ng-container>
-                            <button mat-raised-button class="btn-success min160 mr-l1">{{ element.status }}</button>
-                        </ng-container>
+                        <div
+                            class="text-center download-text"
+                            *ngIf="
+                                element.status === 'SUBMITTED' ||
+                                element.status === 'FAILED' ||
+                                element.status === 'INITIATED'
+                            "
+                        >
+                            {{ element.status }}
+                        </div>
+                        <button
+                            *ngIf="element.status === 'COMPLETED'"
+                            mat-button
+                            class="download-button-status btn-success"
+                            (click)="element?.status === 'COMPLETED' ? downloadData(element) : ''"
+                        >
+                            {{ localeData.download }}
+                        </button>
                     </td>
                 </ng-container>
 
                 <!-- Expiry Column -->
                 <ng-container matColumnDef="expiry">
-                    <th mat-header-cell *matHeaderCellDef>Expiry</th>
+                    <th mat-header-cell *matHeaderCellDef>{{ localeData.expiry }}</th>
                     <td mat-cell *matCellDef="let element">{{ element.expireAt }}</td>
                 </ng-container>
 

@@ -16,12 +16,15 @@ import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from '../../../app.c
 import { Router } from '@angular/router';
 /** This will use for interface */
 export interface DownloadData {
-    requestedDate: any;
-    user: any;
-    services: any;
-    filter: any;
-    download: any;
-    expiry: any;
+    date?: any;
+    requestedDate?: any;
+    user?: any;
+    type?: any;
+    filters?: any;
+    download?: any;
+    expireAt?: any;
+    requestId?: any;
+    status?: any
 }
 /** Hold information of Download  */
 const ELEMENT_DATA: DownloadData[] = [];
@@ -78,7 +81,9 @@ export class DownloadsComponent implements OnInit, OnDestroy {
         from: "",
         to: "",
     };
+    /** This will use for to date static*/
     public toDate: string;
+    /** This will use for from date static*/
     public fromDate: string;
 
     constructor(public dialog: MatDialog, private downloadsService: DownloadsService, private changeDetection: ChangeDetectorRef, private generalService: GeneralService, private router: Router, private modalService: BsModalService, private store: Store<AppState>) {
@@ -102,8 +107,8 @@ export class DownloadsComponent implements OnInit, OnDestroy {
                 let universalDate = cloneDeep(a);
                 this.selectedDateRange = { startDate: moment(a[0]), endDate: moment(a[1]) };
                 this.selectedDateRangeUi = moment(a[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(a[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-                this.fromDate = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
-                this.toDate = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
+                this.downloadRequest.from = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
+                this.downloadRequest.to = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
                 this.getDownloads(true);
             }
         });
@@ -126,9 +131,9 @@ export class DownloadsComponent implements OnInit, OnDestroy {
     }
 
     /**
-  * This function will be called when get the activity log
+  * This function will be called when get the Downloads
   *
-  * @memberof ActivityLogsComponent
+  * @memberof DownloadsComponent
   */
 
     public getDownloads(resetPage?: boolean) {
@@ -139,8 +144,13 @@ export class DownloadsComponent implements OnInit, OnDestroy {
         this.downloadsService.getDownloads(this.downloadRequest).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             this.isLoading = false;
             if (response && response.status === 'success') {
-                response.body?.items?.forEach((result, index) => {
-                    if (result) {
+                response.body?.items?.forEach((result: any) => {
+                    result.date = moment(result.date, GIDDH_DATE_FORMAT + " HH:mm:ss").format(GIDDH_DATE_FORMAT);
+                    let today = moment().format('DD-MM-YYYY');
+                    if (result.expireAt > today) {
+                        result.expireAt = moment(result.expireAt, GIDDH_DATE_FORMAT + " HH:mm:ss").format(GIDDH_DATE_FORMAT);
+                    } else {
+                        result.expireAt = "Expired"
                     }
                 });
                 this.dataSource = response.body.items;
@@ -167,51 +177,12 @@ export class DownloadsComponent implements OnInit, OnDestroy {
             this.getDownloads();
         }
     }
-    /**
-     * To reset applied filter
-     *
-     * @memberof DownloadsComponent
-     */
-    public resetFilter(): void {
-        this.showDateReport = false;
-        this.selectedDateRange = { startDate: moment(this.universalDate[0]), endDate: moment(this.universalDate[1]) };
-        this.selectedDateRangeUi = moment(this.universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(this.universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-        this.downloadRequest.from = moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
-        this.downloadRequest.to = moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
-        this.getDownloads(true);
-        this.changeDetection.detectChanges();
-    }
 
-    /**
-         * Call back function for date/range selection in datepicker
-         *
-         * @param {*} value
-         * @memberof DownloadsComponent
-         */
-    // public dateSelectedCallback(value?: any): void {
-    //     if (value && value.event === "cancel") {
-    //         this.hideGiddhDatepicker();
-    //         return;
-    //     }
-    //     this.selectedRangeLabel = "";
-
-    //     if (value && value.name) {
-    //         this.selectedRangeLabel = value.name;
-    //     }
-    //     this.hideGiddhDatepicker();
-    //     if (value && value.startDate && value.endDate) {
-    //         this.showDateReport = true;
-    //         this.selectedDateRange = { startDate: moment(value.startDate), endDate: moment(value.endDate) };
-    //         this.selectedDateRangeUi = moment(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
-    //         this.downloadRequest.from = moment(value.startDate).format(GIDDH_DATE_FORMAT);
-    //         this.downloadRequest.to = moment(value.endDate).format(GIDDH_DATE_FORMAT);
-    //     }
-    // }
     /**
  * Call back function for date/range selection in datepicker
  *
  * @param {*} value
- * @memberof InventoryGroupStockReportComponent
+ * @memberof DownloadsComponent
  */
     public dateSelectedCallback(value?: any, from?: any): void {
         if (value && value.event === "cancel") {
@@ -225,10 +196,13 @@ export class DownloadsComponent implements OnInit, OnDestroy {
         }
         this.hideGiddhDatepicker();
         if (value && value.startDate && value.endDate) {
+            this.showDateReport = true;
             this.selectedDateRange = { startDate: moment(value.startDate), endDate: moment(value.endDate) };
             this.selectedDateRangeUi = moment(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
             this.fromDate = moment(value.startDate).format(GIDDH_DATE_FORMAT);
             this.toDate = moment(value.endDate).format(GIDDH_DATE_FORMAT);
+            this.downloadRequest.from = this.fromDate;
+            this.downloadRequest.to = this.toDate;
             this.getDownloads(true);
         }
     }
@@ -256,6 +230,31 @@ export class DownloadsComponent implements OnInit, OnDestroy {
             this.datepickerTemplate,
             Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: false })
         );
+    }
+
+    public downloadData(data: any): void {
+        console.log(data);
+    }
+
+    /**
+ * To reset applied filter
+ *
+ * @memberof DownloadsComponent
+ */
+    public resetFilter(): void {
+        this.showDateReport = false;
+        //Reset Date with universal date
+        this.universalDate$.subscribe(a => {
+            if (a) {
+                this.downloadRequest.from = moment(a[0]).format(GIDDH_DATE_FORMAT);
+                this.downloadRequest.to = moment(a[1]).format(GIDDH_DATE_FORMAT);
+                let universalDate = cloneDeep(a);
+                this.selectedDateRange = { startDate: moment(universalDate[0]), endDate: moment(universalDate[1]) };
+                this.selectedDateRangeUi = moment(universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+            }
+        });
+        this.getDownloads(true);
+        this.changeDetection.detectChanges();
     }
 
     /**
