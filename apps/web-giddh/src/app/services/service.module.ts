@@ -58,14 +58,10 @@ import { ReverseChargeService } from './reversecharge.service';
 import { CashFlowStatementService } from './cashflowstatement.service';
 import { PurchaseOrderService } from './purchase-order.service';
 import { LocaleService } from './locale.service';
-<<<<<<< HEAD
 import { BulkVoucherExportService } from './bulkvoucherexport.service';
 import { CustomFieldsService } from "./custom-fields.service";
-=======
 import { PrinterFormatService } from "./printer.format.service";
->>>>>>> 19e7896824... fixed resolved
 import { ThermalService } from "./thermal.service";
-import { PrinterFormatService } from "./printer.format.service";
 import { ActivityLogsService } from "./activity-logs.service";
 import { DownloadsService } from "./downloads.service";
 
