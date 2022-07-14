@@ -58,6 +58,16 @@
                                     <img src="./assets/images/templates/beta.png" alt="" />
                                 </div>
                             </li>
+                            <!--Hide Thermal Feature  -->
+                            <!-- <li
+                                (click)="onDesignChange('uniqueName', template?.uniqueName)"
+                                *ngIf="template?.templateType === 'thermal_template'"
+                            >
+                                <img src="./assets/images/templates/{{ template.templateType }}.png" alt="" />
+                                <div class="beta-img">
+                                    <img src="./assets/images/templates/beta.png" alt="" />
+                                </div>
+                            </li> -->
                         </ng-container>
                         <!-- <li (click)="onDesignChange('uniqueName', 'gst_template_a')">
                 <img src="./assets/images/template1.jpg" alt="" />
@@ -89,10 +99,14 @@
                     </ul>
                 </div>
             </li>
-            <li [hidden]="templateUISectionVisibility.logo" (click)="onChangeVisibility('logo')">
+            <li
+                [hidden]="templateUISectionVisibility.logo"
+                (click)="onChangeVisibility('logo')"
+                *ngIf="customTemplate.templateType !== 'thermal_template'"
+            >
                 <i class="ico-edit"></i> <label>Make logo edit</label>
             </li>
-            <li [hidden]="!templateUISectionVisibility.logo">
+            <li [hidden]="!templateUISectionVisibility.logo" *ngIf="customTemplate.templateType !== 'thermal_template'">
                 <i class="ico-edit"></i> <label>Make logo edit</label>
                 <div class="clearfix mr-t1">
                     <div class="logo-tool">
@@ -184,11 +198,15 @@
                 </div>
             </li>
 
-            <li [hidden]="templateUISectionVisibility.color" (click)="onChangeVisibility('color')">
+            <li
+                [hidden]="templateUISectionVisibility.color"
+                (click)="onChangeVisibility('color')"
+                *ngIf="customTemplate.templateType !== 'thermal_template'"
+            >
                 <i class="ico-swatch"></i> <label>Try other colour</label>
             </li>
             <!--<li *ngIf="ifColorSelected">-->
-            <li [hidden]="!templateUISectionVisibility.color">
+            <li [hidden]="!templateUISectionVisibility.color" *ngIf="templateType !== 'thermal_template'">
                 <i class="ico-swatch"></i> <label>Try other colour</label>
                 <!-- edit color  start -->
                 <div class="clearfix mr-t1">
@@ -224,10 +242,13 @@
                 <!-- edit color end -->
             </li>
 
-            <li *ngIf="!templateUISectionVisibility.font" (click)="onChangeVisibility('font')">
+            <li
+                *ngIf="!templateUISectionVisibility.font && customTemplate.templateType !== 'thermal_template'"
+                (click)="onChangeVisibility('font')"
+            >
                 <i class="ico-txt"></i> <label>Select different fonts</label>
             </li>
-            <li *ngIf="templateUISectionVisibility.font">
+            <li *ngIf="templateUISectionVisibility.font && customTemplate.templateType !== 'thermal_template'">
                 <i class="ico-txt"></i> <label>Select different fonts</label>
                 <div class="row font-selector mr-t1 form-group">
                     <div class="col-9">
@@ -243,7 +264,10 @@
                 </div>
             </li>
             <ng-container>
-                <li *ngIf="!templateUISectionVisibility.fontSize" (click)="onChangeVisibility('fontSize')">
+                <li
+                    *ngIf="!templateUISectionVisibility.fontSize && customTemplate.templateType !== 'thermal_template'"
+                    (click)="onChangeVisibility('fontSize')"
+                >
                     <i class="ico-txt"></i> <label>Select different fonts size</label>
                 </li>
                 <li *ngIf="templateUISectionVisibility.fontSize">
@@ -262,7 +286,11 @@
                     </div>
                 </li>
             </ng-container>
-            <li [hidden]="templateUISectionVisibility.print" (click)="onChangeVisibility('print')">
+            <li
+                [hidden]="templateUISectionVisibility.print"
+                (click)="onChangeVisibility('print')"
+                *ngIf="customTemplate.templateType !== 'thermal_template'"
+            >
                 <i class="ico-print"></i> <label>Edit print setting</label>
             </li>
             <li [hidden]="!templateUISectionVisibility.print">

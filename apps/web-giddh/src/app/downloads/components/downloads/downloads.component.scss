@@ -42,4 +42,14 @@
         width: 160px;
         min-width: 160px;
     }
+    .btn-filter {
+        background: var(--color-dark-fog);
+        border: 1px solid var(--color-primary-button-border);
+        font-size: 14px;
+        color: var(--color-giddh-blue);
+        display: inline-flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 4px 10px;
+    }
 }

@@ -367,7 +367,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
         let requestObject;
         if (e.additional.stock) {
             requestObject = {
-                stockUniqueName: e.additional.stock.uniqueName
+                stockUniqueName: e.additional.stock.uniqueName,
+                oppositeAccountUniqueName: e.additional?.uniqueName
             };
         }
         const currentLedgerCategory = this.lc.activeAccount ? this.generalService.getAccountCategory(this.lc.activeAccount, this.lc.activeAccount.uniqueName) : '';
@@ -410,7 +411,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     stock: data.body.stock,
                     uNameStr: e.additional && e.additional.parentGroups ? e.additional.parentGroups.map(parent => parent?.uniqueName).join(', ') : '',
                     accountApplicableDiscounts: data.body.applicableDiscounts,
-                    parentGroups: data.body.parentGroups,  // added due to parentGroups is getting null in search API
+                    parentGroups: e.additional.stock ? data.body.oppositeAccount.parentGroups : data.body.parentGroups
+                    // added due to parentGroups is getting null in search API
                 };
                 if (txn.selectedAccount && txn.selectedAccount.stock) {
                     txn.selectedAccount.stock.rate = Number((txn.selectedAccount.stock.rate / this.lc.blankLedger.exchangeRate).toFixed(RATE_FIELD_PRECISION));
@@ -468,8 +470,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     this.newLedgerComponent.calculateTax();
                     this.newLedgerComponent.calculateTotal();
                 }
-                this.cdRf.detectChanges();
                 this.selectedTxnAccUniqueName = txn.selectedAccount?.uniqueName;
+                this.cdRf.detectChanges();
             }
         });
     }
@@ -1314,6 +1316,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         }
 
         let blankTransactionObj: BlankLedgerVM = this.lc.prepareBlankLedgerRequestObject();
+
 
         if (blankTransactionObj && blankTransactionObj.transactions && blankTransactionObj.transactions.length > 0) {
             if (this.voucherApiVersion === 2) {

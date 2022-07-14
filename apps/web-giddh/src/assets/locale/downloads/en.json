@@ -2,9 +2,7 @@
     "requested_date": "Requested Date",
     "user":"User",
     "no_logs": "No Record Found",
-    "services": "Services",
-    "filter": "Filter",
     "download": "Download",
     "expiry": "Expiry",
-    "status": "Status"
+    "expired": "Expired"
 }

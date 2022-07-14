@@ -359,7 +359,10 @@
                                                 </span>
 
                                                 <span
-                                                    *ngIf="shouldShowPrintDocument"
+                                                    *ngIf="
+                                                        shouldShowPrintDocument &&
+                                                        defaultTemplate?.templateType !== 'thermal_template'
+                                                    "
                                                     [ngClass]="{
                                                         'disabled':
                                                             isVoucherDownloading ||
@@ -375,6 +378,16 @@
                                                         ><i class="fa fa-print"></i
                                                     ></a>
                                                 </span>
+                                                <!-- Hide Thermal Feature -->
+                                                <!-- <span *ngIf="defaultTemplate?.templateType === 'thermal_template'">
+                                                    <a
+                                                        href="javascript:;"
+                                                        [tooltip]="commonLocaleData?.app_print"
+                                                        placement="top"
+                                                        (click)="printThermal()"
+                                                        ><i class="fa fa-print"></i
+                                                    ></a>
+                                                </span> -->
 
                                                 <span
                                                     *ngIf="selectedItem?.voucherType === 'purchase' && pdfPreviewLoaded"
@@ -710,7 +723,18 @@
         <div class="invoice-edit-wrapper">
             <div class="invoice-edit-header">
                 <span>
-                    <p>{{ getEditVoucherText(selectedItem?.voucherType | voucherTypeToNamePipe | titlecase) }}</p>
+                    <p>
+                        {{
+                            getEditVoucherText(
+                                (selectedItemVoucher?.voucherType
+                                    ? selectedItemVoucher?.voucherType
+                                    : selectedItem?.voucherType
+                                )
+                                    | voucherTypeToNamePipe
+                                    | titlecase
+                            )
+                        }}
+                    </p>
                 </span>
 
                 <span class="close-modal cp p-0" (click)="toggleEditMode()">

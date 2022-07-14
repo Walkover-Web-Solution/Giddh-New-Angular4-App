@@ -20,7 +20,7 @@
                 </div>
             </div>
             <div class="clear-filter form-group mb-0" *ngIf="showDateReport">
-                <button mat-raised-button class="btn-success min-width-100 mr-l1" (click)="resetFilter()">
+                <button mat-raised-button class="btn btn-filter min-width-100 mr-l1" (click)="resetFilter()">
                     <span class="icon-cross"></span> {{ commonLocaleData?.app_clear_filter }}
                 </button>
             </div>
@@ -32,25 +32,25 @@
             <table mat-table [dataSource]="dataSource" class="download-table">
                 <!-- Requested Date Column -->
                 <ng-container matColumnDef="requestedDate">
-                    <th mat-header-cell *matHeaderCellDef>{{ localeData.requested_date }}</th>
+                    <th mat-header-cell *matHeaderCellDef>{{ localeData?.requested_date }}</th>
                     <td mat-cell *matCellDef="let element">{{ element.date }}</td>
                 </ng-container>
 
                 <!-- User Column -->
                 <ng-container matColumnDef="user">
-                    <th mat-header-cell *matHeaderCellDef>{{ localeData.user }}</th>
+                    <th mat-header-cell *matHeaderCellDef>{{ localeData?.user }}</th>
                     <td mat-cell *matCellDef="let element">{{ element.user.name }}</td>
                 </ng-container>
 
                 <!-- Services Column -->
                 <ng-container matColumnDef="services">
-                    <th mat-header-cell *matHeaderCellDef>{{ localeData.services }}</th>
+                    <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_services }}</th>
                     <td mat-cell *matCellDef="let element">{{ element.type }}</td>
                 </ng-container>
 
                 <!-- Filter Column -->
                 <ng-container matColumnDef="filter">
-                    <th mat-header-cell *matHeaderCellDef>{{ localeData.filter }}</th>
+                    <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_filter }}</th>
                     <td mat-cell *matCellDef="let element">
                         <button mat-mini-fab class="download-table-btn" (click)="openDialog(element)">
                             <i class="icon-info"></i>
@@ -60,7 +60,7 @@
 
                 <!-- Download Column -->
                 <ng-container matColumnDef="download">
-                    <th mat-header-cell *matHeaderCellDef>{{ localeData.status }}</th>
+                    <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_status }}</th>
                     <td mat-cell *matCellDef="let element">
                         <div
                             class="text-center download-text"
@@ -76,16 +76,15 @@
                             *ngIf="element.status === 'COMPLETED'"
                             mat-button
                             class="download-button-status btn-success"
-                            (click)="element?.status === 'COMPLETED' ? downloadData(element) : ''"
                         >
-                            {{ localeData.download }}
+                            {{ commonLocaleData?.app_download }}
                         </button>
                     </td>
                 </ng-container>
 
                 <!-- Expiry Column -->
                 <ng-container matColumnDef="expiry">
-                    <th mat-header-cell *matHeaderCellDef>{{ localeData.expiry }}</th>
+                    <th mat-header-cell *matHeaderCellDef>{{ localeData?.expiry }}</th>
                     <td mat-cell *matCellDef="let element">{{ element.expireAt }}</td>
                 </ng-container>
 

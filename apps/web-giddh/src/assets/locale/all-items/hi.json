@@ -65,7 +65,10 @@
                     "label": "बिक्री रजिस्टर",
                     "link": "/pages/reports/sales-register",
                     "icon": "icon-register-new",
-                    "description": "शुद्ध और संचयी बिक्री"
+                    "description": "शुद्ध और संचयी बिक्री",
+                    "additionalRoutes":[
+                        "/pages/reports/sales-detailed-expand"
+                    ]
                 },
                 {
                     "label": "टेम्पलेट",
@@ -108,7 +111,10 @@
                     "label": "खरीद रजिस्टर",
                     "link": "/pages/reports/purchase-register",
                     "icon": "icon-register-new",
-                    "description": "शुद्ध और संचयी खरीदारी"
+                    "description": "शुद्ध और संचयी खरीदारी",
+                    "additionalRoutes":[
+                        "/pages/reports/purchase-detailed-expand"
+                    ]
                 },
                 {
                     "label": "विक्रेता",
@@ -391,7 +397,7 @@
                 },
                 {
                     "label": "डाउनलोड",
-                    "link": "/pages/download",
+                    "link": "/pages/downloads",
                     "icon": "icon-download-circle"
                 }
             ]

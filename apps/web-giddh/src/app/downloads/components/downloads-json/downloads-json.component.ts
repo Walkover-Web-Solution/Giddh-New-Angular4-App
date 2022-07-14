@@ -1,11 +1,12 @@
-import { Component, Inject, OnInit, ViewChild, ElementRef } from "@angular/core";
+import { Component, Inject, OnInit, ViewChild, ElementRef, ChangeDetectionStrategy } from "@angular/core";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import * as jsonTreeViewer from 'json-tree-viewer';
 
 @Component({
     selector: 'downloads-json',
     templateUrl: './downloads-json.component.html',
-    styleUrls: ['./downloads-json.component.scss']
+    styleUrls: ['./downloads-json.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 
 export class DownloadsJsonComponent implements OnInit {

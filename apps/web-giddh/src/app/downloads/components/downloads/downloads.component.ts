@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef, ViewChild, ElementRef, ChangeDetectionStrategy } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { DownloadsService } from '../../../services/downloads.service';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
@@ -32,6 +32,7 @@ const ELEMENT_DATA: DownloadData[] = [];
     selector: 'downloads',
     templateUrl: './downloads.component.html',
     styleUrls: ['./downloads.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 
 export class DownloadsComponent implements OnInit, OnDestroy {
@@ -102,11 +103,11 @@ export class DownloadsComponent implements OnInit, OnDestroy {
             this.router.navigate(['/pages/home']);
         }
         /** Universal date observer */
-        this.universalDate$.subscribe(a => {
-            if (a) {
-                let universalDate = cloneDeep(a);
-                this.selectedDateRange = { startDate: moment(a[0]), endDate: moment(a[1]) };
-                this.selectedDateRangeUi = moment(a[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(a[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+        this.universalDate$.subscribe(dateObj => {
+            if (dateObj) {
+                let universalDate = cloneDeep(dateObj);
+                this.selectedDateRange = { startDate: moment(dateObj[0]), endDate: moment(dateObj[1]) };
+                this.selectedDateRangeUi = moment(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
                 this.downloadRequest.from = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
                 this.downloadRequest.to = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
                 this.getDownloads(true);
@@ -115,8 +116,9 @@ export class DownloadsComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Opens the Sidebar popup
+     *Opens the Sidebar popup
      *
+     * @param {*} row
      * @memberof DownloadsComponent
      */
     public openDialog(row: any): void {
@@ -124,19 +126,15 @@ export class DownloadsComponent implements OnInit, OnDestroy {
             data: row?.filters,
             panelClass: 'download-json-panel'
         });
-
-        dialogRef.afterClosed().subscribe(result => {
-            console.log(`Dialog result: ${result}`);
-        });
     }
 
     /**
-  * This function will be called when get the Downloads
-  *
-  * @memberof DownloadsComponent
-  */
-
-    public getDownloads(resetPage?: boolean) {
+     *This function will be called when get the Downloads
+     *
+     * @param {boolean} [resetPage]
+     * @memberof DownloadsComponent
+     */
+    public getDownloads(resetPage?: boolean): void {
         if (resetPage) {
             this.downloadRequest.page = 1;
         }
@@ -146,11 +144,11 @@ export class DownloadsComponent implements OnInit, OnDestroy {
             if (response && response.status === 'success') {
                 response.body?.items?.forEach((result: any) => {
                     result.date = moment(result.date, GIDDH_DATE_FORMAT + " HH:mm:ss").format(GIDDH_DATE_FORMAT);
-                    let today = moment().format('DD-MM-YYYY');
-                    if (result.expireAt > today) {
+                    let today = moment().format(GIDDH_DATE_FORMAT);
+                    if (result.expireAt >= today) {
                         result.expireAt = moment(result.expireAt, GIDDH_DATE_FORMAT + " HH:mm:ss").format(GIDDH_DATE_FORMAT);
                     } else {
-                        result.expireAt = "Expired"
+                        result.expireAt = this.localeData?.expired;
                     }
                 });
                 this.dataSource = response.body.items;
@@ -166,11 +164,11 @@ export class DownloadsComponent implements OnInit, OnDestroy {
     }
 
     /**
-* This function will change the page of activity logs
-*
-* @param {*} event
-* @memberof DownloadsComponent
-*/
+    * This function will change the page of activity logs
+    *
+    * @param {*} event
+    * @memberof DownloadsComponent
+    */
     public pageChanged(event: any): void {
         if (this.downloadRequest.page !== event.page) {
             this.downloadRequest.page = event.page;
@@ -179,11 +177,13 @@ export class DownloadsComponent implements OnInit, OnDestroy {
     }
 
     /**
- * Call back function for date/range selection in datepicker
- *
- * @param {*} value
- * @memberof DownloadsComponent
- */
+     * Call back function for date/range selection in datepicker
+     *
+     * @param {*} [value]
+     * @param {*} [from]
+     * @return {*}  {void}
+     * @memberof DownloadsComponent
+     */
     public dateSelectedCallback(value?: any, from?: any): void {
         if (value && value.event === "cancel") {
             this.hideGiddhDatepicker();
@@ -232,23 +232,19 @@ export class DownloadsComponent implements OnInit, OnDestroy {
         );
     }
 
-    public downloadData(data: any): void {
-        console.log(data);
-    }
-
     /**
- * To reset applied filter
- *
- * @memberof DownloadsComponent
- */
+     * To reset applied filter
+     *
+     * @memberof DownloadsComponent
+     */
     public resetFilter(): void {
         this.showDateReport = false;
         //Reset Date with universal date
-        this.universalDate$.subscribe(a => {
-            if (a) {
-                this.downloadRequest.from = moment(a[0]).format(GIDDH_DATE_FORMAT);
-                this.downloadRequest.to = moment(a[1]).format(GIDDH_DATE_FORMAT);
-                let universalDate = cloneDeep(a);
+        this.universalDate$.subscribe(dateObj => {
+            if (dateObj) {
+                this.downloadRequest.from = moment(dateObj[0]).format(GIDDH_DATE_FORMAT);
+                this.downloadRequest.to = moment(dateObj[1]).format(GIDDH_DATE_FORMAT);
+                let universalDate = cloneDeep(dateObj);
                 this.selectedDateRange = { startDate: moment(universalDate[0]), endDate: moment(universalDate[1]) };
                 this.selectedDateRangeUi = moment(universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
             }

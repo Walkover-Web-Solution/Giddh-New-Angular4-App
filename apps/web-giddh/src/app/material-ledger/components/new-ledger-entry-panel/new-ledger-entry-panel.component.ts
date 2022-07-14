@@ -252,7 +252,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     private searchReferenceVoucher: any = "";
     /** Invoice list observable */
     public invoiceList$: Observable<any[]>;
-    /** List of discounts */	
+    /** List of discounts */
     public discountsList: any[] = [];
     /** Is advance receipt with tds/tcs */
     public isAdvanceReceiptWithTds: boolean = false;
@@ -743,6 +743,12 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 return;
             }
         }
+        // Taxes checkbox will be false in case of receipt and payment voucher 
+        if (this.voucherApiVersion === 2 && (this.blankLedger.voucherType === 'rcpt' || this.blankLedger.voucherType === 'pay') && !this.isAdvanceReceipt) {
+            this.currentTxn?.taxesVm?.map(tax => {
+                tax.isChecked = false;
+            });
+        }
         /* Add warehouse to the stock entry if the user hits 'Save' button without clicking on 'Add to CR/DR' button
             This will add the warehouse to the entered item */
         this.blankLedger.transactions.map((transaction) => {
@@ -816,7 +822,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         });
 
         dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
-            if(response) {
+            if (response) {
                 this.deleteAttachedFile();
             }
         });
@@ -905,7 +911,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         });
 
         dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
-            if(response) {
+            if (response) {
                 this.mapBankTransaction();
             }
         });
@@ -989,7 +995,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     }
 
     public clickedOutside(event: any): void {
-        if(this.isDatepickerOpen) {
+        if (this.isDatepickerOpen) {
             return;
         }
 
@@ -1068,7 +1074,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         }
         this.selectedInvoiceForCreditNote = null;
 
-        if(!this.currentTxn?.voucherAdjustments?.adjustments?.length) {
+        if (!this.currentTxn?.voucherAdjustments?.adjustments?.length) {
             this.blankLedger.generateInvoice = this.manualGenerateVoucherChecked;
         }
     }
@@ -1124,7 +1130,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             this.blankLedger.otherTaxModal.itemLabel = '';
             return;
         }
-        if(!this.blankLedger?.otherTaxModal) {
+        if (!this.blankLedger?.otherTaxModal) {
             this.blankLedger.otherTaxModal = new SalesOtherTaxesModal();
         }
         this.blankLedger.otherTaxModal.itemLabel = this.currentTxn && this.currentTxn.selectedAccount ?
@@ -1310,7 +1316,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public toggleRcmCheckbox(event: any, element: string): void {
         let isChecked;
 
-        if(element === "checkbox") {
+        if (element === "checkbox") {
             isChecked = event?.checked;
             this.rcmCheckbox['checked'] = !isChecked;
         } else {
@@ -1428,7 +1434,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 }
                 this.isAdjustVoucherSelected = false;
 
-                if(!this.selectedInvoiceForCreditNote) {
+                if (!this.selectedInvoiceForCreditNote) {
                     this.blankLedger.generateInvoice = this.manualGenerateVoucherChecked;
                 }
             } else {
@@ -1454,7 +1460,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             }
             this.isAdjustVoucherSelected = false;
 
-            if(!this.selectedInvoiceForCreditNote) {
+            if (!this.selectedInvoiceForCreditNote) {
                 this.blankLedger.generateInvoice = this.manualGenerateVoucherChecked;
             }
         }
@@ -1472,8 +1478,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         this.isAdjustAdvanceReceiptSelected = false;
         this.isAdjustReceiptSelected = false;
         this.isAdjustVoucherSelected = false;
-        
-        if(!this.selectedInvoiceForCreditNote) {
+
+        if (!this.selectedInvoiceForCreditNote) {
             this.blankLedger.generateInvoice = this.manualGenerateVoucherChecked;
         }
     }
