@@ -397,7 +397,7 @@
                 },
                 {
                     "label": "डाउनलोड करा",
-                    "link": "/pages/download",
+                    "link": "/pages/downloads",
                     "icon": "icon-download-circle"
                 }
             ]
