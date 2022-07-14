@@ -7625,6 +7625,15 @@ giddh-datepicker {
             color: var(--color-common-secondary-disabled) !important;
         }
     }
+    .help-support-aside {
+        aside-help-support {
+            .aside-pane {
+                .aside-help-header {
+                    position: static;
+                }
+            }
+        }
+    }
 }
 
 .cdk-overlay-container,
