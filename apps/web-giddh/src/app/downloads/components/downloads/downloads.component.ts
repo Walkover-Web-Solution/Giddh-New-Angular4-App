@@ -68,7 +68,7 @@ export class DownloadsComponent implements OnInit, OnDestroy {
     /** This will store universalDate */
     public universalDate: any;
     /** To show clear filter */
-    public showDateReport: boolean = false;
+    public showClearFilter: boolean = false;
     /** This will use for table heading */
     public displayedColumns: string[] = ['requestedDate', 'user', 'services', 'filter', 'download', 'expiry'];
     /** Hold the data of downloads */
@@ -196,7 +196,7 @@ export class DownloadsComponent implements OnInit, OnDestroy {
         }
         this.hideGiddhDatepicker();
         if (value && value.startDate && value.endDate) {
-            this.showDateReport = true;
+            this.showClearFilter = true;
             this.selectedDateRange = { startDate: moment(value.startDate), endDate: moment(value.endDate) };
             this.selectedDateRangeUi = moment(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
             this.fromDate = moment(value.startDate).format(GIDDH_DATE_FORMAT);
@@ -242,7 +242,7 @@ export class DownloadsComponent implements OnInit, OnDestroy {
  * @memberof DownloadsComponent
  */
     public resetFilter(): void {
-        this.showDateReport = false;
+        this.showClearFilter = false;
         //Reset Date with universal date
         this.universalDate$.subscribe(a => {
             if (a) {

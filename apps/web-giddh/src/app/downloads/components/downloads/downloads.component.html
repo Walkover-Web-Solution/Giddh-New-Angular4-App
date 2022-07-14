@@ -19,8 +19,8 @@
                     />
                 </div>
             </div>
-            <div class="clear-filter form-group mb-0" *ngIf="showDateReport">
-                <button mat-raised-button class="btn-success min-width-100 mr-l1" (click)="resetFilter()">
+            <div class="clear-filter form-group mb-0" *ngIf="showClearFilter">
+                <button mat-raised-button class="btn btn-filter min-width-100 mr-l1" (click)="resetFilter()">
                     <span class="icon-cross"></span> {{ commonLocaleData?.app_clear_filter }}
                 </button>
             </div>
@@ -94,7 +94,7 @@
             </table>
             <section class="no-logs" *ngIf="!dataSource?.length && !isLoading">
                 <div class="no-data">
-                    <h1>{{ localeData?.no_logs }}</h1>
+                    <h1>{{ commonLocaleData?.app_no_record_found }}</h1>
                 </div>
             </section>
         </div>
