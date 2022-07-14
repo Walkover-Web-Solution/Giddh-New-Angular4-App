@@ -1,9 +1,4 @@
-<ng-container
-    appTranslate
-    [file]="'downloads'"
-    (commonLocaleData)="commonLocaleData = $event"
-    (localeData)="localeData = $event"
->
+<ng-container appTranslate (commonLocaleData)="commonLocaleData = $event">
     <div class="download-list-container">
         <div class="modal-header d-flex align-items-center activity-header">
             <h3>{{ commonLocaleData?.app_filter }}</h3>
