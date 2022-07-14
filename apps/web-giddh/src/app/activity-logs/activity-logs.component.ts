@@ -151,12 +151,11 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
      * @memberof ActivityLogsComponent
      */
     public getLogsDetails(event: any, element: any): void {
-        event.stopPropagation();
-        event.preventDefault();
         this.dialog.open(ActivityLogsJsonComponent, {
             data: element?.details,
             panelClass: 'logs-sidebar'
         });
+        this.addZindexCdkOverlay();
     }
 
 
@@ -327,9 +326,6 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
      * @memberof ActivityLogsComponent
      */
     public getHistory(event: any, row: any): void {
-        event.stopPropagation();
-        event.preventDefault();
-
         if (!row.hasHistory) {
             let activityObj = { entityId: row.entityId, entity: row.entity, count: 200 };
             this.activityService.getActivityLogs(activityObj).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
@@ -350,6 +346,10 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
                         this.toaster.showSnackBar('info', this.localeData?.no_history);
                         row.history = [];
                         row.isExpanded = false;
+                        this.addZindexCdkOverlay();
+                        setTimeout(() => {
+                            this.removeZindexCdkOverlay();
+                        }, 3000);
                     }
                 } else {
                     row.history = [];
@@ -358,8 +358,13 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
             });
         } else if (row.history?.length) {
             row.isExpanded = !row.isExpanded;
+            this.removeZindexCdkOverlay();
         } else {
             this.toaster.showSnackBar('info', this.localeData?.no_history);
+            this.addZindexCdkOverlay();
+            setTimeout(() => {
+                this.removeZindexCdkOverlay();
+            }, 3000);
         }
     }
 
@@ -400,8 +405,6 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
      */
     public compareHistoryJson(rowHistory: any, details: any, event: any): void {
 
-        event.stopPropagation();
-        event.preventDefault();
         let data;
         if (rowHistory.selectedItems[0]?.index === details.index) {
             data = [rowHistory.selectedItems[1]?.details, rowHistory.selectedItems[0]?.details];
@@ -413,6 +416,7 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
             data: data,
             panelClass: 'json-sidebar'
         });
+        this.addZindexCdkOverlay();
     }
 
     /**
@@ -425,5 +429,22 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
         this.destroyed$.next(true);
         this.destroyed$.complete();
         document.body?.classList?.remove("activity-log-page");
+    }
+    /**
+     * Adds Z-index class to cdk-overlay element
+     *
+     * @memberof ActivityLogsComponent
+     */
+    public addZindexCdkOverlay(): void {
+        document.querySelector('.cdk-overlay-container')?.classList?.add('cdk-overlay-container-z-index');
+    }
+
+    /**
+     * Removes Z-index class to cdk-overlay element
+     *
+     * @memberof ActivityLogsComponent
+     */
+    public removeZindexCdkOverlay(): void {
+        document.querySelector('.cdk-overlay-container')?.classList?.remove('cdk-overlay-container-z-index');
     }
 }

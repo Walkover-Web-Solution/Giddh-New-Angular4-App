@@ -65,7 +65,11 @@
         <div *ngIf="discountAccountsDetails.length > 1">
             <ul class="discount-name-ul">
                 <ng-container *ngFor="let discount of discountAccountsDetails;trackBy: trackByFn; let idx = index">
-                    <li *ngIf="discount && discount.discountUniqueName && discount.name" class="custom-item pd mr-b05">
+                    <li
+                        *ngIf="discount && discount.discountUniqueName && discount.name"
+                        class="custom-item pd mr-b05"
+                        #discountDropdownListItem
+                    >
                         <label
                             class="checkbox overflow-hidden width-100 p-0 m-0 label-line"
                             (click)="$event.stopPropagation()"
@@ -78,6 +82,8 @@
                                 [(ngModel)]="discount.isActive"
                                 (change)="change(discount, $event)"
                                 (click)="$event.stopPropagation()"
+                                (focus)="discountDropdownFocus(discountDropdownListItem)"
+                                (blur)="discountDropdownBlur(discountDropdownListItem)"
                             />
                             <span class="pull-left text-ellipsis">{{discount.name}}</span>
                         </label>
