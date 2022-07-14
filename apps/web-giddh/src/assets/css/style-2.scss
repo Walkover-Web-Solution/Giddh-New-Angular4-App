@@ -6322,6 +6322,12 @@ highcharts-chart {
     }
 }
 
+.aside-menu-product-service-page {
+    app-header {
+        z-index: 9;
+    }
+}
+
 #top0,
 .no-top {
     top: 0 !important;
@@ -7484,6 +7490,15 @@ giddh-datepicker {
         }
     }
     height: auto;
+    .help-support-aside {
+        aside-help-support {
+            .aside-pane {
+                .aside-help-header {
+                    position: static;
+                }
+            }
+        }
+    }
 }
 .cdk-overlay-container,
 .cdk-global-overlay-wrapper {
