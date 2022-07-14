@@ -13,7 +13,6 @@ import { NoDataModule } from "../shared/no-data/no-data.module";
 import { GiddhPageLoaderModule } from "../shared/giddh-page-loader/giddh-page-loader.module";
 import { SharedModule } from "../shared/shared.module";
 
-
 @NgModule({
     declarations: [DownloadsComponent, DownloadsJsonComponent],
     exports: [],

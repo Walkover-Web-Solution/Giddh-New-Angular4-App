@@ -12,10 +12,13 @@ export class DownloadsJsonComponent implements OnInit {
 
     /** Instance of activity logs json */
     @ViewChild('jsonData', { static: false }) public jsonData: ElementRef;
+    /** This will hold local JSON data */
+    public localeData: any = {};
+    /** This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor(@Inject(MAT_DIALOG_DATA) public inputData,
         public dialogRef: MatDialogRef<any>) { }
-
 
     /**
      * Initializes the Component

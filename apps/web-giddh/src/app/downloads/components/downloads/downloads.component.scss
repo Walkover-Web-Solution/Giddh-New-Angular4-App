@@ -1,5 +1,4 @@
 .download-table-container {
-    padding: 20px;
     .download-table {
         width: 100%;
         .download-table-btn {
@@ -26,5 +25,21 @@
         align-items: center;
         padding-left: 9px;
         padding-top: 9px;
+    }
+    .btn-success {
+        background-color: var(--color-nonary-button-background);
+        color: var(--color-nonary-button-text);
+        &:hover {
+            background-color: var(--color-nonary-button-background-hover) !important;
+        }
+    }
+    .download-button-status {
+        min-width: 160px;
+        max-width: 160px;
+        text-align: center;
+    }
+    .download-text {
+        width: 160px;
+        min-width: 160px;
     }
 }
