@@ -1,4 +1,9 @@
 .download-table-container {
+    .table-content {
+        max-height: calc(100vh - 200px);
+        overflow-y: auto;
+        height: calc(100vh - 200px);
+    }
     .download-table {
         width: 100%;
         .download-table-btn {
