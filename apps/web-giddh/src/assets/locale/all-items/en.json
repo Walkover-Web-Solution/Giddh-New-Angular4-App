@@ -400,7 +400,7 @@
                     "description": "Select group and search for a time span"
                 },
                 {
-                    "label": "Download",
+                    "label": "Downloads",
                     "link": "/pages/downloads",
                     "icon": "icon-download-circle"
                 }
