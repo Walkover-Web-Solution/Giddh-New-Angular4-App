@@ -62,14 +62,7 @@
                 <ng-container matColumnDef="download">
                     <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_status }}</th>
                     <td mat-cell *matCellDef="let element">
-                        <div
-                            class="text-center download-text"
-                            *ngIf="
-                                element.status === 'SUBMITTED' ||
-                                element.status === 'FAILED' ||
-                                element.status === 'INITIATED'
-                            "
-                        >
+                        <div class="text-center download-text" *ngIf="element.status !== 'COMPLETED'">
                             {{ element.status }}
                         </div>
                         <button
