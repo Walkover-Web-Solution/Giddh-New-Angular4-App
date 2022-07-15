@@ -400,6 +400,11 @@
                     "link": "/pages/search",
                     "icon": "icon-search",
                     "description": "समूह का चयन करें और समय अवधि खोजें"
+                },
+                {
+                    "label": "डाउनलोड",
+                    "link": "/pages/downloads",
+                    "icon": "icon-download-circle"
                 }
             ]
         }

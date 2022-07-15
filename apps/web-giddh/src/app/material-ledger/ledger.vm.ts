@@ -264,7 +264,7 @@ export class LedgerVM {
                         return n.type === bankTxn.type;
                     });
                 });
-                if(item.transactions[0].type === "CREDIT") {
+                if (item.transactions[0].type === "CREDIT") {
                     item.index = creditLoop;
                     this.bankTransactionsCreditData.push(item);
                     creditLoop++;
