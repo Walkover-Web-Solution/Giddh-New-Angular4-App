@@ -5669,23 +5669,6 @@ footer#footer.absolute-footer {
     }
 }
 
-app-manage-groups-accounts {
-    account-update-new-details {
-        .button-group {
-            .update-btn-zindex {
-                .ladda-label {
-                    color: var(--color-septenary-button-text);
-                }
-                &:hover {
-                    .ladda-label {
-                        color: var(--color-secondary-button-text) !important;
-                    }
-                }
-            }
-        }
-    }
-}
-
 section.ledger-stat.sticky-footer.sticky-footer-sale-amount {
     text-align: left !important;
     margin-bottom: 0;
@@ -7252,6 +7235,20 @@ span#HW_badge_cont:nth-child(3) {
         }
     }
 }
+
+.download-page {
+    .download-json-panel {
+        position: fixed !important;
+        right: 0px;
+    }
+    .mat-dialog-content {
+        margin: 0 !important;
+        padding: 0 !important;
+        max-height: 90%;
+        width: 100%;
+    }
+}
+
 .settings-profile-tabs {
     .tab-container {
         .nav-tabs {

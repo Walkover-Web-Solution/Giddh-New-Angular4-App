@@ -1,0 +1,141 @@
+<ng-container
+    appTranslate
+    [file]="'downloads'"
+    (commonLocaleData)="commonLocaleData = $event"
+    (localeData)="localeData = $event"
+>
+    <hamburger-menu class="hamburger-menu"></hamburger-menu>
+
+    <div class="download-table-container">
+        <div class="activity-filter-wrap">
+            <div class="mr-t15 mr-b15 custom-datepicker-wrapper">
+                <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
+                    <i class="icon-calender calendar-addon"></i>
+                    <input
+                        type="text"
+                        name="selectedDateRange"
+                        [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
+                        class="giddh-datepicker date-range-picker"
+                    />
+                </div>
+            </div>
+            <div class="clear-filter form-group mb-0" *ngIf="showClearFilter">
+                <button mat-raised-button class="btn btn-filter min-width-100 mr-l1" (click)="resetFilter()">
+                    <span class="icon-cross"></span> {{ commonLocaleData?.app_clear_filter }}
+                </button>
+            </div>
+        </div>
+        <div *ngIf="isLoading">
+            <giddh-page-loader></giddh-page-loader>
+        </div>
+        <div class="table-content" *ngIf="!isLoading">
+            <table mat-table [dataSource]="dataSource" class="download-table">
+                <!-- Requested Date Column -->
+                <ng-container matColumnDef="requestedDate">
+                    <th mat-header-cell *matHeaderCellDef>{{ localeData?.requested_date }}</th>
+                    <td mat-cell *matCellDef="let element">{{ element.date }}</td>
+                </ng-container>
+
+                <!-- User Column -->
+                <ng-container matColumnDef="user">
+                    <th mat-header-cell *matHeaderCellDef>{{ localeData?.user }}</th>
+                    <td mat-cell *matCellDef="let element">{{ element.user.name }}</td>
+                </ng-container>
+
+                <!-- Services Column -->
+                <ng-container matColumnDef="services">
+                    <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_services }}</th>
+                    <td mat-cell *matCellDef="let element">{{ element.type }}</td>
+                </ng-container>
+
+                <!-- Filter Column -->
+                <ng-container matColumnDef="filter">
+                    <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_filter }}</th>
+                    <td mat-cell *matCellDef="let element">
+                        <button mat-mini-fab class="download-table-btn" (click)="openDialog(element)">
+                            <i class="icon-info"></i>
+                        </button>
+                    </td>
+                </ng-container>
+
+                <!-- Download Column -->
+                <ng-container matColumnDef="download">
+                    <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_status }}</th>
+                    <td mat-cell *matCellDef="let element">
+                        <div
+                            class="text-center download-text"
+                            *ngIf="
+                                element.status === 'SUBMITTED' ||
+                                element.status === 'FAILED' ||
+                                element.status === 'INITIATED'
+                            "
+                        >
+                            {{ element.status }}
+                        </div>
+                        <button
+                            *ngIf="element.status === 'COMPLETED'"
+                            mat-button
+                            class="download-button-status btn-success"
+                        >
+                            {{ commonLocaleData?.app_download }}
+                        </button>
+                    </td>
+                </ng-container>
+
+                <!-- Expiry Column -->
+                <ng-container matColumnDef="expiry">
+                    <th mat-header-cell *matHeaderCellDef>{{ localeData?.expiry }}</th>
+                    <td mat-cell *matCellDef="let element">{{ element.expireAt }}</td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+            </table>
+            <section class="no-logs" *ngIf="!dataSource?.length && !isLoading">
+                <div class="no-data">
+                    <h1>{{ commonLocaleData?.app_no_record_found }}</h1>
+                </div>
+            </section>
+        </div>
+    </div>
+</ng-container>
+<div class="pagination-wrapper" *ngIf="downloadRequest?.totalItems > downloadRequest.count && !isLoading">
+    <pagination
+        [totalItems]="downloadRequest?.totalItems"
+        [(ngModel)]="downloadRequest.page"
+        [maxSize]="5"
+        class="pagination-sm"
+        [boundaryLinks]="true"
+        [itemsPerPage]="downloadRequest.count"
+        [rotate]="false"
+        (pageChanged)="pageChanged($event)"
+        [firstText]="commonLocaleData?.app_first"
+        [previousText]="commonLocaleData?.app_previous"
+        [nextText]="commonLocaleData?.app_next"
+        [lastText]="commonLocaleData?.app_last"
+    ></pagination>
+</div>
+<ng-template #datepickerTemplate>
+    <div class="datepicker-modal">
+        <div class="modal-body">
+            <app-datepicker-wrapper
+                [inputStartDate]="selectedDateRange?.startDate"
+                [inputEndDate]="selectedDateRange?.endDate"
+                [alwaysShowCalendars]="true"
+                [ranges]="datePickerOptions"
+                [selectedRangeLabel]="selectedRangeLabel"
+                [showCustomRangeLabel]="true"
+                [showClearButton]="false"
+                [showCancel]="true"
+                [linkedCalendars]="true"
+                [showDropdowns]="true"
+                [locale]="{ applyLabel: commonLocaleData?.app_done }"
+                (rangeClicked)="dateSelectedCallback($event)"
+                (datesUpdated)="dateSelectedCallback($event)"
+                [keepCalendarOpeningWithRange]="false"
+                [showRangeLabelOnInput]="false"
+                [dateFieldPosition]="dateFieldPosition"
+            ></app-datepicker-wrapper>
+        </div>
+    </div>
+</ng-template>
