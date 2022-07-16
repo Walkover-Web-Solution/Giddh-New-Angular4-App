@@ -1781,9 +1781,13 @@ export class LedgerComponent implements OnInit, OnDestroy {
             let companyUniqueName = null;
             this.sessionKey$.pipe(take(1)).subscribe(a => sessionKey = a);
             this.companyName$.pipe(take(1)).subscribe(a => companyUniqueName = a);
+            let url = Configuration.ApiUrl + LEDGER_API.UPLOAD_FILE.replace(':companyUniqueName', companyUniqueName);
+            // if (this.generalService.voucherApiVersion === 2) {
+            //     url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
+            // }
             const event: UploadInput = {
                 type: 'uploadAll',
-                url: Configuration.ApiUrl + LEDGER_API.UPLOAD_FILE.replace(':companyUniqueName', companyUniqueName),
+                url: url,
                 method: 'POST',
                 fieldName: 'file',
                 data: { entries: _.cloneDeep(this.entryUniqueNamesForBulkAction).join() },
