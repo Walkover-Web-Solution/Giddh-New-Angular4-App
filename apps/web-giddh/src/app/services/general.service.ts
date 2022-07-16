@@ -1071,18 +1071,16 @@ export class GeneralService {
                 }
             });
         }
-        if (entryAccount?.parentGroups && entryAccount?.name && entryAccount?.category) {
-            if (
-                this.voucherApiVersion === 2
-                &&
-                ((ledgerAccount?.parentGroups[1]?.uniqueName === 'sundrydebtors' || ledgerAccount?.parentGroups[1]?.uniqueName === 'sundrycreditors') && (entryAccount?.parentGroups[1]?.uniqueName === VoucherTypeEnum.cash || entryAccount?.parentGroups[1]?.uniqueName === 'bankaccounts'))
+        if (
+            this.voucherApiVersion === 2
+            && entryAccount?.parentGroups?.length > 0 && ledgerAccount?.parentGroups?.length > 0 &&
+            (((ledgerAccount?.parentGroups[1]?.uniqueName === 'sundrydebtors' || ledgerAccount?.parentGroups[1]?.uniqueName === 'sundrycreditors') && (entryAccount?.parentGroups[1]?.uniqueName === VoucherTypeEnum.cash || entryAccount?.parentGroups[1]?.uniqueName === 'bankaccounts'))
                 ||
-                ((ledgerAccount?.parentGroups[1]?.uniqueName === VoucherTypeEnum.cash || ledgerAccount?.parentGroups[1]?.uniqueName === 'bankaccounts') && (entryAccount?.parentGroups[1]?.uniqueName === 'sundrydebtors' || entryAccount?.parentGroups[1]?.uniqueName === 'sundrycreditors'))
-                &&
-                (!voucherType || (["rcpt", "pay", "advance-receipt"].includes(voucherType)))
-            ) {
-                return true;
-            }
+                ((ledgerAccount?.parentGroups[1]?.uniqueName === VoucherTypeEnum.cash || ledgerAccount?.parentGroups[1]?.uniqueName === 'bankaccounts') && (entryAccount?.parentGroups[1]?.uniqueName === 'sundrydebtors' || entryAccount?.parentGroups[1]?.uniqueName === 'sundrycreditors')))
+            &&
+            (!voucherType || (["rcpt", "pay", "advance-receipt"].includes(voucherType)))
+        ) {
+            return true;
         }
 
         return false;
