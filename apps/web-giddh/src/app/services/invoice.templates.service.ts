@@ -19,7 +19,7 @@ export class InvoiceTemplatesService {
 
     public getTemplates(): Observable<BaseResponse<CustomTemplateResponse[], string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.get(this.config.apiUrl + INVOICE_API.GET_USER_TEMPLATES.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
+        return this.http.get(this.config.apiUrl + INVOICE_API.GET_USER_TEMPLATES).pipe(map((res) => {
             let data: BaseResponse<CustomTemplateResponse[], string> = res;
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<CustomTemplateResponse[], string>(e, '')));
