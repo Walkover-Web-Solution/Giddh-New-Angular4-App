@@ -1,5 +1,5 @@
 export const INVOICE_API = {
-    GET_USER_TEMPLATES: 'v2/company/:companyUniqueName/sample-templates',
+    GET_USER_TEMPLATES: 'v2/sample-templates',
     CREATE_NEW_TEMPLATE: 'v2/company/:companyUniqueName/templates', // POST
     UPDATE_TEMPLATE: 'v2/company/:companyUniqueName/templates/:templateUniqueName', // PUT
     GET_CREATED_TEMPLATES: 'v2/company/:companyUniqueName/templates?type=:voucherType', // GET
