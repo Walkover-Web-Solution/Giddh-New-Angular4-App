@@ -2,7 +2,7 @@
     "page_heading": "Export Ledger",
     "email_error": "Enter valid Email ID",
     "columnar": "Columnar",
-    "cr_dr": "Cr/Dr with +/-",
+    "cr_dr": "Cr/Dr and +/-",
     "add_multiple_id": "You can add multiple id's separated comma",
     "receipient_email_ids": "Recipient Email Id's"
 }

@@ -1,5 +1,5 @@
-import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnInit } from '@angular/core';
+import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
 import { LedgerService } from '../../../services/ledger.service';
 import { ExportLedgerRequest, MailLedgerRequest } from '../../../models/api-models/Ledger';
 import { validateEmail } from '../../../shared/helpers/helperFunctions';
@@ -14,7 +14,20 @@ import { take, takeUntil } from 'rxjs/operators';
 import { download } from '@giddh-workspaces/utils';
 import { GeneralService } from '../../../services/general.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-
+import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+export interface ExportBodyRequest {
+    from?: string;
+    to?: string;
+    sort?: string;
+    showVoucherNumber?: boolean;
+    showVoucherTotal?: boolean;
+    showEntryVoucher?: boolean;
+    showDescription?: boolean;
+    accountUniqueName?: string;
+    exportType?: string;
+    voucherType?: boolean;
+}
 @Component({
     selector: 'export-ledger',
     templateUrl: './export-ledger.component.html',
@@ -31,6 +44,7 @@ export class ExportLedgerComponent implements OnInit {
     public emailTypeColumnar: string;
     public emailData: string = '';
     public withInvoiceNumber: boolean = false;
+    public withSorting: boolean = false;
     public universalDate$: Observable<any>;
     public isMobileScreen: boolean = true;
     /** Columnar report in balance type for Credit/Debit as +/- sign */
@@ -40,8 +54,43 @@ export class ExportLedgerComponent implements OnInit {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    public dateRange: { from: string, to: string } = { from: '', to: '' };
+    /** Date format type */
+    public giddhDateFormat: string = GIDDH_DATE_FORMAT;
+    /** directive to get reference of element */
+    @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
+    /* This will store modal reference */
+    public modalRef: BsModalRef;
+    /* This will store selected date range to use in api */
+    public selectedDateRange: any;
+    /* This will store selected date range to show on UI */
+    public selectedDateRangeUi: any;
+    /* This will store available date ranges */
+    public datePickerOption: any = GIDDH_DATE_RANGE_PICKER_RANGES;
+    /* Moment object */
+    public moment = moment;
+    /* Selected from date */
+    public fromDate: string;
+    /* Selected to date */
+    public toDate: string;
+    /* Selected range label */
+    public selectedRangeLabel: any = "";
+    /* This will store the x/y position of the field to show datepicker under it */
+    public dateFieldPosition: any = { x: 0, y: 0 };
+    public exportRequest: ExportBodyRequest = {
+        from: '',
+        to: '',
+        sort: '',
+        showVoucherNumber: false,
+        showVoucherTotal: false,
+        showEntryVoucher: false,
+        showDescription: false,
+        accountUniqueName: '',
+        exportType: 'LEDGER_EXPORT',
+        voucherType: false
+    }
 
-    constructor(private ledgerService: LedgerService, private toaster: ToasterService, private permissionDataService: PermissionDataService, private store: Store<AppState>, private generalService: GeneralService, @Inject(MAT_DIALOG_DATA) public inputData, public dialogRef: MatDialogRef<any>, private changeDetectorRef: ChangeDetectorRef) {
+    constructor(private ledgerService: LedgerService, private toaster: ToasterService, private permissionDataService: PermissionDataService, private store: Store<AppState>, private generalService: GeneralService, @Inject(MAT_DIALOG_DATA) public inputData, public dialogRef: MatDialogRef<any>, private changeDetectorRef: ChangeDetectorRef, private modalService: BsModalService) {
         this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
     }
 
@@ -57,20 +106,42 @@ export class ExportLedgerComponent implements OnInit {
                 }
             });
         }
+        this.universalDate$.subscribe(dateObj => {
+            if (dateObj) {
+                let universalDate = _.cloneDeep(dateObj);
+                this.selectedDateRange = { startDate: moment(dateObj[0]), endDate: moment(dateObj[1]) };
+                this.selectedDateRangeUi = moment(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                this.fromDate = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
+                this.toDate = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
+            }
+        });
     }
 
     public exportLedger() {
         let exportByInvoiceNumber: boolean = this.emailTypeSelected === 'admin-condensed' ? false : this.withInvoiceNumber;
+
+
         let exportRequest = new ExportLedgerRequest();
         exportRequest.type = this.emailTypeSelected;
-        exportRequest.sort = this.order;
         exportRequest.format = this.exportAs;
         exportRequest.balanceTypeAsSign = this.balanceTypeAsSign;
         exportRequest.branchUniqueName = this.inputData?.advanceSearchRequest.branchUniqueName;
         const body = _.cloneDeep(this.inputData?.advanceSearchRequest);
+
         if (body && body.dataToSend) {
             body.dataToSend.balanceTypeAsSign = this.balanceTypeAsSign;
+            // body.dataToSend.sort = this.exportRequest.sort ? 'asc' : 'desc';
+            body.dataToSend.from = this.exportRequest.from;
+            body.dataToSend.to = this.exportRequest.to;
+            body.dataToSend.accountUniqueName = this.inputData?.accountUniqueName;
+            body.dataToSend.exportType = this.exportRequest.exportType;
+            body.dataToSend.voucherType = this.exportRequest.voucherType;
+            body.dataToSend.showVoucherNumber = this.exportRequest.showVoucherNumber;
+            body.dataToSend.showVoucherTotal = this.exportRequest.showVoucherTotal;
+            body.dataToSend.showEntryVoucher = this.exportRequest.showEntryVoucher;
+            body.dataToSend.showDescription = this.exportRequest.showDescription;
         }
+
         if (!body.dataToSend.bsRangeValue) {
             this.universalDate$.pipe(take(1)).subscribe(res => {
                 if (res) {
@@ -182,5 +253,61 @@ export class ExportLedgerComponent implements OnInit {
             isShowColumnarTable: true,
             exportRequest: exportRequest
         });
+    }
+    public onSelectDateRange(ev) {
+        this.dateRange.from = moment(ev.picker.startDate).format(GIDDH_DATE_FORMAT);
+        this.dateRange.to = moment(ev.picker.endDate).format(GIDDH_DATE_FORMAT);
+    }
+
+    /**
+    *To show the datepicker
+    *
+    * @param {*} element
+    * @memberof AuditLogsFormComponent
+    */
+    public showGiddhDatepicker(element: any): void {
+        if (element) {
+            this.dateFieldPosition = this.generalService.getPosition(element.target);
+        }
+        this.modalRef = this.modalService.show(
+            this.datepickerTemplate,
+            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: false })
+        );
+    }
+
+    /**
+     * This will hide the datepicker
+     *
+     * @memberof AuditLogsFormComponent
+     */
+    public hideGiddhDatepicker(): void {
+        this.modalRef.hide();
+    }
+
+    /**
+     * Call back function for date/range selection in datepicker
+     *
+     * @param {*} value
+     * @memberof AuditLogsFormComponent
+     */
+    public dateSelectedCallback(value?: any): void {
+        if (value && value.event === "cancel") {
+            this.hideGiddhDatepicker();
+            return;
+        }
+        this.selectedRangeLabel = "";
+
+        if (value && value.name) {
+            this.selectedRangeLabel = value.name;
+        }
+        this.hideGiddhDatepicker();
+        if (value && value.startDate && value.endDate) {
+            this.selectedDateRange = { startDate: moment(value.startDate), endDate: moment(value.endDate) };
+            this.selectedDateRangeUi = moment(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
+            this.fromDate = moment(value.startDate).format(GIDDH_DATE_FORMAT);
+            this.toDate = moment(value.endDate).format(GIDDH_DATE_FORMAT);
+            this.dateRange.from = this.fromDate;
+            this.dateRange.to = this.toDate;
+        }
     }
 }
