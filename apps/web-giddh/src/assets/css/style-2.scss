@@ -8055,6 +8055,16 @@ body.update-scroll-hidden {
                 }
             }
         }
+        .cdk-overlay-connected-position-bounding-box {
+            .mat-menu-panel {
+                .mat-menu-content {
+                    button:focus {
+                        box-shadow: none !important;
+                        background-color: var(--color-dropdown-list-hover-background);
+                    }
+                }
+            }
+        }
     }
 }
 
