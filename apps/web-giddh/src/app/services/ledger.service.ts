@@ -205,13 +205,13 @@ export class LedgerService {
             url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
         }
         return this.http.get(url).pipe(
-                map((res) => {
-                    let data: BaseResponse<DownloadLedgerAttachmentResponse, string> = res;
-                    data.request = fileName;
-                    data.queryString = { fileName };
-                    return data;
-                }),
-                catchError((e) => this.errorHandler.HandleCatch<DownloadLedgerAttachmentResponse, string>(e, fileName, { fileName })));
+            map((res) => {
+                let data: BaseResponse<DownloadLedgerAttachmentResponse, string> = res;
+                data.request = fileName;
+                data.queryString = { fileName };
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<DownloadLedgerAttachmentResponse, string>(e, fileName, { fileName })));
     }
 
     public DownloadInvoice(model: DownloadLedgerRequest, accountUniqueName: string): Observable<BaseResponse<string, DownloadLedgerRequest>> {
@@ -258,7 +258,7 @@ export class LedgerService {
 
     public ExportLedger(model: ExportLedgerRequest, accountUniqueName: string, body: any, exportByInvoiceNumber?: boolean): Observable<BaseResponse<any, ExportLedgerRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        let API = exportByInvoiceNumber ? this.config.apiUrl + LEDGER_API.EXPORT_LEDGER_WITH_INVOICE_NUMBER : this.config.apiUrl + LEDGER_API.EXPORT_LEDGER;
+        let API = (this.generalService.voucherApiVersion === 2) ? this.config.apiUrl + LEDGER_API.EXPORT : (exportByInvoiceNumber ? this.config.apiUrl + LEDGER_API.EXPORT_LEDGER_WITH_INVOICE_NUMBER : this.config.apiUrl + LEDGER_API.EXPORT_LEDGER);
         let url = API.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             .replace(':accountUniqueName', encodeURIComponent(accountUniqueName))
             .replace(':from', model.from).replace(':to', model.to).replace(':type', encodeURIComponent(model.type)).replace(':format', encodeURIComponent(model.format)).replace(':sort', encodeURIComponent(model.sort));
@@ -465,11 +465,11 @@ export class LedgerService {
     public getInvoiceListsForCreditNote(model: any, date: string): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let url = this.config.apiUrl + LEDGER_API.GET_VOUCHER_INVOICE_LIST
-        .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-        .replace(':voucherDate', encodeURIComponent(date))
-        .replace(':number', encodeURIComponent((model.number || "")))
-        .replace(':count', (model.count || PAGINATION_LIMIT))
-        .replace(':page', (model.page || 1));
+            .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            .replace(':voucherDate', encodeURIComponent(date))
+            .replace(':number', encodeURIComponent((model.number || "")))
+            .replace(':count', (model.count || PAGINATION_LIMIT))
+            .replace(':page', (model.page || 1));
 
         delete model.page;
         delete model.count;
@@ -611,7 +611,7 @@ export class LedgerService {
         if (this.generalService.voucherApiVersion === 2) {
             url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
         }
-        
+
         return this.http.delete(url).pipe(catchError((error) => this.errorHandler.HandleCatch<any, string>(error)));
     }
 
