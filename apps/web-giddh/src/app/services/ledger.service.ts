@@ -9,7 +9,7 @@ import { LEDGER_API } from './apiurls/ledger.api';
 import { BlankLedgerVM } from '../material-ledger/ledger.vm';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
-import { DaybookQueryRequest, DayBookRequestModel } from '../models/api-models/DaybookRequest';
+import { DaybookQueryRequest, DayBookRequestModel, ExportBodyRequest } from '../models/api-models/DaybookRequest';
 import { ToasterService } from './toaster.service';
 import { ReportsDetailedRequestFilter } from '../models/api-models/Reports';
 import { cloneDeep } from '../lodash-optimized';
@@ -262,8 +262,7 @@ export class LedgerService {
         let API;
         if (body.type === 'columnar') {
             API = exportByInvoiceNumber ? this.config.apiUrl + LEDGER_API.EXPORT_LEDGER_WITH_INVOICE_NUMBER : this.config.apiUrl + LEDGER_API.EXPORT_LEDGER;
-        }
-        else {
+        } else {
             API = (this.generalService.voucherApiVersion === 2) ? this.config.apiUrl + LEDGER_API.EXPORT : (exportByInvoiceNumber ? this.config.apiUrl + LEDGER_API.EXPORT_LEDGER_WITH_INVOICE_NUMBER : this.config.apiUrl + LEDGER_API.EXPORT_LEDGER);
         }
         let url = API.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
@@ -362,6 +361,26 @@ export class LedgerService {
                 return data;
             }),
             catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model, { accountUniqueName })));
+    }
+
+    /**
+     * This will use for group ledger export for v2 
+     *
+     * @param {ExportBodyRequest} model
+     * @return {*}  {Observable<BaseResponse<any, ExportBodyRequest>>}
+     * @memberof LedgerService
+     */
+    public GroupLedgerExport(model: ExportBodyRequest): Observable<BaseResponse<any, ExportBodyRequest>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        let API = this.config.apiUrl + LEDGER_API.EXPORT;
+        let url = API.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName));
+        return this.http.post(url, model).pipe(
+            map((res) => {
+                let data: BaseResponse<any, ExportBodyRequest> = res;
+                data.request = model;
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<string, ExportBodyRequest>(e, model)));
     }
 
     public GroupExportLedger(groupUniqueName: string, queryRequest: DaybookQueryRequest): Observable<BaseResponse<any, DayBookRequestModel>> {

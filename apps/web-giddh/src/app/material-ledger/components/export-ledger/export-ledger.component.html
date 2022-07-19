@@ -67,9 +67,13 @@
                 <div class="pd-b2 clearfix" [hidden]="emailTypeSelected === 'columnar'">
                     <label class="w125">{{ commonLocaleData?.app_voucher_type }}:</label>
                     <label class="radio-inline p-0">
-                        <mat-slide-toggle color="primary" name="voucherType" [(ngModel)]="exportRequest.voucherType">
+                        <mat-slide-toggle
+                            color="primary"
+                            name="showEntryVoucherNo"
+                            [(ngModel)]="exportRequest.showEntryVoucherNo"
+                        >
                             <span class="pull-left">{{
-                                exportRequest.voucherType ? commonLocaleData?.app_yes : commonLocaleData?.app_no
+                                exportRequest.showEntryVoucherNo ? commonLocaleData?.app_yes : commonLocaleData?.app_no
                             }}</span>
                         </mat-slide-toggle>
                     </label>

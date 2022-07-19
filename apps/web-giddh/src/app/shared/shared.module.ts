@@ -68,6 +68,7 @@ import { GiddhDatepickerModule } from '../theme/giddh-datepicker/giddh-datepicke
 import { GiddhDateRangepickerModule } from '../theme/giddh-daterangepicker/giddh-daterangepicker.module';
 import { DeleteTemplateConfirmationModalModule } from '../invoice/templates/edit-template/modals/confirmation-modal/confirmation.modal.module';
 import { NgxBootstrapSwitchModule } from 'ngx-bootstrap-switch';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: true
@@ -159,7 +160,8 @@ export function provideConfig() {
         GiddhDatepickerModule,
         GiddhDateRangepickerModule,
         DeleteTemplateConfirmationModalModule,
-        NgxBootstrapSwitchModule.forRoot()
+        NgxBootstrapSwitchModule.forRoot(),
+        MatSlideToggleModule
     ],
     exports: [
         CommonModule,

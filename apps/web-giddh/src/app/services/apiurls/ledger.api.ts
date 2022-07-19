@@ -41,5 +41,7 @@ export const LEDGER_API = {
     EXPORT_LEDGER_COLUMNAR_REPORT_TABLE: 'company/:companyUniqueName/accounts/:accountUniqueName/columnar-report?from=:from&to=:to',
     IMPORT_STATEMENT: 'company/:companyUniqueName/import-pdf/bank-statement/?entity=pdf&accountUniqueName=:accountUniqueName',
     DELETE_BANK_TRANSACTIONS: 'company/:companyUniqueName/bank/accounts/:accountUniqueName/transactions',
+
+    // Export Ledger Entry and Group Ledger entry
     EXPORT: 'company/:companyUniqueName/exports'
 };

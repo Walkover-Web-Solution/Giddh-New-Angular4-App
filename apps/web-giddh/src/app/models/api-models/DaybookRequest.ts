@@ -12,6 +12,19 @@ export class DaybookQueryRequest {
     public branchUniqueName: string;
 }
 
+export class ExportBodyRequest {
+    from?: string;
+    to?: string;
+    sort?: string;
+    showVoucherNumber?: boolean;
+    showVoucherTotal?: boolean;
+    showEntryVoucher?: boolean;
+    showEntryVoucherNo?: boolean;
+    showDescription?: boolean;
+    groupUniqueName?: string;
+    exportType?: string;
+}
+
 export interface DayBookRequestModel {
     amountLessThan: boolean;
     includeAmount: boolean;
