@@ -2,10 +2,9 @@ import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/hel
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { LedgerService } from '../../../services/ledger.service';
 import { ExportLedgerRequest, MailLedgerRequest } from '../../../models/api-models/Ledger';
-import { validateEmail } from '../../../shared/helpers/helperFunctions';
 import { ToasterService } from '../../../services/toaster.service';
 import { PermissionDataService } from 'apps/web-giddh/src/app/permissions/permission-data.service';
-import { cloneDeep, some } from '../../../lodash-optimized';
+import { some } from '../../../lodash-optimized';
 import * as moment from 'moment/moment';
 import { Observable, ReplaySubject } from 'rxjs';
 import { AppState } from 'apps/web-giddh/src/app/store';
@@ -16,8 +15,8 @@ import { GeneralService } from '../../../services/general.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
-import { FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
+// This will use for export body request
 export interface ExportBodyRequest {
     from?: string;
     to?: string;
@@ -28,7 +27,7 @@ export interface ExportBodyRequest {
     showDescription?: boolean;
     accountUniqueName?: string;
     exportType?: string;
-    voucherType?: boolean;
+    showEntryVoucherNo?: boolean;
 }
 @Component({
     selector: 'export-ledger',
@@ -89,7 +88,7 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
         showDescription: false,
         accountUniqueName: '',
         exportType: 'LEDGER_EXPORT',
-        voucherType: false
+        showEntryVoucherNo: false
     }
 
     constructor(private ledgerService: LedgerService, private toaster: ToasterService, private permissionDataService: PermissionDataService, private store: Store<AppState>, private generalService: GeneralService, @Inject(MAT_DIALOG_DATA) public inputData, public dialogRef: MatDialogRef<any>, private changeDetectorRef: ChangeDetectorRef, private modalService: BsModalService, private router: Router) {
@@ -129,6 +128,11 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * This will use for export ledger
+     *
+     * @memberof ExportLedgerComponent
+     */
     public exportLedger() {
         let exportByInvoiceNumber: boolean = this.emailTypeSelected === 'admin-condensed' ? false : this.withInvoiceNumber;
 
@@ -149,7 +153,7 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
             body.dataToSend.to = this.toDate;
             body.dataToSend.accountUniqueName = this.inputData?.accountUniqueName;
             body.dataToSend.exportType = this.exportRequest.exportType;
-            body.dataToSend.voucherType = this.exportRequest.voucherType;
+            body.dataToSend.showEntryVoucherNo = this.exportRequest.showEntryVoucherNo;
             body.dataToSend.showVoucherNumber = this.exportRequest.showVoucherNumber;
             body.dataToSend.showVoucherTotal = this.exportRequest.showVoucherTotal;
             body.dataToSend.showEntryVoucher = this.exportRequest.showEntryVoucher;
