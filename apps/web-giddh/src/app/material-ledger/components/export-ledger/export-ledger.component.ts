@@ -1,11 +1,11 @@
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { LedgerService } from '../../../services/ledger.service';
 import { ExportLedgerRequest, MailLedgerRequest } from '../../../models/api-models/Ledger';
 import { validateEmail } from '../../../shared/helpers/helperFunctions';
 import { ToasterService } from '../../../services/toaster.service';
 import { PermissionDataService } from 'apps/web-giddh/src/app/permissions/permission-data.service';
-import { some } from '../../../lodash-optimized';
+import { cloneDeep, some } from '../../../lodash-optimized';
 import * as moment from 'moment/moment';
 import { Observable, ReplaySubject } from 'rxjs';
 import { AppState } from 'apps/web-giddh/src/app/store';
@@ -16,6 +16,7 @@ import { GeneralService } from '../../../services/general.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { FormGroup } from '@angular/forms';
 export interface ExportBodyRequest {
     from?: string;
     to?: string;
@@ -35,7 +36,7 @@ export interface ExportBodyRequest {
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class ExportLedgerComponent implements OnInit {
+export class ExportLedgerComponent implements OnInit, OnDestroy {
     public emailTypeSelected: string = '';
     public exportAs: string = 'xlsx';
     public order: string = 'asc';
@@ -77,10 +78,11 @@ export class ExportLedgerComponent implements OnInit {
     public selectedRangeLabel: any = "";
     /* This will store the x/y position of the field to show datepicker under it */
     public dateFieldPosition: any = { x: 0, y: 0 };
+    /** To hold export request object */
     public exportRequest: ExportBodyRequest = {
         from: '',
         to: '',
-        sort: '',
+        sort: 'ASC',
         showVoucherNumber: false,
         showVoucherTotal: false,
         showEntryVoucher: false,
@@ -95,6 +97,10 @@ export class ExportLedgerComponent implements OnInit {
     }
 
     public ngOnInit() {
+        // Set a default date
+        this.dateRange.from = moment(moment().subtract(30, 'days')).format(GIDDH_DATE_FORMAT);
+        this.dateRange.to = moment(moment()).format(GIDDH_DATE_FORMAT);
+
         if (this.permissionDataService.getData && this.permissionDataService.getData.length > 0) {
             this.permissionDataService.getData.forEach(f => {
                 if (f.name === 'LEDGER') {
@@ -117,9 +123,13 @@ export class ExportLedgerComponent implements OnInit {
         });
     }
 
+    public onSelectDateRange(ev) {
+        this.dateRange.from = moment(ev.picker.startDate).format(GIDDH_DATE_FORMAT);
+        this.dateRange.to = moment(ev.picker.endDate).format(GIDDH_DATE_FORMAT);
+    }
+
     public exportLedger() {
         let exportByInvoiceNumber: boolean = this.emailTypeSelected === 'admin-condensed' ? false : this.withInvoiceNumber;
-
 
         let exportRequest = new ExportLedgerRequest();
         exportRequest.type = this.emailTypeSelected;
@@ -128,9 +138,13 @@ export class ExportLedgerComponent implements OnInit {
         exportRequest.branchUniqueName = this.inputData?.advanceSearchRequest.branchUniqueName;
         const body = _.cloneDeep(this.inputData?.advanceSearchRequest);
 
+        exportRequest.from = moment(body.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT) ? moment(body.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT) : moment().add(-1, 'month').format(GIDDH_DATE_FORMAT);
+        exportRequest.to = moment(body.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT) ? moment(body.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT) : moment().format(GIDDH_DATE_FORMAT);
+
         if (body && body.dataToSend) {
+            body.dataToSend.type = this.emailTypeSelected;
             body.dataToSend.balanceTypeAsSign = this.balanceTypeAsSign;
-            // body.dataToSend.sort = this.exportRequest.sort ? 'asc' : 'desc';
+            body.dataToSend.sort = this.exportRequest.sort ? 'ASC' : 'DESC';
             body.dataToSend.from = this.exportRequest.from;
             body.dataToSend.to = this.exportRequest.to;
             body.dataToSend.accountUniqueName = this.inputData?.accountUniqueName;
@@ -150,8 +164,7 @@ export class ExportLedgerComponent implements OnInit {
             });
         }
 
-        exportRequest.from = moment(body.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT) ? moment(body.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT) : moment().add(-1, 'month').format(GIDDH_DATE_FORMAT);
-        exportRequest.to = moment(body.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT) ? moment(body.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT) : moment().format(GIDDH_DATE_FORMAT);
+
 
         this.ledgerService.ExportLedger(exportRequest, this.inputData?.accountUniqueName, body.dataToSend, exportByInvoiceNumber).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response.status === 'success') {
@@ -174,55 +187,6 @@ export class ExportLedgerComponent implements OnInit {
         });
     }
 
-    public sendLedgEmail() {
-        let data = this.emailData;
-        const sendData = new MailLedgerRequest();
-        data = (data) ? data.replace(RegExp(' ', 'g'), '') : "";
-        const cdata = data.split(',');
-
-        if (cdata && cdata.length > 0) {
-            for (let i = 0; i < cdata.length; i++) {
-                if (validateEmail(cdata[i])) {
-                    sendData.recipients.push(cdata[i]);
-                } else {
-                    this.toaster.showSnackBar("warning", this.localeData?.email_error, this.commonLocaleData?.app_warning);
-                    data = '';
-                    sendData.recipients = [];
-                    break;
-                }
-            }
-        }
-
-        if (sendData && sendData.recipients && sendData.recipients.length > 0) {
-            const body = _.cloneDeep(this.inputData?.advanceSearchRequest);
-            if (!body.dataToSend.bsRangeValue) {
-                this.universalDate$.pipe(take(1)).subscribe(a => {
-                    if (a) {
-                        body.dataToSend.bsRangeValue = [moment(a[0], GIDDH_DATE_FORMAT).toDate(), moment(a[1], GIDDH_DATE_FORMAT).toDate()];
-                    }
-                });
-            }
-            let from = moment(body.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT) ? moment(body.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT) : moment().add(-1, 'month').format(GIDDH_DATE_FORMAT);
-            let to = moment(body.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT) ? moment(body.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT) : moment().format(GIDDH_DATE_FORMAT);
-            let emailRequestParams = new ExportLedgerRequest();
-            emailRequestParams.from = from;
-            emailRequestParams.to = to;
-            emailRequestParams.type = this.emailTypeSelected;
-            emailRequestParams.format = this.exportAs;
-            emailRequestParams.sort = this.order;
-            emailRequestParams.withInvoice = this.withInvoiceNumber;
-            emailRequestParams.branchUniqueName = this.inputData?.advanceSearchRequest.branchUniqueName;
-            this.ledgerService.MailLedger(sendData, this.inputData?.accountUniqueName, emailRequestParams).pipe(takeUntil(this.destroyed$)).subscribe(sent => {
-                if (sent.status === 'success') {
-                    this.toaster.showSnackBar("success", sent.body, sent.status);
-                    this.emailData = '';
-                    this.changeDetectorRef.detectChanges();
-                } else {
-                    this.toaster.showSnackBar("error", sent.message, sent.status);
-                }
-            });
-        }
-    }
 
     /**
      * Handler for report type change
@@ -254,11 +218,6 @@ export class ExportLedgerComponent implements OnInit {
             exportRequest: exportRequest
         });
     }
-    public onSelectDateRange(ev) {
-        this.dateRange.from = moment(ev.picker.startDate).format(GIDDH_DATE_FORMAT);
-        this.dateRange.to = moment(ev.picker.endDate).format(GIDDH_DATE_FORMAT);
-    }
-
     /**
     *To show the datepicker
     *
@@ -309,5 +268,15 @@ export class ExportLedgerComponent implements OnInit {
             this.dateRange.from = this.fromDate;
             this.dateRange.to = this.toDate;
         }
+    }
+
+    /**
+ * Releases memory
+ *
+ * @memberof AuditLogsFormComponent
+ */
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 }

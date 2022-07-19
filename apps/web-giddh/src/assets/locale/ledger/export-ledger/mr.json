@@ -4,5 +4,8 @@
     "columnar": "स्तंभ",
     "cr_dr": "सीआर / डॉ आणि +/-",
     "add_multiple_id": "आपण एकाधिक आयडीचा विभक्त स्वल्पविराम जोडू शकता",
-    "receipient_email_ids": "प्राप्तकर्ता ईमेल आयडी"
+    "receipient_email_ids": "प्राप्तकर्ता ईमेल आयडी",
+    "voucher_total": "व्हाउचर एकूण",
+    "entry_no": "प्रवेश क्र.",
+    "description": "वर्णन"
 }

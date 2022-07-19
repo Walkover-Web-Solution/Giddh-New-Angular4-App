@@ -65,58 +65,68 @@
                 </div>
 
                 <div class="pd-b2 clearfix" [hidden]="emailTypeSelected === 'columnar'">
-                    <label class="w125">Voucher Type:</label>
+                    <label class="w125">{{ commonLocaleData?.app_voucher_type }}:</label>
                     <label class="radio-inline p-0">
                         <mat-slide-toggle color="primary" name="voucherType" [(ngModel)]="exportRequest.voucherType">
-                            <span class="pull-left">{{ exportRequest.voucherType ? "Yes" : "No" }}</span>
+                            <span class="pull-left">{{
+                                exportRequest.voucherType ? commonLocaleData?.app_yes : commonLocaleData?.app_no
+                            }}</span>
                         </mat-slide-toggle>
                     </label>
                 </div>
                 <div class="pd-b2 clearfix" [hidden]="emailTypeSelected === 'columnar'">
-                    <label class="w125">Voucher Number:</label>
+                    <label class="w125">{{ commonLocaleData?.app_voucher_no }}:</label>
                     <label class="radio-inline p-0">
                         <mat-slide-toggle
                             color="primary"
                             name="showVoucherNumber"
                             [(ngModel)]="exportRequest.showVoucherNumber"
                         >
-                            <span class="pull-left">{{ exportRequest.showVoucherNumber ? "Yes" : "No" }}</span>
+                            <span class="pull-left">{{
+                                exportRequest.showVoucherNumber ? commonLocaleData?.app_yes : commonLocaleData?.app_no
+                            }}</span>
                         </mat-slide-toggle>
                     </label>
                 </div>
                 <div class="pd-b2 clearfix" [hidden]="emailTypeSelected === 'columnar'">
-                    <label class="w125">Voucher Total:</label>
+                    <label class="w125">{{ localeData?.voucher_total }}:</label>
                     <label class="radio-inline p-0">
                         <mat-slide-toggle
                             color="primary"
                             name="showVoucherTotal"
                             [(ngModel)]="exportRequest.showVoucherTotal"
                         >
-                            <span class="pull-left">{{ exportRequest.showVoucherTotal ? "Yes" : "No" }}</span>
+                            <span class="pull-left">{{
+                                exportRequest.showVoucherTotal ? commonLocaleData?.app_yes : commonLocaleData?.app_no
+                            }}</span>
                         </mat-slide-toggle>
                     </label>
                 </div>
                 <div class="pd-b2 clearfix" [hidden]="emailTypeSelected === 'columnar'">
-                    <label class="w125">Entry Number:</label>
+                    <label class="w125">{{ localeData?.entry_no }}:</label>
                     <label class="radio-inline p-0">
                         <mat-slide-toggle
                             color="primary"
                             name="showEntryVoucher"
                             [(ngModel)]="exportRequest.showEntryVoucher"
                         >
-                            <span class="pull-left">{{ exportRequest.showEntryVoucher ? "Yes" : "No" }}</span>
+                            <span class="pull-left">{{
+                                exportRequest.showEntryVoucher ? commonLocaleData?.app_yes : commonLocaleData?.app_no
+                            }}</span>
                         </mat-slide-toggle>
                     </label>
                 </div>
                 <div class="pd-b2 clearfix" [hidden]="emailTypeSelected === 'columnar'">
-                    <label class="w125">Description:</label>
+                    <label class="w125">{{ localeData?.description }}:</label>
                     <label class="radio-inline p-0">
                         <mat-slide-toggle
                             color="primary"
                             name="showDescription"
                             [(ngModel)]="exportRequest.showDescription"
                         >
-                            <span class="pull-left">{{ exportRequest.showDescription ? "Yes" : "No" }}</span>
+                            <span class="pull-left">{{
+                                exportRequest.showDescription ? commonLocaleData?.app_yes : commonLocaleData?.app_no
+                            }}</span>
                         </mat-slide-toggle>
                     </label>
                 </div>
@@ -147,3 +157,26 @@
         </div>
     </div>
 </ng-container>
+<ng-template #datepickerTemplate>
+    <div class="datepicker-modal">
+        <div class="modal-body">
+            <app-datepicker-wrapper
+                [inputStartDate]="selectedDateRange?.startDate"
+                [inputEndDate]="selectedDateRange?.endDate"
+                [alwaysShowCalendars]="true"
+                [ranges]="datePickerOption"
+                [selectedRangeLabel]="selectedRangeLabel"
+                [showCustomRangeLabel]="true"
+                [showClearButton]="false"
+                [showCancel]="true"
+                [linkedCalendars]="true"
+                [showDropdowns]="true"
+                (rangeClicked)="dateSelectedCallback($event)"
+                (datesUpdated)="dateSelectedCallback($event)"
+                [keepCalendarOpeningWithRange]="false"
+                [showRangeLabelOnInput]="false"
+                [dateFieldPosition]="dateFieldPosition"
+            ></app-datepicker-wrapper>
+        </div>
+    </div>
+</ng-template>
