@@ -11,8 +11,8 @@
 
 .text-overflow-ellipsis {
     .list-item {
-        white-space: normal;
-        word-break: break-all;
+        text-overflow: ellipsis;
+        width: 255px;
     }
 }
 
