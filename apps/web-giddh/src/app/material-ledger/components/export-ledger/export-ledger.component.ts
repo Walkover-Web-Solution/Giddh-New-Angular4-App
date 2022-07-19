@@ -17,6 +17,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { FormGroup } from '@angular/forms';
+import { Router } from '@angular/router';
 export interface ExportBodyRequest {
     from?: string;
     to?: string;
@@ -55,7 +56,6 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
-    public dateRange: { from: string, to: string } = { from: '', to: '' };
     /** Date format type */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
     /** directive to get reference of element */
@@ -92,15 +92,11 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
         voucherType: false
     }
 
-    constructor(private ledgerService: LedgerService, private toaster: ToasterService, private permissionDataService: PermissionDataService, private store: Store<AppState>, private generalService: GeneralService, @Inject(MAT_DIALOG_DATA) public inputData, public dialogRef: MatDialogRef<any>, private changeDetectorRef: ChangeDetectorRef, private modalService: BsModalService) {
+    constructor(private ledgerService: LedgerService, private toaster: ToasterService, private permissionDataService: PermissionDataService, private store: Store<AppState>, private generalService: GeneralService, @Inject(MAT_DIALOG_DATA) public inputData, public dialogRef: MatDialogRef<any>, private changeDetectorRef: ChangeDetectorRef, private modalService: BsModalService, private router: Router) {
         this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
-        // Set a default date
-        this.dateRange.from = moment(moment().subtract(30, 'days')).format(GIDDH_DATE_FORMAT);
-        this.dateRange.to = moment(moment()).format(GIDDH_DATE_FORMAT);
-
         if (this.permissionDataService.getData && this.permissionDataService.getData.length > 0) {
             this.permissionDataService.getData.forEach(f => {
                 if (f.name === 'LEDGER') {
@@ -112,20 +108,25 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
                 }
             });
         }
-        this.universalDate$.subscribe(dateObj => {
-            if (dateObj) {
-                let universalDate = _.cloneDeep(dateObj);
-                this.selectedDateRange = { startDate: moment(dateObj[0]), endDate: moment(dateObj[1]) };
-                this.selectedDateRangeUi = moment(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-                this.fromDate = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
-                this.toDate = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
-            }
-        });
-    }
 
-    public onSelectDateRange(ev) {
-        this.dateRange.from = moment(ev.picker.startDate).format(GIDDH_DATE_FORMAT);
-        this.dateRange.to = moment(ev.picker.endDate).format(GIDDH_DATE_FORMAT);
+        if (this.inputData?.advanceSearchRequest?.dataToSend?.bsRangeValue) {
+            let dateObj = this.inputData?.advanceSearchRequest?.dataToSend?.bsRangeValue;
+            let universalDate = _.cloneDeep(dateObj);
+            this.selectedDateRange = { startDate: dateObj[0], endDate: dateObj[1] };
+            this.selectedDateRangeUi = dateObj[0].format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dateObj[1].format(GIDDH_NEW_DATE_FORMAT_UI);
+            this.fromDate = universalDate[0].format(GIDDH_DATE_FORMAT);
+            this.toDate = universalDate[1].format(GIDDH_DATE_FORMAT);
+        } else {
+            this.universalDate$.pipe(take(1)).subscribe(dateObj => {
+                if (dateObj) {
+                    let universalDate = _.cloneDeep(dateObj);
+                    this.selectedDateRange = { startDate: moment(dateObj[0]), endDate: moment(dateObj[1]) };
+                    this.selectedDateRangeUi = moment(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                    this.fromDate = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
+                    this.toDate = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
+                }
+            });
+        }
     }
 
     public exportLedger() {
@@ -136,17 +137,16 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
         exportRequest.format = this.exportAs;
         exportRequest.balanceTypeAsSign = this.balanceTypeAsSign;
         exportRequest.branchUniqueName = this.inputData?.advanceSearchRequest.branchUniqueName;
-        const body = _.cloneDeep(this.inputData?.advanceSearchRequest);
+        exportRequest.from = this.fromDate;
+        exportRequest.to = this.toDate;
 
-        exportRequest.from = moment(body.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT) ? moment(body.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT) : moment().add(-1, 'month').format(GIDDH_DATE_FORMAT);
-        exportRequest.to = moment(body.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT) ? moment(body.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT) : moment().format(GIDDH_DATE_FORMAT);
-
+        let body = _.cloneDeep(this.inputData?.advanceSearchRequest);
         if (body && body.dataToSend) {
             body.dataToSend.type = this.emailTypeSelected;
             body.dataToSend.balanceTypeAsSign = this.balanceTypeAsSign;
             body.dataToSend.sort = this.exportRequest.sort ? 'ASC' : 'DESC';
-            body.dataToSend.from = this.exportRequest.from;
-            body.dataToSend.to = this.exportRequest.to;
+            body.dataToSend.from = this.fromDate;
+            body.dataToSend.to = this.toDate;
             body.dataToSend.accountUniqueName = this.inputData?.accountUniqueName;
             body.dataToSend.exportType = this.exportRequest.exportType;
             body.dataToSend.voucherType = this.exportRequest.voucherType;
@@ -156,29 +156,28 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
             body.dataToSend.showDescription = this.exportRequest.showDescription;
         }
 
-        if (!body.dataToSend.bsRangeValue) {
-            this.universalDate$.pipe(take(1)).subscribe(res => {
-                if (res) {
-                    body.dataToSend.bsRangeValue = [moment(res[0], GIDDH_DATE_FORMAT).toDate(), moment(res[1], GIDDH_DATE_FORMAT).toDate()];
-                }
-            });
-        }
-
-
-
         this.ledgerService.ExportLedger(exportRequest, this.inputData?.accountUniqueName, body.dataToSend, exportByInvoiceNumber).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response.status === 'success') {
                 if (response.body) {
-                    if (response.body.status === "success") {
-                        if (response.queryString.fileType === 'xlsx') {
-                            let blob = this.generalService.base64ToBlob(response.body.response, 'application/vnd.ms-excel', 512);
-                            return download(`${this.inputData?.accountUniqueName}.xlsx`, blob, 'application/vnd.ms-excel');
-                        } else if (response.queryString.fileType === 'pdf') {
-                            let blob = this.generalService.base64ToBlob(response.body.response, 'application/pdf', 512);
-                            return download(`${this.inputData?.accountUniqueName}.pdf`, blob, 'application/pdf');
+                    if (this.emailTypeSelected === 'admin-detailed') {
+                        if (response.body.encodedData) {
+                            let blob = this.generalService.base64ToBlob(response.body.encodedData, (response.body.type === "xlsx" ? 'application/vnd.ms-excel' : 'text/csv'), 512);
+                            return download(response.body.name, blob, (response.body.type === "xlsx" ? 'application/vnd.ms-excel' : 'text/csv'));
+                        } else {
+                            this.router.navigate(["/pages/downloads"]);
                         }
-                    } else if (response.body.message) {
-                        this.toaster.showSnackBar("info", response.body.message);
+                    } else {
+                        if (response.body.status === "success") {
+                            if (response.queryString.fileType === 'xlsx') {
+                                let blob = this.generalService.base64ToBlob(response.body.response, 'application/vnd.ms-excel', 512);
+                                return download(`${this.inputData?.accountUniqueName}.xlsx`, blob, 'application/vnd.ms-excel');
+                            } else if (response.queryString.fileType === 'pdf') {
+                                let blob = this.generalService.base64ToBlob(response.body.response, 'application/pdf', 512);
+                                return download(`${this.inputData?.accountUniqueName}.pdf`, blob, 'application/pdf');
+                            }
+                        } else if (response.body.message) {
+                            this.toaster.showSnackBar("info", response.body.message);
+                        }
                     }
                 }
             } else {
@@ -265,8 +264,6 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
             this.selectedDateRangeUi = moment(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
             this.fromDate = moment(value.startDate).format(GIDDH_DATE_FORMAT);
             this.toDate = moment(value.endDate).format(GIDDH_DATE_FORMAT);
-            this.dateRange.from = this.fromDate;
-            this.dateRange.to = this.toDate;
         }
     }
 
