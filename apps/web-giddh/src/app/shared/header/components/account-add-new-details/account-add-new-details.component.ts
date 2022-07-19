@@ -293,7 +293,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         this.getCurrency();
         this.isStateRequired = this.checkActiveGroupCountry();
 
-        if(this.fromCommandK && this.activeGroupUniqueName) {
+        if (this.fromCommandK && this.activeGroupUniqueName) {
             this.store.dispatch(this.groupWithAccountsAction.getGroupDetails(this.activeGroupUniqueName));
         }
     }
@@ -627,7 +627,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         if (s && s['activeGroupUniqueName'] && s['activeGroupUniqueName'].currentValue) {
             this.activeGroupUniqueName = s['activeGroupUniqueName'].currentValue;
         }
-        if(s && s['reloadCustomFields']?.currentValue && s['reloadCustomFields']?.currentValue !== s['reloadCustomFields']?.previousValue) {
+        if (s && s['reloadCustomFields']?.currentValue && s['reloadCustomFields']?.currentValue !== s['reloadCustomFields']?.previousValue) {
             this.getCompanyCustomField();
         }
     }
@@ -937,7 +937,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     * @memberof AccountAddNewDetailsComponent
     */
     public getCompanyCustomField(): void {
-        if(this.isCustomFieldLoading) {
+        if (this.isCustomFieldLoading) {
             return;
         }
         this.isCustomFieldLoading = true;
@@ -1216,7 +1216,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
      * @memberof AccountAddNewDetailsComponent
      */
     private showHideAddressTab(): void {
-        if(!this.isHsnSacEnabledAcc) {
+        if (!this.isHsnSacEnabledAcc) {
             setTimeout(() => {
                 if (this.staticTabs && this.staticTabs.tabs && this.staticTabs.tabs[0]) {
                     this.staticTabs.tabs[0].active = true;
@@ -1229,7 +1229,13 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 this.addBlankGstForm();
             }
         } else {
-            this.addAccountForm.get('addresses').reset();
+            let loop = 0;
+            const addresses = this.addAccountForm.get('addresses') as FormArray;
+            for (let control of addresses.controls) {
+                this.removeGstDetailsForm(loop);
+                loop++;
+            }
+            addresses.push(this.initialGstDetailsForm());
 
             setTimeout(() => {
                 if (this.staticTabs && this.staticTabs.tabs && this.staticTabs.tabs[1]) {

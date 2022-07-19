@@ -19,6 +19,7 @@ import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
 import { TaxControlData } from '../../../theme/tax-control/tax-control.component';
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 import { difference, orderBy } from '../../../lodash-optimized';
+import { GeneralService } from '../../../services/general.service';
 
 export const TAX_CONTROL_VALUE_ACCESSOR: any = {
     provide: NG_VALUE_ACCESSOR,
@@ -80,7 +81,7 @@ export class UpdateLedgerTaxControlComponent implements OnDestroy, OnChanges {
     public formattedTotal: string;
     private selectedTaxes: UpdateLedgerTaxData[] = [];
 
-    constructor() {
+    constructor(private generalService: GeneralService) {
 
     }
 
@@ -327,5 +328,25 @@ export class UpdateLedgerTaxControlComponent implements OnDestroy, OnChanges {
             // Exclusive tax calculation
             this.formattedTotal = `${giddhRoundOff(((this.totalForTax * this.sum) / 100), 2)}`;
         }
+    }
+
+    /**
+     * Adds styling on focused Dropdown List
+     *
+     * @param {HTMLElement} taxLabel
+     * @memberof UpdateLedgerTaxControlComponent
+     */
+    public taxLabelFocusing(taxLabel: HTMLElement): void {
+        this.generalService.dropdownFocusIn(taxLabel);
+    }
+
+    /**
+     * Removes styling from focused Dropdown List
+     *
+     * @param {HTMLElement} taxLabel
+     * @memberof UpdateLedgerTaxControlComponent
+     */
+    public taxLabelBluring(taxLabel: HTMLElement): void {
+        this.generalService.dropdownFocusOut(taxLabel);
     }
 }
