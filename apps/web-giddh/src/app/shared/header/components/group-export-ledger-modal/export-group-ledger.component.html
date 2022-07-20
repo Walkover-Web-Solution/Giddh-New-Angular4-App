@@ -36,87 +36,6 @@
                     </div>
                 </div>
                 <div class="pd-b2 clearfix">
-                    <label class="w100">{{ commonLocaleData?.app_type }}: </label>
-                    <span class="p-0 mr-r3 w100" *ngIf="voucherApiVersion === 1">
-                        <input
-                            id="mini"
-                            class="radio-custom cp ml-0"
-                            type="radio"
-                            name="emailTypeSelected"
-                            [(ngModel)]="emailTypeSelected"
-                            [value]="emailTypeMini"
-                        />
-                        <label for="mini" class="radio-custom-label">{{ commonLocaleData?.app_mini }}</label>
-                    </span>
-                    <span class="p-0 mr-r3 w100">
-                        <input
-                            id="detailed"
-                            class="radio-custom cp ml-0"
-                            type="radio"
-                            name="emailTypeSelected"
-                            [(ngModel)]="emailTypeSelected"
-                            [value]="emailTypeDetail"
-                        />
-                        <label for="detailed" class="radio-custom-label">{{ commonLocaleData?.app_detailed }}</label>
-                    </span>
-                </div>
-                <div class="pd-b2 clearfix" *ngIf="voucherApiVersion === 1">
-                    <label class="w100">{{ commonLocaleData?.app_export_as }}: </label>
-
-                    <span class="p-0 mr-r3 w100">
-                        <input
-                            id="pdf"
-                            class="radio-custom cp ml-0"
-                            type="radio"
-                            name="fileType"
-                            [(ngModel)]="fileType"
-                            [value]="'pdf'"
-                        />
-                        <label for="pdf" class="radio-custom-label">{{ commonLocaleData?.app_pdf }}</label>
-                    </span>
-
-                    <span class="p-0 mr-r3 w100">
-                        <input
-                            id="excel"
-                            class="radio-custom cp ml-0"
-                            type="radio"
-                            name="fileType"
-                            [(ngModel)]="fileType"
-                            [value]="'xls'"
-                        />
-                        <label for="excel" class="radio-custom-label">{{ commonLocaleData?.app_excel }}</label>
-                    </span>
-                </div>
-                <div class="pd-b2 clearfix" *ngIf="voucherApiVersion === 1">
-                    <label class="w100">{{ commonLocaleData?.app_order }}: </label>
-
-                    <span class="p-0 mr-r3">
-                        <input
-                            id="ascending"
-                            class="radio-custom cp ml-0"
-                            type="radio"
-                            name="order"
-                            [(ngModel)]="order"
-                            [value]="'asc'"
-                        />
-                        <label for="ascending" class="radio-custom-label">{{ commonLocaleData?.app_ascending }}</label>
-                    </span>
-
-                    <span class="p-0 mr-r3" *ngIf="voucherApiVersion === 1">
-                        <input
-                            id="descending"
-                            class="radio-custom cp ml-0"
-                            type="radio"
-                            name="order"
-                            [(ngModel)]="order"
-                            [value]="'desc'"
-                        />
-                        <label for="descending" class="radio-custom-label">{{
-                            commonLocaleData?.app_descending
-                        }}</label>
-                    </span>
-                </div>
-                <div class="pd-b2 clearfix" *ngIf="voucherApiVersion === 2">
                     <label class="w125">{{ commonLocaleData?.app_order }}:</label>
                     <label class="radio-inline p-0">
                         <mat-slide-toggle color="primary" name="sort" [(ngModel)]="exportRequest.sort">
@@ -126,7 +45,7 @@
                         </mat-slide-toggle>
                     </label>
                 </div>
-                <div class="pd-b2 clearfix" *ngIf="voucherApiVersion === 2">
+                <div class="pd-b2 clearfix">
                     <label class="w125">{{ commonLocaleData?.app_voucher_type }}:</label>
                     <label class="radio-inline p-0">
                         <mat-slide-toggle
@@ -140,7 +59,7 @@
                         </mat-slide-toggle>
                     </label>
                 </div>
-                <div class="pd-b2 clearfix" *ngIf="voucherApiVersion === 2">
+                <div class="pd-b2 clearfix">
                     <label class="w125">{{ commonLocaleData?.app_voucher_no }}:</label>
                     <label class="radio-inline p-0">
                         <mat-slide-toggle
@@ -154,7 +73,7 @@
                         </mat-slide-toggle>
                     </label>
                 </div>
-                <div class="pd-b2 clearfix" *ngIf="voucherApiVersion === 2">
+                <div class="pd-b2 clearfix">
                     <label class="w125">{{ localeData?.voucher_total }}:</label>
                     <label class="radio-inline p-0">
                         <mat-slide-toggle
@@ -168,7 +87,7 @@
                         </mat-slide-toggle>
                     </label>
                 </div>
-                <div class="pd-b2 clearfix" *ngIf="voucherApiVersion === 2">
+                <div class="pd-b2 clearfix">
                     <label class="w125">{{ localeData?.entry_no }}:</label>
                     <label class="radio-inline p-0">
                         <mat-slide-toggle
@@ -182,7 +101,7 @@
                         </mat-slide-toggle>
                     </label>
                 </div>
-                <div class="pd-b2 clearfix" *ngIf="voucherApiVersion === 2">
+                <div class="pd-b2 clearfix">
                     <label class="w125">{{ localeData?.description }}:</label>
                     <label class="radio-inline p-0">
                         <mat-slide-toggle

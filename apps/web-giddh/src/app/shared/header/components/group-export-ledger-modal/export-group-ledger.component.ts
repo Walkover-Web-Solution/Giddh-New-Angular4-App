@@ -114,7 +114,7 @@ export class ExportGroupLedgerComponent implements OnInit {
     public exportLedger() {
         this.exportRequest.from = this.fromDate;
         this.exportRequest.to = this.toDate;
-        this.closeExportGroupLedgerModal.emit({ from: this.dateRange.from, to: this.dateRange.to, type: this.emailTypeSelected, fileType: this.fileType, order: this.order, body: this.exportRequest });
+        this.closeExportGroupLedgerModal.emit({ from: this.fromDate, to: this.toDate, type: this.emailTypeSelected, fileType: this.fileType, order: this.order, body: this.exportRequest });
     }
 
     public onSelectDateRange(ev) {

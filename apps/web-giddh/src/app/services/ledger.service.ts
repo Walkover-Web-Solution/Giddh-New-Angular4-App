@@ -9,7 +9,7 @@ import { LEDGER_API } from './apiurls/ledger.api';
 import { BlankLedgerVM } from '../material-ledger/ledger.vm';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
-import { DaybookQueryRequest, DayBookRequestModel, ExportBodyRequest } from '../models/api-models/DaybookRequest';
+import { ExportBodyRequest } from '../models/api-models/DaybookRequest';
 import { ToasterService } from './toaster.service';
 import { ReportsDetailedRequestFilter } from '../models/api-models/Reports';
 import { cloneDeep } from '../lodash-optimized';
@@ -262,13 +262,15 @@ export class LedgerService {
         if (body.type === 'columnar') {
             API = exportByInvoiceNumber ? this.config.apiUrl + LEDGER_API.EXPORT_LEDGER_WITH_INVOICE_NUMBER : this.config.apiUrl + LEDGER_API.EXPORT_LEDGER;
         } else {
-            API = (this.generalService.voucherApiVersion === 2) ? this.config.apiUrl + LEDGER_API.EXPORT : (exportByInvoiceNumber ? this.config.apiUrl + LEDGER_API.EXPORT_LEDGER_WITH_INVOICE_NUMBER : this.config.apiUrl + LEDGER_API.EXPORT_LEDGER);
+            API = this.config.apiUrl + LEDGER_API.EXPORT;
         }
         let url = API.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             .replace(':accountUniqueName', encodeURIComponent(accountUniqueName))
             .replace(':from', model.from).replace(':to', model.to).replace(':type', encodeURIComponent(model.type)).replace(':format', encodeURIComponent(model.format)).replace(':sort', encodeURIComponent(model.sort));
-        if (model.branchUniqueName) {
-            url = url.concat(`&branchUniqueName=${model.branchUniqueName !== this.companyUniqueName ? encodeURIComponent(model.branchUniqueName) : ''}`);
+        if (body.type === 'columnar') {
+            if (model.branchUniqueName) {
+                url = url.concat(`&branchUniqueName=${model.branchUniqueName !== this.companyUniqueName ? encodeURIComponent(model.branchUniqueName) : ''}`);
+            }
         }
         return this.http.post(url, body).pipe(
             map((res) => {
@@ -380,27 +382,6 @@ export class LedgerService {
                 return data;
             }),
             catchError((e) => this.errorHandler.HandleCatch<string, ExportBodyRequest>(e, model)));
-    }
-
-    public GroupExportLedger(groupUniqueName: string, queryRequest: DaybookQueryRequest): Observable<BaseResponse<any, DayBookRequestModel>> {
-        this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.get(this.config.apiUrl + LEDGER_API.GET_GROUP_EXPORT_LEDGER
-            .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            .replace(':groupUniqueName', encodeURIComponent(groupUniqueName))
-            .replace(':page', queryRequest.page.toString())
-            .replace(':count', queryRequest.count.toString())
-            .replace(':from', encodeURIComponent(queryRequest.from))
-            .replace(':to', encodeURIComponent(queryRequest.to))
-            .replace(':format', queryRequest.format.toString())
-            .replace(':type', queryRequest.type.toString())
-            .replace(':sort', queryRequest.sort.toString())).pipe(
-                map((res) => {
-                    let data: BaseResponse<any, DayBookRequestModel> = res;
-                    data.queryString = queryRequest;
-                    data.queryString.requestType = queryRequest.format === 'pdf' ? 'application/pdf' : 'application/vnd.ms-excel';
-                    return data;
-                }),
-                catchError((e) => this.errorHandler.HandleCatch<any, DayBookRequestModel>(e, null)));
     }
 
     /*
