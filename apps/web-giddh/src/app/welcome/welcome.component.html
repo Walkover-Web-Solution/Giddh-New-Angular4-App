@@ -240,9 +240,16 @@
                             >
                                 <div class="">
                                     <label for="taxes-dd">{{ localeData?.applicable_tax }}</label>
-                                    <div class="btn-group btn-block select-caret invoice-btn" dropdown>
+                                    <div
+                                        class="btn-group btn-block select-caret invoice-btn"
+                                        dropdown
+                                        #dropdown="bs-dropdown"
+                                        (blur)="dropdown.hide()"
+                                    >
                                         <button
-                                            dropdownToggle
+                                            (focus)="dropdown.show()"
+                                            (click)="dropdown.show()"
+                                            (clickOutside)="dropdown.hide()"
                                             type="button"
                                             class="form-control text-left btn-block dropdown-toggle"
                                             [ngClass]="{ 'select-tax-placeholder': !selectedTaxes?.length }"
@@ -250,15 +257,27 @@
                                             {{ localeData?.select_taxes }}
                                             <span class="select-drop pull-right mr-t1"></span>
                                         </button>
-                                        <ul class="dropdown-menu dropdown-menu-2 width-100" role="menu">
+                                        <ul
+                                            class="dropdown-menu dropdown-menu-2 width-100"
+                                            role="menu"
+                                            (click)="$event.stopPropagation()"
+                                        >
                                             <li *ngIf="taxesList?.length == 0">
                                                 {{ commonLocaleData?.app_no_result_found }}
                                             </li>
-                                            <li *ngFor="let tax of taxesList">
+                                            <li
+                                                *ngFor="let tax of taxesList"
+                                                (click)="selectingApplicableTaxes(!tax.isSelected, tax, $event)"
+                                                (keydown.enter)="selectingApplicableTaxes(!tax.isSelected, tax, $event)"
+                                                class="select-applicable-tax-list"
+                                                #selectedApplicableTaxList
+                                            >
                                                 <input
                                                     type="checkbox"
                                                     (click)="selectApplicableTaxes(tax, $event)"
                                                     [checked]="tax?.isSelected"
+                                                    (focus)="selectApplicableTaxesFocus(selectedApplicableTaxList)"
+                                                    (blur)="selectApplicableTaxesBlur(selectedApplicableTaxList)"
                                                 />
                                                 {{ tax?.label }}
                                             </li>
