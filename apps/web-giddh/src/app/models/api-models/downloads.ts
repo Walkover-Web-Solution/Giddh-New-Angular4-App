@@ -23,6 +23,6 @@ export interface DownloadData {
     download?: any;
     expireAt?: any;
     requestId?: any;
-    status?: any
+    status?: any;
 }
 
