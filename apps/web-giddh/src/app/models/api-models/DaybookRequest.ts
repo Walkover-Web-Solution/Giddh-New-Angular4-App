@@ -22,6 +22,7 @@ export class ExportBodyRequest {
     showEntryVoucherNo?: boolean;
     showDescription?: boolean;
     groupUniqueName?: string;
+    accountUniqueName?: string;
     exportType?: string;
 }
 

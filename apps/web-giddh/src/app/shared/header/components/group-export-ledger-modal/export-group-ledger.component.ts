@@ -79,13 +79,7 @@ export class ExportGroupLedgerComponent implements OnInit {
     }
 
     public ngOnInit() {
-
-        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
-            if (activeCompany) {
-                this.voucherApiVersion = this.generalService.voucherApiVersion;
-            }
-        });
-
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
         // Set a default date
         this.dateRange.from = moment(moment().subtract(30, 'days')).format(GIDDH_DATE_FORMAT);
         this.dateRange.to = moment(moment()).format(GIDDH_DATE_FORMAT);
