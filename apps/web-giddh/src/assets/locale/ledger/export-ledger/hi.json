@@ -2,7 +2,13 @@
     "page_heading": "निर्यात लेजर",
     "email_error": "मान्य ईमेल आईडी दर्ज करें",
     "columnar": "स्तंभाकार",
-    "cr_dr": "क्रेडिट/डेबिट के साथ +/-",
+    "cr_dr": "सीआर / डॉ और +/-",
     "add_multiple_id": "आप कई आईडी के अलग किए गए अल्पविराम जोड़ सकते हैं",
-    "receipient_email_ids": "प्राप्तकर्ता ईमेल आईडी"
+    "receipient_email_ids": "प्राप्तकर्ता ईमेल आईडी",
+    "voucher_total": "वाउचर कुल",
+    "entry_no": "प्रवेश संख्या.",
+    "description": "विवरण",
+    "cr_dr_toggle":"करोड़/डॉ",
+    "plus_minus_toggle":" +/-",
+    "export_group_ledger": "निर्यात समूह खाता बही"
 }

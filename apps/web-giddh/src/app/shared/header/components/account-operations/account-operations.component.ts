@@ -24,11 +24,14 @@ import { IAccountsInfo } from '../../../../models/interfaces/accountInfo.interfa
 import { ToasterService } from '../../../../services/toaster.service';
 import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
 import { createSelector } from 'reselect';
-import { DaybookQueryRequest } from '../../../../models/api-models/DaybookRequest';
+import { DaybookQueryRequest, ExportBodyRequest } from '../../../../models/api-models/DaybookRequest';
 import { InvoiceActions } from '../../../../actions/invoice/invoice.actions';
 import { IDiscountList } from '../../../../models/api-models/SettingsDiscount';
 import { ShSelectComponent } from '../../../../theme/ng-virtual-select/sh-select.component';
 import { differenceBy, each, flatten, flattenDeep, map, omit, union } from 'apps/web-giddh/src/app/lodash-optimized';
+import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
+import { LedgerService } from 'apps/web-giddh/src/app/services/ledger.service';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'account-operations',
@@ -122,9 +125,11 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     public selectedItems = [];
     public dropdownSettings = {};
     public settings = {};
+    // This will use for group export body request
+    public groupExportLedgerBodyRequest: ExportBodyRequest = new ExportBodyRequest();
 
     constructor(private _fb: FormBuilder, private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction,
-        private companyActions: CompanyActions, private _ledgerActions: LedgerActions, private accountsAction: AccountsAction, private _toaster: ToasterService, _permissionDataService: PermissionDataService, private invoiceActions: InvoiceActions) {
+        private companyActions: CompanyActions, private _ledgerActions: LedgerActions, private accountsAction: AccountsAction, private toaster: ToasterService, _permissionDataService: PermissionDataService, private invoiceActions: InvoiceActions, public generalService: GeneralService, public ledgerService: LedgerService, public router: Router) {
         this.isUserSuperAdmin = _permissionDataService.isUserSuperAdmin;
     }
 
@@ -587,7 +592,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
             this.store.dispatch(this.accountsAction.mergeAccount(activeAccount?.uniqueName, finalData));
             this.showDeleteMove = false;
         } else {
-            this._toaster.errorToast(this.localeData?.merge_account_error);
+            this.toaster.errorToast(this.localeData?.merge_account_error);
             return;
         }
     }
@@ -648,16 +653,34 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         this.groupExportLedgerModal.show();
     }
 
+    /**
+     * This will use for hide group export model
+     *
+     * @param {*} response
+     * @memberof AccountOperationsComponent
+     */
     public hideGroupExportModal(response: any) {
         this.groupExportLedgerModal.hide();
         this.activeGroupUniqueName$.pipe(take(1)).subscribe((grpUniqueName: string) => {
             if (response !== 'close') {
-                this.groupExportLedgerQueryRequest.type = response.type;
-                this.groupExportLedgerQueryRequest.format = response.fileType;
-                this.groupExportLedgerQueryRequest.sort = response.order;
-                this.groupExportLedgerQueryRequest.from = response.from;
-                this.groupExportLedgerQueryRequest.to = response.to;
-                this.store.dispatch(this._ledgerActions.GroupExportLedger(grpUniqueName, this.groupExportLedgerQueryRequest));
+                this.groupExportLedgerBodyRequest.from = response.body.from;
+                this.groupExportLedgerBodyRequest.to = response.body.to;
+                this.groupExportLedgerBodyRequest.showVoucherNumber = response.body.showVoucherNumber;
+                this.groupExportLedgerBodyRequest.showVoucherTotal = response.body.showVoucherTotal;
+                this.groupExportLedgerBodyRequest.showEntryVoucher = response.body.showEntryVoucher;
+                this.groupExportLedgerBodyRequest.showDescription = response.body.showDescription;
+                this.groupExportLedgerBodyRequest.exportType = response.body.exportType;
+                this.groupExportLedgerBodyRequest.showEntryVoucherNo = response.body.showEntryVoucherNo;
+                this.groupExportLedgerBodyRequest.groupUniqueName = grpUniqueName;
+                this.groupExportLedgerBodyRequest.sort = response.body.sort ? 'ASC' : 'DESC';
+                this.ledgerService.groupLedgerExport(this.groupExportLedgerBodyRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                    if (response.status === 'success') {
+                        this.router.navigate(["/pages/downloads"]);
+                        this.toaster.showSnackBar("success", response.message);
+                    } else {
+                        this.toaster.showSnackBar("error", response.message);
+                    }
+                });
             }
         });
     }

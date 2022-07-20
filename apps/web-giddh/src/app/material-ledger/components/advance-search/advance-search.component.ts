@@ -278,7 +278,7 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
         if (this.advanceSearchRequest) {
             this.advanceSearchForm?.patchValue(this.advanceSearchRequest.dataToSend);
 
-            if(this.advanceSearchForm.get('includeDescription').value) {
+            if (this.advanceSearchForm.get('includeDescription').value) {
                 this.isExpanded = true;
             } else {
                 this.isExpanded = false;

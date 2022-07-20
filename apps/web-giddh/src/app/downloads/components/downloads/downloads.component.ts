@@ -10,22 +10,10 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { GeneralService } from '../../../services/general.service';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../../store';
-import { DownloadsRequest } from '../../../models/api-models/downloads';
+import { DownloadData, DownloadsRequest } from '../../../models/api-models/downloads';
 import { cloneDeep } from '../../../lodash-optimized';
 import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from '../../../app.constant';
-import { Router } from '@angular/router';
-/** This will use for interface */
-export interface DownloadData {
-    date?: any;
-    requestedDate?: any;
-    user?: any;
-    type?: any;
-    filters?: any;
-    download?: any;
-    expireAt?: any;
-    requestId?: any;
-    status?: any
-}
+
 /** Hold information of Download  */
 const ELEMENT_DATA: DownloadData[] = [];
 @Component({
@@ -87,7 +75,7 @@ export class DownloadsComponent implements OnInit, OnDestroy {
     /** This will use for from date static*/
     public fromDate: string;
 
-    constructor(public dialog: MatDialog, private downloadsService: DownloadsService, private changeDetection: ChangeDetectorRef, private generalService: GeneralService, private router: Router, private modalService: BsModalService, private store: Store<AppState>) {
+    constructor(public dialog: MatDialog, private downloadsService: DownloadsService, private changeDetection: ChangeDetectorRef, private generalService: GeneralService, private modalService: BsModalService, private store: Store<AppState>) {
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
     }
 
@@ -99,9 +87,6 @@ export class DownloadsComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         document.querySelector('body')?.classList?.add('download-page');
-        if (this.generalService.voucherApiVersion === 1) {
-            this.router.navigate(['/pages/home']);
-        }
         /** Universal date observer */
         this.universalDate$.subscribe(dateObj => {
             if (dateObj) {
