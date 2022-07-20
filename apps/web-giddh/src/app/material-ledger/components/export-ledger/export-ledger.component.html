@@ -13,7 +13,7 @@
         </div>
         <div class="modal-body" id="export-body">
             <form name="addShareEmailForm" novalidate autocomplete="off">
-                <div class="pd-b3 clearfix">
+                <div class="pd-b3 clearfix" *ngIf="voucherApiVersion === 2">
                     <div class="form-inline">
                         <div class="form-group">
                             <label class="w100 justify-content-start">{{ commonLocaleData?.app_date_range }}: </label>
@@ -39,6 +39,13 @@
                             [(ngModel)]="emailTypeSelected"
                         >
                             <mat-radio-button
+                                *ngIf="voucherApiVersion === 1"
+                                id="mini"
+                                (change)="handleReportTypeChange($event)"
+                                [value]="emailTypeMini"
+                                >{{ commonLocaleData?.app_mini }}</mat-radio-button
+                            >
+                            <mat-radio-button
                                 id="detailed"
                                 (change)="handleReportTypeChange($event)"
                                 [value]="emailTypeDetail"
@@ -53,6 +60,24 @@
                         </mat-radio-group>
                     </div>
                 </div>
+                <div class="pd-b2 clearfix export-type" *ngIf="voucherApiVersion === 1">
+                    <label class="w125">{{ commonLocaleData?.app_export_as }}:</label>
+                    <div>
+                        <mat-radio-group
+                            color="primary"
+                            [attr.aria-label]="commonLocaleData?.app_export_as"
+                            name="exportAs"
+                            [(ngModel)]="exportAs"
+                        >
+                            <mat-radio-button [hidden]="emailTypeSelected === 'columnar'" id="pdf" [value]="'pdf'">
+                                {{ commonLocaleData?.app_pdf }}</mat-radio-button
+                            >
+                            <mat-radio-button id="excel" [value]="'xlsx'"
+                                >{{ commonLocaleData?.app_excel }}
+                            </mat-radio-button>
+                        </mat-radio-group>
+                    </div>
+                </div>
                 <div class="pd-b2 clearfix">
                     <label class="w125">{{ commonLocaleData?.app_order }}:</label>
                     <label class="radio-inline p-0">
@@ -64,7 +89,7 @@
                     </label>
                 </div>
 
-                <div class="pd-b2 clearfix" [hidden]="emailTypeSelected === 'columnar'">
+                <div class="pd-b2 clearfix" [hidden]="emailTypeSelected === 'columnar'" *ngIf="voucherApiVersion === 2">
                     <label class="w125">{{ commonLocaleData?.app_voucher_type }}:</label>
                     <label class="radio-inline p-0">
                         <mat-slide-toggle
@@ -78,7 +103,7 @@
                         </mat-slide-toggle>
                     </label>
                 </div>
-                <div class="pd-b2 clearfix" [hidden]="emailTypeSelected === 'columnar'">
+                <div class="pd-b2 clearfix" [hidden]="emailTypeSelected === 'columnar'" *ngIf="voucherApiVersion === 2">
                     <label class="w125">{{ commonLocaleData?.app_voucher_no }}:</label>
                     <label class="radio-inline p-0">
                         <mat-slide-toggle
@@ -92,7 +117,7 @@
                         </mat-slide-toggle>
                     </label>
                 </div>
-                <div class="pd-b2 clearfix" [hidden]="emailTypeSelected === 'columnar'">
+                <div class="pd-b2 clearfix" [hidden]="emailTypeSelected === 'columnar'" *ngIf="voucherApiVersion === 2">
                     <label class="w125">{{ localeData?.voucher_total }}:</label>
                     <label class="radio-inline p-0">
                         <mat-slide-toggle
@@ -106,7 +131,7 @@
                         </mat-slide-toggle>
                     </label>
                 </div>
-                <div class="pd-b2 clearfix" [hidden]="emailTypeSelected === 'columnar'">
+                <div class="pd-b2 clearfix" [hidden]="emailTypeSelected === 'columnar'" *ngIf="voucherApiVersion === 2">
                     <label class="w125">{{ localeData?.entry_no }}:</label>
                     <label class="radio-inline p-0">
                         <mat-slide-toggle
@@ -120,7 +145,7 @@
                         </mat-slide-toggle>
                     </label>
                 </div>
-                <div class="pd-b2 clearfix" [hidden]="emailTypeSelected === 'columnar'">
+                <div class="pd-b2 clearfix" [hidden]="emailTypeSelected === 'columnar'" *ngIf="voucherApiVersion === 2">
                     <label class="w125">{{ localeData?.description }}:</label>
                     <label class="radio-inline p-0">
                         <mat-slide-toggle
@@ -134,14 +159,32 @@
                         </mat-slide-toggle>
                     </label>
                 </div>
-
+                <div
+                    class="pd-b2 clearfix"
+                    *ngIf="voucherApiVersion === 1"
+                    [hidden]="
+                        emailTypeSelected === 'admin-condensed' ||
+                        emailTypeSelected === 'columnar' ||
+                        emailTypeSelected === 'mini'
+                    "
+                >
+                    <label class="w125">{{ commonLocaleData?.app_invoice_no }}:</label>
+                    <label class="radio-inline p-0">
+                        <mat-slide-toggle color="primary" name="withInvoiceNumber" [(ngModel)]="withInvoiceNumber">
+                            <span class="pull-left" *ngIf="withInvoiceNumber">{{ commonLocaleData?.app_include }}</span>
+                            <span class="pull-right" *ngIf="!withInvoiceNumber">{{
+                                commonLocaleData?.app_exclude
+                            }}</span>
+                        </mat-slide-toggle>
+                    </label>
+                </div>
                 <div class="pd-b2 clearfix" [hidden]="emailTypeSelected !== 'columnar'">
                     <label class="w125">{{ localeData?.cr_dr }}</label>
                     <label class="radio-inline p-0">
                         <mat-slide-toggle color="primary" name="balanceTypeAsSign" [(ngModel)]="balanceTypeAsSign">
-                            <span class="pull-left" *ngIf="balanceTypeAsSign">{{ commonLocaleData?.app_include }}</span>
+                            <span class="pull-left" *ngIf="balanceTypeAsSign">{{ localeData?.cr_dr_toggle }}</span>
                             <span class="pull-right" *ngIf="!balanceTypeAsSign">{{
-                                commonLocaleData?.app_exclude
+                                localeData?.plus_minus_toggle
                             }}</span>
                         </mat-slide-toggle>
                     </label>
@@ -157,6 +200,27 @@
                 >
                     {{ commonLocaleData?.app_show }}
                 </button>
+                <div class="modal-wrap" [hidden]="emailTypeSelected === 'columnar'" *ngIf="voucherApiVersion === 1">
+                    <div class="clearfix"></div>
+                    <h3 class="pd-t1 pd-b1">{{ commonLocaleData?.app_or | titlecase }}</h3>
+                    <div>
+                        <h3 class="light-gray pd-b05 size-xs">{{ localeData?.add_multiple_id }}</h3>
+                        <mat-form-field appearance="fill" class="w-100">
+                            <textarea
+                                matInput
+                                [(ngModel)]="emailData"
+                                required
+                                name="email"
+                                class="form-control mat-field-border receipient-email"
+                                [placeholder]="localeData?.receipient_email_ids"
+                            ></textarea>
+                        </mat-form-field>
+                        <button mat-button class="btn btn-success mr-t2 unbold" (click)="sendLedgEmail()">
+                            {{ commonLocaleData?.app_send_email }}
+                        </button>
+                    </div>
+                    <!-- add mailer -->
+                </div>
             </form>
         </div>
     </div>

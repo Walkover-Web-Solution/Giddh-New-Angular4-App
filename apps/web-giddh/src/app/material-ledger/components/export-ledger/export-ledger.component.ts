@@ -2,6 +2,7 @@ import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/hel
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { LedgerService } from '../../../services/ledger.service';
 import { ExportLedgerRequest, MailLedgerRequest } from '../../../models/api-models/Ledger';
+import { validateEmail } from '../../../shared/helpers/helperFunctions';
 import { ToasterService } from '../../../services/toaster.service';
 import { PermissionDataService } from 'apps/web-giddh/src/app/permissions/permission-data.service';
 import { some } from '../../../lodash-optimized';
@@ -16,19 +17,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Router } from '@angular/router';
-// This will use for export body request
-export interface ExportBodyRequest {
-    from?: string;
-    to?: string;
-    sort?: string;
-    showVoucherNumber?: boolean;
-    showVoucherTotal?: boolean;
-    showEntryVoucher?: boolean;
-    showDescription?: boolean;
-    accountUniqueName?: string;
-    exportType?: string;
-    showEntryVoucherNo?: boolean;
-}
+import { ExportBodyRequest } from '../../../models/api-models/DaybookRequest';
 @Component({
     selector: 'export-ledger',
     templateUrl: './export-ledger.component.html',
@@ -45,7 +34,6 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
     public emailTypeColumnar: string;
     public emailData: string = '';
     public withInvoiceNumber: boolean = false;
-    public withSorting: boolean = false;
     public universalDate$: Observable<any>;
     public isMobileScreen: boolean = true;
     /** Columnar report in balance type for Credit/Debit as +/- sign */
@@ -90,12 +78,17 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
         exportType: 'LEDGER_EXPORT',
         showEntryVoucherNo: false
     }
+    /** Stores the voucher API version of the company */
+    public voucherApiVersion: 1 | 2;
 
     constructor(private ledgerService: LedgerService, private toaster: ToasterService, private permissionDataService: PermissionDataService, private store: Store<AppState>, private generalService: GeneralService, @Inject(MAT_DIALOG_DATA) public inputData, public dialogRef: MatDialogRef<any>, private changeDetectorRef: ChangeDetectorRef, private modalService: BsModalService, private router: Router) {
         this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
+
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
+
         if (this.permissionDataService.getData && this.permissionDataService.getData.length > 0) {
             this.permissionDataService.getData.forEach(f => {
                 if (f.name === 'LEDGER') {
@@ -202,6 +195,57 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
             this.exportAs = 'xlsx';
         }
     }
+
+    public sendLedgEmail() {
+        let data = this.emailData;
+        const sendData = new MailLedgerRequest();
+        data = (data) ? data.replace(RegExp(' ', 'g'), '') : "";
+        const cdata = data.split(',');
+
+        if (cdata && cdata.length > 0) {
+            for (let i = 0; i < cdata.length; i++) {
+                if (validateEmail(cdata[i])) {
+                    sendData.recipients.push(cdata[i]);
+                } else {
+                    this.toaster.showSnackBar("warning", this.localeData?.email_error, this.commonLocaleData?.app_warning);
+                    data = '';
+                    sendData.recipients = [];
+                    break;
+                }
+            }
+        }
+
+        if (sendData && sendData.recipients && sendData.recipients.length > 0) {
+            const body = _.cloneDeep(this.inputData?.advanceSearchRequest);
+            if (!body.dataToSend.bsRangeValue) {
+                this.universalDate$.pipe(take(1)).subscribe(a => {
+                    if (a) {
+                        body.dataToSend.bsRangeValue = [moment(a[0], GIDDH_DATE_FORMAT).toDate(), moment(a[1], GIDDH_DATE_FORMAT).toDate()];
+                    }
+                });
+            }
+            let from = moment(body.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT) ? moment(body.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT) : moment().add(-1, 'month').format(GIDDH_DATE_FORMAT);
+            let to = moment(body.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT) ? moment(body.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT) : moment().format(GIDDH_DATE_FORMAT);
+            let emailRequestParams = new ExportLedgerRequest();
+            emailRequestParams.from = from;
+            emailRequestParams.to = to;
+            emailRequestParams.type = this.emailTypeSelected;
+            emailRequestParams.format = this.exportAs;
+            emailRequestParams.sort = this.order;
+            emailRequestParams.withInvoice = this.withInvoiceNumber;
+            emailRequestParams.branchUniqueName = this.inputData?.advanceSearchRequest.branchUniqueName;
+            this.ledgerService.MailLedger(sendData, this.inputData?.accountUniqueName, emailRequestParams).pipe(takeUntil(this.destroyed$)).subscribe(sent => {
+                if (sent.status === 'success') {
+                    this.toaster.showSnackBar("success", sent.body, sent.status);
+                    this.emailData = '';
+                    this.changeDetectorRef.detectChanges();
+                } else {
+                    this.toaster.showSnackBar("error", sent.message, sent.status);
+                }
+            });
+        }
+    }
+
 
     /**
      * To show columnar report table on ledeger

@@ -370,7 +370,7 @@ export class LedgerService {
      * @return {*}  {Observable<BaseResponse<any, ExportBodyRequest>>}
      * @memberof LedgerService
      */
-    public GroupLedgerExport(model: ExportBodyRequest): Observable<BaseResponse<any, ExportBodyRequest>> {
+    public groupLedgerExport(model: ExportBodyRequest): Observable<BaseResponse<any, ExportBodyRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let API = this.config.apiUrl + LEDGER_API.EXPORT;
         let url = API.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName));
