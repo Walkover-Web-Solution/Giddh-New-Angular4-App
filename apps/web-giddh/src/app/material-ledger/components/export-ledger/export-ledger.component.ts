@@ -31,6 +31,7 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
     public emailTypeMini: string = '';
     public emailTypeDetail: string;
     public emailTypeColumnar: string;
+    public emailTypeBillToBill: string;
     public emailData: string = '';
     public withInvoiceNumber: boolean = false;
     public universalDate$: Observable<any>;
@@ -77,12 +78,25 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
         exportType: 'LEDGER_EXPORT',
         showEntryVoucherNo: false
     }
+    /** Stores the voucher API version of the company */
+    public voucherApiVersion: 1 | 2;
+    /** This will show/hide for v2 for bill to bill*/
+    public enableBillToBill: boolean = false;
 
     constructor(private ledgerService: LedgerService, private toaster: ToasterService, private permissionDataService: PermissionDataService, private store: Store<AppState>, private generalService: GeneralService, @Inject(MAT_DIALOG_DATA) public inputData, public dialogRef: MatDialogRef<any>, private changeDetectorRef: ChangeDetectorRef, private modalService: BsModalService, private router: Router) {
         this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
+        this.store.pipe(select(p => p.ledger.account), takeUntil(this.destroyed$)).subscribe(ledgerAccount => {
+            ledgerAccount?.parentGroups?.forEach(group => {
+                if (["sundrycreditors", "sundrydebtors"].includes(group.uniqueName)) {
+                    this.enableBillToBill = true;
+                }
+            });
+        });
+
         if (this.permissionDataService.getData && this.permissionDataService.getData.length > 0) {
             this.permissionDataService.getData.forEach(f => {
                 if (f.name === 'LEDGER') {
@@ -91,6 +105,7 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
                     this.emailTypeMini = isAdmin ? 'admin-condensed' : 'view-condensed';
                     this.emailTypeDetail = isAdmin ? 'admin-detailed' : 'view-detailed';
                     this.emailTypeColumnar = 'columnar';
+                    this.emailTypeBillToBill = 'billToBill';
                 }
             });
         }
@@ -146,35 +161,46 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
             body.dataToSend.showEntryVoucher = this.exportRequest.showEntryVoucher;
             body.dataToSend.showDescription = this.exportRequest.showDescription;
         }
-
-        this.ledgerService.ExportLedger(exportRequest, this.inputData?.accountUniqueName, body.dataToSend, exportByInvoiceNumber).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response.status === 'success') {
-                if (response.body) {
-                    if (this.emailTypeSelected === 'admin-detailed') {
-                        if (response.body.encodedData) {
-                            let blob = this.generalService.base64ToBlob(response.body.encodedData, (response.body.type === "xlsx" ? 'application/vnd.ms-excel' : 'text/csv'), 512);
-                            return download(response.body.name, blob, (response.body.type === "xlsx" ? 'application/vnd.ms-excel' : 'text/csv'));
-                        } else {
-                            this.router.navigate(["/pages/downloads"]);
-                        }
-                    } else {
-                        if (response.body.status === "success") {
-                            if (response.queryString.fileType === 'xlsx') {
-                                let blob = this.generalService.base64ToBlob(response.body.response, 'application/vnd.ms-excel', 512);
-                                return download(`${this.inputData?.accountUniqueName}.xlsx`, blob, 'application/vnd.ms-excel');
-                            } else if (response.queryString.fileType === 'pdf') {
-                                let blob = this.generalService.base64ToBlob(response.body.response, 'application/pdf', 512);
-                                return download(`${this.inputData?.accountUniqueName}.pdf`, blob, 'application/pdf');
+        if (this.voucherApiVersion === 2 && this.emailTypeSelected === 'billToBill') {
+            this.ledgerService.exportBillToBillLedger(exportRequest, this.inputData?.accountUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                if (response.status === "success") {
+                    let blob = this.generalService.base64ToBlob(response.body.file, 'application/vnd.ms-excel', 512);
+                    return download(`${this.inputData?.accountUniqueName}-bill-to-bill.xlsx`, blob, 'application/vnd.ms-excel');
+                } else if (response.message) {
+                    this.toaster.showSnackBar("error", response.message);
+                }
+            });
+        } else {
+            this.ledgerService.ExportLedger(exportRequest, this.inputData?.accountUniqueName, body.dataToSend, exportByInvoiceNumber).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                if (response.status === 'success') {
+                    if (response.body) {
+                        if (this.emailTypeSelected === 'admin-detailed') {
+                            if (response.body.encodedData) {
+                                let blob = this.generalService.base64ToBlob(response.body.encodedData, (response.body.type === "xlsx" ? 'application/vnd.ms-excel' : 'text/csv'), 512);
+                                return download(response.body.name, blob, (response.body.type === "xlsx" ? 'application/vnd.ms-excel' : 'text/csv'));
+                            } else {
+                                this.router.navigate(["/pages/downloads"]);
                             }
-                        } else if (response.body.message) {
-                            this.toaster.showSnackBar("info", response.body.message);
+                        } else {
+                            if (response.body.status === "success") {
+                                if (response.queryString.fileType === 'xlsx') {
+                                    let blob = this.generalService.base64ToBlob(response.body.response, 'application/vnd.ms-excel', 512);
+                                    return download(`${this.inputData?.accountUniqueName}.xlsx`, blob, 'application/vnd.ms-excel');
+                                } else if (response.queryString.fileType === 'pdf') {
+                                    let blob = this.generalService.base64ToBlob(response.body.response, 'application/pdf', 512);
+                                    return download(`${this.inputData?.accountUniqueName}.pdf`, blob, 'application/pdf');
+                                }
+                            } else if (response.body.message) {
+                                this.toaster.showSnackBar("info", response.body.message);
+                            }
                         }
                     }
+                } else {
+                    this.toaster.showSnackBar("error", response.message, response.code);
                 }
-            } else {
-                this.toaster.showSnackBar("error", response.message, response.code);
-            }
-        });
+            });
+        }
+
     }
 
 
