@@ -15,7 +15,6 @@ import { LedgerService } from '../../services/ledger.service';
 import { BlankLedgerVM } from '../../material-ledger/ledger.vm';
 import { GenerateBulkInvoiceRequest, IBulkInvoiceGenerationFalingError } from '../../models/api-models/Invoice';
 import { InvoiceService } from '../../services/invoice.service';
-import { DaybookQueryRequest } from '../../models/api-models/DaybookRequest';
 import { LocaleService } from '../../services/locale.service';
 import { GeneralService } from '../../services/general.service';
 
@@ -162,7 +161,7 @@ export class LedgerActions {
                 } else if (response.status === 'no-network') {
                     this.ResetUpdateLedger();
                     return { type: 'EmptyAction' };
-                } else if(response.status === 'confirm') {
+                } else if (response.status === 'confirm') {
                     return {
                         type: LEDGER.SHOW_DUPLICATE_VOUCHER_CONFIRMATION,
                         payload: response
@@ -277,21 +276,6 @@ export class LedgerActions {
                     type: LEDGER.GET_RECONCILIATION_RESPONSE,
                     payload: response
                 };
-            })));
-
-    public ExportGroupLedger$: Observable<Action> = createEffect(() => this.action$
-        .pipe(
-            ofType(LEDGER.GROUP_EXPORT_LEDGER),
-            switchMap((action: CustomActions) => {
-                return this.ledgerService.GroupExportLedger(action.payload?.groupUniqueName, action.payload.queryRequest).pipe(
-                    map((res) => {
-                        if (res.status === 'success') {
-                            this.toaster.showSnackBar("success", res.body, res.status);
-                        } else {
-                            this.toaster.showSnackBar("error", res.message, res.code);
-                        }
-                        return { type: 'EmptyAction' };
-                    }));
             })));
 
     public DeleteMultipleLedgerEntries$: Observable<Action> = createEffect(() => this.action$
@@ -578,13 +562,6 @@ export class LedgerActions {
         };
     }
 
-    public GroupExportLedger(groupUniqueName: string, queryRequest: DaybookQueryRequest): CustomActions {
-        return {
-            type: LEDGER.GROUP_EXPORT_LEDGER,
-            payload: { groupUniqueName, queryRequest }
-        };
-    }
-
     public DeleteMultipleLedgerEntries(accountUniqueName: string, entryUniqueNames: string[]): CustomActions {
         return {
             type: LEDGER.DELETE_MULTIPLE_LEDGER_ENTRIES,
@@ -675,8 +652,8 @@ export class LedgerActions {
                 this.toaster.showSnackBar("error", response.message);
             }
             return errorAction;
-        } else if(response.status === "confirm") {
-            if(isCreateLedger) {
+        } else if (response.status === "confirm") {
+            if (isCreateLedger) {
                 return {
                     type: LEDGER.SHOW_DUPLICATE_VOUCHER_CONFIRMATION,
                     payload: response

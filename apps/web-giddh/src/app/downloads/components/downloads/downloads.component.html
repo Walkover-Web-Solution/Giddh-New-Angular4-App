@@ -65,13 +65,15 @@
                         <div class="download-text" *ngIf="element.status !== 'COMPLETED'">
                             {{ element.status }}
                         </div>
-                        <button
+                        <a
+                            target="_blank"
+                            [href]="element.s3Path"
                             *ngIf="element.status === 'COMPLETED'"
                             mat-button
                             class="download-button-status btn-success"
                         >
                             {{ commonLocaleData?.app_download }}
-                        </button>
+                        </a>
                     </td>
                 </ng-container>
 

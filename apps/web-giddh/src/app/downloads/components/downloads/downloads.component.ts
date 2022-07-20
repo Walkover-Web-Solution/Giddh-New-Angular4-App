@@ -99,9 +99,6 @@ export class DownloadsComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         document.querySelector('body')?.classList?.add('download-page');
-        if (this.generalService.voucherApiVersion === 1) {
-            this.router.navigate(['/pages/home']);
-        }
         /** Universal date observer */
         this.universalDate$.subscribe(dateObj => {
             if (dateObj) {

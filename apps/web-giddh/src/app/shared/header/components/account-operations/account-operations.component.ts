@@ -663,11 +663,6 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         this.groupExportLedgerModal.hide();
         this.activeGroupUniqueName$.pipe(take(1)).subscribe((grpUniqueName: string) => {
             if (response !== 'close') {
-                this.groupExportLedgerQueryRequest.type = response.type;
-                this.groupExportLedgerQueryRequest.format = response.fileType;
-                this.groupExportLedgerQueryRequest.sort = response.order;
-                this.groupExportLedgerQueryRequest.from = response.from;
-                this.groupExportLedgerQueryRequest.to = response.to;
                 this.groupExportLedgerBodyRequest.from = response.body.from;
                 this.groupExportLedgerBodyRequest.to = response.body.to;
                 this.groupExportLedgerBodyRequest.showVoucherNumber = response.body.showVoucherNumber;
@@ -678,17 +673,13 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
                 this.groupExportLedgerBodyRequest.showEntryVoucherNo = response.body.showEntryVoucherNo;
                 this.groupExportLedgerBodyRequest.groupUniqueName = grpUniqueName;
                 this.groupExportLedgerBodyRequest.sort = response.body.sort ? 'ASC' : 'DESC';
-                if (this.generalService.voucherApiVersion === 2) {
-                    this.ledgerService.groupLedgerExport(this.groupExportLedgerBodyRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-                        if (response.status === 'success') {
-                            this.router.navigate(["/pages/downloads"]);
-                        } else {
-                            this.toaster.showSnackBar("error", response.status);
-                        }
-                    })
-                } else {
-                    this.store.dispatch(this._ledgerActions.GroupExportLedger(grpUniqueName, this.groupExportLedgerQueryRequest));
-                }
+                this.ledgerService.groupLedgerExport(this.groupExportLedgerBodyRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                    if (response.status === 'success') {
+                        this.router.navigate(["/pages/downloads"]);
+                    } else {
+                        this.toaster.showSnackBar("error", response.message);
+                    }
+                });
             }
         });
     }
