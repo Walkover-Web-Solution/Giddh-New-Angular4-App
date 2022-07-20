@@ -1050,11 +1050,11 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
         let text = this.localeData?.onboarding_name;
         let onboardingType = "";
 
-        if(this.itemOnBoardingDetails?.onBoardingType === OnBoardingType.Branch) {
+        if (this.itemOnBoardingDetails?.onBoardingType === OnBoardingType.Branch) {
             onboardingType = this.commonLocaleData?.app_branch;
-        } else if(this.itemOnBoardingDetails?.onBoardingType === OnBoardingType.Company) {
+        } else if (this.itemOnBoardingDetails?.onBoardingType === OnBoardingType.Company) {
             onboardingType = this.commonLocaleData?.app_company;
-        } else if(this.itemOnBoardingDetails?.onBoardingType === OnBoardingType.Warehouse) {
+        } else if (this.itemOnBoardingDetails?.onBoardingType === OnBoardingType.Warehouse) {
             onboardingType = this.commonLocaleData?.app_warehouse;
         }
 
@@ -1084,11 +1084,11 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
         let text = this.localeData?.onboarding_address;
         let onboardingType = "";
 
-        if(this.itemOnBoardingDetails?.onBoardingType === OnBoardingType.Branch) {
+        if (this.itemOnBoardingDetails?.onBoardingType === OnBoardingType.Branch) {
             onboardingType = this.commonLocaleData?.app_branch;
-        } else if(this.itemOnBoardingDetails?.onBoardingType === OnBoardingType.Company) {
+        } else if (this.itemOnBoardingDetails?.onBoardingType === OnBoardingType.Company) {
             onboardingType = this.commonLocaleData?.app_company;
-        } else if(this.itemOnBoardingDetails?.onBoardingType === OnBoardingType.Warehouse) {
+        } else if (this.itemOnBoardingDetails?.onBoardingType === OnBoardingType.Warehouse) {
             onboardingType = this.commonLocaleData?.app_warehouse;
         }
 
@@ -1106,11 +1106,11 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
         let text = this.localeData?.create_onboarding;
         let onboardingType = "";
 
-        if(this.itemOnBoardingDetails?.onBoardingType === OnBoardingType.Branch) {
+        if (this.itemOnBoardingDetails?.onBoardingType === OnBoardingType.Branch) {
             onboardingType = this.commonLocaleData?.app_branch;
-        } else if(this.itemOnBoardingDetails?.onBoardingType === OnBoardingType.Company) {
+        } else if (this.itemOnBoardingDetails?.onBoardingType === OnBoardingType.Company) {
             onboardingType = this.commonLocaleData?.app_company;
-        } else if(this.itemOnBoardingDetails?.onBoardingType === OnBoardingType.Warehouse) {
+        } else if (this.itemOnBoardingDetails?.onBoardingType === OnBoardingType.Warehouse) {
             onboardingType = this.commonLocaleData?.app_warehouse;
         }
 
@@ -1128,15 +1128,54 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
         let text = this.localeData?.update_onboarding;
         let onboardingType = "";
 
-        if(this.itemOnBoardingDetails?.onBoardingType === OnBoardingType.Branch) {
+        if (this.itemOnBoardingDetails?.onBoardingType === OnBoardingType.Branch) {
             onboardingType = this.commonLocaleData?.app_branch;
-        } else if(this.itemOnBoardingDetails?.onBoardingType === OnBoardingType.Company) {
+        } else if (this.itemOnBoardingDetails?.onBoardingType === OnBoardingType.Company) {
             onboardingType = this.commonLocaleData?.app_company;
-        } else if(this.itemOnBoardingDetails?.onBoardingType === OnBoardingType.Warehouse) {
+        } else if (this.itemOnBoardingDetails?.onBoardingType === OnBoardingType.Warehouse) {
             onboardingType = this.commonLocaleData?.app_warehouse;
         }
 
         text = text?.replace("[ONBOARDING_TYPE]", onboardingType);
         return text;
+    }
+
+    /**
+     * Adds styling on focused Dropdown List
+     *
+     * @param {HTMLElement} taxLabel
+     * @memberof WelcomeComponent
+     */
+    public selectApplicableTaxesFocus(taxLabel: HTMLElement): void {
+        this.generalService.dropdownFocusIn(taxLabel);
+    }
+
+    /**
+     * Removes styling from focused Dropdown List
+     *
+     * @param {HTMLElement} taxLabel
+     * @memberof WelcomeComponent
+     */
+    public selectApplicableTaxesBlur(taxLabel: HTMLElement): void {
+        this.generalService.dropdownFocusOut(taxLabel);
+    }
+
+    /**
+     * Selects applicable dropdown list taxes using click and enter
+     *
+     * @param {boolean} isChecked
+     * @param {*} tax
+     * @param {*} event
+     * @memberof WelcomeComponent
+     */
+    public selectingApplicableTaxes(isChecked: boolean, tax: any, event: any): void {
+        tax.isSelected = isChecked;
+        if (isChecked) {
+            this.selectedTaxes.push(tax.value);
+        } else {
+            let index = this.selectedTaxes.indexOf(tax.value);
+            this.selectedTaxes.splice(index, 1);
+        }
+        event.preventDefault();
     }
 }
