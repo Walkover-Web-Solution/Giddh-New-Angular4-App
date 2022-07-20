@@ -1173,8 +1173,8 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
         if (isChecked) {
             this.selectedTaxes.push(tax.value);
         } else {
-            let indx = this.selectedTaxes.indexOf(tax.value);
-            this.selectedTaxes.splice(indx, 1);
+            let index = this.selectedTaxes.indexOf(tax.value);
+            this.selectedTaxes.splice(index, 1);
         }
         event.preventDefault();
     }
