@@ -70,8 +70,6 @@ export class ExportGroupLedgerComponent implements OnInit {
         exportType: 'GROUP_LEDGER_EXPORT',
         showEntryVoucherNo: false
     }
-    /** Stores the voucher API version of the company */
-    public voucherApiVersion: 1 | 2;
 
 
     constructor(private store: Store<AppState>, private _permissionDataService: PermissionDataService, private generalService: GeneralService, private modalService: BsModalService) {
@@ -79,7 +77,6 @@ export class ExportGroupLedgerComponent implements OnInit {
     }
 
     public ngOnInit() {
-        this.voucherApiVersion = this.generalService.voucherApiVersion;
         // Set a default date
         this.dateRange.from = moment(moment().subtract(30, 'days')).format(GIDDH_DATE_FORMAT);
         this.dateRange.to = moment(moment()).format(GIDDH_DATE_FORMAT);

@@ -77,17 +77,12 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
         exportType: 'LEDGER_EXPORT',
         showEntryVoucherNo: false
     }
-    /** Stores the voucher API version of the company */
-    public voucherApiVersion: 1 | 2;
 
     constructor(private ledgerService: LedgerService, private toaster: ToasterService, private permissionDataService: PermissionDataService, private store: Store<AppState>, private generalService: GeneralService, @Inject(MAT_DIALOG_DATA) public inputData, public dialogRef: MatDialogRef<any>, private changeDetectorRef: ChangeDetectorRef, private modalService: BsModalService, private router: Router) {
         this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
-
-        this.voucherApiVersion = this.generalService.voucherApiVersion;
-
         if (this.permissionDataService.getData && this.permissionDataService.getData.length > 0) {
             this.permissionDataService.getData.forEach(f => {
                 if (f.name === 'LEDGER') {
