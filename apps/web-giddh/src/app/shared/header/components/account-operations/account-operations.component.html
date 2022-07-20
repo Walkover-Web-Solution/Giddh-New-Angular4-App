@@ -1,8 +1,15 @@
 <div class="bd-rr row view-forms m-0" id="middleBody" [perfectScrollbar]="config" *ngIf="!(showNewForm$ | async)">
     <!--breadcrumbs-->
     <div class="breadcrumbs container-fluid top-bar bd-rb row mr-0 ml-0 h-100" *ngIf="breadcrumbPath?.length > 0">
+        <div class="col-lg-6">
+            <ol class="breadcrumb row">
+                <li *ngFor="let value of breadcrumbPath; let last = last" [ngClass]="{ 'active': last }">
+                    <a href="javascript:void(0)"> {{ value }}</a>
+                </li>
+            </ol>
+        </div>
         <!--share group/account-->
-        <div class="col pr-0 pl-0" *ngIf="showEditGroup$ | async">
+        <div class="col-lg-6 pr-0 pl-0" *ngIf="showEditGroup$ | async">
             <!--group-->
             <div class="pull-right text-right">
                 <button class="btn btn-share mr-r1" (click)="exportGroupLedger()">
@@ -20,7 +27,7 @@
             </div>
         </div>
         <!--account-->
-        <div class="pull-right col pr-0 pl-0" *ngIf="showEditAccount$ | async">
+        <div class="pull-right col-lg-6 pr-0 pl-0" *ngIf="showEditAccount$ | async">
             <button class="btn btn-share pull-right" (click)="showShareAccountModal()">
                 {{ commonLocaleData?.app_share }}
             </button>
