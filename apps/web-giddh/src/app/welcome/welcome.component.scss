@@ -17,6 +17,9 @@
         font-size: 11px;
         float: right;
     }
+    .applicable-tax-btn:focus {
+        box-shadow: none !important;
+    }
 }
 
 .form-group {
