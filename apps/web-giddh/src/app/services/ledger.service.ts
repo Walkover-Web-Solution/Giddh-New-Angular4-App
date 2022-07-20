@@ -257,15 +257,25 @@ export class LedgerService {
             catchError((e) => this.errorHandler.HandleCatch<MagicLinkResponse, MagicLinkRequest>(e, model, { accountUniqueName })));
     }
 
+    /**
+     *This will use for ledger export  
+     *
+     * @param {ExportLedgerRequest} model
+     * @param {string} accountUniqueName
+     * @param {*} body
+     * @param {boolean} [exportByInvoiceNumber]
+     * @return {*}  {Observable<BaseResponse<any, ExportLedgerRequest>>}
+     * @memberof LedgerService
+     */
     public ExportLedger(model: ExportLedgerRequest, accountUniqueName: string, body: any, exportByInvoiceNumber?: boolean): Observable<BaseResponse<any, ExportLedgerRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        let API;
+        let api;
         if (body.type === 'columnar') {
-            API = exportByInvoiceNumber ? this.config.apiUrl + LEDGER_API.EXPORT_LEDGER_WITH_INVOICE_NUMBER : this.config.apiUrl + LEDGER_API.EXPORT_LEDGER;
+            api = exportByInvoiceNumber ? this.config.apiUrl + LEDGER_API.EXPORT_LEDGER_WITH_INVOICE_NUMBER : this.config.apiUrl + LEDGER_API.EXPORT_LEDGER;
         } else {
-            API = this.config.apiUrl + LEDGER_API.EXPORT;
+            api = this.config.apiUrl + LEDGER_API.EXPORT;
         }
-        let url = API.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+        let url = api.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             .replace(':accountUniqueName', encodeURIComponent(accountUniqueName))
             .replace(':from', model.from).replace(':to', model.to).replace(':type', encodeURIComponent(model.type)).replace(':format', encodeURIComponent(model.format)).replace(':sort', encodeURIComponent(model.sort));
         if (body.type === 'columnar') {
@@ -366,7 +376,7 @@ export class LedgerService {
     }
 
     /**
-     * This will use for group ledger export for v2 
+     * This will use for group ledger export 
      *
      * @param {ExportBodyRequest} model
      * @return {*}  {Observable<BaseResponse<any, ExportBodyRequest>>}
@@ -374,8 +384,8 @@ export class LedgerService {
      */
     public groupLedgerExport(model: ExportBodyRequest): Observable<BaseResponse<any, ExportBodyRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        let API = this.config.apiUrl + LEDGER_API.EXPORT;
-        let url = API.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName));
+        let api = this.config.apiUrl + LEDGER_API.EXPORT;
+        let url = api.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName));
         return this.http.post(url, model).pipe(
             map((res) => {
                 let data: BaseResponse<any, ExportBodyRequest> = res;
