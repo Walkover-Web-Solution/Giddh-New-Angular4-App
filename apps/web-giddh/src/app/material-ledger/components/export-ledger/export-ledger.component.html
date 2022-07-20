@@ -30,7 +30,7 @@
                     </div>
                 </div>
                 <div class="pd-b2 clearfix export-type">
-                    <label class="w125">{{ commonLocaleData?.app_type }}:</label>
+                    <label class="w100">{{ commonLocaleData?.app_type }}:</label>
                     <div>
                         <mat-radio-group
                             color="primary"
@@ -42,7 +42,7 @@
                                 id="detailed"
                                 (change)="handleReportTypeChange($event)"
                                 [value]="emailTypeDetail"
-                                >{{ commonLocaleData?.app_detailed }}</mat-radio-button
+                                >{{ localeData?.ledger }}</mat-radio-button
                             >
                             <mat-radio-button
                                 id="columnar"
@@ -50,10 +50,17 @@
                                 [value]="emailTypeColumnar"
                                 >{{ localeData?.columnar }}</mat-radio-button
                             >
+                            <mat-radio-button
+                                id="bill"
+                                *ngIf="voucherApiVersion === 2 && enableBillToBill"
+                                (change)="handleReportTypeChange($event)"
+                                [value]="emailTypeBillToBill"
+                                >{{ localeData?.bill_to_bill }}</mat-radio-button
+                            >
                         </mat-radio-group>
                     </div>
                 </div>
-                <div class="pd-b2 clearfix">
+                <div class="pd-b2 clearfix" [hidden]="emailTypeSelected === 'billToBill'">
                     <label class="w125">{{ commonLocaleData?.app_order }}:</label>
                     <label class="radio-inline p-0">
                         <mat-slide-toggle color="primary" name="sort" [(ngModel)]="exportRequest.sort">
@@ -64,7 +71,10 @@
                     </label>
                 </div>
 
-                <div class="pd-b2 clearfix" [hidden]="emailTypeSelected === 'columnar'">
+                <div
+                    class="pd-b2 clearfix"
+                    [hidden]="emailTypeSelected === 'columnar' || emailTypeSelected === 'billToBill'"
+                >
                     <label class="w125">{{ commonLocaleData?.app_voucher_type }}:</label>
                     <label class="radio-inline p-0">
                         <mat-slide-toggle
@@ -78,7 +88,10 @@
                         </mat-slide-toggle>
                     </label>
                 </div>
-                <div class="pd-b2 clearfix" [hidden]="emailTypeSelected === 'columnar'">
+                <div
+                    class="pd-b2 clearfix"
+                    [hidden]="emailTypeSelected === 'columnar' || emailTypeSelected === 'billToBill'"
+                >
                     <label class="w125">{{ commonLocaleData?.app_voucher_no }}:</label>
                     <label class="radio-inline p-0">
                         <mat-slide-toggle
@@ -92,7 +105,10 @@
                         </mat-slide-toggle>
                     </label>
                 </div>
-                <div class="pd-b2 clearfix" [hidden]="emailTypeSelected === 'columnar'">
+                <div
+                    class="pd-b2 clearfix"
+                    [hidden]="emailTypeSelected === 'columnar' || emailTypeSelected === 'billToBill'"
+                >
                     <label class="w125">{{ localeData?.voucher_total }}:</label>
                     <label class="radio-inline p-0">
                         <mat-slide-toggle
@@ -106,7 +122,10 @@
                         </mat-slide-toggle>
                     </label>
                 </div>
-                <div class="pd-b2 clearfix" [hidden]="emailTypeSelected === 'columnar'">
+                <div
+                    class="pd-b2 clearfix"
+                    [hidden]="emailTypeSelected === 'columnar' || emailTypeSelected === 'billToBill'"
+                >
                     <label class="w125">{{ localeData?.entry_no }}:</label>
                     <label class="radio-inline p-0">
                         <mat-slide-toggle
@@ -120,7 +139,14 @@
                         </mat-slide-toggle>
                     </label>
                 </div>
-                <div class="pd-b2 clearfix" [hidden]="emailTypeSelected === 'columnar'">
+                <div
+                    class="pd-b2 clearfix"
+                    [hidden]="
+                        emailTypeSelected === 'columnar' ||
+                        emailTypeSelected === 'billToBill' ||
+                        emailTypeSelected === 'ledger'
+                    "
+                >
                     <label class="w125">{{ localeData?.description }}:</label>
                     <label class="radio-inline p-0">
                         <mat-slide-toggle
@@ -134,7 +160,14 @@
                         </mat-slide-toggle>
                     </label>
                 </div>
-                <div class="pd-b2 clearfix" [hidden]="emailTypeSelected !== 'columnar'">
+                <div
+                    class="pd-b2 clearfix"
+                    [hidden]="
+                        emailTypeSelected === 'detailed' ||
+                        emailTypeSelected === 'billToBill' ||
+                        emailTypeSelected !== 'columnar'
+                    "
+                >
                     <label class="w125">{{ localeData?.cr_dr }}</label>
                     <label class="radio-inline p-0">
                         <mat-slide-toggle color="primary" name="balanceTypeAsSign" [(ngModel)]="balanceTypeAsSign">

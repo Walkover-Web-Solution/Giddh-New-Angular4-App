@@ -10,5 +10,7 @@
     "description": "विवरण",
     "cr_dr_toggle":"करोड़/डॉ",
     "plus_minus_toggle":" +/-",
-    "export_group_ledger": "निर्यात समूह खाता बही"
+    "export_group_ledger": "निर्यात समूह खाता बही",
+    "ledger": "खाता",
+    "bill_to_bill": "बिल टू बिल"
 }

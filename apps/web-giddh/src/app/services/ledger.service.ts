@@ -258,6 +258,32 @@ export class LedgerService {
     }
 
     /**
+     * This will use for bill to bill export for v2 companies
+     *
+     * @param {ExportBodyRequest} model
+     * @param {string} accountUniqueName
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof LedgerService
+     */
+    public exportBillToBillLedger(model: ExportBodyRequest, accountUniqueName: string): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        let url = this.config.apiUrl + LEDGER_API.EXPORT_BILL_TO_BILL.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            .replace(':accountUniqueName', encodeURIComponent(accountUniqueName))
+            .replace(':from', model.from).replace(':to', model.to);
+        if (model.branchUniqueName) {
+            url = url.concat(`&branchUniqueName=${model.branchUniqueName !== this.companyUniqueName ? encodeURIComponent(model.branchUniqueName) : ''}`);
+        }
+        return this.http.get(url).pipe(
+            map((res) => {
+                let data: BaseResponse<any, any> = res;
+                data.request = model;
+                data.queryString = { model };
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)));
+    }
+
+    /**
      *This will use for ledger export  
      *
      * @param {ExportLedgerRequest} model
