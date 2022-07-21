@@ -253,7 +253,7 @@ export class DownloadsComponent implements OnInit, OnDestroy {
    * Callback for translation response complete
    *
    * @param {boolean} event
-   * @memberof CustomFieldsListComponent
+   * @memberof DownloadsComponent
    */
     public translationComplete(event: boolean): void {
         if (event) {
