@@ -167,8 +167,8 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
                 if (response?.status === "success") {
                     let blob = this.generalService.base64ToBlob(response?.body?.file, 'application/vnd.ms-excel', 512);
                     return download(`${this.inputData?.accountUniqueName}-bill-to-bill.xlsx`, blob, 'application/vnd.ms-excel');
-                } else if (response?.body.message) {
-                    this.toaster.showSnackBar("error", response.body.message);
+                } else if (response?.body.messgae) {
+                    this.toaster.errorToast("error", response.body.messgae);
                 }
             });
         } else {
@@ -180,6 +180,7 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
                                 let blob = this.generalService.base64ToBlob(response.body.encodedData, (response.body.type === "xlsx" ? 'application/vnd.ms-excel' : 'text/csv'), 512);
                                 return download(response.body.name, blob, (response.body.type === "xlsx" ? 'application/vnd.ms-excel' : 'text/csv'));
                             } else {
+                                this.toaster.successToast("succes", response.body);
                                 this.router.navigate(["/pages/downloads"]);
                             }
                         } else {
@@ -192,12 +193,12 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
                                     return download(`${this.inputData?.accountUniqueName}.pdf`, blob, 'application/pdf');
                                 }
                             } else if (response?.body.message) {
-                                this.toaster.showSnackBar("info", response.body.message);
+                                this.toaster.successToast("succes", response.body.message);
                             }
                         }
                     }
                 } else {
-                    this.toaster.showSnackBar("error", response.message, response.code);
+                    this.toaster.errorToast("error", response.message, response.code);
                 }
             });
         }
