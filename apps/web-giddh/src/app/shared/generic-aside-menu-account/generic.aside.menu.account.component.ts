@@ -7,6 +7,7 @@ import { AddAccountRequest, UpdateAccountRequest } from '../../models/api-models
 import { AccountsAction } from '../../actions/accounts.actions';
 import { IOption } from '../../theme/ng-select/option.interface';
 import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
+import { CommonActions } from '../../actions/common.actions';
 
 @Component({
     selector: 'generic-aside-menu-account',
@@ -76,7 +77,8 @@ export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnCh
     constructor(
         private store: Store<AppState>,
         private accountsAction: AccountsAction,
-        private groupWithAccountsAction: GroupWithAccountsAction
+        private groupWithAccountsAction: GroupWithAccountsAction,
+        private commonActions: CommonActions
     ) {
         // account-add component's property
         this.createAccountInProcess$ = this.store.pipe(select(state => state.sales.createAccountInProcess), takeUntil(this.destroyed$));
@@ -87,11 +89,11 @@ export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnCh
         this.showBankDetail = this.activeGroupUniqueName === 'sundrycreditors';
 
         this.store.pipe(select(state => state.groupwithaccounts.activeTab), takeUntil(this.destroyed$)).subscribe(activeTab => {
-            if(activeTab === 1) {
+            if (activeTab === 1) {
                 this.reloadCustomFields = false;
                 this.isMasterOpen = true;
             } else {
-                if(this.isMasterOpen) {
+                if (this.isMasterOpen) {
                     this.isMasterOpen = false;
                     this.reloadCustomFields = true;
                 }
@@ -108,6 +110,7 @@ export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnCh
     }
 
     public closeAsidePane(event) {
+        this.store.dispatch(this.accountsAction.resetActiveGroup());
         this.closeAsideEvent.emit(event);
     }
 
@@ -169,8 +172,8 @@ export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnCh
      * @param {boolean} event
      * @memberof GenericAsideMenuAccountComponent
      */
-     public showCustomFieldsTab(event: boolean) {
-        if(event) {
+    public showCustomFieldsTab(event: boolean) {
+        if (event) {
             this.store.dispatch(this.groupWithAccountsAction.updateActiveTabOpenAddAndManage(1));
             this.store.dispatch(this.groupWithAccountsAction.OpenAddAndManageFromOutside(''));
         }

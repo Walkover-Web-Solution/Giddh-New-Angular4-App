@@ -117,6 +117,9 @@ export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = i
         case COMMON_ACTIONS.RESET_APPLICATION_DATA: {
             return Object.assign({}, state, initialState);
         }
+        case AccountsAction.RESET_ACTIVE_GROUP:
+            return Object.assign({}, state, { activeGroup: null });
+
         case GroupWithAccountsAction.SHOW_ADD_NEW_FORM:
             return Object.assign({}, state, {
                 showAddNew: true,
@@ -586,7 +589,7 @@ export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = i
             return Object.assign({}, state, {
                 activeTab: action.payload
             });
-        }    
+        }
         default: {
             return state;
         }
