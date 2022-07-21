@@ -19,6 +19,8 @@ import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
 import { GeneralService } from '../../../services/general.service';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { Router } from '@angular/router';
+import { OrganizationType } from '../../../models/user-login-state';
+import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
 
 @Component({
     // tslint:disable-next-line:component-selector
@@ -114,6 +116,20 @@ export class EWayBillComponent implements OnInit, OnDestroy {
     public todaySelected: boolean = false;
     /** True if dropdown menu needs to show upwards */
     public isDropUp: boolean = false;
+    /** Observable to store the branches of current company */
+    public currentCompanyBranches$: Observable<any>;
+    /** Stores the branch list of a company */
+    public currentCompanyBranches: Array<any>;
+    /** Stores the current branch */
+    public currentBranch: any = { name: '', uniqueName: '' };
+    /** Stores the current organization type */
+    public currentOrganizationType: OrganizationType;
+    /** Stores the current company */
+    public activeCompany: any;
+    /** This will be hold for universal date */
+    public universalDate: any[] = [];
+    /** True if initial api got called */
+    public initialApiCalled: boolean = false;
 
     constructor(
         private store: Store<AppState>,
@@ -125,7 +141,8 @@ export class EWayBillComponent implements OnInit, OnDestroy {
         private _cd: ChangeDetectorRef,
         private generalService: GeneralService,
         private breakpointObserver: BreakpointObserver,
-        private router: Router
+        private router: Router,
+        private settingsBranchAction: SettingsBranchActions,
     ) {
         this.EwayBillfilterRequest.count = 20;
         this.EwayBillfilterRequest.page = 1;
@@ -150,14 +167,14 @@ export class EWayBillComponent implements OnInit, OnDestroy {
         });
 
         this.breakpointObserver
-        .observe(['(max-width: 767px)'])
-        .pipe(takeUntil(this.destroyed$))
-        .subscribe((state: BreakpointState) => {
-            this.isMobileScreen = state.matches;
-            if (!this.isMobileScreen) {
-                this.asideGstSidebarMenuState = 'in';
-            }
-        });
+            .observe(['(max-width: 767px)'])
+            .pipe(takeUntil(this.destroyed$))
+            .subscribe((state: BreakpointState) => {
+                this.isMobileScreen = state.matches;
+                if (!this.isMobileScreen) {
+                    this.asideGstSidebarMenuState = 'in';
+                }
+            });
         this.store.pipe(select(appState => appState.general.openGstSideMenu), takeUntil(this.destroyed$)).subscribe(shouldOpen => {
             if (this.isMobileScreen) {
                 if (shouldOpen) {
@@ -197,7 +214,7 @@ export class EWayBillComponent implements OnInit, OnDestroy {
                 this.EwaybillLists = _.cloneDeep(o);
                 this.EwaybillLists.results = o.results;
 
-                if(this.todaySelected) {
+                if (this.todaySelected) {
                     this.selectedDateRange = { startDate: moment(o.fromDate, GIDDH_DATE_FORMAT), endDate: moment(o.toDate, GIDDH_DATE_FORMAT) };
                     this.selectedDateRangeUi = moment(o.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(o.toDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
                     this.fromDate = moment(o.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
@@ -233,35 +250,6 @@ export class EWayBillComponent implements OnInit, OnDestroy {
                 }), takeUntil(this.destroyed$));
         };
 
-        // Refresh report data according to universal date
-        this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$)).subscribe((dateObj) => {
-            if (dateObj) {
-                let universalDate = _.cloneDeep(dateObj);
-
-                setTimeout(() => {
-                    this.store.pipe(select(state => state.session.todaySelected), take(1)).subscribe(response => {
-                        this.todaySelected = response;
-            
-                        if (universalDate && !this.todaySelected) {
-                            this.selectedDateRange = { startDate: moment(dateObj[0]), endDate: moment(dateObj[1]) };
-                            this.selectedDateRangeUi = moment(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-                            this.fromDate = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
-                            this.toDate = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
-                            this.EwayBillfilterRequest.fromDate = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
-                            this.EwayBillfilterRequest.toDate = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
-                        } else {
-                            this.fromDate = "";
-                            this.toDate = "";
-                            this.EwayBillfilterRequest.fromDate = "";
-                            this.EwayBillfilterRequest.toDate = "";
-                        }
-
-                        this.getAllFilteredInvoice();
-                    });
-                }, 100);
-            }
-        });
-
         this.voucherNumberInput.valueChanges.pipe(
             debounceTime(700),
             distinctUntilChanged(),
@@ -290,12 +278,110 @@ export class EWayBillComponent implements OnInit, OnDestroy {
         this.store.pipe(select(state => state.ewaybillstate.isGetAllEwaybillRequestInProcess), takeUntil(this.destroyed$)).subscribe(response => {
             this.isLoading = response;
         });
+
+        this.currentOrganizationType = this.generalService.currentOrganizationType;
+
+        this.store.pipe(
+            select(state => state.session.activeCompany), takeUntil(this.destroyed$)
+        ).subscribe(activeCompany => {
+            this.activeCompany = activeCompany;
+        });
+
+        this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
+        this.currentCompanyBranches$.subscribe(response => {
+            if (response && response.length) {
+                this.currentCompanyBranches = response.map(branch => ({
+                    label: branch.alias,
+                    value: branch.uniqueName,
+                    name: branch.name,
+                    parentBranch: branch.parentBranch
+                }));
+                this.currentCompanyBranches.unshift({
+                    label: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : '',
+                    name: this.activeCompany ? this.activeCompany.name : '',
+                    value: this.activeCompany ? this.activeCompany.uniqueName : '',
+                    isCompany: true
+                });
+                let currentBranchUniqueName;
+                if (!this.currentBranch || !this.currentBranch.uniqueName) {
+                    // Assign the current branch only when it is not selected. This check is necessary as
+                    // opening the branch switcher would reset the current selected branch as this subscription is run everytime
+                    // branches are loaded
+                    if (this.currentOrganizationType === OrganizationType.Branch) {
+                        currentBranchUniqueName = this.generalService.currentBranchUniqueName;
+                        this.currentBranch = _.cloneDeep(response.find(branch => branch.uniqueName === currentBranchUniqueName)) || this.currentBranch;
+                    } else {
+                        currentBranchUniqueName = this.activeCompany ? this.activeCompany.uniqueName : '';
+                        this.currentBranch = {
+                            name: this.activeCompany ? this.activeCompany.name : '',
+                            alias: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : '',
+                            uniqueName: this.activeCompany ? this.activeCompany.uniqueName : '',
+                        };
+                    }
+                }
+                this.EwayBillfilterRequest.branchUniqueName = (this.currentBranch) ? this.currentBranch.uniqueName : "";
+                if (!this.initialApiCalled) {
+                    this.initialApiCalled = true;
+                    this.initialRequest();
+                }
+            } else {
+                if (this.generalService.companyUniqueName) {
+                    // Avoid API call if new user is onboarded
+                    this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '' }));
+                }
+            }
+        });
     }
 
     public getAllFilteredInvoice() {
         this.store.dispatch(this.invoiceActions.GetAllEwayfilterRequest(this.preparemodelForFilterEway()));
         this.detectChange();
     }
+
+    /**
+     * This functtion will be use for initial request for universal date according to eway bill filter
+     *
+     * @memberof EWayBillComponent
+     */
+    public initialRequest() {
+        this.showAdvanceSearchIcon = false;
+        this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$)).subscribe((dateObj) => {
+            if (dateObj) {
+                let universalDate = _.cloneDeep(dateObj);
+
+                this.store.pipe(select(state => state.session.todaySelected), take(1)).subscribe(response => {
+                    this.todaySelected = response;
+                    if (!response) {
+                        this.selectedDateRange = { startDate: moment(universalDate[0]), endDate: moment(universalDate[1]) };
+                        this.selectedDateRangeUi = moment(universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                        this.fromDate = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
+                        this.toDate = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
+
+                        this.EwayBillfilterRequest.fromDate = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
+                        this.EwayBillfilterRequest.toDate = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
+                    } else {
+                        this.EwayBillfilterRequest.fromDate = "";
+                        this.EwayBillfilterRequest.toDate = "";
+                    }
+                    this.EwayBillfilterRequest.page = 0;
+                    this.getAllFilteredInvoice();
+                });
+            }
+        });
+    }
+
+
+    /**
+     * Branch change handler
+     *
+     * @memberof EWayBillComponent
+     */
+    public handleBranchChange(selectedEntity: any): void {
+        this.currentBranch.name = selectedEntity.label;
+        this.EwayBillfilterRequest.branchUniqueName = selectedEntity.value;
+        this.getAllFilteredInvoice();
+    }
+
 
     /**
      * Search query handler for from place field
@@ -458,6 +544,9 @@ export class EWayBillComponent implements OnInit, OnDestroy {
         }
         if (o.page) {
             model.page = o.page;
+        }
+        if (o.branchUniqueName) {
+            model.branchUniqueName = o.branchUniqueName;
         }
 
         return model;

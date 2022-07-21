@@ -1,11 +1,12 @@
 import * as moment from 'moment/moment';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
+import { PAGINATION_LIMIT } from "../../app.constant";
 
 export class AdvanceSearchRequest {
     public dataToSend: AdvanceSearchModel = new AdvanceSearchModel();
     public q: string = '';
     public page: number = 0;
-    public count: number = 30;
+    public count: number = PAGINATION_LIMIT;
     public accountUniqueName: string = '';
     public sort: string = 'asc';
     public branchUniqueName: string = '';

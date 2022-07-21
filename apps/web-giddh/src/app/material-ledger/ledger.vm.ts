@@ -264,7 +264,7 @@ export class LedgerVM {
                         return n.type === bankTxn.type;
                     });
                 });
-                if(item.transactions[0].type === "CREDIT") {
+                if (item.transactions[0].type === "CREDIT") {
                     item.index = creditLoop;
                     this.bankTransactionsCreditData.push(item);
                     creditLoop++;
@@ -462,6 +462,7 @@ export class TransactionVM {
     public voucherAdjustments?: VoucherAdjustments;
     public showDropdown?: boolean = false;
     public referenceVoucher?: ReferenceVoucher;
+    public showOtherTax: boolean = false;
 }
 
 export interface IInventory {
