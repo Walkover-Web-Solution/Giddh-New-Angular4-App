@@ -246,7 +246,7 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
     *To show the datepicker
     *
     * @param {*} element
-    * @memberof AuditLogsFormComponent
+    * @memberof ExportLedgerComponent
     */
     public showGiddhDatepicker(element: any): void {
         if (element) {
@@ -261,7 +261,7 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
     /**
      * This will hide the datepicker
      *
-     * @memberof AuditLogsFormComponent
+     * @memberof ExportLedgerComponent
      */
     public hideGiddhDatepicker(): void {
         this.modalRef.hide();
@@ -271,7 +271,7 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
      * Call back function for date/range selection in datepicker
      *
      * @param {*} value
-     * @memberof AuditLogsFormComponent
+     * @memberof ExportLedgerComponent
      */
     public dateSelectedCallback(value?: any): void {
         if (value && value.event === "cancel") {
@@ -295,7 +295,7 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
     /**
  * Releases memory
  *
- * @memberof AuditLogsFormComponent
+ * @memberof ExportLedgerComponent
  */
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
