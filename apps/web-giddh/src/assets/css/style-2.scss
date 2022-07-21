@@ -7522,6 +7522,13 @@ giddh-datepicker {
             }
         }
     }
+    #share-modal {
+        .share-ledger-btn {
+            .mat-button-wrapper {
+                position: absolute;
+            }
+        }
+    }
 }
 
 .cdk-overlay-container,
