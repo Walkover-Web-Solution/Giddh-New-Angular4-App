@@ -258,11 +258,25 @@ export class SignupComponent implements OnInit, OnDestroy {
         this.store.dispatch(this.loginAction.SignupWithMobileRequest(data));
     }
 
+
+    /**
+     * This will use for sign with providers
+     *
+     * @param {string} provider
+     * @memberof SignupComponent
+     */
     public async signInWithProviders(provider: string) {
         if (Configuration.isElectron) {
+            // electronOauth2
             const { ipcRenderer } = (window as any).require("electron");
             if (provider === "google") {
                 // google
+                const t = ipcRenderer.send("authenticate", provider);
+                ipcRenderer.once('take-your-gmail-token', (sender, arg) => {
+                    this.store.dispatch(this.loginAction.signupWithGoogle(arg.access_token));
+                });
+
+            } else {
                 ipcRenderer.once('take-your-gmail-token', (sender, arg) => {
                     this.store.dispatch(this.loginAction.signupWithGoogle(arg.access_token));
                 });

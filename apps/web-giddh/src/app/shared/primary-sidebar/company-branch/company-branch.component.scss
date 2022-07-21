@@ -73,7 +73,7 @@
                     small {
                         font-size: 10px;
                         line-height: 12.4px;
-                        font-weight: 700;
+                        font-weight: 500;
                         padding: 2px 5px;
                         border-radius: 5px;
                         color: var(--color-sidebar-company-count-text);
@@ -133,7 +133,7 @@
         height: calc(100vh - 345px) !important;
         overflow: auto;
         margin: 0;
-        padding: 0px;
+        padding: 0;
 
         ul {
             li {

@@ -102,9 +102,9 @@
                             <li *ngFor="let acc of accountItemsFromIndexDB">
                                 <a
                                     href="javascript:void(0);"
-                                    routerLink="ledger/{{ acc.uniqueName }}"
+                                    routerLink="ledger/{{ acc?.uniqueName }}"
                                     [routerLinkActive]="['active']"
-                                    [class.active]="isLedgerAccSelected && selectedLedgerName === acc.uniqueName"
+                                    [class.active]="isLedgerAccSelected && selectedLedgerName === acc?.uniqueName"
                                     (click)="analyzeAccounts($event, acc); companyDetailsDropDownWeb.hide()"
                                     >{{ acc.name }} {{ commonLocaleData?.app_ac }}</a
                                 >
@@ -143,7 +143,7 @@
                             <li *ngFor="let acc of accountItemsFromIndexDB">
                                 <a
                                     href="javascript:void(0);"
-                                    routerLink="ledger/{{ acc.uniqueName }}"
+                                    routerLink="ledger/{{ acc?.uniqueName }}"
                                     (click)="analyzeAccounts($event, acc); accountDropdown?.hide()"
                                     >{{ acc.name }} {{ commonLocaleData?.app_ac }}</a
                                 >
@@ -188,7 +188,6 @@
                                     *ngIf="menu?.items?.length"
                                     id="button-basic-02"
                                     dropdownToggle
-                                    type="button"
                                     class="dropdown-toggle"
                                     aria-controls="dropdown-basic-02"
                                     [class.active]="menu?.isActive"
@@ -206,7 +205,6 @@
                                     [queryParams]="menu?.additional"
                                     id="button-basic-02"
                                     dropdownToggle
-                                    type="button"
                                     class="dropdown-toggle"
                                     aria-controls="dropdown-basic-02"
                                 >
@@ -289,6 +287,7 @@
         [class]="accountAsideMenuState"
         [@slideInOut]="accountAsideMenuState"
         (closeAsideEvent)="toggleAccountAsidePane($event)"
+        (closeAccountModal)="closeAccountModal($event)"
         [selectedGrpUniqueName]="selectedGroupForCreateAccount"
         [createAccountFromCommandK]="true"
         [keyboardShortcut]="{ 'esc': accountAsideMenuState === 'in' }"

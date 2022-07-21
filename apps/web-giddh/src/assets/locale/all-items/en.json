@@ -304,6 +304,12 @@
                     "link": "/pages/import/trial-balance",
                     "icon": "icon-trial-balance-new",
                     "description": "Import all credit & debit balances"
+                },
+                {
+                    "label": "TALLY Import",
+                    "link": "/pages/tallysync",
+                    "icon": "icon-tally-import1",
+                    "description": "Check your synced Tally data online"
                 }
             ]
         },
@@ -398,6 +404,11 @@
                     "link": "/pages/search",
                     "icon": "icon-search",
                     "description": "Select group and search for a time span"
+                },
+                {
+                    "label": "Downloads",
+                    "link": "/pages/downloads",
+                    "icon": "icon-download-circle"
                 }
             ]
         }

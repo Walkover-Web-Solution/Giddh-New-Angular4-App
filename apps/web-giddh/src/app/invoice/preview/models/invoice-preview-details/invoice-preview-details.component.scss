@@ -1059,7 +1059,7 @@ p {
 }
 
 strong {
-    font-weight: bold;
+    font-weight: 500;
 }
 
 .invoice-preview-sidebar {
@@ -1102,12 +1102,6 @@ strong {
 }
 
 /*responsive*/
-@media (max-width: 1199px) {
-    .invoice-search-box input {
-        max-width: 180px;
-    }
-}
-
 @media (max-width: 1199px) {
     .invoice-search-box input {
         max-width: 180px;

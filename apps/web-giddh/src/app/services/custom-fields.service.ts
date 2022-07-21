@@ -91,4 +91,23 @@ export class CustomFieldsService {
             }),
             catchError((e) => this.errorHandler.HandleCatch<any, any>(e, request)));
     }
+
+    /**
+     * Get custom field
+     *
+     * @param {string} customFieldUniqueName
+     * @returns {Observable<BaseResponse<any, any>>}
+     * @memberof CustomFieldsService
+     */
+    public get(customFieldUniqueName: string): Observable<BaseResponse<any, any>> {
+        let url = this.config.apiUrl + CUSTOM_FIELDS.GET;
+        url = url.replace(':companyUniqueName', this.generalService.companyUniqueName);
+        url = url.replace(':customFieldUniqueName', customFieldUniqueName);
+        return this.http.get(url).pipe(
+            map((res) => {
+                let data: BaseResponse<any, any> = res;
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<any, any>(e, customFieldUniqueName)));
+    }
 }

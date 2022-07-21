@@ -2,7 +2,13 @@
     "page_heading": "लेजर निर्यात करा",
     "email_error": "वैध ईमेल आयडी प्रविष्ट करा",
     "columnar": "स्तंभ",
-    "cr_dr": "क्रेडिट/डेबिट +/- सह",
+    "cr_dr": "सीआर / डॉ आणि +/-",
     "add_multiple_id": "आपण एकाधिक आयडीचा विभक्त स्वल्पविराम जोडू शकता",
-    "receipient_email_ids": "प्राप्तकर्ता ईमेल आयडी"
+    "receipient_email_ids": "प्राप्तकर्ता ईमेल आयडी",
+    "voucher_total": "व्हाउचर एकूण",
+    "entry_no": "प्रवेश क्र.",
+    "description": "वर्णन",
+    "cr_dr_toggle":"सीआर/डॉ",
+    "plus_minus_toggle":" +/-",
+    "export_group_ledger": "निर्यात गट लेजर"
 }

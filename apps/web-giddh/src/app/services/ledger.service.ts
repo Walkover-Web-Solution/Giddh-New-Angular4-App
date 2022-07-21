@@ -9,7 +9,7 @@ import { LEDGER_API } from './apiurls/ledger.api';
 import { BlankLedgerVM } from '../material-ledger/ledger.vm';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
-import { DaybookQueryRequest, DayBookRequestModel } from '../models/api-models/DaybookRequest';
+import { ExportBodyRequest } from '../models/api-models/DaybookRequest';
 import { ToasterService } from './toaster.service';
 import { ReportsDetailedRequestFilter } from '../models/api-models/Reports';
 import { cloneDeep } from '../lodash-optimized';
@@ -109,6 +109,7 @@ export class LedgerService {
         delete model.baseCurrencyToDisplay;
         delete model.foreignCurrencyToDisplay;
         delete model.otherTaxModal;
+
         let url = LEDGER_API.CREATE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             .replace(':accountUniqueName', encodeURIComponent(accountUniqueName));
         if (this.generalService.voucherApiVersion === 2) {
@@ -205,13 +206,13 @@ export class LedgerService {
             url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
         }
         return this.http.get(url).pipe(
-                map((res) => {
-                    let data: BaseResponse<DownloadLedgerAttachmentResponse, string> = res;
-                    data.request = fileName;
-                    data.queryString = { fileName };
-                    return data;
-                }),
-                catchError((e) => this.errorHandler.HandleCatch<DownloadLedgerAttachmentResponse, string>(e, fileName, { fileName })));
+            map((res) => {
+                let data: BaseResponse<DownloadLedgerAttachmentResponse, string> = res;
+                data.request = fileName;
+                data.queryString = { fileName };
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<DownloadLedgerAttachmentResponse, string>(e, fileName, { fileName })));
     }
 
     public DownloadInvoice(model: DownloadLedgerRequest, accountUniqueName: string): Observable<BaseResponse<string, DownloadLedgerRequest>> {
@@ -256,14 +257,31 @@ export class LedgerService {
             catchError((e) => this.errorHandler.HandleCatch<MagicLinkResponse, MagicLinkRequest>(e, model, { accountUniqueName })));
     }
 
+    /**
+     *This will use for ledger export  
+     *
+     * @param {ExportLedgerRequest} model
+     * @param {string} accountUniqueName
+     * @param {*} body
+     * @param {boolean} [exportByInvoiceNumber]
+     * @return {*}  {Observable<BaseResponse<any, ExportLedgerRequest>>}
+     * @memberof LedgerService
+     */
     public ExportLedger(model: ExportLedgerRequest, accountUniqueName: string, body: any, exportByInvoiceNumber?: boolean): Observable<BaseResponse<any, ExportLedgerRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        let API = exportByInvoiceNumber ? this.config.apiUrl + LEDGER_API.EXPORT_LEDGER_WITH_INVOICE_NUMBER : this.config.apiUrl + LEDGER_API.EXPORT_LEDGER;
-        let url = API.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+        let api;
+        if (body.type === 'columnar') {
+            api = exportByInvoiceNumber ? this.config.apiUrl + LEDGER_API.EXPORT_LEDGER_WITH_INVOICE_NUMBER : this.config.apiUrl + LEDGER_API.EXPORT_LEDGER;
+        } else {
+            api = this.config.apiUrl + LEDGER_API.EXPORT;
+        }
+        let url = api.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             .replace(':accountUniqueName', encodeURIComponent(accountUniqueName))
             .replace(':from', model.from).replace(':to', model.to).replace(':type', encodeURIComponent(model.type)).replace(':format', encodeURIComponent(model.format)).replace(':sort', encodeURIComponent(model.sort));
-        if (model.branchUniqueName) {
-            url = url.concat(`&branchUniqueName=${model.branchUniqueName !== this.companyUniqueName ? encodeURIComponent(model.branchUniqueName) : ''}`);
+        if (body.type === 'columnar') {
+            if (model.branchUniqueName) {
+                url = url.concat(`&branchUniqueName=${model.branchUniqueName !== this.companyUniqueName ? encodeURIComponent(model.branchUniqueName) : ''}`);
+            }
         }
         return this.http.post(url, body).pipe(
             map((res) => {
@@ -357,25 +375,24 @@ export class LedgerService {
             catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model, { accountUniqueName })));
     }
 
-    public GroupExportLedger(groupUniqueName: string, queryRequest: DaybookQueryRequest): Observable<BaseResponse<any, DayBookRequestModel>> {
+    /**
+     * This will use for group ledger export 
+     *
+     * @param {ExportBodyRequest} model
+     * @return {*}  {Observable<BaseResponse<any, ExportBodyRequest>>}
+     * @memberof LedgerService
+     */
+    public groupLedgerExport(model: ExportBodyRequest): Observable<BaseResponse<any, ExportBodyRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.get(this.config.apiUrl + LEDGER_API.GET_GROUP_EXPORT_LEDGER
-            .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            .replace(':groupUniqueName', encodeURIComponent(groupUniqueName))
-            .replace(':page', queryRequest.page.toString())
-            .replace(':count', queryRequest.count.toString())
-            .replace(':from', encodeURIComponent(queryRequest.from))
-            .replace(':to', encodeURIComponent(queryRequest.to))
-            .replace(':format', queryRequest.format.toString())
-            .replace(':type', queryRequest.type.toString())
-            .replace(':sort', queryRequest.sort.toString())).pipe(
-                map((res) => {
-                    let data: BaseResponse<any, DayBookRequestModel> = res;
-                    data.queryString = queryRequest;
-                    data.queryString.requestType = queryRequest.format === 'pdf' ? 'application/pdf' : 'application/vnd.ms-excel';
-                    return data;
-                }),
-                catchError((e) => this.errorHandler.HandleCatch<any, DayBookRequestModel>(e, null)));
+        let api = this.config.apiUrl + LEDGER_API.EXPORT;
+        let url = api.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName));
+        return this.http.post(url, model).pipe(
+            map((res) => {
+                let data: BaseResponse<any, ExportBodyRequest> = res;
+                data.request = model;
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<string, ExportBodyRequest>(e, model)));
     }
 
     /*
@@ -465,11 +482,11 @@ export class LedgerService {
     public getInvoiceListsForCreditNote(model: any, date: string): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let url = this.config.apiUrl + LEDGER_API.GET_VOUCHER_INVOICE_LIST
-        .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-        .replace(':voucherDate', encodeURIComponent(date))
-        .replace(':number', encodeURIComponent((model.number || "")))
-        .replace(':count', (model.count || PAGINATION_LIMIT))
-        .replace(':page', (model.page || 1));
+            .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            .replace(':voucherDate', encodeURIComponent(date))
+            .replace(':number', encodeURIComponent((model.number || "")))
+            .replace(':count', (model.count || PAGINATION_LIMIT))
+            .replace(':page', (model.page || 1));
 
         delete model.page;
         delete model.count;
@@ -611,7 +628,7 @@ export class LedgerService {
         if (this.generalService.voucherApiVersion === 2) {
             url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
         }
-        
+
         return this.http.delete(url).pipe(catchError((error) => this.errorHandler.HandleCatch<any, string>(error)));
     }
 

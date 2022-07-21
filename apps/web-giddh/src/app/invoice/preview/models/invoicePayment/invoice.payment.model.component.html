@@ -1,7 +1,7 @@
 <div>
     <div class="modal-header">
         <h3>{{ localeData?.perform_payment_action }}</h3>
-        <span aria-hidden="true" class="close" data-dismiss="modal" (click)="onCancel()">×</span>
+        <button aria-hidden="true" class="close" data-dismiss="modal" (click)="onCancel()">×</button>
     </div>
 
     <div class="modal-body clearfix" id="export-body" autocomplete="off">
@@ -13,7 +13,7 @@
                         type="text"
                         name="invoiceDateRange"
                         bsDatepicker
-                        class="form-control width-100"
+                        class="form-control w-100"
                         [(ngModel)]="paymentActionFormObj.paymentDate"
                         [bsConfig]="{ dateInputFormat: giddhDateFormat }"
                     />
@@ -130,7 +130,7 @@
                             "
                         />
                         <img
-                            src=" assets/images/autosave.svg"
+                            src="assets/images/autosave.svg"
                             class="edit-pencil mr-1 middle"
                             (click)="
                                 originalExchangeRate = exchangeRate;

@@ -1,0 +1,37 @@
+<div class="aside-pane">
+    <div class="header-create-unit">
+        <button id="close" (click)="closeAsidePane($event)"><i class="icon-cross"></i></button>
+        <div class="form-header">
+            <h3>Add Reason</h3>
+        </div>
+    </div>
+    <div class="aside-body create-combo-aside-body">
+        <div class="aside-pane-form">
+            <form>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <label>Reason <span class="red-text">*</span></label>
+                        <input type="text" id="reason-field" class="form-control" placeholder="Enter" />
+                    </div>
+                </div>
+                <div class="row button-group mt-5">
+                    <div class="col-sm-12">
+                        <button id="cancel-btn" class="btn btn-default">Cancel</button>
+                        <button id="save-btn" class="btn btn-success">Save</button>
+                    </div>
+                </div>
+            </form>
+            <div class="existing-reason mt-4">
+                <h4 class="font-14">Existing Reasons</h4>
+                <ul>
+                    <li>Loss by Fire</li>
+                    <li>Loss by Theaft</li>
+                    <li>Damaged Goods</li>
+                    <li>Stock Written off</li>
+                    <li>Stocktaking results</li>
+                    <li>Inventory revaluation</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

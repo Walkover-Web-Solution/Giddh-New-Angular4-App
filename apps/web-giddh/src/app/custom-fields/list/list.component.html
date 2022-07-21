@@ -1,0 +1,102 @@
+<ng-container
+    appTranslate
+    [file]="'custom-fields'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+    (translationComplete)="translationComplete($event)"
+>
+    <div class="container-fluid mr-t15 custom-field-page">
+        <div class="d-flex justify-content-between custom-field-header">
+            <a
+                mat-button
+                id="custom-field-btn"
+                class="btn btn-sky-blue mr-0 bdr-radius-50"
+                [routerLink]="['/pages/custom-fields/create']"
+            >
+                {{ localeData?.add_new }}
+            </a>
+            <div class="form-group d-flex flex-fill" *ngIf="translationsLoaded">
+                <div class="form-group mr-l15 filter-container">
+                    <mat-select
+                        class="form-control"
+                        name="modules"
+                        [placeholder]="localeData?.modules_placeholder"
+                        (selectionChange)="customFieldsRequest.moduleUniqueName = $event.value; getCustomFields()"
+                        [(value)]="customFieldsRequest.moduleUniqueName"
+                    >
+                        <mat-option *ngFor="let module of fieldModules" [value]="module.uniqueName"
+                            >{{ module.name }}
+                        </mat-option>
+                    </mat-select>
+                </div>
+            </div>
+        </div>
+        <div class="custom-field-list mr-t15">
+            <div [ngClass]="{ 'table-responsive': dataSource?.length }">
+                <table mat-table [dataSource]="dataSource" class="giddh-table" *ngIf="dataSource?.length">
+                    <ng-container matColumnDef="serialNo">
+                        <th mat-header-cell *matHeaderCellDef>{{ localeData?.s_no }}</th>
+                        <td mat-cell *matCellDef="let element">{{ element.index }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="fieldName">
+                        <th mat-header-cell *matHeaderCellDef>{{ localeData?.field_name }}</th>
+                        <td mat-cell *matCellDef="let element">{{ element.fieldName }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="fieldType">
+                        <th mat-header-cell *matHeaderCellDef>{{ localeData?.field_type }}</th>
+                        <td mat-cell *matCellDef="let element">{{ element.fieldType?.name | titlecase }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="isMandatory">
+                        <th mat-header-cell *matHeaderCellDef>{{ localeData?.mandatory }}</th>
+                        <td mat-cell *matCellDef="let element">
+                            {{ element.isMandatory ? commonLocaleData?.app_yes : commonLocaleData?.app_no }}
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="action">
+                        <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_action }}</th>
+                        <td mat-cell *matCellDef="let element">
+                            <a
+                                href="javascript:;"
+                                [routerLink]="['/pages/custom-fields/edit/' + element.uniqueName]"
+                                [matTooltip]="commonLocaleData?.app_edit"
+                                [matTooltipPosition]="'above'"
+                                matTooltipClass="tooltip-black"
+                                ><i class="icon-edit"></i
+                            ></a>
+                            <a
+                                href="javascript:;"
+                                [matTooltip]="commonLocaleData?.app_delete"
+                                [matTooltipPosition]="'above'"
+                                matTooltipClass="tooltip-black"
+                                (click)="deleteCustomField(element.uniqueName)"
+                                ><i class="icon-trash"></i
+                            ></a>
+                        </td>
+                    </ng-container>
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                </table>
+                <div class="no-data" *ngIf="!dataSource?.length">
+                    <no-data [secondaryMessage]="' '"></no-data>
+                </div>
+            </div>
+            <div class="custom-fields-pagination mt-3">
+                <pagination
+                    *ngIf="
+                        customFieldsList?.results?.length && customFieldsList?.totalItems > customFieldsRequest?.count
+                    "
+                    [totalItems]="customFieldsList?.totalItems"
+                    [maxSize]="5"
+                    [itemsPerPage]="customFieldsList?.count"
+                    [boundaryLinks]="true"
+                    [rotate]="true"
+                    (pageChanged)="pageChanged($event)"
+                    [firstText]="commonLocaleData?.app_first"
+                    [previousText]="commonLocaleData?.app_previous"
+                    [nextText]="commonLocaleData?.app_next"
+                    [lastText]="commonLocaleData?.app_last"
+                ></pagination>
+            </div>
+        </div>
+    </div>
+</ng-container>

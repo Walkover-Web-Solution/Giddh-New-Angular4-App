@@ -36,7 +36,12 @@
 
             <div class="right-inventory">
                 <div class="btn-group" dropdown [autoClose]="true" placement="bottom right">
-                    <button class="btn-link icon-btn mr-r15" (click)="editStock()" tooltip="Edit Stock">
+                    <button
+                        class="btn-link icon-btn mr-r15"
+                        href="javascript:;"
+                        [routerLink]="'/pages/new-inventory/stock/edit/' + stockUniqueName"
+                        tooltip="Edit Stock"
+                    >
                         <i class="icon-edit-pencil"></i>
                     </button>
                     <button
@@ -668,9 +673,9 @@
         <div class="modal-content">
             <div class="modal-header theme-bg">
                 <h3 class="modal-title bg" id="modal-title">Advance Search</h3>
-                <span aria-hidden="true" class="close" data-dismiss="modal" (click)="advanceSearchAction('cancel')"
-                    >×</span
-                >
+                <button aria-hidden="true" class="close" data-dismiss="modal" (click)="advanceSearchAction('cancel')">
+                    ×
+                </button>
             </div>
             <div class="modal-body advance-search clearfix" *ngIf="advanceSearchModalShow">
                 <form action="" [formGroup]="advanceSearchForm">

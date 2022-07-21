@@ -1,7 +1,7 @@
 <div id="share-modal" class="pd-b4 share-grp group-share-modal">
     <div class="modal-header d-flex align-items-center">
         <h3>{{ localeData?.share_group }}</h3>
-        <span aria-hidden="true" class="close" data-dismiss="modal" (click)="closeModal()">×</span>
+        <button aria-hidden="true" class="close" data-dismiss="modal" (click)="closeModal()">×</button>
     </div>
     <div class="modal-body" id="SharePop">
         <div class="form-group mb-0">
@@ -15,17 +15,19 @@
                     class="form-inline clearfix"
                     autocomplete="off"
                 >
-                    <div class="input-group form-group w-100">
-                        <input
-                            name="userEmail"
-                            type="email"
-                            [(ngModel)]="email"
-                            required
-                            [placeholder]="commonLocaleData?.app_email_id"
-                            class="form-control"
-                            [pattern]="giddhEmailRegex"
-                        />
-                        <div class="input-group-btn">
+                    <div class="input-group form-group w-100 d-flex justify-content-between">
+                        <div class="input-share-width">
+                            <input
+                                name="userEmail"
+                                type="email"
+                                [(ngModel)]="email"
+                                required
+                                [placeholder]="commonLocaleData?.app_email_id"
+                                class="form-control w-100 mr-0"
+                                [pattern]="giddhEmailRegex"
+                            />
+                        </div>
+                        <div class="input-group-btn d-flex justify-content-between">
                             <select
                                 name="selectedPermission"
                                 class="form-control selected-permission"
@@ -34,7 +36,7 @@
                             >
                                 <option value="">{{ localeData?.select_permission }}</option>
                                 <option
-                                    [value]="permission.uniqueName"
+                                    [value]="permission?.uniqueName"
                                     *ngFor="let permission of allPermissions$ | async"
                                 >
                                     {{ permission?.name }}
@@ -73,8 +75,8 @@
                                         (change)="updatePermission(val, $event)"
                                     >
                                         <option
-                                            [selected]="val.roleUniqueName === permission.uniqueName"
-                                            [value]="permission.uniqueName"
+                                            [selected]="val?.roleUniqueName === permission?.uniqueName"
+                                            [value]="permission?.uniqueName"
                                             *ngFor="let permission of allPermissions$ | async"
                                         >
                                             {{ permission?.name }}
@@ -84,7 +86,7 @@
                                 </div>
                                 <span class="delete-icon pull-right cp">
                                     <i
-                                        (click)="unShareGroup(val.uniqueName, val.entityUniqueName)"
+                                        (click)="unShareGroup(val?.uniqueName, val?.entityUniqueName)"
                                         class="icon-trash"
                                         aria-hidden="true"
                                     ></i>

@@ -111,7 +111,6 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         });
     }
 
-
     public sidebarStatusChange(event) {
         this.sideMenu.isopen = event;
     }
@@ -142,6 +141,13 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             '(max-width: 1023px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             this.changeOnMobileView(result.matches);
+        });
+        this.breakpointObserver.observe([
+            '(max-width: 480px)'
+        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
+            if (result.matches) {
+                this.router.navigate(['/mobile-restricted']);
+            }
         });
         this.sideBarStateChange(true);
         this.subscribeToLazyRouteLoading();
