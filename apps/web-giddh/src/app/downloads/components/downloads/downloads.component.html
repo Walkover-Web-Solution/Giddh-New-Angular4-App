@@ -3,6 +3,7 @@
     [file]="'downloads'"
     (commonLocaleData)="commonLocaleData = $event"
     (localeData)="localeData = $event"
+    (translationComplete)="translationComplete($event)"
 >
     <hamburger-menu class="hamburger-menu"></hamburger-menu>
 
