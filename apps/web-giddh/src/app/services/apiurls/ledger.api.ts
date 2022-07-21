@@ -43,5 +43,8 @@ export const LEDGER_API = {
     DELETE_BANK_TRANSACTIONS: 'company/:companyUniqueName/bank/accounts/:accountUniqueName/transactions',
 
     // Export Ledger Entry and Group Ledger entry
-    EXPORT: 'company/:companyUniqueName/exports'
+    EXPORT: 'company/:companyUniqueName/exports',
+
+    //Export Bill to Bill Report 
+    EXPORT_BILL_TO_BILL: 'v4/company/:companyUniqueName/accounts/:accountUniqueName/vouchers/bill-to-bill/export?from=:from&to=:to'
 };

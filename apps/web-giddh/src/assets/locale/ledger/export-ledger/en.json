@@ -10,5 +10,7 @@
     "description": "Description",
     "cr_dr_toggle":"Cr/Dr",
     "plus_minus_toggle":" +/-",
-    "export_group_ledger": "Export Group Ledger"
+    "export_group_ledger": "Export Group Ledger",
+    "ledger": "Ledger",
+     "bill_to_bill": "Bill to Bill"
 }
