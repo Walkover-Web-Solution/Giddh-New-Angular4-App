@@ -167,7 +167,7 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
                     let blob = this.generalService.base64ToBlob(response.body.file, 'application/vnd.ms-excel', 512);
                     return download(`${this.inputData?.accountUniqueName}-bill-to-bill.xlsx`, blob, 'application/vnd.ms-excel');
                 } else if (response.message) {
-                    this.toaster.showSnackBar("error", response.message);
+                    this.toaster.showSnackBar("error", response.body.message);
                 }
             });
         } else {
