@@ -49,6 +49,7 @@ export class AccountsAction {
     public static GET_ACCOUNT_DETAILS = 'AccountDetails';
     public static GET_ACCOUNT_DETAILS_RESPONSE = 'AccountDetailsResponse';
     public static RESET_ACTIVE_ACCOUNT = 'AccountReset';
+    public static RESET_ACTIVE_GROUP = 'GroupReset';
     public static GET_ACCOUNT_TAX_HIERARCHY = 'AccountTaxHierarchy';
     public static GET_ACCOUNT_TAX_HIERARCHY_RESPONSE = 'AccountTaxHierarchyResponse';
     public static APPLY_GROUP_TAX = 'ApplyAccountTax';
@@ -729,6 +730,12 @@ export class AccountsAction {
     public resetActiveAccount(): CustomActions {
         return {
             type: AccountsAction.RESET_ACTIVE_ACCOUNT
+        };
+    }
+
+    public resetActiveGroup(): CustomActions {
+        return {
+            type: AccountsAction.RESET_ACTIVE_GROUP
         };
     }
 
