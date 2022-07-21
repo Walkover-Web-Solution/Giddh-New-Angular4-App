@@ -161,14 +161,7 @@
                         </mat-slide-toggle>
                     </label>
                 </div>
-                <div
-                    class="pd-b2 clearfix"
-                    [hidden]="
-                        emailTypeSelected === 'detailed' ||
-                        emailTypeSelected === 'billToBill' ||
-                        emailTypeSelected !== 'columnar'
-                    "
-                >
+                <div class="pd-b2 clearfix" [hidden]="emailTypeSelected !== 'columnar'">
                     <label class="w125">{{ localeData?.cr_dr }}</label>
                     <label class="radio-inline p-0">
                         <mat-slide-toggle color="primary" name="balanceTypeAsSign" [(ngModel)]="balanceTypeAsSign">

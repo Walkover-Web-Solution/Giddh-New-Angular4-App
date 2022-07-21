@@ -31,7 +31,6 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
     public emailTypeMini: string = '';
     public emailTypeDetail: string;
     public emailTypeColumnar: string;
-    public emailTypeBillToBill: string;
     public emailData: string = '';
     public withInvoiceNumber: boolean = false;
     public universalDate$: Observable<any>;
@@ -82,6 +81,8 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
     public voucherApiVersion: 1 | 2;
     /** This will show/hide for v2 for bill to bill*/
     public enableBillToBill: boolean = false;
+    /** This will use for bill to bill value*/
+    public emailTypeBillToBill: string;
 
     constructor(private ledgerService: LedgerService, private toaster: ToasterService, private permissionDataService: PermissionDataService, private store: Store<AppState>, private generalService: GeneralService, @Inject(MAT_DIALOG_DATA) public inputData, public dialogRef: MatDialogRef<any>, private changeDetectorRef: ChangeDetectorRef, private modalService: BsModalService, private router: Router) {
         this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
@@ -89,7 +90,7 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
-        this.store.pipe(select(p => p.ledger.account), takeUntil(this.destroyed$)).subscribe(ledgerAccount => {
+        this.store.pipe(select(value => value.ledger.account), takeUntil(this.destroyed$)).subscribe(ledgerAccount => {
             ledgerAccount?.parentGroups?.forEach(group => {
                 if (["sundrycreditors", "sundrydebtors"].includes(group.uniqueName)) {
                     this.enableBillToBill = true;
@@ -163,10 +164,10 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
         }
         if (this.voucherApiVersion === 2 && this.emailTypeSelected === 'billToBill') {
             this.ledgerService.exportBillToBillLedger(exportRequest, this.inputData?.accountUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-                if (response.status === "success") {
-                    let blob = this.generalService.base64ToBlob(response.body.file, 'application/vnd.ms-excel', 512);
+                if (response?.status === "success") {
+                    let blob = this.generalService.base64ToBlob(response?.body?.file, 'application/vnd.ms-excel', 512);
                     return download(`${this.inputData?.accountUniqueName}-bill-to-bill.xlsx`, blob, 'application/vnd.ms-excel');
-                } else if (response.message) {
+                } else if (response.body.message) {
                     this.toaster.showSnackBar("error", response.body.message);
                 }
             });
