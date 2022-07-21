@@ -23,6 +23,7 @@ import { giddhRoundOff } from '../../shared/helpers/helperFunctions';
 import { AppState } from '../../store';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { isEqual, orderBy } from '../../lodash-optimized';
+import { GeneralService } from '../../services/general.service';
 
 export const TAX_CONTROL_VALUE_ACCESSOR: any = {
     provide: NG_VALUE_ACCESSOR,
@@ -92,7 +93,8 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
 
     constructor(
         private cdr: ChangeDetectorRef,
-        private store: Store<AppState>
+        private store: Store<AppState>,
+        private generalService: GeneralService
     ) { }
 
     public ngOnInit(): void {
@@ -285,7 +287,7 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
             }
         }, 100);
         this.taxAmountSumEvent.emit(this.taxSum);
-        if(this.taxRenderData?.length > 0) {
+        if (this.taxRenderData?.length > 0) {
             this.selectedTaxEvent.emit(this.selectedTaxes);
         }
     }
@@ -371,4 +373,23 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
         }
     }
 
+    /**
+     * Adds styling on focused Dropdown List
+     *
+     * @param {HTMLElement} taxLabel
+     * @memberof TaxControlComponent
+     */
+    public taxLabelFocusing(taxLabel: HTMLElement): void {
+        this.generalService.dropdownFocusIn(taxLabel);
+    }
+
+    /**
+     * Removes styling from focused Dropdown List
+     *
+     * @param {HTMLElement} taxLabel
+     * @memberof TaxControlComponent
+     */
+    public taxLabelBluring(taxLabel: HTMLElement): void {
+        this.generalService.dropdownFocusOut(taxLabel);
+    }
 }
