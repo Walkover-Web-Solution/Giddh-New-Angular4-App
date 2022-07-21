@@ -1,6 +1,20 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <!-- Google Tag Manager -->
+        <script>
+            (function (w, d, s, l, i) {
+                w[l] = w[l] || [];
+                w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
+                var f = d.getElementsByTagName(s)[0],
+                    j = d.createElement(s),
+                    dl = l != "dataLayer" ? "&l=" + l : "";
+                j.async = true;
+                j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
+                f.parentNode.insertBefore(j, f);
+            })(window, document, "script", "dataLayer", "GTM-5MCXN7C");
+        </script>
+        <!-- End Google Tag Manager -->
         <script async src="./assets/js/moment.min.js"></script>
         <script src="./assets/js/lodash.min.js"></script>
         <script src="./assets/js/jquery-1.11.3.min.js"></script>
@@ -29,26 +43,7 @@
         <!-- Fallback values for unsupported browsers -->
         <link rel="stylesheet" href="./assets/css/bootstrap.min.css" crossorigin="anonymous" />
         <link href="./assets/css/typography.css" rel="stylesheet" />
-    </head>
-    <body class="unresponsive">
-        <app-component></app-component>
-        <script defer>
-            try {
-                (function (w, d, s, l, i) {
-                    w[l] = w[l] || [];
-                    w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
-                    var f = d.getElementsByTagName(s)[0],
-                        j = d.createElement(s),
-                        dl = l != "dataLayer" ? "&l=" + l : "";
-                    j.async = true;
-                    j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
-                    f.parentNode.insertBefore(j, f);
-                })(window, document, "script", "dataLayer", "GTM-5MCXN7C");
-            } catch (error) {
-                console.error(error);
-            }
-        </script>
-        <script type="text/javascript" defer>
+        <script type="text/javascript">
             try {
                 var HW_config = { selector: ".notification", account: "7eB4aJ" };
                 window.onload = function () {
@@ -60,6 +55,8 @@
                 console.error(error);
             }
         </script>
+    </head>
+    <body class="unresponsive">
         <!-- Google Tag Manager (noscript) -->
         <noscript
             ><iframe
@@ -70,5 +67,6 @@
             ></iframe
         ></noscript>
         <!-- End Google Tag Manager (noscript) -->
+        <app-component></app-component>
     </body>
 </html>
