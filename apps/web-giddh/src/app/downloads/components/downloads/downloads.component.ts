@@ -31,7 +31,7 @@ export class DownloadsComponent implements OnInit, OnDestroy {
     /* it will store image path */
     public imgPath: string = '';
     /** True if api call in progress */
-    public isLoading: boolean = false;
+    public isLoading: boolean = true;
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Selected from date */
@@ -95,7 +95,6 @@ export class DownloadsComponent implements OnInit, OnDestroy {
                 this.selectedDateRangeUi = moment(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
                 this.downloadRequest.from = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
                 this.downloadRequest.to = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
-                this.getDownloads(true);
             }
         });
     }
@@ -248,5 +247,17 @@ export class DownloadsComponent implements OnInit, OnDestroy {
         this.destroyed$.next(true);
         this.destroyed$.complete();
         document.querySelector('body')?.classList?.remove('download-page');
+    }
+
+    /**
+   * Callback for translation response complete
+   *
+   * @param {boolean} event
+   * @memberof CustomFieldsListComponent
+   */
+    public translationComplete(event: boolean): void {
+        if (event) {
+            this.getDownloads(true);
+        }
     }
 }
