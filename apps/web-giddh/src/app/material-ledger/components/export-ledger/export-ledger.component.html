@@ -141,11 +141,7 @@
                 </div>
                 <div
                     class="pd-b2 clearfix"
-                    [hidden]="
-                        emailTypeSelected === 'columnar' ||
-                        emailTypeSelected === 'billToBill' ||
-                        emailTypeSelected === 'ledger'
-                    "
+                    [hidden]="emailTypeSelected === 'columnar' || emailTypeSelected === 'billToBill'"
                 >
                     <label class="w125">{{ localeData?.description }}:</label>
                     <label class="radio-inline p-0">
