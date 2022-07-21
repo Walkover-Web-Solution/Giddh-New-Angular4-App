@@ -167,7 +167,7 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
                 if (response?.status === "success") {
                     let blob = this.generalService.base64ToBlob(response?.body?.file, 'application/vnd.ms-excel', 512);
                     return download(`${this.inputData?.accountUniqueName}-bill-to-bill.xlsx`, blob, 'application/vnd.ms-excel');
-                } else if (response.body.message) {
+                } else if (response?.body.message) {
                     this.toaster.showSnackBar("error", response.body.message);
                 }
             });
@@ -191,7 +191,7 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
                                     let blob = this.generalService.base64ToBlob(response.body.response, 'application/pdf', 512);
                                     return download(`${this.inputData?.accountUniqueName}.pdf`, blob, 'application/pdf');
                                 }
-                            } else if (response.body.message) {
+                            } else if (response?.body.message) {
                                 this.toaster.showSnackBar("info", response.body.message);
                             }
                         }
