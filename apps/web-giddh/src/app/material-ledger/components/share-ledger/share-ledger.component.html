@@ -44,7 +44,9 @@
                                             <button
                                                 mat-button
                                                 class="
-                                                    btn btn-success btn-md
+                                                    btn
+                                                    share-ledger-btn
+                                                    btn-success btn-md
                                                     d-flex
                                                     align-items-center
                                                     disabled-btn-color
@@ -109,7 +111,14 @@
                                     <button
                                         mat-button
                                         [disabled]="!magicLink ? 'disabled' : null"
-                                        class="btn btn-success d-flex align-items-center disabled-btn-color"
+                                        class="
+                                            btn
+                                            share-ledger-btn
+                                            btn-success
+                                            d-flex
+                                            align-items-center
+                                            disabled-btn-color
+                                        "
                                         (click)="toggleIsCopied()"
                                         [ngxClipboard]="magicLinkInput"
                                     >
