@@ -10,8 +10,10 @@
 }
 
 .text-overflow-ellipsis {
-    text-overflow: ellipsis;
-    width: 230px;
+    .list-item {
+        text-overflow: ellipsis;
+        width: 255px;
+    }
 }
 
 @media (max-width: 1024px) {
