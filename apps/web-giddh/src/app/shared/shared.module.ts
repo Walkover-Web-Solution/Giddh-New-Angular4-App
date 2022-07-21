@@ -70,6 +70,7 @@ import { DeleteTemplateConfirmationModalModule } from '../invoice/templates/edit
 import { CustomFieldsModule } from './header/components/custom-fields/custom-fields.module';
 import { NgxBootstrapSwitchModule } from 'ngx-bootstrap-switch';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { CustomFieldsService } from '../services/custom-fields.service';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: true
@@ -245,7 +246,7 @@ export class SharedModule {
     public static forRoot(): ModuleWithProviders<SharedModule> {
         return {
             ngModule: SharedModule,
-            providers: []
+            providers: [CustomFieldsService]
         };
     }
 }
