@@ -163,12 +163,16 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
             body.dataToSend.showDescription = this.exportRequest.showDescription;
         }
         if (this.voucherApiVersion === 2 && this.emailTypeSelected === 'billToBill') {
-            this.ledgerService.exportBillToBillLedger(exportRequest, this.inputData?.accountUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            this.ledgerService.exportBillToBillLedger(exportRequest, this.inputData?.accountUniqueName).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
                 if (response?.status === "success") {
-                    let blob = this.generalService.base64ToBlob(response?.body?.file, 'application/vnd.ms-excel', 512);
-                    return download(`${this.inputData?.accountUniqueName}-bill-to-bill.xlsx`, blob, 'application/vnd.ms-excel');
-                } else if (response?.body.messgae) {
-                    this.toaster.errorToast("error", response.body.messgae);
+                    if (response?.body?.type === "message") {
+                        this.toaster.showSnackBar("success", response.body.file);
+                    } else {
+                        let blob = this.generalService.base64ToBlob(response?.body?.file, 'application/vnd.ms-excel', 512);
+                        return download(`${this.inputData?.accountUniqueName}-bill-to-bill.xlsx`, blob, 'application/vnd.ms-excel');
+                    }
+                } else if (response?.message) {
+                    this.toaster.showSnackBar("error", response?.message);
                 }
             });
         } else {
@@ -180,31 +184,33 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
                                 let blob = this.generalService.base64ToBlob(response.body.encodedData, (response.body.type === "xlsx" ? 'application/vnd.ms-excel' : 'text/csv'), 512);
                                 return download(response.body.name, blob, (response.body.type === "xlsx" ? 'application/vnd.ms-excel' : 'text/csv'));
                             } else {
-                                this.toaster.successToast("succes", response.body);
+                                this.toaster.showSnackBar("success", response.body);
                                 this.router.navigate(["/pages/downloads"]);
                             }
                         } else {
-                            if (response.body.status === "success") {
-                                if (response.queryString.fileType === 'xlsx') {
-                                    let blob = this.generalService.base64ToBlob(response.body.response, 'application/vnd.ms-excel', 512);
-                                    return download(`${this.inputData?.accountUniqueName}.xlsx`, blob, 'application/vnd.ms-excel');
-                                } else if (response.queryString.fileType === 'pdf') {
-                                    let blob = this.generalService.base64ToBlob(response.body.response, 'application/pdf', 512);
-                                    return download(`${this.inputData?.accountUniqueName}.pdf`, blob, 'application/pdf');
+                            if (response.status === "success") {
+                                if (response?.body?.status === "success") {
+                                    if (response.queryString.fileType === 'xlsx') {
+                                        let blob = this.generalService.base64ToBlob(response.body.response, 'application/vnd.ms-excel', 512);
+                                        return download(`${this.inputData?.accountUniqueName}.xlsx`, blob, 'application/vnd.ms-excel');
+                                    } else if (response.queryString.fileType === 'pdf') {
+                                        let blob = this.generalService.base64ToBlob(response.body.response, 'application/pdf', 512);
+                                        return download(`${this.inputData?.accountUniqueName}.pdf`, blob, 'application/pdf');
+                                    }
+                                } else {
+                                    this.toaster.showSnackBar("success", response.body.message);
                                 }
-                            } else if (response?.body.message) {
-                                this.toaster.successToast("succes", response.body.message);
+                            } else if (response.message) {
+                                this.toaster.showSnackBar("error", response.message);
                             }
                         }
                     }
                 } else {
-                    this.toaster.errorToast("error", response.message, response.code);
+                    this.toaster.showSnackBar("error", response.message, response.code);
                 }
             });
         }
-
     }
-
 
     /**
      * Handler for report type change
