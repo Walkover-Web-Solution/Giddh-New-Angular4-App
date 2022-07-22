@@ -91,11 +91,11 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
         this.groupSearchTerms.pipe(
             debounceTime(700), takeUntil(this.destroyed$))
             .subscribe(term => {
-                if(!this.initialLoad) {
+                if (!this.initialLoad) {
                     this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(term));
                 } else {
                     this.searchLoad.subscribe(response => {
-                        if(!response && this.initialLoad) {
+                        if (!response && this.initialLoad) {
                             this.initialLoad = false;
                             this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(term));
                         }
@@ -127,6 +127,7 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
                 }, 200);
             }
         });
+        document.querySelector('body')?.classList?.add('master-page');
     }
 
     public ngAfterViewChecked() {
@@ -160,6 +161,7 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+        document.querySelector('body')?.classList?.remove('master-page');
     }
 
     public ScrollToRight() {

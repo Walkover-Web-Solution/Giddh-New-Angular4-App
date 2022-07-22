@@ -63,7 +63,7 @@
                                             !(activeAccount | async),
                                         'isParent': item?.isOpen
                                     }"
-                                    tooltip="{{ item.synonyms }}"
+                                    tooltip="{{ item.synonyms || item.name }}"
                                     placement="bottom"
                                 >
                                     {{ item?.name }}
@@ -83,6 +83,8 @@
                                                 !(activeAccount | async)?.uniqueName)
                                     }"
                                     id="acc_{{ item.name }}"
+                                    tooltip="{{ item.name }}"
+                                    placement="bottom"
                                     (click)="onAccountClick(item, i)"
                                 >
                                     {{ item?.name }}
