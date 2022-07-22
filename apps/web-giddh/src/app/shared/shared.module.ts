@@ -67,8 +67,9 @@ import { GiddhPageLoaderModule } from './giddh-page-loader/giddh-page-loader.mod
 import { GiddhDatepickerModule } from '../theme/giddh-datepicker/giddh-datepicker.module';
 import { GiddhDateRangepickerModule } from '../theme/giddh-daterangepicker/giddh-daterangepicker.module';
 import { DeleteTemplateConfirmationModalModule } from '../invoice/templates/edit-template/modals/confirmation-modal/confirmation.modal.module';
-import { CustomFieldsModule } from './header/components/custom-fields/custom-fields.module';
 import { NgxBootstrapSwitchModule } from 'ngx-bootstrap-switch';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { CustomFieldsModule } from '../custom-fields/custom-fields.module';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: true
@@ -160,8 +161,9 @@ export function provideConfig() {
         GiddhDatepickerModule,
         GiddhDateRangepickerModule,
         DeleteTemplateConfirmationModalModule,
-        CustomFieldsModule,
-        NgxBootstrapSwitchModule.forRoot()
+        NgxBootstrapSwitchModule.forRoot(),
+        MatSlideToggleModule,
+        CustomFieldsModule
     ],
     exports: [
         CommonModule,
@@ -206,12 +208,12 @@ export function provideConfig() {
         CurrencyModule,
         PrimarySidebarComponent,
         TranslateDirectiveModule,
-        CompanyBranchComponent,
         AmountFieldComponentModule,
         AccountAddNewDetailsModule,
         LedgerDiscountModule,
         ConfirmationModalModule,
         DatepickerWrapperModule,
+        CompanyBranchComponent,
         HamburgerMenuModule,
         ValidateSectionPermissionDirectiveModule,
         GenericAsideMenuAccountComponent,

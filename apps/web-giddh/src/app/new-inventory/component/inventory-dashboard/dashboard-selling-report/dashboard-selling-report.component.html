@@ -1,0 +1,125 @@
+<div class="selling-report-page">
+    <div class="container-fluid">
+        <div class="box mr-t15">
+            <div class="top-selling-header d-flex">
+                <div class="date-wrapper">
+                    <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
+                        <i class="icon-calender calendar-addon bdr-radius-50"></i>
+                        <input
+                            type="text"
+                            id="select-date-stock"
+                            name="selectedDateRange"
+                            [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
+                            class="giddh-datepicker date-range-picker bdr-radius-50"
+                            placeholder="Enter Date"
+                        />
+                    </div>
+                </div>
+                <div class="select-top-selling">
+                    <div class="btn-group" dropdown>
+                        <button
+                            id="button-basic"
+                            dropdownToggle
+                            type="button"
+                            class="btn font-16 top-selling-btn no-btn dropdown-toggle p-0 mr-0"
+                            aria-controls="dropdown-basic"
+                        >
+                            Top 5 Selling <span class="caret"></span>
+                        </button>
+                        <ul
+                            id="dropdown-basic"
+                            *dropdownMenu
+                            class="dropdown-menu"
+                            role="menu"
+                            aria-labelledby="button-basic"
+                        >
+                            <li role="menuitem"><a class="dropdown-item" href="#">Top 5 Selling</a></li>
+                            <li role="menuitem"><a class="dropdown-item" href="#">Top 10 Selling</a></li>
+                            <li role="menuitem"><a class="dropdown-item" href="#">Top 5 Purchase</a></li>
+                            <li role="menuitem"><a class="dropdown-item" href="#">Top 10 Purchase</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div
+                    class="close-selling-report cursor-pointer"
+                    [routerLink]="['/pages/new-inventory/inventory-dashboard']"
+                >
+                    <i class="icon-cross pd"></i>
+                </div>
+            </div>
+        </div>
+        <div class="box mr-t15">
+            <div class="filter-top-selling d-flex flex-column flex-sm-row justify-content-between">
+                <div class="select-by-radio font-14">
+                    <span class="p-0 mr-3">
+                        <input id="location-wise" type="radio" name="selectOption" class="radio-custom cp ml-0" /><label
+                            for="location-wise"
+                            class="radio-custom-label"
+                            >Location wise</label
+                        >
+                    </span>
+                    <span class="p-0 mr-3">
+                        <input id="product-wise" type="radio" name="selectOption" class="radio-custom cp ml-0" /><label
+                            for="product-wise"
+                            class="radio-custom-label"
+                            >Product wise</label
+                        >
+                    </span>
+                    <span class="p-0 mr-3">
+                        <input id="service-wise" type="radio" name="selectOption" class="radio-custom cp ml-0" /><label
+                            for="service-wise"
+                            class="radio-custom-label"
+                            >Service wise</label
+                        >
+                    </span>
+                </div>
+                <div class="select-by-week">
+                    <div>
+                        <div class="total-sales-tabs">
+                            <a class="active-graph">Daily</a>| <a>Weekly</a>|
+                            <a>Monthly</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="highchart-of-sale">
+                <!-- selling graph will be here -->
+            </div>
+            <div class="top-sale-data d-flex flex-column flex-sm-row mt-5">
+                <div class="highest-data pr-5">
+                    <p class="font-16">Total Sales (Sep 19)</p>
+                    <h3 class="text-blue">10,10,900.00</h3>
+                </div>
+                <div class="highest-data top-high-sale pl-3">
+                    <p class="font-16">Total Sales (Sep 19)</p>
+                    <h3 class="text-blue">10,10,900.00</h3>
+                    <p class="text-blue highest-sale-date font-14">(12 Sep 19)</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- datepicker template -->
+<ng-template #datepickerTemplate>
+    <div class="datepicker-modal">
+        <div class="modal-body">
+            <app-datepicker-wrapper
+                [inputStartDate]="selectedDateRange?.startDate"
+                [inputEndDate]="selectedDateRange?.endDate"
+                [alwaysShowCalendars]="true"
+                [ranges]="datePickerOption"
+                [selectedRangeLabel]="selectedRangeLabel"
+                [showCustomRangeLabel]="true"
+                [showClearButton]="false"
+                [showCancel]="true"
+                [linkedCalendars]="true"
+                [showDropdowns]="true"
+                (rangeClicked)="dateSelectedCallback($event)"
+                (datesUpdated)="dateSelectedCallback($event)"
+                [keepCalendarOpeningWithRange]="false"
+                [showRangeLabelOnInput]="false"
+                [dateFieldPosition]="dateFieldPosition"
+            ></app-datepicker-wrapper>
+        </div>
+    </div>
+</ng-template>

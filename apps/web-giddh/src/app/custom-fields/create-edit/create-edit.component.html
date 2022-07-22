@@ -1,0 +1,213 @@
+<ng-container
+    appTranslate
+    [file]="'custom-fields'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+    (translationComplete)="translationComplete($event)"
+>
+    <giddh-page-loader *ngIf="showLoader"></giddh-page-loader>
+    <ng-container *ngIf="!showLoader">
+        <div class="relative create-custom-field-page">
+            <hamburger-menu></hamburger-menu>
+            <span class="back-to-page cursor-pointer" (click)="redirectToGetAllPage()">{{
+                commonLocaleData?.app_back
+            }}</span>
+            <div class="custom-field-wrapper relative">
+                <div>
+                    <form #customFieldCreateEditForm="ngForm" novalidate autocomplete="off">
+                        <p class="text-gray mx-3 my-3 font-14" *ngIf="!customFieldUniqueName">
+                            {{ localeData?.create_note }}
+                        </p>
+                        <div class="col-md-8 col-lg-8 col-xl-6 col-12">
+                            <div class="row mr-b15">
+                                <div class="col-sm-4 col-lg-4">
+                                    <label>{{ localeData?.field_name }} <span class="red-text">*</span></label>
+                                </div>
+                                <div class="col-sm-8 col-lg-6">
+                                    <text-field
+                                        [type]="'text'"
+                                        [cssClass]="'form-control'"
+                                        [placeholder]="localeData?.field_name_placeholder"
+                                        [name]="'fieldName'"
+                                        [(ngModel)]="customFieldRequest.fieldName"
+                                        [required]="true"
+                                    >
+                                    </text-field>
+                                </div>
+                            </div>
+                            <div class="row mr-b15">
+                                <div class="col-sm-4 col-lg-4">
+                                    <label>{{ localeData?.field_type }} <span class="red-text">*</span></label>
+                                </div>
+                                <div class="col-sm-8 col-lg-6">
+                                    <select-field
+                                        [cssClass]="'form-control mat-field-border'"
+                                        [name]="'fieldType'"
+                                        [placeholder]="localeData?.field_type_placeholder"
+                                        [options]="fieldTypes"
+                                        (selectedOption)="selectFieldType($event)"
+                                        [defaultValue]="customFieldRequest?.fieldType?.name"
+                                        [required]="true"
+                                    >
+                                    </select-field>
+                                </div>
+                            </div>
+                            <div class="row mr-b15" *ngIf="visibleFields.fieldInfo">
+                                <div class="col-sm-4 col-lg-4">
+                                    <label>{{ localeData?.info_details }}</label>
+                                </div>
+                                <div class="col-sm-8 col-lg-6">
+                                    <textarea
+                                        class="form-control"
+                                        matInput
+                                        name="fieldInfo"
+                                        [(ngModel)]="customFieldRequest.fieldInfo"
+                                        [placeholder]="localeData?.info_details_placeholder"
+                                    ></textarea>
+                                </div>
+                            </div>
+                            <div class="row mr-b15 minMaxField-wrapper" *ngIf="visibleFields.fieldLimit">
+                                <div class="col-sm-4 col-lg-4">
+                                    <label>{{ localeData?.field_limit }} <span class="red-text">*</span></label>
+                                </div>
+                                <div class="col-sm-8 col-lg-6">
+                                    <div class="minMaxField">
+                                        <text-field
+                                            [type]="'number'"
+                                            [name]="'minLimit'"
+                                            [(ngModel)]="customFieldRequest.dataRange.min"
+                                            [cssClass]="'form-control'"
+                                            [placeholder]="localeData?.min_limit"
+                                        ></text-field>
+                                        <text-field
+                                            [type]="'number'"
+                                            [name]="'maxLimit'"
+                                            [(ngModel)]="customFieldRequest.dataRange.max"
+                                            [cssClass]="'form-control'"
+                                            [placeholder]="localeData?.max_limit"
+                                        ></text-field>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mr-b15" *ngIf="visibleFields.fieldOptions">
+                                <div class="col-sm-4 col-lg-4">
+                                    <label>{{ localeData?.options }} <span class="red-text">*</span></label>
+                                </div>
+                                <div class="col-sm-8 col-lg-6">
+                                    <div class="add-icon-delete mr-b15">
+                                        <text-field
+                                            type="text"
+                                            matInput
+                                            id="fields"
+                                            class="form-control"
+                                            [placeholder]="localeData?.option_name"
+                                        ></text-field>
+                                        <i class="icon-trash"></i>
+                                        <i class="icon-plus"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mr-b15">
+                                <div class="col-sm-4 col-lg-4">
+                                    <label>{{ localeData?.field_mandatory }}</label>
+                                </div>
+                                <div class="col-sm-8 col-lg-6">
+                                    <div class="select-type">
+                                        <span class="mr-r15">
+                                            <mat-radio-group
+                                                color="primary"
+                                                name="isMandatory"
+                                                [(ngModel)]="customFieldRequest.isMandatory"
+                                            >
+                                                <mat-radio-button [value]="true"
+                                                    >{{ commonLocaleData?.app_yes }}
+                                                </mat-radio-button>
+                                                <mat-radio-button [value]="false"
+                                                    >{{ commonLocaleData?.app_no }}
+                                                </mat-radio-button>
+                                            </mat-radio-group>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mr-b15">
+                                <div class="col-sm-4 col-lg-4">
+                                    <label>{{ localeData?.modules_label }} <span class="red-text">*</span></label>
+                                </div>
+                                <div class="col-sm-8 col-lg-6">
+                                    <mat-select
+                                        name="modules"
+                                        [placeholder]="localeData?.modules_placeholder"
+                                        [(value)]="selectedModules"
+                                        [required]="true"
+                                        [multiple]="true"
+                                    >
+                                        <mat-option
+                                            *ngFor="let module of fieldModules"
+                                            [value]="module.uniqueName"
+                                            (click)="setModules(module)"
+                                            >{{ module.name }}
+                                        </mat-option>
+                                    </mat-select>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="vector-image">
+                    <img src="../../../../assets/images/create-custom-field-vector.svg" />
+                </div>
+            </div>
+        </div>
+        <div class="inventory-footer sticky-footer">
+            <div class="inner-content-footer">
+                <div class="d-flex">
+                    <div class="button-group">
+                        <ng-container *ngIf="customFieldUniqueName">
+                            <button
+                                mat-button
+                                class="btn btn-primary min-width-100 bdr-radius-50"
+                                (click)="redirectToGetAllPage()"
+                            >
+                                {{ commonLocaleData?.app_cancel }}
+                            </button>
+                            <button
+                                mat-button
+                                class="btn btn-success min-width-100 bdr-radius-50"
+                                [disabled]="
+                                    customFieldCreateEditForm.invalid ||
+                                    !customFieldRequest.fieldType?.type ||
+                                    !customFieldRequest.modules?.length
+                                "
+                                (click)="updateCustomField(customFieldCreateEditForm)"
+                            >
+                                {{ commonLocaleData?.app_update }}
+                            </button>
+                        </ng-container>
+                        <ng-container *ngIf="!customFieldUniqueName">
+                            <button
+                                mat-button
+                                class="btn btn-primary min-width-100 bdr-radius-50"
+                                (click)="resetForm(customFieldCreateEditForm)"
+                            >
+                                {{ commonLocaleData?.app_clear }}
+                            </button>
+                            <button
+                                mat-button
+                                class="btn btn-success min-width-100 bdr-radius-50"
+                                [disabled]="
+                                    customFieldCreateEditForm.invalid ||
+                                    !customFieldRequest.fieldType?.type ||
+                                    !customFieldRequest.modules?.length
+                                "
+                                (click)="createCustomField(customFieldCreateEditForm)"
+                            >
+                                {{ commonLocaleData?.app_save }}
+                            </button>
+                        </ng-container>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+</ng-container>

@@ -111,7 +111,6 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         });
     }
 
-
     public sidebarStatusChange(event) {
         this.sideMenu.isopen = event;
     }
@@ -143,6 +142,13 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             this.changeOnMobileView(result.matches);
         });
+        this.breakpointObserver.observe([
+            '(max-width: 480px)'
+        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
+            if (result.matches) {
+                this.router.navigate(['/mobile-restricted']);
+            }
+        });
         this.sideBarStateChange(true);
         this.subscribeToLazyRouteLoading();
 
@@ -167,19 +173,19 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
                 document.querySelector("body")?.classList?.remove("dark-theme");
                 document.querySelector("body")?.classList?.remove("default-theme");
                 document.querySelector("body")?.classList?.add(response?.value);
-            } else {
-                let availableThemes = this._generalService.getAvailableThemes();
-                this.store.dispatch(this.commonActions.setActiveTheme(availableThemes[0]));
             }
         });
 
         this.breakpointObserver.observe(['(prefers-color-scheme: light)']).subscribe((state: BreakpointState) => {
+            let availableThemes = this._generalService.getAvailableThemes();
             if (state?.matches) {
                 document.querySelector("body")?.classList?.add("default-theme");
                 document.querySelector("body")?.classList?.remove("dark-theme");
+                this.store.dispatch(this.commonActions.setActiveTheme(availableThemes[0]));
             } else {
                 document.querySelector("body")?.classList?.add("dark-theme");
                 document.querySelector("body")?.classList?.remove("default-theme");
+                this.store.dispatch(this.commonActions.setActiveTheme(availableThemes[1]));
             }
         });
     }

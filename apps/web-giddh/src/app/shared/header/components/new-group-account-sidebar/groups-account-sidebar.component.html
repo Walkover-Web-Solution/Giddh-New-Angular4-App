@@ -77,7 +77,10 @@
                                     [ngClass]="{
                                         'isActive':
                                             (activeAccount | async)?.uniqueName === item?.uniqueName ||
-                                            (searchString && i === mc.columns?.length - 1 && j === 0)
+                                            (searchString &&
+                                                i === mc.columns?.length - 1 &&
+                                                j === 0 &&
+                                                !(activeAccount | async)?.uniqueName)
                                     }"
                                     id="acc_{{ item.name }}"
                                     tooltip="{{ item.name }}"

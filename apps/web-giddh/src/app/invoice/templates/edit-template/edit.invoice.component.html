@@ -38,7 +38,6 @@
                 </small>
                 <button class="btn pull-left isActive mt-5 add-new-btn" (click)="onOpenTemplateModal()">Add New</button>
             </div>
-
             <ng-container *ngFor="let template of customCreatedTemplates; let i = index">
                 <div class="template-grid" *ngIf="template.type === 'invoice' && voucherType === 'sales'">
                     <div class="template-info text-center">

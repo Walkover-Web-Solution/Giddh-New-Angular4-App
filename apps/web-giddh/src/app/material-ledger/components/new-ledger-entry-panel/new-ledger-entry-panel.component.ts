@@ -998,8 +998,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         if (this.isDatepickerOpen) {
             return;
         }
-
-        let classList = event.path.map(m => {
+        
+        let classList = event?.path?.map(m => {
             return m?.classList;
         });
 
@@ -1377,7 +1377,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             this.isAdjustVoucherSelected) {
             this.prepareAdjustVoucherConfiguration();
             this.openAdjustPaymentModal();
-            this.blankLedger.generateInvoice = true;
         } else {
             this.removeAdjustment();
         }

@@ -206,12 +206,12 @@ export class ContactComponent implements OnInit, OnDestroy {
     public openingBalance: any;
     /** This will hold closing balance amount */
     public closingBalance: number = 0;
-    /** Stores the current organization type */
-    public currentOrganizationType: OrganizationType;
     /** This will hold local JSON data */
     public localeData: any = {};
     /** This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** Stores the current organization type */
+    public currentOrganizationType: OrganizationType;
     /** Listens for Master open/close event, required to load the data once master is closed */
     public isAddAndManageOpenedFromOutside$: Observable<boolean>;
     /** This will store screen size */
@@ -255,12 +255,32 @@ export class ContactComponent implements OnInit, OnDestroy {
     /** True, if custom date filter is selected or custom searching or sorting is performed */
     public showClearFilter: boolean = false;
 
-    constructor(public dialog: MatDialog, private store: Store<AppState>, private router: Router, private companyServices: CompanyService, private commonActions: CommonActions, private toaster: ToasterService,
-        private contactService: ContactService, private settingsIntegrationActions: SettingsIntegrationActions, private companyActions: CompanyActions, private componentFactoryResolver: ComponentFactoryResolver,
-        private groupWithAccountsAction: GroupWithAccountsAction, private cdRef: ChangeDetectorRef, private generalService: GeneralService, private route: ActivatedRoute, private generalAction: GeneralActions,
-        private breakPointObservar: BreakpointObserver, private modalService: BsModalService, private settingsProfileActions: SettingsProfileActions,
-        private settingsBranchAction: SettingsBranchActions, public currencyPipe: GiddhCurrencyPipe, private lightbox: Lightbox ,private renderer: Renderer2, private customFieldsService: CustomFieldsService) {
-        this.searchLoader$ = this.store.pipe(select(p => p.search.searchLoader), takeUntil(this.destroyed$));
+    constructor(
+        public dialog: MatDialog,
+        private store: Store<AppState>,
+        private router: Router,
+        private companyServices: CompanyService,
+        private commonActions: CommonActions,
+        private toaster: ToasterService,
+        private contactService: ContactService,
+        private settingsIntegrationActions: SettingsIntegrationActions,
+        private companyActions: CompanyActions,
+        private componentFactoryResolver: ComponentFactoryResolver,
+        private groupWithAccountsAction: GroupWithAccountsAction,
+        private cdRef: ChangeDetectorRef,
+        private generalService: GeneralService,
+        private route: ActivatedRoute,
+        private generalAction: GeneralActions,
+        private breakPointObservar: BreakpointObserver,
+        private modalService: BsModalService,
+        private settingsProfileActions: SettingsProfileActions,
+        private settingsBranchAction: SettingsBranchActions,
+        public currencyPipe: GiddhCurrencyPipe,
+        private lightbox: Lightbox,
+        private renderer: Renderer2,
+        private customFieldsService: CustomFieldsService) {
+
+        this.searchLoader$ = this.store.pipe(select(state => state.search.searchLoader), takeUntil(this.destroyed$));
         this.dueAmountReportRequest = new DueAmountReportQueryRequest();
         this.createAccountIsSuccess$ = this.store.pipe(select(state => state.groupwithaccounts.createAccountIsSuccess), takeUntil(this.destroyed$));
 
@@ -286,9 +306,8 @@ export class ContactComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         this.renderer.addClass(document.body, 'contact-body');
-        this.imgPath = isElectron ? "assets/images/" : AppUrl + APP_FOLDER + "assets/images/";
+        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         this.store.dispatch(this.companyActions.getAllRegistrations());
-        this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
         this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.isAddAndManageOpenedFromOutside$ = this.store.pipe(select(appStore => appStore.groupwithaccounts.isAddAndManageOpenedFromOutside), takeUntil(this.destroyed$));
         // localStorage supported
@@ -336,7 +355,7 @@ export class ContactComponent implements OnInit, OnDestroy {
                         this.availableColumnsCount = [];
                         this.showNameSearch = false;
                         this.searchedName?.reset();
-                        this.translationComplete(true);                        
+                        this.translationComplete(true);
                     }
                 } else {
                     this.setActiveTab("aging-report");
@@ -384,7 +403,7 @@ export class ContactComponent implements OnInit, OnDestroy {
         });
 
         this.store.pipe(select(state => state.sales.updatedAccountDetails), takeUntil(this.destroyed$)).subscribe(response => {
-            if(response) {
+            if (response) {
                 this.getAccounts(this.fromDate, this.toDate, null, "true", PAGINATION_LIMIT, this.searchStr, this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
             }
         });
@@ -402,10 +421,14 @@ export class ContactComponent implements OnInit, OnDestroy {
         }
 
         this.store.pipe(select(store => store.settings.profile), takeUntil(this.destroyed$)).subscribe(response => {
-            if (response && response.balanceDecimalPlaces) {
-                this.giddhDecimalPlaces = response.balanceDecimalPlaces;
+            if (response) {
+                if (response.balanceDecimalPlaces) {
+                    this.giddhDecimalPlaces = response.balanceDecimalPlaces;
+                } else {
+                    this.giddhDecimalPlaces = 2;
+                }
             } else {
-                this.giddhDecimalPlaces = 2;
+                this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
             }
         });
 
@@ -463,7 +486,7 @@ export class ContactComponent implements OnInit, OnDestroy {
             distinctUntilChanged(),
             takeUntil(this.destroyed$),
         ).subscribe(searchedText => {
-            if (searchedText !== null && searchedText !== undefined ) {
+            if (searchedText !== null && searchedText !== undefined) {
                 this.showClearFilter = true;
                 this.searchStr$.next(searchedText);
             }
@@ -529,13 +552,15 @@ export class ContactComponent implements OnInit, OnDestroy {
         if (additionalParams) {
             url = `${url}${additionalParams}`;
         }
-
         if (isElectron) {
+            let ipcRenderer = (window as any).require('electron').ipcRenderer;
             url = location.origin + location.pathname + `#./pages/${part}/${accUniqueName}`;
+            ipcRenderer.send('open-url', url);
         } else {
             (window as any).open(url);
         }
     }
+
 
     public tabSelected(tabName: "customer" | "aging-report" | "vendor") {
         if (!this.searchStr) {
@@ -1014,7 +1039,7 @@ export class ContactComponent implements OnInit, OnDestroy {
             null, "true", PAGINATION_LIMIT, "", "", null, (this.currentBranch ? this.currentBranch.uniqueName : ""));
         this.searchedName?.reset();
         this.searchStr = "";
-        this.showNameSearch = false;    
+        this.showNameSearch = false;
     }
 
     public applyAdvanceSearch(request: ContactAdvanceSearchCommonModal) {
@@ -1294,7 +1319,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     }
 
     private setTableColspan() {
-        let balancesColsArr = ['openingBalance'];
+        let balancesColsArr = ["openingBalance"];
         let length = Object.keys(this.showFieldFilter).filter(f => this.showFieldFilter[f]).filter(f => balancesColsArr.includes(f))?.length;
         this.tableColsPan = length > 0 ? 4 : 3;
     }
@@ -1471,7 +1496,7 @@ export class ContactComponent implements OnInit, OnDestroy {
                 }
 
                 let isColumnAvailable = this.availableColumnsCount.filter(column => column.value === key.uniqueName);
-                if(!isColumnAvailable?.length) {
+                if (!isColumnAvailable?.length) {
                     this.availableColumnsCount.push({ key: index, value: key.uniqueName });
                 }
             }
