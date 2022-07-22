@@ -35,7 +35,8 @@ import { InvoiceService } from 'apps/web-giddh/src/app/services/invoice.service'
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { clone, cloneDeep, uniqBy } from 'apps/web-giddh/src/app/lodash-optimized';
 import { CustomFieldsService } from 'apps/web-giddh/src/app/services/custom-fields.service';
-import { FieldTypes } from 'apps/web-giddh/src/app/custom-fields/custom-fields.constant';
+import { FieldTypes } from '../custom-fields/custom-fields.constant';
+import { AccountsAction } from 'apps/web-giddh/src/app/actions/accounts.actions';
 
 @Component({
     selector: 'account-add-new-details',
@@ -182,9 +183,9 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         private groupService: GroupService,
         private groupWithAccountsAction: GroupWithAccountsAction,
         private invoiceService: InvoiceService,
-        private customFieldsService: CustomFieldsService) {
+        private customFieldsService: CustomFieldsService,
+        private accountsAction: AccountsAction) {
         this.activeGroup$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroup), takeUntil(this.destroyed$));
-
     }
 
     /**
@@ -548,6 +549,13 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     }
 
     public submit() {
+
+        this.createAccountIsSuccess$.subscribe(res => {
+            if (res) {
+                // This will reset the active group after submit 
+                this.store.dispatch(this.accountsAction.resetActiveGroup());
+            }
+        })
 
         if (!this.addAccountForm.get('openingBalance').value) {
             this.addAccountForm.get('openingBalance').setValue('0');
