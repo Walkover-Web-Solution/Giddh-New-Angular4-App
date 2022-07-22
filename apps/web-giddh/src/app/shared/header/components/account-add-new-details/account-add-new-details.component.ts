@@ -188,7 +188,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         private customFieldsService: CustomFieldsService,
         private accountsAction: AccountsAction,) {
         this.activeGroup$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroup), takeUntil(this.destroyed$));
-        this.createAccountIsSuccess$ = this.store.pipe(select(s => s.groupwithaccounts.createAccountIsSuccess), takeUntil(this.destroyed$));
     }
 
     /**
