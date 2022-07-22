@@ -11,7 +11,7 @@ import { Observable, of, ReplaySubject } from 'rxjs';
 import { NgForm } from '@angular/forms';
 import { ToasterService } from '../../services/toaster.service';
 import { cloneDeep } from '../../lodash-optimized';
-import { AdjustedVoucherType, SubVoucher } from '../../app.constant';
+import { AdjustedVoucherType, PAGINATION_LIMIT, SubVoucher } from '../../app.constant';
 import { giddhRoundOff } from '../helpers/helperFunctions';
 import { GeneralService } from '../../services/general.service';
 import { AdjustmentUtilityService } from './services/adjustment-utility.service';
@@ -113,6 +113,8 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
     public adjustVoucherOptions$: Observable<any[]>;
     /** Holds index of current adjustment row */
     private currentAdjustmentRowIndex: number = 0;
+    /** Pagination Limit */
+    private paginationLimit: number = PAGINATION_LIMIT;
 
     constructor(
         private store: Store<AppState>,
@@ -132,6 +134,9 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
      */
     public ngOnInit() {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
+        if (this.voucherApiVersion !== 2) {
+            this.paginationLimit = 500;
+        }
         this.adjustVoucherForm = new VoucherAdjustments();
         this.onClear();
         this.store.pipe(select(prof => prof.settings.profile), takeUntil(this.destroyed$)).subscribe(async (profile) => {
@@ -309,7 +314,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
                 requestObject.page = this.referenceVouchersCurrentPage;
                 this.referenceVouchersCurrentPage++;
 
-                apiCallObservable = this.salesService.getInvoiceList(requestObject, this.getAllAdvanceReceiptsRequest.invoiceDate, 50);
+                apiCallObservable = this.salesService.getInvoiceList(requestObject, this.getAllAdvanceReceiptsRequest.invoiceDate, this.paginationLimit);
             }
 
             apiCallObservable.pipe(takeUntil(this.destroyed$)).subscribe(res => {
@@ -1099,7 +1104,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
             return;
         }
 
-        this.salesService.getInvoiceList(requestObject, this.invoiceFormDetails.voucherDetails.voucherDate, 50).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+        this.salesService.getInvoiceList(requestObject, this.invoiceFormDetails.voucherDetails.voucherDate, this.paginationLimit).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response && response.body && (this.voucherApiVersion !== 2 || (this.voucherApiVersion === 2 && response.body.page === requestObject.page))) {
                 let results = (response.body.results || response.body.items);
 
