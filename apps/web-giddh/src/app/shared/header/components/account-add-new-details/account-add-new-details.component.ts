@@ -87,10 +87,12 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     @Input() public isBankAccount: boolean = true;
     /** True if account creation is from command k */
     @Input() public fromCommandK: boolean = false;
+    /** True if custom fields api needs to be called again */
+    @Input() public reloadCustomFields: boolean = false;
     @Output() public submitClicked: EventEmitter<{ activeGroupUniqueName: string, accountRequest: AccountRequestV2 }> = new EventEmitter();
     @Output() public isGroupSelected: EventEmitter<IOption> = new EventEmitter();
-    /** Emiting true if account modal needs to be closed */
-    @Output() public closeAccountModal: EventEmitter<boolean> = new EventEmitter();
+    /** Emits if we have to switch to custom fields tab */
+    @Output() public goToCustomFields: EventEmitter<boolean> = new EventEmitter();
     @ViewChild('autoFocus', { static: true }) public autoFocus: ElementRef;
     /** Tabs instance */
     @ViewChild('staticTabs', { static: true }) public staticTabs: TabsetComponent;
@@ -149,16 +151,16 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         totalPages: 0,
         query: ''
     };
+    /** This will hold inventory settings */
+    public inventorySettings: any;
+    /** This will hold parent unique name */
+    public activeParentGroupUniqueName: string = '';
     /* This will hold local JSON data */
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
     /** This will hold placeholder for tax */
     public taxNamePlaceholder: string = "";
-    /** This will hold inventory settings */
-    public inventorySettings: any;
-    /** This will hold parent unique name */
-    public activeParentGroupUniqueName: string = '';
     /** True if custom fields api call in progress */
     public isCustomFieldLoading: boolean = false;
     /** Custom fields request */
@@ -178,14 +180,15 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         private _toaster: ToasterService,
         private commonActions: CommonActions,
         private _generalActions: GeneralActions,
-        private changeDetectorRef: ChangeDetectorRef,
         private generalService: GeneralService,
         private groupService: GroupService,
         private groupWithAccountsAction: GroupWithAccountsAction,
         private invoiceService: InvoiceService,
+        private changeDetectorRef: ChangeDetectorRef,
         private customFieldsService: CustomFieldsService,
         private accountsAction: AccountsAction) {
         this.activeGroup$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroup), takeUntil(this.destroyed$));
+
     }
 
     /**
@@ -213,9 +216,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         this.initializeNewForm();
         this.activeGroup$.subscribe(response => {
             if (response) {
-                if (response.uniqueName !== this.activeGroupUniqueName) {
-                    this.store.dispatch(this.groupWithAccountsAction.getGroupDetails(this.activeGroupUniqueName));
-                } else if (response.parentGroups && response.parentGroups.length) {
+                if (response.parentGroups && response.parentGroups.length) {
                     let parent = response.parentGroups;
                     const HSN_SAC_PARENT_GROUPS = ['revenuefromoperations', 'otherincome', 'operatingcost', 'indirectexpenses'];
                     if (parent?.length > 1 && parent[1]) {
@@ -549,13 +550,12 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     }
 
     public submit() {
-        this.store.pipe(select(s => s.groupwithaccounts.createAccountIsSuccess), takeUntil(this.destroyed$)).subscribe(response => {
+        this.store.pipe(select(response => response.groupwithaccounts.createAccountIsSuccess), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 // This will reset the active group after submit
                 this.store.dispatch(this.accountsAction.resetActiveGroup());
             }
-        })
-
+        });
         if (!this.addAccountForm.get('openingBalance').value) {
             this.addAccountForm.get('openingBalance').setValue('0');
         }
@@ -634,6 +634,9 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         if (s && s['activeGroupUniqueName'] && s['activeGroupUniqueName'].currentValue) {
             this.activeGroupUniqueName = s['activeGroupUniqueName'].currentValue;
         }
+        if (s && s['reloadCustomFields']?.currentValue && s['reloadCustomFields']?.currentValue !== s['reloadCustomFields']?.previousValue) {
+            this.getCompanyCustomField();
+        }
     }
 
     public ngOnDestroy() {
@@ -689,7 +692,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             this.isShowBankDetails(activeParentgroup);
             this.isDebtorCreditor = true;
         } else {
-            this.isBankAccount = false;
             this.isDebtorCreditor = false;
             this.showBankDetail = false;
         }
@@ -1162,6 +1164,26 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     }
 
     /**
+     * This will get invoice settings
+     *
+     * @memberof AccountAddNewDetailsComponent
+     */
+    public getInvoiceSettings(): void {
+        this.invoiceService.GetInvoiceSetting().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response && response.status === "success" && response.body) {
+                let invoiceSettings = _.cloneDeep(response.body);
+                this.inventorySettings = invoiceSettings.companyInventorySettings;
+
+                if (this.inventorySettings?.manageInventory) {
+                    this.addAccountForm.get("hsnOrSac").patchValue("hsn");
+                } else {
+                    this.addAccountForm.get("hsnOrSac").patchValue("sac");
+                }
+            }
+        });
+    }
+
+    /*
      * Callback for translation response complete
      *
      * @param {boolean} event
@@ -1192,26 +1214,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 }
             });
         }
-    }
-
-    /*
-     * This will get invoice settings
-     *
-     * @memberof AccountAddNewDetailsComponent
-     */
-    public getInvoiceSettings(): void {
-        this.invoiceService.GetInvoiceSetting().pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response && response.status === "success" && response.body) {
-                let invoiceSettings = cloneDeep(response.body);
-                this.inventorySettings = invoiceSettings.companyInventorySettings;
-
-                if (this.inventorySettings?.manageInventory) {
-                    this.addAccountForm.get("hsnOrSac")?.patchValue("hsn");
-                } else {
-                    this.addAccountForm.get("hsnOrSac")?.patchValue("sac");
-                }
-            }
-        });
     }
 
     /**
@@ -1249,15 +1251,5 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 }
             }, 50);
         }
-    }
-
-    /**
-     * Closes Master
-     *
-     * @memberof AccountAddNewDetailsComponent
-     */
-    public closeMaster(): void {
-        this.closeAccountModal.emit(true);
-        this.store.dispatch(this.groupWithAccountsAction.HideAddAndManageFromOutside());
     }
 }
