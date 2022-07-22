@@ -549,10 +549,9 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     }
 
     public submit() {
-
-        this.createAccountIsSuccess$.subscribe(res => {
-            if (res) {
-                // This will reset the active group after submit 
+        this.store.pipe(select(s => s.groupwithaccounts.createAccountIsSuccess), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                // This will reset the active group after submit
                 this.store.dispatch(this.accountsAction.resetActiveGroup());
             }
         })
