@@ -7,7 +7,6 @@ import { AddAccountRequest, UpdateAccountRequest } from '../../models/api-models
 import { AccountsAction } from '../../actions/accounts.actions';
 import { IOption } from '../../theme/ng-select/option.interface';
 import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
-import { CommonActions } from '../../actions/common.actions';
 
 @Component({
     selector: 'generic-aside-menu-account',
@@ -77,8 +76,7 @@ export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnCh
     constructor(
         private store: Store<AppState>,
         private accountsAction: AccountsAction,
-        private groupWithAccountsAction: GroupWithAccountsAction,
-        private commonActions: CommonActions
+        private groupWithAccountsAction: GroupWithAccountsAction
     ) {
         // account-add component's property
         this.createAccountInProcess$ = this.store.pipe(select(state => state.sales.createAccountInProcess), takeUntil(this.destroyed$));

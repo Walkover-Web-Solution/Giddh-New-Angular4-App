@@ -733,6 +733,12 @@ export class AccountsAction {
         };
     }
 
+    /**
+     * This will use for reset active group for create account
+     *
+     * @return {*}  {CustomActions}
+     * @memberof AccountsAction
+     */
     public resetActiveGroup(): CustomActions {
         return {
             type: AccountsAction.RESET_ACTIVE_GROUP
