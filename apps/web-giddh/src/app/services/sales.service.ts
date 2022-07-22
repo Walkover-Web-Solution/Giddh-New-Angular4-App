@@ -134,7 +134,7 @@ export class SalesService {
     public adjustAnInvoiceWithAdvanceReceipts(model: any, invoiceUniqueName: string): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let url;
-        
+
         if (this.generalService.voucherApiVersion === 2) {
             url = this.config.apiUrl + ADVANCE_RECEIPTS_API.VOUCHER_ADJUSTMENT_WITH_ADVANCE_RECEIPT.replace(':companyUniqueName', this.companyUniqueName).replace(':voucherUniqueName', invoiceUniqueName);
         } else {
