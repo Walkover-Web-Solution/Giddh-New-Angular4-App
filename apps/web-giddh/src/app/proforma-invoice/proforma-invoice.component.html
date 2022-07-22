@@ -2321,27 +2321,6 @@
                                                         </amount-field>
                                                     </span>
                                                 </div>
-                                                <div
-                                                    class="tax-in-currency"
-                                                    *ngIf="
-                                                        entry.isOtherTaxApplicable &&
-                                                        isMulticurrencyAccount &&
-                                                        entry.otherTaxModal?.appliedOtherTax?.name
-                                                    "
-                                                >
-                                                    {{ entry.otherTaxModal?.appliedOtherTax?.name }} :
-                                                    <span
-                                                        class="differ-currency d-flex justify-content-end"
-                                                        *ngIf="isMulticurrencyAccount"
-                                                    >
-                                                        <amount-field
-                                                            [amount]="entry.otherTaxSum * exchangeRate"
-                                                            [currencySymbol]="baseCurrencySymbol"
-                                                            [currencyCode]="companyCurrency"
-                                                        >
-                                                        </amount-field>
-                                                    </span>
-                                                </div>
                                             </div>
                                             <div
                                                 class="differ-currency d-flex justify-content-end"
@@ -2883,24 +2862,6 @@
                                                         </p>
                                                     </span>
                                                 </div>
-                                            </div>
-                                            <div
-                                                *ngIf="
-                                                    entry.isOtherTaxApplicable &&
-                                                    isMulticurrencyAccount &&
-                                                    entry.otherTaxModal?.appliedOtherTax?.name
-                                                "
-                                                class="tax-in-currency"
-                                            >
-                                                {{ entry.otherTaxModal?.appliedOtherTax?.name }}
-                                                <span>
-                                                    <amount-field
-                                                        [amount]="entry.otherTaxSum * exchangeRate"
-                                                        [currencySymbol]="baseCurrencySymbol"
-                                                        [currencyCode]="companyCurrency"
-                                                    >
-                                                    </amount-field>
-                                                </span>
                                             </div>
                                             <div class="differ-currency" *ngIf="isMulticurrencyAccount">
                                                 <span>
@@ -4617,24 +4578,6 @@
                                                                 </p>
                                                             </span>
                                                         </div>
-                                                    </div>
-                                                    <div
-                                                        *ngIf="
-                                                            entry.isOtherTaxApplicable &&
-                                                            isMulticurrencyAccount &&
-                                                            entry.otherTaxModal?.appliedOtherTax?.name
-                                                        "
-                                                        class="tax-in-currency d-flex"
-                                                    >
-                                                        {{ entry.otherTaxModal?.appliedOtherTax?.name }}
-                                                        <span class="mr-l05">
-                                                            <amount-field
-                                                                [amount]="entry.otherTaxSum * exchangeRate"
-                                                                [currencySymbol]="baseCurrencySymbol"
-                                                                [currencyCode]="companyCurrency"
-                                                            >
-                                                            </amount-field>
-                                                        </span>
                                                     </div>
                                                     <div class="differ-currency" *ngIf="isMulticurrencyAccount">
                                                         <amount-field
