@@ -5608,6 +5608,18 @@ footer#footer.absolute-footer {
     }
 }
 
+.master-page {
+    groups-account-sidebar {
+        .grp-list {
+            .cdk-virtual-scroll-viewport {
+                .cdk-virtual-scroll-content-wrapper {
+                    height: 100%;
+                }
+            }
+        }
+    }
+}
+
 section.ledger-stat.sticky-footer.sticky-footer-sale-amount {
     text-align: left !important;
     margin-bottom: 0;
