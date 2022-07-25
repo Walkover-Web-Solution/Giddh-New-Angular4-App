@@ -163,19 +163,19 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
                 document.querySelector("body")?.classList?.remove("dark-theme");
                 document.querySelector("body")?.classList?.remove("default-theme");
                 document.querySelector("body")?.classList?.add(response?.value);
-            } else {
-                let availableThemes = this._generalService.getAvailableThemes();
-                this.store.dispatch(this.commonActions.setActiveTheme(availableThemes[0]));
             }
         });
 
         this.breakpointObserver.observe(['(prefers-color-scheme: light)']).subscribe((state: BreakpointState) => {
+            let availableThemes = this._generalService.getAvailableThemes();
             if (state?.matches) {
                 document.querySelector("body")?.classList?.add("default-theme");
                 document.querySelector("body")?.classList?.remove("dark-theme");
+                this.store.dispatch(this.commonActions.setActiveTheme(availableThemes[0]));
             } else {
                 document.querySelector("body")?.classList?.add("dark-theme");
                 document.querySelector("body")?.classList?.remove("default-theme");
+                this.store.dispatch(this.commonActions.setActiveTheme(availableThemes[1]));
             }
         });
     }

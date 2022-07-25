@@ -186,7 +186,6 @@
                                     tooltip="{{ menu?.label }}"
                                     *ngIf="menu?.items?.length"
                                     dropdownToggle
-                                    type="button"
                                     class="dropdown-toggle"
                                     [class.active]="menu?.isActive"
                                 >
@@ -202,7 +201,6 @@
                                     [routerLink]="[menu?.link]"
                                     [queryParams]="menu?.additional"
                                     dropdownToggle
-                                    type="button"
                                     class="dropdown-toggle"
                                 >
                                     <span

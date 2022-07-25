@@ -8,7 +8,7 @@ import { takeUntil } from 'rxjs/operators';
     // tslint:disable-next-line:component-selector
     selector: 'filing-overview',
     templateUrl: './overview.component.html',
-    styleUrls: ['overview.component.css'],
+    styleUrls: ['overview.component.scss'],
 })
 export class FilingOverviewComponent implements OnInit, OnDestroy {
     @Input() public currentPeriod: GstDatePeriod = new GstDatePeriod();
