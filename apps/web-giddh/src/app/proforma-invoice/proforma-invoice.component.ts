@@ -1829,7 +1829,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         if (!this.isVoucherDateChanged) {
             let date = cloneDeep(this.universalDate);
             this.invFormData.voucherDetails.voucherDate = date;
-
             // get exchange rate when application date is changed
             if (this.isMultiCurrencyModule() && this.isMulticurrencyAccount && date) {
                 this.getCurrencyRate(this.companyCurrency, this.customerCurrencyCode, date);
@@ -1837,6 +1836,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
             this.invFormData.entries.forEach((entry: SalesEntryClass) => {
                 entry.entryDate = date;
+                entry.entryDate = moment(entry.entryDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
             });
         }
     }
@@ -2503,6 +2503,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     // convert date object
                     // txn.date = this.convertDateForAPI(txn.date);
                     entry.entryDate = this.convertDateForAPI(entry.entryDate);
+                    entry.entryDate = moment(entry.entryDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
                     txn.convertedAmount = this.fetchedConvertedRate > 0 ? giddhRoundOff((Number(txn.amount) * this.fetchedConvertedRate), 2) : 0;
 
                     // we need to remove # from account uniqueName because we are appending # to stock for uniqueNess (allowing for pending type voucher)
@@ -3673,9 +3674,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             let entry: SalesEntryClass = new SalesEntryClass();
             if (this.isUpdateMode) {
                 entry.entryDate = this.invFormData.entries[0] ? this.invFormData.entries[0].entryDate : this.universalDate || new Date();
+                entry.entryDate = moment(entry.entryDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
                 entry.isNewEntryInUpdateMode = true;
             } else {
                 entry.entryDate = this.invFormData.voucherDetails.voucherDate;
+                entry.entryDate = moment(entry.entryDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
             }
             this.invFormData.entries.push(entry);
         } else {
@@ -4012,6 +4015,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 }
 
                 this.activeIndx = lastIndex;
+                this.invFormData.voucherDetails.voucherDate = moment(this.invFormData.voucherDetails.voucherDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
                 this.invFormData.entries[lastIndex].entryDate = this.invFormData.voucherDetails.voucherDate;
                 this.invFormData.entries[lastIndex].transactions[0].fakeAccForSelect2 = item.uniqueName;
                 this.invFormData.entries[lastIndex].isNewEntryInUpdateMode = true;
@@ -4101,6 +4105,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 salesEntryClass.voucherType = entry.voucherType;
                 salesEntryClass.uniqueName = entry.uniqueName;
                 salesEntryClass.description = entry.description;
+                entry.entryDate = moment(entry.entryDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
                 salesEntryClass.date = entry.entryDate;
                 let calculationMethod = (entry.otherTaxModal && entry.otherTaxModal.tcsCalculationMethod) ? entry.otherTaxModal.tcsCalculationMethod : "";
                 entry.taxList.forEach(t => {
@@ -4751,6 +4756,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 entry.otherTaxModal = new SalesOtherTaxesModal();
             }
             entry.entryDate = (entry.entryDate) ? moment(entry.entryDate, GIDDH_DATE_FORMAT).toDate() : this.universalDate || new Date();
+            entry.entryDate = moment(entry.entryDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
 
             entry.discounts = this.parseDiscountFromResponse(entry);
             entry.taxList = entry.taxes.map(m => m.uniqueName);
@@ -7230,12 +7236,15 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             if (this.dateChangeType === "voucher") {
                 this.invFormData.entries.forEach(entry => {
                     entry.entryDate = this.invFormData.voucherDetails.voucherDate;
+                    entry.entryDate = moment(entry.entryDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
                 });
             } else if (this.dateChangeType === "entry") {
                 let entryLoop = 0;
                 this.invFormData.entries.forEach(entry => {
                     if (entryLoop !== this.updatedEntryIndex) {
+
                         entry.entryDate = this.invFormData.entries[this.updatedEntryIndex].entryDate;
+                        entry.entryDate = moment(entry.entryDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
                     }
                     entryLoop++;
                 });
