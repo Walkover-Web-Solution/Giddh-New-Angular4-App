@@ -1005,6 +1005,12 @@ td.in-range.in-range-start.in-range-hovered.in-range-end::before {
             opacity: 0;
         }
     }
+
+    .wrap-selected-date {
+        .date-container-one {
+            width: 52% !important;
+        }
+    }
 }
 
 @media (min-width: 730px) {
@@ -1373,9 +1379,9 @@ td span {
     display: flex;
     flex-direction: column;
     max-width: 340px;
+    border-right: 1px solid var(--color-common-secondary-border);
     .calender-container-wrapper {
         flex: 1 1 auto;
-        // overflow: auto;
         .calender-body {
             display: flex;
             flex-direction: column;
@@ -1647,10 +1653,6 @@ cdk-virtual-scroll-viewport::-webkit-scrollbar-thumb {
 
 @media (min-height: 767px) {
     .ranges-perfect-scrollbar {
-        overflow: initial !important;
-        .ps {
-            overflow: initial !important;
-        }
         .ps__thumb-x,
         .ps__rail-x {
             display: none !important;
