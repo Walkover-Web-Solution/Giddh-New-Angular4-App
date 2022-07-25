@@ -5613,7 +5613,11 @@ footer#footer.absolute-footer {
         .grp-list {
             .cdk-virtual-scroll-viewport {
                 .cdk-virtual-scroll-content-wrapper {
-                    height: 100%;
+                    .sidebarTooltip {
+                        &:last-child {
+                            height: 100px;
+                        }
+                    }
                 }
             }
         }
@@ -7508,6 +7512,15 @@ giddh-datepicker {
             .aside-pane {
                 .aside-help-header {
                     position: static;
+                }
+            }
+        }
+    }
+    #share-modal {
+        .btn-success {
+            &.mat-button-disabled {
+                .mat-button-wrapper {
+                    color: var(--color-common-secondary-disabled) !important;
                 }
             }
         }
