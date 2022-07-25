@@ -186,6 +186,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         private customFieldsService: CustomFieldsService,
         private accountsAction: AccountsAction) {
         this.activeGroup$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroup), takeUntil(this.destroyed$));
+        this.store.dispatch(this.accountsAction.resetActiveGroup());
     }
 
     /**
@@ -549,13 +550,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     }
 
     public submit() {
-        this.store.pipe(select(s => s.groupwithaccounts.createAccountIsSuccess), takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
-                // This will reset the active group after submit
-                this.store.dispatch(this.accountsAction.resetActiveGroup());
-            }
-        })
-
         if (!this.addAccountForm.get('openingBalance').value) {
             this.addAccountForm.get('openingBalance').setValue('0');
         }
