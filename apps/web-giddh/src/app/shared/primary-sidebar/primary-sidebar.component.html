@@ -107,9 +107,12 @@
                                 >
                             </li>
                             <li>
-                                <a (click)="showNavigationModal()" class="show-more cursor-pointer">{{
-                                    localeData?.show_more
-                                }}</a>
+                                <a
+                                    href="javascript:;"
+                                    (click)="showNavigationModal()"
+                                    class="show-more cursor-pointer"
+                                    >{{ localeData?.show_more }}</a
+                                >
                             </li>
                         </ul>
                     </div>
@@ -125,7 +128,6 @@
                             dropdownToggle
                             type="button"
                             class="dropdown-toggle"
-                            aria-controls="dropdown-basic-01"
                         >
                             <span [tooltip]="localeData?.accounts"><i class="icon-accounts-new"></i> </span>
                             <i class="icon-right mr-l1 font-14"></i>
