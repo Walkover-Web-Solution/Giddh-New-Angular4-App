@@ -54,7 +54,12 @@
 
             <div class="d-flex justify-content-between align-items-center">
                 <div class="logo-wrapper pd-l4">
-                    <img src="{{ imgPath }}giddh-white-logo.svg" [alt]="localeData?.giddh_logo" />
+                    <img
+                        src="{{ imgPath }}giddh-white-logo.svg"
+                        width="127"
+                        height="25"
+                        [alt]="localeData?.giddh_logo"
+                    />
                 </div>
                 <ul class="nav universal-date mr-r1" *ngIf="selectedCompany | async">
                     <li class="border-none pd-r15 notification" [ngClass]="{ 'mr-0': isTodaysDateSelected }">
