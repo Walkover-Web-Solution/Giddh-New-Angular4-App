@@ -927,7 +927,6 @@ ul.sub-list {
     border: 1px solid var(--color-iron);
     padding: 5px;
     text-align: center;
-    font-weight: bold;
     color: var(--color-abbey);
 }
 .normal {
@@ -4956,7 +4955,7 @@ perfect-scrollbar > .ps > .ps-overlay {
     border-radius: 0px;
 }
 .tax-engine .nav-tabs > li.active a {
-    font-weight: bold;
+    font-weight: 500;
 }
 .tax-engine .nav-tabs > li {
     margin-bottom: 0;
@@ -5003,6 +5002,7 @@ perfect-scrollbar > .ps > .ps-overlay {
 .tax-engine .table.transactions-table thead:first-child tr:first-child th {
     padding: 16px 12px;
     font-size: 14px;
+    font-weight: 500;
     border-bottom: 1px solid var(--color-dark-fog);
 }
 .tax-engine .table thead:first-child tr:first-child th {
@@ -5262,7 +5262,7 @@ perfect-scrollbar > .ps > .ps-overlay {
 }
 .tax-engine .sub-filter-nav-band > ul > li.active > a {
     color: var(--color-nero);
-    font-weight: 600;
+    font-weight: 500;
     border: 0;
 }
 .tax-engine .sub-filter-nav-band.reconciliation-type-band ul > li:last-child {
@@ -5602,6 +5602,22 @@ footer#footer.absolute-footer {
             div:nth-child(7) {
                 .modal-dialog {
                     margin-top: 80px;
+                }
+            }
+        }
+    }
+}
+
+.master-page {
+    groups-account-sidebar {
+        .grp-list {
+            .cdk-virtual-scroll-viewport {
+                .cdk-virtual-scroll-content-wrapper {
+                    .sidebarTooltip {
+                        &:last-child {
+                            height: 100px;
+                        }
+                    }
                 }
             }
         }
@@ -7411,9 +7427,7 @@ giddh-datepicker {
     }
 }
 .ledger-body {
-    .cdk-overlay-container {
-        z-index: 1000 !important;
-    }
+    .cdk-overlay-container,
     .cdk-global-overlay-wrapper {
         z-index: 1000 !important;
     }
@@ -7486,16 +7500,56 @@ giddh-datepicker {
                         }
                     }
                 }
+                .ledger-head-top {
+                    #upload,
+                    #share,
+                    #export-ledger,
+                    #reload-bank-transaction {
+                        .mat-button-wrapper {
+                            display: flex;
+                        }
+                    }
+                }
             }
         }
     }
     height: auto;
+    attachments {
+        .attachment-back-button {
+            .mat-button-wrapper {
+                display: flex;
+                align-items: center;
+            }
+        }
+    }
+
+    .disabled-btn-color:disabled {
+        .mat-button-wrapper {
+            color: var(--color-common-secondary-disabled) !important;
+        }
+    }
     .help-support-aside {
         aside-help-support {
             .aside-pane {
                 .aside-help-header {
                     position: static;
                 }
+            }
+        }
+    }
+    #share-modal {
+        .btn-success {
+            &.mat-button-disabled {
+                .mat-button-wrapper {
+                    color: var(--color-common-secondary-disabled) !important;
+                }
+            }
+        }
+        .share-ledger-button {
+            .mat-button-wrapper {
+                position: absolute;
+                left: 0px;
+                width: 100%;
             }
         }
     }
