@@ -128,8 +128,10 @@ export class DownloadsComponent implements OnInit, OnDestroy {
             if (response && response.status === 'success') {
                 response.body?.items?.forEach((result: any) => {
                     result.date = moment(result.date, GIDDH_DATE_FORMAT + " HH:mm:ss").format(GIDDH_DATE_FORMAT);
-                    let today = moment().format(GIDDH_DATE_FORMAT);
-                    if (result.expireAt >= today) {
+                    let today = moment().format('YYYY-MM-DD');
+                    let expiryDate = moment(result.expireAt, GIDDH_DATE_FORMAT + " HH:mm:ss").format('YYYY-MM-DD');
+                    if (moment(expiryDate)
+                        .isSameOrAfter(today)) {
                         result.expireAt = moment(result.expireAt, GIDDH_DATE_FORMAT + " HH:mm:ss").format(GIDDH_DATE_FORMAT);
                     } else {
                         result.expireAt = this.localeData?.expired;
