@@ -61,7 +61,7 @@
     white-space: nowrap;
     box-shadow: none !important;
     .inner-name.inner-name-bold {
-        font-weight: 700;
+        font-weight: 500;
         width: 100%;
         float: left;
         height: 100%;
@@ -100,12 +100,13 @@
     .sub-plan-name {
         float: left;
         width: 100%;
+        font-weight: 500;
         padding-top: 14px;
     }
     .sub-plan-amount {
         float: left !important;
         width: 100%;
-        font-weight: 700;
+        font-weight: 600;
         font-size: 25px;
     }
     .sub-plan-duration {
@@ -153,7 +154,7 @@
         line-height: 26px;
         border-bottom: 1px solid var(--color-common-primary-border);
         width: 205px;
-        font-weight: bold;
+        font-weight: 500;
         font-size: 13px;
     }
     .all-feature-button {
@@ -170,7 +171,7 @@
         line-height: 26px;
         border-bottom: 1px solid var(--color-common-primary-border);
         width: 205px;
-        font-weight: bold;
+        font-weight: 500;
         font-size: 13px;
     }
     .bottom-grid-list-div {
@@ -438,7 +439,7 @@
     }
     .text-gray {
         font-size: 17px;
-        font-weight: 700;
+        font-weight: 500;
     }
     .footer-plan {
         padding-top: 11px;
@@ -606,7 +607,6 @@
     width: 24%;
     .extra-addons-value {
         color: var(--color-giddh-blue);
-        font-weight: bold;
     }
 }
 .plan-table-layout {

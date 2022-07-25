@@ -560,7 +560,7 @@ aside-menu-account .container-fluid {
         color: var(--color-total-details-heading);
         .number-total {
             font-size: 16px;
-            font-weight: 800;
+            font-weight: 500;
             color: var(--color-total-details-primary-content);
         }
     }
@@ -2025,8 +2025,9 @@ bs-datepicker-container {
 }
 /* added by sarfaraz */
 .d-flex {
-    display: flex;
+    display: flex !important;
     display: -ms-flexbox !important;
+    display: -webkit-flex !important;
 }
 .flex-row {
     flex-direction: row;
@@ -2039,8 +2040,16 @@ bs-datepicker-container {
 .align-items-center {
     align-items: center;
     -ms-flex-align: center;
+    -webkit-box-align: center;
+}
+.justify-content-center {
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
 }
 .justify-content-end {
+    -webkit-box-pack: end;
+    -ms-flex-pack: end;
     justify-content: flex-end;
 }
 /* cmdk modal styles */
@@ -2451,7 +2460,6 @@ form#groupDetailForm {
 .mat-dialog-container {
     padding: 0px !important;
     color: var(--color-table-septenary-content) !important;
-    background-color: var(--color-popup-background) !important;
     .modal-footer {
         background-color: var(--color-popup-background);
     }
@@ -2588,6 +2596,8 @@ giddh-datepicker {
     .btn-success,
     .btn-warning {
         .mat-button-wrapper {
+            display: -webkit-box;
+            display: -ms-flexbox;
             display: flex;
         }
     }
@@ -2596,7 +2606,7 @@ giddh-datepicker {
     .mat-grid-tile-content {
         justify-content: space-between !important;
         padding: 0 10px;
-        font-weight: 600;
+        font-weight: 500;
     }
 }
 #eledgerwrap .alert .mat-close {
