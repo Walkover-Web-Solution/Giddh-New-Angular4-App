@@ -278,7 +278,7 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
         if (this.advanceSearchRequest) {
             this.advanceSearchForm?.patchValue(this.advanceSearchRequest.dataToSend);
 
-            if(this.advanceSearchForm.get('includeDescription').value) {
+            if (this.advanceSearchForm.get('includeDescription').value) {
                 this.isExpanded = true;
             } else {
                 this.isExpanded = false;
@@ -520,6 +520,7 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+        document.querySelector('body')?.classList?.remove('modal-open');
     }
 
     /**

@@ -1,0 +1,60 @@
+.download-table-container {
+    .table-content {
+        max-height: calc(100vh - 200px);
+        overflow-y: auto;
+        height: calc(100vh - 200px);
+    }
+    .download-table {
+        width: 100%;
+        .download-table-btn {
+            color: var(--color-tertiary-button-text);
+            background-color: var(--color-tertiary-button-background);
+            box-shadow: none;
+            border-radius: 4px;
+            i {
+                font-size: 16px;
+            }
+        }
+    }
+    .custom-datepicker-wrapper {
+        display: flex;
+        text-align: center;
+        justify-content: center;
+    }
+    .clear-filter {
+        color: var(--color-giddh-blue);
+        cursor: pointer;
+    }
+    .activity-filter-wrap {
+        display: flex;
+        align-items: center;
+        padding-left: 9px;
+        padding-top: 9px;
+    }
+    .btn-success {
+        background-color: var(--color-nonary-button-background);
+        color: var(--color-nonary-button-text);
+        &:hover {
+            background-color: var(--color-nonary-button-background-hover) !important;
+        }
+    }
+    .download-button-status {
+        min-width: 160px;
+        max-width: 160px;
+        text-align: center;
+    }
+    .download-text {
+        width: 160px;
+        min-width: 160px;
+    }
+    .btn-filter {
+        background: var(--color-dark-fog);
+        border: 1px solid var(--color-primary-button-border);
+        font-size: 14px;
+        color: var(--color-giddh-blue);
+        display: inline-flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 4px 10px;
+    }
+}

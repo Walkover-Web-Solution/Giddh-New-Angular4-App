@@ -300,6 +300,12 @@
                     "link": "/pages/import/trial-balance",
                     "icon": "icon-trial-balance-new",
                     "description": "सभी क्रेडिट और डेबिट शेष आयात करें"
+                },
+                {
+                    "label": "टैली आयात",
+                    "link": "/pages/tallysync",
+                    "icon": "icon-tally-import1",
+                    "description": "अपने सिंक किए गए टैली डेटा को ऑनलाइन जांचें"
                 }
             ]
         },
@@ -394,6 +400,11 @@
                     "link": "/pages/search",
                     "icon": "icon-search",
                     "description": "समूह का चयन करें और समय अवधि खोजें"
+                },
+                {
+                    "label": "डाउनलोड",
+                    "link": "/pages/downloads",
+                    "icon": "icon-download-circle"
                 }
             ]
         }

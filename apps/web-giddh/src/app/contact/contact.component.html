@@ -188,8 +188,17 @@
                                             <i class="icon-options"></i>
                                         </button>
                                         <mat-menu #menu="matMenu">
-                                            <button mat-menu-item (click)="$event.stopPropagation()">
+                                            <button
+                                                mat-menu-item
+                                                (click)="$event.stopPropagation()"
+                                                (keydown.enter)="
+                                                    $event.stopPropagation();
+                                                    selectAllCheckbox.checked = !selectAllCheckbox.checked;
+                                                    selectAllColumns(selectAllCheckbox.checked)
+                                                "
+                                            >
                                                 <mat-checkbox
+                                                    #selectAllCheckbox
                                                     color="primary"
                                                     name="selectAll"
                                                     [(ngModel)]="selectAll"
@@ -202,8 +211,17 @@
                                                     *ngIf="showFieldFilter[item.value]"
                                                     mat-menu-item
                                                     (click)="$event.stopPropagation()"
+                                                    (keydown.enter)="
+                                                        $event.stopPropagation();
+                                                        optionsCheckbox.checked = !optionsCheckbox.checked;
+                                                        columnFilter(
+                                                            !showFieldFilter[item.value].visibility,
+                                                            item.value
+                                                        )
+                                                    "
                                                 >
                                                     <mat-checkbox
+                                                        #optionsCheckbox
                                                         class="text-capitalize"
                                                         color="primary"
                                                         name="{{ item?.value }}"
