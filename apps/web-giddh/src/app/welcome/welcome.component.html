@@ -266,7 +266,7 @@
                                                 {{ commonLocaleData?.app_no_result_found }}
                                             </li>
                                             <li
-                                                *ngFor="let tax of taxesList"
+                                                *ngFor="let tax of taxesList; let last = last"
                                                 (click)="selectingApplicableTaxes(!tax.isSelected, tax, $event)"
                                                 (keydown.enter)="selectingApplicableTaxes(!tax.isSelected, tax, $event)"
                                                 class="select-applicable-tax-list"
@@ -277,7 +277,10 @@
                                                     (click)="selectApplicableTaxes(tax, $event)"
                                                     [checked]="tax?.isSelected"
                                                     (focus)="selectApplicableTaxesFocus(selectedApplicableTaxList)"
-                                                    (blur)="selectApplicableTaxesBlur(selectedApplicableTaxList)"
+                                                    (blur)="
+                                                        selectApplicableTaxesBlur(selectedApplicableTaxList);
+                                                        closeApplicableTaxesDropdown(last)
+                                                    "
                                                 />
                                                 {{ tax?.label }}
                                             </li>

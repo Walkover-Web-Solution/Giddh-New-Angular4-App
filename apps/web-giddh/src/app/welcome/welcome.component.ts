@@ -178,6 +178,8 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
     @ViewChild('address', { static: true }) addressField: ElementRef<any>;
     /** Form instance */
     @ViewChild('welcomeForm', { static: true }) welcomeForm: NgForm;
+    /** Applicable taxes dropdown instance */
+    @ViewChild('dropdown') public dropdown: any;
 
     /**
      * Returns true, if onboarding of Warehouse is going on
@@ -1177,5 +1179,17 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
             this.selectedTaxes.splice(index, 1);
         }
         event.preventDefault();
+    }
+
+    /**
+     * Closes applicable taxes dropdown on focus out
+     *
+     * @param {number} last
+     * @memberof WelcomeComponent
+     */
+    public closeApplicableTaxesDropdown(last: boolean): void {
+        if (last) {
+            this.dropdown.hide();
+        }
     }
 }
