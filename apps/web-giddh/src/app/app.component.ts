@@ -152,10 +152,6 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         this.sideBarStateChange(true);
         this.subscribeToLazyRouteLoading();
 
-        if (this._generalService.companyUniqueName && !window.location.href.includes('login') && !window.location.href.includes('token-verify')) {
-            this.store.dispatch(this.companyActions.RefreshCompanies());
-        }
-
         this.store.pipe(select(state => state.session.currentLocale), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 if (this.activeLocale !== response?.value) {
@@ -191,6 +187,12 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
     }
 
     public ngAfterViewInit() {
+        if (this._generalService.companyUniqueName && !window.location.href.includes('login') && !window.location.href.includes('token-verify')) {
+            setTimeout(() => {
+                this.store.dispatch(this.companyActions.RefreshCompanies());
+            }, 1000);
+        }
+
         this._generalService.IAmLoaded.next(true);
         this._cdr.detectChanges();
         this.router.events.pipe(takeUntil(this.destroyed$)).subscribe((evt) => {
