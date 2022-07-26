@@ -1309,6 +1309,18 @@ table:focus {
         }
     }
 }
+#exportModal {
+    #export-body {
+        .clearfix {
+            .radio-inline {
+                mat-slide-toggle {
+                    position: relative;
+                    top: 8px;
+                }
+            }
+        }
+    }
+}
 @media only screen and (max-width: 1440px) {
     body.unresponsive {
         width: 100%;
