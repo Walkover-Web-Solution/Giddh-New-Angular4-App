@@ -100,6 +100,7 @@ export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnCh
     }
 
     public addNewAcSubmit(accRequestObject: AddAccountRequest) {
+        this.store.dispatch(this.accountsAction.resetActiveGroup());
         this.addEvent.emit(accRequestObject);
     }
 
