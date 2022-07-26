@@ -1835,7 +1835,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             }
 
             this.invFormData.entries.forEach((entry: SalesEntryClass) => {
-                entry.entryDate = moment(date, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                entry.entryDate = date;
+                entry.entryDate = moment(entry.entryDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
             });
         }
     }
@@ -3671,7 +3672,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         if (!txn) {
             let entry: SalesEntryClass = new SalesEntryClass();
             if (this.isUpdateMode) {
-                entry.entryDate = moment(this.invFormData.entries[0] ? this.invFormData.entries[0].entryDate : this.universalDate || new Date(), GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                entry.entryDate = this.invFormData.entries[0] ? this.invFormData.entries[0].entryDate : this.universalDate || new Date();
+                entry.entryDate = moment(entry.entryDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
                 entry.isNewEntryInUpdateMode = true;
             } else {
                 entry.entryDate = moment(this.invFormData.voucherDetails.voucherDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
