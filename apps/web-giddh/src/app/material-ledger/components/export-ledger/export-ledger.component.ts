@@ -246,11 +246,7 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
     *To show the datepicker
     *
     * @param {*} element
-<<<<<<< HEAD
     * @memberof ExportLedgerComponent
-=======
-    * @memberof AuditLogsFormComponent
->>>>>>> 68b7644cb06894c683b8f52ab284530de7eda746
     */
     public showGiddhDatepicker(element: any): void {
         if (element) {
