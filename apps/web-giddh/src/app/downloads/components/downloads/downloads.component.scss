@@ -15,6 +15,11 @@
                 font-size: 16px;
             }
         }
+        .mat-row {
+            .mat-cell:first-child {
+                color: var(--color-mat-tbody-tr-td) !important;
+            }
+        }
     }
     .custom-datepicker-wrapper {
         display: flex;
