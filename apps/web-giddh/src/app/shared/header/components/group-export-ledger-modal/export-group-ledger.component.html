@@ -1,121 +1,127 @@
-<div id="exportModal">
-    <div class="modal-header d-flex align-items-center flex-row-reverse">
-        <button
-            aria-hidden="true"
-            class="close"
-            data-dismiss="modal"
-            (click)="closeExportGroupLedgerModal.emit('close')"
-            [attr.aria-label]="commonLocaleData?.app_close"
-        >
-            ×
-        </button>
-        <h3>{{ localeData?.export_group_ledger }}</h3>
-    </div>
-    <div class="modal-body mr-b4" id="export-body">
-        <form name="addShareEmailForm" novalidate autocomplete="off">
-            <div class="pd-b3 clearfix">
-                <div class="form-inline">
-                    <div class="form-group">
-                        <label class="w100 justify-content-start">{{ commonLocaleData?.app_date_range }}: </label>
-                        <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
-                            <i class="icon-calender calendar-addon"></i>
-                            <input
-                                type="text"
-                                name="selectedDateRange"
-                                [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
-                                class="giddh-datepicker date-range-picker"
-                            />
+<ng-container
+    appTranslate
+    [file]="'ledger/export-ledger'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+>
+    <div id="exportModal">
+        <div class="modal-header d-flex align-items-center flex-row-reverse">
+            <button
+                aria-hidden="true"
+                class="close"
+                data-dismiss="modal"
+                (click)="closeExportGroupLedgerModal.emit('close')"
+                [attr.aria-label]="commonLocaleData?.app_close"
+            >
+                ×
+            </button>
+            <h3>{{ localeData?.export_group_ledger }}</h3>
+        </div>
+        <div class="modal-body mr-b4" id="export-body">
+            <form name="addShareEmailForm" novalidate autocomplete="off">
+                <div class="pd-b3 clearfix">
+                    <div class="form-inline">
+                        <div class="form-group">
+                            <label class="w100 justify-content-start">{{ commonLocaleData?.app_date_range }}: </label>
+                            <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
+                                <i class="icon-calender calendar-addon"></i>
+                                <input
+                                    type="text"
+                                    name="selectedDateRange"
+                                    [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
+                                    class="giddh-datepicker date-range-picker"
+                                />
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="pd-b2 clearfix">
-                <label class="w100">{{ commonLocaleData?.app_type }}: </label>
-
-                <span class="p-0 mr-r3 w100">
-                    <input
-                        id="mini"
-                        class="radio-custom cp ml-0"
-                        type="radio"
-                        name="emailTypeSelected"
-                        [(ngModel)]="emailTypeSelected"
-                        [value]="emailTypeMini"
-                    />
-                    <label for="mini" class="radio-custom-label">{{ commonLocaleData?.app_mini }}</label>
-                </span>
-
-                <span class="p-0 mr-r3 w100">
-                    <input
-                        id="detailed"
-                        class="radio-custom cp ml-0"
-                        type="radio"
-                        name="emailTypeSelected"
-                        [(ngModel)]="emailTypeSelected"
-                        [value]="emailTypeDetail"
-                    />
-                    <label for="detailed" class="radio-custom-label">{{ commonLocaleData?.app_detailed }}</label>
-                </span>
-            </div>
-            <div class="pd-b2 clearfix">
-                <label class="w100">{{ commonLocaleData?.app_export_as }}: </label>
-
-                <span class="p-0 mr-r3 w100">
-                    <input
-                        id="pdf"
-                        class="radio-custom cp ml-0"
-                        type="radio"
-                        name="fileType"
-                        [(ngModel)]="fileType"
-                        [value]="'pdf'"
-                    />
-                    <label for="pdf" class="radio-custom-label">{{ commonLocaleData?.app_pdf }}</label>
-                </span>
-
-                <span class="p-0 mr-r3 w100">
-                    <input
-                        id="excel"
-                        class="radio-custom cp ml-0"
-                        type="radio"
-                        name="fileType"
-                        [(ngModel)]="fileType"
-                        [value]="'xls'"
-                    />
-                    <label for="excel" class="radio-custom-label">{{ commonLocaleData?.app_excel }}</label>
-                </span>
-            </div>
-            <div class="pd-b2 clearfix">
-                <label class="w100">{{ commonLocaleData?.app_order }}: </label>
-
-                <span class="p-0 mr-r3">
-                    <input
-                        id="ascending"
-                        class="radio-custom cp ml-0"
-                        type="radio"
-                        name="order"
-                        [(ngModel)]="order"
-                        [value]="'asc'"
-                    />
-                    <label for="ascending" class="radio-custom-label">{{ commonLocaleData?.app_ascending }}</label>
-                </span>
-
-                <span class="p-0 mr-r3">
-                    <input
-                        id="descending"
-                        class="radio-custom cp ml-0"
-                        type="radio"
-                        name="order"
-                        [(ngModel)]="order"
-                        [value]="'desc'"
-                    />
-                    <label for="descending" class="radio-custom-label">{{ commonLocaleData?.app_descending }}</label>
-                </span>
-            </div>
-            <button class="btn-success btn min-width-100" (click)="exportLedger()">
-                {{ commonLocaleData?.app_export }}
-            </button>
-        </form>
+                <div class="pd-b2 clearfix">
+                    <label class="w125">{{ commonLocaleData?.app_order }}:</label>
+                    <label class="radio-inline p-0">
+                        <mat-slide-toggle color="primary" name="sort" [(ngModel)]="exportRequest.sort">
+                            <span class="pull-left">{{
+                                exportRequest.sort ? commonLocaleData?.app_ascending : commonLocaleData?.app_descending
+                            }}</span>
+                        </mat-slide-toggle>
+                    </label>
+                </div>
+                <div class="pd-b2 clearfix">
+                    <label class="w125">{{ commonLocaleData?.app_voucher_type }}:</label>
+                    <label class="radio-inline p-0">
+                        <mat-slide-toggle
+                            color="primary"
+                            name="showEntryVoucherNo"
+                            [(ngModel)]="exportRequest.showEntryVoucherNo"
+                        >
+                            <span class="pull-left">{{
+                                exportRequest.showEntryVoucherNo ? commonLocaleData?.app_yes : commonLocaleData?.app_no
+                            }}</span>
+                        </mat-slide-toggle>
+                    </label>
+                </div>
+                <div class="pd-b2 clearfix">
+                    <label class="w125">{{ commonLocaleData?.app_voucher_no }}:</label>
+                    <label class="radio-inline p-0">
+                        <mat-slide-toggle
+                            color="primary"
+                            name="showVoucherNumber"
+                            [(ngModel)]="exportRequest.showVoucherNumber"
+                        >
+                            <span class="pull-left">{{
+                                exportRequest.showVoucherNumber ? commonLocaleData?.app_yes : commonLocaleData?.app_no
+                            }}</span>
+                        </mat-slide-toggle>
+                    </label>
+                </div>
+                <div class="pd-b2 clearfix">
+                    <label class="w125">{{ localeData?.voucher_total }}:</label>
+                    <label class="radio-inline p-0">
+                        <mat-slide-toggle
+                            color="primary"
+                            name="showVoucherTotal"
+                            [(ngModel)]="exportRequest.showVoucherTotal"
+                        >
+                            <span class="pull-left">{{
+                                exportRequest.showVoucherTotal ? commonLocaleData?.app_yes : commonLocaleData?.app_no
+                            }}</span>
+                        </mat-slide-toggle>
+                    </label>
+                </div>
+                <div class="pd-b2 clearfix">
+                    <label class="w125">{{ localeData?.entry_no }}:</label>
+                    <label class="radio-inline p-0">
+                        <mat-slide-toggle
+                            color="primary"
+                            name="showEntryVoucher"
+                            [(ngModel)]="exportRequest.showEntryVoucher"
+                        >
+                            <span class="pull-left">{{
+                                exportRequest.showEntryVoucher ? commonLocaleData?.app_yes : commonLocaleData?.app_no
+                            }}</span>
+                        </mat-slide-toggle>
+                    </label>
+                </div>
+                <div class="pd-b2 clearfix">
+                    <label class="w125">{{ localeData?.description }}:</label>
+                    <label class="radio-inline p-0">
+                        <mat-slide-toggle
+                            color="primary"
+                            name="showDescription"
+                            [(ngModel)]="exportRequest.showDescription"
+                        >
+                            <span class="pull-left">{{
+                                exportRequest.showDescription ? commonLocaleData?.app_yes : commonLocaleData?.app_no
+                            }}</span>
+                        </mat-slide-toggle>
+                    </label>
+                </div>
+                <button class="btn-success btn min-width-100" (click)="exportLedger()">
+                    {{ commonLocaleData?.app_export }}
+                </button>
+            </form>
+        </div>
     </div>
-</div>
+</ng-container>
 <ng-template #datepickerTemplate>
     <div class="datepicker-modal">
         <div class="modal-body">
