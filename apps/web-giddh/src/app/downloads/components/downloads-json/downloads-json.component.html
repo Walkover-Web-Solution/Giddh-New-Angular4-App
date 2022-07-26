@@ -1,0 +1,11 @@
+<ng-container appTranslate (commonLocaleData)="commonLocaleData = $event">
+    <div class="download-list-container">
+        <div class="modal-header d-flex align-items-center activity-header">
+            <h3>{{ commonLocaleData?.app_filter }}</h3>
+            <button mat-dialog-close class="close" type="button">×</button>
+        </div>
+        <mat-dialog-content class="mat-dialog-content">
+            <div class="json-preview" #jsonData></div>
+        </mat-dialog-content>
+    </div>
+</ng-container>

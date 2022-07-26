@@ -394,6 +394,11 @@
                     "link": "/pages/search",
                     "icon": "icon-search",
                     "description": "गट निवडा आणि कालावधीसाठी शोधा"
+                },
+                {
+                    "label": "डाउनलोड करा",
+                    "link": "/pages/downloads",
+                    "icon": "icon-download-circle"
                 }
             ]
         }
