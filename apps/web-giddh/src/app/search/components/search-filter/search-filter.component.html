@@ -36,21 +36,23 @@
                         <div [formGroupName]="i" class="d-flex">
                             <label>{{ localeData?.whose }}</label>
                             <span class="position-relative form-group">
-                                <select class="form-control" formControlName="queryType" required>
+                                <select class="form-control custom-select-field" formControlName="queryType" required>
                                     <option value="">{{ commonLocaleData?.app_select_type }}</option>
                                     <option *ngFor="let queryType of queryTypes" value="{{ queryType?.uniqueName }}">
                                         {{ queryType.name }}
                                     </option>
                                 </select>
+                                <i class="icon-caret-down"></i>
                             </span>
                             <label>{{ localeData?.is }}</label>
                             <span class="position-relative form-group">
-                                <select class="form-control" formControlName="queryDiffer" required>
+                                <select class="form-control custom-select-field" formControlName="queryDiffer" required>
                                     <option value="">{{ localeData?.select_query }}</option>
                                     <option *ngFor="let queryDiffer of queryDiffers" value="{{ queryDiffer }}">
                                         {{ queryDiffer }}
                                     </option>
                                 </select>
+                                <i class="icon-caret-down"></i>
                             </span>
                             <label
                                 *ngIf="
@@ -80,21 +82,23 @@
                                 class="position-relative form-group"
                                 *ngIf="item.value.queryType === 'openingBalance'"
                             >
-                                <select class="form-control" formControlName="openingBalanceType">
+                                <select class="form-control custom-select-field" formControlName="openingBalanceType">
                                     <option *ngFor="let type of balType" value="{{ type?.uniqueName }}">
                                         {{ type.name }}
                                     </option>
                                 </select>
+                                <i class="icon-caret-down"></i>
                             </span>
                             <span
                                 class="position-relative form-group"
                                 *ngIf="item.value.queryType === 'closingBalance'"
                             >
-                                <select class="form-control" formControlName="closingBalanceType">
+                                <select class="form-control custom-select-field" formControlName="closingBalanceType">
                                     <option *ngFor="let type of balType" value="{{ type?.uniqueName }}">
                                         {{ type.name }}
                                     </option>
                                 </select>
+                                <i class="icon-caret-down"></i>
                             </span>
                             <label *ngIf="searchDataSet?.controls?.length > 1 && !l" class="condition_tag">{{
                                 localeData?.and

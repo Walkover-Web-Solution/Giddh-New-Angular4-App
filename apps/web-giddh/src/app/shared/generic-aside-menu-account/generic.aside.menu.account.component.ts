@@ -87,11 +87,11 @@ export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnCh
         this.showBankDetail = this.activeGroupUniqueName === 'sundrycreditors';
 
         this.store.pipe(select(state => state.groupwithaccounts.activeTab), takeUntil(this.destroyed$)).subscribe(activeTab => {
-            if(activeTab === 1) {
+            if (activeTab === 1) {
                 this.reloadCustomFields = false;
                 this.isMasterOpen = true;
             } else {
-                if(this.isMasterOpen) {
+                if (this.isMasterOpen) {
                     this.isMasterOpen = false;
                     this.reloadCustomFields = true;
                 }
@@ -169,8 +169,8 @@ export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnCh
      * @param {boolean} event
      * @memberof GenericAsideMenuAccountComponent
      */
-     public showCustomFieldsTab(event: boolean) {
-        if(event) {
+    public showCustomFieldsTab(event: boolean) {
+        if (event) {
             this.store.dispatch(this.groupWithAccountsAction.updateActiveTabOpenAddAndManage(1));
             this.store.dispatch(this.groupWithAccountsAction.OpenAddAndManageFromOutside(''));
         }

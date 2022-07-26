@@ -6,14 +6,9 @@
 >
     <div id="exportModal" class="disable-ripple">
         <div class="modal-header flex-row-reverse">
-            <span
-                aria-hidden="true"
-                class="close"
-                mat-button
-                mat-dialog-close
-                [attr.aria-label]="commonLocaleData?.app_close"
-                >×</span
-            >
+            <button aria-hidden="true" class="close" mat-dialog-close [attr.aria-label]="commonLocaleData?.app_close">
+                ×
+            </button>
             <h3 class="unbold" mat-dialog-title>{{ localeData?.page_heading }}</h3>
         </div>
         <div class="modal-body" id="export-body">
