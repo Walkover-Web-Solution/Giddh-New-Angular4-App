@@ -9,7 +9,7 @@ export const environment: Environment = {
     production: false,
     showDevModule: false,
     AppUrl: 'https://stage.giddh.com/',
-    ApiUrl: 'https://apirelease.giddh.com/',
+    ApiUrl: 'https://api.giddh.com/',
     isElectron: false,
     APP_FOLDER: '',
     /** Angular debug tools in the dev console
