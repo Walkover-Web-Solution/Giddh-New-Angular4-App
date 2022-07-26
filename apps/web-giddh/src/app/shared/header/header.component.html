@@ -54,7 +54,12 @@
 
             <div class="d-flex justify-content-between align-items-center">
                 <div class="logo-wrapper pd-l4">
-                    <img src="{{ imgPath }}giddh-white-logo.svg" [alt]="localeData?.giddh_logo" />
+                    <img
+                        src="{{ imgPath }}giddh-white-logo.svg"
+                        width="127"
+                        height="25"
+                        [alt]="localeData?.giddh_logo"
+                    />
                 </div>
                 <ul class="nav universal-date mr-r1" *ngIf="selectedCompany | async">
                     <li class="border-none pd-r15 notification" [ngClass]="{ 'mr-0': isTodaysDateSelected }">
@@ -113,6 +118,7 @@
             </p>
         </div>
     </div>
+
     <div
         class="plan-wrapper"
         *ngIf="subscribedPlan !== undefined && subscribedPlan.status === 'expired'"
@@ -125,6 +131,7 @@
             </p>
         </div>
     </div>
+
     <div
         class="plan-wrapper"
         *ngIf="subscribedPlan !== undefined && subscribedPlan.additionalCharges"
@@ -272,6 +279,13 @@
                 (closeAsideEvent)="toggleSidebarPane(false, false)"
             ></aside-setting>
         </perfect-scrollbar>
+    </div>
+    <div class="help-support-aside setting-sidebar-wrapper" *ngIf="asideInventorySidebarMenuState === 'in'">
+        <inventory-sidebar
+            class="inventory-sidebar"
+            [ngClass]="{ 'inventory-sidebar': isMobileSidebar }"
+            (closeAsideEvent)="toggleSidebarPane(false, false)"
+        ></inventory-sidebar>
     </div>
     <ng-template #datepickerTemplate>
         <div class="datepicker-modal">
