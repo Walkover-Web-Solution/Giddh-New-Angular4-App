@@ -111,7 +111,6 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         });
     }
 
-
     public sidebarStatusChange(event) {
         this.sideMenu.isopen = event;
     }
@@ -143,12 +142,15 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             this.changeOnMobileView(result.matches);
         });
+        this.breakpointObserver.observe([
+            '(max-width: 480px)'
+        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
+            if (result.matches) {
+                this.router.navigate(['/mobile-restricted']);
+            }
+        });
         this.sideBarStateChange(true);
         this.subscribeToLazyRouteLoading();
-
-        if (this._generalService.companyUniqueName && !window.location.href.includes('login') && !window.location.href.includes('token-verify')) {
-            this.store.dispatch(this.companyActions.RefreshCompanies());
-        }
 
         this.store.pipe(select(state => state.session.currentLocale), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
@@ -185,6 +187,12 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
     }
 
     public ngAfterViewInit() {
+        if (this._generalService.companyUniqueName && !window.location.href.includes('login') && !window.location.href.includes('token-verify')) {
+            setTimeout(() => {
+                this.store.dispatch(this.companyActions.RefreshCompanies());
+            }, 1000);
+        }
+
         this._generalService.IAmLoaded.next(true);
         this._cdr.detectChanges();
         this.router.events.pipe(takeUntil(this.destroyed$)).subscribe((evt) => {

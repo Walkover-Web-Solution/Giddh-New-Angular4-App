@@ -19,6 +19,7 @@ body.default-theme {
     --color-common-quaternary-background-for-all-components: #668cff26;
     --color-common-quinary-background-for-all-components: #f5f5f5;
     --color-common-senary-background-for-all-components: #cbcfd2;
+    --color-common-septenary-background-for-all-components: #f5f5f5;
 
     // Signup Login Page Color Components
     --color-primary-login-page-background: #1a237e;
@@ -127,6 +128,7 @@ body.default-theme {
     --color-dropdown-tertiary-list-hover-background: #e7e9eb;
     --color-dropdown-list-box-shadow: #cbcfd2;
     --color-dropdown-primary-bar-border: #1a237e;
+    --color-primary-dropdown-placeholder: #9b9b9e;
 
     // Checkbox, Radio Button, Mat-Expansion Panel Down Arrow and Icon Color Variables
     --color-primary-icon: #212528;
@@ -149,9 +151,12 @@ body.default-theme {
     --color-input-secondary-background: #ffffff;
     --color-input-tertiary-background: #f5f5f5;
     --color-search-bar-primary-border: #cbcfd2;
+    --color-primary-search-bar-placeholder: #1a237e;
+    --color-secondary-search-bar-placeholder: #9b9b9e;
 
     // Input Bar Variables
     --color-primary-input-bar-text: #212528;
+    --color-secondary-input-bar-text: #9b9b9e;
     --color-primary-input-bar-border: #f5f5f5;
     --color-secondary-input-bar-border: #cbcfd2;
     --color-tertiary-input-bar-border: #cbcfd2;
@@ -160,6 +165,7 @@ body.default-theme {
     --color-tertiary-input-bar-background: #e7e9eb;
     --color-primary-input-bar-background-focus: #668cff26;
     --color-secondary-input-bar-button: #9b9b9e;
+    --color-primary-input-placeholder: #9b9b9e;
 
     // Datepicker Color Variables
     --color-datepicker-title-text: #212528;
@@ -447,6 +453,7 @@ body.default-theme {
     --color-sidebar-list-head: #212528;
     --color-sidebar-anchor-text-hover: #668cff;
     --color-sidebar-company-background: #668cff26;
+    --color-sidebar-secondary-company-background: #f5f5f5;
     --color-sidebar-background: #ffffff;
     --color-sidebar-footer-logout-section-background: #ffffff;
     --color-sidebar-company-count-text: #505159;
@@ -503,6 +510,10 @@ body.default-theme {
     // Inventory Stock Report Color Variables
     --color-primary-credit: #1a237e;
     --color-primary-inventory-stock-report-journal: #36b283;
+    --color-primary-inventory-stock-balance-list-background: #f5f5f5;
+    --color-primary-inventory-stock-balance-text: #505159;
+    --color-primary-inventory-stock-expanded-list-background: #668cff26;
+    --color-primary-inventory-stock-dropdown-button-background: #ffffff;
 
     // All Features Color Variables
     --color-all-features-money-back-guarantee: #9b9b9e;
@@ -604,11 +615,15 @@ body.default-theme {
     --color-btn-success-dropdown-toggle: #36b283;
     --color-common-primary-border: #cbcfd2;
     --color-common-secondary-border: #cbcfd2;
+    --color-common-tertiary-border: #e7e9eb;
     --color-primary-common-box-shadow: #00000033;
     --color-common-primary-disabled: #cbcfd2;
     --color-common-secondary-disabled: #505159;
     --color-common-primary-input-placeholder: #cbcfd2;
     --color-common-secondary-input-placeholder: #505159;
+    --color-common-primary-background-color: #f5f5f5;
+    --color-primary-common-with-opacity-list-hover: #668cff26;
+    --color-primary-common-without-opacity-list-hover: #e8eeff;
 
     // Toast Color Variables
     --color-red-toast: #e54556;
@@ -673,7 +688,9 @@ body.default-theme {
     --color-image-filter: invert(0);
     --color-image-filter-secondary: invert(0);
     --color-image-filter-tertiary: invert(0);
+    --color-image-filter-quaternary: invert(100%) sepia(1%) saturate(2%) hue-rotate(1deg) brightness(33%) contrast(100%);
     --color-image-filter-quinary: invert(0.7);
+    --color-image-filter-senary: brightness(0.67);
     --color-caret-image: url("../../images/caret-light.svg");
 
     /************************ COMMON COLORS USED MORE THAN 12 TIMES ************************/

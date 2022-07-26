@@ -25,7 +25,6 @@ export class ProfitLossGridRowComponent implements OnChanges {
     @Input() public isExpandToggledDuringSearch: boolean;
 
     constructor(private cd: ChangeDetectorRef) {
-
     }
 
     public ngOnChanges(changes: SimpleChanges) {

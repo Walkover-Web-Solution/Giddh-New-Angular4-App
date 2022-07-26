@@ -94,15 +94,15 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
             if (response && !_.isEmpty(response)) {
                 let companyInfo = _.cloneDeep(response);
                 this.currentCompany = companyInfo?.name;
+            } else {
+                this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
             }
         });
         this.isUpdateCompanyInProgress$ = this.store.pipe(select(s => s.settings.updateProfileInProgress), takeUntil(this.destroyed$));
         this.isUpdateCompanySuccess$ = this.store.pipe(select(s => s.settings.updateProfileSuccess), takeUntil(this.destroyed$));
-
     }
 
     public ngOnInit() {
-
         /** This will use for get the active company from store  */
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
@@ -112,8 +112,6 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
                 this.activeCompany = activeCompany;
             }
         });
-
-        this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
 
         this.transactionLimitTooltipContent = this.localeData?.subscription?.transaction_limit_content;
         this.unlimitedUsersTooltipContent = this.localeData?.subscription?.unlimited_users_content;

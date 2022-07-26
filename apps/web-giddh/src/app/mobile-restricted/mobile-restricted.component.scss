@@ -1,0 +1,26 @@
+.mobile-restriction-wrapper {
+    height: 300px;
+    justify-content: space-around;
+    .image-wrapper {
+        .phone-image {
+            height: 250px;
+        }
+    }
+    .text-content-wrapper {
+        height: 100%;
+        padding: 33px 15px;
+        .button-wrapper {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            .store-button {
+                img {
+                    height: auto;
+                    margin-top: 5px;
+                    width: 10rem;
+                }
+            }
+        }
+    }
+}
