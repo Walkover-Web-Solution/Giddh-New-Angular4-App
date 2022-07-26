@@ -7159,6 +7159,20 @@ span#HW_badge_cont:nth-child(3) {
         }
     }
 }
+
+.download-page {
+    .download-json-panel {
+        position: fixed !important;
+        right: 0px;
+    }
+    .mat-dialog-content {
+        margin: 0 !important;
+        padding: 0 !important;
+        max-height: 90%;
+        width: 100%;
+    }
+}
+
 .settings-profile-tabs {
     .tab-container {
         .nav-tabs {
@@ -10172,6 +10186,7 @@ input[type="checkbox"].cdk-visually-hidden::after {
     }
     .mat-dialog-container {
         overflow: hidden;
+        background-color: var(--color-secondary-right-side-popup-body-background);
     }
 }
 .json-sidebar {
