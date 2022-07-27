@@ -46,11 +46,6 @@
                     "label": "टैग",
                     "link": "/pages/settings/tag",
                     "icon": "<i class='icon-tag-new'></i>"
-                },
-                {
-                    "label": "उत्प्रेरक",
-                    "link": "/pages/settings/trigger",
-                    "icon": "<i class='icon-trigger-new'></i>"
                 }
             ],
             [
@@ -132,11 +127,6 @@
                     "label": "टैग",
                     "link": "/pages/settings/tag",
                     "icon": "<i class='icon-tag-new'></i>"
-                },
-                {
-                    "label": "उत्प्रेरक",
-                    "link": "/pages/settings/trigger",
-                    "icon": "<i class='icon-trigger-new'></i>"
                 }
             ],
             [
