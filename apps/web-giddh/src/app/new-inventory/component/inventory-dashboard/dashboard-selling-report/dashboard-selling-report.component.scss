@@ -1,6 +1,8 @@
+@import "../../../../../assets/css/color.scss";
+
 .selling-report-page {
     .box {
-        border: 1px solid var(--color-iron);
+        border: 1px solid $gainsboro;
     }
     .top-selling-header {
         justify-content: space-between;
@@ -22,7 +24,7 @@
     .filter-top-selling {
         .total-sales-tabs {
             .active-graph {
-                color: var(--color-nero);
+                color: $nero;
                 font-family: "opensans-semibold";
             }
         }
@@ -30,12 +32,12 @@
     .top-sale-data {
         .highest-data {
             &.top-high-sale {
-                border-left: 1px solid var(--color-iron);
+                border-left: 1px solid $gainsboro;
             }
             p {
-                color: var(--color-nero);
+                color: $charcoal;
                 &.highest-sale-date {
-                    color: var(--color-giddh-blue);
+                    color: $midnight-blue;
                 }
             }
             h3 {

@@ -1,3 +1,4 @@
+@import "../../../../../assets/css/color.scss";
 .purchase-report-block {
     .purchase-report-head {
         h4 {
@@ -21,13 +22,13 @@
         flex-direction: column;
     }
     .purchase-report-container {
-        border-top: 1px solid var(--color-iron);
+        border-top: 1px solid $gainsboro;
         .table-wrapper {
             width: 80%;
             .purchase-report-table {
                 font-size: 14px;
                 th {
-                    border-bottom: 1px solid var(--color-iron) !important;
+                    border-bottom: 1px solid $gainsboro !important;
                     border-top: none !important;
                     min-width: 150px;
                 }
@@ -45,7 +46,7 @@
         }
         .purchase-summary-wrapper {
             width: 20%;
-            border-right: 1px solid var(--color-iron);
+            border-right: 1px solid $gainsboro;
             .about-purchase-report {
                 .text-blue {
                     font-size: 20px;

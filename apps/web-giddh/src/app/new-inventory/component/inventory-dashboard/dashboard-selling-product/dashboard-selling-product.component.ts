@@ -13,6 +13,6 @@ export class DashboardSellingProduct implements OnInit {
 
     public ngOnInit() {
         /* added image path */
-        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+        this.imgPath = (isElectron || isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
     }
 }

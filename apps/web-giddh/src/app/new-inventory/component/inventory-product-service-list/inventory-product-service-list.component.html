@@ -1,201 +1,70 @@
-<!--<div class="container-fluid">-->
-<!--    <div class="row">-->
-<!--        <div class="col-12">-->
-<!--            <div class="top-content">-->
-<!--                <div class="d-flex w-100 justify-content-between overflow-x-auto">-->
-<!--                    <div class="total-details-box mr-r05 border-none opening-box">-->
-<!--                        <h5>-->
-<!--                            Group Count-->
-<!--                            <div>-->
-<!--                                <span class="d-inline-flex number-total"> 23 </span>-->
-<!--                            </div>-->
-<!--                        </h5>-->
-<!--                    </div>-->
-<!--                    <div class="total-details-box border-none due-box">-->
-<!--                        <h5>-->
-<!--                            Item Count-->
-<!--                            <div>-->
-<!--                                <span class="d-inline-flex number-total"> 23 </span>-->
-<!--                            </div>-->
-<!--                        </h5>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
-
-<!--    <div class="row">-->
-<!--        <div class="col-12">-->
-<!--            <div class="product-list-container">-->
-<!--                <div class="table-responsive">-->
-<!--                    <table class="table giddh-table on-mobile-view">-->
-<!--                        <thead>-->
-<!--                        <tr>-->
-<!--                            <th>&nbsp;</th>-->
-<!--                            <th>Name</th>-->
-<!--                            <th>Type</th>-->
-<!--                            <th>Group</th>-->
-<!--                            <th>SKU</th>-->
-<!--                            <th>HSN/SAC</th>-->
-<!--                            <th>Account/s</th>-->
-<!--                            <th>Pur Rate</th>-->
-<!--                            <th>Sale Rate</th>-->
-<!--                            <th>Closing Qty.</th>-->
-<!--                        </tr>-->
-<!--                        </thead>-->
-<!--                        <tbody>-->
-<!--                        <tr>-->
-<!--                            <td data-title="Select">-->
-<!--                                <div class="d-block text-center text-left-sm">-->
-<!--                                    <input type="checkbox" id="select-group" />-->
-<!--                                </div>-->
-<!--                            </td>-->
-<!--                            <td data-title="Name">-->
-<!--                                <div class="product-name-image d-flex">-->
-<!--                                    <div>-->
-<!--                                        <img src="{{ imgPath }}images/add-image.svg" />-->
-<!--                                    </div>-->
-<!--                                    <div class="cursor-pointer mx-2">-->
-<!--                                        <a-->
-<!--                                            href="javascript:void(0)"-->
-<!--                                            [routerLink]="['/pages/new-inventory/about-product-service-detail']"-->
-<!--                                        >-->
-<!--                                            <p>Product Name</p>-->
-<!--                                            <p class="text-gray">(34 Items)</p>-->
-<!--                                        </a>-->
-<!--                                    </div>-->
-<!--                                </div>-->
-<!--                            </td>-->
-<!--                            <td data-title="Type">Product</td>-->
-<!--                            <td data-title="Group">Group 1</td>-->
-<!--                            <td data-title="SKU">23124</td>-->
-<!--                            <td data-title="HSN/SAC">12345</td>-->
-<!--                            <td data-title="Account/s">-->
-<!--                                <div>Cost of goods sold</div>-->
-<!--                                <div>Sales 2</div>-->
-<!--                            </td>-->
-<!--                            <td data-title="Pur Rate">₹10,00,000.00</td>-->
-<!--                            <td data-title="Sale Rate">₹10,00,000.00</td>-->
-<!--                            <td data-title="Closing Qty">21,200 nos.</td>-->
-<!--                        </tr>-->
-<!--                        </tbody>-->
-<!--                    </table>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</div>-->
-<div class="product-list-container">
-    <div class="p-3">
-        <div class="top-content">
-            <div class="d-flex w-100 justify-content-between overflow-x-auto">
-                <div class="total-details-box border-none mr-3 opening-box">
-                    <h5>
-                        Group Count
-                        <div class="mt-3">
-                            <span class="d-inline-flex number-total"> 23 </span>
+<div class="container-fluid product-list-container">
+    <div class="table-responsive">
+        <table class="table giddh-table on-mobile-view">
+            <thead>
+                <tr>
+                    <th>&nbsp;</th>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Group</th>
+                    <th>SKU</th>
+                    <th>HSN/SAC</th>
+                    <th>Account/s</th>
+                    <th>Pur Rate</th>
+                    <th>Sale Rate</th>
+                    <th>Closing Qty.</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td data-title="Select">
+                        <div class="d-block text-center text-left-sm">
+                            <input type="checkbox" id="select-group" />
                         </div>
-                    </h5>
-                </div>
-                <div class="total-details-box border-none due-box">
-                    <h5>
-                        Item Count
-                        <div class="mt-3">
-                            <span class="d-inline-flex number-total"> 23 </span>
+                    </td>
+                    <td data-title="Name">
+                        <div class="product-name-image d-flex">
+                            <div>
+                                <img src="{{ imgPath }}images/add-image.svg" />
+                            </div>
+                            <div class="cursor-pointer mx-2">
+                                <a
+                                    href="javascript:void(0)"
+                                    [routerLink]="['/pages/new-inventory/about-product-service-detail']"
+                                >
+                                    <p>Product Name</p>
+                                    <p class="text-gray">(34 Items)</p>
+                                </a>
+                            </div>
                         </div>
-                    </h5>
-                </div>
+                    </td>
+                    <td data-title="Type">Product</td>
+                    <td data-title="Group">Group 1</td>
+                    <td data-title="SKU">23124</td>
+                    <td data-title="HSN/SAC">12345</td>
+                    <td data-title="Account/s">
+                        <div>Cost of goods sold</div>
+                        <div>Sales 2</div>
+                    </td>
+                    <td data-title="Pur Rate">₹10,00,000.00</td>
+                    <td data-title="Sale Rate">₹10,00,000.00</td>
+                    <td data-title="Closing Qty">21,200 nos.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="inventory-footer sticky-footer">
+    <div class="inner-content-footer">
+        <div class="d-flex">
+            <div class="mr-3">
+                <p class="text-gray">Group Count:</p>
+                <p class="text-left label-value">23</p>
+            </div>
+            <div class="mr-3">
+                <p class="text-gray">Items Count:</p>
+                <p class="text-left label-value">23</p>
             </div>
         </div>
-    </div>
-    <div class="table-responsive">
-        <table mat-table [dataSource]="dataSource" class="table giddh-table on-mobile-view">
-            <ng-container matColumnDef="select">
-                <th mat-header-cell *matHeaderCellDef>
-                    <mat-checkbox
-                        color="primary"
-                        class="ml-3"
-                        (change)="$event ? masterToggle() : null"
-                        [checked]="selection.hasValue() && isAllSelected()"
-                        [indeterminate]="selection.hasValue() && !isAllSelected()"
-                        [aria-label]="checkboxLabel()"
-                    >
-                    </mat-checkbox>
-                </th>
-                <td mat-cell *matCellDef="let row" data-title="Select">
-                    <mat-checkbox
-                        class="ml-3"
-                        color="primary"
-                        (click)="$event.stopPropagation()"
-                        (change)="$event ? selection.toggle(row) : null"
-                        [checked]="selection.isSelected(row)"
-                        [aria-label]="checkboxLabel(row)"
-                    >
-                    </mat-checkbox>
-                </td>
-            </ng-container>
-
-            <ng-container matColumnDef="name">
-                <th mat-header-cell *matHeaderCellDef>Name</th>
-                <td data-title="Name" mat-cell *matCellDef="let element">
-                    <div class="product-name-image d-flex">
-                        <div class="table-td-imag">
-                            <img src="{{ imgPath }}add-image.svg" />
-                        </div>
-                        <div class="cursor-pointer mx-2">
-                            <strong tooltip="Group Unique Name" class="text-black"> {{ element.name }}</strong>
-                        </div>
-                    </div>
-                </td>
-            </ng-container>
-
-            <ng-container matColumnDef="type">
-                <th mat-header-cell *matHeaderCellDef>Type</th>
-                <td data-title="Type" mat-cell *matCellDef="let element">{{ element.type }}</td>
-            </ng-container>
-
-            <ng-container matColumnDef="group">
-                <th mat-header-cell *matHeaderCellDef>Group</th>
-                <td data-title="Group" mat-cell *matCellDef="let element">{{ element.group }}</td>
-            </ng-container>
-
-            <ng-container matColumnDef="SKU">
-                <th mat-header-cell *matHeaderCellDef>SKU</th>
-                <td data-title="SKU" mat-cell *matCellDef="let element">{{ element.SKU }}</td>
-            </ng-container>
-
-            <ng-container matColumnDef="HSN_SAC">
-                <th mat-header-cell *matHeaderCellDef>HSN/SAC</th>
-                <td data-title="Closing Value" mat-cell *matCellDef="let element">{{ element.HSN_SAC }}</td>
-            </ng-container>
-
-            <ng-container matColumnDef="accounts">
-                <th mat-header-cell *matHeaderCellDef>Account/s</th>
-                <td data-title="Account/s" mat-cell *matCellDef="let element">
-                    {{ element.accounts }}
-                    <div class="mt-2">
-                        <small> {{ element.sales }}</small>
-                    </div>
-                </td>
-            </ng-container>
-
-            <ng-container matColumnDef="purRate">
-                <th mat-header-cell *matHeaderCellDef>Pur Rate</th>
-                <td data-title="Pur Rate" mat-cell *matCellDef="let element">{{ element.purRate }}</td>
-            </ng-container>
-
-            <ng-container matColumnDef="saleRate">
-                <th mat-header-cell *matHeaderCellDef>Sale Rate</th>
-                <td data-title="Sale Rate" mat-cell *matCellDef="let element">{{ element.saleRate }}</td>
-            </ng-container>
-
-            <ng-container matColumnDef="closingQty">
-                <th mat-header-cell *matHeaderCellDef>Closing Qty</th>
-                <td data-title="Closing Qty" mat-cell *matCellDef="let element">{{ element.closingQty }}</td>
-            </ng-container>
-
-            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns" (click)="selection.toggle(row)"></tr>
-        </table>
     </div>
 </div>

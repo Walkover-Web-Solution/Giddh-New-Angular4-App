@@ -1,3 +1,4 @@
+@import "../../../../assets/css/color.scss";
 .inventory-about-page {
     min-height: calc(100vh - 217px);
     margin-bottom: 15px;
@@ -21,7 +22,7 @@
     }
 }
 .create-group-footer {
-    background-color: var(--color-secondary-footer-background);
+    background-color: $whisper-color;
     height: 60px;
     text-align: left;
     display: flex;
@@ -34,12 +35,12 @@
     }
 }
 .stock-group-footer {
-    background-color: var(--color-white);
+    background-color: $white;
     z-index: 3;
     width: calc(100% - 240px);
     padding-right: 15px;
     line-height: 1.8;
-    box-shadow: 0 0 6px var(--color-iron);
+    box-shadow: 0 0 6px $black-russian;
     z-index: 9;
     padding-top: 5px;
     .stock-value {
@@ -59,9 +60,6 @@
             img {
                 width: 100%;
                 height: 100%;
-            }
-            .add-image-filter {
-                filter: var(--color-image-filter-tertiary);
             }
         }
     }

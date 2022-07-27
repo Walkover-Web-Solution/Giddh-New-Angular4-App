@@ -1,132 +1,305 @@
 <div class="help-support-aside setting-sidebar-wrapper" *ngIf="asideInventorySidebarMenuState === 'in'">
     <inventory-sidebar class="inventory-sidebar"></inventory-sidebar>
 </div>
-<hamburger-menu></hamburger-menu>
+
 <!-- *ngIf="asideSettingMenuState === 'in'" -->
 
-<div class="relative new-inventory-page pt-3">
-    <!--new inventory header-->
-    <!--    <div class="new-inventory-page-header">-->
-    <!--        <h2><strong>Inventory > Group Wise</strong></h2>-->
-
-    <!--        <div class="inventory-header-right">-->
-    <!--            <sh-select placeholder="XYZ Alias Name Branch"></sh-select>-->
-    <!--            <div class="custom-datepicker ml-3">-->
-    <!--                <i class="icon-calender calendar-addon bdr-radius-50" (click)="expandDateRang()"></i>-->
-    <!--                <div (click)="showGiddhDatepicker($event)">-->
-    <!--                    <input-->
-    <!--                        type="text"-->
-    <!--                        name="selectedDateRange"-->
-    <!--                        id="select-date"-->
-    <!--                        [ngClass]="{ 'full-width': !dateRangFullWidth }"-->
-    <!--                        [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"-->
-    <!--                        class="giddh-datepicker date-range-picker bdr-radius-50"-->
-    <!--                    />-->
-    <!--                </div>-->
-    <!--            </div>-->
-    <!--        </div>-->
-    <!--    </div>-->
-    <!-- end new inventory header-->
-
-    <div class="container-fluid">
-        <div class="mat-elevation-z3 inventory-card">
-            <!--new inventory data filter card header-->
-            <div class="inventory-filter-bar">
-                <div class="search-control">
-                    <i class="icon-search search-icon"></i>
-                    <sh-select placeholder="Search Branch Alice"></sh-select>
-
-                    <div class="menu-btn-control">
-                        <button mat-button (click)="openModal(inventoryAdvanceSearch)">
-                            <i class="icon-advance-filter mr-2"></i>
-                            Advance Filter
+<div class="relative new-inventory-page absolute-tab">
+    <hamburger-menu></hamburger-menu>
+    <tabset class="custom-tabs">
+        <div class="inventory-header d-flex px-3 pb-3">
+            <div class="d-flex">
+                <div class="mr-r15">
+                    <div class="button-group relative" dropdown placement="top left">
+                        <button
+                            id="button-basic"
+                            dropdownToggle
+                            type="button"
+                            class="btn dropdown-toggle"
+                            aria-controls="dropdown-basic"
+                            tooltip="Customised Columns"
+                        >
+                            <i class="icon-options bdr-radius-50"></i>
                         </button>
-
-                        <button mat-button [matMenuTriggerFor]="customise" aria-label="Customise">
-                            <i class="icon-options mr-2"> </i>
-                            Customise
-                        </button>
-                        <mat-menu #customise="matMenu">
-                            <div class="menu-selector">
-                                <button mat-menu-item>
-                                    <mat-checkbox color="primary">Select All</mat-checkbox>
-                                </button>
-                                <button mat-menu-item>
-                                    <mat-checkbox color="primary">Opening Value</mat-checkbox>
-                                </button>
-                                <button mat-menu-item>
-                                    <mat-checkbox color="primary">Inward Value</mat-checkbox>
-                                </button>
-                                <button mat-menu-item>
-                                    <mat-checkbox color="primary">Outward Value</mat-checkbox>
-                                </button>
-                                <button mat-menu-item>
-                                    <mat-checkbox color="primary">Less Stock</mat-checkbox>
-                                </button>
-                                <button mat-menu-item>
-                                    <mat-checkbox color="primary">Zero Stock</mat-checkbox>
-                                </button>
-                                <button mat-menu-item>
-                                    <mat-checkbox color="primary">Negative Stock</mat-checkbox>
-                                </button>
-                            </div>
-                        </mat-menu>
+                        <ul
+                            id="dropdown-basic"
+                            *dropdownMenu
+                            class="dropdown-menu dropdown-menu-left"
+                            role="menu"
+                            aria-labelledby="button-basic"
+                        >
+                            <li role="menuitem">
+                                <a class="dropdown-item pd-l1" href="javascript:void(0);">
+                                    <span class="d-block">
+                                        <input id="check-group" class="checkbox-custom" type="checkbox" />
+                                        <label for="check-group" class="checkbox-custom-label pl-0 pb-0"> Group </label>
+                                    </span>
+                                </a>
+                            </li>
+                            <li role="menuitem">
+                                <a class="dropdown-item pd-l1" href="javascript:void(0);">
+                                    <span class="d-block">
+                                        <input id="check-parent-group" class="checkbox-custom" type="checkbox" />
+                                        <label for="check-parent-group" class="checkbox-custom-label pl-0 pb-0">
+                                            Parent Group
+                                        </label>
+                                    </span>
+                                </a>
+                            </li>
+                            <li role="menuitem">
+                                <a class="dropdown-item pd-l1" href="javascript:void(0);">
+                                    <span class="d-block">
+                                        <input id="check-sold-item" class="checkbox-custom" type="checkbox" />
+                                        <label for="check-sold-item" class="checkbox-custom-label pl-0 pb-0">
+                                            Top Sold Item
+                                        </label>
+                                    </span>
+                                </a>
+                            </li>
+                            <li role="menuitem">
+                                <a class="dropdown-item pd-l1" href="javascript:void(0);">
+                                    <span class="d-block">
+                                        <input id="check-less-stock" class="checkbox-custom" type="checkbox" />
+                                        <label for="check-less-stock" class="checkbox-custom-label pl-0 pb-0">
+                                            Less Stock
+                                        </label>
+                                    </span>
+                                </a>
+                            </li>
+                            <li role="menuitem">
+                                <a class="dropdown-item pd-l1" href="javascript:void(0);">
+                                    <span class="d-block">
+                                        <input id="check-zero-stock" class="checkbox-custom" type="checkbox" />
+                                        <label for="check-zero-stock" class="checkbox-custom-label pl-0 pb-0">
+                                            Zero Stock
+                                        </label>
+                                    </span>
+                                </a>
+                            </li>
+                            <li role="menuitem">
+                                <a class="dropdown-item pd-l1" href="javascript:void(0);">
+                                    <span class="d-block">
+                                        <input id="check-negative-stock" class="checkbox-custom" type="checkbox" />
+                                        <label for="check-negative-stock" class="checkbox-custom-label pl-0 pb-0">
+                                            Negative Stock
+                                        </label>
+                                    </span>
+                                </a>
+                            </li>
+                            <li role="menuitem">
+                                <a class="dropdown-item pd-l1" href="javascript:void(0);">
+                                    <span class="d-block">
+                                        <input id="check-sku-code" class="checkbox-custom" type="checkbox" />
+                                        <label for="check-sku-code" class="checkbox-custom-label pl-0 pb-0">
+                                            SKU Code
+                                        </label>
+                                    </span>
+                                </a>
+                            </li>
+                            <li role="menuitem">
+                                <a class="dropdown-item pd-l1" href="javascript:void(0);">
+                                    <span class="d-block">
+                                        <input id="check-hsn-sac-code" class="checkbox-custom" type="checkbox" />
+                                        <label for="check-hsn-sac-code" class="checkbox-custom-label pl-0 pb-0">
+                                            HSN/SAC
+                                        </label>
+                                    </span>
+                                </a>
+                            </li>
+                            <li role="menuitem">
+                                <a class="dropdown-item pd-l1" href="javascript:void(0);">
+                                    <span class="d-block">
+                                        <input id="check-account" class="checkbox-custom" type="checkbox" />
+                                        <label for="check-account" class="checkbox-custom-label pl-0 pb-0">
+                                            Account/s
+                                        </label>
+                                    </span>
+                                </a>
+                            </li>
+                            <li role="menuitem">
+                                <a class="dropdown-item pd-l1" href="javascript:void(0);">
+                                    <span class="d-block">
+                                        <input id="check-purchase-rate" class="checkbox-custom" type="checkbox" />
+                                        <label for="check-purchase-rate" class="checkbox-custom-label pl-0 pb-0">
+                                            Purchase Rate
+                                        </label>
+                                    </span>
+                                </a>
+                            </li>
+                            <li role="menuitem">
+                                <a class="dropdown-item pd-l1" href="javascript:void(0);">
+                                    <span class="d-block">
+                                        <input id="check-sales-rate" class="checkbox-custom" type="checkbox" />
+                                        <label for="check-sales-rate" class="checkbox-custom-label pl-0 pb-0">
+                                            Sales Rate
+                                        </label>
+                                    </span>
+                                </a>
+                            </li>
+                            <li role="menuitem">
+                                <a class="dropdown-item pd-l1" href="javascript:void(0);">
+                                    <span class="d-block">
+                                        <input id="check-closing-quantity" class="checkbox-custom" type="checkbox" />
+                                        <label for="check-closing-quantity" class="checkbox-custom-label pl-0 pb-0">
+                                            Closing Quantity
+                                        </label>
+                                    </span>
+                                </a>
+                            </li>
+                        </ul>
                     </div>
                 </div>
-
-                <div class="d-flex">
-                    <button class="round-btn" mat-icon-button [matMenuTriggerFor]="importExport" aria-label="Customise">
-                        <i class="svg">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="12.444" height="16" viewBox="0 0 12.444 16">
-                                <path
-                                    class="a"
-                                    d="M82.456,1185.2l3.556,3.556H83.344v6.222H81.567v-6.222H78.9Zm6.222,12.444h2.667l-3.556,3.556-3.556-3.556H86.9v-6.222h1.778Z"
-                                    transform="translate(-78.9 -1185.2)"
+                <div class="mr-r15">
+                    <span class="input-group" [ngClass]="{ 'full-width-input-group': !dateRangFullWidth }">
+                        <div class="custom-datepicker">
+                            <i class="icon-calender calendar-addon bdr-radius-50" (click)="expandDateRang()"></i>
+                            <div (click)="showGiddhDatepicker($event)">
+                                <input
+                                    type="text"
+                                    name="selectedDateRange"
+                                    id="select-date"
+                                    [ngClass]="{ 'full-width': !dateRangFullWidth }"
+                                    [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
+                                    class="giddh-datepicker date-range-picker bdr-radius-50"
                                 />
-                            </svg>
-                        </i>
-                    </button>
-                    <mat-menu #importExport="matMenu">
-                        <div class="menu-selector">
-                            <button mat-menu-item>
-                                <span>Import Group</span>
-                            </button>
-                            <button mat-menu-item>
-                                <span>Export Groups</span>
-                            </button>
+                            </div>
                         </div>
-                    </mat-menu>
+                    </span>
+                </div>
+                <div class="mr-r15" *ngIf="!isMobileScreen">
+                    <span class="input-group" [ngClass]="{ 'full-width-search-group': !inputFullWidth }">
+                        <input
+                            *ngIf="!inputFullWidth"
+                            [ngClass]="{ 'full-width': !inputFullWidth }"
+                            type="text"
+                            id="select-date-mobile-view"
+                            class="form-control search-group bdr-radius-50"
+                            placeholder="Group"
+                        />
+                        <i class="icon-search position-absolute bdr-radius-50" (click)="searhcGroup()"></i>
+                    </span>
+                </div>
+                <div class="mr-r15" *ngIf="!isMobileScreen">
+                    <sh-select placeholder="Search Branch Alice" id="select-branch-alice"></sh-select>
+                </div>
 
+                <div class="mr-r15 advance-search-btn">
+                    <i
+                        class="icon-advance-filter bdr-radius-50"
+                        (click)="openModal(inventoryAdvanceSearch)"
+                        tooltip="Advance Search"
+                    ></i>
+                </div>
+            </div>
+            <div class="d-flex inventory-right-btn">
+                <div class="btn-group" *ngIf="!isMobileScreen" dropdown>
                     <button
-                        mat-raised-button
-                        class="create-btn-inventory btn-sky-blue ml-3 mr-0"
-                        (click)="createGroupToggleAsidePane()"
+                        id="more-btn-inventory"
+                        dropdownToggle
+                        type="button"
+                        class="btn btn-primary dropdown-toggle"
+                        aria-controls="more-inventory-dropdown"
                     >
-                        + Create New
+                        More <span class="caret"></span>
                     </button>
+                    <ul
+                        id="more-inventory-dropdown"
+                        *dropdownMenu
+                        class="dropdown-menu"
+                        role="menu"
+                        aria-labelledby="more-btn-inventory"
+                    >
+                        <li role="menuitem">
+                            <a
+                                class="dropdown-item"
+                                href="javascript:void(0);"
+                                [routerLink]="['/pages/new-inventory/create-new-inventory']"
+                                >Bulk Edit</a
+                            >
+                        </li>
+                        <li role="menuitem"><a class="dropdown-item" href="javascript:void(0);">Archive</a></li>
+                        <li role="menuitem"><a class="dropdown-item" href="javascript:void(0);">Delete</a></li>
+                    </ul>
                 </div>
+                <button
+                    id="create-new"
+                    class="btn btn-sky-blue mr-0"
+                    (click)="createGroupToggleAsidePane()"
+                    *ngIf="!isMobileScreen"
+                >
+                    + Create New
+                </button>
+                <!--
+                    (click)="toggleAsidePane()" --- crate new function
+                    (click)="createGroupToggleAsidePane()" --- create new group function
+                    (click)="createItemToggleAsidePane() " --- create new item function
+                    (click)="createUnitToggleAsidePane" --- create new Unit funcation
+                    (click)="createComboToggleAsidePane()" -- create new combo funcation
+                            -->
             </div>
 
-            <div class="inventory-filter-bar">
-                <div class="action-button-container">
-                    <button class="round-btn" mat-button><i class="icon-inventory1 mr-2"></i>Archive</button>
-                    <button class="round-btn" mat-button><i class="icon-edit-pencil mr-2"> </i>Bulk edit</button>
-                    <button class="round-btn" mat-icon-button>
-                        <i class="icon-trash"> </i>
-                    </button>
-                </div>
-                <div>
-                    <span class="dots-select">2 Groups Selected</span>
-                    <button mat-icon-button class="ml-3" style="font-size: 25px">×</button>
-                </div>
+            <!-- New inventory button will be show if product/sercive tab on active mode -->
+            <div class="d-flex inventory-right-btn" hidden>
+                <button id="create-new-inventory" class="btn btn-sky-blue">+ New Inventory</button>
             </div>
-            <!--end new inventory data filter card header-->
-
-            <router-outlet></router-outlet>
         </div>
-    </div>
-</div>
+        <div class="mx-3 mr-b15 d-flex justify-content-between" *ngIf="isMobileScreen">
+            <div class="btn-group" dropdown>
+                <button
+                    id="more-btn-inventory-mobile"
+                    dropdownToggle
+                    type="button"
+                    class="btn btn-primary dropdown-toggle min-width-100"
+                    aria-controls="more-inventory-dropdown-mobile"
+                >
+                    More <span class="caret"></span>
+                </button>
+                <ul
+                    id="more-inventory-dropdown-mobile"
+                    *dropdownMenu
+                    class="dropdown-menu"
+                    role="menu"
+                    aria-labelledby="more-btn-inventory-mobile"
+                >
+                    <li role="menuitem">
+                        <a
+                            class="dropdown-item"
+                            href="javascript:void(0);"
+                            [
+                            routerLink]="['/pages/new-inventory/create-new-inventory']"
+                            >Bulk Edit</a
+                        >
+                    </li>
+                    <li role="menuitem"><a class="dropdown-item" href="javascript:void(0);">Archive</a></li>
+                    <li role="menuitem"><a class="dropdown-item" href="javascript:void(0);">Delete</a></li>
+                </ul>
+            </div>
+            <button
+                id="create-new-mobile-view"
+                class="btn btn-sky-blue mr-0 d-flex justify-content-center"
+                (click)="toggleAsidePane()"
+            >
+                + Create New
+            </button>
+        </div>
 
+        <tab heading="Group Wise">
+            <inventory-group></inventory-group>
+        </tab>
+        <tab heading="Product/Service Wise">
+            <inventory-product-service-list></inventory-product-service-list>
+        </tab>
+        <tab heading="Combo">
+            <inventory-combo-list></inventory-combo-list>
+        </tab>
+        <tab heading="Transactions">
+            <inventory-transaction-list></inventory-transaction-list>
+        </tab>
+        <tab heading="Custom Fields">
+            <inventory-custom-field></inventory-custom-field>
+        </tab>
+    </tabset>
+</div>
 <!-- Aside pane code -->
 <div class="aside-overlay" *ngIf="asideMenuState === 'in'"></div>
 
@@ -134,10 +307,8 @@
 <!-- <aside-create-new-inventory *ngIf="asideMenuState === 'in'" [@slideInOut]="asideMenuState" (closeAsideEvent)="toggleAsidePane()"></aside-create-new-inventory> -->
 
 <!-- create new group aside pane -->
-<aside-create-new-group
-    *ngIf="asideMenuState === 'in'"
-    (closeAsideEvent)="createGroupToggleAsidePane()"
-></aside-create-new-group>
+<aside-create-new-group *ngIf="asideMenuState === 'in'" (closeAsideEvent)="createGroupToggleAsidePane()">
+</aside-create-new-group>
 
 <!-- create new item(product/service) aside pane -->
 <!-- <aside-create-new-item *ngIf="asideMenuState === 'in'" (closeAsideEvent)="createItemToggleAsidePane()"></aside-create-new-item> -->

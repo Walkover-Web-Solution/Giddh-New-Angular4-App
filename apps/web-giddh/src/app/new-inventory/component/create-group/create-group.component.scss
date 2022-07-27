@@ -1,0 +1,29 @@
+@import "../../../../assets/css/color.scss";
+
+.create-group-page {
+    padding-top: 15px;
+    .image-group {
+        padding-top: 35px;
+        .group-vector {
+            position: absolute;
+            right: 15px;
+            top: 15px;
+        }
+    }
+}
+:host::ng-deep .nav.nav-tabs {
+    position: static !important;
+    padding-left: 0 !important;
+    margin-bottom: 15px;
+}
+.create-group-footer {
+    background-color: $whisper-color;
+    height: 60px;
+    text-align: left;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    .footer-wrapper {
+        padding: 15px;
+    }
+}

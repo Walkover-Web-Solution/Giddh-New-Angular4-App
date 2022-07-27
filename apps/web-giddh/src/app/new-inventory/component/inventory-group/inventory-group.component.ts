@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-    selector: 'inventory-combo-list',
-    templateUrl: './inventory-combo-list.component.html',
-    styleUrls: ['./inventory-combo-list.component.scss'],
+    selector: 'inventory-group',
+    templateUrl: './inventory-group.component.html',
+    styleUrls: ['./inventory-group.component.scss'],
 
 })
 
-export class InventoryComboListComponent implements OnInit {
+export class NewInventoryGroupComponent implements OnInit {
     /* this will store image path*/
     public imgPath: string = '';
 

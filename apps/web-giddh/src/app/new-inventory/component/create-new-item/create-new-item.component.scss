@@ -1,3 +1,5 @@
+@import "../../../../assets/css/color.scss";
+
 :host {
     position: fixed;
     left: auto;
@@ -14,7 +16,7 @@
     right: 10px;
     z-index: 9999999;
     background-color: transparent;
-    color: var(--color-white);
+    color: $white;
     font-size: 17px;
     top: 18px;
     margin-right: 0;
@@ -91,19 +93,19 @@
     }
     .sales-purchase-details {
         .select-puchase-info {
-            background-color: var(--color-lavender);
+            background-color: $whisper-color;
             padding: 6px 10px;
             font-family: "opensans-semibold";
         }
         .icon-plus {
-            color: var(--color-blue);
+            color: $primary;
         }
     }
     .add-another-option {
-        color: var(--color-blue);
+        color: $primary;
     }
     .icon-plus {
-        color: var(--color-blue);
+        color: $primary;
     }
     p.product-made-by {
         font-family: "opensans-semibold";
@@ -115,7 +117,7 @@
             content: "";
             width: 80%;
             height: 0;
-            border: 1px solid var(--color-iron);
+            border: 1px solid $gainsboro;
             top: 17px;
             left: 21%;
         }

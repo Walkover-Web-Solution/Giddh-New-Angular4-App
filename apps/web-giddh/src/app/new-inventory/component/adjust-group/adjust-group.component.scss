@@ -1,3 +1,5 @@
+@import "../../../../assets/css/color.scss";
+
 .adjust-group-page {
     .back-to-page {
         position: absolute;
@@ -5,7 +7,7 @@
         top: 0;
         padding: 10px;
         z-index: 10;
-        color: var(--color-blue);
+        color: $primary;
     }
     .adjust-field-wrapper {
         min-height: 73vh;
@@ -18,10 +20,10 @@
                 cursor: pointer;
                 padding: 10px;
                 &.icon-plus {
-                    color: var(--color-blue);
+                    color: $primary;
                 }
                 &.icon-trash {
-                    color: var(--color-gray);
+                    color: $gray;
                 }
             }
         }
@@ -51,19 +53,19 @@
         .giddh-table tr,
         .giddh-table td,
         .giddh-table th {
-            border: 1px solid var(--color-iron);
+            border: 1px solid $gainsboro;
             vertical-align: top !important;
         }
         .add-line-bulk-item {
-            color: var(--color-gray);
+            color: $gray;
             a {
-                color: var(--color-blue);
+                color: $deep-sky-blue;
             }
         }
     }
 }
 .inventory-footer {
-    background-color: var(--color-lavender);
+    background-color: $whisper-color;
     z-index: 3;
     width: calc(100% - 240px);
     padding-right: 15px;

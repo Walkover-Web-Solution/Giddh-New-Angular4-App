@@ -1,176 +1,86 @@
+import { Component, EventEmitter, OnInit, Output, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { Component, EventEmitter, Output, OnDestroy } from '@angular/core';
+import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { Router } from '@angular/router';
+import { AppState } from 'apps/web-giddh/src/app/store';
+import { select, Store } from '@ngrx/store';
+import { take, takeUntil } from 'rxjs/operators';
+import { Organization } from 'apps/web-giddh/src/app/models/api-models/Company';
+import { OrganizationType } from 'apps/web-giddh/src/app/models/user-login-state';
 import { ReplaySubject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
-import { FlatTreeControl } from '@angular/cdk/tree';
-import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
-
-/**
- * Food data with nested structure.
- * Each node has a name and an optional list of children.
- */
-interface SidebarNode {
-  icons?: string;
-  name: string;
-  link?: string;
-  children?: SidebarNode[];
-}
-
-const TREE_DATA: SidebarNode[] = [
-  {
-    name: 'Stock',
-    icons: 'stock.svg',
-    children: [{ name: 'Create New', icons: 'create-new.svg', link: '/pages/new-inventory/stock/product/create'}, { name: 'Item-wise', icons:'item-wise.svg', link: '/pages/new-inventory/item-wise' }, { name: 'Group-wise' , icons: 'group-wise.svg', link: '/pages/new-inventory/group-wise' }, { name: 'Variant-wise', icons: 'varient-wise.svg', link: '/pages/new-inventory/variant-wise' }, { name: 'Transactions', icons: 'transactions.svg' }],
-  },
-  {
-    name: 'Services',
-    icons: 'service.svg',
-    children: [{ name: 'Create New', icons: 'create-new.svg', link: '/pages/new-inventory/stock/service/create'}, { name: 'Item-wise', icons:'item-wise.svg', link: '/pages/new-inventory/item-wise' }, { name: 'Group-wise', icons: 'group-wise.svg', link: '/pages/new-inventory/group-wise' }, { name: 'Variant-wise',icons: 'varient-wise.svg', link: '/pages/new-inventory/variant-wise' }, { name: 'Transactions', icons: 'transactions.svg' }],
-  },
-  {
-    name: 'Fixed Assets',
-    icons: 'fixed-assets.svg',
-    children: [{ name: 'Create New', icons: 'create-new.svg', link: '/pages/new-inventory/stock/product/create' }, { name: 'Item-wise', icons:'item-wise.svg', link: '/pages/new-inventory/item-wise' }, { name: 'Group-wise', icons: 'group-wise.svg', link: '/pages/new-inventory/group-wise' }, { name: 'Variant-wise',icons: 'varient-wise.svg', link: '/pages/new-inventory/variant-wise' }, { name: 'Transactions', icons: 'transactions.svg' }],
-  },
-  {
-    name: 'Branch Transfer',
-    icons: 'branch-transfer.svg'
-  },
-  {
-    name: 'Manufacturing',
-    icons: 'manufacturing.svg'
-  },
-  {
-    name: 'Warehouse Opening Balance',
-    link: '/pages/new-inventory/stock-balance',
-    icons: 'warehouse-opening-balance.svg'
-  },
-];
-
-/** Flat node with expandable and level information */
-interface SidebarFlatNode {
-  expandable: boolean;
-  name: string;
-  level: number;
-}
 
 @Component({
-  selector: 'inventory-sidebar',
-  templateUrl: './inventory-sidebar.component.html',
-  styleUrls: [`./inventory-sidebar.component.scss`],
+    selector: 'inventory-sidebar',
+    templateUrl: './inventory-sidebar.component.html',
+    styleUrls: [`./inventory-sidebar.component.scss`],
 })
-export class InventorySidebarComponent implements OnDestroy {
-  /* Event emitter for close sidebar popup event */
-  @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
-  /** True if mobile screen */
-  public isMobileScreen: boolean = true;
-  /** Observable to unsubscribe all the store listeners to avoid memory leaks */
-  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-  /** Holding data in SidebarNode Array */
-  dataList: any[] = TREE_DATA;
-  /** Holds images folder path */
-  public imgPath: string = "";
 
-  private transformer = (node: SidebarNode, level: number) => {
-    return {
-      expandable: !!node.children && node.children.length > 0,
-      name: node.name,
-      level: level,
-      icons: node.icons,
-      link: node.link
-    };
-  };
+export class InventorySidebarComponent implements OnInit, OnDestroy {
+    /* Event emitter for close sidebar popup event */
+    @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
+    @ViewChild('searchField', { static: true }) public searchField: ElementRef;
 
-  treeControl = new FlatTreeControl<SidebarFlatNode>(
-    node => node.level,
-    node => node.expandable,
-  );
+    public imgPath: string = '';
 
-  treeFlattener = new MatTreeFlattener(
-    this.transformer,
-    node => node.level,
-    node => node.expandable,
-    node => node.children,
-  );
+    public search: any = "";
 
-  dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
+    public isMobileScreen: boolean = true;
+    /** Observable to unsubscribe all the store listeners to avoid memory leaks */
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(
-    private router: Router,
-    private breakPointObserver: BreakpointObserver
-  ) {
-    this.breakPointObserver.observe([
-      '(max-width: 767px)'
-    ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
-      this.isMobileScreen = result.matches;
-    });
-    this.dataSource.data = TREE_DATA;
-  }
+    constructor(private breakPointObservar: BreakpointObserver, private generalService: GeneralService, private router: Router, private store: Store<AppState>) {
 
-  hasChild = (_: number, node: SidebarFlatNode) => node.expandable;
-
-  /**
-   * Initializes the component
-   * 
-   * @memberof InventorySidebarComponent
-  */
-  public ngOnInit(): void {
-    this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
-  }
-
-  /**
-   * Releases the memory
-   *
-   * @memberof InventorySidebarComponent
-   */
-  public ngOnDestroy(): void {
-    this.destroyed$.next(true);
-    this.destroyed$.complete();
-  }
-
-  /**
-   * This will close the aside panel
-   *
-   * @param {*} [event]
-   * @memberof InventorySidebarComponent
-   */
-  public closeAsidePane(event?: any): void {
-    this.closeAsideEvent.emit(event);
-  }
-
-  /**
-   * This will navigate the user to previous page
-   *
-   * @memberof InventorySidebarComponent
-   */
-  public goToPreviousPage(): void {
-    this.router.navigate(['/pages/inventory']);
-  }
-
-  /**
-   * This will close the settings popup if clicked outside and is mobile screen
-   *
-   * @param {*} [event]
-   * @memberof InventorySidebarComponent
-   */
-  public closeAsidePaneIfMobile(event?: any): void {
-    if (this.isMobileScreen && event?.target?.className !== "icon-bar") {
-      this.closeAsideEvent.emit(event);
     }
-  }
-  
-  /**
-   * Function for routing list items by mat-tree-node
-   * 
-   * @param {string} listName holds the value of item clicked on sidebar menu
-   * @param {number} index is the index of the item
-   * @memberof InventorySidebarComponent
-   */
-  public gotoPage(node :any): void {
-    if(node.link){
-      this.router.navigate([node.link]);
-    } 
-  }
-}
 
+
+    /**
+     * This will close the aside panel
+     *
+     * @param {*} [event]
+     * @memberof AsideSettingComponent
+     */
+    public closeAsidePane(event?): void {
+        this.closeAsideEvent.emit(event);
+    }
+
+
+
+    /**
+     * This will navigate the user to previous page
+     *
+     * @memberof AsideSettingComponent
+     */
+    public goToPreviousPage(): void {
+        if (this.generalService.getSessionStorage("previousPage") && !this.router.url.includes("/dummy")) {
+            this.router.navigateByUrl(this.generalService.getSessionStorage("previousPage"));
+        } else {
+            this.router.navigate(['/pages/home']);
+        }
+    }
+
+    /**
+     * This will close the settings popup if clicked outside and is mobile screen
+     *
+     * @param {*} [event]
+     * @memberof AsideSettingComponent
+     */
+    public closeAsidePaneIfMobile(event?): void {
+        if (this.isMobileScreen && event && event.target.className !== "icon-bar") {
+            this.closeAsideEvent.emit(event);
+        }
+    }
+
+    public ngOnInit() {
+
+
+    }
+    /**
+     * Releases the memory
+     *
+     * @memberof AsideSettingComponent
+     */
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
+    }
+}

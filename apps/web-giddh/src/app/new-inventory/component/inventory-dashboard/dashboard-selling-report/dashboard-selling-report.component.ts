@@ -12,7 +12,6 @@ import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../../shared/
 
 })
 
-// tslint:disable-next-line:component-class-suffix
 export class DashboardSellingReport implements OnInit {
     /* This will store modal reference */
     public modalRef: BsModalRef;

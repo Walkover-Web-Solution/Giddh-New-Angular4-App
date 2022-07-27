@@ -1,0 +1,96 @@
+<div class="relative">
+    <hamburger-menu [pageHeading]="'Create Group'"></hamburger-menu>
+    <div class="container-fluid">
+        <div class="create-group-page">
+            <div class="row">
+                <div class="col-xl-5 col-lg-6 col-md-6">
+                    <div class="create-group-form">
+                        <p class="mr-b15 text-gray font-14">
+                            Lorem Ipsum dummy text will come here about create stock.
+                        </p>
+                    </div>
+                    <form>
+                        <div class="row mr-b15">
+                            <div class="col-sm-6">
+                                <label>Group Name <span class="red-text">*</span></label>
+                            </div>
+                            <div class="col-sm-6">
+                                <input
+                                    id="group-name"
+                                    class="form-control"
+                                    type="text"
+                                    placeholder="Enter Group Name"
+                                />
+                            </div>
+                        </div>
+                        <div class="row mr-b15">
+                            <div class="col-sm-6">
+                                <label>Unique Name <span class="red-text">*</span></label>
+                            </div>
+                            <div class="col-sm-6">
+                                <input id="unique-name" class="form-control" type="text" placeholder="Unique Name" />
+                            </div>
+                        </div>
+                        <div class="row mr-b15">
+                            <div class="col-sm-6">
+                                <label>HSN Code</label>
+                            </div>
+                            <div class="col-sm-6">
+                                <input id="hsn-code" class="form-control" type="text" placeholder="Enter Code" />
+                            </div>
+                        </div>
+                        <div class="row mr-b15">
+                            <div class="col-sm-6">
+                                <label>SAC Code</label>
+                            </div>
+                            <div class="col-sm-6">
+                                <input id="sac-code" class="form-control" type="text" placeholder="Enter Code" />
+                                <div class="mr-t15"><input id="usb-group" type="checkbox" />Is it Sub-group?</div>
+                            </div>
+                        </div>
+                        <div class="row mr-t15">
+                            <div class="col-sm-6">
+                                <label>Parent Group</label>
+                            </div>
+                            <div class="col-sm-6">
+                                <input class="form-control" id="select-parent-group" placeholder="Select Group" />
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-xl-7 col-lg-6 col-md-6">
+                    <div class="image-group relative">
+                        <div class="add-image">
+                            <img src="{{ imgPath }}add-image.svg" />
+                        </div>
+                        <div class="group-vector">
+                            <img src="{{ imgPath }}create-group-vector.svg" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="other-group">
+                <tabset class="custom-tabs">
+                    <tab heading="Other">
+                        <div class="other-tab-content">
+                            <input type="checkbox" id="out-of-stock" />
+                            <span class="font-14"
+                                >Continue selling when out of stock? (Will be applicable on all the subsequent
+                                group/stock)</span
+                            >
+                        </div>
+                    </tab>
+                </tabset>
+            </div>
+        </div>
+    </div>
+    <div class="create-group-footer sticky-footer">
+        <div class="footer-wrapper">
+            <div class="button-group">
+                <button id="clear-btn" class="btn btn-primary bdr-radius-50 min-width-100">Clear</button>
+                <button id="create-group-btn" class="btn btn-success bdr-radius-50">Create Group</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,3 +1,5 @@
+@import "../../../../../assets/css/color.scss";
+
 .item-product-block {
     h4 {
         font-family: "opensans-semibold";
@@ -12,28 +14,28 @@
             flex-direction: column;
             text-align: center;
             &.less-stock {
-                background-color: var(--color-foam);
+                background-color: $onahau;
                 p {
                     &.value {
-                        color: var(--color-red);
+                        color: $cinnabar-orange;
                         font-size: 20px;
                     }
                 }
             }
             &.zero-stock {
-                background-color: var(--color-chardon);
+                background-color: $chardon;
                 p {
                     &.value {
-                        color: var(--color-teal);
+                        color: $teal;
                         font-size: 20px;
                     }
                 }
             }
             &.negative-stock {
-                background-color: var(--color-tutu);
+                background-color: $tutu;
                 p {
                     &.value {
-                        color: var(--color-red);
+                        color: $bright-pink;
                         font-size: 20px;
                     }
                 }
@@ -44,7 +46,7 @@
         .total-item {
             font-size: 14px;
             justify-content: space-between;
-            border-bottom: 1px solid var(--color-iron);
+            border-bottom: 1px solid $gainsboro;
             padding-bottom: 7px;
             margin-bottom: 7px;
             &:last-child {

@@ -1,0 +1,89 @@
+<div class="container-fluid group-container">
+    <div class="table-responsive">
+        <table class="table giddh-table on-mobile-view">
+            <thead>
+                <tr>
+                    <th>&nbsp;</th>
+                    <th>Group</th>
+                    <th>Parent Group</th>
+                    <th>Top Sold Item</th>
+                    <th>Less Stock</th>
+                    <th>Zero Stock</th>
+                    <th>Negative Stock</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td data-title="Select">
+                        <div class="d-block text-center text-left-sm">
+                            <input type="checkbox" id="select-group" />
+                        </div>
+                    </td>
+                    <td data-title="Group">
+                        <div class="product-name-image d-flex">
+                            <div>
+                                <img src="{{ imgPath }}add-image.svg" />
+                            </div>
+                            <div class="cursor-pointer mx-2">
+                                <a href="javascript:void(0)" [routerLink]="['/pages/new-inventory/about-group-detail']">
+                                    <p>Product Name</p>
+                                    <p class="text-gray">(34 Items)</p>
+                                </a>
+                            </div>
+                        </div>
+                    </td>
+                    <td data-title="Parent Group">Dummy Group Name Text</td>
+                    <td data-title="Top Sold Item" tooltip="solde till date:1/1/2020 , 5,023 Qty. 1,222/-">
+                        Dummy Text Product Name
+                    </td>
+                    <td data-title="Less Stock">Dummy Product Name</td>
+                    <td data-title="Zero Stock">Dummy Product Name</td>
+                    <td data-title="Negative Stock">Dummy Product Name</td>
+                </tr>
+                <tr>
+                    <td data-title="Select">
+                        <div class="d-block text-center text-left-sm">
+                            <input type="checkbox" id="select-product-checkbox" />
+                        </div>
+                    </td>
+                    <td data-title="Group">
+                        <div class="product-name-image d-flex">
+                            <div class="d-flex">
+                                <div>
+                                    <img src="{{ imgPath }}add-image.svg" />
+                                </div>
+                            </div>
+                            <div class="cursor-pointer mx-2">
+                                <a href="javascript:void(0)" [routerLink]="['/pages/new-inventory/about-group-detail']">
+                                    <p>Product Name</p>
+                                    <p class="text-gray">(34 Items)</p>
+                                </a>
+                            </div>
+                        </div>
+                    </td>
+                    <td data-title="Parent Group">Dummy Group Name Text</td>
+                    <td data-title="Top Sold Item" tooltip="solde till date:1/1/2020 , 5,023 Qty. 1,222/-">
+                        Dummy Text Product Name
+                    </td>
+                    <td data-title="Less Stock">Dummy Product Name</td>
+                    <td data-title="Zero Stock">Dummy Product Name</td>
+                    <td data-title="Negative Stock">Dummy Product Name</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="inventory-footer sticky-footer">
+    <div class="inner-content-footer">
+        <div class="d-flex">
+            <div class="mr-3">
+                <p class="text-gray">Group Count:</p>
+                <p class="text-left label-value">23</p>
+            </div>
+            <div class="mr-3">
+                <p class="text-gray">Items Count:</p>
+                <p class="text-left label-value">23</p>
+            </div>
+        </div>
+    </div>
+</div>

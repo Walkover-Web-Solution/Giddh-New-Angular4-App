@@ -1,3 +1,5 @@
+@import "../../../../assets/css/color.scss";
+
 .create-custom-field-page {
     .back-to-page {
         position: absolute;
@@ -5,7 +7,7 @@
         top: 0;
         padding: 10px;
         z-index: 10;
-        color: var(--color-blue);
+        color: $primary;
     }
     .custom-field-wrapper {
         min-height: 73vh;
@@ -18,10 +20,10 @@
                 cursor: pointer;
                 padding: 10px;
                 &.icon-plus {
-                    color: var(--color-blue);
+                    color: $primary;
                 }
                 &.icon-trash {
-                    color: var(--color-gray);
+                    color: $gray;
                 }
             }
         }
@@ -36,7 +38,7 @@
     }
 }
 .inventory-footer {
-    background-color: var(--color-secondary-footer-background);
+    background-color: $whisper-color;
     z-index: 3;
     width: calc(100% - 240px);
     padding-right: 15px;

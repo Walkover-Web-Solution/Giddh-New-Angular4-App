@@ -1,3 +1,5 @@
+@import "../../../../../assets/css/color.scss";
+
 .selling-product-block {
     .box {
         min-height: 325px;
@@ -19,7 +21,7 @@
                 position: absolute;
                 width: 1px;
                 height: 100%;
-                background-color: var(--color-iron);
+                background-color: $gainsboro;
                 content: "";
                 top: 0;
                 left: 200px;
@@ -32,7 +34,7 @@
                     font-size: 14px;
                 }
                 .progress-bar {
-                    background-color: var(--color-solitude-light);
+                    background-color: $lavender-blue;
                     border-radius: 0 10px 10px 0;
                     height: 10px;
                     margin-right: 10px;

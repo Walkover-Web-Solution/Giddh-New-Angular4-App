@@ -1,3 +1,4 @@
+@import "../../../../assets/css/color.scss";
 .custom-datepicker {
     margin-bottom: 0;
     input {
@@ -6,12 +7,12 @@
     }
 }
 .stock-group-footer {
-    background-color: var(--color-white);
+    background-color: $white;
     z-index: 3;
     width: calc(100% - 240px);
     padding-right: 15px;
     line-height: 1.8;
-    box-shadow: 0 0 6px var(--color-primary-common-box-shadow);
+    box-shadow: 0 0 6px $black-russian;
     padding-top: 5px;
     .stock-value {
         padding-right: 80px;

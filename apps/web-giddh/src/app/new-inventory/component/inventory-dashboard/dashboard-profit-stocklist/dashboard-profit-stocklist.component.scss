@@ -1,3 +1,5 @@
+@import "../../../../../assets/css/color.scss";
+
 .profitable-stock-block {
     .profit-stock-head {
         h4 {
@@ -21,14 +23,14 @@
         flex-direction: column;
     }
     .profitable-stock-container {
-        border-top: 1px solid var(--color-iron);
+        border-top: 1px solid $gainsboro;
         .table-wrapper {
             width: 80%;
             .profit-stock-table {
                 border-right: none;
                 font-size: 14px;
                 th {
-                    border-bottom: 1px solid var(--color-iron) !important;
+                    border-bottom: 1px solid $gainsboro !important;
                     border-top: none !important;
                 }
                 tr {
@@ -50,7 +52,7 @@
             align-items: center;
             display: flex;
             text-align: center;
-            border-left: 1px solid var(--color-iron);
+            border-left: 1px solid $gainsboro;
         }
     }
 }
