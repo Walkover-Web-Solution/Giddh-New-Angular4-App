@@ -658,6 +658,29 @@
                                                                 class="select2-parent select2-ledger pl-0 pr-0"
                                                             >
                                                                 <div
+                                                                    *ngIf="!txn.showAccountDropdown"
+                                                                    class="w-100"
+                                                                    (click)="
+                                                                        showBankLedgerPopup(txn, item);
+                                                                        txn.showAccountDropdown = true
+                                                                    "
+                                                                >
+                                                                    <span
+                                                                        [ngClass]="{
+                                                                            'account-placeholder yes': true,
+                                                                            'account-placeholder-text ':
+                                                                                txn.selectedAccount &&
+                                                                                txn.selectedAccount.name
+                                                                        }"
+                                                                        >{{
+                                                                            txn.selectedAccount
+                                                                                ? txn.selectedAccount.name
+                                                                                : commonLocaleData?.app_select_accounts
+                                                                        }}</span
+                                                                    >
+                                                                </div>
+                                                                <div
+                                                                    *ngIf="txn.showAccountDropdown"
                                                                     class="w-100"
                                                                     (click)="
                                                                         txn.showDropdown = true;
@@ -830,7 +853,10 @@
                                                                     "
                                                                     [showOtherTax]="lc.currentBlankTxn.showOtherTax"
                                                                     (saveBlankLedger)="saveBankTransaction()"
-                                                                    (clickedOutsideEvent)="hideBankLedgerPopup($event)"
+                                                                    (clickedOutsideEvent)="
+                                                                        hideBankLedgerPopup($event);
+                                                                        txn.showAccountDropdown = false
+                                                                    "
                                                                     (clickUnpaidInvoiceList)="
                                                                         clickUnpaidInvoiceList($event)
                                                                     "
@@ -920,16 +946,36 @@
                                                                 class="select2-parent select2-ledger pl-0 pr-0"
                                                             >
                                                                 <div
+                                                                    *ngIf="!txn.showAccountDropdown"
                                                                     class="w-100"
                                                                     (click)="
-                                                                        txn.showDropdown = true;
-                                                                        showBankLedgerPopup(txn, item)
+                                                                        showBankLedgerPopup(txn, item);
+                                                                        txn.showAccountDropdown = true
                                                                     "
                                                                 >
                                                                     <span
                                                                         [ngClass]="{
-                                                                            'account-placeholder': true,
-                                                                            'account-placeholder-text':
+                                                                            'account-placeholder yes': true,
+                                                                            'account-placeholder-text ':
+                                                                                txn.selectedAccount &&
+                                                                                txn.selectedAccount.name
+                                                                        }"
+                                                                        >{{
+                                                                            txn.selectedAccount
+                                                                                ? txn.selectedAccount.name
+                                                                                : commonLocaleData?.app_select_accounts
+                                                                        }}</span
+                                                                    >
+                                                                </div>
+                                                                <div
+                                                                    *ngIf="txn.showAccountDropdown"
+                                                                    class="w-100"
+                                                                    (click)="txn.showDropdown = true"
+                                                                >
+                                                                    <span
+                                                                        [ngClass]="{
+                                                                            'account-placeholder no': true,
+                                                                            'account-placeholder-text ':
                                                                                 txn.selectedAccount &&
                                                                                 txn.selectedAccount.name
                                                                         }"
@@ -1090,7 +1136,10 @@
                                                                     "
                                                                     [showOtherTax]="lc.currentBlankTxn.showOtherTax"
                                                                     (saveBlankLedger)="saveBankTransaction()"
-                                                                    (clickedOutsideEvent)="hideBankLedgerPopup($event)"
+                                                                    (clickedOutsideEvent)="
+                                                                        hideBankLedgerPopup($event);
+                                                                        txn.showAccountDropdown = false
+                                                                    "
                                                                     (clickUnpaidInvoiceList)="
                                                                         clickUnpaidInvoiceList($event)
                                                                     "
