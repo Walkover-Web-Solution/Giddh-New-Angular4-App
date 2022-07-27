@@ -514,7 +514,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 this.arrangeLedgerTransactionsForMobile();
             }
         });
-
         this.store.pipe(
             select(appState => appState.session.activeCompany), takeUntil(this.destroyed$)
         ).subscribe(activeCompany => {
@@ -574,7 +573,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
         } else {
             this.showBranchSwitcher = false;
         }
-
         this.uploadInput = new EventEmitter<UploadInput>();
         this.fileUploadOptions = { concurrency: 0 };
         this.shouldShowItcSection = false;
@@ -582,6 +580,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
         observableCombineLatest([this.universalDate$, this.route.params, this.todaySelected$]).pipe(takeUntil(this.destroyed$)).subscribe((resp: any[]) => {
             if (!Array.isArray(resp[0])) {
                 return;
+            }
+            if (this.advanceSearchRequest) {
+                this.resetAdvanceSearch();
             }
             this.resetPreviousSearchResults();
             this.hideEledgerWrap();
@@ -598,9 +599,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 dateRange = this.generalService.dateConversionToSetComponentDatePicker(from, to);
                 this.selectedDateRange = { startDate: moment(dateRange.fromDate, GIDDH_DATE_FORMAT_MM_DD_YYYY), endDate: moment(dateRange.toDate, GIDDH_DATE_FORMAT_MM_DD_YYYY) };
                 this.selectedDateRangeUi = moment(dateRange.fromDate, GIDDH_DATE_FORMAT_MM_DD_YYYY).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dateRange.toDate, GIDDH_DATE_FORMAT_MM_DD_YYYY).format(GIDDH_NEW_DATE_FORMAT_UI);
-                if (this.advanceSearchRequest) {
-                    this.resetAdvanceSearch();
-                }
+                this.advanceSearchRequest = Object.assign({}, this.advanceSearchRequest, {
+                    dataToSend: Object.assign({}, this.advanceSearchRequest.dataToSend, {
+                        bsRangeValue: [moment(from, GIDDH_DATE_FORMAT).toDate(), moment(to, GIDDH_DATE_FORMAT).toDate()]
+                    })
+                });
                 this.advanceSearchRequest.to = to;
                 this.advanceSearchRequest.page = 0;
 
