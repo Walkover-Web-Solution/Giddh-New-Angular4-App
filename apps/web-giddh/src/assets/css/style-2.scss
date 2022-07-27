@@ -8135,7 +8135,13 @@ body.update-scroll-hidden {
         }
     }
 }
-
+.ledger-attachments-popup {
+    .cdk-overlay-container {
+        .mat-dialog-container {
+            background-color: var(--color-popup-background);
+        }
+    }
+}
 .cdk-overlay-pane {
     height: auto !important;
 }

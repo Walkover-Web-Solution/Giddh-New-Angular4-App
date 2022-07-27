@@ -17,6 +17,7 @@
     .section {
         display: flex;
         height: 77vh;
+        background-color: var(--color-popup-background);
         .left-side {
             border-right: 1px solid var(--color-common-secondary-border);
             width: 35%;
