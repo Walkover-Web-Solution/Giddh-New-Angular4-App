@@ -5,10 +5,10 @@
     (commonLocaleData)="commonLocaleData = $event"
     (translationComplete)="translationComplete($event)"
 >
+    <hamburger-menu></hamburger-menu>
     <giddh-page-loader *ngIf="showLoader"></giddh-page-loader>
     <ng-container *ngIf="!showLoader">
         <div class="relative create-custom-field-page">
-            <hamburger-menu></hamburger-menu>
             <span class="back-to-page cursor-pointer" (click)="redirectToGetAllPage()">{{
                 commonLocaleData?.app_back
             }}</span>

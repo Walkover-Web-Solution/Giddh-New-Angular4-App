@@ -30,6 +30,7 @@ export const ROUTES: Routes = [
     { path: 'login', loadChildren: () => import('./login/login.module').then(module => module.LoginModule), canActivate: [BrowserSupported, UserAuthenticated] },
     { path: 'signup', loadChildren: () => import('./signup/signup.module').then(module => module.SignupModule) },
     { path: 'inventory', redirectTo: 'pages/inventory', pathMatch: 'full' },
+    { path: 'new-inventory', loadChildren: () => import('./new-inventory/new-inventory.module').then(module => module.NewInventoryModule), canActivate: [NeedsAuthorization] },
     { path: 'inventory-in-out', redirectTo: 'pages/inventory-in-out', pathMatch: 'full' },
     { path: 'home', redirectTo: 'pages/home', pathMatch: 'full' },
     { path: 'search', redirectTo: 'pages/search', pathMatch: 'full' },

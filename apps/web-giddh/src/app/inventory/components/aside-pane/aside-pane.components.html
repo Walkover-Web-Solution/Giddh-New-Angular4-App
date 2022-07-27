@@ -8,9 +8,7 @@
 
     <div class="aside-body flexy-child vertical-align-middle aside-panel-ledger" *ngIf="!hideFirstScreen" vr-item>
         <div class="pb-3 text-center">
-            <a class="btn btn-lg btn-primary" [routerLink]="'/pages/new-inventory/stock/product/create'"
-                >Create Stock</a
-            >
+            <button class="btn btn-lg btn-primary" (click)="toggleStockPane()">Create Stock</button>
         </div>
         <div class="pb-3 text-center">
             <button class="btn btn-lg btn-primary" (click)="toggleGroupPane()">Create Group</button>

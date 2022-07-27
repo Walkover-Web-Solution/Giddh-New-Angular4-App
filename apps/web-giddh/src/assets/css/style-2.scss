@@ -10591,7 +10591,7 @@ input[type="checkbox"].cdk-visually-hidden::after {
 
     .search-control {
         display: flex;
-        border: 1px solid $gainsboro;
+        border: 1px solid var(--color-gray);
         border-radius: 53px;
         flex: 1;
         margin-right: 15px;
@@ -10615,14 +10615,14 @@ input[type="checkbox"].cdk-visually-hidden::after {
             display: flex;
 
             button {
-                border-left: 1px solid $gainsboro;
+                border-left: 1px solid var(--color-gray);
                 border-radius: 0;
                 margin-right: 0 !important;
                 height: 100%;
 
                 &:hover {
-                    background: $white-smoke;
-                    color: $persian-blue !important;
+                    background: var(--color-white-secondary);
+                    color: var(--color-giddh-blue) !important;
                 }
             }
         }
@@ -10632,7 +10632,7 @@ input[type="checkbox"].cdk-visually-hidden::after {
         display: flex;
         justify-content: center;
         align-items: center;
-        border: 1px solid $gainsboro;
+        border: 1px solid var(--color-gray);
         border-radius: 50px;
 
         i.svg {
@@ -10640,8 +10640,8 @@ input[type="checkbox"].cdk-visually-hidden::after {
         }
 
         &:hover {
-            background: $white-smoke;
-            color: $persian-blue !important;
+            background: var(--color-white-secondary);
+            color: var(--color-giddh-blue) !important;
         }
     }
 
@@ -10662,7 +10662,7 @@ input[type="checkbox"].cdk-visually-hidden::after {
         height: 10px;
         width: 10px;
         left: 0;
-        background-color: $tree-green;
+        background-color: var(--color-teal);
         border-radius: 21px;
         top: 6px;
     }
@@ -10688,7 +10688,7 @@ input[type="checkbox"].cdk-visually-hidden::after {
     }
 
     .mat-ink-bar {
-        background-color: $deep-sky-blue !important;
+        background-color: var(--color-tab-primary-selected-tab-bottom-border) !important;
     }
 
     .mat-tab-label {
@@ -10709,10 +10709,10 @@ input[type="checkbox"].cdk-visually-hidden::after {
     font-size: 1rem;
     font-weight: 400;
     line-height: 1.5;
-    color: $nero;
-    background-color: $white;
+    color: var(--color-nero);
+    background-color: var(--color-white);
     background-clip: padding-box;
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--color-gray);
     border-radius: 0.25rem;
     transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 
