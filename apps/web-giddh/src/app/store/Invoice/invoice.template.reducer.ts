@@ -412,7 +412,7 @@ export function InvoiceTemplateReducer(state = initialState, action: CustomActio
             let nextState = _.cloneDeep(state);
             let res: BaseResponse<any, string> = action.payload;
             if (res?.status === 'success') {
-                let uniqName = res.queryString?.templateUniqueName;
+                let uniqName = res?.queryString?.templateUniqueName;
                 let indx = nextState.customCreatedTemplates.findIndex((template) => template.uniqueName === uniqName);
                 if (indx > -1) {
                     if (res.body.type === 'voucher') {

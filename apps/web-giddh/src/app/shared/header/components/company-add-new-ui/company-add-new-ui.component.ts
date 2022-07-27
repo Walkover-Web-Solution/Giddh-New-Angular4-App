@@ -1,5 +1,5 @@
 import { take, takeUntil, distinctUntilChanged } from 'rxjs/operators';
-import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { VerifyMobileActions } from '../../../../actions/verifyMobile.actions';
 import { CompanyActions } from '../../../../actions/company.actions';
@@ -33,7 +33,7 @@ import { parsePhoneNumberFromString, CountryCode } from 'libphonenumber-js/min';
     styleUrls: ['./company-add-new-ui.component.scss']
 })
 
-export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
+export class CompanyAddNewUiComponent implements OnInit, OnDestroy, AfterViewInit {
     @Output() public closeCompanyModal: EventEmitter<any> = new EventEmitter();
     @Output() public closeCompanyModalAndShowAddManege: EventEmitter<string> = new EventEmitter();
     @ViewChild('logoutModal', { static: true }) public logoutModal: ModalDirective;
@@ -45,6 +45,8 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
     @Input() public isUpdateMode: boolean = false;
     /** Stores the entity details to be updated */
     @Input() public entityDetails: any;
+    /** Stores company name input field reference */
+    @ViewChild('companyNameInputField') companyNameInputField: ElementRef<HTMLElement>;
 
     public imgPath: string = '';
     public countrySource: IOption[] = [];
@@ -153,7 +155,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
                 this._generalService.companyUniqueName = this.company.uniqueName;
                 setTimeout(() => {
                     if (prevTab !== 'user-details') {
-                        this.store.dispatch(this._loginAction.ChangeCompany(this.company.uniqueName));
+                        this.store.dispatch(this._loginAction.ChangeCompany(this.company?.uniqueName));
                         this._route.navigate([this.isNewUser ? 'welcome' : 'onboarding']);
                     }
                     this.closeModal();
@@ -161,7 +163,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
             }
         });
         this.store.pipe(select(p => p.session.companyUniqueName), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(a => {
-            if (a && a !== '' && this.company.uniqueName) {
+            if (a && a !== '' && this.company?.uniqueName) {
                 if (a.includes(this.company.uniqueName.substring(0, 8))) {
                     this.company.name = '';
                     this.company.country = '';
@@ -187,6 +189,17 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
             this.company.name = this.entityDetails.name;
             this.company.nameAlias = this.entityDetails.alias;
         }
+    }
+
+    /**
+     * Runs after view child variable are properly loaded
+     *
+     * @memberof CompanyAddNewUiComponent
+     */
+    public ngAfterViewInit(): void {
+        setTimeout(() => {
+            this.companyNameInputField?.nativeElement?.focus();
+        }, 200);
     }
 
     /**
@@ -451,8 +464,8 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
      */
     public updateBranch(): void {
         this._companyService.updateBranch({
-            companyUniqueName: this.activeCompanyDetails.uniqueName,
-            branchUniqueName: this.entityDetails.uniqueName,
+            companyUniqueName: this.activeCompanyDetails?.uniqueName,
+            branchUniqueName: this.entityDetails?.uniqueName,
             name: this.company.name,
             alias: this.company.nameAlias
         }).pipe(takeUntil(this.destroyed$)).subscribe(data => {

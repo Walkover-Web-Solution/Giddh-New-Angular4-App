@@ -17,6 +17,9 @@
         font-size: 11px;
         float: right;
     }
+    .applicable-tax-btn:focus {
+        box-shadow: none !important;
+    }
 }
 
 .form-group {
@@ -158,4 +161,18 @@ span.same-as-head {
 
 .min-height-100 {
     min-height: 100px;
+}
+
+.select-box {
+    .dropdown-menu {
+        .select-applicable-tax-list {
+            height: 35px;
+            margin-bottom: 0px;
+            display: flex;
+            align-items: center;
+            &:hover {
+                background-color: var(--color-dropdown-list-hover-background);
+            }
+        }
+    }
 }

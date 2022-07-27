@@ -1,0 +1,48 @@
+.custom-field-page {
+    h4 {
+        font-size: 16px;
+        font-family: "opensans-semibold";
+    }
+    .custom-field-list {
+        .table-responsive {
+            max-height: 555px;
+        }
+    }
+}
+.icon-trash,
+.icon-edit {
+    color: var(--color-dark-gray);
+    font-size: 15px;
+}
+.icon-trash {
+    margin-left: 7px;
+}
+.filter-container {
+    width: 160px;
+}
+@media (max-width: 767px) {
+    .giddh-table {
+        tr {
+            td {
+                white-space: normal !important;
+                word-break: inherit !important;
+                width: 100% !important;
+            }
+        }
+    }
+}
+@media (max-width: 575px) {
+    .custom-field-page {
+        .custom-field-header {
+            flex-direction: column;
+            justify-content: flex-start !important;
+            align-items: flex-start !important;
+            h4 {
+                margin-bottom: 10px;
+            }
+            .btn {
+                width: 100%;
+            }
+        }
+    }
+}
