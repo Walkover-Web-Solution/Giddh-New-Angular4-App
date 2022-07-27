@@ -1,33 +1,13 @@
-@import "../../../../assets/css/color.scss";
-
 .product-list-container {
     min-height: calc(100vh - 340px);
     .product-name-image {
         img {
             width: 40px;
             height: 40px;
-            border: 1.5px dashed #b2b2b2;
+            filter: var(--color-image-filter-tertiary);
         }
         p {
             min-width: 120px;
-        }
-    }
-}
-.sticky-footer {
-    background: $white;
-    padding: 10px;
-    box-shadow: 0 0 6px rgba(0, 0, 0, 0.16);
-    text-align: right !important;
-    width: 100%;
-    position: static;
-    bottom: 0;
-    .inner-content-footer {
-        padding-left: 0;
-        padding-right: 80px;
-        min-height: 60px;
-        font-size: 14px;
-        .label-value {
-            font-size: 18px;
         }
     }
 }
@@ -36,14 +16,6 @@
         flex-direction: column;
         p {
             margin-top: 5px;
-        }
-    }
-}
-@media (max-width: 575px) {
-    .inner-content-footer {
-        .d-flex {
-            flex-direction: column;
-            text-align: left;
         }
     }
 }

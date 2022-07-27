@@ -4,6 +4,11 @@
     width: 100%;
     overflow: hidden;
 
+    .no-data-found {
+        text-align: center;
+        margin-top: 50px;
+    }
+
     .stocks-list-head {
         width: 100%;
         overflow: hidden;
@@ -114,7 +119,7 @@
             }
         }
         .warehouse-list-wrapper {
-            height: 56px;
+            min-height: 56px;
             display: flex;
             width: 97%;
 
@@ -124,7 +129,7 @@
                 align-items: center;
                 position: relative;
                 left: 1px;
-                height: 56px;
+                min-height: 56px;
                 &:nth-child(odd) {
                     background-color: var(--color-common-primary-background-color);
                 }
@@ -199,13 +204,14 @@
         .grid-list-div {
             display: inline-flex;
             float: left;
-            height: 70px;
+            height: 56px;
         }
         .top-heading {
             height: 110px !important;
         }
         .grid-title-left {
             width: 240px;
+            min-height: 56px;
             left: 0;
             z-index: 1;
             position: sticky;
@@ -236,7 +242,7 @@
             font-size: 13px;
             display: flex;
             align-items: center;
-            height: 56px;
+            min-height: 56px;
         }
     }
     .searching-stocks {
@@ -360,7 +366,7 @@
                 }
                 .unexpanded-list {
                     width: 100%;
-                    height: 56px;
+                    min-height: 56px;
                     .stock-list-expanded-content {
                         .proper-spacing-list {
                             margin-left: 15px;
@@ -475,7 +481,7 @@
                 }
                 .stock-warehouse-list-container {
                     display: flex;
-                    height: 56px;
+                    min-height: 56px;
                 }
             }
         }

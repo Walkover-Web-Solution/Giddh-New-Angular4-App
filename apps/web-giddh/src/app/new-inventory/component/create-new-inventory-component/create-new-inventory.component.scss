@@ -1,24 +1,3 @@
-@import "../../../../assets/css/color.scss";
-
-.new-inventory-page-header {
-    padding: 0 15px 15px;
-    margin-bottom: 15px;
-    display: flex;
-    justify-content: space-between;
-    border-bottom: 1px solid $gainsboro;
-    align-items: center;
-
-    .inventory-header-right {
-        display: flex;
-    }
-}
-
-.page-title-inventory {
-    font-weight: bold;
-    color: $midnight-blue;
-    font-size: 16px;
-}
-
 .create-new-inventory-page {
     .back-to-page {
         position: absolute;
@@ -26,7 +5,7 @@
         top: 0;
         padding: 10px;
         z-index: 10;
-        color: $primary;
+        color: var(--color-blue);
     }
 
     .select-product-type {
@@ -36,7 +15,7 @@
 
         display: flex;
         justify-content: space-between;
-        border-bottom: 1px solid $gainsboro;
+        border-bottom: 1px solid var(--color-tab-primary-border-bottom);
         margin-bottom: 15px;
         font-size: 14px;
         padding-bottom: 5px;
@@ -47,30 +26,28 @@
     }
 
     .sales-purchase-details {
-        background-color: $white;
-        //margin: 0 -15px;
+        background-color: var(--color-white);
+        margin: 0 -15px;
         padding: 15px 15px;
         border-radius: 7px;
 
         .select-puchase-info {
-            background-color: $whisper-color;
+            background-color: var(--color-lavender);
             padding: 6px 10px;
             font-family: "opensans-semibold";
         }
 
         .add-new-field {
             position: relative;
-
-            .icon-button-add {
-                color: $primary;
+            .icon-plus {
+                color: var(--color-blue);
                 position: absolute;
                 right: -25px;
                 top: -5px;
                 z-index: 1;
             }
-
-            .icon-button-remove {
-                color: $olive;
+            .icon-cross {
+                color: var(--color-red);
                 position: absolute;
                 right: -25px;
                 font-size: 20px;
@@ -85,7 +62,7 @@
             &::after {
                 position: absolute;
                 width: 1px;
-                background-color: $gainsboro;
+                background-color: var(--color-iron);
                 height: 100%;
                 content: "";
                 left: -20px;
@@ -102,7 +79,7 @@
         &:after {
             position: absolute;
             content: "";
-            background-color: $gainsboro;
+            background-color: var(--color-iron);
             right: 0;
             height: 1px;
             width: calc(100% - 220px);
@@ -126,7 +103,7 @@
         }
 
         i {
-            color: $primary;
+            color: var(--color-blue);
         }
     }
 
@@ -172,7 +149,7 @@
 }
 
 .inventory-footer {
-    background-color: $whisper-color;
+    background-color: var(--color-secondary-footer-background);
     z-index: 3;
     width: calc(100% - 240px);
     padding-right: 15px;
@@ -206,12 +183,12 @@ table.stock-table th {
         right: -40px;
         width: 25px;
         height: 25px;
-        border: 1px solid $nobel;
+        border: 1px solid var(--color-gray);
         display: flex;
         justify-content: center;
         align-items: center;
         border-radius: 40px;
-        color: $gray;
+        color: var(--color-gray);
         font-size: 17px;
     }
 
@@ -235,14 +212,14 @@ table.stock-table th {
 .bulk-create-table th,
 .bulk-create-table td,
 .bulk-create-table tbody {
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--color-iron);
     border-collapse: collapse;
     min-width: 160px;
 }
 
 .combo-table th,
 .bulk-create-table th {
-    border-bottom: 1px solid $gainsboro;
+    border-bottom: 1px solid var(--color-iron);
 }
 
 .combo-table th:first-child,
@@ -262,13 +239,12 @@ table.stock-table th {
                 align-items: center;
                 width: 36px;
                 height: 36px;
-                border-color: $gainsboro;
-                background-color: $white;
-
+                border-color: var(--color-iron);
+                background-color: var(--color-white);
                 i {
                     vertical-align: top;
                     font-size: 20px;
-                    color: $gray;
+                    color: var(--color-gray);
                 }
             }
         }
@@ -290,7 +266,7 @@ table.stock-table th {
                 left: 6px;
                 top: 11px;
                 z-index: 4;
-                color: $gray;
+                color: var(--color-gray);
             }
 
             input {
@@ -342,7 +318,7 @@ table.stock-table th {
 }
 
 .final-product-recipe {
-    background-color: $white;
+    background-color: var(--color-white);
     padding: 15px;
     margin-bottom: 15px;
 
@@ -511,7 +487,7 @@ table.stock-table th {
 
             td {
                 input {
-                    border: 1px solid $gainsboro !important;
+                    border: 1px solid var(--color-iron) !important;
                 }
             }
         }
