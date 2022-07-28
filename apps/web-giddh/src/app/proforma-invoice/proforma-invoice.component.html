@@ -2329,7 +2329,6 @@
                                                         entry.otherTaxModal?.appliedOtherTax?.name
                                                     "
                                                 >
-                                                    {{ entry.otherTaxModal?.appliedOtherTax?.name }} :
                                                     <span
                                                         class="differ-currency d-flex justify-content-end"
                                                         *ngIf="isMulticurrencyAccount"
@@ -2892,7 +2891,6 @@
                                                 "
                                                 class="tax-in-currency"
                                             >
-                                                {{ entry.otherTaxModal?.appliedOtherTax?.name }}
                                                 <span>
                                                     <amount-field
                                                         [amount]="entry.otherTaxSum * exchangeRate"
@@ -4626,7 +4624,6 @@
                                                         "
                                                         class="tax-in-currency d-flex"
                                                     >
-                                                        {{ entry.otherTaxModal?.appliedOtherTax?.name }}
                                                         <span class="mr-l05">
                                                             <amount-field
                                                                 [amount]="entry.otherTaxSum * exchangeRate"

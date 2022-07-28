@@ -520,6 +520,7 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+        document.querySelector('body')?.classList?.remove('modal-open');
     }
 
     /**

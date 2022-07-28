@@ -678,4 +678,17 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     public addNewAccount(item: AddAccountRequest) {
         this.store.dispatch(this.salesAction.addAccountDetailsForSales(item));
     }
+
+    /**
+     * Closes account modal
+     *
+     * @param {*} event
+     * @memberof PrimarySidebarComponent
+     */
+    public closeAccountModal(event: any): void {
+        if (event) {
+            this.accountAsideMenuState = 'out';
+            this.toggleBodyClass();
+        }
+    }
 }
