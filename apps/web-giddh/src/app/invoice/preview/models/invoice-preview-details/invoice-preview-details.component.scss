@@ -1280,3 +1280,17 @@ strong {
         width: 1003px !important;
     }
 }
+
+@media (max-width: 1158px) and (min-width: 992px) {
+    .invoice-detail-wrapper {
+        .wrap-edit-history-btn {
+            .history-btn {
+                .history-button {
+                    position: relative;
+                    top: 10px;
+                    right: 33px;
+                }
+            }
+        }
+    }
+}
