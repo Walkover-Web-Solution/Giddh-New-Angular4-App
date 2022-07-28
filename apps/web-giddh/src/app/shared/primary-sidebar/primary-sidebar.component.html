@@ -276,6 +276,7 @@
         [class]="accountAsideMenuState"
         [@slideInOut]="accountAsideMenuState"
         (closeAsideEvent)="toggleAccountAsidePane($event)"
+        (closeAccountModal)="closeAccountModal($event)"
         [selectedGrpUniqueName]="selectedGroupForCreateAccount"
         [createAccountFromCommandK]="true"
         [keyboardShortcut]="{ 'esc': accountAsideMenuState === 'in' }"
