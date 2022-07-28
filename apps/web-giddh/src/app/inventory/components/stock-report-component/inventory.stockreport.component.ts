@@ -486,8 +486,6 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
      * getAllBranch
      */
     public getAllBranch() {
-        let branchFilterRequest = new BranchFilterRequest();
-        this.store.dispatch(this.settingsBranchActions.GetALLBranches(branchFilterRequest));
         // tslint:disable-next-line:no-shadowed-variable
         this.store.pipe(select(createSelector([(state: AppState) => state.settings.branches], (entities) => {
             if (entities) {
@@ -505,6 +503,9 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
                     this.entities$ = observableOf(null);
                 }
                 this.branches = entities;
+            } else {
+                let branchFilterRequest = new BranchFilterRequest();
+                this.store.dispatch(this.settingsBranchActions.GetALLBranches(branchFilterRequest));
             }
         })), takeUntil(this.destroyed$)).subscribe();
     }
@@ -855,17 +856,6 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
         } else {
             this.isFilterCorrect = false;
         }
-    }
-
-    /**
-    * To open edit stock aside panel
-    *
-    * @memberof InventoryStockReportComponent
-    */
-    public editStock(): void {
-        this.store.dispatch(this.sideBarAction.GetInventoryStock(this.stockUniqueName, this.groupUniqueName));
-        this.store.dispatch(this.inventoryAction.OpenInventoryAsidePane(true));
-        this.store.dispatch(this.inventoryAction.ManageInventoryAside({ isOpen: true, isGroup: false, isUpdate: true }));
     }
 
     /**

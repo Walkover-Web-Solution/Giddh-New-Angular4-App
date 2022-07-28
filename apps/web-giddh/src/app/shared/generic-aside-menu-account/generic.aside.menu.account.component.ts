@@ -86,7 +86,7 @@ export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnCh
         this.showBankDetail = this.activeGroupUniqueName === 'sundrycreditors';
 
         this.store.pipe(select(state => state.groupwithaccounts.activeTab), takeUntil(this.destroyed$)).subscribe(activeTab => {
-            if(activeTab === 1) {
+            if (activeTab === 1) {
                 this.isMasterOpen = true;
             } else {
                 if (this.isMasterOpen) {
