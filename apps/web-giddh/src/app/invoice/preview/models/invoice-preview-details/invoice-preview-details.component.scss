@@ -1108,12 +1108,6 @@ strong {
     }
 }
 
-@media (max-width: 1199px) {
-    .invoice-search-box input {
-        max-width: 180px;
-    }
-}
-
 @media (max-width: 1024px) {
     .invoice-search-box {
         display: block;
@@ -1284,5 +1278,19 @@ strong {
 @media (min-width: 992px) {
     .po-preview-modal {
         width: 1003px !important;
+    }
+}
+
+@media (max-width: 1158px) and (min-width: 992px) {
+    .invoice-detail-wrapper {
+        .wrap-edit-history-btn {
+            .history-btn {
+                .history-button {
+                    position: relative;
+                    top: 10px;
+                    right: 33px;
+                }
+            }
+        }
     }
 }
