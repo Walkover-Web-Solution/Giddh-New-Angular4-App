@@ -28,7 +28,6 @@ export const ROUTES: Routes = [
     { path: 'login', loadChildren: () => import('./login/login.module').then(module => module.LoginModule), canActivate: [BrowserSupported, UserAuthenticated] },
     { path: 'signup', loadChildren: () => import('./signup/signup.module').then(module => module.SignupModule) },
     { path: 'inventory', redirectTo: 'pages/inventory', pathMatch: 'full' },
-    { path: 'new-inventory', loadChildren: () => import('./new-inventory/new-inventory.module').then(module => module.NewInventoryModule), canActivate: [NeedsAuthorization] },
     { path: 'inventory-in-out', redirectTo: 'pages/inventory-in-out', pathMatch: 'full' },
     { path: 'home', redirectTo: 'pages/home', pathMatch: 'full' },
     { path: 'search', redirectTo: 'pages/search', pathMatch: 'full' },
@@ -77,6 +76,7 @@ export const ROUTES: Routes = [
                 redirectTo: 'purchase-management'
             },
             { path: 'inventory', loadChildren: () => import('./inventory/inventory.module').then(module => module.InventoryModule), canActivate: [NeedsAuthorization] },
+            { path: 'new-inventory', loadChildren: () => import('./new-inventory/new-inventory.module').then(module => module.NewInventoryModule), canActivate: [NeedsAuthorization] },
             { path: 'inventory-in-out', loadChildren: () => import('./inventory-in-out/inventory-in-out.module').then(module => module.InventoryInOutModule), canActivate: [NeedsAuthorization] },
             { path: 'search', loadChildren: () => import('./search/search.module').then(module => module.SearchModule) },
             { path: 'trial-balance-and-profit-loss', loadChildren: () => import('./financial-reports/financial-reports.module').then(module => module.FinancialReportsModule), canActivate: [NeedsAuthentication, NeedsAuthorization] },
