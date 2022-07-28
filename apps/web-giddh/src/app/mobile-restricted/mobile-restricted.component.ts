@@ -1,8 +1,4 @@
-import { BreakpointObserver } from "@angular/cdk/layout";
-import { Component } from "@angular/core";
-import { Router } from "@angular/router";
-import { ReplaySubject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { Component, OnInit } from "@angular/core";
 
 @Component({
     selector: 'mobile-restricted',
@@ -10,20 +6,14 @@ import { takeUntil } from 'rxjs/operators';
     styleUrls: ['./mobile-restricted.component.scss']
 })
 
-export class MobileRestrictedComponent {
+export class MobileRestrictedComponent implements OnInit{
     /** Holds images folder path */
     public imgPath: string = "";
-    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor(private breakpointObserver: BreakpointObserver, private router: Router) { 
+    constructor() {}
+
+    public ngOnInit(){
         this.imgPath = isElectron ? "assets/images/" : AppUrl + APP_FOLDER + "assets/images/";
-
-        this.breakpointObserver.observe([
-            '(min-width: 480px)'
-        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
-            if (result.matches) {
-                this.router.navigate(['/home'])
-            }
-        });
     }
+
 }

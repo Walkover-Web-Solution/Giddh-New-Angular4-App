@@ -110,6 +110,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             }
         });
     }
+    
 
     public sidebarStatusChange(event) {
         this.sideMenu.isopen = event;
@@ -136,6 +137,30 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         this._generalService.setIsMobileView(isMobile);
     }
 
+    /**
+     * Redirect page to MobileRestrictedComponent
+     *
+     * @param {*} restrictMobile BreakpointObserver Value
+     * @memberof AppComponent
+     */
+    public restrictOnMobileView(restrictMobile: any): void{
+        if (restrictMobile){
+            this.router.navigate(['/mobile-restricted']);
+        }
+    }
+
+    /**
+     * Redirect page to HomeComponent
+     *
+     * @param {*} enableOutsideMobile BreakpointObserver Value
+     * @memberof AppComponent
+     */
+    public homePageRedirect(enableOutsideMobile: any): void{
+        if(enableOutsideMobile){
+            this.router.navigate(['/home'])
+        }
+    }
+
     public ngOnInit() {
         this.breakpointObserver.observe([
             '(max-width: 1023px)'
@@ -145,9 +170,12 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         this.breakpointObserver.observe([
             '(max-width: 480px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
-            if (result.matches) {
-                this.router.navigate(['/mobile-restricted']);
-            }
+            this.restrictOnMobileView(result.matches);
+        });
+        this.breakpointObserver.observe([
+            '(min-width: 480px)'
+        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
+            this.homePageRedirect(result.matches);
         });
         this.sideBarStateChange(true);
         this.subscribeToLazyRouteLoading();
