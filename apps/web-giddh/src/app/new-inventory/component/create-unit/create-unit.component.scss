@@ -1,0 +1,111 @@
+:host {
+    position: fixed;
+    left: auto;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    max-width: 760px;
+    z-index: 99999;
+}
+#close {
+    position: absolute;
+    left: auto;
+    right: 10px;
+    z-index: 9999999;
+    background-color: transparent;
+    color: var(--color-white);
+    font-size: 17px;
+    top: 18px;
+    margin-right: 0;
+    border: 0;
+    border-radius: 0;
+}
+:host .container-fluid {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+:host .aside-pane {
+    width: 100%;
+    max-width: 760px;
+}
+
+.aside-pane {
+    width: 100%;
+}
+
+.flexy-child {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.flexy-child-1 {
+    flex-grow: 1;
+}
+
+.vertical-align-middle {
+    position: absolute;
+    top: 50%;
+    bottom: 0;
+    left: 0;
+    display: table;
+    width: 100%;
+    right: 0;
+    transform: translateY(-50%);
+    text-align: center;
+    margin: 0 auto;
+}
+.aside-body {
+    padding: 15px;
+}
+
+.aside-pane-form {
+    background-color: var(--color-white);
+    box-shadow: 0 3px 6px var(--color-iron);
+    padding: 15px;
+    height: calc(100vh - 90px);
+    overflow: auto;
+    scroll-behavior: smooth;
+    position: relative;
+}
+.header-create-unit {
+    .form-header {
+        display: flex;
+    }
+}
+
+@media (max-width: 768px) {
+    :host {
+        max-width: 600px;
+    }
+    :host .aside-pane {
+        max-width: 600px;
+    }
+}
+@media (max-width: 575px) {
+    :host {
+        max-width: 370px;
+    }
+    :host .aside-pane {
+        max-width: 370px;
+    }
+}
+@media (max-width: 375px) {
+    :host {
+        max-width: 310px;
+    }
+    :host .aside-pane {
+        max-width: 310px;
+    }
+}
+@media (max-width: 320px) {
+    :host {
+        max-width: 280px;
+    }
+    :host .aside-pane {
+        max-width: 280px;
+    }
+}
