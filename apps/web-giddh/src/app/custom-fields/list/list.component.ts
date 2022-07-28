@@ -149,9 +149,7 @@ export class CustomFieldsListComponent implements OnInit, OnDestroy {
     public translationComplete(event: boolean): void {
         if (event) {
             this.fieldModules = [
-                { name: this.localeData?.modules?.account, uniqueName: FieldModules.Account },
-                { name: this.localeData?.modules?.stock, uniqueName: FieldModules.Stock },
-                { name: this.localeData?.modules?.group, uniqueName: FieldModules.Group }
+                { name: this.localeData?.modules?.account, uniqueName: FieldModules.Account }
             ];
             this.translationsLoaded = true;
             this.changeDetectorRef.detectChanges();

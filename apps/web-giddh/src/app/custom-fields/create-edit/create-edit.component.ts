@@ -135,9 +135,7 @@ export class CustomFieldsCreateEditComponent implements OnInit, OnDestroy {
             ];
 
             this.fieldModules = [
-                { name: this.localeData?.modules?.account, uniqueName: FieldModules.Account },
-                { name: this.localeData?.modules?.stock, uniqueName: FieldModules.Stock },
-                { name: this.localeData?.modules?.group, uniqueName: FieldModules.Group }
+                { name: this.localeData?.modules?.account, uniqueName: FieldModules.Account }
             ];
         }
     }
