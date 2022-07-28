@@ -6377,6 +6377,13 @@ highcharts-chart {
     .navbar-nav {
         z-index: 99 !important;
     }
+    .tax-in-currency {
+        amount-field {
+            p[dir="ltr"] {
+                justify-content: flex-end;
+            }
+        }
+    }
 }
 .aside-menu-othertax-open {
     .nav-left-bar {
