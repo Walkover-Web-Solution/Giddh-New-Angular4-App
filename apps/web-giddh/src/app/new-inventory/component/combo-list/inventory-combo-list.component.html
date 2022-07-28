@@ -1,0 +1,75 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="top-content">
+                <div class="d-flex w-100 justify-content-between overflow-x-auto">
+                    <div class="total-details-box mr-r05 border-none opening-box">
+                        <h5>
+                            Group Count
+                            <div>
+                                <span class="d-inline-flex number-total"> 23 </span>
+                            </div>
+                        </h5>
+                    </div>
+                    <div class="total-details-box border-none due-box">
+                        <h5>
+                            Item Count
+                            <div>
+                                <span class="d-inline-flex number-total"> 23 </span>
+                            </div>
+                        </h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="product-list-container">
+                <div class="table-responsive">
+                    <table class="table giddh-table on-mobile-view">
+                        <thead>
+                            <tr>
+                                <th width="3%">&nbsp;</th>
+                                <th>Stock Name</th>
+                                <th>Unit</th>
+                                <th>Qty</th>
+                                <th>Selling Price</th>
+                                <th>Purchase Price</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td width="3%" data-title="Select">
+                                    <div class="d-block text-center text-left-sm">
+                                        <input type="checkbox" id="select-group" />
+                                    </div>
+                                </td>
+                                <td data-title="Stock Name">
+                                    <div class="product-name-image d-flex">
+                                        <div>
+                                            <img src="{{ imgPath }}add-image.svg" />
+                                        </div>
+                                        <div class="cursor-pointer mx-2">
+                                            <a
+                                                href="javascript:void(0)"
+                                                [routerLink]="['/pages/new-inventory/about-group-detail']"
+                                            >
+                                                <p>Product Name</p>
+                                                <p class="text-gray">(34 Items)</p>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td data-title="Unit">KG</td>
+                                <td data-title="Qty">500</td>
+                                <td data-title="Selling Price">23124</td>
+                                <td data-title="Purchase Price">12345</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,21 @@
+.product-list-container {
+    min-height: calc(100vh - 340px);
+    .product-name-image {
+        img {
+            width: 40px;
+            height: 40px;
+            filter: var(--color-image-filter-tertiary);
+        }
+        p {
+            min-width: 120px;
+        }
+    }
+}
+@media (max-width: 768px) {
+    .product-name-image {
+        flex-direction: column;
+        p {
+            margin-top: 5px;
+        }
+    }
+}
