@@ -1789,7 +1789,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
             const event: UploadInput = {
                 type: 'uploadAll',
                 url: url,
-                branchUniqueName: branchUniqueName,
                 method: 'POST',
                 fieldName: 'file',
                 data: { entries: _.cloneDeep(this.entryUniqueNamesForBulkAction).join() },
