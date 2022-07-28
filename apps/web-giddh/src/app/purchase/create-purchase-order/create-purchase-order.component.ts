@@ -39,7 +39,6 @@ import { CurrentCompanyState } from '../../store/Company/company.reducer';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LedgerDiscountClass } from '../../models/api-models/SettingsDiscount';
 import { LedgerResponseDiscountClass } from '../../models/api-models/Ledger';
-import { GeneralActions } from '../../actions/general/general.actions';
 import { InvoiceService } from '../../services/invoice.service';
 import { PURCHASE_ORDER_STATUS } from '../../shared/helpers/purchaseOrderStatus';
 import { INameUniqueName } from '../../models/api-models/Inventory';
@@ -362,10 +361,10 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
     public translationLoaded: boolean = false;
     /** Length of entry description */
     public entryDescriptionLength: number = ENTRY_DESCRIPTION_LENGTH;
-    /** Stores the voucher API version of current company */
-    public voucherApiVersion: 1 | 2;
     /** True if form save in progress */
     public isFormSaveInProgress: boolean = false;
+    /** Stores the voucher API version of current company */
+    public voucherApiVersion: 1 | 2;
 
     constructor(
         private store: Store<AppState>,
@@ -383,7 +382,6 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         private loaderService: LoaderService,
         private route: ActivatedRoute,
         private router: Router,
-        private generalActions: GeneralActions,
         private ledgerService: LedgerService,
         private invoiceService: InvoiceService,
         private modalService: BsModalService,
@@ -409,11 +407,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
     public ngOnInit(): void {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.getInvoiceSettings();
-        this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
         this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: 0 }));
         this.store.dispatch(this.companyActions.getTax());
-        this.store.dispatch(this.settingsBranchAction.resetAllBranches());
-        this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '' }));
 
         this.breakPointObservar.observe([
             '(max-width: 1024px)'
@@ -540,6 +535,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                 }
 
                 this.changeDetection.detectChanges();
+            } else {
+                this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
             }
         });
 
@@ -2409,6 +2406,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         this.store.pipe(select(appStore => appStore.settings.branches), take(1)).subscribe(response => {
             if (response && response.length) {
                 branches = response;
+            } else {
+                this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '' }));
             }
         });
         if (this.generalService.currentOrganizationType === OrganizationType.Branch) {
@@ -3532,35 +3531,6 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
     }
 
     /**
-     * Checks for auto fill shipping address for account and company shipping address
-     *
-     * @private
-     * @param {string} sectionName Section name: company/account
-     * @memberof CreatePurchaseOrderComponent
-     */
-    private checkForAutoFillShippingAddress(sectionName: string): void {
-        if (sectionName === 'account') {
-            if (this.purchaseOrder?.account?.billingDetails?.address[0] === this.purchaseOrder?.account?.shippingDetails?.address[0] &&
-                this.purchaseOrder?.account?.billingDetails?.stateCode === this.purchaseOrder?.account?.shippingDetails?.stateCode &&
-                this.purchaseOrder?.account?.billingDetails?.gstNumber === this.purchaseOrder?.account?.shippingDetails?.gstNumber &&
-                this.purchaseOrder?.account?.billingDetails?.pincode === this.purchaseOrder?.account?.shippingDetails?.pincode) {
-                this.autoFillVendorShipping = true;
-            } else {
-                this.autoFillVendorShipping = false;
-            }
-        } else if (sectionName === 'company') {
-            if (this.purchaseOrder?.company?.billingDetails?.address[0] === this.purchaseOrder?.company?.shippingDetails?.address[0] &&
-                this.purchaseOrder?.company?.billingDetails?.stateCode === this.purchaseOrder?.company?.shippingDetails?.stateCode &&
-                this.purchaseOrder?.company?.billingDetails?.gstNumber === this.purchaseOrder?.company?.shippingDetails?.gstNumber &&
-                this.purchaseOrder?.company?.billingDetails?.pincode === this.purchaseOrder?.company?.shippingDetails?.pincode) {
-                this.autoFillCompanyShipping = true;
-            } else {
-                this.autoFillCompanyShipping = false;
-            }
-        }
-    }
-
-    /**
      * Callback for translation response complete
      *
      * @param {*} event
@@ -3761,6 +3731,35 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                 transaction.convertedTotal = giddhRoundOff(((transaction.quantity * transaction.rate * this.exchangeRate) - entry.discountSum) + (entry.taxSum + entry.cessSum), 2);
             } else {
                 transaction.convertedTotal = giddhRoundOff(transaction.total * this.exchangeRate, 2);
+            }
+        }
+    }
+
+    /**
+     * Checks for auto fill shipping address for account and company shipping address
+     *
+     * @private
+     * @param {string} sectionName Section name: company/account
+     * @memberof CreatePurchaseOrderComponent
+     */
+    private checkForAutoFillShippingAddress(sectionName: string): void {
+        if (sectionName === 'account') {
+            if (this.purchaseOrder?.account?.billingDetails?.address[0] === this.purchaseOrder?.account?.shippingDetails?.address[0] &&
+                this.purchaseOrder?.account?.billingDetails?.stateCode === this.purchaseOrder?.account?.shippingDetails?.stateCode &&
+                this.purchaseOrder?.account?.billingDetails?.gstNumber === this.purchaseOrder?.account?.shippingDetails?.gstNumber &&
+                this.purchaseOrder?.account?.billingDetails?.pincode === this.purchaseOrder?.account?.shippingDetails?.pincode) {
+                this.autoFillVendorShipping = true;
+            } else {
+                this.autoFillVendorShipping = false;
+            }
+        } else if (sectionName === 'company') {
+            if (this.purchaseOrder?.company?.billingDetails?.address[0] === this.purchaseOrder?.company?.shippingDetails?.address[0] &&
+                this.purchaseOrder?.company?.billingDetails?.stateCode === this.purchaseOrder?.company?.shippingDetails?.stateCode &&
+                this.purchaseOrder?.company?.billingDetails?.gstNumber === this.purchaseOrder?.company?.shippingDetails?.gstNumber &&
+                this.purchaseOrder?.company?.billingDetails?.pincode === this.purchaseOrder?.company?.shippingDetails?.pincode) {
+                this.autoFillCompanyShipping = true;
+            } else {
+                this.autoFillCompanyShipping = false;
             }
         }
     }

@@ -179,11 +179,13 @@
                             {{ localeData?.new_proforma }}
                         </button>
                     </div>
+
                     <div *ngIf="voucherType === 'estimates'" class="btn-wrapper mr-r15">
                         <button *ngIf="!isCompany" class="btn btn-sky-blue m-0" (click)="goToInvoice('estimates')">
                             {{ localeData?.new_estimate }}
                         </button>
                     </div>
+
                     <div class="btn-wrapper-more" *ngIf="selectedItems.length === 1">
                         <div *ngIf="!isCompany" class="btn-group d-inline-block mr-b1" dropdown #dp="bs-dropdown">
                             <button
@@ -195,6 +197,7 @@
                                 {{ commonLocaleData?.app_more }}
                                 <span class="caret"></span>
                             </button>
+
                             <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
                                 <li role="menuitem">
                                     <a
@@ -209,546 +212,576 @@
                     </div>
                 </div>
             </div>
-        </div>
-        <ng-template #template>
-            <div class="modal-header">
-                <h4 class="modal-title bg pull-left">{{ localeData?.search_here }}</h4>
-                <button
-                    type="button"
-                    class="close pull-right"
-                    [attr.aria-label]="commonLocaleData?.app_close"
-                    (click)="modalRef.hide()"
-                >
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-sm-6 full-width-on-mobile">
-                        <div class="input-container">
-                            <input
-                                type="text"
-                                [placeholder]="localeData?.search_invoice_no"
-                                class="form-control"
-                                #searchBox
-                                name="voucherNumberInput"
-                                [formControl]="voucherNumberInput"
-                            />
+
+            <ng-template #template>
+                <div class="modal-header">
+                    <h4 class="modal-title bg pull-left">{{ localeData?.search_here }}</h4>
+                    <button
+                        type="button"
+                        class="close pull-right"
+                        [attr.aria-label]="commonLocaleData?.app_close"
+                        (click)="modalRef.hide()"
+                    >
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-6 full-width-on-mobile">
+                            <div class="input-container">
+                                <input
+                                    type="text"
+                                    [placeholder]="localeData?.search_invoice_no"
+                                    class="form-control"
+                                    #searchBox
+                                    name="voucherNumberInput"
+                                    [formControl]="voucherNumberInput"
+                                />
+                            </div>
+                        </div>
+                        <div class="col-sm-6 mt-2 mt-md-0">
+                            <button class="btn btn-sky-blue">{{ commonLocaleData?.app_submit }}</button>
                         </div>
                     </div>
-                    <div class="col-sm-6 mt-2 mt-md-0">
-                        <button class="btn btn-sky-blue">{{ commonLocaleData?.app_submit }}</button>
+                </div>
+            </ng-template>
+            <!-- select app proforma -->
+            <div class="clearfix">
+                <div class="table-responsive remove-responsive invoice-preview mr-t15">
+                    <table
+                        class="table basic pd-t15 giddh-table desktop-table table-bordered invoice-table on-mobile-view"
+                    >
+                        <thead
+                            class="thead-background1"
+                            [attr.style]="
+                                !voucherData?.results?.length &&
+                                !advanceSearchFilter?.proformaNumber &&
+                                !advanceSearchFilter?.estimateNumber &&
+                                !advanceSearchFilter?.q
+                                    ? 'display: none !important'
+                                    : ''
+                            "
+                        >
+                            <tr>
+                                <th *ngIf="selectedItems.length > 0" width="4%" class="min-width-check">
+                                    <div class="check-image d-flex justify-content-center">
+                                        <img
+                                            src="assets/images/unchecked.png"
+                                            *ngIf="!allItemsSelected"
+                                            (click)="toggleAllItems(true)"
+                                        />
+                                        <img
+                                            src="assets/images/checked.png"
+                                            *ngIf="allItemsSelected"
+                                            (click)="toggleAllItems(false)"
+                                        />
+                                    </div>
+                                </th>
+
+                                <th *ngIf="selectedItems.length === 0" width="4%" class="min-width-check">
+                                    <div class="check-image d-flex justify-content-center">#</div>
+                                </th>
+
+                                <th
+                                    width="13%"
+                                    class="td-search-box"
+                                    #searchVoucherNumberContainer
+                                    (clickOutside)="
+                                        clickedOutside($event, searchVoucherNumberContainer, 'voucherNumber')
+                                    "
+                                >
+                                    <ng-container
+                                        *ngTemplateOutlet="
+                                            searchTemplate;
+                                            context: {
+                                                $implicit: showVoucherNoSearch,
+                                                title:
+                                                    voucherType === 'proformas'
+                                                        ? localeData?.proforma_no
+                                                        : localeData?.estimate_no,
+                                                fieldName: 'voucherNumber',
+                                                formControl: voucherNumberInput
+                                            }
+                                        "
+                                    ></ng-container>
+                                </th>
+
+                                <th
+                                    width="19%"
+                                    class="td-search-box"
+                                    #searchCustomerContainer
+                                    (clickOutside)="clickedOutside($event, searchCustomerContainer, 'customerName')"
+                                >
+                                    <ng-container
+                                        *ngTemplateOutlet="
+                                            searchTemplate;
+                                            context: {
+                                                $implicit: showCustomerSearch,
+                                                title: commonLocaleData?.app_customer,
+                                                fieldName: 'customerName',
+                                                formControl: customerNameInput
+                                            }
+                                        "
+                                    ></ng-container>
+                                </th>
+
+                                <th width="10%">
+                                    <div class="d-flex">
+                                        <div class="">
+                                            {{
+                                                voucherType === "proformas"
+                                                    ? localeData?.proforma_date
+                                                    : localeData?.estimate_date
+                                            }}
+                                        </div>
+                                        <div class="icon-pointer">
+                                            <ng-container
+                                                *ngTemplateOutlet="sortTemplate; context: { column: 'proformaDate' }"
+                                            >
+                                            </ng-container>
+                                        </div>
+                                    </div>
+                                </th>
+
+                                <th width="12%">
+                                    <div class="d-flex justify-content-end">
+                                        <div class="text-right">{{ localeData?.total_amt }}</div>
+                                        <div class="icon-pointer">
+                                            <ng-container
+                                                *ngTemplateOutlet="sortTemplate; context: { column: 'grandTotal' }"
+                                            >
+                                            </ng-container>
+                                        </div>
+                                    </div>
+                                </th>
+
+                                <th width="12%">
+                                    <div class="d-flex">
+                                        <div class="">{{ localeData?.expiry_date }}</div>
+                                        <div class="icon-pointer">
+                                            <ng-container
+                                                *ngTemplateOutlet="sortTemplate; context: { column: 'dueDate' }"
+                                            >
+                                            </ng-container>
+                                        </div>
+                                    </div>
+                                </th>
+
+                                <th width="10%">
+                                    <div class="d-flex">
+                                        <div class="flex-fill">{{ commonLocaleData?.app_status }}</div>
+                                    </div>
+                                </th>
+
+                                <th width="10%">
+                                    <div class="d-flex">
+                                        <div class="flex-fill">{{ commonLocaleData?.app_action }}</div>
+                                    </div>
+                                </th>
+                            </tr>
+                        </thead>
+
+                        <tbody
+                            *ngIf="voucherData && voucherData.results.length > 0 && !(isGetAllInProcess$ | async)"
+                            (clickOutside)="hoveredItemUniqueName = ''; clickedItemUniqueName = ''"
+                            (mouseleave)="hoveredItemUniqueName = ''; clickedItemUniqueName = ''"
+                        >
+                            <tr
+                                *ngFor="let item of voucherData.results; let i = index"
+                                (mouseover)="hoveredItemUniqueName = item.uniqueName"
+                            >
+                                <td
+                                    class="check-image"
+                                    width="4%"
+                                    data-title="#"
+                                    *ngIf="
+                                        hoveredItemUniqueName === item.uniqueName ||
+                                        item.isSelected ||
+                                        selectedItems.length > 0
+                                    "
+                                >
+                                    <div class="check-image" class="d-flex checkbox-td">
+                                        <img
+                                            *ngIf="!item.isSelected"
+                                            src="assets/images/unchecked.png"
+                                            (click)="toggleItem(item, true)"
+                                        />
+                                        <img
+                                            *ngIf="item.isSelected"
+                                            src="assets/images/checked.png"
+                                            (click)="toggleItem(item, false)"
+                                        />
+                                    </div>
+                                </td>
+
+                                <td
+                                    width="4%"
+                                    *ngIf="
+                                        !item.isSelected &&
+                                        hoveredItemUniqueName !== item.uniqueName &&
+                                        selectedItems.length === 0
+                                    "
+                                    data-title="#"
+                                >
+                                    <div class="d-flex index-no">
+                                        {{ i + 1 }}
+                                    </div>
+                                </td>
+
+                                <td
+                                    width="13%"
+                                    [attr.data-title]="
+                                        voucherType === 'proformas' ? localeData?.proforma_no : localeData?.estimate_no
+                                    "
+                                >
+                                    <div class="d-flex position-relative remove-capitalize">
+                                        <a
+                                            href="javascript:void(0);"
+                                            class="btn-link-2"
+                                            (click)="onSelectInvoice(item)"
+                                            >{{ item.uniqueName }}</a
+                                        >
+                                    </div>
+                                    <span *ngIf="item.expiredDays !== null">
+                                        <small class="text-danger" *ngIf="item.expiredDays === 0">
+                                            {{ localeData?.expired_by_today }}
+                                        </small>
+                                    </span>
+                                </td>
+
+                                <td
+                                    width="19%"
+                                    (dblclick)="selectedCustomerUniqueName = item.uniqueName"
+                                    class="cp no-dbl-click-select"
+                                    (clickOutside)="selectedCustomerUniqueName = ''"
+                                    [attr.data-title]="commonLocaleData?.app_customer"
+                                >
+                                    {{ item.customerName }}
+                                    <div
+                                        *ngIf="selectedCustomerUniqueName === item.uniqueName"
+                                        account-detail-modal-component
+                                        [accountUniqueName]="item.customerUniqueName"
+                                        [from]="this.advanceSearchFilter.from"
+                                        [to]="this.advanceSearchFilter.to"
+                                        [isModalOpen]="selectedCustomerUniqueName === item.uniqueName"
+                                    ></div>
+                                </td>
+
+                                <td
+                                    width="10%"
+                                    [attr.data-title]="
+                                        voucherType === 'proformas'
+                                            ? localeData?.proforma_date
+                                            : localeData?.estimate_date
+                                    "
+                                >
+                                    {{ item.invoiceDate }}
+                                </td>
+                                <td
+                                    width="12%"
+                                    class="text-right"
+                                    [tooltip]="
+                                        voucherType === 'proformas' || voucherType === 'estimates'
+                                            ? grandTotalPopupTemplate
+                                            : ''
+                                    "
+                                    container="body"
+                                    containerClass="invoice-preview"
+                                >
+                                    <span class="d-flex justify-content-end">
+                                        <amount-field
+                                            [amount]="item.amount?.amountForAccount"
+                                            [currencySymbol]="item?.amount?.currencyForAccount?.symbol"
+                                            [currencyCode]="item?.amount?.currencyForAccount?.code"
+                                        >
+                                        </amount-field>
+                                    </span>
+                                </td>
+                                <ng-template #grandTotalPopupTemplate
+                                    ><span [innerHTML]="item.grandTotalTooltipText"></span>
+                                </ng-template>
+                                <td width="12%" [attr.data-title]="localeData?.expiry_date">{{ item.expiryDate }}</td>
+                                <td [attr.data-title]="commonLocaleData?.app_status">{{ item.status }}</td>
+
+                                <!--for not cancelled status-->
+
+                                <td
+                                    width="10%"
+                                    [attr.data-title]="commonLocaleData?.app_action"
+                                    (click)="clickedItemUniqueName = item.uniqueName"
+                                    class="cp"
+                                    *ngIf="item.action !== 'invoiced'"
+                                >
+                                    <div class="d-flex align-items-center">
+                                        <div class="flex-fill select-action">
+                                            <span [ngClass]="{ 'text-light-2': !item.action }">{{
+                                                item.action ? item.action : commonLocaleData?.app_select_action
+                                            }}</span>
+                                        </div>
+
+                                        <!-- dropdown -->
+
+                                        <div
+                                            *ngIf="!isCompany"
+                                            class="btn-group icon-ellipse select-action"
+                                            dropdown
+                                            #dropdown="bs-dropdown"
+                                            container="body"
+                                        >
+                                            <a
+                                                href="javascript:void(0)"
+                                                id="button-basic"
+                                                dropdownToggle
+                                                class="dropdown-toggle icon-dots-three-vertical pull-right"
+                                                aria-controls="dropdown-basic"
+                                            >
+                                            </a>
+
+                                            <div
+                                                id="dropdown-basic"
+                                                *dropdownMenu
+                                                class="dropdown-menu dropdown-menu-right wd00"
+                                                role="menu"
+                                                aria-labelledby="edit-model-basic"
+                                            >
+                                                <ul
+                                                    role="menu"
+                                                    class="select-action-dropdown"
+                                                    aria-labelledby="button-basic"
+                                                >
+                                                    <li (click)="updateVoucherAction('Accepted', item)">
+                                                        <a class="cp" href="javascript:void(0)">{{
+                                                            localeData?.accepted
+                                                        }}</a>
+                                                    </li>
+                                                    <li (click)="updateVoucherAction('Decline', item)">
+                                                        <a class="cp" href="javascript:void(0)">{{
+                                                            localeData?.declined
+                                                        }}</a>
+                                                    </li>
+                                                    <li
+                                                        (click)="updateVoucherAction('ConvertToSalesOrder', item)"
+                                                        *ngIf="
+                                                            voucherType === 'estimate' || voucherType === 'estimates'
+                                                        "
+                                                    >
+                                                        <a class="cp" href="javascript:void(0)">{{
+                                                            localeData?.convert_proforma
+                                                        }}</a>
+                                                    </li>
+                                                    <li (click)="updateVoucherAction('ConvertToInvoice', item)">
+                                                        <a class="cp" href="javascript:void(0)">{{
+                                                            localeData?.convert_invoice
+                                                        }}</a>
+                                                    </li>
+                                                    <li (click)="updateVoucherAction('Expired', item)">
+                                                        <a class="cp" href="javascript:void(0)">{{
+                                                            localeData?.expired
+                                                        }}</a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+
+                                <!--for cancelled/ declined status-->
+                                <td
+                                    width="10%"
+                                    *ngIf="item.action === 'invoiced'"
+                                    [attr.data-title]="commonLocaleData?.app_action"
+                                >
+                                    <span>{{ item.action }}</span>
+                                </td>
+                            </tr>
+                        </tbody>
+
+                        <tfoot
+                            *ngIf="voucherData && voucherData?.totalItems > 20"
+                            [hidden]="isGetAllInProcess$ | async"
+                        >
+                            <tr>
+                                <td colspan="100%" class="border-none pagination-wrapper">
+                                    <div class="text-center unbold">
+                                        <pagination
+                                            [totalItems]="voucherData.totalItems"
+                                            [(ngModel)]="voucherData.page"
+                                            [maxSize]="5"
+                                            class="pagination-sm"
+                                            [boundaryLinks]="true"
+                                            [itemsPerPage]="20"
+                                            [rotate]="false"
+                                            (pageChanged)="pageChanged($event)"
+                                            [firstText]="commonLocaleData?.app_first"
+                                            [previousText]="commonLocaleData?.app_previous"
+                                            [nextText]="commonLocaleData?.app_next"
+                                            [lastText]="commonLocaleData?.app_last"
+                                        >
+                                        </pagination>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+
+                <!--no data-->
+                <div class="no-data" *ngIf="!voucherData?.results?.length && !(isGetAllInProcess$ | async)">
+                    <no-data></no-data>
+                </div>
+
+                <!--loading-->
+                <giddh-page-loader *ngIf="isGetAllInProcess$ | async"></giddh-page-loader>
+            </div>
+
+            <!-- region search template -->
+            <ng-template
+                #searchTemplate
+                let-show
+                let-title="title"
+                let-fieldName="fieldName"
+                let-formControl="formControl"
+            >
+                <div [hidden]="show">
+                    <i class="icon-search" (click)="toggleSearch(fieldName, searchBox)"></i>
+                    <span> {{ title }}</span>
+                </div>
+
+                <div class="input-container" [hidden]="!show">
+                    <input
+                        type="text"
+                        [placeholder]="getSearchFieldText(title)"
+                        class="w100"
+                        #searchBox
+                        [formControl]="formControl"
+                    />
+                </div>
+            </ng-template>
+            <!-- endregion -->
+
+            <!-- region sort icon template -->
+            <ng-template #sortTemplate let-column="column">
+                <div
+                    class="icon-sort-asc"
+                    *ngIf="advanceSearchFilter.sortBy !== column"
+                    (click)="sortButtonClicked('asc', column)"
+                    [ngClass]="{
+                        'active-text-color': advanceSearchFilter.sortBy === column && advanceSearchFilter.sort === 'asc'
+                    }"
+                ></div>
+
+                <div
+                    class="icon-sort-asc"
+                    *ngIf="advanceSearchFilter.sortBy === column && advanceSearchFilter.sort === 'asc'"
+                    (click)="sortButtonClicked('desc', column)"
+                    [ngClass]="{
+                        'active-text-color': advanceSearchFilter.sortBy === column && advanceSearchFilter.sort === 'asc'
+                    }"
+                ></div>
+
+                <div
+                    class="icon-sort-asc"
+                    *ngIf="advanceSearchFilter.sortBy === column && advanceSearchFilter.sort === 'desc'"
+                    (click)="sortButtonClicked('asc', column)"
+                    [ngClass]="{
+                        'active-text-color':
+                            advanceSearchFilter.sortBy === column && advanceSearchFilter.sort === 'desc'
+                    }"
+                ></div>
+            </ng-template>
+            <!-- endregion -->
+
+            <!-- region invoice-preview-details -->
+            <div *ngIf="selectedVoucher">
+                <invoice-preview-details-component
+                    [(selectedItem)]="selectedVoucher"
+                    [items]="itemsListForDetails"
+                    [isCompany]="isCompany"
+                    [voucherType]="selectedVoucher.voucherType"
+                    [invoiceSetting]="invoiceSetting"
+                    [invoiceSearch]="invoiceSearch"
+                    [voucherNoForDetail]="voucherNoForDetail"
+                    [voucherDetailAction]="voucherDetailAction"
+                    (invoiceSearchEvent)="invoiceSearch = $event"
+                    (closeEvent)="invoicePreviewClosed()"
+                    [appSideMenubarIsOpen]="appSideMenubarIsOpen"
+                    [localeData]="localeData"
+                    [commonLocaleData]="commonLocaleData"
+                    (deleteVoucher)="deleteVoucher()"
+                    (sendEmail)="sendEmail($event)"
+                    (refreshDataAfterVoucherUpdate)="getAll()"
+                    (updateVoucherAction)="updateVoucherAction($event)"
+                ></invoice-preview-details-component>
+            </div>
+            <!-- endregion -->
+
+            <!--advance_search Modal-->
+            <div
+                bsModal
+                #advanceSearch="bs-modal"
+                class="modal fade"
+                role="dialog"
+                [config]="modalConfig"
+                tabindex="-1"
+            >
+                <div class="modal-dialog" *ngIf="showAdvanceSearchModal">
+                    <div class="modal-content">
+                        <invoice-advance-search-component
+                            [type]="'proforma'"
+                            [request]="advanceSearchFilter"
+                            [localeData]="localeData"
+                            [commonLocaleData]="commonLocaleData"
+                            (applyFilterEvent)="applyAdvanceSearch($event)"
+                            (closeModelEvent)="toggleAdvanceSearchPopup()"
+                        >
+                        </invoice-advance-search-component>
                     </div>
                 </div>
             </div>
-        </ng-template>
 
-        <!-- select app proforma -->
-        <div class="clearfix">
-            <div class="table-responsive remove-responsive invoice-preview mr-t15">
-                <table class="table basic pd-t15 giddh-table desktop-table table-bordered invoice-table on-mobile-view">
-                    <thead
-                        class="thead-background1"
-                        [attr.style]="
-                            !voucherData?.results?.length &&
-                            !advanceSearchFilter?.proformaNumber &&
-                            !advanceSearchFilter?.estimateNumber &&
-                            !advanceSearchFilter?.q
-                                ? 'display: none !important'
-                                : ''
-                        "
-                    >
-                        <tr>
-                            <th *ngIf="selectedItems.length > 0" width="4%" class="min-width-check">
-                                <div class="check-image d-flex justify-content-center">
-                                    <img
-                                        src="assets/images/unchecked.png"
-                                        *ngIf="!allItemsSelected"
-                                        (click)="toggleAllItems(true)"
-                                    />
-                                    <img
-                                        src="assets/images/checked.png"
-                                        *ngIf="allItemsSelected"
-                                        (click)="toggleAllItems(false)"
-                                    />
-                                </div>
-                            </th>
-
-                            <th *ngIf="selectedItems.length === 0" width="4%" class="min-width-check">
-                                <div class="check-image d-flex justify-content-center">#</div>
-                            </th>
-
-                            <th
-                                width="13%"
-                                class="td-search-box"
-                                #searchVoucherNumberContainer
-                                (clickOutside)="clickedOutside($event, searchVoucherNumberContainer, 'voucherNumber')"
-                            >
-                                <ng-container
-                                    *ngTemplateOutlet="
-                                        searchTemplate;
-                                        context: {
-                                            $implicit: showVoucherNoSearch,
-                                            title:
-                                                voucherType === 'proformas'
-                                                    ? localeData?.proforma_no
-                                                    : localeData?.estimate_no,
-                                            fieldName: 'voucherNumber',
-                                            formControl: voucherNumberInput
-                                        }
-                                    "
-                                ></ng-container>
-                            </th>
-
-                            <th
-                                width="19%"
-                                class="td-search-box"
-                                #searchCustomerContainer
-                                (clickOutside)="clickedOutside($event, searchCustomerContainer, 'customerName')"
-                            >
-                                <ng-container
-                                    *ngTemplateOutlet="
-                                        searchTemplate;
-                                        context: {
-                                            $implicit: showCustomerSearch,
-                                            title: commonLocaleData?.app_customer,
-                                            fieldName: 'customerName',
-                                            formControl: customerNameInput
-                                        }
-                                    "
-                                ></ng-container>
-                            </th>
-
-                            <th width="10%">
-                                <div class="d-flex">
-                                    <div class="">
-                                        {{
-                                            voucherType === "proformas"
-                                                ? localeData?.proforma_date
-                                                : localeData?.estimate_date
-                                        }}
-                                    </div>
-                                    <div class="icon-pointer">
-                                        <ng-container
-                                            *ngTemplateOutlet="sortTemplate; context: { column: 'proformaDate' }"
-                                        >
-                                        </ng-container>
-                                    </div>
-                                </div>
-                            </th>
-
-                            <th width="12%">
-                                <div class="d-flex justify-content-end">
-                                    <div class="text-right">{{ localeData?.total_amt }}</div>
-                                    <div class="icon-pointer">
-                                        <ng-container
-                                            *ngTemplateOutlet="sortTemplate; context: { column: 'grandTotal' }"
-                                        >
-                                        </ng-container>
-                                    </div>
-                                </div>
-                            </th>
-
-                            <th width="12%">
-                                <div class="d-flex">
-                                    <div class="">{{ localeData?.expiry_date }}</div>
-                                    <div class="icon-pointer">
-                                        <ng-container *ngTemplateOutlet="sortTemplate; context: { column: 'dueDate' }">
-                                        </ng-container>
-                                    </div>
-                                </div>
-                            </th>
-
-                            <th width="10%">
-                                <div class="d-flex">
-                                    <div class="flex-fill">{{ commonLocaleData?.app_status }}</div>
-                                </div>
-                            </th>
-
-                            <th width="10%">
-                                <div class="d-flex">
-                                    <div class="flex-fill">{{ commonLocaleData?.app_action }}</div>
-                                </div>
-                            </th>
-                        </tr>
-                    </thead>
-
-                    <tbody
-                        *ngIf="voucherData && voucherData.results.length > 0 && !(isGetAllInProcess$ | async)"
-                        (clickOutside)="hoveredItemUniqueName = ''; clickedItemUniqueName = ''"
-                        (mouseleave)="hoveredItemUniqueName = ''; clickedItemUniqueName = ''"
-                    >
-                        <tr
-                            *ngFor="let item of voucherData.results; let i = index"
-                            (mouseover)="hoveredItemUniqueName = item.uniqueName"
+            <!-- Delete Proforma/Estimate confirmation model -->
+            <div
+                bsModal
+                #deleteConfirmationModel="bs-modal"
+                class="modal fade"
+                role="dialog"
+                [config]="{ keyboard: true }"
+                tabindex="-1"
+            >
+                <div class="modal-dialog modal-md">
+                    <div class="modal-content">
+                        <delete-role-confirmation-model
+                            [module]="voucherType + 'list'"
+                            (confirmDeleteEvent)="deleteVoucher()"
+                            (closeModelEvent)="toggleConfirmationModel()"
                         >
-                            <td
-                                class="check-image"
-                                width="4%"
-                                data-title="#"
-                                *ngIf="
-                                    hoveredItemUniqueName === item.uniqueName ||
-                                    item.isSelected ||
-                                    selectedItems.length > 0
-                                "
-                            >
-                                <div class="check-image" class="d-flex checkbox-td">
-                                    <img
-                                        *ngIf="!item.isSelected"
-                                        src="assets/images/unchecked.png"
-                                        (click)="toggleItem(item, true)"
-                                    />
-                                    <img
-                                        *ngIf="item.isSelected"
-                                        src="assets/images/checked.png"
-                                        (click)="toggleItem(item, false)"
-                                    />
-                                </div>
-                            </td>
-
-                            <td
-                                width="4%"
-                                *ngIf="
-                                    !item.isSelected &&
-                                    hoveredItemUniqueName !== item.uniqueName &&
-                                    selectedItems.length === 0
-                                "
-                                data-title="#"
-                            >
-                                <div class="d-flex index-no">
-                                    {{ i + 1 }}
-                                </div>
-                            </td>
-
-                            <td
-                                width="13%"
-                                [attr.data-title]="
-                                    voucherType === 'proformas' ? localeData?.proforma_no : localeData?.estimate_no
-                                "
-                            >
-                                <div class="d-flex position-relative remove-capitalize">
-                                    <a href="javascript:void(0);" class="btn-link-2" (click)="onSelectInvoice(item)">{{
-                                        item.uniqueName
-                                    }}</a>
-                                </div>
-                                <span *ngIf="item.expiredDays !== null">
-                                    <small class="text-danger" *ngIf="item.expiredDays === 0">
-                                        {{ localeData?.expired_by_today }}
-                                    </small>
-                                </span>
-                            </td>
-
-                            <td
-                                width="19%"
-                                (dblclick)="selectedCustomerUniqueName = item.uniqueName"
-                                class="cp no-dbl-click-select"
-                                (clickOutside)="selectedCustomerUniqueName = ''"
-                                [attr.data-title]="commonLocaleData?.app_customer"
-                            >
-                                {{ item.customerName }}
-                                <div
-                                    *ngIf="selectedCustomerUniqueName === item.uniqueName"
-                                    account-detail-modal-component
-                                    [accountUniqueName]="item.customerUniqueName"
-                                    [from]="this.advanceSearchFilter.from"
-                                    [to]="this.advanceSearchFilter.to"
-                                    [isModalOpen]="selectedCustomerUniqueName === item.uniqueName"
-                                ></div>
-                            </td>
-
-                            <td
-                                width="10%"
-                                [attr.data-title]="
-                                    voucherType === 'proformas' ? localeData?.proforma_date : localeData?.estimate_date
-                                "
-                            >
-                                {{ item.invoiceDate }}
-                            </td>
-                            <td
-                                width="12%"
-                                class="text-right"
-                                [tooltip]="
-                                    voucherType === 'proformas' || voucherType === 'estimates'
-                                        ? grandTotalPopupTemplate
-                                        : ''
-                                "
-                                container="body"
-                                containerClass="invoice-preview"
-                            >
-                                <span class="d-flex justify-content-end">
-                                    <amount-field
-                                        [amount]="item.amount?.amountForAccount"
-                                        [currencySymbol]="item?.amount?.currencyForAccount?.symbol"
-                                        [currencyCode]="item?.amount?.currencyForAccount?.code"
-                                    >
-                                    </amount-field>
-                                </span>
-                            </td>
-                            <ng-template #grandTotalPopupTemplate
-                                ><span [innerHTML]="item.grandTotalTooltipText"></span>
-                            </ng-template>
-                            <td width="12%" [attr.data-title]="localeData?.expiry_date">{{ item.expiryDate }}</td>
-                            <td [attr.data-title]="commonLocaleData?.app_status">{{ item.status }}</td>
-
-                            <!--for not cancelled status-->
-
-                            <td
-                                width="10%"
-                                [attr.data-title]="commonLocaleData?.app_action"
-                                (click)="clickedItemUniqueName = item.uniqueName"
-                                class="cp"
-                                *ngIf="item.action !== 'invoiced'"
-                            >
-                                <div class="d-flex align-items-center">
-                                    <div class="flex-fill select-action">
-                                        <span [ngClass]="{ 'text-light-2': !item.action }">{{
-                                            item.action ? item.action : commonLocaleData?.app_select_action
-                                        }}</span>
-                                    </div>
-
-                                    <!-- dropdown -->
-
-                                    <div
-                                        *ngIf="!isCompany"
-                                        class="btn-group icon-ellipse select-action"
-                                        dropdown
-                                        #dropdown="bs-dropdown"
-                                        container="body"
-                                    >
-                                        <a
-                                            href="javascript:void(0)"
-                                            id="button-basic"
-                                            dropdownToggle
-                                            class="dropdown-toggle icon-dots-three-vertical pull-right"
-                                            aria-controls="dropdown-basic"
-                                        >
-                                        </a>
-
-                                        <div
-                                            id="dropdown-basic"
-                                            *dropdownMenu
-                                            class="dropdown-menu dropdown-menu-right wd00"
-                                            role="menu"
-                                            aria-labelledby="edit-model-basic"
-                                        >
-                                            <ul
-                                                role="menu"
-                                                class="select-action-dropdown"
-                                                aria-labelledby="button-basic"
-                                            >
-                                                <li (click)="updateVoucherAction('Accepted', item)">
-                                                    <a class="cp" href="javascript:void(0)">{{
-                                                        localeData?.accepted
-                                                    }}</a>
-                                                </li>
-                                                <li (click)="updateVoucherAction('Decline', item)">
-                                                    <a class="cp" href="javascript:void(0)">{{
-                                                        localeData?.declined
-                                                    }}</a>
-                                                </li>
-                                                <li
-                                                    (click)="updateVoucherAction('ConvertToSalesOrder', item)"
-                                                    *ngIf="voucherType === 'estimate' || voucherType === 'estimates'"
-                                                >
-                                                    <a class="cp" href="javascript:void(0)">{{
-                                                        localeData?.convert_proforma
-                                                    }}</a>
-                                                </li>
-                                                <li (click)="updateVoucherAction('ConvertToInvoice', item)">
-                                                    <a class="cp" href="javascript:void(0)">{{
-                                                        localeData?.convert_invoice
-                                                    }}</a>
-                                                </li>
-                                                <li (click)="updateVoucherAction('Expired', item)">
-                                                    <a class="cp" href="javascript:void(0)">{{
-                                                        localeData?.expired
-                                                    }}</a>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </td>
-
-                            <!--for cancelled/ declined status-->
-                            <td
-                                width="10%"
-                                *ngIf="item.action === 'invoiced'"
-                                [attr.data-title]="commonLocaleData?.app_action"
-                            >
-                                <span>{{ item.action }}</span>
-                            </td>
-                        </tr>
-                    </tbody>
-
-                    <tfoot *ngIf="voucherData && voucherData?.totalItems > 20" [hidden]="isGetAllInProcess$ | async">
-                        <tr>
-                            <td colspan="100%" class="border-none pagination-wrapper">
-                                <div class="text-center unbold">
-                                    <pagination
-                                        [totalItems]="voucherData.totalItems"
-                                        [(ngModel)]="voucherData.page"
-                                        [maxSize]="5"
-                                        class="pagination-sm"
-                                        [boundaryLinks]="true"
-                                        [itemsPerPage]="20"
-                                        [rotate]="false"
-                                        (pageChanged)="pageChanged($event)"
-                                        [firstText]="commonLocaleData?.app_first"
-                                        [previousText]="commonLocaleData?.app_previous"
-                                        [nextText]="commonLocaleData?.app_next"
-                                        [lastText]="commonLocaleData?.app_last"
-                                    >
-                                    </pagination>
-                                </div>
-                            </td>
-                        </tr>
-                    </tfoot>
-                </table>
-            </div>
-
-            <!--no data-->
-            <div class="no-data" *ngIf="!voucherData?.results?.length && !(isGetAllInProcess$ | async)">
-                <no-data></no-data>
-            </div>
-
-            <!--loading-->
-            <giddh-page-loader *ngIf="isGetAllInProcess$ | async"></giddh-page-loader>
-        </div>
-
-        <!-- region search template -->
-        <ng-template #searchTemplate let-show let-title="title" let-fieldName="fieldName" let-formControl="formControl">
-            <div [hidden]="show">
-                <i class="icon-search" (click)="toggleSearch(fieldName, searchBox)"></i>
-                <span> {{ title }}</span>
-            </div>
-
-            <div class="input-container" [hidden]="!show">
-                <input
-                    type="text"
-                    [placeholder]="getSearchFieldText(title)"
-                    class="w100"
-                    #searchBox
-                    [formControl]="formControl"
-                />
-            </div>
-        </ng-template>
-        <!-- endregion -->
-
-        <!-- region sort icon template -->
-        <ng-template #sortTemplate let-column="column">
-            <div
-                class="icon-sort-asc"
-                *ngIf="advanceSearchFilter.sortBy !== column"
-                (click)="sortButtonClicked('asc', column)"
-                [ngClass]="{
-                    'active-text-color': advanceSearchFilter.sortBy === column && advanceSearchFilter.sort === 'asc'
-                }"
-            ></div>
-
-            <div
-                class="icon-sort-asc"
-                *ngIf="advanceSearchFilter.sortBy === column && advanceSearchFilter.sort === 'asc'"
-                (click)="sortButtonClicked('desc', column)"
-                [ngClass]="{
-                    'active-text-color': advanceSearchFilter.sortBy === column && advanceSearchFilter.sort === 'asc'
-                }"
-            ></div>
-
-            <div
-                class="icon-sort-asc"
-                *ngIf="advanceSearchFilter.sortBy === column && advanceSearchFilter.sort === 'desc'"
-                (click)="sortButtonClicked('asc', column)"
-                [ngClass]="{
-                    'active-text-color': advanceSearchFilter.sortBy === column && advanceSearchFilter.sort === 'desc'
-                }"
-            ></div>
-        </ng-template>
-        <!-- endregion -->
-
-        <!-- region invoice-preview-details -->
-        <div *ngIf="selectedVoucher">
-            <invoice-preview-details-component
-                [(selectedItem)]="selectedVoucher"
-                [items]="itemsListForDetails"
-                [isCompany]="isCompany"
-                [voucherType]="selectedVoucher.voucherType"
-                [invoiceSetting]="invoiceSetting"
-                [invoiceSearch]="invoiceSearch"
-                [voucherNoForDetail]="voucherNoForDetail"
-                [voucherDetailAction]="voucherDetailAction"
-                (invoiceSearchEvent)="invoiceSearch = $event"
-                (closeEvent)="invoicePreviewClosed()"
-                [appSideMenubarIsOpen]="appSideMenubarIsOpen"
-                [localeData]="localeData"
-                [commonLocaleData]="commonLocaleData"
-                (deleteVoucher)="deleteVoucher()"
-                (sendEmail)="sendEmail($event)"
-                (refreshDataAfterVoucherUpdate)="getAll()"
-                (updateVoucherAction)="updateVoucherAction($event)"
-            ></invoice-preview-details-component>
-        </div>
-        <!-- endregion -->
-
-        <!--advance_search Modal-->
-        <div bsModal #advanceSearch="bs-modal" class="modal fade" role="dialog" [config]="modalConfig" tabindex="-1">
-            <div class="modal-dialog" *ngIf="showAdvanceSearchModal">
-                <div class="modal-content">
-                    <invoice-advance-search-component
-                        [type]="'proforma'"
-                        [request]="advanceSearchFilter"
-                        [localeData]="localeData"
-                        [commonLocaleData]="commonLocaleData"
-                        (applyFilterEvent)="applyAdvanceSearch($event)"
-                        (closeModelEvent)="toggleAdvanceSearchPopup()"
-                    >
-                    </invoice-advance-search-component>
+                        </delete-role-confirmation-model>
+                    </div>
                 </div>
             </div>
-        </div>
-
-        <!-- Delete Proforma/Estimate confirmation model -->
-        <div
-            bsModal
-            #deleteConfirmationModel="bs-modal"
-            class="modal fade"
-            role="dialog"
-            [config]="{ keyboard: true }"
-            tabindex="-1"
-        >
-            <div class="modal-dialog modal-md">
-                <div class="modal-content">
-                    <delete-role-confirmation-model
-                        [module]="voucherType + 'list'"
-                        (confirmDeleteEvent)="deleteVoucher()"
-                        (closeModelEvent)="toggleConfirmationModel()"
-                    >
-                    </delete-role-confirmation-model>
+            <ng-template #datepickerTemplate>
+                <div class="datepicker-modal">
+                    <div class="modal-body">
+                        <app-datepicker-wrapper
+                            [inputStartDate]="selectedDateRange?.startDate"
+                            [inputEndDate]="selectedDateRange?.endDate"
+                            [alwaysShowCalendars]="true"
+                            [ranges]="datePickerOption"
+                            [selectedRangeLabel]="selectedRangeLabel"
+                            [showCustomRangeLabel]="true"
+                            [showClearButton]="false"
+                            [showCancel]="true"
+                            [linkedCalendars]="true"
+                            [showDropdowns]="true"
+                            (rangeClicked)="dateSelectedCallback($event)"
+                            (datesUpdated)="dateSelectedCallback($event)"
+                            [keepCalendarOpeningWithRange]="false"
+                            [showRangeLabelOnInput]="false"
+                            [dateFieldPosition]="dateFieldPosition"
+                        ></app-datepicker-wrapper>
+                    </div>
                 </div>
-            </div>
+            </ng-template>
         </div>
-        <ng-template #datepickerTemplate>
-            <div class="datepicker-modal">
-                <div class="modal-body">
-                    <app-datepicker-wrapper
-                        [inputStartDate]="selectedDateRange?.startDate"
-                        [inputEndDate]="selectedDateRange?.endDate"
-                        [alwaysShowCalendars]="true"
-                        [ranges]="datePickerOption"
-                        [selectedRangeLabel]="selectedRangeLabel"
-                        [showCustomRangeLabel]="true"
-                        [showClearButton]="false"
-                        [showCancel]="true"
-                        [linkedCalendars]="true"
-                        [showDropdowns]="true"
-                        (rangeClicked)="dateSelectedCallback($event)"
-                        (datesUpdated)="dateSelectedCallback($event)"
-                        [keepCalendarOpeningWithRange]="false"
-                        [showRangeLabelOnInput]="false"
-                        [dateFieldPosition]="dateFieldPosition"
-                    ></app-datepicker-wrapper>
-                </div>
-            </div>
-        </ng-template>
     </div>
 </ng-container>
