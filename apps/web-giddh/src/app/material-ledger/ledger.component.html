@@ -210,7 +210,7 @@
                                         />
                                     </mat-form-field>
                                 </span>
-                                <span
+                                <button
                                     id="advance-filter"
                                     (click)="onOpenAdvanceSearch()"
                                     class="advance-icon d-flex advance-search-filter pointer"
@@ -220,7 +220,7 @@
                                     [ngStyle]="{ 'margin-left': checkedTrxWhileHovering?.length === 0 ? '7px' : '0px' }"
                                 >
                                     <span class="icon-advance-filter"></span>
-                                </span>
+                                </button>
                                 <button
                                     class="cp clear-filter-btn"
                                     id="clear-filter"
@@ -489,7 +489,7 @@
                                         [matTooltipPosition]="'above'"
                                         matTooltipClass="tooltip-black"
                                         (click)="showBulkDeleteBankTransactionsConfirmationModal()"
-                                        *ngIf="entryUniqueNamesForBulkAction?.length > 0"
+                                        *ngIf="entryUniqueNamesForBulkAction?.length > 0 && lc.showEledger"
                                     >
                                         <i class="icon-trash lh-0"></i>
                                     </a>

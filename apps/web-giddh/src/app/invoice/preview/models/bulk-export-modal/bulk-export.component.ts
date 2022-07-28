@@ -34,7 +34,6 @@ export class BulkExportModal implements OnInit, OnDestroy {
 
     /** Download Voucher Copy Options */
     public downloadCopyOptions: any[] = [];
-
     /** Selected download Voucher Copy Options */
     public copyTypes: any = [];
     /** Email Receivers */
