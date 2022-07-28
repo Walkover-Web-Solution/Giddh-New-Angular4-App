@@ -1890,7 +1890,19 @@ ul.pills li {
         }
     }
 }
-/*invoice pages global styles  */ /*full width modal  */
+
+.new-inventory-page {
+    .custom-tabs {
+        ul {
+            display: none !important;
+        }
+    }
+}
+
+/*invoice pages global styles  */
+
+/*full width modal  */
+
 .modal-liquid.modal-dialog {
     width: 100%;
     margin: 0;
@@ -3144,6 +3156,73 @@ td.mat-footer-cell {
 .mat-select-arrow {
     color: var(--color-primary-checkbox-and-expansion-panel-arrow) !important;
 }
+.mat-menu-panel {
+    background-color: var(--color-dropdown-primary-background) !important;
+}
+.mat-menu-item:hover:not([disabled]),
+.mat-menu-item.cdk-program-focused:not([disabled]),
+.mat-menu-item.cdk-keyboard-focused:not([disabled]),
+.mat-menu-item-highlighted:not([disabled]) {
+    background-color: var(--color-dropdown-list-hover-background) !important;
+}
+.select-physical-product {
+    .product-detail-content,
+    .service-detail-content,
+    .combo-detail-content,
+    .text-field-container {
+        input {
+            width: 100%;
+            display: inline-block;
+            border: 1px solid var(--color-secondary-input-bar-border);
+        }
+        input[placeholder="Search"][type="text"] {
+            border: none;
+        }
+        input[placeholder="Product Unit"],
+        input[placeholder="Under Group"],
+        input[placeholder="Service Unit"],
+        .default-input-field {
+            width: 100%;
+            height: 36px;
+            border-radius: 5px;
+            padding-left: 6px;
+            font-size: 14px;
+        }
+    }
+    .product-detail-content {
+        mat-select {
+            .mat-select-placeholder {
+                color: var(--color-common-primary-input-placeholder);
+            }
+        }
+        .mat-tab-label {
+            .mat-tab-label-content {
+                letter-spacing: 0px;
+                font: normal normal normal 16px/22px Open Sans;
+                color: var(--color-tab-primary-inactive) !important;
+            }
+            &:focus,
+            :active {
+                .mat-tab-label-content {
+                    letter-spacing: 0px;
+                    font: normal normal 600 16px/22px Open Sans;
+                    color: var(--color-tab-primary-active) !important;
+                }
+            }
+        }
+    }
+}
+
+.mat-chip-list-wrapper {
+    input.mat-input-element {
+        border: none;
+    }
+}
+
+.mat-select-arrow {
+    color: var(--color-primary-checkbox-and-expansion-panel-arrow) !important;
+}
+
 .mat-menu-panel {
     background-color: var(--color-dropdown-primary-background) !important;
 }
