@@ -450,7 +450,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             foreignOpeningBalance: [''],
             openingBalance: [''],
             mobileNo: [''],
-            mobileCode: [''],
             email: ['', Validators.pattern(EMAIL_VALIDATION_REGEX)],
             companyName: [''],
             attentionTo: [''],
@@ -640,7 +639,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
 
     public checkMobileNo(ele) {
         try {
-            let parsedNumber = parsePhoneNumberFromString('+' + this.addAccountForm.get('mobileCode').value + ele.value, this.addAccountForm.get('country').get('countryCode').value as CountryCode);
+            let parsedNumber = parsePhoneNumberFromString('+' + ele.value);
             if (parsedNumber.isValid()) {
                 ele.classList.remove('error-box');
                 this.isMobileNumberValid = true;
@@ -683,14 +682,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         } else {
             this.activeAccount$.pipe(take(1)).subscribe(activeAccountState => this.activeAccountName = activeAccountState?.uniqueName);
         }
-        if (!accountRequest.mobileNo) {
-            accountRequest.mobileCode = '';
-        } else {
-            if (!this.isMobileNumberValid) {
-                this._toaster.errorToast(this.localeData?.invalid_contact_number);
-                return false;
-            }
-        }
         if (this.isHsnSacEnabledAcc) {
             delete accountRequest['addresses'];
         } else {
@@ -705,7 +696,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 return f;
             });
 
-            if (accountRequest.mobileCode && accountRequest.mobileNo) {
+            if (accountRequest.mobileNo) {
                 accountRequest.mobileNo = accountRequest.mobileNo;
             }
         }
@@ -767,8 +758,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             this.addAccountForm.get('accountBankDetails').reset();
             this.store.dispatch(this._generalActions.resetStatesList());
             this.store.dispatch(this.commonActions.resetOnboardingForm());
-            let phoneCode = event.additional;
-            this.addAccountForm.get('mobileCode').setValue(phoneCode);
             let currencyCode = this.countryCurrency[event.value];
             this.addAccountForm.get('currency').setValue(currencyCode);
             this.getStates(event.value);
@@ -935,9 +924,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                         } else {
                             this.addAccountForm.get('currency').patchValue(this.selectedCountryCurrency);
                             this.selectedCurrency = this.selectedCountryCurrency;
-                        }
-                        if (!this.addAccountForm.get('mobileCode').value) {
-                            this.addAccountForm.get('mobileCode')?.patchValue(this.selectedAccountCallingCode);
                         }
                     }
                 }
@@ -1241,7 +1227,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     * @memberof AccountUpdateNewDetailsComponent
     */
     public getCompanyCustomField(): void {
-        if(this.isCustomFieldLoading) {
+        if (this.isCustomFieldLoading) {
             return;
         }
         this.isCustomFieldLoading = true;
@@ -1780,17 +1766,9 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 }
                 this.openingBalanceTypeChnaged(accountDetails.openingBalanceType);
                 if (accountDetails.mobileNo) {
-                    if (accountDetails.mobileNo.indexOf('-') > -1) {
-                        let mobileArray = accountDetails.mobileNo.split('-');
-                        this.addAccountForm.get('mobileCode')?.patchValue(mobileArray[0]);
-                        this.addAccountForm.get('mobileNo')?.patchValue(mobileArray[1]);
-                    } else {
-                        this.addAccountForm.get('mobileNo')?.patchValue(accountDetails.mobileNo);
-                        this.addAccountForm.get('mobileCode')?.patchValue(accountDetails.mobileCode);
-                    }
+                    this.addAccountForm.get('mobileNo')?.patchValue(accountDetails.mobileNo);
                 } else {
                     this.addAccountForm.get('mobileNo')?.patchValue('');
-                    this.addAccountForm.get('mobileCode')?.patchValue(this.selectedAccountCallingCode);  // if mobile no null then country calling cade will assign
                 }
 
                 this.toggleStateRequired();

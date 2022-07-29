@@ -323,22 +323,19 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         if (this.activeCompany && this.activeCompany.countryV2) {
             const countryCode = this.activeCompany.countryV2.alpha2CountryCode;
             const countryName = this.activeCompany.countryV2.countryName;
-            const callingCode = this.activeCompany.countryV2.callingCode;
             this.addAccountForm.get('country').get('countryCode').setValue(countryCode);
             this.selectedCountry = `${countryCode} - ${countryName}`;
             this.selectedCountryCode = countryCode;
-            this.addAccountForm.get('mobileCode').setValue(callingCode);
             this.addAccountForm.get('currency').setValue(company.baseCurrency);
             this.getOnboardingForm(countryCode);
             this.companyCountry = countryCode;
         } else {
-            this.addAccountForm.get('country').get('countryCode').setValue('IN');
-            this.addAccountForm.get('mobileCode').setValue('91');
-            this.selectedCountry = 'IN - India';
-            this.selectedCountryCode = 'IN';
-            this.addAccountForm.get('currency').setValue('IN');
-            this.companyCountry = 'IN';
-            this.getOnboardingForm('IN');
+            this.addAccountForm.get('country').get('countryCode').setValue('');
+            this.selectedCountry = '';
+            this.selectedCountryCode = '';
+            this.addAccountForm.get('currency').setValue('');
+            this.companyCountry = '';
+            this.getOnboardingForm('');
         }
 
         this.toggleStateRequired();
@@ -353,7 +350,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             foreignOpeningBalance: [''],
             openingBalance: [''],
             mobileNo: [''],
-            mobileCode: [''],
             email: ['', Validators.pattern(EMAIL_VALIDATION_REGEX)],
             companyName: [''],
             attentionTo: [''],
@@ -529,7 +525,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
 
     public checkMobileNo(ele) {
         try {
-            let parsedNumber = parsePhoneNumberFromString('+' + this.addAccountForm.get('mobileCode').value + ele.value, this.addAccountForm.get('country').get('countryCode').value as CountryCode);
+            let parsedNumber = parsePhoneNumberFromString('+' + ele.value, this.addAccountForm.get('country').get('countryCode').value as CountryCode);
             if (parsedNumber.isValid()) {
                 ele.classList.remove('error-box');
                 this.isMobileNumberValid = true;
@@ -569,14 +565,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         }
         delete accountRequest['addAccountForm'];
 
-        if (!accountRequest.mobileNo) {
-            accountRequest.mobileCode = '';
-        } else {
-            if (!this.isMobileNumberValid) {
-                this._toaster.errorToast(this.localeData?.invalid_contact_number);
-                return false;
-            }
-        }
         if (this.isHsnSacEnabledAcc) {
             delete accountRequest['addresses'];
         } else {
@@ -637,8 +625,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             this.store.dispatch(this._generalActions.resetStatesList());
             this.store.dispatch(this.commonActions.resetOnboardingForm());
             this.getOnboardingForm(event.value);
-            let phoneCode = event.additional;
-            this.addAccountForm.get('mobileCode').setValue(phoneCode);
             let currencyCode = this.countryCurrency[event.value];
             this.addAccountForm.get('currency').setValue(currencyCode);
             this.getStates(event.value);
