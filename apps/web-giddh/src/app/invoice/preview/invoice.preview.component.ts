@@ -377,7 +377,9 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                         if (record.mergedRecordUniqueName) {
                             allItems = allItems.filter(item => item?.uniqueName !== record.mergedRecordUniqueName);
                         }
-                        allItems[voucherIndex].voucherNumber = record.invoiceNumber;
+                        if (allItems[voucherIndex]) {
+                            allItems[voucherIndex].voucherNumber = record.invoiceNumber;
+                        }
                         allItems = uniqBy([allItems[voucherIndex], ...allItems], 'uniqueName');
                         this.itemsListForDetails = allItems;
                         this.toggleBodyClass();
@@ -907,9 +909,10 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         let model: any = {};
         let o = cloneDeep(this.invoiceSearchRequest);
         let advanceSearch = cloneDeep(this.advanceSearchFilter);
-
-        if (o?.voucherNumber) {
-            model.voucherNumber = o?.voucherNumber;
+        if (model) {
+            if (o?.voucherNumber) {
+                model.voucherNumber = o?.voucherNumber;
+            }
         }
         if (o.page) {
             advanceSearch.page = o.page;
@@ -948,8 +951,11 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         }
         model.sort = o.sort;
         model.sortBy = o.sortBy;
-        if (o.invoiceNumber) {
-            model.voucherNumber = o?.invoiceNumber;
+
+        if (model) {
+            if (o?.invoiceNumber) {
+                model.voucherNumber = o?.invoiceNumber;
+            }
         }
 
         if (o.q) {
