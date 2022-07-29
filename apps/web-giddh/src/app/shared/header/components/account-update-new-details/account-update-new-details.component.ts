@@ -123,7 +123,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public callingCodesSource$: Observable<IOption[]> = observableOf([]);
     public accounts: IOption[];
     public stateGstCode: any[] = [];
-    public isMobileNumberValid: boolean = true;
     public formFields: any[] = [];
     public isGstValid$: Observable<boolean> = observableOf(true);
     public selectedTab: string = 'address';
@@ -631,30 +630,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         this.addBlankGstForm();
     }
 
-    public isValidMobileNumber(ele: HTMLInputElement) {
-        if (ele.value) {
-            this.checkMobileNo(ele);
-        }
-    }
-
-    public checkMobileNo(ele) {
-        try {
-            let parsedNumber = parsePhoneNumberFromString('+' + ele.value);
-            if (parsedNumber.isValid()) {
-                ele.classList.remove('error-box');
-                this.isMobileNumberValid = true;
-            } else {
-                this.isMobileNumberValid = false;
-                this._toaster.errorToast(this.localeData?.invalid_contact_number);
-                ele.classList.add('error-box');
-            }
-        } catch (error) {
-            this.isMobileNumberValid = false;
-            this._toaster.errorToast(this.localeData?.invalid_contact_number);
-            ele.classList.add('error-box');
-        }
-    }
-
     public submit() {
         if (!this.addAccountForm.get('openingBalance').value) {
             this.addAccountForm.get('openingBalance').setValue('0');
@@ -682,6 +657,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         } else {
             this.activeAccount$.pipe(take(1)).subscribe(activeAccountState => this.activeAccountName = activeAccountState?.uniqueName);
         }
+
         if (this.isHsnSacEnabledAcc) {
             delete accountRequest['addresses'];
         } else {
@@ -1766,7 +1742,12 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 }
                 this.openingBalanceTypeChnaged(accountDetails.openingBalanceType);
                 if (accountDetails.mobileNo) {
-                    this.addAccountForm.get('mobileNo')?.patchValue(accountDetails.mobileNo);
+                    if (accountDetails.mobileNo.indexOf('-') > -1) {
+                        let mobileArray = accountDetails.mobileNo.split('-');
+                        this.addAccountForm.get('mobileNo')?.patchValue(mobileArray[1]);
+                    } else {
+                        this.addAccountForm.get('mobileNo')?.patchValue(accountDetails.mobileNo);
+                    }
                 } else {
                     this.addAccountForm.get('mobileNo')?.patchValue('');
                 }
