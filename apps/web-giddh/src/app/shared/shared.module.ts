@@ -24,7 +24,6 @@ import { AuthServiceConfig, GoogleLoginProvider, SocialLoginModule } from '../th
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
-import { WelcomeComponent } from '../welcome/welcome.component';
 import { CheckPermissionDirective } from './../permissions/check-permission.directive';
 import { AsideMenuOtherTaxes } from './aside-menu-other-taxes/aside-menu-other-taxes';
 import { HeaderComponent } from './header';
@@ -42,12 +41,10 @@ import { ElementViewChildModule } from './helpers/directives/elementViewChild/el
 import { KeyboardShortutModule } from './helpers/directives/keyboardShortcut/keyboardShortut.module';
 import { NgxMaskModule } from './helpers/directives/ngx-mask';
 import { TextCaseChangeModule } from './helpers/directives/textCaseChange/textCaseChange.module';
-import { LayoutComponent } from './layout/layout.component';
 import { OnBoardingComponent } from './on-boarding/on-boarding.component';
 import { NgxDaterangepickerMd } from '../theme/ngx-date-range-picker';
 import { AsideHelpSupportComponent } from './header/components/aside-help-support/aside-help-support.component';
 import { AsideSettingComponent } from './header/components/aside-setting/aside-setting.component';
-import { LoaderComponent } from '../loader/loader.component';
 import { ProformaAddBulkItemsComponent } from '../proforma-invoice/components/proforma-add-bulk-items/proforma-add-bulk-items.component';
 import { RevisionHistoryComponent } from './revision-history/revision-history.component';
 import { PurchaseOrderPreviewModalComponent } from './purchase-order-preview/purchase-order-preview.component';
@@ -87,7 +84,6 @@ export function provideConfig() {
 @NgModule({
     declarations: [
         MfReportComponent,
-        LayoutComponent,
         HeaderComponent,
         AsideHelpSupportComponent,
         AsideSettingComponent,
@@ -105,8 +101,6 @@ export function provideConfig() {
         ExportGroupLedgerComponent,
         AsideMenuOtherTaxes,
         AccountUpdateNewDetailsComponent,
-        WelcomeComponent,
-        LoaderComponent,
         ProformaAddBulkItemsComponent,
         RevisionHistoryComponent,
         PurchaseOrderPreviewModalComponent,
@@ -171,7 +165,6 @@ export function provideConfig() {
         FormsModule,
         ReactiveFormsModule,
         LaddaModule,
-        LayoutComponent,
         ShSelectModule,
         ModalModule,
         HeaderComponent,
@@ -191,14 +184,12 @@ export function provideConfig() {
         AsideMenuOtherTaxes,
         MfReportComponent,
         AccountUpdateNewDetailsComponent,
-        WelcomeComponent,
         TabsModule,
         BsDropdownModule,
         ElementViewChildModule,
         TooltipModule,
         BsDatepickerModule,
         NgxDaterangepickerMd,
-        LoaderComponent,
         ProformaAddBulkItemsComponent,
         RevisionHistoryComponent,
         PurchaseOrderPreviewModalComponent,

@@ -32,22 +32,13 @@ import { APP_RESOLVER_PROVIDERS } from './app.resolver';
 import { ROUTES } from './app.routes';
 import { BrowserDetectComponent } from './browser-support/browserDetect.component';
 import { DecoratorsModule } from './decorators/decorators.module';
-import { DummyComponent } from './dummy.component';
-import { TokenVerifyComponent } from './login/token-verify.component';
-import { MobileHomeSidebarComponent } from './mobile-home/mobile-home-sidebar/mobile-home-sidebar.component';
-import { MobileHomeComponent } from './mobile-home/mobile-home.component';
-import { MobileSearchCompanyComponent } from './mobile-home/mobile-search-company/mobile-search-company.component';
-import { MobileSearchBranchComponent } from './mobile-home/mobile-search-branch/mobile-search-branch.component';
 import { NewUserComponent } from './newUser.component';
-import { OnboardingComponent } from './onboarding/onboarding.component';
-import { PageComponent } from './page.component';
 import { PublicPageHandlerComponent } from './public-page-handler.component';
 import { ExceptionLogService } from './services/exception-log.service';
 import { GiddhHttpInterceptor } from './services/http.interceptor';
 import { CustomPreloadingStrategy } from './services/lazy-preloading.service';
 import { ServiceModule } from './services/service.module';
 import { WindowRef } from './shared/helpers/window.object';
-import { SharedModule } from './shared/shared.module';
 import { SocialLoginCallbackComponent } from './social-login-callback.component';
 import { reducers } from './store';
 import { ShSelectModule } from './theme/ng-virtual-select/sh-select.module';
@@ -56,6 +47,8 @@ import { DownloadComponent } from './download/download.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { SnackBarModule } from './theme/snackbar/snackbar.module';
 import { MatDialogModule } from '@angular/material/dialog';
+import { SharedModule } from './shared/shared.module';
+import { LoaderModule } from './loader/loader.module';
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -85,19 +78,11 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     bootstrap: [AppComponent],
     declarations: [
         AppComponent,
-        PageComponent,
         AppLoginSuccessComponent,
         PublicPageHandlerComponent,
-        TokenVerifyComponent,
-        DummyComponent,
         NewUserComponent,
         BrowserDetectComponent,
-        OnboardingComponent,
         SocialLoginCallbackComponent,
-        MobileHomeComponent,
-        MobileHomeSidebarComponent,
-        MobileSearchCompanyComponent,
-        MobileSearchBranchComponent,
         DownloadComponent
     ],
     /**
@@ -141,6 +126,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         MatSnackBarModule,
         SnackBarModule,
         MatDialogModule,
+        LoaderModule,
         ...CONDITIONAL_IMPORTS
     ],
     /**

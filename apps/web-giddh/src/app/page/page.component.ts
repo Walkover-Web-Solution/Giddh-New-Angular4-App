@@ -1,8 +1,8 @@
-import { AppState } from './store/roots';
-import { Store } from '@ngrx/store';
 import { AfterViewInit, Component } from '@angular/core';
-import { GeneralService } from './services/general.service';
-import { GeneralActions } from './actions/general/general.actions';
+import { GeneralService } from '../services/general.service';
+import { GeneralActions } from '../actions/general/general.actions';
+import { AppState } from '../store';
+import { Store } from '@ngrx/store';
 
 @Component({
     selector: 'page',
