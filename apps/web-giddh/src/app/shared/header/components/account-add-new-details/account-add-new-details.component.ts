@@ -116,7 +116,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public countryPhoneCode: IOption[] = [];
     public callingCodesSource$: Observable<IOption[]> = observableOf([]);
     public stateGstCode: any[] = [];
-    public isMobileNumberValid: boolean = false;
     public formFields: any[] = [];
     public isGstValid$: Observable<boolean> = observableOf(true);
     public GSTIN_OR_TRN: string;
@@ -331,12 +330,12 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             this.getOnboardingForm(countryCode);
             this.companyCountry = countryCode;
         } else {
-            this.addAccountForm.get('country').get('countryCode').setValue('');
-            this.selectedCountry = '';
-            this.selectedCountryCode = '';
-            this.addAccountForm.get('currency').setValue('');
-            this.companyCountry = '';
-            this.getOnboardingForm('');
+            this.addAccountForm.get('country').get('countryCode').setValue('IN');
+            this.selectedCountry = 'IN - India';
+            this.selectedCountryCode = 'IN';
+            this.addAccountForm.get('currency').setValue('IN');
+            this.companyCountry = 'IN';
+            this.getOnboardingForm('IN');
         }
 
         this.toggleStateRequired();
@@ -516,30 +515,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         addresses.reset();
         countries.reset();
         this.addAccountForm.reset();
-    }
-
-    public isValidMobileNumber(ele: HTMLInputElement) {
-        if (ele.value) {
-            this.checkMobileNo(ele);
-        }
-    }
-
-    public checkMobileNo(ele) {
-        try {
-            let parsedNumber = parsePhoneNumberFromString('+' + ele.value, this.addAccountForm.get('country').get('countryCode').value as CountryCode);
-            if (parsedNumber.isValid()) {
-                ele.classList.remove('error-box');
-                this.isMobileNumberValid = true;
-            } else {
-                this.isMobileNumberValid = false;
-                this._toaster.errorToast(this.localeData?.invalid_contact_number);
-                ele.classList.add('error-box');
-            }
-        } catch (error) {
-            this.isMobileNumberValid = false;
-            this._toaster.errorToast(this.localeData?.invalid_contact_number);
-            ele.classList.add('error-box');
-        }
     }
 
     public submit() {
