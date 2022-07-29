@@ -671,10 +671,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 }
                 return f;
             });
-
-            if (accountRequest.mobileNo) {
-                accountRequest.mobileNo = accountRequest.mobileNo;
-            }
         }
 
         if (!this.showVirtualAccount) {
