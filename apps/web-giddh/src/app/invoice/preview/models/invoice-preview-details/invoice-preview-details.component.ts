@@ -408,7 +408,7 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         this.shouldShowUploadAttachment = false;
         this.attachedPdfFileUrl = null;
         this.imagePreviewSource = null;
-        if (!this.selectedItem) {
+        if (this.selectedItem) {
             this.selectedItem.hasAttachment = false;
         }
         this.detectChanges();
