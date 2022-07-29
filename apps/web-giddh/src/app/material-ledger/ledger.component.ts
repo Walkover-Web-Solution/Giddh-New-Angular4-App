@@ -273,7 +273,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
         private commonService: CommonService,
         private adjustmentUtilityService: AdjustmentUtilityService
     ) {
-
         this.lc = new LedgerVM();
         this.advanceSearchRequest = new AdvanceSearchRequest();
         this.trxRequest = new TransactionsRequest();
@@ -1779,11 +1778,13 @@ export class LedgerComponent implements OnInit, OnDestroy {
         if (output.type === 'allAddedToQueue') {
             let sessionKey = null;
             let companyUniqueName = null;
+            let branchUniqueName = this.generalService.currentBranchUniqueName;
             this.sessionKey$.pipe(take(1)).subscribe(a => sessionKey = a);
             this.companyName$.pipe(take(1)).subscribe(a => companyUniqueName = a);
             let url = Configuration.ApiUrl + LEDGER_API.UPLOAD_FILE.replace(':companyUniqueName', companyUniqueName);
             if (this.generalService.voucherApiVersion === 2) {
                 url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
+                url = url.concat(`&branchUniqueName=${branchUniqueName}`);
             }
             const event: UploadInput = {
                 type: 'uploadAll',

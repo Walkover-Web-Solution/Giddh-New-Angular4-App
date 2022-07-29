@@ -397,13 +397,22 @@ export class PreviewComponent implements OnInit, OnDestroy, OnChanges, AfterView
      */
     public sendVoucherEmail(event: any): void {
         if (event) {
-            this.store.dispatch(this.invoiceAction.SendInvoiceOnMail(this.voucherDetails?.account?.uniqueName, {
-                emailId: event.email?.split(','),
-                voucherNumber: [this.voucherDetails?.number],
-                voucherType: this.voucherDetails?.type,
-                typeOfInvoice: event.downloadCopy ? event.downloadCopy : [],
-                uniqueName: this.voucherDetails?.uniqueName
-            }));
+            if (this.generalService.voucherApiVersion === 2) {
+                this.store.dispatch(this.invoiceAction.SendInvoiceOnMail(this.voucherDetails.account.uniqueName, {
+                    email: { to: event.email.split(',') },
+                    uniqueName: this.voucherDetails?.uniqueName,
+                    voucherType: this.voucherDetails?.type,
+                    copyTypes: event.downloadCopy ? event.downloadCopy : []
+                }));
+            } else {
+                this.store.dispatch(this.invoiceAction.SendInvoiceOnMail(this.voucherDetails?.account?.uniqueName, {
+                    emailId: event.email?.split(','),
+                    voucherNumber: [this.voucherDetails?.number],
+                    voucherType: this.voucherDetails?.type,
+                    typeOfInvoice: event.downloadCopy ? event.downloadCopy : [],
+                    uniqueName: this.voucherDetails?.uniqueName
+                }));
+            }
         }
     }
 }

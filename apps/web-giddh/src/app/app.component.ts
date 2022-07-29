@@ -111,7 +111,6 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         });
     }
 
-
     public sidebarStatusChange(event) {
         this.sideMenu.isopen = event;
     }
@@ -146,10 +145,6 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         this.sideBarStateChange(true);
         this.subscribeToLazyRouteLoading();
 
-        if (this._generalService.companyUniqueName && !window.location.href.includes('login') && !window.location.href.includes('token-verify')) {
-            this.store.dispatch(this.companyActions.RefreshCompanies());
-        }
-
         this.store.pipe(select(state => state.session.currentLocale), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 if (this.activeLocale !== response?.value) {
@@ -171,20 +166,30 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         });
 
         this.breakpointObserver.observe(['(prefers-color-scheme: light)']).subscribe((state: BreakpointState) => {
-            let availableThemes = this._generalService.getAvailableThemes();
-            if (state?.matches) {
-                document.querySelector("body")?.classList?.add("default-theme");
-                document.querySelector("body")?.classList?.remove("dark-theme");
-                this.store.dispatch(this.commonActions.setActiveTheme(availableThemes[0]));
-            } else {
-                document.querySelector("body")?.classList?.add("dark-theme");
-                document.querySelector("body")?.classList?.remove("default-theme");
-                this.store.dispatch(this.commonActions.setActiveTheme(availableThemes[1]));
-            }
+            this.store.pipe(select(state => state.session.activeTheme), takeUntil(this.destroyed$)).subscribe(response => {
+                if (!response?.value) {
+                    let availableThemes = this._generalService.getAvailableThemes();
+                    if (state?.matches) {
+                        document.querySelector("body")?.classList?.add("default-theme");
+                        document.querySelector("body")?.classList?.remove("dark-theme");
+                        this.store.dispatch(this.commonActions.setActiveTheme(availableThemes[0]));
+                    } else {
+                        document.querySelector("body")?.classList?.add("dark-theme");
+                        document.querySelector("body")?.classList?.remove("default-theme");
+                        this.store.dispatch(this.commonActions.setActiveTheme(availableThemes[1]));
+                    }
+                }
+            });
         });
     }
 
     public ngAfterViewInit() {
+        if (this._generalService.companyUniqueName && !window.location.href.includes('login') && !window.location.href.includes('token-verify')) {
+            setTimeout(() => {
+                this.store.dispatch(this.companyActions.RefreshCompanies());
+            }, 1000);
+        }
+
         this._generalService.IAmLoaded.next(true);
         this._cdr.detectChanges();
         this.router.events.pipe(takeUntil(this.destroyed$)).subscribe((evt) => {
