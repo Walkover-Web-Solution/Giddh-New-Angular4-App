@@ -127,7 +127,6 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
                 }, 200);
             }
         });
-
         document.querySelector('body')?.classList?.add('master-page');
     }
 

@@ -150,6 +150,7 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
         });
 
         this.getFiles();
+        document.querySelector('body')?.classList?.add('ledger-attachments-popup');
     }
 
     /**
@@ -160,6 +161,7 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+        document.querySelector('body')?.classList?.remove('ledger-attachments-popup');
     }
 
     /**

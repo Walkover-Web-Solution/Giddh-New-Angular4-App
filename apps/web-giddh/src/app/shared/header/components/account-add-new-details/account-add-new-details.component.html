@@ -186,7 +186,7 @@
                                             value="hsn"
                                         />
                                         <label for="hsnCodeType" class="radio-custom-label">{{
-                                            commonLocaleData?.app_hsn_code
+                                            commonLocaleData?.app_hsn
                                         }}</label>
                                     </span>
                                     <span>
@@ -199,7 +199,7 @@
                                             value="sac"
                                         />
                                         <label for="sacCodeType" class="ml-1 radio-custom-label">{{
-                                            commonLocaleData?.app_sac_code
+                                            commonLocaleData?.app_sac
                                         }}</label>
                                     </span>
                                 </div>
@@ -329,8 +329,10 @@
                                                 class="form-control"
                                                 autocomplete="false"
                                                 #gstNumberField
-                                                (keyup)="getStateCode(gst, states, $event)"
-                                                (blur)="checkGstNumValidation(gstNumberField)"
+                                                (blur)="
+                                                    checkGstNumValidation(gstNumberField);
+                                                    getStateCode(gst, states, $event)
+                                                "
                                                 name="gstNumber"
                                                 formControlName="gstNumber"
                                                 [placeholder]="taxNamePlaceholder"
@@ -373,7 +375,7 @@
                                             </div>
                                         </div>
 
-                                        <div
+                                        <!-- <div
                                             class="col-sm-4"
                                             *ngIf="gst.get('gstNumber').value && (isGstValid$ | async)"
                                         >
@@ -386,7 +388,7 @@
                                                     </label></label
                                                 >
                                             </div>
-                                        </div>
+                                        </div> -->
                                     </ng-container>
                                 </div>
 

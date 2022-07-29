@@ -1,10 +1,8 @@
 import { Observable, of, ReplaySubject, Subject } from 'rxjs';
-
 import { take, takeUntil } from 'rxjs/operators';
 import { AppState } from '../../../../../store';
 import { Store, select } from '@ngrx/store';
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import { SidebarAction } from '../../../../../actions/inventory/sidebar.actions';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { decimalDigits, digitsOnly, stockManufacturingDetailsValidator } from '../../../../../shared/helpers';
@@ -21,7 +19,6 @@ import { IGroupsWithStocksHierarchyMinItem } from '../../../../../models/interfa
 import { IForceClear } from '../../../../../models/api-models/Sales';
 import { TaxResponse } from '../../../../../models/api-models/Company';
 import { CompanyActions } from '../../../../../actions/company.actions';
-import { InvoiceActions } from '../../../../../actions/invoice/invoice.actions';
 import { InvViewService } from '../../../../../inventory/inv.view.service';
 import { INVALID_STOCK_ERROR_MESSAGE } from 'apps/web-giddh/src/app/app.constant';
 import { SalesService } from 'apps/web-giddh/src/app/services/sales.service';
@@ -91,8 +88,6 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
     public addNewStock: boolean = false;
     public manageInProcess$: Observable<any>;
     public companyTaxesList$: Observable<TaxResponse[]>;
-    public isManageInventory$: Observable<boolean>;
-    public invoiceSetting$: Observable<any>;
     public customFieldsArray: any[] = [];
     public taxTempArray: any[] = [];
     public editSKUlabel: boolean = false;
@@ -131,7 +126,6 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
         this.manageInProcess$ = this.store.pipe(select(s => s.inventory.inventoryAsideState), takeUntil(this.destroyed$));
         this.store.dispatch(this.companyActions.getTax());
         this.companyTaxesList$ = this.store.pipe(select(p => p.company && p.company.taxes), takeUntil(this.destroyed$));
-        this.invoiceSetting$ = this.store.pipe(select(p => p.invoice.settings), takeUntil(this.destroyed$));
 
         this.store.pipe(select(state => state.inventory.stockUnits), takeUntil(this.destroyed$)).subscribe(p => {
             if (p && p.length) {
@@ -416,12 +410,6 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
         this.manageInProcess$.subscribe(s => {
             if (!s.isOpen) {
                 this.addStockForm.reset();
-            }
-        });
-
-        this.invoiceSetting$.subscribe(a => {
-            if (a && a.companyInventorySettings) {
-                this.isManageInventory$ = of(a.companyInventorySettings.manageInventory);
             }
         });
     }
