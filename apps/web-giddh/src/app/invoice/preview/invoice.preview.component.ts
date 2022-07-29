@@ -909,10 +909,9 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         let model: any = {};
         let o = cloneDeep(this.invoiceSearchRequest);
         let advanceSearch = cloneDeep(this.advanceSearchFilter);
-        if (model) {
-            if (o?.voucherNumber) {
-                model.voucherNumber = o?.voucherNumber;
-            }
+
+        if (o?.voucherNumber && model) {
+            model.voucherNumber = o?.voucherNumber;
         }
         if (o.page) {
             advanceSearch.page = o.page;
@@ -952,10 +951,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         model.sort = o.sort;
         model.sortBy = o.sortBy;
 
-        if (model) {
-            if (o?.invoiceNumber) {
-                model.voucherNumber = o?.invoiceNumber;
-            }
+        if (o?.invoiceNumber && model) {
+            model.voucherNumber = o?.invoiceNumber;
         }
 
         if (o.q) {
