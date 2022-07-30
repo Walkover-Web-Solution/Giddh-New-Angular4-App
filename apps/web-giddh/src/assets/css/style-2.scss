@@ -5641,6 +5641,9 @@ footer#footer.absolute-footer {
             }
         }
     }
+    hamburger-menu {
+        z-index: 0;
+    }
 }
 
 section.ledger-stat.sticky-footer.sticky-footer-sale-amount {
