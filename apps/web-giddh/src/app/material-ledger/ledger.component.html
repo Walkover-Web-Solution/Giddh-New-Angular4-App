@@ -215,7 +215,7 @@
                                     (click)="onOpenAdvanceSearch()"
                                     class="advance-icon d-flex advance-search-filter pointer"
                                     [matTooltip]="commonLocaleData?.app_advance_search"
-                                    [matTooltipPosition]="'above'"
+                                    [matTooltipPosition]="'below'"
                                     matTooltipClass="tooltip-black"
                                     [ngStyle]="{ 'margin-left': checkedTrxWhileHovering?.length === 0 ? '7px' : '0px' }"
                                 >
@@ -228,7 +228,7 @@
                                     href="javascript:;"
                                     (click)="resetAdvanceSearch()"
                                     [matTooltip]="commonLocaleData?.app_reset_advance_search"
-                                    [matTooltipPosition]="'above'"
+                                    [matTooltipPosition]="'below'"
                                     matTooltipClass="tooltip-black"
                                 >
                                     <i aria-hidden="true" class="icon-refresh"></i>
@@ -246,7 +246,7 @@
                                         id="delete-ledger"
                                         (click)="performBulkAction('delete')"
                                         [matTooltip]="commonLocaleData?.app_delete"
-                                        [matTooltipPosition]="'above'"
+                                        [matTooltipPosition]="'below'"
                                         matTooltipClass="tooltip-black"
                                     >
                                         <i class="icon-trash font-16"></i>
@@ -261,7 +261,7 @@
                                         class="btn btn-warning d-flex align-items-center justify-content-center"
                                         (click)="performBulkAction('generate')"
                                         [matTooltip]="commonLocaleData?.app_generate_voucher"
-                                        [matTooltipPosition]="'above'"
+                                        [matTooltipPosition]="'below'"
                                         matTooltipClass="tooltip-black"
                                     >
                                         <i class="icon-generate-invoice font-16"></i>
@@ -276,7 +276,7 @@
                                         id="attach-file"
                                         (click)="performBulkAction('upload', BulkUploadfileInput)"
                                         [matTooltip]="localeData?.attach_file"
-                                        [matTooltipPosition]="'above'"
+                                        [matTooltipPosition]="'below'"
                                         matTooltipClass="tooltip-black"
                                     >
                                         <i class="icon-file-path font-16"></i>
@@ -450,7 +450,7 @@
                                         id="upload"
                                         class="icomoon-ico d-flex align-items-center"
                                         [matTooltip]="localeData?.import_statement"
-                                        [matTooltipPosition]="'above'"
+                                        [matTooltipPosition]="'below'"
                                         matTooltipClass="tooltip-black"
                                         (click)="showUploadBankStatementModal()"
                                     >
@@ -462,7 +462,7 @@
                                         id="share"
                                         class="icomoon-ico d-flex align-items-center"
                                         [matTooltip]="localeData?.share_ledger"
-                                        [matTooltipPosition]="'above'"
+                                        [matTooltipPosition]="'below'"
                                         matTooltipClass="tooltip-black"
                                         (click)="showShareLedgerModal()"
                                     >
@@ -474,7 +474,7 @@
                                         id="export-ledger"
                                         href="javascript:void(0)"
                                         [matTooltip]="commonLocaleData?.app_export"
-                                        [matTooltipPosition]="'above'"
+                                        [matTooltipPosition]="'below'"
                                         matTooltipClass="tooltip-black"
                                         (click)="showExportLedgerModal()"
                                     >
@@ -486,7 +486,7 @@
                                         id="delete-bank-transaction"
                                         href="javascript:void(0)"
                                         [matTooltip]="localeData?.delete_bank_transactions"
-                                        [matTooltipPosition]="'above'"
+                                        [matTooltipPosition]="'below'"
                                         matTooltipClass="tooltip-black"
                                         (click)="showBulkDeleteBankTransactionsConfirmationModal()"
                                         *ngIf="entryUniqueNamesForBulkAction?.length > 0"
@@ -503,7 +503,7 @@
                                         "
                                         href="javascript:void(0)"
                                         [matTooltip]="localeData?.reload_bank_transactions"
-                                        [matTooltipPosition]="'above'"
+                                        [matTooltipPosition]="'below'"
                                         matTooltipClass="tooltip-black"
                                         (click)="getBankTransactions()"
                                     >
