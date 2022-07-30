@@ -26,7 +26,6 @@ import { IForceClear } from "../../../../models/api-models/Sales";
 import { CountryRequest, OnboardingFormRequest } from "../../../../models/api-models/Common";
 import { CommonActions } from '../../../../actions/common.actions';
 import { GeneralActions } from "../../../../actions/general/general.actions";
-import { parsePhoneNumberFromString, CountryCode } from 'libphonenumber-js/min';
 import { GroupService } from 'apps/web-giddh/src/app/services/group.service';
 import { GroupWithAccountsAction } from 'apps/web-giddh/src/app/actions/groupwithaccounts.actions';
 import { API_COUNT_LIMIT, BootstrapToggleSwitch, EMAIL_VALIDATION_REGEX } from 'apps/web-giddh/src/app/app.constant';
@@ -36,6 +35,7 @@ import { GeneralService } from 'apps/web-giddh/src/app/services/general.service'
 import { clone, cloneDeep, uniqBy } from 'apps/web-giddh/src/app/lodash-optimized';
 import { CustomFieldsService } from 'apps/web-giddh/src/app/services/custom-fields.service';
 import { FieldTypes } from 'apps/web-giddh/src/app/custom-fields/custom-fields.constant';
+import { CountryISO, PhoneNumberFormat, SearchCountryField } from 'ngx-intl-tel-input';
 
 @Component({
     selector: 'account-add-new-details',
@@ -169,6 +169,15 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public availableFieldTypes: any = FieldTypes;
     /** This will hold toggle buttons value and size */
     public bootstrapToggleSwitch = BootstrapToggleSwitch;
+    /** This will hold SearchCountryField */
+    public SearchCountryField = SearchCountryField;
+    /** This will hold CountryISO */
+    public CountryISO = CountryISO;
+    /** This will hold PhoneNumberFormat */
+    public PhoneNumberFormat = PhoneNumberFormat;
+    /** This will hold preferredCountries */
+    public preferredCountries: CountryISO[] = [CountryISO.UnitedStates, CountryISO.UnitedKingdom];
+
 
     constructor(
         private _fb: FormBuilder,
@@ -183,6 +192,15 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         private invoiceService: InvoiceService,
         private customFieldsService: CustomFieldsService) {
         this.activeGroup$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroup), takeUntil(this.destroyed$));
+    }
+
+    /**
+     * This will use for change prefered countries
+     *
+     * @memberof AccountAddNewDetailsComponent
+     */
+    public changePreferredCountries() {
+        this.preferredCountries = [CountryISO.India];
     }
 
     /**
@@ -349,7 +367,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             openingBalanceType: ['CREDIT'],
             foreignOpeningBalance: [''],
             openingBalance: [''],
-            mobileNo: [''],
+            mobileNo: ['', Validators.required],
             email: ['', Validators.pattern(EMAIL_VALIDATION_REGEX)],
             companyName: [''],
             attentionTo: [''],
@@ -563,6 +581,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             delete accountRequest['addresses'];
         }
 
+        let mobileNo = this.addAccountForm?.get('mobileNo')?.value?.e164Number;
+        accountRequest['mobileNo'] = mobileNo;
         accountRequest['hsnNumber'] = (accountRequest["hsnOrSac"] === "hsn") ? accountRequest['hsnNumber'] : "";
         accountRequest['sacNumber'] = (accountRequest["hsnOrSac"] === "sac") ? accountRequest['sacNumber'] : "";
 

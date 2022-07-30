@@ -43,7 +43,6 @@ import { AppState } from '../../../../store';
 import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
 import { ShSelectComponent } from '../../../../theme/ng-virtual-select/sh-select.component';
 import { digitsOnly } from '../../../helpers';
-import { parsePhoneNumberFromString, CountryCode } from 'libphonenumber-js/min';
 import { ApplyDiscountRequestV2 } from 'apps/web-giddh/src/app/models/api-models/ApplyDiscount';
 import { GroupService } from 'apps/web-giddh/src/app/services/group.service';
 import { API_COUNT_LIMIT, BootstrapToggleSwitch, EMAIL_VALIDATION_REGEX, TCS_TDS_TAXES_TYPES } from 'apps/web-giddh/src/app/app.constant';
@@ -56,6 +55,7 @@ import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { SettingsDiscountService } from 'apps/web-giddh/src/app/services/settings.discount.service';
 import { CustomFieldsService } from 'apps/web-giddh/src/app/services/custom-fields.service';
 import { FieldTypes } from 'apps/web-giddh/src/app/custom-fields/custom-fields.constant';
+import { CountryISO, PhoneNumberFormat, SearchCountryField } from 'ngx-intl-tel-input';
 
 @Component({
     selector: 'account-update-new-details',
@@ -214,6 +214,14 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public availableFieldTypes: any = FieldTypes;
     /** This will hold toggle buttons value and size */
     public bootstrapToggleSwitch = BootstrapToggleSwitch;
+    /** This will hold SearchCountryField */
+    public SearchCountryField = SearchCountryField;
+    /** This will hold CountryISO */
+    public CountryISO = CountryISO;
+    /** This will hold PhoneNumberFormat */
+    public PhoneNumberFormat = PhoneNumberFormat;
+    /** This will hold preferredCountries */
+    public preferredCountries: CountryISO[] = [CountryISO.UnitedStates, CountryISO.UnitedKingdom];
 
     constructor(
         private _fb: FormBuilder,
@@ -262,6 +270,11 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             this.isDiscount = true;
         }
         this.initializeNewForm();
+        this.addAccountForm?.get('mobileNo')?.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(a => {
+            if (a?.e164Number) {
+                this.addAccountForm?.get('mobileNo')?.setValue(a?.e164Number);
+            }
+        });
         this.moveAccountForm = this._fb.group({
             moveto: ['', Validators.required]
         });
@@ -448,7 +461,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             openingBalanceType: ['CREDIT'],
             foreignOpeningBalance: [''],
             openingBalance: [''],
-            mobileNo: [''],
+            mobileNo: ['', Validators.required],
             email: ['', Validators.pattern(EMAIL_VALIDATION_REGEX)],
             companyName: [''],
             attentionTo: [''],
@@ -1738,16 +1751,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                     this.addAccountForm.get('hsnOrSac')?.patchValue('sac');
                 }
                 this.openingBalanceTypeChnaged(accountDetails.openingBalanceType);
-                if (accountDetails.mobileNo) {
-                    if (accountDetails.mobileNo.indexOf('-') > -1) {
-                        let mobileArray = accountDetails.mobileNo.split('-');
-                        this.addAccountForm.get('mobileNo')?.patchValue(mobileArray[1]);
-                    } else {
-                        this.addAccountForm.get('mobileNo')?.patchValue(accountDetails.mobileNo);
-                    }
-                } else {
-                    this.addAccountForm.get('mobileNo')?.patchValue('');
-                }
 
                 this.toggleStateRequired();
                 setTimeout(() => {
