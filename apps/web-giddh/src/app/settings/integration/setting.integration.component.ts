@@ -193,19 +193,19 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         }
 
         // getting all page data of integration page
-        this.store.pipe(select(p => p.settings.integration), takeUntil(this.destroyed$)).subscribe((o) => {
+        this.store.pipe(select(p => p?.settings?.integration), takeUntil(this.destroyed$)).subscribe((o) => {
             // set sms form data
-            if (o.smsForm) {
+            if (o?.smsForm) {
                 this.smsFormObj = o.smsForm;
             }
             // set email form data
-            if (o.emailForm) {
+            if (o?.emailForm) {
                 this.emailFormObj = o.emailForm;
             }
             // set razor pay form data
-            if (o.razorPayForm) {
-                if (typeof o.razorPayForm !== "string") {
-                    this.razorPayObj = cloneDeep(o.razorPayForm);
+            if (o?.razorPayForm) {
+                if (typeof o?.razorPayForm !== "string") {
+                    this.razorPayObj = cloneDeep(o?.razorPayForm);
                     if (this.razorPayObj && this.razorPayObj.account === null) {
                         this.razorPayObj.account = { name: null, uniqueName: null };
                         this.forceClearLinkAccount$ = observableOf({ status: true });
@@ -299,10 +299,12 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     }
 
     public setDummyData() {
-        this.razorPayObj.userName = '';
-        this.razorPayObj.password = 'YOU_ARE_NOT_ALLOWED';
-        this.razorPayObj.account = { name: null, uniqueName: null };
-        this.razorPayObj.autoCapturePayment = true;
+        if (this.razorPayObj) {
+            this.razorPayObj.userName = '';
+            this.razorPayObj.password = 'YOU_ARE_NOT_ALLOWED';
+            this.razorPayObj.account = { name: null, uniqueName: null };
+            this.razorPayObj.autoCapturePayment = true;
+        }
         this.forceClearLinkAccount$ = observableOf({ status: true });
     }
 
@@ -342,8 +344,10 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public unlinkAccountFromRazorPay() {
         if (this.razorPayObj.account && this.razorPayObj.account.name && this.razorPayObj.account.uniqueName) {
             let data = cloneDeep(this.razorPayObj);
-            data.account.uniqueName = null;
-            data.account.name = null;
+            if (data) {
+                data.account.uniqueName = null;
+                data.account.name = null;
+            }
             this.store.dispatch(this.settingsIntegrationActions.UpdateRazorPayDetails(data));
         } else {
             this.toasty.warningToast(this.localeData?.collection?.unlink_razorpay_message);
@@ -790,8 +794,8 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         this.onAccountSearchQueryChanged('', 1, (response) => {
             this.defaultAccountSuggestions = response.map(result => {
                 return {
-                    value: result.uniqueName,
-                    label: result.name
+                    value: result?.uniqueName,
+                    label: result?.name
                 }
             }) || [];
             this.defaultAccountPaginationData.page = this.accountsSearchResultsPaginationData.page;
@@ -810,8 +814,8 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         this.salesService.getAccountsWithCurrency('bankaccounts').pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.body?.results) {
                 const bankAccounts = response.body.results.map(account => ({
-                    label: account.name,
-                    value: account.uniqueName
+                    label: account?.name,
+                    value: account?.uniqueName
                 }))
                 this.bankAccounts$ = observableOf(bankAccounts);
             }
@@ -881,7 +885,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                 this.connectedBankAccounts = response.body;
 
                 this.connectedBankAccounts.forEach(bankAccount => {
-                    if(bankAccount?.iciciDetailsResource?.payor?.length > 0) {
+                    if (bankAccount?.iciciDetailsResource?.payor?.length > 0) {
                         bankAccount?.iciciDetailsResource?.payor.forEach(payor => {
                             this.getPayorRegistrationStatus(bankAccount, payor);
                         });
@@ -1021,7 +1025,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         this.settingsIntegrationService.getPayorRegistrationStatus(request).pipe(take(1)).subscribe(response => {
             payor.isConnected = (response?.body?.status === ACCOUNT_REGISTERED_STATUS);
 
-            if(!payor.isConnected && response?.body?.message) {
+            if (!payor.isConnected && response?.body?.message) {
                 this.toasty.errorToast(response?.body?.message);
             }
         });

@@ -94,7 +94,7 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
                 this.currentCompanyBranches.unshift({
                     label: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : '',
                     name: this.activeCompany ? this.activeCompany.name : '',
-                    value: this.activeCompany ? this.activeCompany.uniqueName : '',
+                    value: this.activeCompany ? this.activeCompany?.uniqueName : '',
                     isCompany: true
                 });
                 if (!this.currentBranch || !this.currentBranch.uniqueName) {
@@ -103,15 +103,15 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
                         currentBranchUniqueName = this.generalService.currentBranchUniqueName;
                         this.currentBranch = _.cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName)) || this.currentBranch;
                     } else {
-                        currentBranchUniqueName = this.activeCompany ? this.activeCompany.uniqueName : '';
+                        currentBranchUniqueName = this.activeCompany ? this.activeCompany?.uniqueName : '';
                         this.currentBranch = {
                             name: this.activeCompany ? this.activeCompany.name : '',
                             alias: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : '',
-                            uniqueName: this.activeCompany ? this.activeCompany.uniqueName : '',
+                            uniqueName: this.activeCompany ? this.activeCompany?.uniqueName : '',
                         };
                     }
                 } else {
-                    const selectedBranch = _.cloneDeep(response.find(branch => branch?.uniqueName === this.currentBranch.uniqueName));
+                    const selectedBranch = _.cloneDeep(response.find(branch => branch?.uniqueName === this.currentBranch?.uniqueName));
                     if (selectedBranch) {
                         this.currentBranch.name = selectedBranch.name;
                         this.currentBranch.alias = selectedBranch.alias;
