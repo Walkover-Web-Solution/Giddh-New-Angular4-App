@@ -5643,6 +5643,17 @@ footer#footer.absolute-footer {
     }
 }
 
+.update-ledger-entry-panel-popup {
+    #HW_frame_cont,
+    #HW_styles_cont {
+        + {
+            .cdk-overlay-container {
+                z-index: 99999 !important;
+            }
+        }
+    }
+}
+
 section.ledger-stat.sticky-footer.sticky-footer-sale-amount {
     text-align: left !important;
     margin-bottom: 0;
