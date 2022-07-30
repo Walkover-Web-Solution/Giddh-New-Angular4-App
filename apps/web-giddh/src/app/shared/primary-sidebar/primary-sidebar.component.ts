@@ -691,4 +691,15 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
             this.toggleBodyClass();
         }
     }
+
+    /**
+     * Shows Primary bar accounts and menu items when clicked outside primary sidebar
+     *
+     * @memberof PrimarySidebarComponent
+     */
+    public hidingPrimarySidebarCompanyList(): void {
+        if (this.showCompanyBranchSwitch) {
+            this.showCompanyBranchSwitch = false;
+        }
+    }
 }
