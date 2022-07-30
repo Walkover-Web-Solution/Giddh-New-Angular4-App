@@ -704,6 +704,7 @@ sh-select:focus {
 
 .debit-credit-amount {
     justify-content: space-between;
+    flex-wrap: wrap;
 }
 .input-wrapper.ipad-view-datepicker {
     display: none !important;
