@@ -210,7 +210,9 @@ export class PreviewComponent implements OnInit, OnDestroy, OnChanges, AfterView
             uniqueName: this.params.uniqueName
         };
 
-        this.selectedItem.hasAttachment = false;
+        if (this.selectedItem) {
+            this.selectedItem.hasAttachment = false;
+        }
         this.isAttachmentExpanded = false;
         this.attachedAttachmentBlob = null;
         this.attachedDocumentType = {};
