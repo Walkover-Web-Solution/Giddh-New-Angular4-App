@@ -453,15 +453,22 @@
                             <div class="form-group">
                                 <label>{{ commonLocaleData?.app_mobile_number }}</label>
                                 <div class="d-flex mobileNumberWidth">
-                                    <input
-                                        type="text"
-                                        class="form-control pull-right"
-                                        [placeholder]="localeData?.mobile_no_placeholder"
+                                    <ngx-intl-tel-input
+                                        [cssClass]="'pull-right'"
+                                        [preferredCountries]="preferredCountries"
+                                        [enableAutoCountrySelect]="true"
+                                        [enablePlaceholder]="true"
+                                        [searchCountryFlag]="true"
+                                        [searchCountryField]="[SearchCountryField.Iso2, SearchCountryField.Name]"
+                                        [selectFirstCountry]="false"
+                                        [selectedCountryISO]="CountryISO.India"
+                                        [maxLength]="15"
+                                        [phoneValidation]="true"
+                                        [numberFormat]="PhoneNumberFormat.National"
+                                        name="mobileNo"
                                         formControlName="mobileNo"
-                                        id="contactNo"
-                                        autocomplete="off"
-                                        #mobileNoEl
-                                    />
+                                    >
+                                    </ngx-intl-tel-input>
                                 </div>
                             </div>
                         </div>
