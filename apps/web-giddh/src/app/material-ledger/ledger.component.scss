@@ -381,10 +381,6 @@ input[type="date"]::-webkit-outer-spin-button {
 .focus-unset.ledger-main .form-control:focus {
     border: unset !important;
 }
-tr[vr-item]:focus {
-    background-color: var(--color-wild-sand);
-    outline: 0;
-}
 sh-select:focus {
     outline: 1px var(--color-red) solid;
 }

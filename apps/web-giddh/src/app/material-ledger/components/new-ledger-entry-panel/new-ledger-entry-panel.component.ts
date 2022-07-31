@@ -17,7 +17,6 @@ import {
     ViewChild,
 } from '@angular/core';
 import { select, Store } from '@ngrx/store';
-import { ResizedEvent } from 'angular-resize-event';
 import {
     Configuration,
     HIGH_RATE_FIELD_PRECISION,

@@ -1,5 +1,5 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, EventEmitter, NgZone, OnDestroy, OnInit, QueryList, TemplateRef, ViewChild, ViewChildren } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, NgZone, OnDestroy, OnInit, QueryList, TemplateRef, ViewChild, ViewChildren } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { LoginActions } from 'apps/web-giddh/src/app/actions/login.action';
@@ -8,7 +8,6 @@ import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI, GIDDH_DATE_FORMAT_MM_DD_YY
 import { ShSelectComponent } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-select.component';
 import * as moment from 'moment/moment';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
-import { PaginationComponent } from 'ngx-bootstrap/pagination';
 import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
 import { createSelector } from 'reselect';
 import { BehaviorSubject, combineLatest as observableCombineLatest, Observable, of as observableOf, ReplaySubject, Subject, } from 'rxjs';
@@ -70,7 +69,6 @@ import { AdjustmentUtilityService } from '../shared/advance-receipt-adjustment/s
 
 export class LedgerComponent implements OnInit, OnDestroy {
     @ViewChild('updateledgercomponent', { static: false }) public updateledgercomponent: ElementViewContainerRef;
-    @ViewChild('paginationChild', { static: false }) public paginationChild: ElementViewContainerRef;
     @ViewChildren(ShSelectComponent) public dropDowns: QueryList<ShSelectComponent>;
     public imgPath: string = '';
     public lc: LedgerVM;
@@ -250,6 +248,14 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public voucherApiVersion: 1 | 2;
     /** Selected entry details */
     public selectedItem: any;
+    /** Pagination Object */
+    public paginationObject: any = {
+        totalItems: 0,
+        itemsPerPage: 0,
+        page: 0,
+        totalPages: 0,
+        showPagination: false
+    };
 
     constructor(
         private store: Store<AppState>,
@@ -258,7 +264,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
         private ledgerService: LedgerService,
         private toaster: ToasterService,
         private companyActions: CompanyActions,
-        private componentFactoryResolver: ComponentFactoryResolver,
         private generalService: GeneralService,
         private loginActions: LoginActions,
         private loaderService: LoaderService,
@@ -737,12 +742,18 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     this.store.dispatch(this.ledgerActions.SelectGivenEntries(failedEntries));
                 }
                 this.lc.currentPage = lt.page;
-                // commented due to new API
                 if (this.isAdvanceSearchImplemented) {
                     this.lc.calculateReckonging(lt);
                 }
                 setTimeout(() => {
-                    this.loadPaginationComponent(lt);
+                    this.paginationObject = {
+                        totalItems: lt.totalPages * lt.count,
+                        itemsPerPage: lt.count,
+                        page: lt.page,
+                        totalPages: lt.totalPages,
+                        showPagination: true
+                    };
+                    
                     if (!this.cdRf['destroyed']) {
                         this.cdRf.detectChanges();
                     }
@@ -1151,27 +1162,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
         }
     }
 
-    public onRightArrow(navigator, result) {
-        if (result.currentHorizontal) {
-            navigator.addVertical(result.currentHorizontal);
-            navigator.nextVertical();
-        }
-    }
-
-    public onLeftArrow(navigator, result) {
-        navigator.removeVertical();
-        if (navigator.currentVertical && navigator.currentVertical.attributes.getNamedItem('vr-item')) {
-            navigator.currentVertical.focus();
-        } else {
-            navigator.nextVertical();
-        }
-    }
-
-    public initNavigator(navigator, el) {
-        navigator.setVertical(el);
-        navigator.nextHorizontal();
-    }
-
     public hideNewLedgerEntryPopup(event?) {
         this.selectedTrxWhileHovering = '';
 
@@ -1528,32 +1518,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
             query: ''
         };
         this.noResultsFoundLabel = SearchResultText.NewSearch;
-    }
-
-    public loadPaginationComponent(s) {
-        if (!this.paginationChild) {
-            return;
-        }
-        let componentFactory = this.componentFactoryResolver.resolveComponentFactory(PaginationComponent);
-        let viewContainerRef = this.paginationChild.viewContainerRef;
-        viewContainerRef.remove();
-
-        let componentInstanceView = componentFactory.create(viewContainerRef.parentInjector);
-        viewContainerRef.insert(componentInstanceView.hostView);
-
-        let componentInstance = componentInstanceView.instance as PaginationComponent;
-        componentInstance.firstText = this.commonLocaleData?.app_first;
-        componentInstance.previousText = this.commonLocaleData?.app_previous;
-        componentInstance.nextText = this.commonLocaleData?.app_next;
-        componentInstance.lastText = this.commonLocaleData?.app_last;
-        componentInstance.totalItems = s.count * s.totalPages;
-        componentInstance.itemsPerPage = s.count;
-        componentInstance.maxSize = 5;
-        componentInstance.writeValue(s.page);
-        componentInstance.boundaryLinks = true;
-        componentInstance.pageChanged.pipe(takeUntil(this.destroyed$)).subscribe(e => {
-            this.pageChanged(e); // commenting this as we will use advance search api from now
-        });
     }
 
     /**
