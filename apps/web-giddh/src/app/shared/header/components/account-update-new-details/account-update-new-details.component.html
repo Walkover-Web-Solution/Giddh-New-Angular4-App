@@ -453,22 +453,28 @@
                             <div class="form-group">
                                 <label>{{ commonLocaleData?.app_mobile_number }}</label>
                                 <div class="d-flex mobileNumberWidth">
-                                    <ngx-intl-tel-input
-                                        [cssClass]="'pull-right'"
-                                        [preferredCountries]="preferredCountries"
-                                        [enableAutoCountrySelect]="true"
-                                        [enablePlaceholder]="true"
-                                        [searchCountryFlag]="true"
-                                        [searchCountryField]="[SearchCountryField.Iso2, SearchCountryField.Name]"
-                                        [selectFirstCountry]="false"
-                                        [selectedCountryISO]="CountryISO.India"
-                                        [maxLength]="15"
-                                        [phoneValidation]="true"
-                                        [numberFormat]="PhoneNumberFormat.National"
-                                        name="mobileNo"
-                                        formControlName="mobileNo"
-                                    >
-                                    </ngx-intl-tel-input>
+                                    <mat-form-field appearance="outline">
+                                        <ngx-mat-intl-tel-input
+                                            matInput
+                                            [enablePlaceholder]="true"
+                                            [enableSearch]="true"
+                                            name="mobileNo"
+                                            formControlName="mobileNo"
+                                            #mobileNo
+                                            describedBy="phoneInput"
+                                        ></ngx-mat-intl-tel-input>
+                                        <mat-hint>e.g. {{ mobileNo.selectedCountry.placeHolder }}</mat-hint>
+                                        <mat-error *ngIf="addAccountForm.controls['mobileNo']?.errors?.required"
+                                            >Required Field</mat-error
+                                        >
+                                        <mat-error
+                                            *ngIf="
+                                                mobileNo.submitted &&
+                                                addAccountForm.controls['mobileNo']?.errors?.validatePhoneNumber
+                                            "
+                                            >Invalid Number</mat-error
+                                        >
+                                    </mat-form-field>
                                 </div>
                             </div>
                         </div>

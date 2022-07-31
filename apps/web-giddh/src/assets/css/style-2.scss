@@ -10783,3 +10783,6 @@ input[type="checkbox"].cdk-visually-hidden::after {
         }
     }
 }
+.custom-panel-numbers {
+    z-index: 99999 !important;
+}

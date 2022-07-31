@@ -121,12 +121,10 @@
                             "apps/web-giddh/src/assets/css/ladda-themeless.min.css",
                             "apps/web-giddh/src/assets/css/perfect-scrollbar.component.scss",
                             "apps/web-giddh/src/assets/css/toastr.css",
-                            "node_modules/ngx-lightbox/lightbox.css",
-                            "node_modules/intl-tel-input/build/css/intlTelInput.css"
+                            "node_modules/ngx-lightbox/lightbox.css"
                         ],
                         "scripts": [
-                            "node_modules/bootstrap-daterangepicker/daterangepicker.js",
-                             "node_modules/intl-tel-input/build/js/utils.js"
+                            "node_modules/bootstrap-daterangepicker/daterangepicker.js"
                         ],
                         "customWebpackConfig": {
                             "path": "apps/web-giddh/webpack.partial.js",
@@ -396,12 +394,10 @@
                             "apps/web-giddh/src/assets/css/ladda-themeless.min.css",
                             "apps/web-giddh/src/assets/css/perfect-scrollbar.component.scss",
                             "apps/web-giddh/src/assets/css/toastr.css",
-                            "node_modules/ngx-lightbox/lightbox.css",
-                            "node_modules/intl-tel-input/build/css/intlTelInput.css"
+                            "node_modules/ngx-lightbox/lightbox.css"
                         ],
                         "scripts": [
-                            "node_modules/bootstrap-daterangepicker/daterangepicker.js",
-                            "node_modules/intl-tel-input/build/js/utils.js"
+                            "node_modules/bootstrap-daterangepicker/daterangepicker.js"
                         ]
                     },
                     "configurations": {
