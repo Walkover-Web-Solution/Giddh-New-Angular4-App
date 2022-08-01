@@ -6,7 +6,7 @@
     "ng": "ng",
     "start": "npm run postinstall.web && node --max_old_space_size=8192 node_modules/@angular/cli/bin/ng serve web-giddh",
     "build": "npm run postinstall.web && node --max_old_space_size=8192 node_modules/@angular/cli/bin/ng build web-giddh --configuration=local --sourceMap=false ",
-    "build-prod": "npm run postinstall.web && node --max_old_space_size=8192 node_modules/@angular/cli/bin/ng build web-giddh --configuration=prod --sourceMap=true --output-hashing=all && node tools/web/postbuild --path=dist/apps/web-giddh-prod && npm run rm_bak_files",
+    "build-prod": "npm run postinstall.web && node --max_old_space_size=8192 node_modules/@angular/cli/bin/ng build web-giddh --configuration=prod --sourceMap=false --output-hashing=all && node tools/web/postbuild --path=dist/apps/web-giddh-prod && npm run rm_bak_files",
     "build-stage": "npm run postinstall.web && node --max_old_space_size=8192 node_modules/@angular/cli/bin/ng build web-giddh --configuration=stage --sourceMap=false --output-hashing=all && node tools/web/postbuild --path=dist/apps/web-giddh-stage && npm run rm_bak_files",
     "build-test": "npm run postinstall.web && node --max_old_space_size=8192 node_modules/@angular/cli/bin/ng build web-giddh --configuration=test --sourceMap=false --output-hashing=all && node tools/web/postbuild --path=dist/apps/web-giddh-test && npm run rm_bak_files",
     "build-dev": "npm run postinstall.web && node --max_old_space_size=8192 node_modules/@angular/cli/bin/ng build web-giddh --configuration=local --sourceMap=false --output-hashing=all && node tools/web/postbuild --path=dist/apps/web-giddh-local && npm run rm_bak_files",
