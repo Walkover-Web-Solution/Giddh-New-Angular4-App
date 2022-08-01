@@ -1,6 +1,5 @@
 const webpack = require('webpack');
 const CompressionPlugin = require('compression-webpack-plugin');
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const zlib = require("zlib");
 require('dotenv').config();
 
@@ -57,7 +56,6 @@ module.exports = {
             threshold: 0,
             minRatio: 0.8,
             deleteOriginalAssets: false
-        }),
-        new BundleAnalyzerPlugin()
+        })
     ]
 }

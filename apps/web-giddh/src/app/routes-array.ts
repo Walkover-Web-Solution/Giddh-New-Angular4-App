@@ -102,6 +102,8 @@ export const ROUTES = [
             { path: 'billing-detail' },
             { path: 'billing-detail/buy-plan' },
             { path: 'mobile-home', loadChildren: () => import('./mobile-home/mobile-home.module').then(module => module.MobileHomeModule) },
+            { path: 'mobile-search-company', loadChildren: () => import('./mobile-home/mobile-home.module').then(module => module.MobileHomeModule) },
+            { path: 'mobile-search-branch', loadChildren: () => import('./mobile-home/mobile-home.module').then(module => module.MobileHomeModule) },
             { path: 'voucher', loadChildren: () => import('./payment-receipt/payment-receipt.module').then(module => module.PaymentReceiptModule) },
             { path: 'downloads', loadChildren: () => import('./downloads/downloads.module').then(module => module.DownloadsModule) },
             { path: 'custom-fields', loadChildren: () => import('./custom-fields/custom-fields.module').then(module => module.CustomFieldsModule) },

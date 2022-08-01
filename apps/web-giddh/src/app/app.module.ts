@@ -28,7 +28,6 @@ import { AppComponent } from './app.component';
 import { IS_ELECTRON_WA } from './app.constant';
 import { APP_RESOLVER_PROVIDERS } from './app.resolver';
 import { ROUTES } from './app.routes';
-import { BrowserDetectComponent } from './browser-support/browserDetect.component';
 import { DecoratorsModule } from './decorators/decorators.module';
 import { PublicPageHandlerComponent } from './public-page-handler.component';
 import { ExceptionLogService } from './services/exception-log.service';
@@ -76,7 +75,6 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         AppComponent,
         AppLoginSuccessComponent,
         PublicPageHandlerComponent,
-        BrowserDetectComponent,
         SocialLoginCallbackComponent
     ],
     /**

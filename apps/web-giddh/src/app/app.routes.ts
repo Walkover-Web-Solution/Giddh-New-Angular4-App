@@ -6,8 +6,6 @@ import { NewUserAuthGuard } from './decorators/newUserGuard';
 import { SocialLoginCallbackComponent } from './social-login-callback.component';
 import { PublicPageHandlerComponent } from './public-page-handler.component';
 import { WelcomeComponent } from './welcome/welcome.component';
-import { BrowserSupported } from './decorators/BrowserSupported';
-import { BrowserDetectComponent } from './browser-support/browserDetect.component';
 import { AppLoginSuccessComponent } from "./app-login-success/app-login-success";
 import { PageComponent } from './page/page.component';
 
@@ -15,8 +13,8 @@ export const ROUTES: Routes = [
     { path: 'download', loadChildren: () => import('./download/download.module').then(module => module.DownloadModule) },
     { path: '', redirectTo: 'login', pathMatch: 'full' },
     { path: 'app-login-success', component: AppLoginSuccessComponent, pathMatch: 'full' },
-    { path: 'token-verify', loadChildren: () => import('./login/token-verify.module').then(module => module.TokenVerifyModule), canActivate: [BrowserSupported, UserAuthenticated] },
-    { path: 'login', loadChildren: () => import('./login/login.module').then(module => module.LoginModule), canActivate: [BrowserSupported, UserAuthenticated] },
+    { path: 'token-verify', loadChildren: () => import('./login/token-verify.module').then(module => module.TokenVerifyModule), canActivate: [UserAuthenticated] },
+    { path: 'login', loadChildren: () => import('./login/login.module').then(module => module.LoginModule), canActivate: [UserAuthenticated] },
     { path: 'signup', loadChildren: () => import('./signup/signup.module').then(module => module.SignupModule) },
     { path: 'inventory', redirectTo: 'pages/inventory', pathMatch: 'full' },
     { path: 'inventory-in-out', redirectTo: 'pages/inventory-in-out', pathMatch: 'full' },
@@ -32,7 +30,6 @@ export const ROUTES: Routes = [
     { path: 'ledger', redirectTo: 'pages/ledger' },
     { path: 'old-ledger', redirectTo: 'pages/old-ledger' },
     { path: 'dummy', loadChildren: () => import('./dummy/dummy.module').then(module => module.DummyModule) },
-    { path: 'browser-support', component: BrowserDetectComponent },
     { path: 'new-user', loadChildren: () => import('./new-user/new-user.module').then(module => module.NewUserModule), canActivate: [NewUserAuthGuard] },
     { path: 'welcome', component: WelcomeComponent },
     { path: 'onboarding', redirectTo: 'pages/onboarding', pathMatch: 'full' },
@@ -90,6 +87,8 @@ export const ROUTES: Routes = [
             { path: 'welcome', loadChildren: () => import('./welcome/welcome.module').then(module => module.WelcomeModule), canActivate: [NeedsAuthorization] },
             { path: 'billing-detail', loadChildren: () => import('./billing-details/billingDetail.module').then(module => module.BillingDetailModule) },
             { path: 'mobile-home', loadChildren: () => import('./mobile-home/mobile-home.module').then(module => module.MobileHomeModule) },
+            { path: 'mobile-search-company', loadChildren: () => import('./mobile-home/mobile-home.module').then(module => module.MobileHomeModule) },
+            { path: 'mobile-search-branch', loadChildren: () => import('./mobile-home/mobile-home.module').then(module => module.MobileHomeModule) },
             { path: 'giddh-all-items', loadChildren: () => import('./all-items/all-item.module').then(module => module.AllItemModule), canActivate: [NeedsAuthorization] },
             // { path: 'tallysync', loadChildren: () => import('./tallysync/tallysync.module').then(module => module.TallysyncModule), canActivate: [NeedsAuthorization] },
             { path: 'expenses-manager', loadChildren: () => import('./expenses/expenses.module').then(module => module.ExpensesModule), canActivate: [NeedsAuthorization] },

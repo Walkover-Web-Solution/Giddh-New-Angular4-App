@@ -7,9 +7,6 @@ import { CheckPermissionDirective } from "./check-permission.directive";
     ],
     exports: [
         CheckPermissionDirective
-    ],
-    providers: [
-        CheckPermissionDirective
     ]
 })
 

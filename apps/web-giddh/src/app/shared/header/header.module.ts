@@ -6,8 +6,8 @@ import { BsDropdownModule } from "ngx-bootstrap/dropdown";
 import { ModalModule } from "ngx-bootstrap/modal";
 import { TooltipModule } from "ngx-bootstrap/tooltip";
 import { PerfectScrollbarModule } from "ngx-perfect-scrollbar";
-import { NgxDaterangepickerMd } from "../../theme/ngx-date-range-picker";
 import { TranslateDirectiveModule } from "../../theme/translate/translate.directive.module";
+import { DatepickerWrapperModule } from "../datepicker-wrapper/datepicker.wrapper.module";
 import { ElementViewChildModule } from "../helpers/directives/elementViewChild/elementViewChild.module";
 import { PrimarySidebarModule } from "../primary-sidebar/primary-sidebar.module";
 import { HeaderComponent } from "./header.component";
@@ -22,13 +22,13 @@ import { HeaderComponent } from "./header.component";
         ReactiveFormsModule,
         TranslateDirectiveModule,
         MatTooltipModule,
-        NgxDaterangepickerMd,
         ModalModule,
         ElementViewChildModule,
         PerfectScrollbarModule,
         PrimarySidebarModule,
         TooltipModule,
-        BsDropdownModule
+        BsDropdownModule,
+        DatepickerWrapperModule
     ],
     exports: [
         HeaderComponent
