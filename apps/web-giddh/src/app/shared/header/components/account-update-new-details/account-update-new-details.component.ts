@@ -1795,8 +1795,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             const value = this.addAccountForm?.get('mobileNo')?.value?.e164Number;
             let newNumber = value?.replace(this.oldCountryCode, this.newCountryCode);
             this.updatedNumber = newNumber;
-            console.log("u", this.updatedNumber);
-
             this.addAccountForm.get('mobileNo').setValue(newNumber);
         }
     }
