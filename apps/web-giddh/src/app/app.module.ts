@@ -29,13 +29,11 @@ import { IS_ELECTRON_WA } from './app.constant';
 import { APP_RESOLVER_PROVIDERS } from './app.resolver';
 import { ROUTES } from './app.routes';
 import { DecoratorsModule } from './decorators/decorators.module';
-import { PublicPageHandlerComponent } from './public-page-handler.component';
 import { ExceptionLogService } from './services/exception-log.service';
 import { GiddhHttpInterceptor } from './services/http.interceptor';
 import { CustomPreloadingStrategy } from './services/lazy-preloading.service';
 import { ServiceModule } from './services/service.module';
 import { WindowRef } from './shared/helpers/window.object';
-import { SocialLoginCallbackComponent } from './social-login-callback.component';
 import { reducers } from './store';
 import { ShSelectModule } from './theme/ng-virtual-select/sh-select.module';
 import { QuicklinkModule, QuicklinkStrategy } from 'ngx-quicklink';
@@ -73,9 +71,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     bootstrap: [AppComponent],
     declarations: [
         AppComponent,
-        AppLoginSuccessComponent,
-        PublicPageHandlerComponent,
-        SocialLoginCallbackComponent
+        AppLoginSuccessComponent
     ],
     /**
      * Import Angular's modules.
