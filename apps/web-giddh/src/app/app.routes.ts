@@ -1,9 +1,7 @@
 import { NeedsAuthorization } from './decorators/needAuthorization';
-import { PageComponent } from './page.component';
 import { Routes } from '@angular/router';
 import { NeedsAuthentication } from './decorators/needsAuthentication';
 import { UserAuthenticated } from './decorators/UserAuthenticated';
-import { NewUserComponent } from './newUser.component';
 import { NewUserAuthGuard } from './decorators/newUserGuard';
 import { SocialLoginCallbackComponent } from './social-login-callback.component';
 import { PublicPageHandlerComponent } from './public-page-handler.component';
@@ -11,10 +9,10 @@ import { WelcomeComponent } from './welcome/welcome.component';
 import { BrowserSupported } from './decorators/BrowserSupported';
 import { BrowserDetectComponent } from './browser-support/browserDetect.component';
 import { AppLoginSuccessComponent } from "./app-login-success/app-login-success";
-import { DownloadComponent } from './download/download.component';
+import { PageComponent } from './page/page.component';
 
 export const ROUTES: Routes = [
-    { path: 'download', component: DownloadComponent },
+    { path: 'download', loadChildren: () => import('./download/download.module').then(module => module.DownloadModule) },
     { path: '', redirectTo: 'login', pathMatch: 'full' },
     { path: 'app-login-success', component: AppLoginSuccessComponent, pathMatch: 'full' },
     { path: 'token-verify', loadChildren: () => import('./login/token-verify.module').then(module => module.TokenVerifyModule), canActivate: [BrowserSupported, UserAuthenticated] },
@@ -35,7 +33,7 @@ export const ROUTES: Routes = [
     { path: 'old-ledger', redirectTo: 'pages/old-ledger' },
     { path: 'dummy', loadChildren: () => import('./dummy/dummy.module').then(module => module.DummyModule) },
     { path: 'browser-support', component: BrowserDetectComponent },
-    { path: 'new-user', component: NewUserComponent, canActivate: [NewUserAuthGuard] },
+    { path: 'new-user', loadChildren: () => import('./new-user/new-user.module').then(module => module.NewUserModule), canActivate: [NewUserAuthGuard] },
     { path: 'welcome', component: WelcomeComponent },
     { path: 'onboarding', redirectTo: 'pages/onboarding', pathMatch: 'full' },
     { path: 'social-login-callback', component: SocialLoginCallbackComponent },
@@ -55,7 +53,7 @@ export const ROUTES: Routes = [
     { path: 'proforma-invoice', redirectTo: 'pages/proforma-invoice' },
     { path: 'mobile-home', redirectTo: 'pages/mobile-home', pathMatch: 'full' },
     {
-        path: 'pages', loadChildren: () => import('./page/page.module').then(module => module.PageModule), canActivate: [NeedsAuthorization],
+        path: 'pages', component: PageComponent,
         children: [
             { path: 'home', loadChildren: () => import('./home/home.module').then(module => module.HomeModule), canActivate: [NeedsAuthorization] },
             { path: 'invoice', loadChildren: () => import('./invoice/invoice.module').then(module => module.InvoiceModule), canActivate: [NeedsAuthorization] },

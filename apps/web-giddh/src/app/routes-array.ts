@@ -1,5 +1,5 @@
 export const ROUTES = [
-    { path: 'download' },
+    { path: 'download', loadChildren: () => import('./download/download.module').then(module => module.DownloadModule) },
     { path: '', redirectTo: 'login', pathMatch: 'full' },
     { path: '404' },
     { path: 'app-login-success' },
@@ -22,7 +22,7 @@ export const ROUTES = [
     { path: 'dummy', loadChildren: () => import('./dummy/dummy.module').then(module => module.DummyModule) },
     { path: 'browser-support' },
     { path: 'proforma-invoice' },
-    { path: 'new-user' },
+    { path: 'new-user', loadChildren: () => import('./new-user/new-user.module').then(module => module.NewUserModule) },
     { path: 'welcome', loadChildren: () => import('./welcome/welcome.module').then(module => module.WelcomeModule) },
     { path: 'onboarding', loadChildren: () => import('./onboarding/onboarding.module').then(module => module.OnboardingModule) },
     { path: 'social-login-callback' },
@@ -45,7 +45,7 @@ export const ROUTES = [
     { path: 'mobile-home', redirectTo: 'pages/mobile-home', pathMatch: 'full' },
     { path: 'select-plan' },
     {
-        path: 'pages', loadChildren: () => import('./page/page.module').then(module => module.PageModule),
+        path: 'pages',
         children: [
             { path: 'home', loadChildren: () => import('./home/home.module').then(module => module.HomeModule) },
             { path: 'invoice', loadChildren: () => import('./invoice/invoice.module').then(module => module.InvoiceModule) },

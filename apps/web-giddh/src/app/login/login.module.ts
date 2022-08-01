@@ -7,6 +7,7 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { LaddaModule } from 'angular2-ladda';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { SharedModule } from '../shared/shared.module';
+import { LoaderModule } from '../loader/loader.module';
 
 @NgModule({
     imports: [
@@ -17,7 +18,8 @@ import { SharedModule } from '../shared/shared.module';
         ModalModule,
         LaddaModule,
         ShSelectModule,
-        SharedModule
+        SharedModule,
+        LoaderModule
     ],
     declarations: [LoginComponent]
 })

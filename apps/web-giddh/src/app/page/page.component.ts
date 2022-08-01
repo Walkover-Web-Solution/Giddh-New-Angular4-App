@@ -19,12 +19,12 @@ import { Store } from '@ngrx/store';
 export class PageComponent implements AfterViewInit {
     public sideMenu: { isopen: boolean } = { isopen: true };
 
-    constructor(private store: Store<AppState>, private _generalService: GeneralService, private generalActions: GeneralActions) {
+    constructor(private store: Store<AppState>, private generalService: GeneralService, private generalActions: GeneralActions) {
 
     }
 
     public ngAfterViewInit() {
-        this._generalService.SetIAmLoaded(true);
+        this.generalService.SetIAmLoaded(true);
     }
 
     public sidebarStatusChange(event) {

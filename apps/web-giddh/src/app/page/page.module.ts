@@ -2,6 +2,7 @@ import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
 import { RouterModule } from "@angular/router";
 import { LoaderModule } from "../loader/loader.module";
+import { HeaderModule } from "../shared/header/header.module";
 import { GiddhLayoutModule } from "../shared/layout/layout.module";
 import { PageComponent } from "./page.component";
 import { PageRoutingModule } from "./page.routing.module";
@@ -15,7 +16,11 @@ import { PageRoutingModule } from "./page.routing.module";
         PageRoutingModule,
         RouterModule,
         GiddhLayoutModule,
-        LoaderModule
+        LoaderModule,
+        HeaderModule
+    ],
+    exports: [
+        PageComponent
     ]
 })
 

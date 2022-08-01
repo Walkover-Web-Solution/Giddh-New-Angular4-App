@@ -24,10 +24,7 @@ import { AuthServiceConfig, GoogleLoginProvider, SocialLoginModule } from '../th
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
-import { CheckPermissionDirective } from './../permissions/check-permission.directive';
 import { AsideMenuOtherTaxes } from './aside-menu-other-taxes/aside-menu-other-taxes';
-import { HeaderComponent } from './header';
-import { PrimarySidebarComponent } from './primary-sidebar/primary-sidebar.component';
 import { AccountOperationsComponent, CompanyAddNewUiComponent, GroupsAccountSidebarComponent, ManageGroupsAccountsComponent } from './header/components';
 import { AccountUpdateNewDetailsComponent } from './header/components/account-update-new-details/account-update-new-details.component';
 import { GroupAddComponent } from './header/components/group-add/group-add.component';
@@ -51,7 +48,6 @@ import { PurchaseOrderPreviewModalComponent } from './purchase-order-preview/pur
 import { PurchaseSendEmailModalComponent } from './purchase-send-email/purchase-send-email.component';
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
 import { TranslateDirectiveModule } from '../theme/translate/translate.directive.module';
-import { CompanyBranchComponent } from './primary-sidebar/company-branch/company-branch.component';
 import { AmountFieldComponentModule } from './amount-field/amount-field.module';
 import { AccountAddNewDetailsModule } from './header/components/account-add-new-details/account-add-new-details.module';
 import { LedgerDiscountModule } from '../material-ledger/components/ledger-discount/ledger-discount.module';
@@ -66,6 +62,7 @@ import { GiddhDateRangepickerModule } from '../theme/giddh-daterangepicker/giddh
 import { DeleteTemplateConfirmationModalModule } from '../invoice/templates/edit-template/modals/confirmation-modal/confirmation.modal.module';
 import { NgxBootstrapSwitchModule } from 'ngx-bootstrap-switch';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { CheckPermissionModule } from '../permissions/check-permission.module';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: true
@@ -84,7 +81,6 @@ export function provideConfig() {
 @NgModule({
     declarations: [
         MfReportComponent,
-        HeaderComponent,
         AsideHelpSupportComponent,
         AsideSettingComponent,
         ManageGroupsAccountsComponent,
@@ -97,7 +93,6 @@ export function provideConfig() {
         GroupUpdateComponent,
         ShareGroupModalComponent,
         ShareAccountModalComponent,
-        CheckPermissionDirective,
         ExportGroupLedgerComponent,
         AsideMenuOtherTaxes,
         AccountUpdateNewDetailsComponent,
@@ -105,8 +100,6 @@ export function provideConfig() {
         RevisionHistoryComponent,
         PurchaseOrderPreviewModalComponent,
         PurchaseSendEmailModalComponent,
-        PrimarySidebarComponent,
-        CompanyBranchComponent,
         GenericAsideMenuAccountComponent
     ],
     imports: [
@@ -155,7 +148,8 @@ export function provideConfig() {
         GiddhDateRangepickerModule,
         DeleteTemplateConfirmationModalModule,
         NgxBootstrapSwitchModule.forRoot(),
-        MatSlideToggleModule
+        MatSlideToggleModule,
+        CheckPermissionModule
     ],
     exports: [
         CommonModule,
@@ -167,7 +161,6 @@ export function provideConfig() {
         LaddaModule,
         ShSelectModule,
         ModalModule,
-        HeaderComponent,
         ManageGroupsAccountsComponent,
         AccountFilterPipe,
         SelectModule,
@@ -195,9 +188,7 @@ export function provideConfig() {
         PurchaseOrderPreviewModalComponent,
         PurchaseSendEmailModalComponent,
         CurrencyModule,
-        PrimarySidebarComponent,
         TranslateDirectiveModule,
-        CompanyBranchComponent,
         AmountFieldComponentModule,
         AccountAddNewDetailsModule,
         LedgerDiscountModule,

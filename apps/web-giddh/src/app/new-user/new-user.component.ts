@@ -1,5 +1,6 @@
 import { AfterViewInit, Component } from '@angular/core';
-import { GeneralService } from './services/general.service';
+import { GeneralService } from '../services/general.service';
+
 
 @Component({
     selector: 'new-user',
@@ -12,12 +13,12 @@ import { GeneralService } from './services/general.service';
   `
 })
 export class NewUserComponent implements AfterViewInit {
-    constructor(private _generalService: GeneralService) {
+    constructor(private generalService: GeneralService) {
         //
     }
 
     public ngAfterViewInit() {
-        this._generalService.IAmLoaded.next(true);
+        this.generalService.IAmLoaded.next(true);
     }
 
 }
