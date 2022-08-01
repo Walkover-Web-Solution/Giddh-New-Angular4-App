@@ -2064,7 +2064,7 @@
                                                 <div class="col-6 col-sm-6 pl-0" *ngIf="entry.entryDate">
                                                     <div class="entry-date">
                                                         <label>{{ localeData?.entry_date }}: </label>
-                                                        {{ entry.entryDate | date: "dd-MM-yyyy" }}
+                                                        {{ entry.entryDate }}
                                                         <span class="edit-icon cp" *ngIf="!isUpdateMode">
                                                             <img src="assets/images/edit-pencilicon.svg" />
                                                         </span>
@@ -2329,7 +2329,6 @@
                                                         entry.otherTaxModal?.appliedOtherTax?.name
                                                     "
                                                 >
-                                                    {{ entry.otherTaxModal?.appliedOtherTax?.name }} :
                                                     <span
                                                         class="differ-currency d-flex justify-content-end"
                                                         *ngIf="isMulticurrencyAccount"
@@ -2513,7 +2512,7 @@
                                                             </span>
 
                                                             <span *ngIf="isUpdateMode">
-                                                                {{ entry.entryDate | date: "dd-MM-yyyy" }}
+                                                                {{ entry.entryDate }}
                                                             </span>
                                                         </div>
                                                     </div>
@@ -2892,7 +2891,6 @@
                                                 "
                                                 class="tax-in-currency"
                                             >
-                                                {{ entry.otherTaxModal?.appliedOtherTax?.name }}
                                                 <span>
                                                     <amount-field
                                                         [amount]="entry.otherTaxSum * exchangeRate"
@@ -3756,7 +3754,7 @@
                                                             <div class="entry-date">
                                                                 <label
                                                                     >{{ localeData?.entry_date }}:
-                                                                    {{ entry.entryDate | date: "dd-MM-yyyy" }}
+                                                                    {{ entry.entryDate }}
                                                                 </label>
                                                             </div>
                                                         </div>
@@ -4142,7 +4140,7 @@
                                                                         </span>
 
                                                                         <span *ngIf="isUpdateMode">
-                                                                            {{ entry.entryDate | date: "dd-MM-yyyy" }}
+                                                                            {{ entry.entryDate }}
                                                                         </span>
                                                                     </div>
                                                                 </div>
@@ -4626,7 +4624,6 @@
                                                         "
                                                         class="tax-in-currency d-flex"
                                                     >
-                                                        {{ entry.otherTaxModal?.appliedOtherTax?.name }}
                                                         <span class="mr-l05">
                                                             <amount-field
                                                                 [amount]="entry.otherTaxSum * exchangeRate"
