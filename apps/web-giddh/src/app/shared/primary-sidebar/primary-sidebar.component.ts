@@ -697,7 +697,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
      *
      * @memberof PrimarySidebarComponent
      */
-    public hidingPrimarySidebarCompanyList(): void {
+    public hidePrimarySidebarCompanyList(): void {
         if (this.showCompanyBranchSwitch) {
             this.showCompanyBranchSwitch = false;
         }
