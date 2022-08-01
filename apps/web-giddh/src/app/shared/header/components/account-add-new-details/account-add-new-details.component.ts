@@ -170,15 +170,15 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     /** This will hold toggle buttons value and size */
     public bootstrapToggleSwitch = BootstrapToggleSwitch;
     /** This will hold SearchCountryField */
-    public SearchCountryField = SearchCountryField;
+    public searchCountryField = SearchCountryField;
     /** This will hold CountryISO */
-    public CountryISO = CountryISO;
+    public countryISO = CountryISO;
     /** This will hold PhoneNumberFormat */
-    public PhoneNumberFormat = PhoneNumberFormat;
+    public phoneNumberFormat = PhoneNumberFormat;
     /** This will hold newCountryCode */
-    public newCountryCode = '';
+    public newCountryCode: any = '';
     /** This will hold oldCountryCode */
-    public oldCountryCode = '';
+    public oldCountryCode: any = '';
     /** This will hold updatedNumber */
     public updatedNumber: any = '';
 
@@ -366,7 +366,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             openingBalanceType: ['CREDIT'],
             foreignOpeningBalance: [''],
             openingBalance: [''],
-            mobileNo: ['', Validators.required],
+            mobileNo: [''],
             email: ['', Validators.pattern(EMAIL_VALIDATION_REGEX)],
             companyName: [''],
             attentionTo: [''],
