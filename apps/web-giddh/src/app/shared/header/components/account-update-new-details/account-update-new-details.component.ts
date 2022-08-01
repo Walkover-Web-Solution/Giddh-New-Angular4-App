@@ -19,8 +19,8 @@ import { GroupResponse } from 'apps/web-giddh/src/app/models/api-models/Group';
 import { IDiscountList } from 'apps/web-giddh/src/app/models/api-models/SettingsDiscount';
 import { AccountService } from 'apps/web-giddh/src/app/services/account.service';
 import { ModalDirective } from 'ngx-bootstrap/modal';
-import { combineLatest, Observable, of as observableOf, ReplaySubject } from 'rxjs';
-import { take, takeUntil } from 'rxjs/operators';
+import { combineLatest, Observable, of as observableOf, ReplaySubject, timer } from 'rxjs';
+import { debounceTime, take, takeUntil } from 'rxjs/operators';
 import { AccountsAction } from '../../../../actions/accounts.actions';
 import { CommonActions } from '../../../../actions/common.actions';
 import { CompanyActions } from '../../../../actions/company.actions';
@@ -220,8 +220,12 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public CountryISO = CountryISO;
     /** This will hold PhoneNumberFormat */
     public PhoneNumberFormat = PhoneNumberFormat;
-    /** This will hold preferredCountries */
-    public preferredCountries: CountryISO[] = [CountryISO.UnitedStates, CountryISO.UnitedKingdom];
+    /** This will hold newCountryCode */
+    public newCountryCode = '';
+    /** This will hold oldCountryCode */
+    public oldCountryCode = '';
+    /** This will hold updatedNumber */
+    public updatedNumber: any = '';
 
     constructor(
         private _fb: FormBuilder,
@@ -270,11 +274,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             this.isDiscount = true;
         }
         this.initializeNewForm();
-        this.addAccountForm?.get('mobileNo')?.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(a => {
-            if (a?.e164Number) {
-                this.addAccountForm?.get('mobileNo')?.setValue(a?.e164Number);
-            }
-        });
         this.moveAccountForm = this._fb.group({
             moveto: ['', Validators.required]
         });
@@ -332,6 +331,11 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     }
 
     public ngAfterViewInit() {
+        this.addAccountForm?.get('mobileNo')?.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.oldCountryCode = response?.dialCode;
+            }
+        });
         if (this.flatGroupsOptions === undefined) {
             this.getAccount();
         }
@@ -706,7 +710,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             this.addAccountForm.get('currency')?.patchValue(this.selectedCurrency, { onlySelf: true });
             accountRequest.currency = this.selectedCurrency;
         }
-
+        let mobileNo = this.addAccountForm?.get('mobileNo')?.value?.e164Number;
+        accountRequest['mobileNo'] = mobileNo;
         accountRequest['hsnNumber'] = (accountRequest["hsnOrSac"] === "hsn") ? accountRequest['hsnNumber'] : "";
         accountRequest['sacNumber'] = (accountRequest["hsnOrSac"] === "sac") ? accountRequest['sacNumber'] : "";
 
@@ -1654,7 +1659,14 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                     }] : this.flatGroupsOptions;
                     this.activeGroupUniqueName = acc.parentGroups?.length > 0 ? acc.parentGroups[acc.parentGroups?.length - 1]?.uniqueName : '';
                     this.store.dispatch(this.groupWithAccountsAction.SetActiveGroup(this.activeGroupUniqueName));
-
+                    timer(1)
+                        .pipe(debounceTime(50))
+                        .subscribe(_ => {
+                            if (results[0]?.mobileNo) {
+                                let updatedNumber = "+" + results[0]?.mobileNo;
+                                this.addAccountForm?.get('mobileNo')?.patchValue(updatedNumber);
+                            }
+                        });
                     this.store.pipe(select(appStore => appStore.groupwithaccounts.activeGroupUniqueName), take(1)).subscribe(response => {
                         if (response !== this.activeGroupUniqueName) {
                             this.store.dispatch(this.groupWithAccountsAction.getGroupDetails(this.activeGroupUniqueName));
@@ -1768,5 +1780,23 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public closeMaster(): void {
         this.closeAccountModal.emit(true);
         this.store.dispatch(this.groupWithAccountsAction.HideAddAndManageFromOutside());
+    }
+
+    /**
+ * This will check no and replace old country code with new country code
+ *
+ * @param {*} event
+ * @memberof AccountUpdateNewDetailsComponent
+ */
+    public checkNumber(event: any): void {
+        if (event) {
+            this.newCountryCode = "+" + event?.dialCode;
+            const value = this.addAccountForm?.get('mobileNo')?.value?.e164Number;
+            let newNumber = value?.replace(this.oldCountryCode, this.newCountryCode);
+            this.updatedNumber = newNumber;
+            console.log("u", this.updatedNumber);
+
+            this.addAccountForm.get('mobileNo').setValue(newNumber);
+        }
     }
 }

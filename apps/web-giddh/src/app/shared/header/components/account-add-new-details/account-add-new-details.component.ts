@@ -175,8 +175,12 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public CountryISO = CountryISO;
     /** This will hold PhoneNumberFormat */
     public PhoneNumberFormat = PhoneNumberFormat;
-    /** This will hold preferredCountries */
-    public preferredCountries: CountryISO[] = [CountryISO.UnitedStates, CountryISO.UnitedKingdom];
+    /** This will hold newCountryCode */
+    public newCountryCode = '';
+    /** This will hold oldCountryCode */
+    public oldCountryCode = '';
+    /** This will hold updatedNumber */
+    public updatedNumber: any = '';
 
 
     constructor(
@@ -193,15 +197,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         private customFieldsService: CustomFieldsService
     ) {
         this.activeGroup$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroup), takeUntil(this.destroyed$));
-    }
-
-    /**
-     * This will use for change prefered countries
-     *
-     * @memberof AccountAddNewDetailsComponent
-     */
-    public changePreferredCountries() {
-        this.preferredCountries = [CountryISO.India];
     }
 
     /**
@@ -314,6 +309,11 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     }
 
     public ngAfterViewInit() {
+        this.addAccountForm?.get('mobileNo')?.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.oldCountryCode = response?.dialCode;
+            }
+        });
         this.addAccountForm.get('country').get('countryCode').setValidators(Validators.required);
         let activegroupName = this.addAccountForm.get('activeGroupUniqueName').value;
         if (activegroupName === 'sundrydebtors' || activegroupName === 'sundrycreditors') {
@@ -1229,5 +1229,21 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public closeMaster(): void {
         this.closeAccountModal.emit(true);
         this.store.dispatch(this.groupWithAccountsAction.HideAddAndManageFromOutside());
+    }
+
+    /**
+     * This will check no and replace old country code with new country code
+     *
+     * @param {*} event
+     * @memberof AccountAddNewDetailsComponent
+     */
+    public checkNumber(event: any): void {
+        if (event) {
+            this.newCountryCode = "+" + event?.dialCode;
+            const value = this.addAccountForm?.get('mobileNo')?.value?.e164Number;
+            let newNumber = value?.replace(this.oldCountryCode, this.newCountryCode);
+            this.updatedNumber = newNumber;
+            this.addAccountForm.get('mobileNo').setValue(newNumber);
+        }
     }
 }
