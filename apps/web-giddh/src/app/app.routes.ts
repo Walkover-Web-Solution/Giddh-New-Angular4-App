@@ -3,11 +3,9 @@ import { Routes } from '@angular/router';
 import { NeedsAuthentication } from './decorators/needsAuthentication';
 import { UserAuthenticated } from './decorators/UserAuthenticated';
 import { NewUserAuthGuard } from './decorators/newUserGuard';
-import { SocialLoginCallbackComponent } from './social-login-callback.component';
-import { PublicPageHandlerComponent } from './public-page-handler.component';
-import { WelcomeComponent } from './welcome/welcome.component';
 import { AppLoginSuccessComponent } from "./app-login-success/app-login-success";
 import { PageComponent } from './page/page.component';
+import { HomeComponent } from './home/home.component';
 
 export const ROUTES: Routes = [
     { path: 'download', loadChildren: () => import('./download/download.module').then(module => module.DownloadModule) },
@@ -30,9 +28,8 @@ export const ROUTES: Routes = [
     { path: 'ledger', redirectTo: 'pages/ledger' },
     { path: 'dummy', loadChildren: () => import('./dummy/dummy.module').then(module => module.DummyModule) },
     { path: 'new-user', loadChildren: () => import('./new-user/new-user.module').then(module => module.NewUserModule), canActivate: [NewUserAuthGuard] },
-    { path: 'welcome', component: WelcomeComponent },
+    { path: 'welcome', loadChildren: () => import('./welcome/welcome.module').then(module => module.WelcomeModule) },
     { path: 'onboarding', redirectTo: 'pages/onboarding', pathMatch: 'full' },
-    { path: 'social-login-callback', component: SocialLoginCallbackComponent },
     { path: 'invoice', redirectTo: 'pages/invoice', pathMatch: 'full' },
     { path: 'sales', redirectTo: 'pages/proforma-invoice/invoice/sales' },
     { path: 'daybook', redirectTo: 'pages/daybook', pathMatch: 'full' },
@@ -100,5 +97,5 @@ export const ROUTES: Routes = [
             { path: '**', redirectTo: 'home', pathMatch: 'full' }
         ]
     },
-    { path: '**', pathMatch: 'full', component: PublicPageHandlerComponent },
+    { path: '**', pathMatch: 'full', redirectTo: 'pages/home' },
 ];
