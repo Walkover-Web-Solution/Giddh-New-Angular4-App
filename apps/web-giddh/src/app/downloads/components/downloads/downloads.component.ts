@@ -245,7 +245,6 @@ export class DownloadsComponent implements OnInit, OnDestroy {
      * @memberof DownloadsComponent
     */
     public ngOnDestroy(): void {
-        this.resetFilter();
         this.destroyed$.next(true);
         this.destroyed$.complete();
         document.querySelector('body')?.classList?.remove('download-page');
