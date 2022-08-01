@@ -10783,6 +10783,38 @@ input[type="checkbox"].cdk-visually-hidden::after {
         }
     }
 }
-.custom-panel-numbers {
-    z-index: 99999 !important;
+.contact-body {
+    .country-selector {
+        opacity: 1 !important;
+        bottom: 8px !important;
+    }
+
+    input:not(.country-search) {
+        bottom: 3px !important;
+        left: 10px !important;
+    }
+
+    .country-list-button {
+        font-size: 0.8rem !important;
+    }
+
+    .mat-menu-content:not(:empty) {
+        max-height: 200px !important;
+    }
+
+    .mat-form-field {
+        width: 100% !important;
+    }
+
+    .mat-form-field-appearance-outline {
+        .mat-form-field-infix {
+            padding: 6px !important;
+        }
+        .mat-form-field-wrapper {
+            margin: 0 !important;
+        }
+        .mat-form-field-flex {
+            padding: 0 !important;
+        }
+    }
 }
