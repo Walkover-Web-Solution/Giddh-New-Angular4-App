@@ -25,9 +25,9 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSelectModule } from '@angular/material/select';
-import { DeleteTemplateConfirmationModalModule } from '../../../invoice/templates/edit-template/modals/confirmation-modal/confirmation.modal.module';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { AttachmentsModule } from '../../../theme/attachments/attachments.module';
+import { LaddaModule } from 'angular2-ladda';
 
 @NgModule({
     declarations: [
@@ -59,9 +59,9 @@ import { AttachmentsModule } from '../../../theme/attachments/attachments.module
         MatButtonModule,
         MatDialogModule,
         MatSelectModule,
-        DeleteTemplateConfirmationModalModule,
         MatExpansionModule,
-        AttachmentsModule
+        AttachmentsModule,
+        LaddaModule
     ],
     exports: [UpdateLedgerEntryPanelComponent, UpdateLedgerTaxControlComponent, UpdateLedgerDiscountComponent]
 })

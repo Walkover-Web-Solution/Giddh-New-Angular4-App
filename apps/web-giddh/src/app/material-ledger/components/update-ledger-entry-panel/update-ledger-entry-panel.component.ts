@@ -111,8 +111,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     @ViewChild('tax', { static: false }) public taxControll: TaxControlComponent;
     @ViewChild('updateBaseAccount', { static: true }) public updateBaseAccount: ModalDirective;
     @ViewChild(BsDatepickerDirective, { static: true }) public datepickers: BsDatepickerDirective;
-    /** Advance receipt remove confirmation modal reference */
-    @ViewChild('advanceReceiptRemoveConfirmationModal', { static: true }) public advanceReceiptRemoveConfirmationModal: TemplateRef<any>;
     /** Adjustment modal */
     @ViewChild('adjustPaymentModal', { static: true }) public adjustPaymentModal: TemplateRef<any>;
     /** Warehouse data for warehouse drop down */
@@ -241,10 +239,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public noResultsFoundLabel = SearchResultText.NewSearch;
     /** True, if all the transactions are of type 'Tax' or 'Reverse Charge' */
     private taxOnlyTransactions: boolean;
-    /** Remove Advance receipt confirmation flag */
-    public confirmationFlag: string = 'text-paragraph';
-    /** Remove Advance receipt confirmation message */
-    public removeAdvanceReceiptConfirmationMessage: string = 'If you change the type of this receipt, all the related advance receipt adjustments in invoices will be removed. & Are you sure you want to proceed?';// & symbol is not part of message it to split sentance by '&'
     /* This will hold the account unique name which is going to be in edit mode to get compared once updated */
     public entryAccountUniqueName: any = '';
     /** Stores the current organization type */
@@ -1455,7 +1449,20 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         }
         if (!this.isAdvanceReceipt && !restrictPopup) {
             if (this.isAdjustedInvoicesWithAdvanceReceipt && this.vm.selectedLedger && this.vm.selectedLedger.voucherGeneratedType === VoucherTypeEnum.receipt) {
-                this.advanceReceiptRemoveDialogRef = this.dialog.open(this.advanceReceiptRemoveConfirmationModal);
+                this.advanceReceiptRemoveDialogRef = this.dialog.open(ConfirmModalComponent, {
+                    width: '630px',
+                    data: {
+                        title: this.commonLocaleData?.app_confirmation,
+                        body: this.localeData?.confirm_proceed,
+                        permanentlyDeleteMessage: this.localeData?.remove_advance_receipt,
+                        ok: this.commonLocaleData?.app_yes,
+                        cancel: this.commonLocaleData?.app_no
+                    }
+                });
+
+                this.advanceReceiptRemoveDialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+                    this.onAdvanceReceiptRemoveCloseConfirmationModal(response);
+                });
             }
         }
         this.vm.generateGrandTotal();
@@ -1804,16 +1811,14 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @memberof UpdateLedgerEntryPanelComponent
      */
     public onAdvanceReceiptRemoveCloseConfirmationModal(userResponse: any): void {
-        if (userResponse) {
-            this.isAdvanceReceipt = !userResponse.response;
-            this.handleAdvanceReceiptChange(true);
-            if (this.isAdvanceReceipt) {
-                this.vm.selectedLedger.voucher.shortCode = "advance-receipt";
-            } else {
-                this.vm.selectedLedger.voucher.shortCode = "rcpt";
-            }
-            this.advanceReceiptRemoveDialogRef.close();
+        this.isAdvanceReceipt = !userResponse;
+        this.handleAdvanceReceiptChange(true);
+        if (this.isAdvanceReceipt) {
+            this.vm.selectedLedger.voucher.shortCode = "advance-receipt";
+        } else {
+            this.vm.selectedLedger.voucher.shortCode = "rcpt";
         }
+        this.advanceReceiptRemoveDialogRef.close();
     }
 
     /**
