@@ -621,7 +621,6 @@
                                 <input
                                     type="text"
                                     class="form-control"
-                                    [control]="addAccountForm.get('uniqueName')"
                                     textCaseChangeDirective
                                     UniqueNameDirective
                                     formControlName="uniqueName"
@@ -919,7 +918,7 @@
                                     (click)="setAccountForMoveFunc(merged)"
                                 >
                                     {{ merged }}
-                                    <span class="" (click)="showDeleteMergedAccountModal(merged)">×</span>
+                                    <span (click)="showDeleteMergedAccountModal(merged)">×</span>
                                 </a>
                             </li>
                         </ul>

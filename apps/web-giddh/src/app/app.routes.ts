@@ -1,31 +1,20 @@
 import { NeedsAuthorization } from './decorators/needAuthorization';
-import { PageComponent } from './page.component';
 import { Routes } from '@angular/router';
 import { NeedsAuthentication } from './decorators/needsAuthentication';
 import { UserAuthenticated } from './decorators/UserAuthenticated';
-import { DummyComponent } from './dummy.component';
-import { NewUserComponent } from './newUser.component';
 import { NewUserAuthGuard } from './decorators/newUserGuard';
 import { SocialLoginCallbackComponent } from './social-login-callback.component';
 import { PublicPageHandlerComponent } from './public-page-handler.component';
 import { WelcomeComponent } from './welcome/welcome.component';
-import { OnboardingComponent } from './onboarding/onboarding.component';
-import { BrowserSupported } from './decorators/BrowserSupported';
-import { BrowserDetectComponent } from './browser-support/browserDetect.component';
-import { TokenVerifyComponent } from './login/token-verify.component';
 import { AppLoginSuccessComponent } from "./app-login-success/app-login-success";
-import { MobileHomeComponent } from "./mobile-home/mobile-home.component";
-import { MobileHomeSidebarComponent } from './mobile-home/mobile-home-sidebar/mobile-home-sidebar.component';
-import { MobileSearchCompanyComponent } from './mobile-home/mobile-search-company/mobile-search-company.component';
-import { MobileSearchBranchComponent } from './mobile-home/mobile-search-branch/mobile-search-branch.component';
-import { DownloadComponent } from './download/download.component';
+import { PageComponent } from './page/page.component';
 
 export const ROUTES: Routes = [
-    { path: 'download', component: DownloadComponent },
+    { path: 'download', loadChildren: () => import('./download/download.module').then(module => module.DownloadModule) },
     { path: '', redirectTo: 'login', pathMatch: 'full' },
     { path: 'app-login-success', component: AppLoginSuccessComponent, pathMatch: 'full' },
-    { path: 'token-verify', component: TokenVerifyComponent },
-    { path: 'login', loadChildren: () => import('./login/login.module').then(module => module.LoginModule), canActivate: [BrowserSupported, UserAuthenticated] },
+    { path: 'token-verify', loadChildren: () => import('./login/token-verify.module').then(module => module.TokenVerifyModule), canActivate: [UserAuthenticated] },
+    { path: 'login', loadChildren: () => import('./login/login.module').then(module => module.LoginModule), canActivate: [UserAuthenticated] },
     { path: 'signup', loadChildren: () => import('./signup/signup.module').then(module => module.SignupModule) },
     { path: 'inventory', redirectTo: 'pages/inventory', pathMatch: 'full' },
     { path: 'inventory-in-out', redirectTo: 'pages/inventory-in-out', pathMatch: 'full' },
@@ -39,10 +28,8 @@ export const ROUTES: Routes = [
     { path: 'audit-logs', redirectTo: 'pages/audit-logs', pathMatch: 'full' },
     { path: 'activity-logs', redirectTo: 'pages/activity-logs', pathMatch: 'full' },
     { path: 'ledger', redirectTo: 'pages/ledger' },
-    { path: 'old-ledger', redirectTo: 'pages/old-ledger' },
-    { path: 'dummy', component: DummyComponent },
-    { path: 'browser-support', component: BrowserDetectComponent },
-    { path: 'new-user', component: NewUserComponent, canActivate: [NewUserAuthGuard] },
+    { path: 'dummy', loadChildren: () => import('./dummy/dummy.module').then(module => module.DummyModule) },
+    { path: 'new-user', loadChildren: () => import('./new-user/new-user.module').then(module => module.NewUserModule), canActivate: [NewUserAuthGuard] },
     { path: 'welcome', component: WelcomeComponent },
     { path: 'onboarding', redirectTo: 'pages/onboarding', pathMatch: 'full' },
     { path: 'social-login-callback', component: SocialLoginCallbackComponent },
@@ -62,7 +49,7 @@ export const ROUTES: Routes = [
     { path: 'proforma-invoice', redirectTo: 'pages/proforma-invoice' },
     { path: 'mobile-home', redirectTo: 'pages/mobile-home', pathMatch: 'full' },
     {
-        path: 'pages', component: PageComponent, canActivate: [NeedsAuthentication],
+        path: 'pages', component: PageComponent,
         children: [
             { path: 'home', loadChildren: () => import('./home/home.module').then(module => module.HomeModule), canActivate: [NeedsAuthorization] },
             { path: 'invoice', loadChildren: () => import('./invoice/invoice.module').then(module => module.InvoiceModule), canActivate: [NeedsAuthorization] },
@@ -95,13 +82,12 @@ export const ROUTES: Routes = [
             { path: 'company-import-export', loadChildren: () => import('./companyImportExport/companyImportExport.module').then(module => module.CompanyImportExportModule) },
             { path: 'reports', loadChildren: () => import('./reports/reports.module').then(module => module.ReportsModule), canActivate: [NeedsAuthorization] },
             { path: 'proforma-invoice', loadChildren: () => import('./proforma-invoice/proforma-invoice.module').then(module => module.ProformaInvoiceModule), canActivate: [NeedsAuthorization] },
-            { path: 'onboarding', component: OnboardingComponent, canActivate: [NeedsAuthorization] },
-            { path: 'welcome', component: WelcomeComponent, canActivate: [NeedsAuthorization] },
+            { path: 'onboarding', loadChildren: () => import('./onboarding/onboarding.module').then(module => module.OnboardingModule), canActivate: [NeedsAuthorization] },
+            { path: 'welcome', loadChildren: () => import('./welcome/welcome.module').then(module => module.WelcomeModule), canActivate: [NeedsAuthorization] },
             { path: 'billing-detail', loadChildren: () => import('./billing-details/billingDetail.module').then(module => module.BillingDetailModule) },
-            { path: 'mobile-home', component: MobileHomeComponent, canActivate: [NeedsAuthorization] },
-            { path: 'mobile-home-sidebar', component: MobileHomeSidebarComponent, canActivate: [NeedsAuthorization] },
-            { path: 'mobile-search-company', component: MobileSearchCompanyComponent, canActivate: [NeedsAuthorization] },
-            { path: 'mobile-search-branch', component: MobileSearchBranchComponent, canActivate: [NeedsAuthorization] },
+            { path: 'mobile-home', loadChildren: () => import('./mobile-home/mobile-home.module').then(module => module.MobileHomeModule) },
+            { path: 'mobile-search-company', loadChildren: () => import('./mobile-home/mobile-home.module').then(module => module.MobileHomeModule) },
+            { path: 'mobile-search-branch', loadChildren: () => import('./mobile-home/mobile-home.module').then(module => module.MobileHomeModule) },
             { path: 'giddh-all-items', loadChildren: () => import('./all-items/all-item.module').then(module => module.AllItemModule), canActivate: [NeedsAuthorization] },
             { path: 'tallysync', loadChildren: () => import('./tallysync/tallysync.module').then(module => module.TallysyncModule), canActivate: [NeedsAuthorization] },
             { path: 'expenses-manager', loadChildren: () => import('./expenses/expenses.module').then(module => module.ExpensesModule), canActivate: [NeedsAuthorization] },

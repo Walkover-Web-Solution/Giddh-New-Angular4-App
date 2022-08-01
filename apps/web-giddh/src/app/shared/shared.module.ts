@@ -24,13 +24,8 @@ import { AuthServiceConfig, GoogleLoginProvider, SocialLoginModule } from '../th
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
-import { WelcomeComponent } from '../welcome/welcome.component';
-import { CheckPermissionDirective } from './../permissions/check-permission.directive';
 import { AsideMenuOtherTaxes } from './aside-menu-other-taxes/aside-menu-other-taxes';
-import { HeaderComponent } from './header';
-import { PrimarySidebarComponent } from './primary-sidebar/primary-sidebar.component';
-import { AccountOperationsComponent, CompanyAddNewUiComponent, GroupsAccountSidebarComponent, ManageGroupsAccountsComponent } from './header/components';
-import { AccountUpdateNewDetailsComponent } from './header/components/account-update-new-details/account-update-new-details.component';
+import { AccountOperationsComponent, GroupsAccountSidebarComponent, ManageGroupsAccountsComponent } from './header/components';
 import { GroupAddComponent } from './header/components/group-add/group-add.component';
 import { ExportGroupLedgerComponent } from './header/components/group-export-ledger-modal/export-group-ledger.component';
 import { GroupUpdateComponent } from './header/components/group-update/group-update.component';
@@ -42,19 +37,14 @@ import { ElementViewChildModule } from './helpers/directives/elementViewChild/el
 import { KeyboardShortutModule } from './helpers/directives/keyboardShortcut/keyboardShortut.module';
 import { NgxMaskModule } from './helpers/directives/ngx-mask';
 import { TextCaseChangeModule } from './helpers/directives/textCaseChange/textCaseChange.module';
-import { LayoutComponent } from './layout/layout.component';
 import { OnBoardingComponent } from './on-boarding/on-boarding.component';
 import { NgxDaterangepickerMd } from '../theme/ngx-date-range-picker';
-import { AsideHelpSupportComponent } from './header/components/aside-help-support/aside-help-support.component';
-import { AsideSettingComponent } from './header/components/aside-setting/aside-setting.component';
-import { LoaderComponent } from '../loader/loader.component';
 import { ProformaAddBulkItemsComponent } from '../proforma-invoice/components/proforma-add-bulk-items/proforma-add-bulk-items.component';
 import { RevisionHistoryComponent } from './revision-history/revision-history.component';
 import { PurchaseOrderPreviewModalComponent } from './purchase-order-preview/purchase-order-preview.component';
 import { PurchaseSendEmailModalComponent } from './purchase-send-email/purchase-send-email.component';
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
 import { TranslateDirectiveModule } from '../theme/translate/translate.directive.module';
-import { CompanyBranchComponent } from './primary-sidebar/company-branch/company-branch.component';
 import { AmountFieldComponentModule } from './amount-field/amount-field.module';
 import { AccountAddNewDetailsModule } from './header/components/account-add-new-details/account-add-new-details.module';
 import { LedgerDiscountModule } from '../material-ledger/components/ledger-discount/ledger-discount.module';
@@ -62,7 +52,6 @@ import { ConfirmationModalModule } from '../common/confirmation-modal/confirmati
 import { DatepickerWrapperModule } from './datepicker-wrapper/datepicker.wrapper.module';
 import { ValidateSectionPermissionDirectiveModule } from './validate-section-permission/validate-section-permission.module';
 import { HamburgerMenuModule } from './header/components/hamburger-menu/hamburger-menu.module';
-import { GenericAsideMenuAccountComponent } from './generic-aside-menu-account/generic.aside.menu.account.component';
 import { GiddhPageLoaderModule } from './giddh-page-loader/giddh-page-loader.module';
 import { GiddhDatepickerModule } from '../theme/giddh-datepicker/giddh-datepicker.module';
 import { GiddhDateRangepickerModule } from '../theme/giddh-daterangepicker/giddh-daterangepicker.module';
@@ -70,6 +59,9 @@ import { DeleteTemplateConfirmationModalModule } from '../invoice/templates/edit
 import { NgxBootstrapSwitchModule } from 'ngx-bootstrap-switch';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { NgxIntlTelInputModule } from 'ngx-intl-tel-input';
+import { CheckPermissionModule } from '../permissions/check-permission.module';
+import { GenericAsideMenuAccountModule } from './generic-aside-menu-account/generic.aside.menu.account.module';
+import { AccountUpdateNewDetailsModule } from './header/components/account-update-new-details/account-update-new-details.module';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: true
@@ -88,12 +80,7 @@ export function provideConfig() {
 @NgModule({
     declarations: [
         MfReportComponent,
-        LayoutComponent,
-        HeaderComponent,
-        AsideHelpSupportComponent,
-        AsideSettingComponent,
         ManageGroupsAccountsComponent,
-        CompanyAddNewUiComponent,
         AccountOperationsComponent,
         AccountFilterPipe,
         OnBoardingComponent,
@@ -102,19 +89,12 @@ export function provideConfig() {
         GroupUpdateComponent,
         ShareGroupModalComponent,
         ShareAccountModalComponent,
-        CheckPermissionDirective,
         ExportGroupLedgerComponent,
         AsideMenuOtherTaxes,
-        AccountUpdateNewDetailsComponent,
-        WelcomeComponent,
-        LoaderComponent,
         ProformaAddBulkItemsComponent,
         RevisionHistoryComponent,
         PurchaseOrderPreviewModalComponent,
-        PurchaseSendEmailModalComponent,
-        PrimarySidebarComponent,
-        CompanyBranchComponent,
-        GenericAsideMenuAccountComponent
+        PurchaseSendEmailModalComponent
     ],
     imports: [
         KeyboardShortutModule,
@@ -163,7 +143,9 @@ export function provideConfig() {
         DeleteTemplateConfirmationModalModule,
         NgxBootstrapSwitchModule.forRoot(),
         MatSlideToggleModule,
-        NgxIntlTelInputModule
+        NgxIntlTelInputModule,
+        CheckPermissionModule,
+        AccountUpdateNewDetailsModule
     ],
     exports: [
         CommonModule,
@@ -173,10 +155,8 @@ export function provideConfig() {
         FormsModule,
         ReactiveFormsModule,
         LaddaModule,
-        LayoutComponent,
         ShSelectModule,
         ModalModule,
-        HeaderComponent,
         ManageGroupsAccountsComponent,
         AccountFilterPipe,
         SelectModule,
@@ -185,50 +165,40 @@ export function provideConfig() {
         PerfectScrollbarModule,
         OnBoardingComponent,
         ConfirmModalModule,
-        AsideHelpSupportComponent,
-        AsideSettingComponent,
         TextCaseChangeModule,
         KeyboardShortutModule,
-        CompanyAddNewUiComponent,
         AsideMenuOtherTaxes,
         MfReportComponent,
-        AccountUpdateNewDetailsComponent,
-        WelcomeComponent,
         TabsModule,
         BsDropdownModule,
         ElementViewChildModule,
         TooltipModule,
         BsDatepickerModule,
         NgxDaterangepickerMd,
-        LoaderComponent,
         ProformaAddBulkItemsComponent,
         RevisionHistoryComponent,
         PurchaseOrderPreviewModalComponent,
         PurchaseSendEmailModalComponent,
         CurrencyModule,
-        PrimarySidebarComponent,
         TranslateDirectiveModule,
         AmountFieldComponentModule,
         AccountAddNewDetailsModule,
         LedgerDiscountModule,
         ConfirmationModalModule,
         DatepickerWrapperModule,
-        CompanyBranchComponent,
         HamburgerMenuModule,
         ValidateSectionPermissionDirectiveModule,
-        GenericAsideMenuAccountComponent,
         GiddhPageLoaderModule,
         GiddhDatepickerModule,
         GiddhDateRangepickerModule,
-        DeleteTemplateConfirmationModalModule
+        DeleteTemplateConfirmationModalModule,
+        GenericAsideMenuAccountModule
     ],
     entryComponents: [
         ManageGroupsAccountsComponent,
-        CompanyAddNewUiComponent,
         AccountOperationsComponent,
         GroupsAccountSidebarComponent,
-        OnBoardingComponent,
-        AccountUpdateNewDetailsComponent
+        OnBoardingComponent
     ],
     providers: [
         {

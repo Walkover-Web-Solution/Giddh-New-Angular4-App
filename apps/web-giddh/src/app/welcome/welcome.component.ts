@@ -279,22 +279,14 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
         this.subscriptionRequestObj.userUniqueName = (this.loggedInUser) ? this.loggedInUser.uniqueName : "";
 
         this.store.pipe(select(state => state.session.isCompanyCreated), takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
-                setTimeout(() => {
-                    if (this.router.url.includes("welcome")) {
-                        this.router.navigate(['/pages/onboarding']);
-                    }
-                }, 2000);
+            if (response && this.router.url.includes("welcome")) {
+                this.router.navigate(['/pages/onboarding']);
             }
         });
     }
 
     public ngAfterViewInit() {
         this.generalService.IAmLoaded.next(true);
-    }
-
-    public skip() {
-        this.router.navigate(['/onboarding']);
     }
 
     public reFillForm() {
