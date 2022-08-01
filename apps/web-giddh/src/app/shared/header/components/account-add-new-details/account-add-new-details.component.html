@@ -447,16 +447,31 @@
                             <div class="form-group">
                                 <label>{{ commonLocaleData?.app_mobile_number }}</label>
                                 <div class="d-flex">
-                                    <input
-                                        type="text"
-                                        class="form-control pull-right"
-                                        [placeholder]="localeData?.mobile_no_placeholder"
+                                    <ngx-intl-tel-input
+                                        [cssClass]="'pull-right'"
+                                        [enableAutoCountrySelect]="true"
+                                        [enablePlaceholder]="true"
+                                        [searchCountryFlag]="true"
+                                        [searchCountryField]="[searchCountryField.Iso2, searchCountryField.Name]"
+                                        [selectFirstCountry]="false"
+                                        [maxLength]="30"
+                                        [phoneValidation]="true"
+                                        [numberFormat]="phoneNumberFormat.National"
+                                        name="mobileNo"
                                         formControlName="mobileNo"
-                                        id="contactNo"
-                                        autocomplete="off"
-                                        #mobileNoEl
-                                    />
+                                        (countryChange)="checkNumber($event)"
+                                        #mobileNo
+                                    >
+                                    </ngx-intl-tel-input>
                                 </div>
+                                <span
+                                    class="error-msg"
+                                    *ngIf="
+                                        addAccountForm.controls['mobileNo'].touched &&
+                                        addAccountForm.controls['mobileNo'].invalid
+                                    "
+                                    >{{ localeData?.invalid_contact_number }}</span
+                                >
                             </div>
                         </div>
                     </div>

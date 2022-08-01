@@ -26,7 +26,6 @@ import { IForceClear } from "../../../../models/api-models/Sales";
 import { CountryRequest, OnboardingFormRequest } from "../../../../models/api-models/Common";
 import { CommonActions } from '../../../../actions/common.actions';
 import { GeneralActions } from "../../../../actions/general/general.actions";
-import { parsePhoneNumberFromString, CountryCode } from 'libphonenumber-js/min';
 import { GroupService } from 'apps/web-giddh/src/app/services/group.service';
 import { GroupWithAccountsAction } from 'apps/web-giddh/src/app/actions/groupwithaccounts.actions';
 import { API_COUNT_LIMIT, BootstrapToggleSwitch, EMAIL_VALIDATION_REGEX } from 'apps/web-giddh/src/app/app.constant';
@@ -36,6 +35,7 @@ import { GeneralService } from 'apps/web-giddh/src/app/services/general.service'
 import { clone, cloneDeep, uniqBy } from 'apps/web-giddh/src/app/lodash-optimized';
 import { CustomFieldsService } from 'apps/web-giddh/src/app/services/custom-fields.service';
 import { FieldTypes } from 'apps/web-giddh/src/app/custom-fields/custom-fields.constant';
+import { CountryISO, PhoneNumberFormat, SearchCountryField } from 'ngx-intl-tel-input';
 
 @Component({
     selector: 'account-add-new-details',
@@ -169,6 +169,19 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public availableFieldTypes: any = FieldTypes;
     /** This will hold toggle buttons value and size */
     public bootstrapToggleSwitch = BootstrapToggleSwitch;
+    /** This will hold SearchCountryField */
+    public searchCountryField = SearchCountryField;
+    /** This will hold CountryISO */
+    public countryISO = CountryISO;
+    /** This will hold PhoneNumberFormat */
+    public phoneNumberFormat = PhoneNumberFormat;
+    /** This will hold newCountryCode */
+    public newCountryCode: any = '';
+    /** This will hold oldCountryCode */
+    public oldCountryCode: any = '';
+    /** This will hold updatedNumber */
+    public updatedNumber: any = '';
+
 
     constructor(
         private _fb: FormBuilder,
@@ -297,6 +310,11 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     }
 
     public ngAfterViewInit() {
+        this.addAccountForm?.get('mobileNo')?.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.oldCountryCode = response?.dialCode;
+            }
+        });
         this.addAccountForm.get('country').get('countryCode').setValidators(Validators.required);
         let activegroupName = this.addAccountForm.get('activeGroupUniqueName').value;
         if (activegroupName === 'sundrydebtors' || activegroupName === 'sundrycreditors') {
@@ -563,6 +581,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             delete accountRequest['addresses'];
         }
 
+        let mobileNo = this.addAccountForm?.get('mobileNo')?.value?.e164Number;
+        accountRequest['mobileNo'] = mobileNo;
         accountRequest['hsnNumber'] = (accountRequest["hsnOrSac"] === "hsn") ? accountRequest['hsnNumber'] : "";
         accountRequest['sacNumber'] = (accountRequest["hsnOrSac"] === "sac") ? accountRequest['sacNumber'] : "";
 
@@ -1211,5 +1231,21 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public closeMaster(): void {
         this.closeAccountModal.emit(true);
         this.store.dispatch(this.groupWithAccountsAction.HideAddAndManageFromOutside());
+    }
+
+    /**
+     * This will check no and replace old country code with new country code
+     *
+     * @param {*} event
+     * @memberof AccountAddNewDetailsComponent
+     */
+    public checkNumber(event: any): void {
+        if (event) {
+            this.newCountryCode = "+" + event?.dialCode;
+            const value = this.addAccountForm?.get('mobileNo')?.value?.e164Number;
+            let newNumber = value?.replace(this.oldCountryCode, this.newCountryCode);
+            this.updatedNumber = newNumber;
+            this.addAccountForm.get('mobileNo').setValue(newNumber);
+        }
     }
 }
