@@ -215,15 +215,15 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     /** This will hold toggle buttons value and size */
     public bootstrapToggleSwitch = BootstrapToggleSwitch;
     /** This will hold SearchCountryField */
-    public SearchCountryField = SearchCountryField;
+    public searchCountryField = SearchCountryField;
     /** This will hold CountryISO */
-    public CountryISO = CountryISO;
+    public countryISO = CountryISO;
     /** This will hold PhoneNumberFormat */
-    public PhoneNumberFormat = PhoneNumberFormat;
+    public phoneNumberFormat = PhoneNumberFormat;
     /** This will hold newCountryCode */
-    public newCountryCode = '';
+    public newCountryCode: any = '';
     /** This will hold oldCountryCode */
-    public oldCountryCode = '';
+    public oldCountryCode: any = '';
     /** This will hold updatedNumber */
     public updatedNumber: any = '';
 
@@ -465,7 +465,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             openingBalanceType: ['CREDIT'],
             foreignOpeningBalance: [''],
             openingBalance: [''],
-            mobileNo: ['', Validators.required],
+            mobileNo: [''],
             email: ['', Validators.pattern(EMAIL_VALIDATION_REGEX)],
             companyName: [''],
             attentionTo: [''],
@@ -1784,11 +1784,11 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     }
 
     /**
- * This will check no and replace old country code with new country code
- *
- * @param {*} event
- * @memberof AccountUpdateNewDetailsComponent
- */
+    * This will check no and replace old country code with new country code
+    *
+    * @param {*} event
+    * @memberof AccountUpdateNewDetailsComponent
+    */
     public checkNumber(event: any): void {
         if (event) {
             this.newCountryCode = "+" + event?.dialCode;
