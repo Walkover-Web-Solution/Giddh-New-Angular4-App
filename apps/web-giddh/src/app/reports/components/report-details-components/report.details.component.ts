@@ -231,7 +231,7 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
                 this.currentBranch.uniqueName = currentBranchUniqueName ? currentBranchUniqueName : (this.currentBranch ? this.currentBranch.uniqueName : "");
                 this.selectedType = currentTimeFilter ? currentTimeFilter.toLowerCase() : this.selectedType;
                 this.populateRecords(this.selectedType);
-                this.salesRegisterTotal.particular = this.activeFinacialYr.uniqueName;
+                this.salesRegisterTotal.particular = this.activeFinacialYr?.uniqueName;
             }
         });
     }
