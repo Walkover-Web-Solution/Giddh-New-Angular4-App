@@ -14,13 +14,17 @@ import { TranslateDirectiveModule } from "../../theme/translate/translate.direct
 import { DatepickerWrapperModule } from "../datepicker-wrapper/datepicker.wrapper.module";
 import { ElementViewChildModule } from "../helpers/directives/elementViewChild/elementViewChild.module";
 import { PrimarySidebarModule } from "../primary-sidebar/primary-sidebar.module";
+import { AsideHelpSupportComponent } from "./components/aside-help-support/aside-help-support.component";
+import { AsideSettingComponent } from "./components/aside-setting/aside-setting.component";
 import { CompanyAddNewUiComponent } from "./components/company-add-new-ui/company-add-new-ui.component";
 import { HeaderComponent } from "./header.component";
 
 @NgModule({
     declarations: [
         HeaderComponent,
-        CompanyAddNewUiComponent
+        CompanyAddNewUiComponent,
+        AsideSettingComponent,
+        AsideHelpSupportComponent
     ],
     imports: [
         CommonModule,
@@ -42,7 +46,8 @@ import { HeaderComponent } from "./header.component";
     ],
     exports: [
         HeaderComponent,
-        CompanyAddNewUiComponent
+        CompanyAddNewUiComponent,
+        AsideSettingComponent
     ],
     entryComponents: [
         CompanyAddNewUiComponent

@@ -39,8 +39,6 @@ import { NgxMaskModule } from './helpers/directives/ngx-mask';
 import { TextCaseChangeModule } from './helpers/directives/textCaseChange/textCaseChange.module';
 import { OnBoardingComponent } from './on-boarding/on-boarding.component';
 import { NgxDaterangepickerMd } from '../theme/ngx-date-range-picker';
-import { AsideHelpSupportComponent } from './header/components/aside-help-support/aside-help-support.component';
-import { AsideSettingComponent } from './header/components/aside-setting/aside-setting.component';
 import { ProformaAddBulkItemsComponent } from '../proforma-invoice/components/proforma-add-bulk-items/proforma-add-bulk-items.component';
 import { RevisionHistoryComponent } from './revision-history/revision-history.component';
 import { PurchaseOrderPreviewModalComponent } from './purchase-order-preview/purchase-order-preview.component';
@@ -81,8 +79,6 @@ export function provideConfig() {
 @NgModule({
     declarations: [
         MfReportComponent,
-        AsideHelpSupportComponent,
-        AsideSettingComponent,
         ManageGroupsAccountsComponent,
         AccountOperationsComponent,
         AccountFilterPipe,
@@ -167,8 +163,6 @@ export function provideConfig() {
         PerfectScrollbarModule,
         OnBoardingComponent,
         ConfirmModalModule,
-        AsideHelpSupportComponent,
-        AsideSettingComponent,
         TextCaseChangeModule,
         KeyboardShortutModule,
         AsideMenuOtherTaxes,
