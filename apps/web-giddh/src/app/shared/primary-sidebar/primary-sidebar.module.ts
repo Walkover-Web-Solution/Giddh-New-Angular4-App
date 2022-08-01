@@ -12,6 +12,7 @@ import { CommandKModule } from "../../theme/command-k/command.k.module";
 import { AuthServiceConfig, GoogleLoginProvider } from "../../theme/ng-social-login-module";
 import { SocialLoginModule } from "../../theme/ng-social-login-module/auth.module";
 import { TranslateDirectiveModule } from "../../theme/translate/translate.directive.module";
+import { GenericAsideMenuAccountModule } from "../generic-aside-menu-account/generic.aside.menu.account.module";
 import { CompanyBranchComponent } from "./company-branch/company-branch.component";
 import { PrimarySidebarComponent } from "./primary-sidebar.component";
 
@@ -46,7 +47,8 @@ export function provideConfig() {
         CheckPermissionModule,
         CommandKModule,
         TabsModule,
-        SocialLoginModule
+        SocialLoginModule,
+        GenericAsideMenuAccountModule
     ],
     exports: [
         PrimarySidebarComponent

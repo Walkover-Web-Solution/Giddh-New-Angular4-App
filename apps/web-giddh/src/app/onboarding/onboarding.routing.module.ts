@@ -7,7 +7,7 @@ import { OnboardingComponent } from "./onboarding.component";
     imports: [
         RouterModule.forChild([
             {
-                path: '', component: OnboardingComponent, canActivate: [UserAuthenticated]
+                path: '', component: OnboardingComponent
             }
         ])
     ]

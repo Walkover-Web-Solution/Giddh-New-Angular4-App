@@ -758,7 +758,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 });
             }
         });
-        if (this.route.snapshot.url.toString() === 'new-user') {
+        if (this.router.url === '/new-user') {
             this.showAddCompanyModal();
         }
         this.store.dispatch(this.loginAction.FetchUserDetails());

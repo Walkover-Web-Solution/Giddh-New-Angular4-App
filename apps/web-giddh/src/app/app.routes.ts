@@ -28,7 +28,6 @@ export const ROUTES: Routes = [
     { path: 'audit-logs', redirectTo: 'pages/audit-logs', pathMatch: 'full' },
     { path: 'activity-logs', redirectTo: 'pages/activity-logs', pathMatch: 'full' },
     { path: 'ledger', redirectTo: 'pages/ledger' },
-    { path: 'old-ledger', redirectTo: 'pages/old-ledger' },
     { path: 'dummy', loadChildren: () => import('./dummy/dummy.module').then(module => module.DummyModule) },
     { path: 'new-user', loadChildren: () => import('./new-user/new-user.module').then(module => module.NewUserModule), canActivate: [NewUserAuthGuard] },
     { path: 'welcome', component: WelcomeComponent },
