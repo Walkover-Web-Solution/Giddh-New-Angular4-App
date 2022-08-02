@@ -265,7 +265,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         let data = new VerifyMobileModel();
         data.countryCode = Number(user?.countryCode);
         data.mobileNumber = user?.contactNumber;
-        data.oneTimePassword = this.twoWayOthForm?.value.otp;
+        data.oneTimePassword = this.twoWayOthForm?.value?.otp;
         this.store.dispatch(this.loginAction.VerifyTwoWayAuthRequest(data));
     }
 
