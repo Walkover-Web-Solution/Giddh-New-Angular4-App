@@ -36,11 +36,14 @@ import { HeaderComponent } from "./header.component";
         ElementViewChildModule,
         PerfectScrollbarModule,
         PrimarySidebarModule,
-        TooltipModule,
-        BsDropdownModule,
+        TooltipModule.forRoot(),
+        BsDropdownModule.forRoot(),
         DatepickerWrapperModule,
         ShSelectModule,
-        LaddaModule,
+        LaddaModule.forRoot({
+            style: 'slide-left',
+            spinnerSize: 30
+        }),
         ConfirmModalModule,
         RouterModule
     ],

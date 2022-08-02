@@ -42,7 +42,7 @@ import { NoDataModule } from "../shared/no-data/no-data.module";
         FormFieldsModule,
         MatTooltipModule,
         TranslateDirectiveModule,
-        PaginationModule,
+        PaginationModule.forRoot(),
         FormsModule,
         GiddhPageLoaderModule,
         NoDataModule

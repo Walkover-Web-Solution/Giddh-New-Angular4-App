@@ -16,7 +16,10 @@ import { LoaderModule } from '../loader/loader.module';
         ReactiveFormsModule,
         LoginRoutingModule,
         ModalModule,
-        LaddaModule,
+        LaddaModule.forRoot({
+            style: 'slide-left',
+            spinnerSize: 30
+        }),
         ShSelectModule,
         SharedModule,
         LoaderModule

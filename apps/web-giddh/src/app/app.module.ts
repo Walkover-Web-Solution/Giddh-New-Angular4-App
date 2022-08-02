@@ -7,17 +7,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
 import { ActionReducer, MetaReducer, StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { LaddaModule } from 'angular2-ladda';
 import { Configuration } from 'apps/web-giddh/src/app/app.constant';
 import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
 import { localStorageSync } from 'ngrx-store-localstorage';
-import { CollapseModule } from 'ngx-bootstrap/collapse';
-import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ModalModule } from 'ngx-bootstrap/modal';
-import { PaginationModule } from 'ngx-bootstrap/pagination';
-import { PopoverModule } from 'ngx-bootstrap/popover';
-import { TabsModule } from 'ngx-bootstrap/tabs';
-import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { PERFECT_SCROLLBAR_CONFIG, PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar/lib/perfect-scrollbar.interfaces';
 import { ToastrModule } from 'ngx-toastr';
@@ -82,18 +75,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         FormsModule,
         ReactiveFormsModule,
         HttpClientModule,
-        LaddaModule.forRoot({
-            style: 'slide-left',
-            spinnerSize: 30
-        }),
-        PaginationModule.forRoot(),
-        CollapseModule.forRoot(),
-        TooltipModule.forRoot(),
         ModalModule.forRoot(),
-        PopoverModule.forRoot(),
-        BsDropdownModule.forRoot(),
-        TabsModule.forRoot(),
-        TooltipModule.forRoot(),
         ServiceModule.forRoot(),
         ActionModule.forRoot(),
         DecoratorsModule.forRoot(),

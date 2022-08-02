@@ -22,7 +22,7 @@ import { WelcomeRoutingModule } from "./welcome.routing.module";
         ReactiveFormsModule,
         TranslateDirectiveModule,
         ShSelectModule,
-        BsDropdownModule
+        BsDropdownModule.forRoot()
     ],
     exports: [
         WelcomeComponent

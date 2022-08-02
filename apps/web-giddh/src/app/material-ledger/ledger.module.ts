@@ -83,10 +83,13 @@ import { AttachmentsModule } from '../theme/attachments/attachments.module';
         TaxControlModule,
         LedgerRoutingModule,
         ModalModule.forRoot(),
-        PaginationModule,
+        PaginationModule.forRoot(),
         NgxUploaderModule,
         ClipboardModule,
-        LaddaModule,
+        LaddaModule.forRoot({
+            style: 'slide-left',
+            spinnerSize: 30
+        }),
         NumberToWordsModule,
         ConfirmModalModule,
         ShSelectModule,

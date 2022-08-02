@@ -45,7 +45,7 @@ import { LaddaModule } from 'angular2-ladda';
         AmountFieldComponentModule,
         NumberToWordsModule,
         NgxMaskModule,
-        PopoverModule,
+        PopoverModule.forRoot(),
         AdvanceReceiptAdjustmentModule,
         DecimalDigitsModule,
         ClickOutsideModule,
@@ -61,7 +61,10 @@ import { LaddaModule } from 'angular2-ladda';
         MatSelectModule,
         MatExpansionModule,
         AttachmentsModule,
-        LaddaModule
+        LaddaModule.forRoot({
+            style: 'slide-left',
+            spinnerSize: 30
+        })
     ],
     exports: [UpdateLedgerEntryPanelComponent, UpdateLedgerTaxControlComponent, UpdateLedgerDiscountComponent]
 })

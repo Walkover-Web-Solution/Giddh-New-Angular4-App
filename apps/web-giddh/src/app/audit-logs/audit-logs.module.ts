@@ -34,7 +34,10 @@ import { AuditLogsServiceModule } from './services/audit-logs.service.module';
         ReactiveFormsModule,
         AuditLogsRoutingModule,
         DatepickerModule,
-        LaddaModule,
+        LaddaModule.forRoot({
+            style: 'slide-left',
+            spinnerSize: 30
+        }),
         ShSelectModule,
         AuditLogsServiceModule,
         CurrencyModule,
