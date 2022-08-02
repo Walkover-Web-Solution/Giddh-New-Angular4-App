@@ -85,8 +85,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     @ViewChild('autoFocusUpdate', { static: true }) public autoFocusUpdate: ElementRef;
     public moveAccountForm: FormGroup;
     public taxGroupForm: FormGroup;
-    @ViewChild('deleteMergedAccountModal', { static: true }) public deleteMergedAccountModal: ModalDirective;
-    @ViewChild('moveMergedAccountModal', { static: true }) public moveMergedAccountModal: ModalDirective;
+    @ViewChild('deleteMergedAccountModal', { static: false }) public deleteMergedAccountModal: ModalDirective;
+    @ViewChild('moveMergedAccountModal', { static: false }) public moveMergedAccountModal: ModalDirective;
     /** Tabs instance */
     @ViewChild('staticTabs', { static: true }) public staticTabs: TabsetComponent;
 

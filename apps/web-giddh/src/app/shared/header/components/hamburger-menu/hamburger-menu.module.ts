@@ -13,7 +13,7 @@ import { HamburgerMenuComponent } from "./hamburger-menu.component";
     declarations: [HamburgerMenuComponent],
     imports: [
         CommonModule,
-        TooltipModule
+        TooltipModule.forRoot()
     ],
     exports: [HamburgerMenuComponent]
 })

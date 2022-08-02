@@ -10,6 +10,7 @@
     "build-stage": "npm run postinstall.web && node --max_old_space_size=8192 node_modules/@angular/cli/bin/ng build web-giddh --configuration=stage --sourceMap=false --output-hashing=all && node tools/web/postbuild --path=dist/apps/web-giddh-stage && npm run rm_bak_files",
     "build-test": "npm run postinstall.web && node --max_old_space_size=8192 node_modules/@angular/cli/bin/ng build web-giddh --configuration=test --sourceMap=false --output-hashing=all && node tools/web/postbuild --path=dist/apps/web-giddh-test && npm run rm_bak_files",
     "build-dev": "npm run postinstall.web && node --max_old_space_size=8192 node_modules/@angular/cli/bin/ng build web-giddh --configuration=local --sourceMap=false --output-hashing=all && node tools/web/postbuild --path=dist/apps/web-giddh-local && npm run rm_bak_files",
+    "bundle:report": "source-map-explorer dist/apps/web-giddh-prod/*.js",
     "rm_bak_files": "find dist -name '*.bak' -exec rm -Rf {} \\;",
     "test": "npm run postinstall.web && ng test",
     "lint": "./node_modules/.bin/nx lint && ng lint",

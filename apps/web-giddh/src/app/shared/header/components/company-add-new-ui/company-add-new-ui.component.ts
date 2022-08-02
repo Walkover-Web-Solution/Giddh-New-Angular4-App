@@ -14,7 +14,6 @@ import { AppState } from '../../../../store';
 import {
     CompanyResponse,
     SocketNewCompanyRequest,
-    StateDetailsRequest,
     CompanyCreateRequest
 } from '../../../../models/api-models/Company';
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';

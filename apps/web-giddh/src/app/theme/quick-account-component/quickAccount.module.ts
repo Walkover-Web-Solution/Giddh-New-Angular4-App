@@ -16,8 +16,11 @@ import { LaddaModule } from 'angular2-ladda';
         ClickOutsideModule,
         SharedModule,
         ShSelectModule,
-        TooltipModule,
-        LaddaModule
+        TooltipModule.forRoot(),
+        LaddaModule.forRoot({
+            style: 'slide-left',
+            spinnerSize: 30
+        })
     ],
     declarations: [QuickAccountComponent],
     entryComponents: [QuickAccountComponent]
