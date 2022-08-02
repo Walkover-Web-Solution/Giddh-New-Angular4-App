@@ -40,6 +40,6 @@ module.exports = {
             'process.env.ApiUrl': JSON.stringify('https://api.giddh.com/'),
             'process.env.APP_FOLDER': JSON.stringify(''),
         }),
-        new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+        new webpack.IgnorePlugin(/^\.\/locale$/),
     ]
 }

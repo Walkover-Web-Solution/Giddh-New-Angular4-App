@@ -24,7 +24,9 @@ import {
     StateDetailsResponse
 } from '../../models/api-models/Company';
 import { CustomActions } from '../customActions';
-import * as moment from 'moment';
+import * as dayjs from 'dayjs';
+import * as customParseFormat from 'dayjs/plugin/customParseFormat';
+dayjs.extend(customParseFormat);
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { userLoginStateEnum } from '../../models/user-login-state';
 import { CommonActions } from '../../actions/common.actions';
@@ -569,9 +571,9 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
                 } else {
                     latestState.todaySelected = false;
                 }
-                let fromDate: any = data.fromDate ? moment(data.fromDate, GIDDH_DATE_FORMAT) : moment().subtract(30, 'days');
-                let toDate: any = data.toDate ? moment(data.toDate, GIDDH_DATE_FORMAT) : moment();
-                latestState.applicationDate = [fromDate._d, toDate._d, chosenLabel, !!data.fromDate];
+                let fromDate: any = data.fromDate ? dayjs(data.fromDate, GIDDH_DATE_FORMAT) : dayjs().subtract(30, 'days');
+                let toDate: any = data.toDate ? dayjs(data.toDate, GIDDH_DATE_FORMAT) : dayjs();
+                latestState.applicationDate = [fromDate.$d, toDate.$d, chosenLabel, !!data.fromDate];
                 return Object.assign({}, state, latestState);
             }
             return state;

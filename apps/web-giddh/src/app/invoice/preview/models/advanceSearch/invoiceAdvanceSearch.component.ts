@@ -2,7 +2,7 @@ import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, 
 import { IOption } from '../../../../theme/ng-select/option.interface';
 import { InvoiceFilterClassForInvoicePreview } from '../../../../models/api-models/Invoice';
 import { ShSelectComponent } from '../../../../theme/ng-virtual-select/sh-select.component';
-import * as moment from 'moment/moment';
+import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../../shared/helpers/defaultDateFormat';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
@@ -46,8 +46,8 @@ export class InvoiceAdvanceSearchComponent implements OnInit, OnChanges {
     public selectedDateRangeUi: any;
     /* This will store available date ranges */
     public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
-    /* Moment object */
-    public moment = moment;
+    /* dayjs object */
+    public dayjs = dayjs;
     /* Selected from date */
     public fromDate: string;
     /* Selected to date */
@@ -228,18 +228,18 @@ export class InvoiceAdvanceSearchComponent implements OnInit, OnChanges {
 
     public dateRangeChanged(event: any) {
         if (event) {
-            this.request.expireFrom = moment(event.picker.startDate).format(GIDDH_DATE_FORMAT);
-            this.request.expireTo = moment(event.picker.endDate).format(GIDDH_DATE_FORMAT);
+            this.request.expireFrom = dayjs(event.picker.startDate).format(GIDDH_DATE_FORMAT);
+            this.request.expireTo = dayjs(event.picker.endDate).format(GIDDH_DATE_FORMAT);
         }
     }
 
     public parseAllDateField() {
         if (this.request.invoiceDate) {
-            this.request.invoiceDate = moment(this.request.invoiceDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+            this.request.invoiceDate = dayjs(this.request.invoiceDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
         }
 
         if (this.request.dueDate) {
-            this.request.dueDate = moment(this.request.dueDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+            this.request.dueDate = dayjs(this.request.dueDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
         }
     }
 
@@ -263,10 +263,10 @@ export class InvoiceAdvanceSearchComponent implements OnInit, OnChanges {
         if ('request' in changes && changes.request.currentValue) {
             if (changes.request.currentValue && changes.request.currentValue.from && changes.request.currentValue.to) {
                 let dateRange = this.generalService.dateConversionToSetComponentDatePicker(changes.request.currentValue.from, changes.request.currentValue.to);
-                this.selectedDateRange = { startDate: moment(dateRange.fromDate), endDate: moment(dateRange.toDate) };
-                this.selectedDateRangeUi = moment(dateRange.fromDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dateRange.toDate).format(GIDDH_NEW_DATE_FORMAT_UI);
-                this.fromDate = moment(dateRange.fromDate).format(GIDDH_DATE_FORMAT);
-                this.toDate = moment(dateRange.toDate).format(GIDDH_DATE_FORMAT);
+                this.selectedDateRange = { startDate: dayjs(dateRange.fromDate), endDate: dayjs(dateRange.toDate) };
+                this.selectedDateRangeUi = dayjs(dateRange.fromDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateRange.toDate).format(GIDDH_NEW_DATE_FORMAT_UI);
+                this.fromDate = dayjs(dateRange.fromDate).format(GIDDH_DATE_FORMAT);
+                this.toDate = dayjs(dateRange.toDate).format(GIDDH_DATE_FORMAT);
                 this.request.expireFrom = this.fromDate;
                 this.request.expireTo = this.toDate;
             }
@@ -329,10 +329,10 @@ export class InvoiceAdvanceSearchComponent implements OnInit, OnChanges {
         }
         this.hideGiddhDatepicker();
         if (value && value.startDate && value.endDate) {
-            this.selectedDateRange = { startDate: moment(value.startDate), endDate: moment(value.endDate) };
-            this.selectedDateRangeUi = moment(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
-            this.fromDate = moment(value.startDate).format(GIDDH_DATE_FORMAT);
-            this.toDate = moment(value.endDate).format(GIDDH_DATE_FORMAT);
+            this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
+            this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
+            this.fromDate = dayjs(value.startDate).format(GIDDH_DATE_FORMAT);
+            this.toDate = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
             this.request.expireFrom = this.fromDate;
             this.request.expireTo = this.toDate;
         }

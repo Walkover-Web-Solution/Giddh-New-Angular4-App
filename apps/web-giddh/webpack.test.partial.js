@@ -39,9 +39,9 @@ module.exports = {
             'process.env.errlyticsKey': JSON.stringify(''),
             'process.env.AppUrl': JSON.stringify('https://test.giddh.com/'),
             'process.env.ApiUrl': JSON.stringify('https://apitest.giddh.com/'),
-            'process.env.APP_FOLDER': JSON.stringify('') //JSON.stringify('app/')""
+            'process.env.APP_FOLDER': JSON.stringify('')
         }),
-        new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+        new webpack.IgnorePlugin(/^\.\/locale$/),
         new CompressionPlugin({
             filename: "[path][base].br",
             algorithm: "brotliCompress",
