@@ -923,6 +923,9 @@ span.edit-icon {
 .update-text {
     color: var(--color-blue);
     padding: 0 5px;
+    &:focus {
+        text-decoration: underline;
+    }
 }
 
 .select-account-label {
@@ -1555,7 +1558,10 @@ label.sales-country-label {
     height: 20px;
     border: 1px solid var(--color-primary-button-border);
     border-radius: 50%;
-    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--color-white);
 }
 
 .set-active .trash-icon-delete {
@@ -1701,6 +1707,19 @@ span.eligible-ITC {
             outline: 0 !important;
             box-shadow: 0 0 0 0.2rem var(--color-primary-common-box-shadow) !important;
         }
+    }
+}
+#dropdown-dropup {
+    .dropup-item {
+        &:focus {
+            color: var(--color-dropdown-list-hover-text);
+            background: var(--color-dropdown-list-hover-background);
+        }
+    }
+}
+.common-anchor-focus {
+    &:focus {
+        text-decoration: underline;
     }
 }
 /* resposnvie */

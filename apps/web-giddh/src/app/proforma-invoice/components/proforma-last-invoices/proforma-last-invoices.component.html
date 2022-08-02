@@ -1,7 +1,12 @@
 <div class="previous-estimate-wrapper" (click)="clickInside($event)">
     <ul>
         <perfect-scrollbar>
-            <li *ngFor="let item of data" (click)="onInvoiceSelected(item)">
+            <li
+                tabindex="0"
+                *ngFor="let item of data"
+                (click)="onInvoiceSelected(item)"
+                (keydown.enter)="onInvoiceSelected(item)"
+            >
                 <div class="pd">
                     <div class="d-flex flex-column">
                         <div class="d-flex justify-content-between">

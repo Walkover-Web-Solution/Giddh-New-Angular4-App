@@ -314,6 +314,7 @@
                                                             href="javascript:;"
                                                             (click)="showLastEstimateModal = !showLastEstimateModal"
                                                             (clickOutside)="showLastEstimateModal = false"
+                                                            class="common-anchor-focus"
                                                         >
                                                             <i class="icon-copy-file"></i> {{ copyPreviousInvoiceText }}
                                                         </a>
@@ -345,11 +346,17 @@
                                                         class="cp aqua-color mr-r05"
                                                         *ngIf="!isCashInvoice && !isUpdateMode"
                                                     >
-                                                        <a href="javascript:void(0)" (click)="getCustomerDetails()">{{
-                                                            !isPurchaseInvoice
-                                                                ? localeData?.customer_details
-                                                                : localeData?.vendor_details
-                                                        }}</a>
+                                                        <a
+                                                            href="javascript:void(0)"
+                                                            (click)="getCustomerDetails()"
+                                                            class="common-anchor-focus"
+                                                            (focus)="showLastEstimateModal = false"
+                                                            >{{
+                                                                !isPurchaseInvoice
+                                                                    ? localeData?.customer_details
+                                                                    : localeData?.vendor_details
+                                                            }}</a
+                                                        >
                                                     </span>
                                                 </div>
                                                 <!-- endregion -->
@@ -2357,7 +2364,7 @@
                                             </div>
                                         </div>
 
-                                        <div
+                                        <button
                                             class="trash-icon-delete"
                                             (click)="
                                                 removeTransaction(entryIdx);
@@ -2368,7 +2375,7 @@
                                             <span class="cp">
                                                 <i class="icon-trash" aria-hidden="true"></i>
                                             </span>
-                                        </div>
+                                        </button>
                                     </td>
                                 </tr>
 
@@ -2542,6 +2549,10 @@
                                                                             !transaction.sacNumber
                                                                         "
                                                                         class="update-text"
+                                                                        (keydown.enter)="
+                                                                            toggleHsnSacDropDown(transaction)
+                                                                        "
+                                                                        tabindex="0"
                                                                         >{{ commonLocaleData?.app_update }}
                                                                     </span>
                                                                     <span class="edit-icon cp">
@@ -2917,7 +2928,7 @@
                                             </ng-container>
                                         </div>
 
-                                        <div
+                                        <button
                                             class="trash-icon-delete"
                                             (click)="
                                                 removeTransaction(entryIdx);
@@ -2928,7 +2939,7 @@
                                             <span class="cp">
                                                 <i class="icon-trash" aria-hidden="true"></i>
                                             </span>
-                                        </div>
+                                        </button>
                                     </td>
                                 </tr>
                                 <!-- endregion -->
@@ -4150,6 +4161,7 @@
                                                                         <div
                                                                             class="hsn-code text-right"
                                                                             (click)="toggleHsnSacDropDown(transaction)"
+                                                                            tabindex="0"
                                                                         >
                                                                             <label
                                                                                 >{{
@@ -5297,14 +5309,22 @@
                                         </button>
                                     </div>
 
-                                    <div *ngIf="!isCompany" class="btn-group" dropdown [dropup]="isDropup">
+                                    <div
+                                        *ngIf="!isCompany"
+                                        class="btn-group"
+                                        dropdown
+                                        #dropdown="bs-dropdown"
+                                        [dropup]="isDropup"
+                                    >
                                         <button
                                             id="button-dropup"
                                             *ngIf="invoiceType === 'sales'"
                                             dropdownToggle
                                             type="button"
+                                            #dropupButton
                                             class="btn btn-default dropdown-toggle"
                                             aria-controls="dropdown-dropup"
+                                            (focus)="dropdown.show()"
                                         >
                                             <span class="caret"></span>
                                         </button>
@@ -5317,7 +5337,8 @@
                                         >
                                             <li role="menuitem">
                                                 <a
-                                                    class="dropdown-item cp"
+                                                    class="dropdown-item cp dropup-item"
+                                                    href="javascript:void(0)"
                                                     (click)="doAction(2); triggerSubmitInvoiceForm(invoiceForm, false)"
                                                     >{{ localeData?.create_send }}</a
                                                 >
@@ -5325,8 +5346,10 @@
 
                                             <li role="menuitem">
                                                 <a
-                                                    class="dropdown-item cp"
+                                                    class="dropdown-item cp dropup-item"
+                                                    href="javascript:void(0)"
                                                     (click)="doAction(3); triggerSubmitInvoiceForm(invoiceForm, false)"
+                                                    (blur)="dropdown.hide()"
                                                     >{{ localeData?.create_print }}</a
                                                 >
                                             </li>
@@ -5336,7 +5359,9 @@
                                                 (click)="doAction(4); triggerSubmitInvoiceForm(invoiceForm, false)"
                                                 *ngIf="voucherApiVersion !== 2"
                                             >
-                                                <a class="dropdown-item cp">{{ localeData?.generate_recurring }}</a>
+                                                <a class="dropdown-item cp dropup-item" href="javascript:void(0)">{{
+                                                    localeData?.generate_recurring
+                                                }}</a>
                                             </li>
                                         </ul>
                                     </div>
@@ -5385,7 +5410,8 @@
                                         >
                                             <li role="menuitem">
                                                 <a
-                                                    class="dropdown-item cp"
+                                                    class="dropdown-item cp dropup-item"
+                                                    href="javascript:void(0)"
                                                     (click)="doAction(2); triggerSubmitInvoiceForm(invoiceForm, false)"
                                                     >{{ localeData?.create_send }}</a
                                                 >
@@ -5393,7 +5419,8 @@
 
                                             <li role="menuitem">
                                                 <a
-                                                    class="dropdown-item cp"
+                                                    class="dropdown-item cp dropup-item"
+                                                    href="javascript:void(0)"
                                                     (click)="doAction(3); triggerSubmitInvoiceForm(invoiceForm, false)"
                                                     >{{ localeData?.create_print }}</a
                                                 >
