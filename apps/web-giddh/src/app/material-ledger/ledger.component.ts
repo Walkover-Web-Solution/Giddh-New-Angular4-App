@@ -560,8 +560,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
                         (this.currentCompanyBranches && this.currentCompanyBranches.length === 2)) {
                         // Add the blank transaction only if it is branch mode or company with single branch
                         this.lc.blankLedger.transactions = [
-                            this.lc.addNewTransaction('DEBIT'),
-                            this.lc.addNewTransaction('CREDIT')
+                            this.lc?.addNewTransaction('DEBIT'),
+                            this.lc?.addNewTransaction('CREDIT')
                         ]
                     }
                 } else {
@@ -1002,7 +1002,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         let blankTransactionObj: BlankLedgerVM = this.lc.prepareBankLedgerRequestObject();
         blankTransactionObj.invoicesToBePaid = this.selectedInvoiceList;
         delete blankTransactionObj['voucherType'];
-        if (blankTransactionObj && blankTransactionObj.transactions && blankTransactionObj.transactions.length > 0) {
+        if (blankTransactionObj && blankTransactionObj?.transactions && blankTransactionObj?.transactions.length > 0) {
             this.store.dispatch(this.ledgerActions.CreateBlankLedger(cloneDeep(blankTransactionObj), this.lc.accountUnq));
         } else {
             this.toaster.showSnackBar("error", this.localeData?.transaction_required, this.commonLocaleData?.app_error);
@@ -1044,7 +1044,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     public toggleTransactionType(event: any) {
         this.lc.showNewLedgerPanel = false;
-        let allTrx: TransactionVM[] = filter(this.lc.blankLedger.transactions, bl => bl.type === event.type);
+        let allTrx: TransactionVM[] = filter(this.lc.blankLedger?.transactions, bl => bl?.type === event?.type);
         let unAccountedTrx = find(allTrx, a => !a.selectedAccount);
 
         if (unAccountedTrx) {
@@ -1062,7 +1062,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 currentlyAddedTransaction.inventory['warehouse'] = { name: '', uniqueName: event.warehouse };
             }
             let newTrx = this.lc.addNewTransaction(event.type);
-            this.lc.blankLedger.transactions.push(newTrx);
+            this.lc.blankLedger?.transactions.push(newTrx);
             this.selectBlankTxn(newTrx);
             setTimeout(() => {
                 this.dropDowns.filter(dd => dd.idEl === newTrx.id).forEach(dd => {
@@ -1111,8 +1111,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.lc.blankLedger.transactions =
             (this.currentOrganizationType === OrganizationType.Branch ||
                 (this.currentCompanyBranches && this.currentCompanyBranches.length === 2)) ? [ // Add the blank transaction only if it is branch mode or company with single branch
-                this.lc.addNewTransaction('DEBIT'),
-                this.lc.addNewTransaction('CREDIT')
+                this.lc?.addNewTransaction('DEBIT'),
+                this.lc?.addNewTransaction('CREDIT')
             ] : [];
         this.lc.blankLedger.voucherType = null;
         this.lc.blankLedger.entryDate = this.selectedDateRange?.endDate ? moment(this.selectedDateRange.endDate).format(GIDDH_DATE_FORMAT) : moment().format(GIDDH_DATE_FORMAT);
@@ -1204,7 +1204,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     public showUpdateLedgerModal(txn: ITransactionItem) {
         let transactions: TransactionsResponse = null;
-        this.store.pipe(select(t => t.ledger.transactionsResponse), take(1)).subscribe(trx => transactions = trx);
+        this.store.pipe(select(t => t.ledger.transactionsResponse), take(1)).subscribe(trx => {
+            if (transactions) {
+                transactions = trx
+            }
+        });
         if (transactions) {
             this.store.dispatch(this.ledgerActions.setAccountForEdit(this.lc.accountUnq));
         }
@@ -1318,7 +1322,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         let blankTransactionObj: BlankLedgerVM = this.lc.prepareBlankLedgerRequestObject();
 
 
-        if (blankTransactionObj && blankTransactionObj.transactions && blankTransactionObj.transactions.length > 0) {
+        if (blankTransactionObj && blankTransactionObj?.transactions && blankTransactionObj?.transactions.length > 0) {
             if (this.voucherApiVersion === 2) {
                 blankTransactionObj = this.adjustmentUtilityService.getAdjustmentObject(blankTransactionObj);
             }
@@ -1874,7 +1878,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     // endregion
 
     public toggleCurrency(event) {
-        let isThereBlankEntry = this.lc.blankLedger.transactions.some(s => s.selectedAccount);
+        let isThereBlankEntry = this.lc.blankLedger?.transactions.some(s => s?.selectedAccount);
         if (isThereBlankEntry) {
             this.toaster.showSnackBar("error", this.localeData?.save_unfinished_entry);
             return false;
