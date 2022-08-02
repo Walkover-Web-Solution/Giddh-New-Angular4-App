@@ -319,7 +319,7 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
                 this.allSubscriptions[subscription.planDetails.uniqueName] = subscription;
             });
             this.inputData = [];
-            let allPlans = uniqBy(subscriptions?.filter(subscription => subscription?.planDetails.name !== "Trial Plan" && subscription.status !== "trial" && subscription?.planDetails?.isCommonPlan).map(subscription => { return subscription.planDetails }), "name");
+            let allPlans = uniqBy(subscriptions?.filter(subscription => subscription?.planDetails.name !== "Trial Plan" && subscription?.status !== "trial" && subscription?.planDetails?.isCommonPlan).map(subscription => { return subscription?.planDetails }), "name");
             allPlans?.forEach(plan => {
                 this.inputData.push(plan);
             });
