@@ -459,6 +459,7 @@
                                         formControlName="mobileNo"
                                         (countryChange)="checkNumber($event)"
                                         #mobileNo
+                                        [selectedCountryISO]="currentCompanyCurrencyCode"
                                     >
                                     </ngx-intl-tel-input>
                                 </div>

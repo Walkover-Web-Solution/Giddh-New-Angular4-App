@@ -181,6 +181,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public oldCountryCode: any = '';
     /** This will hold updatedNumber */
     public updatedNumber: any = '';
+    /** This will hold currentCompanyCurrencyCode */
+    public currentCompanyCurrencyCode: any = '';
 
 
     constructor(
@@ -289,6 +291,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                     this.getStates(this.activeCompany.countryV2.alpha2CountryCode);
                 }
                 this.companyCurrency = clone(this.activeCompany.baseCurrency);
+                console.log(this.companyCurrency);
+
             }
         });
 
@@ -337,8 +341,10 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     }
 
     public setCountryByCompany(company: CompanyResponse) {
+
         if (this.activeCompany && this.activeCompany.countryV2) {
             const countryCode = this.activeCompany.countryV2.alpha2CountryCode;
+            this.currentCompanyCurrencyCode = countryCode.toLowerCase();
             const countryName = this.activeCompany.countryV2.countryName;
             this.addAccountForm.get('country').get('countryCode').setValue(countryCode);
             this.selectedCountry = `${countryCode} - ${countryName}`;
