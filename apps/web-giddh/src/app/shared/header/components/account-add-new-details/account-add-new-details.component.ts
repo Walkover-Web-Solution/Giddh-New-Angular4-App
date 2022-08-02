@@ -291,8 +291,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                     this.getStates(this.activeCompany.countryV2.alpha2CountryCode);
                 }
                 this.companyCurrency = clone(this.activeCompany.baseCurrency);
-                console.log(this.companyCurrency);
-
             }
         });
 
