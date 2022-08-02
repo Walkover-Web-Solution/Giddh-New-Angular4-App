@@ -9,7 +9,10 @@ import { SharedModule } from '../shared.module';
 
 @NgModule({
     declarations: [AsideMenuRecurringEntryComponent],
-    imports: [ReactiveFormsModule, BsDatepickerModule.forRoot(), CommonModule, SelectModule, LaddaModule, SharedModule],
+    imports: [ReactiveFormsModule, BsDatepickerModule.forRoot(), CommonModule, SelectModule, LaddaModule.forRoot({
+        style: 'slide-left',
+        spinnerSize: 30
+    }), SharedModule],
     exports: [AsideMenuRecurringEntryComponent]
 })
 export class AsideMenuRecurringEntryModule {

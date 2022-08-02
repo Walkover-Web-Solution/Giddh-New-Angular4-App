@@ -22,7 +22,7 @@ import { MobileSearchCompanyComponent } from "./mobile-search-company/mobile-sea
         CommonModule,
         MobileHomeRoutingModule,
         TranslateDirectiveModule,
-        BsDropdownModule,
+        BsDropdownModule.forRoot(),
         FormsModule,
         ReactiveFormsModule,
         RouterModule,

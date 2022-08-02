@@ -30,17 +30,20 @@ import { NoDataModule } from '../shared/no-data/no-data.module';
         SearchSidebarComponent
     ],
     imports: [
-        PaginationModule,
+        PaginationModule.forRoot(),
         CommonModule,
         FormsModule,
         ReactiveFormsModule,
         SearchRoutingModule,
         DatepickerModule,
         ModalModule,
-        LaddaModule,
+        LaddaModule.forRoot({
+            style: 'slide-left',
+            spinnerSize: 30
+        }),
         DecimalDigitsModule,
         Daterangepicker,
-        BsDropdownModule,
+        BsDropdownModule.forRoot(),
         ClickOutsideModule,
         CurrencyModule,
         SharedModule,

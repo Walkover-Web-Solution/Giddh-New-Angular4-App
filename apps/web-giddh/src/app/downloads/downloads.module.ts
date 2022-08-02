@@ -16,7 +16,7 @@ import { SharedModule } from "../shared/shared.module";
 @NgModule({
     declarations: [DownloadsComponent, DownloadsJsonComponent],
     exports: [],
-    imports: [CommonModule, PaginationModule, MatTableModule, DownloadsRoutingModule, MatButtonModule, MatDialogModule, HamburgerMenuModule, TranslateDirectiveModule, NoDataModule,
+    imports: [CommonModule, PaginationModule.forRoot(), MatTableModule, DownloadsRoutingModule, MatButtonModule, MatDialogModule, HamburgerMenuModule, TranslateDirectiveModule, NoDataModule,
         GiddhPageLoaderModule, SharedModule]
 })
 
