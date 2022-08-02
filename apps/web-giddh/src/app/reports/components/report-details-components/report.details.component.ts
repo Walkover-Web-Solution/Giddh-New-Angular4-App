@@ -7,8 +7,8 @@ import { CompanyService } from "../../../services/companyService.service";
 import { ReportsModel, ReportsRequestModel } from "../../../models/api-models/Reports";
 import { ToasterService } from "../../../services/toaster.service";
 import { createSelector } from "reselect";
-import { takeUntil, filter, take } from "rxjs/operators";
-import * as moment from 'moment/moment';
+import { takeUntil, filter } from "rxjs/operators";
+import * as dayjs from 'dayjs';
 import { Observable, ReplaySubject } from "rxjs";
 import { GIDDH_DATE_FORMAT } from "../../../shared/helpers/defaultDateFormat";
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
@@ -31,7 +31,7 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
     public selectedType = 'monthly';
     private selectedMonth: string;
     public dateRange: Date[];
-    public moment = moment;
+    public dayjs = dayjs;
     public financialOptions: IOption[] = [];
     public selectedCompany: CompanyResponse;
     private interval: any;
@@ -283,8 +283,8 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
     public bsValueChange(event: any) {
         if (event) {
             let request: ReportsRequestModel = {
-                to: moment(event[1]).format(GIDDH_DATE_FORMAT),
-                from: moment(event[0]).format(GIDDH_DATE_FORMAT),
+                to: dayjs(event[1]).format(GIDDH_DATE_FORMAT),
+                from: dayjs(event[0]).format(GIDDH_DATE_FORMAT),
                 interval: 'monthly',
                 branchUniqueName: (this.currentBranch ? this.currentBranch.uniqueName : "")
             }

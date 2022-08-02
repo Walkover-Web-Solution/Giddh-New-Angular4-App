@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
 import {
     CompanyResponse
 } from '../../../models/api-models/Company';
-import * as moment from 'moment/moment';
+import * as dayjs from 'dayjs';
 import { GeneralService } from '../../../services/general.service';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import {
@@ -1042,10 +1042,10 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
 
     public submit(): void {
         this.isLoading = true;
-        this.branchTransfer.dateOfSupply = moment(this.tempDateParams.dateOfSupply).format(GIDDH_DATE_FORMAT);
+        this.branchTransfer.dateOfSupply = dayjs(this.tempDateParams.dateOfSupply).format(GIDDH_DATE_FORMAT);
 
         if (this.tempDateParams.dispatchedDate) {
-            this.branchTransfer.transporterDetails.dispatchedDate = moment(this.tempDateParams.dispatchedDate).format(GIDDH_DATE_FORMAT);
+            this.branchTransfer.transporterDetails.dispatchedDate = dayjs(this.tempDateParams.dispatchedDate).format(GIDDH_DATE_FORMAT);
         }
 
         this.branchTransfer.sources.forEach(source => {

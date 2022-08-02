@@ -11,7 +11,7 @@ import { GeneralService } from '../../services/general.service';
 import { AppState } from '../../store';
 import { GstReport } from '../constants/gst.constant';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
-import * as moment from 'moment/moment';
+import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { SHOW_GST_FILING } from '../../app.constant';
 
@@ -129,8 +129,8 @@ export class FilingComponent implements OnInit, OnDestroy {
         this.getCurrentPeriod$.subscribe(currentPeriod => {
             if (currentPeriod && currentPeriod.from) {
                 let date = {
-                    startDate: moment(currentPeriod.from, GIDDH_DATE_FORMAT).startOf('month').format(GIDDH_DATE_FORMAT),
-                    endDate: moment(currentPeriod.to, GIDDH_DATE_FORMAT).endOf('month').format(GIDDH_DATE_FORMAT)
+                    startDate: dayjs(currentPeriod.from, GIDDH_DATE_FORMAT).startOf('month').format(GIDDH_DATE_FORMAT),
+                    endDate: dayjs(currentPeriod.to, GIDDH_DATE_FORMAT).endOf('month').format(GIDDH_DATE_FORMAT)
                 };
                 if (date.startDate === currentPeriod.from && date.endDate === currentPeriod.to) {
                     this.isMonthSelected = true;

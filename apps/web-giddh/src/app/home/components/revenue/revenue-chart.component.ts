@@ -5,7 +5,7 @@ import { ReplaySubject } from 'rxjs';
 import { HomeActions } from '../../../actions/home/home.actions';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
-import * as moment from 'moment/moment';
+import * as dayjs from 'dayjs';
 import { RevenueGraphDataRequest } from "../../../models/api-models/Dashboard";
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 import { GiddhCurrencyPipe } from '../../../shared/helpers/pipes/currencyPipe/currencyType.pipe';
@@ -35,7 +35,7 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
         uniqueName: '',
         refresh: false
     };
-    public moment = moment;
+    public dayjs = dayjs;
     public currentData: any[] = [];
     public previousData: any[] = [];
     public summaryData: any = { totalCurrent: 0, totalLast: 0, highest: 0, lowest: 0, highestLabel: '', lowestLabel: '' };
@@ -56,15 +56,15 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
 
     constructor(private store: Store<AppState>, private homeActions: HomeActions, public currencyPipe: GiddhCurrencyPipe, private generalService: GeneralService, private dashboardService: DashboardService, private toasterService: ToasterService) {
         this.getCurrentWeekStartEndDate = this.getWeekStartEndDate(new Date());
-        this.getPreviousWeekStartEndDate = this.getWeekStartEndDate(moment(this.getCurrentWeekStartEndDate[0]).subtract(1, 'days'));
+        this.getPreviousWeekStartEndDate = this.getWeekStartEndDate(dayjs(this.getCurrentWeekStartEndDate[0]).subtract(1, 'days'));
 
         this.currentDateRangePickerValue = [this.getCurrentWeekStartEndDate[0], this.getCurrentWeekStartEndDate[1]];
         this.previousDateRangePickerValue = [this.getPreviousWeekStartEndDate[0], this.getPreviousWeekStartEndDate[1]];
 
-        this.graphParams.currentFrom = moment(this.getCurrentWeekStartEndDate[0]).format(GIDDH_DATE_FORMAT);
-        this.graphParams.currentTo = moment(this.getCurrentWeekStartEndDate[1]).format(GIDDH_DATE_FORMAT);
-        this.graphParams.previousFrom = moment(this.getPreviousWeekStartEndDate[0]).format(GIDDH_DATE_FORMAT);
-        this.graphParams.previousTo = moment(this.getPreviousWeekStartEndDate[1]).format(GIDDH_DATE_FORMAT);
+        this.graphParams.currentFrom = dayjs(this.getCurrentWeekStartEndDate[0]).format(GIDDH_DATE_FORMAT);
+        this.graphParams.currentTo = dayjs(this.getCurrentWeekStartEndDate[1]).format(GIDDH_DATE_FORMAT);
+        this.graphParams.previousFrom = dayjs(this.getPreviousWeekStartEndDate[0]).format(GIDDH_DATE_FORMAT);
+        this.graphParams.previousTo = dayjs(this.getPreviousWeekStartEndDate[1]).format(GIDDH_DATE_FORMAT);
     }
 
     public ngOnInit() {
@@ -314,8 +314,8 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
 
     public setPreviousDate(data) {
         if (data && !this.chartChanged) {
-            this.graphParams.previousFrom = moment(data[0]).format(GIDDH_DATE_FORMAT);
-            this.graphParams.previousTo = moment(data[1]).format(GIDDH_DATE_FORMAT);
+            this.graphParams.previousFrom = dayjs(data[0]).format(GIDDH_DATE_FORMAT);
+            this.graphParams.previousTo = dayjs(data[1]).format(GIDDH_DATE_FORMAT);
             this.getPreviousWeekStartEndDate = [data[0], data[1]];
             this.getRevenueGraphData();
         }
@@ -323,8 +323,8 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
 
     public setCurrentDate(data) {
         if (data) {
-            this.graphParams.currentFrom = moment(data[0]).format(GIDDH_DATE_FORMAT);
-            this.graphParams.currentTo = moment(data[1]).format(GIDDH_DATE_FORMAT);
+            this.graphParams.currentFrom = dayjs(data[0]).format(GIDDH_DATE_FORMAT);
+            this.graphParams.currentTo = dayjs(data[1]).format(GIDDH_DATE_FORMAT);
             this.getCurrentWeekStartEndDate = [data[0], data[1]];
             this.getRevenueGraphData();
             this.chartChanged = false;
@@ -338,15 +338,15 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
         this.graphExpanded = false;
 
         this.getCurrentWeekStartEndDate = this.getWeekStartEndDate(new Date());
-        this.getPreviousWeekStartEndDate = this.getWeekStartEndDate(moment(this.getCurrentWeekStartEndDate[0]).subtract(1, 'days'));
+        this.getPreviousWeekStartEndDate = this.getWeekStartEndDate(dayjs(this.getCurrentWeekStartEndDate[0]).subtract(1, 'days'));
 
         this.currentDateRangePickerValue = [this.getCurrentWeekStartEndDate[0], this.getCurrentWeekStartEndDate[1]];
         this.previousDateRangePickerValue = [this.getPreviousWeekStartEndDate[0], this.getPreviousWeekStartEndDate[1]];
 
-        this.graphParams.currentFrom = moment(this.getCurrentWeekStartEndDate[0]).format(GIDDH_DATE_FORMAT);
-        this.graphParams.currentTo = moment(this.getCurrentWeekStartEndDate[1]).format(GIDDH_DATE_FORMAT);
-        this.graphParams.previousFrom = moment(this.getPreviousWeekStartEndDate[0]).format(GIDDH_DATE_FORMAT);
-        this.graphParams.previousTo = moment(this.getPreviousWeekStartEndDate[1]).format(GIDDH_DATE_FORMAT);
+        this.graphParams.currentFrom = dayjs(this.getCurrentWeekStartEndDate[0]).format(GIDDH_DATE_FORMAT);
+        this.graphParams.currentTo = dayjs(this.getCurrentWeekStartEndDate[1]).format(GIDDH_DATE_FORMAT);
+        this.graphParams.previousFrom = dayjs(this.getPreviousWeekStartEndDate[0]).format(GIDDH_DATE_FORMAT);
+        this.graphParams.previousTo = dayjs(this.getPreviousWeekStartEndDate[1]).format(GIDDH_DATE_FORMAT);
 
         this.getRevenueGraphData();
     }
