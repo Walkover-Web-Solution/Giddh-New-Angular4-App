@@ -998,7 +998,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         if (this.isDatepickerOpen) {
             return;
         }
-        
+
         let classList = event?.path?.map(m => {
             return m?.classList;
         });
@@ -1208,10 +1208,12 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
     public currencyChange() {
         let rate = 0;
-        if (Number(this.blankLedger.exchangeRate)) {
-            rate = 1 / this.blankLedger.exchangeRate;
+        if (Number(this.blankLedger?.exchangeRate)) {
+            rate = 1 / this.blankLedger?.exchangeRate;
         }
-        this.blankLedger.exchangeRate = rate;
+        if (this.blankLedger) {
+            this.blankLedger.exchangeRate = rate;
+        }
         if (this.blankLedger.selectedCurrencyToDisplay === 0) {
             // Currency changed to account currency (currency different from base currency of company)
             this.blankLedger.selectedCurrencyToDisplay = 1;
@@ -1231,13 +1233,15 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     }
 
     public exchangeRateChanged() {
-        this.blankLedger.exchangeRate = Number(this.blankLedger.exchangeRate) || 0;
+        if (this.blankLedger) {
+            this.blankLedger.exchangeRate = Number(this.blankLedger?.exchangeRate) || 0;
+        }
         if (this.currentTxn.inventory && this.currentTxn.inventory.unit && this.currentTxn.unitRate) {
             const stock = this.currentTxn.unitRate.find(rate => {
                 return rate.stockUnitCode === this.currentTxn.inventory.unit.code;
             });
             const stockRate = stock ? stock.rate : 0;
-            this.currentTxn.inventory.rate = Number((stockRate / this.blankLedger.exchangeRate).toFixed(this.ratePrecision));
+            this.currentTxn.inventory.rate = Number((stockRate / this.blankLedger?.exchangeRate).toFixed(this.ratePrecision));
             this.changePrice(this.currentTxn.inventory.rate);
         } else {
             this.amountChanged();
@@ -1254,10 +1258,10 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      * @memberof NewLedgerEntryPanelComponent
      */
     public calculateConversionRate(baseModel: any, customDecimalPlaces?: number): number {
-        if (!baseModel || !this.blankLedger.exchangeRate) {
+        if (!baseModel || !this.blankLedger?.exchangeRate) {
             return 0;
         }
-        return giddhRoundOff(baseModel * Number(this.blankLedger.exchangeRate), (customDecimalPlaces) ? customDecimalPlaces : this.giddhBalanceDecimalPlaces);
+        return giddhRoundOff(baseModel * Number(this.blankLedger?.exchangeRate), (customDecimalPlaces) ? customDecimalPlaces : this.giddhBalanceDecimalPlaces);
     }
 
     /**
@@ -1550,7 +1554,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 customerUniquename: this.currentTxn.selectedAccount ? this.currentTxn.selectedAccount.uniqueName : '',
                 totalTaxableValue: this.blankLedger.compoundTotal,
                 subTotal: this.blankLedger.compoundTotal,
-                exchangeRate: this.blankLedger.exchangeRate ?? 1
+                exchangeRate: this.blankLedger?.exchangeRate ?? 1
             },
             accountDetails: {
                 currencySymbol: enableVoucherAdjustmentMultiCurrency ? this.baseCurrencyDetails?.symbol ?? this.blankLedger.baseCurrencyToDisplay?.symbol ?? '' : this.blankLedger.baseCurrencyToDisplay?.symbol,
