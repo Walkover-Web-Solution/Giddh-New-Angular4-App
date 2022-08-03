@@ -1066,12 +1066,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             if (dateObj) {
                 try {
                     this.poFilterDates = { from: dayjs(dateObj[0]).format(GIDDH_DATE_FORMAT), to: dayjs(dateObj[1]).format(GIDDH_DATE_FORMAT) }
-                    this.universalDate = dayjs(dateObj[1]).toDate();
+                    this.universalDate = dayjs(dateObj[1]).format(GIDDH_DATE_FORMAT);
                     if (!this.isUpdateMode) {
                         this.assignDates();
                     }
                 } catch (e) {
-                    this.universalDate = new Date();
+                    this.universalDate = dayjs().format(GIDDH_DATE_FORMAT);
                 }
             }
         });
@@ -4594,8 +4594,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             if (!entry.otherTaxModal) {
                 entry.otherTaxModal = new SalesOtherTaxesModal();
             }
-            entry.entryDate = (entry.entryDate) ? dayjs(entry.entryDate, GIDDH_DATE_FORMAT).toDate() : this.universalDate || new Date();
-            entry.entryDate = dayjs(entry.entryDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+            entry.entryDate = entry.entryDate || this.universalDate || new Date();
+            entry.entryDate = dayjs(entry.entryDate).format(GIDDH_DATE_FORMAT);
 
             entry.discounts = this.parseDiscountFromResponse(entry);
             entry.taxList = entry.taxes.map(m => m.uniqueName);
@@ -5061,7 +5061,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         voucherDetails.deposit = result.deposit ? result.deposit.amountForAccount : 0;
 
         //need to check usage
-        voucherDetails.dueDate = result.dueDate ? dayjs(result.dueDate, GIDDH_DATE_FORMAT).toDate() : '';
+        voucherDetails.dueDate = result.dueDate ? dayjs(result.dueDate, GIDDH_DATE_FORMAT) : '';
         voucherDetails.balanceStatus = result.balanceStatus;
 
         voucherDetails.customerUniquename = result.account.uniqueName;
@@ -7075,7 +7075,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         if (action === this.commonLocaleData?.app_yes) {
             if (this.dateChangeType === "voucher") {
                 this.invFormData.entries.forEach(entry => {
-                    entry.entryDate = dayjs(this.invFormData.voucherDetails.voucherDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                    entry.entryDate = dayjs(this.invFormData.voucherDetails.voucherDate).format(GIDDH_DATE_FORMAT);
                 });
             } else if (this.dateChangeType === "entry") {
                 let entryLoop = 0;
@@ -7098,6 +7098,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      * @memberof ProformaInvoiceComponent
      */
     public onBlurEntryDate(entryIdx: number, isDatepickerOpen: boolean): void {
+        this.invFormData.entries[entryIdx].entryDate = dayjs(this.invFormData.entries[entryIdx].entryDate).format(GIDDH_DATE_FORMAT);
+
         if (!this.isEntryDateChangeConfirmationDisplayed && isDatepickerOpen && this.invFormData.entries && this.invFormData.entries.length > 1) {
             this.isEntryDateChangeConfirmationDisplayed = true;
             this.dateChangeType = "entry";

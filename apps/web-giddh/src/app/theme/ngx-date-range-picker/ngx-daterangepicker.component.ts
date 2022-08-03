@@ -269,7 +269,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
                     this.maxDate = dayjs(dayjs(response.endDate, GIDDH_DATE_FORMAT).toDate());
                     this.financialYearUpdated = true;
 
-                    this.noOfDaysAllowed = dayjs().diff(this.minDate, 'days') + 1;
+                    this.noOfDaysAllowed = dayjs().diff(this.minDate, 'day') + 1;
                 }
             }
         });
@@ -930,14 +930,14 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
         }
         if (this.isInvalidDate && this.startDate && this.endDate) {
             // get if there are invalid date between range
-            const d = this.startDate.clone();
+            let d = this.startDate.clone();
             while (d.isBefore(this.endDate)) {
                 if (this.isInvalidDate(d)) {
-                    this.endDate = d.subtract(1, 'days');
+                    this.endDate = d.subtract(1, 'day');
                     this.calculateChosenLabel();
                     break;
                 }
-                d.add(1, 'days');
+                d = d.add(1, 'day');
             }
         }
 
@@ -1091,12 +1091,12 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
     public goToPrevMonth(): void {
         this.isPreviousMonth = true;
         if (!this.singleDatePicker) {
-            this.startCalendar.month.subtract(1, 'month');
+            this.startCalendar.month = this.startCalendar.month.subtract(1, 'month');
             if (this.linkedCalendars) {
-                this.endCalendar.month.subtract(1, 'month');
+                this.endCalendar.month = this.endCalendar.month.subtract(1, 'month');
             }
         } else {
-            this.startCalendar.month.subtract(1, 'month');
+            this.startCalendar.month = this.startCalendar.month.subtract(1, 'month');
         }
         this.updateCalendars();
     }
@@ -1107,23 +1107,23 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
     public goToNextMonth(): void {
         this.isPreviousMonth = false;
         if (!this.singleDatePicker) {
-            this.endCalendar.month.add(1, 'month');
+            this.endCalendar.month = this.endCalendar.month.add(1, 'month');
             if (this.linkedCalendars) {
-                this.startCalendar.month.add(1, 'month');
+                this.startCalendar.month = this.startCalendar.month.add(1, 'month');
             }
         } else {
-            this.startCalendar.month.add(1, 'month');
+            this.startCalendar.month = this.startCalendar.month.add(1, 'month');
         }
         this.updateCalendars();
     }
 
     public clickNextYear(side: DateType): void {
         if (side === DateType.start) {
-            this.startCalendar.month.add(1, 'year');
+            this.startCalendar.month = this.startCalendar.month.add(1, 'year');
         } else {
-            this.endCalendar.month.add(1, 'year');
+            this.endCalendar.month = this.endCalendar.month.add(1, 'year');
             if (this.linkedCalendars) {
-                this.startCalendar.month.add(1, 'year');
+                this.startCalendar.month = this.startCalendar.month.add(1, 'year');
             }
         }
         this.updateCalendars();
@@ -1135,12 +1135,12 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
      */
     public clickPrevYear(side: DateType): void {
         if (side === DateType.start) {
-            this.startCalendar.month.subtract(1, 'year');
+            this.startCalendar.month = this.startCalendar.month.subtract(1, 'year');
             if (this.linkedCalendars) {
-                this.endCalendar.month.subtract(1, 'year');
+                this.endCalendar.month = this.endCalendar.month.subtract(1, 'year');
             }
         } else {
-            this.endCalendar.month.subtract(1, 'year');
+            this.endCalendar.month = this.endCalendar.month.subtract(1, 'year');
         }
         this.updateCalendars();
     }
@@ -1190,7 +1190,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
             days = this.noOfDaysAllowed;
         }
 
-        const dates = [dayjs().subtract(days ? (days - 1) : days, 'days'), dayjs()];
+        const dates = [dayjs().subtract(days ? (days - 1) : days, 'day'), dayjs()];
         this.startDate = dates[0].clone();
         this.endDate = dates[1].clone();
 
@@ -1204,7 +1204,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
     }
 
     public uptoYesterday(e: Event, days: number): void {
-        const dates = [dayjs().subtract(days, 'days'), dayjs().subtract(days ? 1 : 0, 'days')];
+        const dates = [dayjs().subtract(days, 'day'), dayjs().subtract(days ? 1 : 0, 'day')];
         this.startDate = dates[0].clone();
         this.endDate = dates[1].clone();
 

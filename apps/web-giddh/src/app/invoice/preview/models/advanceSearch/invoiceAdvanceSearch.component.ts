@@ -46,8 +46,6 @@ export class InvoiceAdvanceSearchComponent implements OnInit, OnChanges {
     public selectedDateRangeUi: any;
     /* This will store available date ranges */
     public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
-    /* dayjs object */
-    public dayjs = dayjs;
     /* Selected from date */
     public fromDate: string;
     /* Selected to date */
@@ -235,11 +233,11 @@ export class InvoiceAdvanceSearchComponent implements OnInit, OnChanges {
 
     public parseAllDateField() {
         if (this.request.invoiceDate) {
-            this.request.invoiceDate = dayjs(this.request.invoiceDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+            this.request.invoiceDate = dayjs(this.request.invoiceDate).format(GIDDH_DATE_FORMAT);
         }
 
         if (this.request.dueDate) {
-            this.request.dueDate = dayjs(this.request.dueDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+            this.request.dueDate = dayjs(this.request.dueDate).format(GIDDH_DATE_FORMAT);
         }
     }
 
