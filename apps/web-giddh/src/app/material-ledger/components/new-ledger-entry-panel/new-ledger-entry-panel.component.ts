@@ -382,6 +382,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 this.discountsList = response?.body;
             }
         });
+        this.blankLedger.generateInvoice = true;
     }
 
     @HostListener('click', ['$event'])
