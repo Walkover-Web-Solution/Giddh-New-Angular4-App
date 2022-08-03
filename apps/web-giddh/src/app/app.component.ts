@@ -111,7 +111,6 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         });
     }
 
-
     public sidebarStatusChange(event) {
         this.sideMenu.isopen = event;
     }
@@ -178,6 +177,14 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
                 this.store.dispatch(this.commonActions.setActiveTheme(availableThemes[1]));
             }
         });
+
+        setTimeout(() => {
+            this._generalService.addLinkTag("./assets/fonts/icomoon/icomoon.css");
+            this._generalService.addLinkTag("./assets/css/assets/css/toastr.css");
+            this._generalService.addLinkTag("./assets/css/assets/css/perfect-scrollbar.component.scss");
+            this._generalService.addLinkTag("./assets/css/assets/css/ngx-bootstrap/bs-datepicker.css");
+            this._generalService.addLinkTag("./assets/css/ladda-themeless.min.css");
+        }, 1000);
     }
 
     public ngAfterViewInit() {

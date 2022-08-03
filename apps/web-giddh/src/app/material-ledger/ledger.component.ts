@@ -503,6 +503,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
+        if (!this.generalService.checkIfCssExists("./assets/css/ledgerfont/ledgerfont.css")) {
+            this.generalService.addLinkTag("./assets/css/ledgerfont/ledgerfont.css");
+        }
         document.querySelector('body').classList.add('ledger-body');
         this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: 0 }));
         // get company taxes
