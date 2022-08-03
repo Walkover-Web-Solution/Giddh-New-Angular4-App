@@ -2,7 +2,6 @@ import { Component, OnInit, Input, Output, EventEmitter, forwardRef, OnDestroy, 
 import * as dayjs from 'dayjs';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 import { MatDatepickerInputEvent } from '@angular/material/datepicker';
-import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { DateAdapter } from '@angular/material/core';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store';
@@ -90,7 +89,7 @@ export class GiddhDatepickerComponent implements ControlValueAccessor, OnInit, O
      * @memberof GiddhDatepickerComponent
      */
     public dateChange(event: MatDatepickerInputEvent<Date>): void {
-        let selectedDate = dayjs(event.value, GIDDH_DATE_FORMAT).toDate();
+        let selectedDate = dayjs(event.value);
         this.onChangeCallback(selectedDate);
         this.dateSelected.emit(selectedDate);
     }
@@ -147,7 +146,7 @@ export class GiddhDatepickerComponent implements ControlValueAccessor, OnInit, O
     public writeValue(value: any): void {
         if (value) {
             this.innerValue = value;
-            this.calendarDate = dayjs(value, GIDDH_DATE_FORMAT).toDate();
+            this.calendarDate = dayjs(value);
             this.changeDetectorRef.detectChanges();
         } else {
             this.innerValue = "";

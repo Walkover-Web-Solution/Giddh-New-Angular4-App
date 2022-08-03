@@ -179,6 +179,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         });
 
         setTimeout(() => {
+            this._generalService.addLinkTag("./assets/css/font-awesome.css");
             this._generalService.addLinkTag("./assets/fonts/icomoon/icomoon.css");
             this._generalService.addLinkTag("./assets/css/toastr.css");
             this._generalService.addLinkTag("./assets/css/perfect-scrollbar.component.scss");

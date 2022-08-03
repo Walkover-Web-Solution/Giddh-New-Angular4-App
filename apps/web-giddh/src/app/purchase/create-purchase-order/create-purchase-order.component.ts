@@ -27,6 +27,8 @@ import { IContentCommon } from '../../models/api-models/Invoice';
 import { giddhRoundOff } from '../../shared/helpers/helperFunctions';
 import { cloneDeep } from '../../lodash-optimized';
 import * as dayjs from 'dayjs';
+import * as customParseFormat from 'dayjs/plugin/customParseFormat';
+dayjs.extend(customParseFormat);
 import { DiscountListComponent } from '../../sales/discount-list/discountList.component';
 import { TaxControlComponent } from '../../theme/tax-control/tax-control.component';
 import { CompanyActions } from '../../actions/company.actions';
@@ -601,7 +603,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         this.store.pipe(select((state: AppState) => state.session.applicationDate)).pipe(takeUntil(this.destroyed$)).subscribe((dateObj: Date[]) => {
             if (dateObj) {
                 try {
-                    this.universalDate = dayjs(dateObj[1]).toDate();
+                    this.universalDate = dayjs(dateObj[1]);
                     this.assignDates();
                 } catch (e) {
                     this.universalDate = new Date();
@@ -662,7 +664,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
             if (this.isMulticurrencyAccount) {
                 this.customerCurrencyCode = accountDetails.currency;
                 this.getCurrencyRate(this.companyCurrency, accountDetails.currency,
-                    dayjs(this.purchaseOrder.voucherDetails.voucherDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT));
+                    dayjs(this.purchaseOrder.voucherDetails.voucherDate).format(GIDDH_DATE_FORMAT));
             } else {
                 this.customerCurrencyCode = this.companyCurrency;
                 this.previousExchangeRate = this.exchangeRate;
