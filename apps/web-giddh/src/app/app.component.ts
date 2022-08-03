@@ -181,6 +181,14 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
                 }
             });
         });
+
+        setTimeout(() => {
+            this._generalService.addLinkTag("./assets/fonts/icomoon/icomoon.css");
+            this._generalService.addLinkTag("./assets/css/toastr.css");
+            this._generalService.addLinkTag("./assets/css/perfect-scrollbar.component.scss");
+            this._generalService.addLinkTag("./assets/css/ngx-bootstrap/bs-datepicker.css");
+            this._generalService.addLinkTag("./assets/css/ladda-themeless.min.css");
+        }, 1000);
     }
 
     public ngAfterViewInit() {
@@ -188,6 +196,10 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             setTimeout(() => {
                 this.store.dispatch(this.companyActions.RefreshCompanies());
             }, 1000);
+        } else {
+            setTimeout(() => {
+                document.getElementById("main-giddh-loader")?.remove();
+            }, 10);
         }
 
         this._generalService.IAmLoaded.next(true);

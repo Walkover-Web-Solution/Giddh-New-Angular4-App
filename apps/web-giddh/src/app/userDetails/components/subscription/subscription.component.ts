@@ -10,7 +10,7 @@ import { Observable, ReplaySubject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { SubscriptionsService } from "../../../services/subscriptions.service";
 import { cloneDeep, uniqBy } from "../../../lodash-optimized";
-import * as moment from "moment";
+import * as dayjs from "dayjs";
 import { GIDDH_DATE_FORMAT } from "../../../shared/helpers/defaultDateFormat";
 import { FormControl } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
@@ -294,9 +294,9 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
                 response.forEach(subscription => {
                     let subscriptionDetails = cloneDeep(subscription);
 
-                    subscriptionDetails.remainingDays = Number(moment(subscriptionDetails.expiry, GIDDH_DATE_FORMAT).diff(moment(), 'days'));
-                    subscriptionDetails.startedAt = moment(subscriptionDetails.startedAt, GIDDH_DATE_FORMAT).format("D MMM, y");
-                    subscriptionDetails.expiry = moment(subscriptionDetails.expiry, GIDDH_DATE_FORMAT).format("D MMM, y");
+                    subscriptionDetails.remainingDays = Number(dayjs(subscriptionDetails.expiry, GIDDH_DATE_FORMAT).diff(dayjs(), 'days'));
+                    subscriptionDetails.startedAt = dayjs(subscriptionDetails.startedAt, GIDDH_DATE_FORMAT).format("D MMM, y");
+                    subscriptionDetails.expiry = dayjs(subscriptionDetails.expiry, GIDDH_DATE_FORMAT).format("D MMM, y");
 
                     let flag = true;
                     if (

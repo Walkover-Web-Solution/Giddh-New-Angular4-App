@@ -5,7 +5,7 @@ import { AppState } from "../../../store";
 import { ContactService } from "../../../services/contact.service";
 import { takeUntil } from "rxjs/operators";
 import { createSelector } from "reselect";
-import * as moment from 'moment/moment';
+import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 
 @Component({
@@ -17,7 +17,7 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
     public universalDate$: Observable<any>;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public datePickerOptions: any;
-    public moment = moment;
+    public dayjs = dayjs;
     public toDate: string;
     public fromDate: string;
     public bankAccounts: any[] = [];
@@ -36,12 +36,12 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
             if (dateObj) {
                 let universalDate = _.cloneDeep(dateObj);
                 this.datePickerOptions = {
-                    ...this.datePickerOptions, startDate: moment(universalDate[0], GIDDH_DATE_FORMAT).toDate(),
-                    endDate: moment(universalDate[1], GIDDH_DATE_FORMAT).toDate(),
+                    ...this.datePickerOptions, startDate: dayjs(universalDate[0], GIDDH_DATE_FORMAT).toDate(),
+                    endDate: dayjs(universalDate[1], GIDDH_DATE_FORMAT).toDate(),
                     chosenLabel: universalDate[2]
                 };
-                this.fromDate = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
-                this.toDate = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
+                this.fromDate = dayjs(universalDate[0]).format(GIDDH_DATE_FORMAT);
+                this.toDate = dayjs(universalDate[1]).format(GIDDH_DATE_FORMAT);
                 this.getAccounts(this.fromDate, this.toDate, 'bankaccounts', null, null, 'true', 20, '', 'closingBalance', 'desc');
             }
         })), takeUntil(this.destroyed$)).subscribe();
