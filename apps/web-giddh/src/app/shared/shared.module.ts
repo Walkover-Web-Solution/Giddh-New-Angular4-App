@@ -54,7 +54,6 @@ import { ValidateSectionPermissionDirectiveModule } from './validate-section-per
 import { HamburgerMenuModule } from './header/components/hamburger-menu/hamburger-menu.module';
 import { GiddhPageLoaderModule } from './giddh-page-loader/giddh-page-loader.module';
 import { GiddhDatepickerModule } from '../theme/giddh-datepicker/giddh-datepicker.module';
-import { GiddhDateRangepickerModule } from '../theme/giddh-daterangepicker/giddh-daterangepicker.module';
 import { DeleteTemplateConfirmationModalModule } from '../invoice/templates/edit-template/modals/confirmation-modal/confirmation.modal.module';
 import { NgxBootstrapSwitchModule } from 'ngx-bootstrap-switch';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
@@ -142,7 +141,6 @@ export function provideConfig() {
         ValidateSectionPermissionDirectiveModule,
         GiddhPageLoaderModule,
         GiddhDatepickerModule,
-        GiddhDateRangepickerModule,
         DeleteTemplateConfirmationModalModule,
         NgxBootstrapSwitchModule.forRoot(),
         MatSlideToggleModule,
@@ -193,7 +191,6 @@ export function provideConfig() {
         ValidateSectionPermissionDirectiveModule,
         GiddhPageLoaderModule,
         GiddhDatepickerModule,
-        GiddhDateRangepickerModule,
         DeleteTemplateConfirmationModalModule,
         GenericAsideMenuAccountModule
     ],
