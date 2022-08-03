@@ -196,6 +196,10 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             setTimeout(() => {
                 this.store.dispatch(this.companyActions.RefreshCompanies());
             }, 1000);
+        } else {
+            setTimeout(() => {
+                document.getElementById("main-giddh-loader")?.remove();
+            }, 10);
         }
 
         this._generalService.IAmLoaded.next(true);
