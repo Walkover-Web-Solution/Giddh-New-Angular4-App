@@ -19,13 +19,13 @@
     margin-bottom: 20px;
     padding: 12px;
 
-    &:hover {
+    &:hover,
+    &:focus {
         background-color: var(--color-dark-fog);
         color: var(--color-blue);
-    }
-
-    &:hover h5 {
-        color: var(--color-blue);
+        h5 {
+            color: var(--color-blue);
+        }
     }
 }
 

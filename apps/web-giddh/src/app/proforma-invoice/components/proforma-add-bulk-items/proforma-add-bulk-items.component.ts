@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnDestroy, Output, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnDestroy, Output, ViewChild } from '@angular/core';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { fromEvent, ReplaySubject, Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map, takeUntil } from 'rxjs/operators';
@@ -13,7 +13,7 @@ import { SearchService } from '../../../services/search.service';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class ProformaAddBulkItemsComponent implements OnDestroy {
+export class ProformaAddBulkItemsComponent implements OnDestroy, AfterViewInit {
     @Input() public invoiceType: string;
 
     @ViewChild('searchElement', { static: false }) public searchElement: ElementRef;
@@ -208,6 +208,16 @@ export class ProformaAddBulkItemsComponent implements OnDestroy {
         if (this.searchResultsPaginationData.page < this.searchResultsPaginationData.totalPages) {
             this.onSearchQueryChanged(this.searchResultsPaginationData.query, this.searchResultsPaginationData.page + 1);
         }
+    }
+    /**
+     * Lifecycle hook for viewchild variables
+     *
+     * @memberof ProformaAddBulkItemsComponent
+     */
+    public ngAfterViewInit(): void {
+        setTimeout(() => {
+            this.searchElement.nativeElement.focus();
+        }, 500);
     }
 
     ngOnDestroy(): void {

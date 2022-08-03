@@ -1816,24 +1816,32 @@ input[type="checkbox"]:before {
     border-top-style: none;
     border-right-style: none;
 }
-
-input[type="checkbox"]:after {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    border: 1px solid var(--color-checkbox-after-border);
-    width: 14px;
-    height: 14px;
-    background: var(--color-white);
-    cursor: pointer;
-    visibility: visible;
+input[type="checkbox"] {
+    &:after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        border: 1px solid var(--color-checkbox-after-border);
+        width: 14px;
+        height: 14px;
+        background: var(--color-white);
+        cursor: pointer;
+        visibility: visible;
+    }
+    &:checked {
+        &:after {
+            background-color: var(--color-checkbox-checked-after-background);
+            border-color: var(--color-checkbox-checked-after-background);
+        }
+    }
+    &:focus {
+        &:after {
+            box-shadow: 0px 0px 0px 4px var(--color-primary-common-box-shadow);
+        }
+    }
 }
 
-input[type="checkbox"]:checked:after {
-    background-color: var(--color-checkbox-checked-after-background);
-    border-color: var(--color-checkbox-checked-after-background);
-}
 .tab-integration {
     .tab-pane.active {
         .connected-accounts {
@@ -6260,7 +6268,14 @@ button.btn.btn-filter {
     background-color: var(--color-tab-primary-background) !important;
 }
 .aside-pane-form #asidePaneFormTabs .nav > li > a {
+    padding-top: 6px !important;
+    padding-right: 10px !important;
     padding-bottom: 10px !important;
+    padding-left: 10px !important;
+    &:focus {
+        box-shadow: var(--color-primary-common-box-shadow) 0 30px 60px -12px inset,
+            var(--color-primary-common-box-shadow) 0 18px 36px -18px inset !important;
+    }
 }
 .manage-account-popup .modal-dialog.modal-xl {
     margin: 0 auto;
@@ -6585,7 +6600,10 @@ input.checkbox-custom[type="checkbox"] {
 .radio-custom:checked + :before {
     background: var(--color-blue);
     border: 1px solid var(--color-blue);
-    box-shadow: inset 0px 0px 0px 4px var(--color-primary-common-box-shadow);
+    margin-right: 8px;
+}
+.radio-custom:focus + :before {
+    box-shadow: 0px 0px 0px 4px var(--color-primary-common-box-shadow);
 }
 .checkbox-custom:focus + .checkbox-custom-label:before {
     border: 1px solid var(--color-blue);

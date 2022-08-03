@@ -34,7 +34,9 @@
                                         <div
                                             class="single-product-wrapper cp"
                                             *ngFor="let item of filteredData"
+                                            tabindex="0"
                                             (click)="addItemToSelectedArr(item)"
+                                            (keydown.enter)="addItemToSelectedArr(item)"
                                         >
                                             <h5>{{ item?.name }}</h5>
                                         </div>

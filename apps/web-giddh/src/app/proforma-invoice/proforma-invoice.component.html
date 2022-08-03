@@ -430,19 +430,24 @@
                                                                             "
                                                                             *ngIf="accountAddressList?.length > 1"
                                                                         >
-                                                                            <a
+                                                                            <button
                                                                                 dropdownToggle
                                                                                 type="button"
-                                                                                class="dropdown-toggle"
+                                                                                class="
+                                                                                    dropdown-toggle
+                                                                                    billing-address-change-button
+                                                                                "
+                                                                                aria-controls="billing-address-change"
                                                                             >
-                                                                                {{ localeData?.change }}</a
-                                                                            >
+                                                                                {{ localeData?.change }}
+                                                                            </button>
                                                                             <ul
                                                                                 *dropdownMenu
                                                                                 class="
                                                                                     dropdown-menu dropdown-menu-right
                                                                                 "
                                                                                 role="menu"
+                                                                                id="billing-address-change"
                                                                             >
                                                                                 <li
                                                                                     role="menuitem"
@@ -452,7 +457,16 @@
                                                                                 >
                                                                                     <a
                                                                                         class="dropdown-item"
+                                                                                        href="javascript:void(0);"
                                                                                         (click)="
+                                                                                            selectAddress(
+                                                                                                invFormData
+                                                                                                    .accountDetails
+                                                                                                    .billingDetails,
+                                                                                                address
+                                                                                            )
+                                                                                        "
+                                                                                        (keydown.enter)="
                                                                                             selectAddress(
                                                                                                 invFormData
                                                                                                     .accountDetails

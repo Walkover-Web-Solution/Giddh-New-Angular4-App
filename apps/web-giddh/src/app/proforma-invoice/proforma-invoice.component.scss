@@ -1699,6 +1699,25 @@ span.eligible-ITC {
             }
         }
     }
+    .billing-address-change-button {
+        background: none;
+        border: none;
+        padding: 0;
+        font-size: 12px;
+        &:focus {
+            text-decoration: underline;
+        }
+    }
+    .dropdown-menu {
+        > li {
+            > a {
+                &:focus {
+                    color: var(--color-dropdown-list-hover-text) !important;
+                    background: var(--color-dropdown-list-hover-background) !important;
+                }
+            }
+        }
+    }
 }
 #button-focus-proforma {
     .btn {
