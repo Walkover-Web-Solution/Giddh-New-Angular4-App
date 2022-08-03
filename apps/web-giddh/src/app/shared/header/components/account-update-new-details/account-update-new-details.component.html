@@ -198,7 +198,7 @@
                                 </div>
                                 <input
                                     type="text"
-                                    class="form-control ml-4 bd-rr"
+                                    class="form-control ml-4 bdr"
                                     maxlength="10"
                                     decimalDigitsDirective
                                     formControlName="hsnNumber"
@@ -206,7 +206,7 @@
                                 />
                                 <input
                                     type="text"
-                                    class="form-control ml-4 bd-rr"
+                                    class="form-control ml-4 bdr"
                                     maxlength="10"
                                     formControlName="sacNumber"
                                     decimalDigitsDirective
@@ -358,7 +358,7 @@
                                             </div>
                                         </div>
 
-                                        <div
+                                        <!-- <div
                                             class="col-sm-4"
                                             *ngIf="gst.get('gstNumber').value && (isGstValid$ | async)"
                                         >
@@ -375,7 +375,7 @@
                                                     </label></label
                                                 >
                                             </div>
-                                        </div>
+                                        </div> -->
                                     </ng-container>
                                     <div class="col-sm-12">
                                         <div class="form-group">
@@ -792,8 +792,9 @@
                 <a
                     href="javascript:;"
                     class="btn-link"
-                    (click)="goToCustomFields.emit(true)"
+                    [routerLink]="'/pages/custom-fields/list'"
                     *ngIf="!companyCustomFields?.length"
+                    (click)="closeMaster()"
                     >{{ commonLocaleData?.app_create_custom_field }}</a
                 >
             </tab>

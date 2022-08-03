@@ -398,6 +398,11 @@
                     "link": "/pages/search",
                     "icon": "icon-search",
                     "description": "Select group and search for a time span"
+                },
+                {
+                    "label": "Downloads",
+                    "link": "/pages/downloads",
+                    "icon": "icon-download-circle"
                 }
             ]
         }

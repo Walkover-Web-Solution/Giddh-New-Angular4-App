@@ -1,0 +1,108 @@
+<div class="inventory-advance-search">
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Advance Search</h4>
+        <button type="button" class="close pull-right" (click)="modalRef.hide()" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form>
+            <div class="row mr-b15">
+                <div class="col-lg-4">
+                    <label>Date</label>
+                </div>
+                <div class="col-lg-8">
+                    <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
+                        <i class="icon-calender calendar-addon"></i>
+                        <input
+                            type="text"
+                            id="select-date"
+                            name="selectedDateRange"
+                            [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
+                            class="giddh-datepicker date-range-picker border-radius-2"
+                            placeholder="Enter Date"
+                        />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4">
+                    <label>Select Category</label>
+                </div>
+                <div class="col-lg-8">
+                    <div class="row">
+                        <div class="col-lg-6 col-sm-6 col-12 mr-b15">
+                            <sh-select id="select-category" placeholder="Select Category"></sh-select>
+                        </div>
+                        <div class="col-lg-6 col-sm-6 col-12 mr-b15">
+                            <sh-select id="select-type" placeholder="Select Type"></sh-select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4">
+                    <label>Value</label>
+                </div>
+                <div class="col-lg-8">
+                    <div class="row">
+                        <div class="col-lg-6 col-sm-6 col-12 mr-b15">
+                            <sh-select id="select-value-type" placeholder="Select Value Type"></sh-select>
+                        </div>
+                        <div class="col-lg-6 col-sm-6 col-12 mr-b15">
+                            <input id="amount-value" type="text" class="form-control" placeholder="Amount" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mr-b15" *ngIf="isMobileScreen">
+                <div class="col-lg-4">
+                    <label>Search Group</label>
+                </div>
+                <div class="col-lg-8">
+                    <input type="text" class="form-control" id="search-group" placeholder="Amount" />
+                </div>
+            </div>
+            <div class="row mr-b15" *ngIf="isMobileScreen">
+                <div class="col-lg-4">
+                    <label>Select Branch</label>
+                </div>
+                <div class="col-lg-8">
+                    <sh-select placeholder="Search Branch Alice" id="Select Branch"></sh-select>
+                </div>
+            </div>
+            <div class="row mr-b15">
+                <div class="col-sm-12">
+                    <div class="button-group d-flex justify-content-end">
+                        <button id="search-btn" class="btn btn-success">Search</button>
+                        <button id="clear-btn" class="btn btn-danger mr-0">Clear</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<!-- datepicker template -->
+<ng-template #datepickerTemplate>
+    <div class="datepicker-modal">
+        <div class="modal-body">
+            <app-datepicker-wrapper
+                [inputStartDate]="selectedDateRange?.startDate"
+                [inputEndDate]="selectedDateRange?.endDate"
+                [alwaysShowCalendars]="true"
+                [ranges]="datePickerOption"
+                [selectedRangeLabel]="selectedRangeLabel"
+                [showCustomRangeLabel]="true"
+                [showClearButton]="false"
+                [showCancel]="true"
+                [linkedCalendars]="true"
+                [showDropdowns]="true"
+                (rangeClicked)="dateSelectedCallback($event)"
+                (datesUpdated)="dateSelectedCallback($event)"
+                [keepCalendarOpeningWithRange]="false"
+                [showRangeLabelOnInput]="false"
+                [dateFieldPosition]="dateFieldPosition"
+            ></app-datepicker-wrapper>
+        </div>
+    </div>
+</ng-template>

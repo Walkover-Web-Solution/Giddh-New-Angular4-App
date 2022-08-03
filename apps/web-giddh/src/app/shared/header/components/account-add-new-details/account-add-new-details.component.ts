@@ -35,7 +35,7 @@ import { InvoiceService } from 'apps/web-giddh/src/app/services/invoice.service'
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { clone, cloneDeep, uniqBy } from 'apps/web-giddh/src/app/lodash-optimized';
 import { CustomFieldsService } from 'apps/web-giddh/src/app/services/custom-fields.service';
-import { FieldTypes } from '../custom-fields/custom-fields.constant';
+import { FieldTypes } from 'apps/web-giddh/src/app/custom-fields/custom-fields.constant';
 
 @Component({
     selector: 'account-add-new-details',
@@ -86,12 +86,10 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     @Input() public isBankAccount: boolean = true;
     /** True if account creation is from command k */
     @Input() public fromCommandK: boolean = false;
-    /** True if custom fields api needs to be called again */
-    @Input() public reloadCustomFields: boolean = false;
     @Output() public submitClicked: EventEmitter<{ activeGroupUniqueName: string, accountRequest: AccountRequestV2 }> = new EventEmitter();
     @Output() public isGroupSelected: EventEmitter<IOption> = new EventEmitter();
-    /** Emits if we have to switch to custom fields tab */
-    @Output() public goToCustomFields: EventEmitter<boolean> = new EventEmitter();
+    /** Emiting true if account modal needs to be closed */
+    @Output() public closeAccountModal: EventEmitter<boolean> = new EventEmitter();
     @ViewChild('autoFocus', { static: true }) public autoFocus: ElementRef;
     /** Tabs instance */
     @ViewChild('staticTabs', { static: true }) public staticTabs: TabsetComponent;
@@ -184,9 +182,9 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         private groupWithAccountsAction: GroupWithAccountsAction,
         private invoiceService: InvoiceService,
         private changeDetectorRef: ChangeDetectorRef,
-        private customFieldsService: CustomFieldsService) {
+        private customFieldsService: CustomFieldsService
+    ) {
         this.activeGroup$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroup), takeUntil(this.destroyed$));
-
     }
 
     /**
@@ -293,7 +291,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         this.getCurrency();
         this.isStateRequired = this.checkActiveGroupCountry();
 
-        if(this.fromCommandK && this.activeGroupUniqueName) {
+        if (this.fromCommandK && this.activeGroupUniqueName) {
             this.store.dispatch(this.groupWithAccountsAction.getGroupDetails(this.activeGroupUniqueName));
         }
     }
@@ -548,7 +546,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     }
 
     public submit() {
-
         if (!this.addAccountForm.get('openingBalance').value) {
             this.addAccountForm.get('openingBalance').setValue('0');
         }
@@ -626,9 +623,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         }
         if (s && s['activeGroupUniqueName'] && s['activeGroupUniqueName'].currentValue) {
             this.activeGroupUniqueName = s['activeGroupUniqueName'].currentValue;
-        }
-        if(s && s['reloadCustomFields']?.currentValue && s['reloadCustomFields']?.currentValue !== s['reloadCustomFields']?.previousValue) {
-            this.getCompanyCustomField();
         }
     }
 
@@ -937,7 +931,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     * @memberof AccountAddNewDetailsComponent
     */
     public getCompanyCustomField(): void {
-        if(this.isCustomFieldLoading) {
+        if (this.isCustomFieldLoading) {
             return;
         }
         this.isCustomFieldLoading = true;
@@ -1216,7 +1210,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
      * @memberof AccountAddNewDetailsComponent
      */
     private showHideAddressTab(): void {
-        if(!this.isHsnSacEnabledAcc) {
+        if (!this.isHsnSacEnabledAcc) {
             setTimeout(() => {
                 if (this.staticTabs && this.staticTabs.tabs && this.staticTabs.tabs[0]) {
                     this.staticTabs.tabs[0].active = true;
@@ -1229,7 +1223,13 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 this.addBlankGstForm();
             }
         } else {
-            this.addAccountForm.get('addresses').reset();
+            let loop = 0;
+            const addresses = this.addAccountForm.get('addresses') as FormArray;
+            for (let control of addresses.controls) {
+                this.removeGstDetailsForm(loop);
+                loop++;
+            }
+            addresses.push(this.initialGstDetailsForm());
 
             setTimeout(() => {
                 if (this.staticTabs && this.staticTabs.tabs && this.staticTabs.tabs[1]) {
@@ -1238,5 +1238,15 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 }
             }, 50);
         }
+    }
+
+    /**
+     * Closes Master
+     *
+     * @memberof AccountAddNewDetailsComponent
+     */
+    public closeMaster(): void {
+        this.closeAccountModal.emit(true);
+        this.store.dispatch(this.groupWithAccountsAction.HideAddAndManageFromOutside());
     }
 }

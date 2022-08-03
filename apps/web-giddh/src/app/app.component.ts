@@ -6,7 +6,7 @@ import { GeneralService } from './services/general.service';
 import { pick } from './lodash-optimized';
 import { VersionCheckService } from './version-check.service';
 import { ReplaySubject } from 'rxjs';
-import { BreakpointObserver } from '@angular/cdk/layout';
+import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { DbService } from './services/db.service';
 import { reassignNavigationalArray } from './models/defaultMenus'
 import { Configuration } from "./app.constant";
@@ -110,7 +110,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             }
         });
     }
-    
+
 
     public sidebarStatusChange(event) {
         this.sideMenu.isopen = event;
@@ -167,9 +167,19 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
                 document.querySelector("body")?.classList?.remove("dark-theme");
                 document.querySelector("body")?.classList?.remove("default-theme");
                 document.querySelector("body")?.classList?.add(response?.value);
-            } else {
-                let availableThemes = this._generalService.getAvailableThemes();
+            }
+        });
+
+        this.breakpointObserver.observe(['(prefers-color-scheme: light)']).subscribe((state: BreakpointState) => {
+            let availableThemes = this._generalService.getAvailableThemes();
+            if (state?.matches) {
+                document.querySelector("body")?.classList?.add("default-theme");
+                document.querySelector("body")?.classList?.remove("dark-theme");
                 this.store.dispatch(this.commonActions.setActiveTheme(availableThemes[0]));
+            } else {
+                document.querySelector("body")?.classList?.add("dark-theme");
+                document.querySelector("body")?.classList?.remove("default-theme");
+                this.store.dispatch(this.commonActions.setActiveTheme(availableThemes[1]));
             }
         });
     }

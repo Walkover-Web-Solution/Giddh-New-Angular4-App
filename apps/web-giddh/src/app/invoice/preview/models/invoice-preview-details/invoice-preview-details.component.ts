@@ -162,6 +162,8 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     public defaultTemplate: any;
     /** Stores the voucher API version of company */
     public voucherApiVersion: 1 | 2;
+    /** Holds selected item voucher */
+    private selectedItemVoucher: any;
 
     constructor(
         private _cdr: ChangeDetectorRef,
@@ -336,6 +338,11 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     }
 
     public toggleEditMode() {
+        if (!this.showEditMode) {
+            this.selectedItemVoucher = this.selectedItem;
+        } else {
+            this.selectedItem = this.selectedItemVoucher;
+        }
         this.store.dispatch(this._generalActions.setAppTitle('/pages/invoice/preview/' + this.voucherType));
         this.showEditMode = !this.showEditMode;
 
@@ -401,7 +408,9 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
         this.shouldShowUploadAttachment = false;
         this.attachedPdfFileUrl = null;
         this.imagePreviewSource = null;
-        this.selectedItem.hasAttachment = false;
+        if (this.selectedItem) {
+            this.selectedItem.hasAttachment = false;
+        }
         this.detectChanges();
 
         if (this._generalService.voucherApiVersion === 2 && ![VoucherTypeEnum.generateEstimate, VoucherTypeEnum.generateProforma].includes(this.voucherType)) {

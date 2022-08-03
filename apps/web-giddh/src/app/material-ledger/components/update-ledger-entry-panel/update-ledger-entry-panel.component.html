@@ -8,14 +8,15 @@
     <div id="entryModal">
         <!-- region header -->
         <div class="modal-header align-items-center flex-row-reverse" *ngIf="!isPettyCash">
-            <span
+            <button
                 aria-hidden="true"
                 class="close hover-orange"
                 mat-button
                 mat-dialog-close
                 [attr.aria-label]="commonLocaleData?.app_close"
-                >×</span
             >
+                ×
+            </button>
 
             <h3 *ngIf="!openDropDown" (dblclick)="openHeaderDropDown()" class="d-inline-block mr-1">
                 {{ (baseAccount$ | async)?.name }} {{ commonLocaleData?.app_ac }}
@@ -1095,7 +1096,7 @@
 
                             <div
                                 *ngIf="vm.showNewEntryPanel || shouldShowAdvanceReceiptMandatoryFields"
-                                class="text-right table-amount"
+                                class="text-right table-amount mr-l1"
                                 (resized)="onResized($event)"
                             >
                                 <label class="font-12">{{ localeData?.total_amount }}</label>
