@@ -94,7 +94,7 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
                 this.currentCompanyBranches.unshift({
                     label: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : '',
                     name: this.activeCompany ? this.activeCompany.name : '',
-                    value: this.activeCompany ? this.activeCompany?.uniqueName : '',
+                    value: this.activeCompany ? this.activeCompany.uniqueName : '',
                     isCompany: true
                 });
                 if (!this.currentBranch || !this.currentBranch.uniqueName) {

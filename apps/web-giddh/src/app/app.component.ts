@@ -6,7 +6,7 @@ import { GeneralService } from './services/general.service';
 import { pick } from './lodash-optimized';
 import { VersionCheckService } from './version-check.service';
 import { ReplaySubject } from 'rxjs';
-import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
+import { BreakpointObserver } from '@angular/cdk/layout';
 import { DbService } from './services/db.service';
 import { reassignNavigationalArray } from './models/defaultMenus'
 import { Configuration } from "./app.constant";
@@ -162,24 +162,10 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
                 document.querySelector("body")?.classList?.remove("dark-theme");
                 document.querySelector("body")?.classList?.remove("default-theme");
                 document.querySelector("body")?.classList?.add(response?.value);
+            } else {
+                let availableThemes = this._generalService.getAvailableThemes();
+                this.store.dispatch(this.commonActions.setActiveTheme(availableThemes[0]));
             }
-        });
-
-        this.breakpointObserver.observe(['(prefers-color-scheme: light)']).subscribe((state: BreakpointState) => {
-            this.store.pipe(select(state => state.session.activeTheme), takeUntil(this.destroyed$)).subscribe(response => {
-                if (!response?.value) {
-                    let availableThemes = this._generalService.getAvailableThemes();
-                    if (state?.matches) {
-                        document.querySelector("body")?.classList?.add("default-theme");
-                        document.querySelector("body")?.classList?.remove("dark-theme");
-                        this.store.dispatch(this.commonActions.setActiveTheme(availableThemes[0]));
-                    } else {
-                        document.querySelector("body")?.classList?.add("dark-theme");
-                        document.querySelector("body")?.classList?.remove("default-theme");
-                        this.store.dispatch(this.commonActions.setActiveTheme(availableThemes[1]));
-                    }
-                }
-            });
         });
 
         setTimeout(() => {

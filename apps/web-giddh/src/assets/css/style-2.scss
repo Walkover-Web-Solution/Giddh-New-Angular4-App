@@ -8429,6 +8429,16 @@ body.update-scroll-hidden {
         .mat-dialog-container {
             background-color: var(--color-popup-background);
         }
+        .cdk-overlay-connected-position-bounding-box {
+            .mat-menu-panel {
+                .mat-menu-content {
+                    button:focus {
+                        box-shadow: none !important;
+                        background-color: var(--color-dropdown-list-hover-background);
+                    }
+                }
+            }
+        }
     }
 }
 .cdk-overlay-pane {
