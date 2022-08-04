@@ -202,7 +202,6 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
         this.isUpdateCompanyInProgress$.pipe(takeUntil(this.destroyed$)).subscribe(inProcess => {
             this.isCreateAndSwitchCompanyInProcess = inProcess;
         });
-        this.twoWayAuth = false;
     }
 
     /**
