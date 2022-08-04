@@ -714,13 +714,13 @@ export class UpdateLedgerVm {
      * @memberof UpdateLedgerVm
      */
     public calculateConversionRate(baseModel: any, customDecimalPlaces?: number): number {
-        if (!baseModel || !this.selectedLedger.exchangeRate) {
+        if (!baseModel || !this.selectedLedger?.exchangeRate) {
             return 0;
         }
         if (this.selectedCurrencyForDisplay === 0) {
-            return giddhRoundOff(baseModel * this.selectedLedger.exchangeRate, (customDecimalPlaces) ? customDecimalPlaces : this.giddhBalanceDecimalPlaces);
+            return giddhRoundOff(baseModel * this.selectedLedger?.exchangeRate, (customDecimalPlaces) ? customDecimalPlaces : this.giddhBalanceDecimalPlaces);
         } else {
-            return giddhRoundOff(baseModel / this.selectedLedger.exchangeRate, (customDecimalPlaces) ? customDecimalPlaces : this.giddhBalanceDecimalPlaces);
+            return giddhRoundOff(baseModel / this.selectedLedger?.exchangeRate, (customDecimalPlaces) ? customDecimalPlaces : this.giddhBalanceDecimalPlaces);
         }
     }
 
