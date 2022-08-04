@@ -106,7 +106,10 @@ export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnCh
     }
 
     public closeAsidePane(event) {
-        this.closeAsideEvent.emit(event);
+        if (event) {
+            this.store.dispatch(this.accountsAction.resetActiveGroup());
+            this.closeAsideEvent.emit(event);
+        }
     }
 
     public isGroupSelected(event) {
