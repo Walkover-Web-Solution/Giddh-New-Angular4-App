@@ -22,7 +22,7 @@ import { AppState } from '../../store';
 import { ProformaActions } from '../../actions/proforma/proforma.actions';
 import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
 import { combineLatest, Observable, ReplaySubject } from 'rxjs';
-import * as moment from 'moment/moment';
+import * as dayjs from 'dayjs';
 import { cloneDeep, uniqBy } from '../../lodash-optimized';
 import { BsModalRef, ModalOptions, BsModalService } from 'ngx-bootstrap/modal';
 import { ModalDirective } from 'ngx-bootstrap/modal';
@@ -35,9 +35,9 @@ import { Router } from '@angular/router';
 import { createSelector } from "reselect";
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { GeneralService } from '../../services/general.service';
+import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../app.constant';
 import { OrganizationType } from '../../models/user-login-state';
 import { CommonActions } from '../../actions/common.actions';
-import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../app.constant';
 
 const VOUCHER_TYPES = ['proformas', 'estimates'];
 
@@ -88,40 +88,40 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
         },
         ranges: {
             'This Month to Date': [
-                moment().startOf('month'),
-                moment()
+                dayjs().startOf('month'),
+                dayjs()
             ],
             'This Quarter to Date': [
-                moment().quarter(moment().quarter()).startOf('quarter'),
-                moment()
+                dayjs().quarter(dayjs().quarter()).startOf('quarter'),
+                dayjs()
             ],
             'This Financial Year to Date': [
-                moment().startOf('year').subtract(9, 'year'),
-                moment()
+                dayjs().startOf('year').subtract(9, 'year'),
+                dayjs()
             ],
             'This Year to Date': [
-                moment().startOf('year'),
-                moment()
+                dayjs().startOf('year'),
+                dayjs()
             ],
             'Last Month': [
-                moment().subtract(1, 'month').startOf('month'),
-                moment().subtract(1, 'month').endOf('month')
+                dayjs().subtract(1, 'month').startOf('month'),
+                dayjs().subtract(1, 'month').endOf('month')
             ],
             'Last Quater': [
-                moment().quarter(moment().quarter()).subtract(1, 'quarter').startOf('quarter'),
-                moment().quarter(moment().quarter()).subtract(1, 'quarter').endOf('quarter')
+                dayjs().quarter(dayjs().quarter()).subtract(1, 'quarter').startOf('quarter'),
+                dayjs().quarter(dayjs().quarter()).subtract(1, 'quarter').endOf('quarter')
             ],
             'Last Financial Year': [
-                moment().startOf('year').subtract(10, 'year'),
-                moment().endOf('year').subtract(10, 'year')
+                dayjs().startOf('year').subtract(10, 'year'),
+                dayjs().endOf('year').subtract(10, 'year')
             ],
             'Last Year': [
-                moment().startOf('year').subtract(1, 'year'),
-                moment().endOf('year').subtract(1, 'year')
+                dayjs().startOf('year').subtract(1, 'year'),
+                dayjs().endOf('year').subtract(1, 'year')
             ]
         },
-        startDate: moment().subtract(30, 'days'),
-        endDate: moment()
+        startDate: dayjs().subtract(30, 'days'),
+        endDate: dayjs()
     };
     public proformaSelectedDate: any = {
         fromDates: '',
@@ -164,12 +164,6 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
     public selectedInvoices: any[] = [];
     /** This will hold the search value */
     public invoiceSearch: any = "";
-    /** This will hold if updated is account in master to refresh the list of vouchers */
-    public isAccountUpdated: boolean = false;
-    /* This will hold local JSON data */
-    public localeData: any = {};
-    /* This will hold common JSON data */
-    public commonLocaleData: any = {};
     /** Date format type */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
     /** directive to get reference of element */
@@ -178,8 +172,8 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
     public selectedDateRangeUi: any;
     /* This will store available date ranges */
     public datePickerOption: any = GIDDH_DATE_RANGE_PICKER_RANGES;
-    /* Moment object */
-    public moment = moment;
+    /* dayjs object */
+    public dayjs = dayjs;
     /* Selected from date */
     public fromDate: string;
     /* Selected to date */
@@ -188,14 +182,20 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
     public selectedRangeLabel: any = "";
     /* This will store the x/y position of the field to show datepicker under it */
     public dateFieldPosition: any = { x: 0, y: 0 };
+    /** This will hold if updated is account in master to refresh the list of vouchers */
+    public isAccountUpdated: boolean = false;
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
     /** True if user has voucher list permission */
     public hasVoucherListPermissions: boolean = true;
 
     constructor(private store: Store<AppState>, private proformaActions: ProformaActions, private router: Router, private _cdr: ChangeDetectorRef, private _breakPointObservar: BreakpointObserver, private generalService: GeneralService, private modalService: BsModalService, private commonActions: CommonActions) {
         this.advanceSearchFilter.page = 1;
         this.advanceSearchFilter.count = 20;
-        this.advanceSearchFilter.from = moment(this.datePickerOptions.startDate).format(GIDDH_DATE_FORMAT);
-        this.advanceSearchFilter.to = moment(this.datePickerOptions.endDate).format(GIDDH_DATE_FORMAT);
+        this.advanceSearchFilter.from = dayjs(this.datePickerOptions.startDate).format(GIDDH_DATE_FORMAT);
+        this.advanceSearchFilter.to = dayjs(this.datePickerOptions.endDate).format(GIDDH_DATE_FORMAT);
 
         this.isGetAllInProcess$ = this.store.pipe(select(s => s.proforma.getAllInProcess), takeUntil(this.destroyed$));
         this.isDeleteVoucherSuccess$ = this.store.pipe(select(s => s.proforma.isDeleteProformaSuccess), takeUntil(this.destroyed$));
@@ -242,13 +242,13 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
                         item.uniqueName = item.proformaNumber || item.estimateNumber;
                         item.invoiceDate = item.proformaDate || item.estimateDate;
 
-                        let dueDate = item.expiryDate ? moment(item.expiryDate, GIDDH_DATE_FORMAT) : null;
+                        let dueDate = item.expiryDate ? dayjs(item.expiryDate, GIDDH_DATE_FORMAT) : null;
 
                         if (dueDate) {
-                            if (dueDate.isAfter(moment()) || ['paid', 'cancel'].includes(item.action)) {
+                            if (dueDate.isAfter(dayjs()) || ['paid', 'cancel'].includes(item.action)) {
                                 item.expiredDays = null;
                             } else {
-                                let dueDays = dueDate ? moment().diff(dueDate, 'days') : null;
+                                let dueDays = dueDate ? dayjs().diff(dueDate, 'days') : null;
                                 item.isSelected = false;
                                 item.expiredDays = dueDays;
                             }
@@ -347,67 +347,67 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
                 if (localStorage.getItem('universalSelectedDate')) {
 
                     let universalStorageData = localStorage.getItem('universalSelectedDate').split(',');
-                    if ((moment(universalStorageData[0]).format(GIDDH_DATE_FORMAT) === moment(a[0]).format(GIDDH_DATE_FORMAT)) && (moment(universalStorageData[1]).format(GIDDH_DATE_FORMAT) === moment(a[1]).format(GIDDH_DATE_FORMAT))) {
+                    if ((dayjs(universalStorageData[0]).format(GIDDH_DATE_FORMAT) === dayjs(a[0]).format(GIDDH_DATE_FORMAT)) && (dayjs(universalStorageData[1]).format(GIDDH_DATE_FORMAT) === dayjs(a[1]).format(GIDDH_DATE_FORMAT))) {
                         if (window.localStorage && localStorage.getItem(this.localStorageSelectedDate)) {
                             let storedSelectedDate = JSON.parse(localStorage.getItem(this.localStorageSelectedDate));
                             this.showResetAdvanceSearchIcon = true;
                             this.datePickerOptions = {
                                 ...this.datePickerOptions,
-                                startDate: moment(storedSelectedDate.fromDates, GIDDH_DATE_FORMAT).toDate(),
-                                endDate: moment(storedSelectedDate.toDates, GIDDH_DATE_FORMAT).toDate(),
+                                startDate: dayjs(storedSelectedDate.fromDates, GIDDH_DATE_FORMAT).toDate(),
+                                endDate: dayjs(storedSelectedDate.toDates, GIDDH_DATE_FORMAT).toDate(),
                                 chosenLabel: undefined  // Let the library handle the highlighted filter label for range picker
                             };
                             let dateRange = { fromDate: '', toDate: '' };
                             dateRange = this.generalService.dateConversionToSetComponentDatePicker(storedSelectedDate.fromDates, storedSelectedDate.toDates);
-                            this.selectedDateRange = { startDate: moment(dateRange.fromDate, GIDDH_DATE_FORMAT_MM_DD_YYYY), endDate: moment(dateRange.toDate, GIDDH_DATE_FORMAT_MM_DD_YYYY) };
-                            this.selectedDateRangeUi = moment(dateRange.fromDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dateRange.toDate).format(GIDDH_NEW_DATE_FORMAT_UI);
-                            this.fromDate = moment(dateRange.fromDate).format(GIDDH_DATE_FORMAT);
-                            this.toDate = moment(dateRange.toDate).format(GIDDH_DATE_FORMAT);
+                            this.selectedDateRange = { startDate: dayjs(dateRange.fromDate, GIDDH_DATE_FORMAT_MM_DD_YYYY), endDate: dayjs(dateRange.toDate, GIDDH_DATE_FORMAT_MM_DD_YYYY) };
+                            this.selectedDateRangeUi = dayjs(dateRange.fromDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateRange.toDate).format(GIDDH_NEW_DATE_FORMAT_UI);
+                            this.fromDate = dayjs(dateRange.fromDate).format(GIDDH_DATE_FORMAT);
+                            this.toDate = dayjs(dateRange.toDate).format(GIDDH_DATE_FORMAT);
                             // assign start and end date
                             this.advanceSearchFilter.from = storedSelectedDate.fromDates;
                             this.advanceSearchFilter.to = storedSelectedDate.toDates;
                         } else {
                             this.datePickerOptions = {
-                                ...this.datePickerOptions, startDate: moment(a[0], GIDDH_DATE_FORMAT).toDate(),
-                                endDate: moment(a[1], GIDDH_DATE_FORMAT).toDate(),
+                                ...this.datePickerOptions, startDate: dayjs(a[0], GIDDH_DATE_FORMAT).toDate(),
+                                endDate: dayjs(a[1], GIDDH_DATE_FORMAT).toDate(),
                                 chosenLabel: a[2]
                             };
-                            this.selectedDateRange = { startDate: moment(a[0]), endDate: moment(a[1]) };
-                            this.selectedDateRangeUi = moment(a[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(a[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-                            this.fromDate = moment(a[0]).format(GIDDH_DATE_FORMAT);
-                            this.toDate = moment(a[1]).format(GIDDH_DATE_FORMAT);
+                            this.selectedDateRange = { startDate: dayjs(a[0]), endDate: dayjs(a[1]) };
+                            this.selectedDateRangeUi = dayjs(a[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(a[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                            this.fromDate = dayjs(a[0]).format(GIDDH_DATE_FORMAT);
+                            this.toDate = dayjs(a[1]).format(GIDDH_DATE_FORMAT);
 
-                            this.advanceSearchFilter.from = moment(a[0]).format(GIDDH_DATE_FORMAT);
-                            this.advanceSearchFilter.to = moment(a[1]).format(GIDDH_DATE_FORMAT);
+                            this.advanceSearchFilter.from = dayjs(a[0]).format(GIDDH_DATE_FORMAT);
+                            this.advanceSearchFilter.to = dayjs(a[1]).format(GIDDH_DATE_FORMAT);
                         }
                     } else {
                         this.datePickerOptions = {
-                            ...this.datePickerOptions, startDate: moment(a[0], GIDDH_DATE_FORMAT).toDate(),
-                            endDate: moment(a[1], GIDDH_DATE_FORMAT).toDate(),
+                            ...this.datePickerOptions, startDate: dayjs(a[0], GIDDH_DATE_FORMAT).toDate(),
+                            endDate: dayjs(a[1], GIDDH_DATE_FORMAT).toDate(),
                             chosenLabel: a[2]
                         };
 
-                        this.selectedDateRange = { startDate: moment(a[0]), endDate: moment(a[1]) };
-                        this.selectedDateRangeUi = moment(a[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(a[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-                        this.fromDate = moment(a[0]).format(GIDDH_DATE_FORMAT);
-                        this.toDate = moment(a[1]).format(GIDDH_DATE_FORMAT);
-                        this.advanceSearchFilter.from = moment(a[0]).format(GIDDH_DATE_FORMAT);
-                        this.advanceSearchFilter.to = moment(a[1]).format(GIDDH_DATE_FORMAT);
+                        this.selectedDateRange = { startDate: dayjs(a[0]), endDate: dayjs(a[1]) };
+                        this.selectedDateRangeUi = dayjs(a[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(a[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                        this.fromDate = dayjs(a[0]).format(GIDDH_DATE_FORMAT);
+                        this.toDate = dayjs(a[1]).format(GIDDH_DATE_FORMAT);
+                        this.advanceSearchFilter.from = dayjs(a[0]).format(GIDDH_DATE_FORMAT);
+                        this.advanceSearchFilter.to = dayjs(a[1]).format(GIDDH_DATE_FORMAT);
                     }
                 } else {
                     this.datePickerOptions = {
-                        ...this.datePickerOptions, startDate: moment(a[0], GIDDH_DATE_FORMAT).toDate(),
-                        endDate: moment(a[1], GIDDH_DATE_FORMAT).toDate(),
+                        ...this.datePickerOptions, startDate: dayjs(a[0], GIDDH_DATE_FORMAT).toDate(),
+                        endDate: dayjs(a[1], GIDDH_DATE_FORMAT).toDate(),
                         chosenLabel: a[2]
                     };
                     let universalDate = _.cloneDeep(a);
-                    this.selectedDateRange = { startDate: moment(a[0]), endDate: moment(a[1]) };
-                    this.selectedDateRangeUi = moment(a[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(a[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-                    this.fromDate = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
-                    this.toDate = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
+                    this.selectedDateRange = { startDate: dayjs(a[0]), endDate: dayjs(a[1]) };
+                    this.selectedDateRangeUi = dayjs(a[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(a[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                    this.fromDate = dayjs(universalDate[0]).format(GIDDH_DATE_FORMAT);
+                    this.toDate = dayjs(universalDate[1]).format(GIDDH_DATE_FORMAT);
 
-                    this.advanceSearchFilter.from = moment(a[0]).format(GIDDH_DATE_FORMAT);
-                    this.advanceSearchFilter.to = moment(a[1]).format(GIDDH_DATE_FORMAT);
+                    this.advanceSearchFilter.from = dayjs(a[0]).format(GIDDH_DATE_FORMAT);
+                    this.advanceSearchFilter.to = dayjs(a[1]).format(GIDDH_DATE_FORMAT);
                 }
                 this.getAll();
             }
@@ -578,8 +578,8 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
     public dateRangeChanged(event: any) {
         this.showResetAdvanceSearchIcon = true;
         if (event) {
-            this.advanceSearchFilter.from = moment(event.picker.startDate).format(GIDDH_DATE_FORMAT);
-            this.advanceSearchFilter.to = moment(event.picker.endDate).format(GIDDH_DATE_FORMAT);
+            this.advanceSearchFilter.from = dayjs(event.picker.startDate).format(GIDDH_DATE_FORMAT);
+            this.advanceSearchFilter.to = dayjs(event.picker.endDate).format(GIDDH_DATE_FORMAT);
             if (window.localStorage) {
                 if (this.voucherType === 'proformas') {
                     this.proformaSelectedDate.fromDates = this.advanceSearchFilter.from;
@@ -632,19 +632,19 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
 
         // set date picker date as application date
         if (universalDate.length > 1) {
-            this.advanceSearchFilter.from = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
-            this.advanceSearchFilter.to = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
+            this.advanceSearchFilter.from = dayjs(universalDate[0]).format(GIDDH_DATE_FORMAT);
+            this.advanceSearchFilter.to = dayjs(universalDate[1]).format(GIDDH_DATE_FORMAT);
             this.datePickerOptions = {
                 ...this.datePickerOptions,
-                startDate: moment(new Date(universalDate[0]), GIDDH_DATE_FORMAT).toDate(),
-                endDate: moment(new Date(universalDate[1]), GIDDH_DATE_FORMAT).toDate(),
+                startDate: dayjs(new Date(universalDate[0]), GIDDH_DATE_FORMAT).toDate(),
+                endDate: dayjs(new Date(universalDate[1]), GIDDH_DATE_FORMAT).toDate(),
                 chosenLabel: universalDate[2]
             };
 
-            this.selectedDateRange = { startDate: moment(universalDate[0]), endDate: moment(universalDate[1]) };
-            this.selectedDateRangeUi = moment(universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-            this.fromDate = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
-            this.toDate = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
+            this.selectedDateRange = { startDate: dayjs(universalDate[0]), endDate: dayjs(universalDate[1]) };
+            this.selectedDateRangeUi = dayjs(universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+            this.fromDate = dayjs(universalDate[0]).format(GIDDH_DATE_FORMAT);
+            this.toDate = dayjs(universalDate[1]).format(GIDDH_DATE_FORMAT);
         }
 
         this.getAll();
@@ -855,10 +855,10 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
         }
         this.hideGiddhDatepicker();
         if (value && value.startDate && value.endDate) {
-            this.selectedDateRange = { startDate: moment(value.startDate), endDate: moment(value.endDate) };
-            this.selectedDateRangeUi = moment(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
-            this.fromDate = moment(value.startDate).format(GIDDH_DATE_FORMAT);
-            this.toDate = moment(value.endDate).format(GIDDH_DATE_FORMAT);
+            this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
+            this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
+            this.fromDate = dayjs(value.startDate).format(GIDDH_DATE_FORMAT);
+            this.toDate = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
 
             this.showResetAdvanceSearchIcon = true;
             this.advanceSearchFilter.from = this.fromDate;

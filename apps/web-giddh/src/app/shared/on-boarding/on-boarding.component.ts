@@ -136,7 +136,7 @@ export class OnBoardingComponent implements OnInit, OnDestroy {
                 this._generalService.companyUniqueName = this.company.uniqueName;
                 setTimeout(() => {
                     if (prevTab !== 'user-details') {
-                        this.store.dispatch(this._loginAction.ChangeCompany(this.company.uniqueName));
+                        this.store.dispatch(this._loginAction.ChangeCompany(this.company?.uniqueName));
                         this._route.navigate([this.isNewUser ? 'welcome' : 'onboarding']);
                     }
                     this.closeModal();
@@ -144,7 +144,7 @@ export class OnBoardingComponent implements OnInit, OnDestroy {
             }
         });
         this.store.pipe(select(p => p.session.companyUniqueName), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(a => {
-            if (a && a !== '' && this.company.uniqueName) {
+            if (a && a !== '' && this.company?.uniqueName) {
                 if (a.includes(this.company.uniqueName.substring(0, 8))) {
                     this.company.name = '';
                     this.company.country = '';

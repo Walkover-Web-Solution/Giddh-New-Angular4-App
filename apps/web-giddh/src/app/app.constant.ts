@@ -1,4 +1,6 @@
-import * as moment from 'moment';
+import * as dayjs from 'dayjs';
+import * as quarterOfYear from 'dayjs/plugin/quarterOfYear' // load on demand
+dayjs.extend(quarterOfYear) // use plugin
 
 export const Configuration = {
     AppUrl,
@@ -96,68 +98,68 @@ export enum DatePickerDefaultRangeEnum {
  */
 export const DEFAULT_DATE_RANGE_PICKER_RANGES = [
     {
-        name: DatePickerDefaultRangeEnum.Today, value: [moment(), moment()]
+        name: DatePickerDefaultRangeEnum.Today, value: [dayjs(), dayjs()]
     },
     {
-        name: DatePickerDefaultRangeEnum.Yesterday, value: [moment().subtract(1, 'days'), moment().subtract(1, 'days')]
+        name: DatePickerDefaultRangeEnum.Yesterday, value: [dayjs().subtract(1, 'days'), dayjs().subtract(1, 'days')]
     },
     {
-        name: DatePickerDefaultRangeEnum.Last7Days, value: [moment().subtract(6, 'days'), moment()]
+        name: DatePickerDefaultRangeEnum.Last7Days, value: [dayjs().subtract(6, 'days'), dayjs()]
     },
     {
-        name: DatePickerDefaultRangeEnum.ThisMonth, value: [moment().startOf('month'), moment().endOf('month')]
+        name: DatePickerDefaultRangeEnum.ThisMonth, value: [dayjs().startOf('month'), dayjs().endOf('month')]
     },
     {
         name: DatePickerDefaultRangeEnum.LastMonth, value: [
-            moment().subtract(1, 'month').startOf('month'),
-            moment().subtract(1, 'month').endOf('month')
+            dayjs().subtract(1, 'month').startOf('month'),
+            dayjs().subtract(1, 'month').endOf('month')
         ]
     },
     {
         name: DatePickerDefaultRangeEnum.ThisWeek, ranges: [{
-            name: DatePickerDefaultRangeEnum.SunToToday, value: [moment().startOf('week'), moment()]
-        }, { name: DatePickerDefaultRangeEnum.MonToToday, value: [moment().startOf('week').add(1, 'd'), moment()] }]
+            name: DatePickerDefaultRangeEnum.SunToToday, value: [dayjs().startOf('week'), dayjs()]
+        }, { name: DatePickerDefaultRangeEnum.MonToToday, value: [dayjs().startOf('week').add(1, 'd'), dayjs()] }]
     },
     {
         name: DatePickerDefaultRangeEnum.ThisQuarterToDate, value: [
-            moment().quarter(moment().quarter()).startOf('quarter'),
-            moment()
+            dayjs().quarter(dayjs().quarter()).startOf('quarter'),
+            dayjs()
         ]
     },
     {
         name: DatePickerDefaultRangeEnum.ThisFinancialYearToDate, value: [
-            moment().startOf('year').subtract(9, 'year'),
-            moment()
+            dayjs().startOf('year').subtract(9, 'year'),
+            dayjs()
         ]
     },
     {
         name: DatePickerDefaultRangeEnum.ThisYearToDate, value: [
-            moment().startOf('year'),
-            moment()
+            dayjs().startOf('year'),
+            dayjs()
         ]
     },
     {
         name: DatePickerDefaultRangeEnum.LastQuarter, value: [
-            moment().quarter(moment().quarter()).subtract(1, 'quarter').startOf('quarter'),
-            moment().quarter(moment().quarter()).subtract(1, 'quarter').endOf('quarter')
+            dayjs().quarter(dayjs().quarter()).subtract(1, 'quarter').startOf('quarter'),
+            dayjs().quarter(dayjs().quarter()).subtract(1, 'quarter').endOf('quarter')
         ]
     },
     {
         name: DatePickerDefaultRangeEnum.LastFinancialYear, value: [
-            moment().startOf('year').subtract(10, 'year'),
-            moment().endOf('year').subtract(10, 'year')
+            dayjs().startOf('year').subtract(10, 'year'),
+            dayjs().endOf('year').subtract(10, 'year')
         ]
     },
     {
         name: DatePickerDefaultRangeEnum.LastYear, value: [
-            moment().subtract(1, 'year').startOf('year'),
-            moment().subtract(1, 'year').endOf('year')
+            dayjs().subtract(1, 'year').startOf('year'),
+            dayjs().subtract(1, 'year').endOf('year')
         ]
     },
     {
         name: DatePickerDefaultRangeEnum.AllTime, value: [
-            moment().startOf('year').subtract(10, 'year'),
-            moment()
+            dayjs().startOf('year').subtract(10, 'year'),
+            dayjs()
         ]
     }
 ];
@@ -165,46 +167,46 @@ export const DEFAULT_DATE_RANGE_PICKER_RANGES = [
 export const GIDDH_DATE_RANGE_PICKER_RANGES = [
     {
         name: DatePickerDefaultRangeEnum.ThisMonth,
-        value: [moment().startOf('month'), moment().endOf('month')],
+        value: [dayjs().startOf('month'), dayjs().endOf('month')],
         key: "ThisMonth"
     },
     {
         name: DatePickerDefaultRangeEnum.LastMonth,
         value: [
-            moment().subtract(1, 'month').startOf('month'),
-            moment().subtract(1, 'month').endOf('month')
+            dayjs().subtract(1, 'month').startOf('month'),
+            dayjs().subtract(1, 'month').endOf('month')
         ],
         key: "LastMonth"
     },
     {
         name: DatePickerDefaultRangeEnum.ThisQuarterToDate,
         value: [
-            moment().quarter(moment().quarter()).startOf('quarter'),
-            moment()
+            dayjs().quarter(dayjs().quarter()).startOf('quarter'),
+            dayjs()
         ],
         key: "ThisQuarterToDate"
     },
     {
         name: DatePickerDefaultRangeEnum.ThisFinancialYearToDate,
         value: [
-            moment().startOf('year').subtract(9, 'year'),
-            moment()
+            dayjs().startOf('year').subtract(9, 'year'),
+            dayjs()
         ],
         key: "ThisFinancialYearToDate"
     },
     {
         name: DatePickerDefaultRangeEnum.LastQuarter,
         value: [
-            moment().quarter(moment().quarter()).subtract(1, 'quarter').startOf('quarter'),
-            moment().quarter(moment().quarter()).subtract(1, 'quarter').endOf('quarter')
+            dayjs().quarter(dayjs().quarter()).subtract(1, 'quarter').startOf('quarter'),
+            dayjs().quarter(dayjs().quarter()).subtract(1, 'quarter').endOf('quarter')
         ],
         key: "LastQuarter"
     },
     {
         name: DatePickerDefaultRangeEnum.AllTime,
         value: [
-            moment().startOf('year').subtract(10, 'year'),
-            moment()
+            dayjs().startOf('year').subtract(10, 'year'),
+            dayjs()
         ],
         key: "AllTime"
     }
@@ -299,13 +301,12 @@ export enum EInvoiceStatus {
 
 /** Length of entry description on vouchers */
 export const ENTRY_DESCRIPTION_LENGTH = 300;
-
 export const EMAIL_REGEX_PATTERN = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
 /** This will hold error status code for permission error from API */
 export const UNAUTHORISED = 401;
+export const SELECT_ALL_RECORDS = "selectallrecords";
 /** This will hide the filing feature of GST module  */
 export const SHOW_GST_FILING = false;
-export const SELECT_ALL_RECORDS = "selectallrecords";
 /** Stores the voucher wise form values to toggle fields in voucher module */
 export const GIDDH_VOUCHER_FORM = [
     {

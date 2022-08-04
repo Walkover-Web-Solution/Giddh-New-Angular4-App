@@ -55,7 +55,7 @@ import { RejectPettyCashEntryConfirmDialogComponent } from './components/reject-
         LedgerModule,
         CurrencyModule,
         NgxUploaderModule,
-        PaginationModule,
+        PaginationModule.forRoot(),
         SharedModule,
         ShSelectModule,
         ModalModule,

@@ -1,4 +1,6 @@
 const webpack = require('webpack');
+const CompressionPlugin = require('compression-webpack-plugin');
+const zlib = require("zlib");
 require('dotenv').config();
 
 module.exports = {
@@ -41,6 +43,19 @@ module.exports = {
             'process.env.ApiUrl': JSON.stringify('https://apitest.giddh.com/'),
             'process.env.APP_FOLDER': JSON.stringify('')
         }),
-        new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+        new CompressionPlugin({
+            filename: "[path][base].br",
+            algorithm: "brotliCompress",
+            test: /\.(js|css|html|svg|json)$/,
+            compressionOptions: {
+                params: {
+                    [zlib.constants.BROTLI_PARAM_QUALITY]: 11,
+                },
+            },
+            threshold: 0,
+            minRatio: 0.8,
+            deleteOriginalAssets: false
+        })
     ]
 }
+

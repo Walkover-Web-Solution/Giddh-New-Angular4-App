@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import * as moment from 'moment';
+import * as dayjs from 'dayjs';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../store';
 import { InventoryReportActions } from '../../actions/inventory/inventory.report.actions';
@@ -91,36 +91,36 @@ export class JobworkComponent implements OnInit, OnDestroy {
         },
         ranges: {
             'Last 1 Day': [
-                moment().subtract(1, 'days'),
-                moment()
+                dayjs().subtract(1, 'days'),
+                dayjs()
             ],
             'Last 7 Days': [
-                moment().subtract(6, 'days'),
-                moment()
+                dayjs().subtract(6, 'days'),
+                dayjs()
             ],
             'Last 30 Days': [
-                moment().subtract(29, 'days'),
-                moment()
+                dayjs().subtract(29, 'days'),
+                dayjs()
             ],
             'Last 6 Months': [
-                moment().subtract(6, 'months'),
-                moment()
+                dayjs().subtract(6, 'months'),
+                dayjs()
             ],
             'Last 1 Year': [
-                moment().subtract(12, 'months'),
-                moment()
+                dayjs().subtract(12, 'months'),
+                dayjs()
             ]
         },
-        startDate: moment().subtract(30, 'days'),
-        endDate: moment()
+        startDate: dayjs().subtract(30, 'days'),
+        endDate: dayjs()
     };
     public inventoryReport: InventoryReport;
     public stocksList$: Observable<IStocksItem[]>;
     public inventoryUsers$: Observable<InventoryUser[]>;
     public filter: InventoryFilter = {};
     public stockOptions: IOption[] = [];
-    public startDate: string = moment().subtract(30, 'days').format(GIDDH_DATE_FORMAT);
-    public endDate: string = moment().format(GIDDH_DATE_FORMAT);
+    public startDate: string = dayjs().subtract(30, 'days').format(GIDDH_DATE_FORMAT);
+    public endDate: string = dayjs().format(GIDDH_DATE_FORMAT);
     public uniqueName: string;
     public type: string;
     public reportType: string;
@@ -281,8 +281,8 @@ export class JobworkComponent implements OnInit, OnDestroy {
         this.universalDate$.subscribe(a => {
             if (a) {
                 this.datePickerOptions = { ...this.datePickerOptions, startDate: a[0], endDate: a[1], chosenLabel: a[2] };
-                this.startDate = moment(a[0]).format(GIDDH_DATE_FORMAT);
-                this.endDate = moment(a[1]).format(GIDDH_DATE_FORMAT);
+                this.startDate = dayjs(a[0]).format(GIDDH_DATE_FORMAT);
+                this.endDate = dayjs(a[1]).format(GIDDH_DATE_FORMAT);
                 this.applyFilters(1, true);
             }
         });
@@ -477,8 +477,8 @@ export class JobworkComponent implements OnInit, OnDestroy {
         this.universalDate$.pipe(take(1)).subscribe(a => {
             if (a) {
                 this.datePickerOptions = { ...this.datePickerOptions, startDate: a[0], endDate: a[1], chosenLabel: a[2] };
-                this.startDate = moment(a[0]).format(GIDDH_DATE_FORMAT);
-                this.endDate = moment(a[1]).format(GIDDH_DATE_FORMAT);
+                this.startDate = dayjs(a[0]).format(GIDDH_DATE_FORMAT);
+                this.endDate = dayjs(a[1]).format(GIDDH_DATE_FORMAT);
             }
         });
         //Reset Date

@@ -567,13 +567,6 @@ span.icon-export-icon {
 }
 
 /* responsive */
-@media (max-width: 1024px) {
-    .perform-payment {
-        max-width: 100% !important;
-        min-width: 100% !important;
-    }
-}
-
 @media (max-width: 1124px) {
     .add-invoice {
         flex-direction: column-reverse;
@@ -663,9 +656,6 @@ span.icon-export-icon {
         transform: rotate(45deg);
         background-color: var(--color-white);
         z-index: -1;
-    }
-    .d-block {
-        display: block !important;
     }
     .click-dropdown ul {
         left: auto;
@@ -868,7 +858,7 @@ span.icon-export-icon {
 
     .min-wid-check {
         min-width: 40px;
-        .check-image {
+        .check-img {
             width: 20px;
         }
     }

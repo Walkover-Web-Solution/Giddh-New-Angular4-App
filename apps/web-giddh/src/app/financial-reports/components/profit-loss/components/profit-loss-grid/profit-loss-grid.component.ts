@@ -18,7 +18,7 @@ import { each } from 'apps/web-giddh/src/app/lodash-optimized';
 import { Account, ChildGroup } from 'apps/web-giddh/src/app/models/api-models/Search';
 import { ProfitLossData } from 'apps/web-giddh/src/app/models/api-models/tb-pl-bs';
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
-import * as moment from 'moment/moment';
+import * as dayjs from 'dayjs';
 import { ReplaySubject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 
@@ -41,7 +41,7 @@ export class ProfitLossGridComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public from: string = '';
     @Input() public to: string = '';
     @ViewChild('searchInputEl', { static: true }) public searchInputEl: ElementRef;
-    public moment = moment;
+    public dayjs = dayjs;
     public plSearchControl: FormControl = new FormControl();
     /** This holds giddh date format */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;

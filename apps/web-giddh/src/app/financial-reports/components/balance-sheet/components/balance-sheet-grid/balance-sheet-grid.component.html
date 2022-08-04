@@ -57,7 +57,7 @@
                                                 "
                                             >
                                                 {{
-                                                    moment(bsData?.dates?.to, giddhDateFormat).toString()
+                                                    dayjs(bsData?.dates?.to, giddhDateFormat).toString()
                                                         | date: "dd MMMM yyyy"
                                                 }}</span
                                             >
@@ -73,7 +73,7 @@
                                                 "
                                             >
                                                 {{
-                                                    moment(bsData?.dates?.from, giddhDateFormat)
+                                                    dayjs(bsData?.dates?.from, giddhDateFormat)
                                                         .add(-1, "days")
                                                         .toString() | date: "dd MMMM yyyy"
                                                 }}</span
@@ -171,6 +171,7 @@
                                         [groupDetail]="grp"
                                         [padding]="padding"
                                         [search]="search"
+                                        [padding]="padding"
                                         [from]="from"
                                         [to]="to"
                                     >

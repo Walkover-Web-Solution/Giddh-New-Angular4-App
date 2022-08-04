@@ -5,7 +5,7 @@ import { FormControl, NgForm } from "@angular/forms";
 import { MatDialog } from "@angular/material/dialog";
 import { ActivatedRoute, Router } from "@angular/router";
 import { select, Store } from "@ngrx/store";
-import * as moment from "moment";
+import * as dayjs from "dayjs";
 import { UploaderOptions, UploadInput, UploadOutput } from "ngx-uploader";
 import { combineLatest, Observable, of as observableOf, ReplaySubject } from "rxjs";
 import { auditTime, take, takeUntil } from "rxjs/operators";
@@ -348,7 +348,7 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
         this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$)).subscribe((dateObj: Date[]) => {
             if (dateObj) {
                 try {
-                    this.universalDate = moment(dateObj[1]).toDate();
+                    this.universalDate = dayjs(dateObj[1]).toDate();
                     this.voucherFormData.date = this.universalDate;
                 } catch (e) {
                     this.universalDate = new Date();
@@ -427,7 +427,7 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
                 this.voucherFormData.account = accountDetails;
                 this.voucherFormData.attachedFiles = response[0].attachedFiles;
                 this.selectedFileName = response[0].attachedFileName;
-                this.voucherFormData.date = moment(response[0].date, GIDDH_DATE_FORMAT).toDate();
+                this.voucherFormData.date = dayjs(response[0].date, GIDDH_DATE_FORMAT).toDate();
 
                 let entryLoop = 0;
                 response[0].entries.forEach(entry => {
@@ -447,7 +447,7 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
                         };
 
                         if (entry.chequeClearanceDate) {
-                            this.voucherFormData.entries[entryLoop].chequeClearanceDate = moment(entry.chequeClearanceDate, GIDDH_DATE_FORMAT).toDate();
+                            this.voucherFormData.entries[entryLoop].chequeClearanceDate = dayjs(entry.chequeClearanceDate, GIDDH_DATE_FORMAT).toDate();
                         }
                         this.voucherFormData.entries[entryLoop].chequeNumber = entry.chequeNumber;
                         this.voucherFormData.entries[entryLoop].date = this.voucherFormData.date;
@@ -1211,7 +1211,7 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
 
         if (item && item.currency && item.currency !== this.companyCurrency) {
             if (this.voucherFormData.date) {
-                this.getCurrencyRate(this.companyCurrency, item.currency, moment(this.voucherFormData.date).format(GIDDH_DATE_FORMAT));
+                this.getCurrencyRate(this.companyCurrency, item.currency, dayjs(this.voucherFormData.date).format(GIDDH_DATE_FORMAT));
             }
         } else {
             this.previousExchangeRate = this.exchangeRate;
@@ -1258,10 +1258,10 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
      *
      * @param {*} to Converted to currency symbol
      * @param {*} from Converted from currency symbol
-     * @param {string} [date=moment().format(GIDDH_DATE_FORMAT)] Date on which currency rate is required, default is today's date
+     * @param {string} [date=dayjs().format(GIDDH_DATE_FORMAT)] Date on which currency rate is required, default is today's date
      * @memberof PaymentReceiptComponent
      */
-    public getCurrencyRate(to: any, from: any, date = moment().format(GIDDH_DATE_FORMAT)): void {
+    public getCurrencyRate(to: any, from: any, date = dayjs().format(GIDDH_DATE_FORMAT)): void {
         if (from && to && !this.isUpdateMode) {
             this.ledgerService.GetCurrencyRateNewApi(from, to, date).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 let rate = response.body;
@@ -1315,12 +1315,21 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
      */
     public sendEmail(event: any): void {
         if (event) {
-            this.store.dispatch(this.invoiceActions.SendInvoiceOnMail(this.paymentReceiptResponse?.account?.uniqueName, {
-                emailId: event.email?.split(','),
-                voucherNumber: [this.paymentReceiptResponse?.number],
-                voucherType: this.paymentReceiptResponse?.type,
-                typeOfInvoice: event.downloadCopy ? event.downloadCopy : []
-            }));
+            if (this.generalService.voucherApiVersion === 2) {
+                this.store.dispatch(this.invoiceActions.SendInvoiceOnMail(this.paymentReceiptResponse.account.uniqueName, {
+                    email: { to: event.email.split(',') },
+                    uniqueName: this.paymentReceiptResponse?.uniqueName,
+                    voucherType: this.paymentReceiptResponse?.type,
+                    copyTypes: event.downloadCopy ? event.downloadCopy : []
+                }));
+            } else {
+                this.store.dispatch(this.invoiceActions.SendInvoiceOnMail(this.paymentReceiptResponse?.account?.uniqueName, {
+                    emailId: event.email?.split(','),
+                    voucherNumber: [this.paymentReceiptResponse?.number],
+                    voucherType: this.paymentReceiptResponse?.type,
+                    typeOfInvoice: event.downloadCopy ? event.downloadCopy : []
+                }));
+            }
         }
     }
 
@@ -1414,12 +1423,12 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
         this.isLoading = true;
 
         if (this.voucherFormData.date) {
-            this.voucherFormData.date = moment(this.voucherFormData.date).format(GIDDH_DATE_FORMAT);
+            this.voucherFormData.date = dayjs(this.voucherFormData.date).format(GIDDH_DATE_FORMAT);
             this.voucherFormData.entries[0].date = this.voucherFormData.date;
         }
 
         if (this.voucherFormData.entries[0].chequeClearanceDate) {
-            this.voucherFormData.entries[0].chequeClearanceDate = moment(this.voucherFormData.entries[0].chequeClearanceDate).format(GIDDH_DATE_FORMAT);
+            this.voucherFormData.entries[0].chequeClearanceDate = dayjs(this.voucherFormData.entries[0].chequeClearanceDate).format(GIDDH_DATE_FORMAT);
         }
 
         if (this.isAdvanceReceipt) {
@@ -1553,12 +1562,12 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
         this.isLoading = true;
 
         if (this.voucherFormData.date) {
-            this.voucherFormData.date = moment(this.voucherFormData.date).format(GIDDH_DATE_FORMAT);
+            this.voucherFormData.date = dayjs(this.voucherFormData.date).format(GIDDH_DATE_FORMAT);
             this.voucherFormData.entries[0].date = this.voucherFormData.date;
         }
 
         if (this.voucherFormData.entries[0].chequeClearanceDate) {
-            this.voucherFormData.entries[0].chequeClearanceDate = moment(this.voucherFormData.entries[0].chequeClearanceDate).format(GIDDH_DATE_FORMAT);
+            this.voucherFormData.entries[0].chequeClearanceDate = dayjs(this.voucherFormData.entries[0].chequeClearanceDate).format(GIDDH_DATE_FORMAT);
         }
 
         if (this.isAdvanceReceipt) {
@@ -1679,7 +1688,7 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
      */
     public validateVoucherDate(): void {
         this.isInvalidVoucherDate = false;
-        if (this.voucherFormData.date && moment(this.voucherFormData.date).format(GIDDH_DATE_FORMAT) === "Invalid date") {
+        if (this.voucherFormData.date && dayjs(this.voucherFormData.date).format(GIDDH_DATE_FORMAT) === "Invalid date") {
             this.isInvalidVoucherDate = true;
         }
     }
@@ -1691,7 +1700,7 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
      */
     public validateChequeDate(): void {
         this.isInvalidChequeDate = false;
-        if (this.voucherFormData.entries[0].chequeClearanceDate && moment(this.voucherFormData.entries[0].chequeClearanceDate).format(GIDDH_DATE_FORMAT) === "Invalid date") {
+        if (this.voucherFormData.entries[0].chequeClearanceDate && dayjs(this.voucherFormData.entries[0].chequeClearanceDate).format(GIDDH_DATE_FORMAT) === "Invalid date") {
             this.isInvalidChequeDate = true;
         }
     }

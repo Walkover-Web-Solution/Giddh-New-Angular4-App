@@ -3,7 +3,7 @@ import { ESCAPE } from '@angular/cdk/keycodes';
 import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { select, Store } from '@ngrx/store';
-import * as moment from 'moment/moment';
+import * as dayjs from 'dayjs';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { createSelector } from 'reselect';
@@ -25,9 +25,9 @@ import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
 import { InvViewService } from '../../inv.view.service';
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { OrganizationType } from '../../../models/user-login-state';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
+import { OrganizationType } from '../../../models/user-login-state';
 import { GeneralService } from '../../../services/general.service';
 import { cloneDeep, isEqual, orderBy } from '../../../lodash-optimized';
 
@@ -76,7 +76,7 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
     public showToDatePicker: boolean;
     public toDate: string;
     public fromDate: string;
-    public moment = moment;
+    public dayjs = dayjs;
     public activeGroupName: string;
     public stockList$: Observable<IOption[]>;
     public comparisonFilterDropDown$: Observable<IOption[]>;
@@ -179,28 +179,28 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
         },
         ranges: {
             'Last 1 Day': [
-                moment().subtract(1, 'days'),
-                moment()
+                dayjs().subtract(1, 'days'),
+                dayjs()
             ],
             'Last 7 Days': [
-                moment().subtract(6, 'days'),
-                moment()
+                dayjs().subtract(6, 'days'),
+                dayjs()
             ],
             'Last 30 Days': [
-                moment().subtract(29, 'days'),
-                moment()
+                dayjs().subtract(29, 'days'),
+                dayjs()
             ],
             'Last 6 Months': [
-                moment().subtract(6, 'months'),
-                moment()
+                dayjs().subtract(6, 'months'),
+                dayjs()
             ],
             'Last 1 Year': [
-                moment().subtract(12, 'months'),
-                moment()
+                dayjs().subtract(12, 'months'),
+                dayjs()
             ]
         },
-        startDate: moment().subtract(1, 'month'),
-        endDate: moment()
+        startDate: dayjs().subtract(1, 'month'),
+        endDate: dayjs()
     };
     public groupStockReport: GroupStockReportResponse;
     /** Stores the message when particular group is not found */
@@ -327,10 +327,10 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
         this.universalDate$.subscribe(a => {
             if (a) {
                 this.datePickerOptions = { ...this.datePickerOptions, startDate: a[0], endDate: a[1], chosenLabel: a[2] };
-                this.fromDate = moment(a[0]).format(GIDDH_DATE_FORMAT);
-                this.toDate = moment(a[1]).format(GIDDH_DATE_FORMAT);
-                this.selectedDateRange = { startDate: moment(a[0]), endDate: moment(a[1]) };
-                this.selectedDateRangeUi = moment(a[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(a[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                this.fromDate = dayjs(a[0]).format(GIDDH_DATE_FORMAT);
+                this.toDate = dayjs(a[1]).format(GIDDH_DATE_FORMAT);
+                this.selectedDateRange = { startDate: dayjs(a[0]), endDate: dayjs(a[1]) };
+                this.selectedDateRangeUi = dayjs(a[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(a[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
                 this.getGroupReport(true);
             }
         });
@@ -502,8 +502,8 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
     }
 
     public selectedDate(value: any, from?: string) { //from like advance search
-        this.fromDate = moment(value.picker.startDate).format(GIDDH_DATE_FORMAT);
-        this.toDate = moment(value.picker.endDate).format(GIDDH_DATE_FORMAT);
+        this.fromDate = dayjs(value.picker.startDate).format(GIDDH_DATE_FORMAT);
+        this.toDate = dayjs(value.picker.endDate).format(GIDDH_DATE_FORMAT);
         this.pickerSelectedFromDate = value.picker.startDate;
         this.pickerSelectedToDate = value.picker.endDate;
         if (!from) {
@@ -650,11 +650,11 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
         this.universalDate$.subscribe(a => {
             if (a) {
                 this.datePickerOptions = { ...this.datePickerOptions, startDate: a[0], endDate: a[1], chosenLabel: a[2] };
-                this.fromDate = moment(a[0]).format(GIDDH_DATE_FORMAT);
-                this.toDate = moment(a[1]).format(GIDDH_DATE_FORMAT);
+                this.fromDate = dayjs(a[0]).format(GIDDH_DATE_FORMAT);
+                this.toDate = dayjs(a[1]).format(GIDDH_DATE_FORMAT);
                 let universalDate = cloneDeep(a);
-                this.selectedDateRange = { startDate: moment(universalDate[0]), endDate: moment(universalDate[1]) };
-                this.selectedDateRangeUi = moment(universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                this.selectedDateRange = { startDate: dayjs(universalDate[0]), endDate: dayjs(universalDate[1]) };
+                this.selectedDateRangeUi = dayjs(universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
             }
         });
 
@@ -680,8 +680,8 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
         if (this.isFilterCorrect) {
             this.datePickerOptions = {
                 ...this.datePickerOptions,
-                startDate: moment(this.pickerSelectedFromDate).toDate(),
-                endDate: moment(this.pickerSelectedToDate).toDate()
+                startDate: dayjs(this.pickerSelectedFromDate).toDate(),
+                endDate: dayjs(this.pickerSelectedToDate).toDate()
             };
             this.showAdvanceSearchModal = false;
             this.advanceSearchModel.hide(); // change request : to only reset fields
@@ -870,10 +870,10 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
         }
         this.hideGiddhDatepicker();
         if (value && value.startDate && value.endDate) {
-            this.selectedDateRange = { startDate: moment(value.startDate), endDate: moment(value.endDate) };
-            this.selectedDateRangeUi = moment(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
-            this.fromDate = moment(value.startDate).format(GIDDH_DATE_FORMAT);
-            this.toDate = moment(value.endDate).format(GIDDH_DATE_FORMAT);
+            this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
+            this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
+            this.fromDate = dayjs(value.startDate).format(GIDDH_DATE_FORMAT);
+            this.toDate = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
             this.pickerSelectedFromDate = value.startDate;
             this.pickerSelectedToDate = value.endDate;
             if (!from) {

@@ -1,7 +1,7 @@
 import { Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
-import * as moment from 'moment/moment';
+import * as dayjs from 'dayjs';
 import { BsDatepickerConfig } from "ngx-bootstrap/datepicker";
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { createSelector } from 'reselect';
@@ -9,9 +9,9 @@ import { Observable, ReplaySubject, of as observableOf } from 'rxjs';
 import { distinct, filter, take, takeUntil } from 'rxjs/operators';
 import { InventoryAction } from '../../actions/inventory/inventory.actions';
 import { ManufacturingActions } from '../../actions/manufacturing/manufacturing.actions';
+import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../app.constant';
 import { SettingsBranchActions } from '../../actions/settings/branch/settings.branch.action';
 import { OrganizationType } from '../../models/user-login-state';
-import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../app.constant';
 import { StocksResponse } from '../../models/api-models/Inventory';
 import { IMfStockSearchRequest } from '../../models/interfaces/manufacturing.interface';
 import { GeneralService } from '../../services/general.service';
@@ -55,7 +55,7 @@ export class MfReportComponent implements OnInit, OnDestroy {
     public isReportLoading$: Observable<boolean>;
     public showFromDatePicker: boolean = false;
     public showToDatePicker: boolean = false;
-    public moment = moment;
+    public dayjs = dayjs;
     public startDate: Date;
     public endDate: Date;
     /** Date format type */
@@ -178,10 +178,10 @@ export class MfReportComponent implements OnInit, OnDestroy {
             if (dateObj) {
                 this.universalDate = cloneDeep(dateObj);
                 this.mfStockSearchRequest.dateRange = this.universalDate;
-                this.selectedDateRange = { startDate: moment(dateObj[0]), endDate: moment(dateObj[1]) };
-                this.selectedDateRangeUi = moment(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-                this.fromDate = moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
-                this.toDate = moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
+                this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
+                this.selectedDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                this.fromDate = dayjs(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
+                this.toDate = dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
                 this.getReportDataOnFresh();
             }
         })), takeUntil(this.destroyed$)).subscribe();
@@ -207,13 +207,13 @@ export class MfReportComponent implements OnInit, OnDestroy {
                 });
                 this.isCompany = this.currentOrganizationType !== OrganizationType.Branch && this.currentCompanyBranches?.length > 2;
                 let currentBranchUniqueName;
-                if (!this.currentBranch.uniqueName) {
+                if (!this.currentBranch?.uniqueName) {
                     // Assign the current branch only when it is not selected. This check is necessary as
                     // opening the branch switcher would reset the current selected branch as this subscription is run everytime
                     // branches are loaded
                     if (this.currentOrganizationType === OrganizationType.Branch) {
                         currentBranchUniqueName = this.generalService.currentBranchUniqueName;
-                        this.currentBranch = cloneDeep(response.find(branch => branch.uniqueName === currentBranchUniqueName)) || this.currentBranch;
+                        this.currentBranch = cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName)) || this.currentBranch;
                     } else {
                         currentBranchUniqueName = this.activeCompany ? this.activeCompany.uniqueName : '';
                         this.currentBranch = {
@@ -265,7 +265,7 @@ export class MfReportComponent implements OnInit, OnDestroy {
     }
 
     public editMFItem(item) {
-        if (item.uniqueName) {
+        if (item?.uniqueName) {
             this.store.dispatch(this.manufacturingActions.SetMFItemUniqueNameInStore(item.uniqueName));
             this.router.navigate(['/pages/manufacturing/edit']);
         }
@@ -274,11 +274,11 @@ export class MfReportComponent implements OnInit, OnDestroy {
     public getReportDataOnFresh() {
         let data = cloneDeep(this.mfStockSearchRequest);
         if (this.universalDate) {
-            data.from = moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
-            data.to = moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
+            data.from = dayjs(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
+            data.to = dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
         } else {
-            data.from = moment().subtract(30, 'days').format(GIDDH_DATE_FORMAT);
-            data.to = moment().format(GIDDH_DATE_FORMAT);
+            data.from = dayjs().subtract(30, 'days').format(GIDDH_DATE_FORMAT);
+            data.to = dayjs().format(GIDDH_DATE_FORMAT);
         }
         this.store.dispatch(this.manufacturingActions.GetMfReport(data));
     }
@@ -288,13 +288,13 @@ export class MfReportComponent implements OnInit, OnDestroy {
     }
 
     public setToday(model: string) {
-        this.mfStockSearchRequest[model] = moment();
+        this.mfStockSearchRequest[model] = dayjs();
     }
 
     public bsValueChange(event: any) {
         if (event) {
-            this.mfStockSearchRequest.from = moment(event[0]).format(GIDDH_DATE_FORMAT);
-            this.mfStockSearchRequest.to = moment(event[1]).format(GIDDH_DATE_FORMAT);
+            this.mfStockSearchRequest.from = dayjs(event[0]).format(GIDDH_DATE_FORMAT);
+            this.mfStockSearchRequest.to = dayjs(event[1]).format(GIDDH_DATE_FORMAT);
         }
     }
 
@@ -366,10 +366,10 @@ export class MfReportComponent implements OnInit, OnDestroy {
         }
         this.hideGiddhDatepicker();
         if (value && value.startDate && value.endDate) {
-            this.selectedDateRange = { startDate: moment(value.startDate), endDate: moment(value.endDate) };
-            this.selectedDateRangeUi = moment(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
-            this.fromDate = moment(value.startDate).format(GIDDH_DATE_FORMAT);
-            this.toDate = moment(value.endDate).format(GIDDH_DATE_FORMAT);
+            this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
+            this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
+            this.fromDate = dayjs(value.startDate).format(GIDDH_DATE_FORMAT);
+            this.toDate = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
             this.mfStockSearchRequest.from = this.fromDate;
             this.mfStockSearchRequest.to = this.toDate;
         }
