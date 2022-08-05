@@ -7,6 +7,7 @@ import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store';
 import { takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
+import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 
 const noop = () => { };
 
@@ -89,7 +90,7 @@ export class GiddhDatepickerComponent implements ControlValueAccessor, OnInit, O
      * @memberof GiddhDatepickerComponent
      */
     public dateChange(event: MatDatepickerInputEvent<Date>): void {
-        let selectedDate = dayjs(event.value);
+        let selectedDate = (typeof(event.value) === "object") ? dayjs(event.value).toDate() : dayjs(event.value, GIDDH_DATE_FORMAT).toDate();
         this.onChangeCallback(selectedDate);
         this.dateSelected.emit(selectedDate);
     }
@@ -146,7 +147,7 @@ export class GiddhDatepickerComponent implements ControlValueAccessor, OnInit, O
     public writeValue(value: any): void {
         if (value) {
             this.innerValue = value;
-            this.calendarDate = dayjs(value);
+            this.calendarDate = (typeof(value) === "object") ? dayjs(value).toDate() : dayjs(value, GIDDH_DATE_FORMAT).toDate();
             this.changeDetectorRef.detectChanges();
         } else {
             this.innerValue = "";
