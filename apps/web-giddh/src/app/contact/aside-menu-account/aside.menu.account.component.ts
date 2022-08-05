@@ -46,8 +46,6 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
     public deleteAccountSuccess$: Observable<boolean>;
     public accountDetails: any = '';
     public breadcrumbUniquePath: string[] = [];
-    /** Holds true if we need to recall custom field api in create/update account */
-    public reloadCustomFields: boolean = false;
     /** Holds true if master is open */
     private isMasterOpen: boolean = false;
     // private below
@@ -107,12 +105,10 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
 
         this.store.pipe(select(state => state.groupwithaccounts.activeTab), takeUntil(this.destroyed$)).subscribe(activeTab => {
             if(activeTab === 1) {
-                this.reloadCustomFields = false;
                 this.isMasterOpen = true;
             } else {
                 if(this.isMasterOpen) {
                     this.isMasterOpen = false;
-                    this.reloadCustomFields = true;
                 }
             }
         });
@@ -217,18 +213,5 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
                 this.showBankDetail = false;
             }
         });
-    }
-
-    /**
-     * This will show custom fields tab if clicked create custom field from add/update account
-     *
-     * @param {boolean} event
-     * @memberof AsideMenuAccountInContactComponent
-     */
-     public showCustomFieldsTab(event: boolean) {
-        if(event) {
-            this.store.dispatch(this.groupWithAccountsAction.updateActiveTabOpenAddAndManage(1));
-            this.store.dispatch(this.groupWithAccountsAction.OpenAddAndManageFromOutside(''));
-        }
     }
 }

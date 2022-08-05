@@ -41,4 +41,18 @@
     scroll-behavior: smooth;
     position: relative;
     margin-top: 15px;
+    .giddh-table {
+        .action {
+            .delete-btn {
+                .fa-trash {
+                    color: var(--color-septenary-button-text);
+                }
+                &:hover {
+                    .fa-trash {
+                        color: var(--color-secondary-button-text);
+                    }
+                }
+            }
+        }
+    }
 }

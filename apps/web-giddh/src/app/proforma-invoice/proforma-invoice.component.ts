@@ -1829,7 +1829,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         if (!this.isVoucherDateChanged) {
             let date = cloneDeep(this.universalDate);
             this.invFormData.voucherDetails.voucherDate = date;
-
             // get exchange rate when application date is changed
             if (this.isMultiCurrencyModule() && this.isMulticurrencyAccount && date) {
                 this.getCurrencyRate(this.companyCurrency, this.customerCurrencyCode, date);
@@ -1837,6 +1836,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
             this.invFormData.entries.forEach((entry: SalesEntryClass) => {
                 entry.entryDate = date;
+                entry.entryDate = moment(entry.entryDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
             });
         }
     }
@@ -2502,7 +2502,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 forEach(entry.transactions, (txn: SalesTransactionItemClass) => {
                     // convert date object
                     // txn.date = this.convertDateForAPI(txn.date);
-                    entry.entryDate = this.convertDateForAPI(entry.entryDate);
+                    entry.entryDate = moment(this.convertDateForAPI(entry.entryDate), GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
                     txn.convertedAmount = this.fetchedConvertedRate > 0 ? giddhRoundOff((Number(txn.amount) * this.fetchedConvertedRate), 2) : 0;
 
                     // we need to remove # from account uniqueName because we are appending # to stock for uniqueNess (allowing for pending type voucher)
@@ -2733,7 +2733,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 }
             }
             if (this.isPurchaseInvoice) {
-                if (this.invFormData.accountDetails.shippingDetails.state.code && this.invFormData.accountDetails.billingDetails.state.code) {
+                if (this.voucherApiVersion === 2 || (this.invFormData.accountDetails.shippingDetails.state.code && this.invFormData.accountDetails.billingDetails.state.code)) {
                     if (this.voucherApiVersion === 2) {
                         updatedData = this.proformaInvoiceUtilityService.getVoucherRequestObjectForInvoice(updatedData);
                     }
@@ -3673,9 +3673,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             let entry: SalesEntryClass = new SalesEntryClass();
             if (this.isUpdateMode) {
                 entry.entryDate = this.invFormData.entries[0] ? this.invFormData.entries[0].entryDate : this.universalDate || new Date();
+                entry.entryDate = moment(entry.entryDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
                 entry.isNewEntryInUpdateMode = true;
             } else {
-                entry.entryDate = this.invFormData.voucherDetails.voucherDate;
+                entry.entryDate = moment(this.invFormData.voucherDetails.voucherDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
             }
             this.invFormData.entries.push(entry);
         } else {
@@ -4101,7 +4102,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 salesEntryClass.voucherType = entry.voucherType;
                 salesEntryClass.uniqueName = entry.uniqueName;
                 salesEntryClass.description = entry.description;
-                salesEntryClass.date = entry.entryDate;
+                salesEntryClass.date = moment(entry.entryDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
                 let calculationMethod = (entry.otherTaxModal && entry.otherTaxModal.tcsCalculationMethod) ? entry.otherTaxModal.tcsCalculationMethod : "";
                 entry.taxList.forEach(t => {
                     salesEntryClass.taxes.push({ uniqueName: t, calculationMethod: calculationMethod });
@@ -4751,6 +4752,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 entry.otherTaxModal = new SalesOtherTaxesModal();
             }
             entry.entryDate = (entry.entryDate) ? moment(entry.entryDate, GIDDH_DATE_FORMAT).toDate() : this.universalDate || new Date();
+            entry.entryDate = moment(entry.entryDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
 
             entry.discounts = this.parseDiscountFromResponse(entry);
             entry.taxList = entry.taxes.map(m => m.uniqueName);
@@ -5173,7 +5175,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         voucherClassConversion.companyDetails = result.company;
 
         voucherClassConversion.accountDetails.billingDetails = new GstDetailsClass();
-        voucherClassConversion.accountDetails.billingDetails.panNumber = result.account.billingDetails.panNumber;
+        voucherClassConversion.accountDetails.billingDetails.panNumber = result?.account?.billingDetails?.panNumber;
+
         voucherClassConversion.accountDetails.billingDetails.pincode = result.account.billingDetails.pincode;
         voucherClassConversion.accountDetails.billingDetails.address = cloneDeep(result?.account?.billingDetails?.address);
         voucherClassConversion.accountDetails.billingDetails.gstNumber = result.account.billingDetails.gstNumber ?? result?.account?.billingDetails?.taxNumber;
@@ -5182,14 +5185,17 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         voucherClassConversion.accountDetails.mobileNumber = result.account.mobileNumber;
 
         voucherClassConversion.accountDetails.shippingDetails = new GstDetailsClass();
-        voucherClassConversion.accountDetails.shippingDetails.panNumber = result.account.shippingDetails.panNumber;
-        voucherClassConversion.accountDetails.shippingDetails.pincode = result.account.shippingDetails.pincode;
-        voucherClassConversion.accountDetails.shippingDetails.address = cloneDeep(result?.account?.shippingDetails?.address);
-        voucherClassConversion.accountDetails.shippingDetails.gstNumber = result.account.shippingDetails.gstNumber ?? result?.account?.shippingDetails?.taxNumber;
-        voucherClassConversion.accountDetails.shippingDetails.state.code = this.getNewStateCode(result.account.shippingDetails.stateCode ?? result?.account?.shippingDetails?.state?.code);
-        voucherClassConversion.accountDetails.shippingDetails.state.name = result.account.shippingDetails.stateName ?? result?.account?.shippingDetails?.state?.name;
+        if (result?.account?.shippingDetails) {
+            voucherClassConversion.accountDetails.shippingDetails.panNumber = result?.account?.shippingDetails?.panNumber;
 
-        voucherClassConversion.accountDetails.shippingDetails = this.updateAddressShippingBilling(voucherClassConversion.accountDetails.shippingDetails);
+            voucherClassConversion.accountDetails.shippingDetails.pincode = result.account.shippingDetails.pincode;
+            voucherClassConversion.accountDetails.shippingDetails.address = cloneDeep(result?.account?.shippingDetails?.address);
+            voucherClassConversion.accountDetails.shippingDetails.gstNumber = result.account.shippingDetails.gstNumber ?? result?.account?.shippingDetails?.taxNumber;
+            voucherClassConversion.accountDetails.shippingDetails.state.code = this.getNewStateCode(result.account.shippingDetails.stateCode ?? result?.account?.shippingDetails?.state?.code);
+            voucherClassConversion.accountDetails.shippingDetails.state.name = result.account.shippingDetails.stateName ?? result?.account?.shippingDetails?.state?.name;
+
+            voucherClassConversion.accountDetails.shippingDetails = this.updateAddressShippingBilling(voucherClassConversion.accountDetails.shippingDetails);
+        }
         voucherClassConversion.accountDetails.billingDetails = this.updateAddressShippingBilling(voucherClassConversion.accountDetails.billingDetails);
 
         voucherClassConversion.accountDetails.attentionTo = result.account.attentionTo;
@@ -7225,13 +7231,13 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         if (action === this.commonLocaleData?.app_yes) {
             if (this.dateChangeType === "voucher") {
                 this.invFormData.entries.forEach(entry => {
-                    entry.entryDate = this.invFormData.voucherDetails.voucherDate;
+                    entry.entryDate = moment(this.invFormData.voucherDetails.voucherDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
                 });
             } else if (this.dateChangeType === "entry") {
                 let entryLoop = 0;
                 this.invFormData.entries.forEach(entry => {
                     if (entryLoop !== this.updatedEntryIndex) {
-                        entry.entryDate = this.invFormData.entries[this.updatedEntryIndex].entryDate;
+                        entry.entryDate = moment(this.invFormData.entries[this.updatedEntryIndex].entryDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
                     }
                     entryLoop++;
                 });

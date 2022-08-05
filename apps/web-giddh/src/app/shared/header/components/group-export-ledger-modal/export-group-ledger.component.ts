@@ -10,6 +10,7 @@ import { GeneralService } from 'apps/web-giddh/src/app/services/general.service'
 import { Store, select } from '@ngrx/store';
 import { AppState } from 'apps/web-giddh/src/app/store';
 import { takeUntil } from 'rxjs/operators';
+import { ExportBodyRequest } from 'apps/web-giddh/src/app/models/api-models/DaybookRequest';
 
 @Component({
     selector: 'export-group-ledger',
@@ -56,6 +57,19 @@ export class ExportGroupLedgerComponent implements OnInit {
     public dateFieldPosition: any = { x: 0, y: 0 };
     /** To unsubscribe observer */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** To hold export request object */
+    public exportRequest: ExportBodyRequest = {
+        from: '',
+        to: '',
+        sort: 'ASC',
+        showVoucherNumber: false,
+        showVoucherTotal: false,
+        showEntryVoucher: false,
+        showDescription: false,
+        groupUniqueName: '',
+        exportType: 'GROUP_LEDGER_EXPORT',
+        showEntryVoucherNo: false
+    }
 
 
     constructor(private store: Store<AppState>, private _permissionDataService: PermissionDataService, private generalService: GeneralService, private modalService: BsModalService) {
@@ -89,8 +103,15 @@ export class ExportGroupLedgerComponent implements OnInit {
         });
     }
 
+    /**
+     * This will use for export ledger
+     *
+     * @memberof ExportGroupLedgerComponent
+     */
     public exportLedger() {
-        this.closeExportGroupLedgerModal.emit({ from: this.dateRange.from, to: this.dateRange.to, type: this.emailTypeSelected, fileType: this.fileType, order: this.order });
+        this.exportRequest.from = this.fromDate;
+        this.exportRequest.to = this.toDate;
+        this.closeExportGroupLedgerModal.emit({ from: this.fromDate, to: this.toDate, type: this.emailTypeSelected, fileType: this.fileType, order: this.order, body: this.exportRequest });
     }
 
     public onSelectDateRange(ev) {
@@ -102,7 +123,7 @@ export class ExportGroupLedgerComponent implements OnInit {
     *To show the datepicker
     *
     * @param {*} element
-    * @memberof AuditLogsFormComponent
+    * @memberof ExportGroupLedgerComponent
     */
     public showGiddhDatepicker(element: any): void {
         if (element) {
@@ -117,7 +138,7 @@ export class ExportGroupLedgerComponent implements OnInit {
     /**
      * This will hide the datepicker
      *
-     * @memberof AuditLogsFormComponent
+     * @memberof ExportGroupLedgerComponent
      */
     public hideGiddhDatepicker(): void {
         this.modalRef.hide();
@@ -127,7 +148,7 @@ export class ExportGroupLedgerComponent implements OnInit {
      * Call back function for date/range selection in datepicker
      *
      * @param {*} value
-     * @memberof AuditLogsFormComponent
+     * @memberof ExportGroupLedgerComponent
      */
     public dateSelectedCallback(value?: any): void {
         if (value && value.event === "cancel") {
@@ -153,7 +174,7 @@ export class ExportGroupLedgerComponent implements OnInit {
     /**
      * Releases memory
      *
-     * @memberof AuditLogsFormComponent
+     * @memberof ExportGroupLedgerComponent
      */
     public ngOnDestroy(): void {
         this.destroyed$.next(true);

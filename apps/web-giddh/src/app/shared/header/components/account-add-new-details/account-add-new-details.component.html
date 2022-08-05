@@ -373,7 +373,7 @@
                                             </div>
                                         </div>
 
-                                        <div
+                                        <!-- <div
                                             class="col-sm-4"
                                             *ngIf="gst.get('gstNumber').value && (isGstValid$ | async)"
                                         >
@@ -386,7 +386,7 @@
                                                     </label></label
                                                 >
                                             </div>
-                                        </div>
+                                        </div> -->
                                     </ng-container>
                                 </div>
 
@@ -766,8 +766,9 @@
                 <a
                     href="javascript:;"
                     class="btn-link"
-                    (click)="goToCustomFields.emit(true)"
+                    [routerLink]="'/pages/custom-fields/list'"
                     *ngIf="!companyCustomFields?.length"
+                    (click)="closeMaster()"
                     >{{ commonLocaleData?.app_create_custom_field }}</a
                 >
             </tab>

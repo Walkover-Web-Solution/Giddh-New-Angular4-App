@@ -28,8 +28,6 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
     @ViewChild('groupsidebar', { static: true }) public groupsidebar: GroupsAccountSidebarComponent;
     public config: PerfectScrollbarConfigInterface = { suppressScrollX: false, suppressScrollY: false };
     @ViewChild('perfectdirective', { static: true }) public directiveScroll: PerfectScrollbarComponent;
-    /** Tabset instance */
-    @ViewChild('staticTabs', { static: true }) public staticTabs: TabsetComponent;
     public breadcrumbPath: string[] = [];
     public breadcrumbUniquePath: string[] = [];
     public myModelRect: any;
@@ -49,10 +47,6 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
     public commonLocaleData: any = {};
     /** True if initial component load */
     public initialLoad: boolean = true;
-    /** This holds active tab */
-    public activeTab: string = "master";
-    /** True if custom fields api needs to be called again */
-    public reloadCustomFields: boolean = false;
 
     // tslint:disable-next-line:no-empty
     constructor(
@@ -97,7 +91,7 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
         this.groupSearchTerms.pipe(
             debounceTime(700), takeUntil(this.destroyed$))
             .subscribe(term => {
-                if(!this.initialLoad) {
+                if (!this.initialLoad) {
                     this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(term));
                 }
                 this.initialLoad = false;
@@ -127,11 +121,7 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
             }
         });
 
-        this.store.pipe(select(state => state.groupwithaccounts.activeTab), takeUntil(this.destroyed$)).subscribe(activeTab => {
-            if(activeTab !== null && activeTab !== undefined) {
-                this.staticTabs.tabs[activeTab].active = true;
-            }
-        });
+        document.querySelector('body')?.classList?.add('master-page');
     }
 
     public ngAfterViewChecked() {
@@ -165,6 +155,7 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+        document.querySelector('body')?.classList?.remove('master-page');
     }
 
     public ScrollToRight() {
@@ -176,32 +167,5 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
     public breadcrumbPathChanged(obj) {
         this.breadcrumbUniquePath = obj.breadcrumbUniqueNamePath;
         this.breadcrumbPath = obj.breadcrumbPath;
-    }
-
-    /**
-     * This will show custom fields tab if clicked create custom field from add/update account
-     *
-     * @param {boolean} event
-     * @memberof ManageGroupsAccountsComponent
-     */
-    public showCustomFieldsTab(event: boolean) {
-        if(event) {
-            this.staticTabs.tabs[1].active = true;
-        }
-    }
-
-    /**
-     * Callback for tab change
-     *
-     * @param {string} tab
-     * @memberof ManageGroupsAccountsComponent
-     */
-    public onTabChange(tab: string): void {
-        if(tab === "master" && this.activeTab === "custom") {
-            this.reloadCustomFields = true;
-        } else {
-            this.reloadCustomFields = false;
-        }
-        this.activeTab = tab;
     }
 }

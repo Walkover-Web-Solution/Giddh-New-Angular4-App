@@ -110,7 +110,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             }
         });
     }
-    
+
 
     public sidebarStatusChange(event) {
         this.sideMenu.isopen = event;

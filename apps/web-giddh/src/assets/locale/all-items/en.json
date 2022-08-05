@@ -65,7 +65,10 @@
                     "label": "Sales Register",
                     "link": "/pages/reports/sales-register",
                     "icon": "icon-register-new",
-                    "description": "Net & cumulative sales"
+                    "description": "Net & cumulative sales",
+                    "additionalRoutes":[
+                        "/pages/reports/sales-detailed-expand"
+                    ]
                 },
                 {
                     "label": "Template",
@@ -108,7 +111,10 @@
                     "label": "Purchase Register",
                     "link": "/pages/reports/purchase-register",
                     "icon": "icon-register-new",
-                    "description": "Net & cumulative purchases"
+                    "description": "Net & cumulative purchases",
+                    "additionalRoutes":[
+                        "/pages/reports/purchase-detailed-expand"
+                    ]
                 },
                 {
                     "label": "Vendor",
@@ -392,6 +398,11 @@
                     "link": "/pages/search",
                     "icon": "icon-search",
                     "description": "Select group and search for a time span"
+                },
+                {
+                    "label": "Downloads",
+                    "link": "/pages/downloads",
+                    "icon": "icon-download-circle"
                 }
             ]
         }

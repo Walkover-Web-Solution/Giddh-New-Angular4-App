@@ -585,7 +585,11 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
             this.inventoryService.GetStockDetails(event.additional.stockGroup?.uniqueName, event.value).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
                 if (response.status === 'success') {
                     product.stockDetails.rate = response.body.purchaseAccountDetails?.unitRates[0]?.rate;
-                    product.stockDetails.stockUnit = response.body.purchaseAccountDetails?.unitRates[0]?.stockUnitCode;
+                    if (!response.body.purchaseAccountDetails) {
+                        product.stockDetails.stockUnit = response.body.stockUnit.code;
+                    } else {
+                        product.stockDetails.stockUnit = response.body.purchaseAccountDetails?.unitRates[0]?.stockUnitCode;
+                    }
                     this.calculateRowTotal(product);
                 }
             });
@@ -1180,7 +1184,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                 this.branchTransfer.products = response.body.products;
 
                 let allWarehouses = [];
-                if(Object.keys(this.allWarehouses)?.length > 0) {
+                if (Object.keys(this.allWarehouses)?.length > 0) {
                     const usedWarehouses = [];
                     this.branchTransfer.sources?.forEach(branch => {
                         usedWarehouses.push(branch?.warehouse?.uniqueName);
@@ -1192,7 +1196,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                     Object.keys(this.allWarehouses)?.forEach(branch => {
                         allWarehouses[branch] = [];
                         this.allWarehouses[branch]?.forEach(warehouse => {
-                            if(!warehouse?.isArchived || usedWarehouses?.includes(warehouse?.uniqueName)) {
+                            if (!warehouse?.isArchived || usedWarehouses?.includes(warehouse?.uniqueName)) {
                                 allWarehouses[branch].push(warehouse);
                             }
                         });

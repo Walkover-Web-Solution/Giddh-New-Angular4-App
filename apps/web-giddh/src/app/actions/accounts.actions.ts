@@ -49,6 +49,7 @@ export class AccountsAction {
     public static GET_ACCOUNT_DETAILS = 'AccountDetails';
     public static GET_ACCOUNT_DETAILS_RESPONSE = 'AccountDetailsResponse';
     public static RESET_ACTIVE_ACCOUNT = 'AccountReset';
+    public static RESET_ACTIVE_GROUP = 'GroupReset';
     public static GET_ACCOUNT_TAX_HIERARCHY = 'AccountTaxHierarchy';
     public static GET_ACCOUNT_TAX_HIERARCHY_RESPONSE = 'AccountTaxHierarchyResponse';
     public static APPLY_GROUP_TAX = 'ApplyAccountTax';
@@ -544,7 +545,7 @@ export class AccountsAction {
                 }
                 return { type: 'EmptyAction' };
             })));
-            
+
     constructor(private action$: Actions,
         private _accountService: AccountService,
         private _toasty: ToasterService,
@@ -729,6 +730,18 @@ export class AccountsAction {
     public resetActiveAccount(): CustomActions {
         return {
             type: AccountsAction.RESET_ACTIVE_ACCOUNT
+        };
+    }
+
+    /**
+     * This will use for reset active group for create account
+     *
+     * @return {*}  {CustomActions}
+     * @memberof AccountsAction
+     */
+    public resetActiveGroup(): CustomActions {
+        return {
+            type: AccountsAction.RESET_ACTIVE_GROUP
         };
     }
 

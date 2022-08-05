@@ -1,6 +1,7 @@
 <input
     type="text"
-    [class]="cssClass"
+    [ngClass]="cssClass"
+    class="select-field-input"
     [placeholder]="placeholder"
     matInput
     [matAutocomplete]="auto"
@@ -12,7 +13,7 @@
     #trigger="matAutocompleteTrigger"
 />
 <mat-autocomplete [displayWith]="displayLabel" (optionSelected)="optionSelected($event)" #auto="matAutocomplete">
-    <mat-option *ngFor="let option of fieldFilteredOptions" [value]="option">
+    <mat-option *ngFor="let option of fieldFilteredOptions" [value]="option" [matTooltip]="option?.label">
         {{ option?.label }}
     </mat-option>
     <mat-option disabled *ngIf="fieldFilteredOptions?.length === 0"> No results found </mat-option>

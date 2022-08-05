@@ -5,7 +5,7 @@
     (commonLocaleData)="commonLocaleData = $event"
     (translationComplete)="translationComplete($event)"
 >
-    <div class="primary-sidebar py-3 position-relative">
+    <div class="primary-sidebar py-3 position-relative" (clickOutside)="hidePrimarySidebarCompanyList()">
         <div
             class="company-branch-block pd-l2 pd-r2 position-relative"
             [ngClass]="{ 'padding-14': !currentBranch && (currentCompanyBranches$ | async)?.length > 1 }"
@@ -52,8 +52,12 @@
                                     ></i>
                                 </span>
                                 <span class="d-flex">
-                                    <i class="icon-down-new" *ngIf="!showCompanyBranchSwitch"></i>
-                                    <i class="icon-cross" *ngIf="showCompanyBranchSwitch"></i>
+                                    <i
+                                        [ngClass]="{
+                                            'icon-cross': showCompanyBranchSwitch,
+                                            'icon-down-new': !showCompanyBranchSwitch
+                                        }"
+                                    ></i>
                                 </span>
                             </div>
                         </div>
@@ -188,7 +192,6 @@
                                     *ngIf="menu?.items?.length"
                                     id="button-basic-02"
                                     dropdownToggle
-                                    type="button"
                                     class="dropdown-toggle"
                                     aria-controls="dropdown-basic-02"
                                     [class.active]="menu?.isActive"
@@ -206,7 +209,6 @@
                                     [queryParams]="menu?.additional"
                                     id="button-basic-02"
                                     dropdownToggle
-                                    type="button"
                                     class="dropdown-toggle"
                                     aria-controls="dropdown-basic-02"
                                 >
@@ -227,7 +229,11 @@
                                             <a
                                                 *ngIf="item?.link"
                                                 href="javascript:void(0);"
-                                                [class.active]="rla?.isActive || isRouteWithParamsActive(item?.link)"
+                                                [class.active]="
+                                                    rla?.isActive ||
+                                                    isRouteWithParamsActive(item?.link) ||
+                                                    item?.additionalRoutes?.includes(isActiveRoute)
+                                                "
                                                 [routerLink]="[item?.link]"
                                                 routerLinkActive
                                                 #rla="routerLinkActive"
@@ -285,6 +291,7 @@
         [class]="accountAsideMenuState"
         [@slideInOut]="accountAsideMenuState"
         (closeAsideEvent)="toggleAccountAsidePane($event)"
+        (closeAccountModal)="closeAccountModal($event)"
         [selectedGrpUniqueName]="selectedGroupForCreateAccount"
         [createAccountFromCommandK]="true"
         [keyboardShortcut]="{ 'esc': accountAsideMenuState === 'in' }"

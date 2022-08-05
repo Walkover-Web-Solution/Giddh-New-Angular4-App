@@ -16,6 +16,7 @@ import { GstTemplateHComponent } from './edit-template/out-tempate/templates/gst
 import { GstTemplateIComponent } from './edit-template/out-tempate/templates/gst-template-i/gst-template-i.component';
 import { NgxUploaderModule } from 'ngx-uploader';
 import { HasFocusDirectiveModule } from '../../shared/helpers/directives/has-focus/has-focus.module';
+import { ThermalTemplateComponent } from './edit-template/out-tempate/templates/thermal-template/thermal-template.component';
 
 @NgModule({
     imports: [
@@ -37,7 +38,8 @@ import { HasFocusDirectiveModule } from '../../shared/helpers/directives/has-foc
         GstTemplateCComponent,
         GstTemplateGComponent,
         GstTemplateHComponent,
-        GstTemplateIComponent
+        GstTemplateIComponent,
+        ThermalTemplateComponent
     ],
     exports: [
         OutTemplateComponent,

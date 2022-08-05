@@ -1,0 +1,103 @@
+.create-custom-field-page {
+    .back-to-page {
+        position: absolute;
+        right: 5px;
+        top: 0;
+        padding: 10px;
+        z-index: 10;
+        color: var(--color-blue);
+    }
+    .custom-field-wrapper {
+        min-height: 73vh;
+        .add-icon-delete {
+            position: relative;
+            i {
+                position: absolute;
+                right: -40px;
+                top: 0px;
+                cursor: pointer;
+                padding: 10px;
+                &.icon-plus {
+                    color: var(--color-blue);
+                }
+                &.icon-trash {
+                    color: var(--color-gray);
+                }
+            }
+        }
+        textarea {
+            min-height: 90px;
+            border: 1px solid var(--color-secondary-input-bar-border);
+        }
+        .vector-image {
+            position: absolute;
+            right: 15px;
+            top: 0;
+        }
+        mat-select {
+            border: 1px solid var(--color-secondary-input-bar-border);
+            height: 35px;
+            border-radius: 5px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 0px 7px;
+        }
+    }
+}
+
+.inventory-footer {
+    background-color: var(--color-secondary-footer-background);
+    z-index: 3;
+    width: calc(100% - 240px);
+    padding-right: 15px;
+    line-height: 1.8;
+    text-align: left;
+    min-height: 60px;
+    align-items: center;
+    display: flex;
+    position: static;
+    width: 100%;
+    padding-left: 15px;
+}
+
+@media (max-width: 767px) {
+    .create-custom-field-page {
+        .back-to-page {
+            top: -12px;
+            right: 0;
+        }
+        .custom-field-wrapper {
+            min-height: calc(100vh - 250px);
+            form {
+                p {
+                    margin-right: 60px !important;
+                }
+            }
+            .icon-cross {
+                position: absolute;
+                right: -20px;
+                top: -10px;
+                padding: 10px;
+            }
+            .vector-image {
+                display: none;
+            }
+        }
+    }
+}
+@media (max-width: 575px) {
+    .create-custom-field-page {
+        .custom-field-wrapper {
+            .vector-image {
+                display: none;
+            }
+            .add-icon-delete {
+                width: calc(100% - 30px);
+            }
+        }
+        .icon-cross {
+            right: 0;
+        }
+    }
+}

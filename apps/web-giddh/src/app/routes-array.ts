@@ -53,6 +53,7 @@ export const ROUTES = [
             { path: 'daybook', loadChildren: () => import('./daybook/daybook.module').then(module => module.DaybookModule) },
             { path: 'purchase', loadChildren: () => import('./purchase/purchase.module').then(module => module.PurchaseModule) },
             { path: 'inventory', loadChildren: () => import('./inventory/inventory.module').then(module => module.InventoryModule) },
+            { path: 'new-inventory', loadChildren: () => import('./new-inventory/new-inventory.module').then(module => module.NewInventoryModule) },
             {
                 path: 'inventory-in-out',
                 loadChildren: () => import('./inventory-in-out/inventory-in-out.module').then(module => module.InventoryInOutModule),
@@ -102,6 +103,8 @@ export const ROUTES = [
             { path: 'billing-detail' },
             { path: 'billing-detail/buy-plan' },
             { path: 'voucher', loadChildren: () => import('./payment-receipt/payment-receipt.module').then(module => module.PaymentReceiptModule) },
+            { path: 'downloads', loadChildren: () => import('./downloads/downloads.module').then(module => module.DownloadsModule) },
+            { path: 'custom-fields', loadChildren: () => import('./custom-fields/custom-fields.module').then(module => module.CustomFieldsModule) },
             { path: '**', redirectTo: 'home', pathMatch: 'full' }
         ]
     },

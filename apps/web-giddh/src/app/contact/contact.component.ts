@@ -259,7 +259,7 @@ export class ContactComponent implements OnInit, OnDestroy {
         private contactService: ContactService, private settingsIntegrationActions: SettingsIntegrationActions, private companyActions: CompanyActions, private componentFactoryResolver: ComponentFactoryResolver,
         private groupWithAccountsAction: GroupWithAccountsAction, private cdRef: ChangeDetectorRef, private generalService: GeneralService, private route: ActivatedRoute, private generalAction: GeneralActions,
         private breakPointObservar: BreakpointObserver, private modalService: BsModalService, private settingsProfileActions: SettingsProfileActions,
-        private settingsBranchAction: SettingsBranchActions, public currencyPipe: GiddhCurrencyPipe, private lightbox: Lightbox ,private renderer: Renderer2, private customFieldsService: CustomFieldsService) {
+        private settingsBranchAction: SettingsBranchActions, public currencyPipe: GiddhCurrencyPipe, private lightbox: Lightbox, private renderer: Renderer2, private customFieldsService: CustomFieldsService) {
         this.searchLoader$ = this.store.pipe(select(p => p.search.searchLoader), takeUntil(this.destroyed$));
         this.dueAmountReportRequest = new DueAmountReportQueryRequest();
         this.createAccountIsSuccess$ = this.store.pipe(select(state => state.groupwithaccounts.createAccountIsSuccess), takeUntil(this.destroyed$));
@@ -336,7 +336,7 @@ export class ContactComponent implements OnInit, OnDestroy {
                         this.availableColumnsCount = [];
                         this.showNameSearch = false;
                         this.searchedName?.reset();
-                        this.translationComplete(true);                        
+                        this.translationComplete(true);
                     }
                 } else {
                     this.setActiveTab("aging-report");
@@ -384,7 +384,7 @@ export class ContactComponent implements OnInit, OnDestroy {
         });
 
         this.store.pipe(select(state => state.sales.updatedAccountDetails), takeUntil(this.destroyed$)).subscribe(response => {
-            if(response) {
+            if (response) {
                 this.getAccounts(this.fromDate, this.toDate, null, "true", PAGINATION_LIMIT, this.searchStr, this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
             }
         });
@@ -463,7 +463,7 @@ export class ContactComponent implements OnInit, OnDestroy {
             distinctUntilChanged(),
             takeUntil(this.destroyed$),
         ).subscribe(searchedText => {
-            if (searchedText !== null && searchedText !== undefined ) {
+            if (searchedText !== null && searchedText !== undefined) {
                 this.showClearFilter = true;
                 this.searchStr$.next(searchedText);
             }
@@ -524,13 +524,15 @@ export class ContactComponent implements OnInit, OnDestroy {
         if (additionalParams) {
             url = `${url}${additionalParams}`;
         }
-
         if (isElectron) {
+            let ipcRenderer = (window as any).require('electron').ipcRenderer;
             url = location.origin + location.pathname + `#./pages/${part}/${accUniqueName}`;
+            ipcRenderer.send('open-url', url);
         } else {
             (window as any).open(url);
         }
     }
+
 
     public tabSelected(tabName: "customer" | "aging-report" | "vendor") {
         if (!this.searchStr) {
@@ -1009,7 +1011,7 @@ export class ContactComponent implements OnInit, OnDestroy {
             null, "true", PAGINATION_LIMIT, "", "", null, (this.currentBranch ? this.currentBranch.uniqueName : ""));
         this.searchedName?.reset();
         this.searchStr = "";
-        this.showNameSearch = false;    
+        this.showNameSearch = false;
     }
 
     public applyAdvanceSearch(request: ContactAdvanceSearchCommonModal) {
@@ -1466,7 +1468,7 @@ export class ContactComponent implements OnInit, OnDestroy {
                 }
 
                 let isColumnAvailable = this.availableColumnsCount.filter(column => column.value === key.uniqueName);
-                if(!isColumnAvailable?.length) {
+                if (!isColumnAvailable?.length) {
                     this.availableColumnsCount.push({ key: index, value: key.uniqueName });
                 }
             }

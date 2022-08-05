@@ -128,7 +128,7 @@ export class LoginComponent implements OnInit, OnDestroy {
             return state.login.isLoginWithGoogleInProcess;
         }), takeUntil(this.destroyed$));
         contriesWithCodes.map(c => {
-            this.countryCodeList.push({ value: c.countryName, label: c.value });
+            this.countryCodeList.push({ value: c?.countryName, label: c?.value });
         });
         this.userLoginState$ = this.store.pipe(select(p => p?.session?.userLoginState), takeUntil(this.destroyed$));
         this.userDetails$ = this.store.pipe(select(p => p?.session?.user), takeUntil(this.destroyed$));
@@ -265,7 +265,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         let data = new VerifyMobileModel();
         data.countryCode = Number(user?.countryCode);
         data.mobileNumber = user?.contactNumber;
-        data.oneTimePassword = this.twoWayOthForm.value.otp;
+        data.oneTimePassword = this.twoWayOthForm?.value?.otp;
         this.store.dispatch(this.loginAction.VerifyTwoWayAuthRequest(data));
     }
 
@@ -341,8 +341,8 @@ export class LoginComponent implements OnInit, OnDestroy {
      * setCountryCode
      */
     public setCountryCode(event: IOption) {
-        if (event.value) {
-            let country = this.countryCodeList?.filter((obj) => obj.value === event.value);
+        if (event?.value) {
+            let country = this.countryCodeList?.filter((obj) => obj?.value === event?.value);
             this.selectedCountry = country[0].label;
         }
     }
@@ -357,7 +357,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
 
     public loginWithPasswd(model: FormGroup) {
-        let ObjToSend = model.value;
+        let ObjToSend = model?.value;
         if (ObjToSend) {
             this.store.dispatch(this.loginAction.LoginWithPasswdRequest(ObjToSend));
         }
@@ -376,7 +376,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
 
     public resetPassword(form) {
-        let ObjToSend = form.value;
+        let ObjToSend = form?.value;
         ObjToSend.uniqueKey = _.cloneDeep(this.userUniqueKey);
         this.store.dispatch(this.loginAction.resetPasswordRequest(ObjToSend));
     }

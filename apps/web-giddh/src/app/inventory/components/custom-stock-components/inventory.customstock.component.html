@@ -183,7 +183,7 @@
                                         <i class="icon-edit-pencil"></i>
                                     </button>
                                     <button
-                                        class="btn-default btn-xs"
+                                        class="btn-default btn-xs delete-btn"
                                         [disabled]="editMode"
                                         [ladda]="(deleteCustomStockInProcessCode$ | async)?.indexOf(item.code) > -1"
                                         (click)="deleteUnit(item.code)"

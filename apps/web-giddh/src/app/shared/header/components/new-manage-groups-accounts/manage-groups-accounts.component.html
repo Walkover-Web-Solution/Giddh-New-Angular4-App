@@ -39,7 +39,7 @@
                 </div>
                 <!-- form-inline -->
             </div>
-            <span aria-hidden="true" class="close m-0 p-0" data-dismiss="modal" (click)="closePopupEvent()">×</span>
+            <button aria-hidden="true" class="close m-0 p-0" data-dismiss="modal" (click)="closePopupEvent()">×</button>
         </span>
         <span>
             <h3 class="modal-title bg pd-t05">{{ localeData?.page_heading }}</h3>
@@ -48,90 +48,72 @@
     <!-- end header -->
 
     <div class="modal-body p-0">
-        <tabset #staticTabs class="custom-tabs master-custom-tabs">
-            <tab heading="{{ localeData?.master }}" id="tab1" (selectTab)="onTabChange('master')">
-                <div class="clearfix">
-                    <div
-                        class="grp-col p-0"
-                        [ngStyle]="{
-                            'height':
-                                (myModelRect ? myModelRect.height : 0) - (headerRect ? headerRect.height : 0) + 'px'
-                        }"
-                    >
-                        <!-- <perfect-scrollbar> -->
-                        <div class="search-loading" *ngIf="searchLoad | async">
-                            <div class="vertical-center">
-                                <span class="spinner small"></span> {{ commonLocaleData?.app_loading }}
-                            </div>
-                        </div>
-                        <div
-                            class="search-loading no-result"
-                            *ngIf="!(searchLoad | async) && !(groupList$ | async)?.length"
-                        >
-                            <div class="vertical-center">
-                                <h1>{{ localeData?.no_result_found }}</h1>
-                            </div>
-                        </div>
-                        <div>
-                            <perfect-scrollbar
-                                #perfectdirective
-                                class="scroll-container"
-                                fxFlex="auto"
-                                [config]="config"
-                                [scrollIndicators]="true"
-                            >
-                                <div
-                                    *ngIf="!(searchLoad | async)"
-                                    [ngStyle]="{ 'width': groupsidebar?.mc?.columns?.length * 255 + 'px' }"
-                                    class="wrap-account-sidebar"
-                                >
-                                    <groups-account-sidebar
-                                        (columnsChanged)="currentColumns = $event"
-                                        #groupsidebar
-                                        [ngStyle]="{
-                                            'height':
-                                                (myModelRect ? myModelRect.height : 0) -
-                                                (headerRect ? headerRect.height : 0) +
-                                                'px'
-                                        }"
-                                        [height]="
-                                            (myModelRect ? myModelRect.height : 0) -
-                                            (headerRect ? headerRect.height : 0)
-                                        "
-                                        [groups]="groupList$ | async"
-                                        (breadcrumbPathChanged)="breadcrumbPathChanged($event)"
-                                        (resetSearchString)="resetGroupSearchString(false)"
-                                        (ScrollToRight)="ScrollToRight()"
-                                        [isSearchingGroups]="!(grpSrch.value === '')"
-                                        [localeData]="localeData"
-                                    ></groups-account-sidebar>
-                                </div>
-                            </perfect-scrollbar>
-                        </div>
-                    </div>
-                    <!-- middle body -->
-                    <div class="form-box form-bg height-in-vh">
-                        <account-operations
-                            [columnsRef]="currentColumns"
-                            [height]="(myModelRect ? myModelRect.height : 0) - (headerRect ? headerRect.height : 0)"
-                            [breadcrumbPath]="breadcrumbPath"
-                            [breadcrumbUniquePath]="breadcrumbUniquePath"
-                            [localeData]="localeData"
-                            [commonLocaleData]="commonLocaleData"
-                            #form
-                            *ngIf="localeData?.page_heading"
-                            (goToCustomFields)="showCustomFieldsTab($event)"
-                            [reloadCustomFields]="reloadCustomFields"
-                        >
-                        </account-operations>
+        <div class="clearfix">
+            <div
+                class="grp-col p-0"
+                [ngStyle]="{
+                    'height': (myModelRect ? myModelRect.height : 0) - (headerRect ? headerRect.height : 0) + 'px'
+                }"
+            >
+                <div class="search-loading" *ngIf="searchLoad | async">
+                    <div class="vertical-center">
+                        <span class="spinner small"></span> {{ commonLocaleData?.app_loading }}
                     </div>
                 </div>
-            </tab>
-            <!--           new -->
-            <tab heading="{{ commonLocaleData?.app_custom }}" (selectTab)="onTabChange('custom')">
-                <custom-fields></custom-fields>
-            </tab>
-        </tabset>
+                <div class="search-loading no-result" *ngIf="!(searchLoad | async) && !(groupList$ | async)?.length">
+                    <div class="vertical-center">
+                        <h1>{{ localeData?.no_result_found }}</h1>
+                    </div>
+                </div>
+                <div>
+                    <perfect-scrollbar
+                        #perfectdirective
+                        class="scroll-container"
+                        fxFlex="auto"
+                        [config]="config"
+                        [scrollIndicators]="true"
+                    >
+                        <div
+                            *ngIf="!(searchLoad | async)"
+                            [ngStyle]="{ 'width': groupsidebar?.mc?.columns?.length * 255 + 'px' }"
+                            class="wrap-account-sidebar"
+                        >
+                            <groups-account-sidebar
+                                (columnsChanged)="currentColumns = $event"
+                                #groupsidebar
+                                [ngStyle]="{
+                                    'height':
+                                        (myModelRect ? myModelRect.height : 0) -
+                                        (headerRect ? headerRect.height : 0) +
+                                        'px'
+                                }"
+                                [height]="(myModelRect ? myModelRect.height : 0) - (headerRect ? headerRect.height : 0)"
+                                [groups]="groupList$ | async"
+                                (breadcrumbPathChanged)="breadcrumbPathChanged($event)"
+                                (resetSearchString)="resetGroupSearchString(false)"
+                                (ScrollToRight)="ScrollToRight()"
+                                [isSearchingGroups]="!(grpSrch.value === '')"
+                                [localeData]="localeData"
+                            ></groups-account-sidebar>
+                        </div>
+                    </perfect-scrollbar>
+                </div>
+            </div>
+            <!-- middle body -->
+            <div class="form-box form-bg height-in-vh">
+                <account-operations
+                    [columnsRef]="currentColumns"
+                    [height]="(myModelRect ? myModelRect.height : 0) - (headerRect ? headerRect.height : 0)"
+                    [breadcrumbPath]="breadcrumbPath"
+                    [breadcrumbUniquePath]="breadcrumbUniquePath"
+                    [localeData]="localeData"
+                    [commonLocaleData]="commonLocaleData"
+                    #form
+                    *ngIf="localeData?.page_heading"
+                >
+                </account-operations>
+            </div>
+        </div>
     </div>
     <!-- end modal body -->
 </div>

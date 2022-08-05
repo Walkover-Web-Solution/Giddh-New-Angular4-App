@@ -210,7 +210,7 @@
                                         />
                                     </mat-form-field>
                                 </span>
-                                <span
+                                <button
                                     id="advance-filter"
                                     (click)="onOpenAdvanceSearch()"
                                     class="advance-icon d-flex advance-search-filter pointer"
@@ -220,8 +220,8 @@
                                     [ngStyle]="{ 'margin-left': checkedTrxWhileHovering?.length === 0 ? '7px' : '0px' }"
                                 >
                                     <span class="icon-advance-filter"></span>
-                                </span>
-                                <a
+                                </button>
+                                <button
                                     class="cp clear-filter-btn"
                                     id="clear-filter"
                                     *ngIf="isAdvanceSearchImplemented && !isMobileScreen"
@@ -232,7 +232,7 @@
                                     matTooltipClass="tooltip-black"
                                 >
                                     <i aria-hidden="true" class="icon-refresh"></i>
-                                </a>
+                                </button>
                                 <div
                                     class="d-flex xs-mb-1"
                                     *ngIf="checkedTrxWhileHovering?.length > 0 && !isMobileScreen"
@@ -497,6 +497,10 @@
                                         mat-button
                                         class="icomoon-ico d-flex align-items-center mr-0"
                                         id="reload-bank-transaction"
+                                        *ngIf="
+                                            lc.bankTransactionsDebitData?.length ||
+                                            lc.bankTransactionsCreditData?.length
+                                        "
                                         href="javascript:void(0)"
                                         [matTooltip]="localeData?.reload_bank_transactions"
                                         [matTooltipPosition]="'above'"
@@ -654,6 +658,29 @@
                                                                 class="select2-parent select2-ledger pl-0 pr-0"
                                                             >
                                                                 <div
+                                                                    *ngIf="!txn.showAccountDropdown"
+                                                                    class="w-100"
+                                                                    (click)="
+                                                                        showBankLedgerPopup(txn, item);
+                                                                        txn.showAccountDropdown = true
+                                                                    "
+                                                                >
+                                                                    <span
+                                                                        [ngClass]="{
+                                                                            'account-placeholder': true,
+                                                                            'account-placeholder-text ':
+                                                                                txn.selectedAccount &&
+                                                                                txn.selectedAccount.name
+                                                                        }"
+                                                                        >{{
+                                                                            txn.selectedAccount
+                                                                                ? txn.selectedAccount.name
+                                                                                : commonLocaleData?.app_select_accounts
+                                                                        }}</span
+                                                                    >
+                                                                </div>
+                                                                <div
+                                                                    *ngIf="txn.showAccountDropdown"
                                                                     class="w-100"
                                                                     (click)="
                                                                         txn.showDropdown = true;
@@ -824,8 +851,12 @@
                                                                     [showTaxationDiscountBox]="
                                                                         lc.currentBlankTxn.showTaxationDiscountBox
                                                                     "
+                                                                    [showOtherTax]="lc.currentBlankTxn.showOtherTax"
                                                                     (saveBlankLedger)="saveBankTransaction()"
-                                                                    (clickedOutsideEvent)="hideBankLedgerPopup($event)"
+                                                                    (clickedOutsideEvent)="
+                                                                        hideBankLedgerPopup($event);
+                                                                        txn.showAccountDropdown = false
+                                                                    "
                                                                     (clickUnpaidInvoiceList)="
                                                                         clickUnpaidInvoiceList($event)
                                                                     "
@@ -915,16 +946,36 @@
                                                                 class="select2-parent select2-ledger pl-0 pr-0"
                                                             >
                                                                 <div
+                                                                    *ngIf="!txn.showAccountDropdown"
                                                                     class="w-100"
                                                                     (click)="
-                                                                        txn.showDropdown = true;
-                                                                        showBankLedgerPopup(txn, item)
+                                                                        showBankLedgerPopup(txn, item);
+                                                                        txn.showAccountDropdown = true
                                                                     "
                                                                 >
                                                                     <span
                                                                         [ngClass]="{
                                                                             'account-placeholder': true,
-                                                                            'account-placeholder-text':
+                                                                            'account-placeholder-text ':
+                                                                                txn.selectedAccount &&
+                                                                                txn.selectedAccount.name
+                                                                        }"
+                                                                        >{{
+                                                                            txn.selectedAccount
+                                                                                ? txn.selectedAccount.name
+                                                                                : commonLocaleData?.app_select_accounts
+                                                                        }}</span
+                                                                    >
+                                                                </div>
+                                                                <div
+                                                                    *ngIf="txn.showAccountDropdown"
+                                                                    class="w-100"
+                                                                    (click)="txn.showDropdown = true"
+                                                                >
+                                                                    <span
+                                                                        [ngClass]="{
+                                                                            'account-placeholder': true,
+                                                                            'account-placeholder-text ':
                                                                                 txn.selectedAccount &&
                                                                                 txn.selectedAccount.name
                                                                         }"
@@ -1083,8 +1134,12 @@
                                                                     [showTaxationDiscountBox]="
                                                                         lc.currentBlankTxn.showTaxationDiscountBox
                                                                     "
+                                                                    [showOtherTax]="lc.currentBlankTxn.showOtherTax"
                                                                     (saveBlankLedger)="saveBankTransaction()"
-                                                                    (clickedOutsideEvent)="hideBankLedgerPopup($event)"
+                                                                    (clickedOutsideEvent)="
+                                                                        hideBankLedgerPopup($event);
+                                                                        txn.showAccountDropdown = false
+                                                                    "
                                                                     (clickUnpaidInvoiceList)="
                                                                         clickUnpaidInvoiceList($event)
                                                                     "
@@ -1771,6 +1826,7 @@
                                                 (moreDetailOpen)="handleOpenMoreDetail($event)"
                                                 (changeTransactionType)="toggleTransactionType($event)"
                                                 [showTaxationDiscountBox]="lc.currentBlankTxn.showTaxationDiscountBox"
+                                                [showOtherTax]="lc.currentBlankTxn.showOtherTax"
                                                 (resetBlankLedger)="resetBlankTransaction()"
                                                 (saveBlankLedger)="saveBlankTransaction()"
                                                 (clickedOutsideEvent)="hideNewLedgerEntryPopup()"
@@ -2193,6 +2249,7 @@
                                                 (moreDetailOpen)="handleOpenMoreDetail($event)"
                                                 (changeTransactionType)="toggleTransactionType($event)"
                                                 [showTaxationDiscountBox]="lc.currentBlankTxn.showTaxationDiscountBox"
+                                                [showOtherTax]="lc.currentBlankTxn.showOtherTax"
                                                 (resetBlankLedger)="resetBlankTransaction()"
                                                 (saveBlankLedger)="saveBlankTransaction()"
                                                 (clickedOutsideEvent)="hideNewLedgerEntryPopup()"

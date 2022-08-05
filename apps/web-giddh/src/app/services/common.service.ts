@@ -78,4 +78,19 @@ export class CommonService {
             catchError((e) => this.errorHandler.HandleCatch<any, string>(e))
         );
     }
+
+    /**
+     * Stock Units for GST Filing
+     *
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof CommonService
+     */
+    public getStockUnits(): Observable<BaseResponse<any, any>> {
+        let url = this.config.apiUrl + COMMON_API.STOCK_UNITS;
+        return this.http.get(url).pipe(
+            map((res) => {
+                let data: BaseResponse<any, any> = res;
+                return data;
+            }));
+    }
 }

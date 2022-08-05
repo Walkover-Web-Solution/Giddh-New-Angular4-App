@@ -1,0 +1,88 @@
+<div class="aside-pane">
+    <div class="header-create-unit">
+        <button id="close" (click)="closeAsidePane($event)"><i class="icon-cross"></i></button>
+        <div class="form-header">
+            <div class="back-button mr-r15"><i class="icon-back-arrow"></i></div>
+            <!-- funcation of back to main aside (click)="backToMainAside()" -->
+            <h3>Create Unit</h3>
+        </div>
+    </div>
+    <div class="aside-body create-combo-aside-body">
+        <div class="create-combo-block">
+            <div class="create-combo-page">
+                <div>
+                    <div class="create-combo-top">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <p class="font-14">Lorem Ipsum dummy text will come here about create Group.</p>
+                            <img src="{{ imgPath }}add-image.svg" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="aside-pane-form">
+            <form>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <label>Combo Name <span class="red-text">*</span></label>
+                        <input type="text" id="combo-name" class="form-control" placeholder="Enter Name" />
+                    </div>
+                    <div class="col-sm-6">
+                        <label>Unit Code <span class="red-text">*</span></label>
+                        <sh-select placeholder="Select Unit" id="combo-unit-code"></sh-select>
+                    </div>
+                </div>
+                <div class="table-responsive mt-5">
+                    <table class="table combo-table font-14">
+                        <thead>
+                            <th width="3%">&nbsp;</th>
+                            <th width="25%">Stock Name <span class="red-text">*</span></th>
+                            <th width="12%">Unit <span class="red-text">*</span></th>
+                            <th width="12%">Qty <span class="red-text">*</span></th>
+                            <th width="15%">Selling Price</th>
+                            <th width="15%">Purchase Price</th>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td width="3%">
+                                    <img src="{{ imgPath }}add-image.svg" width="40" height="40" />
+                                </td>
+                                <td width="25%">
+                                    <sh-select id="select-product-combo" placeholder="Select product/Service">
+                                    </sh-select>
+                                </td>
+                                <td width="12%">
+                                    <input id="combo-unit" type="text" class="form-control" value="Unit" />
+                                </td>
+                                <td width="12%">
+                                    <input id="combo-value" type="text" class="form-control" value="2" />
+                                </td>
+                                <td width="15%">0.00</td>
+                                <td width="15%">0.00</td>
+                            </tr>
+                            <tr>
+                                <td width="3%">
+                                    <img src="{{ imgPath }}add-image.svg" width="40" height="40" />
+                                </td>
+                                <td width="25%">
+                                    <sh-select id="select-product-combo" placeholder="Select product/Service">
+                                    </sh-select>
+                                </td>
+                                <td width="12%"><input type="text" class="form-control" value="Unit" /></td>
+                                <td width="12%"><input type="text" class="form-control" value="2" /></td>
+                                <td width="15%">0.00</td>
+                                <td width="15%">0.00</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="row button-group mt-5">
+                    <div class="col-sm-12">
+                        <button id="combo-clear-btn" class="btn btn-primary">Clear</button>
+                        <button id="combo-success-btn" class="btn btn-success">Create</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
