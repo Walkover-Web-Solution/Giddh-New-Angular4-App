@@ -10,7 +10,6 @@ import { GroupWithAccountsAction } from '../../../../actions/groupwithaccounts.a
 import { GroupAccountSidebarVM } from '../new-group-account-sidebar/VM';
 import { PerfectScrollbarComponent } from 'ngx-perfect-scrollbar';
 import { GeneralService } from "../../../../services/general.service";
-import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { GeneralActions } from 'apps/web-giddh/src/app/actions/general/general.actions';
 
 @Component({
