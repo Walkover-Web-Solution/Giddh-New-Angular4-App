@@ -181,8 +181,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public oldCountryCode: any = '';
     /** This will hold updatedNumber */
     public updatedNumber: any = '';
-    /** This will hold currentCompanyCurrencyCode */
-    public currentCompanyCurrencyCode: any = '';
+    /** This will hold currentCompanyCountryCode */
+    public currentCompanyCountryCode: any = '';
 
 
     constructor(
@@ -343,7 +343,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
 
         if (this.activeCompany && this.activeCompany.countryV2) {
             const countryCode = this.activeCompany.countryV2.alpha2CountryCode;
-            this.currentCompanyCurrencyCode = countryCode.toLowerCase();
+            this.currentCompanyCountryCode = countryCode.toLowerCase();
             const countryName = this.activeCompany.countryV2.countryName;
             this.addAccountForm.get('country').get('countryCode').setValue(countryCode);
             this.selectedCountry = `${countryCode} - ${countryName}`;
@@ -351,6 +351,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             this.addAccountForm.get('currency').setValue(company.baseCurrency);
             this.getOnboardingForm(countryCode);
             this.companyCountry = countryCode;
+            this.addAccountForm.get('mobileNo').setValue("+" + this.activeCompany.countryV2.callingCode);
         } else {
             this.addAccountForm.get('country').get('countryCode').setValue('IN');
             this.selectedCountry = 'IN - India';
@@ -1247,7 +1248,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         if (event) {
             this.newCountryCode = "+" + event?.dialCode;
             const value = this.addAccountForm?.get('mobileNo')?.value?.e164Number;
-            let newNumber = value?.replace(this.oldCountryCode, this.newCountryCode);
+            let newNumber = value ? value?.replace(this.oldCountryCode, this.newCountryCode) : this.newCountryCode;
             this.updatedNumber = newNumber;
             this.addAccountForm.get('mobileNo').setValue(newNumber);
         }
