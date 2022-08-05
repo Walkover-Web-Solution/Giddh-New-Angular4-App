@@ -56,7 +56,7 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
 
     constructor(private store: Store<AppState>, private homeActions: HomeActions, public currencyPipe: GiddhCurrencyPipe, private generalService: GeneralService, private dashboardService: DashboardService, private toasterService: ToasterService) {
         this.getCurrentWeekStartEndDate = this.getWeekStartEndDate(new Date());
-        this.getPreviousWeekStartEndDate = this.getWeekStartEndDate(dayjs(this.getCurrentWeekStartEndDate[0]).subtract(1, 'days'));
+        this.getPreviousWeekStartEndDate = this.getWeekStartEndDate(dayjs(this.getCurrentWeekStartEndDate[0]).subtract(1, 'day'));
 
         this.currentDateRangePickerValue = [this.getCurrentWeekStartEndDate[0], this.getCurrentWeekStartEndDate[1]];
         this.previousDateRangePickerValue = [this.getPreviousWeekStartEndDate[0], this.getPreviousWeekStartEndDate[1]];
@@ -338,7 +338,7 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
         this.graphExpanded = false;
 
         this.getCurrentWeekStartEndDate = this.getWeekStartEndDate(new Date());
-        this.getPreviousWeekStartEndDate = this.getWeekStartEndDate(dayjs(this.getCurrentWeekStartEndDate[0]).subtract(1, 'days'));
+        this.getPreviousWeekStartEndDate = this.getWeekStartEndDate(dayjs(this.getCurrentWeekStartEndDate[0]).subtract(1, 'day'));
 
         this.currentDateRangePickerValue = [this.getCurrentWeekStartEndDate[0], this.getCurrentWeekStartEndDate[1]];
         this.previousDateRangePickerValue = [this.getPreviousWeekStartEndDate[0], this.getPreviousWeekStartEndDate[1]];

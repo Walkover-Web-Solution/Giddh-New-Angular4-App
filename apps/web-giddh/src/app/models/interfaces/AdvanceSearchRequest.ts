@@ -20,7 +20,7 @@ export class AdvanceSearchRequest {
         if (this.dataToSend.bsRangeValue && this.dataToSend.bsRangeValue.length > 0) {
             return dayjs(this.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT);
         }
-        return dayjs().subtract(30, 'days').format(GIDDH_DATE_FORMAT);
+        return dayjs().subtract(30, 'day').format(GIDDH_DATE_FORMAT);
     }
 
     get to(): string {

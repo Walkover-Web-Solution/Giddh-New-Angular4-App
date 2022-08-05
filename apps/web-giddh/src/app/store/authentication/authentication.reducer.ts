@@ -571,7 +571,7 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
                 } else {
                     latestState.todaySelected = false;
                 }
-                let fromDate: any = data.fromDate ? dayjs(data.fromDate, GIDDH_DATE_FORMAT) : dayjs().subtract(30, 'days');
+                let fromDate: any = data.fromDate ? dayjs(data.fromDate, GIDDH_DATE_FORMAT) : dayjs().subtract(30, 'day');
                 let toDate: any = data.toDate ? dayjs(data.toDate, GIDDH_DATE_FORMAT) : dayjs();
                 latestState.applicationDate = [fromDate.$d, toDate.$d, chosenLabel, !!data.fromDate];
                 return Object.assign({}, state, latestState);

@@ -120,7 +120,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
                 dayjs().endOf('year').subtract(1, 'year')
             ]
         },
-        startDate: dayjs().subtract(30, 'days'),
+        startDate: dayjs().subtract(30, 'day'),
         endDate: dayjs()
     };
     public proformaSelectedDate: any = {
@@ -248,7 +248,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
                             if (dueDate.isAfter(dayjs()) || ['paid', 'cancel'].includes(item.action)) {
                                 item.expiredDays = null;
                             } else {
-                                let dueDays = dueDate ? dayjs().diff(dueDate, 'days') : null;
+                                let dueDays = dueDate ? dayjs().diff(dueDate, 'day') : null;
                                 item.isSelected = false;
                                 item.expiredDays = dueDays;
                             }

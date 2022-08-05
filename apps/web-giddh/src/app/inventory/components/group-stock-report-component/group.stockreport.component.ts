@@ -179,23 +179,23 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
         },
         ranges: {
             'Last 1 Day': [
-                dayjs().subtract(1, 'days'),
+                dayjs().subtract(1, 'day'),
                 dayjs()
             ],
             'Last 7 Days': [
-                dayjs().subtract(6, 'days'),
+                dayjs().subtract(6, 'day'),
                 dayjs()
             ],
             'Last 30 Days': [
-                dayjs().subtract(29, 'days'),
+                dayjs().subtract(29, 'day'),
                 dayjs()
             ],
             'Last 6 Months': [
-                dayjs().subtract(6, 'months'),
+                dayjs().subtract(6, 'month'),
                 dayjs()
             ],
             'Last 1 Year': [
-                dayjs().subtract(12, 'months'),
+                dayjs().subtract(12, 'month'),
                 dayjs()
             ]
         },
