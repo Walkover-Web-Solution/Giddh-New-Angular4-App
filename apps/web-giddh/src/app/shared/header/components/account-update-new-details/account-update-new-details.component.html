@@ -738,7 +738,7 @@
                                             [maxLength]="item.dataRange?.max"
                                             [attr.pattern]="item.regex"
                                             [required]="item.isMandatory"
-                                            [placeholder]="item.fieldInfo"
+                                            [placeholder]="item.fieldInfo ? item.fieldInfo : ''"
                                         />
                                         <input
                                             *ngIf="item.fieldType?.type === availableFieldTypes.Number"
@@ -751,7 +751,7 @@
                                             decimalDigitsDirective
                                             [attr.pattern]="item.regex"
                                             [required]="item.isMandatory"
-                                            [placeholder]="item.fieldInfo"
+                                            [placeholder]="item.fieldInfo ? item.fieldInfo : ''"
                                         />
                                         <div
                                             *ngIf="item.fieldType?.type === availableFieldTypes.Boolean"
