@@ -181,8 +181,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public oldCountryCode: any = '';
     /** This will hold updatedNumber */
     public updatedNumber: any = '';
-    /** This will hold currentCompanyCurrencyCode */
-    public currentCompanyCurrencyCode: any = '';
+    /** This will hold currentCompanyCountryCode */
+    public currentCompanyCountryCode: any = '';
 
 
     constructor(
@@ -343,7 +343,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
 
         if (this.activeCompany && this.activeCompany.countryV2) {
             const countryCode = this.activeCompany.countryV2.alpha2CountryCode;
-            this.currentCompanyCurrencyCode = countryCode.toLowerCase();
+            this.currentCompanyCountryCode = countryCode.toLowerCase();
             const countryName = this.activeCompany.countryV2.countryName;
             this.addAccountForm.get('country').get('countryCode').setValue(countryCode);
             this.selectedCountry = `${countryCode} - ${countryName}`;

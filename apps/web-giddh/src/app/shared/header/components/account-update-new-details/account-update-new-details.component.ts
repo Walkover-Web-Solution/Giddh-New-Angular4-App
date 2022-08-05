@@ -226,8 +226,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public oldCountryCode: any = '';
     /** This will hold updatedNumber */
     public updatedNumber: any = '';
-    /** This will hold currentCompanyCurrencyCode */
-    public currentCompanyCurrencyCode: any = '';
+    /** This will hold currentCompanyCountryCode */
+    public currentCompanyCountryCode: any = '';
 
     constructor(
         private _fb: FormBuilder,
@@ -259,7 +259,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                     this.selectedCompanyCountryName = activeCompany.countryV2.alpha2CountryCode + ' - ' + activeCompany.country;
                     const countryCode = this.activeCompany.countryV2.alpha2CountryCode;
                     this.companyCountry = countryCode;
-                    this.currentCompanyCurrencyCode = countryCode.toLowerCase();
+                    this.currentCompanyCountryCode = countryCode.toLowerCase();
                 }
                 this.companyCurrency = clone(activeCompany.baseCurrency);
             }
