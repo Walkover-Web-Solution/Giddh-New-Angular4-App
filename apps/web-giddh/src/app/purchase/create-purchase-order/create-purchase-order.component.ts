@@ -2876,7 +2876,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
     public assignDueDate(): void {
         let duePeriod: number;
         duePeriod = this.invoiceSettings.purchaseBillSettings ? this.invoiceSettings.purchaseBillSettings.poDuePeriod : 0;
-        this.purchaseOrder.voucherDetails.dueDate = duePeriod > 0 ? dayjs(this.purchaseOrder.voucherDetails.voucherDate).add(duePeriod, 'days').toDate() : dayjs(this.purchaseOrder.voucherDetails.voucherDate).toDate();
+        this.purchaseOrder.voucherDetails.dueDate = duePeriod > 0 ? dayjs(this.purchaseOrder.voucherDetails.voucherDate).add(duePeriod, 'day').toDate() : dayjs(this.purchaseOrder.voucherDetails.voucherDate).toDate();
     }
 
     /**

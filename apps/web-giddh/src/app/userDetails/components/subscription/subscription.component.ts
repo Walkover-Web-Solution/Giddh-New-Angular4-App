@@ -294,7 +294,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
                 response.forEach(subscription => {
                     let subscriptionDetails = cloneDeep(subscription);
 
-                    subscriptionDetails.remainingDays = Number(dayjs(subscriptionDetails.expiry, GIDDH_DATE_FORMAT).diff(dayjs(), 'days'));
+                    subscriptionDetails.remainingDays = Number(dayjs(subscriptionDetails.expiry, GIDDH_DATE_FORMAT).diff(dayjs(), 'day'));
                     subscriptionDetails.startedAt = dayjs(subscriptionDetails.startedAt, GIDDH_DATE_FORMAT).format("D MMM, y");
                     subscriptionDetails.expiry = dayjs(subscriptionDetails.expiry, GIDDH_DATE_FORMAT).format("D MMM, y");
 

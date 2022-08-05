@@ -1837,7 +1837,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                                 if (dueDate.isAfter(dayjs()) || ['paid', 'cancel'].includes(item.balanceStatus)) {
                                     item.dueDays = null;
                                 } else {
-                                    let dueDays = dueDate ? dayjs().diff(dueDate, 'days') : null;
+                                    let dueDays = dueDate ? dayjs().diff(dueDate, 'day') : null;
                                     item.dueDays = dueDays;
                                 }
                             } else {

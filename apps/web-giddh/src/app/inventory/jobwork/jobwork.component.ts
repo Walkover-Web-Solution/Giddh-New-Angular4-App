@@ -91,27 +91,27 @@ export class JobworkComponent implements OnInit, OnDestroy {
         },
         ranges: {
             'Last 1 Day': [
-                dayjs().subtract(1, 'days'),
+                dayjs().subtract(1, 'day'),
                 dayjs()
             ],
             'Last 7 Days': [
-                dayjs().subtract(6, 'days'),
+                dayjs().subtract(6, 'day'),
                 dayjs()
             ],
             'Last 30 Days': [
-                dayjs().subtract(29, 'days'),
+                dayjs().subtract(29, 'day'),
                 dayjs()
             ],
             'Last 6 Months': [
-                dayjs().subtract(6, 'months'),
+                dayjs().subtract(6, 'month'),
                 dayjs()
             ],
             'Last 1 Year': [
-                dayjs().subtract(12, 'months'),
+                dayjs().subtract(12, 'month'),
                 dayjs()
             ]
         },
-        startDate: dayjs().subtract(30, 'days'),
+        startDate: dayjs().subtract(30, 'day'),
         endDate: dayjs()
     };
     public inventoryReport: InventoryReport;
@@ -119,7 +119,7 @@ export class JobworkComponent implements OnInit, OnDestroy {
     public inventoryUsers$: Observable<InventoryUser[]>;
     public filter: InventoryFilter = {};
     public stockOptions: IOption[] = [];
-    public startDate: string = dayjs().subtract(30, 'days').format(GIDDH_DATE_FORMAT);
+    public startDate: string = dayjs().subtract(30, 'day').format(GIDDH_DATE_FORMAT);
     public endDate: string = dayjs().format(GIDDH_DATE_FORMAT);
     public uniqueName: string;
     public type: string;

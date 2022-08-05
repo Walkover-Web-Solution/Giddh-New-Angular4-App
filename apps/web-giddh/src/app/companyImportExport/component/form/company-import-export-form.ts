@@ -30,7 +30,7 @@ export class CompanyImportExportFormComponent implements OnInit, OnDestroy {
     @Output('backPressed') public backPressed: EventEmitter<boolean> = new EventEmitter();
     public fileTypes: IOption[] = [];
     public fileType: string = '';
-    public from: string = dayjs().subtract(30, 'days').format(GIDDH_DATE_FORMAT);
+    public from: string = dayjs().subtract(30, 'day').format(GIDDH_DATE_FORMAT);
     public to: string = dayjs().format(GIDDH_DATE_FORMAT);
     public selectedFile: File = null;
     public isExportInProcess$: Observable<boolean>;
