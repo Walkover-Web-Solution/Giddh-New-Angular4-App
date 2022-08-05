@@ -277,7 +277,7 @@ export class MfReportComponent implements OnInit, OnDestroy {
             data.from = dayjs(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
             data.to = dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
         } else {
-            data.from = dayjs().subtract(30, 'days').format(GIDDH_DATE_FORMAT);
+            data.from = dayjs().subtract(30, 'day').format(GIDDH_DATE_FORMAT);
             data.to = dayjs().format(GIDDH_DATE_FORMAT);
         }
         this.store.dispatch(this.manufacturingActions.GetMfReport(data));

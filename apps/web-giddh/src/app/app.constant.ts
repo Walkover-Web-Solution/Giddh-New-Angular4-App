@@ -101,10 +101,10 @@ export const DEFAULT_DATE_RANGE_PICKER_RANGES = [
         name: DatePickerDefaultRangeEnum.Today, value: [dayjs(), dayjs()]
     },
     {
-        name: DatePickerDefaultRangeEnum.Yesterday, value: [dayjs().subtract(1, 'days'), dayjs().subtract(1, 'days')]
+        name: DatePickerDefaultRangeEnum.Yesterday, value: [dayjs().subtract(1, 'day'), dayjs().subtract(1, 'day')]
     },
     {
-        name: DatePickerDefaultRangeEnum.Last7Days, value: [dayjs().subtract(6, 'days'), dayjs()]
+        name: DatePickerDefaultRangeEnum.Last7Days, value: [dayjs().subtract(6, 'day'), dayjs()]
     },
     {
         name: DatePickerDefaultRangeEnum.ThisMonth, value: [dayjs().startOf('month'), dayjs().endOf('month')]
@@ -118,7 +118,7 @@ export const DEFAULT_DATE_RANGE_PICKER_RANGES = [
     {
         name: DatePickerDefaultRangeEnum.ThisWeek, ranges: [{
             name: DatePickerDefaultRangeEnum.SunToToday, value: [dayjs().startOf('week'), dayjs()]
-        }, { name: DatePickerDefaultRangeEnum.MonToToday, value: [dayjs().startOf('week').add(1, 'd'), dayjs()] }]
+        }, { name: DatePickerDefaultRangeEnum.MonToToday, value: [dayjs().startOf('week').add(1, 'day'), dayjs()] }]
     },
     {
         name: DatePickerDefaultRangeEnum.ThisQuarterToDate, value: [

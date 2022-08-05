@@ -47,7 +47,7 @@ const initialState: CurrentCompanyState = {
             customRangeLabel: 'Custom range'
         },
         ranges: DEFAULT_DATE_RANGE_PICKER_RANGES,
-        startDate: dayjs().subtract(30, 'days'),
+        startDate: dayjs().subtract(30, 'day'),
         endDate: dayjs()
     },
     account: null,

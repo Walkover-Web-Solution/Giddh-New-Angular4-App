@@ -78,7 +78,7 @@ export class ExportGroupLedgerComponent implements OnInit {
 
     public ngOnInit() {
         // Set a default date
-        this.dateRange.from = dayjs(dayjs().subtract(30, 'days')).format(GIDDH_DATE_FORMAT);
+        this.dateRange.from = dayjs(dayjs().subtract(30, 'day')).format(GIDDH_DATE_FORMAT);
         this.dateRange.to = dayjs(dayjs()).format(GIDDH_DATE_FORMAT);
 
         if (this._permissionDataService.getData && this._permissionDataService.getData.length > 0) {

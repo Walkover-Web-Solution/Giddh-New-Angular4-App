@@ -28,7 +28,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
     public activeCompany: any;
     public datePickerOptions: any = {
         alwaysShowCalendars: true,
-        startDate: dayjs().subtract(30, 'days'),
+        startDate: dayjs().subtract(30, 'day'),
         endDate: dayjs()
     };
     public dayjs = dayjs;

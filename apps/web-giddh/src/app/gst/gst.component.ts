@@ -66,7 +66,7 @@ export class GstComponent implements OnInit, OnDestroy {
     public isMonthSelected: boolean = true;
     public datePickerOptions: any = {
         alwaysShowCalendars: true,
-        startDate: dayjs().subtract(30, 'days'),
+        startDate: dayjs().subtract(30, 'day'),
         endDate: dayjs()
     };
     public dayjs = dayjs;

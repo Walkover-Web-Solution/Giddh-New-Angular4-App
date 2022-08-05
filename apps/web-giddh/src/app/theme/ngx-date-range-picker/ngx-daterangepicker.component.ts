@@ -783,7 +783,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
         }
 
         if (!this.timePicker) {
-            this.endDate = this.endDate.add(1, 'd').startOf('day').subtract(1, 'second');
+            this.endDate = this.endDate.add(1, 'day').startOf('day').subtract(1, 'second');
         }
 
         if (this.timePicker && this.timePickerIncrement) {

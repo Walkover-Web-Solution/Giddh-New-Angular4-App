@@ -37,7 +37,7 @@ export class SubscriptionsService {
         return this.http.get(this.config.apiUrl + SUBSCRIPTIONS_API.SUBSCRIBED_USER_TRANSACTIONS
             .replace(':subscriptionId', subscription.subscriptionId)
             .replace(':from', subscription.subscribedOn)
-            .replace(':to', dayjs(subscription.subscribedOn, GIDDH_DATE_FORMAT).add(1, 'years').format(GIDDH_DATE_FORMAT))
+            .replace(':to', dayjs(subscription.subscribedOn, GIDDH_DATE_FORMAT).add(1, 'year').format(GIDDH_DATE_FORMAT))
             .replace(':interval', paymentFrequency))
             .pipe(map((res) => {
                 let data: BaseResponse<string, string> = res;
