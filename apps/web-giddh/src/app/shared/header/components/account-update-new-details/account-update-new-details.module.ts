@@ -10,6 +10,7 @@ import { ShSelectModule } from "apps/web-giddh/src/app/theme/ng-virtual-select/s
 import { TranslateDirectiveModule } from "apps/web-giddh/src/app/theme/translate/translate.directive.module";
 import { NgxBootstrapSwitchModule } from "ngx-bootstrap-switch";
 import { ModalModule } from "ngx-bootstrap/modal";
+import { PopoverModule } from "ngx-bootstrap/popover";
 import { TabsModule } from "ngx-bootstrap/tabs";
 import { AccountUpdateNewDetailsComponent } from "./account-update-new-details.component";
 import { NgxIntlTelInputModule } from 'ngx-intl-tel-input';
@@ -36,6 +37,7 @@ import { NgxIntlTelInputModule } from 'ngx-intl-tel-input';
             style: 'slide-left',
             spinnerSize: 30
         }),
+        PopoverModule.forRoot()
     ],
     exports: [
         AccountUpdateNewDetailsComponent,
