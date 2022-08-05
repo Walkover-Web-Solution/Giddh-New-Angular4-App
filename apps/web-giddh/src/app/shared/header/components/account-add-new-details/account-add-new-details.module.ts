@@ -9,6 +9,7 @@ import { TranslateDirectiveModule } from 'apps/web-giddh/src/app/theme/translate
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { AccountAddNewDetailsComponent } from './account-add-new-details.component';
 import { NgxBootstrapSwitchModule } from 'ngx-bootstrap-switch';
+import { NgxIntlTelInputModule } from 'ngx-intl-tel-input';
 
 @NgModule({
     declarations: [AccountAddNewDetailsComponent],
@@ -21,6 +22,7 @@ import { NgxBootstrapSwitchModule } from 'ngx-bootstrap-switch';
         ShSelectModule,
         TabsModule,
         TranslateDirectiveModule,
+        NgxIntlTelInputModule,
         NgxBootstrapSwitchModule.forRoot(),
         RouterModule
     ]
