@@ -679,7 +679,7 @@
                 </div>
             </tab>
 
-            <tab *ngIf="isDebtorCreditor" [heading]="localeData?.tabs?.custom">
+            <tab [heading]="localeData?.tabs?.custom">
                 <giddh-page-loader [cssClass]="'mt-0 mb-0'" *ngIf="isCustomFieldLoading"></giddh-page-loader>
                 <ng-container formArrayName="customFields">
                     <ng-container
