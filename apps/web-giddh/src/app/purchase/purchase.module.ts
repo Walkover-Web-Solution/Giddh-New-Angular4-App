@@ -10,7 +10,7 @@ import { TabsModule } from 'ngx-bootstrap/tabs';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { InvoiceRoutingModule } from '../invoice/invoice.routing.module';
-import { ProformaInvoiceModule } from '../proforma-invoice/proforma-invoice.module';
+import { ProformaInvoiceModule } from '../material-proforma-invoice/proforma-invoice.module';
 import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
 import { NgxMaskModule } from '../shared/helpers/directives/ngx-mask';
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';

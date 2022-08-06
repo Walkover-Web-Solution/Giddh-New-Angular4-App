@@ -1,0 +1,106 @@
+.output-row > td {
+    padding: 12px 10px 12px 0 !important;
+}
+
+.basic > tbody > tr > td {
+    padding: 2px 10px 2px 0;
+}
+
+.table-label {
+    border-color: var(--color-iron) !important;
+    td {
+        padding-top: 12px !important;
+        padding-bottom: 5px;
+    }
+}
+
+.dropdown-menu {
+    max-height: 168px;
+    overflow: auto;
+}
+.sku-row {
+    label {
+        width: 100%;
+    }
+    position: relative;
+    .label-input {
+        background: none;
+        border: none;
+        max-width: 108px;
+        border-bottom: 1px solid var(--color-iron);
+    }
+    .item-label {
+        display: inline-block;
+    }
+    .item-label:first-child {
+        max-width: 108px;
+    }
+    .item-label:last-child {
+        text-align: right;
+    }
+    i {
+        margin-left: 10px;
+        padding-bottom: 3px;
+        border-bottom: 1px solid var(--color-iron);
+    }
+    .new-btn {
+        font-size: 12px;
+        color: var(--color-blue);
+        padding-top: 30px;
+        cursor: pointer;
+    }
+    .text-danger {
+        color: var(--color-danger);
+    }
+}
+
+.opacity {
+    opacity: 0.5;
+}
+.fsstock td {
+    padding-right: 10px;
+}
+tr.fsstock td {
+    padding-bottom: 15px;
+}
+.table-label strong {
+    color: var(--color-nero);
+    font-weight: normal !important;
+    font-size: 14px;
+    font-family: "opensans-regular";
+}
+input.focusBorder[type="checkbox"]:focus:after {
+    border-color: var(--color-blue);
+}
+.aside-pane-form {
+    background-color: var(--color-white);
+    box-shadow: 0px 3px 6px var(--color-primary-common-box-shadow);
+    padding: 15px 15px;
+    height: calc(100vh - 90px);
+    overflow: auto;
+    scroll-behavior: smooth;
+    position: relative;
+    margin-top: 15px;
+}
+#close {
+    position: absolute;
+    left: auto;
+    right: 10px;
+    z-index: 9999999;
+    background-color: transparent;
+    color: var(--color-white);
+    font-size: 17px;
+    top: 18px;
+    margin-right: 0;
+    border: 0;
+    border-radius: 0;
+    display: block;
+}
+
+.collapse-icons {
+    font-size: 10px;
+    border: 1px solid var(--color-blue);
+    border-radius: 4px;
+    padding: 2px;
+    top: 0;
+}
