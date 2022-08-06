@@ -226,8 +226,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public oldCountryCode: any = '';
     /** This will hold updatedNumber */
     public updatedNumber: any = '';
-    /** This will hold currentCompanyCountryCode */
-    public currentCompanyCountryCode: any = '';
 
     constructor(
         private _fb: FormBuilder,
@@ -257,9 +255,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
 
                 if (activeCompany.countryV2) {
                     this.selectedCompanyCountryName = activeCompany.countryV2.alpha2CountryCode + ' - ' + activeCompany.country;
-                    const countryCode = this.activeCompany.countryV2.alpha2CountryCode;
-                    this.companyCountry = countryCode;
-                    this.currentCompanyCountryCode = countryCode.toLowerCase();
+                    this.companyCountry = activeCompany.countryV2.alpha2CountryCode;
                 }
                 this.companyCurrency = clone(activeCompany.baseCurrency);
             }
@@ -1670,8 +1666,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                             if (results[0]?.mobileNo) {
                                 let updatedNumber = "+" + results[0]?.mobileNo;
                                 this.addAccountForm?.get('mobileNo')?.patchValue(updatedNumber);
-                            }else {
-                                this.addAccountForm.get('mobileNo').setValue("+" + this.activeCompany.countryV2.callingCode);
                             }
                         });
                     this.store.pipe(select(appStore => appStore.groupwithaccounts.activeGroupUniqueName), take(1)).subscribe(response => {
@@ -1799,7 +1793,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         if (event) {
             this.newCountryCode = "+" + event?.dialCode;
             const value = this.addAccountForm?.get('mobileNo')?.value?.e164Number;
-            let newNumber = value ? value?.replace(this.oldCountryCode, this.newCountryCode) : this.newCountryCode;
+            let newNumber = value?.replace(this.oldCountryCode, this.newCountryCode);
             this.updatedNumber = newNumber;
             this.addAccountForm.get('mobileNo').setValue(newNumber);
         }
