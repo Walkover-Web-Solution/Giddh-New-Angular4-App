@@ -2076,6 +2076,11 @@ bs-datepicker-container {
     -ms-flex-pack: end;
     justify-content: flex-end;
 }
+.justify-content-space-between {
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+}
 /* cmdk modal styles */
 .modal-dialog.universal_modal .modal-body {
     padding: 0;
