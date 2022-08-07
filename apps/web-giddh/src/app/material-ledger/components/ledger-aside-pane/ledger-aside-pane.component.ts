@@ -4,6 +4,7 @@ import { AppState } from '../../../store';
 import { Store, select } from '@ngrx/store';
 import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
 import { Observable, ReplaySubject } from 'rxjs';
+import { AccountsAction } from '../../../actions/accounts.actions';
 
 @Component({
     selector: 'ledger-aside-pane',
@@ -27,7 +28,7 @@ export class LedgerAsidePaneComponent implements OnInit, OnDestroy {
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor(private store: Store<AppState>, private inventorySidebarAction: SidebarAction) {
+    constructor(private store: Store<AppState>, private inventorySidebarAction: SidebarAction, private accountsAction: AccountsAction,) {
         this.createStockSuccess$ = this.store.pipe(select(s => s.inventory.createStockSuccess), takeUntil(this.destroyed$));
         this.createAccountIsSuccess$ = this.store.pipe(select(s => s.groupwithaccounts.createAccountIsSuccess), takeUntil(this.destroyed$));
     }
@@ -67,6 +68,7 @@ export class LedgerAsidePaneComponent implements OnInit, OnDestroy {
     }
 
     public closeAsidePane(e?: any) {
+        this.store.dispatch(this.accountsAction.resetActiveGroup());
         this.hideFirstScreen = false;
         this.isAddStockOpen = false;
         this.isAddAccountOpen = false;
