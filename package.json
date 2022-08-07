@@ -99,6 +99,7 @@
     "configstore": "5.0.1",
     "core-js": "3.6.5",
     "dexie": "3.0.2",
+    "fast-clean": "^1.2.1",
     "file-saver": "2.0.2",
     "google-libphonenumber": "^3.2.30",
     "highcharts": "^8.2.0",
