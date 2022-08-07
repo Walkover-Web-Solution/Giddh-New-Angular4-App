@@ -1670,8 +1670,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                             if (results[0]?.mobileNo) {
                                 let updatedNumber = "+" + results[0]?.mobileNo;
                                 this.addAccountForm?.get('mobileNo')?.patchValue(updatedNumber);
-                            }else {
-                                this.addAccountForm.get('mobileNo').setValue("+" + this.activeCompany.countryV2.callingCode);
                             }
                         });
                     this.store.pipe(select(appStore => appStore.groupwithaccounts.activeGroupUniqueName), take(1)).subscribe(response => {

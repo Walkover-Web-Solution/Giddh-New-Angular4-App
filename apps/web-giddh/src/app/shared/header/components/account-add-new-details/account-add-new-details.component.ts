@@ -351,7 +351,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             this.addAccountForm.get('currency').setValue(company.baseCurrency);
             this.getOnboardingForm(countryCode);
             this.companyCountry = countryCode;
-            this.addAccountForm.get('mobileNo').setValue("+" + this.activeCompany.countryV2.callingCode);
         } else {
             this.addAccountForm.get('country').get('countryCode').setValue('IN');
             this.selectedCountry = 'IN - India';
