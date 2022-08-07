@@ -101,6 +101,7 @@
     "core-js": "3.6.5",
     "dayjs": "^1.11.4",
     "dexie": "3.0.2",
+    "fast-clean": "^1.2.1",
     "file-saver": "2.0.2",
     "highcharts": "^8.2.0",
     "highcharts-angular": "^2.7.0",
