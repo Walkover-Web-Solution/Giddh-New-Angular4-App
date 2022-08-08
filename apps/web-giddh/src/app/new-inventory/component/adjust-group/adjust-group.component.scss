@@ -1,0 +1,117 @@
+.adjust-group-page {
+    .back-to-page {
+        position: absolute;
+        right: 5px;
+        top: 0;
+        padding: 10px;
+        z-index: 10;
+        color: var(--color-blue);
+    }
+    .adjust-field-wrapper {
+        min-height: 73vh;
+        .add-icon-delete {
+            position: relative;
+            i {
+                position: absolute;
+                right: -40px;
+                top: 0px;
+                cursor: pointer;
+                padding: 10px;
+                &.icon-plus {
+                    color: var(--color-blue);
+                }
+                &.icon-trash {
+                    color: var(--color-gray);
+                }
+            }
+        }
+        .custom-datepicker {
+            input {
+                width: 100% !important;
+                max-width: 100%;
+                text-align: left;
+                padding-left: 35px !important;
+            }
+        }
+        textarea {
+            min-height: 90px;
+        }
+        .vector-image {
+            position: absolute;
+            right: 15px;
+            top: 0;
+        }
+        .giddh-table {
+            max-width: 1000px;
+            width: 100%;
+            textarea {
+                min-height: 65px;
+            }
+        }
+        .giddh-table tr,
+        .giddh-table td,
+        .giddh-table th {
+            border: 1px solid var(--color-iron);
+            vertical-align: top !important;
+        }
+        .add-line-bulk-item {
+            color: var(--color-gray);
+            a {
+                color: var(--color-blue);
+            }
+        }
+    }
+}
+.inventory-footer {
+    background-color: var(--color-lavender);
+    z-index: 3;
+    width: calc(100% - 240px);
+    padding-right: 15px;
+    line-height: 1.8;
+    text-align: left;
+    min-height: 60px;
+    align-items: center;
+    display: flex;
+    position: static;
+    width: 100%;
+    padding-left: 15px;
+}
+@media (max-width: 767px) {
+    .adjust-group-page {
+        .adjust-field-wrapper {
+            .giddh-table td,
+            .giddh-table th {
+                min-width: 160px;
+                &:first-child {
+                    min-width: auto;
+                }
+                &:nth-child(2) {
+                    min-width: 230px;
+                }
+            }
+        }
+        form {
+            p {
+                margin-right: 40px !important;
+            }
+        }
+        .icon-cross {
+            position: absolute;
+            right: -20px;
+            top: -10px;
+            padding: 10px;
+        }
+    }
+}
+@media (max-width: 575px) {
+    .adjust-group-page {
+        .adjust-field-wrapper {
+            .add-icon-delete {
+                width: calc(100% - 30px);
+            }
+        }
+        .icon-cross {
+            right: 0;
+        }
+    }
+}

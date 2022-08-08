@@ -656,7 +656,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                                 uNameStr: e.additional && e.additional.parentGroups ? e.additional.parentGroups.map(parent => parent?.uniqueName).join(', ') : '',
                             };
                             if (txn.selectedAccount && txn.selectedAccount.stock) {
-                                txn.selectedAccount.stock.rate = Number((txn.selectedAccount.stock.rate / this.vm.selectedLedger.exchangeRate).toFixed(RATE_FIELD_PRECISION));
+                                txn.selectedAccount.stock.rate = Number((txn.selectedAccount.stock.rate / this.vm.selectedLedger?.exchangeRate).toFixed(RATE_FIELD_PRECISION));
                             }
                             let rate = 0;
                             let unitCode = '';
@@ -874,11 +874,12 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 return;
             }
         }
-
-        requestObj.valuesInAccountCurrency = this.vm.selectedCurrency === 0;
-        requestObj.exchangeRate = (this.vm.selectedCurrencyForDisplay !== this.vm.selectedCurrency) ? (1 / this.vm.selectedLedger.exchangeRate) : this.vm.selectedLedger.exchangeRate;
-        requestObj.subVoucher = (this.isRcmEntry) ? SubVoucher.ReverseCharge : (this.isAdvanceReceipt) ? SubVoucher.AdvanceReceipt : '';
-        requestObj.transactions = requestObj.transactions.filter(f => !f.isDiscount);
+        if (requestObj) {
+            requestObj.valuesInAccountCurrency = this.vm.selectedCurrency === 0;
+            requestObj.exchangeRate = (this.vm.selectedCurrencyForDisplay !== this.vm.selectedCurrency) ? (1 / this.vm.selectedLedger?.exchangeRate) : this.vm.selectedLedger?.exchangeRate;
+            requestObj.subVoucher = (this.isRcmEntry) ? SubVoucher.ReverseCharge : (this.isAdvanceReceipt) ? SubVoucher.AdvanceReceipt : '';
+            requestObj.transactions = requestObj.transactions.filter(f => !f.isDiscount);
+        }
         if (!this.taxOnlyTransactions) {
             requestObj.transactions = requestObj.transactions.filter(tx => !tx.isTax);
         }
@@ -1356,20 +1357,24 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public async toggleCurrency() {
         this.vm.selectedCurrencyForDisplay = this.vm.selectedCurrencyForDisplay === 1 ? 0 : 1;
         let rate = 0;
-        if (Number(this.vm.selectedLedger.exchangeRate)) {
-            rate = 1 / this.vm.selectedLedger.exchangeRate;
+        if (Number(this.vm.selectedLedger?.exchangeRate)) {
+            rate = 1 / this.vm.selectedLedger?.exchangeRate;
         }
-        this.vm.selectedLedger = { ...this.vm.selectedLedger, exchangeRate: rate };
+        if (this.vm.selectedLedger) {
+            this.vm.selectedLedger = { ...this.vm.selectedLedger, exchangeRate: rate };
+        }
     }
 
     public exchangeRateChanged() {
-        this.vm.selectedLedger.exchangeRate = Number(this.vm.selectedLedger.exchangeRate) || 0;
+        if (this.vm.selectedLedger) {
+            this.vm.selectedLedger.exchangeRate = Number(this.vm.selectedLedger?.exchangeRate) || 0;
+        }
         if (this.vm.stockTrxEntry && this.vm.stockTrxEntry.inventory && this.vm.stockTrxEntry.inventory.unit && this.vm.selectedLedger && this.vm.selectedLedger.unitRates) {
             const stock = this.vm.stockTrxEntry.unitRate.find(rate => {
                 return rate.stockUnitCode === this.vm.stockTrxEntry.inventory.unit.code;
             });
             const stockRate = stock ? stock.rate : 0;
-            this.vm.stockTrxEntry.inventory.rate = Number((stockRate / this.vm.selectedLedger.exchangeRate).toFixed(this.ratePrecision));
+            this.vm.stockTrxEntry.inventory.rate = Number((stockRate / this.vm.selectedLedger?.exchangeRate).toFixed(this.ratePrecision));
             this.vm.inventoryPriceChanged(this.vm.stockTrxEntry.inventory.rate);
         } else {
             this.vm.inventoryAmountChanged();
@@ -1923,7 +1928,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 customerUniquename: customerUniqueName,
                 totalTaxableValue: this.vm.selectedLedger.actualAmount,
                 subTotal: this.vm.selectedLedger.total.amount,
-                exchangeRate: this.vm.selectedLedger.exchangeRate ?? 1,
+                exchangeRate: this.vm.selectedLedger?.exchangeRate ?? 1,
                 gainLoss: this.vm.selectedLedger.gainLoss
             },
             accountDetails: {
@@ -2129,7 +2134,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             if (resp[1].body?.currency !== resp[2].baseCurrency) {
                 let date = moment().format(GIDDH_DATE_FORMAT);
                 this.ledgerService.GetCurrencyRateNewApi(resp[1].body?.currency, resp[2].baseCurrency, date).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-                    this.vm.selectedLedger.exchangeRate = response.body;
+                    if (this.vm.selectedLedger) {
+                        this.vm.selectedLedger.exchangeRate = response.body;
+                    }
                 });
             }
         }

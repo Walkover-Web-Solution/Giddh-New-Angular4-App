@@ -1,0 +1,115 @@
+<div class="stock-group-list-page">
+    <div class="table-responsive">
+        <table class="table giddh-table on-mobile-view">
+            <thead>
+                <tr>
+                    <th colspan="3">
+                        <div class="custom-datepicker">
+                            <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
+                                <i class="icon-calender calendar-addon bdr-radius-50"></i>
+                                <input
+                                    type="text"
+                                    id="select-date"
+                                    name="selectedDateRange"
+                                    [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
+                                    class="giddh-datepicker date-range-picker bdr-radius-50"
+                                    placeholder="Enter Date"
+                                />
+                            </div>
+                        </div>
+                    </th>
+                    <th class="text-center" colspan="4">Transaction</th>
+                    <th colspan="1">Closing Stock</th>
+                </tr>
+                <tr>
+                    <th>Date</th>
+                    <th>Voucher Type</th>
+                    <th>Account Name</th>
+                    <th class="text-right">Inwards</th>
+                    <th class="text-right">Outwards</th>
+                    <th class="text-right">Rate</th>
+                    <th class="text-right">Value</th>
+                    <th class="text-right">Qty</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td data-title="Date">09-10-2020</td>
+                    <td data-title="Voucher Type">SALES</td>
+                    <td data-title="Account Name">USD Account</td>
+                    <td data-title="Inwards" class="text-right">-</td>
+                    <td data-title="Outwards" class="text-right">1.00 Box</td>
+                    <td data-title="Rate" class="text-right">1,02,378.60</td>
+                    <td data-title="Value" class="text-right">1,02,378.60</td>
+                    <td data-title="Qty" class="text-right">432.00box</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="sticky-footer stock-group-footer">
+    <div class="footer-wrapper">
+        <div class="row">
+            <div class="col-lg-3 col-md-6 col-12">
+                <div class="text-left pd-l15">
+                    <label class="text-gray font-14">Profit/Loss</label>
+                    <p class="text-purple">1,02,377.50 <span class="by-date">(Apr 1, 2018 - Dec 11, 2020)</span></p>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-6 col-12">
+                <label class="text-gray font-14"
+                    >Transaction Count : <span class="total-transction text-purple">1.00</span></label
+                >
+                <p>Inward: <span class="total-inward">0.00</span></p>
+                <p>Outward: <span class="total-outward">0.00</span></p>
+            </div>
+            <div class="col-lg-7 col-md-12">
+                <div class="d-flex justify-content-end stock-value">
+                    <div class="total-stock-value">
+                        <label class="text-gray font-14">Opening</label>
+                        <p class="font-16">432.00</p>
+                        <p class="font-14">(433.00 box)</p>
+                    </div>
+                    <div class="total-stock-value">
+                        <label class="text-gray font-14">Inward</label>
+                        <p class="font-16">432.00</p>
+                        <p class="font-14">(433.00 box)</p>
+                    </div>
+                    <div class="total-stock-value">
+                        <label class="text-gray font-14">Outward</label>
+                        <p class="font-16">1,02,378.50</p>
+                        <p class="font-14">(433.00 box)</p>
+                    </div>
+                    <div class="total-stock-value">
+                        <label class="text-gray font-14">Closing Stock</label>
+                        <p class="font-16 text-purple">432.00</p>
+                        <p class="font-14">(433.00 box)</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<ng-template #datepickerTemplate>
+    <div class="datepicker-modal">
+        <div class="modal-body">
+            <app-datepicker-wrapper
+                [inputStartDate]="selectedDateRange?.startDate"
+                [inputEndDate]="selectedDateRange?.endDate"
+                [alwaysShowCalendars]="true"
+                [ranges]="datePickerOption"
+                [selectedRangeLabel]="selectedRangeLabel"
+                [showCustomRangeLabel]="true"
+                [showClearButton]="false"
+                [showCancel]="true"
+                [linkedCalendars]="true"
+                [showDropdowns]="true"
+                (rangeClicked)="dateSelectedCallback($event)"
+                (datesUpdated)="dateSelectedCallback($event)"
+                [keepCalendarOpeningWithRange]="false"
+                [showRangeLabelOnInput]="false"
+                [dateFieldPosition]="dateFieldPosition"
+            ></app-datepicker-wrapper>
+        </div>
+    </div>
+</ng-template>
