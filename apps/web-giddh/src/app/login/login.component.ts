@@ -75,7 +75,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     public isLoginWithGoogleInProcess$: Observable<boolean>;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Modal config */
-    public modalConfig: {
+    public modalConfig: any = {
         backdrop: 'static'
     };
 

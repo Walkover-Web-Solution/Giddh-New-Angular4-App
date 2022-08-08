@@ -161,7 +161,9 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.showVerificationBox = false;
             }
         });
-        this.authenticateTwoWay$.subscribe(s => this.twoWayAuth = s);
+        this.authenticateTwoWay$.subscribe(response => {
+            this.twoWayAuth = (response) ? true : false;
+        });
         this.store.dispatch(this.loginAction.FetchUserDetails());
         this.loginService.GetAuthKey().pipe(takeUntil(this.destroyed$)).subscribe(a => {
             if (a.status === 'success') {
