@@ -1,13 +1,11 @@
 import { ChangeDetectorRef, ComponentFactoryResolver, Directive, DoCheck, ElementRef, EventEmitter, forwardRef, HostListener, Input, KeyValueDiffer, KeyValueDiffers, OnChanges, OnInit, Output, Renderer2, SimpleChanges, ViewContainerRef } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
-import * as _moment from 'moment';
+import * as dayjs from 'dayjs';
 import { NgxDaterangepickerComponent } from './ngx-daterangepicker.component';
 import { LocaleConfig } from './ngx-daterangepicker.config';
 import { NgxDaterangepickerLocaleService } from './ngx-daterangepicker-locale.service';
 import { takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
-
-const moment = _moment;
 
 @Directive({
     selector: 'input[ngxDaterangepickerMd]',
@@ -26,13 +24,13 @@ export class NgxDaterangepickerDirective implements OnInit, OnChanges, DoCheck {
     private _value: any;
     private localeDiffer: KeyValueDiffer<string, any>;
     @Input()
-    inputStartDate: _moment.Moment;
+    inputStartDate: dayjs.Dayjs;
     @Input()
-    inputEndDate: _moment.Moment;
+    inputEndDate: dayjs.Dayjs;
     @Input()
-    minDate: _moment.Moment;
+    minDate: dayjs.Dayjs;
     @Input()
-    maxDate: _moment.Moment;
+    maxDate: dayjs.Dayjs;
     @Input()
     autoApply: boolean;
     @Input()
@@ -247,11 +245,11 @@ export class NgxDaterangepickerDirective implements OnInit, OnChanges, DoCheck {
         const dateString = e.target.value.split(this.picker.locale.separator);
         let start = null, end = null;
         if (dateString.length === 2) {
-            start = moment(dateString[0], this.picker.locale.format);
-            end = moment(dateString[1], this.picker.locale.format);
+            start = dayjs(dateString[0], this.picker.locale.format);
+            end = dayjs(dateString[1], this.picker.locale.format);
         }
         if (this.singleDatePicker || start === null || end === null) {
-            start = moment(e.target.value, this.picker.locale.format);
+            start = dayjs(e.target.value, this.picker.locale.format);
             end = start;
         }
         if (!start.isValid() || !end.isValid()) {

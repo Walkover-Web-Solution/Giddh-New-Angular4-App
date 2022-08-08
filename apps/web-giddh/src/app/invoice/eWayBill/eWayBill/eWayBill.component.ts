@@ -3,7 +3,9 @@ import { InvoiceActions } from '../../../actions/invoice/invoice.actions';
 import { InvoiceService } from '../../../services/invoice.service';
 import { AppState } from '../../../store';
 import { select, Store } from '@ngrx/store';
-import * as moment from 'moment/moment';
+import * as dayjs from 'dayjs';
+import * as customParseFormat from 'dayjs/plugin/customParseFormat';
+dayjs.extend(customParseFormat);
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged, map, switchMap, take, takeUntil } from 'rxjs/operators';
 import { IEwayBillAllList, IEwayBillCancel, Result, UpdateEwayVehicle, IEwayBillfilter } from '../../../models/api-models/Invoice';
@@ -95,8 +97,8 @@ export class EWayBillComponent implements OnInit, OnDestroy {
     public selectedDateRangeUi: any;
     /* This will store available date ranges */
     public datePickerOption: any = GIDDH_DATE_RANGE_PICKER_RANGES;
-    /* Moment object */
-    public moment = moment;
+    /* dayjs object */
+    public dayjs = dayjs;
     /* Selected from date */
     public fromDate: string;
     /* Selected to date */
@@ -188,8 +190,8 @@ export class EWayBillComponent implements OnInit, OnDestroy {
 
     public selectedDate(value: any) {
         if (value) {
-            this.EwayBillfilterRequest.fromDate = moment(value.picker.startDate._d).format(GIDDH_DATE_FORMAT);
-            this.EwayBillfilterRequest.toDate = moment(value.picker.endDate._d).format(GIDDH_DATE_FORMAT);
+            this.EwayBillfilterRequest.fromDate = dayjs(value.picker.startDate.$d).format(GIDDH_DATE_FORMAT);
+            this.EwayBillfilterRequest.toDate = dayjs(value.picker.endDate.$d).format(GIDDH_DATE_FORMAT);
         }
         this.getAllFilteredInvoice();
     }
@@ -215,12 +217,12 @@ export class EWayBillComponent implements OnInit, OnDestroy {
                 this.EwaybillLists.results = o.results;
 
                 if (this.todaySelected) {
-                    this.selectedDateRange = { startDate: moment(o.fromDate, GIDDH_DATE_FORMAT), endDate: moment(o.toDate, GIDDH_DATE_FORMAT) };
-                    this.selectedDateRangeUi = moment(o.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(o.toDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
-                    this.fromDate = moment(o.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
-                    this.toDate = moment(o.toDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
-                    this.EwayBillfilterRequest.fromDate = moment(o.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
-                    this.EwayBillfilterRequest.toDate = moment(o.toDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                    this.selectedDateRange = { startDate: dayjs(o.fromDate, GIDDH_DATE_FORMAT), endDate: dayjs(o.toDate, GIDDH_DATE_FORMAT) };
+                    this.selectedDateRangeUi = dayjs(o.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(o.toDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
+                    this.fromDate = dayjs(o.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                    this.toDate = dayjs(o.toDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                    this.EwayBillfilterRequest.fromDate = dayjs(o.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                    this.EwayBillfilterRequest.toDate = dayjs(o.toDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
                 }
                 this.detectChange();
             }
@@ -352,13 +354,13 @@ export class EWayBillComponent implements OnInit, OnDestroy {
                 this.store.pipe(select(state => state.session.todaySelected), take(1)).subscribe(response => {
                     this.todaySelected = response;
                     if (!response) {
-                        this.selectedDateRange = { startDate: moment(universalDate[0]), endDate: moment(universalDate[1]) };
-                        this.selectedDateRangeUi = moment(universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-                        this.fromDate = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
-                        this.toDate = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
+                        this.selectedDateRange = { startDate: dayjs(universalDate[0]), endDate: dayjs(universalDate[1]) };
+                        this.selectedDateRangeUi = dayjs(universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                        this.fromDate = dayjs(universalDate[0]).format(GIDDH_DATE_FORMAT);
+                        this.toDate = dayjs(universalDate[1]).format(GIDDH_DATE_FORMAT);
 
-                        this.EwayBillfilterRequest.fromDate = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
-                        this.EwayBillfilterRequest.toDate = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
+                        this.EwayBillfilterRequest.fromDate = dayjs(universalDate[0]).format(GIDDH_DATE_FORMAT);
+                        this.EwayBillfilterRequest.toDate = dayjs(universalDate[1]).format(GIDDH_DATE_FORMAT);
                     } else {
                         this.EwayBillfilterRequest.fromDate = "";
                         this.EwayBillfilterRequest.toDate = "";
@@ -459,7 +461,7 @@ export class EWayBillComponent implements OnInit, OnDestroy {
 
         this.updateEwayVehicleObj = updateEwayTransportfrom.value;
         this.updateEwayVehicleObj['ewbNo'] = this.selectedEwayItem.ewbNo;
-        this.updateEwayVehicleObj['transDocDate'] = this.updateEwayVehicleform['transDocDate'] ? moment(this.updateEwayVehicleform['transDocDate']).format('DD/MM/YYYY') : null;
+        this.updateEwayVehicleObj['transDocDate'] = this.updateEwayVehicleform['transDocDate'] ? dayjs(this.updateEwayVehicleform['transDocDate']).format('DD/MM/YYYY') : null;
         if (updateEwayTransportfrom.valid) {
             this.store.dispatch(this.invoiceActions.UpdateEwayVehicle(updateEwayTransportfrom.value));
         }
@@ -596,10 +598,10 @@ export class EWayBillComponent implements OnInit, OnDestroy {
         this.hideGiddhDatepicker();
         if (value && value.startDate && value.endDate) {
             this.todaySelected = false;
-            this.selectedDateRange = { startDate: moment(value.startDate), endDate: moment(value.endDate) };
-            this.selectedDateRangeUi = moment(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
-            this.fromDate = moment(value.startDate).format(GIDDH_DATE_FORMAT);
-            this.toDate = moment(value.endDate).format(GIDDH_DATE_FORMAT);
+            this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
+            this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
+            this.fromDate = dayjs(value.startDate).format(GIDDH_DATE_FORMAT);
+            this.toDate = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
             this.EwayBillfilterRequest.fromDate = this.fromDate;
             this.EwayBillfilterRequest.toDate = this.toDate;
             this.getAllFilteredInvoice();

@@ -18,7 +18,7 @@ import { ResizedEvent } from 'angular-resize-event';
 import { Configuration, SubVoucher, RATE_FIELD_PRECISION, SearchResultText } from 'apps/web-giddh/src/app/app.constant';
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { saveAs } from 'file-saver';
-import * as moment from 'moment/moment';
+import * as dayjs from 'dayjs';
 import { BsDatepickerDirective } from "ngx-bootstrap/datepicker";
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
@@ -111,8 +111,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     @ViewChild('tax', { static: false }) public taxControll: TaxControlComponent;
     @ViewChild('updateBaseAccount', { static: true }) public updateBaseAccount: ModalDirective;
     @ViewChild(BsDatepickerDirective, { static: true }) public datepickers: BsDatepickerDirective;
-    /** Advance receipt remove confirmation modal reference */
-    @ViewChild('advanceReceiptRemoveConfirmationModal', { static: true }) public advanceReceiptRemoveConfirmationModal: TemplateRef<any>;
     /** Adjustment modal */
     @ViewChild('adjustPaymentModal', { static: true }) public adjustPaymentModal: TemplateRef<any>;
     /** Warehouse data for warehouse drop down */
@@ -241,10 +239,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public noResultsFoundLabel = SearchResultText.NewSearch;
     /** True, if all the transactions are of type 'Tax' or 'Reverse Charge' */
     private taxOnlyTransactions: boolean;
-    /** Remove Advance receipt confirmation flag */
-    public confirmationFlag: string = 'text-paragraph';
-    /** Remove Advance receipt confirmation message */
-    public removeAdvanceReceiptConfirmationMessage: string = 'If you change the type of this receipt, all the related advance receipt adjustments in invoices will be removed. & Are you sure you want to proceed?';// & symbol is not part of message it to split sentance by '&'
     /* This will hold the account unique name which is going to be in edit mode to get compared once updated */
     public entryAccountUniqueName: any = '';
     /** Stores the current organization type */
@@ -833,23 +827,23 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public saveLedgerTransaction() {
         // due to date picker of Tx entry date format need to change
         if (this.vm.selectedLedger.entryDate) {
-            if (!moment(this.vm.selectedLedger.entryDate, GIDDH_DATE_FORMAT).isValid()) {
+            if (!dayjs(this.vm.selectedLedger.entryDate, GIDDH_DATE_FORMAT).isValid()) {
                 this.toaster.showSnackBar("error", this.localeData?.invalid_date);
                 this.loaderService.hide();
                 return;
             } else {
-                this.vm.selectedLedger.entryDate = moment(this.vm.selectedLedger.entryDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                this.vm.selectedLedger.entryDate = dayjs(this.vm.selectedLedger.entryDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
             }
         }
 
         // due to date picker of Tx chequeClearance date format need to change
         if (this.vm.selectedLedger.chequeClearanceDate) {
-            if (!moment(this.vm.selectedLedger.chequeClearanceDate, GIDDH_DATE_FORMAT).isValid()) {
+            if (!dayjs(this.vm.selectedLedger.chequeClearanceDate, GIDDH_DATE_FORMAT).isValid()) {
                 this.toaster.showSnackBar("error", this.localeData?.invalid_cheque_clearance_date);
                 this.loaderService.hide();
                 return;
             } else {
-                this.vm.selectedLedger.chequeClearanceDate = moment(this.vm.selectedLedger.chequeClearanceDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                this.vm.selectedLedger.chequeClearanceDate = dayjs(this.vm.selectedLedger.chequeClearanceDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
             }
         }
         let requestObj: LedgerResponse = this.vm.prepare4Submit();
@@ -1148,7 +1142,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         if (typeof this.vm.selectedLedger.entryDate === 'string') {
             date = this.vm.selectedLedger.entryDate;
         } else {
-            date = moment(this.vm.selectedLedger.entryDate).format(GIDDH_DATE_FORMAT);
+            date = dayjs(this.vm.selectedLedger.entryDate).format(GIDDH_DATE_FORMAT);
         }
 
         if (this.voucherApiVersion !== 2) {
@@ -1455,7 +1449,20 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         }
         if (!this.isAdvanceReceipt && !restrictPopup) {
             if (this.isAdjustedInvoicesWithAdvanceReceipt && this.vm.selectedLedger && this.vm.selectedLedger.voucherGeneratedType === VoucherTypeEnum.receipt) {
-                this.advanceReceiptRemoveDialogRef = this.dialog.open(this.advanceReceiptRemoveConfirmationModal);
+                this.advanceReceiptRemoveDialogRef = this.dialog.open(ConfirmModalComponent, {
+                    width: '630px',
+                    data: {
+                        title: this.commonLocaleData?.app_confirmation,
+                        body: this.localeData?.confirm_proceed,
+                        permanentlyDeleteMessage: this.localeData?.remove_advance_receipt,
+                        ok: this.commonLocaleData?.app_yes,
+                        cancel: this.commonLocaleData?.app_no
+                    }
+                });
+
+                this.advanceReceiptRemoveDialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+                    this.onAdvanceReceiptRemoveCloseConfirmationModal(response);
+                });
             }
         }
         this.vm.generateGrandTotal();
@@ -1804,16 +1811,14 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @memberof UpdateLedgerEntryPanelComponent
      */
     public onAdvanceReceiptRemoveCloseConfirmationModal(userResponse: any): void {
-        if (userResponse) {
-            this.isAdvanceReceipt = !userResponse.response;
-            this.handleAdvanceReceiptChange(true);
-            if (this.isAdvanceReceipt) {
-                this.vm.selectedLedger.voucher.shortCode = "advance-receipt";
-            } else {
-                this.vm.selectedLedger.voucher.shortCode = "rcpt";
-            }
-            this.advanceReceiptRemoveDialogRef.close();
+        this.isAdvanceReceipt = !userResponse;
+        this.handleAdvanceReceiptChange(true);
+        if (this.isAdvanceReceipt) {
+            this.vm.selectedLedger.voucher.shortCode = "advance-receipt";
+        } else {
+            this.vm.selectedLedger.voucher.shortCode = "rcpt";
         }
+        this.advanceReceiptRemoveDialogRef.close();
     }
 
     /**
@@ -2127,7 +2132,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             resp[0].particularType = resp[1].body?.accountType;
 
             if (resp[1].body?.currency !== resp[2].baseCurrency) {
-                let date = moment().format(GIDDH_DATE_FORMAT);
+                let date = dayjs().format(GIDDH_DATE_FORMAT);
                 this.ledgerService.GetCurrencyRateNewApi(resp[1].body?.currency, resp[2].baseCurrency, date).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     this.vm.selectedLedger.exchangeRate = response.body;
                 });

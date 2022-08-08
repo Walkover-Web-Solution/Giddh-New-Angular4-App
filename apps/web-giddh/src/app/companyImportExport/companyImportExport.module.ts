@@ -12,12 +12,15 @@ import { SharedModule } from './../shared/shared.module';
 @NgModule({
     imports: [
         CompanyImportExportRoutingModule,
-        TabsModule,
+        TabsModule.forRoot(),
         ShSelectModule,
         FormsModule,
         CommonModule,
         Daterangepicker,
-        LaddaModule,
+        LaddaModule.forRoot({
+            style: 'slide-left',
+            spinnerSize: 30
+        }),
         SharedModule
     ],
     exports: [],

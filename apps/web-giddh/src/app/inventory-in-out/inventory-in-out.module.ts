@@ -41,14 +41,17 @@ import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/
     imports: [InventoryInOutRoutingModule,
         CommonModule,
         ShSelectModule,
-        PaginationModule,
+        PaginationModule.forRoot(),
         Daterangepicker,
         ReactiveFormsModule,
         FormsModule,
-        BsDatepickerModule.forRoot(), CommonModule, SelectModule, LaddaModule,
-        BsDropdownModule,
+        BsDatepickerModule.forRoot(), CommonModule, SelectModule, LaddaModule.forRoot({
+            style: 'slide-left',
+            spinnerSize: 30
+        }),
+        BsDropdownModule.forRoot(),
         InventoryModule,
-        TabsModule,
+        TabsModule.forRoot(),
         DecimalDigitsModule
     ],
 })

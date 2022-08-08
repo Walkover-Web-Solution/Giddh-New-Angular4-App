@@ -1,6 +1,6 @@
 import { UserDetails } from '../../../models/api-models/loginModels';
 import { CompanyResponse } from '../../../models/api-models/Company';
-import * as moment from 'moment/moment';
+import * as dayjs from 'dayjs';
 import { Observable } from 'rxjs';
 import { GroupsWithAccountsResponse } from '../../../models/api-models/GroupsWithAccounts';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
@@ -12,8 +12,8 @@ export class AuditLogsSidebarVM {
     public groups$: Observable<IOption[]>;
     public users$: Observable<IOption[]>;
     public options: Select2Options = {};
-    public moment = moment;
-    public maxDate: Date = moment().toDate();
+    public dayjs = dayjs;
+    public maxDate: Date = dayjs().toDate();
     public filters: IOption[];
     public entities: IOption[];
     public selectedCompany: Observable<CompanyResponse>;
@@ -79,10 +79,10 @@ export class AuditLogsSidebarVM {
         this.selectedUserUnq = '';
         this.selectedAccountUnq = '';
         this.selectedGroupUnq = '';
-        this.selectedFromDate = moment().toDate();
-        this.selectedToDate = moment().toDate();
-        this.selectedLogDate = moment().toDate();
-        this.selectedEntryDate = moment().toDate();
+        this.selectedFromDate = dayjs().toDate();
+        this.selectedToDate = dayjs().toDate();
+        this.selectedLogDate = dayjs().toDate();
+        this.selectedEntryDate = dayjs().toDate();
         this.logOrEntry = 'entryDate';
         this.selectedDateOption = '';
     }
