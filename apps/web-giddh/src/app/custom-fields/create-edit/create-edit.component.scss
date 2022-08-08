@@ -3,11 +3,11 @@
         position: absolute;
         right: 23px;
         top: 0;
-        border: 1px solid;
         z-index: 10;
         padding: 0px 10px;
+        background: var(--color-primary-cancel-button-background-hover);
+        border-color: var(--color-primary-cancel-button-background-hover);
         color: var(--color-secondary-button-text);
-        background-color: var(--color-secondary-button-background);
         &:hover {
             background-color: var(--color-secondary-button-background-hover);
         }

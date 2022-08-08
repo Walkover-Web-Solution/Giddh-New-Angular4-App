@@ -407,7 +407,7 @@
                 {
                     "label": "Custom Fields",
                     "link": "/pages/custom-fields/list",
-                    "icon": "icon-download-circle"
+                    "icon": "icon-custom-field"
                 }
             ]
         }
