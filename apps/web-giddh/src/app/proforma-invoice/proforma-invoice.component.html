@@ -1017,16 +1017,32 @@
                                     </div>
 
                                     <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12">
-                                        <div class="col-sm-12 col-xl-6 col-lg-10 col-md-10 pl-0">
-                                            <input
-                                                digitsOnlyDirective
-                                                [placeholder]="localeData?.mobile_number_placeholder"
-                                                type="tel"
-                                                name="accountDetails.mobileNumber"
-                                                class="form-control attention-to"
-                                                [(ngModel)]="invFormData.accountDetails.mobileNumber"
-                                            />
-                                        </div>
+                                        <ngx-intl-tel-input
+                                            [cssClass]="'pull-right'"
+                                            [enableAutoCountrySelect]="true"
+                                            [enablePlaceholder]="true"
+                                            [searchCountryFlag]="true"
+                                            [searchCountryField]="[searchCountryField.Iso2, searchCountryField.Name]"
+                                            [selectFirstCountry]="false"
+                                            [maxLength]="30"
+                                            [phoneValidation]="true"
+                                            [numberFormat]="phoneNumberFormat.National"
+                                            name="accountDetails.mobileNumber"
+                                            (countryChange)="checkNumber($event)"
+                                            #mobileNo
+                                            [selectedCountryISO]="currentCompanyCountryCode"
+                                            [(ngModel)]="selectedCustomerNumber"
+                                        >
+                                        </ngx-intl-tel-input>
+
+                                        <!-- <span
+                                    class="error-msg"
+                                    *ngIf="
+                                        invFormData.controls['mobileNo'].touched &&
+                                        invFormData.controls['mobileNo'].invalid
+                                    "
+                                    >{{ localeData?.invalid_contact_number }}</span
+                                > -->
                                     </div>
                                 </div>
                                 <!-- endregion-->

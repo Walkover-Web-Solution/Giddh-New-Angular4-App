@@ -117,6 +117,7 @@ import { Location, TitleCasePipe } from '@angular/common';
 import { VoucherForm } from '../models/api-models/Voucher';
 import { AdjustmentUtilityService } from '../shared/advance-receipt-adjustment/services/adjustment-utility.service';
 import { GstReconcileActions } from '../actions/gst-reconcile/GstReconcile.actions';
+import { CountryISO, PhoneNumberFormat, SearchCountryField } from 'ngx-intl-tel-input';
 
 /** Type of search: customer and item (product/service) search */
 const SEARCH_TYPE = {
@@ -631,6 +632,22 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     private referenceVouchersCurrentPage: number = 1;
     /** Reference voucher search field */
     private searchReferenceVoucher: any = "";
+    /** This will hold SearchCountryField */
+    public searchCountryField = SearchCountryField;
+    /** This will hold CountryISO */
+    public countryISO = CountryISO;
+    /** This will hold PhoneNumberFormat */
+    public phoneNumberFormat = PhoneNumberFormat;
+    /** This will hold newCountryCode */
+    public newCountryCode: any = '';
+    /** This will hold oldCountryCode */
+    public oldCountryCode: any = '';
+    /** This will hold updatedNumber */
+    public updatedNumber: any = '';
+    /** This will hold currentCompanyCountryCode */
+    public currentCompanyCountryCode: any = '';
+    /** This will hold updatedNumber */
+    public selectedCustomerNumber: any = '';
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -812,6 +829,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
+                const countryCode = activeCompany.countryV2.alpha2CountryCode;
+                this.currentCompanyCountryCode = countryCode.toLowerCase();
                 this.selectedCompany = activeCompany;
                 this.companyAddressList = activeCompany.addresses;
                 this.initializeCurrentVoucherForm();
@@ -2092,6 +2111,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     public assignAccountDetailsValuesInForm(data: AccountResponseV2) {
+        if (data?.mobileNo) {
+            let newSelectedMobileNumber = "+" + data?.mobileNo;
+            this.selectedCustomerNumber = newSelectedMobileNumber;
+        }
         this.isCashBankAccount = false;
 
         data?.parentGroups?.forEach(parentGroup => {
@@ -2319,7 +2342,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.createEmbeddedViewAtIndex(0);
     }
 
-    public triggerSubmitInvoiceForm(form: NgForm, isUpdate) {
+    public triggerSubmitInvoiceForm(form: NgForm, isUpdate) {        
         this.updateAccount = isUpdate;
         if (this.isPendingVoucherType) {
             this.startLoader(true);
@@ -2360,7 +2383,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         }
     }
 
-    public onSubmitInvoiceForm(form?: NgForm) {
+    public onSubmitInvoiceForm(form?: NgForm) {        
         if ((this.isSalesInvoice || this.isPurchaseInvoice) && this.depositAccountUniqueName && (this.userDeposit === null || this.userDeposit === undefined)) {
             this._toasty.errorToast(this.localeData?.enter_amount);
             this.startLoader(false);
@@ -2560,6 +2583,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         let requestObject: any;
         let voucherDate: any;
         const deposit = this.getDeposit();
+        data.accountDetails.mobileNumber = this.selectedCustomerNumber?.e164Number;
         if (!this.isPurchaseInvoice) {
             voucherDate = data.voucherDetails.voucherDate;
             requestObject = {
@@ -4073,7 +4097,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      * @param {NgForm} invoiceForm Form instance for values
      * @memberof ProformaInvoiceComponent
      */
-    private handleUpdateInvoiceForm(invoiceForm: NgForm): void {
+    private handleUpdateInvoiceForm(invoiceForm: NgForm): void {        
         let requestObject: any = this.prepareDataForApi();
         if (!requestObject) {
             this.startLoader(false);
@@ -7867,5 +7891,23 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.invoiceList = [];
         this.invoiceList$ = observableOf([]);
         this.referenceVouchersCurrentPage = 1;
+    }
+
+    /**	
+    * This will check no and replace old country code with new country code	
+    *	
+    * @param {*} event	
+    * @memberof ProformaInvoiceComponent	
+    */
+    public checkNumber(event: any): void {
+        if (event) {
+            this.oldCountryCode = this.selectedCustomerNumber?.dialCode;
+            let oldNumber = this.selectedCustomerNumber?.e164Number;
+            this.newCountryCode = "+" + event?.dialCode;
+            const value = oldNumber;
+            let newNumber = value ? value?.replace(this.oldCountryCode, this.newCountryCode) : this.newCountryCode;
+            this.selectedCustomerNumber = newNumber;
+            this._cdr.detectChanges();
+        }
     }
 }
