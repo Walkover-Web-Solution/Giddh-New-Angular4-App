@@ -28,7 +28,7 @@ export class LedgerAsidePaneComponent implements OnInit, OnDestroy {
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor(private store: Store<AppState>, private inventorySidebarAction: SidebarAction, private accountsAction: AccountsAction,) {
+    constructor(private store: Store<AppState>, private inventorySidebarAction: SidebarAction, private accountsAction: AccountsAction) {
         this.createStockSuccess$ = this.store.pipe(select(s => s.inventory.createStockSuccess), takeUntil(this.destroyed$));
         this.createAccountIsSuccess$ = this.store.pipe(select(s => s.groupwithaccounts.createAccountIsSuccess), takeUntil(this.destroyed$));
     }
@@ -62,6 +62,7 @@ export class LedgerAsidePaneComponent implements OnInit, OnDestroy {
     }
 
     public backButtonPressed() {
+        this.store.dispatch(this.accountsAction.resetActiveGroup());
         this.hideFirstScreen = false;
         this.isAddStockOpen = false;
         this.isAddAccountOpen = false;
