@@ -10,7 +10,7 @@ import { VAT_SUPPORTED_COUNTRIES } from '../../app.constant';
 import { GstReconcileService } from '../../services/GstReconcile.service';
 import { OrganizationType } from '../../models/user-login-state';
 import { GIDDH_DATE_FORMAT } from '../helpers/defaultDateFormat';
-import * as moment from 'moment';
+import * as dayjs from 'dayjs';
 import { GstReconcileActions } from '../../actions/gst-reconcile/GstReconcile.actions';
 
 @Component({
@@ -96,8 +96,8 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
         this.getCurrentPeriod$.subscribe(period => {
             if (period && period.from) {
                 let date = {
-                    startDate: moment(period.from, GIDDH_DATE_FORMAT).startOf('month').format(GIDDH_DATE_FORMAT),
-                    endDate: moment(period.to, GIDDH_DATE_FORMAT).endOf('month').format(GIDDH_DATE_FORMAT)
+                    startDate: dayjs(period.from, GIDDH_DATE_FORMAT).startOf('month').format(GIDDH_DATE_FORMAT),
+                    endDate: dayjs(period.to, GIDDH_DATE_FORMAT).endOf('month').format(GIDDH_DATE_FORMAT)
                 };
                 if (date.startDate === period.from && date.endDate === period.to) {
                     this.isMonthSelected = true;
@@ -110,8 +110,8 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
                 };
             } else {
                 this.currentPeriod = {
-                    from: moment().startOf('month').format(GIDDH_DATE_FORMAT),
-                    to: moment().endOf('month').format(GIDDH_DATE_FORMAT)
+                    from: dayjs().startOf('month').format(GIDDH_DATE_FORMAT),
+                    to: dayjs().endOf('month').format(GIDDH_DATE_FORMAT)
                 };
                 this.isMonthSelected = true;
             }

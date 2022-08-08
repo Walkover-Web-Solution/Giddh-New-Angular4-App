@@ -1,6 +1,6 @@
 import { Observable, ReplaySubject } from 'rxjs';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import * as moment from 'moment/moment';
+import * as dayjs from 'dayjs';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { ToasterService } from '../../services/toaster.service';
 import { takeUntil } from "rxjs/operators";
@@ -31,7 +31,7 @@ export class CompletedComponent implements OnInit, OnDestroy {
         containerClass: 'theme-green myDpClass'
     };
     public CompanyList: IOption[] = [];
-    public moment = moment;
+    public dayjs = dayjs;
     public maxDate = new Date(new Date().setDate(new Date().getDate() - 1));
     public startDate: string;
     public endDate: string;
@@ -154,10 +154,10 @@ export class CompletedComponent implements OnInit, OnDestroy {
             }
         });
         // set initial Data
-        this.filterForm.get('filterDate')?.patchValue(moment(this.maxDate).format('D-MMM-YYYY'));
+        this.filterForm.get('filterDate')?.patchValue(dayjs(this.maxDate).format('D-MMM-YYYY'));
         this.filterForm.get('filterTimeInterval')?.patchValue(this.timeInterval[5].value);
         this.filter.timeRange = this.timeInterval[5].value;
-        this.filter.startDate = moment(this.maxDate).format(GIDDH_DATE_FORMAT);
+        this.filter.startDate = dayjs(this.maxDate).format(GIDDH_DATE_FORMAT);
         this.getReport();
     }
 
@@ -276,7 +276,7 @@ export class CompletedComponent implements OnInit, OnDestroy {
     }
 
     public onValueChange(event: Date): void {
-        this.filter.startDate = moment(event).format(GIDDH_DATE_FORMAT);
+        this.filter.startDate = dayjs(event).format(GIDDH_DATE_FORMAT);
     }
 
     public onDDElementTimeRangeSelect(event: IOption): void {

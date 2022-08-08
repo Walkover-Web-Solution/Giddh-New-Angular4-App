@@ -26,7 +26,9 @@ import { TaxResponse } from '../../models/api-models/Company';
 import { IContentCommon } from '../../models/api-models/Invoice';
 import { giddhRoundOff } from '../../shared/helpers/helperFunctions';
 import { cloneDeep } from '../../lodash-optimized';
-import * as moment from 'moment/moment';
+import * as dayjs from 'dayjs';
+import * as customParseFormat from 'dayjs/plugin/customParseFormat';
+dayjs.extend(customParseFormat);
 import { DiscountListComponent } from '../../sales/discount-list/discountList.component';
 import { TaxControlComponent } from '../../theme/tax-control/tax-control.component';
 import { CompanyActions } from '../../actions/company.actions';
@@ -238,8 +240,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
     public isRcmEntry: boolean = false;
     /* This will hold universal date */
     public universalDate: any;
-    /* moment object */
-    public moment = moment;
+    /* dayjs object */
+    public dayjs = dayjs;
     /* This will hold currency symbol of company */
     public baseCurrencySymbol: string = '';
     /* Object for selected vendor */
@@ -601,7 +603,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         this.store.pipe(select((state: AppState) => state.session.applicationDate)).pipe(takeUntil(this.destroyed$)).subscribe((dateObj: Date[]) => {
             if (dateObj) {
                 try {
-                    this.universalDate = moment(dateObj[1]).toDate();
+                    this.universalDate = dayjs(dateObj[1]);
                     this.assignDates();
                 } catch (e) {
                     this.universalDate = new Date();
@@ -662,7 +664,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
             if (this.isMulticurrencyAccount) {
                 this.customerCurrencyCode = accountDetails.currency;
                 this.getCurrencyRate(this.companyCurrency, accountDetails.currency,
-                    moment(this.purchaseOrder.voucherDetails.voucherDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT));
+                    dayjs(this.purchaseOrder.voucherDetails.voucherDate).format(GIDDH_DATE_FORMAT));
             } else {
                 this.customerCurrencyCode = this.companyCurrency;
                 this.previousExchangeRate = this.exchangeRate;
@@ -2046,7 +2048,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
             }
         }
 
-        if (moment(data.voucherDetails.dueDate, GIDDH_DATE_FORMAT).isBefore(moment(data.voucherDetails.voucherDate, GIDDH_DATE_FORMAT), 'd')) {
+        if (dayjs(data.voucherDetails.dueDate, GIDDH_DATE_FORMAT).isBefore(dayjs(data.voucherDetails.voucherDate, GIDDH_DATE_FORMAT), 'd')) {
             this.startLoader(false);
             this.toaster.errorToast(this.localeData?.delivery_date_error);
             return;
@@ -2299,7 +2301,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                 }
             } else {
                 try {
-                    return moment(val).format(GIDDH_DATE_FORMAT);
+                    return dayjs(val).format(GIDDH_DATE_FORMAT);
                 } catch (error) {
                     return '';
                 }
@@ -2874,7 +2876,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
     public assignDueDate(): void {
         let duePeriod: number;
         duePeriod = this.invoiceSettings.purchaseBillSettings ? this.invoiceSettings.purchaseBillSettings.poDuePeriod : 0;
-        this.purchaseOrder.voucherDetails.dueDate = duePeriod > 0 ? moment(this.purchaseOrder.voucherDetails.voucherDate).add(duePeriod, 'days').toDate() : moment(this.purchaseOrder.voucherDetails.voucherDate).toDate();
+        this.purchaseOrder.voucherDetails.dueDate = duePeriod > 0 ? dayjs(this.purchaseOrder.voucherDetails.voucherDate).add(duePeriod, 'day').toDate() : dayjs(this.purchaseOrder.voucherDetails.voucherDate).toDate();
     }
 
     /**
@@ -2968,7 +2970,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
     public onUpdateOrderDate(): void {
         this.isOrderDateChanged = true;
         if (this.isMulticurrencyAccount && this.purchaseOrder.voucherDetails.voucherDate) {
-            this.getCurrencyRate(this.companyCurrency, this.customerCurrencyCode, moment(this.purchaseOrder.voucherDetails.voucherDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT));
+            this.getCurrencyRate(this.companyCurrency, this.customerCurrencyCode, dayjs(this.purchaseOrder.voucherDetails.voucherDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT));
         }
         if (this.invoiceSettings && this.invoiceSettings.purchaseBillSettings) {
             setTimeout(() => {
@@ -3640,10 +3642,10 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
      *
      * @param {string} to Converted to currency symbol
      * @param {string} from Converted from currency symbol
-     * @param {string} [date=moment().format(GIDDH_DATE_FORMAT)] Date on which currency rate is required, default is today's date
+     * @param {string} [date=dayjs().format(GIDDH_DATE_FORMAT)] Date on which currency rate is required, default is today's date
      * @memberof CreatePurchaseOrderComponent
      */
-    public getCurrencyRate(to: string, from: string, date = moment().format(GIDDH_DATE_FORMAT)): void {
+    public getCurrencyRate(to: string, from: string, date = dayjs().format(GIDDH_DATE_FORMAT)): void {
         if (from && to) {
             this.ledgerService.GetCurrencyRateNewApi(from, to, date).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 let rate = response.body;

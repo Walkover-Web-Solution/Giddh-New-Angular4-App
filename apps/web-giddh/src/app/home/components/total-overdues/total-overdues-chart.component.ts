@@ -4,7 +4,7 @@ import * as Highcharts from 'highcharts';
 import { Observable, ReplaySubject } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
-import * as moment from 'moment/moment';
+import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
 import { DashboardService } from '../../../services/dashboard.service';
 import { GiddhCurrencyPipe } from '../../../shared/helpers/pipes/currencyPipe/currencyType.pipe';
@@ -50,7 +50,7 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
     public overDueObj: any = {};
     public ReceivableDurationAmt: number = 0;
     public PaybaleDurationAmt: number = 0;
-    public moment = moment;
+    public dayjs = dayjs;
     public amountSettings: any = { baseCurrencySymbol: '', balanceDecimalPlaces: '' };
     public universalDate$: Observable<any>;
     public dataFound: boolean = false;
@@ -83,7 +83,7 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
         this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$)).subscribe((dateObj) => {
             if (dateObj) {
                 let dates = [];
-                dates = [moment(dateObj[0]).format(GIDDH_DATE_FORMAT), moment(dateObj[1]).format(GIDDH_DATE_FORMAT), false];
+                dates = [dayjs(dateObj[0]).format(GIDDH_DATE_FORMAT), dayjs(dateObj[1]).format(GIDDH_DATE_FORMAT), false];
                 this.getFilterDate(dates);
             }
         });
@@ -93,8 +93,8 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
             if (dateObj) {
                 let universalDate = cloneDeep(dateObj);
 
-                this.selectedDateRange = { startDate: moment(universalDate[0]), endDate: moment(universalDate[1]) };
-                this.selectedDateRangeUi = moment(universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                this.selectedDateRange = { startDate: dayjs(universalDate[0]), endDate: dayjs(universalDate[1]) };
+                this.selectedDateRangeUi = dayjs(universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
             }
         });
     }
@@ -296,10 +296,10 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
         }
         this.hideGiddhDatepicker();
         if (value && value.startDate && value.endDate) {
-            this.selectedDateRange = { startDate: moment(value.startDate), endDate: moment(value.endDate) };
-            this.selectedDateRangeUi = moment(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
-            this.fromDate = moment(value.startDate).format(GIDDH_DATE_FORMAT);
-            this.toDate = moment(value.endDate).format(GIDDH_DATE_FORMAT);
+            this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
+            this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
+            this.fromDate = dayjs(value.startDate).format(GIDDH_DATE_FORMAT);
+            this.toDate = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
             this.requestInFlight = true;
             this.toRequest.from = this.fromDate;
             this.toRequest.to = this.toDate;

@@ -74,7 +74,7 @@ import { TaxResponse } from '../models/api-models/Company';
 import { INameUniqueName } from '../models/interfaces/nameUniqueName.interface';
 import { AccountResponseV2, AddAccountRequest, UpdateAccountRequest } from '../models/api-models/Account';
 import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
-import * as moment from 'moment/moment';
+import * as dayjs from 'dayjs';
 import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
 import { cloneDeep, find, forEach, isEqual, isUndefined, omit, orderBy, uniqBy } from '../lodash-optimized';
 import { InvoiceSetting } from '../models/interfaces/invoice.setting.interface';
@@ -276,7 +276,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     };
     public pageList: IOption[] = VOUCHER_TYPE_LIST;
     public universalDate: any;
-    public moment = moment;
+    public dayjs = dayjs;
     public GIDDH_DATE_FORMAT = GIDDH_DATE_FORMAT;
     public activeIndx: number;
     public isCustomerSelected = false;
@@ -654,7 +654,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      */
     private get isPurchaseRecordContractBroken(): boolean {
         return (this.purchaseRecordCustomerUniqueName !== this.invFormData.voucherDetails.customerUniquename) ||
-            (this.purchaseRecordInvoiceDate !== moment(this.invFormData.voucherDetails.voucherDate).format(GIDDH_DATE_FORMAT)) ||
+            (this.purchaseRecordInvoiceDate !== dayjs(this.invFormData.voucherDetails.voucherDate).format(GIDDH_DATE_FORMAT)) ||
             (this.purchaseRecordTaxNumber !== this.invFormData.accountDetails.shippingDetails.gstNumber ||
                 (this.purchaseRecordInvoiceNumber !== this.invFormData.voucherDetails.voucherNumber));
     }
@@ -1072,13 +1072,13 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.store.pipe(select((p: AppState) => p.session.applicationDate), takeUntil(this.destroyed$)).subscribe((dateObj: Date[]) => {
             if (dateObj) {
                 try {
-                    this.poFilterDates = { from: moment(dateObj[0]).format(GIDDH_DATE_FORMAT), to: moment(dateObj[1]).format(GIDDH_DATE_FORMAT) }
-                    this.universalDate = moment(dateObj[1]).toDate();
+                    this.poFilterDates = { from: dayjs(dateObj[0]).format(GIDDH_DATE_FORMAT), to: dayjs(dateObj[1]).format(GIDDH_DATE_FORMAT) }
+                    this.universalDate = dayjs(dateObj[1]).format(GIDDH_DATE_FORMAT);
                     if (!this.isUpdateMode) {
                         this.assignDates();
                     }
                 } catch (e) {
-                    this.universalDate = new Date();
+                    this.universalDate = dayjs().format(GIDDH_DATE_FORMAT);
                 }
             }
         });
@@ -1430,17 +1430,17 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         if (!this.isLastInvoiceCopied) {
                             // convert date object
                             if (this.isProformaInvoice) {
-                                obj.voucherDetails.voucherDate = moment(obj.voucherDetails.voucherDate, GIDDH_DATE_FORMAT).toDate();
+                                obj.voucherDetails.voucherDate = dayjs(obj.voucherDetails.voucherDate, GIDDH_DATE_FORMAT).toDate();
                                 obj.voucherDetails.voucherNumber = obj.voucherDetails.proformaNumber;
                             } else if (this.isEstimateInvoice) {
-                                obj.voucherDetails.voucherDate = moment(obj.voucherDetails.voucherDate, GIDDH_DATE_FORMAT).toDate();
+                                obj.voucherDetails.voucherDate = dayjs(obj.voucherDetails.voucherDate, GIDDH_DATE_FORMAT).toDate();
                                 obj.voucherDetails.voucherNumber = obj.voucherDetails.estimateNumber;
                             } else {
-                                obj.voucherDetails.voucherDate = moment(obj.voucherDetails.voucherDate, GIDDH_DATE_FORMAT).toDate();
+                                obj.voucherDetails.voucherDate = dayjs(obj.voucherDetails.voucherDate, GIDDH_DATE_FORMAT).toDate();
                             }
 
                             if (obj.voucherDetails.dueDate) {
-                                obj.voucherDetails.dueDate = moment(obj.voucherDetails.dueDate, GIDDH_DATE_FORMAT).toDate();
+                                obj.voucherDetails.dueDate = dayjs(obj.voucherDetails.dueDate, GIDDH_DATE_FORMAT).toDate();
                             }
                         }
 
@@ -1836,7 +1836,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
             this.invFormData.entries.forEach((entry: SalesEntryClass) => {
                 entry.entryDate = date;
-                entry.entryDate = moment(entry.entryDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                if (typeof (entry.entryDate) === "object") {
+                    entry.entryDate = dayjs(entry.entryDate).format(GIDDH_DATE_FORMAT);
+                } else {
+                    entry.entryDate = dayjs(entry.entryDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                }
             });
         }
     }
@@ -1929,7 +1933,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             } else if (typeof this.invFormData.voucherDetails.voucherDate === 'string') {
                 date = this.invFormData.voucherDetails.voucherDate;
             } else {
-                date = moment(this.invFormData.voucherDetails.voucherDate).format(GIDDH_DATE_FORMAT);
+                date = dayjs(this.invFormData.voucherDetails.voucherDate).format(GIDDH_DATE_FORMAT);
             }
 
             if (this.voucherApiVersion !== 2) {
@@ -2350,7 +2354,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 }
             } else {
                 try {
-                    return moment(val).format(GIDDH_DATE_FORMAT);
+                    return dayjs(val).format(GIDDH_DATE_FORMAT);
                 } catch (error) {
                     return '';
                 }
@@ -2403,7 +2407,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         }
 
         if (this.isSalesInvoice || this.isPurchaseInvoice || this.isProformaInvoice || this.isEstimateInvoice) {
-            if (moment(data.voucherDetails.dueDate, GIDDH_DATE_FORMAT).isBefore(moment(data.voucherDetails.voucherDate, GIDDH_DATE_FORMAT), 'd')) {
+            if (dayjs(data.voucherDetails.dueDate, GIDDH_DATE_FORMAT).isBefore(dayjs(data.voucherDetails.voucherDate, GIDDH_DATE_FORMAT), 'd')) {
                 this.startLoader(false);
 
                 let dateText = this.commonLocaleData?.app_invoice;
@@ -2502,7 +2506,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 forEach(entry.transactions, (txn: SalesTransactionItemClass) => {
                     // convert date object
                     // txn.date = this.convertDateForAPI(txn.date);
-                    entry.entryDate = moment(this.convertDateForAPI(entry.entryDate), GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                    entry.entryDate = dayjs(this.convertDateForAPI(entry.entryDate), GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
                     txn.convertedAmount = this.fetchedConvertedRate > 0 ? giddhRoundOff((Number(txn.amount) * this.fetchedConvertedRate), 2) : 0;
 
                     // we need to remove # from account uniqueName because we are appending # to stock for uniqueNess (allowing for pending type voucher)
@@ -2692,7 +2696,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 requestObject.depositAccountUniqueName = '';
             }
 
-            requestObject.date = moment(voucherDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+            requestObject.date = dayjs(voucherDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
             requestObject.type = VoucherTypeEnum.sales;
 
             let updatedData = requestObject;
@@ -3673,10 +3677,14 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             let entry: SalesEntryClass = new SalesEntryClass();
             if (this.isUpdateMode) {
                 entry.entryDate = this.invFormData.entries[0] ? this.invFormData.entries[0].entryDate : this.universalDate || new Date();
-                entry.entryDate = moment(entry.entryDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                if (typeof (entry.entryDate) === "object") {
+                    entry.entryDate = dayjs(entry.entryDate).format(GIDDH_DATE_FORMAT);
+                } else {
+                    entry.entryDate = dayjs(entry.entryDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                }
                 entry.isNewEntryInUpdateMode = true;
             } else {
-                entry.entryDate = moment(this.invFormData.voucherDetails.voucherDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                entry.entryDate = this.invFormData.voucherDetails.voucherDate;
             }
             this.invFormData.entries.push(entry);
         } else {
@@ -4013,7 +4021,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 }
 
                 this.activeIndx = lastIndex;
-                this.invFormData.entries[lastIndex].entryDate = this.invFormData.voucherDetails.voucherDate;
+                if (typeof (this.invFormData.voucherDetails.voucherDate) === "object") {
+                    this.invFormData.entries[lastIndex].entryDate = dayjs(this.invFormData.voucherDetails.voucherDate).format(GIDDH_DATE_FORMAT);
+                } else {
+                    this.invFormData.entries[lastIndex].entryDate = this.invFormData.voucherDetails.voucherDate;
+                }
                 this.invFormData.entries[lastIndex].transactions[0].fakeAccForSelect2 = item.uniqueName;
                 this.invFormData.entries[lastIndex].isNewEntryInUpdateMode = true;
                 if (isBlankItemInBetween) {
@@ -4102,7 +4114,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 salesEntryClass.voucherType = entry.voucherType;
                 salesEntryClass.uniqueName = entry.uniqueName;
                 salesEntryClass.description = entry.description;
-                salesEntryClass.date = moment(entry.entryDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                salesEntryClass.date = dayjs(entry.entryDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
                 let calculationMethod = (entry.otherTaxModal && entry.otherTaxModal.tcsCalculationMethod) ? entry.otherTaxModal.tcsCalculationMethod : "";
                 entry.taxList.forEach(t => {
                     salesEntryClass.taxes.push({ uniqueName: t, calculationMethod: calculationMethod });
@@ -4382,7 +4394,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         }
 
         if (this.isSalesInvoice || this.isPurchaseInvoice || this.isProformaInvoice || this.isEstimateInvoice) {
-            if (moment(data.voucherDetails.dueDate, GIDDH_DATE_FORMAT).isBefore(moment(data.voucherDetails.voucherDate, GIDDH_DATE_FORMAT), 'd')) {
+            if (dayjs(data.voucherDetails.dueDate, GIDDH_DATE_FORMAT).isBefore(dayjs(data.voucherDetails.voucherDate, GIDDH_DATE_FORMAT), 'd')) {
                 this.startLoader(false);
 
                 let dateText = this.commonLocaleData?.app_invoice;
@@ -4472,7 +4484,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             data.entries.forEach((entry) => {
                 entry.transactions.forEach((txn: SalesTransactionItemClass) => {
                     // convert date object
-                    entry.entryDate = moment(entry.entryDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                    entry.entryDate = dayjs(entry.entryDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
 
                     // allowing below block of code for pending voucher to create because no need # in caseof pending voucher
                     if (this.isUpdateMode || this.isPendingVoucherType) {
@@ -4751,8 +4763,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             if (!entry.otherTaxModal) {
                 entry.otherTaxModal = new SalesOtherTaxesModal();
             }
-            entry.entryDate = (entry.entryDate) ? moment(entry.entryDate, GIDDH_DATE_FORMAT).toDate() : this.universalDate || new Date();
-            entry.entryDate = moment(entry.entryDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+            entry.entryDate = entry.entryDate || this.universalDate || new Date();
+            entry.entryDate = dayjs(entry.entryDate).format(GIDDH_DATE_FORMAT);
 
             entry.discounts = this.parseDiscountFromResponse(entry);
             entry.taxList = entry.taxes.map(m => m.uniqueName);
@@ -5166,7 +5178,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             salesEntryClass.voucherType = entry.voucherType;
             salesEntryClass.uniqueName = entry.uniqueName;
             salesEntryClass.description = entry.description;
-            salesEntryClass.entryDate = moment(entry.date, GIDDH_DATE_FORMAT).toDate();
+            salesEntryClass.entryDate = dayjs(entry.date, GIDDH_DATE_FORMAT).toDate();
             this.calculateOtherTaxes(salesEntryClass.otherTaxModal, salesEntryClass);
             voucherClassConversion.entries.push(salesEntryClass);
         });
@@ -5218,7 +5230,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         voucherDetails.deposit = result.deposit ? result.deposit.amountForAccount : 0;
 
         //need to check usage
-        voucherDetails.dueDate = result.dueDate ? moment(result.dueDate, GIDDH_DATE_FORMAT).toDate() : '';
+        voucherDetails.dueDate = result.dueDate ? dayjs(result.dueDate, GIDDH_DATE_FORMAT) : '';
         voucherDetails.balanceStatus = result.balanceStatus;
 
         voucherDetails.customerUniquename = result.account.uniqueName;
@@ -5307,7 +5319,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      * @param modelDate: Date ( date that was already selected by user )
      */
     public onVoucherDateChanged(selectedDate, modelDate) {
-        if (this.isMultiCurrencyModule() && this.isMulticurrencyAccount && selectedDate && this.voucherDateBeforeUpdate && moment(selectedDate).format(GIDDH_DATE_FORMAT) !== moment(this.voucherDateBeforeUpdate).format(GIDDH_DATE_FORMAT)) {
+        if (this.isMultiCurrencyModule() && this.isMulticurrencyAccount && selectedDate && this.voucherDateBeforeUpdate && dayjs(selectedDate).format(GIDDH_DATE_FORMAT) !== dayjs(this.voucherDateBeforeUpdate).format(GIDDH_DATE_FORMAT)) {
             this.getCurrencyRate(this.companyCurrency, this.customerCurrencyCode, selectedDate);
         }
         if (selectedDate && modelDate && selectedDate !== modelDate && this.invFormData &&
@@ -5316,7 +5328,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.getAllAdvanceReceipts(this.invFormData.voucherDetails.customerUniquename, selectedDate);
         }
         if (selectedDate && modelDate && selectedDate !== modelDate && (this.isCreditNote || this.isDebitNote)) {
-            this.getInvoiceListsForCreditNote(moment(selectedDate).format(GIDDH_DATE_FORMAT));
+            this.getInvoiceListsForCreditNote(dayjs(selectedDate).format(GIDDH_DATE_FORMAT));
         }
 
         if (this.voucherDateBeforeUpdate && this.invFormData.voucherDetails.voucherDate && this.voucherDateBeforeUpdate !== this.invFormData.voucherDetails.voucherDate && (!this.isUpdateMode || (this.isUpdateMode && this.invoiceType !== VoucherTypeEnum.purchase))) {
@@ -5346,7 +5358,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             if (typeof date === 'string') {
                 voucherDate = date;
             } else {
-                voucherDate = moment(date).format(GIDDH_DATE_FORMAT);
+                voucherDate = dayjs(date).format(GIDDH_DATE_FORMAT);
             }
             this._ledgerService.GetCurrencyRateNewApi(from, to, voucherDate).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 let rate = response.body;
@@ -5712,7 +5724,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     private saveCurrentPurchaseRecordDetails(): void {
         try {
             this.purchaseRecordCustomerUniqueName = String(this.invFormData.voucherDetails.customerUniquename);
-            this.purchaseRecordInvoiceDate = moment(this.invFormData.voucherDetails.voucherDate).format(GIDDH_DATE_FORMAT);
+            this.purchaseRecordInvoiceDate = dayjs(this.invFormData.voucherDetails.voucherDate).format(GIDDH_DATE_FORMAT);
             this.purchaseRecordTaxNumber = String(this.invFormData.accountDetails.shippingDetails.gstNumber);
             this.purchaseRecordInvoiceNumber = String(this.invFormData.voucherDetails.voucherNumber);
         } catch (error) {
@@ -5968,7 +5980,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         const requestObject = {
             accountUniqueName: this.invFormData.voucherDetails.customerUniquename,
             taxNumber: this.invFormData.accountDetails.billingDetails.gstNumber || this.invFormData.accountDetails.shippingDetails.gstNumber || '',
-            purchaseDate: moment(this.invFormData.voucherDetails.voucherDate).format(GIDDH_DATE_FORMAT),
+            purchaseDate: dayjs(this.invFormData.voucherDetails.voucherDate).format(GIDDH_DATE_FORMAT),
             number: this.invFormData.voucherDetails.voucherNumber || ''
         }
         return this.purchaseRecordService.validatePurchaseRecord(requestObject);
@@ -6190,7 +6202,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         if (typeof voucherDate === 'string') {
             date = voucherDate;
         } else {
-            date = moment(voucherDate).format(GIDDH_DATE_FORMAT);
+            date = dayjs(voucherDate).format(GIDDH_DATE_FORMAT);
         }
         if (customerUniqueName && date) {
             let apiCallObservable: Observable<any>;
@@ -7231,13 +7243,17 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         if (action === this.commonLocaleData?.app_yes) {
             if (this.dateChangeType === "voucher") {
                 this.invFormData.entries.forEach(entry => {
-                    entry.entryDate = moment(this.invFormData.voucherDetails.voucherDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                    entry.entryDate = dayjs(this.invFormData.voucherDetails.voucherDate).format(GIDDH_DATE_FORMAT);
                 });
             } else if (this.dateChangeType === "entry") {
                 let entryLoop = 0;
                 this.invFormData.entries.forEach(entry => {
                     if (entryLoop !== this.updatedEntryIndex) {
-                        entry.entryDate = moment(this.invFormData.entries[this.updatedEntryIndex].entryDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                        if (typeof (this.invFormData.entries[this.updatedEntryIndex].entryDate) === "object") {
+                            entry.entryDate = dayjs(this.invFormData.entries[this.updatedEntryIndex].entryDate).format(GIDDH_DATE_FORMAT);
+                        } else {
+                            entry.entryDate = dayjs(this.invFormData.entries[this.updatedEntryIndex].entryDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                        }
                     }
                     entryLoop++;
                 });
@@ -7254,6 +7270,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      * @memberof ProformaInvoiceComponent
      */
     public onBlurEntryDate(entryIdx: number, isDatepickerOpen: boolean): void {
+        if (typeof (this.invFormData.entries[entryIdx].entryDate) === "object") {
+            this.invFormData.entries[entryIdx].entryDate = dayjs(this.invFormData.entries[entryIdx].entryDate).format(GIDDH_DATE_FORMAT);
+        } else {
+            this.invFormData.entries[entryIdx].entryDate = this.invFormData.entries[entryIdx].entryDate;
+        }
+
         if (!this.isEntryDateChangeConfirmationDisplayed && isDatepickerOpen && this.invFormData.entries && this.invFormData.entries.length > 1) {
             this.isEntryDateChangeConfirmationDisplayed = true;
             this.dateChangeType = "entry";
@@ -7283,7 +7305,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             }
 
             if (this.invFormData.voucherDetails.voucherDate) {
-                this.invFormData.voucherDetails.dueDate = duePeriod > 0 ? moment(this.invFormData.voucherDetails.voucherDate).add(duePeriod, 'days').toDate() : moment(this.invFormData.voucherDetails.voucherDate).toDate();
+                if (typeof (this.invFormData.voucherDetails.voucherDate) === "object") {
+                    this.invFormData.voucherDetails.dueDate = duePeriod > 0 ? dayjs(this.invFormData.voucherDetails.voucherDate).add(duePeriod, 'day').toDate() : dayjs(this.invFormData.voucherDetails.voucherDate).toDate();
+                } else {
+                    this.invFormData.voucherDetails.dueDate = duePeriod > 0 ? dayjs(this.invFormData.voucherDetails.voucherDate, GIDDH_DATE_FORMAT).add(duePeriod, 'day').toDate() : dayjs(this.invFormData.voucherDetails.voucherDate, GIDDH_DATE_FORMAT).toDate();
+                }
             }
         }
     }

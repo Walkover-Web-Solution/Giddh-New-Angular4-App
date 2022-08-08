@@ -6,7 +6,7 @@ import { FormControl, NgForm } from '@angular/forms';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
-import * as moment from 'moment/moment';
+import * as dayjs from 'dayjs';
 import { GenBulkInvoiceFinalObj, GenBulkInvoiceGroupByObj, GenerateBulkInvoiceObject, GenerateBulkInvoiceRequest, GetAllLedgersForInvoiceResponse, GetAllLedgersOfInvoicesResponse, ILedgersInvoiceResult, InvoiceFilterClass, InvoicePreviewDetailsVm } from '../../models/api-models/Invoice';
 import { InvoiceActions } from '../../actions/invoice/invoice.actions';
 import { ElementViewContainerRef } from '../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
@@ -40,7 +40,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
     @ViewChild('accountUniqueNameSearch', { static: true }) public accountUniqueNameSearch: ElementRef;
     @Input() public selectedVoucher: string = 'invoice';
 
-    public moment = moment;
+    public dayjs = dayjs;
     public showFromDatePicker: boolean = false;
     public showToDatePicker: boolean = false;
     public togglePrevGenBtn: boolean = false;
@@ -185,7 +185,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
 
                     let response = cloneDeep(res);
                     response.results = orderBy(response.results, (item: ILedgersInvoiceResult) => {
-                        return moment(item.entryDate, GIDDH_DATE_FORMAT);
+                        return dayjs(item.entryDate, GIDDH_DATE_FORMAT);
                     }, 'desc');
 
                     if (response && response.results) {
@@ -201,8 +201,8 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
                         this.ledgerSearchRequest.from = response.fromDate;
                         this.ledgerSearchRequest.to = response.toDate;
 
-                        this.selectedDateRange = { startDate: moment(response.fromDate, GIDDH_DATE_FORMAT), endDate: moment(response.toDate, GIDDH_DATE_FORMAT) };
-                        this.selectedDateRangeUi = moment(response.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(response.toDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
+                        this.selectedDateRange = { startDate: dayjs(response.fromDate, GIDDH_DATE_FORMAT), endDate: dayjs(response.toDate, GIDDH_DATE_FORMAT) };
+                        this.selectedDateRangeUi = dayjs(response.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(response.toDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
                     }
 
                     setTimeout(() => {
@@ -265,11 +265,11 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
                         if (this.universalDate && !this.todaySelected) {
                             this.ledgerSearchRequest.dateRange = this.universalDate;
 
-                            this.selectedDateRange = { startDate: moment(dateObj[0]), endDate: moment(dateObj[1]) };
-                            this.selectedDateRangeUi = moment(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                            this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
+                            this.selectedDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
 
-                            this.ledgerSearchRequest.from = moment(dateObj[0]).format(GIDDH_DATE_FORMAT);
-                            this.ledgerSearchRequest.to = moment(dateObj[1]).format(GIDDH_DATE_FORMAT);
+                            this.ledgerSearchRequest.from = dayjs(dateObj[0]).format(GIDDH_DATE_FORMAT);
+                            this.ledgerSearchRequest.to = dayjs(dateObj[1]).format(GIDDH_DATE_FORMAT);
 
                             this.isUniversalDateApplicable = true;
                         } else {
@@ -478,7 +478,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     public setToday(model: string) {
-        this.ledgerSearchRequest[model] = String(moment());
+        this.ledgerSearchRequest[model] = String(dayjs());
     }
 
     public clearDate(model: string) {
@@ -536,8 +536,8 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
         let fromDate = null;
         let toDate = null;
         if (this.universalDate && this.universalDate.length) {
-            fromDate = moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
-            toDate = moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
+            fromDate = dayjs(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
+            toDate = dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
         }
 
         return {
@@ -662,8 +662,8 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
         this.ledgerSearchRequest.dateRange = this.universalDate;
         this.customDateSelected = false;
         if (this.universalDate && !this.todaySelected) {
-            this.selectedDateRange = { startDate: moment(this.universalDate[0]), endDate: moment(this.universalDate[1]) };
-            this.selectedDateRangeUi = moment(this.universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(this.universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+            this.selectedDateRange = { startDate: dayjs(this.universalDate[0]), endDate: dayjs(this.universalDate[1]) };
+            this.selectedDateRangeUi = dayjs(this.universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(this.universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
 
             this.isUniversalDateApplicable = true;
         } else {
@@ -769,10 +769,10 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
         this.hideGiddhDatepicker();
         if (value && value.startDate && value.endDate) {
             this.customDateSelected = true;
-            this.selectedDateRange = { startDate: moment(value.startDate), endDate: moment(value.endDate) };
-            this.selectedDateRangeUi = moment(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
-            this.ledgerSearchRequest.from = moment(value.startDate).format(GIDDH_DATE_FORMAT);
-            this.ledgerSearchRequest.to = moment(value.endDate).format(GIDDH_DATE_FORMAT);
+            this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
+            this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
+            this.ledgerSearchRequest.from = dayjs(value.startDate).format(GIDDH_DATE_FORMAT);
+            this.ledgerSearchRequest.to = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
             this.isUniversalDateApplicable = false;
             this.getLedgersOfInvoice();
         }

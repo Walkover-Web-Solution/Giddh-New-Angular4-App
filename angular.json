@@ -112,14 +112,8 @@
                             }
                         ],
                         "styles": [
-                            "apps/web-giddh/src/assets/css/typography.css",
-                            "apps/web-giddh/src/assets/css/ngx-bootstrap/bs-datepicker.css",
-                            "apps/web-giddh/src/assets/fonts/icomoon/icomoon.css",
-                            "apps/web-giddh/src/assets/css/ledgerfont/ledgerfont.css",
                             "apps/web-giddh/src/assets/css/style-1.scss",
                             "apps/web-giddh/src/assets/css/style-2.scss",
-                            "apps/web-giddh/src/assets/css/perfect-scrollbar.component.scss",
-                            "apps/web-giddh/src/assets/css/toastr.css",
                             "node_modules/ngx-lightbox/lightbox.css"
                         ],
                         "scripts": [
@@ -384,14 +378,8 @@
                             }
                         ],
                         "styles": [
-                            "apps/web-giddh/src/assets/css/typography.css",
-                            "apps/web-giddh/src/assets/css/ngx-bootstrap/bs-datepicker.css",
-                            "apps/web-giddh/src/assets/fonts/icomoon/icomoon.css",
-                            "apps/web-giddh/src/assets/css/ledgerfont/ledgerfont.css",
                             "apps/web-giddh/src/assets/css/style-1.scss",
                             "apps/web-giddh/src/assets/css/style-2.scss",
-                            "apps/web-giddh/src/assets/css/perfect-scrollbar.component.scss",
-                            "apps/web-giddh/src/assets/css/toastr.css",
                             "node_modules/ngx-lightbox/lightbox.css"
                         ],
                         "scripts": [
