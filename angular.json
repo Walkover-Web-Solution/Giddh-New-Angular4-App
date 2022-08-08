@@ -125,8 +125,7 @@
                             "node_modules/intl-tel-input/build/css/intlTelInput.css"
                         ],
                         "scripts": [
-                            "node_modules/bootstrap-daterangepicker/daterangepicker.js",
-                            "node_modules/intl-tel-input/build/js/utils.js"
+                            "node_modules/bootstrap-daterangepicker/daterangepicker.js"
                         ],
                         "customWebpackConfig": {
                             "path": "apps/web-giddh/webpack.partial.js",
@@ -400,8 +399,7 @@
                             "node_modules/intl-tel-input/build/css/intlTelInput.css"
                         ],
                         "scripts": [
-                            "node_modules/bootstrap-daterangepicker/daterangepicker.js",
-                            "node_modules/intl-tel-input/build/js/utils.js"
+                            "node_modules/bootstrap-daterangepicker/daterangepicker.js"
                         ]
                     },
                     "configurations": {
