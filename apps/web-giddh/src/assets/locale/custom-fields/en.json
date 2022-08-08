@@ -35,6 +35,5 @@
     "option_name": "Enter Option",
     "field_mandatory": "Field Mandatory?",
     "modules_label": "Modules",
-    "modules_placeholder": "Select Modules",
-    "create_custom_field":"Create Custom Field"
+    "modules_placeholder": "Select Modules"
 }

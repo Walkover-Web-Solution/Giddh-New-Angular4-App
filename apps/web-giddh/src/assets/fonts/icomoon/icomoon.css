@@ -27,6 +27,23 @@
     -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-icici-logo .path1:before {
+  content: "\e914";
+  color: #f06321;
+}
+.icon-icici-logo .path2:before {
+  content: "\e915";
+  margin-left: -1em;
+  color: #ae282e;
+}
+.icon-icici-logo .path3:before {
+  content: "\e916";
+  margin-left: -1em;
+  color: #fff;
+}
+.icon-custom-field:before {
+  content: "\ea15";
+}
 .icon-print_settings:before {
   content: "\e900";
   color: #666;
@@ -137,20 +154,6 @@
 }
 .icon-download:before {
   content: "\e913";
-}
-.icon-icici-logo .path1:before {
-  content: "\e914";
-  color: #f06321;
-}
-.icon-icici-logo .path2:before {
-  content: "\e915";
-  margin-left: -1em;
-  color: #ae282e;
-}
-.icon-icici-logo .path3:before {
-  content: "\e916";
-  margin-left: -1em;
-  color: #fff;
 }
 .icon-success:before {
   content: "\e917";
@@ -923,3 +926,4 @@
 .icon-folder:before {
   content: "\f2334";
 }
+

@@ -8,22 +8,15 @@
     <hamburger-menu></hamburger-menu>
     <giddh-page-loader *ngIf="showLoader"></giddh-page-loader>
     <ng-container *ngIf="!showLoader">
-        <div class="custom-field-header d-flex align-items-center justify-content-space-between">
-            <h1 class="custom-field-heading">{{ localeData?.create_custom_field }}</h1>
-            <button
-                mat-button
-                disableRipple="true"
-                class="back-to-page cursor-pointer"
-                (click)="redirectToGetAllPage()"
-            >
-                <i class="icon-cross"></i>
+        <div class="relative create-custom-field-page mr-t2">
+            <button mat-flat-button [disableRipple]="true" class="back-to-page" (click)="redirectToGetAllPage()">
+                <i class="back-left icon-left"></i>
+                {{ commonLocaleData?.app_back }}
             </button>
-        </div>
-        <div class="relative create-custom-field-page">
             <div class="custom-field-wrapper relative">
                 <div>
                     <form #customFieldCreateEditForm="ngForm" novalidate autocomplete="off">
-                        <p class="text-gray mx-3 my-3 font-14" *ngIf="!customFieldUniqueName">
+                        <p class="text-gray mx-3 mb-3 mr-b2 font-14" *ngIf="!customFieldUniqueName">
                             {{ localeData?.create_note }}
                         </p>
                         <div class="col-md-8 col-lg-8 col-xl-6 col-12">
@@ -161,9 +154,6 @@
                             </div>
                         </div>
                     </form>
-                </div>
-                <div class="vector-image">
-                    <img src="../../../../assets/images/create-custom-field-vector.svg" />
                 </div>
             </div>
         </div>
