@@ -1,11 +1,18 @@
 .create-custom-field-page {
     .back-to-page {
         position: absolute;
-        right: 5px;
+        right: 23px;
         top: 0;
-        padding: 10px;
         z-index: 10;
-        color: var(--color-blue);
+        padding: 0px 10px;
+        background: var(--color-primary-cancel-button-background-hover);
+        border-color: var(--color-primary-cancel-button-background-hover);
+        color: var(--color-secondary-button-text);
+        i {
+            font-size: 21px;
+            float: left;
+            margin-top: 15%;
+        }
     }
     .custom-field-wrapper {
         min-height: 73vh;
