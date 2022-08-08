@@ -48,15 +48,18 @@ import { NgxBootstrapSwitchModule } from 'ngx-bootstrap-switch';
     imports: [
         PurchaseRoutingModule,
         CollapseModule,
-        PaginationModule,
+        PaginationModule.forRoot(),
         DatepickerModule,
-        BsDropdownModule,
+        BsDropdownModule.forRoot(),
         Daterangepicker,
-        LaddaModule,
+        LaddaModule.forRoot({
+            style: 'slide-left',
+            spinnerSize: 30
+        }),
         HighlightModule,
-        TooltipModule,
+        TooltipModule.forRoot(),
         ClickOutsideModule,
-        TabsModule,
+        TabsModule.forRoot(),
         AlertModule,
         ElementViewChildModule,
         PerfectScrollbarModule,

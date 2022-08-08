@@ -6,7 +6,7 @@ import { Observable, ReplaySubject } from 'rxjs';
 import { AppState } from '../../store';
 import { select, Store } from '@ngrx/store';
 import { InvoiceActions } from '../../actions/invoice/invoice.actions';
-import * as moment from 'moment';
+import * as dayjs from 'dayjs';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
@@ -287,7 +287,7 @@ export class RecurringComponent implements OnInit, OnDestroy {
     public submit() {
         const filter = { ...this.filter };
         if (filter.lastInvoiceDate) {
-            filter.lastInvoiceDate = moment(filter.lastInvoiceDate).format(GIDDH_DATE_FORMAT);
+            filter.lastInvoiceDate = dayjs(filter.lastInvoiceDate).format(GIDDH_DATE_FORMAT);
         }
         if (Object.keys(filter).some(p => filter[p])) {
             this.isLoading = true;

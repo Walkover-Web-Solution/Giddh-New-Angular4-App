@@ -9,7 +9,7 @@ import { ExpenseService } from '../../../services/expences.service';
 import { CommonPaginatedRequest } from '../../../models/api-models/Invoice';
 import { FormControl } from '@angular/forms';
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
-import * as moment from 'moment/moment';
+import * as dayjs from 'dayjs';
 import { MatSort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
 import { Lightbox } from 'ngx-lightbox';
@@ -96,8 +96,8 @@ export class PendingListComponent implements OnInit, OnChanges {
             this.todaySelected = resp[1];
             if (dateObj && !this.todaySelected) {
                 let universalDate = _.cloneDeep(dateObj);
-                let from = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
-                let to = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
+                let from = dayjs(universalDate[0]).format(GIDDH_DATE_FORMAT);
+                let to = dayjs(universalDate[1]).format(GIDDH_DATE_FORMAT);
                 if (from && to) {
                     this.pettycashRequest.from = from;
                     this.pettycashRequest.to = to;

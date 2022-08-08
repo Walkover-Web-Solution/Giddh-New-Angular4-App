@@ -148,7 +148,7 @@ export class AccountCreateEditComponent implements OnInit, OnDestroy {
                         index++;
                     });
 
-                    let isAllOptionsChecked = this.paymentAlerts.filter(paymentAlertUser => paymentAlertUser !== this.selectAllRecords); 
+                    let isAllOptionsChecked = this.paymentAlerts.filter(paymentAlertUser => paymentAlertUser !== this.selectAllRecords);
                     if((isAllOptionsChecked?.length === this.paymentAlertsUsersList?.length - 1)) {
                         // if all options checked and select all is unchecked, we need to show select all as selected
                         this.paymentAlerts.push(this.selectAllRecords);
@@ -180,9 +180,6 @@ export class AccountCreateEditComponent implements OnInit, OnDestroy {
                     this.toaster.errorToast(response?.message);
                 }
             });
-        } else {
-            this.toaster.clearAllToaster();
-            this.toaster.errorToast(this.localeData?.payment?.required_field_error);
         }
     }
 
@@ -218,7 +215,7 @@ export class AccountCreateEditComponent implements OnInit, OnDestroy {
                     this.paymentAlerts.push(event?.value);
                 }
 
-                let isAllOptionsChecked = this.paymentAlerts.filter(paymentAlertUser => paymentAlertUser !== this.selectAllRecords); 
+                let isAllOptionsChecked = this.paymentAlerts.filter(paymentAlertUser => paymentAlertUser !== this.selectAllRecords);
                 let isSelectAllChecked = this.paymentAlerts.filter(paymentAlertUser => paymentAlertUser === this.selectAllRecords);
                 if((isAllOptionsChecked?.length === this.paymentAlertsUsersList?.length - 1) && !isSelectAllChecked?.length) {
                     // if all options checked and select all is unchecked, we need to show select all as selected

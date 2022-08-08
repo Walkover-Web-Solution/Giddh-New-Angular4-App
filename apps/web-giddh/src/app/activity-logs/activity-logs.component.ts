@@ -5,7 +5,7 @@ import { ActivityLogsService } from '../services/activity-logs.service';
 import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from '../app.constant';
 import { takeUntil } from 'rxjs/operators';
 import { ActivityLogsJsonComponent } from './components/activity-logs-json/activity-logs-json.component';
-import * as moment from 'moment';
+import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../shared/helpers/defaultDateFormat';
 import { GeneralService } from '../services/general.service';
 import { Router } from '@angular/router';
@@ -136,10 +136,10 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
         this.universalDate$.subscribe(dateObj => {
             if (dateObj) {
                 this.universalDate = _.cloneDeep(dateObj);
-                this.selectedDateRange = { startDate: moment(dateObj[0]), endDate: moment(dateObj[1]) };
-                this.selectedDateRangeUi = moment(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-                this.activityObj.fromDate = moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
-                this.activityObj.toDate = moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
+                this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
+                this.selectedDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                this.activityObj.fromDate = dayjs(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
+                this.activityObj.toDate = dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
             }
         });
     }
@@ -188,8 +188,8 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
                 response.body?.results?.forEach((result, index) => {
                     if (result) {
                         result.index = index;
-                        result.timeonly = moment(result.time, GIDDH_DATE_FORMAT + " HH:mm:ss").format("HH:mm:ss");
-                        result.time = moment(result.time, GIDDH_DATE_FORMAT + " HH:mm:ss").format(GIDDH_DATE_FORMAT);
+                        result.timeonly = dayjs(result.time, GIDDH_DATE_FORMAT + " HH:mm:ss").format("HH:mm:ss");
+                        result.time = dayjs(result.time, GIDDH_DATE_FORMAT + " HH:mm:ss").format(GIDDH_DATE_FORMAT);
                     }
                 });
                 this.dataSource = response.body.results;
@@ -249,21 +249,16 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
         this.activityObj.entity = '';
         this.activityObj.operation = '';
         this.activityObj.userUniqueNames = [];
-        this.activityObjLabels = {
-            entity: "",
-            operation: "",
-            user: ""
-        };
         this.showDateReport = false;
         this.activityObjLabels = {
             entity: "",
             operation: "",
             user: ""
         };
-        this.selectedDateRange = { startDate: moment(this.universalDate[0]), endDate: moment(this.universalDate[1]) };
-        this.selectedDateRangeUi = moment(this.universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(this.universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-        this.activityObj.fromDate = moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
-        this.activityObj.toDate = moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
+        this.selectedDateRange = { startDate: dayjs(this.universalDate[0]), endDate: dayjs(this.universalDate[1]) };
+        this.selectedDateRangeUi = dayjs(this.universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(this.universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+        this.activityObj.fromDate = dayjs(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
+        this.activityObj.toDate = dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
         this.getActivityLogs(true);
         this.changeDetection.detectChanges();
     }
@@ -287,10 +282,10 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
         this.hideGiddhDatepicker();
         if (value && value.startDate && value.endDate) {
             this.showDateReport = true;
-            this.selectedDateRange = { startDate: moment(value.startDate), endDate: moment(value.endDate) };
-            this.selectedDateRangeUi = moment(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
-            this.activityObj.fromDate = moment(value.startDate).format(GIDDH_DATE_FORMAT);
-            this.activityObj.toDate = moment(value.endDate).format(GIDDH_DATE_FORMAT);
+            this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
+            this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
+            this.activityObj.fromDate = dayjs(value.startDate).format(GIDDH_DATE_FORMAT);
+            this.activityObj.toDate = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
         }
     }
 
@@ -336,8 +331,8 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
                         response.body?.results?.forEach((result, index) => {
                             if (result) {
                                 result.index = index;
-                                result.timeonly = moment(result.time, GIDDH_DATE_FORMAT + " HH:mm:ss").format("HH:mm:ss");
-                                result.time = moment(result.time, GIDDH_DATE_FORMAT + " HH:mm:ss").format(GIDDH_DATE_FORMAT);
+                                result.timeonly = dayjs(result.time, GIDDH_DATE_FORMAT + " HH:mm:ss").format("HH:mm:ss");
+                                result.time = dayjs(result.time, GIDDH_DATE_FORMAT + " HH:mm:ss").format(GIDDH_DATE_FORMAT);
                             }
                         });
                         row.history = response.body.results;

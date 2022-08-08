@@ -22,8 +22,8 @@ import {
 import { IOption } from "../theme/ng-virtual-select/sh-options.interface";
 import { DOCUMENT } from "@angular/common";
 import { userLoginStateEnum } from "../models/user-login-state";
-import { GeneralService } from "../services/general.service";
 import { contriesWithCodes } from "../shared/helpers/countryWithCodes";
+import { CommonActions } from "../actions/common.actions";
 
 @Component({
     selector: "login",
@@ -75,7 +75,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     public isLoginWithGoogleInProcess$: Observable<boolean>;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Modal config */
-    public modalConfig: {
+    public modalConfig: any = {
         backdrop: 'static'
     };
 
@@ -85,7 +85,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         private loginAction: LoginActions,
         private authService: AuthService,
         @Inject(DOCUMENT) private document: Document,
-        private _generalService: GeneralService
+        private commonAction: CommonActions
     ) {
         this.urlPath = isElectron ? "" : AppUrl + APP_FOLDER;
         this.isLoginWithEmailInProcess$ = this.store.pipe(select(state => {
@@ -138,6 +138,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
     // tslint:disable-next-line:no-empty
     public ngOnInit() {
+        this.store.dispatch(this.commonAction.setActiveTheme(null));
         this.document.body.classList.remove("unresponsive");
         this.generateRandomBanner();
         this.mobileVerifyForm = this._fb.group({

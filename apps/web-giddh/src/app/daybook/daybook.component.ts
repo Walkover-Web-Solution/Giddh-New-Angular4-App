@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild 
 import { Store, select } from '@ngrx/store';
 import { cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
 import { AppState } from 'apps/web-giddh/src/app/store';
-import * as moment from 'moment/moment';
+import * as dayjs from 'dayjs';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Observable, ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
@@ -74,8 +74,8 @@ export class DaybookComponent implements OnInit, OnDestroy {
     public selectedDateRangeUi: any;
     /* This will store available date ranges */
     public datePickerOption: any = GIDDH_DATE_RANGE_PICKER_RANGES;
-    /* Moment object */
-    public moment = moment;
+    /* dayjs object */
+    public dayjs = dayjs;
     /* Selected from date */
     public fromDate: string;
     /* Selected to date */
@@ -212,8 +212,8 @@ export class DaybookComponent implements OnInit, OnDestroy {
     }
 
     public selectedDate(value: any) {
-        let from = moment(value.picker.startDate).format(GIDDH_DATE_FORMAT);
-        let to = moment(value.picker.endDate).format(GIDDH_DATE_FORMAT);
+        let from = dayjs(value.picker.startDate).format(GIDDH_DATE_FORMAT);
+        let to = dayjs(value.picker.endDate).format(GIDDH_DATE_FORMAT);
         if ((this.daybookQueryRequest.from !== from) || (this.daybookQueryRequest.to !== to)) {
             this.daybookQueryRequest.from = from;
             this.daybookQueryRequest.to = to;
@@ -275,13 +275,13 @@ export class DaybookComponent implements OnInit, OnDestroy {
                     this.daybookData = { entries: [], totalItems: 0, page: 0 };
                 }
                 if (this.todaySelected) {
-                    this.daybookQueryRequest.from = moment(response?.body?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
-                    this.daybookQueryRequest.to = moment(response?.body?.toDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                    this.daybookQueryRequest.from = dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                    this.daybookQueryRequest.to = dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
 
-                    this.fromDate = moment(response?.body?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
-                    this.toDate = moment(response?.body?.toDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
-                    this.selectedDateRange = { startDate: moment(response?.body?.fromDate, GIDDH_DATE_FORMAT), endDate: moment(response?.body?.toDate, GIDDH_DATE_FORMAT) };
-                    this.selectedDateRangeUi = moment(response?.body?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(response?.body?.toDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
+                    this.fromDate = dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                    this.toDate = dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                    this.selectedDateRange = { startDate: dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT), endDate: dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT) };
+                    this.selectedDateRangeUi = dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
                 }
 
             } else {
@@ -320,13 +320,13 @@ export class DaybookComponent implements OnInit, OnDestroy {
                     this.todaySelected = response;
 
                     if (!this.todaySelected) {
-                        this.selectedDateRange = { startDate: moment(universalDate[0]), endDate: moment(universalDate[1]) };
-                        this.selectedDateRangeUi = moment(universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-                        this.fromDate = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
-                        this.toDate = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
+                        this.selectedDateRange = { startDate: dayjs(universalDate[0]), endDate: dayjs(universalDate[1]) };
+                        this.selectedDateRangeUi = dayjs(universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                        this.fromDate = dayjs(universalDate[0]).format(GIDDH_DATE_FORMAT);
+                        this.toDate = dayjs(universalDate[1]).format(GIDDH_DATE_FORMAT);
 
-                        this.daybookQueryRequest.from = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
-                        this.daybookQueryRequest.to = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
+                        this.daybookQueryRequest.from = dayjs(universalDate[0]).format(GIDDH_DATE_FORMAT);
+                        this.daybookQueryRequest.to = dayjs(universalDate[1]).format(GIDDH_DATE_FORMAT);
                     } else {
                         this.daybookQueryRequest.from = "";
                         this.daybookQueryRequest.to = "";
@@ -489,10 +489,10 @@ export class DaybookComponent implements OnInit, OnDestroy {
         this.todaySelected = false;
         this.hideGiddhDatepicker();
         if (value && value.startDate && value.endDate) {
-            this.selectedDateRange = { startDate: moment(value.startDate), endDate: moment(value.endDate) };
-            this.selectedDateRangeUi = moment(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
-            this.fromDate = moment(value.startDate).format(GIDDH_DATE_FORMAT);
-            this.toDate = moment(value.endDate).format(GIDDH_DATE_FORMAT);
+            this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
+            this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
+            this.fromDate = dayjs(value.startDate).format(GIDDH_DATE_FORMAT);
+            this.toDate = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
 
             this.daybookQueryRequest.from = this.fromDate;
             this.daybookQueryRequest.to = this.toDate;

@@ -17,7 +17,6 @@ import {
     ViewChild,
 } from '@angular/core';
 import { select, Store } from '@ngrx/store';
-import { ResizedEvent } from 'angular-resize-event';
 import {
     Configuration,
     HIGH_RATE_FIELD_PRECISION,
@@ -28,7 +27,7 @@ import { AccountResponse, AccountResponseV2 } from 'apps/web-giddh/src/app/model
 import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
 import { BehaviorSubject, Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
-import * as moment from 'moment/moment';
+import * as dayjs from 'dayjs';
 import {
     ConfirmationModalConfiguration,
 } from '../../../common/confirmation-modal/confirmation-modal.interface';
@@ -863,8 +862,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         let o: ReconcileRequest = {};
         o.chequeNumber = (this.blankLedger.chequeNumber) ? this.blankLedger.chequeNumber : '';
         o.accountUniqueName = this.trxRequest.accountUniqueName;
-        o.from = (this.trxRequest.from) ? moment(this.trxRequest.from).format(GIDDH_DATE_FORMAT) : "";
-        o.to = (this.trxRequest.to) ? moment(this.trxRequest.to).format(GIDDH_DATE_FORMAT) : "";
+        o.from = (this.trxRequest.from) ? dayjs(this.trxRequest.from).format(GIDDH_DATE_FORMAT) : "";
+        o.to = (this.trxRequest.to) ? dayjs(this.trxRequest.to).format(GIDDH_DATE_FORMAT) : "";
         this.ledgerService.GetReconcile(o.accountUniqueName, o.from, o.to, o.chequeNumber).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             let data: BaseResponse<ReconcileResponse[], string> = res;
             if (data.status === 'success') {
@@ -1382,7 +1381,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             this.isAdjustVoucherSelected) {
             this.prepareAdjustVoucherConfiguration();
             this.openAdjustPaymentModal();
-            this.blankLedger.generateInvoice = true;
         } else {
             this.removeAdjustment();
         }
@@ -1740,7 +1738,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 if (typeof this.blankLedger.entryDate === 'string') {
                     date = this.blankLedger.entryDate;
                 } else {
-                    date = moment(this.blankLedger.entryDate).format(GIDDH_DATE_FORMAT);
+                    date = dayjs(this.blankLedger.entryDate).format(GIDDH_DATE_FORMAT);
                 }
             }
 

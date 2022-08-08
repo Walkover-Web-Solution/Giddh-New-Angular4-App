@@ -4,7 +4,7 @@ import { GIDDH_DATE_FORMAT } from './../../shared/helpers/defaultDateFormat';
 import { Store, select } from '@ngrx/store';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { AppState } from '../../store';
-import * as moment from 'moment/moment';
+import * as dayjs from 'dayjs';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { IOption } from '../../theme/ng-select/ng-select';
 import { ToasterService } from '../../services/toaster.service';
@@ -39,7 +39,7 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
         url: null,
         description: null
     };
-    public moment = moment;
+    public dayjs = dayjs;
     public days: IOption[] = [];
     public records = []; // This array is just for generating dynamic ngModel
     public taxToEdit = []; // It is for edit toogle
@@ -237,7 +237,7 @@ export class SettingTriggerComponent implements OnInit, OnDestroy {
                 });
             } else if (this.confirmationFor === 'edit') {
                 each(this.newTriggerObj.taxDetail, (tax) => {
-                    tax.date = moment(tax.date).format(GIDDH_DATE_FORMAT);
+                    tax.date = dayjs(tax.date).format(GIDDH_DATE_FORMAT);
                 });
 
                 this.settingsTriggersService.UpdateTrigger(this.newTriggerObj, this.newTriggerObj.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
