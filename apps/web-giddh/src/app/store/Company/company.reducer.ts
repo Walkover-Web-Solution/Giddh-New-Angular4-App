@@ -3,7 +3,7 @@ import { TaxResponse } from '../../models/api-models/Company';
 import { CompanyActions } from '../../actions/company.actions';
 import { SETTINGS_TAXES_ACTIONS } from '../../actions/settings/taxes/settings.taxes.const';
 import { CustomActions } from '../customActions';
-import * as moment from 'moment/moment';
+import * as dayjs from 'dayjs';
 import { IntegratedBankList, IRegistration } from "../../models/interfaces/registration.interface";
 import { DEFAULT_DATE_RANGE_PICKER_RANGES, UNAUTHORISED } from '../../app.constant';
 
@@ -47,8 +47,8 @@ const initialState: CurrentCompanyState = {
             customRangeLabel: 'Custom range'
         },
         ranges: DEFAULT_DATE_RANGE_PICKER_RANGES,
-        startDate: moment().subtract(30, 'days'),
-        endDate: moment()
+        startDate: dayjs().subtract(30, 'day'),
+        endDate: dayjs()
     },
     account: null,
     isTaxCreationInProcess: false,

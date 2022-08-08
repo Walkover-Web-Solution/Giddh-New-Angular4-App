@@ -9,7 +9,7 @@ import { NgxMaskModule } from '../../shared/helpers/directives/ngx-mask';
 import { TaxControlComponent } from './tax-control.component';
 
 @NgModule({
-    imports: [CommonModule, FormsModule, ClickOutsideModule, VirtualScrollModule, NgxMaskModule, TooltipModule],
+    imports: [CommonModule, FormsModule, ClickOutsideModule, VirtualScrollModule, NgxMaskModule, TooltipModule.forRoot()],
     declarations: [TaxControlComponent],
     exports: [TaxControlComponent]
 })

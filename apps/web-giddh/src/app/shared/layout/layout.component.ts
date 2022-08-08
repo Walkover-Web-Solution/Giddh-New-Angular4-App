@@ -8,8 +8,4 @@ import { Component, Input } from '@angular/core';
 
 export class LayoutComponent {
     @Input() public sideMenu: { isopen: boolean, isExpanded: boolean } = { isopen: true, isExpanded: false };
-
-    constructor() {
-
-    }
 }

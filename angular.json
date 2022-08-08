@@ -71,7 +71,6 @@
                 "build": {
                     "builder": "@angular-builders/custom-webpack:browser",
                     "options": {
-                        "baseHref": "http://localhost:3000",
                         "allowedCommonJsDependencies": [
                             "file-saver",
                             "angular2-text-mask",
@@ -89,6 +88,7 @@
                         "polyfills": "apps/web-giddh/src/polyfills.ts",
                         "tsConfig": "apps/web-giddh/tsconfig.app.json",
                         "aot": true,
+                        "baseHref": "/",
                         "assets": [
                             {
                                 "glob": "**/*",
@@ -112,17 +112,10 @@
                             }
                         ],
                         "styles": [
-                            "apps/web-giddh/src/assets/css/ngx-bootstrap/bs-datepicker.css",
-                            "apps/web-giddh/src/assets/css/font-awesome.css",
-                            "apps/web-giddh/src/assets/fonts/icomoon/icomoon.css",
-                            "apps/web-giddh/src/assets/css/ledgerfont/ledgerfont.css",
                             "apps/web-giddh/src/assets/css/style-1.scss",
                             "apps/web-giddh/src/assets/css/style-2.scss",
-                            "apps/web-giddh/src/assets/css/ladda-themeless.min.css",
-                            "apps/web-giddh/src/assets/css/perfect-scrollbar.component.scss",
-                            "apps/web-giddh/src/assets/css/toastr.css",
-                            "node_modules/ngx-lightbox/lightbox.css",
-                            "node_modules/intl-tel-input/build/css/intlTelInput.css"
+                            "node_modules/intl-tel-input/build/css/intlTelInput.css",
+                            "node_modules/ngx-lightbox/lightbox.css"
                         ],
                         "scripts": [
                             "node_modules/bootstrap-daterangepicker/daterangepicker.js",
@@ -387,17 +380,10 @@
                             }
                         ],
                         "styles": [
-                            "apps/web-giddh/src/assets/css/ngx-bootstrap/bs-datepicker.css",
-                            "apps/web-giddh/src/assets/css/font-awesome.css",
-                            "apps/web-giddh/src/assets/fonts/icomoon/icomoon.css",
-                            "apps/web-giddh/src/assets/css/ledgerfont/ledgerfont.css",
                             "apps/web-giddh/src/assets/css/style-1.scss",
                             "apps/web-giddh/src/assets/css/style-2.scss",
-                            "apps/web-giddh/src/assets/css/ladda-themeless.min.css",
-                            "apps/web-giddh/src/assets/css/perfect-scrollbar.component.scss",
-                            "apps/web-giddh/src/assets/css/toastr.css",
-                            "node_modules/ngx-lightbox/lightbox.css",
-                            "node_modules/intl-tel-input/build/css/intlTelInput.css"
+                            "node_modules/intl-tel-input/build/css/intlTelInput.css",
+                            "node_modules/ngx-lightbox/lightbox.css"
                         ],
                         "scripts": [
                             "node_modules/bootstrap-daterangepicker/daterangepicker.js",
@@ -425,9 +411,8 @@
                             },
                             "optimization": false,
                             "outputHashing": "all",
-                            "sourceMap": false,
-                            "extractCss": true,
-                            "namedChunks": false,
+                            "sourceMap": true,
+                            "namedChunks": true,
                             "aot": false,
                             "extractLicenses": false,
                             "vendorChunk": false,
@@ -475,16 +460,16 @@
                                     "externals": "replace"
                                 }
                             },
-                            "index": {
-                                "input": "apps/web-giddh/src/index.electron.prod.html",
-                                "output": "/index.html"
-                            },
                             "fileReplacements": [
                                 {
                                     "replace": "apps/web-giddh/src/environments/environment.ts",
                                     "with": "apps/web-giddh/src/environments/environment.prod.electron.ts"
                                 }
                             ],
+                            "index": {
+                                "input": "apps/web-giddh/src/index.electron.prod.html",
+                                "output": "/index.html"
+                            },
                             "optimization": true,
                             "outputHashing": "all",
                             "sourceMap": false,

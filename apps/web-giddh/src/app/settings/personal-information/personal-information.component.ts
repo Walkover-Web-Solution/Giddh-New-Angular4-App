@@ -9,6 +9,7 @@ import { OrganizationProfile } from '../constants/settings.constant';
     templateUrl: './personal-information.component.html',
     styleUrls: ['./personal-information.component.scss']
 })
+
 export class PersonalInformationComponent implements OnInit, OnDestroy {
 
     /** Decides when to emit the value for UPDATE operation */
@@ -56,11 +57,11 @@ export class PersonalInformationComponent implements OnInit, OnDestroy {
      * @memberof PersonalInformationComponent
      */
     public ngOnInit(): void {
-        this.saveProfileSubject.pipe(debounceTime(5000), takeUntil(this.destroyed$)).subscribe(() => {
+        this.saveProfileSubject.pipe(debounceTime(2000), takeUntil(this.destroyed$)).subscribe(() => {
             this.saveProfile.emit(this.updatedData);
         });
-    }
 
+    }
     /**
      * Unsubscribes from listeners
      *

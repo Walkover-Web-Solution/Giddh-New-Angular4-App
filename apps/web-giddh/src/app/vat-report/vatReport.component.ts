@@ -8,7 +8,7 @@ import { AppState } from '../store';
 import { GeneralService } from '../services/general.service';
 import { ToasterService } from '../services/toaster.service';
 import { VatService } from "../services/vat.service";
-import * as moment from 'moment/moment';
+import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT } from "../shared/helpers/defaultDateFormat";
 import { saveAs } from "file-saver";
 import { BsDropdownDirective } from "ngx-bootstrap/dropdown";
@@ -28,10 +28,10 @@ export class VatReportComponent implements OnInit, OnDestroy {
     public activeCompany: any;
     public datePickerOptions: any = {
         alwaysShowCalendars: true,
-        startDate: moment().subtract(30, 'days'),
-        endDate: moment()
+        startDate: dayjs().subtract(30, 'day'),
+        endDate: dayjs()
     };
-    public moment = moment;
+    public dayjs = dayjs;
     public fromDate: string = '';
     public toDate: string = '';
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -48,20 +48,20 @@ export class VatReportComponent implements OnInit, OnDestroy {
     public taxNumber: string;
     /** True, if API is in progress */
     public isTaxApiInProgress: boolean;
+    /** This holds giddh date format */
+    public giddhDateFormat: string = GIDDH_DATE_FORMAT;
     /** Observable to store the branches of current company */
     public currentCompanyBranches$: Observable<any>;
     /** Stores the branch list of a company */
     public currentCompanyBranches: Array<any>;
     /** Stores the current branch */
     public currentBranch: any = { name: '', uniqueName: '' };
-    /** This holds giddh date format */
-    public giddhDateFormat: string = GIDDH_DATE_FORMAT;
-    /** Stores the current organization type */
-    public currentOrganizationType: OrganizationType;
     /** This will hold local JSON data */
     public localeData: any = {};
     /** This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** Stores the current organization type */
+    public currentOrganizationType: OrganizationType;
     /** This will hold the value out/in to open/close setting sidebar popup */
     public asideGstSidebarMenuState: string = 'in';
     /** this will check mobile screen size */
@@ -105,8 +105,8 @@ export class VatReportComponent implements OnInit, OnDestroy {
         this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.loadTaxDetails();
         this.currentPeriod = {
-            from: moment().startOf('month').format(GIDDH_DATE_FORMAT),
-            to: moment().endOf('month').format(GIDDH_DATE_FORMAT)
+            from: dayjs().startOf('month').format(GIDDH_DATE_FORMAT),
+            to: dayjs().endOf('month').format(GIDDH_DATE_FORMAT)
         };
         this.taxNumber = window.history.state.taxNumber || '';
         if (window.history.state.from && window.history.state.to) {
@@ -115,7 +115,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
                 to: window.history.state.to
             };
         }
-        this.selectedMonth = moment(this.currentPeriod.from, GIDDH_DATE_FORMAT).toISOString();
+        this.selectedMonth = dayjs(this.currentPeriod.from, GIDDH_DATE_FORMAT).toISOString();
         this.fromDate = this.currentPeriod.from;
         this.toDate = this.currentPeriod.to;
 
@@ -140,7 +140,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
                     isCompany: true
                 });
                 let currentBranchUniqueName;
-                if (!this.currentBranch.uniqueName) {
+                if (!this.currentBranch?.uniqueName) {
                     // Assign the current branch only when it is not selected. This check is necessary as
                     // opening the branch switcher would reset the current selected branch as this subscription is run everytime
                     // branches are loaded
@@ -231,19 +231,19 @@ export class VatReportComponent implements OnInit, OnDestroy {
     public periodChanged(ev) {
         if (ev && ev.picker) {
             this.currentPeriod = {
-                from: moment(ev.picker.startDate.d).format(GIDDH_DATE_FORMAT),
-                to: moment(ev.picker.endDate.d).format(GIDDH_DATE_FORMAT)
+                from: dayjs(ev.picker.startDate.d).format(GIDDH_DATE_FORMAT),
+                to: dayjs(ev.picker.endDate.d).format(GIDDH_DATE_FORMAT)
             };
-            this.fromDate = moment(ev.picker.startDate.d).format(GIDDH_DATE_FORMAT);
-            this.toDate = moment(ev.picker.endDate.d).format(GIDDH_DATE_FORMAT);
+            this.fromDate = dayjs(ev.picker.startDate.d).format(GIDDH_DATE_FORMAT);
+            this.toDate = dayjs(ev.picker.endDate.d).format(GIDDH_DATE_FORMAT);
             this.isMonthSelected = false;
         } else {
             this.currentPeriod = {
-                from: moment(ev).startOf('month').format(GIDDH_DATE_FORMAT),
-                to: moment(ev).endOf('month').format(GIDDH_DATE_FORMAT)
+                from: dayjs(ev).startOf('month').format(GIDDH_DATE_FORMAT),
+                to: dayjs(ev).endOf('month').format(GIDDH_DATE_FORMAT)
             };
-            this.fromDate = moment(ev).startOf('month').format(GIDDH_DATE_FORMAT);
-            this.toDate = moment(ev).endOf('month').format(GIDDH_DATE_FORMAT);
+            this.fromDate = dayjs(ev).startOf('month').format(GIDDH_DATE_FORMAT);
+            this.toDate = dayjs(ev).endOf('month').format(GIDDH_DATE_FORMAT);
             this.selectedMonth = ev;
             this.isMonthSelected = true;
         }

@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ILedgersInvoiceResult } from '../../../../models/api-models/Invoice';
-import { confirmationMessages } from "../../../../shared/helpers/confirmationMessages";
 
 @Component({
     selector: 'delete-role-confirmation-model',

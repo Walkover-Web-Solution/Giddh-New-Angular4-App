@@ -179,7 +179,7 @@
                                             value="hsn"
                                         />
                                         <label for="hsnCodeType" class="radio-custom-label">{{
-                                            commonLocaleData?.app_hsn_code
+                                            commonLocaleData?.app_hsn
                                         }}</label>
                                     </span>
                                     <span>
@@ -192,7 +192,7 @@
                                             value="sac"
                                         />
                                         <label for="sacCodeType" class="ml-1 radio-custom-label">{{
-                                            commonLocaleData?.app_sac_code
+                                            commonLocaleData?.app_sac
                                         }}</label>
                                     </span>
                                 </div>
@@ -622,7 +622,6 @@
                                 <input
                                     type="text"
                                     class="form-control"
-                                    [control]="addAccountForm.get('uniqueName')"
                                     textCaseChangeDirective
                                     UniqueNameDirective
                                     formControlName="uniqueName"
@@ -698,7 +697,7 @@
                     </div>
                 </div>
             </tab>
-            <tab *ngIf="isDebtorCreditor" [heading]="localeData?.tabs?.custom" (selectTab)="tabChanged('custom')">
+            <tab [heading]="localeData?.tabs?.custom" (selectTab)="tabChanged('custom')">
                 <giddh-page-loader [cssClass]="'mt-0 mb-0'" *ngIf="isCustomFieldLoading"></giddh-page-loader>
                 <ng-container formArrayName="customFields">
                     <ng-container
@@ -718,7 +717,7 @@
                         >
                             <div
                                 class="row mr-b15"
-                                *ngIf="item.uniqueName === customFieldsItem.get('uniqueName').value"
+                                *ngIf="item?.uniqueName === customFieldsItem.get('uniqueName')?.value"
                             >
                                 <div class="col-lg-8">
                                     <div class="name-of-field">
@@ -922,7 +921,7 @@
                                     (click)="setAccountForMoveFunc(merged)"
                                 >
                                     {{ merged }}
-                                    <span class="" (click)="showDeleteMergedAccountModal(merged)">×</span>
+                                    <span (click)="showDeleteMergedAccountModal(merged)">×</span>
                                 </a>
                             </li>
                         </ul>

@@ -4,11 +4,13 @@ import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store';
 import { ImportExcelStatusPaginatedResponse, ImportExcelStatusResponse } from '../../models/api-models/import-excel';
 import { ReplaySubject } from 'rxjs';
-import { take, takeUntil } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { CommonPaginatedRequest } from '../../models/api-models/Invoice';
 import { PageChangedEvent } from 'ngx-bootstrap/pagination';
 import { saveAs } from 'file-saver';
-import * as moment from 'moment';
+import * as dayjs from 'dayjs';
+import * as utc from 'dayjs/plugin/utc' // load on demand
+dayjs.extend(utc) // use plugin
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { GeneralService } from '../../services/general.service';
 import { ImportExcelService } from '../../services/import-excel.service';
@@ -71,7 +73,7 @@ export class ImportReportComponent implements OnInit, OnDestroy {
         this.importExcelService.importStatus(this.importPaginatedRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if(response?.status === "success" && response?.body) {
                 response.body.results = response?.body?.results?.map(res => {
-                    res.processDate = moment.utc(res.processDate, 'YYYY-MM-DD hh:mm:ss a').local().format(GIDDH_DATE_FORMAT + ' hh:mm:ss a');
+                    res.processDate = dayjs.utc(res.processDate, 'YYYY-MM-DD hh:mm:ss a').local().format(GIDDH_DATE_FORMAT + ' hh:mm:ss a');
                     return res;
                 });
 

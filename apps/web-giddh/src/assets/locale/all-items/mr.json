@@ -300,6 +300,12 @@
                     "link": "/pages/import/trial-balance",
                     "icon": "icon-trial-balance-new",
                     "description": "सर्व क्रेडिट आणि डेबिट शिल्लक आयात करा"
+                },
+                {
+                    "label": "टॅली आयात करा",
+                    "link": "/pages/tallysync",
+                    "icon": "icon-tally-import1",
+                    "description": "आपला संकालित केलेला टॅली डेटा ऑनलाइन तपासा"
                 }
             ]
         },

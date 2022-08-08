@@ -200,5 +200,7 @@
     "remove_file": "यशस्वीरित्या हटविला",
     "delete_bank_transactions": "बँक व्यवहार हटवा",
     "delete_bank_transactions_title": "तुम्हाला निवडलेले बँक व्यवहार (डिलिट) हटवायचे आहेत का?",
-    "reload_bank_transactions": "बँक व्यवहार रीलोड करा"
+    "reload_bank_transactions": "बँक व्यवहार रीलोड करा",
+    "confirm_proceed": "तुम्हाला नक्की पुढे जायचे आहे का?",
+    "remove_advance_receipt": "तुम्ही या पावतीचा प्रकार बदलल्यास, इन्व्हॉइसमधील सर्व संबंधित आगाऊ पावती समायोजन काढून टाकले जातील."
 }

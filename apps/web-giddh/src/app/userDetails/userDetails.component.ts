@@ -11,13 +11,16 @@ import { CompanyResponse } from '../models/api-models/Company';
 import { cloneDeep } from '../lodash-optimized';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SessionActions } from '../actions/session.action';
-import * as moment from 'moment';
+import * as dayjs from 'dayjs';
+import * as duration from 'dayjs/plugin/duration';
+dayjs.extend(duration)
 import { GIDDH_DATE_FORMAT_DD_MM_YYYY, GIDDH_DATE_FORMAT_UI } from '../shared/helpers/defaultDateFormat';
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { BsModalRef } from 'ngx-bootstrap/modal';
 import { GeneralActions } from '../actions/general/general.actions';
 import { API_POSTMAN_DOC_URL, BootstrapToggleSwitch } from '../app.constant';
 import { BreakpointObserver } from '@angular/cdk/layout';
+import { SettingsProfileActions } from '../actions/settings/profile/settings.profile.action';
 
 @Component({
     selector: 'user-details',
@@ -58,7 +61,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
     public apiTabActivated: boolean = false;
     public userSessionResponse$: Observable<any>;
     public userSessionList: any[] = [];
-    public moment = moment;
+    public dayjs = dayjs;
     public giddhDateFormatUI: string = GIDDH_DATE_FORMAT_UI;
     public userSessionId: any = null;
     public modalRef: BsModalRef;
@@ -83,7 +86,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
         private sessionAction: SessionActions,
         private route: ActivatedRoute,
         private breakPointObservar: BreakpointObserver,
-        private generalActions: GeneralActions) {
+        private generalActions: GeneralActions, private settingsProfileActions: SettingsProfileActions) {
         this.contactNo$ = this.store.pipe(select(s => {
             if (s.session.user) {
                 return s.session.user.user.contactNo;
@@ -111,6 +114,8 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
 
     public ngOnInit() {
         document.querySelector('body').classList.add('setting-sidebar-open');
+        /** To reset isUpdateCompanyInProgress in case of subscription module */
+        this.store.dispatch(this.settingsProfileActions.resetPatchProfile());
 
         this.breakPointObservar.observe([
             '(max-width:767px)'
@@ -189,11 +194,11 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
             if (s && s.length) {
                 this.userSessionList = s.map(session => {
                     // Calculate sign in date
-                    session.signInDate = moment(session.createdAt).format(GIDDH_DATE_FORMAT_DD_MM_YYYY);
+                    session.signInDate = dayjs(session.createdAt).format(GIDDH_DATE_FORMAT_DD_MM_YYYY);
                     // Calculate sign in time
-                    session.signInTime = moment(session.createdAt).format('LTS');
+                    session.signInTime = dayjs(session.createdAt).format('LTS');
                     // Calculate duration
-                    const duration = moment.duration(moment().diff(session.createdAt));
+                    const duration = dayjs.duration(dayjs().diff(session.createdAt));
                     session.sessionDuration = `${duration.days()}/${duration.hours()}/${duration.minutes()}/${duration.seconds()}`;
                     return session;
                 });

@@ -200,5 +200,7 @@
     "remove_file": "Deleted Successfully.",
     "delete_bank_transactions": "Delete bank transactions",
     "delete_bank_transactions_title": "Do you want to delete the selected bank transaction(s)?",
-    "reload_bank_transactions": "Reload bank transactions"
+    "reload_bank_transactions": "Reload bank transactions",
+    "confirm_proceed": "Are you sure you want to proceed?",
+    "remove_advance_receipt": "If you change the type of this receipt, all the related advance receipt adjustments in invoices will be removed."
 }

@@ -100,11 +100,11 @@
                                     aria-controls="dropdown-nested"
                                 >
                                     <ng-container *ngIf="isMonthSelected">
-                                        {{ moment(selectedMonth).format("MMMM YYYY") }}
+                                        {{ dayjs(selectedMonth).format("MMMM YYYY") }}
                                     </ng-container>
                                     <ng-container *ngIf="!isMonthSelected">
-                                        {{ moment(currentPeriod?.from, giddhDateFormat).format("DD MMM YYYY") }}
-                                        - {{ moment(currentPeriod?.to, giddhDateFormat).format("DD MMM YYYY") }}
+                                        {{ dayjs(currentPeriod?.from, giddhDateFormat).format("DD MMM YYYY") }}
+                                        - {{ dayjs(currentPeriod?.to, giddhDateFormat).format("DD MMM YYYY") }}
                                     </ng-container>
                                     <span class="caret"></span>
                                 </button>
@@ -236,14 +236,12 @@
                                         <b class="text-middle"
                                             >{{ localeData?.gstr1_label }}
                                             <ng-container *ngIf="isMonthSelected">
-                                                ({{ moment(selectedMonth).format("MMMM YYYY") }})
+                                                ({{ dayjs(selectedMonth).format("MMMM YYYY") }})
                                             </ng-container>
                                             <ng-container *ngIf="!isMonthSelected">
-                                                ({{
-                                                    moment(currentPeriod?.from, giddhDateFormat).format("DD MMM YYYY")
-                                                }}
+                                                ({{ dayjs(currentPeriod?.from, giddhDateFormat).format("DD MMM YYYY") }}
                                                 -
-                                                {{ moment(currentPeriod?.to, giddhDateFormat).format("DD MMM YYYY") }})
+                                                {{ dayjs(currentPeriod?.to, giddhDateFormat).format("DD MMM YYYY") }})
                                             </ng-container>
                                         </b>
                                         &nbsp;&nbsp;
@@ -261,6 +259,7 @@
                                 </a>
                             </span>
                         </div>
+
                         <div class="content-graph" *ngIf="gstr1TransactionCounts">
                             <div class="sales-colm">
                                 <div class="text-muted text-uppercase font-xs">
@@ -394,14 +393,12 @@
                                             >{{ localeData?.gstr2_label }}
 
                                             <ng-container *ngIf="isMonthSelected">
-                                                ({{ moment(selectedMonth).format("MMMM YYYY") }})
+                                                ({{ dayjs(selectedMonth).format("MMMM YYYY") }})
                                             </ng-container>
                                             <ng-container *ngIf="!isMonthSelected">
-                                                ({{
-                                                    moment(currentPeriod?.from, giddhDateFormat).format("DD MMM YYYY")
-                                                }}
+                                                ({{ dayjs(currentPeriod?.from, giddhDateFormat).format("DD MMM YYYY") }}
                                                 -
-                                                {{ moment(currentPeriod?.to, giddhDateFormat).format("DD MMM YYYY") }})
+                                                {{ dayjs(currentPeriod?.to, giddhDateFormat).format("DD MMM YYYY") }})
                                             </ng-container>
                                         </b>
                                     </div>
