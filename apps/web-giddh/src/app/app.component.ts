@@ -222,7 +222,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         }
 
         if (!LOCAL_ENV && !isElectron) {
-            this._versionCheckService.initVersionCheck(AppUrl + '/version.json');
+            this._versionCheckService.initVersionCheck(AppUrl + 'version.json');
 
             this._versionCheckService.onVersionChange$.pipe(takeUntil(this.destroyed$)).subscribe((isChanged: boolean) => {
                 if (isChanged) {
