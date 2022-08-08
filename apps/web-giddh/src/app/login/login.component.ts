@@ -22,7 +22,6 @@ import {
 import { IOption } from "../theme/ng-virtual-select/sh-options.interface";
 import { DOCUMENT } from "@angular/common";
 import { userLoginStateEnum } from "../models/user-login-state";
-import { GeneralService } from "../services/general.service";
 import { contriesWithCodes } from "../shared/helpers/countryWithCodes";
 
 @Component({
@@ -75,7 +74,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     public isLoginWithGoogleInProcess$: Observable<boolean>;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Modal config */
-    public modalConfig: {
+    public modalConfig: any = {
         backdrop: 'static'
     };
 
@@ -84,8 +83,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         private store: Store<AppState>,
         private loginAction: LoginActions,
         private authService: AuthService,
-        @Inject(DOCUMENT) private document: Document,
-        private _generalService: GeneralService
+        @Inject(DOCUMENT) private document: Document
     ) {
         this.urlPath = isElectron ? "" : AppUrl + APP_FOLDER;
         this.isLoginWithEmailInProcess$ = this.store.pipe(select(state => {
