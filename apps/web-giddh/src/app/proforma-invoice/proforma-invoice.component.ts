@@ -3684,7 +3684,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 }
                 entry.isNewEntryInUpdateMode = true;
             } else {
-                entry.entryDate = this.invFormData.voucherDetails.voucherDate;
+                if (typeof (this.invFormData.voucherDetails.voucherDate) === "object") {
+                    entry.entryDate = dayjs(this.invFormData.voucherDetails.voucherDate).format(GIDDH_DATE_FORMAT);
+                } else {
+                    entry.entryDate = dayjs(this.invFormData.voucherDetails.voucherDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                }
             }
             this.invFormData.entries.push(entry);
         } else {
