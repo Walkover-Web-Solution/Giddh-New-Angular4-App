@@ -9,8 +9,8 @@
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title pull-left">{{ localeData?.add_bulk_items }}</h4>
-                    <button type="button" class="close pull-right" aria-label="Close" (click)="closeEvent.emit()">
+                    <h4 class="modal-title pull-left">{{ localeData?.add_bulk_items }}check</h4>
+                    <button mat-button class="close pull-right" aria-label="Close" (click)="closeEvent.emit()">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -21,12 +21,12 @@
                         <div class="col-md-6 col-sm-6">
                             <div class="left-content">
                                 <div class="search-box">
-                                    <input
+                                    <text-field
                                         type="text"
                                         [placeholder]="localeData?.search_stock"
                                         #searchElement
                                         class="pr-1 pl-1 form-control"
-                                    />
+                                    ></text-field>
                                 </div>
 
                                 <div class="product-list">
@@ -76,7 +76,7 @@
                                                     <div class="input-group add-item-btn">
                                                         <span class="input-group-btn">
                                                             <button
-                                                                type="button"
+                                                                mat-button
                                                                 class="btn btn-default btn-number minus-btn"
                                                                 (click)="alterQuantity(item, 'minus')"
                                                             >
@@ -84,18 +84,18 @@
                                                             </button>
                                                         </span>
 
-                                                        <input
+                                                        <text-field
                                                             type="number"
                                                             name="quantity"
                                                             class="form-control input-number"
                                                             value="1"
                                                             min="1"
                                                             [(ngModel)]="item.quantity"
-                                                        />
+                                                        ></text-field>
 
                                                         <span class="input-group-btn">
                                                             <button
-                                                                type="button"
+                                                                mat-button
                                                                 class="btn btn-default btn-number"
                                                                 (click)="alterQuantity(item)"
                                                             >
@@ -104,9 +104,13 @@
                                                         </span>
                                                     </div>
 
-                                                    <span class="mr-l15" (click)="removeSelectedItem(item?.uniqueName)">
+                                                    <button
+                                                        mat-button
+                                                        class="mr-l15"
+                                                        (click)="removeSelectedItem(item?.uniqueName)"
+                                                    >
                                                         <i class="icon-cross"></i>
-                                                    </span>
+                                                    </button>
                                                 </div>
                                             </div>
                                         </div>
@@ -118,17 +122,13 @@
 
                                     <div class="btn-group bulk-item-btn-group">
                                         <button
+                                            mat-button
                                             class="btn btn-sm btn-success"
-                                            type="button"
                                             (click)="saveItemsEvent.emit(selectedItems); closeEvent.emit()"
                                         >
                                             {{ commonLocaleData?.app_add }}
                                         </button>
-                                        <button
-                                            class="btn btn-sm btn-primary"
-                                            type="button"
-                                            (click)="closeEvent.emit()"
-                                        >
+                                        <button mat-button class="btn btn-sm btn-primary" (click)="closeEvent.emit()">
                                             {{ commonLocaleData?.app_cancel }}
                                         </button>
                                     </div>
