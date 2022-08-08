@@ -23,7 +23,6 @@ import { TaxControlModule } from '../theme/tax-control/tax-control.module';
 import { AsideMenuProductServiceComponent } from './components/aside-menu-product-service/component';
 import { SalesAddStockComponent } from './components/aside-menu-product-service/components/create-stock/sales.create.stock.component';
 import { ProformaGstTreatmentComponent } from './components/proforma-gst-treatment/proforma-gst-treatment.component';
-import { ProformaLastInvoicesComponent } from './components/proforma-last-invoices/proforma-last-invoices.component';
 import { ProformaPrintInPlaceComponent } from './components/proforma-print-inplace/proforma-print-in-place.component';
 import { ProformaInvoiceRendererComponent } from './proforma-invoice-renderer.component';
 import { ProformaInvoiceComponent } from './proforma-invoice.component';
@@ -89,7 +88,6 @@ import { GiddhDatepickerModule } from '../theme/giddh-datepicker/giddh-datepicke
     declarations: [
         ProformaInvoiceRendererComponent,
         ProformaInvoiceComponent,
-        ProformaLastInvoicesComponent,
         ProformaGstTreatmentComponent,
         SalesAddStockComponent,
         AsideMenuProductServiceComponent,
