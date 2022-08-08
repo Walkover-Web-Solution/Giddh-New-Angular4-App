@@ -1,11 +1,21 @@
 .create-custom-field-page {
     .back-to-page {
         position: absolute;
-        right: 5px;
+        right: 23px;
         top: 0;
-        padding: 10px;
+        border: 1px solid;
         z-index: 10;
-        color: var(--color-blue);
+        padding: 0px 10px;
+        color: var(--color-secondary-button-text);
+        background-color: var(--color-secondary-button-background);
+        &:hover {
+            background-color: var(--color-secondary-button-background-hover);
+        }
+        i {
+            font-size: 21px;
+            float: left;
+            margin-top: 15%;
+        }
     }
     .custom-field-wrapper {
         min-height: 73vh;
@@ -83,24 +93,6 @@
             .vector-image {
                 display: none;
             }
-        }
-    }
-}
-.custom-field-header {
-    height: 50px;
-    padding-left: 14px;
-    border-bottom: 1px solid var(--color-common-primary-border);
-    margin-bottom: 20px;
-    .custom-field-heading {
-        color: var(--color-giddh-blue);
-        font-family: "opensans-semibold";
-    }
-    .back-to-page {
-        padding: 0px;
-        min-width: 42px;
-        margin-right: 10px !important;
-        .icon-cross {
-            font-size: 20px;
         }
     }
 }

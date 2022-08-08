@@ -8,18 +8,16 @@
     <hamburger-menu></hamburger-menu>
     <giddh-page-loader *ngIf="showLoader"></giddh-page-loader>
     <ng-container *ngIf="!showLoader">
-        <div class="custom-field-header d-flex align-items-center justify-content-space-between">
-            <h1 class="custom-field-heading">{{ localeData?.create_custom_field }}</h1>
+        <div class="relative create-custom-field-page">
             <button
-                mat-button
-                disableRipple="true"
-                class="back-to-page cursor-pointer"
+                mat-flat-button
+                [disableRipple]="true"
+                class="back-to-page btn-cancel"
                 (click)="redirectToGetAllPage()"
             >
-                <i class="icon-cross"></i>
+                <i class="back-left icon-left"></i>
+                {{ commonLocaleData?.app_back }}
             </button>
-        </div>
-        <div class="relative create-custom-field-page">
             <div class="custom-field-wrapper relative">
                 <div>
                     <form #customFieldCreateEditForm="ngForm" novalidate autocomplete="off">
@@ -161,9 +159,6 @@
                             </div>
                         </div>
                     </form>
-                </div>
-                <div class="vector-image">
-                    <img src="../../../../assets/images/create-custom-field-vector.svg" />
                 </div>
             </div>
         </div>
