@@ -8,9 +8,6 @@
         background: var(--color-primary-cancel-button-background-hover);
         border-color: var(--color-primary-cancel-button-background-hover);
         color: var(--color-secondary-button-text);
-        &:hover {
-            background-color: var(--color-secondary-button-background-hover);
-        }
         i {
             font-size: 21px;
             float: left;
