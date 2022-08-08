@@ -7868,4 +7868,14 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.invoiceList$ = observableOf([]);
         this.referenceVouchersCurrentPage = 1;
     }
+
+    /**
+     * Callback function for getLastInvoiceDetails function
+     *
+     * @param {PreviousInvoicesVm} item
+     * @memberof ProformaInvoiceComponent
+     */
+    public copyInvoice(item: PreviousInvoicesVm): void {
+        this.getLastInvoiceDetails({ accountUniqueName: item.account?.uniqueName, invoiceNo: item.versionNumber, uniqueName: item.uniqueName });
+    }
 }
