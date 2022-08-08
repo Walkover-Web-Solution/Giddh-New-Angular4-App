@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit, Input } from '@angular/core';
 import { select, Store } from '@ngrx/store';
-import * as moment from 'moment/moment';
+import * as dayjs from 'dayjs';
 import { of as observableOf, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { map as lodashMap } from '../../../lodash-optimized';
@@ -185,17 +185,17 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
             reqBody.fromDate = null;
             reqBody.toDate = null;
             if (this.vm.logOrEntry === 'logDate') {
-                reqBody.logDate = this.vm.selectedLogDate ? moment(this.vm.selectedLogDate).format(GIDDH_DATE_FORMAT) : '';
+                reqBody.logDate = this.vm.selectedLogDate ? dayjs(this.vm.selectedLogDate).format(GIDDH_DATE_FORMAT) : '';
                 reqBody.entryDate = null;
             } else if (this.vm.logOrEntry === 'entryDate') {
-                reqBody.entryDate = this.vm.selectedLogDate ? moment(this.vm.selectedLogDate).format(GIDDH_DATE_FORMAT) : '';
+                reqBody.entryDate = this.vm.selectedLogDate ? dayjs(this.vm.selectedLogDate).format(GIDDH_DATE_FORMAT) : '';
                 reqBody.logDate = null;
             }
         } else {
             reqBody.logDate = null;
             reqBody.entryDate = null;
-            reqBody.fromDate = this.vm.selectedFromDate ? moment(this.vm.selectedFromDate).format(GIDDH_DATE_FORMAT) : '';
-            reqBody.toDate = this.vm.selectedToDate ? moment(this.vm.selectedToDate).format(GIDDH_DATE_FORMAT) : '';
+            reqBody.fromDate = this.vm.selectedFromDate ? dayjs(this.vm.selectedFromDate).format(GIDDH_DATE_FORMAT) : '';
+            reqBody.toDate = this.vm.selectedToDate ? dayjs(this.vm.selectedToDate).format(GIDDH_DATE_FORMAT) : '';
         }
         this.store.dispatch(this.auditLogsActions.GetLogs(reqBody, 1));
     }

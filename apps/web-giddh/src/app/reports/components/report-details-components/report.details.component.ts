@@ -7,8 +7,8 @@ import { CompanyService } from "../../../services/companyService.service";
 import { ReportsModel, ReportsRequestModel } from "../../../models/api-models/Reports";
 import { ToasterService } from "../../../services/toaster.service";
 import { createSelector } from "reselect";
-import { takeUntil, filter, take } from "rxjs/operators";
-import * as moment from 'moment/moment';
+import { takeUntil, filter } from "rxjs/operators";
+import * as dayjs from 'dayjs';
 import { Observable, ReplaySubject } from "rxjs";
 import { GIDDH_DATE_FORMAT } from "../../../shared/helpers/defaultDateFormat";
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
@@ -31,7 +31,7 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
     public selectedType = 'monthly';
     private selectedMonth: string;
     public dateRange: Date[];
-    public moment = moment;
+    public dayjs = dayjs;
     public financialOptions: IOption[] = [];
     public selectedCompany: CompanyResponse;
     private interval: any;
@@ -44,14 +44,15 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
     public currentBranch: any = { name: '', uniqueName: '' };
     /** Stores the current company */
     public activeCompany: any;
-    /** Stores the current organization type */
-    public currentOrganizationType: OrganizationType;
     /* This will hold local JSON data */
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** Stores the current organization type */
+    public currentOrganizationType: OrganizationType;
     /* This will hold if it's mobile screen or not */
     public isMobileScreen: boolean = false;
+
     constructor(
         private router: Router,
         private store: Store<AppState>,
@@ -226,10 +227,10 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
                 }
                 selectedFinancialYear = this.financialOptions.find(p => p?.value === uniqueNameToSearch);
                 activeFinancialYear = this.selectedCompany.financialYears.find(p => p.uniqueName === uniqueNameToSearch);
-                this.activeFinacialYr = activeFinancialYear;
                 this.currentActiveFinacialYear = _.cloneDeep(selectedFinancialYear);
                 this.currentBranch.uniqueName = currentBranchUniqueName ? currentBranchUniqueName : (this.currentBranch ? this.currentBranch.uniqueName : "");
                 this.selectedType = currentTimeFilter ? currentTimeFilter.toLowerCase() : this.selectedType;
+                this.activeFinacialYr = activeFinancialYear;
                 this.populateRecords(this.selectedType);
                 this.salesRegisterTotal.particular = this.activeFinacialYr?.uniqueName;
             }
@@ -282,8 +283,8 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
     public bsValueChange(event: any) {
         if (event) {
             let request: ReportsRequestModel = {
-                to: moment(event[1]).format(GIDDH_DATE_FORMAT),
-                from: moment(event[0]).format(GIDDH_DATE_FORMAT),
+                to: dayjs(event[1]).format(GIDDH_DATE_FORMAT),
+                from: dayjs(event[0]).format(GIDDH_DATE_FORMAT),
                 interval: 'monthly',
                 branchUniqueName: (this.currentBranch ? this.currentBranch.uniqueName : "")
             }
@@ -371,16 +372,6 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Releases memory
-     *
-     * @memberof PurchaseRegisterExpandComponent
-     */
-    public ngOnDestroy(): void {
-        this.destroyed$.next(true);
-        this.destroyed$.complete();
-    }
-
-    /*
      * Callback for translation response complete
      *
      * @param {boolean} event
@@ -392,6 +383,16 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
             this.setCurrentFY();
             this.getSelectedDuration();
         }
+    }
+
+    /**
+     * Releases memory
+     *
+     * @memberof PurchaseRegisterExpandComponent
+     */
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 
     /**

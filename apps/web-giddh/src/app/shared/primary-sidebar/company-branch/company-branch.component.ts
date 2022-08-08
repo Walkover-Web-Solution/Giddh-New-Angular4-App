@@ -289,7 +289,7 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
         if (!company.branches || reloadBranches) {
             company.branches = [];
             this.branchRefreshInProcess = true;
-            let branchFilterRequest: BranchFilterRequest = { from: '', to: '', companyUniqueName: company.uniqueName };
+            let branchFilterRequest: BranchFilterRequest = { from: '', to: '', companyUniqueName: company?.uniqueName };
             this.settingsBranchService.GetAllBranches(branchFilterRequest).subscribe(response => {
                 if (response?.status === "success") {
                     let unarchivedBranches = response?.body?.filter(branch => branch.isArchived === false);

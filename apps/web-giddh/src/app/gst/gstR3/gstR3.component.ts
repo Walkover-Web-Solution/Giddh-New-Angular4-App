@@ -11,7 +11,7 @@ import { AppState } from '../../store';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ToasterService } from '../../services/toaster.service';
 import { GstReconcileActions } from '../../actions/gst-reconcile/GstReconcile.actions';
-import * as moment from 'moment/moment';
+import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { InvoicePurchaseActions } from '../../actions/purchase-invoice/purchase-invoice.action';
 import { GstReport } from '../constants/gst.constant';
@@ -102,8 +102,8 @@ export class FileGstR3Component implements OnInit, OnDestroy {
                 this.store.dispatch(this.gstAction.SetActiveCompanyGstin(this.activeCompanyGstNumber));
             }
             this.isCompany = params['isCompany'] === 'true';
-            this.selectedMonth = moment(this.currentPeriod.from, GIDDH_DATE_FORMAT).toISOString();
-            this.selectedMonth = moment(this.selectedMonth).format('MMMM YYYY');
+            this.selectedMonth = dayjs(this.currentPeriod.from, GIDDH_DATE_FORMAT).toISOString();
+            this.selectedMonth = dayjs(this.selectedMonth).format('MMMM YYYY');
             this.store.dispatch(this.gstAction.SetSelectedPeriod(this.currentPeriod));
             this.selectedGstr = params['return_type'];
         });
@@ -199,20 +199,6 @@ export class FileGstR3Component implements OnInit, OnDestroy {
                 }
             }
         });
-        this.getCurrentPeriod$ = this.store.pipe(select(appStore => appStore.gstR.currentPeriod), takeUntil(this.destroyed$));
-        this.getCurrentPeriod$.subscribe(currentPeriod => {
-            if (currentPeriod && currentPeriod.from) {
-                let date = {
-                    startDate: moment(currentPeriod.from, GIDDH_DATE_FORMAT).startOf('month').format(GIDDH_DATE_FORMAT),
-                    endDate: moment(currentPeriod.to, GIDDH_DATE_FORMAT).endOf('month').format(GIDDH_DATE_FORMAT)
-                };
-                if (date.startDate === currentPeriod.from && date.endDate === currentPeriod.to) {
-                    this.isMonthSelected = true;
-                } else {
-                    this.isMonthSelected = false;
-                }
-            }
-        });
         this.store.pipe(select(appState => appState.general.openGstSideMenu), takeUntil(this.destroyed$)).subscribe(shouldOpen => {
             if (this.isMobileScreen) {
                 if (shouldOpen) {
@@ -222,14 +208,28 @@ export class FileGstR3Component implements OnInit, OnDestroy {
                 }
             }
         });
+        this.getCurrentPeriod$ = this.store.pipe(select(appStore => appStore.gstR.currentPeriod), takeUntil(this.destroyed$));
+        this.getCurrentPeriod$.subscribe(currentPeriod => {
+            if (currentPeriod && currentPeriod.from) {
+                let date = {
+                    startDate: dayjs(currentPeriod.from, GIDDH_DATE_FORMAT).startOf('month').format(GIDDH_DATE_FORMAT),
+                    endDate: dayjs(currentPeriod.to, GIDDH_DATE_FORMAT).endOf('month').format(GIDDH_DATE_FORMAT)
+                };
+                if (date.startDate === currentPeriod.from && date.endDate === currentPeriod.to) {
+                    this.isMonthSelected = true;
+                } else {
+                    this.isMonthSelected = false;
+                }
+            }
+        });
     }
 
     public periodChanged(ev) {
         if (ev) {
-            this.selectedMonth = moment(ev).format('MMMM YYYY');
+            this.selectedMonth = dayjs(ev).format('MMMM YYYY');
             this.currentPeriod = {
-                from: moment(ev).startOf('month').format(GIDDH_DATE_FORMAT),
-                to: moment(ev).endOf('month').format(GIDDH_DATE_FORMAT)
+                from: dayjs(ev).startOf('month').format(GIDDH_DATE_FORMAT),
+                to: dayjs(ev).endOf('month').format(GIDDH_DATE_FORMAT)
             };
             this.dateSelected = true;
             this.store.dispatch(this.gstAction.SetSelectedPeriod(this.currentPeriod));
@@ -260,8 +260,8 @@ export class FileGstR3Component implements OnInit, OnDestroy {
             return this.toasty.errorToast(this.localeData?.email_required_error);
         }
         // Note:- appended ",1" with selectedMonth (July 2020) because "July 2020" format does not support for firefox browser and ("July 2020, 1") is valid format for chrome and firefox browser
-        let convertValidDateFormatForMoment = this.selectedMonth + ',1';
-        let monthToSend = moment(convertValidDateFormatForMoment).format("MM") + "-" + moment(convertValidDateFormatForMoment).format("YYYY");
+        let convertValidDateFormat = this.selectedMonth + ',1';
+        let monthToSend = dayjs(convertValidDateFormat).format("MM") + "-" + dayjs(convertValidDateFormat).format("YYYY");
         if (!monthToSend) {
             this.toasty.errorToast(this.localeData?.month_required_error);
         } else if (!this.activeCompanyGstNumber) {
@@ -308,7 +308,7 @@ export class FileGstR3Component implements OnInit, OnDestroy {
      * @param {*} type Type of report (gstr1, gstr2, gstr3b)
      * @memberof FileGstR3Component
      */
-     public navigateToOverview(type): void {
+    public navigateToOverview(type): void {
         this.router.navigate(['pages', 'gstfiling', 'filing-return'], { queryParams: { return_type: type, from: this.currentPeriod.from, to: this.currentPeriod.to, tab: 0, selectedGst: this.activeCompanyGstNumber } });
     }
 

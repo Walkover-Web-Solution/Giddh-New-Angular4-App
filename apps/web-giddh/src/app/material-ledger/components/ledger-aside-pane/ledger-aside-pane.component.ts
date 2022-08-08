@@ -69,6 +69,7 @@ export class LedgerAsidePaneComponent implements OnInit, OnDestroy {
     }
 
     public closeAsidePane(e?: any) {
+        this.store.dispatch(this.accountsAction.resetActiveGroup());
         this.hideFirstScreen = false;
         this.isAddStockOpen = false;
         this.isAddAccountOpen = false;

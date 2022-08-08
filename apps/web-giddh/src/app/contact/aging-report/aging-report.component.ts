@@ -27,7 +27,7 @@ import { PaginationComponent } from "ngx-bootstrap/pagination";
 import { ElementViewContainerRef } from "../../shared/helpers/directives/elementViewChild/element.viewchild.directive";
 import { debounceTime, distinctUntilChanged, takeUntil } from "rxjs/operators";
 import { BreakpointObserver, BreakpointState } from "@angular/cdk/layout";
-import * as moment from "moment/moment";
+import * as dayjs from "dayjs";
 import { PerfectScrollbarConfigInterface } from "ngx-perfect-scrollbar";
 import { ContactAdvanceSearchComponent } from "../advanceSearch/contactAdvanceSearch.component";
 import { GeneralService } from "../../services/general.service";
@@ -59,7 +59,7 @@ export class AgingReportComponent implements OnInit, OnDestroy {
     public dueAmountReportData$: Observable<DueAmountReportResponse>;
     public totalDueAmounts: number = 0;
     public totalFutureDueAmounts: number = 0;
-    public moment = moment;
+    public dayjs = dayjs;
     public key: string = "name";
     public order: string = "asc";
     public filter: string = "";

@@ -38,7 +38,6 @@
                 </small>
                 <button class="btn pull-left isActive mt-5 add-new-btn" (click)="onOpenTemplateModal()">Add New</button>
             </div>
-
             <ng-container *ngFor="let template of customCreatedTemplates; let i = index">
                 <div class="template-grid" *ngIf="template.type === 'invoice' && voucherType === 'sales'">
                     <div class="template-info text-center">
@@ -121,7 +120,14 @@
         </div>
     </div>
     <!-- Template modal -->
-    <div bsModal #templateModal="bs-modal" class="modal fade" role="dialog" [config]="{ keyboard: true }" tabindex="-1">
+    <div
+        bsModal
+        #templateModal="bs-modal"
+        class="modal fade template-preview-container"
+        role="dialog"
+        [config]="{ keyboard: true }"
+        tabindex="-1"
+    >
         <div class="modal-dialog full-modal">
             <!-- modal-liq-90 class is removed for now-->
             <div class="modal-content border-radius-none">

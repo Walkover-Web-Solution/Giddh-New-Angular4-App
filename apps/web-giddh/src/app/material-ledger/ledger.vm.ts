@@ -2,7 +2,7 @@ import { IELedgerResponse, IELedgerTransaction, TransactionsResponse } from '../
 import { Observable } from 'rxjs';
 import { AccountResponse, AccountResponseV2 } from '../models/api-models/Account';
 import { ITransactionItem } from '../models/interfaces/ledger.interface';
-import * as moment from 'moment/moment';
+import * as dayjs from 'dayjs';
 import { IFlattenAccountsResultItem } from '../models/interfaces/flattenAccountsResultItem.interface';
 import { v4 as uuidv4 } from 'uuid';
 import { cloneDeep, forEach, remove } from '../lodash-optimized';
@@ -351,7 +351,7 @@ export class LedgerVM {
                     isInclusiveTax: true,
                 }],
             voucherType: 'sal',
-            entryDate: moment().format(GIDDH_DATE_FORMAT),
+            entryDate: dayjs().format(GIDDH_DATE_FORMAT),
             unconfirmedEntry: false,
             attachedFile: '',
             attachedFileName: '',

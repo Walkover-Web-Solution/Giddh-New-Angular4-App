@@ -10,7 +10,7 @@ import { Location } from '@angular/common';
 import { ManufacturingActions } from '../../actions/manufacturing/manufacturing.actions';
 import { InventoryAction } from '../../actions/inventory/inventory.actions';
 import { IStockItemDetail } from '../../models/interfaces/stocksItem.interface';
-import * as moment from 'moment/moment';
+import * as dayjs from 'dayjs';
 import { ManufacturingItemRequest } from '../../models/interfaces/manufacturing.interface';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { InventoryService } from '../../services/inventory.service';
@@ -46,7 +46,7 @@ export class MfEditComponent implements OnInit, OnDestroy {
     public selectedProduct: string;
     public selectedProductName: string;
     public showFromDatePicker: boolean = false;
-    public moment = moment;
+    public dayjs = dayjs;
     public initialQuantityObj: any = [];
     /* To check page is not inventory page */
     public isInventoryPage: boolean = false;
@@ -119,10 +119,10 @@ export class MfEditComponent implements OnInit, OnDestroy {
         private store: Store<AppState>,
         private manufacturingActions: ManufacturingActions,
         private inventoryAction: InventoryAction,
+        private router: Router,
         private _location: Location,
         private _inventoryService: InventoryService,
         private generalAction: GeneralActions,
-        private router: Router,
         private generalService: GeneralService,
         private _toasty: ToasterService,
         private searchService: SearchService,
@@ -151,7 +151,7 @@ export class MfEditComponent implements OnInit, OnDestroy {
                 if (manufacturingObj) {
                     this.selectedProductName = `${manufacturingObj.stockName} (${manufacturingObj.stockUniqueName})`;
                     manufacturingObj.quantity = manufacturingObj.manufacturingQuantity;
-                    manufacturingObj.date = moment(manufacturingObj.date, GIDDH_DATE_FORMAT).toDate();
+                    manufacturingObj.date = dayjs(manufacturingObj.date, GIDDH_DATE_FORMAT).toDate();
                     manufacturingObj.multipleOf = (manufacturingObj.manufacturingQuantity / manufacturingObj.manufacturingMultipleOf);
                     manufacturingObj.linkedStocks.forEach((item) => {
                         item.quantity = (item.manufacturingQuantity / manufacturingObj.manufacturingMultipleOf);
@@ -166,7 +166,7 @@ export class MfEditComponent implements OnInit, OnDestroy {
                     manufacturingObj.warehouseUniqueName = manufacturingObj?.warehouse?.uniqueName;
                     this.manufacturingDetails = manufacturingObj;
                     if (this.manufacturingDetails.date && typeof this.manufacturingDetails.date === 'object') {
-                        this.manufacturingDetails.date = String(moment(this.manufacturingDetails.date).format(GIDDH_DATE_FORMAT));
+                        this.manufacturingDetails.date = String(dayjs(this.manufacturingDetails.date).format(GIDDH_DATE_FORMAT));
                     }
                     this.onQuantityChange(manufacturingObj.manufacturingMultipleOf);
                 }
@@ -339,7 +339,6 @@ export class MfEditComponent implements OnInit, OnDestroy {
             } else {
                 manufacturingObj.otherExpenses = [objToPush];
             }
-            
             this.manufacturingDetails = manufacturingObj;
 
             this.otherExpenses = {};
@@ -360,7 +359,7 @@ export class MfEditComponent implements OnInit, OnDestroy {
         let dataToSave = cloneDeep(this.manufacturingDetails);
         dataToSave.stockUniqueName = this.selectedProduct;
         if (dataToSave.date && typeof dataToSave.date === 'object') {
-            dataToSave.date = String(moment(dataToSave.date).format(GIDDH_DATE_FORMAT));
+            dataToSave.date = String(dayjs(dataToSave.date).format(GIDDH_DATE_FORMAT));
         }
         delete dataToSave.warehouse;
         dataToSave.linkedStocks.forEach((obj) => {
@@ -373,7 +372,7 @@ export class MfEditComponent implements OnInit, OnDestroy {
     public updateEntry() {
         let dataToSave = cloneDeep(this.manufacturingDetails);
         if (dataToSave.date && typeof dataToSave.date === 'object') {
-            dataToSave.date = String(moment(dataToSave.date).format(GIDDH_DATE_FORMAT));
+            dataToSave.date = String(dayjs(dataToSave.date).format(GIDDH_DATE_FORMAT));
         }
         delete dataToSave.warehouse;
         this.store.dispatch(this.manufacturingActions.UpdateMfItem(dataToSave));
@@ -504,13 +503,13 @@ export class MfEditComponent implements OnInit, OnDestroy {
      * @memberof MfEditComponent
      */
     public setToday(): void {
-        this.manufacturingDetails.date = String(moment(this.bsValue).format(GIDDH_DATE_FORMAT));
+        this.manufacturingDetails.date = String(dayjs(this.bsValue).format(GIDDH_DATE_FORMAT));
     }
 
     public clearDate() {
         this.manufacturingDetails.date = '';
     }
-    
+
     /**
      * To toggle add expense entry block
      *
@@ -732,16 +731,6 @@ export class MfEditComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Releases memory
-     *
-     * @memberof MfEditComponent
-     */
-    public ngOnDestroy(): void {
-        this.destroyed$.next(true);
-        this.destroyed$.complete();
-    }
-
-    /**
      * Intializes the warehouse
      *
      * @private
@@ -758,5 +747,15 @@ export class MfEditComponent implements OnInit, OnDestroy {
                 });
             }
         });
+    }
+
+    /**
+     * Releases memory
+     *
+     * @memberof MfEditComponent
+     */
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 }
