@@ -283,4 +283,5 @@ export class UpdateAccountRequest {
 export class CustomFieldsData {
     uniqueName: string;
     value: AccountRequestV2
+    isMandatory?: boolean;
 }
