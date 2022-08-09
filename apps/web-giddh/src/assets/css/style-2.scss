@@ -6395,6 +6395,11 @@ highcharts-chart {
             }
         }
     }
+    .tax-control-menu {
+        .mat-menu-content:not(:empty) {
+            max-height: 200px;
+        }
+    }
 }
 .aside-menu-othertax-open {
     .nav-left-bar {

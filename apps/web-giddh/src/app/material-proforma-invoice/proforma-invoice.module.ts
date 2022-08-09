@@ -14,7 +14,6 @@ import { KeyboardShortutModule } from '../shared/helpers/directives/keyboardShor
 import { NgxMaskModule } from '../shared/helpers/directives/ngx-mask';
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
 import { SendEmailInvoiceModule } from '../shared/send-email-invoice/send-email-invoice.module';
-import { SharedModule } from '../shared/shared.module';
 import { DiscountControlModule } from '../theme/discount-control/discount-control.module';
 import { SelectModule } from '../theme/ng-select/ng-select';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
@@ -42,6 +41,11 @@ import { MatTableModule } from '@angular/material/table';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 import { MatSelectModule } from '@angular/material/select';
 import { GiddhDatepickerModule } from '../theme/giddh-datepicker/giddh-datepicker.module';
+import { AddBulkItemsModule } from '../add-bulk-items/add-bulk-items.module';
+import { TranslateDirectiveModule } from '../theme/translate/translate.directive.module';
+import { HamburgerMenuModule } from '../shared/header/components/hamburger-menu/hamburger-menu.module';
+import { ConfirmationModalModule } from '../common/confirmation-modal/confirmation-modal.module';
+import { PopoverModule } from 'ngx-bootstrap/popover';
 
 @NgModule({
     imports: [
@@ -57,7 +61,6 @@ import { GiddhDatepickerModule } from '../theme/giddh-datepicker/giddh-datepicke
         NgxUploaderModule,
         BsDropdownModule,
         DigitsOnlyModule,
-        SharedModule,
         AsideMenuRecurringEntryModule,
         ModalModule,
         TaxControlModule,
@@ -82,7 +85,12 @@ import { GiddhDatepickerModule } from '../theme/giddh-datepicker/giddh-datepicke
         MatTableModule,
         MatSelectModule,
         FormFieldsModule,
-        GiddhDatepickerModule
+        GiddhDatepickerModule,
+        AddBulkItemsModule,
+        TranslateDirectiveModule,
+        HamburgerMenuModule,
+        ConfirmationModalModule,
+        PopoverModule
     ],
     exports: [ProformaInvoiceComponent, SalesAddStockComponent, AsideMenuProductServiceComponent],
     declarations: [

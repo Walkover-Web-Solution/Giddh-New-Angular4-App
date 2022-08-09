@@ -9,7 +9,7 @@
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title pull-left">{{ localeData?.add_bulk_items }}check</h4>
+                    <h4 class="modal-title pull-left">{{ localeData?.add_bulk_items }}</h4>
                     <button mat-button class="close pull-right" aria-label="Close" (click)="closeEvent.emit()">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -30,14 +30,15 @@
                                 </div>
 
                                 <div class="product-list">
-                                    <perfect-scrollbar (psYReachEnd)="onScrollEnd()">
-                                        <div
-                                            class="single-product-wrapper cp"
+                                    <perfect-scrollbar (psYReachEnd)="onScrollEnd()" class="y-scroll overflow-x-hidden">
+                                        <button
+                                            mat-button
+                                            class="single-product-wrapper w-100"
                                             *ngFor="let item of filteredData"
                                             (click)="addItemToSelectedArr(item)"
                                         >
                                             <h5>{{ item?.name }}</h5>
-                                        </div>
+                                        </button>
                                     </perfect-scrollbar>
                                 </div>
                             </div>
@@ -74,39 +75,48 @@
 
                                                 <div class="d-flex align-items-center">
                                                     <div class="input-group add-item-btn">
-                                                        <span class="input-group-btn">
-                                                            <button
-                                                                mat-button
-                                                                class="btn btn-default btn-number minus-btn"
-                                                                (click)="alterQuantity(item, 'minus')"
-                                                            >
-                                                                <span class="fa fa-minus"></span>
-                                                            </button>
-                                                        </span>
+                                                        <button
+                                                            mat-button
+                                                            disableRipple
+                                                            class="
+                                                                btn-number
+                                                                d-flex
+                                                                align-items-center
+                                                                justify-content-center
+                                                            "
+                                                            (click)="alterQuantity(item, 'minus')"
+                                                        >
+                                                            <span class="fa fa-minus"></span>
+                                                        </button>
 
                                                         <text-field
                                                             type="number"
                                                             name="quantity"
-                                                            class="form-control input-number"
+                                                            class="form-control input-number text-align-center"
                                                             value="1"
                                                             min="1"
                                                             [(ngModel)]="item.quantity"
                                                         ></text-field>
 
-                                                        <span class="input-group-btn">
-                                                            <button
-                                                                mat-button
-                                                                class="btn btn-default btn-number"
-                                                                (click)="alterQuantity(item)"
-                                                            >
-                                                                <span class="fa fa-plus"></span>
-                                                            </button>
-                                                        </span>
+                                                        <button
+                                                            mat-button
+                                                            disableRipple
+                                                            class="
+                                                                btn-number
+                                                                d-flex
+                                                                align-items-center
+                                                                justify-content-center
+                                                            "
+                                                            (click)="alterQuantity(item)"
+                                                        >
+                                                            <span class="fa fa-plus"></span>
+                                                        </button>
                                                     </div>
 
                                                     <button
                                                         mat-button
-                                                        class="mr-l15"
+                                                        disableRipple
+                                                        class="remove-stock-list"
                                                         (click)="removeSelectedItem(item?.uniqueName)"
                                                     >
                                                         <i class="icon-cross"></i>

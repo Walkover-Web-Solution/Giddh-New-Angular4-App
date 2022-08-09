@@ -4,7 +4,7 @@
     (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event"
     (translationComplete)="translationComplete($event)"
-    >shivansh
+>
     <giddh-page-loader *ngIf="showLoader"></giddh-page-loader>
     <div [ngStyle]="{ 'display': !showLoader ? 'block' : 'none' }">
         <!-- region page change menu -->
@@ -5523,11 +5523,11 @@
         [config]="{ animated: true, keyboard: false, backdrop: false, ignoreBackdropClick: true }"
     >
         <ng-container *ngIf="bulkItemsModal?.isShown">
-            <proforma-add-bulk-items-component
+            <add-bulk-items
                 [invoiceType]="invoiceType"
                 (saveItemsEvent)="addBulkStockItems($event)"
                 (closeEvent)="bulkItemsModal.hide()"
-            ></proforma-add-bulk-items-component>
+            ></add-bulk-items>
         </ng-container>
     </div>
     <!-- endregion -->

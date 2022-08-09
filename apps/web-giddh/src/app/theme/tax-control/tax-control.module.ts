@@ -7,9 +7,12 @@ import { TooltipModule } from 'ngx-bootstrap/tooltip';
 
 import { NgxMaskModule } from '../../shared/helpers/directives/ngx-mask';
 import { TaxControlComponent } from './tax-control.component';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @NgModule({
-    imports: [CommonModule, FormsModule, ClickOutsideModule, VirtualScrollModule, NgxMaskModule, TooltipModule.forRoot()],
+    imports: [CommonModule, FormsModule, ClickOutsideModule, VirtualScrollModule, NgxMaskModule, TooltipModule.forRoot(), MatMenuModule, MatButtonModule, MatCheckboxModule],
     declarations: [TaxControlComponent],
     exports: [TaxControlComponent]
 })
