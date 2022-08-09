@@ -1,19 +1,19 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnDestroy, Output, ViewChild } from '@angular/core';
-import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { fromEvent, ReplaySubject, Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map, takeUntil } from 'rxjs/operators';
-import { SalesAddBulkStockItems, VoucherTypeEnum } from '../../../models/api-models/Sales';
-import { ToasterService } from '../../../services/toaster.service';
-import { SearchService } from '../../../services/search.service';
+import { SalesAddBulkStockItems, VoucherTypeEnum } from '../models/api-models/Sales';
+import { SearchService } from '../services/search.service';
+import { ToasterService } from '../services/toaster.service';
+import { IOption } from '../theme/ng-virtual-select/sh-options.interface';
 
 @Component({
-    selector: 'proforma-add-bulk-items-component',
-    templateUrl: './proforma-add-bulk-items.component.html',
-    styleUrls: [`./proforma-add-bulk-items.component.scss`],
+    selector: 'add-bulk-items',
+    templateUrl: './add-bulk-items.component.html',
+    styleUrls: [`./add-bulk-items.component.scss`],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class ProformaAddBulkItemsComponent implements OnDestroy {
+export class AddBulkItemsComponent implements OnDestroy {
     @Input() public invoiceType: string;
 
     @ViewChild('searchElement', { static: false }) public searchElement: ElementRef;

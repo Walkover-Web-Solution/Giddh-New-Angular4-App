@@ -4,9 +4,10 @@
     <a id="discount">
         <div class="multi-select adjust">
             <input
+                matInput
                 type="text"
                 decimalDigitsDirective
-                name=""
+                name="discountSum"
                 class="form-control text-right cursor-pointer pd-r2"
                 (focus)="discountMenu = true;hideOtherPopups.emit(true)"
                 [(ngModel)]="discountSum"
@@ -31,6 +32,7 @@
 
                 <div class="position-relative">
                     <input
+                        matInput
                         type="text"
                         class="form-control text-right cursor-pointer w-100 percentage-width"
                         [disabled]="!discountFromPer"
@@ -47,6 +49,7 @@
             <div class="d-flex mr-b1">
                 <label class="mr-1 align-items-center d-flex width-50">{{commonLocaleData?.app_value}}</label>
                 <input
+                    matInput
                     type="text"
                     class="form-control text-right cursor-pointer value-width"
                     [disabled]="!discountFromVal"
@@ -65,27 +68,22 @@
         <div *ngIf="discountAccountsDetails.length > 1">
             <ul class="discount-name-ul">
                 <ng-container *ngFor="let discount of discountAccountsDetails;trackBy: trackByFn; let idx = index">
-                    <li
-                        *ngIf="discount && discount.discountUniqueName && discount.name"
-                        class="custom-item pd mr-b05"
-                        #discountDropdownListItem
-                    >
+                    <li *ngIf="discount && discount.discountUniqueName && discount.name" class="custom-item pd mr-b05">
                         <label
                             class="checkbox overflow-hidden width-100 p-0 m-0 label-line"
                             (click)="$event.stopPropagation()"
                         >
-                            <input
+                            <mat-checkbox
+                                color="primary"
                                 class="pull-left"
                                 id="{{'discount-control-' + idx}}"
                                 name="tax_{{idx}}"
-                                type="checkbox"
                                 [(ngModel)]="discount.isActive"
                                 (change)="change(discount, $event)"
                                 (click)="$event.stopPropagation()"
-                                (focus)="discountDropdownFocus(discountDropdownListItem)"
-                                (blur)="discountDropdownBlur(discountDropdownListItem)"
-                            />
-                            <span class="pull-left text-ellipsis">{{discount.name}}</span>
+                            >
+                                {{discount.name}}
+                            </mat-checkbox>
                         </label>
                     </li>
                 </ng-container>
