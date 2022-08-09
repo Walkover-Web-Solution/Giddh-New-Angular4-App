@@ -55,7 +55,7 @@ import { clone, cloneDeep, differenceBy, flattenDeep, uniq } from 'apps/web-gidd
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { SettingsDiscountService } from 'apps/web-giddh/src/app/services/settings.discount.service';
 import { CustomFieldsService } from 'apps/web-giddh/src/app/services/custom-fields.service';
-import { FieldTypes } from '../custom-fields/custom-fields.constant';
+import { FieldTypes } from 'apps/web-giddh/src/app/custom-fields/custom-fields.constant';
 
 @Component({
     selector: 'account-update-new-details',
@@ -82,8 +82,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     @Input() public isBankAccount: boolean = false;
     @Input() public showDeleteButton: boolean = true;
     @Input() public accountDetails: any;
-    /** True if custom fields api needs to be called again */
-    @Input() public reloadCustomFields: boolean = false;
     @ViewChild('autoFocusUpdate', { static: true }) public autoFocusUpdate: ElementRef;
     public moveAccountForm: FormGroup;
     public taxGroupForm: FormGroup;
@@ -97,8 +95,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         = new EventEmitter();
     @Output() public deleteClicked: EventEmitter<any> = new EventEmitter();
     @Output() public isGroupSelected: EventEmitter<IOption> = new EventEmitter();
-    /** Emits if we have to switch to custom fields tab */
-    @Output() public goToCustomFields: EventEmitter<boolean> = new EventEmitter();
+    /** Emiting true if account modal needs to be closed */
+    @Output() public closeAccountModal: EventEmitter<boolean> = new EventEmitter();
     public showOtherDetails: boolean = false;
     public partyTypeSource: IOption[] = [];
     public stateList: StateList[] = [];
@@ -755,9 +753,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         if (s && s['showVirtualAccount'] && s['showVirtualAccount'].currentValue) {
             this.showOtherDetails = true;
         }
-        if(s && s['reloadCustomFields']?.currentValue && s['reloadCustomFields']?.currentValue !== s['reloadCustomFields']?.previousValue) {
-            this.initAccountCustomFields();
-        }
     }
 
     public ngOnDestroy() {
@@ -1299,7 +1294,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public initialCustomFieldDetailsForm(value: CustomFieldsData = null): FormGroup {
         let customFields = this._fb.group({
             uniqueName: [''],
-            value: [''],
+            value: ['', (value?.isMandatory) ? Validators.required : undefined],
         });
         if (value) {
             customFields?.patchValue(value);
@@ -1805,5 +1800,15 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             }
 
         });
+    }
+
+    /**
+     * Closes Master
+     *
+     * @memberof AccountUpdateNewDetailsComponent
+     */
+    public closeMaster(): void {
+        this.closeAccountModal.emit(true);
+        this.store.dispatch(this.groupWithAccountsAction.HideAddAndManageFromOutside());
     }
 }

@@ -35,8 +35,7 @@ import { InvoiceService } from 'apps/web-giddh/src/app/services/invoice.service'
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { clone, cloneDeep, uniqBy } from 'apps/web-giddh/src/app/lodash-optimized';
 import { CustomFieldsService } from 'apps/web-giddh/src/app/services/custom-fields.service';
-import { FieldTypes } from '../custom-fields/custom-fields.constant';
-import { AccountsAction } from 'apps/web-giddh/src/app/actions/accounts.actions';
+import { FieldTypes } from 'apps/web-giddh/src/app/custom-fields/custom-fields.constant';
 
 @Component({
     selector: 'account-add-new-details',
@@ -87,12 +86,10 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     @Input() public isBankAccount: boolean = true;
     /** True if account creation is from command k */
     @Input() public fromCommandK: boolean = false;
-    /** True if custom fields api needs to be called again */
-    @Input() public reloadCustomFields: boolean = false;
     @Output() public submitClicked: EventEmitter<{ activeGroupUniqueName: string, accountRequest: AccountRequestV2 }> = new EventEmitter();
     @Output() public isGroupSelected: EventEmitter<IOption> = new EventEmitter();
-    /** Emits if we have to switch to custom fields tab */
-    @Output() public goToCustomFields: EventEmitter<boolean> = new EventEmitter();
+    /** Emiting true if account modal needs to be closed */
+    @Output() public closeAccountModal: EventEmitter<boolean> = new EventEmitter();
     @ViewChild('autoFocus', { static: true }) public autoFocus: ElementRef;
     /** Tabs instance */
     @ViewChild('staticTabs', { static: true }) public staticTabs: TabsetComponent;
@@ -627,9 +624,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         if (s && s['activeGroupUniqueName'] && s['activeGroupUniqueName'].currentValue) {
             this.activeGroupUniqueName = s['activeGroupUniqueName'].currentValue;
         }
-        if (s && s['reloadCustomFields']?.currentValue && s['reloadCustomFields']?.currentValue !== s['reloadCustomFields']?.previousValue) {
-            this.getCompanyCustomField();
-        }
     }
 
     public ngOnDestroy() {
@@ -990,7 +984,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public initialCustomFieldDetailsForm(value: CustomFieldsData = null): FormGroup {
         let customFields = this._fb.group({
             uniqueName: [''],
-            value: [''],
+            value: ['', (value?.isMandatory) ? Validators.required : undefined],
         });
         if (value) {
             customFields?.patchValue(value);
@@ -1244,5 +1238,15 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 }
             }, 50);
         }
+    }
+
+    /**
+     * Closes Master
+     *
+     * @memberof AccountAddNewDetailsComponent
+     */
+    public closeMaster(): void {
+        this.closeAccountModal.emit(true);
+        this.store.dispatch(this.groupWithAccountsAction.HideAddAndManageFromOutside());
     }
 }

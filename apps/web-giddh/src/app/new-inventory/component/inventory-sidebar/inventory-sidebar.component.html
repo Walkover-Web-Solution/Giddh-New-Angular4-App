@@ -1,0 +1,172 @@
+<div class="aside-pane" (clickOutside)="closeAsidePaneIfMobile($event)" asideInventorySidebarMenuState>
+    <div class="help-aside-body">
+        <div class="back-to-main-slider">
+            <a href="javascript:;">
+                <span (click)="goToPreviousPage()">
+                    <i class="icon-back-arrow"></i>
+                </span>
+            </a>
+            <h1 class="heading">INVENTORY</h1>
+        </div>
+        <div class="inventory-items">
+            <ul class="mb-3">
+                <!-- <li>
+                    <a class="d-block clearfix" [routerLink]="['inventory-dashboard']" [routerLinkActive]="['active']">
+                        <span><i class="icon-inventory-dashboard"></i></span>
+                        <span>Dashboard</span>
+                    </a>
+                </li> -->
+                <!-- <li>
+                    <a class="d-block clearfix">
+                        <span><i class="icon-report"></i></span>
+                        <span>Report</span>
+                    </a>
+                </li> -->
+                <!-- <li>
+                    <a class="d-block clearfix">
+                        <span><i class="icon-settings-cog"></i></span>
+                        <span>Settings</span>
+                    </a>
+                </li> -->
+                <!-- <li>
+                    <a class="d-block clearfix">
+                        <span><i class="icon-inventory"></i></span>
+                        <span>Inventory</span>
+                    </a>
+                    <ng-container>
+                        <ul class="inventory-sub-bar">
+                            <li>
+                                <a
+                                    href="javascript:void(0);"
+                                    [routerLink]="['stock-group/list-group']"
+                                    [routerLinkActive]="['active']"
+                                >
+                                    Group Wise
+                                </a>
+                                <a
+                                    href="javascript:void(0);"
+                                    [routerLink]="['inventory-product-service-list']"
+                                    [routerLinkActive]="['active']"
+                                >
+                                    Item Wise
+                                </a>
+                                <a
+                                    href="javascript:void(0);"
+                                    [routerLink]="['inventory-combo-list']"
+                                    [routerLinkActive]="['active']"
+                                >
+                                    Combo
+                                </a>
+                                <a
+                                    href="javascript:void(0);"
+                                    [routerLink]="['inventory-transaction-list']"
+                                    [routerLinkActive]="['active']"
+                                >
+                                    Transactions
+                                </a>
+                                <a
+                                    href="javascript:void(0);"
+                                    [routerLink]="['inventory-custom-field']"
+                                    [routerLinkActive]="['active']"
+                                >
+                                    Custom Fields
+                                </a>
+                            </li>
+                        </ul>
+                    </ng-container>
+                </li> -->
+                <!-- <li>
+                    <a class="d-block clearfix">
+                        <span><i class="icon-inventory"></i></span>
+                        <span>Stock</span>
+                    </a>
+                    <ng-container>
+                        <ul class="inventory-sub-bar">
+                            <li>
+                                <a
+                                    href="javascript:void(0);"
+                                    [routerLink]="['/pages/new-inventory/stock/product/create']"
+                                    [routerLinkActive]="['active']"
+                                >
+                                    Product
+                                </a>
+                                <a
+                                    href="javascript:void(0);"
+                                    [routerLink]="['/pages/new-inventory/stock/service/create']"
+                                    [routerLinkActive]="['active']"
+                                >
+                                    Service
+                                </a>
+                            </li>
+                        </ul>
+                    </ng-container>
+                </li> -->
+                <!-- <li>
+                    <a class="d-block clearfix">
+                        <span><i class="icon-adjust-inventory"></i></span>
+                        <span>Adjust Inventory</span>
+                    </a>
+                </li> -->
+                <!-- <li>
+                    <a class="d-block clearfix">
+                        <span><i class="icon-package"></i></span>
+                        <span>Packages</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="d-block clearfix">
+                        <span><i class="icon-delivery"></i></span>
+                        <span>Delivery Challan</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="d-block clearfix">
+                        <span><i class="icon-branch-transfer"></i></span>
+                        <span>Branch Transfer</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="d-block clearfix">
+                        <span><i class="icon-warehouse"></i></span>
+                        <span>Warehouse</span>
+                    </a>
+                </li>
+                <li>
+                    <a class="d-block clearfix" [routerLink]="['/pages/new-inventory/create-new-inventory']">
+                        <span><i class="icon-fixed-assets"></i></span>
+                        <span>Fixed Assets</span>
+                    </a>
+                </li> -->
+            </ul>
+            <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
+                <mat-tree-node
+                    *matTreeNodeDef="let node"
+                    matTreeNodePadding
+                    class="sub-option"
+                    (click)="gotoPage(node)"
+                >
+                    <img src="{{ imgPath }}{{ node.icons }}" class="sidebar-menu-icons" alt="" />
+                    {{ node.name }}
+                </mat-tree-node>
+                <mat-tree-node
+                    *matTreeNodeDef="let node; when: hasChild"
+                    matTreeNodePadding
+                    matTreeNodeToggle
+                    class="list"
+                >
+                    <button mat-icon-button disableRipple matTreeNodeToggle class="arrow-btn">
+                        <span class="sidebar-list-icon">
+                            <i *ngIf="treeControl.isExpanded(node)" class="icon-up mr-l1 font-14 sidebar-icon"></i>
+                            <i
+                                *ngIf="!treeControl.isExpanded(node)"
+                                class="icon-down-new mr-l1 font-14 sidebar-icon"
+                            ></i>
+                        </span>
+                    </button>
+                    <img src="{{ imgPath }}{{ node.icons }}" class="sidebar-menu-icons" alt="" />
+                    {{ node.name }}
+                </mat-tree-node>
+            </mat-tree>
+        </div>
+    </div>
+</div>
