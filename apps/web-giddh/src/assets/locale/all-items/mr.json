@@ -399,6 +399,11 @@
                     "label": "डाउनलोड करा",
                     "link": "/pages/downloads",
                     "icon": "icon-download-circle"
+                },
+                {
+                    "label": "सानुकूल फील्ड",
+                    "link": "/pages/custom-fields/list",
+                    "icon": "icon-custom-field"
                 }
             ]
         }

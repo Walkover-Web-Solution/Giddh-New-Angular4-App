@@ -399,6 +399,11 @@
                     "label": "डाउनलोड",
                     "link": "/pages/downloads",
                     "icon": "icon-download-circle"
+                },
+                {
+                    "label": "तटकर क्षेत्र",
+                    "link": "/pages/custom-fields/list",
+                    "icon": "icon-custom-field"
                 }
             ]
         }
