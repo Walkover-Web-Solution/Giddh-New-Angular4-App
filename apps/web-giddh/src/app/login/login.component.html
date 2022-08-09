@@ -224,7 +224,7 @@
     #emailVerifyModal="bs-modal"
     role="dialog"
     aria-hidden="true"
-    [config]="modalConfig"
+    [config]="{ backdrop: 'static' }"
 >
     <div class="modal-dialog modal-md">
         <div class="modal-content">
@@ -296,7 +296,7 @@
     #mobileVerifyModal="bs-modal"
     role="dialog"
     aria-hidden="true"
-    [config]="modalConfig"
+    [config]="{ backdrop: 'static' }"
 >
     <div class="modal-dialog modal-md">
         <div class="modal-content">
@@ -378,7 +378,7 @@
     #twoWayAuthModal="bs-modal"
     role="dialog"
     aria-hidden="true"
-    [config]="modalConfig"
+    [config]="{ backdrop: 'static' }"
     (onHidden)="onHiddenAuthModal($event)"
 >
     <div class="modal-dialog modal-md">
