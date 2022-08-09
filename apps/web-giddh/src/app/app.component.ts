@@ -179,19 +179,18 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
     }
 
     public ngAfterViewInit() {
+        this.hideMainGiddhLoader();
+
         if (this._generalService.companyUniqueName && !window.location.href.includes('login') && !window.location.href.includes('token-verify')) {
             setTimeout(() => {
                 this.store.dispatch(this.companyActions.RefreshCompanies());
             }, 1000);
-        } else {
-            setTimeout(() => {
-                document.getElementById("main-giddh-loader")?.remove();
-            }, 10);
         }
 
         this._generalService.IAmLoaded.next(true);
         this._cdr.detectChanges();
         this.router.events.pipe(takeUntil(this.destroyed$)).subscribe((evt) => {
+            this.hideMainGiddhLoader();
             if ((evt instanceof NavigationStart) && this.newVersionAvailableForWebApp && !isElectron) {
                 // need to save last state
                 const redirectState = this.getLastStateFromUrl(evt.url);
@@ -229,6 +228,20 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
                     this.newVersionAvailableForWebApp = _.clone(isChanged);
                 }
             });
+        }
+    }
+
+    /**
+     * Hides main giddh loader for login/signup/token verify and shows on other pages
+     *
+     * @private
+     * @memberof AppComponent
+     */
+    private hideMainGiddhLoader(): void {
+        if (this.router.url.includes('login') || this.router.url.includes('token-verify') || this.router.url.includes('signup')) {
+            document.getElementById("main-giddh-loader")?.classList.add("d-none");
+        } else {
+            document.getElementById("main-giddh-loader")?.classList.remove("d-none");
         }
     }
 
