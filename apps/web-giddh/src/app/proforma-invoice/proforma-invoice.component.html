@@ -5562,6 +5562,8 @@
                     toggleOtherTaxesAsidePane(true, null);
                     calculateAffectedThingsFromOtherTaxChanges()
                 "
+                [keyboardShortcut]="{ 'esc': asideMenuStateForOtherTaxes === 'in' }"
+                (onShortcutPress)="closeAsideMenuStateForOtherTaxes()"
             >
             </app-aside-menu-other-taxes>
         </div>
