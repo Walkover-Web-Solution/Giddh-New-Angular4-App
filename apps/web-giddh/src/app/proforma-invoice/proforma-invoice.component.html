@@ -4550,6 +4550,7 @@
 
                                                         <div *ngIf="isTcsTdsApplicable" class="wrap-other-tax">
                                                             <input
+                                                                [checked]="isChecked"
                                                                 type="checkbox"
                                                                 class="other-taxes-checkbox"
                                                                 [(ngModel)]="entry.isOtherTaxApplicable"
@@ -5562,8 +5563,6 @@
                     toggleOtherTaxesAsidePane(true, null);
                     calculateAffectedThingsFromOtherTaxChanges()
                 "
-                [keyboardShortcut]="{ 'esc': asideMenuStateForOtherTaxes === 'in' }"
-                (onShortcutPress)="closeAsideMenuStateForOtherTaxes()"
             >
             </app-aside-menu-other-taxes>
         </div>

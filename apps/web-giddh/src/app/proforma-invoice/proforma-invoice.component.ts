@@ -2816,18 +2816,34 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public toggleOtherTaxesAsidePane(modalBool: boolean, index: number = null) {
         if (!modalBool) {
             let entry = this.invFormData.entries[this.activeIndx];
-            if (entry) {
+            if (entry) { 
                 entry.otherTaxModal = new SalesOtherTaxesModal();
                 entry.otherTaxSum = 0;
             }
             return;
         } else {
+            console.log(this.tcsTdsIndex,"red" );
+
+            let entry = this.invFormData.entries[this.activeIndx];
+            console.log(entry);
+            
+        if(entry.otherTaxSum > 0){
+            entry.isOtherTaxApplicable = true;
+
+        }else { 
+            console.log(this.tcsTdsIndex );
+              entry.isOtherTaxApplicable = false;
+        }
             if (index !== null) {
+                
                 this.entriesListBeforeTax = cloneDeep(this.invFormData.entries);
             }
+
         }
         this.asideMenuStateForOtherTaxes = this.asideMenuStateForOtherTaxes === 'out' ? 'in' : 'out';
         this.toggleBodyClass();
+              this._cdr.detectChanges();
+
     }
 
     /**
@@ -2837,10 +2853,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      */
     public closeAsideMenuStateForOtherTaxes(): void {
         if (this.asideMenuStateForOtherTaxes === 'in') {
-            this.toggleOtherTaxesAsidePane(true, null);
-            let entry = this.invFormData.entries[this.activeIndx];
-            entry.otherTaxModal = new SalesOtherTaxesModal();
-            entry.isOtherTaxApplicable = false;
+       this.toggleOtherTaxesAsidePane(true, null);
         }
     }
 

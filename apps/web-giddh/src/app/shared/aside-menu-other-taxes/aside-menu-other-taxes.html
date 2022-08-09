@@ -1,4 +1,9 @@
-<div class="aside-pane aside-pane-other-tax text-left" (clickOutside)="closeTaxesModal()">
+<div
+    class="aside-pane aside-pane-other-tax text-left"
+    (clickOutside)="closeTaxesModal()"
+    [keyboardShortcut]="'esc'"
+    (onShortcutPress)="closeTaxesModal()"
+>
     <button id="close" type="button" (click)="closeTaxesModal()">
         <i class="icon-cross"></i>
     </button>
