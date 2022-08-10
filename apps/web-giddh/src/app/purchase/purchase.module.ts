@@ -10,7 +10,7 @@ import { TabsModule } from 'ngx-bootstrap/tabs';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { InvoiceRoutingModule } from '../invoice/invoice.routing.module';
-import { ProformaInvoiceModule } from '../material-proforma-invoice/proforma-invoice.module';
+import { VoucherModule } from '../voucher/voucher.module';
 import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
 import { NgxMaskModule } from '../shared/helpers/directives/ngx-mask';
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
@@ -33,6 +33,7 @@ import { PurchaseSettingComponent } from './purchase-setting/purchase-setting.co
 import { PurchaseComponent } from './purchase.component';
 import { PurchaseRoutingModule } from './purchase.routing.module';
 import { NgxBootstrapSwitchModule } from 'ngx-bootstrap-switch';
+import { AsideMenuOtherTaxesModule } from '../shared/aside-menu-other-taxes/aside-menu-other-taxes.module';
 
 
 @NgModule({
@@ -71,9 +72,10 @@ import { NgxBootstrapSwitchModule } from 'ngx-bootstrap-switch';
         NgxMaskModule.forRoot(),
         TaxControlModule,
         DiscountControlModule,
-        ProformaInvoiceModule,
+        VoucherModule,
         NoDataModule,
         NgxBootstrapSwitchModule.forRoot(),
+        AsideMenuOtherTaxesModule
     ],
     entryComponents: [],
     exports: [

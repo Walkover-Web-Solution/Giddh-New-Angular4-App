@@ -307,37 +307,27 @@
                                                         </a>
                                                         <div class="previous-estimate-wrapper">
                                                             <mat-menu #menu="matMenu">
-                                                                <perfect-scrollbar>
-                                                                    <button
-                                                                        mat-menu-item
-                                                                        *ngFor="let item of lastInvoices"
-                                                                        (click)="copyInvoice(item)"
-                                                                        class="line-height-initial"
-                                                                    >
-                                                                        <div class="pd">
-                                                                            <div class="d-flex flex-column">
-                                                                                <div
-                                                                                    class="
-                                                                                        d-flex
-                                                                                        justify-content-between
-                                                                                    "
-                                                                                >
-                                                                                    <span>{{
-                                                                                        item.versionNumber
-                                                                                    }}</span>
-                                                                                    <span>{{
-                                                                                        item.grandTotal
-                                                                                            ?.amountForAccount
-                                                                                    }}</span>
-                                                                                </div>
-                                                                                <span
-                                                                                    >{{ item.date }} (
-                                                                                    {{ item.account?.name }} )</span
-                                                                                >
+                                                                <button
+                                                                    mat-menu-item
+                                                                    *ngFor="let item of lastInvoices"
+                                                                    (click)="copyInvoice(item)"
+                                                                    class="line-height-initial"
+                                                                >
+                                                                    <div class="pd">
+                                                                        <div class="d-flex flex-column">
+                                                                            <div class="d-flex justify-content-between">
+                                                                                <span>{{ item.versionNumber }}</span>
+                                                                                <span>{{
+                                                                                    item.grandTotal?.amountForAccount
+                                                                                }}</span>
                                                                             </div>
+                                                                            <span
+                                                                                >{{ item.date }} (
+                                                                                {{ item.account?.name }} )</span
+                                                                            >
                                                                         </div>
-                                                                    </button>
-                                                                </perfect-scrollbar>
+                                                                    </div>
+                                                                </button>
                                                             </mat-menu>
                                                         </div>
                                                     </div>
@@ -2739,6 +2729,7 @@
                                                 <discount-control-component
                                                     #discountComponent
                                                     [discountMenu]="false"
+                                                    [discountsList]="discountsList"
                                                     [discountAccountsDetails]="entry.discounts"
                                                     [discountSum]="entry.discountSum"
                                                     [showHeaderText]="false"
@@ -4324,7 +4315,7 @@
                                                             >
                                                                 <mat-option
                                                                     *ngFor="let stock of transaction.stockList"
-                                                                    [ngValue]="stock.id"
+                                                                    [value]="stock.id"
                                                                 >
                                                                     {{ stock.text }}
                                                                 </mat-option>
@@ -4442,6 +4433,7 @@
                                                         <discount-control-component
                                                             #discountComponent
                                                             [discountMenu]="false"
+                                                            [discountsList]="discountsList"
                                                             [discountAccountsDetails]="entry.discounts"
                                                             [discountSum]="entry.discountSum"
                                                             [showHeaderText]="false"
@@ -5523,12 +5515,12 @@
     <!-- region gst treatment modal-->
     <ng-template #gstTreatmentModal let-show>
         <div *ngIf="show" class="gst-treatment-modal">
-            <proforma-gst-treatment-component
+            <voucher-gst-treatment-component
                 [localeData]="localeData"
                 [commonLocaleData]="commonLocaleData"
                 (closeEvent)="showGstTreatmentModal = false"
             >
-            </proforma-gst-treatment-component>
+            </voucher-gst-treatment-component>
         </div>
     </ng-template>
     <!-- endregion -->
@@ -5558,7 +5550,7 @@
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <ng-container *ngIf="actionAfterGenerateORUpdate === 3 && invoiceNo && accountUniqueName">
-                    <proforma-print-in-place-component
+                    <voucher-print-in-place-component
                         [voucherType]="invoiceType"
                         [localeData]="localeData"
                         [commonLocaleData]="commonLocaleData"
@@ -5568,7 +5560,7 @@
                             voucherUniqueName: newVoucherUniqueName
                         }"
                         (cancelEvent)="cancelPrintModal()"
-                    ></proforma-print-in-place-component>
+                    ></voucher-print-in-place-component>
                 </ng-container>
             </div>
         </div>

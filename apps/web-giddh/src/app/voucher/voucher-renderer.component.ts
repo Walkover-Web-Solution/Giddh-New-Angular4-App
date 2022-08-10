@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 
 @Component({
-    selector: 'proforma-invoice-renderer-component',
+    selector: 'voucher-renderer-component',
     template: `<router-outlet></router-outlet>`
 })
 
-export class ProformaInvoiceRendererComponent {
+export class VoucherRendererComponent {
     constructor() {
     }
 }

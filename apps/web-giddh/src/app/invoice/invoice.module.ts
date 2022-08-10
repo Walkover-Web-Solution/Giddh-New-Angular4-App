@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { InvoiceRoutingModule } from './invoice.routing.module';
-import { ProformaInvoiceModule } from '../material-proforma-invoice/proforma-invoice.module';
+import { VoucherModule } from '../voucher/voucher.module';
 import { DigitsOnlyModule } from '../shared/helpers/directives/digitsOnly/digitsOnly.module';
 import { PurchaseModule } from '../purchase/purchase.module';
 import { SharedModule } from '../shared/shared.module';
@@ -9,7 +9,7 @@ import { SharedModule } from '../shared/shared.module';
     declarations: [],
     imports: [
         InvoiceRoutingModule,
-        ProformaInvoiceModule,
+        VoucherModule,
         DigitsOnlyModule,
         PurchaseModule,
         SharedModule

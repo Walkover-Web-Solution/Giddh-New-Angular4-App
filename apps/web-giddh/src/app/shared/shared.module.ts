@@ -24,7 +24,6 @@ import { AuthServiceConfig, GoogleLoginProvider, SocialLoginModule } from '../th
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
-import { AsideMenuOtherTaxes } from './aside-menu-other-taxes/aside-menu-other-taxes';
 import { AccountOperationsComponent, GroupsAccountSidebarComponent, ManageGroupsAccountsComponent } from './header/components';
 import { GroupAddComponent } from './header/components/group-add/group-add.component';
 import { ExportGroupLedgerComponent } from './header/components/group-export-ledger-modal/export-group-ledger.component';
@@ -60,6 +59,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { CheckPermissionModule } from '../permissions/check-permission.module';
 import { GenericAsideMenuAccountModule } from './generic-aside-menu-account/generic.aside.menu.account.module';
 import { AccountUpdateNewDetailsModule } from './header/components/account-update-new-details/account-update-new-details.module';
+import { AsideMenuOtherTaxesModule } from './aside-menu-other-taxes/aside-menu-other-taxes.module';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: true
@@ -88,7 +88,6 @@ export function provideConfig() {
         ShareGroupModalComponent,
         ShareAccountModalComponent,
         ExportGroupLedgerComponent,
-        AsideMenuOtherTaxes,
         ProformaAddBulkItemsComponent,
         RevisionHistoryComponent,
         PurchaseOrderPreviewModalComponent,
@@ -166,7 +165,6 @@ export function provideConfig() {
         ConfirmModalModule,
         TextCaseChangeModule,
         KeyboardShortutModule,
-        AsideMenuOtherTaxes,
         MfReportComponent,
         TabsModule,
         BsDropdownModule,
@@ -190,7 +188,8 @@ export function provideConfig() {
         GiddhPageLoaderModule,
         GiddhDatepickerModule,
         DeleteTemplateConfirmationModalModule,
-        GenericAsideMenuAccountModule
+        GenericAsideMenuAccountModule,
+        AsideMenuOtherTaxesModule
     ],
     entryComponents: [
         ManageGroupsAccountsComponent,

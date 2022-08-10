@@ -1,13 +1,13 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
-    selector: 'proforma-gst-treatment-component',
-    templateUrl: './proforma-gst-treatment.component.html',
-    styleUrls: [`./proforma-gst-treatment.component.scss`],
+    selector: 'voucher-gst-treatment-component',
+    templateUrl: './voucher-gst-treatment.component.html',
+    styleUrls: [`./voucher-gst-treatment.component.scss`],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class ProformaGstTreatmentComponent {
+export class VoucherGstTreatmentComponent {
     @Output() public closeEvent: EventEmitter<boolean> = new EventEmitter();
     /* This will hold local JSON data */
     @Input() public localeData: any = {};

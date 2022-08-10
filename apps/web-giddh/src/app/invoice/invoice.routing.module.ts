@@ -51,7 +51,7 @@ import { EWayBillComponent } from './eWayBill/eWayBill/eWayBill.component';
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
 import { InvoicePreviewDetailsComponent } from './preview/models/invoice-preview-details/invoice-preview-details.component';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
-import { ProformaInvoiceModule } from '../material-proforma-invoice/proforma-invoice.module';
+import { VoucherRoutingModule } from '../voucher/voucher.routing.module';
 import { DigitsOnlyModule } from '../shared/helpers/directives/digitsOnly/digitsOnly.module';
 import { UniqueNameModule } from '../shared/helpers/directives/uniqueName/uniqueName.module';
 import { ProformaListComponent } from './proforma/proforma-list.component';
@@ -150,7 +150,7 @@ const INVOICE_ROUTES: Routes = [
         AccountDetailModalModule,
         CurrencyModule,
         PerfectScrollbarModule,
-        ProformaInvoiceModule,
+        VoucherRoutingModule,
         DigitsOnlyModule,
         UniqueNameModule,
         ConfirmModalModule,

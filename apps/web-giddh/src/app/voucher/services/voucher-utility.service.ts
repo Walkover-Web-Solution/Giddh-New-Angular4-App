@@ -10,13 +10,13 @@ import { VoucherForm } from '../../models/api-models/Voucher';
 @Injectable({
     providedIn: 'any'
 })
-export class ProformaInvoiceUtilityService {
+export class VoucherUtilityService {
 
     /**
      * Returns the popup configuration for purchase record confirmation popup
      *
      * @returns {ConfirmationModalConfiguration} Popup configuration for purchase record confirmation popup
-     * @memberof ProformaInvoiceUtilityService
+     * @memberof VoucherUtilityService
      */
     public getPurchaseRecordConfirmationConfiguration(localeData: any, commonLocaleData: any): ConfirmationModalConfiguration {
         const buttons: Array<ConfirmationModalButton> = [{
@@ -47,7 +47,7 @@ export class ProformaInvoiceUtilityService {
      *
      * @param {*} data Old request object
      * @return {*} {*} New request object
-     * @memberof ProformaInvoiceUtilityService
+     * @memberof VoucherUtilityService
      */
     public getVoucherRequestObjectForInvoice(data: any): any {
         data.type = this.parseVoucherType(data.type);
@@ -111,7 +111,7 @@ export class ProformaInvoiceUtilityService {
      *
      * @param {VoucherTypeEnum} voucher Voucher type
      * @return {string} Parsed voucher type
-     * @memberof ProformaInvoiceUtilityService
+     * @memberof VoucherUtilityService
      */
     public parseVoucherType(voucher: VoucherTypeEnum): string {
         if (voucher === VoucherTypeEnum.cash) {
@@ -126,7 +126,7 @@ export class ProformaInvoiceUtilityService {
      * @param {VoucherTypeEnum} voucherType Current voucher type
      * @param {*} [formConfiguration] If form configuration are loaded from the API
      * @return {VoucherForm} Voucher form configuration for current voucher
-     * @memberof ProformaInvoiceUtilityService
+     * @memberof VoucherUtilityService
      */
     public prepareVoucherForm(voucherType: VoucherTypeEnum, formConfiguration?: any): VoucherForm {
         if (formConfiguration) {

@@ -13,7 +13,7 @@ import { cloneDeep } from '../../lodash-optimized';
     styleUrls: ['./aside-menu-other-taxes.scss'],
     host: { 'class': 'app-aside-menu-other-taxes' },
 })
-export class AsideMenuOtherTaxes implements OnInit, OnChanges, OnDestroy {
+export class AsideMenuOtherTaxesComponent implements OnInit, OnChanges, OnDestroy {
     @Output() public closeModal: EventEmitter<boolean> = new EventEmitter();
     @Input() public otherTaxesModal: SalesOtherTaxesModal;
     @Input() public taxes: TaxResponse[] = [];

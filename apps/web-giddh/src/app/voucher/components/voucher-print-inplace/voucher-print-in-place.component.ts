@@ -12,11 +12,11 @@ import { GeneralService } from '../../../services/general.service';
 import { CommonService } from '../../../services/common.service';
 
 @Component({
-    selector: 'proforma-print-in-place-component',
-    templateUrl: './proforma-print-in-place.component.html',
-    styleUrls: ['./proforma-print-in-place.component.scss']
+    selector: 'voucher-print-in-place-component',
+    templateUrl: './voucher-print-in-place.component.html',
+    styleUrls: ['./voucher-print-in-place.component.scss']
 })
-export class ProformaPrintInPlaceComponent implements OnInit, OnDestroy {
+export class VoucherPrintInPlaceComponent implements OnInit, OnDestroy {
     @Input() public voucherType: VoucherTypeEnum = VoucherTypeEnum.sales;
     @Input() public selectedItem: { voucherNumber: string, uniqueName: string, blob?: Blob, voucherUniqueName?: string };
     /* This will hold local JSON data */

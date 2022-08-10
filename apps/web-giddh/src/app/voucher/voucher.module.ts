@@ -21,11 +21,11 @@ import { SalesShSelectModule } from '../theme/sales-ng-virtual-select/sh-select.
 import { TaxControlModule } from '../theme/tax-control/tax-control.module';
 import { AsideMenuProductServiceComponent } from './components/aside-menu-product-service/component';
 import { SalesAddStockComponent } from './components/aside-menu-product-service/components/create-stock/sales.create.stock.component';
-import { ProformaGstTreatmentComponent } from './components/proforma-gst-treatment/proforma-gst-treatment.component';
-import { ProformaPrintInPlaceComponent } from './components/proforma-print-inplace/proforma-print-in-place.component';
-import { ProformaInvoiceRendererComponent } from './proforma-invoice-renderer.component';
-import { ProformaInvoiceComponent } from './proforma-invoice.component';
-import { ProformaInvoiceRoutingModule } from './proforma-invoice.routing.module';
+import { VoucherGstTreatmentComponent } from './components/voucher-gst-treatment/voucher-gst-treatment.component';
+import { VoucherPrintInPlaceComponent } from './components/voucher-print-inplace/voucher-print-in-place.component';
+import { VoucherRendererComponent } from './voucher-renderer.component';
+import { VoucherComponent } from './voucher.component';
+import { VoucherRoutingModule } from './voucher.routing.module';
 import { AdvanceReceiptAdjustmentModule } from '../shared/advance-receipt-adjustment/advance-receipt-adjustment.module';
 import { HasFocusDirectiveModule } from '../shared/helpers/directives/has-focus/has-focus.module';
 import { ReplacePipeModule } from '../shared/helpers/pipes/replace/replace.module';
@@ -47,10 +47,15 @@ import { HamburgerMenuModule } from '../shared/header/components/hamburger-menu/
 import { ConfirmationModalModule } from '../common/confirmation-modal/confirmation-modal.module';
 import { PopoverModule } from 'ngx-bootstrap/popover';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import { GiddhPageLoaderModule } from '../shared/giddh-page-loader/giddh-page-loader.module';
+import { AmountFieldComponentModule } from '../shared/amount-field/amount-field.module';
+import { ClickOutsideModule } from 'ng-click-outside';
+import { GenericAsideMenuAccountModule } from '../shared/generic-aside-menu-account/generic.aside.menu.account.module';
+import { AsideMenuOtherTaxesModule } from '../shared/aside-menu-other-taxes/aside-menu-other-taxes.module';
 
 @NgModule({
     imports: [
-        ProformaInvoiceRoutingModule,
+        VoucherRoutingModule,
         FormsModule,
         CommonModule,
         ReactiveFormsModule,
@@ -92,18 +97,24 @@ import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
         HamburgerMenuModule,
         ConfirmationModalModule,
         PopoverModule,
-        BsDatepickerModule
+        BsDatepickerModule,
+        GiddhPageLoaderModule,
+        AmountFieldComponentModule,
+        ClickOutsideModule,
+        GenericAsideMenuAccountModule,
+        NgxBootstrapSwitchModule.forRoot(),
+        AsideMenuOtherTaxesModule
     ],
-    exports: [ProformaInvoiceComponent, SalesAddStockComponent, AsideMenuProductServiceComponent],
+    exports: [VoucherComponent, SalesAddStockComponent, AsideMenuProductServiceComponent],
     declarations: [
-        ProformaInvoiceRendererComponent,
-        ProformaInvoiceComponent,
-        ProformaGstTreatmentComponent,
+        VoucherRendererComponent,
+        VoucherComponent,
+        VoucherGstTreatmentComponent,
         SalesAddStockComponent,
         AsideMenuProductServiceComponent,
-        ProformaPrintInPlaceComponent
+        VoucherPrintInPlaceComponent
     ],
     providers: [TitleCasePipe],
 })
-export class ProformaInvoiceModule {
+export class VoucherModule {
 }
