@@ -387,7 +387,7 @@ aside-menu-account .container-fluid {
     margin-top: 20px !important;
 }
 .mr-b2 {
-    margin-bottom: 20px;
+    margin-bottom: 20px !important;
 }
 .mr-l2 {
     margin-left: 20px !important;
@@ -2075,6 +2075,11 @@ bs-datepicker-container {
     -webkit-box-pack: end;
     -ms-flex-pack: end;
     justify-content: flex-end;
+}
+.justify-content-space-between {
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
 }
 /* cmdk modal styles */
 .modal-dialog.universal_modal .modal-body {

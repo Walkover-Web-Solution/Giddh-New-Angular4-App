@@ -5,7 +5,7 @@
     (commonLocaleData)="commonLocaleData = $event"
     (translationComplete)="translationComplete($event)"
 >
-    <div class="primary-sidebar py-3 position-relative">
+    <div class="primary-sidebar py-3 position-relative" (clickOutside)="hidePrimarySidebarCompanyList()">
         <div
             class="company-branch-block pd-l2 pd-r2 position-relative"
             [ngClass]="{ 'padding-14': !currentBranch && (currentCompanyBranches$ | async)?.length > 1 }"
@@ -51,8 +51,12 @@
                                     ></i>
                                 </span>
                                 <span class="d-flex">
-                                    <i class="icon-down-new" *ngIf="!showCompanyBranchSwitch"></i>
-                                    <i class="icon-cross" *ngIf="showCompanyBranchSwitch"></i>
+                                    <i
+                                        [ngClass]="{
+                                            'icon-cross': showCompanyBranchSwitch,
+                                            'icon-down-new': !showCompanyBranchSwitch
+                                        }"
+                                    ></i>
                                 </span>
                             </div>
                         </div>
