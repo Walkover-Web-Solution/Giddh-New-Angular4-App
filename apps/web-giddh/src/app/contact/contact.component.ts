@@ -254,6 +254,8 @@ export class ContactComponent implements OnInit, OnDestroy {
     };
     /** True, if custom date filter is selected or custom searching or sorting is performed */
     public showClearFilter: boolean = false;
+    /** True if it's default load */
+    public defaultLoad: boolean = true;
 
     constructor(public dialog: MatDialog, private store: Store<AppState>, private router: Router, private companyServices: CompanyService, private commonActions: CommonActions, private toaster: ToasterService,
         private contactService: ContactService, private settingsIntegrationActions: SettingsIntegrationActions, private companyActions: CompanyActions, private componentFactoryResolver: ComponentFactoryResolver,
@@ -393,8 +395,11 @@ export class ContactComponent implements OnInit, OnDestroy {
             debounceTime(1000),
             distinctUntilChanged(), takeUntil(this.destroyed$))
             .subscribe((term: any) => {
-                this.searchStr = term;
-                this.getAccounts(this.fromDate, this.toDate, null, "true", PAGINATION_LIMIT, term, this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
+                if (!this.defaultLoad) {
+                    this.searchStr = term;
+                    this.getAccounts(this.fromDate, this.toDate, null, "true", PAGINATION_LIMIT, term, this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
+                }
+                this.defaultLoad = false;
             });
 
         if (this.activeCompany && this.activeCompany.countryV2) {
@@ -1142,7 +1147,7 @@ export class ContactComponent implements OnInit, OnDestroy {
         this.currentPage = pageNumber;
         let groupUniqueName = (this.activeTab === "customer") ? "sundrydebtors" : "sundrycreditors";
 
-        if (this.activeTab === "aging-report") {
+        if (this.activeTab === "aging-report" || !fromDate || !toDate) {
             return;
         }
 
