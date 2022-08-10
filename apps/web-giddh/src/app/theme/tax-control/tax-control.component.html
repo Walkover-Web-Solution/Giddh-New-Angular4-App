@@ -40,12 +40,13 @@
 
     <div class="position-relative">
         <mat-menu #menu="matMenu" yPosition="below" class="tax-control-menu">
-            <button mat-menu-item *ngIf="taxRenderData.length === 0">
+            <button mat-menu-item disableRipple *ngIf="taxRenderData.length === 0">
                 <p class="lead pd">{{ commonLocaleData?.app_no_tax_found }}</p>
             </button>
 
             <button
                 mat-menu-item
+                disableRipple
                 class="relative"
                 *ngFor="let tax of taxRenderData; trackBy: trackByFn; let idx = index"
             >

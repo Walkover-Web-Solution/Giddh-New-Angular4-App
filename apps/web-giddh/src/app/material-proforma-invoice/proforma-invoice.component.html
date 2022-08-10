@@ -2554,39 +2554,25 @@
                                                                 </span>
                                                             </div>
                                                             <div class="hsn-code-dropdown" *ngIf="hsnDropdownShow">
-                                                                <div class="d-flex wrap-hsn-sac mb-2 mt-3">
-                                                                    <span>
-                                                                        <input
-                                                                            type="radio"
-                                                                            class="radio-custom radio-theme"
-                                                                            name="showCodeType{{ entryIdx }}"
-                                                                            id="hsnCodeType{{ entryIdx }}"
-                                                                            [(ngModel)]="transaction.showCodeType"
-                                                                            value="hsn"
-                                                                        />
-                                                                        <label
-                                                                            for="hsnCodeType{{ entryIdx }}"
-                                                                            class="radio-custom-label"
-                                                                            >{{ commonLocaleData?.app_hsn_code }}</label
-                                                                        >
-                                                                    </span>
-                                                                    <span>
-                                                                        <input
-                                                                            type="radio"
-                                                                            class="radio-custom radio-theme"
-                                                                            name="showCodeType{{ entryIdx }}"
-                                                                            id="sacCodeType{{ entryIdx }}"
-                                                                            [(ngModel)]="transaction.showCodeType"
-                                                                            value="sac"
-                                                                        />
-                                                                        <label
-                                                                            for="sacCodeType{{ entryIdx }}"
-                                                                            class="radio-custom-label"
-                                                                            >{{ commonLocaleData?.app_sac_code }}</label
-                                                                        >
-                                                                    </span>
-                                                                </div>
-                                                                <input
+                                                                <mat-radio-group class="d-flex mb-2">
+                                                                    <mat-radio-button
+                                                                        color="primary"
+                                                                        name="showCodeType{{ entryIdx }}"
+                                                                        id="hsnCodeType{{ entryIdx }}"
+                                                                        [(ngModel)]="transaction.showCodeType"
+                                                                        value="hsn"
+                                                                        >{{ commonLocaleData?.app_hsn_code }}
+                                                                    </mat-radio-button>
+                                                                    <mat-radio-button
+                                                                        color="primary"
+                                                                        name="showCodeType{{ entryIdx }}"
+                                                                        id="sacCodeType{{ entryIdx }}"
+                                                                        [(ngModel)]="transaction.showCodeType"
+                                                                        value="sac"
+                                                                        >{{ commonLocaleData?.app_sac_code }}
+                                                                    </mat-radio-button>
+                                                                </mat-radio-group>
+                                                                <text-field
                                                                     type="text"
                                                                     maxLength="10"
                                                                     decimalDigitsDirective
@@ -2594,8 +2580,8 @@
                                                                     name="transaction.hsnNumber_{{ entryIdx }}"
                                                                     *ngIf="transaction.showCodeType === 'hsn'"
                                                                     [(ngModel)]="transaction.hsnNumber"
-                                                                />
-                                                                <input
+                                                                ></text-field>
+                                                                <text-field
                                                                     type="text"
                                                                     maxLength="10"
                                                                     decimalDigitsDirective
@@ -2603,19 +2589,19 @@
                                                                     name="transaction.hsnNumber_{{ entryIdx }}"
                                                                     *ngIf="transaction.showCodeType === 'sac'"
                                                                     [(ngModel)]="transaction.sacNumber"
-                                                                />
+                                                                ></text-field>
 
                                                                 <div class="btn-group mt-2 pt-1 d-flex">
                                                                     <button
+                                                                        mat-button
                                                                         class="btn btn-sm btn-success-green"
-                                                                        type="button"
                                                                         (click)="hsnDropdownShow = !hsnDropdownShow"
                                                                     >
                                                                         {{ commonLocaleData?.app_save }}
                                                                     </button>
                                                                     <button
-                                                                        class="btn btn-sm btn-primary mr-0"
-                                                                        type="button"
+                                                                        mat-button
+                                                                        class="btn cancel-button mr-0"
                                                                         (click)="hideHsnSacEditPopup(transaction)"
                                                                     >
                                                                         {{ commonLocaleData?.app_cancel }}

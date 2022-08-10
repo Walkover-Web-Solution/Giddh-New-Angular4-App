@@ -6400,6 +6400,17 @@ highcharts-chart {
             max-height: 200px;
         }
     }
+    .my-dropdown-menu {
+        .discount-dropdown-upper-part {
+            line-height: initial;
+            height: 95px;
+            &:hover,
+            &:active,
+            &:focus {
+                background-color: transparent !important;
+            }
+        }
+    }
 }
 .aside-menu-othertax-open {
     .nav-left-bar {
