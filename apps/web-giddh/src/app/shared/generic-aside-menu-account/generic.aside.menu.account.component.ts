@@ -7,6 +7,7 @@ import { AddAccountRequest, UpdateAccountRequest } from '../../models/api-models
 import { AccountsAction } from '../../actions/accounts.actions';
 import { IOption } from '../../theme/ng-select/option.interface';
 import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
     selector: 'generic-aside-menu-account',
@@ -75,7 +76,7 @@ export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnCh
     constructor(
         private store: Store<AppState>,
         private accountsAction: AccountsAction,
-        private groupWithAccountsAction: GroupWithAccountsAction
+        private activeRoute: ActivatedRoute,
     ) {
         // account-add component's property
         this.createAccountInProcess$ = this.store.pipe(select(state => state.sales.createAccountInProcess), takeUntil(this.destroyed$));
@@ -83,8 +84,15 @@ export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnCh
     }
 
     public ngOnInit() {
-        this.showBankDetail = this.activeGroupUniqueName === 'sundrycreditors';
+        
+        /** This will get the activate routing by query params */
+        this.activeRoute.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+            if (response) {
+                this.store.dispatch(this.accountsAction.resetActiveGroup());
+            }
+        });
 
+        this.showBankDetail = this.activeGroupUniqueName === 'sundrycreditors';
         this.store.pipe(select(state => state.groupwithaccounts.activeTab), takeUntil(this.destroyed$)).subscribe(activeTab => {
             if (activeTab === 1) {
                 this.isMasterOpen = true;
