@@ -46,6 +46,7 @@ import { TranslateDirectiveModule } from '../theme/translate/translate.directive
 import { HamburgerMenuModule } from '../shared/header/components/hamburger-menu/hamburger-menu.module';
 import { ConfirmationModalModule } from '../common/confirmation-modal/confirmation-modal.module';
 import { PopoverModule } from 'ngx-bootstrap/popover';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 
 @NgModule({
     imports: [
@@ -90,7 +91,8 @@ import { PopoverModule } from 'ngx-bootstrap/popover';
         TranslateDirectiveModule,
         HamburgerMenuModule,
         ConfirmationModalModule,
-        PopoverModule
+        PopoverModule,
+        BsDatepickerModule
     ],
     exports: [ProformaInvoiceComponent, SalesAddStockComponent, AsideMenuProductServiceComponent],
     declarations: [
