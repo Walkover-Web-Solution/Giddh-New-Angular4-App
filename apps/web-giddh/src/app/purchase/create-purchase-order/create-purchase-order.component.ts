@@ -41,7 +41,6 @@ import { CurrentCompanyState } from '../../store/Company/company.reducer';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LedgerDiscountClass } from '../../models/api-models/SettingsDiscount';
 import { LedgerResponseDiscountClass } from '../../models/api-models/Ledger';
-import { GeneralActions } from '../../actions/general/general.actions';
 import { InvoiceService } from '../../services/invoice.service';
 import { PURCHASE_ORDER_STATUS } from '../../shared/helpers/purchaseOrderStatus';
 import { INameUniqueName } from '../../models/api-models/Inventory';
@@ -53,6 +52,7 @@ import { SettingsBranchActions } from '../../actions/settings/branch/settings.br
 import { SearchService } from '../../services/search.service';
 import { SalesShSelectComponent } from '../../theme/sales-ng-virtual-select/sh-select.component';
 import { LedgerService } from '../../services/ledger.service';
+import { SettingsDiscountService } from '../../services/settings.discount.service';
 
 /** Type of search: vendor and item (product/service) search */
 const SEARCH_TYPE = {
@@ -368,6 +368,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
     public voucherApiVersion: 1 | 2;
     /** True if form save in progress */
     public isFormSaveInProgress: boolean = false;
+    /** List of discounts */
+    public discountsList: any[] = [];
 
     constructor(
         private store: Store<AppState>,
@@ -385,14 +387,14 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         private loaderService: LoaderService,
         private route: ActivatedRoute,
         private router: Router,
-        private generalActions: GeneralActions,
         private ledgerService: LedgerService,
         private invoiceService: InvoiceService,
         private modalService: BsModalService,
         private settingsBranchAction: SettingsBranchActions,
         private searchService: SearchService,
         private ngZone: NgZone,
-        private changeDetection: ChangeDetectorRef
+        private changeDetection: ChangeDetectorRef,
+        private settingsDiscountService: SettingsDiscountService
     ) {
         this.selectedAccountDetails$ = this.store.pipe(select(state => state.sales.acDtl), takeUntil(this.destroyed$));
         this.createAccountIsSuccess$ = this.store.pipe(select(state => state.sales.createAccountSuccess), takeUntil(this.destroyed$));
@@ -411,6 +413,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
     public ngOnInit(): void {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.getInvoiceSettings();
+        this.getDiscounts();
         this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
         this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: 0 }));
         this.store.dispatch(this.companyActions.getTax());
@@ -3765,5 +3768,19 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                 transaction.convertedTotal = giddhRoundOff(transaction.total * this.exchangeRate, 2);
             }
         }
+    }
+
+    /**
+     * Get list of discounts
+     *
+     * @private
+     * @memberof CreatePurchaseOrderComponent
+     */
+     private getDiscounts(): void {
+        this.settingsDiscountService.GetDiscounts().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.status === "success" && response?.body?.length > 0) {
+                this.discountsList = response?.body;
+            }
+        });
     }
 }
