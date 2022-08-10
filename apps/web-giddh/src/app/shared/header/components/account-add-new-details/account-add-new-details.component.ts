@@ -967,7 +967,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public initialCustomFieldDetailsForm(value: CustomFieldsData = null): FormGroup {
         let customFields = this._fb.group({
             uniqueName: [''],
-            value: [''],
+            value: ['', (value?.isMandatory) ? Validators.required : undefined],
         });
         if (value) {
             customFields?.patchValue(value);
