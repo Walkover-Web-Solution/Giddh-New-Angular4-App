@@ -14,7 +14,7 @@ import { Configuration } from '../../../../app.constant';
 import { BulkUpdateInvoiceNote, BulkUpdateInvoiceImageSignature, BulkUpdateInvoiceTemplates, BulkUpdateInvoiceDueDates, BulkUpdateInvoiceSlogan, BulkUpdateInvoiceShippingDetails, BulkUpdateInvoiceCustomfields } from 'apps/web-giddh/src/app/models/api-models/Contact';
 import { InvoiceBulkUpdateService } from 'apps/web-giddh/src/app/services/invoice.bulkupdate.service';
 import { NgForm } from '@angular/forms';
-import * as moment from 'moment/moment';
+import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { IForceClear } from 'apps/web-giddh/src/app/models/api-models/Sales';
 import { ModalOptions, ModalDirective } from 'ngx-bootstrap/modal';
@@ -319,12 +319,11 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges, OnDes
 
                 case 'dueDate':
                     if (this.updateDueDatesRequest.dueDate) {
-                        this.updateDueDatesRequest.dueDate = moment(this.updateDueDatesRequest.dueDate, this.giddhDateFormat).format(this.giddhDateFormat);
+                        this.updateDueDatesRequest.dueDate = dayjs(this.updateDueDatesRequest.dueDate, this.giddhDateFormat).format(this.giddhDateFormat);
                     }
                     this.bulkUpdateRequest(this.updateDueDatesRequest, 'duedate');
 
                     break;
-
                 case 'shippingDetails':
                     break;
 

@@ -124,17 +124,17 @@
                                                         aria-controls="dropdown-nested"
                                                     >
                                                         <ng-container *ngIf="isMonthSelected">
-                                                            {{ moment(selectedMonth).format("MMMM YYYY") }}
+                                                            {{ dayjs(selectedMonth).format("MMMM YYYY") }}
                                                         </ng-container>
                                                         <ng-container *ngIf="!isMonthSelected">
                                                             {{
-                                                                moment(currentPeriod?.from, giddhDateFormat).format(
+                                                                dayjs(currentPeriod?.from, giddhDateFormat).format(
                                                                     "DD MMM YYYY"
                                                                 )
                                                             }}
                                                             -
                                                             {{
-                                                                moment(currentPeriod?.to, giddhDateFormat).format(
+                                                                dayjs(currentPeriod?.to, giddhDateFormat).format(
                                                                     "DD MMM YYYY"
                                                                 )
                                                             }}

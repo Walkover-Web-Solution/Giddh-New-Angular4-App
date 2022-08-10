@@ -7,19 +7,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
 import { ActionReducer, MetaReducer, StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { LaddaModule } from 'angular2-ladda';
 import { Configuration } from 'apps/web-giddh/src/app/app.constant';
 import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
-import { Daterangepicker } from 'apps/web-giddh/src/app/theme/ng2-daterangepicker/daterangepicker.module';
 import { localStorageSync } from 'ngrx-store-localstorage';
-import { CollapseModule } from 'ngx-bootstrap/collapse';
-import { DatepickerModule } from 'ngx-bootstrap/datepicker';
-import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ModalModule } from 'ngx-bootstrap/modal';
-import { PaginationModule } from 'ngx-bootstrap/pagination';
-import { PopoverModule } from 'ngx-bootstrap/popover';
-import { TabsModule } from 'ngx-bootstrap/tabs';
-import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { PERFECT_SCROLLBAR_CONFIG, PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar/lib/perfect-scrollbar.interfaces';
 import { ToastrModule } from 'ngx-toastr';
@@ -30,32 +21,20 @@ import { AppComponent } from './app.component';
 import { IS_ELECTRON_WA } from './app.constant';
 import { APP_RESOLVER_PROVIDERS } from './app.resolver';
 import { ROUTES } from './app.routes';
-import { BrowserDetectComponent } from './browser-support/browserDetect.component';
 import { DecoratorsModule } from './decorators/decorators.module';
-import { DummyComponent } from './dummy.component';
-import { TokenVerifyComponent } from './login/token-verify.component';
-import { MobileHomeSidebarComponent } from './mobile-home/mobile-home-sidebar/mobile-home-sidebar.component';
-import { MobileHomeComponent } from './mobile-home/mobile-home.component';
-import { MobileSearchCompanyComponent } from './mobile-home/mobile-search-company/mobile-search-company.component';
-import { MobileSearchBranchComponent } from './mobile-home/mobile-search-branch/mobile-search-branch.component';
-import { NewUserComponent } from './newUser.component';
-import { OnboardingComponent } from './onboarding/onboarding.component';
-import { PageComponent } from './page.component';
-import { PublicPageHandlerComponent } from './public-page-handler.component';
 import { ExceptionLogService } from './services/exception-log.service';
 import { GiddhHttpInterceptor } from './services/http.interceptor';
 import { CustomPreloadingStrategy } from './services/lazy-preloading.service';
 import { ServiceModule } from './services/service.module';
 import { WindowRef } from './shared/helpers/window.object';
-import { SharedModule } from './shared/shared.module';
-import { SocialLoginCallbackComponent } from './social-login-callback.component';
 import { reducers } from './store';
 import { ShSelectModule } from './theme/ng-virtual-select/sh-select.module';
 import { QuicklinkModule, QuicklinkStrategy } from 'ngx-quicklink';
-import { DownloadComponent } from './download/download.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { SnackBarModule } from './theme/snackbar/snackbar.module';
 import { MatDialogModule } from '@angular/material/dialog';
+import { LoaderModule } from './loader/loader.module';
+import { PageModule } from './page/page.module';
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -85,45 +64,18 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     bootstrap: [AppComponent],
     declarations: [
         AppComponent,
-        PageComponent,
-        AppLoginSuccessComponent,
-        PublicPageHandlerComponent,
-        TokenVerifyComponent,
-        DummyComponent,
-        NewUserComponent,
-        BrowserDetectComponent,
-        OnboardingComponent,
-        SocialLoginCallbackComponent,
-        MobileHomeComponent,
-        MobileHomeSidebarComponent,
-        MobileSearchCompanyComponent,
-        MobileSearchBranchComponent,
-        DownloadComponent
+        AppLoginSuccessComponent
     ],
     /**
      * Import Angular's modules.
      */
     imports: [
         BrowserModule,
-        Daterangepicker,
         BrowserAnimationsModule,
         FormsModule,
         ReactiveFormsModule,
         HttpClientModule,
-        LaddaModule.forRoot({
-            style: 'slide-left',
-            spinnerSize: 30
-        }),
-        PaginationModule.forRoot(),
-        CollapseModule.forRoot(),
-        TooltipModule.forRoot(),
         ModalModule.forRoot(),
-        PopoverModule.forRoot(),
-        BsDropdownModule.forRoot(),
-        TabsModule.forRoot(),
-        TooltipModule.forRoot(),
-        DatepickerModule.forRoot(),
-        SharedModule.forRoot(),
         ServiceModule.forRoot(),
         ActionModule.forRoot(),
         DecoratorsModule.forRoot(),
@@ -141,6 +93,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         MatSnackBarModule,
         SnackBarModule,
         MatDialogModule,
+        LoaderModule,
+        PageModule,
         ...CONDITIONAL_IMPORTS
     ],
     /**

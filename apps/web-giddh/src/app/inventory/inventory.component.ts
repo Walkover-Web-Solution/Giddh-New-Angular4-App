@@ -19,7 +19,7 @@ import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { InvViewService } from './inv.view.service';
 import { SidebarAction } from "../actions/inventory/sidebar.actions";
 import { StockReportActions } from "../actions/inventory/stocks-report.actions";
-import * as moment from 'moment/moment';
+import * as dayjs from 'dayjs';
 import { IGroupsWithStocksHierarchyMinItem } from "../models/interfaces/groupsWithStocks.interface";
 import { InventoryService } from '../services/inventory.service';
 import { ToasterService } from '../services/toaster.service';
@@ -126,21 +126,10 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
         this.activeStock$ = this.store.pipe(select(p => p.inventory.activeStock), takeUntil(this.destroyed$));
         this.activeGroup$ = this.store.pipe(select(p => p.inventory.activeGroup), takeUntil(this.destroyed$));
         this.groupsWithStocks$ = this.store.pipe(select(s => s.inventory.groupsWithStocks), takeUntil(this.destroyed$));
-
-        this.store.pipe(select(p => p.settings.profile), takeUntil(this.destroyed$)).subscribe((o) => {
-            if (o && !isEmpty(o)) {
-                let companyInfo = cloneDeep(o);
-                this.currentBranch = companyInfo.name;
-                this.currentBranchNameAlias = companyInfo.nameAlias;
-            }
-        });
     }
 
     public ngOnInit() {
-        let branchFilterRequest = new BranchFilterRequest();
-
-        this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
-        this.store.dispatch(this.settingsBranchActions.GetALLBranches(branchFilterRequest));
+        this.getProfile();
 
         this.store.pipe(select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.settings.branches], (companies, branches) => {
             if (branches) {
@@ -154,6 +143,8 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
                 } else if (branches.length === 0) {
                     this.branches$ = observableOf(null);
                 }
+            } else {
+                this.getAllBranches();
             }
             if (companies && companies.length && branches) {
                 let companiesWithSuperAdminRole = [];
@@ -347,7 +338,6 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
 
     public getAllBranches() {
         let branchFilterRequest = new BranchFilterRequest();
-        this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
         this.store.dispatch(this.settingsBranchActions.GetALLBranches(branchFilterRequest));
     }
 
@@ -521,11 +511,11 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
         if (firstElement) {
             this.universalDate$.pipe(take(1)).subscribe(dateObj => {
                 if (dateObj) {
-                    this.GroupStockReportRequest.from = moment(dateObj[0]).format(GIDDH_DATE_FORMAT);
-                    this.GroupStockReportRequest.to = moment(dateObj[1]).format(GIDDH_DATE_FORMAT);
+                    this.GroupStockReportRequest.from = dayjs(dateObj[0]).format(GIDDH_DATE_FORMAT);
+                    this.GroupStockReportRequest.to = dayjs(dateObj[1]).format(GIDDH_DATE_FORMAT);
                 } else {
-                    this.GroupStockReportRequest.from = moment().add(-1, 'month').format(GIDDH_DATE_FORMAT);
-                    this.GroupStockReportRequest.to = moment().format(GIDDH_DATE_FORMAT);
+                    this.GroupStockReportRequest.from = dayjs().add(-1, 'month').format(GIDDH_DATE_FORMAT);
+                    this.GroupStockReportRequest.to = dayjs().format(GIDDH_DATE_FORMAT);
                 }
             });
 
@@ -542,5 +532,23 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.store.dispatch(this.stockReportActions.GetGroupStocksReport(cloneDeep(this.GroupStockReportRequest))); // open first default group
             }
         }
+    }
+
+    /**
+     * Gets profile information
+     *
+     * @private
+     * @memberof InventoryComponent
+     */
+    private getProfile(): void {
+        this.store.pipe(select(state => state.settings.profile), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                let companyInfo = cloneDeep(response);
+                this.currentBranch = companyInfo.name;
+                this.currentBranchNameAlias = companyInfo.nameAlias;
+            } else {
+                this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
+            }
+        });
     }
 }

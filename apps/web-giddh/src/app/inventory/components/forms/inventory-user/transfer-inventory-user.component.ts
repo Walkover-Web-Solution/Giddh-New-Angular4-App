@@ -4,7 +4,7 @@ import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { IStocksItem } from '../../../../models/interfaces/stocksItem.interface';
 import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
-import * as moment from 'moment';
+import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 
 @Component({
@@ -87,7 +87,7 @@ export class InventoryUserComponent implements OnChanges {
 
     public save() {
         if (this.form.valid) {
-            const inventoryEntryDate = moment(this.form.value.transferDate).format(GIDDH_DATE_FORMAT);
+            const inventoryEntryDate = dayjs(this.form.value.transferDate).format(GIDDH_DATE_FORMAT);
             this.onSave.emit(this.form.value);
         }
     }

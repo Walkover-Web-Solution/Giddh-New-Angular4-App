@@ -16,7 +16,6 @@
                 class="list-style-none branch-connection dropdown-toggle"
                 id="button-company-branch"
                 dropdownToggle
-                aria-controls="dropdown-basic-company-branch"
                 (click)="openCompanyBranchDropdown()"
             >
                 <span class="outer-span" *ngIf="(currentCompanyBranches$ | async)?.length > 1">
@@ -77,7 +76,7 @@
                 <div class="search-box position-relative mr-t2">
                     <div class="input-group flex-nowrap">
                         <div class="input-group-prepend" (click)="showNavigationModal()">
-                            <span class="input-group-text border-right-none" id="addon-wrapping">
+                            <span class="input-group-text border-right-none">
                                 <i class="icon-search"></i>
                             </span>
                         </div>
@@ -86,8 +85,6 @@
                             type="text"
                             class="form-control"
                             [placeholder]="commonLocaleData?.app_search"
-                            [attr.aria-label]="commonLocaleData?.app_search"
-                            aria-describedby="addon-wrapping"
                         />
                         <span class="input-group-append" (click)="showNavigationModal()">
                             {{ commonLocaleData?.app_cmd_g }}
@@ -106,17 +103,20 @@
                             <li *ngFor="let acc of accountItemsFromIndexDB">
                                 <a
                                     href="javascript:void(0);"
-                                    routerLink="ledger/{{ acc.uniqueName }}"
+                                    routerLink="ledger/{{ acc?.uniqueName }}"
                                     [routerLinkActive]="['active']"
-                                    [class.active]="isLedgerAccSelected && selectedLedgerName === acc.uniqueName"
+                                    [class.active]="isLedgerAccSelected && selectedLedgerName === acc?.uniqueName"
                                     (click)="analyzeAccounts($event, acc); companyDetailsDropDownWeb.hide()"
                                     >{{ acc.name }} {{ commonLocaleData?.app_ac }}</a
                                 >
                             </li>
                             <li>
-                                <a (click)="showNavigationModal()" class="show-more cursor-pointer">{{
-                                    localeData?.show_more
-                                }}</a>
+                                <a
+                                    href="javascript:;"
+                                    (click)="showNavigationModal()"
+                                    class="show-more cursor-pointer"
+                                    >{{ localeData?.show_more }}</a
+                                >
                             </li>
                         </ul>
                     </div>
@@ -132,7 +132,6 @@
                             dropdownToggle
                             type="button"
                             class="dropdown-toggle"
-                            aria-controls="dropdown-basic-01"
                         >
                             <span [tooltip]="localeData?.accounts"><i class="icon-accounts-new"></i> </span>
                             <i class="icon-right mr-l1 font-14"></i>
@@ -147,7 +146,7 @@
                             <li *ngFor="let acc of accountItemsFromIndexDB">
                                 <a
                                     href="javascript:void(0);"
-                                    routerLink="ledger/{{ acc.uniqueName }}"
+                                    routerLink="ledger/{{ acc?.uniqueName }}"
                                     (click)="analyzeAccounts($event, acc); accountDropdown?.hide()"
                                     >{{ acc.name }} {{ commonLocaleData?.app_ac }}</a
                                 >
@@ -190,10 +189,8 @@
                                     href="javascript:void(0);"
                                     tooltip="{{ menu?.label }}"
                                     *ngIf="menu?.items?.length"
-                                    id="button-basic-02"
                                     dropdownToggle
                                     class="dropdown-toggle"
-                                    aria-controls="dropdown-basic-02"
                                     [class.active]="menu?.isActive"
                                 >
                                     <span
@@ -207,10 +204,8 @@
                                     *ngIf="menu?.items?.length === 0 && menu?.link"
                                     [routerLink]="[menu?.link]"
                                     [queryParams]="menu?.additional"
-                                    id="button-basic-02"
                                     dropdownToggle
                                     class="dropdown-toggle"
-                                    aria-controls="dropdown-basic-02"
                                 >
                                     <span
                                         ><i [ngClass]="menu?.icon"></i>
@@ -218,13 +213,7 @@
                                     </span>
                                 </a>
                                 <ng-container *ngIf="menu?.items?.length">
-                                    <ul
-                                        id="dropdown-basic-02"
-                                        *dropdownMenu
-                                        class="dropdown-menu list-style-none pd-l2 sub-menu"
-                                        role="menu"
-                                        aria-labelledby="button-basic-02"
-                                    >
+                                    <ul *dropdownMenu class="dropdown-menu list-style-none pd-l2 sub-menu" role="menu">
                                         <li *ngFor="let item of menu?.items; trackBy: trackItems">
                                             <a
                                                 *ngIf="item?.link"
