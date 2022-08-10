@@ -53,6 +53,7 @@ import { SettingsBranchActions } from '../../actions/settings/branch/settings.br
 import { SearchService } from '../../services/search.service';
 import { SalesShSelectComponent } from '../../theme/sales-ng-virtual-select/sh-select.component';
 import { LedgerService } from '../../services/ledger.service';
+import { SettingsDiscountService } from '../../services/settings.discount.service';
 
 /** Type of search: vendor and item (product/service) search */
 const SEARCH_TYPE = {
@@ -368,6 +369,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
     public voucherApiVersion: 1 | 2;
     /** True if form save in progress */
     public isFormSaveInProgress: boolean = false;
+    /** List of discounts */
+    public discountsList: any[] = [];
 
     constructor(
         private store: Store<AppState>,
@@ -392,7 +395,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         private settingsBranchAction: SettingsBranchActions,
         private searchService: SearchService,
         private ngZone: NgZone,
-        private changeDetection: ChangeDetectorRef
+        private changeDetection: ChangeDetectorRef,
+        private settingsDiscountService: SettingsDiscountService
     ) {
         this.selectedAccountDetails$ = this.store.pipe(select(state => state.sales.acDtl), takeUntil(this.destroyed$));
         this.createAccountIsSuccess$ = this.store.pipe(select(state => state.sales.createAccountSuccess), takeUntil(this.destroyed$));
@@ -412,6 +416,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.getInvoiceSettings();
         this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
+        this.getDiscounts();
         this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: 0 }));
         this.store.dispatch(this.companyActions.getTax());
         this.store.dispatch(this.settingsBranchAction.resetAllBranches());
@@ -1507,7 +1512,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
      * @param {SalesTransactionItemClass} transaction Current edited transaction
      * @memberof CreatePurchaseOrderComponent
      */
-     public calculateConvertedAmount(transaction: SalesTransactionItemClass): void {
+    public calculateConvertedAmount(transaction: SalesTransactionItemClass): void {
         if (this.isMulticurrencyAccount) {
             if (transaction.isStockTxn) {
                 transaction.convertedAmount = giddhRoundOff(transaction.quantity * ((transaction.rate * this.exchangeRate) ? transaction.rate * this.exchangeRate : 0), 2);
@@ -1920,7 +1925,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         if (this.container) {
             for (let index = entryIdx + 1; index < this.purchaseOrder.entries.length; index++) {
                 const viewRef: any = this.container.get(index);
-                if(viewRef) {
+                if (viewRef) {
                     viewRef.context.entryIdx -= 1;
                 }
             }
@@ -2028,7 +2033,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
      * @memberof CreatePurchaseOrderComponent
      */
     public savePurchaseOrder(type: string): void {
-        if(this.isFormSaveInProgress) {
+        if (this.isFormSaveInProgress) {
             return;
         }
 
@@ -3133,7 +3138,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
             group = 'operatingcost, indirectexpenses';
             withStocks = !!query;
 
-            if(this.voucherApiVersion === 2) {
+            if (this.voucherApiVersion === 2) {
                 group += ", fixedassets";
             }
         }
@@ -3765,5 +3770,19 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                 transaction.convertedTotal = giddhRoundOff(transaction.total * this.exchangeRate, 2);
             }
         }
+    }
+
+    /**
+     * Get list of discounts
+     *
+     * @private
+     * @memberof CreatePurchaseOrderComponent
+     */
+    private getDiscounts(): void {
+        this.settingsDiscountService.GetDiscounts().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.status === "success" && response?.body?.length > 0) {
+                this.discountsList = response?.body;
+            }
+        });
     }
 }

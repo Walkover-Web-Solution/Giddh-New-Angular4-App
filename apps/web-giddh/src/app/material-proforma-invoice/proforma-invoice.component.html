@@ -2828,6 +2828,7 @@
                                                 <div *ngIf="isTcsTdsApplicable" class="wrap-other-tax">
                                                     <mat-checkbox
                                                         class="other-taxes-checkbox"
+                                                        [checked]="entry.isOtherTaxApplicable"
                                                         [(ngModel)]="entry.isOtherTaxApplicable"
                                                         (click)="tcsTdsIndex = entryIdx"
                                                         *ngIf="!entry.isOtherTaxApplicable"
@@ -4546,6 +4547,7 @@
                                                             <input
                                                                 type="checkbox"
                                                                 class="other-taxes-checkbox"
+                                                                [checked]="entry.isOtherTaxApplicable"
                                                                 [(ngModel)]="entry.isOtherTaxApplicable"
                                                                 *ngIf="!entry.isOtherTaxApplicable"
                                                                 (click)="tcsTdsIndex = entryIdx"
@@ -5540,7 +5542,7 @@
                 [otherTaxesModal]="entry.otherTaxModal"
                 [commonLocaleData]="commonLocaleData"
                 [@slideInOut]="asideMenuStateForOtherTaxes"
-                (closeModal)="toggleOtherTaxesAsidePane(true, null)"
+                (closeModal)="closeAsideMenuStateForOtherTaxes(true, null)"
                 (applyTaxes)="
                     calculateOtherTaxes($event, entry);
                     toggleOtherTaxesAsidePane(true, null);

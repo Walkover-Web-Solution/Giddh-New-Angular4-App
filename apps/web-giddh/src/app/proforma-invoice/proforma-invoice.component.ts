@@ -117,6 +117,7 @@ import { Location, TitleCasePipe } from '@angular/common';
 import { VoucherForm } from '../models/api-models/Voucher';
 import { AdjustmentUtilityService } from '../shared/advance-receipt-adjustment/services/adjustment-utility.service';
 import { GstReconcileActions } from '../actions/gst-reconcile/GstReconcile.actions';
+import { SettingsDiscountService } from '../services/settings.discount.service';
 
 /** Type of search: customer and item (product/service) search */
 const SEARCH_TYPE = {
@@ -631,6 +632,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     private referenceVouchersCurrentPage: number = 1;
     /** Reference voucher search field */
     private searchReferenceVoucher: any = "";
+    /** List of discounts */
+    public discountsList: any[] = [];
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -691,7 +694,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         private titleCasePipe: TitleCasePipe,
         private location: Location,
         private adjustmentUtilityService: AdjustmentUtilityService,
-        private gstAction: GstReconcileActions
+        private gstAction: GstReconcileActions,
+        private settingsDiscountService: SettingsDiscountService
     ) {
         this.advanceReceiptAdjustmentData = new VoucherAdjustments();
         this.advanceReceiptAdjustmentData.adjustments = [];
@@ -789,6 +793,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
         this.getInventorySettings();
         this.store.dispatch(this._settingsProfileActions.GetProfileInfo());
+        this.getDiscounts();
         this.store.dispatch(this.companyActions.getTax());
         this.store.dispatch(this.invoiceActions.getInvoiceSetting());
         this.store.dispatch(this.salesAction.resetAccountDetailsForSales());
@@ -7897,5 +7902,19 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.invoiceList = [];
         this.invoiceList$ = observableOf([]);
         this.referenceVouchersCurrentPage = 1;
+    }
+
+    /**
+     * Get list of discounts
+     *
+     * @private
+     * @memberof ProformaInvoiceComponent
+     */
+    private getDiscounts(): void {
+        this.settingsDiscountService.GetDiscounts().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.status === "success" && response?.body?.length > 0) {
+                this.discountsList = response?.body;
+            }
+        });
     }
 }
