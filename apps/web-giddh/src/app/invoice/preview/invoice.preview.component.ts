@@ -330,7 +330,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                             account: {
                                 accountType: (res.body.account) ? res.body.account.type : null,
                                 uniqueName: (res.body.account) ? res.body.account.uniqueName : null,
-                                name: (res.body.account) ? res.body.account.name : null
+                                name: (res.body.account) ? res.body.account?.name : null
                             },
                             uniqueName: res.body.uniqueName,
                             voucherDate: res.body.date,
@@ -1394,7 +1394,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             this.invFormData.voucherDetails.balanceDue = item.totalBalance.amountForAccount;
         }
         this.invFormData.voucherDetails.grandTotal = item.grandTotal.amountForAccount;
-        this.invFormData.voucherDetails.customerName = item.account.name;
+        this.invFormData.voucherDetails.customerName = item.account?.name;
         this.invFormData.voucherDetails.customerUniquename = customerUniqueName;
         this.invFormData.voucherDetails.voucherDate = item.voucherDate;
         this.invFormData.voucherDetails.exchangeRate = item.exchangeRate ?? 1;
@@ -1674,7 +1674,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         this.selectedRangeLabel = "";
 
         if (value && value.name) {
-            this.selectedRangeLabel = value.name;
+            this.selectedRangeLabel = value?.name;
         }
         this.hideGiddhDatepicker();
         if (value && value.startDate && value.endDate) {
