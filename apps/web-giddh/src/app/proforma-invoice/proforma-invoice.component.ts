@@ -2822,23 +2822,15 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             }
             return;
         } else {
-            console.log(this.tcsTdsIndex,"red" );
-
-            let entry = this.invFormData.entries[this.activeIndx];
-            console.log(entry);
-            
+            let entry = this.invFormData.entries[this.activeIndx];            
         if(entry.otherTaxSum > 0){
             entry.isOtherTaxApplicable = true;
-
         }else { 
-            console.log(this.tcsTdsIndex );
               entry.isOtherTaxApplicable = false;
         }
             if (index !== null) {
-                
                 this.entriesListBeforeTax = cloneDeep(this.invFormData.entries);
             }
-
         }
         this.asideMenuStateForOtherTaxes = this.asideMenuStateForOtherTaxes === 'out' ? 'in' : 'out';
         this.toggleBodyClass();
