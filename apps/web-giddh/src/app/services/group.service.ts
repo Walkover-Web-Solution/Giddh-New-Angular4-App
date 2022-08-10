@@ -224,4 +224,14 @@ export class GroupService {
         return this.http.get(contextPath)
             .pipe(catchError((error) => this.errorHandler.HandleCatch<any, any>(error)));
     }
+
+    public getMasters(groupUniqueName: string): Observable<BaseResponse<GroupResponse, string>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.get(this.config.apiUrl + GROUP_API.GET_MASTERS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':groupUniqueName', encodeURIComponent(groupUniqueName))).pipe(map((res) => {
+            let data: BaseResponse<GroupResponse, string> = res;
+            data.request = groupUniqueName;
+            data.queryString = { groupUniqueName };
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<GroupResponse, string>(e, groupUniqueName, { groupUniqueName })));
+    }
 }
