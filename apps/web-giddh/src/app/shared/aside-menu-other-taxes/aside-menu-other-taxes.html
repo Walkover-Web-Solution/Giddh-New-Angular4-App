@@ -4,7 +4,7 @@
     [keyboardShortcut]="'esc'"
     (onShortcutPress)="closeTaxesModal()"
 >
-    <button id="close" type="button" (click)="closeTaxesModal()"><i class="icon-cross"></i></button>
+    <button id="close" mat-button disableRipple (click)="closeTaxesModal()"><i class="icon-cross"></i></button>
 
     <div class="form-header">
         <h3 class="aside-title">{{commonLocaleData?.app_tax_applicable}}</h3>
@@ -54,7 +54,8 @@
             <div>
                 <button
                     class="btn btn-success"
-                    type="button"
+                    mat-button
+                    disableRipple
                     [disabled]="!defaultOtherTaxesModal?.tcsCalculationMethod"
                     (click)="saveTaxes()"
                 >

@@ -70,7 +70,7 @@ export class DiscountControlComponent implements OnInit, OnDestroy, OnChanges {
             let nextElement = focussable[index + 1] || focussable[0];
             nextElement.focus();
         }
-        this.hideDiscountMenu();
+        // this.hideDiscountMenu();
         return false;
     }
 
@@ -172,15 +172,15 @@ export class DiscountControlComponent implements OnInit, OnDestroy, OnChanges {
         return index;
     }
 
-    public hideDiscountMenu() {
-        this.discountMenu = false;
-    }
+    // public hideDiscountMenu() {
+    //     this.discountMenu = false;
+    // }
 
-    public discountInputBlur(event) {
-        if (event && event.relatedTarget && this.disInptEle && !this.disInptEle?.nativeElement.contains(event.relatedTarget)) {
-            this.hideDiscountMenu();
-        }
-    }
+    // public discountInputBlur(event) {
+    //     if (event && event.relatedTarget && this.disInptEle && !this.disInptEle?.nativeElement.contains(event.relatedTarget)) {
+    //         this.hideDiscountMenu();
+    //     }
+    // }
 
     public ngOnDestroy(): void {
         this.destroyed$.next(true);

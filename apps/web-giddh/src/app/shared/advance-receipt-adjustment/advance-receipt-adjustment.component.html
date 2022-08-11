@@ -7,8 +7,8 @@
 >
     <!-- Adjust Payment modal start -->
     <div class="modal-header">
-        <h4 class="modal-title bg pull-left">{{ localeData?.page_heading }}</h4>
-        <button type="button" class="close pull-right" aria-label="Close" (click)="onCancel()">
+        <h4 class="modal-title pull-left">{{ localeData?.page_heading }}</h4>
+        <button mat-button disableRipple class="close pull-right" aria-label="Close" (click)="onCancel()">
             <span aria-hidden="true">&times;</span>
         </button>
     </div>
@@ -23,8 +23,9 @@
                         <div class="form-group">
                             <label>{{ localeData?.customer_name }} </label>
                             <input
+                                matInput
                                 type="text"
-                                class="form-control"
+                                class="form-control usual-border-text-field"
                                 name="customerName"
                                 [(ngModel)]="adjustPayment.customerName"
                                 readonly
@@ -255,13 +256,14 @@
                             <div class="col-sm-3">
                                 <div class="form-group">
                                     <input
+                                        matInput
                                         [disabled]="
                                             shouldDisableEdit(entry) || entry.linkingAdjustment ? 'disabled' : null
                                         "
                                         required
                                         decimalDigitsDirective
                                         type="text"
-                                        class="form-control"
+                                        class="form-control usual-border-text-field"
                                         [placeholder]="localeData?.enter_amount"
                                         name="amount{{ entry.uniqueName }}"
                                         [(ngModel)]="entry.adjustmentAmount.amountForAccount"
@@ -442,8 +444,9 @@
                                         >
                                         <div class="col-md-3">
                                             <input
+                                                matInput
                                                 type="text"
-                                                class="form-control"
+                                                class="form-control usual-border-text-field"
                                                 required
                                                 #tdsAmountBox
                                                 decimalDigitsDirective
@@ -509,7 +512,8 @@
                         <div class="mt-2">
                             <button
                                 *ngIf="!isUpdateMode"
-                                type="button"
+                                mat-button
+                                disableRipple
                                 class="btn btn-success mr-r1"
                                 [disabled]="isInvalidForm"
                                 (click)="saveAdjustAdvanceReceipt(adjustAdvancePaymentForm)"
@@ -518,14 +522,15 @@
                             </button>
                             <button
                                 *ngIf="isUpdateMode"
-                                type="button"
+                                mat-button
+                                disableRipple
                                 class="btn btn-success mr-r1"
                                 [disabled]="isInvalidForm"
                                 (click)="saveAdjustAdvanceReceipt(adjustAdvancePaymentForm)"
                             >
                                 {{ commonLocaleData?.app_update }}
                             </button>
-                            <button class="btn btn-cancel" (click)="onClear(true)">
+                            <button mat-button disableRipple class="btn btn-cancel" (click)="onClear(true)">
                                 {{ commonLocaleData?.app_reset }}
                             </button>
                         </div>

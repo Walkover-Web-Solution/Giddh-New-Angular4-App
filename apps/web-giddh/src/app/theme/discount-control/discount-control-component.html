@@ -1,4 +1,4 @@
-<div (clickOutside)="hideDiscountMenu()" (click)="$event.stopPropagation()" class="position-relative">
+<div (click)="$event.stopPropagation()" class="position-relative">
     <label *ngIf="showHeaderText">{{commonLocaleData?.app_discount}}</label>
 
     <a id="discount">
@@ -15,7 +15,6 @@
                 [prefix]="prefixInput"
                 [suffix]="suffixInput"
                 readonly
-                (blur)="discountInputBlur($event)"
             />
         </div>
     </a>
@@ -33,7 +32,6 @@
                         [disabled]="!discountFromPer"
                         decimalDigitsDirective
                         [(ngModel)]="discountPercentageModal"
-                        (blur)="discountInputBlur($event)"
                         (input)="discountFromInput('PERCENTAGE', $event)"
                         [mask]="inputMaskFormat"
                     />
@@ -73,7 +71,7 @@
                         *ngIf="discount && discount.discountUniqueName && discount.name"
                         class="custom-item pd mr-b05"
                     >
-                        <label class="checkbox overflow-hidden width-100 p-0 m-0 label-line">
+                        <label class="overflow-hidden width-100 cp d-flex align-items-center discount-number-label">
                             <mat-checkbox
                                 color="primary"
                                 class="pull-left"

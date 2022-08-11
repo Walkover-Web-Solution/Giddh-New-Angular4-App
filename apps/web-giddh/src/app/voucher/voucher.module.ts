@@ -52,6 +52,8 @@ import { AmountFieldComponentModule } from '../shared/amount-field/amount-field.
 import { ClickOutsideModule } from 'ng-click-outside';
 import { GenericAsideMenuAccountModule } from '../shared/generic-aside-menu-account/generic.aside.menu.account.module';
 import { AsideMenuOtherTaxesModule } from '../shared/aside-menu-other-taxes/aside-menu-other-taxes.module';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 @NgModule({
     imports: [
@@ -102,8 +104,9 @@ import { AsideMenuOtherTaxesModule } from '../shared/aside-menu-other-taxes/asid
         AmountFieldComponentModule,
         ClickOutsideModule,
         GenericAsideMenuAccountModule,
-        NgxBootstrapSwitchModule.forRoot(),
-        AsideMenuOtherTaxesModule
+        AsideMenuOtherTaxesModule,
+        MatDialogModule,
+        MatExpansionModule
     ],
     exports: [VoucherComponent, SalesAddStockComponent, AsideMenuProductServiceComponent],
     declarations: [

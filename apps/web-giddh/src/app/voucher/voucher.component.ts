@@ -118,6 +118,8 @@ import { VoucherForm } from '../models/api-models/Voucher';
 import { AdjustmentUtilityService } from '../shared/advance-receipt-adjustment/services/adjustment-utility.service';
 import { GstReconcileActions } from '../actions/gst-reconcile/GstReconcile.actions';
 import { SettingsDiscountService } from '../services/settings.discount.service';
+import { ConfirmationModalComponent } from '../common/confirmation-modal/confirmation-modal.component';
+import { MatDialog } from '@angular/material/dialog';
 
 /** Type of search: customer and item (product/service) search */
 const SEARCH_TYPE = {
@@ -695,7 +697,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         private location: Location,
         private adjustmentUtilityService: AdjustmentUtilityService,
         private gstAction: GstReconcileActions,
-        private settingsDiscountService: SettingsDiscountService
+        private settingsDiscountService: SettingsDiscountService,
+        public dialog: MatDialog
     ) {
         this.advanceReceiptAdjustmentData = new VoucherAdjustments();
         this.advanceReceiptAdjustmentData.adjustments = [];
@@ -755,7 +758,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * @memberof ProformaInvoiceComponent
      */
     public toggleRcmCheckbox(event: any): void {
-        event.preventDefault();
+        event.preventDefault()
         this.rcmConfiguration = this.generalService.getRcmConfiguration(event?.target?.checked, this.commonLocaleData);
     }
 
@@ -3761,13 +3764,13 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         return (item.label.toLocaleLowerCase().indexOf(term) > -1 || item.value.toLocaleLowerCase().indexOf(term) > -1 || item.additional.email.toLocaleLowerCase().indexOf(term) > -1 || item.additional.mobileNo.toLocaleLowerCase().indexOf(term) > -1);
     }
 
-    public closeDiscountPopup() {
-        if (this.discountComponent) {
-            this.discountComponent.forEach(disComp => {
-                disComp.hideDiscountMenu();
-            });
-        }
-    }
+    // public closeDiscountPopup() {
+    //     if (this.discountComponent) {
+    //         this.discountComponent.forEach(disComp => {
+    //             disComp.hideDiscountMenu();
+    //         });
+    //     }
+    // }
 
     public closeTaxControlPopup() {
         if (this.taxControlComponent) {
@@ -4014,7 +4017,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      *
      * @memberof ProformaInvoiceComponent
      */
-     public addBulkStockItems(items: SalesAddBulkStockItems[]) {
+    public addBulkStockItems(items: SalesAddBulkStockItems[]) {
         const startIndex = this.invFormData.entries.length;
         let isBlankItemPresent;
         this.ngZone.runOutsideAngular(() => {
@@ -5333,7 +5336,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * @param selectedDate: Date ( date that is selected by user )
      * @param modelDate: Date ( date that was already selected by user )
      */
-     public onVoucherDateChanged(selectedDate, modelDate) {
+    public onVoucherDateChanged(selectedDate, modelDate) {
         if (this.isMultiCurrencyModule() && this.isMulticurrencyAccount && selectedDate && this.voucherDateBeforeUpdate && dayjs(selectedDate).format(GIDDH_DATE_FORMAT) !== dayjs(this.voucherDateBeforeUpdate).format(GIDDH_DATE_FORMAT)) {
             this.getCurrencyRate(this.companyCurrency, this.customerCurrencyCode, selectedDate);
         }
@@ -5631,6 +5634,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         } else if (transaction.showCodeType === "sac") {
             this.editingHsnSac = transaction.sacNumber;
         }
+
+
 
         this.hsnDropdownShow = !this.hsnDropdownShow;
     }
@@ -6212,7 +6217,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * @param {*} voucherDate  Voucher Date (GIDDH_DATE_FORMAT) of selected invoice
      * @memberof ProformaInvoiceComponent
      */
-     public getAllAdvanceReceipts(customerUniqueName: string, voucherDate: any): void {
+    public getAllAdvanceReceipts(customerUniqueName: string, voucherDate: any): void {
         let date;
         if (typeof voucherDate === 'string') {
             date = voucherDate;
@@ -7254,7 +7259,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * @param {string} action
      * @memberof ProformaInvoiceComponent
      */
-     public handleDateChangeConfirmation(action: string): void {
+    public handleDateChangeConfirmation(action: string): void {
         if (action === this.commonLocaleData?.app_yes) {
             if (this.dateChangeType === "voucher") {
                 this.invFormData.entries.forEach(entry => {
@@ -7284,7 +7289,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * @param {number} entryIdx
      * @memberof ProformaInvoiceComponent
      */
-     public onBlurEntryDate(entryIdx: number, isDatepickerOpen: boolean): void {
+    public onBlurEntryDate(entryIdx: number, isDatepickerOpen: boolean): void {
         if (typeof (this.invFormData.entries[entryIdx].entryDate) === "object") {
             this.invFormData.entries[entryIdx].entryDate = dayjs(this.invFormData.entries[entryIdx].entryDate).format(GIDDH_DATE_FORMAT);
         } else {
@@ -7305,7 +7310,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      *
      * @memberof ProformaInvoiceComponent
      */
-     public updateDueDate(): void {
+    public updateDueDate(): void {
         let invoiceSettings: InvoiceSetting = null;
         this.store.pipe(select(state => state.invoice.settings), take(1)).subscribe(res => invoiceSettings = res);
         if (invoiceSettings) {
@@ -7916,7 +7921,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * @private
      * @memberof ProformaInvoiceComponent
      */
-     private getDiscounts(): void {
+    private getDiscounts(): void {
         this.settingsDiscountService.GetDiscounts().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success" && response?.body?.length > 0) {
                 this.discountsList = response?.body;

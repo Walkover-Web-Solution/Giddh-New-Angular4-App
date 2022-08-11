@@ -1379,6 +1379,14 @@ table.table.table-custom-invoice.basic,
     }
 }
 
+.other-details-section {
+    .other-details-expansion-panel {
+        .invoice-other-details-row {
+            padding: 10px 20px;
+        }
+    }
+}
+
 .customer-invoice-form {
     position: relative;
 }
