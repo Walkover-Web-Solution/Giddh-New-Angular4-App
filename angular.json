@@ -136,7 +136,7 @@
                     },
                     "configurations": {
                         "local": {
-                            "outputPath": "dist/apps/web-giddh-local",
+                            "outputPath": "dist/apps/web-giddh",
                             "customWebpackConfig": {
                                 "path": "apps/web-giddh/webpack.local.partial.js",
                                 "mergeRules": {
@@ -171,7 +171,7 @@
                             ]
                         },
                         "stage": {
-                            "outputPath": "dist/apps/web-giddh-stage",
+                            "outputPath": "dist/apps/web-giddh",
                             "customWebpackConfig": {
                                 "path": "apps/web-giddh/webpack.stage.partial.js",
                                 "mergeRules": {
@@ -199,7 +199,7 @@
                             "buildOptimizer": true
                         },
                         "prod": {
-                            "outputPath": "dist/apps/web-giddh-prod",
+                            "outputPath": "dist/apps/web-giddh",
                             "customWebpackConfig": {
                                 "path": "apps/web-giddh/webpack.prod.partial.js",
                                 "mergeRules": {
@@ -234,7 +234,7 @@
                             ]
                         },
                         "test": {
-                            "outputPath": "dist/apps/web-giddh-test",
+                            "outputPath": "dist/apps/web-giddh",
                             "customWebpackConfig": {
                                 "path": "apps/web-giddh/webpack.test.partial.js",
                                 "mergeRules": {
@@ -390,7 +390,7 @@
                     },
                     "configurations": {
                         "local": {
-                            "outputPath": "dist/apps/web-giddh-local",
+                            "outputPath": "dist/apps/web-giddh",
                             "customWebpackConfig": {
                                 "path": "apps/web-giddh/webpack.electron.partial.js",
                                 "mergeRules": {
@@ -424,7 +424,7 @@
                             ]
                         },
                         "stage": {
-                            "outputPath": "dist/apps/web-giddh-stage",
+                            "outputPath": "dist/apps/web-giddh",
                             "customWebpackConfig": {
                                 "path": "apps/web-giddh/webpack.stage.partial.js",
                                 "mergeRules": {
@@ -451,7 +451,7 @@
                             "buildOptimizer": true
                         },
                         "prod": {
-                            "outputPath": "dist/apps/web-giddh-prod",
+                            "outputPath": "dist/apps/web-giddh",
                             "customWebpackConfig": {
                                 "path": "apps/web-giddh/webpack.electron.prod.partial.js",
                                 "mergeRules": {
@@ -485,7 +485,7 @@
                             ]
                         },
                         "test": {
-                            "outputPath": "dist/apps/web-giddh-test",
+                            "outputPath": "dist/apps/web-giddh",
                             "customWebpackConfig": {
                                 "path": "apps/web-giddh/webpack.test.partial.js",
                                 "mergeRules": {
