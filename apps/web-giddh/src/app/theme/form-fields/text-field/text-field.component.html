@@ -17,7 +17,7 @@
         [attr.min]="min"
         [attr.max]="max"
         [maxLength]="maxlength"
-        *ngIf="!allowDecimalDigitsOnly"
+        *ngIf="!allowDecimalDigitsOnly && !allowDigitsOnly"
         #textField
     />
     <input
@@ -38,6 +38,26 @@
         [attr.max]="max"
         *ngIf="allowDecimalDigitsOnly"
         decimalDigitsDirective
+        #textField
+    />
+    <input
+        matInput
+        [name]="name"
+        type="number"
+        [id]="id"
+        [class]="cssClass"
+        [placeholder]="placeholder"
+        [(ngModel)]="ngModel"
+        (ngModelChange)="handleChange()"
+        (input)="handleInput()"
+        [readonly]="readonly"
+        [ngClass]="{ 'error-box': showError }"
+        [attr.pattern]="pattern"
+        [required]="required"
+        [attr.min]="min"
+        [attr.max]="max"
+        *ngIf="allowDigitsOnly"
+        digitsOnlyDirective
         #textField
     />
 </div>

@@ -1,20 +1,29 @@
-<input
-    type="text"
-    [ngClass]="cssClass"
-    class="select-field-input"
-    [placeholder]="placeholder"
-    matInput
-    [matAutocomplete]="auto"
-    (blur)="resetValueIfOptionNotSelected()"
-    [name]="name"
-    [formControl]="searchFormControl"
-    [readonly]="readonly"
-    (click)="!readonly ? trigger?.openPanel() : trigger?.closePanel()"
-    #trigger="matAutocompleteTrigger"
-/>
-<mat-autocomplete [displayWith]="displayLabel" (optionSelected)="optionSelected($event)" #auto="matAutocomplete">
-    <mat-option *ngFor="let option of fieldFilteredOptions" [value]="option" [matTooltip]="option?.label">
-        {{ option?.label }}
-    </mat-option>
-    <mat-option disabled *ngIf="fieldFilteredOptions?.length === 0"> No results found </mat-option>
-</mat-autocomplete>
+<ng-container appTranslate (commonLocaleData)="commonLocaleData = $event">
+    <input
+        type="text"
+        [ngClass]="cssClass"
+        class="select-field-input"
+        [placeholder]="placeholder"
+        matInput
+        [matAutocomplete]="auto"
+        (blur)="resetValueIfOptionNotSelected()"
+        [name]="name"
+        [formControl]="searchFormControl"
+        [readonly]="readonly"
+        (click)="!readonly ? trigger?.openPanel() : trigger?.closePanel()"
+        autocomplete="disabled"
+        #trigger="matAutocompleteTrigger"
+    />
+    <mat-autocomplete [displayWith]="displayLabel" (optionSelected)="optionSelected($event)" #auto="matAutocomplete">
+        <a href="javascript:;" *ngIf="createNewText" (click)="createNewRecord()">
+            <div class="item">{{ createNewText }}</div>
+            <div class="item">
+                {{ commonLocaleData?.app_alt_c }}
+            </div>
+        </a>
+        <mat-option *ngFor="let option of fieldFilteredOptions" [value]="option" [matTooltip]="option?.label">
+            {{ option?.label }}
+        </mat-option>
+        <mat-option disabled *ngIf="fieldFilteredOptions?.length === 0">No results found</mat-option>
+    </mat-autocomplete>
+</ng-container>

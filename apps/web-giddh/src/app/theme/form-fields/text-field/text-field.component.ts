@@ -26,6 +26,7 @@ export class TextFieldComponent implements OnInit, OnChanges, OnDestroy, Control
     @Input() public min: number = null;
     @Input() public max: number = null;
     @Input() public allowDecimalDigitsOnly: boolean = false;
+    @Input() public allowDigitsOnly: boolean = false;
     @Input() public cssClass: string = "";
     @Input() public cssStyle: string = "";
     /** Taking placeholder as input */
