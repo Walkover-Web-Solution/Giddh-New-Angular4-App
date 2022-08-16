@@ -66,7 +66,7 @@
                     </div>
                 </div>
                 <div>
-                    <perfect-scrollbar
+                    <!-- <perfect-scrollbar
                         #perfectdirective
                         class="scroll-container"
                         fxFlex="auto"
@@ -95,6 +95,17 @@
                                 [isSearchingGroups]="!(grpSrch.value === '')"
                                 [localeData]="localeData"
                             ></groups-account-sidebar>
+                        </div>
+                    </perfect-scrollbar> -->
+                    <perfect-scrollbar
+                        #perfectdirective
+                        class="scroll-container"
+                        fxFlex="auto"
+                        [config]="config"
+                        [scrollIndicators]="true"
+                    >
+                        <div class="wrap-account-sidebar">
+                            <master></master>
                         </div>
                     </perfect-scrollbar>
                 </div>

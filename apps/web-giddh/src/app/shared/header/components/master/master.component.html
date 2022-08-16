@@ -1,0 +1,53 @@
+<div class="grp-col" fxLayout="column" fxLayoutAlign="stretch" fxFlex>
+    <div class="grp-wrapper" fxFlex>
+        <div class="col-wrapper left-account-operation" *ngFor="let i of masterColumns">
+            <ng-container *ngIf="masterColumnsData[i]?.results?.length">
+                <ul class="grp-list users-last-list">
+                    <cdk-virtual-scroll-viewport
+                        class="virtual-group-list overflow-x-hidden"
+                        [itemSize]="37"
+                        [minBufferPx]="400"
+                        [maxBufferPx]="800"
+                        [id]="i"
+                    >
+                        <li
+                            *cdkVirtualFor="
+                                let item of masterColumnsData[i]?.results;
+                                let j = index;
+                                trackBy: trackByIdx
+                            "
+                            class="list-item sidebarTooltip text-overflow-ellipsis"
+                        >
+                            <ng-container *ngIf="item.type === 'GROUP'">
+                                <a
+                                    href="javascript:void(0);"
+                                    id="subGrp_{{ item.name }}"
+                                    nav-vr-item
+                                    class="list-item"
+                                    (click)="onGroupClick(item, i)"
+                                    tooltip="{{ item.synonyms || item.name }}"
+                                    placement="bottom"
+                                >
+                                    {{ item?.name }}
+                                </a>
+                            </ng-container>
+                            <ng-container *ngIf="item.type === 'ACCOUNT'">
+                                <a
+                                    href="javascript:void(0);"
+                                    nav-vr-item
+                                    class="list-item isAcc"
+                                    id="acc_{{ item.name }}"
+                                    tooltip="{{ item.name }}"
+                                    placement="bottom"
+                                    (click)="onAccountClick(item, i)"
+                                >
+                                    {{ item?.name }}
+                                </a>
+                            </ng-container>
+                        </li>
+                    </cdk-virtual-scroll-viewport>
+                </ul>
+            </ng-container>
+        </div>
+    </div>
+</div>

@@ -80,7 +80,8 @@ const firstLevelGroups = [
         accounts: [],
         isActive: false,
         isOpen: false,
-        isVisible: true
+        isVisible: true,
+        type: "GROUP"
     },
     {
         name: 'Non Current Liabilities',
@@ -91,7 +92,8 @@ const firstLevelGroups = [
         accounts: [],
         isActive: false,
         isOpen: false,
-        isVisible: true
+        isVisible: true,
+        type: "GROUP"
     },
     {
         name: 'Current Liabilities',
@@ -102,7 +104,8 @@ const firstLevelGroups = [
         accounts: [],
         isActive: false,
         isOpen: false,
-        isVisible: true
+        isVisible: true,
+        type: "GROUP"
     },
     {
         name: 'Fixed Assets',
@@ -113,7 +116,8 @@ const firstLevelGroups = [
         accounts: [],
         isActive: false,
         isOpen: false,
-        isVisible: true
+        isVisible: true,
+        type: "GROUP"
     },
     {
         name: 'Non Current Assets',
@@ -124,7 +128,8 @@ const firstLevelGroups = [
         accounts: [],
         isActive: false,
         isOpen: false,
-        isVisible: true
+        isVisible: true,
+        type: "GROUP"
     },
     {
         name: 'Current Assets',
@@ -135,7 +140,8 @@ const firstLevelGroups = [
         accounts: [],
         isActive: false,
         isOpen: false,
-        isVisible: true
+        isVisible: true,
+        type: "GROUP"
     },
     {
         name: 'Revenue From Operations',
@@ -146,7 +152,8 @@ const firstLevelGroups = [
         accounts: [],
         isActive: false,
         isOpen: false,
-        isVisible: true
+        isVisible: true,
+        type: "GROUP"
     },
     {
         name: 'Other Income',
@@ -157,7 +164,8 @@ const firstLevelGroups = [
         accounts: [],
         isActive: false,
         isOpen: false,
-        isVisible: true
+        isVisible: true,
+        type: "GROUP"
     },
     {
         name: 'Operating Cost',
@@ -168,7 +176,8 @@ const firstLevelGroups = [
         accounts: [],
         isActive: false,
         isOpen: false,
-        isVisible: true
+        isVisible: true,
+        type: "GROUP"
     },
     {
         name: 'Indirect Expenses',
@@ -179,7 +188,8 @@ const firstLevelGroups = [
         accounts: [],
         isActive: false,
         isOpen: false,
-        isVisible: true
+        isVisible: true,
+        type: "GROUP"
     }
 ];
 

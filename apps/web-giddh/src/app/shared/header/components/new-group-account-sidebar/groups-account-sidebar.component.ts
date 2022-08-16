@@ -378,7 +378,6 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges, OnDestr
         this.store.dispatch(this.groupWithAccountsAction.hideAddNewForm());
         this.store.dispatch(this.groupWithAccountsAction.getGroupDetails(item.uniqueName));
         this.store.dispatch(this.accountsAction.resetActiveAccount());
-        this.getMasters(item.uniqueName, currentIndex);
         this.mc.selectedType = 'grp';
     }
 
@@ -559,13 +558,5 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges, OnDestr
         this.breadcrumbPathChanged.emit({ breadcrumbPath: this.breadcrumbPath, breadcrumbUniqueNamePath: this.breadcrumbUniqueNamePath });
         this.ScrollToRight.emit(true);
         this.ScrollToElement = true;
-    }
-
-    private getMasters(groupUniqueName: string, currentIndex: number): void {
-        this.groupService.getMasters(groupUniqueName).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
-            if(response?.status === "success") {
-                //this.mc.columns[currentIndex + 1] = response?.body?.results;
-            }
-        });
     }
 }
