@@ -425,11 +425,11 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                     /** Creating voucher pdf start */
                     if (this.selectedItem) {
                         this.selectedItem.blob = this._generalService.base64ToBlob(result.body.data, 'application/pdf', 512);
+                        const file = new Blob([this.selectedItem.blob], { type: 'application/pdf' });
+                        this.attachedDocumentBlob = file;
+                        URL.revokeObjectURL(this.pdfFileURL);
+                        this.pdfFileURL = URL.createObjectURL(file);
                     }
-                    const file = new Blob([this.selectedItem.blob], { type: 'application/pdf' });
-                    this.attachedDocumentBlob = file;
-                    URL.revokeObjectURL(this.pdfFileURL);
-                    this.pdfFileURL = URL.createObjectURL(file);
                     this.sanitizedPdfFileUrl = this.domSanitizer.bypassSecurityTrustResourceUrl(this.pdfFileURL);
                     this.isVoucherDownloadError = false;
                     this.pdfPreviewLoaded = true;
@@ -452,11 +452,13 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                             this.attachedDocumentType = { name: result.body.attachments[0].name, type: 'pdf', value: fileExtention };
                             this.attachedAttachmentBlob = this._generalService.base64ToBlob(result.body.attachments[0].encodedData, 'application/pdf', 512);
                             setTimeout(() => {
-                                this.selectedItem.blob = this.attachedAttachmentBlob;
-                                const file = new Blob([this.attachedAttachmentBlob], { type: 'application/pdf' });
-                                URL.revokeObjectURL(this.pdfFileURL);
-                                this.pdfFileURL = URL.createObjectURL(file);
-                                this.attachedPdfFileUrl = this.domSanitizer.bypassSecurityTrustResourceUrl(this.pdfFileURL);
+                                if (this.selectedItem) {
+                                    this.selectedItem.blob = this.attachedAttachmentBlob;
+                                    const file = new Blob([this.attachedAttachmentBlob], { type: 'application/pdf' });
+                                    URL.revokeObjectURL(this.pdfFileURL);
+                                    this.pdfFileURL = URL.createObjectURL(file);
+                                    this.attachedPdfFileUrl = this.domSanitizer.bypassSecurityTrustResourceUrl(this.pdfFileURL);
+                                }
                                 this.detectChanges();
                             }, 250);
                             this.isVoucherDownloadError = false;
@@ -496,11 +498,13 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                     this.sanitizedPdfFileUrl = null;
                     this._receiptService.DownloadVoucher(model, accountUniqueName, false).pipe(takeUntil(this.destroyed$)).subscribe(result => {
                         if (result) {
-                            this.selectedItem.blob = result;
-                            const file = new Blob([result], { type: 'application/pdf' });
-                            URL.revokeObjectURL(this.pdfFileURL);
-                            this.pdfFileURL = URL.createObjectURL(file);
-                            this.sanitizedPdfFileUrl = this.domSanitizer.bypassSecurityTrustResourceUrl(this.pdfFileURL);
+                            if (this.selectedItem) {
+                                this.selectedItem.blob = result;
+                                const file = new Blob([result], { type: 'application/pdf' });
+                                URL.revokeObjectURL(this.pdfFileURL);
+                                this.pdfFileURL = URL.createObjectURL(file);
+                                this.sanitizedPdfFileUrl = this.domSanitizer.bypassSecurityTrustResourceUrl(this.pdfFileURL);
+                            }
                             this.isVoucherDownloadError = false;
                         } else {
                             this.isVoucherDownloadError = true;
@@ -538,11 +542,13 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                                 this.attachedDocumentType = { name: data.body.name, type: 'pdf', value: fileExtention };
                                 this.attachedAttachmentBlob = this._generalService.base64ToBlob(data.body.uploadedFile, 'application/pdf', 512);
                                 setTimeout(() => {
-                                    this.selectedItem.blob = this.attachedAttachmentBlob;
-                                    const file = new Blob([this.attachedAttachmentBlob], { type: 'application/pdf' });
-                                    URL.revokeObjectURL(this.pdfFileURL);
-                                    this.pdfFileURL = URL.createObjectURL(file);
-                                    this.attachedPdfFileUrl = this.domSanitizer.bypassSecurityTrustResourceUrl(this.pdfFileURL);
+                                    if (this.selectedItem) {
+                                        this.selectedItem.blob = this.attachedAttachmentBlob;
+                                        const file = new Blob([this.attachedAttachmentBlob], { type: 'application/pdf' });
+                                        URL.revokeObjectURL(this.pdfFileURL);
+                                        this.pdfFileURL = URL.createObjectURL(file);
+                                        this.attachedPdfFileUrl = this.domSanitizer.bypassSecurityTrustResourceUrl(this.pdfFileURL);
+                                    }
                                     this.detectChanges();
                                 }, 250);
                                 this.isVoucherDownloadError = false;
@@ -600,11 +606,13 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                     this._proformaService.download(request, this.selectedItem.voucherType).pipe(takeUntil(this.destroyed$)).subscribe(result => {
                         if (result && result.status === 'success') {
                             let blob: Blob = this._generalService.base64ToBlob(result.body, 'application/pdf', 512);
+                            if (this.selectedItem) {
                             this.selectedItem.blob = blob;
                             const file = new Blob([blob], { type: 'application/pdf' });
                             URL.revokeObjectURL(this.pdfFileURL);
                             this.pdfFileURL = URL.createObjectURL(file);
                             this.sanitizedPdfFileUrl = this.domSanitizer.bypassSecurityTrustResourceUrl(this.pdfFileURL);
+                            }
                             this.isVoucherDownloadError = false;
                         } else {
                             this._toasty.errorToast(result.message, result.code);
@@ -637,7 +645,9 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                 if (this.selectedItem.hasAttachment) {
                     this.downloadVoucherModal.show();
                 } else {
-                    return saveAs(this.selectedItem.blob, `${this.selectedItem.voucherNumber}.pdf`);
+                    if (this.selectedItem) {
+                        return saveAs(this.selectedItem.blob, `${this.selectedItem.voucherNumber}.pdf`);
+                    }
                 }
             } else {
                 this.downloadCreditDebitNotePdf();
