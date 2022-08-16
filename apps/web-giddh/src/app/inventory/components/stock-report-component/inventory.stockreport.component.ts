@@ -503,9 +503,6 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
                     this.entities$ = observableOf(null);
                 }
                 this.branches = entities;
-            } else {
-                let branchFilterRequest = new BranchFilterRequest();
-                this.store.dispatch(this.settingsBranchActions.GetALLBranches(branchFilterRequest));
             }
         })), takeUntil(this.destroyed$)).subscribe();
     }

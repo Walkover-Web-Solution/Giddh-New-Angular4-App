@@ -59,7 +59,6 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
     };
     public dataSyncOption = [];
     public currentBranch: string = null;
-    public currentBranchNameAlias: string = null;
     public companies$: Observable<CompanyResponse[]>;
     public branches$: Observable<CompanyResponse[]>;
     public selectedCompaniesUniquename: string[] = [];
@@ -132,7 +131,6 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
             if (profile && !isEmpty(profile)) {
                 let companyInfo = cloneDeep(profile);
                 this.currentBranch = companyInfo.name;
-                this.currentBranchNameAlias = companyInfo.nameAlias;
             } else {
                 this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
             }
