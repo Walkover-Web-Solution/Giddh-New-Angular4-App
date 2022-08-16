@@ -15,7 +15,7 @@ import { CommonActions } from '../../actions/common.actions';
 import { CompanyCountry, CompanyCreateRequest, CompanyResponse, StatesRequest, Organization, StateDetailsRequest } from '../../models/api-models/Company';
 import { UserDetails } from '../../models/api-models/loginModels';
 import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
-import { ActivatedRoute, NavigationEnd, NavigationError, NavigationStart, RouteConfigLoadEnd, Router } from '@angular/router';
+import { NavigationEnd, NavigationError, NavigationStart, RouteConfigLoadEnd, Router } from '@angular/router';
 import { ElementViewContainerRef } from '../helpers/directives/elementViewChild/element.viewchild.directive';
 import { GeneralActions } from '../../actions/general/general.actions';
 import { createSelector } from 'reselect';
@@ -40,7 +40,6 @@ import { SettingsProfileService } from '../../services/settings.profile.service'
 import { CompanyService } from '../../services/companyService.service';
 import { SettingsBranchActions } from '../../actions/settings/branch/settings.branch.action';
 import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
-import { AccountsAction } from '../../actions/accounts.actions';
 import { LedgerActions } from '../../actions/ledger/ledger.actions';
 import { LocaleService } from '../../services/locale.service';
 import { SettingsFinancialYearActions } from '../../actions/settings/financial-year/financial-year.action';
@@ -251,7 +250,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         private router: Router,
         private componentFactoryResolver: ComponentFactoryResolver,
         private zone: NgZone,
-        private route: ActivatedRoute,
         private _generalActions: GeneralActions,
         private authService: AuthenticationService,
         private _dbService: DbService,
@@ -264,7 +262,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         private settingsProfileAction: SettingsProfileActions,
         private companyService: CompanyService,
         private settingsBranchAction: SettingsBranchActions,
-        private accountsAction: AccountsAction,
         private ledgerAction: LedgerActions,
         public location: Location,
         private localeService: LocaleService,
