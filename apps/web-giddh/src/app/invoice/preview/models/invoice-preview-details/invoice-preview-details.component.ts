@@ -607,11 +607,11 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
                         if (result && result.status === 'success') {
                             let blob: Blob = this._generalService.base64ToBlob(result.body, 'application/pdf', 512);
                             if (this.selectedItem) {
-                            this.selectedItem.blob = blob;
-                            const file = new Blob([blob], { type: 'application/pdf' });
-                            URL.revokeObjectURL(this.pdfFileURL);
-                            this.pdfFileURL = URL.createObjectURL(file);
-                            this.sanitizedPdfFileUrl = this.domSanitizer.bypassSecurityTrustResourceUrl(this.pdfFileURL);
+                                this.selectedItem.blob = blob;
+                                const file = new Blob([blob], { type: 'application/pdf' });
+                                URL.revokeObjectURL(this.pdfFileURL);
+                                this.pdfFileURL = URL.createObjectURL(file);
+                                this.sanitizedPdfFileUrl = this.domSanitizer.bypassSecurityTrustResourceUrl(this.pdfFileURL);
                             }
                             this.isVoucherDownloadError = false;
                         } else {
