@@ -839,9 +839,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
      */
     public downloadFile() {
         let blob = this.generalService.base64ToBlob(this.base64Data, 'application/pdf', 512);
-        if (blob) {
             return saveAs(blob, `${this.commonLocaleData?.app_invoice}-${this.selectedInvoice.account?.uniqueName}.pdf`);
-        }
     }
 
     public sortButtonClicked(type: 'asc' | 'desc', columnName: string) {
@@ -1335,10 +1333,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             if (res) {
                 if (res.status === 'success') {
                     let blob = this.generalService.base64ToBlob(res.body, 'application/xls', 512);
-                    if (blob) {
                         this.selectedInvoicesList = [];
                         return saveAs(blob, `${dataTosend.accountUniqueName}${this.localeData?.all_invoices}.xls`);
-                    }
                 } else {
                     this._toaster.errorToast(res.message);
                 }

@@ -423,7 +423,9 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
             this.commonService.downloadFile(getRequest, "ALL").pipe(takeUntil(this.destroyed$)).subscribe(result => {
                 if (result?.body) {
                     /** Creating voucher pdf start */
-                    this.selectedItem.blob = this._generalService.base64ToBlob(result.body.data, 'application/pdf', 512);
+                    if (this.selectedItem) {
+                        this.selectedItem.blob = this._generalService.base64ToBlob(result.body.data, 'application/pdf', 512);
+                    }
                     const file = new Blob([this.selectedItem.blob], { type: 'application/pdf' });
                     this.attachedDocumentBlob = file;
                     URL.revokeObjectURL(this.pdfFileURL);
