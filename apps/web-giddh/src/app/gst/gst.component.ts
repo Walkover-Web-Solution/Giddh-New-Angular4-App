@@ -123,14 +123,14 @@ export class GstComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         document.querySelector('body').classList.add('gst-sidebar-open');
         this.breakpointObserver
-        .observe(['(max-width: 767px)'])
-        .pipe(takeUntil(this.destroyed$))
-        .subscribe((state: BreakpointState) => {
-            this.isMobileScreen = state.matches;
-            if (!this.isMobileScreen) {
-                this.asideGstSidebarMenuState = 'in';
-            }
-        });
+            .observe(['(max-width: 767px)'])
+            .pipe(takeUntil(this.destroyed$))
+            .subscribe((state: BreakpointState) => {
+                this.isMobileScreen = state.matches;
+                if (!this.isMobileScreen) {
+                    this.asideGstSidebarMenuState = 'in';
+                }
+            });
         this.loadTaxDetails();
 
         this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch;
@@ -191,9 +191,12 @@ export class GstComponent implements OnInit, OnDestroy {
      * @memberof GstComponent
      */
     public ngOnDestroy(): void {
+        this.store.dispatch(this.gstAction.resetGstr1OverViewResponse());
+        this.store.dispatch(this.gstAction.resetGstr2OverViewResponse());
         this.destroyed$.next(true);
         this.destroyed$.complete();
         document.querySelector('body').classList.remove('gst-sidebar-open');
+        this.asideGstSidebarMenuState = 'out';
     }
 
     /**
@@ -326,7 +329,7 @@ export class GstComponent implements OnInit, OnDestroy {
         this.store.dispatch(this.gstAction.SetActiveCompanyGstin(this.activeCompanyGstNumber));
         this.loadTaxReport();
     }
-    
+
     /**
      * this is handle navigation of menu item
      *
@@ -334,7 +337,7 @@ export class GstComponent implements OnInit, OnDestroy {
      * @memberof GstComponent
      */
     public handleNavigation(type: string): void {
-        switch(type) {
+        switch (type) {
             case GstReport.Gstr1: case GstReport.Gstr2:
                 this.navigateToOverview(type);
                 break;

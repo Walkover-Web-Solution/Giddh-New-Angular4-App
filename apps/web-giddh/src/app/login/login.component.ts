@@ -3,7 +3,7 @@ import { LoginActions } from "../actions/login.action";
 import { AppState } from "../store";
 import { Component, Inject, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { ModalDirective } from "ngx-bootstrap/modal";
+import { ModalDirective, ModalOptions } from "ngx-bootstrap/modal";
 import { Configuration } from "../app.constant";
 import { Store, select } from "@ngrx/store";
 import { Observable, ReplaySubject } from "rxjs";
@@ -22,7 +22,6 @@ import {
 import { IOption } from "../theme/ng-virtual-select/sh-options.interface";
 import { DOCUMENT } from "@angular/common";
 import { userLoginStateEnum } from "../models/user-login-state";
-import { GeneralService } from "../services/general.service";
 import { contriesWithCodes } from "../shared/helpers/countryWithCodes";
 
 @Component({
@@ -35,7 +34,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     @ViewChild("emailVerifyModal", { static: true }) public emailVerifyModal: ModalDirective;
     public isLoginWithEmailSubmited$: Observable<boolean>;
     @ViewChild("mobileVerifyModal", { static: true }) public mobileVerifyModal: ModalDirective;
-    @ViewChild("twoWayAuthModal", { static: true }) public twoWayAuthModal: ModalDirective;
+    @ViewChild("twoWayAuthModal", { static: false }) public twoWayAuthModal: ModalDirective;
 
     public isSubmited: boolean = false;
     public mobileVerifyForm: FormGroup;
@@ -74,18 +73,13 @@ export class LoginComponent implements OnInit, OnDestroy {
     /** To Observe is google login inprocess */
     public isLoginWithGoogleInProcess$: Observable<boolean>;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    /** Modal config */
-    public modalConfig: {
-        backdrop: 'static'
-    };
 
     // tslint:disable-next-line:no-empty
     constructor(private _fb: FormBuilder,
         private store: Store<AppState>,
         private loginAction: LoginActions,
         private authService: AuthService,
-        @Inject(DOCUMENT) private document: Document,
-        private _generalService: GeneralService
+        @Inject(DOCUMENT) private document: Document
     ) {
         this.urlPath = isElectron ? "" : AppUrl + APP_FOLDER;
         this.isLoginWithEmailInProcess$ = this.store.pipe(select(state => {
@@ -128,7 +122,7 @@ export class LoginComponent implements OnInit, OnDestroy {
             return state.login.isLoginWithGoogleInProcess;
         }), takeUntil(this.destroyed$));
         contriesWithCodes.map(c => {
-            this.countryCodeList.push({ value: c.countryName, label: c.value });
+            this.countryCodeList.push({ value: c?.countryName, label: c?.value });
         });
         this.userLoginState$ = this.store.pipe(select(p => p?.session?.userLoginState), takeUntil(this.destroyed$));
         this.userDetails$ = this.store.pipe(select(p => p?.session?.user), takeUntil(this.destroyed$));
@@ -265,7 +259,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         let data = new VerifyMobileModel();
         data.countryCode = Number(user?.countryCode);
         data.mobileNumber = user?.contactNumber;
-        data.oneTimePassword = this.twoWayOthForm.value.otp;
+        data.oneTimePassword = this.twoWayOthForm?.value?.otp;
         this.store.dispatch(this.loginAction.VerifyTwoWayAuthRequest(data));
     }
 
@@ -341,8 +335,8 @@ export class LoginComponent implements OnInit, OnDestroy {
      * setCountryCode
      */
     public setCountryCode(event: IOption) {
-        if (event.value) {
-            let country = this.countryCodeList?.filter((obj) => obj.value === event.value);
+        if (event?.value) {
+            let country = this.countryCodeList?.filter((obj) => obj?.value === event?.value);
             this.selectedCountry = country[0].label;
         }
     }
@@ -357,7 +351,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
 
     public loginWithPasswd(model: FormGroup) {
-        let ObjToSend = model.value;
+        let ObjToSend = model?.value;
         if (ObjToSend) {
             this.store.dispatch(this.loginAction.LoginWithPasswdRequest(ObjToSend));
         }
@@ -376,7 +370,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
 
     public resetPassword(form) {
-        let ObjToSend = form.value;
+        let ObjToSend = form?.value;
         ObjToSend.uniqueKey = _.cloneDeep(this.userUniqueKey);
         this.store.dispatch(this.loginAction.resetPasswordRequest(ObjToSend));
     }

@@ -19,7 +19,7 @@ interface SequenceConfig {
     // tslint:disable-next-line:component-selector
     selector: 'overview-summary',
     templateUrl: './summary.component.html',
-    styleUrls: ['summary.component.css'],
+    styleUrls: ['summary.component.scss'],
 })
 export class OverviewSummaryComponent implements OnInit, OnDestroy {
     @Input() public currentPeriod: any = null;
@@ -52,28 +52,28 @@ export class OverviewSummaryComponent implements OnInit, OnDestroy {
     constructor(private store: Store<AppState>, private route: Router, private gstAction: GstReconcileActions) {
         this.gstr1OverviewData$ = this.store.pipe(select(p => p.gstR.gstr1OverViewData), takeUntil(this.destroyed$));
         this.gstr2OverviewData$ = this.store.pipe(select(p => p.gstR.gstr2OverViewData), takeUntil(this.destroyed$));
-		this.companyGst$ = this.store.pipe(select(p => p.gstR.activeCompanyGst), takeUntil(this.destroyed$));
-		this.gstFoundOnGiddh$ = this.store.pipe(select(p => p.gstReconcile.gstFoundOnGiddh), takeUntil(this.destroyed$));
-		this.gstNotFoundOnGiddhData$ = this.store.pipe(select(p => p.gstReconcile.gstReconcileData.notFoundOnGiddh), takeUntil(this.destroyed$));
-		this.gstNotFoundOnPortalData$ = this.store.pipe(select(p => p.gstReconcile.gstReconcileData.notFoundOnPortal), takeUntil(this.destroyed$));
-		this.gstMatchedData$ = this.store.pipe(select(p => p.gstReconcile.gstReconcileData.matched), takeUntil(this.destroyed$));
-		this.gstPartiallyMatchedData$ = this.store.pipe(select(p => p.gstReconcile.gstReconcileData.partiallyMatched), takeUntil(this.destroyed$));
-	}
+        this.companyGst$ = this.store.pipe(select(p => p.gstR.activeCompanyGst), takeUntil(this.destroyed$));
+        this.gstFoundOnGiddh$ = this.store.pipe(select(p => p.gstReconcile.gstFoundOnGiddh), takeUntil(this.destroyed$));
+        this.gstNotFoundOnGiddhData$ = this.store.pipe(select(p => p.gstReconcile.gstReconcileData.notFoundOnGiddh), takeUntil(this.destroyed$));
+        this.gstNotFoundOnPortalData$ = this.store.pipe(select(p => p.gstReconcile.gstReconcileData.notFoundOnPortal), takeUntil(this.destroyed$));
+        this.gstMatchedData$ = this.store.pipe(select(p => p.gstReconcile.gstReconcileData.matched), takeUntil(this.destroyed$));
+        this.gstPartiallyMatchedData$ = this.store.pipe(select(p => p.gstReconcile.gstReconcileData.partiallyMatched), takeUntil(this.destroyed$));
+    }
 
-	public ngOnInit() {
-		this.imgPath = isElectron ? 'assets/images/gst/' : AppUrl + APP_FOLDER + 'assets/images/gst/';
+    public ngOnInit() {
+        this.imgPath = isElectron ? 'assets/images/gst/' : AppUrl + APP_FOLDER + 'assets/images/gst/';
 
-		this.gstr1OverviewData$.subscribe(data => {
-			if (this.selectedGst === GstReport.Gstr1) {
-				this.gstrOverviewData = data;
-			}
-		});
+        this.gstr1OverviewData$.subscribe(data => {
+            if (this.selectedGst === GstReport.Gstr1) {
+                this.gstrOverviewData = data;
+            }
+        });
 
-		this.gstr2OverviewData$.subscribe(data => {
-			if (this.selectedGst === GstReport.Gstr2) {
-				this.gstrOverviewData = data;
-			}
-		});
+        this.gstr2OverviewData$.subscribe(data => {
+            if (this.selectedGst === GstReport.Gstr2) {
+                this.gstrOverviewData = data;
+            }
+        });
 
         let request: GstOverViewRequest = new GstOverViewRequest();
         request.from = this.currentPeriod.from;
@@ -85,9 +85,9 @@ export class OverviewSummaryComponent implements OnInit, OnDestroy {
                 this.store.dispatch(this.gstAction.GetOverView(GstReport.Gstr1, request));
             }
         });
-	}
+    }
 
-	/**
+    /**
      * View Transactions
      *
      * @param {GstOverViewSummary} obj
@@ -95,8 +95,8 @@ export class OverviewSummaryComponent implements OnInit, OnDestroy {
      * @memberof OverviewSummaryComponent
      */
     public viewTransactions(obj: GstOverViewSummary) {
-		if (obj.gstReturnType === 'CreditNote/DebitNote/RefundVouchers') {
-			return;
+        if (obj.gstReturnType === 'CreditNote/DebitNote/RefundVouchers') {
+            return;
         }
         if (obj.gstReturnType === 'hsnsac') {
             this.hsnSacSelected.emit();
@@ -116,9 +116,10 @@ export class OverviewSummaryComponent implements OnInit, OnDestroy {
     }
 
     public ngOnDestroy() {
+        this.store.dispatch(this.gstAction.resetGstr1OverViewResponse());
+        this.store.dispatch(this.gstAction.resetGstr2OverViewResponse());
         this.destroyed$.next(true);
         this.destroyed$.complete();
-        this.store.dispatch(this.gstAction.resetGstr1OverViewResponse());
     }
 
     public mapResponseData(data: GstOverViewSummary[], sequencingList: SequenceConfig[]): GstOverViewSummary[] {

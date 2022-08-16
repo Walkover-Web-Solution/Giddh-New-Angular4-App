@@ -373,7 +373,7 @@
                                             </div>
                                         </div>
 
-                                        <div
+                                        <!-- <div
                                             class="col-sm-4"
                                             *ngIf="gst.get('gstNumber').value && (isGstValid$ | async)"
                                         >
@@ -386,7 +386,7 @@
                                                     </label></label
                                                 >
                                             </div>
-                                        </div>
+                                        </div> -->
                                     </ng-container>
                                 </div>
 
@@ -677,7 +677,7 @@
                 </div>
             </tab>
 
-            <tab *ngIf="isDebtorCreditor" [heading]="localeData?.tabs?.custom">
+            <tab [heading]="localeData?.tabs?.custom">
                 <giddh-page-loader [cssClass]="'mt-0 mb-0'" *ngIf="isCustomFieldLoading"></giddh-page-loader>
                 <ng-container formArrayName="customFields">
                     <ng-container
@@ -710,8 +710,9 @@
                                             formControlName="value"
                                             class="form-control custom-field"
                                             [maxLength]="item.dataRange?.max"
-                                            [attr.pattern]="item.regex"
+                                            [pattern]="item.regex"
                                             [required]="item.isMandatory"
+                                            [placeholder]="item.fieldInfo ? item.fieldInfo : ''"
                                         />
                                         <input
                                             *ngIf="item.fieldType?.type === availableFieldTypes.Number"
@@ -724,6 +725,7 @@
                                             decimalDigitsDirective
                                             [attr.pattern]="item.regex"
                                             [required]="item.isMandatory"
+                                            [placeholder]="item.fieldInfo ? item.fieldInfo : ''"
                                         />
                                         <div
                                             *ngIf="item.fieldType?.type === availableFieldTypes.Boolean"
@@ -766,8 +768,9 @@
                 <a
                     href="javascript:;"
                     class="btn-link"
-                    (click)="goToCustomFields.emit(true)"
+                    [routerLink]="'/pages/custom-fields/list'"
                     *ngIf="!companyCustomFields?.length"
+                    (click)="closeMaster()"
                     >{{ commonLocaleData?.app_create_custom_field }}</a
                 >
             </tab>

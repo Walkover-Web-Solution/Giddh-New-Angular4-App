@@ -377,7 +377,9 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                         if (record.mergedRecordUniqueName) {
                             allItems = allItems.filter(item => item?.uniqueName !== record.mergedRecordUniqueName);
                         }
-                        allItems[voucherIndex].voucherNumber = record.invoiceNumber;
+                        if (allItems[voucherIndex]) {
+                            allItems[voucherIndex].voucherNumber = record.invoiceNumber;
+                        }
                         allItems = uniqBy([allItems[voucherIndex], ...allItems], 'uniqueName');
                         this.itemsListForDetails = allItems;
                         this.toggleBodyClass();
@@ -474,9 +476,9 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             takeUntil(this.destroyed$)
         ).subscribe(s => {
             if (s !== null && s !== undefined) {
-            this.showAdvanceSearchIcon = true;
-            this.invoiceSearchRequest.q = s;
-            this.getVoucher(this.isUniversalDateApplicable);
+                this.showAdvanceSearchIcon = true;
+                this.invoiceSearchRequest.q = s;
+                this.getVoucher(this.isUniversalDateApplicable);
             }
         });
 
@@ -908,8 +910,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         let o = cloneDeep(this.invoiceSearchRequest);
         let advanceSearch = cloneDeep(this.advanceSearchFilter);
 
-        if (o.voucherNumber) {
-            model.voucherNumber = o.voucherNumber;
+        if (o?.voucherNumber && model) {
+            model.voucherNumber = o?.voucherNumber;
         }
         if (o.page) {
             advanceSearch.page = o.page;
@@ -948,8 +950,9 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         }
         model.sort = o.sort;
         model.sortBy = o.sortBy;
-        if (o.invoiceNumber) {
-            model.voucherNumber = o.invoiceNumber;
+
+        if (o?.invoiceNumber && model) {
+            model.voucherNumber = o?.invoiceNumber;
         }
 
         if (o.q) {
@@ -1283,7 +1286,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         }
 
         setTimeout(() => {
-            if(!document.getElementsByClassName("sidebar-collapse")?.length) {
+            if (!document.getElementsByClassName("sidebar-collapse")?.length) {
                 this.store.dispatch(this.generalActions.openSideMenu(true));
             }
         }, 200);
@@ -1467,7 +1470,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                 item.voucherDate = (item.voucherDate.toString().includes('/')) ? item.voucherDate.trim().replace(/\//g, '-') : item.voucherDate;
                 item.voucherNumber = item.voucherNumber === '-' ? '' : item.voucherNumber;
 
-                if(this.voucherApiVersion === 2) {
+                if (this.voucherApiVersion === 2) {
                     item.amount = item.adjustmentAmount;
                     item.unadjustedAmount = item.balanceDue;
                     delete item.adjustmentAmount;
@@ -1734,7 +1737,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     public createBulkEInvoice(): void {
         let requestObject;
 
-        if(this.voucherApiVersion === 2) {
+        if (this.voucherApiVersion === 2) {
             requestObject = {
                 model: {
                     voucherUniqueNames: this.selectedInvoicesList.map(item => item.uniqueName),
@@ -2020,7 +2023,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
      */
     public createEWayBill(): void {
         this.store.pipe(select(state => state.receipt.voucher), take(1)).subscribe((voucher: any) => {
-            if(!voucher?.account?.billingDetails?.pincode) {
+            if (!voucher?.account?.billingDetails?.pincode) {
                 this._toaster.errorToast(this.localeData?.pincode_required);
             } else {
                 this._router.navigate(['pages', 'invoice', 'ewaybill', 'create']);

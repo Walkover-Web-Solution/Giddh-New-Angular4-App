@@ -224,14 +224,14 @@
     #emailVerifyModal="bs-modal"
     role="dialog"
     aria-hidden="true"
-    [config]="modalConfig"
+    [config]="{ backdrop: 'static' }"
 >
     <div class="modal-dialog modal-md">
         <div class="modal-content">
             <div class="border-radius-0">
                 <div class="modal-header">
                     <h3>Sign Up with Giddh</h3>
-                    <span aria-hidden="true" class="close" data-dismiss="modal" (click)="hideEmailModal()">×</span>
+                    <button aria-hidden="true" class="close" data-dismiss="modal" (click)="hideEmailModal()">×</button>
                 </div>
                 <div class="modal-body clearfix">
                     <form class="col-12" name="verifyEmailForm" novalidate [formGroup]="emailVerifyForm">
@@ -296,14 +296,14 @@
     #mobileVerifyModal="bs-modal"
     role="dialog"
     aria-hidden="true"
-    [config]="modalConfig"
+    [config]="{ backdrop: 'static' }"
 >
     <div class="modal-dialog modal-md">
         <div class="modal-content">
             <div class="border-radius-0">
                 <div class="modal-header">
                     <h3>Sign Up with Giddh</h3>
-                    <span aria-hidden="true" class="close" data-dismiss="modal" (click)="hideMobileModal()">×</span>
+                    <button aria-hidden="true" class="close" data-dismiss="modal" (click)="hideMobileModal()">×</button>
                 </div>
                 <div class="modal-body clearfix">
                     <form
@@ -378,7 +378,7 @@
     #twoWayAuthModal="bs-modal"
     role="dialog"
     aria-hidden="true"
-    [config]="modalConfig"
+    [config]="{ backdrop: 'static' }"
     (onHidden)="onHiddenAuthModal($event)"
 >
     <div class="modal-dialog modal-md">
@@ -386,9 +386,9 @@
             <div class="border-radius-0">
                 <div class="modal-header">
                     <h3>Sign Up with Giddh</h3>
-                    <span aria-hidden="true" class="close" data-dismiss="modal" (click)="resetTwoWayAuthModal()"
-                        >×</span
-                    >
+                    <button aria-hidden="true" class="close" data-dismiss="modal" (click)="resetTwoWayAuthModal()">
+                        ×
+                    </button>
                 </div>
                 <div class="modal-body clearfix">
                     <form class="col-12" id="authModal" name="verifyEmailForm" novalidate [formGroup]="twoWayOthForm">

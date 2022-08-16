@@ -1,0 +1,234 @@
+<div class="container-fluid inventory-about-page static-tabs-on-page">
+    <div class="about-group pd-t15">
+        <div class="row">
+            <div class="col-9 col-md-6">
+                <div class="group-detail d-flex w-100 align-items-center">
+                    <div class="group-thumbnail mr-r15">
+                        <img src="{{ imgPath }}Login-Page-Image.png" alt="group-icon" />
+                    </div>
+                    <div class="group-name">
+                        <h4>Group Dummy Name Furniture</h4>
+                        <p class="text-gray font-14">(Group Unique Name)</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-3 col-md-6 group-detail-right-btn">
+                <div class="more-add-button d-flex align-items-center justify-content-end w-100">
+                    <div class="btn-group" dropdown>
+                        <button
+                            id="more-btn-inventory"
+                            *ngIf="!isMobileScreen"
+                            dropdownToggle
+                            type="button"
+                            class="btn btn-primary dropdown-toggle bdr-radius-50"
+                            aria-controls="more-inventory-dropdown"
+                        >
+                            More <span class="caret"></span>
+                        </button>
+                        <i class="icon-dots-three-vertical pd" *ngIf="isMobileScreen" dropdownToggle></i>
+                        <ul
+                            id="more-inventory-dropdown"
+                            *dropdownMenu
+                            class="dropdown-menu"
+                            role="menu"
+                            aria-labelledby="more-btn-inventory"
+                        >
+                            <li role="menuitem">
+                                <a
+                                    class="dropdown-item"
+                                    href="javascript:void(0);"
+                                    [routerLink]="['/pages/new-inventory/adjust-inventory']"
+                                    >Adjust Group</a
+                                >
+                            </li>
+                            <li role="menuitem"><a class="dropdown-item" href="javascript:void(0);">Archive</a></li>
+                            <li role="menuitem"><a class="dropdown-item" href="javascript:void(0);">Delete</a></li>
+                            <li class="divider dropdown-divider" *ngIf="isMobileScreen"></li>
+                            <li role="menuitem">
+                                <a class="dropdown-item text-primary" *ngIf="isMobileScreen" href="javascript:void(0);"
+                                    >+ Add Inventory</a
+                                >
+                            </li>
+                        </ul>
+                    </div>
+                    <button
+                        class="btn btn-sky-blue bdr-radius-50"
+                        *ngIf="!isMobileScreen"
+                        [routerLink]="['/pages/new-inventory/create-new-inventory']"
+                    >
+                        + Add Inventory
+                    </button>
+                    <i class="icon-undo pd cursor-pointer" tooltip="Back" [routerLink]="['/pages/new-inventory']"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <tabset class="custom-tabs about-group-tab">
+        <tab heading="About Group">
+            <div class="row">
+                <div class="col-md-8 col-lg-8 col-xl-6 col-12">
+                    <p class="text-gray font-14 mr-b15">Lorem Ipsum dummy text will come here about create stock.</p>
+                    <form>
+                        <div class="row mr-b15">
+                            <div class="col-sm-6">
+                                <label>Group Name <span class="red-text">*</span></label>
+                            </div>
+                            <div class="col-sm-6">
+                                <input
+                                    id="group-name"
+                                    class="form-control"
+                                    type="text"
+                                    placeholder="Enter Group Name"
+                                />
+                            </div>
+                        </div>
+                        <div class="row mr-b15">
+                            <div class="col-sm-6">
+                                <label>Unique Name <span class="red-text">*</span></label>
+                            </div>
+                            <div class="col-sm-6">
+                                <input id="unique-name" class="form-control" type="text" placeholder="Unique Name" />
+                            </div>
+                        </div>
+                        <div class="row mr-b15">
+                            <div class="col-sm-6">
+                                <span class="p-0 mr-3" (click)="selectCode(true)">
+                                    <input
+                                        id="group-hsn-code-option"
+                                        class="radio-custom cp ml-0"
+                                        type="radio"
+                                        name="selectCode"
+                                        [value]=""
+                                    />
+                                    <label for="group-hsn-code-option" class="radio-custom-label">HSN</label>
+                                </span>
+                                <span class="p-0" (click)="selectCode(false)">
+                                    <input
+                                        id="group-sac-code-option"
+                                        class="radio-custom cp ml-0"
+                                        type="radio"
+                                        name="selectCode"
+                                        [value]=""
+                                    />
+                                    <label for="group-sac-code-option" class="radio-custom-label">SAC</label>
+                                </span>
+                            </div>
+                            <div class="col-sm-6">
+                                <input
+                                    *ngIf="isHSN"
+                                    id="group-hsn-code"
+                                    class="form-control"
+                                    type="text"
+                                    placeholder="Enter HSN Code"
+                                />
+                                <input
+                                    *ngIf="!isHSN"
+                                    id="group-sac-code"
+                                    class="form-control"
+                                    type="text"
+                                    placeholder="Enter SAC Code"
+                                />
+                                <div>
+                                    <input id="usb-group" type="checkbox" /><span class="font-14 ml-1"
+                                        >Is it Sub-group?</span
+                                    >
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="other-group mt-3">
+                <tabset class="custom-tabs about-group-tab">
+                    <tab heading="Other">
+                        <div class="other-tab-content d-flex">
+                            <input type="checkbox" id="out-of-stock" />
+                            <span class="font-14 ml-1"
+                                >Continue selling when out of stock? (Will be applicable on all the subsequent
+                                group/stock)</span
+                            >
+                        </div>
+                    </tab>
+                </tabset>
+            </div>
+        </tab>
+        <tab heading="Report">
+            <div class="d-flex">
+                <inventory-group-list-sidebar></inventory-group-list-sidebar>
+                <div class="right-side-content w-100 d-flex flex-column">
+                    <p class="font-14 mr-b15">
+                        Following is the list of items created in <strong>Group Dummy Name Furniture</strong>
+                        <i class="icon-info pd ml-1"></i>
+                    </p>
+                    <div class="d-flex mr-b15">
+                        <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
+                            <i class="icon-calender calendar-addon bdr-radius-50"></i>
+                            <input
+                                type="text"
+                                id="select-date-group"
+                                name="selectedDateRange"
+                                [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
+                                class="giddh-datepicker date-range-picker bdr-radius-50"
+                                placeholder="Enter Date"
+                            />
+                        </div>
+                    </div>
+                    <!-- table for sub detail content of about group -->
+                    <table class="table giddh-table on-mobile-view">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Type</th>
+                                <th class="text-right">Pur Rate</th>
+                                <th class="text-right">Sale Rate</th>
+                                <th class="text-right">Closing Qty.</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td data-title="Name">
+                                    <div class="d-flex align-items-center">
+                                        <span class="image-thumbnail mr-2"
+                                            ><img src="{{ imgPath }}Login-Page-Image.png"
+                                        /></span>
+                                        <span>Product Name 1 Dummy</span>
+                                    </div>
+                                </td>
+                                <td data-title="Type">Product</td>
+                                <td data-title="Pur Rate" class="text-right">₹10,00,000.00</td>
+                                <td data-title="Sale Rate" class="text-right">₹17,48,242.86</td>
+                                <td data-title="Closing Qty." class="text-right">21,200 nos.</td>
+                            </tr>
+                            <tr>
+                                <td data-title="Name">
+                                    <div class="d-flex align-items-center">
+                                        <span class="image-thumbnail mr-2"
+                                            ><img src="{{ imgPath }}add-image.svg" class="add-image-filter"
+                                        /></span>
+                                        <span>Product Name 2 Dummy</span>
+                                    </div>
+                                </td>
+                                <td data-title="Type">Product</td>
+                                <td data-title="Pur Rate" class="text-right">₹10,00,000.00</td>
+                                <td data-title="Sale Rate" class="text-right">₹17,48,242.86</td>
+                                <td data-title="Closing Qty." class="text-right">21,200 nos.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <!-- table for stock list -->
+                    <stock-group-list></stock-group-list>
+                </div>
+            </div>
+        </tab>
+    </tabset>
+</div>
+<!-- foote will shown on about group tab only -->
+<div class="sticky-footer create-group-footer">
+    <div class="footer-wrapper">
+        <div class="button-group">
+            <button id="about-group-clear-btn" class="btn btn-primary bdr-radius-50 min-width-100">Clear</button>
+            <button id="about-under-btn" class="btn btn-success disable bdr-radius-50">Update Group</button>
+        </div>
+    </div>
+</div>

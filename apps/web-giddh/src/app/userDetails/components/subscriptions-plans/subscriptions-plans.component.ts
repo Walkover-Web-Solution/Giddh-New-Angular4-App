@@ -312,13 +312,13 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
         this.authenticationService.getAllUserSubsciptionPlans(activeCompany?.countryV2?.alpha2CountryCode).pipe(takeUntil(this.destroyed$)).subscribe(res => {
             let subscriptions = res.body;
 
-            subscriptions.forEach(subscription => {
+            subscriptions?.forEach(subscription => {
                 this.allSubscriptions[subscription.planDetails.uniqueName] = [];
                 this.allSubscriptions[subscription.planDetails.uniqueName] = subscription;
             });
             this.inputData = [];
-            let allPlans = uniqBy(subscriptions?.filter(subscription => subscription?.planDetails.name !== "Trial Plan" && subscription.status !== "trial" && subscription?.planDetails?.isCommonPlan).map(subscription => { return subscription.planDetails }), "name");
-            allPlans.forEach(plan => {
+            let allPlans = uniqBy(subscriptions?.filter(subscription => subscription?.planDetails.name !== "Trial Plan" && subscription?.status !== "trial" && subscription?.planDetails?.isCommonPlan).map(subscription => { return subscription?.planDetails }), "name");
+            allPlans?.forEach(plan => {
                 this.inputData.push(plan);
             });
 

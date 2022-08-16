@@ -151,7 +151,7 @@ export function GstRReducer(state: GstRReducerState = initialState, action: Cust
                 gstr3BOverViewDataFetchedSuccessfully: false
             };
         }
-        
+
         // endregion
 
         // region GSTR2
@@ -179,6 +179,14 @@ export function GstRReducer(state: GstRReducerState = initialState, action: Cust
             return newState;
         }
         // endregion
+
+        case GSTR_ACTIONS.RESET_GSTR2_OVERVIEW_RESPONSE: {
+            return {
+                ...state,
+                gstr2OverViewDataInProgress: false,
+                gstr2OverViewDataFetchedSuccessfully: false
+            };
+        }
         // endregion
 
         // region transactions
