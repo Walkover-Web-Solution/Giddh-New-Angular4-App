@@ -40,7 +40,6 @@ import { SettingsProfileService } from '../../services/settings.profile.service'
 import { CompanyService } from '../../services/companyService.service';
 import { SettingsBranchActions } from '../../actions/settings/branch/settings.branch.action';
 import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
-import { AccountsAction } from '../../actions/accounts.actions';
 import { LedgerActions } from '../../actions/ledger/ledger.actions';
 import { LocaleService } from '../../services/locale.service';
 import { SettingsFinancialYearActions } from '../../actions/settings/financial-year/financial-year.action';
@@ -254,7 +253,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         private settingsProfileAction: SettingsProfileActions,
         private companyService: CompanyService,
         private settingsBranchAction: SettingsBranchActions,
-        private accountsAction: AccountsAction,
         private ledgerAction: LedgerActions,
         public location: Location,
         private localeService: LocaleService,
@@ -422,8 +420,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                     this.activeCompanyForDb.uniqueName = selectedCmp.uniqueName;
                     this.selectedCompanyCountry = selectedCmp.country;
                 }
-
-                this.loadCompanyBranches();
             }
         });
 
@@ -470,6 +466,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.store.pipe(select(state => state.general.isCalendlyModelOpen), takeUntil(this.destroyed$)).subscribe(response => {
             this.isCalendlyModelActivate = response;
         });
+
+        this.loadCompanyBranches();
     }
 
     public ngOnInit() {
