@@ -2283,7 +2283,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                      * so transaction amount of income/ expenses account differ from both the side
                      * so overcome this issue api provides the actual amount which was added by user while creating entry
                      */
-                    t.amount = this.vm.selectedLedger.actualAmount;
+                    if (this.voucherApiVersion !== 2) {
+                        t.amount = this.vm.selectedLedger.actualAmount;
+                    }
                     // if transaction is stock transaction then also update inventory amount and recalculate inventory rate
                     if (t.inventory) {
                         t.inventory.amount = this.vm.selectedLedger.actualAmount;
