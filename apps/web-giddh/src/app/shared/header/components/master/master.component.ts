@@ -20,6 +20,7 @@ export class MasterComponent implements OnInit {
     public masterColumns: any[] = [];
     public masterColumnsData: any[] = [];
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    public loadMoreInProgress: boolean = false;
 
     constructor(
         private groupService: GroupService,
@@ -39,19 +40,33 @@ export class MasterComponent implements OnInit {
             this.createColumns();
         });
 
-        this.scrollDispatcher.scrolled().pipe(filter(event => this.virtualScroll.measureScrollOffset('bottom') === 0)).subscribe((event: any) => {
-            this.getMasters(this.masterColumnsData[event?.elementRef?.nativeElement?.id], event?.elementRef?.nativeElement?.id);
+        this.scrollDispatcher.scrolled().pipe(filter(event => this.virtualScroll.getRenderedRange().end === this.virtualScroll.getDataLength())).subscribe((event: any) => {
+            console.log(this.virtualScroll, this.virtualScroll.getRenderedRange().end, this.virtualScroll.getDataLength());
+            if (!this.loadMoreInProgress && this.masterColumnsData[event?.elementRef?.nativeElement?.id]?.page < this.masterColumnsData[event?.elementRef?.nativeElement?.id]?.totalPages) {
+                this.getMasters(this.masterColumnsData[event?.elementRef?.nativeElement?.id]?.groupUniqueName, event?.elementRef?.nativeElement?.id, true);
+                this.loadMoreInProgress = true;
+            }
         });
     }
 
-    private getMasters(groupUniqueName: string, currentIndex: number): void {
-        this.groupService.getMasters(groupUniqueName).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
+    private getMasters(groupUniqueName: string, currentIndex: number, isLoadMore: boolean = false): void {
+        if (!groupUniqueName) {
+            return;
+        }
+        const page = (isLoadMore) ? (Number(this.masterColumnsData[currentIndex]?.page) + 1) : 1;
+        this.groupService.getMasters(groupUniqueName, page).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
             if (response?.status === "success") {
-                let newIndex = Number(currentIndex) + 1;
-                this.masterColumnsData = this.masterColumnsData.slice(0, newIndex);
-                this.masterColumnsData[newIndex] = { results: response?.body?.results, page: response?.body?.page, totalPages: response?.body?.totalPages, groupUniqueName: groupUniqueName };
+                if (!isLoadMore) {
+                    let newIndex = Number(currentIndex) + 1;
+                    this.masterColumnsData = this.masterColumnsData.slice(0, newIndex);
+                    this.masterColumnsData[newIndex] = { results: response?.body?.results, page: response?.body?.page, totalPages: response?.body?.totalPages, groupUniqueName: groupUniqueName };
+                } else {
+                    this.masterColumnsData[currentIndex].page = response?.body?.page;
+                    this.masterColumnsData[currentIndex].results.push(response?.body?.results);
+                }
                 this.createColumns();
             }
+            this.loadMoreInProgress = false;
         });
     }
 

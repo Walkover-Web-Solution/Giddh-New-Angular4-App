@@ -10,6 +10,7 @@ import { GROUP_API } from './apiurls/group.api';
 import { GroupsWithAccountsResponse } from '../models/api-models/GroupsWithAccounts';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
+import { PAGINATION_LIMIT } from '../app.constant';
 
 declare var _: any;
 
@@ -225,9 +226,9 @@ export class GroupService {
             .pipe(catchError((error) => this.errorHandler.HandleCatch<any, any>(error)));
     }
 
-    public getMasters(groupUniqueName: string): Observable<BaseResponse<GroupResponse, string>> {
+    public getMasters(groupUniqueName: string, page: Number): Observable<BaseResponse<GroupResponse, string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.get(this.config.apiUrl + GROUP_API.GET_MASTERS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':groupUniqueName', encodeURIComponent(groupUniqueName))).pipe(map((res) => {
+        return this.http.get(this.config.apiUrl + GROUP_API.GET_MASTERS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':groupUniqueName', encodeURIComponent(groupUniqueName)).replace(':page', encodeURIComponent(page.toString())).replace(':count', encodeURIComponent(PAGINATION_LIMIT))).pipe(map((res) => {
             let data: BaseResponse<GroupResponse, string> = res;
             data.request = groupUniqueName;
             data.queryString = { groupUniqueName };
