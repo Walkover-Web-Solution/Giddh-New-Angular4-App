@@ -1170,7 +1170,7 @@ export class ContactComponent implements OnInit, OnDestroy {
         this.currentPage = pageNumber;
         let groupUniqueName = (this.activeTab === "customer") ? "sundrydebtors" : "sundrycreditors";
 
-        if (this.activeTab === "aging-report" || !fromDate || !toDate) {
+        if (this.activeTab === "aging-report" || (!this.todaySelected && (!fromDate || !toDate))) {
             return;
         }
 
