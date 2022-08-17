@@ -46,6 +46,7 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
     public commonLocaleData: any = {};
     /** True if initial component load */
     public initialLoad: boolean = true;
+    public searchedMasterData: any[] = [];
 
     // tslint:disable-next-line:no-empty
     constructor(
@@ -92,7 +93,177 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
             debounceTime(700), takeUntil(this.destroyed$))
             .subscribe(term => {
                 if (!this.initialLoad) {
-                    this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(term));
+                    //this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(term));
+                    this.searchedMasterData = [
+                        {
+                            "type": "GROUP",
+                            "name": "Unsecured Loans",
+                            "uniqueName": "unsecured_loans",
+                            "parentGroups": [
+                                {
+                                    "name": "Non Current Liabilities",
+                                    "uniqueName": "noncurrentliabilities",
+                                    "category": "liabilities"
+                                }
+                            ]
+                        },
+                        {
+                            "type": "GROUP",
+                            "name": "Chinmay Daga",
+                            "uniqueName": "chinmay_daga",
+                            "parentGroups": [
+                                {
+                                    "name": "Current Assets",
+                                    "uniqueName": "currentassets",
+                                    "category": "assets"
+                                },
+                                {
+                                    "name": "Sundry Debtors",
+                                    "uniqueName": "sundrydebtors",
+                                    "category": "assets"
+                                }
+                            ]
+                        },
+                        {
+                            "type": "GROUP",
+                            "name": "Creditors for Spares",
+                            "uniqueName": "creditors_for_spares",
+                            "parentGroups": [
+                                {
+                                    "name": "Current Liabilities",
+                                    "uniqueName": "currentliabilities",
+                                    "category": "liabilities"
+                                },
+                                {
+                                    "name": "Sundry Creditors",
+                                    "uniqueName": "sundrycreditors",
+                                    "category": "liabilities"
+                                }
+                            ]
+                        },
+                        {
+                            "type": "GROUP",
+                            "name": "Amit Bisen",
+                            "uniqueName": "amit99",
+                            "parentGroups": [
+                                {
+                                    "name": "Current Assets",
+                                    "uniqueName": "currentassets",
+                                    "category": "assets"
+                                },
+                                {
+                                    "name": "Sundry Debtors",
+                                    "uniqueName": "sundrydebtors",
+                                    "category": "assets"
+                                }
+                            ]
+                        },
+                        {
+                            "type": "ACCOUNT",
+                            "name": "Chigru",
+                            "uniqueName": "drmanju",
+                            "parentGroups": [
+                                {
+                                    "name": "Current Assets",
+                                    "uniqueName": "currentassets",
+                                    "category": "assets"
+                                },
+                                {
+                                    "name": "Sundry Debtors",
+                                    "uniqueName": "sundrydebtors",
+                                    "category": "assets"
+                                },
+                                {
+                                    "name": "Support@msg91.Com",
+                                    "uniqueName": "support@msg91",
+                                    "category": "assets"
+                                }
+                            ]
+                        },
+                        {
+                            "type": "ACCOUNT",
+                            "name": "adhyatravels",
+                            "uniqueName": "bheemaraju",
+                            "parentGroups": [
+                                {
+                                    "name": "Current Assets",
+                                    "uniqueName": "currentassets",
+                                    "category": "assets"
+                                },
+                                {
+                                    "name": "Sundry Debtors",
+                                    "uniqueName": "sundrydebtors",
+                                    "category": "assets"
+                                },
+                                {
+                                    "name": "Support@msg91.Com",
+                                    "uniqueName": "support@msg91",
+                                    "category": "assets"
+                                }
+                            ]
+                        },
+                        {
+                            "type": "ACCOUNT",
+                            "name": "Rajesh jewellers",
+                            "uniqueName": "rajeshjewellers",
+                            "parentGroups": [
+                                {
+                                    "name": "Current Assets",
+                                    "uniqueName": "currentassets",
+                                    "category": "assets"
+                                },
+                                {
+                                    "name": "Sundry Debtors",
+                                    "uniqueName": "sundrydebtors",
+                                    "category": "assets"
+                                },
+                                {
+                                    "name": "Support@msg91.Com",
+                                    "uniqueName": "support@msg91",
+                                    "category": "assets"
+                                }
+                            ]
+                        },
+                        {
+                            "type": "ACCOUNT",
+                            "name": "Dropot ",
+                            "uniqueName": "admin@dropot.com",
+                            "parentGroups": [
+                                {
+                                    "name": "Current Assets",
+                                    "uniqueName": "currentassets",
+                                    "category": "assets"
+                                },
+                                {
+                                    "name": "Sundry Debtors",
+                                    "uniqueName": "sundrydebtors",
+                                    "category": "assets"
+                                },
+                                {
+                                    "name": "Support@msg91.Com",
+                                    "uniqueName": "support@msg91",
+                                    "category": "assets"
+                                }
+                            ]
+                        },
+                        {
+                            "type": "ACCOUNT",
+                            "name": "Click Labs Private Limited",
+                            "uniqueName": "clicklabsprivatelimite",
+                            "parentGroups": [
+                                {
+                                    "name": "Current Liabilities",
+                                    "uniqueName": "currentliabilities",
+                                    "category": "liabilities"
+                                },
+                                {
+                                    "name": "Sundry Creditors",
+                                    "uniqueName": "sundrycreditors",
+                                    "category": "liabilities"
+                                }
+                            ]
+                        }
+                    ];
                 }
                 this.initialLoad = false;
             });

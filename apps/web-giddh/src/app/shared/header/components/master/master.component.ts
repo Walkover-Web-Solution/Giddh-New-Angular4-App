@@ -1,8 +1,9 @@
 import { CdkVirtualScrollViewport, ScrollDispatcher } from "@angular/cdk/scrolling";
-import { Component, OnInit, ViewChild } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from "@angular/core";
 import { select, Store } from "@ngrx/store";
 import { AccountsAction } from "apps/web-giddh/src/app/actions/accounts.actions";
 import { GroupWithAccountsAction } from "apps/web-giddh/src/app/actions/groupwithaccounts.actions";
+import { cloneDeep } from "apps/web-giddh/src/app/lodash-optimized";
 import { IGroupsWithAccounts } from "apps/web-giddh/src/app/models/interfaces/groupsWithAccounts.interface";
 import { GroupService } from "apps/web-giddh/src/app/services/group.service";
 import { AppState } from "apps/web-giddh/src/app/store";
@@ -12,12 +13,12 @@ import { filter, takeUntil } from "rxjs/operators";
 @Component({
     selector: "master",
     templateUrl: "./master.component.html",
-    styleUrls: ["./master.component.scss"]
+    styleUrls: ["./master.component.scss"],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
-
-export class MasterComponent implements OnInit {
+export class MasterComponent implements OnInit, OnChanges {
     @ViewChild(CdkVirtualScrollViewport) virtualScroll: CdkVirtualScrollViewport;
-    public masterColumns: any[] = [];
+    @Input() public searchedMasterData: any[] = [];
     public masterColumnsData: any[] = [];
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public loadMoreInProgress: boolean = false;
@@ -27,7 +28,8 @@ export class MasterComponent implements OnInit {
         private groupWithAccountsAction: GroupWithAccountsAction,
         private accountsAction: AccountsAction,
         private store: Store<AppState>,
-        private scrollDispatcher: ScrollDispatcher
+        private scrollDispatcher: ScrollDispatcher,
+        private changeDetectorRef: ChangeDetectorRef
     ) {
 
     }
@@ -37,7 +39,6 @@ export class MasterComponent implements OnInit {
             if (response) {
                 this.masterColumnsData[0] = { results: response, page: 1, totalPages: 1, groupUniqueName: '' };
             }
-            this.createColumns();
         });
 
         this.scrollDispatcher.scrolled().pipe(filter(event => this.virtualScroll.getRenderedRange().end === this.virtualScroll.getDataLength())).subscribe((event: any) => {
@@ -47,6 +48,36 @@ export class MasterComponent implements OnInit {
                 this.loadMoreInProgress = true;
             }
         });
+    }
+
+    public ngOnChanges(changes: SimpleChanges): void {
+        if (changes?.searchedMasterData?.currentValue?.length > 0) {
+            let masterColumnsData = [];
+            let masterTempData = [];
+            changes?.searchedMasterData?.currentValue.forEach(master => {
+                master?.parentGroups?.forEach((masterParentGroup, index) => {
+                    if (!masterTempData[masterParentGroup?.uniqueName]) {
+                        masterTempData[masterParentGroup?.uniqueName] = masterParentGroup?.uniqueName;
+
+                        masterParentGroup.type = "GROUP";
+
+                        if (masterColumnsData[index]) {
+                            masterColumnsData[index].results.push(masterParentGroup);
+                        } else {
+                            masterColumnsData[index] = { results: [masterParentGroup], page: 1, totalPages: 1, groupUniqueName: '' };
+                        }
+                    }
+                });
+
+                if (masterColumnsData[master?.parentGroups?.length]) {
+                    masterColumnsData[master?.parentGroups?.length].results.push(master);
+                } else {
+                    masterColumnsData[master?.parentGroups?.length] = { results: [master], page: 1, totalPages: 1, groupUniqueName: '' };
+                }
+            });
+
+            this.masterColumnsData = cloneDeep(masterColumnsData);
+        }
     }
 
     private getMasters(groupUniqueName: string, currentIndex: number, isLoadMore: boolean = false): void {
@@ -64,14 +95,11 @@ export class MasterComponent implements OnInit {
                     this.masterColumnsData[currentIndex].page = response?.body?.page;
                     this.masterColumnsData[currentIndex].results.push(response?.body?.results);
                 }
-                this.createColumns();
             }
+            console.log(this.masterColumnsData);
             this.loadMoreInProgress = false;
+            this.changeDetectorRef.detectChanges();
         });
-    }
-
-    private createColumns(): void {
-        this.masterColumns = Object.keys(this.masterColumnsData);
     }
 
     public onGroupClick(item: IGroupsWithAccounts, currentIndex: number): void {

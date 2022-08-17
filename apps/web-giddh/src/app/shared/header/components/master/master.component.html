@@ -1,7 +1,7 @@
 <div class="grp-col" fxLayout="column" fxLayoutAlign="stretch" fxFlex>
     <div class="grp-wrapper" fxFlex>
-        <div class="col-wrapper left-account-operation" *ngFor="let i of masterColumns">
-            <ng-container *ngIf="masterColumnsData[i]?.results?.length">
+        <div class="col-wrapper left-account-operation" *ngFor="let items of masterColumnsData; let i = index">
+            <ng-container *ngIf="items?.results?.length">
                 <ul class="grp-list users-last-list">
                     <cdk-virtual-scroll-viewport
                         class="virtual-group-list overflow-x-hidden"
@@ -11,11 +11,7 @@
                         [id]="i"
                     >
                         <li
-                            *cdkVirtualFor="
-                                let item of masterColumnsData[i]?.results;
-                                let j = index;
-                                trackBy: trackByIdx
-                            "
+                            *cdkVirtualFor="let item of items?.results; let j = index; trackBy: trackByIdx"
                             class="list-item sidebarTooltip text-overflow-ellipsis"
                         >
                             <ng-container *ngIf="item.type === 'GROUP'">
