@@ -529,7 +529,7 @@ export class ContactComponent implements OnInit, OnDestroy {
             url = `${url}${additionalParams}`;
         }
         if (isElectron) { 
-            this.router.navigate([url]);
+            this.router.navigate([`?returnUrl=/pages/${part}/${accUniqueName}`]);
         } else {
             (window as any).open(url);
         }
