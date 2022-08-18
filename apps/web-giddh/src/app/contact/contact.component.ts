@@ -1040,8 +1040,10 @@ export class ContactComponent implements OnInit, OnDestroy {
         this.isAdvanceSearchApplied = false;
         this.key = (this.activeTab === "vendor") ? "amountDue" : "name";
         this.order = (this.activeTab === "vendor") ? "desc" : "asc";
-        this.getAccounts(this.fromDate, this.toDate,
-            null, "true", PAGINATION_LIMIT, "", "", null, (this.currentBranch ? this.currentBranch.uniqueName : ""));
+        if (!this.searchedName?.value) {
+            this.getAccounts(this.fromDate, this.toDate,
+                null, "true", PAGINATION_LIMIT, "", "", null, (this.currentBranch ? this.currentBranch.uniqueName : ""));
+        }
         this.searchedName?.reset();
         this.searchStr = "";
         this.showNameSearch = false;
