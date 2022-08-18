@@ -184,6 +184,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public updatedNumber: any = '';
     /** This will hold currentCompanyCountryCode */
     public currentCompanyCountryCode: any = '';
+    /** Observable for selected active group  */
+    private isAddandManageFromOutside$: Observable<any>;
 
 
     constructor(
@@ -200,6 +202,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         private customFieldsService: CustomFieldsService,
         private accountsAction: AccountsAction) {
         this.activeGroup$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroup), takeUntil(this.destroyed$));
+       this.isAddandManageFromOutside$= this.store.pipe(select(appStore => appStore.groupwithaccounts.isAddAndManageOpenedFromOutside), takeUntil(this.destroyed$))
     }
 
     /**
@@ -612,10 +615,13 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             this.activeGroupUniqueName = s['activeGroupUniqueName'].currentValue;
         }
     }
-
   
     public ngOnDestroy() {
-        this.store.dispatch(this.accountsAction.resetActiveGroup());
+        this.isAddandManageFromOutside$.subscribe(response => {
+            if (!response) {
+                this.store.dispatch(this.accountsAction.resetActiveGroup());
+            }
+        });
         this.resetAddAccountForm();
         this.destroyed$.next(true);
         this.destroyed$.complete();
