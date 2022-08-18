@@ -33,7 +33,15 @@
                     <span class="select-drop"><i class="fa fa-caret-down"></i></span>
                 </div>
                 <div class="form-group select-page position-relative" *ngIf="newRoleObj.isFresh">
-                    <div class="btn-group btn-block" dropdown (onShown)="onDDShown()" (onHidden)="onDDHidden()">
+                    <div
+                        class="btn-group btn-block"
+                        dropdown
+                        (onShown)="onDDShown()"
+                        (onHidden)="onDDHidden()"
+                        #permissionDropDown="bs-dropdown"
+                        [attachOutsideOnClick]="true"
+                        (clickOutside)="permissionDropDown.hide()"
+                    >
                         <button dropdownToggle type="button" class="form-control text-left btn-block dropdown-toggle">
                             {{ dropdownHeading }}
                             <span class="select-drop pull-right mr-t1"><i class="fa fa-caret-down"></i></span>
