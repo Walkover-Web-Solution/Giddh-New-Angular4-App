@@ -524,12 +524,14 @@ export class ContactComponent implements OnInit, OnDestroy {
     }
 
     public goToRoute(part: string, additionalParams: string = "", accUniqueName: string) {
-        let url = location.href + `?returnUrl=${part}/${accUniqueName}`;        
+        let url = location.href + `?returnUrl=${part}/${accUniqueName}`;                
         if (additionalParams) {
             url = `${url}${additionalParams}`;
         }
-        if (isElectron) { 
-            this.router.navigate([`?returnUrl=/pages/${part}/${accUniqueName}`]);
+        if (isElectron) {
+            let ipcRenderer = (window as any).require('electron').ipcRenderer;
+            url = location.origin + location.pathname + '?returnUrl=ledger/' + accUniqueName;
+            console.log(ipcRenderer.send('open-url', url));
         } else {
             (window as any).open(url);
         }
