@@ -54,7 +54,7 @@ import { MatButtonModule } from '@angular/material/button';
         GstRoutingModule,
         CollapseModule,
         PaginationModule.forRoot(),
-        DatepickerModule,
+        DatepickerModule.forRoot(),
         BsDropdownModule.forRoot(),
         Daterangepicker,
         LaddaModule.forRoot({
