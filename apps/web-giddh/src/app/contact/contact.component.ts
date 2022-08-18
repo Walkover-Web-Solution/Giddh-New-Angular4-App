@@ -558,7 +558,7 @@ export class ContactComponent implements OnInit, OnDestroy {
         }
         if (isElectron) {
             let ipcRenderer = (window as any).require('electron').ipcRenderer;
-            url = location.origin + location.pathname + '?returnUrl=ledger/' + accUniqueName;
+            url = location.origin + location.pathname + `#./pages/${part}/${accUniqueName}`;
             console.log(ipcRenderer.send('open-url', url));
         } else {
             (window as any).open(url);
