@@ -1304,7 +1304,14 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         }
 
                         tempObj.entries.forEach((entry, index) => {
-                            tempObj.entries[index].entryDate = voucherDate || this.universalDate || new Date();
+                            let entryDate = voucherDate || this.universalDate || dayjs().format(GIDDH_DATE_FORMAT);
+
+                            if (typeof (entryDate) === "object") {
+                                tempObj.entries[index].entryDate = dayjs(entryDate).format(GIDDH_DATE_FORMAT);
+                            } else {
+                                tempObj.entries[index].entryDate = entryDate;
+                            }
+
                             tempObj.entries[index].uniqueName = undefined;
                         });
 
@@ -1344,7 +1351,14 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                                 if (this.copyPurchaseBill) {
                                     if (obj && obj.entries) {
                                         obj.entries.forEach((entry, index) => {
-                                            obj.entries[index].entryDate = this.universalDate || new Date();
+                                            let entryDate = this.universalDate || dayjs().format(GIDDH_DATE_FORMAT);
+
+                                            if (typeof (entryDate) === "object") {
+                                                obj.entries[index].entryDate = dayjs(entryDate).format(GIDDH_DATE_FORMAT);
+                                            } else {
+                                                obj.entries[index].entryDate = entryDate;
+                                            }
+
                                             obj.entries[index].uniqueName = "";
                                         });
                                         obj.entries = obj.entries;
@@ -4781,8 +4795,13 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             if (!entry.otherTaxModal) {
                 entry.otherTaxModal = new SalesOtherTaxesModal();
             }
-            entry.entryDate = entry.entryDate || this.universalDate || new Date();
-            entry.entryDate = dayjs(entry.entryDate).format(GIDDH_DATE_FORMAT);
+            entry.entryDate = entry.entryDate || this.universalDate || dayjs().format(GIDDH_DATE_FORMAT);
+
+            if (typeof (entry.entryDate) === "object") {
+                entry.entryDate = dayjs(entry.entryDate).format(GIDDH_DATE_FORMAT);
+            } else {
+                entry.entryDate = entry.entryDate;
+            }
 
             entry.discounts = this.parseDiscountFromResponse(entry);
             entry.taxList = entry.taxes.map(m => m.uniqueName);
@@ -5196,7 +5215,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             salesEntryClass.voucherType = entry.voucherType;
             salesEntryClass.uniqueName = entry.uniqueName;
             salesEntryClass.description = entry.description;
-            salesEntryClass.entryDate = dayjs(entry.date, GIDDH_DATE_FORMAT).toDate();
+
+            if (typeof (entry.date) === "object") {
+                salesEntryClass.entryDate = dayjs(entry.date).format(GIDDH_DATE_FORMAT);
+            } else {
+                salesEntryClass.entryDate = entry.date;
+            }
             this.calculateOtherTaxes(salesEntryClass.otherTaxModal, salesEntryClass);
             voucherClassConversion.entries.push(salesEntryClass);
         });
