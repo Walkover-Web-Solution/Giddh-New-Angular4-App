@@ -552,15 +552,12 @@ export class ContactComponent implements OnInit, OnDestroy {
     }
 
     public goToRoute(part: string, additionalParams: string = "", accUniqueName: string) {
-        let url = location.href + `?returnUrl=${part}/${accUniqueName}`;
-
+        let url = location.href + `?returnUrl=${part}/${accUniqueName}`;                
         if (additionalParams) {
             url = `${url}${additionalParams}`;
         }
         if (isElectron) {
-            let ipcRenderer = (window as any).require('electron').ipcRenderer;
-            url = location.origin + location.pathname + `#./pages/${part}/${accUniqueName}`;
-            ipcRenderer.send('open-url', url);
+            this.router.navigate([`/pages/${part}/${accUniqueName}`]);
         } else {
             (window as any).open(url);
         }
