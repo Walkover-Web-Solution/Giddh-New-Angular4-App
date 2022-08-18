@@ -105,7 +105,21 @@
                         [scrollIndicators]="true"
                     >
                         <div class="wrap-account-sidebar">
-                            <master [searchedMasterData]="searchedMasterData"></master>
+                            <master
+                                [searchedMasterData]="searchedMasterData"
+                                [ngStyle]="{
+                                    'height':
+                                        (myModelRect ? myModelRect.height : 0) -
+                                        (headerRect ? headerRect.height : 0) +
+                                        'px'
+                                }"
+                                [height]="(myModelRect ? myModelRect.height : 0) - (headerRect ? headerRect.height : 0)"
+                                [isSearchingGroups]="!(grpSrch.value === '')"
+                                [localeData]="localeData"
+                                (resetSearchString)="resetGroupSearchString(false)"
+                                (breadcrumbPathChanged)="breadcrumbPathChanged($event)"
+                            >
+                            </master>
                         </div>
                     </perfect-scrollbar>
                 </div>

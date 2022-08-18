@@ -1,6 +1,22 @@
 <div class="grp-col" fxLayout="column" fxLayoutAlign="stretch" fxFlex>
     <div class="grp-wrapper" fxFlex>
-        <div class="col-wrapper left-account-operation" *ngFor="let items of masterColumnsData; let i = index">
+        <div
+            class="col-wrapper left-account-operation"
+            [style.height.px]="height"
+            *ngFor="let items of masterColumnsData; let i = index"
+        >
+            <ul class="new-btn-ul" *ngIf="i !== 0">
+                <li class="new-btn">
+                    <a
+                        href="javascript:void(0)"
+                        nav-vr-item
+                        class="btn-link"
+                        *ngIf="showCreateNewButton"
+                        (click)="showAddNewForm()"
+                        >{{ localeData?.create_new }}</a
+                    >
+                </li>
+            </ul>
             <ng-container *ngIf="items?.results?.length">
                 <ul class="grp-list users-last-list">
                     <cdk-virtual-scroll-viewport
@@ -11,7 +27,7 @@
                         [id]="i"
                     >
                         <li
-                            *cdkVirtualFor="let item of items?.results; let j = index; trackBy: trackByIdx"
+                            *cdkVirtualFor="let item of items?.results; let j = index; trackBy: trackByFn"
                             class="list-item sidebarTooltip text-overflow-ellipsis"
                         >
                             <ng-container *ngIf="item.type === 'GROUP'">

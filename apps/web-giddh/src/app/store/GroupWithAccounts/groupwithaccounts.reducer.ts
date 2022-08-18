@@ -21,6 +21,7 @@ export interface CurrentGroupAndAccountState {
     showAddNewGroup: boolean;
     showEditGroup: boolean;
     showEditAccount: boolean;
+    firstLevelGroups: GroupsWithAccountsResponse[];
     groupswithaccounts: GroupsWithAccountsResponse[];
     isGroupWithAccountsLoading: boolean;
     isAddAndManageOpenedFromOutside: boolean;
@@ -202,6 +203,7 @@ const initialState: CurrentGroupAndAccountState = {
     showAddNewGroup: false,
     showEditGroup: false,
     showEditAccount: false,
+    firstLevelGroups: null,
     groupswithaccounts: null,
     isGroupWithAccountsLoading: false,
     activeGroup: null,
@@ -706,7 +708,12 @@ export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = i
         }
         case GroupWithAccountsAction.INITIALIZE_FIRST_LEVEL_GROUPS: {
             return Object.assign({}, state, {
-                groupswithaccounts: firstLevelGroups
+                firstLevelGroups: firstLevelGroups
+            });
+        }
+        case GroupWithAccountsAction.RESET_FIRST_LEVEL_GROUPS: {
+            return Object.assign({}, state, {
+                firstLevelGroups: []
             });
         }
         default: {

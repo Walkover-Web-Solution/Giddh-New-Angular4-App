@@ -63,6 +63,7 @@ export class GroupWithAccountsAction {
     public static UPDATE_ACTIVE_TAB_ADD_AND_MANAGE = 'UPDATE_ACTIVE_TAB_ADD_AND_MANAGE';
 
     public static INITIALIZE_FIRST_LEVEL_GROUPS = 'INITIALIZE_FIRST_LEVEL_GROUPS';
+    public static RESET_FIRST_LEVEL_GROUPS = 'RESET_FIRST_LEVEL_GROUPS';
 
     public ApplyGroupTax$: Observable<Action> = createEffect(() => this.action$
         .pipe(
@@ -602,6 +603,18 @@ export class GroupWithAccountsAction {
     public initializeFirstLevelGroups() {
         return {
             type: GroupWithAccountsAction.INITIALIZE_FIRST_LEVEL_GROUPS
+        };
+    }
+
+    /**
+     * Resets first level groups
+     *
+     * @returns
+     * @memberof GroupWithAccountsAction
+     */
+     public resetFirstLevelGroups() {
+        return {
+            type: GroupWithAccountsAction.RESET_FIRST_LEVEL_GROUPS
         };
     }
 }
