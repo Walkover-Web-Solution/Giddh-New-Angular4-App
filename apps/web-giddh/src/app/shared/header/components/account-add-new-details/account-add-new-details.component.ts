@@ -36,6 +36,7 @@ import { clone, cloneDeep, uniqBy } from 'apps/web-giddh/src/app/lodash-optimize
 import { CustomFieldsService } from 'apps/web-giddh/src/app/services/custom-fields.service';
 import { FieldTypes } from 'apps/web-giddh/src/app/custom-fields/custom-fields.constant';
 import { CountryISO, PhoneNumberFormat, SearchCountryField } from 'ngx-intl-tel-input';
+import { AccountsAction } from 'apps/web-giddh/src/app/actions/accounts.actions';
 
 @Component({
     selector: 'account-add-new-details',
@@ -196,7 +197,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         private groupService: GroupService,
         private groupWithAccountsAction: GroupWithAccountsAction,
         private invoiceService: InvoiceService,
-        private customFieldsService: CustomFieldsService) {
+        private customFieldsService: CustomFieldsService,
+        private accountsAction: AccountsAction) {
         this.activeGroup$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroup), takeUntil(this.destroyed$));
     }
 
@@ -235,7 +237,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                         this.isHsnSacEnabledAcc = (response.parentGroups) ? HSN_SAC_PARENT_GROUPS.includes(response.parentGroups[0]?.uniqueName) : false;
                         this.isParentDebtorCreditor(response.uniqueName);
                     }
-
                     this.showHideAddressTab();
                 }
             }
@@ -612,7 +613,9 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         }
     }
 
+  
     public ngOnDestroy() {
+        this.store.dispatch(this.accountsAction.resetActiveGroup());
         this.resetAddAccountForm();
         this.destroyed$.next(true);
         this.destroyed$.complete();
