@@ -81,7 +81,6 @@ export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnCh
     }
 
     public ngOnInit() {
-        
         this.showBankDetail = this.activeGroupUniqueName === 'sundrycreditors';
         this.store.pipe(select(state => state.groupwithaccounts.activeTab), takeUntil(this.destroyed$)).subscribe(activeTab => {
             if (activeTab === 1) {
