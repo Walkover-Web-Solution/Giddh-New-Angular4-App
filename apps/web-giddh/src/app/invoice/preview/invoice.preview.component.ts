@@ -839,7 +839,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
      */
     public downloadFile() {
         let blob = this.generalService.base64ToBlob(this.base64Data, 'application/pdf', 512);
-        return saveAs(blob, `${this.commonLocaleData?.app_invoice}-${this.selectedInvoice.account?.uniqueName}.pdf`);
+            return saveAs(blob, `${this.commonLocaleData?.app_invoice}-${this.selectedInvoice.account?.uniqueName}.pdf`);
     }
 
     public sortButtonClicked(type: 'asc' | 'desc', columnName: string) {
@@ -1333,8 +1333,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             if (res) {
                 if (res.status === 'success') {
                     let blob = this.generalService.base64ToBlob(res.body, 'application/xls', 512);
-                    this.selectedInvoicesList = [];
-                    return saveAs(blob, `${dataTosend.accountUniqueName}${this.localeData?.all_invoices}.xls`);
+                        this.selectedInvoicesList = [];
+                        return saveAs(blob, `${dataTosend.accountUniqueName}${this.localeData?.all_invoices}.xls`);
                 } else {
                     this._toaster.errorToast(res.message);
                 }
@@ -1394,7 +1394,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             this.invFormData.voucherDetails.balanceDue = item.totalBalance.amountForAccount;
         }
         this.invFormData.voucherDetails.grandTotal = item.grandTotal.amountForAccount;
-        this.invFormData.voucherDetails.customerName = item.account.name;
+        this.invFormData.voucherDetails.customerName = item.account?.name;
         this.invFormData.voucherDetails.customerUniquename = customerUniqueName;
         this.invFormData.voucherDetails.voucherDate = item.voucherDate;
         this.invFormData.voucherDetails.exchangeRate = item.exchangeRate ?? 1;
