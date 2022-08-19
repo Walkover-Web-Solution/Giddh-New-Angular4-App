@@ -4020,7 +4020,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 }
 
                 this.activeIndx = lastIndex;
-                this.invFormData.entries[lastIndex].entryDate = this.invFormData.voucherDetails.voucherDate;
+                this.invFormData.entries[lastIndex].entryDate = moment(this.invFormData.voucherDetails.voucherDate).format(GIDDH_DATE_FORMAT);
                 this.invFormData.entries[lastIndex].transactions[0].fakeAccForSelect2 = item.uniqueName;
                 this.invFormData.entries[lastIndex].isNewEntryInUpdateMode = true;
                 if (isBlankItemInBetween) {
