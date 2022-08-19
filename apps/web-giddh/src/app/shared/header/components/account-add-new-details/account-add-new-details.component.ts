@@ -212,7 +212,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         this.initializeNewForm();
         this.activeGroup$.subscribe(response => {
             if (response) {
-                if(response.uniqueName !== this.activeGroupUniqueName) {
+                if (this.activeGroupUniqueName && response.uniqueName !== this.activeGroupUniqueName) {
                     this.store.dispatch(this.groupWithAccountsAction.getGroupDetails(this.activeGroupUniqueName));
                 } else if (response.parentGroups && response.parentGroups.length) {
                     let parent = response.parentGroups;
@@ -659,7 +659,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     }
 
     public selectGroup(event: IOption) {
-        if (event) {
+        if (event?.value) {
             this.activeGroupUniqueName = event.value;
             this.store.dispatch(this.groupWithAccountsAction.getGroupDetails(this.activeGroupUniqueName));
             this.isParentDebtorCreditor(this.activeGroupUniqueName);
