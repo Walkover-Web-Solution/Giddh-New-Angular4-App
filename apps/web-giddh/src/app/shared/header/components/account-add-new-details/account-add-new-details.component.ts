@@ -36,6 +36,7 @@ import { GeneralService } from 'apps/web-giddh/src/app/services/general.service'
 import { clone, cloneDeep, uniqBy } from 'apps/web-giddh/src/app/lodash-optimized';
 import { CustomFieldsService } from 'apps/web-giddh/src/app/services/custom-fields.service';
 import { FieldTypes } from 'apps/web-giddh/src/app/custom-fields/custom-fields.constant';
+import { AccountsAction } from 'apps/web-giddh/src/app/actions/accounts.actions';
 
 @Component({
     selector: 'account-add-new-details',
@@ -170,6 +171,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public availableFieldTypes: any = FieldTypes;
     /** This will hold toggle buttons value and size */
     public bootstrapToggleSwitch = BootstrapToggleSwitch;
+    /** Observable for selected active group  */
+    private isAddAndManageOpenedFromOutside$: Observable<any>;
 
     constructor(
         private _fb: FormBuilder,
@@ -182,9 +185,11 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         private groupWithAccountsAction: GroupWithAccountsAction,
         private invoiceService: InvoiceService,
         private changeDetectorRef: ChangeDetectorRef,
-        private customFieldsService: CustomFieldsService
+        private customFieldsService: CustomFieldsService,
+        private accountsAction: AccountsAction
     ) {
         this.activeGroup$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroup), takeUntil(this.destroyed$));
+        this.isAddAndManageOpenedFromOutside$ = this.store.pipe(select(appStore => appStore.groupwithaccounts.isAddAndManageOpenedFromOutside), takeUntil(this.destroyed$));
     }
 
     /**
@@ -212,7 +217,9 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         this.initializeNewForm();
         this.activeGroup$.subscribe(response => {
             if (response) {
-                if (response.parentGroups && response.parentGroups.length) {
+                if (response.uniqueName !== this.activeGroupUniqueName) {
+                    this.store.dispatch(this.groupWithAccountsAction.getGroupDetails(this.activeGroupUniqueName));
+                } else if (response.parentGroups && response.parentGroups.length) {
                     let parent = response.parentGroups;
                     const HSN_SAC_PARENT_GROUPS = ['revenuefromoperations', 'otherincome', 'operatingcost', 'indirectexpenses'];
                     if (parent?.length > 1 && parent[1]) {
@@ -627,6 +634,11 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     }
 
     public ngOnDestroy() {
+        this.isAddAndManageOpenedFromOutside$.subscribe(response => {
+            if (response) {
+                this.store.dispatch(this.accountsAction.resetActiveGroup());
+            }
+        });
         this.resetAddAccountForm();
         this.destroyed$.next(true);
         this.destroyed$.complete();
