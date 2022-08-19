@@ -2812,6 +2812,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         }
     }
 
+
     public toggleOtherTaxesAsidePane(modalBool: boolean, index: number = null) {
         if (!modalBool) {
             let entry = this.invFormData.entries[this.activeIndx];
@@ -2836,6 +2837,12 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      */
     public closeAsideMenuStateForOtherTaxes(): void {
         if (this.asideMenuStateForOtherTaxes === 'in') {
+            let entry = this.invFormData.entries[this.activeIndx];
+            if (entry.otherTaxSum > 0) {
+                entry.isOtherTaxApplicable = true;
+            } else {
+                entry.isOtherTaxApplicable = false;
+            }
             this.toggleOtherTaxesAsidePane(true, null);
         }
     }
