@@ -70,8 +70,8 @@ export class PermissionListComponent implements OnInit, AfterViewInit, OnDestroy
         this.store.dispatch(this.permissionActions.GetRoles());
         this.store.dispatch(this.permissionActions.RemoveNewlyCreatedRoleFromStore());
         this.store.pipe(select(p => p.permission.roles), takeUntil(this.destroyed$)).subscribe((roles: IRoleCommonResponseAndRequest[]) => {
-            this.allRoles = roles
-            if (this.allRoles.length > 0) {
+            this.allRoles = roles;
+            if (this.allRoles?.length > 0) {
                 this.showBackButton = true;
             }
         });

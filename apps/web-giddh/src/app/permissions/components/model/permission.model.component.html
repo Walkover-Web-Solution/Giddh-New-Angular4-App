@@ -40,7 +40,7 @@
                         (onHidden)="onDDHidden()"
                         #permissionDropDown="bs-dropdown"
                         [attachOutsideOnClick]="true"
-                        (clickOutside)="permissionDropDown.hide()"
+                        (clickOutside)="permissionDropDown?.hide()"
                     >
                         <button dropdownToggle type="button" class="form-control text-left btn-block dropdown-toggle">
                             {{ dropdownHeading }}
