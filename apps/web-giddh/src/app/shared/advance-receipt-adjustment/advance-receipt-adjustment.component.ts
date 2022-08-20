@@ -722,10 +722,10 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
      * @memberof AdvanceReceiptAdjustmentComponent
      */
     public calculateBalanceDue(): void {
+        let totalAmount: number = 0;
+        let convertedTotalAmount: number = 0;
         if (this.adjustVoucherForm && this.adjustVoucherForm.adjustments && this.adjustVoucherForm.adjustments.length) {
             this.adjustPayment.balanceDue = this.invoiceFormDetails.voucherDetails.balanceDue;
-            let totalAmount: number = 0;
-            let convertedTotalAmount: number = 0;
             this.adjustVoucherForm.adjustments.forEach(item => {
                 if (item && item.adjustmentAmount && item.adjustmentAmount.amountForAccount) {
                     if (((this.adjustedVoucherType === AdjustedVoucherType.SalesInvoice || this.adjustedVoucherType === AdjustedVoucherType.Sales) && item.voucherType === AdjustedVoucherType.DebitNote) || ((this.adjustedVoucherType === AdjustedVoucherType.PurchaseInvoice || this.adjustedVoucherType === AdjustedVoucherType.Purchase) && item.voucherType === AdjustedVoucherType.CreditNote)) {
@@ -737,15 +737,15 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
                     }
                 }
             });
+        }
 
-            this.adjustPayment.totalAdjustedAmount = Number(totalAmount);
-            this.adjustPayment.convertedTotalAdjustedAmount = Number(convertedTotalAmount);
-            this.exceedDueAmount = this.getBalanceDue();
-            if (this.exceedDueAmount < 0) {
-                this.isInvalidForm = true;
-            } else {
-                this.isInvalidForm = false;
-            }
+        this.adjustPayment.totalAdjustedAmount = Number(totalAmount);
+        this.adjustPayment.convertedTotalAdjustedAmount = Number(convertedTotalAmount);
+        this.exceedDueAmount = this.getBalanceDue();
+        if (this.exceedDueAmount < 0) {
+            this.isInvalidForm = true;
+        } else {
+            this.isInvalidForm = false;
         }
     }
 
