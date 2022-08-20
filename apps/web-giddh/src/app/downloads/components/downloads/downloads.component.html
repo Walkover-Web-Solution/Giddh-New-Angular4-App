@@ -7,7 +7,7 @@
 >
     <hamburger-menu class="hamburger-menu"></hamburger-menu>
 
-    <div class="download-table-container">
+    <div class="download-table-container" *ngIf="dataSource?.length">
         <div class="activity-filter-wrap">
             <div class="mr-t15 mr-b15 custom-datepicker-wrapper">
                 <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
@@ -87,14 +87,14 @@
                 <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                 <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
             </table>
-            <section class="no-logs" *ngIf="!dataSource?.length && !isLoading">
-                <div class="no-data">
-                    <h1>{{ commonLocaleData?.app_no_record_found }}</h1>
-                </div>
-            </section>
         </div>
     </div>
 </ng-container>
+<section class="no-logs" *ngIf="!dataSource?.length && !isLoading">
+    <div class="no-data">
+        <h1>{{ commonLocaleData?.app_no_record_found }}</h1>
+    </div>
+</section>
 <div class="pagination-wrapper" *ngIf="downloadRequest?.totalItems > downloadRequest.count && !isLoading">
     <pagination
         [totalItems]="downloadRequest?.totalItems"
