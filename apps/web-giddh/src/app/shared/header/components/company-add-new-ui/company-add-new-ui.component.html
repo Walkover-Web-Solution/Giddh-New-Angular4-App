@@ -75,7 +75,7 @@
                                         class="pull-left select-caret w-100"
                                         [required]="true"
                                         [isRequired]="true"
-                                        (selected)="selectCountry($event)"
+                                        (selected)="selectCountry($event); isValidMobileNumber()"
                                         [defaultValue]="selectedCountry"
                                     >
                                     </sh-select>
@@ -111,6 +111,7 @@
                                             [options]="countryPhoneCode"
                                             [(ngModel)]="company.phoneCode"
                                             [defaultValue]="company.phoneCode"
+                                            (selected)="isValidMobileNumber()"
                                         >
                                         </sh-select>
                                         <input
