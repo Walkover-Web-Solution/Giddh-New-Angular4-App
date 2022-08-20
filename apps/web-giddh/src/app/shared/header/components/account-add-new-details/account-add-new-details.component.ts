@@ -36,7 +36,6 @@ import { clone, cloneDeep, uniqBy } from 'apps/web-giddh/src/app/lodash-optimize
 import { CustomFieldsService } from 'apps/web-giddh/src/app/services/custom-fields.service';
 import { FieldTypes } from 'apps/web-giddh/src/app/custom-fields/custom-fields.constant';
 import { CountryISO, PhoneNumberFormat, SearchCountryField } from 'ngx-intl-tel-input';
-import { AccountsAction } from 'apps/web-giddh/src/app/actions/accounts.actions';
 
 @Component({
     selector: 'account-add-new-details',
@@ -184,9 +183,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public updatedNumber: any = '';
     /** This will hold currentCompanyCountryCode */
     public currentCompanyCountryCode: any = '';
-    /** Observable for selected active group  */
-    private isAddAndManageOpenedFromOutside$: Observable<any>;
-
 
     constructor(
         private _fb: FormBuilder,
@@ -199,10 +195,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         private groupService: GroupService,
         private groupWithAccountsAction: GroupWithAccountsAction,
         private invoiceService: InvoiceService,
-        private customFieldsService: CustomFieldsService,
-        private accountsAction: AccountsAction) {
+        private customFieldsService: CustomFieldsService) {
         this.activeGroup$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroup), takeUntil(this.destroyed$));
-        this.isAddAndManageOpenedFromOutside$= this.store.pipe(select(appStore => appStore.groupwithaccounts.isAddAndManageOpenedFromOutside), takeUntil(this.destroyed$))
     }
 
     /**
@@ -230,7 +224,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         this.initializeNewForm();
         this.activeGroup$.subscribe(response => {
             if (response) {
-                if(response.uniqueName !== this.activeGroupUniqueName) {
+                if (this.activeGroupUniqueName && response.uniqueName !== this.activeGroupUniqueName) {
                     this.store.dispatch(this.groupWithAccountsAction.getGroupDetails(this.activeGroupUniqueName));
                 } else if (response.parentGroups && response.parentGroups.length) {
                     let parent = response.parentGroups;
@@ -369,7 +363,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
 
     public initializeNewForm() {
         this.addAccountForm = this._fb.group({
-            activeGroupUniqueName: [''],
+            activeGroupUniqueName: ['', Validators.required],
             name: ['', Validators.compose([Validators.required, Validators.maxLength(100)])],
             uniqueName: [''],
             openingBalanceType: ['CREDIT'],
@@ -619,11 +613,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     }
   
     public ngOnDestroy() {
-        this.isAddAndManageOpenedFromOutside$.subscribe(response => {
-            if (response) {
-                this.store.dispatch(this.accountsAction.resetActiveGroup());
-            }
-        });
         this.resetAddAccountForm();
         this.destroyed$.next(true);
         this.destroyed$.complete();
@@ -652,7 +641,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     }
 
     public selectGroup(event: IOption) {
-        if (event) {
+        if (event?.value) {
             this.activeGroupUniqueName = event.value;
             this.store.dispatch(this.groupWithAccountsAction.getGroupDetails(this.activeGroupUniqueName));
             this.isParentDebtorCreditor(this.activeGroupUniqueName);
