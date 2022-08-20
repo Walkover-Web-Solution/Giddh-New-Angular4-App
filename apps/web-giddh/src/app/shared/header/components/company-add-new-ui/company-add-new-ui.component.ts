@@ -351,6 +351,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy, AfterViewIni
             } else {
                 // branch on-boarding is carried out where no mobile field is there
                 this.isMobileNumberValid = true;
+                this.companyForm.form.controls['contactNo'].setErrors(null);
             }
         } catch (error) {
             this.isMobileNumberValid = false;
