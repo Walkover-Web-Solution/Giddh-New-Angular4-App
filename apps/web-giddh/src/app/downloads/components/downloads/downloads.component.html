@@ -7,7 +7,7 @@
 >
     <hamburger-menu class="hamburger-menu"></hamburger-menu>
 
-    <div class="download-table-container" *ngIf="dataSource?.length">
+    <div class="download-table-container">
         <div class="activity-filter-wrap">
             <div class="mr-t15 mr-b15 custom-datepicker-wrapper">
                 <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
@@ -29,7 +29,7 @@
         <div *ngIf="isLoading">
             <giddh-page-loader></giddh-page-loader>
         </div>
-        <div class="table-content" *ngIf="!isLoading">
+        <div class="table-content" *ngIf="!isLoading && dataSource?.length">
             <table mat-table [dataSource]="dataSource" class="download-table">
                 <!-- Requested Date Column -->
                 <ng-container matColumnDef="requestedDate">
