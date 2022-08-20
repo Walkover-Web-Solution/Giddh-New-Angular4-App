@@ -363,7 +363,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
 
     public initializeNewForm() {
         this.addAccountForm = this._fb.group({
-            activeGroupUniqueName: [''],
+            activeGroupUniqueName: ['', Validators.required],
             name: ['', Validators.compose([Validators.required, Validators.maxLength(100)])],
             uniqueName: [''],
             openingBalanceType: ['CREDIT'],
