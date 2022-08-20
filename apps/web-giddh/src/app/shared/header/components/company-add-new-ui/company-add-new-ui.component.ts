@@ -341,6 +341,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy, AfterViewIni
                 if (parsedNumber.isValid()) {
                     ele.classList.remove('error-box');
                     this.isMobileNumberValid = true;
+                    this.companyForm.form.controls['contactNo'].setErrors(null);
                 } else {
                     this.isMobileNumberValid = false;
                     this._toaster.errorToast(this.localeData?.invalid_contact_number_error);
