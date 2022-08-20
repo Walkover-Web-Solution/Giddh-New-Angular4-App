@@ -27,8 +27,10 @@ export class PermissionListComponent implements OnInit, AfterViewInit, OnDestroy
     public selectedRoleForDelete: IRoleCommonResponseAndRequest;
     public session$: Observable<any>;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    // showBackButton will be used to show/hide the back button
+    /* showBackButton will be used to show/hide the back button */
     public showBackButton: boolean = false;
+    /* showPopup will be used to show/hide the popup */
+    public showPopup: boolean = false;
     /* This will hold local JSON data */
     public localeData: any = {};
     /* This will hold common JSON data */
@@ -49,6 +51,7 @@ export class PermissionListComponent implements OnInit, AfterViewInit, OnDestroy
         this.route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((params) => {
             if (params && params["tab"] && params["tab"] === "settings") {
                 this.showBackButton = true;
+                this.showPopup = true;
                 this.router.navigate(['pages/permissions/list'], { replaceUrl: true });
             }
         });
@@ -83,7 +86,7 @@ export class PermissionListComponent implements OnInit, AfterViewInit, OnDestroy
      * @memberof PermissionListComponent
      */
     public ngAfterViewInit(): void {
-        if (this.showBackButton) {
+        if (this.showPopup) {
             this.openPermissionModal();
         }
     }
@@ -102,6 +105,7 @@ export class PermissionListComponent implements OnInit, AfterViewInit, OnDestroy
     }
 
     public closePopupEvent(userAction) {
+        this.showPopup = false;
         this.permissionModel.hide();
         if (userAction === 'save') {
             this.router.navigate(['/pages', 'permissions', 'details']);
