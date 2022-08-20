@@ -1,5 +1,4 @@
 <section id="manufacture" class="clearfix">
-    <!-- page Title -->
     <hamburger-menu *ngIf="!isInventoryPage" [pageHeading]="'Mfg. Journal Register'"></hamburger-menu>
     <div class="clearfix mr-r15 create-btn" *ngIf="isMobileScreen">
         <div class="mr-r15" *ngIf="showClearFilter()">
@@ -240,7 +239,7 @@
                     </thead>
                     <tbody>
                         <tr *ngFor="let item of reportData.results" (dblclick)="editMFItem(item)">
-                            <td data-title="Date">{{ moment(item.date, "DD-MM-YYYY") | date: "d MMM y" }}</td>
+                            <td data-title="Date">{{ dayjs(item.date, "DD-MM-YYYY") | date: "d MMM y" }}</td>
                             <td data-title="Voucher No." class="cursor-pointer">{{ item.voucherNumber }}</td>
                             <td data-title="Product Name">{{ item.stockName }}</td>
                             <td data-title="Qty Outwards">{{ item.manufacturingQuantity }}</td>

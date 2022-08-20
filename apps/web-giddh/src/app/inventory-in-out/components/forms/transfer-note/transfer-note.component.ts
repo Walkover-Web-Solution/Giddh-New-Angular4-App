@@ -4,7 +4,7 @@ import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@ang
 import { IStocksItem } from '../../../../models/interfaces/stocksItem.interface';
 import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
-import * as moment from 'moment';
+import * as dayjs from 'dayjs';
 import { StockUnitRequest } from '../../../../models/api-models/Inventory';
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 
@@ -34,7 +34,7 @@ export class TransferNoteComponent implements OnChanges {
 
     constructor(private _fb: FormBuilder) {
         this.form = this._fb.group({
-            inventoryEntryDate: [moment().format(GIDDH_DATE_FORMAT), Validators.required],
+            inventoryEntryDate: [dayjs().format(GIDDH_DATE_FORMAT), Validators.required],
             transactions: this._fb.array([]),
             description: [''],
             type: ['SENDER', Validators.required],
@@ -99,7 +99,7 @@ export class TransferNoteComponent implements OnChanges {
         if (this.form.valid) {
 
             let value: any = {
-                inventoryEntryDate: moment(this.inventoryEntryDate.value, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT),
+                inventoryEntryDate: dayjs(this.inventoryEntryDate.value, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT),
                 description: this.description.value,
                 transactions: [{
                     stock: { uniqueName: this.stock.value },

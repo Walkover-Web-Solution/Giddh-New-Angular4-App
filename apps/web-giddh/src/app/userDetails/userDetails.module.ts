@@ -64,9 +64,12 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         FormsModule,
         ReactiveFormsModule,
         UserDetailsRoutingModule,
-        TabsModule,
+        TabsModule.forRoot(),
         AlertModule,
-        LaddaModule,
+        LaddaModule.forRoot({
+            style: 'slide-left',
+            spinnerSize: 30
+        }),
         PerfectScrollbarModule,
         DecimalDigitsModule,
         SharedModule,

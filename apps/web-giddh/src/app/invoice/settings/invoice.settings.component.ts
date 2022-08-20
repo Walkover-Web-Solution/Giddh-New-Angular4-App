@@ -2,7 +2,7 @@ import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
-import * as moment from 'moment/moment';
+import * as dayjs from 'dayjs';
 import { CompanyCashFreeSettings, CompanyEmailSettings, EstimateSettings, InvoiceSetting, InvoiceSettings, InvoiceWebhooks, ProformaSettings } from '../../models/interfaces/invoice.setting.interface';
 import { AppState } from '../../store';
 import { select, Store } from '@ngrx/store';
@@ -52,7 +52,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
         entity: 'invoice'
     };
     public showDatePicker: boolean = false;
-    public moment = moment;
+    public dayjs = dayjs;
     public isAutoPaidOn: boolean;
     public companyCashFreeSettings: CompanyCashFreeSettings = new CompanyCashFreeSettings();
     public paymentGatewayList: IOption[] = [];
@@ -193,7 +193,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
 
                 if (this.invoiceSetting.lockDate) {
                     this.isLockDateSet = true;
-                    this.lockDate = moment(this.invoiceSetting.lockDate, GIDDH_DATE_FORMAT).toDate();
+                    this.lockDate = dayjs(this.invoiceSetting.lockDate, GIDDH_DATE_FORMAT).toDate();
                 } else {
                     this.isLockDateSet = false;
                 }
@@ -275,12 +275,12 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
         delete this.formToSave.sendThroughGmail;
         delete this.formToSave.razorPayform; // delete razorPay before sending form
         if (this.formToSave.invoiceSettings.lockDate instanceof Date) {
-            this.formToSave.invoiceSettings.lockDate = moment(this.formToSave.invoiceSettings.lockDate).format(GIDDH_DATE_FORMAT);
+            this.formToSave.invoiceSettings.lockDate = dayjs(this.formToSave.invoiceSettings.lockDate).format(GIDDH_DATE_FORMAT);
         }
         if (this.formToSave?.invoiceSettings?.gstEInvoiceEnable) {
             const invoiceSettings = this.formToSave.invoiceSettings;
             if (!invoiceSettings.gstEInvoiceUserName || !invoiceSettings.gstEInvoiceUserPassword || !invoiceSettings.gstEInvoiceGstin) {
-                this._toasty.errorToast('All fields are required for E-invoicing Authentication');
+                this._toasty.errorToast(this.localeData?.e_invoice_fields_required_error_message);
                 return;
             }
             if (this.formFields['taxName'] && this.formFields['taxName']['regex'] && this.formFields['taxName']['regex'].length > 0) {
@@ -292,7 +292,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
                     }
                 }
                 if (!isValid) {
-                    this._toasty.errorToast('Please provide a valid GSTIN');
+                    this._toasty.errorToast(this.localeData?.e_invoice_invalid_gstin_error_message);
                     return;
                 }
             }
@@ -467,7 +467,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
      * setInvoiceLockDate
      */
     public setInvoiceLockDate(date) {
-        this.invoiceSetting.lockDate = moment(date).format(GIDDH_DATE_FORMAT);
+        this.invoiceSetting.lockDate = dayjs(date).format(GIDDH_DATE_FORMAT);
         this.showDatePicker = !this.showDatePicker;
     }
 

@@ -1,7 +1,7 @@
 import { Component, OnInit, EventEmitter, Output, Input, ViewChild, ElementRef, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { VoucherAdjustments, AdjustAdvancePaymentModal, AdvanceReceiptRequest, Adjustment } from '../../models/api-models/AdvanceReceiptsAdjust';
 import { GIDDH_DATE_FORMAT } from '../helpers/defaultDateFormat';
-import * as moment from 'moment/moment';
+import * as dayjs from 'dayjs';
 import { SalesService } from '../../services/sales.service';
 import { IOption } from '../../theme/ng-select/ng-select';
 import { AppState } from '../../store';
@@ -162,7 +162,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
         }
         if (this.invoiceFormDetails && this.invoiceFormDetails.voucherDetails) {
             if (typeof this.invoiceFormDetails.voucherDetails.voucherDate !== 'string') {
-                this.invoiceFormDetails.voucherDetails.voucherDate = moment(this.invoiceFormDetails.voucherDetails.voucherDate).format(GIDDH_DATE_FORMAT);
+                this.invoiceFormDetails.voucherDetails.voucherDate = dayjs(this.invoiceFormDetails.voucherDetails.voucherDate).format(GIDDH_DATE_FORMAT);
             }
             this.invoiceFormDetails.voucherDetails.tcsTotal = this.invoiceFormDetails.voucherDetails.tcsTotal || 0;
             this.invoiceFormDetails.voucherDetails.tdsTotal = this.invoiceFormDetails.voucherDetails.tdsTotal || 0;
@@ -722,10 +722,10 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
      * @memberof AdvanceReceiptAdjustmentComponent
      */
     public calculateBalanceDue(): void {
+        let totalAmount: number = 0;
+        let convertedTotalAmount: number = 0;
         if (this.adjustVoucherForm && this.adjustVoucherForm.adjustments && this.adjustVoucherForm.adjustments.length) {
             this.adjustPayment.balanceDue = this.invoiceFormDetails.voucherDetails.balanceDue;
-            let totalAmount: number = 0;
-            let convertedTotalAmount: number = 0;
             this.adjustVoucherForm.adjustments.forEach(item => {
                 if (item && item.adjustmentAmount && item.adjustmentAmount.amountForAccount) {
                     if (((this.adjustedVoucherType === AdjustedVoucherType.SalesInvoice || this.adjustedVoucherType === AdjustedVoucherType.Sales) && item.voucherType === AdjustedVoucherType.DebitNote) || ((this.adjustedVoucherType === AdjustedVoucherType.PurchaseInvoice || this.adjustedVoucherType === AdjustedVoucherType.Purchase) && item.voucherType === AdjustedVoucherType.CreditNote)) {
@@ -737,15 +737,15 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
                     }
                 }
             });
+        }
 
-            this.adjustPayment.totalAdjustedAmount = Number(totalAmount);
-            this.adjustPayment.convertedTotalAdjustedAmount = Number(convertedTotalAmount);
-            this.exceedDueAmount = this.getBalanceDue();
-            if (this.exceedDueAmount < 0) {
-                this.isInvalidForm = true;
-            } else {
-                this.isInvalidForm = false;
-            }
+        this.adjustPayment.totalAdjustedAmount = Number(totalAmount);
+        this.adjustPayment.convertedTotalAdjustedAmount = Number(convertedTotalAmount);
+        this.exceedDueAmount = this.getBalanceDue();
+        if (this.exceedDueAmount < 0) {
+            this.isInvalidForm = true;
+        } else {
+            this.isInvalidForm = false;
         }
     }
 

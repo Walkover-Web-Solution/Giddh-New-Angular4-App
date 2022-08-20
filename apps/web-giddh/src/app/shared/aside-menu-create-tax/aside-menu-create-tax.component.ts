@@ -5,7 +5,7 @@ import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { AppState } from '../../store';
 import { select, Store } from '@ngrx/store';
 import { takeUntil } from 'rxjs/operators';
-import * as moment from 'moment/moment';
+import * as dayjs from 'dayjs';
 import { SettingsTaxesActions } from '../../actions/settings/taxes/settings.taxes.action';
 import { uniqueNameInvalidStringReplace } from '../helpers/helperFunctions';
 import { IForceClear } from "../../models/api-models/Sales";
@@ -50,7 +50,7 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
         private _settingsTaxesActions: SettingsTaxesActions,
         private salesService: SalesService
     ) {
-        this.newTaxObj.date = moment().toDate();
+        this.newTaxObj.date = dayjs().toDate();
     }
 
     ngOnInit() {
@@ -116,7 +116,7 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
             this.newTaxObj = {
                 ...this.tax,
                 taxValue: this.tax.taxDetail[0].taxValue,
-                date: moment(this.tax.taxDetail[0].date).toDate(),
+                date: dayjs(this.tax.taxDetail[0].date).toDate(),
                 tdsTcsTaxSubTypes: subTyp ? subTyp : null,
                 taxType: subTyp ? this.tax.taxType.replace(subTyp, '') : this.tax.taxType,
                 taxFileDate: this.tax.taxFileDate.toString()
@@ -175,7 +175,7 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
             });
         }
 
-        dataToSave.date = moment(dataToSave.date).format(GIDDH_DATE_FORMAT);
+        dataToSave.date = dayjs(dataToSave.date).format(GIDDH_DATE_FORMAT);
         dataToSave.accounts = dataToSave.accounts ? dataToSave.accounts : [];
         dataToSave.taxDetail = [{ date: dataToSave.date, taxValue: dataToSave.taxValue }];
 

@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef, TemplateRef, OnDestroy, Output, EventEmitter, OnInit } from '@angular/core';
+import { Component, ViewChild, ElementRef, TemplateRef, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal'
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { BreakpointObserver } from '@angular/cdk/layout';
@@ -9,7 +9,7 @@ import { AppState } from '../../store';
 import { takeUntil, filter } from 'rxjs/operators';
 import { ToasterService } from '../../services/toaster.service';
 import { PAGINATION_LIMIT, GIDDH_DATE_RANGE_PICKER_RANGES } from '../../app.constant';
-import * as moment from 'moment/moment';
+import * as dayjs from 'dayjs';
 import { GIDDH_NEW_DATE_FORMAT_UI, GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { ActivatedRoute, NavigationStart, Router } from '@angular/router';
 import { PurchaseOrderActions } from '../../actions/purchase-order/purchase-order.action';
@@ -26,7 +26,7 @@ import { cloneDeep } from '../../lodash-optimized';
     styleUrls: ['./purchase-order.component.scss']
 })
 
-export class PurchaseOrderComponent implements OnInit, OnDestroy {
+export class PurchaseOrderComponent implements OnDestroy {
     /* Datepicker component */
     @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
     /* Input element for column search */
@@ -46,8 +46,8 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
     public selectedDateRangeUi: any;
     /* This will store available date ranges */
     public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
-    /* Moment object */
-    public moment = moment;
+    /* dayjs object */
+    public dayjs = dayjs;
     /* Selected range label */
     public selectedRangeLabel: any = "";
     /* Universal date observer */
@@ -160,7 +160,7 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
      *
      * @memberof PurchaseOrderComponent
      */
-    public ngOnInit(): void {
+    public initPurchaseOrders(): void {
         this.breakPointObservar.observe([
             '(max-width: 767px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
@@ -213,16 +213,16 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
                 this.universalDate = _.cloneDeep(dateObj);
 
                 if (!this.useStoreFilters) {
-                    this.selectedDateRange = { startDate: moment(this.universalDate[0]), endDate: moment(this.universalDate[1]) };
-                    this.selectedDateRangeUi = moment(this.universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(this.universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                    this.selectedDateRange = { startDate: dayjs(this.universalDate[0]), endDate: dayjs(this.universalDate[1]) };
+                    this.selectedDateRangeUi = dayjs(this.universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(this.universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
 
-                    this.purchaseOrderGetRequest.from = moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
-                    this.purchaseOrderGetRequest.to = moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
+                    this.purchaseOrderGetRequest.from = dayjs(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
+                    this.purchaseOrderGetRequest.to = dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
 
                     this.getAllPurchaseOrders(true);
                 } else {
-                    this.selectedDateRange = { startDate: moment(this.purchaseOrderGetRequest.from, GIDDH_DATE_FORMAT), endDate: moment(this.purchaseOrderGetRequest.to, GIDDH_DATE_FORMAT) };
-                    this.selectedDateRangeUi = moment(this.purchaseOrderGetRequest.from, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(this.purchaseOrderGetRequest.to, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
+                    this.selectedDateRange = { startDate: dayjs(this.purchaseOrderGetRequest.from, GIDDH_DATE_FORMAT), endDate: dayjs(this.purchaseOrderGetRequest.to, GIDDH_DATE_FORMAT) };
+                    this.selectedDateRangeUi = dayjs(this.purchaseOrderGetRequest.from, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(this.purchaseOrderGetRequest.to, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
                     this.useStoreFilters = false;
                     this.getAllPurchaseOrders(true);
                 }
@@ -311,7 +311,9 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
                                 if (grandTotalAmountForCompany && grandTotalAmountForAccount) {
                                     grandTotalConversionRate = +((grandTotalAmountForCompany / grandTotalAmountForAccount) || 0).toFixed(2);
                                 }
-                                item.grandTotalTooltipText = `In ${item.grandTotal?.currencyForCompany?.code}: ${grandTotalAmountForCompany}<br />(Conversion Rate: ${grandTotalConversionRate})`;
+                                let currencyConversion = this.localeData?.currency_conversion;
+                                currencyConversion = currencyConversion?.replace("[BASE_CURRENCY]", item.grandTotal?.currencyForCompany?.code)?.replace("[AMOUNT]", grandTotalAmountForCompany)?.replace("[CONVERSION_RATE]", grandTotalConversionRate);
+                                item.grandTotalTooltipText = currencyConversion;
                                 return item;
                             });
                         }
@@ -379,10 +381,10 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
         this.hideGiddhDatepicker();
 
         if (value && value.startDate && value.endDate) {
-            this.selectedDateRange = { startDate: moment(value.startDate), endDate: moment(value.endDate) };
-            this.selectedDateRangeUi = moment(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
-            this.purchaseOrderGetRequest.from = moment(value.startDate).format(GIDDH_DATE_FORMAT);
-            this.purchaseOrderGetRequest.to = moment(value.endDate).format(GIDDH_DATE_FORMAT);
+            this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
+            this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
+            this.purchaseOrderGetRequest.from = dayjs(value.startDate).format(GIDDH_DATE_FORMAT);
+            this.purchaseOrderGetRequest.to = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
             this.getAllPurchaseOrders(true);
         }
     }
@@ -420,10 +422,10 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
      * @memberof PurchaseOrderComponent
      */
     public clearFilter(): void {
-        this.purchaseOrderGetRequest.from = moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
-        this.purchaseOrderGetRequest.to = moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
-        this.selectedDateRange = { startDate: moment(this.universalDate[0]), endDate: moment(this.universalDate[1]) };
-        this.selectedDateRangeUi = moment(this.universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(this.universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+        this.purchaseOrderGetRequest.from = dayjs(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
+        this.purchaseOrderGetRequest.to = dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
+        this.selectedDateRange = { startDate: dayjs(this.universalDate[0]), endDate: dayjs(this.universalDate[1]) };
+        this.selectedDateRangeUi = dayjs(this.universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(this.universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
         this.purchaseOrderGetRequest.page = 1;
         this.purchaseOrderGetRequest.sort = 'DESC';
         this.purchaseOrderGetRequest.sortBy = 'purchaseDate';
@@ -495,7 +497,7 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
      * @memberof PurchaseOrderComponent
      */
     public showClearFilterButton(): boolean {
-        if (this.purchaseOrderPostRequest.purchaseOrderNumber || this.purchaseOrderPostRequest.grandTotal || this.purchaseOrderPostRequest.grandTotalOperation || (this.purchaseOrderPostRequest.statuses && this.purchaseOrderPostRequest.statuses.length > 0) || this.purchaseOrderPostRequest.dueFrom || this.purchaseOrderPostRequest.dueTo || this.purchaseOrderPostRequest.vendorName || (this.purchaseOrderGetRequest.sortBy && this.purchaseOrderGetRequest.sortBy !== "purchaseDate") || (this.universalDate && (this.purchaseOrderGetRequest.from !== moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT) || this.purchaseOrderGetRequest.to !== moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT)))) {
+        if (this.purchaseOrderPostRequest.purchaseOrderNumber || this.purchaseOrderPostRequest.grandTotal || this.purchaseOrderPostRequest.grandTotalOperation || (this.purchaseOrderPostRequest.statuses && this.purchaseOrderPostRequest.statuses.length > 0) || this.purchaseOrderPostRequest.dueFrom || this.purchaseOrderPostRequest.dueTo || this.purchaseOrderPostRequest.vendorName || (this.purchaseOrderGetRequest.sortBy && this.purchaseOrderGetRequest.sortBy !== "purchaseDate") || (this.universalDate && (this.purchaseOrderGetRequest.from !== dayjs(this.universalDate[0]).format(GIDDH_DATE_FORMAT) || this.purchaseOrderGetRequest.to !== dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT)))) {
             return true;
         } else {
             return false;
@@ -722,14 +724,14 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
                     isValid = false;
                     this.toaster.errorToast(this.localeData?.po_date_error);
                 } else {
-                    this.bulkUpdatePostParams.purchaseDate = moment(this.bulkUpdatePostParams.purchaseDate).format(GIDDH_DATE_FORMAT);
+                    this.bulkUpdatePostParams.purchaseDate = dayjs(this.bulkUpdatePostParams.purchaseDate).format(GIDDH_DATE_FORMAT);
                 }
             } else if (this.bulkUpdateGetParams.action === BULK_UPDATE_FIELDS.duedate) {
                 if (!this.bulkUpdatePostParams.dueDate) {
                     isValid = false;
                     this.toaster.errorToast(this.localeData?.po_expirydate_error);
                 } else {
-                    this.bulkUpdatePostParams.dueDate = moment(this.bulkUpdatePostParams.dueDate).format(GIDDH_DATE_FORMAT);
+                    this.bulkUpdatePostParams.dueDate = dayjs(this.bulkUpdatePostParams.dueDate).format(GIDDH_DATE_FORMAT);
                 }
             } else if (this.bulkUpdateGetParams.action === BULK_UPDATE_FIELDS.warehouse) {
                 if (!this.bulkUpdatePostParams.warehouseUniqueName) {
@@ -778,12 +780,12 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
     public translationComplete(event: any): void {
         if (event) {
             this.translationLoaded = true;
-
             this.bulkUpdateFields = [
                 { label: this.localeData?.order_date, value: BULK_UPDATE_FIELDS.purchasedate },
                 { label: this.localeData?.expected_delivery_date, value: BULK_UPDATE_FIELDS.duedate },
                 { label: this.commonLocaleData?.app_warehouse, value: BULK_UPDATE_FIELDS.warehouse }
             ];
+            this.initPurchaseOrders();
         }
     }
 
@@ -808,7 +810,7 @@ export class PurchaseOrderComponent implements OnInit, OnDestroy {
             text = this.localeData?.delayed_by_days;
             text = text?.replace("[DAYS]", String(this.formatNumber(dueDays)));
         }
-        
+
         return text;
     }
 }

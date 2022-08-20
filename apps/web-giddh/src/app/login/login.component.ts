@@ -23,6 +23,7 @@ import { IOption } from "../theme/ng-virtual-select/sh-options.interface";
 import { DOCUMENT } from "@angular/common";
 import { userLoginStateEnum } from "../models/user-login-state";
 import { contriesWithCodes } from "../shared/helpers/countryWithCodes";
+import { CommonActions } from "../actions/common.actions";
 
 @Component({
     selector: "login",
@@ -79,7 +80,8 @@ export class LoginComponent implements OnInit, OnDestroy {
         private store: Store<AppState>,
         private loginAction: LoginActions,
         private authService: AuthService,
-        @Inject(DOCUMENT) private document: Document
+        @Inject(DOCUMENT) private document: Document,
+        private commonAction: CommonActions
     ) {
         this.urlPath = isElectron ? "" : AppUrl + APP_FOLDER;
         this.isLoginWithEmailInProcess$ = this.store.pipe(select(state => {
@@ -132,6 +134,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
     // tslint:disable-next-line:no-empty
     public ngOnInit() {
+        this.store.dispatch(this.commonAction.setActiveTheme(null));
         this.document.body.classList.remove("unresponsive");
         this.generateRandomBanner();
         this.mobileVerifyForm = this._fb.group({
