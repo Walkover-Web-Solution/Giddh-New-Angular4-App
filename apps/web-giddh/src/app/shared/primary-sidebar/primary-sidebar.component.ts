@@ -387,6 +387,12 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
             this.selectedGroupForCreateAccount = e[1]?.uniqueName;
             if (this.accountAsideMenuState === "out") {
                 this.toggleAccountAsidePane();
+            } else {
+                this.toggleAccountAsidePane();
+                setTimeout(() => {
+                    this.toggleAccountAsidePane();
+                    this.changeDetection.detectChanges();
+                }, 50);
             }
         }
     }
