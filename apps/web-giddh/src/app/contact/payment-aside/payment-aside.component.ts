@@ -165,7 +165,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
     }
 
     public ngOnInit() {
-        this.imgPath = (isElectron || isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         this.initializeNewForm();
         // get all registered account
         this.store.pipe((select(c => c.session.companyUniqueName)), take(2)).subscribe(s => this.companyUniqueName = s);
@@ -293,9 +293,9 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
                 this.OTPsent = true;
             } else {
                 if (res.status === 'error' && res.code === 'BANK_ERROR') {
-                    this.toaster.warningToast(res.message);
+                    this.toaster.showSnackBar("warning", res.message);
                 } else {
-                    this.toaster.errorToast(res.message);
+                    this.toaster.showSnackBar("error", res.message);
                 }
             }
         });
@@ -315,12 +315,12 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
 
                 this.isPayClicked = true;
                 if (response.body && response.body.message) {
-                    this.toaster.successToast(response.body.message);
+                    this.toaster.showSnackBar("success", response.body.message);
                     this.otpReceiverNameMessage = response.body.message;
                     this.paymentRequestId = response.body.requestId;
                 }
             } else if (response.status === 'error') {
-                this.toaster.errorToast(response.message, response.code);
+                this.toaster.showSnackBar("error", response.message, response.code);
             }
         });
     }
@@ -342,9 +342,9 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
                 this.openModalWithClass(this.successTemplate);
             } else {
                 if (res.status === 'error' && res.code === 'BANK_ERROR') {
-                    this.toaster.warningToast(res.message);
+                    this.toaster.showSnackBar("warning", res.message);
                 } else {
-                    this.toaster.errorToast(res.message, res.code);
+                    this.toaster.showSnackBar("error", res.message, res.code);
                 }
             }
             this.isRequestInProcess = false;
@@ -460,13 +460,13 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
             if (response && response.status === 'success') {
                 this.isPayClicked = true;
                 if (response.body && response.body.message) {
-                    this.toaster.successToast(response.body.message);
+                    this.toaster.showSnackBar("success", response.body.message);
                     this.otpReceiverNameMessage = response.body.message;
                     this.paymentRequestId = response.body.requestId;
                 }
             } else if (response.status === 'error') {
                 this.isPayClicked = false;
-                this.toaster.errorToast(response.message, response.code);
+                this.toaster.showSnackBar("error", response.message, response.code);
                 this.paymentRequestId = '';
             }
         });
@@ -495,7 +495,8 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
         this.totalSelectedAccountAmount = 0;
         if (selectedAccount && selectedAccount.length) {
             this.totalSelectedAccountAmount = selectedAccount.reduce((prev, cur) => {
-                return prev + Number(cur.closingBalanceAmount);
+                const closingBalanceAmount = Number(String(cur.closingBalanceAmount).replace(/,/g, ''));
+                return prev + closingBalanceAmount;
             }, 0);
         }
         this.totalSelectedAccountAmount = Number(this.totalSelectedAccountAmount);
@@ -547,9 +548,10 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
                 remarks: '',
                 vendorUniqueName: ''
             };
-            transaction.amount = item.closingBalanceAmount;
-            transaction.remarks = item.remarks;
-            transaction.vendorUniqueName = item.uniqueName;
+            const closingBalanceAmount = Number(String(item?.closingBalanceAmount).replace(/,/g, ''));
+            transaction.amount = String(closingBalanceAmount);
+            transaction.remarks = item?.remarks;
+            transaction.vendorUniqueName = item?.uniqueName;
             this.requestObjectToGetOTP.bankPaymentTransactions.push(transaction);
         });
     }
@@ -711,8 +713,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
             } else {
                 this.payorsList = [];
                 if(response?.message) {
-                    this.toaster.clearAllToaster();
-                    this.toaster.errorToast(response?.message);
+                    this.toaster.showSnackBar("error", response?.message);
                 }
             }
             this.isPayorListInProgress = false;

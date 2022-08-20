@@ -33,7 +33,7 @@
                 </perfect-scrollbar>
                 <div class="add-bank-details" *ngIf="!isLoading && bankAccounts.length === 0">
                     <p>{{ localeData?.no_banks_found }}</p>
-                    <a class="connect-bank" [routerLink]="['/pages/settings/linked-accounts']">{{
+                    <a class="connect-bank" [routerLink]="['/pages/settings/integration/payment']">{{
                         localeData?.connect_bank
                     }}</a>
                 </div>
@@ -42,7 +42,7 @@
             <a
                 class="connect-bank"
                 *ngIf="bankAccounts.length > 0"
-                [routerLink]="['/pages/settings/linked-accounts']"
+                [routerLink]="['/pages/settings/integration/payment']"
                 >{{ localeData?.connect_bank }}</a
             >
         </div>

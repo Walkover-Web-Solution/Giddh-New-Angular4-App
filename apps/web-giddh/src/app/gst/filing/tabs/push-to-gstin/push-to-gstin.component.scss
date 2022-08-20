@@ -1,7 +1,5 @@
-@import "../../../../../../../web-giddh/src/assets/css/color.scss";
-
 .nav.nav-tabs {
-    background: $white !important;
+    background: var(--color-white) !important;
 }
 
 .push-gstin .nav.nav-tabs > li:last-child {

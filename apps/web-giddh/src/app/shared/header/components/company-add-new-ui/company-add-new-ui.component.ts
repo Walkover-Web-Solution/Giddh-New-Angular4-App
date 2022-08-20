@@ -1,5 +1,5 @@
 import { take, takeUntil, distinctUntilChanged } from 'rxjs/operators';
-import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { VerifyMobileActions } from '../../../../actions/verifyMobile.actions';
 import { CompanyActions } from '../../../../actions/company.actions';
@@ -14,7 +14,6 @@ import { AppState } from '../../../../store';
 import {
     CompanyResponse,
     SocketNewCompanyRequest,
-    StateDetailsRequest,
     CompanyCreateRequest
 } from '../../../../models/api-models/Company';
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
@@ -33,7 +32,7 @@ import { parsePhoneNumberFromString, CountryCode } from 'libphonenumber-js/min';
     styleUrls: ['./company-add-new-ui.component.scss']
 })
 
-export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
+export class CompanyAddNewUiComponent implements OnInit, OnDestroy, AfterViewInit {
     @Output() public closeCompanyModal: EventEmitter<any> = new EventEmitter();
     @Output() public closeCompanyModalAndShowAddManege: EventEmitter<string> = new EventEmitter();
     @ViewChild('logoutModal', { static: true }) public logoutModal: ModalDirective;
@@ -45,6 +44,8 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
     @Input() public isUpdateMode: boolean = false;
     /** Stores the entity details to be updated */
     @Input() public entityDetails: any;
+    /** Stores company name input field reference */
+    @ViewChild('companyNameInputField') companyNameInputField: ElementRef<HTMLElement>;
 
     public imgPath: string = '';
     public countrySource: IOption[] = [];
@@ -124,7 +125,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
         this.getCountry();
         this.getCallingCodes();
 
-        this.imgPath = (isElectron || isCordova) ? '' : AppUrl + APP_FOLDER + '';
+        this.imgPath = isElectron ? '' : AppUrl + APP_FOLDER + '';
         this.logedInuser = this._generalService.user;
         if (this._generalService.createNewCompany) {
             this.company = this._generalService.createNewCompany;
@@ -150,13 +151,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
                 this.store.pipe(select(ss => ss.session.lastState), take(1)).subscribe(se => {
                     prevTab = se;
                 });
-                let stateDetailsRequest = new StateDetailsRequest();
-                stateDetailsRequest.companyUniqueName = this.company?.uniqueName;
-                stateDetailsRequest.lastState = this.isNewUser ? 'welcome' : 'onboarding';
-                this._generalService.companyUniqueName = this.company?.uniqueName;
-                if (prevTab !== 'user-details') {
-                    this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
-                }
+                this._generalService.companyUniqueName = this.company.uniqueName;
                 setTimeout(() => {
                     if (prevTab !== 'user-details') {
                         this.store.dispatch(this._loginAction.ChangeCompany(this.company?.uniqueName));
@@ -193,6 +188,17 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
             this.company.name = this.entityDetails.name;
             this.company.nameAlias = this.entityDetails.alias;
         }
+    }
+
+    /**
+     * Runs after view child variable are properly loaded
+     *
+     * @memberof CompanyAddNewUiComponent
+     */
+    public ngAfterViewInit(): void {
+        setTimeout(() => {
+            this.companyNameInputField?.nativeElement?.focus();
+        }, 200);
     }
 
     /**
@@ -291,12 +297,6 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
         this.closeCompanyModal.emit();
         if (isElectron) {
             this.store.dispatch(this._loginAction.ClearSession());
-        } else if (isCordova) {
-            (window as any).plugins.googleplus.logout(
-                (msg) => {
-                    this.store.dispatch(this._loginAction.ClearSession());
-                }
-            );
         } else {
             this.isLoggedInWithSocialAccount$.subscribe((val) => {
                 if (val) {
@@ -340,6 +340,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
                 if (parsedNumber.isValid()) {
                     ele.classList.remove('error-box');
                     this.isMobileNumberValid = true;
+                    this.companyForm.form.controls['contactNo'].setErrors(null);
                 } else {
                     this.isMobileNumberValid = false;
                     this._toaster.errorToast(this.localeData?.invalid_contact_number_error);
@@ -349,6 +350,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy {
             } else {
                 // branch on-boarding is carried out where no mobile field is there
                 this.isMobileNumberValid = true;
+                this.companyForm.form.controls['contactNo'].setErrors(null);
             }
         } catch (error) {
             this.isMobileNumberValid = false;

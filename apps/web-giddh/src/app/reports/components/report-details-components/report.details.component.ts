@@ -7,8 +7,8 @@ import { CompanyService } from "../../../services/companyService.service";
 import { ReportsModel, ReportsRequestModel } from "../../../models/api-models/Reports";
 import { ToasterService } from "../../../services/toaster.service";
 import { createSelector } from "reselect";
-import { takeUntil, filter, take } from "rxjs/operators";
-import * as moment from 'moment/moment';
+import { takeUntil, filter } from "rxjs/operators";
+import * as dayjs from 'dayjs';
 import { Observable, ReplaySubject } from "rxjs";
 import { GIDDH_DATE_FORMAT } from "../../../shared/helpers/defaultDateFormat";
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
@@ -31,7 +31,7 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
     public selectedType = 'monthly';
     private selectedMonth: string;
     public dateRange: Date[];
-    public moment = moment;
+    public dayjs = dayjs;
     public financialOptions: IOption[] = [];
     public selectedCompany: CompanyResponse;
     private interval: any;
@@ -62,11 +62,11 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
         private settingsBranchAction: SettingsBranchActions,
         private generalService: GeneralService,
         private breakPointObservar: BreakpointObserver) {
-            this.breakPointObservar.observe([
-                '(max-width: 767px)'
-            ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
-                this.isMobileScreen = result.matches;
-            });
+        this.breakPointObservar.observe([
+            '(max-width: 767px)'
+        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
+            this.isMobileScreen = result.matches;
+        });
     }
 
     ngOnInit() {
@@ -86,10 +86,10 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
         this.currentCompanyBranches$.subscribe(response => {
             if (response && response.length) {
                 this.currentCompanyBranches = response.map(branch => ({
-                    label: branch.alias,
-                    value: branch.uniqueName,
-                    name: branch.name,
-                    parentBranch: branch.parentBranch
+                    label: branch?.alias,
+                    value: branch?.uniqueName,
+                    name: branch?.name,
+                    parentBranch: branch?.parentBranch
                 }));
                 this.currentCompanyBranches.unshift({
                     label: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : '',
@@ -101,17 +101,17 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
                     let currentBranchUniqueName;
                     if (this.currentOrganizationType === OrganizationType.Branch) {
                         currentBranchUniqueName = this.generalService.currentBranchUniqueName;
-                        this.currentBranch = _.cloneDeep(response.find(branch => branch.uniqueName === currentBranchUniqueName)) || this.currentBranch;
+                        this.currentBranch = _.cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName)) || this.currentBranch;
                     } else {
-                        currentBranchUniqueName = this.activeCompany ? this.activeCompany.uniqueName : '';
+                        currentBranchUniqueName = this.activeCompany ? this.activeCompany?.uniqueName : '';
                         this.currentBranch = {
                             name: this.activeCompany ? this.activeCompany.name : '',
                             alias: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : '',
-                            uniqueName: this.activeCompany ? this.activeCompany.uniqueName : '',
+                            uniqueName: this.activeCompany ? this.activeCompany?.uniqueName : '',
                         };
                     }
                 } else {
-                    const selectedBranch = _.cloneDeep(response.find(branch => branch.uniqueName === this.currentBranch.uniqueName));
+                    const selectedBranch = _.cloneDeep(response.find(branch => branch?.uniqueName === this.currentBranch?.uniqueName));
                     if (selectedBranch) {
                         this.currentBranch.name = selectedBranch.name;
                         this.currentBranch.alias = selectedBranch.alias;
@@ -225,21 +225,21 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
                 } else {
                     uniqueNameToSearch = (activeCompany.activeFinancialYear) ? activeCompany.activeFinancialYear.uniqueName : "";
                 }
-                selectedFinancialYear = this.financialOptions.find(p => p.value === uniqueNameToSearch);
+                selectedFinancialYear = this.financialOptions.find(p => p?.value === uniqueNameToSearch);
                 activeFinancialYear = this.selectedCompany.financialYears.find(p => p.uniqueName === uniqueNameToSearch);
                 this.currentActiveFinacialYear = _.cloneDeep(selectedFinancialYear);
                 this.currentBranch.uniqueName = currentBranchUniqueName ? currentBranchUniqueName : (this.currentBranch ? this.currentBranch.uniqueName : "");
                 this.selectedType = currentTimeFilter ? currentTimeFilter.toLowerCase() : this.selectedType;
                 this.activeFinacialYr = activeFinancialYear;
                 this.populateRecords(this.selectedType);
-                this.salesRegisterTotal.particular = this.activeFinacialYr.uniqueName;
+                this.salesRegisterTotal.particular = this.activeFinacialYr?.uniqueName;
             }
         });
     }
 
     public selectFinancialYearOption(v: IOption) {
-        if (v.value) {
-            let financialYear = this.selectedCompany.financialYears.find(p => p.uniqueName === v.value);
+        if (v?.value) {
+            let financialYear = this.selectedCompany.financialYears.find(p => p.uniqueName === v?.value);
             this.activeFinacialYr = financialYear;
             this.populateRecords(this.interval, this.selectedMonth);
         }
@@ -283,8 +283,8 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
     public bsValueChange(event: any) {
         if (event) {
             let request: ReportsRequestModel = {
-                to: moment(event[1]).format(GIDDH_DATE_FORMAT),
-                from: moment(event[0]).format(GIDDH_DATE_FORMAT),
+                to: dayjs(event[1]).format(GIDDH_DATE_FORMAT),
+                from: dayjs(event[0]).format(GIDDH_DATE_FORMAT),
                 interval: 'monthly',
                 branchUniqueName: (this.currentBranch ? this.currentBranch.uniqueName : "")
             }
@@ -348,7 +348,7 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
      */
     private savePreferences(): void {
         this.store.dispatch(this.companyActions.setUserChosenFinancialYear({
-            financialYear: this.currentActiveFinacialYear.value, branchUniqueName: (this.currentBranch ? this.currentBranch.uniqueName : ""), timeFilter: this.selectedType
+            financialYear: this.currentActiveFinacialYear?.value, branchUniqueName: (this.currentBranch ? this.currentBranch.uniqueName : ""), timeFilter: this.selectedType
         }));
     }
 

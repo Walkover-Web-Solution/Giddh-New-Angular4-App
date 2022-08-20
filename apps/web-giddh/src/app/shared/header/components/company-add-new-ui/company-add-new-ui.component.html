@@ -8,13 +8,14 @@
         <div class="modal-header">
             <h3 *ngIf="!createBranch">{{ localeData?.page_heading }}</h3>
             <h3 *ngIf="createBranch">{{ isUpdateMode ? localeData?.update_branch : localeData?.create_new_branch }}</h3>
-            <span
+            <button
                 aria-hidden="true"
                 class="close"
                 data-dismiss="modal"
                 (click)="removeCompanySessionData(); closeModal()"
-                >×</span
             >
+                ×
+            </button>
         </div>
         <div class="modal-body p-0" id="SharePop">
             <div class="welcome-wrapper">
@@ -54,6 +55,7 @@
                                     [(ngModel)]="company.name"
                                     class="form-control"
                                     (blur)="makeMeCaptialize(company.name)"
+                                    #companyNameInputField
                                 />
                                 <!-- /btn-account -->
                             </div>
@@ -73,7 +75,7 @@
                                         class="pull-left select-caret w-100"
                                         [required]="true"
                                         [isRequired]="true"
-                                        (selected)="selectCountry($event)"
+                                        (selected)="selectCountry($event); isValidMobileNumber()"
                                         [defaultValue]="selectedCountry"
                                     >
                                     </sh-select>
@@ -109,6 +111,7 @@
                                             [options]="countryPhoneCode"
                                             [(ngModel)]="company.phoneCode"
                                             [defaultValue]="company.phoneCode"
+                                            (selected)="isValidMobileNumber()"
                                         >
                                         </sh-select>
                                         <input

@@ -1,6 +1,5 @@
-@import "../../../../assets/css/color.scss";
 .secondary-dark-bg span {
-    background: $teal;
+    background: var(--color-primary-revenue-chart-secondary-dark-bg);
     width: 15px;
     height: 15px;
     display: inline-block;
@@ -8,7 +7,7 @@
 }
 
 .secondary-light-bg span {
-    background: $light-sea-green;
+    background: var(--color-primary-revenue-chart-secondary-dark-bg);
     width: 15px;
     height: 15px;
     display: inline-block;
@@ -21,23 +20,23 @@
     align-items: center;
 }
 .dashboard-option li.secondary-dark-bg {
-    color: $teal;
+    color: var(--color-primary-revenue-chart-secondary-dark-bg);
     font-size: 14px;
 }
 .dashboard-option li.secondary-light-bg {
-    color: $light-sea-green;
+    color: var(--color-primary-revenue-chart-secondary-dark-bg);
     font-size: 14px;
 }
 
 .dashboard-option li h3 {
-    color: $dark-gray;
+    color: var(--color-abbey);
 }
 .left-column {
-    border-right: 1px solid $gainsboro;
     margin: 5px 0;
+    border-right: 1px solid var(--color-common-secondary-border);
 }
 span.this-week {
-    color: $dark-gray;
+    color: var(--color-abbey);
     padding-left: 5px;
     font-size: 16px;
 }
@@ -47,16 +46,16 @@ span.this-week {
 }
 .total-sale-detail p {
     font-size: 18px;
-    color: $dark-gray;
+    color: var(--color-abbey);
 }
 .total-sale-detail h3 {
     font-size: 22px;
-    color: $black;
+    color: var(--color-nero);
 }
 
 .total-sale-detail span {
     font-size: 18px;
-    color: $black;
+    color: var(--color-common-septenary-text);
 }
 .single-sale-detail {
     padding-top: 30px;
@@ -67,32 +66,32 @@ span.icon-collapse-icon {
     cursor: pointer;
 }
 span.icon-collapse-icon:hover {
-    color: $midnight-blue;
+    color: var(--color-giddh-blue);
 }
 
 /* CSS FOR LINE CHART */
 
 p.bankName {
     font-size: 14px;
-    color: $midnight-blue;
+    color: var(--color-giddh-blue);
     margin-bottom: 5px;
 }
 
 p.bank-balance {
-    color: $dark-gray;
+    color: var(--color-abbey);
     font-size: 14px;
     display: flex;
     justify-content: space-between;
 }
 .single-bank-detail {
-    border-bottom: 1px solid $gainsboro;
+    border-bottom: 1px solid var(--color-iron);
     padding-bottom: 10px;
     margin-bottom: 10px;
 }
 a.connect-bank {
     position: absolute;
     bottom: 10px;
-    color: $nero;
+    color: var(--color-nero);
     font-size: 14px;
     text-decoration: underline;
 }
@@ -100,18 +99,18 @@ a.connect-bank {
     padding: 15px;
 }
 .total-sales-header {
-    background-color: $white;
-    border: 1px solid $gainsboro;
+    background-color: var(--color-white);
+    border: 1px solid var(--color-common-primary-border);
     border-radius: 2px;
     padding: 15px 15px 20px;
 }
 .dashboard-container label {
     font-size: 14px;
-    color: $charcoal;
+    color: var(--color-nero);
     margin-bottom: 3px;
 }
 .date-range-block .form-control {
-    border: 1px solid $chetwode-blue;
+    border: 1px solid var(--color-blue);
 }
 .date-range-input {
     position: relative;
@@ -123,15 +122,14 @@ a.connect-bank {
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    border-right: 1px solid $gainsboro;
-    color: $nero;
+    color: var(--color-nero);
 }
 .date-range-input input {
     padding-left: 35px !important;
-    color: $nero;
+    color: var(--color-nero);
 }
 .page-title h1 {
-    color: $midnight-blue;
+    color: var(--color-giddh-blue);
     font-size: 24px;
     text-align: center;
     font-weight: 600;
@@ -155,7 +153,7 @@ a.connect-bank {
     display: inline;
     text-align: right;
     font-size: 24px;
-    color: $midnight-blue;
+    color: var(--color-giddh-blue);
 }
 .date-range-input.disabled {
     opacity: 0.5;
@@ -169,7 +167,7 @@ a.connect-bank {
     font-size: 18px;
 }
 .active-date {
-    color: $midnight-blue;
+    color: var(--color-giddh-blue);
     display: inline-flex;
     justify-content: center;
     align-items: center;
@@ -179,11 +177,11 @@ a.connect-bank {
     width: 15px;
     height: 15px;
     display: inline-block;
-    background-color: $midnight-blue;
+    background-color: var(--color-giddh-blue);
     margin-right: 5px;
 }
 .in-active-date {
-    color: $chetwode-blue;
+    color: var(--color-blue);
     display: inline-flex;
     justify-content: center;
     align-items: center;
@@ -193,35 +191,36 @@ a.connect-bank {
     width: 15px;
     height: 15px;
     display: inline-block;
-    background-color: $chetwode-blue;
+    background-color: var(--color-blue);
     margin-right: 5px;
 }
 
 .panel {
     padding: 15px;
     border-radius: 2px;
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--color-iron);
+
     position: relative;
 }
 .top-dates {
     min-height: 60px;
 }
 .single-sale-data p {
-    color: $charcoal;
+    color: var(--color-nero);
     font-size: 16px;
 }
 .single-sale-data h3 {
     font-size: 22px;
-    color: $midnight-blue;
+    color: var(--color-giddh-blue);
     margin-top: 6px;
 }
 span.date-wise-sale {
-    color: $midnight-blue;
+    color: var(--color-giddh-blue);
     font-size: 18px;
 }
 
 .single-sale-data {
-    border-right: 1px solid $gainsboro;
+    border-right: 1px solid var(--color-common-secondary-border);
     min-height: 78px;
 }
 .total-sale-data {
@@ -232,17 +231,17 @@ span.date-wise-sale {
     border-right: none;
 }
 .total-sales-tabs a {
-    color: $charcoal;
+    color: var(--color-nero);
     cursor: pointer;
 }
 .total-sales-tabs a.active-graph {
     font-family: "opensans-semibold";
 }
 input:read-only {
-    border-color: $gainsboro !important;
+    border-color: var(--color-secondary-input-bar-border) !important;
 }
 input:read-only:focus {
-    border-color: $gainsboro !important;
+    border-color: var(--color-secondary-input-bar-border) !important;
 }
 .total-sales-header label {
     margin-bottom: 5px;

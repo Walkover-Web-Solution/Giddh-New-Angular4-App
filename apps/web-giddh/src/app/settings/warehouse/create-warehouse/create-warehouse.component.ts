@@ -149,7 +149,7 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.imgPath = (isElectron || isCordova) ? 'assets/images/warehouse-image.svg' : AppUrl + APP_FOLDER + 'assets/images/warehouse-image.svg';
+        this.imgPath = isElectron ? 'assets/images/warehouse-image.svg' : AppUrl + APP_FOLDER + 'assets/images/warehouse-image.svg';
     }
 
     /**

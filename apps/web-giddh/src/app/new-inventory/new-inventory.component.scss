@@ -1,32 +1,38 @@
-@import "../../assets/css/color.scss";
 .inventory-header {
-    padding-top: 60px;
+    padding-top: 15px;
     justify-content: space-between;
+
     i {
         width: 36px;
         height: 36px;
         display: flex;
         justify-content: center;
         align-items: center;
-        border: 1px solid $gainsboro;
-        color: $gray;
-        background-color: $white;
+        border: 1px solid var(--color-primary-button-border);
+        color: var(--color-gray);
+        background-color: var(--color-white);
         cursor: pointer;
     }
+
     .input-group {
         width: 36px;
+
         &.full-width-input-group {
             border: none;
             width: 228px;
+
             .icon-search {
                 border: none;
             }
+
             .icon-search {
-                border-right: 1px solid $gainsboro;
+                border-right: 1px solid var(--color-primary-button-border);
             }
         }
+
         &.full-width-search-group {
             width: 228px;
+
             .icon-search.pos-abs {
                 z-index: 4;
             }
@@ -37,11 +43,13 @@
     sh-select {
         min-width: 228px;
         text-align: left;
+
         &.search-group,
         &.giddh-datepicker {
             min-width: 0;
             width: 0 !important;
         }
+
         &.search-group.full-width,
         &.giddh-datepicker.full-width {
             min-width: 228px;
@@ -49,6 +57,7 @@
             padding-left: 40px !important;
         }
     }
+
     .button-group {
         button {
             display: flex;
@@ -59,21 +68,39 @@
             padding: 0;
             margin: 0;
             border: none;
+
             i {
                 vertical-align: top;
                 font-size: 18px;
-                color: $gray;
+                color: var(--color-gray);
             }
         }
     }
 }
+
 input,
 sh-select::ng-deep input {
     border-radius: 50px !important;
 }
-button {
-    border-radius: 50px !important;
+
+.new-inventory-page-header {
+    padding: 0 15px 15px;
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--color-gray);
+    align-items: center;
+
+    .inventory-header-right {
+        display: flex;
+    }
 }
+.inventory-card {
+    border-radius: 5px;
+}
+//button {
+//    border-radius: 50px !important;
+//}
 button#more-btn-inventory {
     min-width: 90px;
     display: flex;
@@ -81,25 +108,30 @@ button#more-btn-inventory {
     align-items: center;
     border-radius: 50px !important;
 }
+
 @media (max-width: 1270px) and (min-width: 768px) {
     .inventory-header {
         position: relative;
         flex-direction: column;
+
         .inventory-right-btn {
             justify-content: flex-end;
             margin-top: 15px;
         }
+
         .advance-search-btn {
             position: absolute;
             top: 70px;
         }
     }
 }
+
 @media (max-width: 767px) {
     #more-btn-inventory {
         margin-right: 0 !important;
     }
 }
+
 @media (max-width: 360px) {
     .advance-search-btn {
         position: absolute;

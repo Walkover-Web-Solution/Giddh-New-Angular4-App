@@ -1,6 +1,6 @@
 import { Inject, Injectable, Optional } from '@angular/core';
 import { Observable } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { PURCHASE_ORDER_API } from './apiurls/purchase-order.api';
 import { GiddhErrorHandler } from './catchManager/catchmanger';
@@ -230,5 +230,21 @@ export class PurchaseOrderService {
         url = url.replace(':sortBy', getRequestObject.sortBy);
 
         return this.http.post(url, postRequestObject).pipe(catchError((e) => this.errorHandler.HandleCatch<any, any>(e, getRequestObject)));
+    }
+
+    /* This will verify the email
+     *
+     * @param {*} params
+     * @returns {Observable<BaseResponse<any, string>>}
+     * @memberof PurchaseOrderService
+     */
+    public verifyEmail(params: any): Observable<BaseResponse<any, string>> {
+        let url = this.config.apiUrl + PURCHASE_ORDER_API.VERIFY_EMAIL.replace(':companyUniqueName', params.companyUniqueName).replace(':branchUniqueName', params.branchUniqueName).replace(':emailAddress', params.emailAddress).replace(':scope', params.scope);
+        return this.http.get(url).pipe(
+            map((res) => {
+                let data: BaseResponse<any, string> = res;
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
     }
 }

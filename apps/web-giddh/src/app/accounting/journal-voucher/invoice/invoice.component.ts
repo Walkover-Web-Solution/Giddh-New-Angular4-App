@@ -17,10 +17,10 @@ import {
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
-import { BlankLedgerVM } from 'apps/web-giddh/src/app/ledger/ledger.vm';
+import { BlankLedgerVM } from 'apps/web-giddh/src/app/material-ledger/ledger.vm';
 import { cloneDeep, forEach, isEqual, sumBy, concat, find, without, orderBy } from 'apps/web-giddh/src/app/lodash-optimized';
 import { TaxResponse } from 'apps/web-giddh/src/app/models/api-models/Company';
-import * as moment from 'moment';
+import * as dayjs from 'dayjs';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Observable, ReplaySubject } from 'rxjs';
 import { distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
@@ -97,7 +97,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
     public totalCreditAmount: number = 0;
     public totalDebitAmount: number = 0;
     public showConfirmationBox: boolean = false;
-    public moment = moment;
+    public dayjs = dayjs;
     public accountSearch: string = '';
     public stockSearch: string;
     public selectedRowIdx: any;
@@ -243,7 +243,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
                 this.taxesToRemember = [];
             }
         });
-        this.entryDate = moment().format(GIDDH_DATE_FORMAT);
+        this.entryDate = dayjs().format(GIDDH_DATE_FORMAT);
         // this.refreshEntry();
         // this.data.transactions[this.data.transactions.length - 1].inventory.push(this.initInventory());
 
@@ -506,8 +506,8 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
         this.totalDebitAmount = 0;
         this.addNewRow('stock');
         this.addNewRow('account');
-        this.data.entryDate = moment().format(GIDDH_DATE_FORMAT);
-        this.entryDate = moment().format(GIDDH_DATE_FORMAT);
+        this.data.entryDate = dayjs().format(GIDDH_DATE_FORMAT);
+        this.entryDate = dayjs().format(GIDDH_DATE_FORMAT);
         this.creditorAcc = {};
         this.debtorAcc = {};
         this.stockTotal = null;
@@ -791,9 +791,9 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
     }
 
     public dateEntered() {
-        const date = moment(this.entryDate, GIDDH_DATE_FORMAT);
-        if (moment(date).format('dddd') !== 'Invalid date') {
-            this.displayDay = moment(date).format('dddd');
+        const date = dayjs(this.entryDate, GIDDH_DATE_FORMAT);
+        if (dayjs(date).format('dddd') !== 'Invalid date') {
+            this.displayDay = dayjs(date).format('dddd');
         } else {
             this.displayDay = '';
         }

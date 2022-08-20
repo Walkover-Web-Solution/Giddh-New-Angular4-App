@@ -1,48 +1,49 @@
-@import "../../../../assets/css/color.scss";
 p.bank-name {
     font-size: 14px;
-    color: $midnight-blue;
+    color: var(--color-common-senary-text);
     margin-bottom: 5px;
 }
 p.bank-balance {
-    color: $dark-gray;
+    color: var(--color-abbey);
     font-size: 14px;
     display: flex;
     justify-content: space-between;
 }
 .single-bank-detail {
-    border-bottom: 1px solid $gainsboro;
+    border-bottom: 1px solid var(--color-iron);
     padding-bottom: 10px;
     margin-bottom: 10px;
 }
 a.connect-bank {
     position: absolute;
     bottom: 10px;
-    color: $nero;
+    color: var(--color-nero);
     text-decoration: underline;
 }
 table.basic td {
     padding-right: 0;
     padding-left: 0;
     border-top: none;
-    border-bottom: 1px solid $gainsboro !important;
+    border-bottom: 1px solid var(--color-table-primary-content-bar-border) !important;
     padding-top: 20px;
     padding-bottom: 3px;
     font-size: 16px;
-    color: $charcoal;
+    color: var(--color-table-senary-content);
 }
 .table thead th {
     vertical-align: bottom;
-    border-bottom: 1px solid $gainsboro;
+    border-bottom: 1px solid var(--color-table-primary-header-bar-border);
     border-top: none;
     padding-left: 0;
+    font-weight: 500;
 }
 .creditors-table tr:last-child td {
     border-bottom: none !important;
 }
 table.basic th {
-    color: $midnight-blue;
     font-size: 14px;
+    color: var(--color-table-secondary-heading);
+    background-color: var(--color-table-heading-primary-background);
 }
 .cr-dr-body {
     padding: 15px;
@@ -51,7 +52,7 @@ table.basic th {
     margin-bottom: 50px;
 }
 span.this-week {
-    color: $dark-gray;
+    color: var(--color-abbey);
     text-decoration: underline;
     font-size: 16px;
 }
@@ -62,18 +63,18 @@ thead th {
     padding-bottom: 5px !important;
 }
 .no-entries {
-    border-top: 1px solid $gainsboro !important;
+    border-top: 1px solid var(--color-iron) !important;
     margin-top: 10px;
     padding-bottom: 20px !important;
     text-align: center;
-    color: rgba(0, 0, 0, 0.4) !important;
+    color: var(--color-common-primary-text) !important;
     font-size: 16px;
 }
 .dashboard-datepicker {
     max-width: 190px;
     min-width: 190px;
     border-radius: 30px;
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--color-primary-button-border);
 }
 @media (max-width: 768px) {
     .debtors-table {

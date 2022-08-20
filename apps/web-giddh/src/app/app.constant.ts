@@ -1,9 +1,10 @@
-import * as moment from 'moment';
+import * as dayjs from 'dayjs';
+import * as quarterOfYear from 'dayjs/plugin/quarterOfYear' // load on demand
+dayjs.extend(quarterOfYear) // use plugin
 
 export const Configuration = {
     AppUrl,
     ApiUrl,
-    isCordova,
     isElectron,
     APP_FOLDER
 };
@@ -39,7 +40,6 @@ export const DEFAULT_TOASTER_OPTIONS_WITH_HTML = {
 };
 
 export const DEFAULT_SERVER_ERROR_MSG = 'Something went wrong! Please try again.';
-export let IS_CORDOVA_WA = isCordova;
 export let IS_ELECTRON_WA = isElectron;
 export let APP_URL_WA = AppUrl;
 export let APP_FOLDER_WA = APP_FOLDER;
@@ -98,68 +98,68 @@ export enum DatePickerDefaultRangeEnum {
  */
 export const DEFAULT_DATE_RANGE_PICKER_RANGES = [
     {
-        name: DatePickerDefaultRangeEnum.Today, value: [moment(), moment()]
+        name: DatePickerDefaultRangeEnum.Today, value: [dayjs(), dayjs()]
     },
     {
-        name: DatePickerDefaultRangeEnum.Yesterday, value: [moment().subtract(1, 'days'), moment().subtract(1, 'days')]
+        name: DatePickerDefaultRangeEnum.Yesterday, value: [dayjs().subtract(1, 'day'), dayjs().subtract(1, 'day')]
     },
     {
-        name: DatePickerDefaultRangeEnum.Last7Days, value: [moment().subtract(6, 'days'), moment()]
+        name: DatePickerDefaultRangeEnum.Last7Days, value: [dayjs().subtract(6, 'day'), dayjs()]
     },
     {
-        name: DatePickerDefaultRangeEnum.ThisMonth, value: [moment().startOf('month'), moment().endOf('month')]
+        name: DatePickerDefaultRangeEnum.ThisMonth, value: [dayjs().startOf('month'), dayjs().endOf('month')]
     },
     {
         name: DatePickerDefaultRangeEnum.LastMonth, value: [
-            moment().subtract(1, 'month').startOf('month'),
-            moment().subtract(1, 'month').endOf('month')
+            dayjs().subtract(1, 'month').startOf('month'),
+            dayjs().subtract(1, 'month').endOf('month')
         ]
     },
     {
         name: DatePickerDefaultRangeEnum.ThisWeek, ranges: [{
-            name: DatePickerDefaultRangeEnum.SunToToday, value: [moment().startOf('week'), moment()]
-        }, { name: DatePickerDefaultRangeEnum.MonToToday, value: [moment().startOf('week').add(1, 'd'), moment()] }]
+            name: DatePickerDefaultRangeEnum.SunToToday, value: [dayjs().startOf('week'), dayjs()]
+        }, { name: DatePickerDefaultRangeEnum.MonToToday, value: [dayjs().startOf('week').add(1, 'day'), dayjs()] }]
     },
     {
         name: DatePickerDefaultRangeEnum.ThisQuarterToDate, value: [
-            moment().quarter(moment().quarter()).startOf('quarter'),
-            moment()
+            dayjs().quarter(dayjs().quarter()).startOf('quarter'),
+            dayjs()
         ]
     },
     {
         name: DatePickerDefaultRangeEnum.ThisFinancialYearToDate, value: [
-            moment().startOf('year').subtract(9, 'year'),
-            moment()
+            dayjs().startOf('year').subtract(9, 'year'),
+            dayjs()
         ]
     },
     {
         name: DatePickerDefaultRangeEnum.ThisYearToDate, value: [
-            moment().startOf('year'),
-            moment()
+            dayjs().startOf('year'),
+            dayjs()
         ]
     },
     {
         name: DatePickerDefaultRangeEnum.LastQuarter, value: [
-            moment().quarter(moment().quarter()).subtract(1, 'quarter').startOf('quarter'),
-            moment().quarter(moment().quarter()).subtract(1, 'quarter').endOf('quarter')
+            dayjs().quarter(dayjs().quarter()).subtract(1, 'quarter').startOf('quarter'),
+            dayjs().quarter(dayjs().quarter()).subtract(1, 'quarter').endOf('quarter')
         ]
     },
     {
         name: DatePickerDefaultRangeEnum.LastFinancialYear, value: [
-            moment().startOf('year').subtract(10, 'year'),
-            moment().endOf('year').subtract(10, 'year')
+            dayjs().startOf('year').subtract(10, 'year'),
+            dayjs().endOf('year').subtract(10, 'year')
         ]
     },
     {
         name: DatePickerDefaultRangeEnum.LastYear, value: [
-            moment().subtract(1, 'year').startOf('year'),
-            moment().subtract(1, 'year').endOf('year')
+            dayjs().subtract(1, 'year').startOf('year'),
+            dayjs().subtract(1, 'year').endOf('year')
         ]
     },
     {
         name: DatePickerDefaultRangeEnum.AllTime, value: [
-            moment().startOf('year').subtract(10, 'year'),
-            moment()
+            dayjs().startOf('year').subtract(10, 'year'),
+            dayjs()
         ]
     }
 ];
@@ -167,46 +167,46 @@ export const DEFAULT_DATE_RANGE_PICKER_RANGES = [
 export const GIDDH_DATE_RANGE_PICKER_RANGES = [
     {
         name: DatePickerDefaultRangeEnum.ThisMonth,
-        value: [moment().startOf('month'), moment().endOf('month')],
+        value: [dayjs().startOf('month'), dayjs().endOf('month')],
         key: "ThisMonth"
     },
     {
         name: DatePickerDefaultRangeEnum.LastMonth,
         value: [
-            moment().subtract(1, 'month').startOf('month'),
-            moment().subtract(1, 'month').endOf('month')
+            dayjs().subtract(1, 'month').startOf('month'),
+            dayjs().subtract(1, 'month').endOf('month')
         ],
         key: "LastMonth"
     },
     {
         name: DatePickerDefaultRangeEnum.ThisQuarterToDate,
         value: [
-            moment().quarter(moment().quarter()).startOf('quarter'),
-            moment()
+            dayjs().quarter(dayjs().quarter()).startOf('quarter'),
+            dayjs()
         ],
         key: "ThisQuarterToDate"
     },
     {
         name: DatePickerDefaultRangeEnum.ThisFinancialYearToDate,
         value: [
-            moment().startOf('year').subtract(9, 'year'),
-            moment()
+            dayjs().startOf('year').subtract(9, 'year'),
+            dayjs()
         ],
         key: "ThisFinancialYearToDate"
     },
     {
         name: DatePickerDefaultRangeEnum.LastQuarter,
         value: [
-            moment().quarter(moment().quarter()).subtract(1, 'quarter').startOf('quarter'),
-            moment().quarter(moment().quarter()).subtract(1, 'quarter').endOf('quarter')
+            dayjs().quarter(dayjs().quarter()).subtract(1, 'quarter').startOf('quarter'),
+            dayjs().quarter(dayjs().quarter()).subtract(1, 'quarter').endOf('quarter')
         ],
         key: "LastQuarter"
     },
     {
         name: DatePickerDefaultRangeEnum.AllTime,
         value: [
-            moment().startOf('year').subtract(10, 'year'),
-            moment()
+            dayjs().startOf('year').subtract(10, 'year'),
+            dayjs()
         ],
         key: "AllTime"
     }
@@ -218,7 +218,6 @@ export const FILE_ATTACHMENT_TYPE = {
     PDF: ['pdf'],
     UNSUPPORTED: ['doc', 'docx', 'xls', 'xlsx']
 };
-
 
 /** Error message to display if the stock is invalid */
 export const INVALID_STOCK_ERROR_MESSAGE = 'Both Unit and Rate fields are mandatory if you provide data for either of them.';
@@ -241,23 +240,6 @@ export const HIGH_RATE_FIELD_PRECISION = 16;
 /** Regex to remove trailing zeros from a string representation of number */
 export const REMOVE_TRAILING_ZERO_REGEX = /^([\d,' ]*)$|^([\d,' ]*)\.0*$|^([\d,' ]+\.[0-9]*?)0*$/;
 
-/* This plan unique name will be used as a default plan while creating new company/branch */
-export let DEFAULT_SIGNUP_TRIAL_PLAN = "";
-
-if (PRODUCTION_ENV || isElectron || isCordova) {
-    DEFAULT_SIGNUP_TRIAL_PLAN = "e6v1566224240273";
-} else {
-    DEFAULT_SIGNUP_TRIAL_PLAN = "xoh1591185630174";
-}
-
-export let DEFAULT_POPULAR_PLAN = "";
-
-if (PRODUCTION_ENV || isElectron || isCordova) {
-    DEFAULT_POPULAR_PLAN = "Oak";
-} else {
-    DEFAULT_POPULAR_PLAN = "Popular Plan";
-}
-
 /** Type of voucher that is adjusted */
 export enum AdjustedVoucherType {
     Receipt = 'rcpt',
@@ -265,6 +247,7 @@ export enum AdjustedVoucherType {
     Sales = 'sal', // used in ledger
     SalesInvoice = 'sales', // used in invoice preview module
     Purchase = 'pur',
+    PurchaseInvoice = 'purchase',
     CreditNote = 'credit note',
     DebitNote = 'debit note',
     Payment = 'pay',
@@ -292,10 +275,6 @@ export const RESTRICTED_BRANCH_ROUTES = [
     '/pages/settings/create-branch',
     '/pages/settings/financial-year',
     '/pages/user-details/subscription'
-];
-
-export const SUPPORT_TEAM_NUMBERS = [
-    "+918889500350", "+918889378604"
 ];
 
 /** Settings integration tabs */
@@ -348,7 +327,7 @@ export const GIDDH_VOUCHER_FORM = [
         type: "cash",
         advanceReceiptAllowed: false,
         rcmAllowed: false,
-        depositAllowed: true,
+        depositAllowed: false,
         taxesAllowed: true,
         quantityAllowed: true,
         rateAllowed: true,
@@ -457,3 +436,22 @@ export const GIDDH_VOUCHER_FORM = [
         attachmentAllowed: false
     }
 ];
+export const CALENDLY_URL = "https://calendly.com/d/cg6-6kx-924/schedule-demo";
+export const JOURNAL_VOUCHER_ALLOWED_DOMAINS = [
+    'giddh.com',
+    'walkover.in',
+    'muneem.co',
+    'whozzat.com',
+];
+
+/**
+ * Enum for switching toggle button On and Off and changing its size
+ *
+ * @export
+ * @enum {string}
+ */
+export enum BootstrapToggleSwitch {
+    On = 'blue',
+    Off = 'gray',
+    Size = 'mini'
+}

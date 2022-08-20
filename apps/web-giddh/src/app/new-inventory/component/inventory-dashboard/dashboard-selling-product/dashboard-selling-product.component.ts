@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { BsDropdownModule } from 'ngx-bootstrap';
+
 @Component({
     selector: 'dashboard-selling-product',
     templateUrl: './dashboard-selling-product.component.html',
@@ -13,6 +12,6 @@ export class DashboardSellingProduct implements OnInit {
 
     public ngOnInit() {
         /* added image path */
-        this.imgPath = (isElectron || isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
     }
 }

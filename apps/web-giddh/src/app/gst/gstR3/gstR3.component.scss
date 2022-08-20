@@ -1,17 +1,17 @@
-@import "../../../assets/css/color.scss";
-
 .font-xlarge {
     font-size: 18px;
 }
 
 a {
-    color: $curious-blue;
+    color: var(--color-blue);
     text-decoration: none;
 }
 
 svg.icon.icon-lg {
     height: 18px;
     width: 18px;
+    filter: invert(0);
+    color: var(--color-primary-checkbox-and-expansion-panel-arrow);
 }
 
 .text-middle {
@@ -27,9 +27,9 @@ svg.icon.icon-lg {
 .tax-engine .gstr3b-sel {
     display: inline-block;
     padding: 4px 4px 4px 8px;
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--color-iron);
     border-radius: 2px;
-    background: $white;
+    background: var(--color-white);
 }
 
 svg.icon.icon-sm {
@@ -48,7 +48,7 @@ svg.icon.icon-sm {
 }
 
 .text-primary {
-    color: $curious-blue;
+    color: var(--color-blue);
 }
 
 .caret {
@@ -57,7 +57,7 @@ svg.icon.icon-sm {
     height: 0;
     margin-left: 2px;
     vertical-align: middle;
-    border-top: 4px solid $black;
+    border-top: 4px solid var(--color-nero);
     border-right: 4px solid transparent;
     border-left: 4px solid transparent;
     border-bottom: 0 dotted;
@@ -113,7 +113,7 @@ input.gsc-input {
 }
 
 .tax-engine .gstr3b-header .sel-tab {
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--color-iron);
     border-radius: 25px;
     overflow: hidden;
     padding: 0;
@@ -138,11 +138,11 @@ input.gsc-input {
 }
 
 .tax-engine .gstr3b-header .sel-tab .active {
-    background-color: $chetwode-blue;
+    background-color: var(--color-blue);
 }
 
 .tax-engine .gstr3b-header .sel-tab li:before {
-    border-left: 23px solid $gainsboro;
+    border-left: 23px solid var(--color-iron);
     top: 42%;
     margin-top: -22px;
     margin-left: 1px;
@@ -150,11 +150,11 @@ input.gsc-input {
 }
 
 .tax-engine .gstr3b-header .sel-tab .active:after {
-    border-left: 23px solid $chetwode-blue;
+    border-left: 23px solid var(--color-blue);
 }
 
 .tax-engine .gstr3b-header .sel-tab li:after {
-    border-left: 23px solid $white;
+    border-left: 23px solid var(--color-white);
     top: 41%;
     margin-top: -21px;
     z-index: 2;
@@ -180,12 +180,12 @@ svg.icon.icon-xxlg {
 }
 
 .tax-engine .gstr3b-header .sel-tab .active a {
-    color: $white;
+    color: var(--color-primary-gstr3-page-main-button);
 }
 
 .tax-engine .gstr3b-header .sel-tab li a {
     padding: 0 10px;
-    color: $night-rider;
+    color: var(--color-nero);
 }
 
 svg.icon.icon-xxlg {
@@ -194,7 +194,7 @@ svg.icon.icon-xxlg {
 }
 
 .column.content-column.gst-filing-container.navs-list {
-    background: $white;
+    background: var(--color-white);
 }
 
 .tax-engine .gstr3b-header .sel-tab li {
@@ -233,7 +233,7 @@ address {
 }
 
 .tax-engine .summary-content .gstr-3b-user.table > tbody > tr > td {
-    border: 1px solid $faux-cadet-blue;
+    border: 1px solid var(--color-table-primary-content-bar-border);
     padding: 10px 30px 10px 10px;
 }
 
@@ -247,14 +247,14 @@ address {
 }
 
 .tax-engine .summary-content .gstr-3b-report.table > thead > tr > td {
-    border: 1px solid $faux-cadet-blue !important;
+    border: 1px solid var(--color-table-primary-header-bar-border) !important;
     padding: 6px;
     font-size: 13px;
 }
 
 .btn-link:focus,
 .btn-link:hover {
-    color: $curious-blue;
+    color: var(--color-blue);
     background-color: transparent;
     text-decoration: none;
 }
@@ -265,24 +265,25 @@ table {
 }
 
 .gstr-3b-report tr:hover {
-    background-color: $gray-95;
+    background-color: var(--color-invoice-preview-giddh-table-tbody-tr-background-hover);
 }
 
 .tax-engine .summary-content .gstr-3b-report.table > tbody > tr > td {
     font-size: 13px;
-    border: 1px solid $faux-cadet-blue !important;
+    border: 1px solid var(--color-table-primary-content-bar-border) !important;
     padding: 6px;
 }
 
 .gstr3-subheading,
 .vat-summary thead > tr {
-    background-color: $gray-95;
+    background-color: var(--color-wild-sand);
 }
 
 .dropdown-menu li .help-text,
 .modal-header .help-text,
 .text-muted {
-    color: $gray;
+    color: var(--color-abbey);
+    background-color: var(--color-table-body-secondary-background);
 }
 
 *,
@@ -323,7 +324,7 @@ h6 {
     position: fixed;
     top: 0;
     z-index: 1030;
-    background-color: $white;
+    background-color: var(--color-white);
     transition: all 0.3s;
 }
 
@@ -332,7 +333,7 @@ h6 {
 }
 
 .modal-content {
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 5px 15px var(--color-primary-common-box-shadow);
 }
 
 .modal-header {
@@ -341,13 +342,13 @@ h6 {
 
 .modal-header {
     padding: 20px;
-    border-bottom: 1px solid $gainsboro;
+    border-bottom: 1px solid var(--color-iron);
     min-height: 21.43px;
-    background-color: $gray-95;
+    background-color: var(--color-wild-sand);
 }
 
 .highlight-info {
-    background-color: $alice-blue;
+    background-color: var(--color-wild-sand);
 }
 
 .alert {
@@ -381,9 +382,9 @@ fieldset[disabled] .btn-primary:hover .btn-primary[disabled],
 .open .dropdown-toggle.btn-primary,
 .receipt-wrapper .doc-checkbox:checked,
 .doc-actions {
-    color: $white;
-    background-color: $bitter-sweet;
-    border-color: $bitter-sweet;
+    color: var(--color-white);
+    background-color: var(--color-gst-primary-doc-actions);
+    border-color: var(--color-gst-primary-doc-actions);
 }
 
 .btn,
@@ -393,9 +394,9 @@ fieldset[disabled] .btn-primary:hover .btn-primary[disabled],
 }
 
 .btn-primary {
-    color: $white;
-    background-color: $cinnabar-orange;
-    border-color: $cinnabar-orange;
+    color: var(--color-white);
+    background-color: var(--color-red);
+    border-color: var(--color-red);
 }
 
 .btn {
@@ -422,8 +423,8 @@ fieldset[disabled] .btn-primary:hover .btn-primary[disabled],
 }
 
 .tax-engine .gstr3-points .point {
-    background-color: $primary;
-    color: $white;
+    background-color: var(--color-blue);
+    color: var(--color-white);
     width: 22px;
     height: 22px;
     text-align: center;
@@ -448,19 +449,19 @@ tax-engine .caret-right {
 }
 
 .tax-engine .gstr3-points a .caret-right {
-    color: $silver;
+    color: var(--color-gray);
 }
 
 .gstr3-filing-procedure > div {
     width: 900px;
     margin: 30px auto 0;
-    box-shadow: 1px 1px 11px $very-light-gray;
+    box-shadow: 1px 1px 11px var(--color-primary-common-box-shadow);
     border-radius: 3px;
     padding: 20px 50px 10px;
 }
 
 .tax-engine .gstr3-points {
-    border-left: 1px dashed $gainsboro;
+    border-left: 1px dashed var(--color-iron);
     padding-left: 41px;
 }
 
@@ -472,22 +473,22 @@ dropdown-menu-right {
 
 .successful-file-detail h3,
 .gst-return-date h3 {
-    color: $night-rider !important;
+    color: var(--color-nero) !important;
     font-size: 24px !important;
     margin: 20px 0 7px !important;
 }
 
 .btn-2 {
-    background: $white;
-    color: $chetwode-blue;
+    background: var(--color-white);
+    color: var(--color-blue);
     border: 0px;
     border-radius: 4px;
-    border: 1px solid $chetwode-blue;
+    border: 1px solid var(--color-blue);
 }
 
 .btn-2:hover {
-    color: $white;
-    background: $chetwode-blue;
+    color: var(--color-white);
+    background: var(--color-blue);
 }
 
 .file-your-return {
@@ -534,13 +535,13 @@ ul#dropdown-menu {
 }
 
 .bg-thead {
-    background-color: $whisper;
-    color: $black;
+    background-color: var(--color-dark-fog);
+    color: var(--color-nero);
 }
 
 .bg-thead-dark {
-    background: $alice-blue-light;
-    color: $black;
+    background: var(--color-table-body-secondary-background);
+    color: var(--color-nero);
 }
 
 .pointer-none {

@@ -11,5 +11,6 @@
     "invalid_aadhar_no": "Invalid Aadhar No:",
     "your_aadhar_no": "Your Aadhaar No.",
     "aadhar_required_note": "NOTE: Aadhaar is required for <strong>Aadhaar eSign</strong>",
-    "go": "Go"
+    "go": "Go",
+    "attachment": "Attachment"
 }

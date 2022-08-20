@@ -15,6 +15,7 @@ import {
     SimpleChanges,
     ViewChild,
     ViewChildren,
+    ChangeDetectorRef,
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -22,7 +23,7 @@ import { select, Store } from '@ngrx/store';
 import { TallyModuleService } from 'apps/web-giddh/src/app/accounting/tally-service';
 import { cloneDeep, forEach, isEqual, sumBy, filter, find, without, maxBy, findIndex } from 'apps/web-giddh/src/app/lodash-optimized';
 import { InventoryService } from 'apps/web-giddh/src/app/services/inventory.service';
-import * as moment from 'moment';
+import * as dayjs from 'dayjs';
 import { BsDatepickerConfig, BsDatepickerDirective } from 'ngx-bootstrap/datepicker';
 import { ModalDirective, BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { combineLatest, Observable, ReplaySubject, of as observableOf, Subject } from 'rxjs';
@@ -117,7 +118,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     public totalCreditAmount: number = 0;
     public totalDebitAmount: number = 0;
     public showConfirmationBox: boolean = false;
-    public moment = moment;
+    public dayjs = dayjs;
     public accountSearch: string;
     public selectedIdx: any;
     public isSelectedRow: boolean;
@@ -251,16 +252,19 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         private _ledgerActions: LedgerActions,
         private store: Store<AppState>,
         private _keyboardService: KeyboardService,
-        private _toaster: ToasterService, private router: Router,
+        private _toaster: ToasterService, 
+        private router: Router,
         private tallyModuleService: TallyModuleService,
         private componentFactoryResolver: ComponentFactoryResolver,
         private inventoryService: InventoryService,
-        private fb: FormBuilder, public bsConfig: BsDatepickerConfig,
+        private fb: FormBuilder, 
+        public bsConfig: BsDatepickerConfig,
         private salesAction: SalesActions,
         private modalService: BsModalService,
         private salesService: SalesService,
         private searchService: SearchService,
-        private companyActions: CompanyActions) {
+        private companyActions: CompanyActions,
+        private changeDetectionRef: ChangeDetectorRef) {
 
         this.universalDate$ = this.store.pipe(select(sessionStore => sessionStore.session.applicationDate), takeUntil(this.destroyed$));
 
@@ -324,7 +328,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         this.universalDate$.subscribe(dateObj => {
             if (dateObj) {
                 this.universalDate = cloneDeep(dateObj);
-                this.journalDate = moment(this.universalDate[1], GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                this.journalDate = dayjs(this.universalDate[1], GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
                 this.dateEntered();
             }
         });
@@ -557,7 +561,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     public onSubmitChequeDetail() {
         const chequeDetails = this.chequeDetailForm.value;
         this.requestObj.chequeNumber = chequeDetails.chequeNumber;
-        this.requestObj.chequeClearanceDate = moment(chequeDetails.chequeClearanceDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+        this.requestObj.chequeClearanceDate = dayjs(chequeDetails.chequeClearanceDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
         this.closeChequeDetailForm();
         setTimeout(() => {
             this.selectedParticular.focus();
@@ -590,7 +594,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 let idx = this.selectedIdx;
                 let transaction = this.requestObj.transactions[idx];
                 if (acc) {
-                    const formattedCurrentDate = moment(this.universalDate[1], GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                    const formattedCurrentDate = dayjs(this.universalDate[1], GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
                     this.tallyModuleService.getCurrentBalance(this.currentCompanyUniqueName, acc.uniqueName, formattedCurrentDate, formattedCurrentDate).subscribe((data) => {
                         if (data && data.body) {
                             this.setAccountCurrentBalance(data.body, idx);
@@ -773,7 +777,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      */
     public saveEntry() {
         let data = cloneDeep(this.requestObj);
-        data.entryDate = moment(this.journalDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+        data.entryDate = dayjs(this.journalDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
         data.transactions = this.validateTransaction(data.transactions);
 
         if (!data.transactions) {
@@ -783,19 +787,19 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         const foundContraEntry: boolean = this.validateForContraEntry(data);
         const foundSalesAndBankEntry: boolean = this.validateForSalesAndPurchaseEntry(data);
 
-        if (foundContraEntry && data.voucherType !== 'Contra') {
+        if (foundContraEntry && data.voucherType !== VOUCHERS.CONTRA) {
             let message = this.localeData?.contra_entry_notallowed;
             message = message?.replace("[VOUCHER_TYPE]", data.voucherType);
             this._toaster.errorToast(message, this.commonLocaleData?.app_error);
             return setTimeout(() => this.narrationBox?.nativeElement?.focus(), 500);
         }
-        if (!foundContraEntry && data.voucherType === 'Contra') {
+        if (!foundContraEntry && data.voucherType === VOUCHERS.CONTRA) {
             this._toaster.errorToast(this.localeData?.contra_entry_error, this.commonLocaleData?.app_error);
             return setTimeout(() => this.narrationBox?.nativeElement?.focus(), 500);
         }
 
         // This suggestion was given by Sandeep
-        if (foundSalesAndBankEntry && data.voucherType === 'Journal') {
+        if (foundSalesAndBankEntry && data.voucherType === VOUCHERS.JOURNAL) {
             this._toaster.errorToast(this.localeData?.sales_purchase_entry_error, this.commonLocaleData?.app_error);
             return setTimeout(() => this.narrationBox?.nativeElement?.focus(), 500);
         }
@@ -920,8 +924,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     }
 
     public validatePaymentAndReceipt(data) {
-        if (data.voucherType === 'Payment' || data.voucherType === 'Receipt') {
-            const byOrTo = data.voucherType === 'Payment' ? 'to' : 'by';
+        if (data.voucherType === VOUCHERS.PAYMENT || data.voucherType === VOUCHERS.RECEIPT) {
+            const byOrTo = data.voucherType === VOUCHERS.PAYMENT ? 'to' : 'by';
             const toAccounts = data.transactions.filter((acc) => acc.type === byOrTo);
             const AccountOfCashOrBank = toAccounts.filter((acc) => {
                 const indexOfCashOrBank = acc.selectedAccount.parentGroups.findIndex((pg) => pg.uniqueName === 'cash' || pg.uniqueName === 'bankaccounts');
@@ -944,11 +948,11 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         this.receiptEntries = [];
         this.totalEntries = 0;
         this.adjustmentTransaction = {};
-        this.requestObj.entryDate = moment().format(GIDDH_DATE_FORMAT);
+        this.requestObj.entryDate = dayjs().format(GIDDH_DATE_FORMAT);
         if (this.universalDate[1]) {
-            this.journalDate = moment(this.universalDate[1], GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+            this.journalDate = dayjs(this.universalDate[1], GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
         } else {
-            this.journalDate = moment().format(GIDDH_DATE_FORMAT);
+            this.journalDate = dayjs().format(GIDDH_DATE_FORMAT);
         }
         this.dateEntered();
         this.requestObj.description = '';
@@ -1001,7 +1005,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      */
     public setDate(date) {
         this.showFromDatePicker = !this.showFromDatePicker;
-        this.requestObj.entryDate = moment(date).format(GIDDH_DATE_FORMAT);
+        this.requestObj.entryDate = dayjs(date).format(GIDDH_DATE_FORMAT);
     }
 
     /**
@@ -1169,21 +1173,10 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         //  }
     }
 
-    /**
-     * hideListItems
-     */
-    public hideListItems() {
-        // this.showLedgerAccountList = false;
-        // this.showStockList = false;
-    }
-
     public dateEntered() {
-        const date = moment(this.journalDate, GIDDH_DATE_FORMAT);
-        if (moment(date).format('dddd') !== 'Invalid date') {
-            this.displayDay = moment(date).format('dddd');
-        } else {
-            this.displayDay = '';
-        }
+        const date = dayjs(this.journalDate, GIDDH_DATE_FORMAT).format("dddd");
+        this.displayDay = (date !== 'Invalid date') ? date : '';
+        this.changeDetectionRef.detectChanges();
     }
 
     /**
@@ -1602,7 +1595,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         this.pendingInvoiceList = [];
         this.pendingInvoiceListSource$ = observableOf(pendingInvoiceList);
 
-        this.salesService.getInvoiceList(this.pendingInvoicesListParams, moment(this.journalDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT)).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.salesService.getInvoiceList(this.pendingInvoicesListParams, dayjs(this.journalDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT)).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.status === "success" && response.body && response.body.results && response.body.results.length > 0) {
                 Object.keys(response.body.results).forEach(key => {
                     this.pendingInvoiceList[response.body.results[key].uniqueName] = [];

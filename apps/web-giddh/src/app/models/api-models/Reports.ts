@@ -210,3 +210,11 @@ export class ColumnarResponseResult {
     accountNameAndAmountMap?: any;
     accountNameAndBalanceMap: any;
 }
+
+/** Request object model for payment summary API */
+export interface PaymentSummaryRequest {
+    companyUniqueName: string;
+    from?: string;
+    to?: string;
+    branchUniqueName?: string;
+}

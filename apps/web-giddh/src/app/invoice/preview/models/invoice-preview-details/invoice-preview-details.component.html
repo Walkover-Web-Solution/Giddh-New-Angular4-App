@@ -53,7 +53,7 @@
                     </div>
 
                     <ul class="invoice-sidebar">
-                        <perfect-scrollbar>
+                        <perfect-scrollbar #perfectScrollbar>
                             <li
                                 class="single-invoice-detail cp"
                                 *ngFor="let item of filteredData"
@@ -64,7 +64,11 @@
                                     <div class="col-7 col-sm-7">
                                         <div class="invoice-number-date">
                                             <span class="invoice-number">
-                                                {{ item.voucherNumber ? item.voucherNumber : "-" }}
+                                                {{
+                                                    item.voucherNumber
+                                                        ? item.voucherNumber
+                                                        : commonLocaleData?.app_not_available
+                                                }}
                                             </span>
                                             <span class="invoice-date"> | {{ item?.voucherDate }} </span>
                                         </div>
@@ -100,7 +104,11 @@
                                 <div class="col-md-4 col-12">
                                     <div class="invoice-num-holder">
                                         <h3 class="invoice-num">
-                                            {{ selectedItem?.voucherNumber ? selectedItem?.voucherNumber : "-" }}
+                                            {{
+                                                selectedItem?.voucherNumber
+                                                    ? selectedItem?.voucherNumber
+                                                    : commonLocaleData?.app_not_available
+                                            }}
                                         </h3>
                                         <p class="account-holder-name">{{ selectedItem?.account.name }}</p>
                                     </div>
@@ -351,7 +359,10 @@
                                                 </span>
 
                                                 <span
-                                                    *ngIf="shouldShowPrintDocument"
+                                                    *ngIf="
+                                                        shouldShowPrintDocument &&
+                                                        defaultTemplate?.templateType !== 'thermal_template'
+                                                    "
                                                     [ngClass]="{
                                                         'disabled':
                                                             isVoucherDownloading ||
@@ -367,6 +378,16 @@
                                                         ><i class="fa fa-print"></i
                                                     ></a>
                                                 </span>
+                                                <!-- Hide Thermal Feature -->
+                                                <!-- <span *ngIf="defaultTemplate?.templateType === 'thermal_template'">
+                                                    <a
+                                                        href="javascript:;"
+                                                        [tooltip]="commonLocaleData?.app_print"
+                                                        placement="top"
+                                                        (click)="printThermal()"
+                                                        ><i class="fa fa-print"></i
+                                                    ></a>
+                                                </span> -->
 
                                                 <span
                                                     *ngIf="selectedItem?.voucherType === 'purchase' && pdfPreviewLoaded"
@@ -402,7 +423,8 @@
                                                 <span
                                                     *ngIf="
                                                         selectedItem?.voucherType === 'purchase' &&
-                                                        attachedDocumentType?.type
+                                                        attachedDocumentType?.type &&
+                                                        voucherApiVersion !== 2
                                                     "
                                                     [ngClass]="{
                                                         'disabled':
@@ -417,7 +439,7 @@
                                                         [tooltip]="localeData?.download_attachment"
                                                         placement="top"
                                                         (click)="downloadFile()"
-                                                        ><i class="icon-download"></i
+                                                        ><i class="icon-download-circle"></i
                                                     ></a>
                                                 </span>
 
@@ -431,9 +453,18 @@
                                                     ></a>
                                                 </span>
                                             </div>
-                                            <div class="history-btn" *ngIf="selectedItem?.voucherType === 'purchase'">
+                                            <div
+                                                class="history-btn"
+                                                *ngIf="
+                                                    (voucherApiVersion !== 2 &&
+                                                        selectedItem?.voucherType === 'purchase') ||
+                                                    (voucherApiVersion === 2 &&
+                                                        selectedItem?.voucherType !== 'proformas' &&
+                                                        selectedItem?.voucherType !== 'estimates')
+                                                "
+                                            >
                                                 <button
-                                                    class="btn btn-primary"
+                                                    class="btn btn-primary history-button"
                                                     (click)="toggleActivityHistoryAsidePane()"
                                                 >
                                                     <i class="icon-history-icon font-12 pr-1"></i>
@@ -531,7 +562,9 @@
                                 <a
                                     href="javascript:;"
                                     class="aqua-color"
-                                    (click)="openPurchaseOrderPreviewPopup(purchaseOrderPreviewModal, order.uniqueName)"
+                                    (click)="
+                                        openPurchaseOrderPreviewPopup(purchaseOrderPreviewModal, order?.uniqueName)
+                                    "
                                     *ngFor="let order of purchaseOrderNumbers; let i = index"
                                     >{{ order.number }}<span *ngIf="checkIfPipeSymbolRequired(i)">|</span></a
                                 >
@@ -566,7 +599,8 @@
                                 class="preview-not-supported-attachment"
                                 *ngIf="attachedDocumentType?.type === 'unsupported'"
                             >
-                                <span class="text-warning">{{ localeData?.preview_formats }} </span>
+                                <p>{{ attachedDocumentType?.name }}</p>
+                                <p>{{ commonLocaleData?.app_preview_formats }}</p>
                             </div>
 
                             <div
@@ -689,7 +723,18 @@
         <div class="invoice-edit-wrapper">
             <div class="invoice-edit-header">
                 <span>
-                    <p>{{ getEditVoucherText(selectedItem?.voucherType | voucherTypeToNamePipe | titlecase) }}</p>
+                    <p>
+                        {{
+                            getEditVoucherText(
+                                (selectedItemVoucher?.voucherType
+                                    ? selectedItemVoucher?.voucherType
+                                    : selectedItem?.voucherType
+                                )
+                                    | voucherTypeToNamePipe
+                                    | titlecase
+                            )
+                        }}
+                    </p>
                 </span>
 
                 <span class="close-modal cp p-0" (click)="toggleEditMode()">
@@ -705,6 +750,7 @@
                     [invoiceType]="voucherType"
                     [callFromOutside]="false"
                     (cancelVoucherUpdate)="toggleEditMode()"
+                    (reloadFiles)="downloadVoucher('base64')"
                 >
                 </proforma-invoice-component>
             </div>
@@ -717,7 +763,7 @@
     <aside-revision-history
         (closeAsideEvent)="toggleActivityHistoryAsidePane()"
         [companyUniqueName]="companyUniqueName"
-        [purchaseBill]="selectedItem"
+        [selectedVoucher]="selectedItem"
     ></aside-revision-history>
 </div>
 

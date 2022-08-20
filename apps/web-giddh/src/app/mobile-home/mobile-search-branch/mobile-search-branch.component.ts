@@ -119,7 +119,7 @@ export class MobileSearchBranchComponent implements OnInit, OnDestroy {
         this.setOrganizationDetails(OrganizationType.Branch, details);
         this.companyService.getStateDetails(this.generalService.companyUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.body) {
-                if (screen.width <= 767 || isCordova) {
+                if (screen.width <= 767) {
                     window.location.href = '/pages/mobile-home';
                 } else if (isElectron) {
                     this.router.navigate([response.body.lastState]);
@@ -129,19 +129,6 @@ export class MobileSearchBranchComponent implements OnInit, OnDestroy {
                 } else {
                     window.location.href = response.body.lastState;
                 }
-            }
-        });
-    }
-
-    /**
-     * This will get the current company data
-     *
-     * @memberof MobileSearchBranchComponent
-     */
-    public getCurrentCompanyData(): void {
-        this.settingsProfileService.GetProfileInfo().pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
-            if (response && response.status === "success" && response.body) {
-                this.activeCompany = response.body;
             }
         });
     }
@@ -169,18 +156,6 @@ export class MobileSearchBranchComponent implements OnInit, OnDestroy {
             });
         } else {
             this.currentCompanyBranches = branches;
-        }
-    }
-
-    /**
-     * Loads company branches
-     *
-     * @memberof MobileSearchBranchComponent
-     */
-    public loadCompanyBranches(): void {
-        if (this.generalService.companyUniqueName) {
-            // Avoid API call if new user is onboarded
-            this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '' }));
         }
     }
 

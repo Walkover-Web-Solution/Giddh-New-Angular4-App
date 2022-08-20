@@ -1,9 +1,7 @@
-@import "../../../../../../../assets/css/color.scss";
-
 * {
     border: 0;
     box-sizing: content-box;
-    color: $nero;
+    color: var(--color-nero);
     font-family: inherit;
     font-style: inherit;
     font-weight: inherit;
@@ -64,8 +62,8 @@ p {
 #default {
     overflow: auto;
     /* font-size: 93%; */
-    background: #fff;
-    border: 1px solid #bfbfbf;
+    background: var(--color-white-tertiary);
+    border: 1px solid var(--color-common-secondary-border);
     padding: 0;
 }
 
@@ -76,7 +74,6 @@ p {
     padding: 0.1in;
     letter-spacing: 0;
     width: 100%;
-    background: #fff;
     border-radius: 1px;
 }
 
@@ -84,7 +81,7 @@ p {
 
 #default header {
     margin: 0;
-    background: #fff;
+    background: var(--color-primary-invoice-preview-background);
     padding: 10px;
 }
 
@@ -119,7 +116,7 @@ p {
     border: 0;
     padding: 0;
     text-align: left;
-    color: $nero;
+    color: var(--color-nero);
 }
 
 .hidden-label {
@@ -222,13 +219,13 @@ header img {
 }
 #default table.item tfoot tr th {
     padding-right: 7px;
-    border-top: 1px solid $light-gray;
+    border-top: 1px solid var(--color-iron);
 }
 /* tcs */
 .tcs hr {
     margin-top: 50px;
     width: 100%;
-    border-bottom: 1px solid $cinnabar-orange;
+    border-bottom: 1px solid var(--color-red);
 }
 .tcs table {
     margin: 50px 0px;
@@ -240,7 +237,7 @@ header img {
 .tcs table th {
     border-radius: 0;
     padding: 5px;
-    border: 1px solid $light-gray;
+    border: 1px solid var(--color-common-secondary-border);
     vertical-align: top;
     text-align: right;
 }
@@ -284,13 +281,13 @@ header img {
 #default table.item td {
     border-radius: 0;
     padding: 7px;
-    border-top: 1px solid $light-gray;
+    border-top: 1px solid var(--color-table-primary-content-bar-border);
     line-height: 1.2rem;
     vertical-align: top;
 }
 
 #default table.item td p {
-    color: $zambezi;
+    color: var(--color-abbey);
 }
 
 #default table.balance {
@@ -316,7 +313,7 @@ header img {
 }
 
 #default aside h1 {
-    border-color: #999;
+    border-color: var(--color-common-secondary-border);
     border-bottom-style: solid;
 }
 
@@ -326,7 +323,7 @@ header img {
     border-top: 1px solid;
     padding: 16px 0px 10px 0;
     margin: 8px 0 0;
-    background: #fff;
+    background: var(--color-primary-invoice-preview-background);
 }
 
 #default aside {
@@ -342,7 +339,7 @@ header img {
 
 #default .subfooter hr {
     width: 100%;
-    border-bottom: 1px solid #ccc;
+    border-bottom: 1px solid var(--color-common-secondary-border);
     margin: 3px 0;
 }
 
@@ -371,7 +368,7 @@ header img {
     content: attr(title);
     width: auto;
     position: relative;
-    background: #fff;
+    background: var(--color-primary-invoice-preview-background);
     margin: 0 auto;
     padding: 6px 16px;
     right: 0;
@@ -399,7 +396,7 @@ header img {
     position: absolute;
     top: 0;
     bottom: 0;
-    background: aqua;
+    background: var(--color-blue);
     left: 0;
     right: 0;
     width: 100%;
@@ -454,7 +451,7 @@ strong {
     right: 0;
     pointer-events: none;
     background: rgba(204, 204, 204, 0.5);
-    border: 1px dashed #808080;
+    border: 1px dashed var(--color-common-secondary-border);
 }
 
 .edit-template {
@@ -464,7 +461,7 @@ strong {
     padding: 4px;
     height: 15px;
     z-index: 1;
-    background: #fff;
+    background: var(--color-primary-invoice-preview-background);
     width: 20px;
 }
 
@@ -490,15 +487,15 @@ strong {
     width: 60%;
     height: 1px;
     margin: 0px 0 auto auto;
-    border-bottom: 1px solid #ccc;
+    border-bottom: 1px solid var(--color-common-secondary-border);
 }
 
 .green-row {
-    border-bottom: solid 1px rgb(121, 189, 88);
+    border-bottom: solid 1px var(--color-teal);
     padding: 6px 16px;
 }
 .tax-table p {
-    color: $zambezi;
+    color: var(--color-abbey);
 }
 
 .tax-table tfoot th {
@@ -517,7 +514,7 @@ strong {
 .tax-table tbody tr td,
 .tax-table tfoot tr th {
     padding: 6px;
-    border-right: 1px solid $light-gray;
+    border-right: 1px solid var(--color-table-primary-header-bar-border);
 }
 
 .tax-table thead tr th:last-child,
@@ -530,14 +527,14 @@ table.tax-table.item {
     padding-top: 0px !important;
 }
 .tax-table.item tfoot tr th {
-    border-bottom: 1px solid $light-gray;
+    border-bottom: 1px solid var(--color-table-primary-header-bar-border);
 }
 .tax-table tbody tr td {
     border-top: 0px solid;
 }
 .warehouse-table {
     width: 100%;
-    border-bottom: 1px solid $light-gray;
+    border-bottom: 1px solid var(--color-table-primary-content-bar-border);
     margin-bottom: 10px;
     padding-bottom: 5px;
     padding-right: 0px;

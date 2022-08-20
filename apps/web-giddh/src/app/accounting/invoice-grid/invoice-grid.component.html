@@ -48,7 +48,7 @@
                 <!-- key not available in request
     <div class="max-width-300 form-group" (clickOutside)="showInvoiceDate=false;">
     <span>Date: </span>
-    <input type="text" [ngModel]="moment(entryDate).format(giddhDateFormat)" decimalDigitsDirective readonly (focus)="showInvoiceDate = true;" class="form-control appearance-none max-height28" />
+    <input type="text" [ngModel]="dayjs(entryDate).format(giddhDateFormat)" decimalDigitsDirective readonly (focus)="showInvoiceDate = true;" class="form-control appearance-none max-height28" />
     <div *ngIf="showInvoiceDate" style="position: absolute; z-index:10; min-height:290px;">
         <datepicker [(ngModel)]="entryDate" (selectionDone)="setInvoiceDate($event)" [showWeeks]="false"></datepicker>
     </div>
@@ -380,6 +380,7 @@
 </div>
 
 <div class="aside-overlay" (click)="closeCreateStock($event)" *ngIf="asideMenuStateForProductService === 'in'"></div>
+
 <aside-inventory-stock-group
     *ngIf="asideMenuStateForProductService === 'in'"
     [autoFocus]="autoFocusStockGroupField"

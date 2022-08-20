@@ -324,7 +324,7 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
                             }
                         } else {
                             if (el.childStockGroups.length) {
-                                let myGrp = removeGroupItemAndReturnIt(el.childStockGroups, activeGroup.parentStockGroup.uniqueName, resp.queryString.stockGroupUniquename, null);
+                                let myGrp = removeGroupItemAndReturnIt(el.childStockGroups, activeGroup?.parentStockGroup?.uniqueName, resp.queryString?.stockGroupUniquename, null);
                                 if (myGrp) {
                                     myGrp.name = resp.body.name;
                                     myGrp.uniqueName = resp.body.uniqueName;

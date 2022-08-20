@@ -72,7 +72,8 @@ export class LinkedStocksVM implements INameUniqueName {
         public uniqueName: string,
         public isWareHouse: boolean = false,
         public alias: string = '',
-        public warehouses: Array<any> = []) {
+        public warehouses: Array<any> = [],
+        public isArchived: boolean = false) {
     }
 }
 
@@ -107,6 +108,7 @@ export class NewBranchTransferProduct {
     public uniqueName: any;
     public stockDetails: NewBranchTransferProductStockDetails;
     public description: string;
+    public variant?: any;
 }
 
 export class NewBranchTransferTransportationDetails {

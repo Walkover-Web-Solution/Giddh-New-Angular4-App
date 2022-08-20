@@ -92,18 +92,18 @@ export class BulkExportModal implements OnInit, OnDestroy {
 
         let getRequest: any = { from: "", to: "", type: "", mail: false, q: "" };
         let postRequest: any;
-
-        if (!this.advanceSearch.invoiceDate && !this.advanceSearch.dueDate) {
-            getRequest.from = this.dateRange.from;
-            getRequest.to = this.dateRange.to;
-        }
-
+        getRequest.from = this.dateRange.from;
+        getRequest.to = this.dateRange.to;
         getRequest.type = this.type;
         getRequest.mail = event;
         getRequest.q = (this.advanceSearch.q) ? this.advanceSearch.q : "";
 
         postRequest = this.advanceSearch;
-        postRequest.voucherUniqueNames = this.voucherUniqueNames;
+        if (this.generalService.voucherApiVersion === 2) {
+            postRequest.uniqueNames = this.voucherUniqueNames;
+        } else {
+            postRequest.voucherUniqueNames = this.voucherUniqueNames;
+        }
         postRequest.copyTypes = this.copyTypes;
 
         delete postRequest.count;
@@ -131,7 +131,14 @@ export class BulkExportModal implements OnInit, OnDestroy {
                     }
                 });
             }
-            postRequest.sendTo = { recipients: validEmails };
+            if (this.generalService.voucherApiVersion === 2) {
+                postRequest.email = { to: validEmails };
+            } else {
+                postRequest.sendTo = { recipients: validEmails };
+            }
+        } else {
+            postRequest.email = undefined;
+            postRequest.sendTo = undefined;
         }
 
         if (!validRecipients) {

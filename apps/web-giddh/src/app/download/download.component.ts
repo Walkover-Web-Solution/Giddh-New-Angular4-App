@@ -29,7 +29,7 @@ export class DownloadComponent implements OnInit, OnDestroy {
      */
     public ngOnInit(): void {
 
-        this.imgPath = (isElectron || isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
 
         this.route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.url) {

@@ -143,7 +143,7 @@ export function Receiptreducer(state: ReceiptState = initialState, action: Custo
                                 m.grandTotal.amountForAccount = result.body.voucherDetails.grandTotal;
                             }
 
-                            if (result && result.body && (result.body.type === VoucherTypeEnum.sales || result.body.type === VoucherTypeEnum.cash) && result.body.number == m.voucherNumber) {
+                            if (result && result.body && (result.body.type === VoucherTypeEnum.sales || result.body.type === VoucherTypeEnum.cash || result.body.type === VoucherTypeEnum.creditNote || result.body.type === VoucherTypeEnum.debitNote) && result.body.number == m.voucherNumber) {
                                 m.account = result.body.account;
                             } else if (result && result.body && result.body.type === VoucherTypeEnum.purchase && result.body.uniqueName == m.uniqueName) {
                                 m.account = result.body.account;
@@ -233,6 +233,7 @@ export function Receiptreducer(state: ReceiptState = initialState, action: Custo
         case INVOICE_ACTIONS.PREVIEW_INVOICE: {
             return {
                 ...state,
+                invoiceDataHasError: false,
                 voucherDetailsInProcess: true
             };
         }

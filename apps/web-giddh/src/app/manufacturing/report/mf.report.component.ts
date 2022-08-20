@@ -1,7 +1,7 @@
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { Store, select } from '@ngrx/store';
-import * as moment from 'moment/moment';
+import { select, Store } from '@ngrx/store';
+import * as dayjs from 'dayjs';
 import { BsDatepickerConfig } from "ngx-bootstrap/datepicker";
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { createSelector } from 'reselect';
@@ -45,7 +45,8 @@ const filter2 = [
 })
 
 export class MfReportComponent implements OnInit, OnDestroy {
-
+    /** True if component is getting input in some parent component */
+    @Input() public fromParentComponent: boolean = false;
     public mfStockSearchRequest: IMfStockSearchRequest = new MfStockSearchRequestClass();
     public filtersForSearchBy: IOption[] = filter2;
     public filtersForSearchOperation: IOption[] = filter1;
@@ -54,7 +55,7 @@ export class MfReportComponent implements OnInit, OnDestroy {
     public isReportLoading$: Observable<boolean>;
     public showFromDatePicker: boolean = false;
     public showToDatePicker: boolean = false;
-    public moment = moment;
+    public dayjs = dayjs;
     public startDate: Date;
     public endDate: Date;
     /** Date format type */
@@ -177,10 +178,10 @@ export class MfReportComponent implements OnInit, OnDestroy {
             if (dateObj) {
                 this.universalDate = cloneDeep(dateObj);
                 this.mfStockSearchRequest.dateRange = this.universalDate;
-                this.selectedDateRange = { startDate: moment(dateObj[0]), endDate: moment(dateObj[1]) };
-                this.selectedDateRangeUi = moment(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-                this.fromDate = moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
-                this.toDate = moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
+                this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
+                this.selectedDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                this.fromDate = dayjs(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
+                this.toDate = dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
                 this.getReportDataOnFresh();
             }
         })), takeUntil(this.destroyed$)).subscribe();
@@ -193,10 +194,10 @@ export class MfReportComponent implements OnInit, OnDestroy {
         this.currentCompanyBranches$.subscribe(response => {
             if (response && response.length) {
                 this.currentCompanyBranches = response.map(branch => ({
-                    label: branch.alias,
-                    value: branch.uniqueName,
-                    name: branch.name,
-                    parentBranch: branch.parentBranch
+                    label: branch?.alias,
+                    value: branch?.uniqueName,
+                    name: branch?.name,
+                    parentBranch: branch?.parentBranch
                 }));
                 this.currentCompanyBranches.unshift({
                     label: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : '',
@@ -273,11 +274,11 @@ export class MfReportComponent implements OnInit, OnDestroy {
     public getReportDataOnFresh() {
         let data = cloneDeep(this.mfStockSearchRequest);
         if (this.universalDate) {
-            data.from = moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
-            data.to = moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
+            data.from = dayjs(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
+            data.to = dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
         } else {
-            data.from = moment().subtract(30, 'days').format(GIDDH_DATE_FORMAT);
-            data.to = moment().format(GIDDH_DATE_FORMAT);
+            data.from = dayjs().subtract(30, 'day').format(GIDDH_DATE_FORMAT);
+            data.to = dayjs().format(GIDDH_DATE_FORMAT);
         }
         this.store.dispatch(this.manufacturingActions.GetMfReport(data));
     }
@@ -287,13 +288,13 @@ export class MfReportComponent implements OnInit, OnDestroy {
     }
 
     public setToday(model: string) {
-        this.mfStockSearchRequest[model] = moment();
+        this.mfStockSearchRequest[model] = dayjs();
     }
 
     public bsValueChange(event: any) {
         if (event) {
-            this.mfStockSearchRequest.from = moment(event[0]).format(GIDDH_DATE_FORMAT);
-            this.mfStockSearchRequest.to = moment(event[1]).format(GIDDH_DATE_FORMAT);
+            this.mfStockSearchRequest.from = dayjs(event[0]).format(GIDDH_DATE_FORMAT);
+            this.mfStockSearchRequest.to = dayjs(event[1]).format(GIDDH_DATE_FORMAT);
         }
     }
 
@@ -365,10 +366,10 @@ export class MfReportComponent implements OnInit, OnDestroy {
         }
         this.hideGiddhDatepicker();
         if (value && value.startDate && value.endDate) {
-            this.selectedDateRange = { startDate: moment(value.startDate), endDate: moment(value.endDate) };
-            this.selectedDateRangeUi = moment(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
-            this.fromDate = moment(value.startDate).format(GIDDH_DATE_FORMAT);
-            this.toDate = moment(value.endDate).format(GIDDH_DATE_FORMAT);
+            this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
+            this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
+            this.fromDate = dayjs(value.startDate).format(GIDDH_DATE_FORMAT);
+            this.toDate = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
             this.mfStockSearchRequest.from = this.fromDate;
             this.mfStockSearchRequest.to = this.toDate;
         }

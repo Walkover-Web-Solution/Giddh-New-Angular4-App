@@ -1,26 +1,24 @@
-@import "../../../assets/css/color.scss";
-
 .warehouse-header {
     .search-container {
         display: flex;
         flex-direction: row;
     }
     .clear-filter-btn {
-        color: $midnight-blue;
+        color: var(--color-giddh-blue);
         font-size: 14px;
-        border: 1px solid $midnight-blue;
+        border: 1px solid var(--color-giddh-blue);
         border-radius: 20px;
         padding: 0 15px;
         width: 150px !important;
         display: flex;
         align-items: center;
         justify-content: center;
-        background-color: $white;
+        background-color: var(--color-white);
         i {
             font-size: 12px;
             padding-right: 8px;
             top: 0;
-            color: $midnight-blue;
+            color: var(--color-giddh-blue);
         }
     }
 }
@@ -44,19 +42,48 @@
     margin-bottom: 10px;
 }
 .create-warehouse p span {
-    color: $chetwode-blue;
+    color: var(--color-blue);
 }
 .create-warehouse img {
     margin-bottom: 20px;
 }
 .warehouse-card {
-    background-color: $white;
+    background-color: var(--color-common-primary-background-for-all-components);
     padding: 15px;
     margin-bottom: 15px;
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--color-common-secondary-border);
 }
 .warehouse-options {
     text-align: right;
+    .warehouse-status {
+        float: left;
+        margin-right: -8px;
+
+        &.warehouse-active {
+            color: var(--color-teal);
+            span {
+                background-color: var(--color-teal);
+                width: 8px;
+                height: 8px;
+                float: left;
+                border-radius: 5px;
+                margin-top: 8px;
+                margin-right: 4px;
+            }
+        }
+        &.warehouse-archived {
+            color: var(--color-red);
+            span {
+                background-color: var(--color-red);
+                width: 8px;
+                height: 8px;
+                float: left;
+                border-radius: 5px;
+                margin-top: 8px;
+                margin-right: 4px;
+            }
+        }
+    }
 }
 .warehouse-options {
     .warehouse-options {
@@ -68,7 +95,7 @@
     .btn-group .btn {
         background-color: transparent;
         padding: 0;
-        color: $gray;
+        color: var(--color-abbey);
         margin-right: 0;
         font-size: 20px;
         position: relative;
@@ -96,10 +123,10 @@
     float: left;
     width: 66%;
     word-break: break-all;
-    color: $midnight-blue;
+    color: var(--color-common-senary-text);
 }
 span.set-as-default {
-    background-color: $gainsboro;
+    background-color: var(--color-iron);
     padding: 5px 10px;
     font-size: 14px;
     border-radius: 13px;
@@ -112,7 +139,7 @@ span.set-as-default {
 .warehouse-details label {
     font-family: "opensans-semibold";
     width: 70px;
-    color: $gray;
+    color: var(--color-abbey);
     &.cursor-pointer,
     &.pin-label {
         width: auto;
@@ -128,15 +155,15 @@ span.set-as-default {
     display: flex;
     flex-direction: column;
     .icon-favorite-selected {
-        color: $rich-blue;
+        color: var(--color-blue);
     }
 }
 .gray-text {
-    color: $gray;
+    color: var(--color-abbey);
     font-size: 12px;
 }
 .set-as-default i.icon-favorite-selected {
-    color: $chetwode-blue;
+    color: var(--color-blue);
 }
 .create-new-warehouse-btn {
     justify-content: center;
@@ -175,9 +202,9 @@ span.set-as-default {
         list-style: none;
         li {
             margin-bottom: 12px;
-            color: $nero;
+            color: var(--color-nero);
             i {
-                color: $gray;
+                color: var(--color-abbey);
             }
         }
     }

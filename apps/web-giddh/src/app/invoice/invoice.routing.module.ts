@@ -66,6 +66,8 @@ import { HasFocusDirectiveModule } from '../shared/helpers/directives/has-focus/
 import { TrimPipeModule } from '../shared/helpers/pipes/trim/trim.module';
 import { TaxSidebarModule } from '../shared/tax-sidebar/tax-sidebar.module';
 import { NoDataModule } from '../shared/no-data/no-data.module';
+import { NgxMaskModule } from '../shared/helpers/directives/ngx-mask';
+import { NgxBootstrapSwitchModule } from 'ngx-bootstrap-switch';
 
 const DEFAULT_FONT_PICKER_CONFIG: FontPickerConfigInterface = {
     // Change this to your Google API key
@@ -121,11 +123,11 @@ const INVOICE_ROUTES: Routes = [
     imports: [
         FormsModule,
         CommonModule,
-        TabsModule,
+        TabsModule.forRoot(),
         ReactiveFormsModule,
         ModalModule,
-        TooltipModule,
-        PaginationModule,
+        TooltipModule.forRoot(),
+        PaginationModule.forRoot(),
         RouterModule.forChild(INVOICE_ROUTES),
         InvoiceTemplatesModule,
         KeyboardShortutModule,
@@ -133,13 +135,16 @@ const INVOICE_ROUTES: Routes = [
         CollapseModule.forRoot(),
         NgxUploaderModule,
         SelectModule,
-        LaddaModule,
+        LaddaModule.forRoot({
+            style: 'slide-left',
+            spinnerSize: 30
+        }),
         ShSelectModule,
         ClickOutsideModule,
         ElementViewChildModule,
         DecimalDigitsModule,
         DatepickerModule,
-        BsDropdownModule,
+        BsDropdownModule.forRoot(),
         AsideMenuRecurringEntryModule,
         SalesShSelectModule,
         TextMaskModule,
@@ -158,7 +163,9 @@ const INVOICE_ROUTES: Routes = [
         HasFocusDirectiveModule,
         TrimPipeModule,
         TaxSidebarModule,
-        NoDataModule
+        NoDataModule,
+        NgxMaskModule.forRoot(),
+        NgxBootstrapSwitchModule.forRoot()
     ],
     exports: [
         RouterModule,

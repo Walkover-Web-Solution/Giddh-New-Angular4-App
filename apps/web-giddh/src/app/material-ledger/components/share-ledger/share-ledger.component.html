@@ -5,16 +5,17 @@
     (commonLocaleData)="commonLocaleData = $event"
 >
     <div id="share-modal">
-        <div id="share-modal" ng-if="ledgerCtrl.toggleShare">
+        <div id="share-modal">
             <div class="modal-header flex-row-reverse">
-                <span
+                <button
                     aria-hidden="true"
                     class="close"
                     mat-button
                     mat-dialog-close
                     [attr.aria-label]="commonLocaleData?.app_close"
-                    >×</span
                 >
+                    ×
+                </button>
                 <h3 class="unbold" mat-dialog-title>{{ localeData?.page_heading }}</h3>
             </div>
             <div class="modal-body" id="SharePop">
@@ -36,13 +37,20 @@
                                                 required
                                                 [placeholder]="commonLocaleData?.app_email_id"
                                                 class="form-control mat-field-border mt-0"
-                                                pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$"
+                                                pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,5}$"
                                             />
                                         </mat-form-field>
                                         <span class="input-group-btn mr-l1">
                                             <button
                                                 mat-button
-                                                class="btn btn-success btn-md d-flex align-items-center"
+                                                class="
+                                                    btn
+                                                    share-ledger-button
+                                                    btn-success btn-md
+                                                    d-flex
+                                                    align-items-center
+                                                    disabled-btn-color
+                                                "
                                                 type="submit"
                                                 [disabled]="shareAccountForm.invalid"
                                                 (click)="shareAccount()"
@@ -103,7 +111,14 @@
                                     <button
                                         mat-button
                                         [disabled]="!magicLink ? 'disabled' : null"
-                                        class="btn btn-success d-flex align-items-center"
+                                        class="
+                                            btn
+                                            share-ledger-button
+                                            btn-success
+                                            d-flex
+                                            align-items-center
+                                            disabled-btn-color
+                                        "
                                         (click)="toggleIsCopied()"
                                         [ngxClipboard]="magicLinkInput"
                                     >

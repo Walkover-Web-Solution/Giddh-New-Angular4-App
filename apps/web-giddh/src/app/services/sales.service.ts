@@ -10,6 +10,7 @@ import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { AdvanceReceiptRequest, VoucherAdjustments } from '../models/api-models/AdvanceReceiptsAdjust';
 import { ADVANCE_RECEIPTS_API } from './apiurls/advance-receipt-adjustment.api';
+import { PAGINATION_LIMIT } from '../app.constant';
 
 @Injectable()
 export class SalesService {
@@ -70,7 +71,7 @@ export class SalesService {
                 catchError((e) => this.errorHandler.HandleCatch<any, GenericRequestForGenerateSCD>(e, model)));
     }
 
-    public updateVoucherV4(model: GenericRequestForGenerateSCD): Observable<BaseResponse<any, GenericRequestForGenerateSCD>> {
+    public updateVoucherV4(model: any): Observable<BaseResponse<any, GenericRequestForGenerateSCD>> {
         let accountUniqueName = model.account.uniqueName;
         this.companyUniqueName = this.generalService.companyUniqueName;
         let url = this.config.apiUrl + SALES_API_V4.UPDATE_VOUCHER
@@ -82,11 +83,11 @@ export class SalesService {
         return this.http.put(url, model)
             .pipe(
                 map((res) => {
-                    let data: BaseResponse<any, GenericRequestForGenerateSCD> = res;
+                    let data: BaseResponse<any, any> = res;
                     data.request = model;
                     return data;
                 }),
-                catchError((e) => this.errorHandler.HandleCatch<any, GenericRequestForGenerateSCD>(e, model)));
+                catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)));
     }
 
     public getStateCode(country) {
@@ -125,14 +126,26 @@ export class SalesService {
     /**
      * API call to adjust an invoice with advance receipts
      *
-     * @param {VoucherAdjustments} model Adjust advance receipts request model
+     * @param {*} model Adjust advance receipts request model
      * @param {string} invoiceUniqueName Invoice unique name which need to adjust
      * @returns {Observable<BaseResponse<any, any>>}
      * @memberof SalesService
      */
-    public adjustAnInvoiceWithAdvanceReceipts(model: VoucherAdjustments, invoiceUniqueName: string): Observable<BaseResponse<any, any>> {
+    public adjustAnInvoiceWithAdvanceReceipts(model: any, invoiceUniqueName: string): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.post(this.config.apiUrl + ADVANCE_RECEIPTS_API.INVOICE_ADJUSTMENT_WITH_ADVANCE_RECEIPT.replace(':companyUniqueName', this.companyUniqueName).replace(':invoiceUniqueName', invoiceUniqueName), model).pipe(
+        let url;
+
+        if (this.generalService.voucherApiVersion === 2) {
+            url = this.config.apiUrl + ADVANCE_RECEIPTS_API.VOUCHER_ADJUSTMENT_WITH_ADVANCE_RECEIPT.replace(':companyUniqueName', this.companyUniqueName).replace(':voucherUniqueName', invoiceUniqueName);
+        } else {
+            url = this.config.apiUrl + ADVANCE_RECEIPTS_API.INVOICE_ADJUSTMENT_WITH_ADVANCE_RECEIPT.replace(':companyUniqueName', this.companyUniqueName).replace(':invoiceUniqueName', invoiceUniqueName);
+        }
+
+        if (this.generalService.voucherApiVersion === 2) {
+            url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
+        }
+
+        return this.http.post(url, model).pipe(
             map((res) => {
                 let data: BaseResponse<any, any> = res;
                 data.request = model;
@@ -174,15 +187,19 @@ export class SalesService {
      *
      * @param {any} model voucher type & account unique name
      * @param {string} date Date in GIDDH_DATE_FORMAT
+     * @param {number} count
      * @returns {Observable<BaseResponse<any, any>>}
      * @memberof LedgerService
      */
-    public getInvoiceList(model: any, date: string): Observable<BaseResponse<any, any>> {
+    public getInvoiceList(model: any, date: string, count: number = PAGINATION_LIMIT): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let contextPath = SALES_API_V2.GET_VOUCHER_INVOICE_LIST
             .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             .replace(':voucherDate', encodeURIComponent(date))
-            .replace(':adjustmentRequest', String(true));
+            .replace(':adjustmentRequest', String(true))
+            .replace(':count', String(count))
+            .replace(':number', encodeURIComponent((model.number || "")))
+            .replace(':page', (model.page || 1));
         if (this.generalService.voucherApiVersion === 2) {
             contextPath = this.generalService.addVoucherVersion(contextPath, this.generalService.voucherApiVersion);
         }
@@ -217,4 +234,19 @@ export class SalesService {
         return this.http.get(contextPath);
     }
 
+    /**
+     * Updates attachment in voucher
+     *
+     * @param {*} model
+     * @returns {Observable<BaseResponse<any, any>>}
+     * @memberof SalesService
+     */
+    public updateAttachmentInVoucher(model: any): Observable<BaseResponse<any, any>> {
+        let url: string = `${this.config.apiUrl}${SALES_API_V4.UPDATE_ATTACHMENT.replace(':companyUniqueName', this.generalService.companyUniqueName)}`;
+        if (this.generalService.voucherApiVersion === 2) {
+            url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
+        }
+        return this.http.patch(url, model).pipe(
+            catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)));
+    }
 }

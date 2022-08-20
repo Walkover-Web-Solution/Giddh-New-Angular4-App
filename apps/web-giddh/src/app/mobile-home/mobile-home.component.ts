@@ -98,7 +98,7 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
             }
         });
 
-        this.imgPath = (isElectron || isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
 
         // listen on input for search
         this.searchSubject.pipe(debounceTime(300), takeUntil(this.destroyed$)).subscribe(term => {
@@ -406,12 +406,6 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
     public logout(): void {
         if (isElectron) {
             this.store.dispatch(this.loginAction.ClearSession());
-        } else if (isCordova) {
-            (window as any).plugins.googleplus.logout(
-                (msg) => {
-                    this.store.dispatch(this.loginAction.ClearSession());
-                }
-            );
         } else {
             // check if logged in via social accounts
             this.isLoggedInWithSocialAccount$.subscribe((val) => {

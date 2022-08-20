@@ -1,5 +1,5 @@
 <div
-    class="top-aging-table-top1"
+    class="top-aging-table-top1 top-aging-table-top1-mat"
     (clickOutside)="closeAging($event)"
     [clickOutsideEnabled]="true"
     [delayClickOutsideInit]="true"
@@ -9,51 +9,51 @@
             <p>{{ localeData?.first_interval }}</p>
             <div class="top-aging-table-box">
                 <span>0 -</span>
-                <input
-                    class="input-design"
-                    name="opt_4th"
-                    type="number"
+                <text-field
+                    [cssClass]="'form-control input-design'"
+                    [name]="'opt_4th'"
+                    [type]="'number'"
                     digitsOnlyDirective
-                    (blur)="saveAgingDropdown()"
+                    (change)="saveAgingDropdown()"
                     [(ngModel)]="options.fourth"
                     (click)="$event.stopPropagation()"
-                />
+                ></text-field>
             </div>
         </div>
         <div class="col-md-3 col-sm-3 col-xs-6">
             <p>{{ localeData?.second_interval }}</p>
             <div class="top-aging-table-box">
-                <span>{{ options.fourth + 1 }} -</span>
-                <input
-                    class="input-design"
-                    name="opt_4th"
-                    type="number"
+                <span>{{ +options.fourth + 1 }} -</span>
+                <text-field
+                    [cssClass]="'form-control input-design'"
+                    [name]="'opt_4th'"
+                    [type]="'number'"
                     digitsOnlyDirective
                     [(ngModel)]="options.fifth"
-                    (blur)="saveAgingDropdown()"
+                    (change)="saveAgingDropdown()"
                     (click)="$event.stopPropagation()"
-                />
+                ></text-field>
             </div>
         </div>
         <div class="col-md-3 col-sm-3 col-xs-6">
             <p>{{ localeData?.third_interval }}</p>
             <div class="top-aging-table-box">
-                <span>{{ options.fifth + 1 }} -</span>
-                <input
-                    class="input-design"
-                    name="opt_4th"
+                <span>{{ +options.fifth + 1 }} -</span>
+                <text-field
+                    [cssClass]="'form-control input-design'"
+                    [name]="'opt_4th'"
                     digitsOnlyDirective
-                    type="number"
+                    [type]="'number'"
                     [(ngModel)]="options.sixth"
-                    (blur)="saveAgingDropdown()"
+                    (change)="saveAgingDropdown()"
                     (click)="$event.stopPropagation()"
-                />
+                ></text-field>
             </div>
         </div>
         <div class="col-md-3 col-sm-3 col-xs-6">
             <p>{{ localeData?.last_interval }}</p>
             <div class="top-aging-table-box">
-                <span>+{{ options.sixth + 1 }}</span>
+                <span>+{{ +options.sixth + 1 }}</span>
             </div>
         </div>
     </div>

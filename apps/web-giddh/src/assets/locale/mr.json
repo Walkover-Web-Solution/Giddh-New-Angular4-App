@@ -148,7 +148,7 @@
     "app_invalid_transporter_name_message": "ट्रान्सपोर्टरच्या नावामध्ये किमान 5 वर्ण असावेत आणि त्यामध्ये कोणतेही विशेष वर्ण नसावेत.",
     "app_transporter_id": "ट्रान्सपोर्टर आयडी",
     "app_transporter_id_placeholder": "क्रमांक सांगा",
-    "app_invalid_transporter_id_message": "ट्रान्सपोर्टर आयडीमध्ये किमान 4 वर्ण असले पाहिजेत आणि फक्त अंक असावेत.",
+    "app_invalid_transporter_id_message": "ट्रान्सपोर्टर आयडीमध्ये किमान 4 वर्ण असले पाहिजेत.",
     "app_transporter_table_name": "नाव",
     "app_transporter_table_id": "ट्रान्सपोर्टर आयडी",
     "app_transporter": "ट्रान्सपोर्टर",
@@ -469,7 +469,8 @@
     "app_datatype_list": {
         "string": "स्ट्रिंग",
         "number": "संख्या",
-        "boolean": "बुलियन"
+        "boolean": "बुलियन",
+        "barcode": "बारकोड"
     },
     "app_rc_heading": "उलट शुल्क पुष्टीकरण",
     "app_rc_selected_note": "सुचना: जर आपण रिव्हर्स चार्जिंगसाठी या लेन्डिडींगच्या सल्ल्यांचे पालन केले तर त्या अंमलबजावणीच्या कर्करोगाच्या अंमलबजावणी कर्करोगाच्या अंतर्गत घटनेची आणि कर्तव्याची नोंद असलेल्या प्रकरणात समाविष्ट केली जाईल.",
@@ -637,7 +638,8 @@
 		"otp_sent_email": "आपल्या ईमेल खात्यावर एक सत्यापन कोड पाठविला गेला आहे.",
 		"internet_error": "कृपया आपले इंटरनेट कनेक्शन तपासा.",
 		"internet_disconnected": "इंटरनेट डिस्कनेक्ट झाले",
-        "voucher_saved": "व्हाउचर यशस्वीरित्या व्युत्पन्न केले"
+        "voucher_saved": "व्हाउचर यशस्वीरित्या व्युत्पन्न केले",
+        "file_uploaded": "फाईल यशस्वीरित्या अपलोड केली"
 	},
 	"app_supported_languages": {
 		"english": "इंग्रजी",
@@ -659,5 +661,18 @@
     },
     "app_voucher_unavailable": "समायोजनासाठी कोणतेही व्हाउचर नाही.",
     "app_reference_invoice": "संदर्भ पावती",
-    "app_create_custom_field": "सानुकूल फील्डस तयार करा"
+    "app_create_custom_field": "सानुकूल फील्डस तयार करा",
+    "app_validation": "प्रमाणीकरण",
+    "app_archive": "संग्रहण",
+    "app_unarchive": "संग्रहण रद्द करा",
+    "app_archived": "संग्रहित",
+    "app_unarchived": "सक्रिय",
+    "app_not_available": "N/A",
+    "app_true": "खरे",
+    "app_false": "खोटे",
+    "app_preview": "पूर्वावलोकन",
+    "app_purchase_bill": "खरेदी बिल",
+    "app_on": "On",
+    "app_off": "Off",
+    "app_preview_formats": "हे फाइल स्वरूप पूर्वावलोकनासाठी समर्थित नाहीत (xls, xlsx, doc, CSV)"
 }

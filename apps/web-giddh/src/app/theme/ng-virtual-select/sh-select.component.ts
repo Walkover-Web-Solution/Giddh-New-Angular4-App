@@ -247,12 +247,12 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
         } else if (this._options && this.useInBuiltFilterForIOptionTypeItems) {
             this.filteredData = this.filterByIOption(this._options, lowercaseFilter);
         } else {
-            let filteredData = this._options ? this._options?.filter(item => {
+            let filteredData = lowercaseFilter ? (this._options ? this._options?.filter(item => {
                 if (this.customFilter) {
                     return this.customFilter(lowercaseFilter, item);
                 }
                 return !lowercaseFilter || String(item?.label).toLocaleLowerCase().indexOf(lowercaseFilter) !== -1;
-            }) : [];
+            }) : []) : ((this._options) ? this._options : []);
 
             if (this.customSorting) {
                 this.filteredData = filteredData.sort(this.customSorting);

@@ -1,5 +1,4 @@
-@import "../../../assets/css/color.scss";
-
+@import "../../../assets/css/mixin-common.scss";
 .dropdown-menu > li > a {
     padding: 2px 10px;
 }
@@ -16,6 +15,9 @@
     margin-left: 6px;
     cursor: pointer;
 }
+.icon-search {
+    font-size: 16px;
+}
 
 .linked-entities {
     width: 200px;
@@ -27,18 +29,25 @@
 }
 
 .icon-pointer .font-xxs {
-    font-size: 12px;
+    font-size: 16px;
 }
+
 .aging-table {
     width: 100%;
     background: transparent;
 }
+
 .pagination-wrapper {
-    width: 100%;
+    width: 80%;
+    padding: 20px 0;
+    position: fixed;
+    bottom: 20px;
 }
+
 .wrap-searching-aging {
     display: none !important;
 }
+
 .advance-icon {
     display: inline-flex;
     justify-content: center;
@@ -46,27 +55,35 @@
     font-size: 14px;
     border-radius: 5px;
     margin-right: 0;
+    width: 73px;
+    position: relative;
+    right: 1px;
+    border-color: var(--color-common-secondary-border);
+    color: var(--color-primary-filter-button-text);
 }
 
 .search-field {
     position: relative;
     margin-bottom: 0;
 }
+
 .search-field input {
     width: 235px;
-    background-color: $whisper !important;
-    border-color: $whisper !important;
+    background-color: var(--color-dark-fog) !important;
+    border-color: var(--color-dark-fog) !important;
 }
+
 .search-field input:focus {
-    background-color: $white !important;
-    border-color: $midnight-express !important;
+    background-color: var(--color-white) !important;
+    border-color: var(--color-common-primary-blue-border) !important;
 }
+
 span.input-addon {
     position: absolute;
     right: 0px;
     padding: 4px 9px;
-    background-color: $chetwode-blue;
-    color: $white;
+    background-color: var(--color-blue);
+    color: var(--color-white);
     font-size: 18px;
     border-radius: 5px;
     top: 0;
@@ -74,6 +91,7 @@ span.input-addon {
 
 tr.aging-table-top td {
     padding: 8px 0;
+    background-color: var(--color-common-primary-background-for-all-components) !important;
 }
 
 .refresh-btn {
@@ -82,9 +100,13 @@ tr.aging-table-top td {
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    background-color: $white;
-    border: 1px solid $gainsboro;
+    background-color: var(--color-white);
+    border: 1px solid var(--color-common-secondary-border);
+    border-radius: 5px;
     margin-left: 10px !important;
+    .icon-refresh {
+        color: var(--color-abbey);
+    }
 }
 
 .name-width {
@@ -98,22 +120,117 @@ tr.aging-table-top td {
 .word-break {
     word-break: break-word !important;
 }
+
 .input-container {
     input {
         height: 36px;
         min-width: 100%;
         padding: 11px;
         padding-right: 40px;
-        color: $nero;
+        color: var(--color-nero);
         border: none;
-        background-color: $gray-95;
+        background-color: var(--color-input-tertiary-background) !important;
+        border-radius: 5px;
     }
 }
+
 .top-aging-table-top {
     background: none !important;
 }
+
 .empty-table {
     height: 120px;
+}
+
+tr.mat-header-row {
+    height: 51.5px;
+}
+
+.mat-button {
+    padding: 0;
+    text-decoration: underline;
+    margin-right: 0px !important;
+}
+
+th.mat-header-cell:first-of-type {
+    width: 251px;
+    padding-left: 5px !important;
+}
+
+.pull-left {
+    button {
+        width: auto;
+        margin-right: 15px;
+    }
+}
+
+::ng-deep {
+    .mat-customer-name {
+        .icon-pointer {
+            .font-xxs {
+                color: var(--color-blue) !important;
+            }
+        }
+    }
+    .mat-parent-group {
+        padding-left: 10px !important;
+    }
+    .mat-app-days-1,
+    .mat-app-days-2,
+    .mat-app-days-3,
+    .mat-app-days-4 {
+        padding-right: 12px !important;
+    }
+    .mat-header-cell .icon-pointer {
+        margin-left: 0px;
+    }
+    .mat-table tbody {
+        tr {
+            td {
+                &:first-child {
+                    padding-left: 18px;
+                }
+            }
+        }
+    }
+    .mat-flat-button {
+        padding: 0px 11px;
+    }
+    .search-table {
+        margin-left: 21px;
+    }
+    .ng-untouched {
+        .pull-right {
+            display: flex;
+            button {
+                min-width: 88px;
+                padding-right: 10px;
+                padding-left: 10px !important;
+            }
+        }
+    }
+    .total-padding {
+        height: 130px;
+    }
+    .mat-customer-name span:nth-child(2) {
+        position: relative;
+        right: 3px;
+    }
+}
+::ng-deep {
+    .btn-sky-blue {
+        color: var(--color-secondary-button-text);
+        background-color: var(--color-secondary-button-background);
+        border-color: var(--color-secondary-button-background);
+    }
+}
+
+.btn-filters {
+    @include common-filters(
+        var(--color-giddh-blue),
+        var(--color-primary-filter-background),
+        1px solid var(--color-primary-button-border)
+    );
 }
 
 // responsive
@@ -130,13 +247,42 @@ tr.aging-table-top td {
     .table-aging-report span.justify-content-end {
         justify-content: flex-start !important;
     }
+    .main-table {
+        tbody {
+            tr {
+                td {
+                    &:first-child {
+                        min-width: 242px !important;
+                    }
+                }
+            }
+        }
+    }
 }
+@media (max-width: 1024px) {
+    .main-table {
+        th {
+            .mat-header-cell {
+                &:first-of-type {
+                    min-width: 242px !important;
+                }
+            }
+        }
+    }
+}
+
 @media (max-width: 767px) {
     span.input-addon {
         top: 0;
     }
+    .main-table {
+        margin-top: 0;
+        float: left;
+    }
     .pagination-wrapper {
         margin-bottom: 0px;
+        position: relative;
+        margin-top: 20px;
     }
     .wrap-searching-aging .max-width-250.default-width {
         max-width: calc(100% - 90px);
@@ -146,12 +292,14 @@ tr.aging-table-top td {
         display: flex;
         width: auto !important;
         margin-left: auto !important;
+
         span {
             justify-content: center;
             align-items: center;
             display: flex;
+
             i {
-                color: $gray;
+                color: var(--color-abbey);
             }
         }
     }
@@ -159,13 +307,16 @@ tr.aging-table-top td {
         flex-direction: column-reverse;
         display: flex;
         margin-bottom: 15px;
+
         .linked-entities {
             margin-right: 0;
             margin-bottom: 0;
             width: 100%;
         }
+
         .btn-group {
             width: 100%;
+
             .btn {
                 width: 100%;
             }
@@ -173,9 +324,11 @@ tr.aging-table-top td {
     }
     .wrap-searching-aging {
         display: flex !important;
+
         a {
-            color: $gray;
+            color: var(--color-abbey);
         }
+
         .max-width-250 {
             max-width: 250px;
             width: 100%;
@@ -203,12 +356,14 @@ tr.aging-table-top td {
         display: block;
     }
 }
+
 @media (max-width: 575px) {
     .top-aging-table-top {
         padding: 8px 3px !important;
         font-size: 14px;
     }
 }
+
 @media (max-width: 575px) {
     .btn-group.plus-btn {
         float: none;
@@ -224,8 +379,10 @@ tr.aging-table-top td {
             margin-bottom: 0;
             width: 100%;
         }
+
         .btn-group {
             width: 100%;
+
             .btn {
                 width: 100%;
             }
@@ -244,6 +401,33 @@ tr.aging-table-top td {
         .table-responsive {
             max-height: calc(100vh - 295px);
             overflow-y: auto;
+            min-height: auto !important;
         }
     }
+}
+
+.icon-calender {
+    position: absolute;
+    z-index: 9;
+    height: 32px;
+    width: 36px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    height: 36px !important;
+    // border-right: 1px solid var(--color-iron) !important;
+    cursor: pointer;
+}
+
+.m-0 {
+    margin: 0 !important;
+}
+
+::ng-deep.aging-dropdown-table {
+    max-width: 100%;
+    width: 534px;
+    height: 93px;
+    padding-top: 10px;
+    margin-top: 17px;
+    box-shadow: 0 0 19px var(--color-primary-common-box-shadow);
 }

@@ -10,14 +10,12 @@ import {
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
-import * as moment from 'moment';
+import * as dayjs from 'dayjs';
 import { Observable, of, ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
-import { CompanyActions } from '../actions/company.actions';
 import { GeneralActions } from '../actions/general/general.actions';
 import { GroupWithAccountsAction } from '../actions/groupwithaccounts.actions';
 import { GstReport } from '../gst/constants/gst.constant';
-import { StateDetailsRequest } from '../models/api-models/Company';
 import { OrganizationType } from '../models/user-login-state';
 import { GeneralService } from '../services/general.service';
 import { GstReconcileService } from '../services/GstReconcile.service';
@@ -60,7 +58,6 @@ export class AllGiddhItemComponent implements OnInit, OnDestroy {
 
     constructor(
         private changeDetectorRef: ChangeDetectorRef,
-        private companyActions: CompanyActions,
         private generalService: GeneralService,
         private generalActions: GeneralActions,
         private groupWithAction: GroupWithAccountsAction,
@@ -139,13 +136,12 @@ export class AllGiddhItemComponent implements OnInit, OnDestroy {
         this.loadTaxDetails();
         this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch;
         this.currentPeriod = {
-            from: moment().startOf('month').format(GIDDH_DATE_FORMAT),
-            to: moment().endOf('month').format(GIDDH_DATE_FORMAT)
+            from: dayjs().startOf('month').format(GIDDH_DATE_FORMAT),
+            to: dayjs().endOf('month').format(GIDDH_DATE_FORMAT)
         };
 
         this.store.dispatch(this.generalActions.getSideMenuItems());
         this.searchField?.nativeElement?.focus();
-        this.saveLastState();
     }
 
     /**
@@ -174,7 +170,7 @@ export class AllGiddhItemComponent implements OnInit, OnDestroy {
             let filteredItems = [];
             allItems?.forEach((items) => {
                 found = false;
-                if (items.label.toLowerCase().includes(search.trim().toLowerCase())) {
+                if (items?.label?.toLowerCase().includes(search?.trim()?.toLowerCase())) {
                     if (filteredItems[loop] === undefined) {
                         filteredItems[loop] = [];
                     }
@@ -184,7 +180,7 @@ export class AllGiddhItemComponent implements OnInit, OnDestroy {
                 } else {
                     let itemsFound = [];
                     items?.items?.forEach(item => {
-                        if (item.label.toLowerCase().includes(search.trim().toLowerCase())) {
+                        if (item?.label?.toLowerCase().includes(search?.trim()?.toLowerCase())) {
                             if (filteredItems[loop] === undefined) {
                                 filteredItems[loop] = [];
                             }
@@ -217,24 +213,9 @@ export class AllGiddhItemComponent implements OnInit, OnDestroy {
     public handleItemClick(item: AllItem): void {
         if (item.label === this.commonLocaleData?.app_master) {
             this.store.dispatch(this.groupWithAction.OpenAddAndManageFromOutside(''));
-        } else if(item?.additional?.isGstMenu === true) {
+        } else if (item?.additional?.isGstMenu === true) {
             this.navigate(item?.additional?.type);
         }
-    }
-
-    /**
-     * Saves the last state
-     *
-     * @private
-     * @memberof AllGiddhItemComponent
-     */
-    private saveLastState(): void {
-        let state = 'giddh-all-items';
-        let stateDetailsRequest = new StateDetailsRequest();
-        stateDetailsRequest.companyUniqueName = this.generalService.companyUniqueName;
-        stateDetailsRequest.lastState = `/pages/${state}`;
-
-        this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
     }
 
     /**
@@ -263,12 +244,12 @@ export class AllGiddhItemComponent implements OnInit, OnDestroy {
      *
      * @memberof AllGiddhItemComponent
      */
-     public loadTaxDetails(): void {
+    public loadTaxDetails(): void {
         this.activeCompanyGstNumber = "";
         this.gstReconcileService.getTaxDetails().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.body) {
                 let taxes = response.body;
-                if(taxes?.length === 1) {
+                if (taxes?.length === 1) {
                     this.activeCompanyGstNumber = taxes[0];
                 }
             }
@@ -281,8 +262,8 @@ export class AllGiddhItemComponent implements OnInit, OnDestroy {
     * @param {string} type Type of GST module
     * @memberof AllGiddhItemComponent
     */
-     public navigate(type: string): void {
-        if(this.activeCompanyGstNumber) {
+    public navigate(type: string): void {
+        if (this.activeCompanyGstNumber) {
             switch (type) {
                 case GstReport.Gstr1: case GstReport.Gstr2:
                     this.navigateToOverview(type);

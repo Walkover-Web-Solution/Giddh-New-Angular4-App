@@ -41,6 +41,7 @@ export interface GeneralState {
     openSideMenu: boolean;
     menuItems: Array<any>;
     openGstSideMenu: boolean;
+    isCalendlyModelOpen: boolean;
 }
 
 const initialState: GeneralState = {
@@ -55,7 +56,8 @@ const initialState: GeneralState = {
     updateIndexDbInProcess: false,
     openSideMenu: true,
     menuItems: [],
-    openGstSideMenu: false
+    openGstSideMenu: false,
+    isCalendlyModelOpen: false
 };
 
 export function GeneRalReducer(state: GeneralState = initialState, action: CustomActions): GeneralState {
@@ -362,6 +364,11 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
                 ...state,
                 openGstSideMenu: action.payload
             };
+        }
+        case GENERAL_ACTIONS.OPEN_CALENDLY_MODEL: {
+            return {
+                ...state, isCalendlyModelOpen: action.payload
+            }
         }
         default:
             return state;

@@ -1,18 +1,16 @@
-@import "../../../../assets/css/color.scss";
-
 .icon-download {
     font-weight: 600;
 }
 
 .dropdown-menu > li > a:hover {
-    color: $chetwode-blue;
-    background: $whisper;
+    color: var(--color-blue);
+    background: var(--color-dark-fog);
 }
 .z-index-for-aside {
     z-index: 99999;
 }
 .authenticate-btn {
-    border: 1px solid $chetwode-blue;
+    border: 1px solid var(--color-blue);
 }
 
 .list-inline {
@@ -26,8 +24,11 @@
 }
 .btn-wrapper-filling-header {
     .btn-primary {
-        border-color: $chetwode-blue;
+        border-color: var(--color-blue);
     }
+}
+.head-font-weight {
+    font-weight: 500 !important;
 }
 @media (max-width: 991px) {
     .list-filter {

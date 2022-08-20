@@ -7,7 +7,7 @@
         <div class="aside-pane-form">
             <div class="row">
                 <div class="col-sm-12 mr-b1">
-                    <span> {{ otherTaxesModal.itemLabel }} </span>
+                    <span> {{ defaultOtherTaxesModal?.itemLabel }} </span>
                 </div>
                 <div class="col-sm-6 col-xs-12">
                     <div class="select-tax-dropdown d-flex flex-column">
@@ -23,8 +23,8 @@
                                 [showClear]="true"
                             ></sh-select>
 
-                            <label class="label-select-tax" *ngIf="otherTaxesModal?.appliedOtherTax?.name">
-                                {{ otherTaxesModal?.appliedOtherTax?.name | uppercase}}
+                            <label class="label-select-tax" *ngIf="defaultOtherTaxesModal?.appliedOtherTax?.name">
+                                {{ defaultOtherTaxesModal?.appliedOtherTax?.name | uppercase}}
                             </label>
                         </div>
                     </div>
@@ -38,8 +38,7 @@
                             [options]="calculationMethodOptions"
                             name="tcsCalculationMethod"
                             [placeholder]="commonLocaleData?.app_select_method"
-                            [disabled]="isDisabledCalMethod"
-                            [(ngModel)]="otherTaxesModal.tcsCalculationMethod"
+                            [(ngModel)]="defaultOtherTaxesModal.tcsCalculationMethod"
                         ></sh-select>
                     </div>
                 </div>
@@ -48,7 +47,7 @@
                 <button
                     class="btn btn-success"
                     type="button"
-                    [disabled]="!otherTaxesModal.tcsCalculationMethod"
+                    [disabled]="!defaultOtherTaxesModal?.tcsCalculationMethod"
                     (click)="saveTaxes()"
                 >
                     {{commonLocaleData?.app_apply}}

@@ -78,6 +78,8 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Stores the voucher API version of current company */
     public voucherApiVersion: 1 | 2;
+    /** Holds gst number */
+    public selectedGstNumber: string = '';
 
     constructor(private gstAction: GstReconcileActions, private store: Store<AppState>, private route: Router, private activatedRoute: ActivatedRoute, private invoiceActions: InvoiceActions, private componentFactoryResolver: ComponentFactoryResolver,
         private invoiceReceiptActions: InvoiceReceiptActions,
@@ -133,12 +135,13 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
             { label: this.localeData?.unregistered, value: 'unregistered' }
         ];
 
-        this.imgPath = (isElectron || isCordova) ? 'assets/images/gst/' : AppUrl + APP_FOLDER + 'assets/images/gst/';
+        this.imgPath = isElectron ? 'assets/images/gst/' : AppUrl + APP_FOLDER + 'assets/images/gst/';
         this.filterParam.from = this.currentPeriod.from;
         this.filterParam.to = this.currentPeriod.to;
         this.filterParam.gstin = this.activeCompanyGstNumber;
 
         this.activatedRoute.firstChild.queryParams.pipe(takeUntil(this.destroyed$)).subscribe(params => {
+            this.selectedGstNumber = params.selectedGst;
             this.filterParam.entityType = params.entityType;
             this.filterParam.type = params.type;
             this.filterParam.status = params.status;
@@ -158,7 +161,7 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
     }
 
     public goBack() {
-        this.route.navigate(['pages', 'gstfiling', 'filing-return'], { queryParams: { return_type: this.selectedGst, from: this.currentPeriod.from, to: this.currentPeriod.to } });
+        this.route.navigate(['pages', 'gstfiling', 'filing-return'], { queryParams: { return_type: this.selectedGst, from: this.currentPeriod.from, to: this.currentPeriod.to, selectedGst: this.selectedGstNumber } });
     }
 
     public pageChanged(event) {
@@ -168,23 +171,18 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
     public onSelectInvoice(invoice) {
         let downloadVoucherRequestObject;
         if (invoice && invoice.account) {
-            if(this.voucherApiVersion === 2) {
-                downloadVoucherRequestObject = {
-                    voucherNumber: [invoice.voucherNumber],
-                    uniqueName: invoice.voucherUniqueName,
-                    voucherType: invoice.voucherType,
-                    accountUniqueName: invoice.account.uniqueName
-                };
-            } else {
-                downloadVoucherRequestObject = {
-                    voucherNumber: [invoice.voucherNumber],
-                    voucherType: invoice.voucherType,
-                    accountUniqueName: invoice.account.uniqueName
-                };
-            }
-            
             this.selectedInvoice = invoice;
-            this.store.dispatch(this.invoiceReceiptActions.VoucherPreview(downloadVoucherRequestObject, downloadVoucherRequestObject.accountUniqueName));
+            this.selectedInvoice.uniqueName = invoice.voucherUniqueName;
+
+            if(this.voucherApiVersion !== 2) {
+                downloadVoucherRequestObject = {
+                    voucherNumber: [invoice.voucherNumber],
+                    voucherType: invoice.voucherType,
+                    accountUniqueName: invoice.account.uniqueName
+                };
+            
+                this.store.dispatch(this.invoiceReceiptActions.VoucherPreview(downloadVoucherRequestObject, downloadVoucherRequestObject.accountUniqueName));
+            }
         }
         this.loadDownloadOrSendMailComponent();
         this.downloadOrSendMailModel.show();
@@ -199,6 +197,7 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
         viewContainerRef.insert(componentInstanceView.hostView);
 
         let componentInstance = componentInstanceView.instance as DownloadOrSendInvoiceOnMailComponent;
+        componentInstance.selectedVoucher = this.selectedInvoice;
         componentInstance.closeModelEvent.subscribe(e => this.closeDownloadOrSendMailPopup(e));
         componentInstance.downloadOrSendMailEvent.subscribe(e => this.onDownloadOrSendMailEvent(e));
         componentInstance.downloadInvoiceEvent.subscribe(e => this.onDownloadInvoiceEvent(e));
@@ -277,12 +276,21 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
         if (userResponse.action === 'download') {
             this.downloadFile();
         } else if (userResponse.action === 'send_mail' && userResponse.emails && userResponse.emails.length) {
-            this.store.dispatch(this.invoiceActions.SendInvoiceOnMail(this.selectedInvoice.account.uniqueName, {
-                emailId: userResponse.emails,
-                voucherNumber: [this.selectedInvoice.voucherNumber],
-                typeOfInvoice: userResponse.typeOfInvoice,
-                voucherType: this.selectedInvoice.voucherType
-            }));
+            if (this.voucherApiVersion === 2) {
+                this.store.dispatch(this.invoiceActions.SendInvoiceOnMail(this.selectedInvoice.account.uniqueName, {
+                    email: { to: userResponse.emails },
+                    uniqueName: this.selectedInvoice.uniqueName,
+                    copyTypes: userResponse.typeOfInvoice,
+                    voucherType: this.selectedInvoice.voucherType
+                }));
+            } else {
+                this.store.dispatch(this.invoiceActions.SendInvoiceOnMail(this.selectedInvoice.account.uniqueName, {
+                    emailId: userResponse.emails,
+                    voucherNumber: [this.selectedInvoice.voucherNumber],
+                    typeOfInvoice: userResponse.typeOfInvoice,
+                    voucherType: this.selectedInvoice.voucherType
+                }));
+            }
         } else if (userResponse.action === 'send_sms' && userResponse.numbers && userResponse.numbers.length) {
             this.store.dispatch(this.invoiceActions.SendInvoiceOnSms(this.selectedInvoice.account.uniqueName, { numbers: userResponse.numbers }, this.selectedInvoice.voucherNumber));
         }
@@ -299,13 +307,16 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
             let model: DownloadVoucherRequest = {
                 voucherType: this.selectedInvoice.voucherType,
                 voucherNumber: [this.selectedInvoice.voucherNumber],
-                typeOfInvoice: invoiceCopy,
+                copyTypes: invoiceCopy,
                 uniqueName: this.selectedInvoice.voucherUniqueName
             };
 
             let accountUniqueName: string = this.selectedInvoice.account?.uniqueName;
             this.receiptService.DownloadVoucher(model, accountUniqueName, false).pipe(takeUntil(this.destroyed$)).subscribe(res => {
                 if (res) {
+                    if (model.typeOfInvoice.length > 1) {
+                        return saveAs(res, `${model.voucherNumber[0]}.` + 'zip');
+                    }
                     return saveAs(res, `${this.selectedInvoice.voucherNumber}.` + 'pdf');
                 } else {
                     this.toaster.errorToast(this.commonLocaleData?.app_something_went_wrong);

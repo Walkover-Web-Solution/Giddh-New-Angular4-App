@@ -70,7 +70,6 @@ declare var ApiUrl: string;
 declare var isElectron: boolean;
 declare var fileChooser: any;
 declare var FilePicker: any;
-declare var isCordova: boolean;
 declare var errlyticsNeeded: boolean;
 declare var errlyticsKey: string;
 declare var _: any;
@@ -93,7 +92,6 @@ interface GlobalEnvironment {
     System: SystemJS;
     AppUrl: string;
     ApiUrl: string;
-    isCordova: boolean;
     isElectron: boolean;
     errlyticsNeeded: boolean;
     errlyticsKey: string;

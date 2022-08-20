@@ -1,67 +1,423 @@
-@import "../../assets/css/color.scss";
-.welcome-header {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 64px;
-}
-
-.your-account span {
-    display: block;
-    font-size: 14px;
-    color: $nobel;
-    margin-bottom: 5px;
-}
-
-.your-account p {
-    color: $nero;
-    font-size: 14px;
-}
-
-.your-account p.success-text {
-    color: $success-green !important;
-}
-
-.welcome-msg {
-    padding: 25px 15px 0;
-    margin-bottom: 30px;
-}
-
-.billing-details {
-    padding: 25px 15px;
-}
-
-.billing-details h3 {
-    font-size: 20px;
-    font-weight: 500;
-    font-family: "opensans-regular";
-    color: $nero;
-    margin-bottom: 20px;
-}
-
-.billing-details form label {
-    color: $nero;
-    font-size: 14px;
-}
-
-.billing-details .form-group {
-    margin-bottom: 25px;
-}
-
-.billing-details form {
-    max-width: 300px;
+#main {
+    position: relative;
+    float: left;
     width: 100%;
-}
+    .main-heading-billing {
+        padding: 52px 0px 0px 16px;
+        float: left;
+        width: 100%;
+        .back-button {
+            margin-top: 4%;
+            background-color: var(--color-iron) !important;
+            border-color: var(--color-iron);
+            color: var(--color-nero);
+            font-family: "opensans-semibold" !important;
+            margin-bottom: 15px !important;
+            padding-left: 12px !important;
+            padding-right: 18px !important;
+            height: 37px;
+            .back-left {
+                font-size: 21px;
+                float: left;
+            }
+        }
+        .giddh-heading {
+            font-size: 37px;
+            font-weight: bold;
+            float: left;
+            width: 30%;
+            text-align: center;
+        }
+    }
+    .welcome-msg {
+        padding: 25px 0 0;
+        margin-bottom: 5px;
+        float: left;
+        width: 100%;
+        .user-details {
+            padding-top: 20px;
+            padding-bottom: 20px;
+        }
+        .user-title {
+            font-size: 19px;
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+        .user-title-content {
+            float: left;
+            width: 24%;
+            height: 29px;
+        }
+        .user-content-part {
+            float: left;
+        }
+    }
+    .billing-details {
+        padding: 25px 15px;
+        padding-top: 0;
+        float: left;
+        width: 100%;
+        .billing-name-content {
+            margin-bottom: 20px;
+        }
+        .billing-name {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--color-gray);
+        }
+        .billing-wrapper {
+            height: 100%;
+            border-right: 1px solid var(--color-common-secondary-border);
+            .form-label {
+                height: 16px;
+                margin-bottom: 6px !important;
+            }
+            .red-text-content {
+                display: none;
+            }
+            .mat-input-field {
+                float: left;
+                width: 100%;
+                height: 37px;
+                border: 1px solid var(--color-dark-fog);
+            }
+        }
+        .mat-input {
+            float: left;
+            width: 100%;
+            label {
+                color: var(--color-slate);
+                float: left;
+                width: 100%;
+            }
+        }
 
-.billing-wrapper {
-    border-right: 1px solid $gainsboro;
-    height: 100%;
+        .form-control {
+            background: var(--color-white) !important;
+            border: 1px solid var(--color-secondary-input-bar-border);
+            border-radius: 2px !important;
+            padding: 6px !important;
+        }
+        .form-text-area {
+            float: left;
+            width: 100%;
+            height: 100px;
+        }
+        .form-div {
+            float: left;
+            width: 100%;
+            height: 39px;
+        }
+        .red-text {
+            color: var(--color-danger) !important;
+        }
+        .billing-details form label {
+            color: var(--color-gray);
+            font-size: 15px;
+            font-weight: 400;
+        }
+        .billing-details form {
+            width: 100%;
+        }
+        .billing-name-content {
+            padding-left: 0 !important;
+        }
+        .form-field {
+            display: none;
+        }
+    }
+    .right-side {
+        padding-left: 0;
+        padding-right: 0;
+        .whole-renewal {
+            float: left;
+            width: 100%;
+            margin-top: 20px;
+            top: 0;
+            .renewal-list-content {
+                padding-left: 0 !important;
+            }
+            .renewal-heading {
+                margin-bottom: 13px;
+            }
+            .renewal-details {
+                color: var(--color-nero);
+            }
+            .renewal-data {
+                padding-left: 4px;
+                padding-right: 4px;
+            }
+            .renewal-card-title {
+                margin-bottom: -3px;
+                padding-top: 0px;
+            }
+            .renewal-card-subtitle {
+                color: var(--color-slate);
+                font-size: 16px;
+                font-weight: bold;
+                margin-bottom: 0px !important;
+            }
+            .form-group-div {
+                float: left;
+                width: 100%;
+            }
+            .year {
+                font-size: 14px;
+                margin-left: 3px;
+                text-transform: lowercase;
+            }
+            .amount-field-content {
+                float: left;
+                font-weight: bold;
+            }
+            .renewal-list {
+                padding-left: 14px;
+                padding-top: 10px;
+            }
+            .renewal-card {
+                float: left;
+                width: 100%;
+                color: var(--color-primary-card-text);
+                background-color: var(--color-primary-card-background);
+                box-shadow: 1px 0px 4px var(--color-primary-card-box-shadow);
+            }
+            .renewal-off {
+                color: var(--color-slate);
+                font-size: 12px;
+                font-weight: 600;
+                padding-left: 4px;
+            }
+            .discount-off {
+                color: var(--color-teal);
+                font-weight: bold;
+            }
+            .features {
+                line-height: 1.7;
+                color: var(--color-slate);
+                margin-bottom: 3px;
+            }
+            .renewal-payable {
+                float: left;
+                width: 100%;
+                .mat-button-disabled {
+                    background-color: var(--color-slate) !important;
+                }
+            }
+            .new-payable {
+                font-size: 15px !important;
+                padding-left: 5px;
+                margin-bottom: 7px !important;
+            }
+            .pay-now-content {
+                display: none;
+            }
+            .form-group-button {
+                height: 58px;
+                width: 38%;
+                margin-top: 11px;
+            }
+            .new-payable-content {
+                float: left;
+                width: 100%;
+            }
+            .renewal-amount {
+                padding-left: 5px;
+                font-size: 24px;
+                font-weight: bolder;
+                float: left;
+                width: 100%;
+            }
+            .renewal-details-content {
+                width: 50%;
+            }
+            .renewal-amount-content {
+                float: left;
+            }
+            .including-tax {
+                font-size: 13px;
+                font-weight: 300;
+                margin-left: 5px;
+            }
+            .pay-now {
+                margin-top: 11px;
+                width: 102px;
+                font-weight: bolder;
+                height: 38px;
+                font-size: 17px;
+                color: var(--color-senary-button-text);
+                background-color: var(--color-senary-button-background);
+                &:hover {
+                    background-color: var(--color-senary-button-background-hover);
+                }
+            }
+        }
+    }
+    .renewal-section {
+        float: left;
+        width: 100%;
+        padding-top: 12px;
+        padding-bottom: 13px;
+        color: var(--color-gray);
+        font-size: 14px;
+        padding-left: 5px;
+        .renewal-subscription-extra {
+            height: 20px;
+            float: left;
+            width: 79%;
+        }
+        .renewal-subscription-content {
+            display: none;
+        }
+    }
+    .renewal-payable {
+        .mat-button-disabled {
+            background-color: var(--color-gray) !important;
+        }
+    }
+    .display-line {
+        float: left;
+        width: 100%;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        .left-side {
+            padding-left: 0;
+        }
+        .col-sm-1 {
+            padding-left: 0;
+        }
+    }
 }
-
-.plan-title {
-    margin-bottom: 12px;
+@media screen and (min-width: 768px) and (orientation: portrait) {
+    #main {
+        .main-heading-billing {
+            .back-button {
+                width: 90px;
+                height: 40px;
+            }
+        }
+    }
+    .left-side {
+        float: left !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        flex: 0 0 50% !important;
+    }
+    .right-side {
+        padding-right: 0 !important;
+        float: left !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        flex: 0 0 50% !important;
+    }
+    .user-main {
+        float: left;
+        width: 100%;
+        max-width: 100% !important;
+        flex: 0 0 auto !important;
+    }
+    .display-line {
+        float: left;
+        width: 100%;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+    }
+    .giddh-heading {
+        padding-left: 0% !important;
+        width: 100% !important;
+    }
+    .welcome-msg {
+        float: left;
+        width: 100%;
+    }
+    .billing-details {
+        float: left;
+        width: 100%;
+    }
+    .billing-name {
+        padding-left: 15px;
+    }
+    #main {
+        position: relative;
+        float: left;
+        width: 100%;
+    }
+    .billing-name-content {
+        max-width: 50%;
+    }
+    .billing-name {
+        padding-left: 0px;
+    }
+} /* Landscape */
+@media screen and (max-width: 1024px) and (orientation: landscape) {
+    #main {
+        .main-heading-billing {
+            .back-button {
+                width: 90px;
+                height: 40px;
+            }
+        }
+    }
+    .left-side {
+        float: left !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        flex: 0 0 50% !important;
+    }
+    .right-side {
+        padding-right: 0 !important;
+        float: left !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        flex: 0 0 50% !important;
+    }
+    .user-main {
+        float: left;
+        width: 100%;
+        max-width: 100%;
+        flex: 0 0 100%;
+    }
+    .display-line {
+        float: left;
+        width: 100%;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+    }
+    #main {
+        position: relative;
+        float: left;
+        width: 100%;
+    }
+    .giddh-heading {
+        padding-left: 0% !important;
+        width: 100% !important;
+    }
+    .billing-name-content {
+        max-width: 50%;
+    }
+    .billing-name {
+        padding-left: 0px;
+    }
 }
-
-.plan-title .grey-text {
-    color: $nobel;
+@media (max-width: 480px) and (orientation: portrait) {
+    #main {
+        .main-heading-billing {
+            .giddh-heading {
+                width: 100%;
+                margin-top: 22px;
+            }
+        }
+    }
+}
+@media screen and (min-width: 1280px) and (orientation: landscape) {
+    .back-btnn {
+        float: left;
+        width: 101px !important;
+    }
+    #main {
+        .main-heading-billing {
+            .giddh-heading {
+                width: 43% !important;
+            }
+        }
+    }
 }

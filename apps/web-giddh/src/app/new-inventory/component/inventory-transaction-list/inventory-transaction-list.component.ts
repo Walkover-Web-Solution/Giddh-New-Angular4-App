@@ -1,16 +1,94 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { GeneralService } from '../../../services/general.service';
-import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal';
-import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
-import * as moment from 'moment/moment';
-import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
+import { Component, OnInit, ViewChild, ElementRef } from "@angular/core";
+import { GeneralService } from "../../../services/general.service";
+import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
+import { GIDDH_DATE_RANGE_PICKER_RANGES } from "../../../app.constant";
+import * as dayjs from "dayjs";
+import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from "../../../shared/helpers/defaultDateFormat";
+
+export interface PeriodicElement {
+    date: string;
+    voucherType: string;
+    accountName: string;
+    inwards: string;
+    outwards: string;
+    rate: string;
+    value: string;
+    qty: string;
+}
+
+const ELEMENT_DATA: PeriodicElement[] = [
+    {
+        date: "09-10-2020",
+        voucherType: "SALES",
+        accountName: "USD Account",
+        inwards: "-",
+        outwards: "1.00 Box",
+        rate: "1, 02, 378.60",
+        value: "1,02,378.60",
+        qty: "432.00box",
+    },
+    {
+        date: "09-10-2020",
+        voucherType: "SALES",
+        accountName: "USD Account",
+        inwards: "-",
+        outwards: "1.00 Box",
+        rate: "1, 02, 378.60",
+        value: "1,02,378.60",
+        qty: "432.00box",
+    },
+    {
+        date: "09-10-2020",
+        voucherType: "SALES",
+        accountName: "USD Account",
+        inwards: "-",
+        outwards: "1.00 Box",
+        rate: "1, 02, 378.60",
+        value: "1,02,378.60",
+        qty: "432.00box",
+    },
+    {
+        date: "09-10-2020",
+        voucherType: "SALES",
+        accountName: "USD Account",
+        inwards: "-",
+        outwards: "1.00 Box",
+        rate: "1, 02, 378.60",
+        value: "1,02,378.60",
+        qty: "432.00box",
+    },
+    {
+        date: "09-10-2020",
+        voucherType: "SALES",
+        accountName: "USD Account",
+        inwards: "-",
+        outwards: "1.00 Box",
+        rate: "1, 02, 378.60",
+        value: "1,02,378.60",
+        qty: "432.00box",
+    },
+    {
+        date: "09-10-2020",
+        voucherType: "SALES",
+        accountName: "USD Account",
+        inwards: "-",
+        outwards: "1.00 Box",
+        rate: "1, 02, 378.60",
+        value: "1,02,378.60",
+        qty: "432.00box",
+    },
+
+];
+
 @Component({
-    selector: 'inventory-transaction-list',
-    templateUrl: './inventory-transaction-list.component.html',
-    styleUrls: ['./inventory-transaction-list.component.scss'],
+    selector: "inventory-transaction-list",
+    templateUrl: "./inventory-transaction-list.component.html",
+    styleUrls: ["./inventory-transaction-list.component.scss"],
 })
 
 export class InventoryTransactionListComponent implements OnInit {
+    displayedColumns: string[] = ["date", "voucherType", "accountName", "inwards", "outwards", "rate", "value", "qty"];
+    dataSource = ELEMENT_DATA;
     /* This will store modal reference */
     public modalRef: BsModalRef;
     /* Selected range label */
@@ -20,8 +98,8 @@ export class InventoryTransactionListComponent implements OnInit {
     public selectedDateRangeUi: any;
     /* This will store available date ranges */
     public datePickerOption: any = GIDDH_DATE_RANGE_PICKER_RANGES;
-    /* Moment object */
-    public moment = moment;
+    /* dayjs object */
+    public dayjs = dayjs;
     /* Selected from date */
     public fromDate: string;
     /* Selected to date */
@@ -31,11 +109,11 @@ export class InventoryTransactionListComponent implements OnInit {
 
     /* This will store the x/y position of the field to show datepicker under it */
     public dateFieldPosition: any = { x: 0, y: 0 };
-    @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
+    @ViewChild("datepickerTemplate") public datepickerTemplate: ElementRef;
 
     constructor(
         private generalService: GeneralService,
-        private modalService: BsModalService,) {
+        private modalService: BsModalService) {
 
     }
 
@@ -51,7 +129,7 @@ export class InventoryTransactionListComponent implements OnInit {
         }
         this.modalRef = this.modalService.show(
             this.datepickerTemplate,
-            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: false })
+            Object.assign({}, { class: "modal-lg giddh-datepicker-modal", backdrop: false, ignoreBackdropClick: false }),
         );
     }
 
@@ -82,10 +160,10 @@ export class InventoryTransactionListComponent implements OnInit {
         }
         this.hideGiddhDatepicker();
         if (value && value.startDate && value.endDate) {
-            this.selectedDateRange = { startDate: moment(value.startDate), endDate: moment(value.endDate) };
-            this.selectedDateRangeUi = moment(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
-            this.fromDate = moment(value.startDate).format(GIDDH_DATE_FORMAT);
-            this.toDate = moment(value.endDate).format(GIDDH_DATE_FORMAT);
+            this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
+            this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
+            this.fromDate = dayjs(value.startDate).format(GIDDH_DATE_FORMAT);
+            this.toDate = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
         }
     }
 

@@ -415,7 +415,9 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
         this.isFileUploadInProgress = false;
         this.showDeleteButton = false;
         this.showUploadButton = false;
-        this.logoFile.nativeElement.value = "";
+        if (this.logoFile) {
+            this.logoFile.nativeElement.value = "";
+        }
     }
 
     /**

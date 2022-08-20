@@ -1,9 +1,7 @@
-import { take, takeUntil } from 'rxjs/operators';
-import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { takeUntil } from 'rxjs/operators';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../store';
-import { CompanyActions } from '../actions/company.actions';
-import { StateDetailsRequest } from '../models/api-models/Company';
 import { ActivatedRoute, Router } from '@angular/router';
 import { combineLatest, ReplaySubject } from 'rxjs';
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
@@ -14,7 +12,7 @@ import { GeneralService } from '../services/general.service';
     templateUrl: './invoice.component.html',
     styleUrls: [`./invoice.component.scss`]
 })
-export class InvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
+export class InvoiceComponent implements OnInit, OnDestroy {
     @ViewChild('staticTabs', { static: true }) public staticTabs: TabsetComponent;
 
     public selectedVoucherType: VoucherTypeEnum;
@@ -30,7 +28,6 @@ export class InvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
 
     constructor(
         private store: Store<AppState>,
-        private companyActions: CompanyActions,
         private router: Router,
         private _activatedRoute: ActivatedRoute,
         private _breakPointObservar: BreakpointObserver,
@@ -98,13 +95,6 @@ export class InvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     /**
-     * Saves the last state
-     */
-    public ngAfterViewInit(): void {
-        this.saveLastState(this.activeTab);
-    }
-
-    /**
      *
      *
      * @param {string} tab  this is voucher type
@@ -118,9 +108,6 @@ export class InvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
             this.router.navigate(['pages', 'invoice', 'preview', tab, type]);
         } else {
             this.router.navigate(['pages', 'invoice', 'preview', tab]);
-        }
-        if (e && !e.target) {
-            this.saveLastState(tab);
         }
     }
     /**
@@ -172,15 +159,5 @@ export class InvoiceComponent implements OnInit, OnDestroy, AfterViewInit {
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();
-    }
-
-    private saveLastState(state: string) {
-        let companyUniqueName = null;
-        this.store.pipe(select(c => c.session.companyUniqueName), take(1)).subscribe(s => companyUniqueName = s);
-        let stateDetailsRequest = new StateDetailsRequest();
-        stateDetailsRequest.companyUniqueName = companyUniqueName;
-        stateDetailsRequest.lastState = `pages/invoice/preview/${state}/${this.selectedVoucherType !== state ? this.selectedVoucherType : ''}`;
-
-        this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
     }
 }

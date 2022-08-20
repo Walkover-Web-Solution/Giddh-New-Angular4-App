@@ -1,4 +1,3 @@
-@import "../../../assets/css/color.scss";
 :host {
     position: fixed;
     left: auto;
@@ -22,7 +21,7 @@
     border: 0;
     border-radius: 0;
     background: transparent;
-    color: $white;
+    color: var(--color-primary-right-side-popup-header-text);
 }
 
 :host .container-fluid {
@@ -38,8 +37,8 @@
     padding: 0 15px;
 }
 .aside-pane-form {
-    background-color: $white;
-    box-shadow: 0px 3px 6px $light-black-russian;
+    background-color: var(--color-common-primary-background-for-all-components);
+    box-shadow: 0px 3px 6px var(--color-primary-aside-pane-form-box-shadow);
     padding: 15px 15px;
     height: calc(100vh - 90px);
     overflow: auto;
@@ -64,10 +63,10 @@
             align-items: center;
             display: flex;
             &:hover:after {
-                color: $rich-blue;
+                color: var(--color-blue);
             }
             .icon-favorite-selected {
-                color: $rich-blue;
+                color: var(--color-blue);
             }
         }
     }
@@ -105,12 +104,12 @@
             .action-icon {
                 display: flex;
                 align-items: center;
-                border: 1px solid $gainsboro;
+                border: 1px solid var(--color-iron);
                 a {
                     width: 34px;
                     font-size: 18px;
-                    color: $gray;
-                    border-right: 1px solid $gainsboro;
+                    color: var(--color-abbey);
+                    border-right: 1px solid var(--color-iron);
                     display: flex;
                     align-items: center;
                     justify-content: center;
@@ -119,7 +118,7 @@
                     align-items: stretch;
                     height: 34px;
                     align-items: center;
-                    background-color: $white;
+                    background-color: var(--color-white);
                 }
                 &:last-child {
                     border-right: none !important;

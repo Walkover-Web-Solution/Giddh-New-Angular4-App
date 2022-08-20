@@ -4,7 +4,7 @@ import { Store, select } from '@ngrx/store';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AppState } from '../../store/roots';
 import { ReplaySubject, Observable, of as observableOf } from 'rxjs';
-import * as moment from 'moment/moment';
+import * as dayjs from 'dayjs';
 import { SettingsFinancialYearActions } from '../../actions/settings/financial-year/financial-year.action';
 import { IFinancialYearResponse } from '../../services/settings.financial-year.service';
 import { ActiveFinancialYear } from '../../models/api-models/Company';
@@ -64,11 +64,17 @@ export class FinancialYearComponent implements OnInit, OnDestroy {
                 });
             }
         });
+
+        this.store.pipe(select(state => state.settings.refreshCompany), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.store.dispatch(this.settingsFinancialYearActions.GetAllFinancialYears());
+            }
+        });
     }
 
     public setYearRange() {
-        let endYear = moment().year();
-        let startYear = moment().subtract(7, 'year').year();
+        let endYear = dayjs().year();
+        let startYear = dayjs().subtract(7, 'year').year();
         let yearArray = range(startYear, endYear);
         this.yearOptions = yearArray.map(year => {
             return { label: String(year), value: year };
@@ -84,7 +90,7 @@ export class FinancialYearComponent implements OnInit, OnDestroy {
                 this.financialYearObj = cloneDeep(o);
                 let yearOptions = cloneDeep(this.yearOptions);
                 o.financialYears.forEach((fyear) => {
-                    let year = moment(fyear.financialYearStarts, GIDDH_DATE_FORMAT).year();
+                    let year = dayjs(fyear.financialYearStarts, GIDDH_DATE_FORMAT).year();
                     let yearIndx = yearOptions.findIndex((y: any) => y.value === year);
                     if (yearIndx !== -1) {
                         yearOptions.splice(yearIndx, 1);
@@ -128,7 +134,7 @@ export class FinancialYearComponent implements OnInit, OnDestroy {
 
     public addFY() {
         if (this.selectedYear) {
-            if (this.selectedYear < moment().year()) {
+            if (this.selectedYear < dayjs().year()) {
                 this.store.dispatch(this.settingsFinancialYearActions.addFinancialYear(this.selectedYear));
             } else {
                 this.store.dispatch(this.settingsFinancialYearActions.addFutureFinancialYear(this.selectedYear));

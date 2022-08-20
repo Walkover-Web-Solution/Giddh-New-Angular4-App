@@ -1,5 +1,5 @@
 import { InventoryAction } from '../actions/inventory/inventory.actions';
-import { CompanyResponse, StateDetailsRequest, BranchFilterRequest } from '../models/api-models/Company';
+import { CompanyResponse, BranchFilterRequest } from '../models/api-models/Company';
 import { GroupStockReportRequest, StockDetailResponse, StockGroupResponse } from '../models/api-models/Inventory';
 import { InvoiceActions } from '../actions/invoice/invoice.actions';
 import { TabDirective, TabsetComponent } from 'ngx-bootstrap/tabs';
@@ -19,7 +19,7 @@ import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { InvViewService } from './inv.view.service';
 import { SidebarAction } from "../actions/inventory/sidebar.actions";
 import { StockReportActions } from "../actions/inventory/stocks-report.actions";
-import * as moment from 'moment/moment';
+import * as dayjs from 'dayjs';
 import { IGroupsWithStocksHierarchyMinItem } from "../models/interfaces/groupsWithStocks.interface";
 import { InventoryService } from '../services/inventory.service';
 import { ToasterService } from '../services/toaster.service';
@@ -55,8 +55,6 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
     @ViewChild('warehouseFilter', { static: false }) warehouseFilter: ShSelectComponent;
 
     public dataSyncOption = IsyncData;
-    public currentBranch: string = null;
-    public currentBranchNameAlias: string = null;
     public companies$: Observable<CompanyResponse[]>;
     public branches$: Observable<CompanyResponse[]>;
     public selectedCompaniesUniquename: string[] = [];
@@ -96,6 +94,8 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
     public shouldShowInventoryReport$: Observable<any>;
     /** Emits when group delete operation is successful */
     public removeGroupSuccess$: Observable<any>;
+    /** True if get branches api has initiated once */
+    private getBranchesInitiated: boolean = false;
 
     constructor(
         private store: Store<AppState>,
@@ -126,22 +126,9 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
         this.activeStock$ = this.store.pipe(select(p => p.inventory.activeStock), takeUntil(this.destroyed$));
         this.activeGroup$ = this.store.pipe(select(p => p.inventory.activeGroup), takeUntil(this.destroyed$));
         this.groupsWithStocks$ = this.store.pipe(select(s => s.inventory.groupsWithStocks), takeUntil(this.destroyed$));
-
-        this.store.pipe(select(p => p.settings.profile), takeUntil(this.destroyed$)).subscribe((o) => {
-            if (o && !isEmpty(o)) {
-                let companyInfo = cloneDeep(o);
-                this.currentBranch = companyInfo.name;
-                this.currentBranchNameAlias = companyInfo.nameAlias;
-            }
-        });
     }
 
     public ngOnInit() {
-        let branchFilterRequest = new BranchFilterRequest();
-
-        this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
-        this.store.dispatch(this.settingsBranchActions.GetALLBranches(branchFilterRequest));
-
         this.store.pipe(select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.settings.branches], (companies, branches) => {
             if (branches) {
                 if (branches.length) {
@@ -154,6 +141,8 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
                 } else if (branches.length === 0) {
                     this.branches$ = observableOf(null);
                 }
+            } else {
+                this.getAllBranches();
             }
             if (companies && companies.length && branches) {
                 let companiesWithSuperAdminRole = [];
@@ -203,7 +192,6 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
 
         this.router.events.pipe(takeUntil(this.destroyed$)).subscribe(s => {
             if (s instanceof NavigationEnd) {
-                this.saveLastState();
                 this.activeTabIndex = this.router.url.indexOf('jobwork') > -1 ? 1 : this.router.url.indexOf('manufacturing') > -1 ? 2 : this.router.url.indexOf('inventory/report') > -1 ? 3 : 0;
             }
         });
@@ -226,7 +214,6 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     public ngAfterViewInit() {
-        this.saveLastState();
         if (!this.isMobileScreen) {
             this.setDefaultGroup();
         }
@@ -285,7 +272,7 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     public openAddBranchModal() {
-        this.branchModal.show();
+        this.branchModal?.show();
     }
 
     public hideAddBranchModal() {
@@ -335,7 +322,7 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
     public removeBranch(branchUniqueName, companyName) {
         this.selectedBranch = branchUniqueName;
         this.confirmationMessage = `Are you sure want to remove <b>${companyName}</b>?`;
-        this.confirmationModal.show();
+        this.confirmationModal?.show();
     }
 
     public onUserConfirmation(yesOrNo) {
@@ -348,9 +335,11 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     public getAllBranches() {
-        let branchFilterRequest = new BranchFilterRequest();
-        this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
-        this.store.dispatch(this.settingsBranchActions.GetALLBranches(branchFilterRequest));
+        if (!this.getBranchesInitiated) {
+            this.getBranchesInitiated = true;
+            let branchFilterRequest = new BranchFilterRequest();
+            this.store.dispatch(this.settingsBranchActions.GetALLBranches(branchFilterRequest));
+        }
     }
 
     /**
@@ -384,15 +373,6 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.isAllSelected$ = observableOf(false);
             }
         });
-    }
-
-    private saveLastState() {
-        let state = this.activeTabIndex === 0 ? 'inventory' : this.activeTabIndex === 1 ? 'inventory/jobwork' : this.activeTabIndex === 2 ? 'inventory/manufacturing' : 'inventory/report';
-        let stateDetailsRequest = new StateDetailsRequest();
-        stateDetailsRequest.companyUniqueName = this.generalService.companyUniqueName;
-        stateDetailsRequest.lastState = `/pages/${state}`;
-
-        this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
     }
 
     /**
@@ -532,11 +512,11 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
         if (firstElement) {
             this.universalDate$.pipe(take(1)).subscribe(dateObj => {
                 if (dateObj) {
-                    this.GroupStockReportRequest.from = moment(dateObj[0]).format(GIDDH_DATE_FORMAT);
-                    this.GroupStockReportRequest.to = moment(dateObj[1]).format(GIDDH_DATE_FORMAT);
+                    this.GroupStockReportRequest.from = dayjs(dateObj[0]).format(GIDDH_DATE_FORMAT);
+                    this.GroupStockReportRequest.to = dayjs(dateObj[1]).format(GIDDH_DATE_FORMAT);
                 } else {
-                    this.GroupStockReportRequest.from = moment().add(-1, 'month').format(GIDDH_DATE_FORMAT);
-                    this.GroupStockReportRequest.to = moment().format(GIDDH_DATE_FORMAT);
+                    this.GroupStockReportRequest.from = dayjs().add(-1, 'month').format(GIDDH_DATE_FORMAT);
+                    this.GroupStockReportRequest.to = dayjs().format(GIDDH_DATE_FORMAT);
                 }
             });
 

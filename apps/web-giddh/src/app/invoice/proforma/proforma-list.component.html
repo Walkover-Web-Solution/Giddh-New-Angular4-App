@@ -248,7 +248,9 @@
             <!-- select app proforma -->
             <div class="clearfix">
                 <div class="table-responsive remove-responsive invoice-preview mr-t15">
-                    <table class="table basic giddh-table table-bordered invoice-table on-mobile-view">
+                    <table
+                        class="table basic pd-t15 giddh-table desktop-table table-bordered invoice-table on-mobile-view"
+                    >
                         <thead
                             class="thead-background1"
                             [attr.style]="
@@ -432,7 +434,7 @@
                                         voucherType === 'proformas' ? localeData?.proforma_no : localeData?.estimate_no
                                     "
                                 >
-                                    <div class="d-flex position-relative">
+                                    <div class="d-flex position-relative remove-capitalize">
                                         <a
                                             href="javascript:void(0);"
                                             class="btn-link-2"
@@ -599,8 +601,8 @@
                             [hidden]="isGetAllInProcess$ | async"
                         >
                             <tr>
-                                <td colspan="100%" class="border-none">
-                                    <div class="text-center">
+                                <td colspan="100%" class="border-none pagination-wrapper">
+                                    <div class="text-center unbold">
                                         <pagination
                                             [totalItems]="voucherData.totalItems"
                                             [(ngModel)]="voucherData.page"

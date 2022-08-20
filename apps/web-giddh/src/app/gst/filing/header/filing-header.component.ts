@@ -1,4 +1,4 @@
-import * as moment from 'moment/moment';
+import * as dayjs from 'dayjs';
 import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { InvoicePurchaseActions } from '../../../actions/purchase-invoice/purchase-invoice.action';
 import { GstReconcileActionsEnum, GstReconcileInvoiceRequest, GstrSheetDownloadRequest } from '../../../models/api-models/GstReconcile';
@@ -61,7 +61,7 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     public selectedService: 'VAYANA' | 'TAXPRO' | 'RECONCILE' | 'JIO_GST';
     public companyGst$: Observable<string> = of('');
     public activeCompanyGstNumber: string = '';
-    public moment = moment;
+    public dayjs = dayjs;
     public imgPath: string = '';
     public gstAuthenticated: boolean = false;
     public gstSessionResponse$: Observable<any> = of({});
@@ -91,7 +91,7 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     public ngOnInit() {
-        this.imgPath = (isElectron || isCordova) ? 'assets/images/gst/' : AppUrl + APP_FOLDER + 'assets/images/gst/';
+        this.imgPath = isElectron ? 'assets/images/gst/' : AppUrl + APP_FOLDER + 'assets/images/gst/';
         this.companyGst$.subscribe(a => {
             if (a) {
                 this.activeCompanyGstNumber = a;
@@ -129,8 +129,8 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     public ngOnChanges(s: SimpleChanges) {
         if (s && s.currentPeriod && s.currentPeriod.currentValue) {
             let date = {
-                startDate: moment(this.currentPeriod.from, GIDDH_DATE_FORMAT).startOf('month').format(GIDDH_DATE_FORMAT),
-                endDate: moment(this.currentPeriod.to, GIDDH_DATE_FORMAT).endOf('month').format(GIDDH_DATE_FORMAT)
+                startDate: dayjs(this.currentPeriod.from, GIDDH_DATE_FORMAT).startOf('month').format(GIDDH_DATE_FORMAT),
+                endDate: dayjs(this.currentPeriod.to, GIDDH_DATE_FORMAT).endOf('month').format(GIDDH_DATE_FORMAT)
             };
             this.isMonthSelected = date.startDate === this.currentPeriod.from && date.endDate === this.currentPeriod.to;
         }

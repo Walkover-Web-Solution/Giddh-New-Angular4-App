@@ -23,7 +23,9 @@ export const INVOICE_API = {
     DOWNLOAD_INVOICE_EXPORT_CSV: COMMON_URL + 'export-invoices?from=:from&to=:to&fileType=base64',
     REMOVE_IMAGE_SIGNATURE: COMMON_URL + '/delete-image?imgUniqueName=:imgUniqueName',
     CANCEL_E_INVOICE_API: COMMON_URL + 'invoice/:invoiceUniqueName/cancel-einvoice',
-    CANCEL_CN_DN_E_INVOICE_API: COMMON_URL + 'voucher/:voucherUniqueName/cancel-einvoice'
+    CANCEL_CN_DN_E_INVOICE_API: COMMON_URL + 'voucher/:voucherUniqueName/cancel-einvoice',
+    VERIFY_EMAIL: COMMON_URL + 'invoice-setting/verify-email?emailAddress=:emailAddress&scope=:scope&branchUniqueName=:branchUniqueName',
+    GET_ALL_VERSIONS: COMMON_URL + 'voucher/:voucherUniqueName/versions?page=:page&count=:count'
 };
 
 export const INVOICE_API_2 = {
@@ -39,6 +41,8 @@ export const INVOICE_API_2 = {
     PREVIEW_VOUCHERS: COMMON_URL + 'accounts/:accountUniqueName/vouchers/preview',
     DOWNLOAD_INVOICE_V3: COMMON_URL + ':companyUniqueName/accounts/:accountUniqueName/vouchers/mail',
     CANCEL_E_INVOICE: COMMON_URL + 'accounts/:accountUniqueName/vouchers/cancel-einvoice',
+    GENERATE_BULK_INVOICE: COMMON_URL_V4 + 'vouchers/bulk-generate?combined',
+    PREVIEW_VOUCHERS_V4: COMMON_URL_V4 + 'accounts/:accountUniqueName/vouchers',
 };
 
 export const EWAYBILL_API = {

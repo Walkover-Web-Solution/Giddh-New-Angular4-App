@@ -1,11 +1,9 @@
 import { Injectable } from '@angular/core';
 import { GIDDH_VOUCHER_FORM } from '../../app.constant';
-import {
-    ConfirmationModalButton,
-    ConfirmationModalConfiguration,
-} from '../../common/confirmation-modal/confirmation-modal.interface';
+import { ConfirmationModalButton, ConfirmationModalConfiguration } from '../../common/confirmation-modal/confirmation-modal.interface';
 import { VoucherTypeEnum } from '../../models/api-models/Sales';
 import { VoucherForm } from '../../models/api-models/Voucher';
+import * as cleaner from 'fast-clean';
 
 @Injectable({
     providedIn: 'any'
@@ -56,7 +54,7 @@ export class ProformaInvoiceUtilityService {
             delete data.account.name;
             delete data.account.country;
             if (data.account.billingDetails) {
-                data.account.billingDetails.taxNumber = data.account.billingDetails.gstNumber;
+                data.account.billingDetails.taxNumber = (data.account.billingDetails.gstNumber) ? data.account.billingDetails.gstNumber : (data.account.billingDetails.taxNumber && data.uniqueName) ? data.account.billingDetails.taxNumber : "";
                 data.account.billingDetails.country = {
                     code: data.account.billingDetails.countryCode,
                     name: data.account.billingDetails.countryName
@@ -68,7 +66,7 @@ export class ProformaInvoiceUtilityService {
                 delete data.account.billingDetails.countryCode;
             }
             if (data.account.shippingDetails) {
-                data.account.shippingDetails.taxNumber = data.account.shippingDetails.gstNumber;
+                data.account.shippingDetails.taxNumber = (data.account.shippingDetails.gstNumber) ? data.account.shippingDetails.gstNumber : (data.account.shippingDetails.taxNumber && data.uniqueName) ? data.account.shippingDetails.taxNumber : "";
                 data.account.shippingDetails.country = {
                     code: data.account.shippingDetails.countryCode,
                     name: data.account.shippingDetails.countryName
@@ -91,6 +89,14 @@ export class ProformaInvoiceUtilityService {
                     }
                 });
             });
+        }
+        if(data?.company) {
+            if (data.company.billingDetails) {
+                data.company.billingDetails.taxNumber = data.company.billingDetails.gstNumber;
+            }
+            if (data.company.shippingDetails) {
+                data.company.shippingDetails.taxNumber = data.company.shippingDetails.gstNumber;
+            }
         }
         if([VoucherTypeEnum.debitNote, VoucherTypeEnum.creditNote].includes(data.type)) {
             data.number = data.invoiceNumberAgainstVoucher || data.number || '';
@@ -126,5 +132,26 @@ export class ProformaInvoiceUtilityService {
         } else {
             return GIDDH_VOUCHER_FORM.find(form => form.type === voucherType);
         }
+    }
+
+    /**
+     * This will clean the voucher object
+     *
+     * @param {*} updatedData
+     * @returns {*}
+     * @memberof ProformaInvoiceUtilityService
+     */
+    public cleanObject(updatedData: any): any {
+        delete updatedData?.account?.billingDetails?.country;
+        delete updatedData?.account?.billingDetails?.state?.name;
+        delete updatedData?.account?.shippingDetails?.country;
+        delete updatedData?.account?.shippingDetails?.state?.name;
+        delete updatedData?.account?.currency;
+        delete updatedData?.account?.currencyCode;
+        delete updatedData?.account?.currencySymbol;
+
+        return cleaner?.clean(updatedData, {
+            nullCleaner: true
+        });
     }
 }

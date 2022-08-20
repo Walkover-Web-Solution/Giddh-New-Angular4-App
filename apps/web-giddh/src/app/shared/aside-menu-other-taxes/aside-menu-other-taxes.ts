@@ -5,6 +5,7 @@ import { IOption } from '../../theme/ng-select/option.interface';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
+import { cloneDeep } from '../../lodash-optimized';
 
 @Component({
     selector: 'app-aside-menu-other-taxes',
@@ -12,25 +13,22 @@ import { ReplaySubject } from 'rxjs';
     styleUrls: ['./aside-menu-other-taxes.scss'],
     host: { 'class': 'app-aside-menu-other-taxes' },
 })
-
 export class AsideMenuOtherTaxes implements OnInit, OnChanges, OnDestroy {
     @Output() public closeModal: EventEmitter<boolean> = new EventEmitter();
     @Input() public otherTaxesModal: SalesOtherTaxesModal;
     @Input() public taxes: TaxResponse[] = [];
     @Output() public applyTaxes: EventEmitter<SalesOtherTaxesModal> = new EventEmitter();
-    public isDisabledCalMethod: boolean = false;
     public taxesOptions: IOption[] = [];
     public selectedTaxUniqueName: string;
-
     public calculationMethodOptions: IOption[] = [];
-
     /** True if mobile screen */
     public isMobileScreen: boolean;
-
     /** To unsubscribe from subscription */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /* This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
+    /** This will hold default data of other taxes */
+    public defaultOtherTaxesModal: SalesOtherTaxesModal;
 
     constructor(
         private breakPointObservar: BreakpointObserver
@@ -42,7 +40,8 @@ export class AsideMenuOtherTaxes implements OnInit, OnChanges, OnDestroy {
         });
     }
 
-    ngOnInit() {
+    public ngOnInit(): void {
+        document.querySelector('body').classList.add('aside-menu-othertax-open');
         this.taxesOptions = this.taxes
             ?.filter(f => ['tcsrc', 'tcspay', 'tdsrc', 'tdspay'].includes(f.taxType))
             .map(m => {
@@ -54,35 +53,42 @@ export class AsideMenuOtherTaxes implements OnInit, OnChanges, OnDestroy {
             { label: this.commonLocaleData?.app_on_total_value, value: 'OnTotalAmount' },
         ];
     }
-    public hideListItems() {
-        this.saveTaxes();
-    }
 
-    ngOnChanges(changes: SimpleChanges): void {
+    public ngOnChanges(changes: SimpleChanges): void {
         if ('otherTaxesModal' in changes && changes.otherTaxesModal.currentValue !== changes.otherTaxesModal.previousValue) {
             this.otherTaxesModal = changes.otherTaxesModal.currentValue;
-            if (this.otherTaxesModal.appliedOtherTax) {
-                this.selectedTaxUniqueName = this.otherTaxesModal.appliedOtherTax.uniqueName;
-                this.applyTax({ label: this.otherTaxesModal.appliedOtherTax.name, value: this.otherTaxesModal.appliedOtherTax.uniqueName });
+
+            this.defaultOtherTaxesModal = cloneDeep(changes.otherTaxesModal.currentValue);
+
+            if (this.defaultOtherTaxesModal.appliedOtherTax) {
+                this.selectedTaxUniqueName = this.defaultOtherTaxesModal.appliedOtherTax.uniqueName;
+                this.applyTax({ label: this.defaultOtherTaxesModal.appliedOtherTax.name, value: this.defaultOtherTaxesModal.appliedOtherTax.uniqueName });
             }
         }
     }
 
-    public applyTax(tax: IOption) {
+    public applyTax(tax: IOption): void {
         if (tax && tax.value) {
-            this.otherTaxesModal.appliedOtherTax = { name: tax.label, uniqueName: tax.value };
-            let taxType = this.taxes.find(f => f?.uniqueName === tax.value).taxType;
-            this.isDisabledCalMethod = ['tdsrc', 'tdspay'].includes(taxType);
+            this.defaultOtherTaxesModal.appliedOtherTax = { name: tax.label, uniqueName: tax.value };
+            if (!this.selectedTaxUniqueName) {
+                let taxType = this.taxes.find(f => f.uniqueName === tax.value).taxType;
+                const isTdsTax = ['tdsrc', 'tdspay'].includes(taxType);
+                if (!isTdsTax) {
+                    this.defaultOtherTaxesModal.tcsCalculationMethod = SalesOtherTaxesCalculationMethodEnum.OnTotalAmount;
+                } else {
+                    this.defaultOtherTaxesModal.tcsCalculationMethod = SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount;
+                }
+            }
         }
     }
 
-    public onClear() {
-        this.otherTaxesModal.appliedOtherTax = null;
-        this.isDisabledCalMethod = false;
-        this.otherTaxesModal.tcsCalculationMethod = SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount;
+    public onClear(): void {
+        this.defaultOtherTaxesModal.appliedOtherTax = null;
+        this.defaultOtherTaxesModal.tcsCalculationMethod = SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount;
     }
 
-    public saveTaxes() {
+    public saveTaxes(): void {
+        this.otherTaxesModal = cloneDeep(this.defaultOtherTaxesModal);
         this.applyTaxes.emit(this.otherTaxesModal);
     }
 
@@ -92,7 +98,17 @@ export class AsideMenuOtherTaxes implements OnInit, OnChanges, OnDestroy {
      * @memberof AsideMenuOtherTaxes
      */
     public ngOnDestroy(): void {
+        document.querySelector('body').classList.remove('aside-menu-othertax-open');
         this.destroyed$.next(true);
         this.destroyed$.complete();
+    }
+
+    /**
+     * Close the aside-menu-modal
+     *
+     * @memberof AsideMenuOtherTaxes
+     */
+    public closeTaxesModal(): void {
+        this.closeModal.emit(true);
     }
 }

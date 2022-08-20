@@ -2,10 +2,11 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
-import * as moment from 'moment/moment';
+import * as dayjs from 'dayjs';
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { SettingsIntegrationActions } from '../../actions/settings/settings.integration.action';
+import { BootstrapToggleSwitch } from '../../app.constant';
 import { AuthenticationService } from '../../services/authentication.service';
 import { InvoiceService } from '../../services/invoice.service';
 import { PurchaseOrderService } from '../../services/purchase-order.service';
@@ -21,7 +22,7 @@ import { AppState } from '../../store';
 
 export class PurchaseSettingComponent implements OnInit, OnDestroy {
     /* This will hold the invoice settings */
-    public invoiceSettings: any = { purchaseBillSettings: {} };
+    public invoiceSettings: any = { purchaseBillSettings: {sendThroughGmail: false,changePOStatusOnExpiry: false,useCustomPONumber:false,enableNarration:false} };
     /* This will hold the PB lock date */
     public lockDate: Date = new Date();
     /* This will hold if email updated */
@@ -46,6 +47,8 @@ export class PurchaseSettingComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** This will hold toggle buttons value and size */
+    public bootstrapToggleSwitch = BootstrapToggleSwitch;
 
     constructor(private store: Store<AppState>, private toaster: ToasterService, private settingsIntegrationActions: SettingsIntegrationActions, private invoiceService: InvoiceService, public purchaseOrderService: PurchaseOrderService, private generalService: GeneralService, public authenticationService: AuthenticationService, private route: ActivatedRoute) {
         this.activeCompanyUniqueName$ = this.store.pipe(select(state => state.session.companyUniqueName), (takeUntil(this.destroyed$)));
@@ -97,7 +100,7 @@ export class PurchaseSettingComponent implements OnInit, OnDestroy {
                 this.originalEmail = _.cloneDeep(this.invoiceSettings.purchaseBillSettings.email);
 
                 if (this.invoiceSettings.purchaseBillSettings.lockDate) {
-                    this.lockDate = moment(this.invoiceSettings.purchaseBillSettings.lockDate, GIDDH_DATE_FORMAT).toDate();
+                    this.lockDate = dayjs(this.invoiceSettings.purchaseBillSettings.lockDate, GIDDH_DATE_FORMAT).toDate();
                 }
             }
         });
@@ -125,7 +128,7 @@ export class PurchaseSettingComponent implements OnInit, OnDestroy {
         let formToSave = _.cloneDeep(this.invoiceSettings);
 
         if (formToSave.purchaseBillSettings.lockDate instanceof Date) {
-            formToSave.purchaseBillSettings.lockDate = moment(formToSave.purchaseBillSettings.lockDate).format(GIDDH_DATE_FORMAT);
+            formToSave.purchaseBillSettings.lockDate = dayjs(formToSave.purchaseBillSettings.lockDate).format(GIDDH_DATE_FORMAT);
         }
 
         this.invoiceService.UpdateInvoiceSetting(formToSave).pipe(takeUntil(this.destroyed$)).subscribe(response => {

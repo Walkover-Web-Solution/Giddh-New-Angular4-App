@@ -1,24 +1,23 @@
-@import "../../../../assets/css/color.scss";
 .receipt-note-header {
     display: flex;
     justify-content: space-between;
-    background-color: $white;
-    border-bottom: 1px solid $silver;
+    background-color: var(--color-white);
+    border-bottom: 1px solid var(--color-common-secondary-border);
     font-size: 18px;
     font-family: "opensans-bold";
     padding-top: 10px;
     padding-bottom: 10px;
     align-items: center;
-    color: $midnight-blue;
+    color: var(--color-giddh-blue);
 }
 section.receipt-note {
-    background-color: $white;
+    background-color: var(--color-white);
 }
 .receipt-note-radio-btn {
     padding-top: 15px;
     padding-bottom: 15px;
-    color: $nero;
-    border-bottom: 1px solid $silver;
+    color: var(--color-nero);
+    border-bottom: 1px solid var(--color-common-secondary-border);
 }
 .receipt-note-content {
     font-size: 14px;
@@ -30,11 +29,11 @@ section.receipt-note {
 .multiple-products label {
     vertical-align: middle;
     line-height: 2.5;
-    color: $nero;
+    color: var(--color-nero);
 }
 #table-receipt th,
 #table-receipt td {
-    border-left: 1px solid $gainsboro !important;
+    border-left: 1px solid var(--color-table-primary-content-bar-border) !important;
 }
 #table-receipt td {
     vertical-align: top !important;
@@ -47,10 +46,10 @@ section.receipt-note {
     width: 200px;
 }
 button.btn.btn-filter {
-    background: $whisper;
-    border: 1px solid $whisper;
+    background: var(--color-dark-fog);
+    border: 1px solid var(--color-dark-fog);
     font-size: 14px;
-    color: $midnight-blue;
+    color: var(--color-giddh-blue);
     display: -webkit-inline-box;
     display: inline-flex;
     -webkit-box-pack: justify;
@@ -83,20 +82,20 @@ tfoot td .table-sec.form-group {
     right: -60%;
     top: 9px;
     font-size: 12px;
-    color: $primary;
+    color: var(--color-blue);
     z-index: 9;
 }
 .sender-details,
 .sender-receivers,
 .multiple-receivers {
     font-size: 12px;
-    color: $primary;
+    color: var(--color-blue);
     margin-top: 7px;
     cursor: pointer;
 }
 .right-total-amount {
     text-align: right;
-    color: $nero;
+    color: var(--color-nero);
 }
 
 .right-total-amount h3 {
@@ -107,33 +106,33 @@ tfoot td .table-sec.form-group {
     padding-bottom: 60px;
 }
 .multiple-products-wrapper table thead {
-    border-top: 1px solid $gainsboro;
+    border-top: 1px solid var(--color-table-primary-header-bar-border);
 }
 .multiple-products-wrapper table tbody {
-    border-bottom: 1px solid $gainsboro;
+    border-bottom: 1px solid var(--color-table-primary-content-bar-border);
 }
 #actionPane {
-    background-color: $very-light-gray;
+    background-color: var(--color-common-senary-background-for-all-components);
     padding: 20px 0;
 }
 .btn-success-text {
-    background-color: $whisper;
-    color: $success-green;
+    background-color: var(--color-dark-fog);
+    color: var(--color-success-enable);
 }
 .btn-danger:hover {
-    background-color: $whisper;
+    background-color: var(--color-dark-fog);
 }
 
 .hsn-code-dropdown {
     position: absolute;
-    background-color: $white;
-    border: 1px solid $gainsboro;
+    background-color: var(--color-white);
+    border: 1px solid var(--color-common-secondary-border);
     border-radius: 3px;
     width: 100%;
     max-width: 250px;
     left: auto;
     top: 31px;
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+    box-shadow: 0 6px 12px var(--color-primary-common-box-shadow);
     right: 0;
     z-index: 4;
 }
@@ -149,18 +148,19 @@ tfoot td .table-sec.form-group {
 .hsn-code-dropdown input {
     width: 100%;
     padding: 5px;
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--color-secondary-input-bar-border);
+    background-color: var(--color-secondary-input-bar-background);
 }
 
 .hsn-code-dropdown input::placeholder,
 .hsn-code-dropdown input::-webkit-input-placeholder {
-    color: $silver;
+    color: var(--color-gray);
 }
 
 .hsn-code-dropdown a {
     display: inline-block;
     text-align: center;
-    color: $very-light-gray;
+    color: var(--color-secondary-input-bar-border);
     padding: 5px 8px;
     font-size: 16px;
 }
@@ -171,8 +171,8 @@ tfoot td .table-sec.form-group {
 
 .hsn-code-dropdown button.btn.btn-sm.btn-success,
 .bulk-item-btn-group button.btn.btn-sm.btn-success {
-    background-color: $success-green;
-    color: $white;
+    background-color: var(--color-success-enable);
+    color: var(--color-white);
 }
 .sku-code,
 .hsn-code {
@@ -197,14 +197,14 @@ tfoot td .table-sec.form-group {
     display: block;
     height: 36px;
     width: 1px;
-    background-color: $gainsboro;
+    background-color: var(--color-common-secondary-border);
     left: 37px !important;
     z-index: 100;
     top: 0;
 }
 .branch-transfer-report .input-group input.form-control {
     padding-left: 35px !important;
-    border-color: $gainsboro;
+    border-color: var(--color-common-secondary-border);
     background-image: url("../../../../assets/images/calender-icon.svg") !important;
     background-size: 17px !important;
     background-position: 9px 8px !important;
@@ -215,13 +215,13 @@ tfoot td .table-sec.form-group {
     cursor: default;
 }
 .branch-transfer-report .input-group input.form-control:focus {
-    border-color: $gainsboro !important;
+    border-color: var(--color-common-secondary-border) !important;
 }
 .branch-transfer-report .btn-group.show {
     display: inline !important;
 }
 .branch-transfer-report .btn-group a {
-    color: $night-rider;
+    color: var(--color-nero);
 }
 .branch-transfer-report ul#dropdown-basic {
     right: 0 !important;
@@ -264,9 +264,9 @@ tfoot td .table-sec.form-group {
     min-width: 100%;
     padding: 11px;
     padding-right: 0;
-    color: $nero;
+    color: var(--color-nero);
     border: none;
-    background-color: $gray-95;
+    background-color: var(--color-wild-sand);
 }
 
 .advance-icon {
@@ -287,8 +287,8 @@ tfoot td .table-sec.form-group {
     transform: translateY(16px);
 }
 .trash-icon-delete a {
-    color: $nobel;
-    border: 1px solid $gainsboro;
+    color: var(--color-gray);
+    border: 1px solid var(--color-common-secondary-border);
     border-radius: 50%;
     text-align: center;
     width: 20px;
@@ -305,17 +305,17 @@ tfoot td .table-sec.form-group {
     padding-top: 30px;
 }
 .recept-modal .modal-title {
-    color: $white;
+    color: var(--color-white);
 }
 .transfer-type-checked:before {
-    border: 1px solid $chetwode-blue;
+    border: 1px solid var(--color-blue);
 }
 .transfer-type-checked:after {
     content: " ";
     position: absolute;
     width: 8px;
     height: 8px;
-    background: $chetwode-blue;
+    background: var(--color-blue);
     left: 5px;
     bottom: 5px;
     border-radius: 50%;
@@ -335,7 +335,7 @@ tfoot td .table-sec.form-group {
 
 .aside-right {
     font-size: 14px;
-    background: $white;
+    background: var(--color-white);
     right: -530px;
     transition: 0.5s all ease;
     z-index: 999;
@@ -355,7 +355,7 @@ tfoot td .table-sec.form-group {
 }
 
 .aside-right .list-icon-group input:checked + label {
-    border: 1px solid $orange;
+    border: 1px solid var(--color-orange);
     border-radius: 0px;
 }
 
@@ -379,14 +379,14 @@ tfoot td .table-sec.form-group {
     z-index: 9991;
 }
 .icon-pointer.active-text-color {
-    color: $deep-sky-blue;
+    color: var(--color-blue);
 }
 .close-receipt {
-    color: $dark-gray;
+    color: var(--color-abbey);
     font-size: 24px;
 }
 .form-control[readonly] {
-    background-color: $white !important;
+    background-color: var(--color-white) !important;
 }
 .select-action-button {
     background: none;
@@ -394,7 +394,7 @@ tfoot td .table-sec.form-group {
     padding-left: 0;
 }
 .placeholder-for-table {
-    color: $very-light-gray;
+    color: var(--color-table-primary-content-bar-border);
 }
 .transportation-details {
     max-width: 1160px;
@@ -420,7 +420,7 @@ tfoot td .table-sec.form-group {
         top: 1px;
         transform: translateY(16px);
         font-size: 18px;
-        color: $gray;
+        color: var(--color-abbey);
         &.change-position {
             right: -55px;
         }
@@ -475,7 +475,7 @@ tfoot td .table-sec.form-group {
 
         .basic > tbody > tr td:last-child,
         .basic > thead > tr th:last-child {
-            border-right: 1px solid $gainsboro-light !important;
+            border-right: 1px solid var(--color-new-branch-table-delivery-basic-thead-tbody-tr-th-last-child) !important;
         }
     }
 }

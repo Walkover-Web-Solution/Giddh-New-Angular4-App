@@ -57,7 +57,7 @@ export class ReceiptService {
 
     public GetAllReceipt(body: InvoiceReceiptFilter, type: string): Observable<BaseResponse<ReciptResponse, InvoiceReceiptFilter>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        const requestPayload = type === VoucherTypeEnum.purchase ? this.getPurchaseRecordPayload(body) : body;
+        const requestPayload = (type === VoucherTypeEnum.purchase && this.generalService.voucherApiVersion !== 2) ? this.getPurchaseRecordPayload(body) : body;
         const contextPath = (type === VoucherTypeEnum.purchase && this.generalService.voucherApiVersion !== 2) ? RECEIPT_API.GET_ALL_PURCHASE_RECORDS : RECEIPT_API.GET_ALL;
         const requestParameter = {
             page: body.page, count: body.count, from: body.from, to: body.to, q: (body.q) ? encodeURIComponent(body.q) : body.q, sort: body.sort, sortBy: body.sortBy
@@ -270,7 +270,7 @@ export class ReceiptService {
         return url;
     }
 
-    public getAllReceiptBalanceDue(body: InvoiceReceiptFilter, type: string): Observable<BaseResponse<ReciptResponse, InvoiceReceiptFilter>> {
+    public getAllReceiptBalanceDue(body: any, type: string): Observable<BaseResponse<ReciptResponse, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let requestType = type;
         let url = this.createQueryString(this.config.apiUrl + RECEIPT_API.GET_ALL_BAL_SALE_DUE, {
@@ -282,12 +282,12 @@ export class ReceiptService {
         return this.http.post(url
             .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), body).pipe(
                 map((res) => {
-                    let data: BaseResponse<ReciptResponse, InvoiceReceiptFilter> = res;
+                    let data: BaseResponse<ReciptResponse, any> = res;
                     data.queryString = { page: body.page, count: body.count, from: body.from, to: body.to, type: 'pdf' };
                     data.request = body;
                     return data;
                 }),
-                catchError((e) => this.errorHandler.HandleCatch<ReciptResponse, InvoiceReceiptFilter>(e, body, { page: body.page, count: body.count, from: body.from, to: body.to, type: 'pdf' })));
+                catchError((e) => this.errorHandler.HandleCatch<ReciptResponse, any>(e, body, { page: body.page, count: body.count, from: body.from, to: body.to, type: 'pdf' })));
     }
 
     /**

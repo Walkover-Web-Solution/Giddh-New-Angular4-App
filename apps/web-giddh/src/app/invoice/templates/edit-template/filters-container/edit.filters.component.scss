@@ -1,12 +1,10 @@
-@import "../../../../../assets/css/color.scss";
-
 .active-tab {
-    background: $jacksons-purple !important;
-    color: $white !important;
+    color: var(--color-quaternary-button-text) !important;
+    background: var(--color-quaternary-button-background) !important;
 }
 .inactive-tab {
-    background: $white !important;
-    color: $jacksons-purple !important;
+    color: var(--color-primary-button-text) !important;
+    background: var(--color-primary-button-background) !important;
 }
 .content-tab {
     .badge {
@@ -14,13 +12,13 @@
         top: -10px;
         right: -10px;
         border-radius: 50%;
-        background: $red;
-        color: $white;
+        background: var(--color-danger);
+        color: var(--color-white);
         width: 25px;
         height: 25px;
         align-items: center;
         display: flex;
         justify-content: center;
-        box-shadow: -1px 1px 6px $red;
+        box-shadow: -1px 1px 6px var(--color-primary-common-box-shadow);
     }
 }

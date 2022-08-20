@@ -1,4 +1,4 @@
-import { take, takeUntil } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { Component, OnDestroy, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { Observable, ReplaySubject } from 'rxjs';
 import { Store, select } from '@ngrx/store';
@@ -7,17 +7,18 @@ import { ToasterService } from '../services/toaster.service';
 import { SignupWithMobile, UserDetails, VerifyMobileModel } from '../models/api-models/loginModels';
 import { LoginActions } from '../actions/login.action';
 import { AuthenticationService } from '../services/authentication.service';
-import { CompanyResponse, StateDetailsRequest } from '../models/api-models/Company';
+import { CompanyResponse } from '../models/api-models/Company';
 import { cloneDeep } from '../lodash-optimized';
-import { CompanyActions } from '../actions/company.actions';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SessionActions } from '../actions/session.action';
-import * as moment from 'moment';
+import * as dayjs from 'dayjs';
+import * as duration from 'dayjs/plugin/duration';
+dayjs.extend(duration)
 import { GIDDH_DATE_FORMAT_DD_MM_YYYY, GIDDH_DATE_FORMAT_UI } from '../shared/helpers/defaultDateFormat';
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { BsModalRef } from 'ngx-bootstrap/modal';
 import { GeneralActions } from '../actions/general/general.actions';
-import { API_POSTMAN_DOC_URL } from '../app.constant';
+import { API_POSTMAN_DOC_URL, BootstrapToggleSwitch } from '../app.constant';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { SettingsProfileActions } from '../actions/settings/profile/settings.profile.action';
 
@@ -60,7 +61,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
     public apiTabActivated: boolean = false;
     public userSessionResponse$: Observable<any>;
     public userSessionList: any[] = [];
-    public moment = moment;
+    public dayjs = dayjs;
     public giddhDateFormatUI: string = GIDDH_DATE_FORMAT_UI;
     public userSessionId: any = null;
     public modalRef: BsModalRef;
@@ -74,12 +75,13 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
     public localeData: any = {};
     /** This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** This will hold toggle buttons value and size */
+    public bootstrapToggleSwitch = BootstrapToggleSwitch;
 
     constructor(private store: Store<AppState>,
         private toasty: ToasterService,
         private loginService: AuthenticationService,
         private loginAction: LoginActions,
-        private companyActions: CompanyActions,
         private router: Router,
         private sessionAction: SessionActions,
         private route: ActivatedRoute,
@@ -129,10 +131,8 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
 
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             if (params['type'] && this.activeTab !== params['type']) {
-                this.setStateDetails(params['type']);
                 this.activeTab = params['type'];
             } else if (!params['type'] && !this.activeTab) {
-                this.setStateDetails("auth-key");
                 this.activeTab = "auth-key";
             }
         });
@@ -161,7 +161,9 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.showVerificationBox = false;
             }
         });
-        this.authenticateTwoWay$.subscribe(s => this.twoWayAuth = s);
+        this.authenticateTwoWay$.subscribe(response => {
+            this.twoWayAuth = (response) ? true : false;
+        });
         this.store.dispatch(this.loginAction.FetchUserDetails());
         this.loginService.GetAuthKey().pipe(takeUntil(this.destroyed$)).subscribe(a => {
             if (a.status === 'success') {
@@ -188,20 +190,20 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
             }
         });
 
+        this.store.dispatch(this.sessionAction.getAllSession());
+
         this.userSessionResponse$.subscribe(s => {
             if (s && s.length) {
                 this.userSessionList = s.map(session => {
                     // Calculate sign in date
-                    session.signInDate = moment(session.createdAt).format(GIDDH_DATE_FORMAT_DD_MM_YYYY);
+                    session.signInDate = dayjs(session.createdAt).format(GIDDH_DATE_FORMAT_DD_MM_YYYY);
                     // Calculate sign in time
-                    session.signInTime = moment(session.createdAt).format('LTS');
+                    session.signInTime = dayjs(session.createdAt).format('LTS');
                     // Calculate duration
-                    const duration = moment.duration(moment().diff(session.createdAt));
+                    const duration = dayjs.duration(dayjs().diff(session.createdAt));
                     session.sessionDuration = `${duration.days()}/${duration.hours()}/${duration.minutes()}/${duration.seconds()}`;
                     return session;
                 });
-            } else {
-                this.store.dispatch(this.sessionAction.getAllSession());
             }
         });
         this.isUpdateCompanyInProgress$.pipe(takeUntil(this.destroyed$)).subscribe(inProcess => {
@@ -314,22 +316,6 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     /**
-     * Sets the state for selected page
-     * which is used by header component
-     *
-     * @private
-     * @param {string} tabName Current selected tab
-     * @memberof UserDetailsComponent
-     */
-    private setStateDetails(tabName: string): void {
-        let companyUniqueName = null;
-        this.store.pipe(select(c => c.session.companyUniqueName), take(1)).subscribe(s => companyUniqueName = s);
-        let stateDetailsRequest = new StateDetailsRequest();
-        stateDetailsRequest.companyUniqueName = companyUniqueName;
-        stateDetailsRequest.lastState = `pages/user-details/${tabName}`;
-        this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
-    }
-     /**
      * This will return page heading based on active tab
      *
      * @param {boolean} event

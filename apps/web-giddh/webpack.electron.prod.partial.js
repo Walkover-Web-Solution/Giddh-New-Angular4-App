@@ -6,7 +6,6 @@ module.exports = {
             "VERSION": JSON.stringify("4711"),
             'ENV': JSON.stringify('production'),
             'isElectron': JSON.stringify(true),
-            'isCordova': JSON.stringify(false),
             'errlyticsNeeded': JSON.stringify(false),
             'errlyticsKey': JSON.stringify(''),
             'AppUrl': JSON.stringify('./'),
@@ -16,7 +15,7 @@ module.exports = {
             'STAGING_ENV': JSON.stringify(false),
             'TEST_ENV': JSON.stringify(false),
             'LOCAL_ENV': JSON.stringify(false),
-            'enableVoucherAdjustmentMultiCurrency': JSON.stringify(''),
+            'enableVoucherAdjustmentMultiCurrency': JSON.stringify(true),
             'GOOGLE_CLIENT_ID': JSON.stringify(process.env.GOOGLE_CLIENT_ID_PROD),
             'GOOGLE_CLIENT_SECRET': JSON.stringify(process.env.GOOGLE_CLIENT_SECRET_PROD),
             'TWITTER_CLIENT_ID': JSON.stringify(process.env.TWITTER_CLIENT_ID_PROD),
@@ -25,7 +24,7 @@ module.exports = {
             'LINKEDIN_SECRET_KEY': JSON.stringify(process.env.LINKEDIN_SECRET_KEY_PROD),
             'RAZORPAY_KEY': JSON.stringify(process.env.RAZORPAY_KEY_PROD),
             'OFFLINE_API_URL': JSON.stringify(process.env.OFFLINE_API_URL),
-            'process.env.enableVoucherAdjustmentMultiCurrency': JSON.stringify(''),
+            'process.env.enableVoucherAdjustmentMultiCurrency': JSON.stringify(true),
             'process.env.GOOGLE_CLIENT_ID': JSON.stringify(process.env.GOOGLE_CLIENT_ID_PROD),
             'process.env.GOOGLE_CLIENT_SECRET': JSON.stringify(process.env.GOOGLE_CLIENT_SECRET_PROD),
             'process.env.TWITTER_CLIENT_ID': JSON.stringify(process.env.TWITTER_CLIENT_ID_PROD),
@@ -42,7 +41,6 @@ module.exports = {
             'process.env.AppUrl': JSON.stringify('./'),
             'process.env.ApiUrl': JSON.stringify('https://api.giddh.com/'),
             'process.env.APP_FOLDER': JSON.stringify(''),
-        }),
-        new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+        })
     ]
 }

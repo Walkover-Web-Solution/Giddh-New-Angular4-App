@@ -7,6 +7,8 @@ export interface INameUniqueName {
     name: string;
     isActive?: boolean;
     customerName?: string;
+    parentGroups?: any;
+    category?: any;
 }
 
 /*
@@ -261,6 +263,7 @@ export class GroupStockReportResponse {
     public profit?: number;
     public from?: any;
     public to?: any;
+    public stockGroupName?: any;
 }
 
 interface IGroupStockReport {

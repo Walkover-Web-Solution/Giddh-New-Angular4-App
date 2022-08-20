@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { GeneralService } from '../services/general.service';
 import { BillingDetails, CompanyCreateRequest, CreateCompanyUsersPlan, States, StatesRequest, SubscriptionRequest } from '../models/api-models/Company';
@@ -10,26 +10,32 @@ import { ToasterService } from '../services/toaster.service';
 import { ShSelectComponent } from '../theme/ng-virtual-select/sh-select.component';
 import { take, takeUntil } from 'rxjs/operators';
 import { Router } from '@angular/router';
-import { NgForm } from '@angular/forms';
+import { FormControl, NgForm } from '@angular/forms';
 import { CompanyService } from '../services/companyService.service';
 import { GeneralActions } from '../actions/general/general.actions';
 import { CompanyActions } from '../actions/company.actions';
 import { SettingsProfileActions } from '../actions/settings/profile/settings.profile.action';
-import { OnboardingFormRequest } from "../models/api-models/Common";
+import { CountryRequest, OnboardingFormRequest } from "../models/api-models/Common";
 import { CommonActions } from '../actions/common.actions';
 import { parsePhoneNumberFromString, CountryCode } from 'libphonenumber-js/min';
-import { environment } from '../../environments/environment.prod';
 import { SettingsProfileService } from '../services/settings.profile.service';
 import { EMAIL_VALIDATION_REGEX } from '../app.constant';
+import { cloneDeep, orderBy } from '../lodash-optimized';
+import { SalesService } from '../services/sales.service';
+import { StateCode } from '../models/api-models/Sales';
 
 @Component({
     selector: 'billing-details',
     templateUrl: 'billingDetail.component.html',
     styleUrls: ['billingDetail.component.scss']
 })
-
 export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit {
-
+    /** Form instance */
+    @ViewChild('billingForm', { static: true }) billingForm: NgForm;
+    /** Billing state instance */
+    @ViewChild('billingState', { static: true }) billingState: ElementRef;
+    /** Billing country  instance */
+    @ViewChild('billingCountry', { static: true }) billingCountry: ElementRef;
     public logedInuser: UserDetails;
     public billingDetailsObj: BillingDetails = {
         name: '',
@@ -75,31 +81,82 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
     public stateGstCode: any[] = [];
     public disableState: boolean = false;
     public isMobileNumberValid: boolean = true;
-
-    /** Form instance */
-    @ViewChild('billingForm', { static: true }) billingForm: NgForm;
-
     private activeCompany;
     /* This will hold local JSON data */
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** control for the MatSelect filter keyword */
+    public searchBillingStates: FormControl = new FormControl();
+    /** Billing States list */
+    public filteredBillingStates: IOption[] = [];
+    /** control for the MatSelect filter keyword */
+    public selectedCountry: any = '';
+    /** control for the MatSelect filter keyword */
+    public searchCountry: FormControl = new FormControl();
+    /** Billing Country list */
+    public countrySource: IOption[] = [];
+    /** Billing Country list Observable */
+    public countrySource$: Observable<IOption[]> = observableOf([]);
+    /** True if api call in progress */
+    public showLoader: boolean = true;
+    /** True if we need to show GSTIN number */
+    public showGstinNo: boolean;
+    /** True if we need to show Tax number */
+    public showTrnNo: boolean;
+    /** This will hold onboarding api form request */
+    public onboardingFormRequest: OnboardingFormRequest = { formName: '', country: '' };
+    /** This will hold states list with respect to country */
+    public countryStates: any[] = [];
+    public statesSource: IOption[] = [];
+    /** This will hold company's country states */
+    public companyStatesSource: IOption[] = [];
+    /**This will use for country code */
+    public countryCode: string = '';
+    /** This will use for tax percentage */
+    public taxPercentage: number = 0.18;
 
     constructor(private store: Store<AppState>, private generalService: GeneralService, private toasty: ToasterService, private route: Router, private companyService: CompanyService, private generalActions: GeneralActions, private companyActions: CompanyActions, private cdRef: ChangeDetectorRef,
-        private settingsProfileActions: SettingsProfileActions, private commonActions: CommonActions, private settingsProfileService: SettingsProfileService) {
+        private settingsProfileActions: SettingsProfileActions, private commonActions: CommonActions, private settingsProfileService: SettingsProfileService, private salesService: SalesService,) {
         this.isUpdateCompanyInProgress$ = this.store.pipe(select(s => s.settings.updateProfileInProgress), takeUntil(this.destroyed$));
         this.fromSubscription = this.route.routerState.snapshot.url.includes('buy-plan');
         this.isUpdateCompanySuccess$ = this.store.pipe(select(s => s.settings.updateProfileSuccess), takeUntil(this.destroyed$));
     }
 
-    public ngOnInit() {
-        this.store.dispatch(this.settingsProfileActions.resetPatchProfile());
-        this.getCurrentCompanyData();
+    public ngOnInit(): void {
 
+        /** This will be use for reset state value if input is empty */
+        this.store.pipe(select(s => s.general.states), takeUntil(this.destroyed$)).subscribe(res => {
+            if (res) {
+                Object.keys(res.stateList).forEach(key => {
+                    if (res.stateList[key]?.code === this.createNewCompany?.addresses[0]?.stateCode) {
+                        this.checkAndResetValue(this.searchBillingStates, res.stateList[key].name);
+                    }
+                });
+            }
+        });
+
+        /** This will use for filter states  */
+        this.searchBillingStates.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(search => {
+            this.filterStates(search);
+        });
+
+        /** This will use for filter country  */
+        this.searchCountry.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(search => {
+            this.filterCountry(search);
+        });
+
+        this.store.dispatch(this.settingsProfileActions.resetPatchProfile());
+
+        /** This will use for get active company data */
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
+                this.getUpdatedStateCodes(activeCompany.countryV2?.alpha3CountryCode, true);
+                this.showGstAndTaxUsingCountryName(activeCompany.countryV2?.countryName);
+                // this.searchCountry.setValue({ label: activeCompany.countryV2?.countryName });
                 this.activeCompany = activeCompany;
                 this.getStates();
+                // this.getCountry();
                 this.reFillForm();
             }
         });
@@ -167,14 +224,13 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
             this.prepareSelectedPlanFromSubscriptions(this.selectedPlans);
         }
         this.getOnboardingForm();
-
     }
 
-    public getPayAmountForRazorPay(amt: any) {
+    public getPayAmountForRazorPay(amt: any): number {
         return amt * 100;
     }
 
-    public checkGstNumValidation(ele: HTMLInputElement) {
+    public checkGstNumValidation(ele: HTMLInputElement): void {
         let isValid: boolean = false;
 
         if (ele.value) {
@@ -204,7 +260,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
         }
     }
 
-    public getStateCode(gstNo: HTMLInputElement, statesEle: ShSelectComponent) {
+    public getStateCode(gstNo: HTMLInputElement, statesEle: ShSelectComponent): void {
         this.disableState = false;
         if (this.createNewCompany.country === "IN") {
             let gstVal: string = gstNo.value;
@@ -237,11 +293,11 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
         }
     }
 
-    public validateEmail(emailStr) {
+    public validateEmail(emailStr: any): boolean {
         return EMAIL_VALIDATION_REGEX.test(emailStr);
     }
 
-    public autoRenewSelected(event) {
+    public autoRenewSelected(event: any): void {
         if (event) {
             this.billingDetailsObj.autorenew = event.target.checked;
         }
@@ -253,7 +309,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
      * @param {CreateCompanyUsersPlan} plan
      * @memberof BillingDetailComponent
      */
-    public prepareSelectedPlanFromSubscriptions(plan: CreateCompanyUsersPlan) {
+    public prepareSelectedPlanFromSubscriptions(plan: CreateCompanyUsersPlan): void {
         this.isCreateAndSwitchCompanyInProcess = true;
         this.subscriptionPrice = plan.planDetails.amount;
         this.SubscriptionRequestObj.userUniqueName = this.logedInuser.uniqueName;
@@ -281,12 +337,12 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
         }
     }
 
-    public ngOnDestroy() {
+    public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
 
-    public backToSubscriptions() {
+    public backToSubscriptions(): void {
         this.route.navigate(['/pages', 'user-details', 'subscription'], {
             queryParams: {
                 showPlans: true
@@ -294,27 +350,40 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
         });
     }
 
-    public payWithRazor(billingDetail: NgForm) {
+    public payWithRazor(billingDetail: NgForm): void {
         if (!(this.validateEmail(billingDetail.value.email))) {
             this.toasty.warningToast(this.localeData?.invalid_email_error, this.commonLocaleData?.app_warning);
-            return false;
+            return;
         }
         if (billingDetail.valid && this.createNewCompany) {
             this.createNewCompany.userBillingDetails = billingDetail.value;
             if (this.billingDetailsObj) {
                 if (this.billingDetailsObj.stateCode) {
                     this.createNewCompany.userBillingDetails.stateCode = this.billingDetailsObj.stateCode;
+                } else {
+                    return;
                 }
             }
         }
         this.razorpay?.open();
     }
 
-    public patchProfile(obj) {
+    /**
+     * This function will use for on select state change 
+     *
+     * @param {*} event
+     * @memberof BillingDetailComponent
+     */
+    public onStateChange(event: any): void {
+        this.billingDetailsObj.stateCode = event?.option?.value?.value;
+        this.cdRef.detectChanges();
+    }
+
+    public patchProfile(obj: any): void {
         this.store.dispatch(this.settingsProfileActions.PatchProfile(obj));
     }
 
-    public createPaidPlanCompany(razorPay_response: any) {
+    public createPaidPlanCompany(razorPay_response: any): void {
         if (razorPay_response) {
             if (!this.fromSubscription) {
                 this.createNewCompany.paymentId = razorPay_response.razorpay_payment_id;
@@ -334,10 +403,9 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
             }
         }
         this.cdRef.detectChanges();
-
     }
 
-    ngAfterViewInit(): void {
+    public ngAfterViewInit(): void {
         let that = this;
 
         this.options = {
@@ -361,7 +429,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
         }, 1000);
     }
 
-    public reFillForm() {
+    public reFillForm(): void {
         // if createNewCompany is undefined or null
         // it means user came from user derails => subscription => buy new plan
         // then get current company data and assign it to createNewCompany object
@@ -401,29 +469,65 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
         this.billingDetailsObj.address = this.createNewCompany.address;
     }
 
-    public getStates() {
-        this.store.pipe(select(s => s.general.states), takeUntil(this.destroyed$)).subscribe(res => {
+    /**
+     * This  will get the country data
+     *
+     * @memberof BillingDetailComponent
+     */
+    public getCountry(): void {
+        this.store.pipe(select(s => s.common.countriesAll), takeUntil(this.destroyed$)).subscribe(res => {
+            this.countrySource = [];
+            if (res) {
+                Object.keys(res).forEach(key => {
+                    this.countrySource.push({
+                        value: res[key].alpha2CountryCode,
+                        label: res[key].countryName,
+                        additional: res[key].callingCode
+                    });
+                });
+                this.countrySource = cloneDeep(this.countrySource)
+                this.countrySource$ = observableOf(this.countrySource);
+                setTimeout(() => {
+                    this.showLoader = false;
+                }, 3000);
+            } else {
+                let countryRequest = new CountryRequest();
+                countryRequest.formName = '';
+                this.store.dispatch(this.commonActions.GetAllCountry(countryRequest));
+            }
+            this.cdRef.detectChanges();
+        });
+    }
+
+
+    /**
+     *This  will get the states data
+     *
+     * @memberof BillingDetailComponent
+     */
+    public getStates(): void {
+        this.store.pipe(select(s => s.general.states), take(1)).subscribe(res => {
             if (res) {
                 this.states = [];
                 Object.keys(res.stateList).forEach(key => {
-
                     if (res.stateList[key].stateGstCode !== null) {
                         this.stateGstCode[res.stateList[key].stateGstCode] = [];
                         this.stateGstCode[res.stateList[key].stateGstCode] = res.stateList[key].code;
                     }
 
-                    this.states.push({ label: res.stateList[key].code + ' - ' + res.stateList[key].name, value: res.stateList[key].code });
+                    this.states.push({ label: res.stateList[key].name, value: res.stateList[key].code });
 
                     if (this.createNewCompany !== undefined && this.createNewCompany.addresses !== undefined && this.createNewCompany.addresses[0] !== undefined) {
                         if (res.stateList[key].code === this.createNewCompany.addresses[0].stateCode) {
-                            this.selectedState = res.stateList[key].code + ' - ' + res.stateList[key].name;
+                            this.searchBillingStates.setValue({ label: res.stateList[key].name });
+                            this.selectedState = res.stateList[key].name;
                             this.billingDetailsObj.stateCode = res.stateList[key].code;
-                            this.disableState = true;
                         }
                     }
                 });
-
+                this.filteredBillingStates = cloneDeep(this.states);
                 this.statesSource$ = observableOf(this.states);
+                this.showLoader = false;
             } else {
                 // initialize new StatesRequest();
                 let statesRequest = new StatesRequest();
@@ -435,7 +539,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
         });
     }
 
-    public getOnboardingForm() {
+    public getOnboardingForm(): void {
         this.store.pipe(select(s => s.common.onboardingform), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
                 if (res.fields) {
@@ -455,13 +559,13 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
         });
     }
 
-    public isValidMobileNumber(ele: HTMLInputElement) {
+    public isValidMobileNumber(ele: HTMLInputElement): void {
         if (ele.value) {
             this.checkMobileNo(ele);
         }
     }
 
-    public checkMobileNo(ele) {
+    public checkMobileNo(ele): void {
         try {
             let parsedNumber = parsePhoneNumberFromString('+' + this.createNewCompany.phoneCode + ele.value, this.createNewCompany.country as CountryCode);
             if (parsedNumber.isValid()) {
@@ -480,20 +584,6 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     /**
-     * This will get the current company data
-     *
-     * @memberof BillingDetailComponent
-     */
-    public getCurrentCompanyData(): void {
-        this.settingsProfileService.GetProfileInfo().pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
-            if (response && response.status === "success" && response.body) {
-                this.store.dispatch(this.settingsProfileActions.handleCompanyProfileResponse(response));
-                this.store.dispatch(this.companyActions.setActiveCompanyData(response.body));
-            }
-        });
-    }
-
-    /**
      * This will return hi user text
      *
      * @returns {string}
@@ -503,5 +593,192 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
         let text = this.localeData?.hello_user;
         text = text?.replace("[USER]", this.logedInuser?.name);
         return text;
+    }
+
+    /**
+     *
+     * This will use for filter states
+     * @private
+     * @param {*} search
+     * @param {boolean} [isBillingStates=true]
+     * @memberof BillingDetailComponent
+     */
+    private filterStates(search: any): void {
+        let filteredStates: IOption[] = [];
+
+        this.states.forEach(state => {
+            if (typeof search !== "string" || state?.label?.toLowerCase()?.indexOf(search?.toLowerCase()) > -1) {
+                filteredStates.push({ label: state.label, value: state.value, additional: state });
+
+            }
+        });
+
+        filteredStates = orderBy(filteredStates, 'label');
+        this.filteredBillingStates = filteredStates;
+    }
+
+    /**
+     * This will use for filter billing country
+     *
+     * @private
+     * @param {*} search
+     * @memberof BillingDetailComponent
+     */
+    private filterCountry(search: any): void {
+        let billingCountry: IOption[] = [];
+        this.countrySource$?.subscribe(response => {
+            if (response) {
+                response.forEach(account => {
+                    if (typeof search !== "string" || account?.label?.toLowerCase()?.indexOf(search?.toLowerCase()) > -1) {
+                        billingCountry.push({ label: account.label, value: account.value, additional: account });
+                    }
+                });
+
+                billingCountry = orderBy(billingCountry, 'label');
+                this.countrySource = billingCountry;
+            }
+        });
+    }
+
+
+    /**
+     *This will show label value in the search field
+     *
+     * @param {*} option
+     * @return {*}  {string}
+     * @memberof BillingDetailComponent
+     */
+    public displayLabel(option: any): string {
+        return option?.label;
+    }
+
+    /**
+     * Resets the value if value not selected from option
+     *
+     * @param {string} field
+     * @memberof BillingDetailComponent
+     */
+    public resetValueIfOptionNotSelected(field: string): void {
+        setTimeout(() => {
+            switch (field) {
+                case "billingState":
+                    const stateObj = this.companyStatesSource?.filter(state => state.value === this.billingDetailsObj.stateCode);
+                    this.checkAndResetValue(this.searchBillingStates, stateObj[0]?.label);
+                    break;
+
+                case "billingCountry":
+                    this.checkAndResetValue(this.searchCountry, this.activeCompany.country);
+                    break;
+            }
+        }, 200);
+    }
+
+    /**
+     *  This will use fpr checks and reset value
+     *
+     * @public
+     * @param {FormControl} formControl
+     * @param {*} value
+     * @memberof BillingDetailComponent
+     */
+    public checkAndResetValue(formControl: FormControl, value: any): void {
+        if (typeof formControl?.value !== "object" && formControl?.value !== value) {
+            formControl.setValue({ label: value });
+        }
+    }
+
+    /**
+     * This will use for  hide/show GSTIN/Tax Number Label by default based on country
+     *
+     * @public
+     * @param {string} name
+     * @memberof BillingDetailComponent
+     */
+    public showGstAndTaxUsingCountryName(name: string): void {
+        if (this.activeCompany?.country === name) {
+            if (name !== 'India') {
+                this.showGstinNo = true;
+                this.showTrnNo = false;
+            } else {
+                this.showGstinNo = false;
+                this.showTrnNo = true;
+            }
+        }
+    }
+
+    /**
+     *  This will use for on change country GST label Hide/Show
+     *
+     * @param {*} evt
+     * @memberof BillingDetailComponent
+     */
+    public onSelectChangeCountry(evt: any) {
+        this.searchBillingStates.setValue('');
+        this.getUpdatedStateCodes(evt.source.value.value, true);
+        if (evt.source.value.label === 'India' && this.activeCompany?.country === 'India') {
+            this.showGstinNo = true;
+            this.showTrnNo = false;
+        } else {
+            this.showGstinNo = false;
+            this.showTrnNo = true;
+        }
+    }
+
+    /**
+      * Returns the promise once the state list is successfully
+      * fetched to carry outn further operations
+      *
+      * @public
+      * @param {*} countryCode Country code for the user
+      * @param {boolean} isCompanyStates
+      * @returns Promise to carry out further operations
+      * @memberof BillingDetailComponent
+      */
+    public getUpdatedStateCodes(countryCode: any, isCompanyStates?: boolean): Promise<any> {
+        return new Promise((resolve: Function) => {
+            if (countryCode) {
+                if (this.countryStates[countryCode]) {
+                    if (!isCompanyStates) {
+                        this.statesSource = this.countryStates[countryCode];
+                    } else {
+                        this.companyStatesSource = this.countryStates[countryCode];
+                    }
+                    resolve();
+                } else {
+                    this.salesService.getStateCode(countryCode).pipe(takeUntil(this.destroyed$)).subscribe(resp => {
+                        if (!isCompanyStates) {
+                            this.statesSource = this.modifyStateResp((resp.body) ? resp.body.stateList : [], countryCode);
+                        } else {
+                            this.companyStatesSource = this.modifyStateResp((resp.body) ? resp.body.stateList : [], countryCode);
+                        }
+                        resolve();
+                    }, () => {
+                        resolve();
+                    });
+                }
+            } else {
+                resolve();
+            }
+        });
+    }
+
+    /**
+     * This will use for modify state response by country
+     *
+     * @param {StateCode[]} stateList
+     * @param {string} countryCode
+     * @return {IOption[]} 
+     * @memberof BillingDetailComponent
+     */
+    public modifyStateResp(stateList: StateCode[], countryCode: string): IOption[] {
+        let stateListRet: IOption[] = [];
+        stateList.forEach(stateR => {
+            stateListRet.push({
+                label: stateR.name,
+                value: stateR.code ? stateR.code : stateR.stateGstCode,
+            });
+        });
+        this.countryStates[countryCode] = stateListRet;
+        return stateListRet;
     }
 }

@@ -14,7 +14,8 @@
             <span
                 class="col-sm-6 col-12 text-right"
                 [ngClass]="{
-                    'invisible': groupDetail.isOpen && (groupDetail.accounts.length || groupDetail.childGroups.length)
+                    'invisible':
+                        groupDetail?.isOpen && (groupDetail?.accounts?.length || groupDetail?.childGroups?.length)
                 }"
             >
                 <span

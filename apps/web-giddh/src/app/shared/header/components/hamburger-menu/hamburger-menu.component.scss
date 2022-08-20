@@ -1,4 +1,3 @@
-@import "../../../../../assets/css/color.scss";
 .hamburger-menu-icon {
     display: flex;
     align-items: flex-start;
@@ -8,7 +7,7 @@
     li {
         display: flex;
         align-items: center;
-        color: $midnight-blue;
+        color: var(--color-giddh-blue);
         button {
             margin: 10px;
             padding: 0;
@@ -18,7 +17,7 @@
             top: 0;
             left: 0;
             i {
-                color: $white;
+                color: var(--color-primary-header-icons);
             }
         }
     }
@@ -32,7 +31,7 @@
 }
 .nav.navbar-nav {
     position: relative;
-    z-index: 999;
+    z-index: 999 !important;
 }
 @media screen and (max-width: 767px) {
     .hamburger-menu-icon.page-has-heading {
@@ -49,7 +48,7 @@
                 display: none;
             }
             h4 {
-                color: $white;
+                color: var(--color-white);
                 font-size: 16px;
                 text-transform: initial !important;
             }
@@ -77,6 +76,44 @@
         li {
             button {
                 margin: 10px 0 10px 4px;
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 767px) {
+    .hamburger-menu-icon.page-has-heading {
+        display: flex !important;
+        top: 9px;
+        z-index: 999 !important;
+        width: calc(100% - 130px) !important;
+        left: 45px;
+        border: none !important;
+        position: fixed !important;
+        li {
+            display: flex;
+            button {
+                display: none;
+            }
+            h4 {
+                color: var(--color-white);
+                font-size: 16px;
+                text-transform: initial !important;
+            }
+        }
+    }
+}
+@media screen and (max-width: 375px) {
+    .hamburger-menu-icon.page-has-heading {
+        width: calc(100% - 130px) !important;
+        li {
+            width: calc(100% - 80px);
+            h4 {
+                white-space: nowrap;
+                width: 100%;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                min-width: 186px;
             }
         }
     }

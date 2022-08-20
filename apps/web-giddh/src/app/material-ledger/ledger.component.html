@@ -210,29 +210,29 @@
                                         />
                                     </mat-form-field>
                                 </span>
-                                <span
+                                <button
                                     id="advance-filter"
                                     (click)="onOpenAdvanceSearch()"
                                     class="advance-icon d-flex advance-search-filter pointer"
                                     [matTooltip]="commonLocaleData?.app_advance_search"
-                                    [matTooltipPosition]="'above'"
+                                    [matTooltipPosition]="'below'"
                                     matTooltipClass="tooltip-black"
                                     [ngStyle]="{ 'margin-left': checkedTrxWhileHovering?.length === 0 ? '7px' : '0px' }"
                                 >
                                     <span class="icon-advance-filter"></span>
-                                </span>
-                                <a
+                                </button>
+                                <button
                                     class="cp clear-filter-btn"
                                     id="clear-filter"
                                     *ngIf="isAdvanceSearchImplemented && !isMobileScreen"
                                     href="javascript:;"
                                     (click)="resetAdvanceSearch()"
                                     [matTooltip]="commonLocaleData?.app_reset_advance_search"
-                                    [matTooltipPosition]="'above'"
+                                    [matTooltipPosition]="'below'"
                                     matTooltipClass="tooltip-black"
                                 >
                                     <i aria-hidden="true" class="icon-refresh"></i>
-                                </a>
+                                </button>
                                 <div
                                     class="d-flex xs-mb-1"
                                     *ngIf="checkedTrxWhileHovering?.length > 0 && !isMobileScreen"
@@ -246,7 +246,7 @@
                                         id="delete-ledger"
                                         (click)="performBulkAction('delete')"
                                         [matTooltip]="commonLocaleData?.app_delete"
-                                        [matTooltipPosition]="'above'"
+                                        [matTooltipPosition]="'below'"
                                         matTooltipClass="tooltip-black"
                                     >
                                         <i class="icon-trash font-16"></i>
@@ -261,7 +261,7 @@
                                         class="btn btn-warning d-flex align-items-center justify-content-center"
                                         (click)="performBulkAction('generate')"
                                         [matTooltip]="commonLocaleData?.app_generate_voucher"
-                                        [matTooltipPosition]="'above'"
+                                        [matTooltipPosition]="'below'"
                                         matTooltipClass="tooltip-black"
                                     >
                                         <i class="icon-generate-invoice font-16"></i>
@@ -276,7 +276,7 @@
                                         id="attach-file"
                                         (click)="performBulkAction('upload', BulkUploadfileInput)"
                                         [matTooltip]="localeData?.attach_file"
-                                        [matTooltipPosition]="'above'"
+                                        [matTooltipPosition]="'below'"
                                         matTooltipClass="tooltip-black"
                                     >
                                         <i class="icon-file-path font-16"></i>
@@ -450,7 +450,7 @@
                                         id="upload"
                                         class="icomoon-ico d-flex align-items-center"
                                         [matTooltip]="localeData?.import_statement"
-                                        [matTooltipPosition]="'above'"
+                                        [matTooltipPosition]="'below'"
                                         matTooltipClass="tooltip-black"
                                         (click)="showUploadBankStatementModal()"
                                     >
@@ -462,7 +462,7 @@
                                         id="share"
                                         class="icomoon-ico d-flex align-items-center"
                                         [matTooltip]="localeData?.share_ledger"
-                                        [matTooltipPosition]="'above'"
+                                        [matTooltipPosition]="'below'"
                                         matTooltipClass="tooltip-black"
                                         (click)="showShareLedgerModal()"
                                     >
@@ -474,7 +474,7 @@
                                         id="export-ledger"
                                         href="javascript:void(0)"
                                         [matTooltip]="commonLocaleData?.app_export"
-                                        [matTooltipPosition]="'above'"
+                                        [matTooltipPosition]="'below'"
                                         matTooltipClass="tooltip-black"
                                         (click)="showExportLedgerModal()"
                                     >
@@ -486,10 +486,10 @@
                                         id="delete-bank-transaction"
                                         href="javascript:void(0)"
                                         [matTooltip]="localeData?.delete_bank_transactions"
-                                        [matTooltipPosition]="'above'"
+                                        [matTooltipPosition]="'below'"
                                         matTooltipClass="tooltip-black"
                                         (click)="showBulkDeleteBankTransactionsConfirmationModal()"
-                                        *ngIf="entryUniqueNamesForBulkAction?.length > 0"
+                                        *ngIf="entryUniqueNamesForBulkAction?.length > 0 && lc.showEledger"
                                     >
                                         <i class="icon-trash lh-0"></i>
                                     </a>
@@ -497,9 +497,13 @@
                                         mat-button
                                         class="icomoon-ico d-flex align-items-center mr-0"
                                         id="reload-bank-transaction"
+                                        *ngIf="
+                                            lc.bankTransactionsDebitData?.length ||
+                                            lc.bankTransactionsCreditData?.length
+                                        "
                                         href="javascript:void(0)"
                                         [matTooltip]="localeData?.reload_bank_transactions"
-                                        [matTooltipPosition]="'above'"
+                                        [matTooltipPosition]="'below'"
                                         matTooltipClass="tooltip-black"
                                         (click)="getBankTransactions()"
                                     >
@@ -654,6 +658,29 @@
                                                                 class="select2-parent select2-ledger pl-0 pr-0"
                                                             >
                                                                 <div
+                                                                    *ngIf="!txn.showAccountDropdown"
+                                                                    class="w-100"
+                                                                    (click)="
+                                                                        showBankLedgerPopup(txn, item);
+                                                                        txn.showAccountDropdown = true
+                                                                    "
+                                                                >
+                                                                    <span
+                                                                        [ngClass]="{
+                                                                            'account-placeholder': true,
+                                                                            'account-placeholder-text ':
+                                                                                txn.selectedAccount &&
+                                                                                txn.selectedAccount.name
+                                                                        }"
+                                                                        >{{
+                                                                            txn.selectedAccount
+                                                                                ? txn.selectedAccount.name
+                                                                                : commonLocaleData?.app_select_accounts
+                                                                        }}</span
+                                                                    >
+                                                                </div>
+                                                                <div
+                                                                    *ngIf="txn.showAccountDropdown"
                                                                     class="w-100"
                                                                     (click)="
                                                                         txn.showDropdown = true;
@@ -824,8 +851,12 @@
                                                                     [showTaxationDiscountBox]="
                                                                         lc.currentBlankTxn.showTaxationDiscountBox
                                                                     "
+                                                                    [showOtherTax]="lc.currentBlankTxn.showOtherTax"
                                                                     (saveBlankLedger)="saveBankTransaction()"
-                                                                    (clickedOutsideEvent)="hideBankLedgerPopup($event)"
+                                                                    (clickedOutsideEvent)="
+                                                                        hideBankLedgerPopup($event);
+                                                                        txn.showAccountDropdown = false
+                                                                    "
                                                                     (clickUnpaidInvoiceList)="
                                                                         clickUnpaidInvoiceList($event)
                                                                     "
@@ -915,16 +946,36 @@
                                                                 class="select2-parent select2-ledger pl-0 pr-0"
                                                             >
                                                                 <div
+                                                                    *ngIf="!txn.showAccountDropdown"
                                                                     class="w-100"
                                                                     (click)="
-                                                                        txn.showDropdown = true;
-                                                                        showBankLedgerPopup(txn, item)
+                                                                        showBankLedgerPopup(txn, item);
+                                                                        txn.showAccountDropdown = true
                                                                     "
                                                                 >
                                                                     <span
                                                                         [ngClass]="{
                                                                             'account-placeholder': true,
-                                                                            'account-placeholder-text':
+                                                                            'account-placeholder-text ':
+                                                                                txn.selectedAccount &&
+                                                                                txn.selectedAccount.name
+                                                                        }"
+                                                                        >{{
+                                                                            txn.selectedAccount
+                                                                                ? txn.selectedAccount.name
+                                                                                : commonLocaleData?.app_select_accounts
+                                                                        }}</span
+                                                                    >
+                                                                </div>
+                                                                <div
+                                                                    *ngIf="txn.showAccountDropdown"
+                                                                    class="w-100"
+                                                                    (click)="txn.showDropdown = true"
+                                                                >
+                                                                    <span
+                                                                        [ngClass]="{
+                                                                            'account-placeholder': true,
+                                                                            'account-placeholder-text ':
                                                                                 txn.selectedAccount &&
                                                                                 txn.selectedAccount.name
                                                                         }"
@@ -1083,8 +1134,12 @@
                                                                     [showTaxationDiscountBox]="
                                                                         lc.currentBlankTxn.showTaxationDiscountBox
                                                                     "
+                                                                    [showOtherTax]="lc.currentBlankTxn.showOtherTax"
                                                                     (saveBlankLedger)="saveBankTransaction()"
-                                                                    (clickedOutsideEvent)="hideBankLedgerPopup($event)"
+                                                                    (clickedOutsideEvent)="
+                                                                        hideBankLedgerPopup($event);
+                                                                        txn.showAccountDropdown = false
+                                                                    "
                                                                     (clickUnpaidInvoiceList)="
                                                                         clickUnpaidInvoiceList($event)
                                                                     "
@@ -1226,7 +1281,7 @@
                                                             transactions.entryUniqueName === lc.selectedTxnUniqueName ||
                                                             transactions.isChecked
                                                     }"
-                                                    tooltip="{{ transactions.description }}"
+                                                    [matTooltip]="transactions.description"
                                                     (mouseover)="entryHovered(transactions.entryUniqueName)"
                                                     (mouseout)="selectedTrxWhileHovering = ''"
                                                 >
@@ -1273,20 +1328,31 @@
                                                         }}</span>
                                                         <span
                                                             class="download-invoice-ledger d-flex"
-                                                            *ngIf="transactions.attachedFileUniqueName"
-                                                            (click)="
-                                                                downloadAttachedFile(
-                                                                    transactions.attachedFileUniqueName,
-                                                                    $event
-                                                                )
+                                                            *ngIf="
+                                                                voucherApiVersion !== 2 &&
+                                                                transactions.attachedFileUniqueName
                                                             "
+                                                            (click)="downloadFiles(transactions, 'ATTACHMENT', $event)"
+                                                        >
+                                                            <i class="icon-attachment pull-left"></i>
+                                                        </span>
+                                                        <span
+                                                            class="download-invoice-ledger d-flex"
+                                                            *ngIf="
+                                                                voucherApiVersion !== 2 && transactions.voucherGenerated
+                                                            "
+                                                            (click)="downloadFiles(transactions, 'VOUCHER', $event)"
                                                         >
                                                             <i class="icon-download-circle pull-left"></i>
                                                         </span>
                                                         <span
-                                                            class="download-invoice-ledger d-flex"
-                                                            *ngIf="transactions.voucherGenerated"
-                                                            (click)="downloadInvoice(transactions, $event)"
+                                                            class="download-invoice-ledger d-flex cursor-pointer"
+                                                            *ngIf="
+                                                                voucherApiVersion === 2 &&
+                                                                (transactions.attachedFileUniqueName ||
+                                                                    transactions.voucherGenerated)
+                                                            "
+                                                            (click)="openAttachmentsDialog(attachments, transactions)"
                                                         >
                                                             <i class="icon-download-circle pull-left"></i>
                                                         </span>
@@ -1333,31 +1399,30 @@
                             <span class="black"
                                 >{{ (lc.transactionData$ | async)?.totalPages }} {{ localeData?.pages }}</span
                             >
-                            <div
-                                id="pagination"
-                                element-view-container-ref
-                                #paginationChild="elementviewcontainerref"
-                            ></div>
+                            <pagination
+                                *ngIf="paginationObject.showPagination"
+                                [totalItems]="paginationObject.totalItems"
+                                [(ngModel)]="paginationObject.page"
+                                [maxSize]="5"
+                                class="pagination-sm"
+                                [boundaryLinks]="true"
+                                [itemsPerPage]="paginationObject.itemsPerPage"
+                                (pageChanged)="pageChanged($event)"
+                                [firstText]="commonLocaleData?.app_first"
+                                [previousText]="commonLocaleData?.app_previous"
+                                [nextText]="commonLocaleData?.app_next"
+                                [lastText]="commonLocaleData?.app_last"
+                            >
+                            </pagination>
                         </div>
                         <!-- endregion -->
                     </div>
                     <!-- end mobile view -->
                     <!-- region main transactions-->
-                    <div
-                        class="ledger-book"
-                        *ngIf="!isMobileScreen"
-                        [navigationWalker]="{ horizontal: 'hr-item', vertical: 'vr-item', ignore: 'no-tree' }"
-                        #navigator="navigationWalker"
-                        #root
-                        (onReset)="initNavigator(navigator, root.children[0])"
-                        (onLeft)="onLeftArrow(navigator, $event)"
-                        (onRight)="onRightArrow(navigator, $event)"
-                    >
+                    <div class="ledger-book" *ngIf="!isMobileScreen">
                         <!-- region debit transaction-->
                         <div
                             [ngClass]="Shown ? 'active' : ''"
-                            hr-item
-                            (ngInit)="initNavigator(navigator, $event?.nativeElement); navigator.nextVertical()"
                             class="left-col-new"
                             [ngClass]="{
                                 'bd-rr':
@@ -1462,7 +1527,6 @@
                             <mat-grid-list
                                 cols="4"
                                 rowHeight="50px"
-                                vr-item
                                 tabindex="-1"
                                 class="ledger-row"
                                 *ngFor="
@@ -1504,7 +1568,7 @@
 
                                 <mat-grid-tile colspan="2" [attr.data-title]="commonLocaleData?.app_particular">
                                     <div class="d-flex align-items-center justify-content-between w-100">
-                                        <div class="text-ellipsis">
+                                        <div class="text-ellipsis particular-label">
                                             {{
                                                 txn
                                                     | particular
@@ -1516,18 +1580,18 @@
 
                                         <span
                                             class="download-invoice-ledger d-flex"
-                                            *ngIf="txn.attachedFileUniqueName"
-                                            (click)="downloadAttachedFile(txn.attachedFileUniqueName, $event)"
+                                            *ngIf="voucherApiVersion !== 2 && txn.attachedFileUniqueName"
+                                            (click)="downloadFiles(txn, 'ATTACHMENT', $event)"
                                             [matTooltip]="localeData?.download_file + ' : ' + txn.attachedFileName"
                                             [matTooltipPosition]="'right'"
                                             matTooltipClass="tooltip-black"
                                         >
-                                            <i class="icon-download-circle pull-left"></i>
+                                            <i class="icon-attachment pull-left"></i>
                                         </span>
                                         <span
                                             class="download-invoice-ledger d-flex"
-                                            *ngIf="txn.voucherGenerated"
-                                            (click)="downloadInvoice(txn, $event)"
+                                            *ngIf="voucherApiVersion !== 2 && txn.voucherGenerated"
+                                            (click)="downloadFiles(txn, 'VOUCHER', $event)"
                                             [matTooltip]="
                                                 commonLocaleData?.app_download +
                                                 ' ' +
@@ -1535,7 +1599,28 @@
                                                     ? commonLocaleData?.app_invoice
                                                     : commonLocaleData?.app_voucher) +
                                                 ' : ' +
-                                                txn.voucherNumber
+                                                (txn.voucherNumber || commonLocaleData?.app_not_available)
+                                            "
+                                            [matTooltipPosition]="'right'"
+                                            matTooltipClass="tooltip-black"
+                                        >
+                                            <i class="icon-download-circle pull-left"></i>
+                                        </span>
+                                        <span
+                                            class="download-invoice-ledger d-flex cursor-pointer"
+                                            *ngIf="
+                                                voucherApiVersion === 2 &&
+                                                (txn.attachedFileUniqueName || txn.voucherGenerated)
+                                            "
+                                            (click)="openAttachmentsDialog(attachments, txn)"
+                                            [matTooltip]="
+                                                txn.attachedFileUniqueName && txn.voucherGenerated
+                                                    ? (txn.voucherNumber || commonLocaleData?.app_not_available) +
+                                                      ', ' +
+                                                      txn.attachedFileName
+                                                    : txn.attachedFileUniqueName
+                                                    ? txn.attachedFileName
+                                                    : txn.voucherNumber || commonLocaleData?.app_not_available
                                             "
                                             [matTooltipPosition]="'right'"
                                             matTooltipClass="tooltip-black"
@@ -1590,7 +1675,12 @@
                                                             name="ledgDate"
                                                             [(ngModel)]="lc.blankLedger.entryDate"
                                                             [placeholder]="lc.formatPlaceholder"
-                                                            (dateSelected)="getInvoiceListsForCreditNote(true)"
+                                                            (dateSelected)="
+                                                                getInvoiceListsForCreditNote([
+                                                                    {},
+                                                                    lc.blankLedger.voucherType
+                                                                ])
+                                                            "
                                                             (datepickerState)="datepickerState($event)"
                                                         ></giddh-datepicker>
                                                     </div>
@@ -1620,7 +1710,6 @@
                                                             [notFoundMsg]="noResultsFoundLabel"
                                                             [options]="searchResults"
                                                             [(ngModel)]="txn.particular"
-                                                            vr-item
                                                             tabindex="-1"
                                                             #select
                                                             [showClear]="false"
@@ -1656,7 +1745,7 @@
                                                                         </div>
                                                                         <div class="item-stock">
                                                                             {{ commonLocaleData?.app_stock }}:
-                                                                            {{ option.additional?.stock.name }}
+                                                                            {{ option.additional?.stock.uniqueName }}
                                                                         </div>
                                                                     </a>
                                                                 </ng-container>
@@ -1734,6 +1823,7 @@
                                                 (moreDetailOpen)="handleOpenMoreDetail($event)"
                                                 (changeTransactionType)="toggleTransactionType($event)"
                                                 [showTaxationDiscountBox]="lc.currentBlankTxn.showTaxationDiscountBox"
+                                                [showOtherTax]="lc.currentBlankTxn.showOtherTax"
                                                 (resetBlankLedger)="resetBlankTransaction()"
                                                 (saveBlankLedger)="saveBlankTransaction()"
                                                 (clickedOutsideEvent)="hideNewLedgerEntryPopup()"
@@ -1760,8 +1850,6 @@
                         <div
                             [ngClass]="isHide ? 'active' : 'right-col-new'"
                             class="right-col-new"
-                            hr-item
-                            (ngInit)="initNavigator(navigator, $event?.nativeElement); navigator.nextVertical()"
                             [ngClass]="{
                                 'bd-rl':
                                     (lc.transactionData$ | async)?.debitTransactions?.length <
@@ -1788,7 +1876,6 @@
                                 rowHeight="50px"
                                 tabindex="-1"
                                 class="ledger-row"
-                                vr-item
                                 tabindex="-1"
                                 *ngIf="
                                     ledgerTxnBalance?.forwardedBalance?.amount > 0 &&
@@ -1877,7 +1964,6 @@
                                 "
                                 (touchend)="showUpdateLedgerModalIpad(txn)"
                                 (dblclick)="showUpdateLedgerModal(txn)"
-                                vr-item
                                 tabindex="-1"
                                 (keydown.enter)="showUpdateLedgerModal(txn)"
                                 [ngClass]="{
@@ -1911,7 +1997,7 @@
                                 </mat-grid-tile>
                                 <mat-grid-tile colspan="2" [attr.data-title]="commonLocaleData?.app_particular">
                                     <div class="d-flex align-items-center justify-content-between w-100">
-                                        <div class="text-ellipsis">
+                                        <div class="text-ellipsis particular-label">
                                             {{
                                                 txn
                                                     | particular
@@ -1922,18 +2008,18 @@
                                         </div>
                                         <span
                                             class="download-invoice-ledger d-flex"
-                                            *ngIf="txn.attachedFileUniqueName"
-                                            (click)="downloadAttachedFile(txn.attachedFileUniqueName, $event)"
+                                            *ngIf="voucherApiVersion !== 2 && txn.attachedFileUniqueName"
+                                            (click)="downloadFiles(txn, 'ATTACHMENT', $event)"
                                             [matTooltip]="localeData?.download_file + ' : ' + txn.attachedFileName"
                                             [matTooltipPosition]="'right'"
                                             matTooltipClass="tooltip-black"
                                         >
-                                            <i class="icon-download-circle pull-left"></i>
+                                            <i class="icon-attachment pull-left"></i>
                                         </span>
                                         <span
                                             class="download-invoice-ledger d-flex"
-                                            *ngIf="txn.voucherGenerated"
-                                            (click)="downloadInvoice(txn, $event)"
+                                            *ngIf="voucherApiVersion !== 2 && txn.voucherGenerated"
+                                            (click)="downloadFiles(txn, 'VOUCHER', $event)"
                                             [matTooltip]="
                                                 commonLocaleData?.app_download +
                                                 ' ' +
@@ -1941,7 +2027,28 @@
                                                     ? commonLocaleData?.app_invoice
                                                     : commonLocaleData?.app_voucher) +
                                                 ' : ' +
-                                                txn.voucherNumber
+                                                (txn.voucherNumber || commonLocaleData?.app_not_available)
+                                            "
+                                            [matTooltipPosition]="'right'"
+                                            matTooltipClass="tooltip-black"
+                                        >
+                                            <i class="icon-download-circle pull-left"></i>
+                                        </span>
+                                        <span
+                                            class="download-invoice-ledger d-flex cursor-pointer"
+                                            *ngIf="
+                                                voucherApiVersion === 2 &&
+                                                (txn.attachedFileUniqueName || txn.voucherGenerated)
+                                            "
+                                            (click)="openAttachmentsDialog(attachments, txn)"
+                                            [matTooltip]="
+                                                txn.attachedFileUniqueName && txn.voucherGenerated
+                                                    ? (txn.voucherNumber || commonLocaleData?.app_not_available) +
+                                                      ', ' +
+                                                      txn.attachedFileName
+                                                    : txn.attachedFileUniqueName
+                                                    ? txn.attachedFileName
+                                                    : txn.voucherNumber || commonLocaleData?.app_not_available
                                             "
                                             [matTooltipPosition]="'right'"
                                             matTooltipClass="tooltip-black"
@@ -2014,7 +2121,6 @@
                                                             [idEl]="txn.id"
                                                             #shCredit
                                                             [options]="searchResults"
-                                                            vr-item
                                                             tabindex="-1"
                                                             [isPaginationEnabled]="true"
                                                             (scrollEnd)="handleScrollEnd()"
@@ -2056,7 +2162,7 @@
                                                                         </div>
                                                                         <div class="item-stock">
                                                                             {{ commonLocaleData?.app_stock }}:
-                                                                            {{ option.additional?.stock.name }}
+                                                                            {{ option.additional?.stock.uniqueName }}
                                                                         </div>
                                                                     </a>
                                                                 </ng-container>
@@ -2135,6 +2241,7 @@
                                                 (moreDetailOpen)="handleOpenMoreDetail($event)"
                                                 (changeTransactionType)="toggleTransactionType($event)"
                                                 [showTaxationDiscountBox]="lc.currentBlankTxn.showTaxationDiscountBox"
+                                                [showOtherTax]="lc.currentBlankTxn.showOtherTax"
                                                 (resetBlankLedger)="resetBlankTransaction()"
                                                 (saveBlankLedger)="saveBlankTransaction()"
                                                 (clickedOutsideEvent)="hideNewLedgerEntryPopup()"
@@ -2271,11 +2378,21 @@
                             <span class="black"
                                 >{{ (lc.transactionData$ | async)?.totalPages }} {{ localeData?.pages }}</span
                             >
-                            <div
-                                id="pagination"
-                                element-view-container-ref
-                                #paginationChild="elementviewcontainerref"
-                            ></div>
+                            <pagination
+                                *ngIf="paginationObject.showPagination"
+                                [totalItems]="paginationObject.totalItems"
+                                [(ngModel)]="paginationObject.page"
+                                [maxSize]="5"
+                                class="pagination-sm"
+                                [boundaryLinks]="true"
+                                [itemsPerPage]="paginationObject.itemsPerPage"
+                                (pageChanged)="pageChanged($event)"
+                                [firstText]="commonLocaleData?.app_first"
+                                [previousText]="commonLocaleData?.app_previous"
+                                [nextText]="commonLocaleData?.app_next"
+                                [lastText]="commonLocaleData?.app_last"
+                            >
+                            </pagination>
                         </div>
                         <!-- endregion -->
                     </div>
@@ -2433,7 +2550,10 @@
                                 <div class="ledger-state-box">
                                     <h1>{{ localeData?.net_total }}</h1>
                                     <div class="d-flex justify-content-between">
-                                        <div *ngIf="ledgerTxnBalance?.creditTotal > ledgerTxnBalance?.debitTotal">
+                                        <div
+                                            class="d-flex flex-column justify-content-between"
+                                            *ngIf="ledgerTxnBalance?.creditTotal > ledgerTxnBalance?.debitTotal"
+                                        >
                                             <h3 class="digit-blue d-flex">
                                                 <amount-field
                                                     [amount]="
@@ -2447,7 +2567,7 @@
                                                 <span class="text-capitalize">{{ commonLocaleData?.app_cr }}</span>
                                             </h3>
                                             <h3
-                                                class="digit-blue sub-total font-12 d-inline-flex"
+                                                class="digit-blue sub-total font-12 d-flex"
                                                 *ngIf="isLedgerAccountAllowsMultiCurrency"
                                             >
                                                 <amount-field
@@ -2465,7 +2585,10 @@
                                         </div>
                                     </div>
                                     <div class="d-flex justify-content-between">
-                                        <div *ngIf="ledgerTxnBalance?.creditTotal < ledgerTxnBalance?.debitTotal">
+                                        <div
+                                            class="d-flex flex-column justify-content-between"
+                                            *ngIf="ledgerTxnBalance?.creditTotal < ledgerTxnBalance?.debitTotal"
+                                        >
                                             <h3 class="digit-blue d-inline-flex">
                                                 <amount-field
                                                     [amount]="
@@ -2479,7 +2602,7 @@
                                                 <span class="text-capitalize">{{ commonLocaleData?.app_dr }}</span>
                                             </h3>
                                             <h3
-                                                class="digit-blue sub-total font-12 d-inline-flex"
+                                                class="digit-blue sub-total font-12 d-flex"
                                                 *ngIf="isLedgerAccountAllowsMultiCurrency"
                                             >
                                                 <amount-field
@@ -2498,7 +2621,7 @@
                                     </div>
                                     <br />
                                     <div class="d-flex debit-credit-amount">
-                                        <h1 class="mr-t05 font-16 grey-text-color d-flex flex-column">
+                                        <h1 class="mr-t05 grey-text-color d-flex flex-column mr-r2">
                                             {{ commonLocaleData?.app_debit }}
                                             <span class="digit-blue mt-1 d-inline-flex">
                                                 <amount-field
@@ -2520,7 +2643,7 @@
                                                 </amount-field>
                                             </span>
                                         </h1>
-                                        <h1 class="mr-t05 font-16 grey-text-color d-flex flex-column">
+                                        <h1 class="mr-t05 grey-text-color d-flex flex-column">
                                             {{ commonLocaleData?.app_credit }}
                                             <span class="digit-blue d-flex mt-1">
                                                 <amount-field
@@ -2574,7 +2697,10 @@
                                                 }}
                                             </span>
                                         </h3>
-                                        <h3 class="digit-blue d-flex" *ngIf="isLedgerAccountAllowsMultiCurrency">
+                                        <h3
+                                            class="digit-blue font-12 d-flex"
+                                            *ngIf="isLedgerAccountAllowsMultiCurrency"
+                                        >
                                             <span
                                                 class="d-flex"
                                                 [matTooltip]="
@@ -2708,6 +2834,10 @@
                         </confirm-modal>
                     </div>
                 </div>
+            </ng-template>
+
+            <ng-template #attachments>
+                <attachments [selectedItem]="selectedItem"></attachments>
             </ng-template>
         </ng-container>
     </div>

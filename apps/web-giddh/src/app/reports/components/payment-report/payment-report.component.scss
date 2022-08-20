@@ -1,0 +1,206 @@
+.td-search-box {
+    div {
+        i {
+            margin-top: 1px;
+            color: var(--color-blue);
+            padding-right: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            padding-left: 8px;
+        }
+    }
+}
+
+.td-search-box div {
+    display: flex;
+}
+.d-flex {
+    display: flex;
+}
+.input-group {
+    position: relative;
+    width: auto !important;
+    input.form-control {
+        padding-left: 35px !important;
+        background-image: url("../../../../assets/images/calender-icon.svg") !important;
+        background-size: 17px !important;
+        background-position: 9px 8px !important;
+        background-repeat: no-repeat !important;
+        padding-left: 45px !important;
+        position: relative;
+        z-index: 99;
+        cursor: default;
+        width: 100%;
+        &:focus {
+            border-color: var(--color-iron);
+        }
+    }
+}
+.icon-calender {
+    position: absolute;
+    z-index: 9;
+    height: 32px;
+    width: 32px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--color-primary-basic-button-text);
+}
+.input-wrapper {
+    display: block !important;
+    width: 220px !important;
+    position: relative;
+    height: 36px !important;
+    &:before {
+        position: absolute;
+        content: "";
+        display: block;
+        height: 36px;
+        width: 1px;
+        background-color: var(--color-iron);
+        left: 37px !important;
+        z-index: 100;
+        top: 0;
+    }
+}
+.advance-icon {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+    margin-left: 10px;
+    border: 1px solid var(--color-primary-button-border);
+    border-radius: 5px;
+}
+
+.btn-filter {
+    background: var(--color-primary-filter-background);
+    border: 1px solid var(--color-primary-button-border);
+    font-size: 14px;
+    color: var(--color-giddh-blue);
+    display: inline-flex;
+    justify-content: space-between;
+    -webkit-box-align: center;
+    align-items: center;
+    padding: 7px 10px !important;
+    .icon-cross {
+        margin-right: 5px;
+    }
+    &:focus {
+        box-shadow: none;
+        outline: none;
+    }
+    &:active {
+        box-shadow: none;
+        outline: none;
+    }
+}
+
+.input-grp-date-range-picker input.form-control {
+    padding-left: 45px !important;
+    width: 220px;
+}
+.voucher-type-dropdown {
+    display: inline-block;
+}
+.voucher-type-dropdown .btn {
+    padding: 0 8px;
+    margin-right: 0px;
+}
+.basic > tbody > tr > td,
+.basic > thead > tr > th {
+    padding: 15px 11px;
+}
+.giddh-table .td-search-box {
+    padding-right: 10px !important;
+}
+.entry-date {
+    padding-left: 0 !important;
+}
+.entity-dropdown {
+    width: 200px;
+}
+.check-image {
+    img {
+        max-height: 14px;
+        cursor: pointer;
+    }
+}
+@media screen and (max-width: 1199px) {
+    .clear-filter {
+        margin-left: 15px;
+    }
+    .reverse-table-report {
+        margin-bottom: 100px;
+    }
+}
+@media (max-width: 768px) {
+    .entry-date {
+        padding-left: 50% !important;
+    }
+}
+@media only screen and (max-width: 767px) {
+    .entry-date {
+        padding: 5px 10px 5px 50% !important;
+    }
+    .input-grp-date-range-picker {
+        flex-direction: column;
+        .clear-filter {
+            margin-left: 0;
+        }
+    }
+    .advance-icon {
+        width: auto;
+        margin-left: auto;
+        position: relative;
+        top: -37px;
+    }
+}
+@media (max-width: 575px) {
+    .input-grp-date-range-picker {
+        &.clear-filter-applicable {
+            position: relative;
+            .advance-icon {
+                position: absolute !important;
+                bottom: 0;
+                margin-left: 0 !important;
+            }
+            .custom-datepicker {
+                margin-bottom: 15px;
+                width: 100%;
+                input {
+                    width: 100% !important;
+                    max-width: 100% !important;
+                }
+            }
+            .clear-filter {
+                margin-left: 50px;
+            }
+        }
+
+        .mr-r1 {
+            margin-right: 0 !important;
+        }
+
+        .linked-entities {
+            margin-bottom: 15px;
+            margin-right: 0;
+            width: 100%;
+            sh-select {
+                width: 100%;
+            }
+        }
+        .clear-filter {
+            justify-content: end !important;
+            margin-left: 0;
+        }
+    }
+}
+
+@media (min-width: 769px) {
+    .table-responsive {
+        max-height: calc(100vh - 295px);
+        overflow-y: auto;
+    }
+}

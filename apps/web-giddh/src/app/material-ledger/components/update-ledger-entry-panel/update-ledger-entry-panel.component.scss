@@ -1,4 +1,3 @@
-@import "../../../../assets/css/color.scss";
 .item-padding {
     padding: 0 4px;
 }
@@ -38,21 +37,21 @@ table.width-100 {
 
 .modal-header ng-select div a.ng-star-inserted {
     font-size: 18px;
-    color: $white;
+    color: var(--color-white);
 }
 
 .modal-header ng-select div i.fa.fa-caret-up::before {
-    color: $white;
+    color: var(--color-white);
     font-size: 24px;
 }
 
 ng-select > div i.fa.fa-caret-down::before {
-    color: $white;
+    color: var(--color-white);
     font-size: 20px;
 }
 
 ng-select > div a.ng-star-inserted {
-    color: $white;
+    color: var(--color-white);
     text-transform: uppercase;
     font-size: 16px;
 }
@@ -63,7 +62,7 @@ ng-select > div {
 }
 
 ng-select .select-drop i.fa.fa-caret-up::before {
-    color: $white;
+    color: var(--color-white);
     font-size: 20px;
 }
 
@@ -72,11 +71,11 @@ ng-select .select-drop i.fa.fa-caret-up::before {
     background: transparent;
     border: none !important;
     padding: 5px;
-    color: $gray;
+    color: var(--color-abbey);
 }
 
 .notfound-option.active {
-    background: $lavender !important;
+    background: var(--color-dark-fog) !important;
     padding: 2px 5px !important;
 }
 
@@ -86,7 +85,7 @@ ng-select .select-drop i.fa.fa-caret-up::before {
 
 .amount-total {
     font-size: 12px;
-    color: $nobel;
+    color: var(--color-gray);
 }
 
 .other-tax {
@@ -104,7 +103,7 @@ ng-select .select-drop i.fa.fa-caret-up::before {
 }
 
 .ledger-main .form-control {
-    background: $white !important;
+    background: var(--color-white) !important;
     top: 0px !important;
 }
 
@@ -159,7 +158,7 @@ ng-select .select-drop i.fa.fa-caret-up::before {
 }
 
 .download-invoice-ledger > i {
-    background-color: $white;
+    background-color: var(--color-white);
     padding-left: 5px;
 }
 
@@ -173,7 +172,7 @@ span.eligible-ITC {
     padding-top: 5px;
     display: inline-block;
     span {
-        color: $deep-sky-blue;
+        color: var(--color-blue);
         font-size: 10px;
     }
 }
@@ -188,7 +187,7 @@ span.eligible-ITC {
 
 .adjust-receipt {
     padding: 10px;
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--color-common-secondary-border);
     margin-top: 10px;
     position: relative;
 }
@@ -206,7 +205,7 @@ span.eligible-ITC {
 }
 
 .ledger-head th {
-    color: $jacksons-purple;
+    color: var(--color-giddh-blue);
     padding-left: 0;
     padding-bottom: 10px;
 }
@@ -222,19 +221,19 @@ span.eligible-ITC {
     }
 }
 .advanced {
-    background: $alice-blue;
+    background: var(--color-dropdown-primary-background);
     table.xs-table-block {
-        tbody tr {
+        tr {
             td.remove-invoice {
                 span:first-child {
-                    font-size: 25px;
+                    font-size: 16px;
                     vertical-align: middle;
-                    color: $gray;
+                    color: var(--color-abbey);
                     padding-right: 8px;
                 }
                 .remove-invoice-label {
                     vertical-align: middle;
-                    color: $gray;
+                    color: var(--color-abbey);
                     font-size: 13px;
                 }
             }
@@ -248,17 +247,17 @@ span.eligible-ITC {
     padding: 0 5px 0;
 }
 .icon-info {
-    color: $gray;
+    color: var(--color-abbey);
     cursor: pointer;
     padding: 8px 5px 0;
 }
 .adjusted-info {
-    background-color: $white;
+    background-color: var(--color-white);
     padding: 15px;
     z-index: 1;
     max-width: 360px;
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
-    color: $dark-gray;
+    box-shadow: 0 3px 6px var(--color-primary-common-box-shadow);
+    color: var(--color-abbey);
     .info-text {
         font-family: "opensans-regular";
     }
@@ -276,14 +275,14 @@ span.eligible-ITC {
     pointer-events: none;
 }
 #update-ledger-assign-tag.disabled-ledger::ng-deep .sh-select-disabled .bg-white {
-    background-color: $whisper-light !important;
+    background-color: var(--color-dark-fog) !important;
 }
 #update-ledger-assign-tag.disabled-ledger::ng-deep input,
 #update-ledger-select-warehouse.disabled-ledger::ng-deep input,
 #update-ledger-price-input.disabled-ledger,
 #update-ledger-invoice-voucher-number.disabled-ledger::ng-deep input,
 #update-ledger-invoice-number.disabled-ledger::ng-deep input {
-    background-color: $whisper-light !important;
+    background-color: var(--color-dark-fog) !important;
 }
 .tourist-scheme-wrapper {
     input[type="checkbox"] {
@@ -291,10 +290,10 @@ span.eligible-ITC {
     }
 }
 p.edit-message {
-    background-color: $whisper-light;
+    background-color: var(--color-dark-fog);
     text-align: center;
     padding: 8px 0;
-    border-top: 1px solid $gainsboro;
+    border-top: 1px solid var(--color-common-secondary-border);
     font-size: 16px;
     font-family: "opensans-semibold";
     margin-top: 15px;
@@ -312,6 +311,16 @@ p.edit-message {
 
 .tax-width {
     width: 100px;
+}
+.delete-attachment {
+    margin-right: 14px;
+    margin-left: 7px;
+    float: right;
+    margin-top: 1px;
+    a {
+        color: var(--color-dark-gray);
+        font-size: 15px;
+    }
 }
 /* responsive */
 
@@ -419,7 +428,7 @@ p.edit-message {
     }
     #credit-select input,
     #debit-select input {
-        border: 1px solid $gainsboro !important;
+        border: 1px solid var(--color-iron) !important;
         height: 36px;
     }
     .ledger-main .form-control {

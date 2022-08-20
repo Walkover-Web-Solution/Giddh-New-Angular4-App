@@ -1,11 +1,12 @@
 <div
     class="aside-pane aside-pane-other-tax text-left"
-    (clickOutside)="hideListItems()"
-    [clickOutsideEnabled]="!isMobileScreen"
+    (clickOutside)="closeTaxesModal()"
     [keyboardShortcut]="'esc'"
-    (onShortcutPress)="saveTaxes()"
+    (onShortcutPress)="closeTaxesModal()"
 >
-    <button id="close" type="button" (click)="saveTaxes()"><i class="icon-cross"></i></button>
+    <button id="close" type="button" (click)="closeTaxesModal()">
+        <i class="icon-cross"></i>
+    </button>
 
     <div class="form-header">
         <h3 class="aside-title">{{commonLocaleData?.app_tax_applicable}}</h3>
@@ -30,8 +31,8 @@
                             >
                             </sh-select>
 
-                            <label class="label-tax" *ngIf="otherTaxesModal?.appliedOtherTax?.name">
-                                {{ otherTaxesModal?.appliedOtherTax?.name | uppercase}}
+                            <label class="label-tax" *ngIf="defaultOtherTaxesModal?.appliedOtherTax?.name">
+                                {{ defaultOtherTaxesModal?.appliedOtherTax?.name | uppercase}}
                             </label>
                         </div>
                     </div>
@@ -47,8 +48,7 @@
                             [options]="calculationMethodOptions"
                             name="tcsCalculationMethod"
                             [placeholder]="commonLocaleData?.app_select_method"
-                            [disabled]="isDisabledCalMethod"
-                            [(ngModel)]="otherTaxesModal.tcsCalculationMethod"
+                            [(ngModel)]="defaultOtherTaxesModal.tcsCalculationMethod"
                         ></sh-select>
                     </div>
                 </div>
@@ -57,7 +57,7 @@
                 <button
                     class="btn btn-success"
                     type="button"
-                    [disabled]="!otherTaxesModal.tcsCalculationMethod"
+                    [disabled]="!defaultOtherTaxesModal?.tcsCalculationMethod"
                     (click)="saveTaxes()"
                 >
                     {{commonLocaleData?.app_apply}}

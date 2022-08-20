@@ -60,8 +60,6 @@ export class SignupComponent implements OnInit, OnDestroy {
     public retryCount: number = 0;
     public signupVerifyEmail$: Observable<string>;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    /** Used only to refer in the template */
-    public isCordova: boolean = isCordova;
     /** To Observe is google login inprocess */
     public isLoginWithGoogleInProcess$: Observable<boolean>;
 
@@ -72,7 +70,7 @@ export class SignupComponent implements OnInit, OnDestroy {
         private authService: AuthService,
         @Inject(DOCUMENT) private document: Document
     ) {
-        this.urlPath = (isElectron || isCordova) ? "" : AppUrl + APP_FOLDER;
+        this.urlPath = isElectron ? "" : AppUrl + APP_FOLDER;
         this.isLoginWithEmailInProcess$ = this.store.pipe(select(state => {
             return state.login.isLoginWithEmailInProcess;
         }), takeUntil(this.destroyed$));
@@ -143,7 +141,7 @@ export class SignupComponent implements OnInit, OnDestroy {
         this.setCountryCode({ value: "India", label: "India" });
 
         // get user object when google auth is complete
-        if (!Configuration.isElectron && !Configuration.isCordova) {
+        if (!Configuration.isElectron) {
             this.authService.authState.pipe(takeUntil(this.destroyed$)).subscribe((user: SocialUser) => {
                 this.isSocialLogoutAttempted$.subscribe((res) => {
                     if (!res && user) {
@@ -260,32 +258,29 @@ export class SignupComponent implements OnInit, OnDestroy {
         this.store.dispatch(this.loginAction.SignupWithMobileRequest(data));
     }
 
+
+    /**
+     * This will use for sign with providers
+     *
+     * @param {string} provider
+     * @memberof SignupComponent
+     */
     public async signInWithProviders(provider: string) {
         if (Configuration.isElectron) {
-
+            // electronOauth2
             const { ipcRenderer } = (window as any).require("electron");
             if (provider === "google") {
                 // google
+                const t = ipcRenderer.send("authenticate", provider);
+                ipcRenderer.once('take-your-gmail-token', (sender, arg) => {
+                    this.store.dispatch(this.loginAction.signupWithGoogle(arg.access_token));
+                });
+
+            } else {
                 ipcRenderer.once('take-your-gmail-token', (sender, arg) => {
                     this.store.dispatch(this.loginAction.signupWithGoogle(arg.access_token));
                 });
             }
-
-        } else if (Configuration.isCordova) {
-            (window as any).plugins.googleplus.login(
-                {
-                    'scopes': 'email', // optional, space-separated list of scopes, If not included or empty, defaults to `profile` and `email`.
-                    'webClientId': GOOGLE_CLIENT_ID,
-                    'offline': true // optional, but requires the webClientId - if set to true the plugin will also return a serverAuthCode, which can be used to grant offline access to a non-Google server
-                },
-                (obj) => {
-                    this.store.dispatch(this.loginAction.signupWithGoogle(obj.accessToken));
-                },
-                (msg) => {
-                    console.log(('error: ' + msg));
-                }
-            );
-
         } else {
             //  web social authentication
             this.store.dispatch(this.loginAction.resetSocialLogoutAttempt());

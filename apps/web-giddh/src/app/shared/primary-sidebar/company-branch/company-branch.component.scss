@@ -1,27 +1,34 @@
-@import "../../../../assets/css/color.scss";
 .company-branch-dropdown {
     font-family: "opensans-regular";
     .search-box {
         padding: 0 20px;
         .input-group-text {
-            background-color: $gray-95;
             padding: 8px !important;
+            color: var(--color-sidebar-search-bar-text);
+            background-color: var(--color-sidebar-primary-search-bar-background);
+            border: none;
+            position: relative;
+            left: -1px;
         }
         input {
             border-left: none;
             padding-left: 0 !important;
-            background-color: $gray-95 !important;
+            background-color: var(--color-sidebar-primary-search-bar-background) !important;
             border-top-left-radius: 0px !important;
             border-bottom-left-radius: 0px !important;
             border-top-right-radius: 5px !important;
             border-bottom-right-radius: 5px !important;
+            border: none;
             &:focus {
-                border-color: $gainsboro !important;
+                border-color: var(--color-iron) !important;
+            }
+            &::placeholder {
+                color: var(--color-common-secondary-input-placeholder) !important;
             }
         }
         .input-group-append {
             font-size: 12px;
-            color: $grey-chateau;
+            color: var(--color-primary-company-branch-input-group-append);
             right: 10px;
             top: 0;
             padding: 0 5px;
@@ -29,8 +36,8 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: $gray-95;
-            border: 1px solid $gainsboro;
+            background-color: var(--color-wild-sand);
+            border: 1px solid var(--color-iron);
             border-radius: 5px;
             border-left: none;
             border-top-left-radius: 0px !important;
@@ -39,7 +46,7 @@
     }
     .total-company {
         .company-count {
-            color: $comet;
+            color: var(--color-primary-company-branch-dropdown-total-company-count);
         }
     }
     tab {
@@ -64,18 +71,25 @@
             p {
                 span {
                     small {
-                        background: $dark-fog;
-                        color: $omiod;
                         font-size: 10px;
                         line-height: 12.4px;
-                        font-weight: 700;
+                        font-weight: 500;
                         padding: 2px 5px;
                         border-radius: 5px;
+                        color: var(--color-sidebar-company-count-text);
+                        background-color: var(--color-sidebar-company-count-background);
                     }
                 }
             }
             .btn-sky-blue {
                 padding: 5px 7px;
+                color: var(--color-secondary-button-text);
+                background-color: var(--color-secondary-button-background);
+                border: 1px solid var(--color-secondary-button-background);
+            }
+            .btn-sky-blue:hover {
+                background-color: var(--color-secondary-button-background-hover) !important;
+                border-color: var(--color-secondary-button-background-hover) !important;
             }
         }
         .company-list {
@@ -90,7 +104,7 @@
                             }
                             .branch-count {
                                 width: 50px;
-                                color: $grey-chateau;
+                                color: var(--color-secondary-button-background);
                                 padding-left: 10px;
                                 white-space: nowrap;
                             }
@@ -125,10 +139,10 @@
             li {
                 padding: 8px 0;
                 cursor: pointer;
-                color: $omiod;
+                color: var(--color-sidebar-create-company-list-text);
                 &:hover {
                     span {
-                        background-color: $light-alice-blue;
+                        background-color: var(--color-primary-company-branch-company-list-li-hover-span-background);
                     }
                     .dropdown-menu {
                         span {
@@ -142,10 +156,10 @@
                     margin-bottom: 0 !important;
                     padding: 0 20px;
                     &.active {
-                        background-color: $light-alice-blue !important;
+                        background-color: var(--color-sidebar-create-company-list-background) !important;
                     }
                     &:hover {
-                        background-color: $light-alice-blue !important;
+                        background-color: var(--color-sidebar-create-company-list-background) !important;
                     }
                     span {
                         white-space: normal;
@@ -167,7 +181,7 @@
                         }
                     }
                     &.open {
-                        background-color: $dark-alice-blue;
+                        background-color: var(--color-primary-company-branch-company-list-btn-group-open-background);
                         margin: 0 -20px;
                         p.show-more-branches {
                             padding: 6px 15px;
@@ -196,13 +210,13 @@
                             a {
                                 background-color: transparent;
                                 padding: 5px 20px;
-                                color: $omiod !important;
+                                color: var(--color-primary-company-branch-dropdown-menu-anchor-hover) !important;
                                 &:hover {
                                     background-color: initial !important;
-                                    color: $omiod !important;
+                                    color: var(--color-primary-company-branch-dropdown-menu-anchor-hover) !important;
                                 }
                                 &.head-branch {
-                                    color: $cornflower;
+                                    color: var(--color-primary-company-branch-dropdown-menu-head-branch);
                                     .branch-company-name {
                                         max-width: 150px;
                                         text-overflow: ellipsis;
@@ -213,10 +227,12 @@
                                 }
                                 &.company-branches-list {
                                     &.active {
-                                        color: $omiod !important;
-                                        background-color: $sunshine !important;
+                                        color: var(--color-primary-company-branch-company-branches-list) !important;
+                                        background-color: var(
+                                            --color-primary-company-branch-company-list-btn-group-active-hover
+                                        ) !important;
                                         span {
-                                            color: $omiod !important;
+                                            color: var(--color-primary-company-branch-company-branches-list) !important;
                                         }
                                     }
                                     .branch-alias,
@@ -232,18 +248,20 @@
 
                             &:hover {
                                 a {
-                                    background-color: $sunshine !important;
+                                    background-color: var(
+                                        --color-primary-company-branch-company-list-btn-group-active-hover
+                                    ) !important;
                                 }
                             }
                         }
                     }
                     p.show-more-branches {
-                        color: $midnight-blue;
+                        color: var(--color-giddh-blue);
                         padding: 10px 0;
                         text-decoration: underline;
                     }
                     li.create-branch {
-                        color: $orange;
+                        color: var(--color-orange);
                         padding: 6px 0;
                     }
                 }
@@ -269,16 +287,16 @@
                     a {
                         background-color: transparent;
                         padding: 8px 20px;
-                        color: $omiod;
+                        color: var(--color-primary-company-branch-branch-list-anchor);
                         white-space: normal;
                         word-break: break-all;
                         &.active {
-                            color: $omiod !important;
-                            background-color: $sunshine !important;
+                            color: var(--color-primary-company-branch-branch-list-anchor) !important;
+                            background-color: var(--color-primary-company-branch-branch-list-active-hover) !important;
                         }
                         &:hover {
                             background-color: initial !important;
-                            color: $omiod !important;
+                            color: var(--color-primary-company-branch-branch-list-anchor) !important;
                         }
                         .main-company {
                             text-overflow: ellipsis;
@@ -289,7 +307,7 @@
                     }
                     &:hover {
                         a {
-                            background-color: $sunshine !important;
+                            background-color: var(--color-primary-company-branch-branch-list-active-hover) !important;
                         }
                     }
                     .branch-alias,
@@ -309,21 +327,21 @@
         bottom: 0;
         width: 240px;
         left: 0;
-        border-top: 1px solid $gainsboro;
-        background-color: $white;
+        border-top: 1px solid var(--color-common-secondary-border);
         z-index: 991;
+        background-color: var(--color-sidebar-footer-logout-section-background);
         .profile-name {
             cursor: pointer;
             .profile-alice {
                 display: inline-flex;
                 width: 24px;
                 height: 24px;
-                background-color: $cornflower;
+                background-color: var(--color-secondary-button-background);
                 border-radius: 30px;
                 font-size: 12px;
                 justify-content: center;
                 align-items: center;
-                color: $white;
+                color: var(--color-secondary-button-text);
                 letter-spacing: -1px;
             }
         }
@@ -331,9 +349,9 @@
             display: flex;
             align-items: center;
             button {
-                background-color: $white;
-                border: 1px solid $midnight-blue;
-                color: $midnight-blue;
+                border: 1px solid var(--color-secondary-button-border);
+                background: var(--color-tertiary-button-background);
+                color: var(--color-tertiary-button-text);
                 display: flex;
                 justify-content: center;
                 align-items: center;
@@ -342,8 +360,7 @@
                 border-radius: 5px !important;
                 font-size: 12px;
                 &:hover {
-                    background-color: $midnight-blue;
-                    color: $white;
+                    background-color: var(--color-tertiary-button-background-hover);
                 }
             }
         }
@@ -361,8 +378,8 @@
             p {
                 span {
                     small {
-                        background: $dark-fog;
-                        color: $omiod;
+                        background: var(--color-primary-company-branch-wrap-company-refresh-small-background);
+                        color: var(--color-primary-company-branch-wrap-company-refresh-small);
                         font-size: 10px;
                         line-height: 12.4px;
                         font-weight: 700;
@@ -419,11 +436,13 @@
                                 &.dropdown-toggle {
                                     padding: 8px 20px;
                                     span {
-                                        color: $omiod;
+                                        color: var(--color-primary-company-branch-btn-group-dropdown-toggle-span);
                                     }
                                 }
                                 &.active {
-                                    background-color: $dark-alice-blue;
+                                    background-color: var(
+                                        --color-primary-company-branch-company-list-btn-group-open-span-active
+                                    );
                                     position: sticky;
                                     top: 0;
                                     z-index: 991;
@@ -460,13 +479,13 @@
     }
 }
 .digit-blue {
-    color: $cornflower !important;
+    color: var(--color-primary-company-branch-digit-blue) !important;
 }
 .digit-orange {
-    color: $orange-new !important;
+    color: var(--color-primary-company-branch-digit-orange) !important;
 }
 .icon-reload {
-    color: $omiod;
+    color: var(--color-primary-company-branch-icon-reload);
 }
 .icon-plus,
 .icon-link-arrow {
@@ -476,6 +495,16 @@
 }
 .font-semibold {
     font-family: "opensans-semibold";
+}
+
+::ng-deep {
+    .custom-tabs {
+        .nav-link.active {
+            span {
+                color: var(--color-common-senary-text) !important;
+            }
+        }
+    }
 }
 
 @media screen and (max-height: 800px) {

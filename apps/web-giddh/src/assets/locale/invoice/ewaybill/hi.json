@@ -12,7 +12,7 @@
 	"over_dimensional_cargo": "ओवर डायमेंशनल कार्गो",
 	"vehicle_type_required": "वाहन का प्रकार*",
 	"vehicle_type": "वाहन का प्रकार",
-	"vehicle_no_label": "वाहन संख्या*",
+	"vehicle_no_label": "वाहन संख्या",
 	"vehicle_no_placeholder": "उल्लेख संख्या",
 	"from_place_label": "जगह से*",
 	"from_place_placeholder": "शहर दर्ज करें",
@@ -96,5 +96,6 @@
 	"search_eway": "ई-वे खोजें",
 	"search_particular": "विशेष खोजें",
 	"download_eway_bill": "ई-वे बिल डाउनलोड करें",
-	"mode_of_transportation": "परिवहन के साधन"
+	"mode_of_transportation": "परिवहन के साधन",
+    "pincode_required": "ईवे बिल बनाने से पहले कृपया वाउचर में पिनकोड अपडेट करें।"
 }

@@ -11,6 +11,7 @@
         (dateChange)="dateChange($event)"
         [class]="cssClass"
         [disabled]="disabled"
+        [ngClass]="{ 'error-box': showError }"
     />
     <ng-container *ngIf="showToggleIcon">
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>

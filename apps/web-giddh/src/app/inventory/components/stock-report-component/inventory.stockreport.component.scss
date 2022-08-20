@@ -1,7 +1,5 @@
-@import "../../../../assets/css/color.scss";
-
 .bd-rt {
-    border-color: $gainsboro;
+    border-color: var(--color-iron);
 }
 
 .flex-fill {
@@ -23,7 +21,7 @@
 
 .td-search-box div i {
     margin-top: 1px;
-    color: $wild-blue-yonder;
+    color: var(--color-blue);
     padding-right: 8px;
     cursor: pointer;
     display: flex;
@@ -43,9 +41,9 @@
     min-width: 100%;
     padding: 11px;
     padding-right: 40px;
-    color: $nero;
+    color: var(--color-nero);
     border: none;
-    background-color: $white-smoke;
+    background-color: var(--color-wild-sand);
 }
 
 .td-search-box .input-container i {
@@ -55,7 +53,7 @@
 }
 
 .basic > thead > tr > th {
-    border-right: 1px solid $gainsboro;
+    border-right: 1px solid var(--color-iron);
 }
 
 .icon-pointer .glyphicon {
@@ -63,42 +61,42 @@
 }
 
 .td-search-box div i:hover {
-    color: $nobel;
+    color: var(--color-gray);
 }
 
 .dropdown-menu > li > a:hover {
-    color: $chetwode-blue;
-    background: $whisper;
+    color: var(--color-blue);
+    background: var(--color-dark-fog);
 }
 .stock-input {
     background-color: transparent !important;
-    border-bottom: 1px dotted $white !important;
+    border-bottom: 1px dotted var(--color-white) !important;
     border: none;
     width: auto;
     padding: 0 !important;
     height: auto;
     text-align: center;
     min-width: 155px;
-    color: $white;
+    color: var(--color-white);
 }
 .inventory-stock-table input.form-control.stock-input {
-    color: $nero;
+    color: var(--color-nero);
     text-align: left;
 }
 .table-border input.form-control.stock-input {
-    color: $nero;
+    color: var(--color-nero);
     text-align: left;
 }
 .footer-tr td {
-    background-color: $whisper;
+    background-color: var(--color-dark-fog);
 }
 .total-footer {
-    background-color: $white;
+    background-color: var(--color-white);
     display: flex;
     .foot-item {
         padding: 41px;
         h2 {
-            color: $wistful;
+            color: var(--color-gray);
             font-size: 20px;
             margin-bottom: 10px;
         }
@@ -109,26 +107,26 @@
 }
 
 .journal-voucher {
-    color: $silver;
+    color: var(--color-gray);
 }
 
 .purchase {
-    color: $primary;
+    color: var(--color-blue);
 }
 .sales {
-    color: $success-green;
+    color: var(--color-success-enable);
 }
 
 /* class name same as what we are getting data */
 
 .journal {
-    color: $hint-of-cyan;
+    color: var(--color-primary-inventory-stock-report-journal);
 }
 .credit {
-    color: $faux-true;
+    color: var(--color-primary-credit);
 }
 .debit {
-    color: $orange;
+    color: var(--color-orange);
 }
 .modal-content {
     border-radius: 0px;
@@ -150,11 +148,11 @@
 
 /* voucher type DDL */
 .c-3 {
-    color: $white;
+    color: var(--color-white);
 }
 .btn-group-voucher-type {
     width: 100%;
-    color: $nero !important;
+    color: var(--color-nero) !important;
     white-space: nowrap;
     min-width: 140px;
     max-width: 140px;
@@ -164,7 +162,7 @@
     button {
         text-align: left;
         width: 100%;
-        color: $nero;
+        color: var(--color-nero);
         margin-right: 0;
         &:focus,
         &:hover {
@@ -182,7 +180,7 @@
     border-radius: 0px;
     padding: 0px;
     input[type="checkbox"]:after {
-        border: 1px solid $gainsboro;
+        border: 1px solid var(--color-iron);
         width: 15px;
         height: 15px;
         top: 2px;
@@ -191,12 +189,12 @@
         top: 6px;
         width: 9px;
         height: 5px;
-        border: 2px solid $white;
+        border: 2px solid var(--color-white);
         border-top-style: none;
         border-right-style: none;
     }
     li {
-        color: $night-rider;
+        color: var(--color-nero);
         padding: 3px 7px !important;
         font-size: 12px;
     }
@@ -206,7 +204,7 @@
     }
 }
 button[aria-expanded="true"] i {
-    color: $dim-gray;
+    color: var(--color-gray);
 }
 /* voucher type DDL */
 
@@ -214,7 +212,7 @@ button[aria-expanded="true"] i {
     text-transform: capitalize;
 }
 .table-border {
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--color-iron);
 }
 .border-none {
     border: none !important;
@@ -229,10 +227,10 @@ button[aria-expanded="true"] i {
 .icon-pointer .icon-sort-asc {
     line-height: 20px;
     width: 15px;
-    color: $wild-blue-yonder;
+    color: var(--color-blue);
 }
 .icon-pointer .active-text-color {
-    color: $deep-sky-blue;
+    color: var(--color-blue);
 }
 .sticky-footer-sale-amount {
     .inner-content-footer {
@@ -248,7 +246,7 @@ button[aria-expanded="true"] i {
         }
         .operators {
             font-size: 39px;
-            color: $wistful;
+            color: var(--color-gray);
         }
         h2 {
             font-size: 18px;
@@ -268,13 +266,13 @@ button[aria-expanded="true"] i {
     width: 100% !important;
 }
 .text-purple {
-    color: $chetwode-blue;
+    color: var(--color-blue);
 }
 .bg-white {
-    background: $white;
+    background: var(--color-white);
 }
 .btn-link-2 {
-    color: $primary;
+    color: var(--color-blue);
 }
 .mr-b100 {
     margin-bottom: 100px;
@@ -288,10 +286,10 @@ button[aria-expanded="true"] i {
     align-items: center;
     font-size: 18px;
     margin-left: 10px;
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--color-iron);
     border-radius: 5px;
-    color: $midnight-blue;
-    background: $white;
+    color: var(--color-giddh-blue);
+    background: var(--color-white);
     .icon-advance-filter {
         padding: 10px;
     }
@@ -304,10 +302,10 @@ button[aria-expanded="true"] i {
     cursor: pointer;
 }
 button.btn.btn-filter {
-    background: $whisper;
-    border: 1px solid $whisper;
+    background: var(--color-dark-fog);
+    border: 1px solid var(--color-iron);
     font-size: 14px;
-    color: $midnight-blue;
+    color: var(--color-giddh-blue);
     display: inline-flex;
     justify-content: space-between;
     align-items: center;
@@ -329,12 +327,12 @@ button.btn.btn-filter {
     display: table;
 }
 .icon-btn {
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--color-common-secondary-border);
     border-radius: 5px;
     height: 36px;
     width: 36px;
     margin-top: 0;
-    background-color: $white;
+    background-color: var(--color-white);
     .strong {
         font-weight: bold;
     }
@@ -344,7 +342,7 @@ button.btn.btn-filter {
         tr {
             &:last-child {
                 td {
-                    border-bottom: 1px solid $gainsboro;
+                    border-bottom: 1px solid var(--color-iron);
                 }
             }
         }
@@ -422,7 +420,7 @@ button.btn.btn-filter {
     }
 
     .table-border {
-        border: 0px solid $white !important;
+        border: 0px solid var(--color-white) !important;
     }
 }
 

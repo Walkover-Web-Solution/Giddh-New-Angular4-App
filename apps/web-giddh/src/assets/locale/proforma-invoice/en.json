@@ -11,6 +11,7 @@
     "customer_name": "Customer Name",
     "balance_due": "Balance Due",
     "copy_previous_invoices": "Copy Previous [INVOICE_TYPE] Invoices",
+    "copy_previous_dr_cr": "Copy Previous [INVOICE_TYPE]",
     "customer_details": "Customer Details",
     "vendor_details": "Vendor Details",
     "billing_address": "Billing Address",
@@ -47,7 +48,6 @@
     "attachment": "Attachment",
     "drag_drop_file": "Drag/Drop file or click here",
     "deposit": "Deposit",
-    "advance_receipt": "Advance Receipt",
     "adjust_amount": "Adjust Amount",
     "product_service_description": "Product/Service Description",
     "qty": "Qty",
@@ -62,6 +62,7 @@
     "add_customer": "Add Customer",
     "add_vendor": "Add Vendor",
     "invoice_no": "Invoice #",
+    "bill_number":"Bill Number",
     "proforma_no": "Proforma #",
     "estimate_no": "Estimate #",
     "purchase_bill_no": "Purchase Bill #",
@@ -103,5 +104,8 @@
     "date_change_confirmation_heading": "Date Change Confirmation",
     "change_single_entry_date": "Do you want to change the entry date as well?",
     "change_all_entry_dates": "Do you want to change the all entries date with this date?",
-    "exchange_label": "Exchange"
+    "exchange_label": "Exchange",
+    "confirm_delete_file": "Are you sure you want to delete the attached file?",
+    "enter_amount": "Please enter deposit amount",
+    "voucher_number_required": "Voucher number is mandatory."
 }

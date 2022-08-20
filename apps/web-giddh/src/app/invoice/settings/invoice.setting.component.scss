@@ -1,4 +1,3 @@
-@import "../../../assets/css/color.scss";
 .webook-list li {
     list-style: none;
     margin-bottom: 7px;
@@ -20,7 +19,7 @@
 
 .icon-estimate .path1:before {
     content: "\e900";
-    color: $skin-tone;
+    color: var(--color-primary-icon-estimate-path1-before);
 }
 
 .general-tab h4,
@@ -33,7 +32,7 @@
 .general-tab,
 .email-tab,
 .estimate-tab {
-    box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0px 3px 6px var(--color-primary-common-box-shadow);
     margin: 0 15px;
     label {
         font-size: 14px;
@@ -41,7 +40,7 @@
 }
 
 h4 > span {
-    color: $nobel !important;
+    color: var(--color-gray) !important;
     font-size: 12px !important;
 }
 
@@ -91,7 +90,7 @@ input.form-control.send-alert {
 
 .send-alert a {
     padding-left: 5px;
-    color: $primary;
+    color: var(--color-blue);
 }
 
 .p-0 {
@@ -114,7 +113,7 @@ input.form-control.send-alert {
         left: 0;
         right: 15px;
         font-size: 12px;
-        color: $dark-gray;
+        color: var(--color-abbey);
         text-align: left;
     }
     div {
@@ -144,7 +143,7 @@ span.viasocket {
 }
 
 span.viasocket a {
-    color: $silver;
+    color: var(--color-gray);
 }
 
 .invoice-lock-date {
@@ -160,7 +159,7 @@ span.viasocket a {
     position: absolute;
     right: 10px;
     top: 25%;
-    color: $dark-gray;
+    color: var(--color-abbey);
     font-size: 16px;
 }
 
@@ -183,17 +182,17 @@ span.viasocket a {
     display: flex;
     align-items: center;
     justify-content: center;
-    color: $nobel;
+    color: var(--color-gray);
 }
 .verified-text {
-    color: $light-sea-green;
+    color: var(--color-teal);
     padding: 6px 10px;
     margin-right: 10px;
     margin-left: 0;
 }
 .delete-verified-icon {
     padding: 6px 10px;
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--color-primary-button-border);
     border-radius: 5px;
     display: inline-flex;
     justify-content: center;
@@ -234,9 +233,17 @@ span.viasocket a {
         margin-top: 5px;
     }
 
-    #invoice-setting label {
-        float: left;
-        width: 88%;
+    #invoice-setting {
+        ngx-switch + label {
+            margin-left: 39px;
+        }
+        label {
+            float: left;
+            width: 88%;
+        }
+        .flex-container {
+            display: flex;
+        }
     }
 
     .form-group.clearfix.max-width-150 {

@@ -14,7 +14,7 @@ import {
 } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
-import * as moment from 'moment/moment';
+import * as dayjs from 'dayjs';
 import { ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { TaxResponse } from '../../models/api-models/Company';
@@ -23,6 +23,7 @@ import { giddhRoundOff } from '../../shared/helpers/helperFunctions';
 import { AppState } from '../../store';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { isEqual, orderBy } from '../../lodash-optimized';
+import { GeneralService } from '../../services/general.service';
 
 export const TAX_CONTROL_VALUE_ACCESSOR: any = {
     provide: NG_VALUE_ACCESSOR,
@@ -92,7 +93,8 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
 
     constructor(
         private cdr: ChangeDetectorRef,
-        private store: Store<AppState>
+        private store: Store<AppState>,
+        private generalService: GeneralService
     ) { }
 
     public ngOnInit(): void {
@@ -111,15 +113,14 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
     public ngOnChanges(changes: SimpleChanges) {
         // change
         if ('date' in changes && changes.date.currentValue !== changes.date.previousValue) {
-            if (moment(changes['date'].currentValue, GIDDH_DATE_FORMAT).isValid()) {
+            if (dayjs(changes['date'].currentValue, GIDDH_DATE_FORMAT).isValid()) {
                 this.taxSum = 0;
                 this.prepareTaxObject();
                 this.change();
             }
         }
 
-        if ('applicableTaxes' in changes && (Array.isArray(changes.applicableTaxes.currentValue)) &&
-            !isEqual(changes.applicableTaxes.currentValue, changes.applicableTaxes.previousValue)) {
+        if ('applicableTaxes' in changes && (Array.isArray(changes.applicableTaxes.currentValue)) && !isEqual(changes.applicableTaxes.currentValue, changes.applicableTaxes.previousValue)) {
             this.prepareTaxObject();
             this.change();
         }
@@ -161,7 +162,7 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
                         this.taxRenderData[index].isChecked ? this.taxRenderData[index].isChecked : false;
                 if (this.date && tax.taxDetail && tax.taxDetail.length) {
                     this.taxRenderData[index].amount =
-                        (moment(tax.taxDetail[0].date, GIDDH_DATE_FORMAT).isSame(moment(this.date, GIDDH_DATE_FORMAT)) || moment(tax.taxDetail[0].date, GIDDH_DATE_FORMAT) < moment(this.date, GIDDH_DATE_FORMAT)) ?
+                        (dayjs(tax.taxDetail[0].date, GIDDH_DATE_FORMAT).isSame(dayjs(this.date, GIDDH_DATE_FORMAT)) || dayjs(tax.taxDetail[0].date, GIDDH_DATE_FORMAT) < dayjs(this.date, GIDDH_DATE_FORMAT)) ?
                             tax.taxDetail[0].taxValue : 0;
                 }
             } else {
@@ -173,13 +174,13 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
 
                 if (this.date) {
                     let taxObject = orderBy(tax.taxDetail, (p: ITaxDetail) => {
-                        return moment(p.date, GIDDH_DATE_FORMAT);
+                        return dayjs(p.date, GIDDH_DATE_FORMAT);
                     }, 'desc');
-                    let exactDate = taxObject.filter(p => moment(p.date, GIDDH_DATE_FORMAT).isSame(moment(this.date, GIDDH_DATE_FORMAT)));
+                    let exactDate = taxObject.filter(p => dayjs(p.date, GIDDH_DATE_FORMAT).isSame(dayjs(this.date, GIDDH_DATE_FORMAT)));
                     if (exactDate.length > 0) {
                         taxObj.amount = exactDate[0].taxValue;
                     } else {
-                        let filteredTaxObject = taxObject.filter(p => moment(p.date, GIDDH_DATE_FORMAT) < moment(this.date, GIDDH_DATE_FORMAT));
+                        let filteredTaxObject = taxObject.filter(p => dayjs(p.date, GIDDH_DATE_FORMAT) < dayjs(this.date, GIDDH_DATE_FORMAT));
                         if (filteredTaxObject.length > 0) {
                             taxObj.amount = filteredTaxObject[0].taxValue;
                         } else {
@@ -286,7 +287,7 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
             }
         }, 100);
         this.taxAmountSumEvent.emit(this.taxSum);
-        if(this.taxRenderData?.length > 0) {
+        if (this.taxRenderData?.length > 0) {
             this.selectedTaxEvent.emit(this.selectedTaxes);
         }
     }
@@ -372,4 +373,23 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
         }
     }
 
+    /**
+     * Adds styling on focused Dropdown List
+     *
+     * @param {HTMLElement} taxLabel
+     * @memberof TaxControlComponent
+     */
+    public taxLabelFocusing(taxLabel: HTMLElement): void {
+        this.generalService.dropdownFocusIn(taxLabel);
+    }
+
+    /**
+     * Removes styling from focused Dropdown List
+     *
+     * @param {HTMLElement} taxLabel
+     * @memberof TaxControlComponent
+     */
+    public taxLabelBluring(taxLabel: HTMLElement): void {
+        this.generalService.dropdownFocusOut(taxLabel);
+    }
 }

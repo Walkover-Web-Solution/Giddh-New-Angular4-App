@@ -11,7 +11,7 @@ import {
     ViewChild,
 } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
-import * as moment from 'moment/moment';
+import * as dayjs from 'dayjs';
 import { TaxResponse } from '../../../models/api-models/Company';
 import { INameUniqueName } from '../../../models/api-models/Inventory';
 import { ITaxDetail } from '../../../models/interfaces/tax.interface';
@@ -19,6 +19,7 @@ import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
 import { TaxControlData } from '../../../theme/tax-control/tax-control.component';
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 import { difference, orderBy } from '../../../lodash-optimized';
+import { GeneralService } from '../../../services/general.service';
 
 export const TAX_CONTROL_VALUE_ACCESSOR: any = {
     provide: NG_VALUE_ACCESSOR,
@@ -80,7 +81,7 @@ export class UpdateLedgerTaxControlComponent implements OnDestroy, OnChanges {
     public formattedTotal: string;
     private selectedTaxes: UpdateLedgerTaxData[] = [];
 
-    constructor() {
+    constructor(private generalService: GeneralService) {
 
     }
 
@@ -90,7 +91,7 @@ export class UpdateLedgerTaxControlComponent implements OnDestroy, OnChanges {
             if (hasApplicableTaxesChanged) {
                 this.taxRenderData = [];
             }
-            const hasDateChanged = changes['date'] && changes['date'].currentValue !== changes['date'].previousValue && moment(changes['date'].currentValue, GIDDH_DATE_FORMAT).isValid();
+            const hasDateChanged = changes['date'] && changes['date'].currentValue !== changes['date'].previousValue && dayjs(changes['date'].currentValue, GIDDH_DATE_FORMAT).isValid();
             if (hasApplicableTaxesChanged || hasDateChanged) {
                 this.sum = 0;
                 this.prepareTaxObject();
@@ -101,6 +102,7 @@ export class UpdateLedgerTaxControlComponent implements OnDestroy, OnChanges {
         if (changes['totalForTax'] && changes['totalForTax'].currentValue !== changes['totalForTax'].previousValue ||
             changes['isAdvanceReceipt'] && changes['isAdvanceReceipt'].currentValue !== changes['isAdvanceReceipt'].previousValue) {
             this.calculateInclusiveOrExclusiveFormattedTax();
+            this.taxAmountSumEvent.emit(this.sum);
         }
     }
 
@@ -121,7 +123,7 @@ export class UpdateLedgerTaxControlComponent implements OnDestroy, OnChanges {
             if (index > -1) {
                 if (this.date && tax.taxDetail && tax.taxDetail.length) {
                     this.taxRenderData[index].amount =
-                        (moment(tax.taxDetail[0].date, GIDDH_DATE_FORMAT).isSame(moment(this.date, GIDDH_DATE_FORMAT)) || moment(tax.taxDetail[0].date, GIDDH_DATE_FORMAT) < moment(this.date, GIDDH_DATE_FORMAT)) ?
+                        (dayjs(tax.taxDetail[0].date, GIDDH_DATE_FORMAT).isSame(dayjs(this.date, GIDDH_DATE_FORMAT)) || dayjs(tax.taxDetail[0].date, GIDDH_DATE_FORMAT) < dayjs(this.date, GIDDH_DATE_FORMAT)) ?
                             tax.taxDetail[0].taxValue : 0;
                 }
             } else {
@@ -131,13 +133,13 @@ export class UpdateLedgerTaxControlComponent implements OnDestroy, OnChanges {
                 taxObj.uniqueName = tax?.uniqueName;
                 if (this.date) {
                     let taxObject = orderBy(tax.taxDetail, (p: ITaxDetail) => {
-                        return moment(p.date, GIDDH_DATE_FORMAT);
+                        return dayjs(p.date, GIDDH_DATE_FORMAT);
                     }, 'desc');
-                    let exactDate = taxObject.filter(p => moment(p.date, GIDDH_DATE_FORMAT).isSame(moment(this.date, GIDDH_DATE_FORMAT)));
+                    let exactDate = taxObject.filter(p => dayjs(p.date, GIDDH_DATE_FORMAT).isSame(dayjs(this.date, GIDDH_DATE_FORMAT)));
                     if (exactDate && exactDate.length > 0) {
                         taxObj.amount = exactDate[0].taxValue;
                     } else {
-                        let filteredTaxObject = taxObject.filter(p => moment(p.date, GIDDH_DATE_FORMAT) < moment(this.date, GIDDH_DATE_FORMAT));
+                        let filteredTaxObject = taxObject.filter(p => dayjs(p.date, GIDDH_DATE_FORMAT) < dayjs(this.date, GIDDH_DATE_FORMAT));
                         if (filteredTaxObject && filteredTaxObject.length > 0) {
                             taxObj.amount = filteredTaxObject[0].taxValue;
                         } else {
@@ -326,5 +328,25 @@ export class UpdateLedgerTaxControlComponent implements OnDestroy, OnChanges {
             // Exclusive tax calculation
             this.formattedTotal = `${giddhRoundOff(((this.totalForTax * this.sum) / 100), 2)}`;
         }
+    }
+
+    /**
+     * Adds styling on focused Dropdown List
+     *
+     * @param {HTMLElement} taxLabel
+     * @memberof UpdateLedgerTaxControlComponent
+     */
+    public taxLabelFocusing(taxLabel: HTMLElement): void {
+        this.generalService.dropdownFocusIn(taxLabel);
+    }
+
+    /**
+     * Removes styling from focused Dropdown List
+     *
+     * @param {HTMLElement} taxLabel
+     * @memberof UpdateLedgerTaxControlComponent
+     */
+    public taxLabelBluring(taxLabel: HTMLElement): void {
+        this.generalService.dropdownFocusOut(taxLabel);
     }
 }

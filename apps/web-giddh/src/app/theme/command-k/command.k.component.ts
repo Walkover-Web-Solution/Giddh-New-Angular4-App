@@ -9,6 +9,8 @@ import { CommandKRequest } from '../../models/api-models/Common';
 import { remove } from '../../lodash-optimized';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../store';
+import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
+import { GeneralActions } from '../../actions/general/general.actions';
 
 const DIRECTIONAL_KEYS = [
     LEFT_ARROW, RIGHT_ARROW, UP_ARROW, DOWN_ARROW
@@ -77,7 +79,9 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
         private zone: NgZone,
         private _generalService: GeneralService,
         private _commandKService: CommandKService,
-        private _cdref: ChangeDetectorRef
+        private _cdref: ChangeDetectorRef,
+        private groupWithAccountsAction: GroupWithAccountsAction,
+        private generalAction: GeneralActions
     ) {
         this.store.pipe(select(p => p.session.companyUniqueName), takeUntil(this.destroyed$)).subscribe(res => {
             this.activeCompanyUniqueName = res;
@@ -99,6 +103,7 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
         });
 
         this.searchSubject.next("");
+        document.querySelector("body")?.classList?.add("cmd-k");
     }
 
     /**
@@ -127,11 +132,22 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     /**
+     * Closes Master Page
+     *
+     * @memberof CommandKComponent
+     */
+    public closeMaster(): void {
+        this.store.dispatch(this.generalAction.addAndManageClosed());
+        this.store.dispatch(this.groupWithAccountsAction.HideAddAndManageFromOutside());
+    }
+
+    /**
      * Releases all the observables to avoid memory leaks
      *
      * @memberof CommandKComponent
      */
     public ngOnDestroy(): void {
+        document.querySelector("body")?.classList?.remove("cmd-k");
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
@@ -188,6 +204,7 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
             this.focusInSearchBox();
             this.searchCommandK(true);
         }
+        this.closeMaster();
     }
 
     /**

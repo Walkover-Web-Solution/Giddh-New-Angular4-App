@@ -104,6 +104,21 @@
                                     </sh-select>
                                 </div>
                             </div>
+                            <div class="col-12 col-sm-6">
+                                <div class="form-group">
+                                    <label>{{ localeData?.theme }}</label>
+                                    <sh-select
+                                        class="theme-selection"
+                                        [options]="availableThemes"
+                                        [placeholder]="localeData?.select_theme"
+                                        (selected)="setActiveTheme($event)"
+                                        [isFilterEnabled]="true"
+                                        name="activeTheme"
+                                        [(ngModel)]="activeTheme"
+                                    >
+                                    </sh-select>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

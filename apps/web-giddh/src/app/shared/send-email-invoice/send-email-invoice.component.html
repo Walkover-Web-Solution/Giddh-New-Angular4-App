@@ -27,13 +27,15 @@
                 voucherType !== 'proforma' &&
                 voucherType !== 'proformas' &&
                 voucherType !== 'estimates' &&
-                voucherType !== 'estimate'
+                voucherType !== 'estimate' &&
+                voucherType !== 'debit note' &&
+                voucherType !== 'credit note'
             "
         >
             <h3 class="font-16 mr-b05">{{ localeData?.invoice_copy }}</h3>
             <hr />
 
-            <div class="checkbox">
+            <div class="checkbox" *ngIf="voucherApiVersion === 2">
                 <label>
                     <input
                         name="originalCopy"
@@ -44,13 +46,6 @@
                         (change)="invoiceTypeChanged($event)"
                     />
                     {{ localeData?.original }}
-                    <input
-                        type="checkbox"
-                        value="Transport"
-                        (change)="invoiceTypeChanged($event)"
-                        [(ngModel)]="isTransport"
-                    />
-                    {{ localeData?.transport }}
                 </label>
             </div>
 

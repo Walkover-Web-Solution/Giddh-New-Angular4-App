@@ -1,0 +1,187 @@
+.voucher-sidebar-wrapper {
+    box-shadow: 3px 3px 6px var(--color-primary-common-box-shadow);
+    z-index: 9;
+}
+.voucher-search-box {
+    display: flex;
+    padding: 15px 10px 10px 0px;
+    justify-content: space-around;
+    position: relative;
+
+    .icon-search {
+        color: var(--color-gray);
+        left: 8px;
+        top: 26px;
+        z-index: 1;
+    }
+}
+.width-70 {
+    width: 70%;
+    flex: 1;
+}
+.voucher-sidebar {
+    background-color: var(--color-white);
+    padding: 0;
+    height: calc(100vh - 120px);
+
+    .single-voucher-details {
+        padding: 10px 15px;
+        border-bottom: 1px solid var(--color-iron);
+        list-style: none;
+    }
+    .voucher-number-date {
+        .order-number {
+            color: #2680eb;
+        }
+        .order-date {
+            color: #666;
+        }
+    }
+    .voucher-holder-name {
+        p {
+            color: #333;
+            font-size: 14px;
+            margin-top: 3px;
+            white-space: normal;
+            word-break: break-all;
+        }
+    }
+    .voucher-amount {
+        font-size: 12px;
+        line-height: 3.4;
+    }
+}
+.scroll-half {
+    height: 100vh !important;
+    overflow-y: auto !important;
+
+    .voucher-detail {
+        background-color: #f7f8fa;
+        padding-bottom: 0;
+
+        .voucher-detail-header {
+            padding-top: 30px;
+            padding-bottom: 25px;
+
+            h3.voucher-number {
+                font-size: 16px;
+                font-weight: 600;
+            }
+
+            p.account-holder-name {
+                font-size: 14px;
+                margin-top: 3px;
+            }
+
+            .edit-change-status {
+                text-align: right;
+
+                span.close-modal {
+                    display: inline-grid;
+                    justify-content: center;
+                    align-items: center;
+                    height: 34px;
+                    width: 34px;
+                    background-color: #ddd;
+                    border: 1px solid var(--color-iron);
+                    border-radius: 5px;
+                    position: static;
+                    transform: inherit;
+
+                    img {
+                        width: 16px;
+                        opacity: 0.6;
+                    }
+                }
+
+                .edit-action-btn-groups {
+                    display: flex;
+                    background-color: #fff;
+                    border: 1px solid var(--color-iron);
+                    margin-right: 10px;
+                    border-radius: 5px;
+
+                    span {
+                        border-left: 1px solid var(--color-iron);
+                        padding: 5px;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        height: 33px;
+                        width: 32px;
+
+                        a {
+                            color: #666;
+                            display: block;
+                            text-align: center;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    .voucher-image-section {
+        text-align: center;
+        background-color: #fff;
+        margin-bottom: 35px;
+        z-index: -9;
+        height: 100%;
+
+        .relative {
+            height: 100%;
+            .error {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                font-size: 36px;
+                margin: 0 auto;
+                color: var(--color-red);
+            }
+            .img-expand-collapse {
+                padding: 50px 50px 0 50px;
+            }
+            .pdf-expand-collapse {
+                padding: 50px 0px 0 0px;
+            }
+            .image-collapsed {
+                max-height: 130px;
+                overflow: hidden;
+                img {
+                    height: auto;
+                }
+            }
+            .preview-not-supported-attachment {
+                font-size: 15px;
+                margin: 16px;
+            }
+            .pdf-preview {
+                height: 100%;
+                margin-top: 50px;
+                h5 {
+                    background-color: var(--color-wild-sand);
+                    strong {
+                        color: var(--color-giddh-blue);
+                    }
+                }
+            }
+            .expand-file {
+                position: absolute;
+                right: 15px;
+                font-size: 14px;
+                margin: 15px;
+                top: 0;
+
+                a {
+                    color: var(--color-gray);
+                    span {
+                        margin-right: 5px;
+                    }
+                }
+            }
+        }
+    }
+}
+.preview-button {
+    margin-left: 5px;
+    min-width: 34px !important;
+}

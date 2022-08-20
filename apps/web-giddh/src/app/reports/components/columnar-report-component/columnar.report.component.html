@@ -64,23 +64,33 @@
             </div>
             <div class="row">
                 <div class="col-xl-3 col-md-8 col-sm-12 col-12 mr-b15 clear-both">
-                    <input
-                        type="checkbox"
+                    <ngx-switch
+                        [(status)]="exportRequest.showHideOpeningClosingBalance"
                         name="showHideOpeningClosingBalance"
                         id="showHideOpeningClosingBalance"
-                        [(ngModel)]="exportRequest.showHideOpeningClosingBalance"
-                    />&nbsp;<label for="showHideOpeningClosingBalance">{{ localeData?.opening_closing_balance }}</label>
+                        [onText]="commonLocaleData?.app_on"
+                        [offText]="commonLocaleData?.app_off"
+                        [onColor]="bootstrapToggleSwitch?.On"
+                        [offColor]="bootstrapToggleSwitch?.Off"
+                        [size]="bootstrapToggleSwitch?.Size"
+                    ></ngx-switch>
+                    &nbsp;<label for="showHideOpeningClosingBalance">{{ localeData?.opening_closing_balance }}</label>
                 </div>
             </div>
             <div class="row">
                 <div class="col-xl-3 col-md-8 col-sm-12 col-12 mr-b15 clear-both">
-                    <input
-                        type="checkbox"
+                    <ngx-switch
+                        [(status)]="exportRequest.balanceTypeAsSign"
                         name="balanceTypeAsSign"
                         id="balanceTypeAsSign"
-                        [(ngModel)]="exportRequest.balanceTypeAsSign"
-                        (ngModelChange)="onBalanceTypeAsSignChanged($event)"
-                    />&nbsp;<label for="balanceTypeAsSign">{{ localeData?.cr_dr }}</label>
+                        [onText]="commonLocaleData?.app_on"
+                        [offText]="commonLocaleData?.app_off"
+                        [onColor]="bootstrapToggleSwitch?.On"
+                        [offColor]="bootstrapToggleSwitch?.Off"
+                        [size]="bootstrapToggleSwitch?.Size"
+                        (statusChange)="onBalanceTypeAsSignChanged($event)"
+                    ></ngx-switch>
+                    &nbsp;<label for="balanceTypeAsSign">{{ localeData?.cr_dr }}</label>
                 </div>
             </div>
             <div class="row">

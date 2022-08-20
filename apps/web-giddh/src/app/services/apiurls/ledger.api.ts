@@ -35,10 +35,16 @@ export const LEDGER_API = {
     GET_CURRENCY_RATE: 'currency/rate?from=:from&to=:to&date=:date',
 
     GET_UNPAID_INVOICE_LIST: 'v2/company/:companyUniqueName/invoices/list?accountUniqueName=:accountUniqueName&status=:accStatus',
-    GET_VOUCHER_INVOICE_LIST: 'company/:companyUniqueName/vouchers/invoice-list?voucherDate=:voucherDate',
+    GET_VOUCHER_INVOICE_LIST: 'company/:companyUniqueName/vouchers/invoice-list?voucherDate=:voucherDate&count=:count&page=:page&number=:number',
     GET_COLUMNAR_REPORT: 'v2/company/:companyUniqueName/groups/:groupUniqueName/export/account-balances',
     // Export Ledger get columnar report table
     EXPORT_LEDGER_COLUMNAR_REPORT_TABLE: 'company/:companyUniqueName/accounts/:accountUniqueName/columnar-report?from=:from&to=:to',
     IMPORT_STATEMENT: 'company/:companyUniqueName/import-pdf/bank-statement/?entity=pdf&accountUniqueName=:accountUniqueName',
-    DELETE_BANK_TRANSACTIONS: 'company/:companyUniqueName/bank/accounts/:accountUniqueName/transactions'
+    DELETE_BANK_TRANSACTIONS: 'company/:companyUniqueName/bank/accounts/:accountUniqueName/transactions',
+
+    // Export Ledger Entry and Group Ledger entry
+    EXPORT: 'company/:companyUniqueName/exports',
+
+    //Export Bill to Bill Report 
+    EXPORT_BILL_TO_BILL: 'v4/company/:companyUniqueName/accounts/:accountUniqueName/vouchers/bill-to-bill/export?from=:from&to=:to'
 };

@@ -6,7 +6,6 @@ import { AppState } from '../../store';
 import { AddAccountRequest, UpdateAccountRequest } from '../../models/api-models/Account';
 import { AccountsAction } from '../../actions/accounts.actions';
 import { IOption } from '../../theme/ng-select/option.interface';
-import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
 
 @Component({
     selector: 'generic-aside-menu-account',
@@ -24,7 +23,8 @@ export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnCh
     @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
     @Output() public addEvent: EventEmitter<AddAccountRequest> = new EventEmitter();
     @Output() public updateEvent: EventEmitter<UpdateAccountRequest> = new EventEmitter();
-
+    /** Emiting true if account modal needs to be closed */
+    @Output() public closeAccountModal: EventEmitter<boolean> = new EventEmitter(false);
     public flatAccountWGroupsList$: Observable<IOption[]>;
     public flatAccountWGroupsList: IOption[];
     public activeGroupUniqueName: string;
@@ -68,15 +68,12 @@ export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnCh
     public commonLocaleData: any = {};
     /** This will hold account action text */
     public actionAccount: string = "";
-    /** Holds true if we need to recall custom field api in create/update account */
-    public reloadCustomFields: boolean = false;
     /** Holds true if master is open */
     private isMasterOpen: boolean = false;
 
     constructor(
         private store: Store<AppState>,
         private accountsAction: AccountsAction,
-        private groupWithAccountsAction: GroupWithAccountsAction
     ) {
         // account-add component's property
         this.createAccountInProcess$ = this.store.pipe(select(state => state.sales.createAccountInProcess), takeUntil(this.destroyed$));
@@ -85,21 +82,19 @@ export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnCh
 
     public ngOnInit() {
         this.showBankDetail = this.activeGroupUniqueName === 'sundrycreditors';
-
         this.store.pipe(select(state => state.groupwithaccounts.activeTab), takeUntil(this.destroyed$)).subscribe(activeTab => {
-            if(activeTab === 1) {
-                this.reloadCustomFields = false;
+            if (activeTab === 1) {
                 this.isMasterOpen = true;
             } else {
-                if(this.isMasterOpen) {
+                if (this.isMasterOpen) {
                     this.isMasterOpen = false;
-                    this.reloadCustomFields = true;
                 }
             }
         });
     }
 
     public addNewAcSubmit(accRequestObject: AddAccountRequest) {
+        this.store.dispatch(this.accountsAction.resetActiveGroup());
         this.addEvent.emit(accRequestObject);
     }
 
@@ -108,7 +103,10 @@ export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnCh
     }
 
     public closeAsidePane(event) {
-        this.closeAsideEvent.emit(event);
+        if (event) {
+            this.store.dispatch(this.accountsAction.resetActiveGroup());
+            this.closeAsideEvent.emit(event);
+        }
     }
 
     public isGroupSelected(event) {
@@ -160,19 +158,6 @@ export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnCh
     public translationComplete(event: any): void {
         if (event) {
             this.actionAccount = this.selectedAccountUniqueName ? this.commonLocaleData?.app_update_account : this.commonLocaleData?.app_create_account;
-        }
-    }
-
-    /**
-     * This will show custom fields tab if clicked create custom field from add/update account
-     *
-     * @param {boolean} event
-     * @memberof GenericAsideMenuAccountComponent
-     */
-     public showCustomFieldsTab(event: boolean) {
-        if(event) {
-            this.store.dispatch(this.groupWithAccountsAction.updateActiveTabOpenAddAndManage(1));
-            this.store.dispatch(this.groupWithAccountsAction.OpenAddAndManageFromOutside(''));
         }
     }
 }

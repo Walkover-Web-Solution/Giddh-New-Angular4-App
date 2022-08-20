@@ -46,8 +46,6 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
     public deleteAccountSuccess$: Observable<boolean>;
     public accountDetails: any = '';
     public breadcrumbUniquePath: string[] = [];
-    /** Holds true if we need to recall custom field api in create/update account */
-    public reloadCustomFields: boolean = false;
     /** Holds true if master is open */
     private isMasterOpen: boolean = false;
     // private below
@@ -108,12 +106,10 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
 
         this.store.pipe(select(state => state.groupwithaccounts.activeTab), takeUntil(this.destroyed$)).subscribe(activeTab => {
             if(activeTab === 1) {
-                this.reloadCustomFields = false;
                 this.isMasterOpen = true;
             } else {
                 if(this.isMasterOpen) {
                     this.isMasterOpen = false;
-                    this.reloadCustomFields = true;
                 }
             }
         });
@@ -163,10 +159,10 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
         let obj;
         obj = _.map(rawList, (item: any) => {
             obj = {};
-            obj.name = item.name;
-            obj.uniqueName = item.uniqueName;
-            obj.synonyms = item.synonyms;
-            obj.parentGroups = item.parentGroups;
+            obj.name = item?.name;
+            obj.uniqueName = item?.uniqueName;
+            obj.synonyms = item?.synonyms;
+            obj.parentGroups = item?.parentGroups;
             return obj;
         });
         return obj;
@@ -179,8 +175,8 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
             let result;
             newParents = _.union([], parents);
             newParents.push({
-                name: listItem.name,
-                uniqueName: listItem.uniqueName
+                name: listItem?.name,
+                uniqueName: listItem?.uniqueName
             });
             listItem = Object.assign({}, listItem, { parentGroups: [] });
             if (listItem) {
@@ -213,23 +209,10 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
         this.accountService.GetAccountDetailsV2(accountUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.body) {
                 const accountDetails = response.body;
-                this.showBankDetail = accountDetails.parentGroups.some(parent => parent.uniqueName === 'sundrycreditors');
+                this.showBankDetail = accountDetails.parentGroups.some(parent => parent?.uniqueName === 'sundrycreditors');
             } else {
                 this.showBankDetail = false;
             }
         });
-    }
-
-    /**
-     * This will show custom fields tab if clicked create custom field from add/update account
-     *
-     * @param {boolean} event
-     * @memberof AsideMenuAccountInContactComponent
-     */
-     public showCustomFieldsTab(event: boolean) {
-        if(event) {
-            this.store.dispatch(this.groupWithAccountsAction.updateActiveTabOpenAddAndManage(1));
-            this.store.dispatch(this.groupWithAccountsAction.OpenAddAndManageFromOutside(''));
-        }
     }
 }

@@ -17,6 +17,7 @@ import { saveAs } from 'file-saver';
 import { PurchaseOrderActions } from '../../actions/purchase-order/purchase-order.action';
 import { DomSanitizer } from '@angular/platform-browser';
 import { GeneralService } from '../../services/general.service';
+import { PerfectScrollbarComponent } from 'ngx-perfect-scrollbar';
 
 @Component({
     selector: 'purchase-order-preview',
@@ -45,6 +46,8 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
     @ViewChild('attachedDocumentPreview') attachedDocumentPreview: ElementRef;
     /** Instance of PDF container iframe */
     @ViewChild('pdfContainer', { static: false }) pdfContainer: ElementRef;
+    /** Instance of perfect scrollbar */
+    @ViewChild('perfectScrollbar', { static: false }) public perfectScrollbar: PerfectScrollbarComponent;
     /* Modal instance */
     public modalRef: BsModalRef;
     /* This will hold state of activity history aside pan */
@@ -89,6 +92,8 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
     public sanitizedPdfFileUrl: any = '';
     /** PDF src */
     public pdfFileURL: any = '';
+    /** Stores the voucher API version of current company */
+    public voucherApiVersion: 1 | 2;
     /** True if left sidebar is expanded */
     private isSidebarExpanded: boolean = false;
 
@@ -104,7 +109,7 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
         private domSanitizer: DomSanitizer,
         private generalService: GeneralService
     ) {
-
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
     }
 
     /**
@@ -131,6 +136,7 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
             if (this.poSearch) {
                 this.filterPo(this.poSearch);
             }
+            this.scrollToActiveItem();
         }
 
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
@@ -188,6 +194,7 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
             if (this.poSearch) {
                 this.filterPo(this.poSearch);
             }
+            this.scrollToActiveItem();
         }
 
         if (changes.purchaseOrderUniqueName && changes.purchaseOrderUniqueName.currentValue && changes.purchaseOrderUniqueName.currentValue !== this.purchaseOrder.uniqueName) {
@@ -549,5 +556,17 @@ export class PurchaseOrderPreviewComponent implements OnInit, OnChanges, OnDestr
                 item.voucherDate.includes(term) ||
                 item.grandTotal.amountForAccount.toString().includes(term);
         });
+    }
+
+    /**
+     * Scrolls to active item in the list
+     *
+     * @private
+     * @memberof PurchaseOrderPreviewComponent
+     */
+    private scrollToActiveItem(): void {
+        setTimeout(() => {
+            this.perfectScrollbar?.directiveRef?.scrollToElement(".single-invoice-detail.activeItem");
+        }, 200);
     }
 }

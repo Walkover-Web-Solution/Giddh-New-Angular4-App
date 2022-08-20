@@ -1,4 +1,9 @@
-@import "../../../assets/css/color.scss";
+@mixin custom-datepicker {
+    input {
+        width: 100% !important;
+        max-width: 100%;
+    }
+}
 
 .mf-stock-search-request-form .col-xs-1 {
     width: 11.33333333%;
@@ -45,8 +50,6 @@
 }
 .custom-datepicker {
     input {
-        width: 100% !important;
-        max-width: 100%;
         padding-left: 40px !important;
         text-align: left;
     }
@@ -54,7 +57,7 @@
 .no-btn.clear-filter {
     text-decoration: underline;
     font-family: "opensans-semibold";
-    color: $davy-grey;
+    color: var(--color-abbey);
     padding: 6px 0;
     outline: none !important;
     &:focus {
@@ -63,20 +66,20 @@
 }
 .manufacture-table {
     .bd-rl {
-        border-left: 1px solid $gainsboro !important;
+        border-left: 1px solid var(--color-iron) !important;
     }
     .bd-rr {
-        border-right: 1px solid $gainsboro !important;
+        border-right: 1px solid var(--color-iron) !important;
     }
     td.raw-material {
-        background-color: $gray-95;
+        background-color: var(--color-wild-sand);
         line-height: 2;
-        color: $matterhorn;
+        color: var(--color-abbey);
     }
     tr {
         &:hover {
             td.raw-material {
-                background-color: rgba(221, 225, 230, 0.5);
+                background-color: var(--color-iron);
             }
         }
     }
@@ -98,7 +101,8 @@
     th {
         border: none !important;
         padding: 0;
-        color: $midnight-blue !important;
+        color: var(--color-giddh-blue) !important;
+        background: none !important;
     }
 }
 .material-data {
@@ -116,10 +120,13 @@
     font-family: "opensans-regular";
 }
 .row-gray-background th {
-    background-color: $medium-gray;
+    background-color: var(--color-primary-mf-report-row-gray-th-background);
 }
 .mf-report-head {
-    margin-top: 55px;
+    margin-top: 15px;
+    &.parent {
+        margin-top: 55px !important;
+    }
 }
 
 .table-responsive {
@@ -217,14 +224,16 @@
     .mf-report-head {
         margin-top: 15px;
     }
+    @include custom-datepicker();
 }
 
 @media (max-width: 768px) {
+    @include custom-datepicker();
     .material-data {
         display: flex;
         width: 100%;
         padding: 10px 15px 0 !important;
-        background-color: $gray-95;
+        background-color: var(--color-wild-sand);
         line-height: 1.8;
         .data-title-td {
             width: 50%;

@@ -2,7 +2,7 @@ import { IELedgerResponse, IELedgerTransaction, TransactionsResponse } from '../
 import { Observable } from 'rxjs';
 import { AccountResponse, AccountResponseV2 } from '../models/api-models/Account';
 import { ITransactionItem } from '../models/interfaces/ledger.interface';
-import * as moment from 'moment/moment';
+import * as dayjs from 'dayjs';
 import { IFlattenAccountsResultItem } from '../models/interfaces/flattenAccountsResultItem.interface';
 import { v4 as uuidv4 } from 'uuid';
 import { cloneDeep, forEach, remove } from '../lodash-optimized';
@@ -264,7 +264,7 @@ export class LedgerVM {
                         return n.type === bankTxn.type;
                     });
                 });
-                if(item.transactions[0].type === "CREDIT") {
+                if (item.transactions[0].type === "CREDIT") {
                     item.index = creditLoop;
                     this.bankTransactionsCreditData.push(item);
                     creditLoop++;
@@ -351,7 +351,7 @@ export class LedgerVM {
                     isInclusiveTax: true,
                 }],
             voucherType: 'sal',
-            entryDate: moment().format(GIDDH_DATE_FORMAT),
+            entryDate: dayjs().format(GIDDH_DATE_FORMAT),
             unconfirmedEntry: false,
             attachedFile: '',
             attachedFileName: '',
@@ -410,6 +410,7 @@ export class BlankLedgerVM {
     public touristSchemeApplicable?: boolean;
     public index?: number;
     public mergePB?: boolean;
+    public referenceVoucher?: ReferenceVoucher;
 }
 
 export class IInvoiceLinkingRequest {
@@ -419,6 +420,13 @@ export class IInvoiceLinkingRequest {
 export class ILinkedInvoice {
     public invoiceUniqueName: string;
     public voucherType: string;
+}
+
+export class ReferenceVoucher {
+    public uniqueName: string;
+    public number?: any;
+    public voucherType?: string;
+    public date?: string;
 }
 
 export class TransactionVM {
@@ -453,6 +461,8 @@ export class TransactionVM {
     public invoiceLinkingRequest?: IInvoiceLinkingRequest;
     public voucherAdjustments?: VoucherAdjustments;
     public showDropdown?: boolean = false;
+    public referenceVoucher?: ReferenceVoucher;
+    public showOtherTax: boolean = false;
 }
 
 export interface IInventory {

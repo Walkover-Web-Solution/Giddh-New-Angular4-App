@@ -18,8 +18,6 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { LoginWithPassword, SignUpWithPassword } from '../models/api-models/login';
-import { isCordova } from "@giddh-workspaces/utils";
-import { UserAgent } from "@ionic-native/user-agent/ngx";
 
 @Injectable()
 export class AuthenticationService {
@@ -28,12 +26,7 @@ export class AuthenticationService {
         public httpClient: HttpClient,
         public http: HttpWrapperService,
         private generalService: GeneralService,
-        @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs, private userAgent: UserAgent) {
-        if (isCordova()) {
-            this.userAgent.set('Mozilla/5.0 (Linux; U; Android 2.2) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1')
-                .then((res: any) => console.log(res))
-                .catch((error: any) => console.error(error));
-        }
+        @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
     }
 
     public SignupWithEmail(datatoSend: any): Observable<BaseResponse<string, string>> {

@@ -4,14 +4,12 @@ import { NewVsOldInvoicesRequest, NewVsOldInvoicesResponse } from '../models/api
 import { AppState } from '../store';
 import { Store, select } from '@ngrx/store';
 import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
-import { CompanyActions } from '../actions/company.actions';
 import { ReplaySubject } from 'rxjs';
 import { ToasterService } from '../services/toaster.service';
-import { StateDetailsRequest } from 'apps/web-giddh/src/app/models/api-models/Company';
-import { take, takeUntil } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { SettingsFinancialYearActions } from '../actions/settings/financial-year/financial-year.action';
 import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
-import * as moment from 'moment';
+import * as dayjs from 'dayjs';
 import { NewVsOldInvoicesService } from '../services/new-vs-old-invoices.service';
 
 @Component({
@@ -60,7 +58,6 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
 
     constructor(
         private store: Store<AppState>, 
-        private companyActions: CompanyActions,
         private toaster: ToasterService, 
         private settingsFinancialYearActions: SettingsFinancialYearActions,
         private newVsOldInvoicesService: NewVsOldInvoicesService
@@ -74,8 +71,8 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
         this.store.pipe(select(state => state.settings.financialYearLimits), takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.startDate && response.endDate) {
                 this.yearOptions = [];
-                let startYear = Number(moment(response.startDate, GIDDH_DATE_FORMAT).format("YYYY"));
-                let endYear = Number(moment(response.endDate, GIDDH_DATE_FORMAT).format("YYYY"));
+                let startYear = Number(dayjs(response.startDate, GIDDH_DATE_FORMAT).format("YYYY"));
+                let endYear = Number(dayjs(response.endDate, GIDDH_DATE_FORMAT).format("YYYY"));
 
                 for (startYear; startYear <= endYear; startYear++) {
                     this.yearOptions.push({ label: String(startYear), value: String(startYear) });
@@ -85,27 +82,19 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
 
         this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                let universalEndDate = moment(response[1]).format("YYYY");
+                let universalEndDate = dayjs(response[1]).format("YYYY");
 
-                if (moment(response[1]).toDate() >= moment().toDate()) {
+                if (dayjs(response[1]).toDate() >= dayjs().toDate()) {
                     this.selectedYear = (new Date()).getFullYear().toString();
                     this.selectedmonth = ("0" + (new Date().getMonth() + 1)).slice(-2).toString();
                     this.getSalesBifurcation();
                 } else {
                     this.selectedYear = universalEndDate;
-                    this.selectedmonth = ("0" + (moment(response[1]).format("M"))).slice(-2).toString();
+                    this.selectedmonth = ("0" + (dayjs(response[1]).format("M"))).slice(-2).toString();
                     this.getSalesBifurcation();
                 }
             }
         });
-
-        let companyUniqueName = null;
-        this.store.pipe(select(c => c.session.companyUniqueName), take(1)).subscribe(s => companyUniqueName = s);
-        let stateDetailsRequest = new StateDetailsRequest();
-        stateDetailsRequest.companyUniqueName = companyUniqueName;
-        stateDetailsRequest.lastState = 'new-vs-old-invoices';
-
-        this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
     }
 
     /**

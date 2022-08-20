@@ -1,5 +1,3 @@
-@import "../../../assets/css/color.scss";
-
 .form-horizontal .control-label {
     text-align: left;
 }
@@ -14,15 +12,15 @@
 
 .custom-multi-select {
     li {
-        background: $white-smoke;
-        color: $white;
+        background: var(--color-wild-sand);
+        color: var(--color-white);
         margin: 4px;
         padding: 2px 10px;
         font-size: 14px;
         border-radius: 3px;
         cursor: pointer;
         a {
-            color: $gray;
+            color: var(--color-abbey);
         }
     }
 }
@@ -42,8 +40,8 @@
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    border-right: 1px solid $gainsboro;
-    color: $nobel;
+    border-right: 1px solid var(--color-iron);
+    color: var(--color-gray);
     left: 0;
 }
 .input-group-date-range-picker input.form-control {
@@ -56,35 +54,32 @@
     font-size: 14px;
 }
 .branch-card {
-    background-color: $white;
+    background-color: var(--color-common-primary-background-for-all-components);
     margin-bottom: 15px;
     font-size: 14px;
-    border: 1px solid $gainsboro;
-}
-.card-basic-details span:first-child {
-    width: 60px;
+    border: 1px solid var(--color-common-secondary-border);
 }
 .card-basic-details span:nth-child(2) {
     width: 83%;
 }
 .card-basic-details .clearfix {
     margin-bottom: 10px;
-    color: $nero;
+    color: var(--color-nero);
 }
 .clearfix {
     .icon-favorite-selected {
-        color: $rich-blue;
+        color: var(--color-blue);
     }
     .icon-branch-icon,
     .icon-company-HO {
         padding: 4px 5px 0 0;
-        color: $midnight-blue;
+        color: var(--color-common-senary-text);
         font-size: 12px;
     }
 }
 .card-basic-details h2 {
     font-size: 16px;
-    color: $midnight-blue;
+    color: var(--color-common-senary-text);
     font-family: "opensans-bold";
     margin-bottom: 12px;
     white-space: normal;
@@ -95,15 +90,15 @@
 }
 .card-basic-details {
     padding: 20px;
-    border-bottom: 1px solid $gainsboro;
+    border-bottom: 1px solid var(--color-common-secondary-border);
 }
 .branch-sales-details {
-    border-top: 1px solid $gainsboro;
+    border-top: 1px solid var(--color-common-secondary-border);
     padding-top: 20px;
     label {
         font-family: "opensans-semibold";
         margin-bottom: 10px;
-        color: $night-rider;
+        color: var(--color-nero);
     }
     .total-amount {
         width: 70%;
@@ -111,7 +106,7 @@
 }
 
 .unlink a {
-    color: $chetwode-blue !important;
+    color: var(--color-blue) !important;
     cursor: pointer;
 }
 
@@ -129,7 +124,7 @@
     cursor: pointer;
 }
 .card-basic-details a#button-basic {
-    color: $gray;
+    color: var(--color-abbey);
     font-size: 16px;
     width: 32px;
     height: 32px;
@@ -146,7 +141,7 @@
 }
 .btn-link {
     border-width: 0px !important;
-    background: $white !important;
+    background: var(--color-white) !important;
 }
 
 .modal-width {
@@ -170,21 +165,21 @@
     display: flex;
     flex-direction: row;
     .clear-filter-btn {
-        color: $midnight-blue;
+        color: var(--color-giddh-blue);
         font-size: 14px;
-        border: 1px solid $midnight-blue;
+        border: 1px solid var(--color-giddh-blue);
         border-radius: 20px;
         padding: 0 12px;
         width: 150px !important;
         display: flex;
         align-items: center;
         justify-content: center;
-        background-color: $white;
+        background-color: var(--color-white);
         i {
             font-size: 12px;
             padding-right: 8px;
             top: 0;
-            color: $midnight-blue;
+            color: var(--color-giddh-blue);
         }
     }
 }
@@ -195,14 +190,14 @@
     align-items: center;
     font-size: 18px;
     border-radius: 5px;
-    background: $white;
+    background: var(--color-white);
     margin-right: 15px;
 
     li {
         padding-top: 5px;
         &:hover {
-            background-color: $lavender;
-            color: $jacksons-purple;
+            background-color: var(--color-dark-fog);
+            color: var(--color-giddh-blue);
         }
     }
 }
@@ -212,7 +207,7 @@
 }
 
 .active-status {
-    color: $light-green;
+    color: var(--color-primary-branch-active-status);
 }
 
 .status-bullet {
@@ -223,7 +218,7 @@
 }
 
 .parent-branch {
-    color: $gray;
+    color: var(--color-abbey);
 }
 
 .star-radio {
@@ -244,8 +239,8 @@
         &:before {
             content: "\2605";
             position: absolute;
-            border-color: $chetwode-blue;
-            color: $chetwode-blue;
+            border-color: var(--color-blue);
+            color: var(--color-blue);
         }
     }
 }
@@ -256,7 +251,7 @@
 
 .icon-advance-search {
     font-size: 18px;
-    color: $gray;
+    color: var(--color-abbey);
 }
 
 .more-btn {
@@ -271,8 +266,8 @@
         padding: 5px;
         cursor: default;
         &:hover {
-            background-color: $lavender;
-            color: $jacksons-purple;
+            background-color: var(--color-dark-fog);
+            color: var(--color-giddh-blue);
         }
     }
 }
@@ -290,9 +285,9 @@
 .btn-primary.active,
 .btn-primary:active,
 .open > .dropdown-toggle.btn-primary {
-    color: $night-rider;
-    background-color: $lavender;
-    border-color: $lavender;
+    color: var(--color-nero);
+    background-color: var(--color-dark-fog);
+    border-color: var(--color-dark-fog);
     box-shadow: none !important;
 }
 
@@ -306,6 +301,37 @@
 
 .right-card-section {
     margin-top: -15px;
+
+    .branch-status {
+        float: left;
+        margin-top: 11px;
+        margin-right: -18px;
+
+        &.branch-active {
+            color: var(--color-teal);
+            span {
+                background-color: var(--color-teal);
+                width: 8px;
+                height: 8px;
+                float: left;
+                border-radius: 5px;
+                margin-top: 8px;
+                margin-right: 4px;
+            }
+        }
+        &.branch-archived {
+            color: var(--color-red);
+            span {
+                background-color: var(--color-red);
+                width: 8px;
+                height: 8px;
+                float: left;
+                border-radius: 5px;
+                margin-top: 8px;
+                margin-right: 4px;
+            }
+        }
+    }
 }
 .branch-vector {
     text-align: right;

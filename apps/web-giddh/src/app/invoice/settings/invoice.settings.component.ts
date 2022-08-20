@@ -2,7 +2,7 @@ import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
-import * as moment from 'moment/moment';
+import * as dayjs from 'dayjs';
 import { CompanyCashFreeSettings, CompanyEmailSettings, EstimateSettings, InvoiceSetting, InvoiceSettings, InvoiceWebhooks, ProformaSettings } from '../../models/interfaces/invoice.setting.interface';
 import { AppState } from '../../store';
 import { select, Store } from '@ngrx/store';
@@ -17,6 +17,7 @@ import { CommonActions } from '../../actions/common.actions';
 import { GeneralService } from '../../services/general.service';
 import { OrganizationType } from '../../models/user-login-state';
 import { cloneDeep, concat, isEmpty, isEqual } from '../../lodash-optimized';
+import { BootstrapToggleSwitch } from '../../app.constant'
 
 @Component({
     selector: 'app-invoice-setting',
@@ -32,8 +33,6 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
     public webhooks: InvoiceWebhooks[];
     public invoiceWebhook: InvoiceWebhooks[];
     public estimateWebhook: InvoiceWebhooks[];
-    public invoiceLastState: InvoiceSettings;
-    public webhookLastState: InvoiceWebhooks[];
     public webhookIsValidate: boolean = false;
     public settingResponse: any;
     public formToSave: any;
@@ -53,7 +52,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
         entity: 'invoice'
     };
     public showDatePicker: boolean = false;
-    public moment = moment;
+    public dayjs = dayjs;
     public isAutoPaidOn: boolean;
     public companyCashFreeSettings: CompanyCashFreeSettings = new CompanyCashFreeSettings();
     public paymentGatewayList: IOption[] = [];
@@ -73,6 +72,10 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
     public formFields: any[] = [];
     /** True if user has invoice setting permissions */
     public hasInvoiceSettingPermissions: boolean = true;
+    /** Stores the voucher API version of company */
+    public voucherApiVersion: 1 | 2;
+    /** This will hold toggle buttons value and size */
+    public bootstrapToggleSwitch = BootstrapToggleSwitch;
 
     constructor(
         private commonActions: CommonActions,
@@ -90,7 +93,6 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
-        this.store.dispatch(this.invoiceActions.getInvoiceSetting());
         this.store.dispatch(this.settingsIntegrationActions.GetGmailIntegrationStatus());
         this.activeCompany$ = this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$));
         this.store.pipe(select(s => s.settings.isGmailIntegrated), takeUntil(this.destroyed$)).subscribe(result => {
@@ -118,7 +120,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
             } else {
                 let companyCountry;
                 this.activeCompany$.pipe(take(1)).subscribe((response: any) => {
-                    companyCountry = response.countryV2?.alpha2CountryCode;
+                    companyCountry = response?.countryV2?.alpha2CountryCode;
                 });
                 if (companyCountry === 'IN') {
                     const requestObject = {
@@ -137,7 +139,8 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
 
     public initSettingObj() {
         this.store.pipe(select(p => p.invoice.settings), takeUntil(this.destroyed$)).subscribe((setting: InvoiceSetting) => {
-            if (setting && setting.invoiceSettings && setting.webhooks) {
+            if (setting && setting.invoiceSettings) {
+
                 this.originalEmail = cloneDeep(setting.invoiceSettings.email);
 
                 this.settingResponse = setting;
@@ -146,11 +149,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
                 this.proformaSetting = cloneDeep(setting.proformaSettings);
                 this.invoiceSetting.autoPaid = this.invoiceSetting.autoPaid === 'runtime';
 
-                // using last state to compare data before dispatching action
-                this.invoiceLastState = cloneDeep(setting.invoiceSettings);
-                this.webhookLastState = cloneDeep(setting.webhooks);
-
-                let webhookArray = cloneDeep(setting.webhooks);
+                let webhookArray = cloneDeep(setting.webhooks ?? []);
 
                 // using filter to get webhooks for 'invoice' only
                 this.invoiceWebhook = webhookArray.filter((obj) => obj.entity === 'invoice');
@@ -194,17 +193,20 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
 
                 if (this.invoiceSetting.lockDate) {
                     this.isLockDateSet = true;
-                    this.lockDate = moment(this.invoiceSetting.lockDate, GIDDH_DATE_FORMAT).toDate();
+                    this.lockDate = dayjs(this.invoiceSetting.lockDate, GIDDH_DATE_FORMAT).toDate();
                 } else {
                     this.isLockDateSet = false;
                 }
                 this.companyCashFreeSettings = cloneDeep(setting.companyCashFreeSettings);
                 this.cdr.detectChanges();
-            } else if (!setting || !setting.webhooks) {
+            } else if (!setting) {
                 this.store.dispatch(this.invoiceActions.getInvoiceSetting());
             }
+            
         });
+        
     }
+    
 
     // public onChangeSendInvoiceViaSms(isChecked) {
     //     if (!isChecked) {
@@ -273,7 +275,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
         delete this.formToSave.sendThroughGmail;
         delete this.formToSave.razorPayform; // delete razorPay before sending form
         if (this.formToSave.invoiceSettings.lockDate instanceof Date) {
-            this.formToSave.invoiceSettings.lockDate = moment(this.formToSave.invoiceSettings.lockDate).format(GIDDH_DATE_FORMAT);
+            this.formToSave.invoiceSettings.lockDate = dayjs(this.formToSave.invoiceSettings.lockDate).format(GIDDH_DATE_FORMAT);
         }
         if (this.formToSave?.invoiceSettings?.gstEInvoiceEnable) {
             const invoiceSettings = this.formToSave.invoiceSettings;
@@ -465,7 +467,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
      * setInvoiceLockDate
      */
     public setInvoiceLockDate(date) {
-        this.invoiceSetting.lockDate = moment(date).format(GIDDH_DATE_FORMAT);
+        this.invoiceSetting.lockDate = dayjs(date).format(GIDDH_DATE_FORMAT);
         this.showDatePicker = !this.showDatePicker;
     }
 

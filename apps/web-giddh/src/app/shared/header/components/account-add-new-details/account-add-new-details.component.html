@@ -262,14 +262,24 @@
                                                         <i class="icon-cross"> </i> {{ commonLocaleData?.app_remove }}
                                                     </a>
                                                 </span>
-                                                <input
-                                                    type="checkbox"
-                                                    name="defaultGst_{{ i }}"
-                                                    formControlName="isDefault"
-                                                    (change)="isDefaultAddressSelected(gst.get('isDefault').value, i)"
-                                                    [tooltip]="localeData?.address_tooltip"
-                                                    placement="left"
-                                                />
+                                                <span [tooltip]="localeData?.address_tooltip" placement="left">
+                                                    <ngx-switch
+                                                        [(status)]="
+                                                            addAccountForm.get('addresses').controls[i].get('isDefault')
+                                                                .value
+                                                        "
+                                                        name="defaultGst_{{ i }}"
+                                                        [onText]="commonLocaleData?.app_on"
+                                                        [offText]="commonLocaleData?.app_off"
+                                                        [onColor]="bootstrapToggleSwitch?.On"
+                                                        [offColor]="bootstrapToggleSwitch?.Off"
+                                                        [size]="bootstrapToggleSwitch?.Size"
+                                                        (statusChange)="
+                                                            isDefaultAddressSelected(gst.get('isDefault').value, i)
+                                                        "
+                                                    >
+                                                    </ngx-switch>
+                                                </span>
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -365,7 +375,7 @@
                                             </div>
                                         </div>
 
-                                        <div
+                                        <!-- <div
                                             class="col-sm-4"
                                             *ngIf="gst.get('gstNumber').value && (isGstValid$ | async)"
                                         >
@@ -378,7 +388,7 @@
                                                     </label></label
                                                 >
                                             </div>
-                                        </div>
+                                        </div> -->
                                     </ng-container>
                                 </div>
 
@@ -437,32 +447,32 @@
                             <div class="form-group">
                                 <label>{{ commonLocaleData?.app_mobile_number }}</label>
                                 <div class="d-flex">
-                                    <sh-select
-                                        [placeholder]="commonLocaleData?.app_country_code"
-                                        [options]="countryPhoneCode"
-                                        formControlName="mobileCode"
-                                        class="mobile-number-sh-select"
-                                    ></sh-select>
-                                    <input
-                                        type="text"
-                                        pattern="[0-9]*"
-                                        class="form-control pull-right"
-                                        [placeholder]="localeData?.mobile_no_placeholder"
+                                    <ngx-intl-tel-input
+                                        [cssClass]="'pull-right'"
+                                        [enableAutoCountrySelect]="true"
+                                        [enablePlaceholder]="true"
+                                        [searchCountryFlag]="true"
+                                        [searchCountryField]="[searchCountryField.Iso2, searchCountryField.Name]"
+                                        [selectFirstCountry]="false"
+                                        [maxLength]="30"
+                                        [phoneValidation]="true"
+                                        [numberFormat]="phoneNumberFormat.National"
+                                        name="mobileNo"
                                         formControlName="mobileNo"
-                                        id="contactNo"
-                                        autocomplete="off"
-                                        (blur)="isValidMobileNumber(mobileNoEl)"
-                                        #mobileNoEl
-                                    />
-                                    <small
-                                        class="clearfix error-msg"
-                                        *ngIf="
-                                            addAccountForm.get('mobileNo').value &&
-                                            !addAccountForm.get('mobileCode').value
-                                        "
-                                        >{{ localeData?.phone_code_error }}</small
+                                        (countryChange)="checkNumber($event)"
+                                        #mobileNo
+                                        [selectedCountryISO]="currentCompanyCountryCode"
                                     >
+                                    </ngx-intl-tel-input>
                                 </div>
+                                <span
+                                    class="error-msg"
+                                    *ngIf="
+                                        addAccountForm.controls['mobileNo'].touched &&
+                                        addAccountForm.controls['mobileNo'].invalid
+                                    "
+                                    >{{ localeData?.invalid_contact_number }}</span
+                                >
                             </div>
                         </div>
                     </div>
@@ -669,7 +679,7 @@
                 </div>
             </tab>
 
-            <tab *ngIf="isDebtorCreditor" [heading]="localeData?.tabs?.custom">
+            <tab [heading]="localeData?.tabs?.custom">
                 <giddh-page-loader [cssClass]="'mt-0 mb-0'" *ngIf="isCustomFieldLoading"></giddh-page-loader>
                 <ng-container formArrayName="customFields">
                     <ng-container
@@ -688,25 +698,41 @@
                             >
                                 <div class="col-lg-8">
                                     <div class="name-of-field">
-                                        <label>{{ item.key }} </label>
+                                        <label
+                                            >{{ item.fieldName }}
+                                            <span class="red-text" *ngIf="item.isMandatory">*</span>
+                                        </label>
                                         <input
-                                            *ngIf="item.dataType === 'STRING'"
+                                            *ngIf="
+                                                item.fieldType?.type === availableFieldTypes.String ||
+                                                item.fieldType?.type === availableFieldTypes.Barcode
+                                            "
                                             type="text"
                                             name="values{{ index }}"
                                             formControlName="value"
-                                            class="form-control"
-                                            [maxLength]="item.valueLength"
+                                            class="form-control custom-field"
+                                            [maxLength]="item.dataRange?.max"
+                                            [pattern]="item.regex"
+                                            [required]="item.isMandatory"
+                                            [placeholder]="item.fieldInfo ? item.fieldInfo : ''"
                                         />
                                         <input
-                                            *ngIf="item.dataType === 'NUMERIC'"
-                                            type="text"
+                                            *ngIf="item.fieldType?.type === availableFieldTypes.Number"
+                                            type="number"
                                             name="values{{ index }}"
                                             formControlName="value"
-                                            class="form-control"
-                                            [maxLength]="item.valueLength"
+                                            class="form-control custom-field"
+                                            [min]="item.dataRange?.min"
+                                            [max]="item.dataRange?.max"
                                             decimalDigitsDirective
+                                            [attr.pattern]="item.regex"
+                                            [required]="item.isMandatory"
+                                            [placeholder]="item.fieldInfo ? item.fieldInfo : ''"
                                         />
-                                        <div *ngIf="item.dataType === 'BOOLEAN'" class="clearfix">
+                                        <div
+                                            *ngIf="item.fieldType?.type === availableFieldTypes.Boolean"
+                                            class="clearfix"
+                                        >
                                             <span class="d-inline-block">
                                                 <input
                                                     id="yes{{ index }}"
@@ -717,7 +743,7 @@
                                                     name="booleanType{{ index }}"
                                                 />
                                                 <label for="yes{{ index }}" class="radio-custom-label">{{
-                                                    commonLocaleData?.app_yes?.toUpperCase()
+                                                    commonLocaleData?.app_true?.toUpperCase()
                                                 }}</label>
                                             </span>
 
@@ -731,7 +757,7 @@
                                                     name="booleanType{{ index }}"
                                                 />
                                                 <label for="no{{ index }}" class="radio-custom-label">{{
-                                                    commonLocaleData?.app_no?.toUpperCase()
+                                                    commonLocaleData?.app_false?.toUpperCase()
                                                 }}</label>
                                             </span>
                                         </div>
@@ -744,11 +770,13 @@
                 <a
                     href="javascript:;"
                     class="btn-link"
-                    (click)="goToCustomFields.emit(true)"
+                    [routerLink]="'/pages/custom-fields/list'"
                     *ngIf="!companyCustomFields?.length"
+                    (click)="closeMaster()"
                     >{{ commonLocaleData?.app_create_custom_field }}</a
                 >
             </tab>
+
             <div class="row">
                 <div class="col-sm-12 mt-5">
                     <div class="button-group">

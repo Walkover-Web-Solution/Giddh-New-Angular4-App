@@ -7,17 +7,13 @@ import { Component, Output, EventEmitter } from '@angular/core';
 })
 
 export class AllFeaturesComponent {
+
     @Output() public closeEvent = new EventEmitter<boolean>();
     /* This will hold local JSON data */
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
 
-    constructor() {
+    constructor() { }
 
-    }
-
-    public closePopup() {
-        this.closeEvent.emit(true);
-    }
 }

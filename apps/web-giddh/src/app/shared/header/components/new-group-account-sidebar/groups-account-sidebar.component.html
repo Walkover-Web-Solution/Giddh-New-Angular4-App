@@ -33,12 +33,15 @@
             <ng-container *ngIf="col.Items">
                 <ul class="grp-list users-last-list">
                     <cdk-virtual-scroll-viewport
-                        class="virtual-group-list"
+                        class="virtual-group-list overflow-x-hidden"
                         [itemSize]="37"
                         [minBufferPx]="400"
                         [maxBufferPx]="800"
                     >
-                        <li *cdkVirtualFor="let item of col.Items; let j = index" class="list-item sidebarTooltip">
+                        <li
+                            *cdkVirtualFor="let item of col.Items; let j = index"
+                            class="list-item sidebarTooltip text-overflow-ellipsis"
+                        >
                             <ng-container *ngIf="item.isGroup">
                                 <a
                                     href="javascript:void(0);"
@@ -60,7 +63,7 @@
                                             !(activeAccount | async),
                                         'isParent': item?.isOpen
                                     }"
-                                    tooltip="{{ item.synonyms }}"
+                                    tooltip="{{ item.synonyms || item.name }}"
                                     placement="bottom"
                                 >
                                     {{ item?.name }}
@@ -74,9 +77,14 @@
                                     [ngClass]="{
                                         'isActive':
                                             (activeAccount | async)?.uniqueName === item?.uniqueName ||
-                                            (searchString && i === mc.columns?.length - 1 && j === 0)
+                                            (searchString &&
+                                                i === mc.columns?.length - 1 &&
+                                                j === 0 &&
+                                                !(activeAccount | async)?.uniqueName)
                                     }"
                                     id="acc_{{ item.name }}"
+                                    tooltip="{{ item.name }}"
+                                    placement="bottom"
                                     (click)="onAccountClick(item, i)"
                                 >
                                     {{ item?.name }}

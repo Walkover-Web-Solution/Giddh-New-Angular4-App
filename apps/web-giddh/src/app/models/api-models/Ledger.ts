@@ -4,6 +4,7 @@ import { SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal } from './Sa
 import { PettyCashEntryStatus } from './Expences';
 import { VoucherAdjustments } from './AdvanceReceiptsAdjust';
 import { PAGINATION_LIMIT } from '../../app.constant';
+import { ReferenceVoucher } from '../../material-ledger/ledger.vm';
 
 /*
  * Model for ledger create api request
@@ -127,6 +128,9 @@ export class LedgerResponse {
     public voucherAdjustments?: VoucherAdjustments;
     public unitRates?: Array<any>;
     public entryVoucherTotals?: any;
+    public voucherUniqueName?: string;
+    public referenceVoucher?: ReferenceVoucher;
+    public gainLoss?: number;
 }
 
 /** Model adjusted amounts for invoices */

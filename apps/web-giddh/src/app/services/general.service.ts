@@ -9,8 +9,9 @@ import { cloneDeep, find } from '../lodash-optimized';
 import { OrganizationType } from '../models/user-login-state';
 import { AllItems } from '../shared/helpers/allItems';
 import { Router } from '@angular/router';
-import { AdjustedVoucherType } from '../app.constant';
+import { AdjustedVoucherType, JOURNAL_VOUCHER_ALLOWED_DOMAINS } from '../app.constant';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
+import { SalesOtherTaxesCalculationMethodEnum, VoucherTypeEnum } from '../models/api-models/Sales';
 
 @Injectable()
 export class GeneralService {
@@ -244,16 +245,17 @@ export class GeneralService {
      *
      * @param {*} currentLedgerAccountDetails Current ledger detail
      * @param {*} selectedAccountDetails User selected particular account
+     * @param {*} activeCompany Active Company
      * @returns {boolean} True, if the current ledger and user selected particular account belongs to RCM category accounts
      * @memberof GeneralService
      */
-    public shouldShowRcmSection(currentLedgerAccountDetails: any, selectedAccountDetails: any): boolean {
+    public shouldShowRcmSection(currentLedgerAccountDetails: any, selectedAccountDetails: any, activeCompany?: any): boolean {
         if (currentLedgerAccountDetails && selectedAccountDetails) {
             if (![currentLedgerAccountDetails.uniqueName, selectedAccountDetails.uniqueName].includes('roundoff')) {
                 // List of allowed first level parent groups
-                const allowedFirstLevelUniqueNames = (this.voucherApiVersion === 2) ? ['operatingcost', 'indirectexpenses', 'fixedassets', 'revenuefromoperations', 'otherincome'] : ['operatingcost', 'indirectexpenses', 'fixedassets'];
+                const allowedFirstLevelUniqueNames = (this.voucherApiVersion === 2 && activeCompany?.country === "India") ? ['operatingcost', 'indirectexpenses', 'fixedassets', 'revenuefromoperations', 'otherincome'] : ['operatingcost', 'indirectexpenses', 'fixedassets'];
                 // List of not allowed second level parent groups
-                const disallowedSecondLevelUniqueNames = (this.voucherApiVersion === 2) ? ['discount', 'exchangeloss', 'roundoff', 'exchangegain', 'dividendincome', 'interestincome', 'dividendexpense', 'interestexpense'] : ['discount', 'exchangeloss'];
+                const disallowedSecondLevelUniqueNames = (this.voucherApiVersion === 2 && activeCompany?.country === "India") ? ['discount', 'exchangeloss', 'roundoff', 'exchangegain', 'dividendincome', 'interestincome', 'dividendexpense', 'interestexpense'] : ['discount', 'exchangeloss'];
                 const currentLedgerFirstParent = (currentLedgerAccountDetails.parentGroups && currentLedgerAccountDetails.parentGroups[0]) ? currentLedgerAccountDetails.parentGroups[0].uniqueName : '';
                 const currentLedgerSecondParent = (currentLedgerAccountDetails.parentGroups && currentLedgerAccountDetails.parentGroups[1]) ? currentLedgerAccountDetails.parentGroups[1].uniqueName : '';
                 const selectedAccountFirstParent = (selectedAccountDetails.parentGroups && selectedAccountDetails.parentGroups[0]) ? selectedAccountDetails.parentGroups[0].uniqueName : '';
@@ -373,7 +375,7 @@ export class GeneralService {
         let isAllowed = false;
         if (email) {
             let emailSplit = email.split("@");
-            if (emailSplit.indexOf("giddh.com") > -1 || emailSplit.indexOf("walkover.in") > -1 || emailSplit.indexOf("muneem.co") > -1) {
+            if (JOURNAL_VOUCHER_ALLOWED_DOMAINS.includes(emailSplit[1])) {
                 isAllowed = true;
             }
         }
@@ -771,7 +773,7 @@ export class GeneralService {
             visibleMenuItems[menuIndex].items = [];
             menuItem.items?.forEach(item => {
                 const isValidItem = apiItems.find(apiItem => apiItem.uniqueName === item.link);
-                if (((isValidItem && item.hide !== module) || (item.alwaysPresent && item.hide !== module)) && (!item.additional?.countrySpecific?.length || item.additional?.countrySpecific?.indexOf(countryCode) > -1)) {
+                if (((isValidItem && item.hide !== module) || (item.alwaysPresent && item.hide !== module)) && (!item.additional?.countrySpecific?.length || item.additional?.countrySpecific?.indexOf(countryCode) > -1) && (!item.additional?.voucherVersion || item.additional?.voucherVersion === this.voucherApiVersion)) {
                     // If items returned from API have the current item which can be shown in branch/company mode, add it
                     visibleMenuItems[menuIndex].items.push(item);
                 }
@@ -814,7 +816,7 @@ export class GeneralService {
      */
     public finalNavigate(route: any, parameter?: any, isSocialLogin?: boolean): void {
         let isQueryParams: boolean;
-        if (screen.width <= 767 || isCordova) {
+        if (screen.width <= 767) {
             this.router.navigate(["/pages/mobile-home"]);
         } else {
             if (route.includes('?')) {
@@ -834,7 +836,7 @@ export class GeneralService {
             } else {
                 this.router.navigate([route], parameter);
             }
-            if(isElectron && isSocialLogin) {
+            if (isElectron && isSocialLogin) {
                 setTimeout(() => {
                     window.location.reload();
                 }, 200);
@@ -850,10 +852,10 @@ export class GeneralService {
      * @return {string} Multi-lingual current voucher label
      * @memberof GeneralService
      */
-     public getCurrentVoucherLabel(voucherCode: string, commonLocaleData: any): string {
-        switch(voucherCode) {
+    public getCurrentVoucherLabel(voucherCode: string, commonLocaleData: any): string {
+        switch (voucherCode) {
             case AdjustedVoucherType.Sales: case AdjustedVoucherType.SalesInvoice: return commonLocaleData?.app_voucher_types.sales;
-            case AdjustedVoucherType.Purchase: return commonLocaleData?.app_voucher_types.purchase;
+            case AdjustedVoucherType.Purchase: case AdjustedVoucherType.PurchaseInvoice: return commonLocaleData?.app_voucher_types.purchase;
             case AdjustedVoucherType.CreditNote: return commonLocaleData?.app_voucher_types.credit_note;
             case AdjustedVoucherType.DebitNote: return commonLocaleData?.app_voucher_types.debit_note;
             case AdjustedVoucherType.Payment: return commonLocaleData?.app_voucher_types.payment;
@@ -942,6 +944,235 @@ export class GeneralService {
     public addVoucherVersion(url: string, voucherVersion: number): string {
         const delimiter = url.includes('?') ? '&' : '?';
         return url.concat(`${delimiter}voucherVersion=${voucherVersion}`);
+    }
+
+    /**
+     * This will remove special characters and spaces from amount
+     *
+     * @param {string} amount
+     * @returns {string}
+     * @memberof GeneralService
+     */
+    public removeSpecialCharactersFromAmount(amount: any): string {
+        amount = amount.toString();
+        return amount?.replace(/,/g, "")?.replace(/ /g, "")?.replace(/'/g, "").trim();
+    }
+
+    /**
+     * This will return available themes
+     *
+     * @returns {*}
+     * @memberof GeneralService
+     */
+    public getAvailableThemes(): any {
+        return [
+            { label: 'Default', value: 'default-theme' },
+            { label: 'Dark', value: 'dark-theme' }
+        ];
+    }
+
+    /*
+     * Adds tooltip text for grand total and total due amount
+     * to item supplied (for Cash/Sales Invoice and CR/DR note)
+     *
+     * @private
+     * @param {ReceiptItem} item Receipt item received from service
+     * @returns {*} Modified item with tooltup text for grand total and total due amount
+     * @memberof GeneralService
+     */
+    public addToolTipText(selectedVoucher: any, baseCurrency: string, item: any, localeData: any, commonLocaleData: any): any {
+        try {
+            let balanceDueAmountForCompany, balanceDueAmountForAccount, grandTotalAmountForCompany,
+                grandTotalAmountForAccount;
+
+            if (item && item.totalBalance && item.totalBalance.amountForCompany !== undefined && item.totalBalance.amountForAccount !== undefined) {
+                balanceDueAmountForCompany = Number(item.totalBalance.amountForCompany) || 0;
+                balanceDueAmountForAccount = Number(item.totalBalance.amountForAccount) || 0;
+            }
+            if ([VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote, VoucherTypeEnum.purchase, VoucherTypeEnum.receipt, VoucherTypeEnum.payment].indexOf(selectedVoucher) > -1 && item.grandTotal) {
+                grandTotalAmountForCompany = Number(item.grandTotal.amountForCompany) || 0;
+                grandTotalAmountForAccount = Number(item.grandTotal.amountForAccount) || 0;
+            }
+
+            let grandTotalConversionRate = 0, balanceDueAmountConversionRate = 0;
+            if (this.voucherApiVersion === 2) {
+                grandTotalConversionRate = item.exchangeRate;
+            } else if (grandTotalAmountForCompany && grandTotalAmountForAccount) {
+                grandTotalConversionRate = +((grandTotalAmountForCompany / grandTotalAmountForAccount) || 0).toFixed(2);
+            }
+            if (balanceDueAmountForCompany && balanceDueAmountForAccount) {
+                balanceDueAmountConversionRate = +((balanceDueAmountForCompany / balanceDueAmountForAccount) || 0).toFixed(2);
+                if (this.voucherApiVersion !== 2) {
+                    item.exchangeRate = balanceDueAmountConversionRate;
+                }
+            }
+            let text = localeData?.currency_conversion;
+            let grandTotalTooltipText = text?.replace("[BASE_CURRENCY]", baseCurrency)?.replace("[AMOUNT]", grandTotalAmountForCompany)?.replace("[CONVERSION_RATE]", grandTotalConversionRate);
+            let balanceDueTooltipText;
+            if (enableVoucherAdjustmentMultiCurrency && item.gainLoss) {
+                const gainLossText = localeData?.exchange_gain_loss_label?.
+                    replace("[BASE_CURRENCY]", baseCurrency)?.
+                    replace("[AMOUNT]", balanceDueAmountForCompany)?.
+                    replace('[PROFIT_TYPE]', item.gainLoss > 0 ? commonLocaleData?.app_exchange_gain : commonLocaleData?.app_exchange_loss);
+                balanceDueTooltipText = `${gainLossText}: ${Math.abs(item.gainLoss)}`;
+            } else {
+                balanceDueTooltipText = text?.replace("[BASE_CURRENCY]", baseCurrency)?.replace("[AMOUNT]", balanceDueAmountForCompany)?.replace("[CONVERSION_RATE]", balanceDueAmountConversionRate);
+            }
+
+            item['grandTotalTooltipText'] = grandTotalTooltipText;
+            item['balanceDueTooltipText'] = balanceDueTooltipText;
+        } catch (error) {
+        }
+        return item;
+    }
+
+    /**
+     * This returns voucher number
+     *
+     * @private
+     * @param {*} item
+     * @returns {*}
+     * @memberof GeneralService
+     */
+    public getVoucherNumberLabel(voucherType: string, voucherNumber: any, commonLocaleData: any): any {
+        if ((voucherType === "pur" || voucherType === VoucherTypeEnum.purchase) && (!voucherNumber || voucherNumber === "-")) {
+            voucherNumber = commonLocaleData?.app_not_available;
+        } else if (!voucherNumber) {
+            voucherNumber = "-";
+        }
+
+        return voucherNumber;
+    }
+    /**
+     * This will use for convert V1 response to V2 version
+     *
+     * @param {*} data
+     * @return {*}  {*}
+     * @memberof GeneralService
+     */
+    public convertV1ResponseInV2(data: any): any {
+        if (data?.company?.billingDetails?.taxNumber) {
+        }
+        return data;
+    }
+
+    /**
+     * To check if it's receipt/payment entry
+     *
+     * @param {*} ledgerAccount
+     * @param {*} entryAccount
+     * @param {*} [voucherType]
+     * @returns {boolean}
+     * @memberof GeneralService
+     */
+    public isReceiptPaymentEntry(ledgerAccount: any, entryAccount: any, voucherType?: any): boolean {
+        if (entryAccount?.parentGroups?.length > 0 && !entryAccount?.parentGroups[0]?.uniqueName) {
+            entryAccount.parentGroups = entryAccount?.parentGroups?.map(group => {
+                return {
+                    uniqueName: group
+                }
+            });
+        }
+        if (
+            this.voucherApiVersion === 2
+            && entryAccount?.parentGroups?.length > 0 && ledgerAccount?.parentGroups?.length > 0 &&
+            (((ledgerAccount?.parentGroups[1]?.uniqueName === 'sundrydebtors' || ledgerAccount?.parentGroups[1]?.uniqueName === 'sundrycreditors') && (entryAccount?.parentGroups[1]?.uniqueName === VoucherTypeEnum.cash || entryAccount?.parentGroups[1]?.uniqueName === 'bankaccounts'))
+                ||
+                ((ledgerAccount?.parentGroups[1]?.uniqueName === VoucherTypeEnum.cash || ledgerAccount?.parentGroups[1]?.uniqueName === 'bankaccounts') && (entryAccount?.parentGroups[1]?.uniqueName === 'sundrydebtors' || entryAccount?.parentGroups[1]?.uniqueName === 'sundrycreditors')))
+            &&
+            (!voucherType || (["rcpt", "pay", "advance-receipt"].includes(voucherType)))
+        ) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Returns other tax amount for receipt/payment
+     *
+     * @param {string} tcsCalculationMethod
+     * @param {number} totalAmount
+     * @param {*} mainTaxPercentage
+     * @param {*} tdsTaxPercentage
+     * @param {*} tcsTaxPercentage
+     * @returns {number}
+     * @memberof GeneralService
+     */
+    public getReceiptPaymentOtherTaxAmount(tcsCalculationMethod: string, totalAmount: number, mainTaxPercentage: any, tdsTaxPercentage: any, tcsTaxPercentage: any): number {
+        let taxableValue = 0;
+
+        if (tcsCalculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount) {
+            if (tdsTaxPercentage) {
+                //Advance Received/1+{(Rate of GST - Rate of TDS)/100}
+                taxableValue = totalAmount / (1 + ((mainTaxPercentage - tdsTaxPercentage) / 100));
+            } else if (tcsTaxPercentage) {
+                //Advance Received/1+{(Rate of GST + Rate of TCS)/100}
+                taxableValue = totalAmount / (1 + ((mainTaxPercentage + tcsTaxPercentage) / 100));
+            }
+        } else if (tcsCalculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTotalAmount) {
+            if (tdsTaxPercentage) {
+                //{[{Advance received/(100-TDS Rate)}*100]/(100+GST rate)}*100
+                taxableValue = (((totalAmount / (100 - tdsTaxPercentage)) * 100) / (100 + mainTaxPercentage)) * 100;
+            } else if (tcsTaxPercentage) {
+                //{[{Advance received/(100+TCS Rate)}*100]/(100+GST rate)}*100
+                taxableValue = (((totalAmount / (100 + tcsTaxPercentage)) * 100) / (100 + mainTaxPercentage)) * 100;
+            }
+        }
+        return taxableValue;
+    }
+
+    /**
+     * Adds class from the dropdown list item
+     *
+     * @param {HTMLElement} dropdownListItem
+     * @memberof GeneralService
+     */
+    public dropdownFocusIn(dropdownListItem: HTMLElement): void {
+        dropdownListItem.classList.add('custom-keyboard-dropdown-list-focus');
+    }
+
+    /**
+     * Removes class from the dropdown list item
+     *
+     * @param {HTMLElement} dropdownListItem
+     * @memberof GeneralService
+     */
+    public dropdownFocusOut(dropdownListItem: HTMLElement): void {
+        dropdownListItem.classList.remove('custom-keyboard-dropdown-list-focus');
+    }
+
+    /**
+     * Adds link tag
+     *
+     * @param {string} path
+     * @memberof GeneralService
+     */
+    public addLinkTag(path: string): void {
+        let linkTag = document.createElement('link');
+        linkTag.href = path;
+        linkTag.rel = 'stylesheet';
+        linkTag.crossOrigin = "anonymous";
+        linkTag.as = "style";
+        document.body.appendChild(linkTag);
+    }
+
+    /**
+     * Returns true if css is loaded else false
+     *
+     * @param {string} path
+     * @returns {boolean}
+     * @memberof GeneralService
+     */
+    public checkIfCssExists(path: string): boolean {
+        let found = false;
+        for (let i = 0; i < document.styleSheets.length; i++) {
+            if (document.styleSheets[i].href == path) {
+                found = true;
+                break;
+            }
+        }
+        return found;
     }
 
     /* This will return the api host domain based on electron app/web

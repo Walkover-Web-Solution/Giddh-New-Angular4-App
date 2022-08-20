@@ -252,7 +252,7 @@ export class GstReconcileActions {
         private localeService: LocaleService,
         private _reconcileService: GstReconcileService,
         private generalService: GeneralService) {
-        
+
     }
 
     public GstReconcileOtpRequest(userName: string): CustomActions {
@@ -471,6 +471,42 @@ export class GstReconcileActions {
         return {
             type: GSTR_ACTIONS.GST_GET_GSP_SESSION_RESPONSE,
             payload: response
+        };
+    }
+
+    /**
+     * Resets the gstr3b response
+     *
+     * @returns {CustomActions}
+     * @memberof GstReconcileActions
+     */
+    public resetGstr3BOverViewResponse(): CustomActions {
+        return {
+            type: GSTR_ACTIONS.RESET_GSTR3B_OVERVIEW_RESPONSE
+        };
+    }
+
+    /**
+     * Resets the gstr1 response
+     *
+     * @returns {CustomActions}
+     * @memberof GstReconcileActions
+     */
+    public resetGstr1OverViewResponse(): CustomActions {
+        return {
+            type: GSTR_ACTIONS.RESET_GSTR1_OVERVIEW_RESPONSE
+        };
+    }
+
+    /**
+     * Resets the gstr2 response
+     *
+     * @returns {CustomActions}
+     * @memberof GstReconcileActions
+     */
+    public resetGstr2OverViewResponse(): CustomActions {
+        return {
+            type: GSTR_ACTIONS.RESET_GSTR2_OVERVIEW_RESPONSE
         };
     }
 }

@@ -1,15 +1,18 @@
-@import "../../../../assets/css/color.scss";
 .template-grid {
-    background: $white;
     max-width: 255px;
     width: 100%;
     padding: 20px;
     min-height: 250px;
-    border: 1px solid $gainsboro;
-    float: left;
+    border: 1px solid var(--color-common-secondary-border);
+    display: inline-grid;
     border-radius: 4px;
     margin: 5px 15px 15px 0;
     position: relative;
+    color: var(--color-common-primary-text);
+    background: var(--color-common-primary-background-for-all-components);
+    .add-new-btn {
+        width: 81px;
+    }
 }
 
 .template-grid h3 {
@@ -28,41 +31,35 @@
     padding: 15px 0 0;
 }
 
-.primary-color {
-    overflow-y: hidden;
-    white-space: nowrap;
-}
-
-@import "../../../../../../web-giddh/src/assets/css/color.scss";
 .btn-warning {
-    color: $white;
-    background-color: $bright-yellow;
-    border-color: $bright-yellow;
+    color: var(--color-white);
+    background-color: var(--color-primary-edit-template-btn-warning);
+    border-color: var(--color-primary-edit-template-btn-warning);
 }
 
 .more-btn-dropdown {
-    border: 1px solid $gainsboro !important;
+    border: 1px solid var(--color-secondary-input-bar-border) !important;
     box-shadow: none !important;
     border-radius: 5px !important;
     font-size: 14px;
     padding: 5px 10px;
-    background: $white !important;
+    background: var(--color-dropdown-primary-background) !important;
     width: 160px;
     text-align: left;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    color: $charcoal;
+    color: var(--color-dropdown-list-quaternary);
 }
 
 .dropdown-menu > li > a:hover {
-    color: $chetwode-blue;
-    background: $whisper;
+    color: var(--color-blue);
+    background: var(--color-dark-fog);
 }
 .badge {
-    background: $whisper-color !important;
-    color: $charcoal !important;
+    background: var(--color-dark-fog) !important;
+    color: var(--color-nero) !important;
     font-family: opensans-regular;
     border: none !important;
     font-weight: 400 !important;
@@ -70,14 +67,14 @@
     border-radius: 50px;
 }
 .badge.btn-success:hover {
-    background: $gainsboro-light !important;
-    color: $charcoal !important;
+    background: var(--color-primary-edit-template-badge-btn-success-hover) !important;
+    color: var(--color-nero) !important;
 }
 .badge.btn-sky-blue,
 .badge.btn-sky-blue:hover {
-    background: $jacksons-purple !important;
+    background: var(--color-quaternary-button-background) !important;
     border: none !important;
-    color: $white !important;
+    color: var(--color-white) !important;
 }
 .template-grid-container {
     padding: 0 15px;
@@ -89,6 +86,11 @@
 }
 .select-design {
     height: 44px;
+    .btn-group {
+        .dropdown-menu {
+            z-index: 1;
+        }
+    }
 }
 
 .border-radius-none {
@@ -97,7 +99,13 @@
 
 @media (max-width: 414px) {
     .template-grid {
-        background: $gray-95;
+        background: var(--color-wild-sand);
         max-width: 100%;
+    }
+}
+
+@media (max-width: 1024px) {
+    .template-preview-container {
+        z-index: 99999;
     }
 }

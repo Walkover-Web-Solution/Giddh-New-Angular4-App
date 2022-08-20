@@ -1,11 +1,10 @@
-@import "../../assets/css/color.scss";
 .mobile-item-icon:hover {
     -webkit-animation-name: pulse;
     animation-name: pulse;
     animation-duration: 1s;
     cursor: pointer;
     animation-timing-function: ease-in-out;
-    box-shadow: 0px 10px 50px 0 rgba(0, 0, 0, 0.1);
+    box-shadow: 0px 10px 50px 0 var(--color-primary-common-box-shadow);
 }
 @keyframes pulse {
     0% {
@@ -25,13 +24,13 @@
     max-width: 767px;
     width: 100%;
     margin: 0 auto;
-    background-color: $lavender;
+    background-color: var(--color-dark-fog);
     padding: 0;
     .search-field {
         padding: 10px 5px;
         input {
             width: 100%;
-            border: 1px solid $gainsboro;
+            border: 1px solid var(--color-iron);
             padding: 5px 20px;
             border-radius: 30px;
             height: 36px;
@@ -68,7 +67,7 @@
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                background-color: $white;
+                background-color: var(--color-white);
                 border-radius: 11px;
                 margin-bottom: 8px;
                 transform: scaleX(1);
@@ -79,13 +78,13 @@
                 i {
                     font-size: 20px;
                     display: block;
-                    color: $midnight-blue;
+                    color: var(--color-giddh-blue);
                 }
             }
             .mobile-item-name {
                 h4 {
                     font-size: 10px;
-                    color: $midnight-blue;
+                    color: var(--color-giddh-blue);
                     text-align: center;
                     font-family: "opensans-semibold";
                     height: 40px;
@@ -99,15 +98,15 @@
                 }
             }
             &:hover {
-                border-color: $midnight-blue;
+                border-color: var(--color-giddh-blue);
                 .mobile-item-icon {
                     i {
-                        color: $midnight-blue;
+                        color: var(--color-giddh-blue);
                     }
                 }
                 .mobile-item-name {
                     h4 {
-                        color: $midnight-blue;
+                        color: var(--color-giddh-blue);
                         text-overflow: ellipsis;
                         overflow: hidden;
                     }
@@ -117,20 +116,20 @@
     }
     .search-accounts-groups {
         padding: 15px 0 0;
-        border-top: 1px solid $gainsboro;
+        border-top: 1px solid var(--color-iron);
         margin: 0 15px 0;
-        color: $nero;
+        color: var(--color-nero);
         .single-search-group {
             display: flex;
             align-items: center;
             padding: 7px 15px;
             margin: 5px -15px 5px;
             &:hover {
-                background-color: $lavender-light !important;
+                background-color: var(--color-common--primary-light-background) !important;
             }
             .group-icon {
                 padding-right: 10px;
-                color: $gray;
+                color: var(--color-abbey);
                 font-size: 12px;
                 .icon-account {
                     font-size: 11px;
@@ -139,11 +138,11 @@
             .group-name {
                 h4 {
                     font-size: 12px;
-                    color: $nero;
+                    color: var(--color-nero);
                 }
                 p {
                     font-size: 10px;
-                    color: $gray;
+                    color: var(--color-abbey);
                 }
             }
         }
@@ -153,7 +152,7 @@
                     line-height: 0.5;
                 }
                 .account-unique-name {
-                    color: $matterhorn;
+                    color: var(--color-abbey);
                     font-size: 10px;
                 }
             }
@@ -161,7 +160,7 @@
     }
 }
 .mobile-home-search {
-    background-color: $lavender;
+    background-color: var(--color-dark-fog);
     display: flex;
     align-items: center;
     padding: 0 15px;
@@ -185,8 +184,8 @@
                 background-color: transparent;
                 letter-spacing: 0;
                 &:hover {
-                    color: $chetwode-blue !important;
-                    background: $lavender !important;
+                    color: var(--color-blue) !important;
+                    background: var(--color-dark-fog) !important;
                 }
             }
         }
@@ -194,13 +193,13 @@
     .company-name-alice {
         width: 36px;
         height: 36px;
-        background-color: $chetwode-blue;
+        background-color: var(--color-blue);
         border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
         font-size: 13px;
-        color: $white;
+        color: var(--color-white);
         letter-spacing: -1px;
         p {
             display: flex;
@@ -217,7 +216,7 @@
         width: calc(100% - 36px);
         position: relative;
         .input-group {
-            background-color: $white;
+            background-color: var(--color-white);
             border-radius: 50px;
             padding: 10px 15px;
             display: flex;
@@ -232,7 +231,7 @@
                 line-height: 1.2;
                 height: auto;
                 padding-right: 5px;
-                color: $gray;
+                color: var(--color-abbey);
                 border: none;
                 padding: 0 !important;
                 padding-right: 25px !important;
@@ -248,7 +247,7 @@
                 padding-left: 0;
                 line-height: 1.2;
                 height: auto;
-                color: $gray;
+                color: var(--color-abbey);
                 border: none;
                 padding: 0 !important;
                 padding-right: 0;
@@ -263,7 +262,7 @@
                     right: 0;
                     top: 0;
                     z-index: 3;
-                    color: $gray;
+                    color: var(--color-abbey);
                 }
             }
             input {
@@ -276,7 +275,7 @@
                 background-color: transparent !important;
                 display: inline-block;
                 &:focus {
-                    border-color: $gainsboro !important;
+                    border-color: var(--color-iron) !important;
                 }
             }
         }
@@ -297,14 +296,14 @@
     height: 40px;
     display: flex;
     position: fixed;
-    background-color: $midnight-blue;
-    color: $white;
+    background-color: var(--color-giddh-blue);
+    color: var(--color-white);
     bottom: 15px;
     right: 15px;
     align-items: center;
     justify-content: center;
     border-radius: 10px;
-    box-shadow: 0 1px 6px 0 rgba(0, 0, 0, 0.06), 0 2px 32px 0 rgba(0, 0, 0, 0.16);
+    box-shadow: 0 1px 6px 0 var(--color-primary-common-box-shadow), 0 2px 32px 0 var(--color-primary-common-box-shadow);
     cursor: pointer;
     transition: 0.5s ease;
     opacity: 0;

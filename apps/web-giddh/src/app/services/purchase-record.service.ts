@@ -156,7 +156,7 @@ export class PurchaseRecordService {
     public getPdf(requestObject: any): Observable<BaseResponse<any, any>> {
         if (this.generalService.voucherApiVersion === 2) {
             let url: string = this.config.apiUrl + PURCHASE_RECORD_API.V2.GET_PDF;
-            url = url.replace(':companyUniqueName', requestObject.companyUniqueName);
+            url = url.replace(':companyUniqueName', this.generalService.companyUniqueName);
             url = url.replace(':accountUniqueName', encodeURIComponent(requestObject.accountUniqueName));
             url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
 
@@ -164,7 +164,7 @@ export class PurchaseRecordService {
                 catchError((e) => this.errorHandler.HandleCatch<any, any>(e, requestObject)));
         } else {
             let url: string = this.config.apiUrl + PURCHASE_RECORD_API.GET_PDF;
-            url = url.replace(':companyUniqueName', requestObject.companyUniqueName);
+            url = url.replace(':companyUniqueName', this.generalService.companyUniqueName);
             url = url.replace(':accountUniqueName', encodeURIComponent(requestObject.accountUniqueName));
             url = url.replace(':uniqueName', requestObject.uniqueName);
 

@@ -1,13 +1,12 @@
-@import "../../../../../assets/css/color.scss";
 .form-header {
     padding: 20px 15px;
-    background: $midnight-blue;
-    color: $white;
+    background: var(--color-giddh-blue);
+    color: var(--color-white);
 }
 
 .aside-pane-form {
-    background-color: $white;
-    box-shadow: 0px 3px 6px $black-russian;
+    background-color: var(--color-white);
+    box-shadow: 0px 3px 6px var(--color-primary-common-box-shadow);
     padding: 15px 15px;
     overflow: auto;
     scroll-behavior: smooth;
@@ -17,7 +16,7 @@
 .aside-pane-container {
     padding: 15px;
     font-size: 14px;
-    color: $nero;
+    color: var(--color-nero);
 }
 
 .aside-pane-form label {
@@ -47,8 +46,8 @@ span.dr-label {
 }
 
 .cr-dr-account span.active {
-    background-color: $chetwode-blue;
-    color: $white;
+    background-color: var(--color-blue);
+    color: var(--color-white);
 }
 
 .aside-pane-form .col-sm-4,
@@ -64,13 +63,13 @@ span.dr-label {
     margin-bottom: 20px;
     .input-group {
         .input-group-addon {
-            border-left: 1px solid $gainsboro !important;
+            border-left: 1px solid var(--color-iron) !important;
         }
         input {
-            border-left: 1px solid $gainsboro !important;
+            border-left: 1px solid var(--color-iron) !important;
             border-right: none;
             &:focus {
-                border-left: 1px solid $chetwode-blue !important;
+                border-left: 1px solid var(--color-blue) !important;
             }
         }
     }
@@ -83,7 +82,7 @@ form.gstin-form {
 .add-address-default {
     display: flex;
     justify-content: space-between;
-    background-color: $gainsboro;
+    background-color: var(--color-right-sidebar-primary-background);
     padding: 6px 10px;
     align-items: center;
     margin: 20px 0;
@@ -99,7 +98,7 @@ form.gstin-form {
 }
 .add-address-default h3 {
     font-size: 16px;
-    color: $nero;
+    color: var(--color-common-primary-text);
 }
 
 .contact-form,
@@ -126,9 +125,9 @@ form.gstin-form {
 
 a.btn-remove {
     padding: 3px 10px;
-    background-color: $white;
-    color: $nero;
-    border: 1px solid $gainsboro;
+    background-color: var(--color-white);
+    color: var(--color-nero);
+    border: 1px solid var(--color-iron);
 }
 
 .name-of-field {

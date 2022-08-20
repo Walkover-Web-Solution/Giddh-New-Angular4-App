@@ -3,7 +3,7 @@
         <div class="search-box position-relative mr-t1 mr-b1">
             <div class="input-group flex-nowrap">
                 <div class="input-group-prepend">
-                    <span class="input-group-text border-right-none" id="addon-wrapping">
+                    <span class="input-group-text border-right-none">
                         <i class="icon-search"></i>
                     </span>
                 </div>
@@ -11,8 +11,6 @@
                     type="text"
                     class="form-control"
                     [placeholder]="localeData?.search_company"
-                    [attr.aria-label]="localeData?.search_company"
-                    aria-describedby="addon-wrapping"
                     [(ngModel)]="searchCompany"
                     (ngModelChange)="filterCompanyList($event)"
                     autocomplete="off"
@@ -22,8 +20,6 @@
                     type="text"
                     class="form-control"
                     [placeholder]="localeData?.search_branch"
-                    [attr.aria-label]="localeData?.search_branch"
-                    aria-describedby="addon-wrapping"
                     [(ngModel)]="searchBranch"
                     (ngModelChange)="filterBranchList($event)"
                     autocomplete="off"
@@ -66,23 +62,23 @@
                     >
                         <li
                             class="btn-group"
-                            *ngFor="let company of companyListForFilter"
+                            *ngFor="let company of companyListForFilter; let i = index"
                             [ngClass]="{ 'active': company?.uniqueName === activeCompany?.uniqueName }"
                             [tooltip]="company?.name"
-                            placement="top"
+                            [placement]="i === 0 ? 'bottom' : 'top'"
                         >
                             <span
                                 id="button-basic"
                                 class="dropdown-toggle d-flex align-items-center"
                                 aria-controls="dropdown-basic"
-                                (click)="getCompanyBranches(company); showAllBranches(company)"
+                                (click)="getCompanyBranches(company, true); showAllBranches(company)"
                             >
                                 <i class="icon-company mr-2"></i>
                                 <span class="company-name-right">{{ company?.name }}</span>
                                 <span
                                     class="font-11 text-right branch-count pt-0 pb-0"
-                                    *ngIf="company?.branchCount > 1"
-                                    >{{ company?.branchCount }}</span
+                                    *ngIf="company?.branchCount > 1 && company?.unarchivedBranchCount >= 1"
+                                    >{{ company?.unarchivedBranchCount }}</span
                                 >
                             </span>
                         </li>
@@ -93,14 +89,14 @@
             <tab
                 [heading]="commonLocaleData?.app_branch"
                 (selectTab)="tabChanged('branch')"
-                *ngIf="companyBranches?.branchCount > 1"
+                *ngIf="companyBranches?.branchCount > 1 && companyBranches?.unarchivedBranchCount >= 1"
             >
                 <div class="wrap-company-refresh">
                     <p class="font-12 d-flex justify-content-between mr-t1">
                         <span
                             ><small
                                 >{{
-                                    companyBranches?.branchCount > 1
+                                    companyBranches?.unarchivedBranchCount >= 1
                                         ? branchList?.length
                                         : commonLocaleData?.app_numbers?.zero
                                 }}
@@ -126,13 +122,13 @@
                 </div>
                 <div class="company-list branch-list mt-2">
                     <ul class="list-style-none font-14" *ngIf="!branchRefreshInProcess">
-                        <ng-container *ngIf="companyBranches?.branchCount > 1">
+                        <ng-container *ngIf="companyBranches?.unarchivedBranchCount >= 1">
                             <li
                                 *ngIf="
                                     activeCompany?.uniqueName !== companyBranches?.uniqueName || currentBranchUniqueName
                                 "
                                 [tooltip]="companyBranches.name"
-                                placement="top"
+                                placement="bottom"
                             >
                                 <a
                                     class="d-flex align-items-center head-branch"
@@ -169,7 +165,7 @@
                                 </a>
                             </li>
                         </ng-container>
-                        <ng-container *ngIf="companyBranches?.branchCount === 1">
+                        <ng-container *ngIf="companyBranches?.unarchivedBranchCount === 0">
                             <li class="wrap-company-refresh">
                                 <span class="d-flex align-items-center">{{ localeData?.no_branches_found }}</span>
                             </li>

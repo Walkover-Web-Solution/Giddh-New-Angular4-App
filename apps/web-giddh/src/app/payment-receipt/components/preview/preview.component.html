@@ -1,0 +1,271 @@
+<ng-container
+    appTranslate
+    [file]="'reports/' + translationFile"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+>
+    <hamburger-menu></hamburger-menu>
+    <mat-card class="receipt-preview-card p-0">
+        <mat-card-content>
+            <div class="row mr-0 ml-0">
+                <div class="col-sm-12 col-lg-4 voucher-sidebar-wrapper pr-0">
+                    <div>
+                        <div class="voucher-search-box">
+                            <span matPrefix><i class="icon-search position-absolute"></i></span>
+                            <text-field
+                                class="width-70"
+                                [cssClass]="'form-control mat-field-border search-icon-field'"
+                                [placeholder]="commonLocaleData?.app_search"
+                                [(ngModel)]="search"
+                                (ngModelChange)="search$.next(search)"
+                                #searchElement
+                            ></text-field>
+                            <button
+                                *ngIf="!isCompany"
+                                class="mr-l1"
+                                mat-raised-button
+                                color="primary"
+                                [routerLink]="['/pages/voucher/' + voucherType + '/create']"
+                            >
+                                {{ localeData?.new_voucher }}
+                            </button>
+                        </div>
+                        <ul class="voucher-sidebar">
+                            <perfect-scrollbar *ngIf="filteredData && filteredData.length > 0">
+                                <li
+                                    class="single-voucher-details cp"
+                                    [ngClass]="{ 'activeItem': row.uniqueName === params?.uniqueName }"
+                                    *ngFor="let row of filteredData; let i = index"
+                                    [routerLink]="
+                                        '/pages/voucher/' +
+                                        voucherType +
+                                        '/preview/' +
+                                        row?.uniqueName +
+                                        '/' +
+                                        row?.account?.uniqueName
+                                    "
+                                >
+                                    <div class="row">
+                                        <div class="col-7 col-sm-7 pl-0">
+                                            <div class="voucher-number-date font-12">
+                                                <span class="order-number">
+                                                    {{ row.voucherNumber || commonLocaleData?.app_not_available }}
+                                                </span>
+                                                <span class="order-date"> | {{ row.voucherDate }} </span>
+                                            </div>
+                                            <div class="voucher-holder-name">
+                                                <p>{{ row.account?.name }}</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-5 col-sm-5">
+                                            <div class="voucher-amount pull-right">
+                                                <amount-field
+                                                    [amount]="row.grandTotal?.amountForAccount"
+                                                    [currencySymbol]="false"
+                                                    [currencyCode]="false"
+                                                >
+                                                </amount-field>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            </perfect-scrollbar>
+                        </ul>
+                    </div>
+                </div>
+                <!-- endregion -->
+
+                <div class="col-sm-12 col-lg-8 p-0 voucher-detail-wrapper">
+                    <div class="scroll-half">
+                        <div class="voucher-detail">
+                            <div class="voucher-detail-header col-md-12">
+                                <div class="row">
+                                    <div class="col-xl-4 col-lg-3 col-sm-12">
+                                        <div class="voucher-number-holder">
+                                            <h3 class="voucher-number">
+                                                {{ voucherDetails?.number || commonLocaleData?.app_not_available }}
+                                            </h3>
+                                            <p class="account-holder-name">{{ voucherDetails?.account?.name }}</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xl-8 col-lg-9 col-sm-12">
+                                        <div class="edit-change-status">
+                                            <span
+                                                class="close-modal cp pull-right"
+                                                [routerLink]="['/pages/reports/' + voucherType]"
+                                            >
+                                                <img src="assets/images/multiply.svg"
+                                            /></span>
+
+                                            <div class="wrap-edit-history-btn">
+                                                <div class="edit-action-btn-groups pull-right">
+                                                    <span *ngIf="!isCompany">
+                                                        <a
+                                                            href="javascript:;"
+                                                            [matTooltip]="commonLocaleData?.app_edit"
+                                                            [matTooltipPosition]="'above'"
+                                                            [routerLink]="
+                                                                '/pages/voucher/' +
+                                                                voucherType +
+                                                                '/edit/' +
+                                                                params?.uniqueName +
+                                                                '/' +
+                                                                params?.accountUniqueName
+                                                            "
+                                                            ><i class="icon-edit-pencil"></i
+                                                        ></a>
+                                                    </span>
+
+                                                    <span>
+                                                        <a
+                                                            href="javascript:;"
+                                                            [matTooltip]="commonLocaleData?.app_send_email"
+                                                            [matTooltipPosition]="'above'"
+                                                            (click)="openSendEmailModal()"
+                                                            ><i class="icon-envelope font-12"></i
+                                                        ></a>
+                                                    </span>
+
+                                                    <span>
+                                                        <button
+                                                            mat-button
+                                                            href="javascript:;"
+                                                            [matTooltip]="commonLocaleData?.app_print"
+                                                            [matTooltipPosition]="'above'"
+                                                            (click)="!pdfPreviewHasError ? printVoucher() : ''"
+                                                            [disabled]="pdfPreviewHasError"
+                                                            class="preview-button"
+                                                        >
+                                                            <i class="fa fa-print"></i>
+                                                        </button>
+                                                    </span>
+
+                                                    <span>
+                                                        <button
+                                                            mat-button
+                                                            href="javascript:;"
+                                                            [matTooltip]="commonLocaleData?.app_download"
+                                                            [matTooltipPosition]="'above'"
+                                                            (click)="!pdfPreviewHasError ? downloadPdf() : ''"
+                                                            [disabled]="pdfPreviewHasError"
+                                                            class="preview-button"
+                                                        >
+                                                            <i class="icon-download-circle"></i>
+                                                        </button>
+                                                    </span>
+
+                                                    <span>
+                                                        <button
+                                                            mat-button
+                                                            href="javascript:;"
+                                                            [matTooltip]="commonLocaleData?.app_download"
+                                                            [matTooltipPosition]="'above'"
+                                                            (click)="selectedItem?.hasAttachment ? downloadFile() : ''"
+                                                            [disabled]="!selectedItem?.hasAttachment"
+                                                            class="preview-button"
+                                                        >
+                                                            <i class="icon-attachment"></i>
+                                                        </button>
+                                                    </span>
+
+                                                    <span *ngIf="!isCompany">
+                                                        <a
+                                                            href="javascript:;"
+                                                            [matTooltip]="commonLocaleData?.app_delete"
+                                                            [matTooltipPosition]="'above'"
+                                                            (click)="deleteVoucher()"
+                                                            ><i class="icon-trash"></i
+                                                        ></a>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="pd-l15" *ngIf="attachedDocumentType?.type === 'unsupported'">
+                                <h5 class="pd-b05 font-16">
+                                    <strong>{{ localeData?.uploaded_bill }}</strong>
+                                </h5>
+                            </div>
+                        </div>
+                        <div class="voucher-image-section mr-l1 mr-t1">
+                            <div class="relative">
+                                <div class="position-relative" *ngIf="!pdfPreviewHasError && !pdfPreviewLoaded">
+                                    <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
+                                </div>
+                                <div
+                                    class="preview-not-supported-attachment"
+                                    *ngIf="attachedDocumentType?.type === 'unsupported'"
+                                >
+                                    <p>{{ attachedDocumentType?.name }}</p>
+                                    <p>{{ commonLocaleData?.app_preview_formats }}</p>
+                                </div>
+                                <div
+                                    *ngIf="attachedDocumentType?.type === 'image'"
+                                    class="img-expand-collapse"
+                                    [ngClass]="{ 'image-collapsed': !isAttachmentExpanded }"
+                                >
+                                    <img class="image-preview img-expand" [src]="imagePreviewSource" />
+                                </div>
+                                <div
+                                    *ngIf="attachedDocumentType?.type === 'pdf' && attachedPdfFileUrl"
+                                    #attachedDocumentPreview
+                                    class="pdf-expand-collapse pdf-preview mt-0"
+                                    [ngClass]="{ 'image-collapsed': !isAttachmentExpanded }"
+                                >
+                                    <iframe
+                                        #pdfContainer
+                                        width="100%"
+                                        height="100%"
+                                        [src]="attachedPdfFileUrl"
+                                    ></iframe>
+                                </div>
+                                <div class="expand-file" *ngIf="imagePreviewSource || attachedPdfFileUrl">
+                                    <a
+                                        href="javascript:;"
+                                        *ngIf="!isAttachmentExpanded"
+                                        class="cp"
+                                        (click)="isAttachmentExpanded = true"
+                                        ><span><img src="assets/images/expand.svg" /></span
+                                        >{{ commonLocaleData?.app_expand }}</a
+                                    >
+                                    <a
+                                        href="javascript:;"
+                                        *ngIf="isAttachmentExpanded"
+                                        class="cp"
+                                        (click)="isAttachmentExpanded = false"
+                                        ><span><img src="assets/images/expand.svg" class="collapse-icon" /></span
+                                        >{{ commonLocaleData?.app_collapse }}</a
+                                    >
+                                </div>
+                                <div class="error" [hidden]="!pdfPreviewHasError">
+                                    <span>
+                                        {{ localeData?.preview_unavailable }}
+                                    </span>
+                                </div>
+                                <div class="pdf-preview" #attachedDocumentPreview>
+                                    <iframe
+                                        #pdfContainer
+                                        *ngIf="sanitizedPdfFileUrl && pdfPreviewLoaded"
+                                        width="100%"
+                                        height="100%"
+                                        [src]="sanitizedPdfFileUrl"
+                                    ></iframe>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </mat-card-content>
+    </mat-card>
+</ng-container>
+<ng-template #sendEmail>
+    <send-email
+        [voucherType]="voucherType"
+        [email]="voucherDetails?.account?.email"
+        (successEvent)="sendVoucherEmail($event)"
+    ></send-email>
+</ng-template>

@@ -69,7 +69,7 @@
                     <div class="clearfix" [hidden]="smsTabActive">
                         <h3 class="font-16 mr-b05">{{ localeData?.invoice_copy }}</h3>
                         <hr />
-                        <div class="checkbox">
+                        <div class="checkbox" *ngIf="voucherApiVersion === 2">
                             <label
                                 ><input
                                     type="checkbox"
@@ -93,6 +93,19 @@
                                 }}</label
                             >
                         </div>
+                        <div
+                            class="checkbox"
+                            *ngIf="voucherApiVersion === 2 && voucherHasAttachments && downloadTabActive"
+                        >
+                            <label
+                                ><input
+                                    name="attachment"
+                                    type="checkbox"
+                                    value="Attachment"
+                                    [(ngModel)]="isAttachment"
+                                />{{ localeData?.attachment }}</label
+                            >
+                        </div>
                     </div>
                 </ng-container>
 
@@ -110,7 +123,7 @@
                         type="button"
                         class="btn btn-sm btn-success"
                         (click)="downloadInvoice()"
-                        [disabled]="!invoiceType.length"
+                        [disabled]="!invoiceType.length && !isAttachment"
                         [hidden]="emailTabActive || smsTabActive"
                     >
                         {{ localeData?.download_invoice }}
@@ -209,6 +222,7 @@
             <div class="clearfix mt-2">
                 <button
                     [hidden]="!emailTabActive"
+                    [disabled]="!emailList?.value || (currentVoucherFilter === 'invoices' && !invoiceType?.length)"
                     type="button"
                     class="btn btn-sm btn-success"
                     (click)="onSendInvoiceOnMail(emailList.value)"
@@ -219,7 +233,7 @@
                     type="button"
                     class="btn btn-sm btn-success"
                     (click)="downloadInvoice()"
-                    [disabled]="!invoiceType.length && currentVoucherFilter === 'invoices'"
+                    [disabled]="!invoiceType.length && !isAttachment && currentVoucherFilter === 'invoices'"
                     [hidden]="emailTabActive || smsTabActive"
                 >
                     {{ localeData?.download_invoice }}

@@ -1,12 +1,10 @@
-@import "../../../assets/css/color.scss";
-
 .max-width-500 {
     max-width: 500px;
 }
 .right-bar {
     position: absolute;
     top: -49px;
-    background-color: $white;
+    background-color: var(--color-white);
     right: -15px;
     height: unset;
     width: 310px;
@@ -17,11 +15,11 @@
 input.green-checkbox[type="checkbox"]:after {
     left: -3px !important;
     border: 0px solid transparent !important;
-    background-color: $whisper;
+    background-color: var(--color-dark-fog);
     border-radius: 27px !important;
 }
 input.green-checkbox[type="checkbox"]:before {
-    border: 2px solid $white !important;
+    border: 2px solid var(--color-white) !important;
     border-top-style: none !important;
     border-right-style: none !important;
     left: 0px !important;
@@ -30,10 +28,10 @@ input.green-checkbox[type="checkbox"]:before {
     font-size: 12px;
 }
 input.green-checkbox[type="checkbox"]:checked:after {
-    background-color: $success-green !important;
+    background-color: var(--color-success-enable) !important;
 }
 .group-card {
-    border: 1px solid $silver;
+    border: 1px solid var(--color-gray);
     padding: 0 13px;
     border-radius: 4px;
     margin: 15px 0;
@@ -51,7 +49,7 @@ input.green-checkbox[type="checkbox"]:checked:after {
 }
 
 .success-label {
-    color: $success-green !important;
+    color: var(--color-success-enable) !important;
 }
 
 @media (max-width: 1140px) {

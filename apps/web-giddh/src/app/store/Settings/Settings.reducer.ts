@@ -10,8 +10,7 @@ import { SETTINGS_FINANCIAL_YEAR_ACTIONS } from '../../actions/settings/financia
 import { IFinancialYearResponse, ILockFinancialYearRequest } from '../../services/settings.financial-year.service';
 import { CustomActions } from '../customActions';
 import { SETTINGS_BRANCH_ACTIONS } from '../../actions/settings/branch/settings.branch.const';
-import { CreateDiscountRequest, IDiscountList } from '../../models/api-models/SettingsDiscount';
-import { AccountResponse } from '../../models/api-models/Account';
+import { IDiscountList } from '../../models/api-models/SettingsDiscount';
 import { COMMON_ACTIONS } from '../../actions/common.const';
 import { SETTINGS_TAXES_ACTIONS } from "../../actions/settings/taxes/settings.taxes.const";
 import { cloneDeep, filter, map, orderBy } from '../../lodash-optimized';

@@ -1,8 +1,6 @@
-@import "../../../../../../../assets/css/color.scss";
-
 .inner-tabs {
     padding: 15px;
-    background: $alice-blue-light;
+    background: var(--color-gst-primary-background-color);
 }
 .basic > thead > tr > th {
     position: relative;
@@ -15,7 +13,7 @@
     right: 10px;
 }
 .sort-table .top-sort {
-    border-bottom: 6px solid $gainsboro;
+    border-bottom: 6px solid var(--color-iron);
     border-top: 4px solid transparent;
 }
 .sort-table .bottom-sort,
@@ -30,12 +28,12 @@
     line-height: 0;
 }
 .sort-table .bottom-sort {
-    border-top: 7px solid $gainsboro;
+    border-top: 7px solid var(--color-iron);
     border-bottom: 4px solid transparent;
     margin-bottom: 0px;
 }
 .bg-white {
-    background: $white;
+    background: var(--color-white);
     padding: 15px;
 }
 .error-shit-total .table tr td {
@@ -43,23 +41,23 @@
 }
 .error-shit-total .table tr td h4 {
     font-size: 28px;
-    color: $black;
+    color: var(--color-nero);
 }
 .error-shit-total .table tr td p {
-    color: $nobel;
+    color: var(--color-gray);
     font-size: 18px;
 }
 .error-shit-total .table {
     margin: 0px;
 }
 .error-shit-total {
-    background: $white;
+    background: var(--color-white);
     padding: 20px;
     width: 100%;
     display: block;
 }
 .text-purple {
-    color: $chetwode-blue !important;
+    color: var(--color-blue) !important;
 }
 .gst-error {
     display: block;

@@ -32,6 +32,8 @@ import { PurchaseRecordComponent } from './purchase-record/component/purchase-re
 import { PurchaseSettingComponent } from './purchase-setting/purchase-setting.component';
 import { PurchaseComponent } from './purchase.component';
 import { PurchaseRoutingModule } from './purchase.routing.module';
+import { NgxBootstrapSwitchModule } from 'ngx-bootstrap-switch';
+
 
 @NgModule({
     declarations: [
@@ -46,15 +48,18 @@ import { PurchaseRoutingModule } from './purchase.routing.module';
     imports: [
         PurchaseRoutingModule,
         CollapseModule,
-        PaginationModule,
+        PaginationModule.forRoot(),
         DatepickerModule,
-        BsDropdownModule,
+        BsDropdownModule.forRoot(),
         Daterangepicker,
-        LaddaModule,
+        LaddaModule.forRoot({
+            style: 'slide-left',
+            spinnerSize: 30
+        }),
         HighlightModule,
-        TooltipModule,
+        TooltipModule.forRoot(),
         ClickOutsideModule,
-        TabsModule,
+        TabsModule.forRoot(),
         AlertModule,
         ElementViewChildModule,
         PerfectScrollbarModule,
@@ -67,7 +72,8 @@ import { PurchaseRoutingModule } from './purchase.routing.module';
         TaxControlModule,
         DiscountControlModule,
         ProformaInvoiceModule,
-        NoDataModule
+        NoDataModule,
+        NgxBootstrapSwitchModule.forRoot(),
     ],
     entryComponents: [],
     exports: [

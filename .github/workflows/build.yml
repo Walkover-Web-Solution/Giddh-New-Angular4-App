@@ -67,7 +67,7 @@ jobs:
         if: ${{ env.BUILD_ENV == 'Test' }}
         run: |
           mkdir public
-          cp -r /home/runner/work/Giddh-New-Angular4-App/Giddh-New-Angular4-App/dist/apps/web-giddh-test /home/runner/work/Giddh-New-Angular4-App/Giddh-New-Angular4-App/public/website/
+          cp -r /home/runner/work/Giddh-New-Angular4-App/Giddh-New-Angular4-App/dist/apps/web-giddh /home/runner/work/Giddh-New-Angular4-App/Giddh-New-Angular4-App/public/website/
       - name: Creating Stage bundle
         if: ${{ env.BUILD_ENV == 'Stage' }}
         run: npm run build-stage
@@ -87,7 +87,7 @@ jobs:
         if: ${{ env.BUILD_ENV == 'Stage' }}
         run: |
           mkdir public
-          cp -r /home/runner/work/Giddh-New-Angular4-App/Giddh-New-Angular4-App/dist/apps/web-giddh-stage /home/runner/work/Giddh-New-Angular4-App/Giddh-New-Angular4-App/public/website/
+          cp -r /home/runner/work/Giddh-New-Angular4-App/Giddh-New-Angular4-App/dist/apps/web-giddh /home/runner/work/Giddh-New-Angular4-App/Giddh-New-Angular4-App/public/website/
       - name: Creating Beta bundle
         if: ${{ env.BUILD_ENV == 'Beta' }}
         run: npm run build-prod
@@ -107,7 +107,7 @@ jobs:
         if: ${{ env.BUILD_ENV == 'Beta' }}
         run: |
           mkdir public
-          cp -r /home/runner/work/Giddh-New-Angular4-App/Giddh-New-Angular4-App/dist/apps/web-giddh-prod /home/runner/work/Giddh-New-Angular4-App/Giddh-New-Angular4-App/public/website/
+          cp -r /home/runner/work/Giddh-New-Angular4-App/Giddh-New-Angular4-App/dist/apps/web-giddh /home/runner/work/Giddh-New-Angular4-App/Giddh-New-Angular4-App/public/website/
       - name: Creating Prod bundle
         if: ${{ env.BUILD_ENV == 'Prod' }}
         run: npm run build-prod
@@ -127,7 +127,7 @@ jobs:
         if: ${{ env.BUILD_ENV == 'Prod' }}
         run: |
           mkdir public
-          cp -r /home/runner/work/Giddh-New-Angular4-App/Giddh-New-Angular4-App/dist/apps/web-giddh-prod /home/runner/work/Giddh-New-Angular4-App/Giddh-New-Angular4-App/public/website/
+          cp -r /home/runner/work/Giddh-New-Angular4-App/Giddh-New-Angular4-App/dist/apps/web-giddh /home/runner/work/Giddh-New-Angular4-App/Giddh-New-Angular4-App/public/website/
       - name: Create ZIP folder
         run:
           zip -r public.zip public

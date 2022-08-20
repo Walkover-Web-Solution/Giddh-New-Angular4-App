@@ -12,6 +12,8 @@ import { Router } from '@angular/router';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { findIndex, isEmpty } from 'apps/web-giddh/src/app/lodash-optimized';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
+import { VoucherTypeEnum } from 'apps/web-giddh/src/app/models/api-models/Sales';
+import { CommonService } from 'apps/web-giddh/src/app/services/common.service';
 
 @Component({
     selector: 'download-or-send-mail-invoice',
@@ -20,7 +22,8 @@ import { GeneralService } from 'apps/web-giddh/src/app/services/general.service'
 })
 
 export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
-
+    /** Selected voucher details */
+    @Input() public selectedVoucher: any;
     @Input() public base64Data: any;
     @Input() public selectedInvoiceForDelete: ILedgersInvoiceResult;
     @Output() public closeModelEvent: EventEmitter<number> = new EventEmitter();
@@ -34,14 +37,13 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
     public showEsign: boolean = false;
     public showEditButton: boolean = false;
     public isErrOccured$: Observable<boolean>;
-    public invoiceType: string[] = ['Original'];
+    public invoiceType: string[] = [];
     public showMore: boolean = false;
     public emailTabActive: boolean = true;
     public downloadTabActive: boolean = false;
     public smsTabActive: boolean = false;
     public isSendSmsEnabled: boolean = false;
     public isElectron = isElectron;
-    public isCordova = isCordova;
     public voucherRequest = null;
     public accountUniqueName: string = '';
     public selectedInvoiceNo: string = '';
@@ -64,6 +66,10 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
     public voucherApiVersion: 1 | 2;
     /** Holds voucher unique name */
     public selectedVoucherUniqueName: string = "";
+    /** Voucher has attachments */
+    public voucherHasAttachments: boolean = false;
+    /** True if attachment is checked */
+    public isAttachment: boolean = false;
 
     constructor(
         private _toasty: ToasterService,
@@ -73,7 +79,8 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
         private invoiceReceiptActions: InvoiceReceiptActions,
         private _router: Router,
         private breakpointObserver: BreakpointObserver,
-        private generalService: GeneralService
+        private generalService: GeneralService,
+        private commonService: CommonService
     ) {
         this.breakpointObserver
         .observe(['(max-width: 768px)'])
@@ -89,55 +96,78 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
     public ngOnInit() {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
 
-        this.voucherPreview$.subscribe((o: any) => {
-            if (o) {
-                const reader = new FileReader();
-                const b64toBlob = (b64Data, contentType = '', sliceSize = 512) => {
-                    const byteCharacters = atob(b64Data);
-                    const byteArrays = [];
+        if(this.voucherApiVersion === 2 && ![VoucherTypeEnum.generateEstimate, VoucherTypeEnum.generateProforma].includes(this.selectedVoucher?.voucherType)) {
+            this.invoiceType.push('Original');
 
-                    for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
-                        const slice = byteCharacters.slice(offset, offset + sliceSize);
+            let getRequest = {
+                voucherType: this.selectedVoucher.voucherType,
+                uniqueName: this.selectedVoucher.uniqueName
+            };
 
-                        const byteNumbers = new Array(slice.length);
-                        for (let i = 0; i < slice.length; i++) {
-                            byteNumbers[i] = slice.charCodeAt(i);
-                        }
-
-                        const byteArray = new Uint8Array(byteNumbers);
-                        byteArrays.push(byteArray);
-                    }
-
-                    const blob = new Blob(byteArrays, { type: contentType });
-                    return blob;
-                }
-
-                reader.addEventListener('loadend', (e: any) => {
-                    const blob = b64toBlob(e.srcElement.result.split(',')[1], 'application/pdf');
+            this.sanitizedPdfFileUrl = null;
+            this.voucherHasAttachments = false;
+            this.commonService.downloadFile(getRequest, "VOUCHER").pipe(takeUntil(this.destroyed$)).subscribe(result => {
+                if (result?.body) {
+                    /** Creating voucher pdf start */
+                    const blob = this.generalService.base64ToBlob(result.body.data, 'application/pdf', 512);
                     const file = new Blob([blob], { type: 'application/pdf' });
                     URL.revokeObjectURL(this.pdfFileURL);
                     this.pdfFileURL = URL.createObjectURL(file);
                     this.sanitizedPdfFileUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.pdfFileURL);
-                });
 
-                reader.readAsDataURL(o);
-                this.selectedInvoiceNo = o.request.voucherNumber?.join();
-                this.selectedVoucherType = o.request.voucherType;
-                this.selectedVoucherUniqueName = o.request.uniqueName;
+                    this.selectedInvoiceNo = this.selectedVoucher.voucherNumber;
+                    this.selectedVoucherType = this.selectedVoucher.voucherType;
+                    this.selectedVoucherUniqueName = this.selectedVoucher.uniqueName;
 
-                this.store.dispatch(this.invoiceReceiptActions.getVoucherDetailsV4(o.request.accountUniqueName, {
-                    invoiceNumber: o.request.voucherNumber?.join(),
-                    voucherType: o.request.voucherType,
-                    uniqueName: (this.voucherApiVersion === 2) ? o.request.uniqueName : undefined
-                }));
+                    let accountUniqueName = (this.selectedVoucher?.accountUniqueName || this.selectedVoucher.account?.uniqueName);
 
-                this.showPdfWrap = true;
-                this.showEditButton = true;
-            } else {
-                this.showPdfWrap = false;
-                this.showEditButton = false;
-            }
-        });
+                    this.store.dispatch(this.invoiceReceiptActions.getVoucherDetailsV4(accountUniqueName, {
+                        invoiceNumber:this.selectedVoucher.voucherNumber,
+                        voucherType: this.selectedVoucher.voucherType,
+                        uniqueName: this.selectedVoucher.uniqueName
+                    }));
+
+                    this.showPdfWrap = true;
+                    this.showEditButton = true;
+
+                    if(result.body.attachments?.length > 0) {
+                        this.voucherHasAttachments = true;
+                    }
+                }
+            });
+        } else {
+            this.voucherPreview$.subscribe((o: any) => {
+                if (o) {
+                    const reader = new FileReader();
+
+                    reader.addEventListener('loadend', (e: any) => {
+                        const blob = this.generalService.base64ToBlob(e.srcElement.result.split(',')[1], 'application/pdf', 512);
+                        const file = new Blob([blob], { type: 'application/pdf' });
+                        URL.revokeObjectURL(this.pdfFileURL);
+                        this.pdfFileURL = URL.createObjectURL(file);
+                        this.sanitizedPdfFileUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.pdfFileURL);
+                    });
+
+                    reader.readAsDataURL(o);
+                    this.selectedInvoiceNo = o.request.voucherNumber?.join();
+                    this.selectedVoucherType = o.request.voucherType;
+                    this.selectedVoucherUniqueName = o.request.uniqueName;
+
+                    this.store.dispatch(this.invoiceReceiptActions.getVoucherDetailsV4(o.request.accountUniqueName, {
+                        invoiceNumber: o.request.voucherNumber?.join(),
+                        voucherType: o.request.voucherType,
+                        uniqueName: (this.voucherApiVersion === 2) ? o.request.uniqueName : undefined
+                    }));
+
+                    this.showPdfWrap = true;
+                    this.showEditButton = true;
+                } else {
+                    this.showPdfWrap = false;
+                    this.showEditButton = false;
+                }
+            });
+        }
+
         this.store.pipe(select(p => p.invoice.settings), takeUntil(this.destroyed$)).subscribe((o: any) => {
             if (o && o.invoiceSettings) {
                 this.isSendSmsEnabled = o.invoiceSettings.sendInvLinkOnSms;
@@ -149,8 +179,8 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
         this.store.pipe(select(p => p.receipt.voucher), takeUntil(this.destroyed$)).subscribe((o: any) => {
             if (o) {
                 this.accountUniqueName = o.account.uniqueName;
-                if(o.templateDetails.templateUniqueName) {
-                    this.store.dispatch(this._invoiceActions.GetTemplateDetailsOfInvoice(o.templateDetails.templateUniqueName));
+                if(o.templateDetails?.templateUniqueName) {
+                    this.store.dispatch(this._invoiceActions.GetTemplateDetailsOfInvoice(o.templateDetails?.templateUniqueName));
                 }
             }
         });
@@ -228,7 +258,46 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
      * downloadInvoice
      */
     public downloadInvoice() {
-        this.downloadInvoiceEvent.emit(this.invoiceType);
+        if(this.voucherApiVersion === 2) {
+            let dataToSend = {
+                copyTypes: this.invoiceType,
+                voucherType: this.selectedVoucher?.voucherType,
+                uniqueName: this.selectedVoucher?.uniqueName
+            };
+
+            let downloadOption = "";
+            let fileType = "pdf";
+            if (this.isAttachment) {
+                if (this.invoiceType?.length > 0) {
+                    downloadOption = "ALL";
+                } else {
+                    downloadOption = "ATTACHMENT";
+                    fileType = "base64";
+                }
+            } else {
+                downloadOption = "VOUCHER";
+            }
+
+            this.commonService.downloadFile(dataToSend, downloadOption, fileType).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                if (response?.status !== "error") {
+                    if (dataToSend.copyTypes.length > 1 || this.isAttachment) {
+                        if (fileType === "base64") {
+                            saveAs((this.generalService.base64ToBlob(response.body.attachments[0].encodedData, '', 512)), response.body.attachments[0].name);
+                        } else {
+                            saveAs(response, `${this.selectedVoucher?.voucherNumber}.` + 'zip');
+                        }
+                    } else {
+                        saveAs(response, `${this.selectedVoucher?.voucherNumber}.` + 'pdf');
+                    }
+                } else {
+                    this._toasty.errorToast(this.commonLocaleData?.app_something_went_wrong);
+                }
+            }, (error => {
+                this._toasty.errorToast(this.commonLocaleData?.app_something_went_wrong);
+            }));
+        } else {
+            this.downloadInvoiceEvent.emit(this.invoiceType);
+        }
     }
 
     public ngOnDestroy() {

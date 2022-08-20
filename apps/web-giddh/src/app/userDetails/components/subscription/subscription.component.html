@@ -1,0 +1,951 @@
+<div *ngIf="!isPlanShow">
+    <div class="main-content-subscription">
+        <div class="menu-one-button">
+            <button mat-flat-button color="primary" (click)="isPlanShow = true" *ngIf="!showLoader">
+                {{ commonLocaleData?.app_buy_new_plan }}
+            </button>
+        </div>
+        <mat-grid-list cols="16" rowHeight="40px" gutterSize="0px">
+            <mat-grid-tile [colspan]="menuOneWidth" rowspan="1" class="ipad-responsive">
+                <div class="menu-two" [ngClass]="{ 'skeleton-common-class': showLoader }">
+                    <label for="Search-box">
+                        <img src="{{ imgPath }}search.png" alt="SearchBar" *ngIf="!showLoader" />
+                    </label>
+                    <mat-form-field class="form-field" appearance="none" *ngIf="!showLoader">
+                        <input
+                            matInput
+                            class="search-bar"
+                            [placeholder]="localeData?.subscription?.search_plans"
+                            [formControl]="searchSubscription"
+                        />
+                    </mat-form-field>
+                </div>
+            </mat-grid-tile>
+            <mat-grid-tile [colspan]="menuTwoWidth" class="ipad-responsive">
+                <div class="menu-two-list" [ngClass]="{ 'skeleton-common-class': showLoader }">
+                    <div class="menu-two-list-items" *ngIf="!showLoader">
+                        <span class="mat-body-1 plan">{{ localeData?.subscription?.plan }}</span>
+                        <mat-form-field
+                            appearance="none"
+                            floatLabel="never"
+                            class="select-subscription subscription-form-select"
+                        >
+                            <mat-select
+                                [placeholder]="commonLocaleData?.app_select"
+                                (selectionChange)="filterSubscriptions()"
+                                [(ngModel)]="filters.plan"
+                            >
+                                <mat-option value="">{{ commonLocaleData?.app_select }}</mat-option>
+                                <mat-option *ngFor="let plan of plansList" [value]="plan?.uniqueName">
+                                    {{ plan?.name }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="menu-two-list-items" *ngIf="!showLoader">
+                        <span class="mat-body-1 expiring-within">{{ localeData?.subscription?.expiring_within }}</span>
+                        <mat-form-field appearance="none" floatLabel="never" class="select-subscription">
+                            <mat-select
+                                [placeholder]="commonLocaleData?.app_select"
+                                [(ngModel)]="filters.expiration"
+                                (selectionChange)="filterSubscriptions()"
+                            >
+                                <mat-option value="">{{ commonLocaleData?.app_select }}</mat-option>
+                                <mat-option *ngFor="let expiring of expiringList" [value]="expiring?.value">
+                                    {{ expiring?.name }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="menu-two-list-items transaction-box" *ngIf="!showLoader">
+                        <span class="mat-body-1 transaction-balance">{{
+                            localeData?.subscription?.transaction_balance
+                        }}</span>
+                        <mat-form-field appearance="none" floatLabel="never" class="select-subscription">
+                            <mat-select
+                                [placeholder]="commonLocaleData?.app_select"
+                                class="transaction-select"
+                                [(ngModel)]="filters.transactionBalance"
+                                (selectionChange)="filterSubscriptions()"
+                            >
+                                <mat-option value="">{{ commonLocaleData?.app_select }}</mat-option>
+                                <mat-option
+                                    *ngFor="let transactionBalance of transactionBalanceList"
+                                    [value]="transactionBalance?.value"
+                                    >{{ transactionBalance?.name }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="menu-two-button" [ngClass]="{ 'skeleton-common-class': showLoader }">
+                    <a
+                        class="mat-body-2"
+                        *ngIf="
+                            searchSubscription?.value ||
+                            filters?.plan ||
+                            filters?.expiration ||
+                            filters?.transactionBalance
+                        "
+                        (click)="clearFilters()"
+                        >{{ commonLocaleData?.app_clear }}</a
+                    >
+                </div>
+            </mat-grid-tile>
+
+            <div class="full-subscription-wrapper">
+                <mat-grid-tile [colspan]="sideBarBoxWidth" [rowspan]="sideBarBoxLength" class="ipad-responsive-sidebar">
+                    <div
+                        class="subscription-sidebar"
+                        *ngIf="!showLoader"
+                        [ngClass]="{ 'border-none': !selectedSubscription }"
+                    >
+                        <ng-container *ngFor="let subscription of subscriptions; let i = index">
+                            <mat-grid-list cols="2" [rowHeight]="rowLength" gutterSize="0px" class="sidebar-box">
+                                <mat-grid-tile
+                                    colspan="2"
+                                    [ngClass]="{
+                                        'active': selectedSubscription?.subscriptionId === subscription?.subscriptionId
+                                    }"
+                                >
+                                    <div class="side-bar-items" (click)="selectSubscription(subscription)">
+                                        <p class="mat-body-2 side-bar-head">
+                                            {{ subscription?.planDetails?.name
+                                            }}<img src="{{ imgPath }}dot.png" alt="dot" /><span>{{
+                                                subscription?.subscriptionId
+                                            }}</span>
+                                        </p>
+                                        <div class="side-bar-list">
+                                            <img src="{{ imgPath }}transaction.png" alt="transaction" />
+                                            <p class="side-bar-list-title">{{ commonLocaleData?.app_transactions }}</p>
+                                            <span>:</span>
+                                            <p class="mat-body-2">
+                                                {{ subscription?.remainingTransactions }}
+                                                <span class="warning mat-body-2">{{
+                                                    localeData?.subscription?.left
+                                                }}</span>
+                                            </p>
+                                        </div>
+                                        <div class="side-bar-list">
+                                            <img src="{{ imgPath }}companies.png" alt="companies" />
+                                            <p class="mat-subheading-4 side-bar-list-title">
+                                                {{ localeData?.subscription?.companies }}
+                                            </p>
+                                            <span>:</span>
+                                            <p>{{ subscription?.totalCompanies | number }}</p>
+                                        </div>
+                                        <div class="side-bar-list plan-timeline">
+                                            <img src="{{ imgPath }}plan_timeline.png" alt="plan_timeline" />
+                                            <p class="mat-subheading-4 side-bar-list-title">
+                                                {{ localeData?.subscription?.timeline }}
+                                            </p>
+                                            <span>:</span>
+                                            <p class="date">
+                                                {{ subscription?.startedAt }} - {{ subscription?.expiry }}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </mat-grid-tile>
+                            </mat-grid-list>
+                        </ng-container>
+                    </div>
+                    <div class="sidebar-clone" *ngIf="showLoader">
+                        <ng-container *ngFor="let subscriptionStatic of subscriptionsDummy">
+                            <mat-grid-list cols="2" [rowHeight]="rowLength" gutterSize="0px" class="sidebar-box-clone">
+                                <mat-grid-tile colspan="2">
+                                    <div class="side-bar-items-clone">
+                                        <p
+                                            class="mat-body-2 side-bar-head-clone"
+                                            [ngClass]="{ 'skeleton-common-class': showLoader }"
+                                        >
+                                            -
+                                            <span></span>
+                                        </p>
+                                        <div
+                                            class="side-bar-list-clone-1"
+                                            [ngClass]="{ 'skeleton-common-class': showLoader }"
+                                        >
+                                            <p class="side-bar-list-title">-</p>
+                                            <span>:</span>
+                                            <p class="mat-body-2">
+                                                -
+                                                <span class="warning mat-body-2"></span>
+                                            </p>
+                                        </div>
+                                        <div
+                                            class="side-bar-list-clone-2"
+                                            [ngClass]="{ 'skeleton-common-class': showLoader }"
+                                        >
+                                            <p class="mat-subheading-4 side-bar-list-title"></p>
+                                            <span></span>
+                                            <p>-</p>
+                                        </div>
+                                        <div
+                                            class="side-bar-list-clone-3 plan-timeline"
+                                            [ngClass]="{ 'skeleton-common-class': showLoader }"
+                                        >
+                                            <p class="mat-subheading-4 side-bar-list-title">-</p>
+                                            <span>:</span>
+                                            <p class="date"></p>
+                                        </div>
+                                    </div>
+                                </mat-grid-tile>
+                            </mat-grid-list>
+                        </ng-container>
+                    </div>
+                </mat-grid-tile>
+
+                <mat-grid-tile
+                    [colspan]="mainContentWidth"
+                    [rowspan]="sideBarBoxLength"
+                    class="ipad-responsive-sidebar"
+                >
+                    <div class="main-content" *ngIf="selectedSubscription">
+                        <mat-toolbar class="main-content-head">
+                            <div class="left-side">
+                                <p>
+                                    {{ selectedSubscription?.planDetails?.name }} <br /><span>
+                                        {{ selectedSubscription?.subscriptionId }}</span
+                                    >
+                                </p>
+                            </div>
+                            <div class="right-side">
+                                <div>
+                                    <p>
+                                        {{
+                                            selectedSubscription?.remainingDays > 0
+                                                ? localeData?.subscription?.expires
+                                                : localeData?.subscription?.expired
+                                        }}
+                                        {{ commonLocaleData?.app_date_options?.on }}: {{ selectedSubscription?.expiry }}
+                                        <br />
+                                        <span *ngIf="selectedSubscription?.remainingDays > 0">{{
+                                            selectedSubscription?.remainingDays +
+                                                localeData?.subscription?.days_remaining
+                                        }}</span>
+                                    </p>
+                                </div>
+                                <button
+                                    mat-flat-button
+                                    color="primary"
+                                    class="right-side-btn"
+                                    *ngIf="selectedSubscription?.status !== 'trial'"
+                                    (click)="renewPlan()"
+                                >
+                                    {{ commonLocaleData?.app_renew }}
+                                </button>
+                                <!-- <button mat-flat-button color="primary">Buy Add-ons</button> -->
+                            </div>
+                        </mat-toolbar>
+                        <!-- Addons selector  -->
+                        <!-- <add-ons ></add-ons> -->
+                        <p class="summary">{{ localeData?.subscription?.overall_summary }}</p>
+                        <div class="balance-info">
+                            <mat-grid-list cols="2" rowHeight="10px" gutterSize="3px">
+                                <mat-grid-tile colspan="2" [rowspan]="overallSummaryTopRow">
+                                    <div class="overall-summary-bar-one">
+                                        <div class="box item-1">
+                                            <div class="box-heading">
+                                                <img src="{{ imgPath }}transaction.png" alt="" />
+                                                <span>{{ commonLocaleData?.app_transactions }}</span>
+                                            </div>
+                                            <p>
+                                                {{ commonLocaleData?.app_balance
+                                                }}<span>
+                                                    {{
+                                                        selectedSubscription?.remainingTransactions
+                                                            ? (selectedSubscription?.remainingTransactions | number)
+                                                            : "0"
+                                                    }}</span
+                                                >
+                                            </p>
+                                        </div>
+                                        <!-- <div class="box item-2">
+                                    <div class="box-heading">
+                                        <img class="set-height" src="{{ imgPath }}branch.png" alt="" /> <span>Branch</span>
+                                    </div>
+                                    <p>
+                                        Active <span>10</span> <img src="{{ imgPath }}dot.png" alt="" />Balance
+                                        <span class="balance">-2</span>
+                                    </p>
+                                </div> -->
+                                        <!-- <div class="box item-3">
+                                    <div class="box-heading">
+                                        <img class="set-height" src="{{ imgPath }}warehouse.png" alt="" />
+                                        <span>Warehouse</span>
+                                    </div>
+                                    <p>
+                                        Active <span>10</span> <img src="{{ imgPath }}dot.png" alt="" />Balance
+                                        <span class="balance">-2</span>
+                                    </p>
+                                </div> -->
+                                        <div class="box item-4">
+                                            <div class="box-heading">
+                                                <img src="{{ imgPath }}companies.png" alt="" />
+                                                <span>{{ localeData?.subscription?.companies }}</span>
+                                            </div>
+                                            <p>
+                                                {{ commonLocaleData?.app_active }}
+                                                <span>{{ selectedSubscription?.totalCompanies | number }}</span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </mat-grid-tile>
+                                <!-- <mat-grid-tile colspan="2" [rowspan]="overallSummaryBottomRow">
+                            <div class="overall-summary-bar-two">
+                                <p>Total dues <span class="tomato">₹5,200 </span> <span class="grey">Settle now</span></p>
+                            </div>
+                        </mat-grid-tile> -->
+                            </mat-grid-list>
+                        </div>
+                        <div class="expand-button">
+                            <button
+                                (click)="accordion.openAll(); isExpand = true"
+                                mat-button
+                                disableRipple="true"
+                                *ngIf="!isExpand"
+                            >
+                                {{ commonLocaleData?.app_expand_all }}
+                            </button>
+                            <button
+                                (click)="accordion.closeAll(); isExpand = false"
+                                mat-button
+                                disableRipple="true"
+                                *ngIf="isExpand"
+                            >
+                                {{ commonLocaleData?.app_collapse_all }}
+                            </button>
+                        </div>
+                        <!-- <div class="menu-two accordion-search-box main-content-search-box">
+                        <label for="Search-box">
+                            <img src="{{ imgPath }}search.png" alt="SearchBar" />
+                        </label>
+                        <mat-form-field class="form-field" appearance="none">
+                            <input matInput class="search-bar" placeholder="Search month" />
+                        </mat-form-field>
+                    </div> -->
+                        <div class="main-tabs-content">
+                            <mat-tab-group>
+                                <!-- <mat-tab label="Monthly">
+                        <mat-accordion multi="true">
+                            <mat-expansion-panel hideToggle>
+                                <mat-expansion-panel-header>
+                                    <mat-panel-title> January, 2021 </mat-panel-title>
+                                </mat-expansion-panel-header>
+    
+                                <img src="{{ imgPath }}transaction.png" alt="" class="consumed-transaction" />
+                                <img src="{{ imgPath }}branch.png" alt="" class="consumed-branch" />
+                                <img src="{{ imgPath }}warehouse.png" alt="" class="consumed-warehouse" />
+    
+                                <table mat-table [dataSource]="dataSource" class="monthly-table">
+                                    <ng-container matColumnDef="consumed">
+                                        <th mat-header-cell *matHeaderCellDef>Consumed</th>
+                                        <td mat-cell *matCellDef="let element">{{ element.consumed }}</td>
+                                    </ng-container>
+    
+                                    <ng-container matColumnDef="balance">
+                                        <th mat-header-cell *matHeaderCellDef>Balance</th>
+                                        <td mat-cell *matCellDef="let element">{{ element.balance }}</td>
+                                    </ng-container>
+    
+                                    <ng-container matColumnDef="dues">
+                                        <th mat-header-cell *matHeaderCellDef>Dues</th>
+                                        <td mat-cell *matCellDef="let element">{{ element.dues }}</td>
+                                    </ng-container>
+    
+                                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                                </table>
+    
+                                <img src="{{ imgPath }}transaction.png" alt="" class="added-transaction" />
+                                <img src="{{ imgPath }}branch.png" alt="" class="added-branch" />
+                                <img src="{{ imgPath }}warehouse.png" alt="" class="added-warehouse" />
+    
+                                <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+                                    <ng-container matColumnDef="consumed">
+                                        <th mat-header-cell *matHeaderCellDef class="added-row">Added</th>
+                                        <td mat-cell *matCellDef="let element">{{ element.consumed }}</td>
+                                    </ng-container>
+    
+                                    <ng-container matColumnDef="balance">
+                                        <th mat-header-cell *matHeaderCellDef class="added-balance">Balance</th>
+                                        <td mat-cell *matCellDef="let element">{{ element.balance }}</td>
+                                    </ng-container>
+    
+                                    <ng-container matColumnDef="dues">
+                                        <th mat-header-cell *matHeaderCellDef class="added-charges">Charges</th>
+                                        <td mat-cell *matCellDef="let element">{{ element.dues }}</td>
+                                    </ng-container>
+    
+                                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                                </table>
+                            </mat-expansion-panel>
+    
+                            <mat-expansion-panel hideToggle>
+                                <mat-expansion-panel-header>
+                                    <mat-panel-title> December, 2020 </mat-panel-title>
+                                </mat-expansion-panel-header>
+    
+                                <img src="{{ imgPath }}transaction.png" alt="" class="consumed-transaction" />
+                                <img src="{{ imgPath }}branch.png" alt="" class="consumed-branch" />
+                                <img src="{{ imgPath }}warehouse.png" alt="" class="consumed-warehouse" />
+    
+                                <table mat-table [dataSource]="dataSource" class="monthly-table">
+                                    <ng-container matColumnDef="consumed">
+                                        <th mat-header-cell *matHeaderCellDef>Consumed</th>
+                                        <td mat-cell *matCellDef="let element">{{ element.consumed }}</td>
+                                    </ng-container>
+    
+                                    <ng-container matColumnDef="balance">
+                                        <th mat-header-cell *matHeaderCellDef>Balance</th>
+                                        <td mat-cell *matCellDef="let element">{{ element.balance }}</td>
+                                    </ng-container>
+    
+                                    <ng-container matColumnDef="dues">
+                                        <th mat-header-cell *matHeaderCellDef>Dues</th>
+                                        <td mat-cell *matCellDef="let element">{{ element.dues }}</td>
+                                    </ng-container>
+    
+                                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                                </table>
+    
+                                <img src="{{ imgPath }}transaction.png" alt="" class="added-transaction" />
+                                <img src="{{ imgPath }}branch.png" alt="" class="added-branch" />
+                                <img src="{{ imgPath }}warehouse.png" alt="" class="added-warehouse" />
+    
+                                <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+                                    <ng-container matColumnDef="consumed">
+                                        <th mat-header-cell *matHeaderCellDef class="added-row">Added</th>
+                                        <td mat-cell *matCellDef="let element">{{ element.consumed }}</td>
+                                    </ng-container>
+    
+                                    <ng-container matColumnDef="balance">
+                                        <th mat-header-cell *matHeaderCellDef class="added-balance">Balance</th>
+                                        <td mat-cell *matCellDef="let element">{{ element.balance }}</td>
+                                    </ng-container>
+    
+                                    <ng-container matColumnDef="dues">
+                                        <th mat-header-cell *matHeaderCellDef class="added-charges">Charges</th>
+                                        <td mat-cell *matCellDef="let element">{{ element.dues }}</td>
+                                    </ng-container>
+    
+                                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                                </table>
+                            </mat-expansion-panel>
+    
+                            <mat-expansion-panel hideToggle>
+                                <mat-expansion-panel-header>
+                                    <mat-panel-title> November, 2020 </mat-panel-title>
+                                </mat-expansion-panel-header>
+    
+                                <img src="{{ imgPath }}transaction.png" alt="" class="consumed-transaction" />
+                                <img src="{{ imgPath }}branch.png" alt="" class="consumed-branch" />
+                                <img src="{{ imgPath }}warehouse.png" alt="" class="consumed-warehouse" />
+    
+                                <table mat-table [dataSource]="dataSource" class="monthly-table">
+                                    <ng-container matColumnDef="consumed">
+                                        <th mat-header-cell *matHeaderCellDef>Consumed</th>
+                                        <td mat-cell *matCellDef="let element">{{ element.consumed }}</td>
+                                    </ng-container>
+    
+                                    <ng-container matColumnDef="balance">
+                                        <th mat-header-cell *matHeaderCellDef>Balance</th>
+                                        <td mat-cell *matCellDef="let element">{{ element.balance }}</td>
+                                    </ng-container>
+    
+                                    <ng-container matColumnDef="dues">
+                                        <th mat-header-cell *matHeaderCellDef>Dues</th>
+                                        <td mat-cell *matCellDef="let element">{{ element.dues }}</td>
+                                    </ng-container>
+    
+                                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                                </table>
+    
+                                <img src="{{ imgPath }}transaction.png" alt="" class="added-transaction" />
+                                <img src="{{ imgPath }}branch.png" alt="" class="added-branch" />
+                                <img src="{{ imgPath }}warehouse.png" alt="" class="added-warehouse" />
+    
+                                <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+                                    <ng-container matColumnDef="consumed">
+                                        <th mat-header-cell *matHeaderCellDef class="added-row">Added</th>
+                                        <td mat-cell *matCellDef="let element">{{ element.consumed }}</td>
+                                    </ng-container>
+    
+                                    <ng-container matColumnDef="balance">
+                                        <th mat-header-cell *matHeaderCellDef class="added-balance">Balance</th>
+                                        <td mat-cell *matCellDef="let element">{{ element.balance }}</td>
+                                    </ng-container>
+    
+                                    <ng-container matColumnDef="dues">
+                                        <th mat-header-cell *matHeaderCellDef class="added-charges">Charges</th>
+                                        <td mat-cell *matCellDef="let element">{{ element.dues }}</td>
+                                    </ng-container>
+    
+                                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                                </table>
+                            </mat-expansion-panel>
+    
+                            <mat-expansion-panel hideToggle>
+                                <mat-expansion-panel-header>
+                                    <mat-panel-title> October, 2020 </mat-panel-title>
+                                </mat-expansion-panel-header>
+    
+                                <img src="{{ imgPath }}transaction.png" alt="" class="consumed-transaction" />
+                                <img src="{{ imgPath }}branch.png" alt="" class="consumed-branch" />
+                                <img src="{{ imgPath }}warehouse.png" alt="" class="consumed-warehouse" />
+    
+                                <table mat-table [dataSource]="dataSource" class="monthly-table">
+                                    <ng-container matColumnDef="consumed">
+                                        <th mat-header-cell *matHeaderCellDef>Consumed</th>
+                                        <td mat-cell *matCellDef="let element">{{ element.consumed }}</td>
+                                    </ng-container>
+    
+                                    <ng-container matColumnDef="balance">
+                                        <th mat-header-cell *matHeaderCellDef>Balance</th>
+                                        <td mat-cell *matCellDef="let element">{{ element.balance }}</td>
+                                    </ng-container>
+    
+                                    <ng-container matColumnDef="dues">
+                                        <th mat-header-cell *matHeaderCellDef>Dues</th>
+                                        <td mat-cell *matCellDef="let element">{{ element.dues }}</td>
+                                    </ng-container>
+    
+                                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                                </table>
+    
+                                <img src="{{ imgPath }}transaction.png" alt="" class="added-transaction" />
+                                <img src="{{ imgPath }}branch.png" alt="" class="added-branch" />
+                                <img src="{{ imgPath }}warehouse.png" alt="" class="added-warehouse" />
+    
+                                <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+                                    <ng-container matColumnDef="consumed">
+                                        <th mat-header-cell *matHeaderCellDef class="added-row">Added</th>
+                                        <td mat-cell *matCellDef="let element">{{ element.consumed }}</td>
+                                    </ng-container>
+    
+                                    <ng-container matColumnDef="balance">
+                                        <th mat-header-cell *matHeaderCellDef class="added-balance">Balance</th>
+                                        <td mat-cell *matCellDef="let element">{{ element.balance }}</td>
+                                    </ng-container>
+    
+                                    <ng-container matColumnDef="dues">
+                                        <th mat-header-cell *matHeaderCellDef class="added-charges">Charges</th>
+                                        <td mat-cell *matCellDef="let element">{{ element.dues }}</td>
+                                    </ng-container>
+    
+                                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                                </table>
+                            </mat-expansion-panel>
+    
+                            <mat-expansion-panel hideToggle>
+                                <mat-expansion-panel-header>
+                                    <mat-panel-title> September, 2020 </mat-panel-title>
+                                </mat-expansion-panel-header>
+    
+                                <img src="{{ imgPath }}transaction.png" alt="" class="consumed-transaction" />
+                                <img src="{{ imgPath }}branch.png" alt="" class="consumed-branch" />
+                                <img src="{{ imgPath }}warehouse.png" alt="" class="consumed-warehouse" />
+    
+                                <table mat-table [dataSource]="dataSource" class="monthly-table">
+                                    <ng-container matColumnDef="consumed">
+                                        <th mat-header-cell *matHeaderCellDef>Consumed</th>
+                                        <td mat-cell *matCellDef="let element">{{ element.consumed }}</td>
+                                    </ng-container>
+    
+                                    <ng-container matColumnDef="balance">
+                                        <th mat-header-cell *matHeaderCellDef>Balance</th>
+                                        <td mat-cell *matCellDef="let element">{{ element.balance }}</td>
+                                    </ng-container>
+    
+                                    <ng-container matColumnDef="dues">
+                                        <th mat-header-cell *matHeaderCellDef>Dues</th>
+                                        <td mat-cell *matCellDef="let element">{{ element.dues }}</td>
+                                    </ng-container>
+    
+                                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                                </table>
+    
+                                <img src="{{ imgPath }}transaction.png" alt="" class="added-transaction" />
+                                <img src="{{ imgPath }}branch.png" alt="" class="added-branch" />
+                                <img src="{{ imgPath }}warehouse.png" alt="" class="added-warehouse" />
+    
+                                <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+                                    <ng-container matColumnDef="consumed">
+                                        <th mat-header-cell *matHeaderCellDef class="added-row">Added</th>
+                                        <td mat-cell *matCellDef="let element">{{ element.consumed }}</td>
+                                    </ng-container>
+    
+                                    <ng-container matColumnDef="balance">
+                                        <th mat-header-cell *matHeaderCellDef class="added-balance">Balance</th>
+                                        <td mat-cell *matCellDef="let element">{{ element.balance }}</td>
+                                    </ng-container>
+    
+                                    <ng-container matColumnDef="dues">
+                                        <th mat-header-cell *matHeaderCellDef class="added-charges">Charges</th>
+                                        <td mat-cell *matCellDef="let element">{{ element.dues }}</td>
+                                    </ng-container>
+    
+                                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                                </table>
+                            </mat-expansion-panel>
+    
+                            <mat-expansion-panel hideToggle>
+                                <mat-expansion-panel-header>
+                                    <mat-panel-title> August, 2020 </mat-panel-title>
+                                </mat-expansion-panel-header>
+    
+                                <img src="{{ imgPath }}transaction.png" alt="" class="consumed-transaction" />
+                                <img src="{{ imgPath }}branch.png" alt="" class="consumed-branch" />
+                                <img src="{{ imgPath }}warehouse.png" alt="" class="consumed-warehouse" />
+    
+                                <table mat-table [dataSource]="dataSource" class="monthly-table">
+                                    <ng-container matColumnDef="consumed">
+                                        <th mat-header-cell *matHeaderCellDef>Consumed</th>
+                                        <td mat-cell *matCellDef="let element">{{ element.consumed }}</td>
+                                    </ng-container>
+    
+                                    <ng-container matColumnDef="balance">
+                                        <th mat-header-cell *matHeaderCellDef>Balance</th>
+                                        <td mat-cell *matCellDef="let element">{{ element.balance }}</td>
+                                    </ng-container>
+    
+                                    <ng-container matColumnDef="dues">
+                                        <th mat-header-cell *matHeaderCellDef>Dues</th>
+                                        <td mat-cell *matCellDef="let element">{{ element.dues }}</td>
+                                    </ng-container>
+    
+                                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                                </table>
+    
+                                <img src="{{ imgPath }}transaction.png" alt="" class="added-transaction" />
+                                <img src="{{ imgPath }}branch.png" alt="" class="added-branch" />
+                                <img src="{{ imgPath }}warehouse.png" alt="" class="added-warehouse" />
+    
+                                <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+                                    <ng-container matColumnDef="consumed">
+                                        <th mat-header-cell *matHeaderCellDef class="added-row">Added</th>
+                                        <td mat-cell *matCellDef="let element">{{ element.consumed }}</td>
+                                    </ng-container>
+    
+                                    <ng-container matColumnDef="balance">
+                                        <th mat-header-cell *matHeaderCellDef class="added-balance">Balance</th>
+                                        <td mat-cell *matCellDef="let element">{{ element.balance }}</td>
+                                    </ng-container>
+    
+                                    <ng-container matColumnDef="dues">
+                                        <th mat-header-cell *matHeaderCellDef class="added-charges">Charges</th>
+                                        <td mat-cell *matCellDef="let element">{{ element.dues }}</td>
+                                    </ng-container>
+    
+                                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                                </table>
+                            </mat-expansion-panel>
+    
+                            <mat-expansion-panel hideToggle>
+                                <mat-expansion-panel-header>
+                                    <mat-panel-title> July, 2020 </mat-panel-title>
+                                </mat-expansion-panel-header>
+    
+                                <img src="{{ imgPath }}transaction.png" alt="" class="consumed-transaction" />
+                                <img src="{{ imgPath }}branch.png" alt="" class="consumed-branch" />
+                                <img src="{{ imgPath }}warehouse.png" alt="" class="consumed-warehouse" />
+    
+                                <table mat-table [dataSource]="dataSource" class="monthly-table">
+                                    <ng-container matColumnDef="consumed">
+                                        <th mat-header-cell *matHeaderCellDef>Consumed</th>
+                                        <td mat-cell *matCellDef="let element">{{ element.consumed }}</td>
+                                    </ng-container>
+    
+                                    <ng-container matColumnDef="balance">
+                                        <th mat-header-cell *matHeaderCellDef>Balance</th>
+                                        <td mat-cell *matCellDef="let element">{{ element.balance }}</td>
+                                    </ng-container>
+    
+                                    <ng-container matColumnDef="dues">
+                                        <th mat-header-cell *matHeaderCellDef>Dues</th>
+                                        <td mat-cell *matCellDef="let element">{{ element.dues }}</td>
+                                    </ng-container>
+    
+                                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                                </table>
+    
+                                <img src="{{ imgPath }}transaction.png" alt="" class="added-transaction" />
+                                <img src="{{ imgPath }}branch.png" alt="" class="added-branch" />
+                                <img src="{{ imgPath }}warehouse.png" alt="" class="added-warehouse" />
+    
+                                <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+                                    <ng-container matColumnDef="consumed">
+                                        <th mat-header-cell *matHeaderCellDef class="added-row">Added</th>
+                                        <td mat-cell *matCellDef="let element">{{ element.consumed }}</td>
+                                    </ng-container>
+    
+                                    <ng-container matColumnDef="balance">
+                                        <th mat-header-cell *matHeaderCellDef class="added-balance">Balance</th>
+                                        <td mat-cell *matCellDef="let element">{{ element.balance }}</td>
+                                    </ng-container>
+    
+                                    <ng-container matColumnDef="dues">
+                                        <th mat-header-cell *matHeaderCellDef class="added-charges">Charges</th>
+                                        <td mat-cell *matCellDef="let element">{{ element.dues }}</td>
+                                    </ng-container>
+    
+                                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                                </table>
+                            </mat-expansion-panel>
+    
+                            <mat-expansion-panel hideToggle>
+                                <mat-expansion-panel-header>
+                                    <mat-panel-title> June, 2020 </mat-panel-title>
+                                </mat-expansion-panel-header>
+    
+                                <img src="{{ imgPath }}transaction.png" alt="" class="consumed-transaction" />
+                                <img src="{{ imgPath }}branch.png" alt="" class="consumed-branch" />
+                                <img src="{{ imgPath }}warehouse.png" alt="" class="consumed-warehouse" />
+    
+                                <table mat-table [dataSource]="dataSource" class="monthly-table">
+                                    <ng-container matColumnDef="consumed">
+                                        <th mat-header-cell *matHeaderCellDef>Consumed</th>
+                                        <td mat-cell *matCellDef="let element">{{ element.consumed }}</td>
+                                    </ng-container>
+    
+                                    <ng-container matColumnDef="balance">
+                                        <th mat-header-cell *matHeaderCellDef>Balance</th>
+                                        <td mat-cell *matCellDef="let element">{{ element.balance }}</td>
+                                    </ng-container>
+    
+                                    <ng-container matColumnDef="dues">
+                                        <th mat-header-cell *matHeaderCellDef>Dues</th>
+                                        <td mat-cell *matCellDef="let element">{{ element.dues }}</td>
+                                    </ng-container>
+    
+                                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                                </table>
+    
+                                <img src="{{ imgPath }}transaction.png" alt="" class="added-transaction" />
+                                <img src="{{ imgPath }}branch.png" alt="" class="added-branch" />
+                                <img src="{{ imgPath }}warehouse.png" alt="" class="added-warehouse" />
+    
+                                <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+                                    <ng-container matColumnDef="consumed">
+                                        <th mat-header-cell *matHeaderCellDef class="added-row">Added</th>
+                                        <td mat-cell *matCellDef="let element">{{ element.consumed }}</td>
+                                    </ng-container>
+    
+                                    <ng-container matColumnDef="balance">
+                                        <th mat-header-cell *matHeaderCellDef class="added-balance">Balance</th>
+                                        <td mat-cell *matCellDef="let element">{{ element.balance }}</td>
+                                    </ng-container>
+    
+                                    <ng-container matColumnDef="dues">
+                                        <th mat-header-cell *matHeaderCellDef class="added-charges">Charges</th>
+                                        <td mat-cell *matCellDef="let element">{{ element.dues }}</td>
+                                    </ng-container>
+    
+                                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                                </table>
+                            </mat-expansion-panel>
+    
+                            <mat-expansion-panel hideToggle>
+                                <mat-expansion-panel-header>
+                                    <mat-panel-title> May, 2020 </mat-panel-title>
+                                </mat-expansion-panel-header>
+    
+                                <img src="{{ imgPath }}transaction.png" alt="" class="consumed-transaction" />
+                                <img src="{{ imgPath }}branch.png" alt="" class="consumed-branch" />
+                                <img src="{{ imgPath }}warehouse.png" alt="" class="consumed-warehouse" />
+    
+                                <table mat-table [dataSource]="dataSource" class="monthly-table">
+                                    <ng-container matColumnDef="consumed">
+                                        <th mat-header-cell *matHeaderCellDef>Consumed</th>
+                                        <td mat-cell *matCellDef="let element">{{ element.consumed }}</td>
+                                    </ng-container>
+    
+                                    <ng-container matColumnDef="balance">
+                                        <th mat-header-cell *matHeaderCellDef>Balance</th>
+                                        <td mat-cell *matCellDef="let element">{{ element.balance }}</td>
+                                    </ng-container>
+    
+                                    <ng-container matColumnDef="dues">
+                                        <th mat-header-cell *matHeaderCellDef>Dues</th>
+                                        <td mat-cell *matCellDef="let element">{{ element.dues }}</td>
+                                    </ng-container>
+    
+                                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                                </table>
+    
+                                <img src="{{ imgPath }}transaction.png" alt="" class="added-transaction" />
+                                <img src="{{ imgPath }}branch.png" alt="" class="added-branch" />
+                                <img src="{{ imgPath }}warehouse.png" alt="" class="added-warehouse" />
+    
+                                <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+                                    <ng-container matColumnDef="consumed">
+                                        <th mat-header-cell *matHeaderCellDef class="added-row">Added</th>
+                                        <td mat-cell *matCellDef="let element">{{ element.consumed }}</td>
+                                    </ng-container>
+    
+                                    <ng-container matColumnDef="balance">
+                                        <th mat-header-cell *matHeaderCellDef class="added-balance">Balance</th>
+                                        <td mat-cell *matCellDef="let element">{{ element.balance }}</td>
+                                    </ng-container>
+    
+                                    <ng-container matColumnDef="dues">
+                                        <th mat-header-cell *matHeaderCellDef class="added-charges">Charges</th>
+                                        <td mat-cell *matCellDef="let element">{{ element.dues }}</td>
+                                    </ng-container>
+    
+                                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                                </table>
+                            </mat-expansion-panel>
+    
+                            <mat-expansion-panel hideToggle>
+                                <mat-expansion-panel-header>
+                                    <mat-panel-title> April, 2020 </mat-panel-title>
+                                </mat-expansion-panel-header>
+    
+                                <img src="{{ imgPath }}transaction.png" alt="" class="consumed-transaction" />
+                                <img src="{{ imgPath }}branch.png" alt="" class="consumed-branch" />
+                                <img src="{{ imgPath }}warehouse.png" alt="" class="consumed-warehouse" />
+    
+                                <table mat-table [dataSource]="dataSource" class="monthly-table">
+                                    <ng-container matColumnDef="consumed">
+                                        <th mat-header-cell *matHeaderCellDef>Consumed</th>
+                                        <td mat-cell *matCellDef="let element">{{ element.consumed }}</td>
+                                    </ng-container>
+    
+                                    <ng-container matColumnDef="balance">
+                                        <th mat-header-cell *matHeaderCellDef>Balance</th>
+                                        <td mat-cell *matCellDef="let element">{{ element.balance }}</td>
+                                    </ng-container>
+    
+                                    <ng-container matColumnDef="dues">
+                                        <th mat-header-cell *matHeaderCellDef>Dues</th>
+                                        <td mat-cell *matCellDef="let element">{{ element.dues }}</td>
+                                    </ng-container>
+    
+                                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                                </table>
+    
+                                <img src="{{ imgPath }}transaction.png" alt="" class="added-transaction" />
+                                <img src="{{ imgPath }}branch.png" alt="" class="added-branch" />
+                                <img src="{{ imgPath }}warehouse.png" alt="" class="added-warehouse" />
+    
+                                <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+                                    <ng-container matColumnDef="consumed">
+                                        <th mat-header-cell *matHeaderCellDef class="added-row">Added</th>
+                                        <td mat-cell *matCellDef="let element">{{ element.consumed }}</td>
+                                    </ng-container>
+    
+                                    <ng-container matColumnDef="balance">
+                                        <th mat-header-cell *matHeaderCellDef class="added-balance">Balance</th>
+                                        <td mat-cell *matCellDef="let element">{{ element.balance }}</td>
+                                    </ng-container>
+    
+                                    <ng-container matColumnDef="dues">
+                                        <th mat-header-cell *matHeaderCellDef class="added-charges">Charges</th>
+                                        <td mat-cell *matCellDef="let element">{{ element.dues }}</td>
+                                    </ng-container>
+    
+                                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                                </table>
+                            </mat-expansion-panel>
+                        </mat-accordion>
+                    </mat-tab>  -->
+                                <mat-tab [label]="localeData?.subscription?.companies">
+                                    <mat-accordion class="companies" multi>
+                                        <ng-container
+                                            *ngFor="
+                                                let company of selectedSubscription?.companiesWithTransactions;
+                                                let i = index
+                                            "
+                                        >
+                                            <mat-expansion-panel
+                                                hideToggle
+                                                class="companies-expansion-panel"
+                                                (opened)="panelOpenState = true; isExpand = true"
+                                                (closed)="panelOpenState = false; isExpand = false"
+                                            >
+                                                <mat-expansion-panel-header class="companies-expansion-header-mat">
+                                                    <mat-panel-title>
+                                                        {{ company?.name }}
+                                                        <a
+                                                            (click)="openModalMove(company, $event)"
+                                                            href="javascript:void(0);"
+                                                            >{{ localeData?.subscription?.move }}</a
+                                                        >
+                                                    </mat-panel-title>
+                                                </mat-expansion-panel-header>
+                                                <div class="companies-container">
+                                                    <div class="companies-container-items">
+                                                        <p>
+                                                            <img
+                                                                src="{{ imgPath }}transaction.png"
+                                                                [alt]="commonLocaleData?.subscription?.app_transactions"
+                                                            />
+                                                            {{ company?.transactions }}
+                                                            {{ localeData?.subscription?.transaction_used }}
+                                                        </p>
+                                                    </div>
+                                                    <!-- <div class="companies-container-items">
+                                            <p><img src="{{ imgPath }}branch.png" alt="Transaction" /> 6 branches active</p>
+                                        </div>
+                                        <div class="companies-container-items">
+                                            <p><img src="{{ imgPath }}warehouse.png" alt="Transaction" /> 6 warehouse active</p>
+                                        </div> -->
+                                                </div>
+                                            </mat-expansion-panel>
+                                            <mat-divider
+                                                *ngIf="i < selectedSubscription?.companiesWithTransactions?.length"
+                                            >
+                                            </mat-divider>
+                                        </ng-container>
+                                    </mat-accordion>
+                                </mat-tab>
+                            </mat-tab-group>
+                        </div>
+                    </div>
+                </mat-grid-tile>
+            </div>
+            <div class="no-data" *ngIf="!subscriptions?.length && !showLoader">
+                <no-data [secondaryMessageClass]="'p-0'"></no-data>
+            </div>
+        </mat-grid-list>
+    </div>
+</div>
+<!-- </ng-container> -->
+<subscriptions-plans
+    *ngIf="isPlanShow && localeData?.subscription"
+    [subscriptions]="subscriptions"
+    (isSubscriptionPlanShow)="isSubscriptionPlanShow($event)"
+    [localeData]="localeData"
+    [commonLocaleData]="commonLocaleData"
+></subscriptions-plans>
+<!-- MoveCompany Modal -->
+<ng-template #moveCompany>
+    <move-company
+        (moveCompany)="addOrMoveCompanyCallback($event)"
+        [subscriptions]="subscriptions"
+        [moveSelectedCompany]="selectedCompany"
+        [localeData]="localeData"
+        [commonLocaleData]="commonLocaleData"
+    >
+    </move-company>
+</ng-template>

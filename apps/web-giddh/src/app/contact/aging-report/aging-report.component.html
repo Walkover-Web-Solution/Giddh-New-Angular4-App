@@ -2,7 +2,7 @@
     <div class="top-bar aging-top-bar d-flex justify-content-between">
         <div class="aging-form-inline">
             <div class="btn-group pull-left on-desktop-view">
-                <button class="btn btn-sky-blue" (click)="creteNewCustomerEvent.emit(true)">
+                <button mat-flat-button class="btn-sky-blue" (click)="creteNewCustomerEvent.emit(true)">
                     {{ localeData?.new_customer }}
                 </button>
             </div>
@@ -27,14 +27,16 @@
                                 <a href="javascript:void(0)" class="list-item d-flex">
                                     <span class="entity-icon">
                                         <i
-                                            class="icon-branch-icon pull-right"
+                                            class="icon-branch-icon"
                                             *ngIf="!option.isCompany"
-                                            tooltip="{{ commonLocaleData?.app_branch }}"
+                                            matTooltip="{{ commonLocaleData?.app_branch }}"
+                                            matTooltipPosition="above"
                                         ></i>
                                         <i
-                                            class="icon-company-profile pull-right"
+                                            class="icon-company-profile"
                                             *ngIf="option.isCompany"
-                                            tooltip="{{ commonLocaleData?.app_company }}"
+                                            matTooltip="{{ commonLocaleData?.app_company }}"
+                                            matTooltipPosition="above"
                                         ></i>
                                     </span>
                                     <span class="entity-details">
@@ -49,19 +51,14 @@
                     </sh-select>
                 </div>
             </div>
-            <form #invoiceForm="ngForm" novalidate class="form-inline input-grp-date-range-picker position-relative">
-                <div class="form-group mr-r15 d-flex flex-fill">
-                    <div class="input-group custom-datepicker" (click)="showGiddhDatepicker($event)">
-                        <i class="icon-calender calendar-addon"></i>
-                        <input
-                            type="text"
-                            name="selectedDateRange"
-                            [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
-                            class="giddh-datepicker date-range-picker border-radius-2"
-                        />
-                    </div>
-                </div>
-            </form>
+        </div>
+        <div
+            class="clear-filter align-items-center d-flex justify-content-xl-center justify-content-lg-start w-50"
+            *ngIf="showClearFilter"
+        >
+            <button class="btn btn-filters mr-0" (click)="resetAdvanceSearch()">
+                <span class="icon-cross"></span> {{ commonLocaleData?.app_clear_filter }}
+            </button>
         </div>
         <div class="d-flex justify-content-between">
             <div class="pull-left d-flex wrap-searching-aging">
@@ -69,40 +66,46 @@
                     class="form-group search-field max-width-250"
                     [ngClass]="{ 'default-width': isAdvanceSearchApplied }"
                 >
-                    <input
+                    <text-field
                         type="text"
                         [placeholder]="localeData?.name_amount"
-                        class="form-control name-width"
+                        [cssClass]="'form-control name-width'"
                         [(ngModel)]="searchStr"
                         (ngModelChange)="searchStr$.next($event)"
-                    />
+                    ></text-field>
                     <span class="input-addon">
                         <i class="icon-search"></i>
                     </span>
                 </div>
             </div>
             <div class="cp advance-clear-filter-icons d-flex float-right">
-                <div
-                    class="advance-icon btn btn-primary"
-                    (click)="toggleAdvanceSearchPopup()"
-                    tooltip="{{ commonLocaleData?.app_advance_search }}"
+                <button
+                    mat-stroked-button
+                    color="primary"
+                    class="advance-icon"
+                    (click)="showAdvanceSearchPopup()"
+                    matTooltip="{{ commonLocaleData?.app_advance_search }}"
+                    matTooltipPosition="right"
                 >
-                    <span class="pd-r05 d-sm-flex d-none">{{ commonLocaleData?.app_filter }}</span>
-                    <span class="icon-advance-filter"></span>
-                </div>
+                    <div class="d-flex align-items-center">
+                        {{ commonLocaleData?.app_filter }}
+                        <span class="icon-advance-filter ml-2"></span>
+                    </div>
+                </button>
                 <span class="refresh-btn" *ngIf="isAdvanceSearchApplied">
-                    <a class="cp" href="javascript: void 0" (click)="resetAdvanceSearch()">
+                    <button mat-icon-button (click)="resetAdvanceSearch()">
                         <i
                             aria-hidden="true"
                             class="icon-refresh"
-                            tooltip="{{ commonLocaleData?.app_reset_filter }}"
+                            matTooltip="{{ commonLocaleData?.app_reset_filter }}"
+                            matTooltipPosition="below"
                         ></i>
-                    </a>
+                    </button>
                 </span>
             </div>
         </div>
         <div class="btn-group mr-t15 pull-left mobile-view">
-            <button class="btn btn-sky-blue w-100" (click)="creteNewCustomerEvent.emit(true)">
+            <button mat-raised-button class="btn-sky-blue w-100" (click)="creteNewCustomerEvent.emit(true)">
                 {{ localeData?.new_customer }}
             </button>
         </div>
@@ -140,7 +143,7 @@
         </div>
     </div>
     <div class="contact-main aging-page">
-        <div class="pd-b2 mr-b1 mr-t1 on-mobile-view mobile-card-wrapper">
+        <div class="pd-b2 mr-b1 on-mobile-view mobile-card-wrapper">
             <div *ngIf="!isMobileScreen" class="table-responsive">
                 <ng-container *ngTemplateOutlet="mainTable"></ng-container>
             </div>
@@ -168,29 +171,27 @@
     </div>
 </div>
 <!--region advance_search Modal-->
-<div bsModal #advanceSearch="bs-modal" class="modal fade" role="dialog" [config]="modalConfig" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <app-contact-advance-search-component
-                *ngIf="advanceSearch.isShown"
-                #agingReportAdvanceSearch
-                [request]="commonRequest"
-                [advanceSearch4]="'agingReport'"
-                [localeData]="localeData"
-                [commonLocaleData]="commonLocaleData"
-                (applyAdvanceSearchEvent)="applyAdvanceSearch($event)"
-                (closeModelEvent)="toggleAdvanceSearchPopup()"
-            >
-            </app-contact-advance-search-component>
-        </div>
+<ng-template #advanceSearch tabindex="-1">
+    <div>
+        <app-contact-advance-search-component
+            *ngIf="advanceSearch"
+            #agingReportAdvanceSearch
+            [request]="commonRequest"
+            [advanceSearch4]="'agingReport'"
+            [localeData]="localeData"
+            [commonLocaleData]="commonLocaleData"
+            (applyAdvanceSearchEvent)="applyAdvanceSearch($event)"
+            (closeModelEvent)="hideAdvanceSearchPopup()"
+        >
+        </app-contact-advance-search-component>
     </div>
-</div>
+</ng-template>
 <!-- endregion -->
 <!-- region sorting template -->
 <ng-template #sortingTemplate let-col>
     <div class="icon-pointer cp">
         <div
-            class="icon-sort-asc text-light-2 d-block font-xxs"
+            class="icon-sort-asc one text-light-2 d-block font-xxs"
             (click)="sort(col, 'asc')"
             *ngIf="key !== col"
             [ngClass]="{ 'active-text-color': key === col && order === 'asc' }"
@@ -211,27 +212,34 @@
 </ng-template>
 <!-- endregion -->
 <ng-template #mainTable>
-    <table class="table giddh-table aging-table table-aging-report">
-        <thead [hidden]="!(dueAmountReportData$ | async)?.results?.length && !dueAmountReportRequest?.q">
-            <tr class="aging-table-top">
-                <td></td>
-                <td></td>
-                <td></td>
-                <td colspan="4" class="text-center top-aging-table-top">
+    <div [hidden]="!(dueAmountReportData$ | async)?.results?.length && !dueAmountReportRequest?.q">
+        <div class="d-flex justify-content-end">
+            <mat-menu #agingDropdown="matMenu" class="aging-dropdown-table">
+                <ng-template matMenuContent>
                     <aging-dropdown
+                        (close)="onCloseMenu()"
                         [options]="agingDropDownoptions"
                         *ngIf="setDueRangeOpen$ | async"
                         [localeData]="localeData"
                         [commonLocaleData]="commonLocaleData"
                     ></aging-dropdown>
-                </td>
-                <td></td>
-            </tr>
-            <tr>
+                </ng-template>
+            </mat-menu>
+        </div>
+
+        <table
+            *ngIf="!(getAgingReportRequestInProcess$ | async)"
+            mat-table
+            [dataSource]="agingReportDataSource"
+            class="w-100 main-table"
+        >
+            <ng-container matColumnDef="customerName">
                 <th
+                    class="mat-customer-name"
+                    mat-header-cell
+                    *matHeaderCellDef
                     #searchCustomerContainer
                     (clickOutside)="handleClickOutside($event, searchCustomerContainer, 'name')"
-                    class="td-search-box"
                 >
                     <div class="d-flex align-items-center">
                         <ng-container
@@ -250,7 +258,13 @@
                         ></ng-container>
                     </div>
                 </th>
-                <th>
+                <td mat-cell *matCellDef="let element" [attr.data-title]="commonLocaleData?.app_name">
+                    {{ element.name }}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="parentGroup">
+                <th class="mat-parent-group" mat-header-cell *matHeaderCellDef>
                     <div class="d-flex align-items-center">
                         {{ commonLocaleData?.app_parent_group }}
                         <ng-container
@@ -258,200 +272,216 @@
                         ></ng-container>
                     </div>
                 </th>
-                <th class="text-right">
+                <td mat-cell *matCellDef="let element" [attr.data-title]="localeData?.group_name">
+                    {{ element.groupName }}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="app_upcoming_due">
+                <th mat-header-cell *matHeaderCellDef>
                     <div class="d-flex align-items-center justify-content-end">
                         {{ commonLocaleData?.app_upcoming_due }}
                         <ng-container *ngTemplateOutlet="sortingTemplate; context: { $implicit: 'futureDueAmount' }">
                         </ng-container>
                     </div>
                 </th>
-                <th class="italic unbold underline text-right">
-                    <div class="d-flex align-items-center justify-content-end">
-                        <span (click)="openAgingDropDown()"
-                            >0-{{ (agingDropDownoptions$ | async)?.fourth }} {{ commonLocaleData?.app_days }}</span
+                <td mat-cell *matCellDef="let element" [attr.data-title]="commonLocaleData?.app_due_amount">
+                    <span class="d-flex justify-content-end">
+                        <amount-field
+                            [amount]="element.futureDueAmount"
+                            [currencySymbol]="false"
+                            [currencyCode]="false"
                         >
-                        <ng-container *ngTemplateOutlet="sortingTemplate; context: { $implicit: 'range0' }">
-                        </ng-container>
+                        </amount-field>
+                    </span>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="app_days_1">
+                <th class="mat-app-days-1" mat-header-cell *matHeaderCellDef>
+                    <div class="d-flex align-items-center justify-content-end">
+                        <button
+                            mat-button
+                            (click)="openAgingDropDown()"
+                            [matMenuTriggerFor]="agingDropdown"
+                            class="font-italic"
+                        >
+                            0-{{ (agingDropDownoptions$ | async)?.fourth }} {{ commonLocaleData?.app_days }}
+                        </button>
+
+                        <ng-container
+                            *ngTemplateOutlet="sortingTemplate; context: { $implicit: 'range0' }"
+                        ></ng-container>
                     </div>
                 </th>
-                <th class="italic text-right unbold underline">
+                <td
+                    mat-cell
+                    *matCellDef="let element"
+                    [attr.data-title]="
+                        '0 - ' + (agingDropDownoptions$ | async)?.fourth + ' ' + commonLocaleData?.app_days
+                    "
+                >
+                    <span class="d-flex justify-content-end">
+                        <amount-field
+                            [amount]="element.currentAndPastDueAmount[0].dueAmount"
+                            [currencySymbol]="false"
+                            [currencyCode]="false"
+                        >
+                        </amount-field>
+                    </span>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="app_days_2">
+                <th class="mat-app-days-2" mat-header-cell *matHeaderCellDef>
                     <div class="d-flex align-items-center justify-content-end">
-                        <span (click)="openAgingDropDown()">
+                        <button
+                            [matMenuTriggerFor]="agingDropdown"
+                            mat-button
+                            (click)="openAgingDropDown()"
+                            class="font-italic m-0"
+                        >
                             {{ (agingDropDownoptions$ | async)?.fourth + 1 }}-{{
                                 (agingDropDownoptions$ | async)?.fifth
                             }}
                             {{ commonLocaleData?.app_days }}
-                        </span>
+                        </button>
                         <ng-container *ngTemplateOutlet="sortingTemplate; context: { $implicit: 'range1' }">
                         </ng-container>
                     </div>
                 </th>
-                <th class="italic text-right unbold underline">
+                <td
+                    mat-cell
+                    *matCellDef="let element"
+                    [attr.data-title]="
+                        (agingDropDownoptions$ | async)?.fourth +
+                        1 +
+                        ' - ' +
+                        (agingDropDownoptions$ | async)?.fifth +
+                        ' ' +
+                        commonLocaleData?.app_days
+                    "
+                >
+                    <span (click)="openAgingDropDown()">
+                        <span class="d-flex justify-content-end">
+                            <amount-field
+                                [amount]="element.currentAndPastDueAmount[1].dueAmount"
+                                [currencySymbol]="false"
+                                [currencyCode]="false"
+                            >
+                            </amount-field>
+                        </span>
+                    </span>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="app_days_3">
+                <th class="mat-app-days-3" mat-header-cell *matHeaderCellDef>
                     <div class="d-flex align-items-center justify-content-end">
-                        <span (click)="openAgingDropDown()">
+                        <button
+                            mat-button
+                            (click)="openAgingDropDown()"
+                            [matMenuTriggerFor]="agingDropdown"
+                            class="font-italic m-0"
+                        >
                             {{ (agingDropDownoptions$ | async)?.fifth + 1 }}-{{
                                 (agingDropDownoptions$ | async)?.sixth
                             }}
                             {{ commonLocaleData?.app_days }}
-                        </span>
+                        </button>
                         <ng-container *ngTemplateOutlet="sortingTemplate; context: { $implicit: 'range2' }">
                         </ng-container>
                     </div>
                 </th>
-                <th class="italic text-right unbold underline">
+                <td
+                    mat-cell
+                    *matCellDef="let element"
+                    [attr.data-title]="
+                        (agingDropDownoptions$ | async)?.fifth +
+                        1 +
+                        ' - ' +
+                        (agingDropDownoptions$ | async)?.sixth +
+                        ' ' +
+                        commonLocaleData?.app_days
+                    "
+                >
+                    <span class="d-flex justify-content-end">
+                        <amount-field
+                            [amount]="element.currentAndPastDueAmount[2].dueAmount"
+                            [currencySymbol]="false"
+                            [currencyCode]="false"
+                        >
+                        </amount-field>
+                    </span>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="app_days_4">
+                <th class="mat-app-days-4" mat-header-cell *matHeaderCellDef>
                     <div class="d-flex align-items-center justify-content-end">
-                        <span (click)="openAgingDropDown()"
-                            >{{ (agingDropDownoptions$ | async)?.sixth + 1 }}+ {{ commonLocaleData?.app_days }}
-                        </span>
+                        <button
+                            mat-button
+                            (click)="openAgingDropDown()"
+                            [matMenuTriggerFor]="agingDropdown"
+                            class="font-italic m-0"
+                        >
+                            {{ (agingDropDownoptions$ | async)?.sixth + 1 }}+ {{ commonLocaleData?.app_days }}
+                        </button>
                         <ng-container *ngTemplateOutlet="sortingTemplate; context: { $implicit: 'range3' }">
                         </ng-container>
                     </div>
                 </th>
-                <th class="text-right">
+                <td
+                    mat-cell
+                    *matCellDef="let element"
+                    [attr.data-title]="(agingDropDownoptions$ | async)?.sixth + 1 + ' ' + commonLocaleData?.app_days"
+                >
+                    <span class="d-flex justify-content-end">
+                        <amount-field
+                            [amount]="element.currentAndPastDueAmount[3].dueAmount"
+                            [currencySymbol]="false"
+                            [currencyCode]="false"
+                        >
+                        </amount-field>
+                    </span>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="app_total_due">
+                <th mat-header-cell *matHeaderCellDef>
                     <div class="d-flex align-items-center justify-content-end">
                         {{ commonLocaleData?.app_total_due }}
                         <ng-container *ngTemplateOutlet="sortingTemplate; context: { $implicit: 'totalDueAmount' }">
                         </ng-container>
                     </div>
                 </th>
-            </tr>
-        </thead>
-        <tbody *ngIf="!(getAgingReportRequestInProcess$ | async)">
-            <ng-container *ngFor="let entry of (dueAmountReportData$ | async)?.results">
-                <tr *ngIf="(dueAmountReportData$ | async)?.results?.length">
-                    <td [attr.data-title]="commonLocaleData?.app_name" class="word-break">{{ entry.name }}</td>
-                    <td [attr.data-title]="localeData?.group_name">{{ entry.groupName }}</td>
-                    <td [attr.data-title]="commonLocaleData?.app_due_amount" class="text-right">
-                        <span class="d-flex justify-content-end">
-                            <amount-field
-                                [amount]="entry.futureDueAmount"
-                                [currencySymbol]="false"
-                                [currencyCode]="false"
-                            >
-                            </amount-field>
-                        </span>
-                    </td>
-                    <td
-                        [attr.data-title]="
-                            '0 - ' + (agingDropDownoptions$ | async)?.fourth + ' ' + commonLocaleData?.app_days
-                        "
-                        class="text-right"
-                    >
-                        <span class="d-flex justify-content-end">
-                            <amount-field
-                                [amount]="entry.currentAndPastDueAmount[0].dueAmount"
-                                [currencySymbol]="false"
-                                [currencyCode]="false"
-                            >
-                            </amount-field>
-                        </span>
-                    </td>
-                    <td
-                        [attr.data-title]="
-                            (agingDropDownoptions$ | async)?.fourth +
-                            1 +
-                            ' - ' +
-                            (agingDropDownoptions$ | async)?.fifth +
-                            ' ' +
-                            commonLocaleData?.app_days
-                        "
-                        class="text-right"
-                    >
-                        <span (click)="openAgingDropDown()">
-                            <span class="d-flex justify-content-end">
-                                <amount-field
-                                    [amount]="entry.currentAndPastDueAmount[1].dueAmount"
-                                    [currencySymbol]="false"
-                                    [currencyCode]="false"
-                                >
-                                </amount-field>
-                            </span>
-                        </span>
-                    </td>
-                    <td
-                        [attr.data-title]="
-                            (agingDropDownoptions$ | async)?.fifth +
-                            1 +
-                            ' - ' +
-                            (agingDropDownoptions$ | async)?.sixth +
-                            ' ' +
-                            commonLocaleData?.app_days
-                        "
-                        class="text-right"
-                    >
-                        <span class="d-flex justify-content-end">
-                            <amount-field
-                                [amount]="entry.currentAndPastDueAmount[2].dueAmount"
-                                [currencySymbol]="false"
-                                [currencyCode]="false"
-                            >
-                            </amount-field>
-                        </span>
-                    </td>
-                    <td
-                        [attr.data-title]="
-                            (agingDropDownoptions$ | async)?.sixth + 1 + ' ' + commonLocaleData?.app_days
-                        "
-                        class="text-right"
-                    >
-                        <span class="d-flex justify-content-end">
-                            <amount-field
-                                [amount]="entry.currentAndPastDueAmount[3].dueAmount"
-                                [currencySymbol]="false"
-                                [currencyCode]="false"
-                            >
-                            </amount-field>
-                        </span>
-                    </td>
-                    <td [attr.data-title]="commonLocaleData?.app_total_amount" class="text-right">
-                        <span class="d-flex justify-content-end">
-                            <amount-field
-                                [amount]="entry.totalDueAmount"
-                                [currencySymbol]="false"
-                                [currencyCode]="false"
-                            >
-                            </amount-field>
-                        </span>
-                    </td>
-                </tr>
-            </ng-container>
-        </tbody>
-        <tbody *ngIf="getAgingReportRequestInProcess$ | async">
-            <tr>
-                <td colspan="8">
-                    <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
+                <td mat-cell *matCellDef="let element" [attr.data-title]="commonLocaleData?.app_total_amount">
+                    <span class="d-flex justify-content-end">
+                        <amount-field [amount]="element.totalDueAmount" [currencySymbol]="false" [currencyCode]="false">
+                        </amount-field>
+                    </span>
                 </td>
-            </tr>
-        </tbody>
-    </table>
-    <div *ngIf="(dueAmountReportData$ | async)?.totalItems >= 20" class="pagination-wrapper">
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="agingReportDisplayedColumns; sticky: true"></tr>
+
+            <tr mat-row *matRowDef="let row; columns: agingReportDisplayedColumns"></tr>
+        </table>
+    </div>
+
+    <div *ngIf="getAgingReportRequestInProcess$ | async">
+        <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
+    </div>
+
+    <div
+        *ngIf="(dueAmountReportData$ | async)?.totalItems >= 20"
+        class="pagination-wrapper"
+        [hidden]="getAgingReportRequestInProcess$ | async"
+    >
         <div class="xs-pl-0">
-            <div class="text-center">
+            <div class="text-center unbold pagination-sm">
                 <div id="pagination" element-view-container-ref #paginationChild="elementviewcontainerref"></div>
             </div>
-        </div>
-    </div>
-</ng-template>
-<ng-template #datepickerTemplate>
-    <div class="datepicker-modal">
-        <div class="modal-body">
-            <app-datepicker-wrapper
-                [inputStartDate]="selectedDateRange?.startDate"
-                [inputEndDate]="selectedDateRange?.endDate"
-                [alwaysShowCalendars]="true"
-                [ranges]="datePickerOptions"
-                [selectedRangeLabel]="selectedRangeLabel"
-                [showCustomRangeLabel]="true"
-                [showClearButton]="false"
-                [showCancel]="true"
-                [linkedCalendars]="true"
-                [showDropdowns]="true"
-                (rangeClicked)="selectedDate($event)"
-                (datesUpdated)="selectedDate($event)"
-                [keepCalendarOpeningWithRange]="false"
-                [showRangeLabelOnInput]="false"
-                [dateFieldPosition]="dateFieldPosition"
-            ></app-datepicker-wrapper>
         </div>
     </div>
 </ng-template>
@@ -463,17 +493,19 @@
     let-fieldName="fieldName"
     let-formControl="formControl"
 >
-    <div [hidden]="show">
-        <i class="icon-search" (click)="toggleSearch(fieldName, searchBox)"></i>
-        <span> {{ title }}</span>
+    <div class="align-items-center d-flex" [hidden]="show">
+        <button mat-icon-button (click)="toggleSearch(fieldName)">
+            <span class="icon-search"></span>
+        </button>
+        <span>{{ title }}</span>
     </div>
-    <div class="input-container" [hidden]="!show">
-        <input
-            type="text"
+    <div [hidden]="!show">
+        <text-field
+            [type]="'text'"
             [placeholder]="getSearchFieldText(fieldName)"
-            class="w-100"
-            #searchBox
+            [cssClass]="'form-control search-table mat-field-border'"
             [formControl]="formControl"
-        />
+            [autoFocus]="show"
+        ></text-field>
     </div>
 </ng-template>

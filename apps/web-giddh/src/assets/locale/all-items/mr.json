@@ -65,7 +65,10 @@
                     "label": "विक्री नोंदणी",
                     "link": "/pages/reports/sales-register",
                     "icon": "icon-register-new",
-                    "description": "निव्वळ व संचयी विक्री"
+                    "description": "निव्वळ व संचयी विक्री",
+                    "additionalRoutes":[
+                        "/pages/reports/sales-detailed-expand"
+                    ]
                 },
                 {
                     "label": "टेम्पलेट",
@@ -108,13 +111,25 @@
                     "label": "खरेदी नोंदणी",
                     "link": "/pages/reports/purchase-register",
                     "icon": "icon-register-new",
-                    "description": "निव्वळ आणि संचयी खरेदी"
+                    "description": "निव्वळ आणि संचयी खरेदी",
+                    "additionalRoutes":[
+                        "/pages/reports/purchase-detailed-expand"
+                    ]
                 },
                 {
                     "label": "विक्रेता",
                     "link": "/pages/contact/vendor",
                     "icon": "icon-vendor",
                     "description": "बल्क एसएमएस / ईमेल पाठवा, स्मरणपत्रे सेट करा"
+                },
+                {
+                    "label": "फेड",
+                    "link": "/pages/reports/payment",
+                    "icon": "icon-reciept-new",
+                    "description": "एकूण, आणि न वापरलेली देयके",
+                    "additional": {
+                        "voucherVersion": 2
+                    }
                 }
             ]
         },
@@ -285,6 +300,12 @@
                     "link": "/pages/import/trial-balance",
                     "icon": "icon-trial-balance-new",
                     "description": "सर्व क्रेडिट आणि डेबिट शिल्लक आयात करा"
+                },
+                {
+                    "label": "टॅली आयात करा",
+                    "link": "/pages/tallysync",
+                    "icon": "icon-tally-import1",
+                    "description": "आपला संकालित केलेला टॅली डेटा ऑनलाइन तपासा"
                 }
             ]
         },
@@ -326,7 +347,19 @@
                     "label": "ऑडिट नोंदी नवीन",
                     "link": "/pages/audit-logs/new",
                     "icon": "icon-audit-log",
-                    "description": "प्रविष्टींचा कालक्रमानुसार डेटा"
+                    "description": "प्रविष्टींचा कालक्रमानुसार डेटा",
+                    "additional": {
+                        "voucherVersion": 1
+                    }
+                },
+                {
+                    "label": "क्रियाकलाप नोंदी",
+                    "link": "/pages/activity-logs",
+                    "icon": "icon-audit-log",
+                    "description": "प्रविष्टींचा कालक्रमानुसार डेटा",
+                    "additional": {
+                        "voucherVersion": 2
+                    }
                 },
                 {
                     "label": "रोख प्रवाह",
@@ -367,6 +400,16 @@
                     "link": "/pages/search",
                     "icon": "icon-search",
                     "description": "गट निवडा आणि कालावधीसाठी शोधा"
+                },
+                {
+                    "label": "डाउनलोड करा",
+                    "link": "/pages/downloads",
+                    "icon": "icon-download-circle"
+                },
+                {
+                    "label": "सानुकूल फील्ड",
+                    "link": "/pages/custom-fields/list",
+                    "icon": "icon-custom-field"
                 }
             ]
         }

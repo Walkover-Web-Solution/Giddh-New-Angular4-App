@@ -4,7 +4,7 @@ import { Store, select } from '@ngrx/store';
 import { Component, Inject, OnDestroy, OnInit, Optional, ViewChild } from '@angular/core';
 import { AppState } from '../../store';
 import { Observable, of, ReplaySubject } from 'rxjs';
-import * as moment from 'moment/moment';
+import * as dayjs from 'dayjs';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { SettingsLinkedAccountsService } from '../../services/settings.linked.accounts.service';
 import { SettingsLinkedAccountsActions } from '../../actions/settings/linked-accounts/settings.linked.accounts.action';
@@ -16,6 +16,7 @@ import { GeneralService } from '../../services/general.service';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { SearchService } from '../../services/search.service';
 import { cloneDeep } from '../../lodash-optimized';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'setting-linked-accounts',
@@ -75,12 +76,15 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
         @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs,
         private _generalService: GeneralService,
         private searchService: SearchService,
+        private router: Router
     ) {
         this.companyUniqueName = this._generalService.companyUniqueName;
         this.needReloadingLinkedAccounts$ = this.store.pipe(select(s => s.settings.linkedAccounts.needReloadingLinkedAccounts), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
+        /** Temporarily redirecting to home until we fix the working of this module */
+        this.router.navigate(['/pages/home']);
 
         this.yodleeForm = this._fb.group({
             rsession: ['', [Validators.required]],
@@ -260,7 +264,7 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
     }
 
     public onUpdateDate(date, account) {
-        this.dateToUpdate = moment(date).format(GIDDH_DATE_FORMAT);
+        this.dateToUpdate = dayjs(date).format(GIDDH_DATE_FORMAT);
         this.selectedAccount = cloneDeep(account);
         let message = this.localeData?.get_ledger_entries;
         message = message?.replace("[DATE]", this.dateToUpdate);

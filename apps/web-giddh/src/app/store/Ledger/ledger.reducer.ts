@@ -2,7 +2,7 @@ import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { DownloadLedgerRequest, LedgerResponse, LedgerUpdateRequest, TransactionsRequest, TransactionsResponse } from '../../models/api-models/Ledger';
 import { AccountResponse, AccountSharedWithResponse } from '../../models/api-models/Account';
 import { LEDGER } from '../../actions/ledger/ledger.const';
-import { BlankLedgerVM } from '../../ledger/ledger.vm';
+import { BlankLedgerVM } from '../../material-ledger/ledger.vm';
 import { CustomActions } from '../customActions';
 import { COMMON_ACTIONS } from '../../actions/common.const';
 import { cloneDeep } from '../../lodash-optimized';

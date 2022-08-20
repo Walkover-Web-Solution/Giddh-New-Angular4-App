@@ -34,6 +34,7 @@ export interface SubscriptionsUser {
     createdAt: string;
     status: string;
     remainingTransactions: number;
+    remainingDays?:number
 }
 
 export class PlanDetails {

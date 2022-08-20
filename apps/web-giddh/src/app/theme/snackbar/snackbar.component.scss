@@ -1,5 +1,3 @@
-@import "../../../assets/css/color.scss";
-
 .snack-container {
     padding: 13px 45px 13px 50px;
     width: 400px;
@@ -13,7 +11,7 @@
         bottom: 0;
         height: 4px;
         opacity: 0.4;
-        background-color: $black;
+        background-color: var(--color-nero);
         width: 100%;
     }
 
@@ -23,7 +21,7 @@
         top: -2px;
         float: right;
         font-size: 25px;
-        color: $white;
+        color: var(--color-toast-primary-text);
         opacity: 1;
         font-weight: normal;
 
@@ -36,8 +34,9 @@
         content: "";
         width: 26px;
         height: 26px;
-        background-color: rgba(256, 256, 256, 0.2);
-        top: 8px;
+        background-color: var(--color-primary-toast-cross-background);
+        top: 50%;
+        transform: translateY(-42%);
         right: -5px;
         border-radius: 50%;
         text-align: center;
@@ -46,7 +45,7 @@
     }
     .snack-close-button:hover,
     .snack-close-button:focus {
-        color: $white;
+        // color: var(--color-white);
         text-decoration: none;
         cursor: pointer;
         opacity: 0.4;
@@ -61,5 +60,6 @@
         border: 0;
         -webkit-appearance: none;
         -moz-appearance: none;
+        height: 100%;
     }
 }

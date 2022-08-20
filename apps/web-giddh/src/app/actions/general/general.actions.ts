@@ -250,4 +250,18 @@ export class GeneralActions {
             payload: shouldOpen
         }
     }
+
+    /**
+     * Hide/Show calendly model
+     *
+     * @param {boolean} isOpen
+     * @returns
+     * @memberof GeneralActions
+     */
+    public isOpenCalendlyModel(isOpen: boolean) {
+        return {
+            type: GENERAL_ACTIONS.OPEN_CALENDLY_MODEL,
+            payload: isOpen
+        }
+    }
 }

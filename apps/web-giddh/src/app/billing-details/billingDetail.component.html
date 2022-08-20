@@ -4,200 +4,380 @@
     (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event"
 >
-    <div *ngIf="!isCreateAndSwitchCompanyInProcess && localeData?.welcome_to_giddh" id="main" class="welcome-outer">
-        <div class="welcome-header">
-            <h2>{{ localeData?.welcome_to_giddh }}</h2>
-        </div>
-        <hr />
-        <div class="welcome-msg">
-            <div class="row">
-                <div class="col-sm-10">
-                    <div class="">
-                        <p>{{ getHelloUserText() }}</p>
-                        <p>{{ localeData?.check_details_note }}</p>
-                    </div>
-                </div>
-                <div class="col-sm-2">
-                    <div class="back-btn">
-                        <button class="btn btn-default" (click)="backToSubscriptions()">
+    <hamburger-menu [pageHeading]="localeData?.welcome_to_giddh"></hamburger-menu>
+    <div *ngIf="localeData?.welcome_to_giddh" id="main" class="welcome-outer">
+        <div class="main-heading-billing">
+            <div class="row display-line">
+                <div class="col-sm-1" [ngClass]="{ 'skeleton-common-class': showLoader }">
+                    <div class="back-btnn">
+                        <button class="btn btn-default back-button" (click)="backToSubscriptions()" *ngIf="!showLoader">
+                            <i class="icon-left back-left"></i>
                             {{ commonLocaleData?.app_back }}
                         </button>
+                    </div>
+                </div>
+                <div class="col-sm-11">
+                    <h2 class="giddh-heading" [ngClass]="{ 'skeleton-common-class': showLoader }">
+                        {{ localeData?.welcome_to_giddh }}
+                    </h2>
+                </div>
+            </div>
+        </div>
+        <div class="welcome-msg">
+            <div class="row display-line">
+                <div class="col-sm-6 user-main">
+                    <div class="user-details">
+                        <p
+                            class="user-title"
+                            [ngClass]="{ 'skeleton-common-class': showLoader, 'user-title-content': showLoader }"
+                        >
+                            {{ getHelloUserText() }}
+                        </p>
+                        <p
+                            class="user-content"
+                            [ngClass]="{ 'skeleton-common-class': showLoader, 'user-content-part': showLoader }"
+                        >
+                            {{ localeData?.check_details_note }}
+                        </p>
                     </div>
                 </div>
             </div>
         </div>
         <div class="billing-details">
-            <div class="row">
-                <div class="col-sm-6 col-xs-12">
+            <div class="col-md-2 billing-name-content">
+                <h3 class="billing-name" [ngClass]="{ 'skeleton-common-class': showLoader }">
+                    {{ localeData?.billing_details }}
+                </h3>
+            </div>
+            <div class="row display-line">
+                <div class="col-md-3 left-side">
                     <div class="billing-wrapper">
-                        <h3>{{ localeData?.billing_details }}</h3>
                         <form name="form" #billingForm="ngForm" novalidate="" autocomplete="off">
                             <div class="form-group">
-                                <label>{{ localeData?.billing_name }} <span class="red-text">*</span></label>
-                                <input
-                                    type="text"
-                                    required
-                                    class="form-control"
-                                    id="name"
-                                    name="name"
-                                    [(ngModel)]="billingDetailsObj.name"
-                                />
+                                <mat-form-field appearance="fill" class="mat-input">
+                                    <label [ngClass]="{ 'form-label': showLoader, 'skeleton-common-class': showLoader }"
+                                        >{{ localeData?.billing_name }}
+                                        <span [ngClass]="{ 'red-text-content': showLoader }" class="red-text"
+                                            >*</span
+                                        ></label
+                                    >
+                                    <ng-container *ngTemplateOutlet="skeletonLoader"></ng-container>
+                                    <input
+                                        type="text"
+                                        required
+                                        class="form-control"
+                                        id="name"
+                                        name="name"
+                                        [class.error-box]="billingForm?.controls['name']?.errors"
+                                        [ngClass]="{ 'form-field': showLoader }"
+                                        [(ngModel)]="billingDetailsObj.name"
+                                        matInput
+                                    />
+                                </mat-form-field>
                             </div>
                             <div class="form-group">
-                                <label>{{ commonLocaleData?.app_email_id }} <span class="red-text">*</span></label>
-                                <input
-                                    type="email"
-                                    required
-                                    name="email"
-                                    id="email"
-                                    [(ngModel)]="billingDetailsObj.email"
-                                    class="form-control"
-                                />
+                                <mat-form-field appearance="fill" class="mat-input">
+                                    <label [ngClass]="{ 'form-label': showLoader, 'skeleton-common-class': showLoader }"
+                                        >{{ commonLocaleData?.app_email_id }}
+                                        <span [ngClass]="{ 'red-text-content': showLoader }" class="red-text"
+                                            >*</span
+                                        ></label
+                                    >
+                                    <ng-container *ngTemplateOutlet="skeletonLoader"></ng-container>
+                                    <input
+                                        type="email"
+                                        required
+                                        name="email"
+                                        id="email"
+                                        [class.error-box]="billingForm?.controls['email']?.errors"
+                                        [ngClass]="{ 'form-field': showLoader }"
+                                        [(ngModel)]="billingDetailsObj.email"
+                                        class="form-control"
+                                        matInput
+                                    />
+                                </mat-form-field>
                             </div>
                             <div class="form-group">
-                                <label>{{ commonLocaleData?.app_mobile_number }}</label>
-                                <input
-                                    type="text"
-                                    id="contactNo"
-                                    class="form-control"
-                                    name="contactNo"
-                                    [(ngModel)]="billingDetailsObj.contactNo"
-                                    #mobileNoEl
-                                />
+                                <mat-form-field appearance="fill" class="mat-input">
+                                    <label
+                                        [ngClass]="{ 'form-label': showLoader, 'skeleton-common-class': showLoader }"
+                                        >{{ commonLocaleData?.app_mobile_number }}</label
+                                    >
+                                    <ng-container *ngTemplateOutlet="skeletonLoader"></ng-container>
+                                    <input
+                                        type="text"
+                                        id="contactNo"
+                                        class="form-control"
+                                        [ngClass]="{ 'form-field': showLoader }"
+                                        name="contactNo"
+                                        [(ngModel)]="billingDetailsObj.contactNo"
+                                        #mobileNoEl
+                                        matInput
+                                    />
+                                </mat-form-field>
                             </div>
-
+                            <!-- <div class="form-group">
+                                <mat-form-field appearance="fill"
+                                    class="mat-field-select width-100 only-bottom-border mat-input">
+                                    <label
+                                        [ngClass]="{ 'form-label': showLoader, 'skeleton-common-class': showLoader }">{{ commonLocaleData?.app_country }}
+                                        <span [ngClass]="{ 'red-text-content': showLoader }"
+                                            class="red-text">*</span></label>
+                                    <ng-container *ngTemplateOutlet="skeletonLoader"></ng-container>
+                                    <input type="text" name="country" required [formControl]="searchCountry"
+                                        [placeholder]="commonLocaleData?.app_country"
+                                        [ngClass]="{ 'form-field': showLoader }" class="no-border pd-l1 mat-input-field"
+                                        matInput [matAutocomplete]="billingCountryAuto" autocomplete="off"
+                                        (optionSelected)="selectCountry(searchCountry.value)"
+                                        (blur)="resetValueIfOptionNotSelected('billingCountry')" />
+                                    <mat-autocomplete #billingCountryAuto="matAutocomplete"
+                                        [displayWith]="displayLabel">
+                                        <mat-option (onSelectionChange)="onSelectChangeCountry($event)"
+                                            *ngFor="let country of countrySource" [value]="country">{{ country?.label }}
+                                        </mat-option>
+                                    </mat-autocomplete>
+                                </mat-form-field>
+                            </div> -->
                             <div class="form-group" *ngIf="formFields['taxName'] !== undefined">
-                                <label>{{ formFields["taxName"].label }}</label>
-                                <input
-                                    type="text"
-                                    class="form-control"
-                                    name="gstin"
-                                    id="gstin"
-                                    autocomplete="false"
-                                    maxlength="15"
-                                    [(ngModel)]="billingDetailsObj.gstin"
-                                    #gstinNumberField
-                                    (keyup)="
-                                        getStateCode(gstinNumberField, states); checkGstNumValidation(gstinNumberField)
-                                    "
-                                />
+                                <mat-form-field appearance="fill" class="mat-input">
+                                    <label
+                                        [ngClass]="{ 'form-label': showLoader, 'skeleton-common-class': showLoader }"
+                                        *ngIf="showGstinNo || showTrnNo"
+                                        >{{ formFields["taxName"].label }}</label
+                                    >
+                                    <ng-container *ngTemplateOutlet="skeletonLoader"></ng-container>
+                                    <input
+                                        [ngClass]="{ 'form-field': showLoader }"
+                                        type="text"
+                                        class="form-control"
+                                        name="gstin"
+                                        id="gstin"
+                                        autocomplete="false"
+                                        maxlength="15"
+                                        [(ngModel)]="billingDetailsObj.gstin"
+                                        #gstinNumberField
+                                        (keyup)="
+                                            getStateCode(gstinNumberField, states);
+                                            checkGstNumValidation(gstinNumberField)
+                                        "
+                                        matInput
+                                    />
+                                </mat-form-field>
                             </div>
                             <div class="form-group">
-                                <label>{{ commonLocaleData?.app_state }} <span class="red-text">*</span></label>
-                                <sh-select
-                                    #states
-                                    [options]="statesSource$ | async"
-                                    required
-                                    [isRequired]="true"
-                                    [isFilterEnabled]="true"
-                                    [disabled]="disableState"
-                                    [defaultValue]="selectedState"
-                                    class="w-100"
-                                    [(ngModel)]="billingDetailsObj.stateCode"
-                                    id="stateCode"
-                                    name="stateCode"
+                                <mat-form-field
+                                    appearance="fill"
+                                    class="mat-field-select width-100 only-bottom-border mat-input"
                                 >
-                                </sh-select>
+                                    <label [ngClass]="{ 'form-label': showLoader, 'skeleton-common-class': showLoader }"
+                                        >{{ commonLocaleData?.app_state }}
+                                        <span [ngClass]="{ 'red-text-content': showLoader }" class="red-text"
+                                            >*</span
+                                        ></label
+                                    >
+                                    <ng-container *ngTemplateOutlet="skeletonLoader"></ng-container>
+                                    <input
+                                        type="text"
+                                        [placeholder]="commonLocaleData?.app_state"
+                                        [ngClass]="{ 'form-field': showLoader }"
+                                        class="no-border pd-l1 mat-input-field"
+                                        matInput
+                                        name="stateCode"
+                                        [formControl]="searchBillingStates"
+                                        [matAutocomplete]="billingStateAuto"
+                                        autocomplete="off"
+                                        (blur)="resetValueIfOptionNotSelected('billingState')"
+                                        required
+                                    />
+                                    <mat-autocomplete
+                                        #billingStateAuto="matAutocomplete"
+                                        [displayWith]="displayLabel"
+                                        (optionSelected)="onStateChange($event)"
+                                    >
+                                        <mat-option *ngFor="let state of companyStatesSource" [value]="state">
+                                            {{ state.label }}
+                                        </mat-option>
+                                    </mat-autocomplete>
+                                </mat-form-field>
                             </div>
                             <!-- static pincode start -->
-                            <div class="form-group">
-                                <label for="pinCodeNum"
-                                    >{{ localeData?.pincode }} <span class="red-text">*</span></label
-                                >
-                                <input type="text" class="form-control" autocomplete="false" name="pinCodeNum" />
-                            </div>
+                            <!-- <div class="form-group">
+                                <mat-form-field appearance="fill" class="mat-input">
+                                    <label [ngClass]="{ 'form-label': showLoader, 'skeleton-common-class': showLoader }"
+                                        for="pinCodeNum">{{ localeData?.pincode }}
+                                        <span class="red-text"
+                                            [ngClass]="{ 'red-text-content': showLoader }">*</span></label>
+                                    <ng-container *ngTemplateOutlet="skeletonLoader"></ng-container>
+                                    <input type="text" [ngClass]="{ 'form-field': showLoader }" class="form-control"
+                                        name="pinCodeNum" matInput />
+                                </mat-form-field>
+                            </div> -->
                             <!-- static pincode end -->
                             <div class="form-group">
-                                <label>{{ commonLocaleData?.app_address }}</label>
-                                <textarea
-                                    class="form-control"
-                                    name="address"
-                                    id="address"
-                                    [(ngModel)]="billingDetailsObj.address"
-                                    [placeholder]="commonLocaleData?.app_address"
-                                    rows="5"
-                                    cols="12"
-                                ></textarea>
-                            </div>
-                            <div class="form-group">
-                                <input
-                                    type="checkbox"
-                                    (click)="autoRenewSelected($event)"
-                                    id="autorenew"
-                                    name="autorenew"
-                                    [(ngModel)]="billingDetailsObj.autorenew"
-                                /><label class="mr-l1">{{ localeData?.renew_subscription }}</label>
-                            </div>
-                            <div class="form-group">
-                                <button
-                                    type="button"
-                                    id="rzp-button1"
-                                    (click)="payWithRazor(billingForm)"
-                                    [disabled]="billingForm.invalid || !isMobileNumberValid"
-                                    class="btn btn-success"
-                                >
-                                    {{ commonLocaleData?.app_pay_now }}
-                                </button>
+                                <mat-form-field appearance="fill" class="mat-input">
+                                    <label
+                                        [ngClass]="{ 'form-label': showLoader, 'skeleton-common-class': showLoader }"
+                                        >{{ commonLocaleData?.app_address }}</label
+                                    >
+                                    <div
+                                        [ngClass]="{
+                                            'form-text-area': showLoader,
+                                            'skeleton-common-class': showLoader
+                                        }"
+                                    ></div>
+                                    <textarea
+                                        class="form-control"
+                                        name="address"
+                                        id="address"
+                                        [ngClass]="{ 'form-field': showLoader }"
+                                        [(ngModel)]="billingDetailsObj.address"
+                                        [placeholder]="localeData?.type_your_address"
+                                        rows="5"
+                                        cols="12"
+                                        matInput
+                                    ></textarea>
+                                </mat-form-field>
                             </div>
                         </form>
                     </div>
                 </div>
-                <div class="col-sm-6 col-xs-12">
-                    <div class="professional-plan">
-                        <p class="plan-title">
-                            {{ selectedPlans?.planDetails?.name }}
-                            <span class="grey-text"> {{ localeData?.current_plan }} </span>
-                        </p>
+                <div class="col-md-3 right-side">
+                    <div class="whole-renewal">
+                        <div class="renewal-heading">
+                            <h3
+                                class="renewal-details"
+                                [ngClass]="{
+                                    'skeleton-common-class': showLoader,
+                                    'renewal-details-content': showLoader
+                                }"
+                            >
+                                {{ localeData?.renewal_plan_details }}
+                            </h3>
+                        </div>
+                        <div class="renewal-data">
+                            <mat-card class="renewal-card">
+                                <mat-card-subtitle
+                                    class="renewal-card-subtitle"
+                                    [ngClass]="{ 'skeleton-common-class': showLoader }"
+                                >
+                                    {{ selectedPlans?.planDetails?.name }}
+                                    <!-- <span class="current-plan-details"> {{ localeData?.current_plan }} </span> -->
+                                </mat-card-subtitle>
+                                <mat-card-title
+                                    class="renewal-card-title"
+                                    [ngClass]="{ 'skeleton-common-class': showLoader }"
+                                >
+                                    <div class="amount-field-content">
+                                        <amount-field
+                                            [amount]="selectedPlans?.planDetails?.amount"
+                                            [currencySymbol]="activeCompany?.countryV2.currency?.symbol"
+                                            [currencyCode]="activeCompany?.countryV2.currency?.code"
+                                        >
+                                        </amount-field>
+                                    </div>
+                                    <span class="year">
+                                        /{{ selectedPlans?.planDetails?.duration }}
+                                        {{ selectedPlans?.planDetails?.durationUnit }}(s)</span
+                                    >
+                                </mat-card-title>
+                                <!-- <p class="renewal-off">₹15000 <span class="discount-off">20% off</span></p> -->
+                                <mat-card-content class="renewal-card-content">
+                                    <ul class="renewal-list" [ngClass]="{ 'renewal-list-content': showLoader }">
+                                        <li class="features" [ngClass]="{ 'skeleton-common-class': showLoader }">
+                                            {{ selectedPlans?.planDetails?.transactionLimit | number }}
+                                            {{ localeData?.transactions }}
+                                        </li>
+                                        <li class="features" [ngClass]="{ 'skeleton-common-class': showLoader }">
+                                            {{ selectedPlans?.planDetails?.companiesLimit | number }}
+                                            {{ localeData?.companies }}
+                                        </li>
+                                        <!-- <li class="features">10 hrs<span class="hrs-underline"> Muneem Consultant</span></li> -->
+                                        <li class="features" [ngClass]="{ 'skeleton-common-class': showLoader }">
+                                            {{ localeData?.unlimited_users }}
+                                        </li>
+                                        <li class="features" [ngClass]="{ 'skeleton-common-class': showLoader }">
+                                            {{ localeData?.unlimited_contacts }}
+                                        </li>
+                                        <li class="features" [ngClass]="{ 'skeleton-common-class': showLoader }">
+                                            {{ localeData?.desktop_mobile_app }}
+                                        </li>
+                                    </ul>
+                                </mat-card-content>
+                            </mat-card>
+                        </div>
+                        <section class="renewal-section">
+                            <!-- <div
+                                class="form-group"
+                                [ngClass]="{
+                                    'skeleton-common-class': showLoader,
+                                    'renewal-subscription-extra': showLoader
+                                }"
+                            >
+                                <mat-checkbox
+                                    class="renewal-subscription"
+                                    [ngClass]="{ 'renewal-subscription-content': showLoader }"
+                                    (click)="autoRenewSelected($event)"
+                                    id="autorenew"
+                                    name="autorenew"
+                                    color="primary"
+                                    [(ngModel)]="billingDetailsObj.autorenew"
+                                >
+                                    {{ localeData?.renew_subscription }}</mat-checkbox
+                                >
+                            </div> -->
+                        </section>
+                        <div class="renewal-payable">
+                            <h3
+                                class="new-payable"
+                                [ngClass]="{ 'skeleton-common-class': showLoader, 'new-payable-content': showLoader }"
+                            >
+                                {{ localeData?.net_payable_amount }}
+                            </h3>
+                            <h2
+                                class="renewal-amount"
+                                [ngClass]="{
+                                    'skeleton-common-class': showLoader,
+                                    'renewal-amount-content': showLoader
+                                }"
+                            >
+                                <div class="amount-field-content">
+                                    <amount-field
+                                        [amount]="
+                                            selectedPlans?.planDetails?.amount +
+                                            (activeCompany?.country === 'India'
+                                                ? selectedPlans?.planDetails?.amount * taxPercentage
+                                                : 0)
+                                        "
+                                        [currencySymbol]="activeCompany?.countryV2.currency?.symbol"
+                                        [currencyCode]="activeCompany?.countryV2.currency?.code"
+                                    >
+                                    </amount-field>
+                                </div>
 
-                        <div class="your-account">
-                            <div class="row">
-                                <div class="col-6">
-                                    <span>
-                                        {{ localeData?.subscription_price }}
-                                    </span>
-                                </div>
-                                <div class="col-6">
-                                    <p>
-                                        {{ selectedPlans?.planDetails?.amount | number }}
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-6">
-                                    <span>
-                                        {{ localeData?.total_companies }}
-                                    </span>
-                                </div>
-                                <div class="col-6">
-                                    <p>
-                                        {{ selectedPlans?.planDetails?.companiesLimit | number }}
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-6">
-                                    <span>
-                                        {{ localeData?.transaction_limit }}
-                                    </span>
-                                </div>
-                                <div class="col-6">
-                                    <p>
-                                        {{ selectedPlans?.planDetails?.transactionLimit | number }}
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-6">
-                                    <span>
-                                        {{ localeData?.subscription_renewal }}
-                                    </span>
-                                </div>
-                                <div class="col-6">
-                                    <p>
-                                        {{ selectedPlans?.planDetails?.duration }}
-                                        {{ selectedPlans?.planDetails?.durationUnit }}(s)
-                                    </p>
-                                </div>
+                                <span
+                                    class="including-tax"
+                                    *ngIf="activeCompany?.country === 'India'"
+                                    [ngClass]="{ 'including-text-content': showLoader }"
+                                    >{{ localeData?.including_tax }}</span
+                                >
+                            </h2>
+
+                            <div class="form-group" [ngClass]="{ 'form-group-div': showLoader }">
+                                <div
+                                    [ngClass]="{ 'form-group-button': showLoader, 'skeleton-common-class': showLoader }"
+                                ></div>
+                                <button
+                                    class="pay-now"
+                                    mat-button
+                                    color="primary"
+                                    [ngClass]="{ 'pay-now-content': showLoader }"
+                                    (click)="payWithRazor(billingForm)"
+                                    [disabled]="
+                                        billingForm.invalid || !isMobileNumberValid || !billingDetailsObj.stateCode
+                                    "
+                                >
+                                    {{ commonLocaleData?.app_pay_now }}
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -205,8 +385,7 @@
             </div>
         </div>
     </div>
-
-    <div *ngIf="isCreateAndSwitchCompanyInProcess || !localeData?.welcome_to_giddh">
-        <giddh-page-loader></giddh-page-loader>
-    </div>
+    <ng-template #skeletonLoader>
+        <div [ngClass]="{ 'form-div': showLoader, 'skeleton-common-class': showLoader }"></div>
+    </ng-template>
 </ng-container>

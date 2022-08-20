@@ -1,5 +1,3 @@
-@import "../../../../assets/css/color.scss";
-
 .buttons-container {
     display: flex;
     justify-content: center;
@@ -46,5 +44,5 @@
     max-width: 480px;
     width: 100%;
     padding: 0;
-    background: $white;
+    background: var(--color-white);
 }

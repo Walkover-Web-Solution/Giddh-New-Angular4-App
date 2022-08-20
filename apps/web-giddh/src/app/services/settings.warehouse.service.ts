@@ -126,4 +126,23 @@ export class SettingsWarehouseService {
             }), catchError((e) => this.errorHandler.HandleCatch<WareHouseResponse, string>(e, WareHouseResponse)));
     }
 
+    /**
+     * Updates the warehouse status
+     *
+     * @param {*} model
+     * @param {string} warehouseUniqueName
+     * @returns {Observable<BaseResponse<any, any>>}
+     * @memberof SettingsWarehouseService
+     */
+     public updateWarehouseStatus(model: any, warehouseUniqueName: string): Observable<BaseResponse<any, any>> {
+        const companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.patch(this.config.apiUrl + WAREHOUSE_API.UPDATE_WAREHOUSE_STATUS
+            .replace(':companyUniqueName', companyUniqueName)
+            .replace(':warehouseUniqueName', warehouseUniqueName), model).pipe(
+                map((res) => {
+                    let data: BaseResponse<any, string> = res;
+                    data.queryString = {};
+                    return data;
+                }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
+    }
 }

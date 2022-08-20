@@ -32,13 +32,43 @@
                 </p>
             </div>
             <div class="col-xs-8 col-sm-8">
-                <p class="font-14">
+                <p class="font-14" *ngIf="!showCategoryOption">
                     {{
                         entryAgainstObject && pettyCashEntry
                             ? pettyCashEntry?.particular?.name
                             : selectedEntryForApprove?.baseAccount?.name
                     }}
                 </p>
+                <sh-select
+                    *ngIf="showCategoryOption"
+                    [ngClass]="{ 'error-box': showEntryAgainstRequired }"
+                    class="text-left multi-select entry-against"
+                    name="depositAccountUniqueName"
+                    #entryAgainstAccountDropDown
+                    [options]="entryAgainstObject.dropDownOption"
+                    [(ngModel)]="entryAgainstObject.model"
+                    (selected)="onSelectEntryAgainstAccount($event)"
+                    (onClear)="onClearEntryAgainstAccount()"
+                    [placeholder]="commonLocaleData?.app_select_account"
+                    [notFoundLink]="false"
+                    [enableDynamicSearch]="true"
+                    [isPaginationEnabled]="true"
+                    (scrollEnd)="handleAccountScrollEnd()"
+                    (dynamicSearchedQuery)="onAccountSearchQueryChanged($event)"
+                    [defaultValue]="entryAgainstObject?.name"
+                    [fixedValue]="entryAgainstObject?.name"
+                    [forceClearReactive]="forceClear$ | async"
+                    [multiple]="false"
+                    [ItemHeight]="33"
+                    [useInBuiltFilterForIOptionTypeItems]="true"
+                >
+                    <ng-template #optionTemplate1 let-option="option">
+                        <a href="javascript:void(0)" class="list-item">
+                            <div class="item">{{ option.label }}</div>
+                            <div class="item-unique">{{ option.value }}</div>
+                        </a>
+                    </ng-template>
+                </sh-select>
             </div>
         </div>
         <div class="row mr-b1">
@@ -65,7 +95,7 @@
             <button
                 mat-raised-button
                 class="btn btn-success"
-                (click)="approveEntry.emit(true)"
+                (click)="confirmApproveEntry()"
                 [ladda]="approveEntryRequestInProcess"
             >
                 {{ commonLocaleData?.app_yes }}

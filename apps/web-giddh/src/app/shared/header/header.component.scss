@@ -1,8 +1,3 @@
-@import "../../../assets/css/color.scss";
-.ddMaxHeight {
-    max-height: 500px;
-}
-
 .giddh-logo {
     width: 100px;
 }
@@ -12,21 +7,21 @@
     top: 57px;
     bottom: 0;
     min-height: calc(100vh - 60px);
-    background-color: $white;
+    background-color: var(--color-white);
     width: 60px;
     left: 0;
     z-index: 991;
-    box-shadow: -2px -2px 15px rgba(0, 0, 0, 0.2) !important;
+    box-shadow: 1px 0px 4px var(--color-sidebar-primary-box-shadow) !important;
 }
 
 .account-search .input-group-addon {
-    color: $charcoal;
+    color: var(--color-nero);
     font-size: 12px;
     padding-right: 0px;
     background-color: transparent;
     vertical-align: top;
     line-height: 1.8;
-    border: 0px solid $white;
+    border: 0px solid var(--color-white);
 }
 
 .account-search .input-group-addon i.icon-search {
@@ -39,31 +34,31 @@
     background: none !important;
     height: 36px;
     padding-left: 3px !important;
-    border: 0px solid $white !important;
+    border: 0px solid var(--color-white) !important;
 }
 
 .account-search .form-control:focus {
-    border-color: $gainsboro !important;
-    color: $pink-swan;
+    border-color: var(--color-iron) !important;
+    color: var(--color-primary-header-account-search-form-control-focus);
 }
 
 .account-search {
     position: relative;
     height: 36px;
-    border-color: $gainsboro;
+    border-color: var(--color-iron);
     border-radius: 20px 20px 20px 20px !important;
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--color-iron);
     margin: 10px 0px 5px 0px;
 }
 
 .account-search:hover:after {
-    color: $rich-blue;
+    color: var(--color-blue);
     cursor: pointer;
 }
 
 a[vr-item]:focus {
-    background-color: $vivid-blue;
-    color: $white;
+    background-color: var(--color-blue);
+    color: var(--color-white);
     cursor: pointer;
 }
 
@@ -76,11 +71,11 @@ a[vr-item]:focus {
     right: 10px;
     font-size: 12px;
     line-height: 36px;
-    color: $charcoal;
+    color: var(--color-nero);
 }
 
 .account-search .form-control:after {
-    background: $red;
+    background: var(--color-danger);
     content: "";
     width: 90px;
     height: 90px;
@@ -89,28 +84,28 @@ a[vr-item]:focus {
 }
 
 .account-search .form-control::-webkit-input-placeholder {
-    color: $charcoal;
+    color: var(--color-nero);
     font-size: 12px;
     position: relative;
     top: -2px;
 }
 
 .account-search .form-control::-moz-placeholder {
-    color: $charcoal;
+    color: var(--color-nero);
     font-size: 12px;
     position: relative;
     top: -2px;
 }
 
 .account-search .form-control:-ms-input-placeholder {
-    color: $charcoal;
+    color: var(--color-nero);
     font-size: 12px;
     position: relative;
     top: -2px;
 }
 
 .account-search .form-control:-moz-placeholder {
-    color: $charcoal;
+    color: var(--color-nero);
     font-size: 12px;
     position: relative;
     top: -2px;
@@ -121,7 +116,7 @@ a[vr-item]:focus {
 .account-search .form-control::-moz-placeholder,
 .account-search .form-control:-ms-input-placeholder,
 .account-search .form-control:-moz-placeholder {
-    color: $charcoal !important;
+    color: var(--color-nero) !important;
 }
 
 .left-fixed-header li:hover {
@@ -139,7 +134,7 @@ a[vr-item]:focus {
 
 .main-company-name > li > a:hover .company-text .company-name,
 .main-company-name > li > a:hover .icon-dots-three-vertical {
-    color: $white;
+    color: var(--color-white);
 }
 
 .left-fixed-header > li {
@@ -153,7 +148,6 @@ a[vr-item]:focus {
     right: 0;
     top: 110px;
 }
-
 @media screen and (-webkit-min-device-pixel-ratio: 0) {
     .left-fixed-header li {
         display: grid;
@@ -163,7 +157,7 @@ a[vr-item]:focus {
 .left-fixed-header > li > a {
     display: block;
     padding: 7px 15px;
-    color: $nero;
+    color: var(--color-nero);
     position: relative;
 }
 
@@ -178,20 +172,20 @@ a[vr-item]:focus {
 }
 
 .left-fixed-header > li > a:hover {
-    color: $nero;
+    color: var(--color-nero);
 }
 .left-fixed-header > li > a:hover .label > span,
 .left-fixed-header > li > a:hover .label {
-    color: $deep-sky-blue;
+    color: var(--color-blue);
 }
 
 .left-fixed-header > li a.active {
-    background: $lavender;
+    background: var(--color-dark-fog);
 }
 
 .left-fixed-header > li > a.active .label,
 .left-fixed-header > li > a.active .label > span {
-    color: $nero;
+    color: var(--color-nero);
 }
 
 .left-fixed-header > li > a .label {
@@ -200,7 +194,7 @@ a[vr-item]:focus {
     vertical-align: middle;
     padding-left: 0px;
     text-align: left;
-    color: $nero;
+    color: var(--color-nero);
     letter-spacing: 0.6px;
     font-weight: normal;
     font-family: "opensans-semibold";
@@ -221,7 +215,7 @@ a[vr-item]:focus {
 }
 
 .left-fixed-header .divider {
-    border-bottom: 1px solid $night-rider;
+    border-bottom: 1px solid var(--color-nero);
     padding: 4px 0;
     height: 0;
     margin-bottom: 4px;
@@ -254,7 +248,7 @@ a[vr-item]:focus {
 }
 
 .left-fixed-header h6 {
-    color: $midnight-blue;
+    color: var(--color-giddh-blue);
     font-size: 16px;
     padding-left: 15px;
     padding-right: 15px;
@@ -267,14 +261,14 @@ a[vr-item]:focus {
 .left-fixed-header > h6 > i {
     float: right;
     font-size: 10px;
-    background: $midnight-blue;
+    background: var(--color-giddh-blue);
     display: inline-block;
     width: 15px;
     height: 15px;
     text-align: center;
     line-height: 15.9px;
     border-radius: 2px;
-    color: $white;
+    color: var(--color-white);
     margin-top: 1px;
     margin-right: 2px;
 }
@@ -289,13 +283,13 @@ a[vr-item]:focus {
     text-align: center;
     line-height: 15.9px;
     border-radius: 2px;
-    color: $nobel;
+    color: var(--color-gray);
     margin-top: 1px;
 }
 
 .left-fixed-header > h6 > i:hover {
-    color: $white;
-    background: $rich-blue;
+    color: var(--color-white);
+    background: var(--color-blue);
 }
 
 .nav-tabs {
@@ -312,7 +306,7 @@ a[vr-item]:focus {
 
 .left-sub-menu ul > li > a {
     font-size: 14px;
-    color: $dim-gray;
+    color: var(--color-gray);
     display: block;
     clear: both;
     padding: 6px 15px;
@@ -320,7 +314,7 @@ a[vr-item]:focus {
 }
 
 .left-sub-menu ul > li > a:hover {
-    color: $deep-sky-blue;
+    color: var(--color-blue);
 }
 
 .left-sub-menu ul {
@@ -331,7 +325,7 @@ a[vr-item]:focus {
 }
 
 .left-sub-menu {
-    background: $white;
+    background: var(--color-white);
     position: absolute;
     left: -12px;
     bottom: 0;
@@ -340,7 +334,7 @@ a[vr-item]:focus {
     display: block;
     clear: both;
     float: none;
-    box-shadow: 0 0 3px $black-russian;
+    box-shadow: 0 0 3px var(--color-primary-common-box-shadow);
     border-radius: 2px;
     padding: 5px 0;
     visibility: hidden;
@@ -355,7 +349,7 @@ a[vr-item]:focus {
     vertical-align: middle;
     text-align: right;
     position: relative;
-    color: $dim-gray;
+    color: var(--color-gray);
     top: 6px;
 }
 
@@ -366,7 +360,7 @@ a[vr-item]:focus {
 .sub-menu > li > a {
     display: block;
     padding: 8px 20px;
-    color: $pink-swan;
+    color: var(--color-primary-header-sub-menu-li-a);
 }
 
 .left-fixed-header > li > a > i {
@@ -418,7 +412,7 @@ a[vr-item]:focus {
 .universal-date li {
     display: inline-block;
     position: relative;
-    border: 1px solid $white;
+    border: 1px solid var(--color-white);
     border-radius: 20px;
     padding: 0 7px;
     i {
@@ -427,14 +421,14 @@ a[vr-item]:focus {
         position: relative;
         left: 16px;
         padding: 0 20px;
-        color: $white;
+        color: var(--color-white);
         font-size: 20px;
     }
 }
 
 .universal-date li input {
     padding-left: 10px !important;
-    color: $white !important;
+    color: var(--color-white) !important;
     padding-right: 0 !important;
     text-align: left;
 }
@@ -445,7 +439,7 @@ a[vr-item]:focus {
 .header-date {
     padding: 5px 11px;
     border-radius: 0px 2px 2px 0px;
-    color: $white;
+    color: var(--color-white);
     padding-left: 0;
 }
 
@@ -470,7 +464,7 @@ a[vr-item]:focus {
         margin: auto;
     }
     .input-date {
-        border: 1px solid $white;
+        border: 1px solid var(--color-white);
         border-radius: 20px !important;
         height: 34px;
         width: 220px;
@@ -483,13 +477,13 @@ a[vr-item]:focus {
 
 #add-manage.btn-gray {
     background: transparent;
-    color: $white;
+    color: var(--color-white);
     position: relative;
     padding-left: 15px;
     padding-top: 5px;
     padding-bottom: 6px;
     padding-right: 15px;
-    border: 1px solid $white;
+    border: 1px solid var(--color-white);
     border-radius: 20px;
     margin-right: 15px;
     display: inline-block !important;
@@ -499,11 +493,11 @@ a[vr-item]:focus {
     }
 }
 span.icon-support.dropdown-toggle {
-    background-color: $governor-bay;
-    color: $white;
+    background-color: var(--color-primary-icon-support-dropdown-toggle);
+    color: var(--color-white);
     padding: 6px 7px;
     font-size: 17px;
-    border: 1px solid $governor-bay;
+    border: 1px solid var(--color-primary-icon-support-dropdown-toggle);
     border-radius: 1px;
     position: relative;
     top: 1px;
@@ -515,19 +509,18 @@ span.icon-support.dropdown-toggle {
 .date-range-picker {
     max-width: 100%;
     min-width: 100%;
-    line-height: 3;
     height: 32px !important;
 }
 
 .other a {
-    color: $night-rider;
+    color: var(--color-nero);
     text-transform: uppercase;
 }
 .show-more-opt {
     font-size: 14px;
     padding: 0 15px;
     font-family: "opensans-semibold";
-    color: $deep-sky-blue;
+    color: var(--color-blue);
 }
 
 // top header css
@@ -536,7 +529,7 @@ span.icon-support.dropdown-toggle {
 }
 
 .primary-header {
-    background-color: $midnight-blue;
+    background-color: var(--color-giddh-blue);
     min-height: 60px;
     position: fixed;
     width: 100%;
@@ -600,7 +593,7 @@ ul.sub-list {
 }
 
 .nav-left-bar .company-name .company-text span {
-    color: $nero;
+    color: var(--color-nero);
     word-break: break-all;
 }
 
@@ -617,7 +610,7 @@ ul.sub-list {
 
 .nav-left-bar .company-name .branch-unique-name {
     font-size: 12px;
-    color: $deep-sky-blue !important;
+    color: var(--color-blue) !important;
     padding: 0 0 3px 0;
 }
 
@@ -646,7 +639,7 @@ ul.sub-list {
     right: 30px;
     background: none;
     border: 0px;
-    color: $nero;
+    color: var(--color-nero);
     cursor: pointer;
     font-size: 20px;
     z-index: 9999;
@@ -655,8 +648,8 @@ ul.sub-list {
     transition: 2s linear;
 }
 .head-nav {
-    background: $white-smoke;
-    border-bottom: 1px solid $gainsboro;
+    background: var(--color-wild-sand);
+    border-bottom: 1px solid var(--color-dark-fog);
     margin-bottom: 5px;
 }
 .ledger-page {
@@ -665,7 +658,7 @@ ul.sub-list {
     z-index: 10;
 }
 .help-setting-icons {
-    color: $white;
+    color: var(--color-white);
     i {
         font-size: 20px;
         line-height: 1.3;
@@ -676,33 +669,34 @@ ul.sub-list {
 }
 .show-more-module a {
     font-size: 14px;
-    color: $deep-sky-blue !important;
+    color: var(--color-blue) !important;
     font-family: "opensans-semibold";
 }
 /*notification css*/
 .white-row {
-    background-color: $white;
+    background-color: var(--color-primary-header-notification-background);
     padding: 10px 15px;
     margin-bottom: 10px;
     font-size: 16px;
-    box-shadow: 1px 1px 3px $black-russian;
+    box-shadow: 1px 1px 3px var(--color-primary-common-box-shadow);
     margin-top: 10px;
+    color: var(--color-primary-header-notification-text);
     p {
         font-family: "opensans-semibold";
         font-size: 14px;
     }
     .click-here {
-        color: $chetwode-blue;
+        color: var(--color-blue);
         cursor: pointer;
     }
 
     span.icon-traingle-info {
-        color: $bitter-sweet;
+        color: var(--color-primary-header-icon-traingle-info);
         font-size: 15px;
         margin-right: 10px;
     }
     span.icon-info-icon {
-        color: $nobel;
+        color: var(--color-gray);
         font-size: 18px;
         margin-right: 10px;
     }
@@ -711,7 +705,7 @@ ul.sub-list {
     margin-left: 240px;
 }
 .setting-sidebar {
-    box-shadow: -2px -2px 15px rgba(0, 0, 0, 0.2);
+    box-shadow: -2px -2px 15px --color-primary-common-box-shadow;
 }
 .desktop-header .hamburger-menu {
     display: flex;
@@ -733,12 +727,12 @@ ul.sub-list {
 }
 .name-year {
     font-size: 12px !important;
-    color: $deep-sky-blue !important;
+    color: var(--color-blue) !important;
 }
 .company-name {
     ul.dropdown-menu.user-dropdown-header {
         left: 0 !important;
-        color: $night-rider;
+        color: var(--color-nero);
         .company-name-finance-year {
             .text-ellipsis {
                 white-space: normal;
@@ -747,19 +741,19 @@ ul.sub-list {
     }
 }
 .create-company-btn {
-    border-top: 1px solid $gainsboro;
+    border-top: 1px solid var(--color-iron);
 }
 .user-dropdown-header:after {
     position: absolute;
     content: "";
     height: 20px;
     width: 20px;
-    background-color: $whisper;
+    background-color: var(--color-dark-fog);
     top: -9px;
     z-index: -1;
     transform: rotate(45deg);
     left: 15px;
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--color-iron);
 }
 .switch-branch-wrapper {
     .btn-group {
@@ -769,8 +763,8 @@ ul.sub-list {
             display: flex;
             padding: 15px;
             font-family: "opensans-bold";
-            color: $nero;
-            border-bottom: 1px solid $gainsboro;
+            color: var(--color-nero);
+            border-bottom: 1px solid var(--color-iron);
             width: 100%;
             align-items: center;
             justify-content: space-between;
@@ -781,13 +775,13 @@ ul.sub-list {
                 float: right;
                 padding-top: 4px;
                 transform: rotate(270deg);
-                border: 2px solid $gray;
+                border: 2px solid var(--color-abbey);
                 padding: 3px;
                 border-radius: 50%;
                 justify-content: center;
                 align-items: center;
                 display: flex;
-                color: $gray;
+                color: var(--color-abbey);
             }
         }
         .dropdown-menu {
@@ -796,8 +790,8 @@ ul.sub-list {
             top: 17px !important;
             transform: translateY(0px);
             bottom: auto;
-            border: 1px solid $gainsboro;
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+            border: 1px solid var(--color-iron);
+            box-shadow: 0 6px 12px var(--color-primary-common-box-shadow);
             min-width: 270px;
             max-width: 270px;
             max-height: 315px;
@@ -813,17 +807,17 @@ ul.sub-list {
                     display: flex;
                     align-items: center;
                     justify-content: space-between;
-                    color: $nero !important;
+                    color: var(--color-nero) !important;
                     cursor: pointer;
                     &.dropdown-item.active-branch {
-                        color: $chetwode-blue;
+                        color: var(--color-blue);
                         font-weight: bold;
                     }
                     &.company-create {
-                        color: $chetwode-blue !important;
+                        color: var(--color-blue) !important;
                     }
                     &:hover {
-                        color: $chetwode-blue !important;
+                        color: var(--color-blue) !important;
                     }
                 }
                 span {
@@ -836,7 +830,7 @@ ul.sub-list {
                 }
             }
             .go-to-company {
-                color: $deep-sky-blue;
+                color: var(--color-blue);
                 &.company-label {
                     flex-direction: column;
                     justify-content: flex-start;
@@ -844,7 +838,7 @@ ul.sub-list {
                 }
             }
             .company-create {
-                color: $chetwode-blue;
+                color: var(--color-blue);
             }
             div {
                 input {
@@ -876,20 +870,20 @@ ul.sub-list {
 
 /*new header css starts*/
 .fixed-padding {
-    padding-top: 58px;
+    padding-top: 12px;
 }
 #primary-new-header.primary-main-header {
     padding-left: 15px;
-    border-bottom: 1px solid $gainsboro;
+    border-bottom: 1px solid var(--color-primary-header-border-bottom);
     position: fixed;
     width: 100%;
     top: 0;
-    background-color: $midnight-blue;
-    z-index: 990;
+    background-color: var(--color-primary-header-background);
+    z-index: 990 !important;
     padding-top: 12px;
     padding-bottom: 12px;
     .universal-date {
-        color: $persian-blue !important;
+        color: var(--color-primary-header-universal-date) !important;
         display: flex;
         align-items: center;
         li {
@@ -908,7 +902,7 @@ ul.sub-list {
         .icon-plus,
         i,
         .btn-link {
-            color: $white !important;
+            color: var(--color-primary-header-icons) !important;
             position: static !important;
         }
         .notification {
@@ -919,23 +913,24 @@ ul.sub-list {
         .not-today {
             .calendar-addon {
                 padding: 6px 7px 7px 8px;
+                color: var(--color-primary-button-text);
             }
             .input-date {
                 height: 32px;
             }
         }
         .input-date {
-            background-color: $white;
+            background-color: var(--color-primary-button-background);
             border-radius: 5px !important;
             border: none;
             input {
-                color: $persian-blue !important;
+                color: var(--color-primary-button-text) !important;
             }
         }
         #add-manage {
-            color: $persian-blue !important;
+            color: var(--color-primary-button-text) !important;
             padding: 6px 8px;
-            background-color: $white;
+            background-color: var(--color-primary-button-background);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -944,7 +939,7 @@ ul.sub-list {
             i {
                 padding: 0 5px !important;
                 padding-left: 0 !important;
-                color: $persian-blue !important;
+                color: var(--color-primary-button-text) !important;
             }
         }
         .header-utility-icons {
@@ -954,7 +949,7 @@ ul.sub-list {
             }
             &.disable-icon {
                 i {
-                    color: $gainsboro !important;
+                    color: var(--color-iron) !important;
                     cursor: no-drop;
                 }
             }
@@ -986,6 +981,9 @@ aside-setting {
         transform: translate3d(0, 0px, 0px);
         right: 0;
         z-index: 9991;
+        &.z-index-990 {
+            z-index: 990 !important;
+        }
     }
 }
 
@@ -1035,6 +1033,18 @@ aside-setting {
             }
         }
     }
+    .fixed-padding {
+        #primary-new-header {
+            z-index: 99999 !important;
+        }
+    }
+}
+@media (max-width: 1024px) {
+    .fixed-padding {
+        #primary-new-header {
+            z-index: 99999 !important;
+        }
+    }
 }
 @media (max-width: 767px) {
     .setting-sidebar-wrapper {
@@ -1047,9 +1057,9 @@ aside-setting {
         top: 0;
     }
     .fixed-padding {
-        padding-top: 90px;
+        padding-top: 44px;
         #primary-new-header.primary-main-header {
-            background-color: $midnight-blue;
+            background-color: var(--color-giddh-blue);
             position: fixed;
             top: 0;
             width: 100%;
@@ -1058,13 +1068,13 @@ aside-setting {
             display: flex;
             align-items: flex-start;
             justify-content: space-between;
-            z-index: 9999;
+            z-index: 99999 !important;
             .logo-wrapper {
                 display: none;
             }
             .hamburger-menu {
                 i {
-                    color: $white;
+                    color: var(--color-white);
                 }
             }
             .universal-date {
@@ -1132,7 +1142,7 @@ aside-setting {
             position: relative;
             left: 0;
             padding: 0 20px;
-            color: $white;
+            color: var(--color-white);
             margin-right: 0;
             height: 34px;
             align-items: center;
@@ -1150,7 +1160,7 @@ aside-setting {
     .close-2 {
         top: 65px;
         right: 66px;
-        background-color: $white;
+        background-color: var(--color-white);
         width: 35px;
         height: 35px;
         position: fixed;
@@ -1188,9 +1198,9 @@ aside-setting {
     .mobile-menu-icon {
         position: absolute;
         top: 14px;
-        color: $white;
+        color: var(--color-white);
         right: -35px;
-        background-color: $midnight-blue;
+        background-color: var(--color-giddh-blue);
         width: 35px;
         height: 35px;
         text-align: center;
@@ -1205,13 +1215,13 @@ aside-setting {
         display: flex;
     }
     .upper-layer-header .open .dropdown-menu {
-        background-color: $white;
+        background-color: var(--color-white);
         -webkit-background-clip: padding-box;
         background-clip: padding-box;
-        border: 1px solid $gainsboro;
-        border: 1px solid rgba(0, 0, 0, 0.15);
+        border: 1px solid var(--color-iron);
+        border: 1px solid var(--color-common-secondary-border);
         border-radius: 4px;
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+        box-shadow: 0 6px 12px var(--color-primary-common-box-shadow);
     }
 
     .lower-layer-header {
@@ -1284,7 +1294,7 @@ aside-setting {
     }
     .mobile-back-btn {
         display: none;
-        color: $white;
+        color: var(--color-white);
         margin-right: 10px;
     }
     .not-today {

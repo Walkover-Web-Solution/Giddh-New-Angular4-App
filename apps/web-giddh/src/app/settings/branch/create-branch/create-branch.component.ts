@@ -127,7 +127,7 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
         this.loadAddresses('GET', { count: 0 });
         this.store.dispatch(this.generalActions.setAppTitle('/pages/settings/branch'));
 
-        this.imgPath = (isElectron || isCordova) ? 'assets/images/branch-image.svg' : AppUrl + APP_FOLDER + 'assets/images/branch-image.svg';
+        this.imgPath = isElectron ? 'assets/images/branch-image.svg' : AppUrl + APP_FOLDER + 'assets/images/branch-image.svg';
     }
 
     /**

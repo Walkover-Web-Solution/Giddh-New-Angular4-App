@@ -148,7 +148,7 @@
     "app_invalid_transporter_name_message": "Transporter name should contain atleast 5 characters and should not contain any special character.",
     "app_transporter_id": "Transporter ID",
     "app_transporter_id_placeholder": "Mention number",
-    "app_invalid_transporter_id_message": "Transporter id should contain atleast 4 characters and should contain digit only.",
+    "app_invalid_transporter_id_message": "Transporter ID should contain atleast 4 characters.",
     "app_transporter_table_name": "Name",
     "app_transporter_table_id": "Transporter ID",
     "app_transporter": "Transporter",
@@ -469,7 +469,8 @@
     "app_datatype_list": {
         "string": "String",
         "number": "Number",
-        "boolean": "Boolean"
+        "boolean": "Boolean",
+        "barcode": "Barcode"
     },
     "app_rc_heading": "Reverse Charge Confirmation",
     "app_rc_selected_note": "Note: If you check this transaction for Reverse Charge, applied taxes will be considered under Reverse Charge taxes and will be added in tax report.",
@@ -639,7 +640,8 @@
         "internet_disconnected": "Internet disconnected",
         "warehouse_created": "New warehouse created successfully.",
         "warehouse_updated": "Warehouse updated successfully.",
-        "voucher_saved": "Voucher generated successfully"
+        "voucher_saved": "Voucher generated successfully",
+        "file_uploaded": "File uploaded successfully"
     },
     "app_supported_languages": {
         "english": "English",
@@ -661,5 +663,18 @@
     },
     "app_voucher_unavailable": "There is no voucher for adjustment.",
     "app_reference_invoice": "Reference Invoice",
-    "app_create_custom_field": "Create Custom Fields"
+    "app_create_custom_field": "Create Custom Fields",
+    "app_validation": "Validation",
+    "app_archive": "Archive",
+    "app_unarchive": "Unarchive",
+    "app_archived": "Archived",
+    "app_unarchived": "Active",
+    "app_not_available": "N/A",
+    "app_true": "True",
+    "app_false": "False",
+    "app_preview": "Preview",
+    "app_purchase_bill": "Purchase Bill",
+    "app_on": "On",
+    "app_off": "Off",
+    "app_preview_formats": "These file formats are not supported for preview (xls, xlsx, doc, CSV)"
 }

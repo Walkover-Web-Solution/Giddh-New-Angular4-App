@@ -4,8 +4,6 @@ import { Store, select } from '@ngrx/store';
 import { AppState } from '../store/roots';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Observable, ReplaySubject } from 'rxjs';
-import { StateDetailsRequest } from '../models/api-models/Company';
-import { CompanyActions } from '../actions/company.actions';
 import { HomeActions } from '../actions/home/home.actions';
 import { Router } from '@angular/router';
 import { AccountService } from 'apps/web-giddh/src/app/services/account.service';
@@ -32,7 +30,6 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     constructor(
         private store: Store<AppState>,
-        private companyActions: CompanyActions,
         private homeActions: HomeActions,
         private router: Router,
         private accountService: AccountService,
@@ -51,13 +48,6 @@ export class HomeComponent implements OnInit, OnDestroy {
                 });
             }
         });
-        
-        let companyUniqueName = null;
-        this.store.pipe(select(c => c.session.companyUniqueName), take(1)).subscribe(s => companyUniqueName = s);
-        let stateDetailsRequest = new StateDetailsRequest();
-        stateDetailsRequest.companyUniqueName = companyUniqueName;
-        stateDetailsRequest.lastState = 'home';
-        this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
 
         this.generalService.invokeEvent.pipe(takeUntil(this.destroyed$)).subscribe(value => {
             if (value === 'hideallcharts') {

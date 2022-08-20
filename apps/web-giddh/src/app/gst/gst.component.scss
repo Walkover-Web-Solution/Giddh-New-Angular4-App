@@ -1,18 +1,16 @@
-@import "../../assets/css/color.scss";
-
 .return-body .main-wrapper {
-    background-color: $gray-95;
+    background-color: var(--color-gst-primary-background-color);
     padding: 0;
-    border-right: 1px solid $gainsboro;
+    border-right: 1px solid transparent;
 }
 
 .return-content {
     padding: 15px;
-    background-color: $white;
+    background-color: var(--color-white);
 }
 
 .btn-primary {
-    border-color: $chetwode-blue !important;
+    border-color: var(--color-common-secondary-border) !important;
 }
 .btn-primary.disabled,
 .btn-primary.disabled.active,
@@ -37,9 +35,9 @@ fieldset[disabled] .btn-primary:hover .btn-primary[disabled],
 .open .dropdown-toggle.btn-primary,
 .receipt-wrapper .doc-checkbox:checked,
 .doc-actions {
-    border-color: $chetwode-blue !important;
-    background: $chetwode-blue;
-    color: $white;
+    border-color: var(--color-blue) !important;
+    background: var(--color-blue);
+    color: var(--color-white);
 }
 
 .btn,
@@ -86,7 +84,7 @@ svg.icon.icon-xxlg-md {
 }
 
 .return-content .return-filed {
-    background-color: $jade-color;
+    background-color: var(--color-gst-primary-return-content-return-filed);
 }
 
 .text-uppercase {
@@ -94,7 +92,7 @@ svg.icon.icon-xxlg-md {
 }
 
 .text-muted {
-    color: $gray;
+    color: var(--color-abbey);
 }
 
 .return-content .content-graph {
@@ -117,12 +115,12 @@ svg.icon.gstr-icon {
 }
 
 .return-body b {
-    font-weight: 600;
+    font-weight: 500;
 }
 
 .return-content .line {
     margin: 5px 18px;
-    border-bottom: 1px solid $gainsboro;
+    border-bottom: 1px solid var(--color-common-secondary-border);
 }
 
 .return-content .line::before {
@@ -131,7 +129,7 @@ svg.icon.gstr-icon {
     width: 9px;
     height: 9px;
     border-radius: 5px;
-    background-color: $whisper-color;
+    background-color: var(--color-dark-fog);
     position: relative;
     top: 5px;
     right: 19px;
@@ -168,7 +166,7 @@ svg.icon {
 }
 
 .text-overdue {
-    color: $chetwode-blue;
+    color: var(--color-blue);
     margin: 20px 0px 0px;
     i {
         padding: 0 4%;
@@ -191,14 +189,14 @@ svg.icon.icon-xxlg-md {
 }
 
 .btn-default {
-    color: $night-rider;
-    background-color: $gray-95;
-    border-color: $gainsboro;
+    color: var(--color-nero);
+    background-color: var(--color-wild-sand);
+    border-color: var(--color-iron);
 }
 
 .return-body .notification {
     padding-top: 25px;
-    background: $white;
+    background: var(--color-white);
 }
 
 .filing-demo-video {
@@ -227,13 +225,13 @@ svg.icon.icon-xxlg-md {
 }
 
 .label-default {
-    background-color: $nobel;
+    background-color: var(--color-gray);
 }
 
 hr {
     margin-top: 20px;
     margin-bottom: 20px;
-    border-top: 1px solid $gainsboro;
+    border-top: 1px solid var(--color-iron);
 }
 
 .filing-due-date {
@@ -242,7 +240,7 @@ hr {
 
 .filing-due-date .return-details {
     margin-top: 10px;
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--color-iron);
     border-radius: 4px;
 }
 
@@ -264,7 +262,7 @@ hr {
     display: inline-block;
     margin-right: 6px;
     vertical-align: middle;
-    background-color: $cornflower-blue;
+    background-color: var(--color-gst-primary-filing-due-date-return-details-table-tbody-tr-td-first-child-before);
 }
 
 .filing-due-date .return-details > table > tbody > tr > td:last-child {
@@ -278,7 +276,7 @@ hr {
 
 .return-body .notification .notify-title {
     font-size: 13px;
-    color: $nobel;
+    color: var(--color-gray);
 }
 
 .return-body .notification .activity-graph {
@@ -297,14 +295,14 @@ hr {
     left: 4px;
     bottom: 5px;
     height: 75%;
-    border-left: 1px solid $whisper;
+    border-left: 1px solid var(--color-dark-fog);
 }
 
 .return-body .notification .activity-graph .notify-circle {
     width: 9px;
     height: 9px;
     border-radius: 50%;
-    background-color: $primary;
+    background-color: var(--color-blue);
     display: inline-block;
     margin-right: 15px;
     margin-top: 4px;
@@ -323,12 +321,12 @@ hr {
 
 .notify label.font-xs.text-muted strong {
     font-weight: 600;
-    color: $gray !important;
+    color: var(--color-abbey) !important;
 }
 
 .font-normal {
     font-size: 13px;
-    color: $gray;
+    color: var(--color-abbey);
 }
 
 .return-body .notification .faq-list {
@@ -337,25 +335,25 @@ hr {
 
 .return-body .notification .faq-list li {
     padding: 6px 10px;
-    color: $curious-blue;
+    color: var(--color-blue);
     font-size: 13px;
 }
 
 .return-body .notification .faq-list li a:hover {
-    color: $faux-true;
+    color: var(--color-gst-primary-return-body-notification-faq-list-li-a-hover);
 }
 
 #c-tab ::ng-deep .nav-tabs > li.active > a,
 .nav-tabs > li.active > a:focus,
 .nav-tabs > li.active > a:hover {
-    color: $davy-grey;
+    color: var(--color-abbey);
     cursor: default;
-    background-color: $white;
-    border: 2px solid $gainsboro;
+    background-color: var(--color-white);
+    border: 2px solid var(--color-iron);
     border-right: 0 !important;
     border-left: 0 !important;
     border-top: 0 !important;
-    border-bottom-color: $navy-blue;
+    border-bottom-color: var(--color-gst-primary-c-tab-nav-tabs-active-hover-focus-border-bottom);
 }
 
 .my-dropdown-menu {
@@ -390,8 +388,8 @@ hr {
 }
 
 .dropdown-menu > li > a:hover {
-    color: $chetwode-blue;
-    background: $whisper;
+    color: var(--color-blue);
+    background: var(--color-dark-fog);
 }
 
 .month-picker {
@@ -416,26 +414,26 @@ hr {
     z-index: 989;
 }
 ::ng-deep #monthPicker button.btn.btn-default.btn-info {
-    background: $chetwode-blue !important;
-    color: $white !important;
+    background: var(--color-blue) !important;
+    color: var(--color-white) !important;
     text-decoration: none;
     border-radius: 3px;
 }
 
 ::ng-deep #monthPicker .btn-info > .text-success {
-    color: $primary !important;
+    color: var(--color-blue) !important;
 }
 ::ng-deep #monthPicker .btn-default.btn-info > .text-success {
     color: inherit !important;
 }
 ::ng-deep #monthPicker .btn-info:hover .text-success {
-    color: $white !important;
+    color: var(--color-white) !important;
 }
 ::ng-deep #monthPicker .btn-default > .text-success {
     color: inherit !important;
 }
 ::ng-deep #monthPicker .btn-default:hover > .text-success {
-    color: $white !important;
+    color: var(--color-white) !important;
 }
 .parent {
     position: relative;
@@ -460,7 +458,7 @@ hr {
     top: 0px;
     width: 200px;
     height: 4px;
-    background-color: $chetwode-blue;
+    background-color: var(--color-blue);
     animation: loading 2s linear infinite;
 }
 
@@ -514,7 +512,7 @@ hr {
         right: 0;
     }
     .return-content {
-        background-color: $white;
+        background-color: var(--color-white);
     }
     .filing-steps .font-large {
         font-size: 14px;

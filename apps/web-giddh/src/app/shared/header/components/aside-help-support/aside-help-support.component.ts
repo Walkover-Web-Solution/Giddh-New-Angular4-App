@@ -1,5 +1,9 @@
 import { Component, EventEmitter, OnInit, Output, HostListener, OnDestroy } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { GeneralActions } from 'apps/web-giddh/src/app/actions/general/general.actions';
+import { CALENDLY_URL } from 'apps/web-giddh/src/app/app.constant';
 import { AuthenticationService } from 'apps/web-giddh/src/app/services/authentication.service';
+import { AppState } from 'apps/web-giddh/src/app/store';
 import { ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
@@ -24,7 +28,11 @@ export class AsideHelpSupportComponent implements OnInit, OnDestroy {
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
 
-    constructor(private authService: AuthenticationService) {
+    constructor(
+        private authService: AuthenticationService,
+        private generalActions: GeneralActions,
+        private store: Store<AppState>
+        ) {
 
     }
 
@@ -36,7 +44,7 @@ export class AsideHelpSupportComponent implements OnInit, OnDestroy {
     public ngOnInit() {
         this.getElectronAppVersion();
         this.getElectronMacAppVersion();
-        this.imgPath = (isElectron || isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
     }
 
     /**
@@ -56,9 +64,7 @@ export class AsideHelpSupportComponent implements OnInit, OnDestroy {
      * @memberof AsideHelpSupportComponent
      */
     public scheduleNow(event): void {
-        if (window['SOE'] !== undefined) {
-            window['SOE'].prototype.toggleLightBox('giddhbooks');
-        }
+        this.store.dispatch(this.generalActions.isOpenCalendlyModel(true));
         this.closeAsidePane(event);
     }
 

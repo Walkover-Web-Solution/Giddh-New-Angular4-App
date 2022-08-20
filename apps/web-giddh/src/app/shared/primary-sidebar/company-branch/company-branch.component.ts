@@ -5,6 +5,7 @@ import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import { CompanyActions } from '../../../actions/company.actions';
+import { InvoiceActions } from '../../../actions/invoice/invoice.actions';
 import { LoginActions } from '../../../actions/login.action';
 import { orderBy } from '../../../lodash-optimized';
 import { BranchFilterRequest, CompanyResponse, Organization, OrganizationDetails } from '../../../models/api-models/Company';
@@ -76,7 +77,8 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
         private settingsBranchService: SettingsBranchService,
         private changeDetectorRef: ChangeDetectorRef,
         private companyService: CompanyService,
-        private router: Router
+        private router: Router,
+        private invoiceAction: InvoiceActions
     ) {
 
     }
@@ -123,11 +125,13 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
 
                 this.currentCompanyBranches$.subscribe(response => {
                     if (response && response.length) {
-                        this.branchList = response.sort(this.generalService.sortBranches);
+                        let unarchivedBranches = response.filter(branch => branch.isArchived === false);
+                        this.branchList = unarchivedBranches?.sort(this.generalService.sortBranches);
                         this.currentCompanyBranches = this.branchList;
                         if(this.companyBranches) {
                             this.companyBranches.branches = this.branchList;
-                            this.companyBranches.branchCount = this.branchList?.length
+                            this.companyBranches.branchCount = response?.length
+                            this.companyBranches.unarchivedBranchCount = this.branchList?.length;
                         }
                         this.changeDetectorRef.detectChanges();
                     }
@@ -165,10 +169,10 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
         this.companies$?.pipe(take(1)).subscribe(cmps => companies = cmps);
 
         this.companyListForFilter = companies?.filter((cmp) => {
-            if (!cmp.alias) {
-                return cmp.name.toLowerCase().includes(event.toLowerCase());
+            if (!cmp?.alias) {
+                return cmp?.name.toLowerCase().includes(event.toLowerCase());
             } else {
-                return cmp.name.toLowerCase().includes(event.toLowerCase()) || cmp.alias.toLowerCase().includes(event.toLowerCase());
+                return cmp?.name.toLowerCase().includes(event.toLowerCase()) || cmp?.alias.toLowerCase().includes(event.toLowerCase());
             }
         });
     }
@@ -176,12 +180,15 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
     /**
      * Change company callback method
      *
-     * @param {string} selectedCompany Selected company
+      * @param {string} selectedCompany Selected company
      * @param {boolean} [fetchLastState] True, if last state of the company needs to be fetched
      * @memberof CompanyBranchComponent
      */
     public changeCompany(selectedCompany: any, selectBranchUniqueName: string, fetchLastState?: boolean) {
         this.generalService.companyUniqueName = selectedCompany?.uniqueName;
+        this.store.dispatch(this.companyActions.resetActiveCompanyData());
+        this.generalService.companyUniqueName = selectedCompany?.uniqueName;
+        this.generalService.voucherApiVersion = selectedCompany?.voucherVersion;
         const details = {
             branchDetails: {
                 uniqueName: selectBranchUniqueName
@@ -264,12 +271,6 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
         localStorage.removeItem('isNewArchitecture');
         if (isElectron) {
             this.store.dispatch(this.loginAction.ClearSession());
-        } else if (isCordova) {
-            (window as any).plugins.googleplus.logout(
-                (msg) => {
-                    this.store.dispatch(this.loginAction.ClearSession());
-                }
-            );
         } else {
             // check if logged in via social accounts
             this.isLoggedInWithSocialAccount$.subscribe((val) => {
@@ -302,10 +303,12 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
             let branchFilterRequest: BranchFilterRequest = { from: '', to: '', companyUniqueName: company?.uniqueName };
             this.settingsBranchService.GetAllBranches(branchFilterRequest).subscribe(response => {
                 if (response?.status === "success") {
-                    this.branchList = response.body.sort(this.generalService.sortBranches);
+                    let unarchivedBranches = response?.body?.filter(branch => branch.isArchived === false);
+                    this.branchList = unarchivedBranches?.sort(this.generalService.sortBranches);
                     company.branches = this.branchList;
                     this.companyBranches = company;
-                    this.companyBranches.branchCount = this.branchList?.length;
+                    this.companyBranches.branchCount = response?.body?.length;
+                    this.companyBranches.unarchivedBranchCount = this.branchList?.length;
                     this.branchRefreshInProcess = false;
 
                     if (this.searchBranch) {
@@ -322,6 +325,7 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
                     company.branches = this.branchList;
                     this.companyBranches = company;
                     this.companyBranches.branchCount = this.branchList?.length;
+                    this.companyBranches.unarchivedBranchCount = this.branchList?.length;
                     this.branchRefreshInProcess = false;
 
                     this.changeDetectorRef.detectChanges();
@@ -365,8 +369,12 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
         this.filterBranchList(this.searchBranch);
 
         if(tabName === "company") {
+            const unarchivedBranchCount = this.companyBranches?.unarchivedBranchCount;
+            const branchCount = this.companyBranches?.branchCount;
+
             this.companyBranches = this.activeCompany;
-            this.companyBranches.branchCount = this.currentCompanyBranches?.length;
+            this.companyBranches.branchCount = branchCount;
+            this.companyBranches.unarchivedBranchCount = unarchivedBranchCount;
             this.companyBranches.branches = this.currentCompanyBranches;
             this.branchList = this.currentCompanyBranches;
             this.changeDetectorRef.detectChanges();
@@ -395,7 +403,7 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
     /**
      * Switches to branch mode
      *
-     * @param {string} company Company
+     * @param {any} company Company object
      * @param {string} branchUniqueName Branch uniqueName
      * @memberof CompanyBranchComponent
      */
@@ -412,6 +420,7 @@ export class CompanyBranchComponent implements OnInit, OnDestroy {
                 }
             };
             this.setOrganizationDetails(OrganizationType.Branch, details);
+            this.store.dispatch(this.invoiceAction.getInvoiceSetting());
             this.companyService.getStateDetails(this.generalService.companyUniqueName).pipe(take(1)).subscribe(response => {
                 if (response && response.body) {
                     this.router.navigateByUrl('/dummy', { skipLocationChange: true }).then(() => {

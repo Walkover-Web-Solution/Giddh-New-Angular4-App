@@ -11,6 +11,7 @@
     "customer_name": "ग्राहकाचे नाव",
     "balance_due": "शिल्लक बाकी",
     "copy_previous_invoices": "मागील [INVOICE_TYPE] पावत्या कॉपी करा",
+    "copy_previous_dr_cr": "मागील [INVOICE_TYPE] कॉपी करा",
     "customer_details": "ग्राहक तपशील",
     "vendor_details": "विक्रेता तपशील",
     "billing_address": "बिलाचा पत्ता",
@@ -47,7 +48,6 @@
     "attachment": "जोड",
     "drag_drop_file": "फाइल ड्रॅग / ड्रॉप करा किंवा येथे क्लिक करा",
     "deposit": "ठेवी",
-    "advance_receipt": "आगाऊ पावती",
     "adjust_amount": "रक्कम समायोजित करा",
     "product_service_description": "उत्पादन / सेवा वर्णन",
     "qty": "प्रमाण",
@@ -62,6 +62,7 @@
     "add_customer": "ग्राहक जोडा",
     "add_vendor": "विक्रेता जोडा",
     "invoice_no": "बीजक #",
+    "bill_number":"बिल क्रमांक",
     "proforma_no": "प्रोफार्मा #",
     "estimate_no": "अंदाज #",
     "purchase_bill_no": "खरेदी बिल #",
@@ -103,5 +104,8 @@
     "date_change_confirmation_heading": "तारीख बदल पुष्टीकरण",
     "change_single_entry_date": "तुम्हाला एन्ट्रीची तारीखही बदलायची आहे का?",
     "change_all_entry_dates": "आपण या तारखेसह सर्व नोंदी तारीख बदलू इच्छिता??",
-    "exchange_label": "विनिमय"
+    "exchange_label": "विनिमय",
+    "confirm_delete_file": "आपली खात्री आहे की आपण संलग्न केलेली फाइल हटवू इच्छिता?",
+    "enter_amount": "कृपया ठेव रक्कम प्रविष्ट करा",
+    "voucher_number_required": "व्हाउचर क्रमांक अनिवार्य आहे"
 }

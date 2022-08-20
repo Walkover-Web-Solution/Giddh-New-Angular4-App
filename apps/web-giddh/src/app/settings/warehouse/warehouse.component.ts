@@ -22,6 +22,7 @@ import { ItemOnBoardingActions } from '../../actions/item-on-boarding/item-on-bo
 import { OnBoardingType, PAGINATION_LIMIT } from '../../app.constant';
 import { GeneralService } from '../../services/general.service';
 import { SettingsProfileService } from '../../services/settings.profile.service';
+import { SettingsWarehouseService } from '../../services/settings.warehouse.service';
 import { ToasterService } from '../../services/toaster.service';
 import { ElementViewContainerRef } from '../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { OnBoardingComponent } from '../../shared/on-boarding/on-boarding.component';
@@ -87,9 +88,9 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
     public warehouseToUpdate: any;
     /** Stores the current organization uniqueName */
     public currentOrganizationUniqueName: string;
-
     public imgPath2: string = '';
-
+    /** Change status modal instance */
+    @ViewChild('statusModal', { static: true }) public statusModal: ModalDirective;
     /** View container to carry out on boarding */
     @ViewChild('onBoardingContainer', { static: true }) public onBoardingContainer: ElementViewContainerRef;
     /** Warehouse on boarding modal viewchild */
@@ -98,9 +99,8 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
     @ViewChild('welcomeComponent', { static: true }) public welcomeComponentTemplate: TemplateRef<any>;
     /** Warehouse pagination instance */
     @ViewChild('warehousePagination', { static: true }) warehousePagination: PaginationComponent;
-    /** Branch search field instance */
+    /** Warehouse search field instance */
     @ViewChild('searchWarehouse', { static: false }) public searchWarehouse: ElementRef;
-
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: Subject<boolean> = new Subject();
     /** Stores the current visible on boarding modal instance */
@@ -111,6 +111,10 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
     public profileLocaleData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** Holds warehouse to archive/unarchive */
+    public warehouseStatusToUpdate: any;
+    /** Holds current page number */
+    private currentPage: number = 1;
 
     /** Stores the address configuration */
     public addressConfiguration: SettingsAsideConfiguration = {
@@ -131,7 +135,8 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
         private store: Store<AppState>,
         private settingsProfileService: SettingsProfileService,
         private toasterService: ToasterService,
-        private warehouseActions: WarehouseActions
+        private warehouseActions: WarehouseActions,
+        private settingsWarehouseService: SettingsWarehouseService
     ) { }
 
     /**
@@ -140,11 +145,11 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
      * @memberof WarehouseComponent
      */
     public ngOnInit(): void {
-        this.imgPath = (isElectron || isCordova) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         this.currentOrganizationUniqueName = this.generalService.currentBranchUniqueName || this.generalService.companyUniqueName;
         this.initSubscribers();
 
-        this.imgPath2 = (isElectron || isCordova) ? 'assets/images/warehouse-vector.svg' : AppUrl + APP_FOLDER + 'assets/images/warehouse-vector.svg';
+        this.imgPath2 = isElectron ? 'assets/images/warehouse-vector.svg' : AppUrl + APP_FOLDER + 'assets/images/warehouse-vector.svg';
     }
 
     /**
@@ -286,6 +291,7 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
      */
     public pageChanged(event: PageChangedEvent): void {
         this.showLoader = true;
+        this.currentPage = event.page;
         this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: event.page, count: PAGINATION_LIMIT }));
     }
 
@@ -580,6 +586,39 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
                     successCallback();
                 }
             }
+        });
+    }
+
+    /**
+     * This will show confirmation modal for warehouse archive/unarchive
+     *
+     * @param {*} warehouse
+     * @memberof WarehouseComponent
+     */
+    public confirmStatusUpdate(warehouse: any): void {
+        if (!warehouse?.isDefault || warehouse?.isArchived) {
+            this.warehouseStatusToUpdate = warehouse;
+            this.statusModal?.show();
+        } else {
+            this.toasterService.warningToast(this.localeData?.archive_notallowed);
+        }
+    }
+
+    /**
+     * Updates the warehouse status
+     *
+     * @memberof WarehouseComponent
+     */
+    public updateWarehouseStatus(): void {
+        const isArchived = !this.warehouseStatusToUpdate?.isArchived;
+        this.settingsWarehouseService.updateWarehouseStatus({ isArchived: isArchived }, this.warehouseStatusToUpdate?.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.status === "success") {
+                this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: this.currentPage, count: PAGINATION_LIMIT }));
+                this.toasterService.successToast((isArchived) ? this.localeData?.warehouse_archived : this.localeData?.warehouse_unarchived);
+            } else {
+                this.toasterService.errorToast(response?.message);
+            }
+            this.statusModal?.hide();
         });
     }
 }

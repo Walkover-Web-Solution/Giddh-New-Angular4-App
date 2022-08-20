@@ -68,5 +68,6 @@
     "select_payor": "Select Payor",
     "connect_icici_bank": "Connect ICICI Bank",
     "pending_approval": "Pending approval",
-    "due": "Due"
+    "due": "Due",
+    "bulk_payment_unsupported_error": "Bulk Payment is not supported."
 }

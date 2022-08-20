@@ -1,4 +1,4 @@
-@import "../../../assets/css/color.scss";
+@import "../../../assets/css/mixin-common.scss";
 .flex-container {
     display: flex;
     flex-direction: row;
@@ -9,10 +9,11 @@
 .check-image img {
     max-height: 14px;
     cursor: pointer;
+    filter: var(--color-primary-checkbox-background-filter);
 }
 
 .basic > thead > tr > th {
-    border-right: 1px solid $gainsboro;
+    border-right: 1px solid var(--color-table-primary-header-bar-border);
 }
 
 .flex-fill {
@@ -42,7 +43,7 @@
 
 .td-search-box div i {
     margin-top: 1px;
-    color: $wild-blue-yonder;
+    color: var(--color-blue);
     padding-right: 8px;
     cursor: pointer;
     display: flex;
@@ -51,7 +52,7 @@
 }
 
 .td-search-box div i:hover {
-    color: $deep-sky-blue;
+    color: var(--color-blue);
 }
 
 .td-search-box {
@@ -63,9 +64,10 @@
     min-width: 100%;
     padding: 11px;
     padding-right: 40px;
-    color: $nero;
+    color: var(--color-nero);
     border: none;
-    background-color: $gray-95;
+    background-color: var(--color-wild-sand);
+    border-radius: 5px;
 }
 
 .td-search-box .input-container i {
@@ -76,16 +78,16 @@
 
 .icon-pointer .glyphicon {
     cursor: pointer;
-    color: $wild-blue-yonder;
+    color: var(--color-blue);
 }
 
 .icon-pointer .glyphicon:hover {
-    color: $deep-sky-blue;
+    color: var(--color-blue);
 }
 
 .dropdown-menu > li > a:hover {
-    color: $chetwode-blue !important;
-    background: $lavender !important;
+    color: var(--color-blue) !important;
+    background: var(--color-dark-fog) !important;
 }
 
 .dropdown-menu {
@@ -108,12 +110,12 @@
     list-style: none;
     position: absolute;
     left: -114px;
-    background-color: $white;
+    background-color: var(--color-white);
     width: 131px;
-    box-shadow: 0px 4px 7px $silver;
+    box-shadow: 0px 4px 7px var(--color-primary-common-box-shadow);
     border-radius: 3px;
     z-index: 100;
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--color-iron);
 }
 
 .click-dropdown {
@@ -123,20 +125,20 @@
 .click-dropdown ul li {
     padding: 3px 6px;
     margin-bottom: 4px;
-    color: $orange;
+    color: var(--color-orange);
     cursor: pointer;
 }
 
 .click-dropdown ul li:hover {
-    background-color: $gainsboro;
+    background-color: var(--color-iron);
 }
 
 .click-dropdown ul li:hover a {
-    color: orangered;
+    color: var(--color-orange);
 }
 
 .click-dropdown ul li a {
-    color: $black;
+    color: var(--color-nero);
 }
 
 .invoice-table tr:hover .dropdown-btn {
@@ -147,6 +149,7 @@
     td.no-dbl-click-select {
         white-space: normal !important;
         word-break: normal !important;
+        text-transform: none !important;
     }
 }
 .click-dropdown .dropdown-btn {
@@ -155,9 +158,9 @@
 
 .btn.btn-sky-blue:focus,
 .btn.btn-sky-blue:hover {
-    color: $white;
     text-decoration: none;
     outline: none !important;
+    color: var(--color-secondary-button-text);
 }
 
 .input-grp-date-range-picker {
@@ -168,7 +171,7 @@
 /* my css */
 
 .card {
-    box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0px 0px 6px var(--color-primary-card-box-shadow);
     width: 100%;
 }
 
@@ -192,7 +195,7 @@
 }
 
 td.card-header.clearfix {
-    background-color: $whisper;
+    background-color: var(--color-dark-fog);
     padding: 10px !important;
 }
 
@@ -202,10 +205,10 @@ td.card-header.clearfix {
 }
 
 .card #invoice-td {
-    border-bottom: 1px solid $gainsboro !important;
+    border-bottom: 1px solid var(--color-iron) !important;
     padding-bottom: 20px !important;
-    background-color: $white-smoke;
-    border-top: 1px solid $gainsboro !important;
+    background-color: var(--color-wild-sand);
+    border-top: 1px solid var(--color-iron) !important;
     padding-top: 10px !important;
 }
 
@@ -239,7 +242,7 @@ td.card-header.clearfix {
 
 .card .more-button .more-btn-wrapper {
     margin-right: 0;
-    border-top: 1px solid $gainsboro;
+    border-top: 1px solid var(--color-iron);
     padding-top: 8px;
 }
 
@@ -272,12 +275,12 @@ td.card-header.clearfix {
 
 .icon-pointer {
     cursor: pointer;
-    color: $wild-blue-yonder;
+    color: var(--color-blue);
     margin-left: 6px;
 }
 
 .icon-pointer .active-text-color {
-    color: $deep-sky-blue;
+    color: var(--color-blue);
 }
 
 .dropdown-btn-new {
@@ -295,15 +298,15 @@ ul.select-action-dropdown {
 }
 
 .select-action-dropdown a {
-    color: $night-rider;
+    color: var(--color-dropdown-list);
     font-size: 14px;
     padding: 5px 10px;
     display: block;
 }
 
 .select-action-dropdown a:hover {
-    color: $chetwode-blue !important;
-    background: $lavender !important;
+    color: var(--color-dropdown-list-hover-text) !important;
+    background: var(--color-dropdown-list-hover-background) !important;
 }
 
 .invoice-container {
@@ -316,7 +319,7 @@ ul.select-action-dropdown {
 
 .input-group input.form-control {
     padding-left: 35px !important;
-    border-color: $chetwode-blue;
+    border-color: var(--color-blue);
     background-image: url("../../../assets/images/calender-icon.svg") !important;
     background-size: 17px !important;
     background-position: 9px 8px !important;
@@ -329,7 +332,7 @@ ul.select-action-dropdown {
 }
 
 .input-group input.form-control:focus {
-    border-color: $gainsboro;
+    border-color: var(--color-iron);
 }
 
 .icon-calender {
@@ -340,8 +343,8 @@ ul.select-action-dropdown {
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    border-right: 1px solid $gainsboro;
-    color: $nobel;
+    border-right: 1px solid var(--color-iron);
+    color: var(--color-datepicker-date-icon) !important;
 }
 
 .advance-icon {
@@ -352,6 +355,8 @@ ul.select-action-dropdown {
     align-items: center;
     font-size: 14px;
     margin-right: 10px;
+    color: var(--color-primary-filter-button-text);
+    border-color: var(--color-secondary-input-bar-border) !important;
 }
 
 .search-icon-block {
@@ -362,10 +367,10 @@ ul.select-action-dropdown {
     align-items: center;
     font-size: 18px;
     margin-left: 10px;
-    border: 1px solid $gainsboro;
+    border: 1px solid var(--color-iron);
     border-radius: 5px;
-    color: $gray;
-    background: $white;
+    color: var(--color-abbey);
+    background: var(--color-white);
 }
 
 .search-icon-block {
@@ -393,10 +398,10 @@ button.btn.btn-default.ladda-button {
 }
 .clear-filter {
     button.btn.btn-filter {
-        background: $whisper;
-        border: 1px solid $whisper;
+        background: var(--color-dark-fog);
+        border: 1px solid var(--color-dark-fog);
         font-size: 14px;
-        color: $midnight-blue;
+        color: var(--color-giddh-blue);
         display: inline-flex;
         justify-content: space-between;
         align-items: center;
@@ -413,7 +418,7 @@ button.btn.btn-default.ladda-button {
 }
 
 .btn-link-2 {
-    color: $nero;
+    color: var(--color-table-primary-content);
 }
 
 .input-wrapper {
@@ -429,7 +434,7 @@ button.btn.btn-default.ladda-button {
     display: block;
     height: 36px;
     width: 1px;
-    background-color: $gainsboro;
+    background-color: var(--color-iron);
     left: 37px !important;
     z-index: 100;
     top: 0;
@@ -444,7 +449,7 @@ div.remove-capitalize {
 }
 
 span.icon-export-icon {
-    color: $gray;
+    color: var(--color-abbey);
 }
 
 .giddh-table {
@@ -453,14 +458,14 @@ span.icon-export-icon {
             .action-icon {
                 display: flex;
                 align-items: center;
-                border: 1px solid $gainsboro;
+                border: 1px solid var(--color-primary-button-border);
                 border-radius: 5px;
                 display: none;
                 a {
                     width: 30px;
                     font-size: 20px;
-                    color: $gray;
-                    border-right: 1px solid $gainsboro;
+                    color: var(--color-abbey);
+                    border-right: 1px solid var(--color-primary-button-border);
                     border-radius: 5px;
                     display: flex;
                     align-items: center;
@@ -470,7 +475,7 @@ span.icon-export-icon {
                     align-items: stretch;
                     height: 30px;
                     align-items: center;
-                    background-color: $white;
+                    background-color: var(--color-white);
                 }
             }
             .item-selected {
@@ -505,12 +510,12 @@ span.icon-export-icon {
 }
 
 .giddh-table {
-    border-right: 1px solid $gainsboro;
-    border-bottom: 1px solid $gainsboro !important;
+    border-right: 1px solid var(--color-table-primary-content-bar-border);
+    border-bottom: 1px solid var(--color-table-primary-content-bar-border) !important;
     tbody {
         tr {
             &:hover {
-                background: $solitude;
+                background: var(--color-table-row-hover-primary-background) !important;
                 td {
                     background: transparent !important;
                 }
@@ -521,10 +526,11 @@ span.icon-export-icon {
     > tbody {
         > tr {
             &:hover {
-                background: $light-alice-blue;
+                background: var(--color-invoice-preview-giddh-table-tbody-tr-background-hover);
             }
             td {
                 background: transparent !important;
+                background-color: var(--color-table-body-primary-background) !important;
             }
         }
     }
@@ -539,15 +545,28 @@ span.icon-export-icon {
 .cancel-remarks-section {
     min-height: 120px;
 }
-
-/* responsive */
-@media (max-width: 1024px) {
-    .perform-payment {
-        max-width: 100% !important;
-        min-width: 100% !important;
+.giddh-table {
+    border-bottom: 1px solid var(--color-common-primary-border) !important;
+    tbody {
+        tr {
+            td {
+                margin-top: -1px !important;
+                &:last-child {
+                    border-bottom: none !important;
+                }
+                &.status-mobile {
+                    border-bottom: none !important;
+                }
+            }
+        }
     }
 }
 
+.btn-filter {
+    @include common-filters(var(--color-giddh-blue), var(--color-dark-fog), 1px solid var(--color-iron));
+}
+
+/* responsive */
 @media (max-width: 1124px) {
     .add-invoice {
         flex-direction: column-reverse;
@@ -633,9 +652,9 @@ span.icon-export-icon {
         content: "";
         bottom: 0;
         right: 14px;
-        box-shadow: 2px 2px 9px rgba(0, 0, 0, 0.1);
+        box-shadow: 2px 2px 9px var(--color-primary-common-box-shadow);
         transform: rotate(45deg);
-        background-color: $white;
+        background-color: var(--color-white);
         z-index: -1;
     }
     .click-dropdown ul {
@@ -657,9 +676,9 @@ span.icon-export-icon {
         bottom: 120px;
         z-index: 99;
         line-height: 0;
-        background-color: $vivid-blue;
-        color: $white;
-        box-shadow: 0px 0px 18px rgba(0, 0, 0, 0.3) !important;
+        background-color: var(--color-blue);
+        color: var(--color-white);
+        box-shadow: 0px 0px 18px var(--color-primary-common-box-shadow) !important;
         display: block;
     }
     .date-advance-search .dropdown-menu > li > a {
@@ -784,7 +803,7 @@ span.icon-export-icon {
 @media (max-width: 420px) {
     .small-loading {
         padding-left: 0;
-        color: $night-rider;
+        color: var(--color-nero);
         font-size: 12px;
         position: relative;
         top: 2px;

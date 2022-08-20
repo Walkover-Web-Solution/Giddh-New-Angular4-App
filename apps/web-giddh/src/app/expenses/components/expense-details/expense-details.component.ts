@@ -4,7 +4,6 @@ import { ToasterService } from '../../../services/toaster.service';
 import { ExpenseService } from '../../../services/expences.service';
 import { AppState } from '../../../store';
 import { select, Store } from '@ngrx/store';
-import { FormControl } from '@angular/forms';
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
@@ -63,7 +62,6 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
     public message: string;
     public actionPettyCashRequestBody: ExpenseActionRequest;
     public selectedItem: ExpenseResults;
-    public rejectReason = new FormControl();
     public actionPettycashRequest: ActionPettycashRequest = new ActionPettycashRequest();
     public imgAttached: boolean = false;
     public imgUploadInprogress: boolean = false;
@@ -145,8 +143,6 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
         query: ''
     };
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    /** This will hold creator name */
-    public byCreator: string = '';
     /** True if account belongs to cash/bank account */
     private cashOrBankEntry: any;
     /** Stores the petty cash entry type */
@@ -184,7 +180,6 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
         this.store.pipe(select(state => state.company && state.company.taxes), takeUntil(this.destroyed$)).subscribe(res => {
             this.companyTaxesList = res || [];
         });
-        this.buildCreatorString();
     }
 
     /**
@@ -372,7 +367,8 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
             this.approveEntryRequestInProcess = false;
             if (res.status === 'success') {
                 this.hideApproveConfirmPopup(false);
-                this.processNextRecord(res);
+                this.toaster.showSnackBar("success", res?.body);
+                this.processNextRecord();
             } else {
                 this.toaster.showSnackBar("error", res.message);
                 this.approveEntryRequestInProcess = false;
@@ -396,23 +392,6 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     /**
-     * Performs action on petty cash entry
-     *
-     * @param {ActionPettycashRequest} actionType
-     * @memberof ExpenseDetailsComponent
-     */
-    public pettyCashAction(actionType: ActionPettycashRequest): void {
-        this.expenseService.actionPettycashReports(actionType, this.actionPettyCashRequestBody).pipe(takeUntil(this.destroyed$)).subscribe(res => {
-            if (res.status === 'success') {
-                this.processNextRecord(res);
-            } else {
-                this.toaster.showSnackBar("error", res.body ?? res.message);
-            }
-            this.modalRef.close();
-        });
-    }
-
-    /**
      * This updates the values on change from parent component
      *
      * @param {SimpleChanges} changes
@@ -423,22 +402,8 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
             this.selectedItem = changes['selectedRowItem'].currentValue;
             this.getPettyCashEntry(this.selectedItem.uniqueName);
             this.store.dispatch(this.ledgerActions.setAccountForEdit(this.selectedItem.baseAccount.uniqueName || null));
-            this.buildCreatorString();
             this.showEntryAgainstRequired = false;
         }
-    }
-
-    /**
-     * Rejects entry
-     *
-     * @memberof ExpenseDetailsComponent
-     */
-    public submitReject(): void {
-        this.actionPettyCashRequestBody = new ExpenseActionRequest();
-        this.actionPettyCashRequestBody.message = this.rejectReason.value;
-        this.actionPettycashRequest.actionType = 'reject';
-        this.actionPettycashRequest.uniqueName = this.selectedItem.uniqueName;
-        this.pettyCashAction(this.actionPettycashRequest);
     }
 
     /**
@@ -960,20 +925,6 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     /**
-     * This will build the creator name string
-     *
-     * @memberof ExpenseDetailsComponent
-     */
-    public buildCreatorString(): void {
-        if (this.selectedItem && this.selectedItem.createdBy) {
-            this.byCreator = this.localeData?.by_creator;
-            this.byCreator = this.byCreator.replace("[CREATOR_NAME]", this.selectedItem.createdBy.name);
-        } else {
-            this.byCreator = "";
-        }
-    }
-
-    /**
      * Fetching petty cash entry details
      *
      * @param {string} uniqueName
@@ -996,13 +947,14 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
      * This will emit true to show next record in preview mode
      *
      * @private
-     * @param {*} response
+     * @param {*} [event]
      * @memberof ExpenseDetailsComponent
      */
-    private processNextRecord(response: any): void {
-        this.toaster.showSnackBar("success", response?.body);
-        this.rejectReason.setValue("");
-        this.previewNextItem.emit(true);
+    private processNextRecord(event?: any): void {
+        this.modalRef?.close();
+        if (event) {
+            this.previewNextItem.emit(true);
+        }
     }
 
     /**

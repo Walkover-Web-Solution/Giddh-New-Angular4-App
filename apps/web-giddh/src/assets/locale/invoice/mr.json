@@ -38,10 +38,9 @@
 	"estimate": "अंदाज",
     "voucher_log": "[USER] द्वारे [TOTAL] साठी [ACTION]",
     "linked_po": "दुवा साधलेला खरेदी ऑर्डर:",
-	"invoice_preview_unavailable": "बीजक पूर्वावलोकन आत्ता उपलब्ध नाही! कृपया पुन्हा प्रयत्न करा...",
-	"preview_formats": "पूर्वावलोकनासाठी समर्थित स्वरूप: प्रतिमा (.jpg, .jpeg, .png) आणि पीडीएफ (.pdf); इतर स्वरूप मुद्रित करण्यासाठी, ते डाउनलोड करा.",
-	"upload_excel_csv": "एक EXCEL किंवा CSV फाईल अपलोड करा",
-	"drop_file": "अपलोड करण्यासाठी फाइल ड्रॉप करा",
+    "invoice_preview_unavailable": "बीजक पूर्वावलोकन आत्ता उपलब्ध नाही! कृपया पुन्हा प्रयत्न करा...",
+    "upload_excel_csv": "एक EXCEL किंवा CSV फाईल अपलोड करा",
+    "drop_file": "अपलोड करण्यासाठी फाइल ड्रॉप करा",
     "browse_file": "फाईल ब्राउझ करा",
 	"edit_voucher": "संपादित करा [VOUCHER]",
 	"download_voucher": "व्हाउचर डाऊनलोड करा",
@@ -112,7 +111,8 @@
 	"invoice_copy_options": {
 		"original": "मूळ",
 		"customer": "ग्राहक",
-		"transport": "वाहतूक"
+		"transport": "वाहतूक",
+        "attachment": "संलग्नक"
 	},
     "invalid_email": "[EMAIL] अवैध ईमेल आहे!",
 	"select_copy": "कॉपी निवडा",
@@ -174,5 +174,7 @@
     "exchange_gain_loss_label": "[BASE_CURRENCY] मध्ये: [AMOUNT]<br />एक्सचेंज [PROFIT_TYPE]: ",
     "works_for_single_entry": "केवळ एकल प्रवेशासाठी कार्य करते.",
     "uploaded_purchase_bill": "बिल अपलोड केले",
-    "auto_generated_purchase_bill": "गिद्ध/ऑटो वयुत्पन्न बिल"
+    "auto_generated_purchase_bill": "गिद्ध ऑटो वयुत्पन्न बिल",
+    "amount_adjusted": "रक्कम यशस्वीरित्या समायोजित केली",
+    "pincode_required": "कृपया ई-वे बिल तयार करण्यापूर्वी व्हाउचरमध्ये पिनकोड अपडेट करा."
 }

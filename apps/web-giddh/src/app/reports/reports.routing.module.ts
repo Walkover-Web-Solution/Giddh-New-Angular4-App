@@ -11,6 +11,7 @@ import { ReverseChargeReport } from './components/reverse-charge-report-componen
 import { ColumnarReportComponent } from './components/columnar-report-component/columnar.report.component';
 import { AdvanceReceiptReportComponent } from './components/advance-receipt-report/advance-receipt-report.component';
 import { CashFlowStatementComponent } from './components/cash-flow-statement-component/cash.flow.statement.component';
+import { PaymentReportComponent } from './components/payment-report/payment-report.component';
 
 @NgModule({
     imports: [
@@ -30,6 +31,7 @@ import { CashFlowStatementComponent } from './components/cash-flow-statement-com
                     { path: 'monthly-columnar-report', component: ColumnarReportComponent },
                     { path: 'receipt', component: AdvanceReceiptReportComponent },
                     { path: 'cash-flow-statement', component: CashFlowStatementComponent },
+                    { path: 'payment', component: PaymentReportComponent }
                 ]
             }
         ]),

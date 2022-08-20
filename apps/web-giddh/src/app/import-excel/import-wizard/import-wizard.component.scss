@@ -1,8 +1,6 @@
-@import "../../../assets/css/color.scss";
-
 .steps-wizard {
     padding: 30px 70px;
-    background: $white;
+    background: var(--color-white);
     text-align: center;
     display: flex;
     justify-content: space-between;
@@ -20,12 +18,12 @@
         > label {
             width: 30px;
             height: 30px;
-            border: 2px solid $gainsboro;
+            border: 2px solid var(--color-iron);
             border-radius: 100%;
             transition: background-color 1s;
-            background-color: $white;
+            background-color: var(--color-white);
             position: relative;
-            color: $opium;
+            color: var(--color-import-excel-and-wizard-steps-wizard-li-label);
             line-height: 100%;
             align-items: center;
             display: flex;
@@ -35,13 +33,13 @@
 }
 
 .steps-wizard li.active > label {
-    color: $white;
+    color: var(--color-white);
 }
 
 .steps-wizard:before {
     content: " ";
     position: absolute;
-    border-top: 2px solid $gainsboro;
+    border-top: 2px solid var(--color-iron);
     right: 0;
     left: 0;
     top: 40%;

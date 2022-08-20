@@ -11,6 +11,18 @@ textarea.receipient-email {
     width: 98%;
     height: 42px;
 }
+#exportModal {
+    #export-body {
+        .clearfix {
+            .radio-inline {
+                mat-slide-toggle {
+                    position: relative;
+                    top: 8px;
+                }
+            }
+        }
+    }
+}
 @media (max-width: 767px) {
     .descendingRadioBtn {
         display: block !important;

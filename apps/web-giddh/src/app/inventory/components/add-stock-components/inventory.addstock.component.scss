@@ -1,4 +1,3 @@
-@import "../../../../assets/css/color.scss";
 .output-row > td {
     padding: 12px 10px 12px 0 !important;
 }
@@ -8,7 +7,7 @@
 }
 
 .table-label {
-    border-color: $gainsboro;
+    border-color: var(--color-iron);
     td {
         padding-top: 12px !important;
         padding-bottom: 5px;
@@ -18,6 +17,7 @@
 .dropdown-menu {
     max-height: 168px;
     overflow: auto;
+    width: 100%;
 }
 .sku-row {
     label {
@@ -28,7 +28,7 @@
         background: none;
         border: none;
         max-width: 108px;
-        border-bottom: 1px solid $gainsboro;
+        border-bottom: 1px solid var(--color-iron);
     }
     .item-label {
         display: inline-block;
@@ -42,16 +42,16 @@
     i {
         margin-left: 10px;
         padding-bottom: 3px;
-        border-bottom: 1px solid $gainsboro;
+        border-bottom: 1px solid var(--color-iron);
     }
     .new-custom-btn {
         font-size: 12px;
-        color: $primary;
+        color: var(--color-blue);
         padding-top: 30px;
         cursor: pointer;
     }
     .text-danger {
-        color: $red;
+        color: var(--color-danger);
     }
 }
 
@@ -65,7 +65,7 @@ tr.fsstock td {
     padding-bottom: 15px;
 }
 .table-label strong {
-    color: $charcoal;
+    color: var(--color-nero);
     font-weight: normal !important;
     font-size: 14px;
     font-family: "opensans-regular";
@@ -80,15 +80,15 @@ tr.fsstock td {
     right: 18px;
     z-index: 9999999;
     background-color: transparent;
-    color: $white;
+    color: var(--color-primary-right-side-popup-header-text);
     font-size: 17px;
     top: 18px;
     margin-right: 0;
     border: 0;
 }
 .aside-pane-form {
-    background-color: $white;
-    box-shadow: 0 3px 6px $black-russian;
+    background-color: var(--color-white);
+    box-shadow: 0 3px 6px var(--color-primary-common-box-shadow);
     padding: 15px;
     height: calc(100vh - 90px);
     overflow: auto;
@@ -99,7 +99,7 @@ tr.fsstock td {
 
 .collapse-icons {
     font-size: 10px;
-    border: 1px solid $chetwode-blue;
+    border: 1px solid var(--color-blue);
     border-radius: 4px;
     padding: 2px;
     top: 0 !important;

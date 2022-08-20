@@ -1,29 +1,30 @@
-@import "../../../../assets/css/color.scss";
 .flex-fill {
     flex: 1 1 auto;
 }
 .basic > tbody > tr:hover td > a {
-    color: $midnight-blue;
+    color: var(--color-giddh-blue);
 }
 .basic > tbody > tr > td,
 .basic > thead > tr > th,
 .basic > tfoot > tr > th {
     white-space: nowrap !important;
+    background-color: var(--color-table-heading-primary-background);
+    border-bottom: 1px solid var(--color-table-primary-header-bar-border) !important;
 }
 .width-200px {
     width: 200px;
 }
 .bgChange {
-    background: $white-smoke;
+    background: var(--color-table-row-hover-primary-background);
 }
 .btn-sort {
     display: flex !important;
     width: 36px;
     height: 36px;
-    background-color: $white;
+    background-color: var(--color-white);
     font-size: 18px;
-    color: $midnight-blue !important;
-    border: 1px solid $gainsboro;
+    color: var(--color-giddh-blue) !important;
+    border: 1px solid var(--color-iron);
     justify-content: center;
     align-items: center;
 }
@@ -37,6 +38,10 @@
     height: 100%;
     text-align: center;
     line-height: 35px;
+}
+
+.giddh-table thead > .register-table-th > th {
+    color: var(--color-table-secondary-heading) !important;
 }
 
 @media screen and (max-width: 768px) {

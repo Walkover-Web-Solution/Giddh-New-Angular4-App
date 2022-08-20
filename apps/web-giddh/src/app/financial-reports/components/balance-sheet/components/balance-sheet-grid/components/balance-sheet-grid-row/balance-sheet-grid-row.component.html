@@ -19,7 +19,7 @@
                 >
                 </amount-field>
             </span>
-            {{ groupDetail.closingBalance | recType }}
+            {{ groupDetail.closingBalance | recType: groupDetail.category }}
         </span>
     </div>
     <div class="col-4 group text-right">
@@ -32,7 +32,7 @@
                 >
                 </amount-field>
             </span>
-            {{ groupDetail.forwardedBalance | recType }}
+            {{ groupDetail.forwardedBalance | recType: groupDetail.category }}
         </span>
     </div>
 </div>
@@ -79,7 +79,7 @@
                         >
                         </amount-field>
                     </span>
-                    {{ account.closingBalance | recType }}
+                    {{ account.closingBalance | recType: groupDetail.category }}
                 </span>
             </div>
             <div class="col-4 account text-right">
@@ -92,7 +92,7 @@
                         >
                         </amount-field>
                     </span>
-                    {{ account.openingBalance | recType }}
+                    {{ account.openingBalance | recType: groupDetail.category }}
                 </span>
             </div>
         </div>

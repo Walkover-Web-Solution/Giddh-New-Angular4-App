@@ -1,6 +1,6 @@
 import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { select, Store } from '@ngrx/store';
-import * as moment from 'moment/moment';
+import * as dayjs from 'dayjs';
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import { AuditLogsActions } from '../../../actions/audit-logs/audit-logs.actions';
@@ -34,8 +34,8 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
     /** This will store if device is mobile or not */
     public isMobileScreen: boolean = false;
-    /** Moment object */
-    public moment = moment;
+    /** dayjs object */
+    public dayjs = dayjs;
     /** Selected range label */
     public selectedRangeLabel: any = "";
     /** Active company details */
@@ -189,7 +189,7 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
     public getLogFilters(): void {
         let getAuditLogsRequest: GetAuditLogsRequest = new GetAuditLogsRequest();
         getAuditLogsRequest = cloneDeep(this.prepareAuditLogFormRequest());
-        this.store.dispatch(this.auditLogsActions.getAuditLogs(getAuditLogsRequest, 1));
+        this.store.dispatch(this.auditLogsActions.getAuditLogs(getAuditLogsRequest));
     }
 
     /**

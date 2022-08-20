@@ -54,11 +54,11 @@ export class MapExcelDataComponent implements OnInit {
     private _clonedMappings: Mappings;
 
     constructor(private toaster: ToasterService) {
-        
+
     }
 
     public ngOnInit() {
-        this.imgPath = (isElectron || isCordova) ? 'assets/icon/' : AppUrl + APP_FOLDER + 'assets/icon/';
+        this.imgPath = isElectron ? 'assets/icon/' : AppUrl + APP_FOLDER + 'assets/icon/';
     }
 
     public mapExcelData() {
@@ -78,7 +78,7 @@ export class MapExcelDataComponent implements OnInit {
         this.importRequestData = {
             ...this._importData,
             data: {
-                items: this._importData.data.items
+                items: this._importData?.data?.items
                     .map(p => {
                         p.row = p.row.map((pr, index) => {
                             pr.columnNumber = index.toString();

@@ -162,6 +162,8 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     public personalInformationTabHeading: string = "";
     /* This will store screen size */
     public isMobileScreen: boolean = false;
+    /** True if initial data is fetched */
+    private initialDataFetched: boolean = false;
 
     constructor(
         private commonService: CommonService,
@@ -252,7 +254,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             this.currentTab = (params['referrer']) ? params['referrer'] : "personal";
         });
 
-        this.imgPath = (isElectron || isCordova) ? 'assets/images/warehouse-vector.svg' : AppUrl + APP_FOLDER + 'assets/images/warehouse-vector.svg';
+        this.imgPath = isElectron ? 'assets/images/warehouse-vector.svg' : AppUrl + APP_FOLDER + 'assets/images/warehouse-vector.svg';
 
         this.store.pipe(select(state => state.session.currentLocale), takeUntil(this.destroyed$)).subscribe(response => {
             if(this.activeLocale && this.activeLocale !== response?.value) {
@@ -267,21 +269,24 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
 
     public getInitialProfileData() {
         this.store.pipe(select(appStore => appStore.session.currentOrganizationDetails), takeUntil(this.destroyed$)).subscribe((organization: Organization) => {
-            if (organization) {
-                if (organization.type === OrganizationType.Branch) {
-                    this.store.dispatch(this.settingsProfileActions.getBranchInfo());
-                    this.currentOrganizationType = OrganizationType.Branch;
-                } else if (organization.type === OrganizationType.Company) {
+            if (!this.initialDataFetched) {
+                this.initialDataFetched = true;
+                if (organization) {
+                    if (organization.type === OrganizationType.Branch) {
+                        this.store.dispatch(this.settingsProfileActions.getBranchInfo());
+                        this.currentOrganizationType = OrganizationType.Branch;
+                    } else if (organization.type === OrganizationType.Company) {
+                        this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
+                        this.currentOrganizationType = OrganizationType.Company;
+                    }
+                } else {
+                    // Treat it as company
                     this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
                     this.currentOrganizationType = OrganizationType.Company;
                 }
-            } else {
-                // Treat it as company
-                this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
-                this.currentOrganizationType = OrganizationType.Company;
-            }
 
-            this.loadAddresses('GET');
+                this.loadAddresses('GET');
+            }
         });
     }
 
@@ -304,7 +309,11 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
 
         this.store.pipe(select(appState => appState.settings.profile), takeUntil(this.destroyed$)).subscribe((response) => {
             if (response) {
+                const loadTabChangeApi = (this.currentCompanyDetails?.countryV2) ? false : true;
                 this.currentCompanyDetails = response;
+                if (loadTabChangeApi && this.currentTab === "address") {
+                    this.handleTabChanged("address");
+                }
                 if (this.currentOrganizationType === OrganizationType.Company) {
                     this.handleCompanyProfileResponse(response);
                 } else if (this.currentOrganizationType === OrganizationType.Branch) {

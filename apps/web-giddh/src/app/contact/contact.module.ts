@@ -30,6 +30,18 @@ import { NgxMaskModule } from '../shared/helpers/directives/ngx-mask';
 import { GiddhCurrencyPipe } from '../shared/helpers/pipes/currencyPipe/currencyType.pipe';
 import { NoDataModule } from '../shared/no-data/no-data.module';
 import { LightboxModule } from 'ngx-lightbox';
+import { MatButtonModule } from "@angular/material/button";
+import { MatMenuModule } from "@angular/material/menu";
+import { MatCheckboxModule } from "@angular/material/checkbox";
+import { MatTabsModule } from "@angular/material/tabs";
+import { MatRippleModule } from "@angular/material/core";
+import { FormFieldsModule } from "../theme/form-fields/form-fields.module";
+import { MatChipsModule } from "@angular/material/chips";
+import { MatTableModule } from "@angular/material/table";
+import { MatInputModule } from "@angular/material/input";
+import { MatTooltipModule } from "@angular/material/tooltip";
+import { MatDialogModule } from "@angular/material/dialog";
+import { AccountUpdateNewDetailsModule } from '../shared/header/components/account-update-new-details/account-update-new-details.module';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: false,
@@ -53,16 +65,19 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         FormsModule,
         ReactiveFormsModule,
         ContactRoutingModule,
-        LaddaModule,
+        LaddaModule.forRoot({
+            style: 'slide-left',
+            spinnerSize: 30
+        }),
         ShSelectModule,
         TabsModule,
-        BsDropdownModule,
-        TooltipModule,
+        BsDropdownModule.forRoot(),
+        TooltipModule.forRoot(),
         SharedModule,
         SelectModule.forRoot(),
         TabsModule.forRoot(),
         ModalModule.forRoot(),
-        PaginationModule,
+        PaginationModule.forRoot(),
         ClickOutsideModule,
         DigitsOnlyModule,
         ElementViewChildModule,
@@ -74,7 +89,19 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         TextMaskModule,
         NgxMaskModule.forRoot(),
         NoDataModule,
-        LightboxModule
+        LightboxModule,
+        MatButtonModule,
+        MatMenuModule,
+        MatCheckboxModule,
+        MatTabsModule,
+        MatRippleModule,
+        FormFieldsModule,
+        MatChipsModule,
+        MatTableModule,
+        MatInputModule,
+        MatTooltipModule,
+        MatDialogModule,
+        AccountUpdateNewDetailsModule
     ],
     entryComponents: [
         PaginationComponent

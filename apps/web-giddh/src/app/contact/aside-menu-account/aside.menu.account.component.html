@@ -7,7 +7,7 @@
         </div>
     </div>
 
-    <button id="close" (click)="closeAsidePane($event)"><i class="icon-cross"></i></button>
+    <button mat-icon-button id="close" (click)="closeAsidePane($event)"><i class="icon-cross"></i></button>
     <div class="aside-body">
         <div class="aside-pane-form">
             <account-add-new-details
@@ -23,8 +23,6 @@
                 [isHsnSacEnabledAcc]="isHsnSacEnabledAcc"
                 [showBankDetail]="showBankDetail"
                 [isCustomerCreation]="true"
-                (goToCustomFields)="showCustomFieldsTab($event)"
-                [reloadCustomFields]="reloadCustomFields"
             >
             </account-add-new-details>
 
@@ -44,8 +42,6 @@
                 [flatGroupsOptions]="flatGroupsOptions"
                 [showVirtualAccount]="showVirtualAccount"
                 [isDebtorCreditor]="isDebtorCreditor"
-                (goToCustomFields)="showCustomFieldsTab($event)"
-                [reloadCustomFields]="reloadCustomFields"
             >
             </account-update-new-details>
         </div>

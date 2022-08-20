@@ -30,6 +30,8 @@ import { ProformaInvoiceComponent } from './proforma-invoice.component';
 import { ProformaInvoiceRoutingModule } from './proforma-invoice.routing.module';
 import { AdvanceReceiptAdjustmentModule } from '../shared/advance-receipt-adjustment/advance-receipt-adjustment.module';
 import { HasFocusDirectiveModule } from '../shared/helpers/directives/has-focus/has-focus.module';
+import { ReplacePipeModule } from '../shared/helpers/pipes/replace/replace.module';
+import { NgxBootstrapSwitchModule } from 'ngx-bootstrap-switch';
 
 @NgModule({
     imports: [
@@ -43,21 +45,26 @@ import { HasFocusDirectiveModule } from '../shared/helpers/directives/has-focus/
         DecimalDigitsModule,
         CollapseModule,
         NgxUploaderModule,
-        BsDropdownModule,
+        BsDropdownModule.forRoot(),
         DigitsOnlyModule,
         SharedModule,
         AsideMenuRecurringEntryModule,
         ModalModule,
         TaxControlModule,
         DiscountControlModule,
-        LaddaModule,
+        LaddaModule.forRoot({
+            style: 'slide-left',
+            spinnerSize: 30
+        }),
         SelectModule.forRoot(),
         SendEmailInvoiceModule,
         VoucherTypeToNamePipeModule,
         CurrencyModule,
         NgxMaskModule.forRoot(),
         AdvanceReceiptAdjustmentModule,
-        HasFocusDirectiveModule
+        HasFocusDirectiveModule,
+        ReplacePipeModule,
+        NgxBootstrapSwitchModule.forRoot()
     ],
     exports: [ProformaInvoiceComponent, SalesAddStockComponent, AsideMenuProductServiceComponent],
     declarations: [

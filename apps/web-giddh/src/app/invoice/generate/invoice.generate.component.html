@@ -7,7 +7,10 @@
 >
     <div validateSectionPermission [hasPermission]="hasPendingVouchersListPermissions">
         <ng-container *ngIf="!showEditMode">
-            <div class="invoice-generate-container">
+            <div *ngIf="isGetAllRequestInProcess$ | async">
+                <giddh-page-loader></giddh-page-loader>
+            </div>
+            <div class="invoice-generate-container" *ngIf="!(isGetAllRequestInProcess$ | async)">
                 <div
                     class="btn-dropdown-dr-cr"
                     *ngIf="selectedVoucher === 'debit note' || selectedVoucher === 'credit note'"
@@ -95,6 +98,7 @@
                                         {{ localeData?.generate_compound }}
                                     </button>
                                     <button
+                                        type="button"
                                         *ngIf="!isCompany && !isMobileView"
                                         placement="top"
                                         [tooltip]="localeData?.works_for_single_entry"
@@ -212,7 +216,7 @@
                             </tr>
                         </thead>
                         <tbody
-                            *ngIf="!(getLedgerDataInProcess$ | async)"
+                            *ngIf="!(getLedgerDataInProcess$ | async) && !generateVoucherInProcess"
                             (clickOutside)="hoveredItemForAction = ''; clickedHoveredItemForAction = ''"
                             (mouseleave)="hoveredItemForAction = ''; clickedHoveredItemForAction = ''"
                         >
@@ -363,7 +367,11 @@
                         </tbody>
 
                         <tbody
-                            *ngIf="(isGetAllRequestInProcess$ | async) || (getLedgerDataInProcess$ | async)"
+                            *ngIf="
+                                (isGetAllRequestInProcess$ | async) ||
+                                (getLedgerDataInProcess$ | async) ||
+                                generateVoucherInProcess
+                            "
                             id="centerAlign"
                         >
                             <tr>
@@ -378,7 +386,9 @@
 
             <div
                 *ngIf="ledgersData?.totalItems > 20"
-                [hidden]="(isGetAllRequestInProcess$ | async) || (getLedgerDataInProcess$ | async)"
+                [hidden]="
+                    (isGetAllRequestInProcess$ | async) || (getLedgerDataInProcess$ | async) || generateVoucherInProcess
+                "
                 class="pagination-wrapper"
             >
                 <div class="text-center">
@@ -399,7 +409,7 @@
                 </div>
             </div>
 
-            <div class="no-data" *ngIf="!ledgersData?.results?.length">
+            <div class="no-data" *ngIf="!ledgersData?.results?.length && !(isGetAllRequestInProcess$ | async)">
                 <no-data></no-data>
             </div>
         </ng-container>

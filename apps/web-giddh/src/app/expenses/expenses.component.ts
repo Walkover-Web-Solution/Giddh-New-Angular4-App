@@ -4,13 +4,11 @@ import { select, Store } from '@ngrx/store';
 import { CommonPaginatedRequest } from '../models/api-models/Invoice';
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
-import * as moment from 'moment/moment';
+import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../shared/helpers/defaultDateFormat';
 import { ExpenseResults, PettyCashReportResponse } from '../models/api-models/Expences';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
-import { CompanyActions } from '../actions/company.actions';
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
-import { StateDetailsRequest } from '../models/api-models/Company';
 import { GeneralService } from '../services/general.service';
 import { PendingListComponent } from './components/pending-list/pending-list.component';
 import { RejectedListComponent } from './components/rejected-list/rejected-list.component';
@@ -64,8 +62,8 @@ export class ExpensesComponent implements OnInit, OnDestroy {
     public selectedDateRangeUi: any;
     /* This will store available date ranges */
     public datePickerOption: any = GIDDH_DATE_RANGE_PICKER_RANGES;
-    /* Moment object */
-    public moment = moment;
+    /* dayjs object */
+    public dayjs = dayjs;
     /* Selected from date */
     public fromDate: string;
     /* Selected to date */
@@ -95,7 +93,6 @@ export class ExpensesComponent implements OnInit, OnDestroy {
         private store: Store<AppState>,
         private route: ActivatedRoute,
         private modalService: BsModalService,
-        private companyActions: CompanyActions,
         private cdRf: ChangeDetectorRef,
         private generalService: GeneralService,
         private router: Router,
@@ -137,13 +134,13 @@ export class ExpensesComponent implements OnInit, OnDestroy {
                         this.todaySelected = response;
 
                         if (universalDate && !this.todaySelected) {
-                            this.universalFrom = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
-                            this.universalTo = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
+                            this.universalFrom = dayjs(universalDate[0]).format(GIDDH_DATE_FORMAT);
+                            this.universalTo = dayjs(universalDate[1]).format(GIDDH_DATE_FORMAT);
 
-                            this.selectedDateRange = { startDate: moment(dateObj[0]), endDate: moment(dateObj[1]) };
-                            this.selectedDateRangeUi = moment(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-                            this.fromDate = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
-                            this.toDate = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
+                            this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
+                            this.selectedDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                            this.fromDate = dayjs(universalDate[0]).format(GIDDH_DATE_FORMAT);
+                            this.toDate = dayjs(universalDate[1]).format(GIDDH_DATE_FORMAT);
 
                             this.pettycashRequest.from = this.universalFrom;
                             this.pettycashRequest.to = this.universalTo;
@@ -170,8 +167,6 @@ export class ExpensesComponent implements OnInit, OnDestroy {
                 }, 100);
             }
         });
-
-        this.saveLastState('');
     }
 
     public selectedRowToggle(e) {
@@ -241,6 +236,8 @@ export class ExpensesComponent implements OnInit, OnDestroy {
 
     public getPettyCashPendingReports(request: CommonPaginatedRequest) {
         request.status = 'pending';
+        request.from = this.pettycashRequest.from;
+        request.to = this.pettycashRequest.to;
         this.isPettyCashPendingReportLoading = true;
         this.expenseService.getPettycashReports(request).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if(response?.status === "success") {
@@ -255,6 +252,8 @@ export class ExpensesComponent implements OnInit, OnDestroy {
 
     public getPettyCashRejectedReports(request: CommonPaginatedRequest) {
         request.status = 'rejected';
+        request.from = this.pettycashRequest.from;
+        request.to = this.pettycashRequest.to;
         this.isPettyCashRejectedReportLoading = true;
         this.expenseService.getPettycashRejectedReports(request).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if(response?.status === "success") {
@@ -270,15 +269,15 @@ export class ExpensesComponent implements OnInit, OnDestroy {
     public clearFilter() {
         this.universalDate$.subscribe(res => {
             if (res) {
-                this.universalFrom = moment(res[0]).format(GIDDH_DATE_FORMAT);
-                this.universalTo = moment(res[1]).format(GIDDH_DATE_FORMAT);
+                this.universalFrom = dayjs(res[0]).format(GIDDH_DATE_FORMAT);
+                this.universalTo = dayjs(res[1]).format(GIDDH_DATE_FORMAT);
                 let universalDate = _.cloneDeep(res);
 
                 if (universalDate && !this.todaySelected) {
-                    this.selectedDateRange = { startDate: moment(res[0]), endDate: moment(res[1]) };
-                    this.selectedDateRangeUi = moment(res[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(res[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-                    this.fromDate = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
-                    this.toDate = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
+                    this.selectedDateRange = { startDate: dayjs(res[0]), endDate: dayjs(res[1]) };
+                    this.selectedDateRangeUi = dayjs(res[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(res[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                    this.fromDate = dayjs(universalDate[0]).format(GIDDH_DATE_FORMAT);
+                    this.toDate = dayjs(universalDate[1]).format(GIDDH_DATE_FORMAT);
                     this.pettycashRequest.from = this.universalFrom;
                     this.pettycashRequest.to = this.universalTo;
                 } else {
@@ -305,9 +304,9 @@ export class ExpensesComponent implements OnInit, OnDestroy {
      */
     public tabChanged(event: any): void {
         let tab = (event?.index === 0) ? "pending" : "rejected";
-        if (event && !event.target) {
-            this.saveLastState(tab);
-        }
+        let tabIndex = (event?.index === 0) ? 0 : 1;
+
+        this.router.navigate(['pages', 'expenses-manager'], { queryParams: { tab: tab, tabIndex: tabIndex } } );
 
         if (tab === "pending" && this.rejectedListComponent && this.rejectedListComponent.pettycashRequest) {
             this.rejectedTabSortOptions.sort = this.rejectedListComponent.pettycashRequest.sort;
@@ -327,15 +326,6 @@ export class ExpensesComponent implements OnInit, OnDestroy {
                 this.rejectedListComponent.pettycashRequest.sortBy = this.rejectedTabSortOptions.sortBy;
             }
         }, 20);
-    }
-
-    private saveLastState(state: string) {
-        let companyUniqueName = null;
-        this.store.pipe(select(c => c.session.companyUniqueName), take(1)).subscribe(s => companyUniqueName = s);
-        let stateDetailsRequest = new StateDetailsRequest();
-        stateDetailsRequest.companyUniqueName = companyUniqueName;
-        stateDetailsRequest.lastState = `pages/expenses-manager${state ? +'/' + state : ''}`;
-        this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
     }
 
     detectChanges() {
@@ -403,10 +393,10 @@ export class ExpensesComponent implements OnInit, OnDestroy {
         }
         this.hideGiddhDatepicker();
         if (value && value.startDate && value.endDate) {
-            this.selectedDateRange = { startDate: moment(value.startDate), endDate: moment(value.endDate) };
-            this.selectedDateRangeUi = moment(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
-            this.fromDate = moment(value.startDate).format(GIDDH_DATE_FORMAT);
-            this.toDate = moment(value.endDate).format(GIDDH_DATE_FORMAT);
+            this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
+            this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
+            this.fromDate = dayjs(value.startDate).format(GIDDH_DATE_FORMAT);
+            this.toDate = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
             this.pettycashRequest.from = this.fromDate;
             this.pettycashRequest.to = this.toDate;
             this.isFilterSelected = true;
@@ -447,8 +437,8 @@ export class ExpensesComponent implements OnInit, OnDestroy {
      */
     public reportDates(event: any): void {
         if(this.todaySelected && event) {
-            this.selectedDateRange = { startDate: moment(event[0], GIDDH_DATE_FORMAT), endDate: moment(event[1], GIDDH_DATE_FORMAT) };
-            this.selectedDateRangeUi = moment(event[0], GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(event[1], GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
+            this.selectedDateRange = { startDate: dayjs(event[0], GIDDH_DATE_FORMAT), endDate: dayjs(event[1], GIDDH_DATE_FORMAT) };
+            this.selectedDateRangeUi = dayjs(event[0], GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(event[1], GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
         }
     }
 

@@ -51,17 +51,23 @@ export class ExpenseService {
 
     public actionPettycashReports(requestObj: ActionPettycashRequest, model?: any): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.post(this.config.apiUrl + EXPENSE_API.ACTION
+        let url = this.config.apiUrl + EXPENSE_API.ACTION
             .replace(':companyUniqueName', this.companyUniqueName)
             .replace(':uniqueName', requestObj.uniqueName)
             .replace(':accountUniqueName', encodeURIComponent(requestObj.accountUniqueName))
-            .replace(':actionType', requestObj.actionType), model).pipe(
-                map((res) => {
-                    let data: BaseResponse<any, any> = res;
-                    data.request = requestObj;
-                    return data;
-                }),
-                catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
+            .replace(':actionType', requestObj.actionType);
+
+        if (this.generalService.voucherApiVersion === 2) {
+            url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
+        }
+
+        return this.http.post(url, model).pipe(
+            map((res) => {
+                let data: BaseResponse<any, any> = res;
+                data.request = requestObj;
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
     }
 
     public getPettycashEntry(uniqueName: string): Observable<BaseResponse<PettyCashResonse, any>> {

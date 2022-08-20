@@ -1,12 +1,10 @@
-@import "../../../assets/css/color.scss";
-
 .import-data-table {
     height: 68vh;
     overflow-y: auto;
     .import-card {
         padding: 15px;
-        background-color: $white;
-        box-shadow: 0px 3px 7px $black-russian;
+        background-color: var(--color-common-primary-background-for-all-components);
+        box-shadow: 0px 3px 7px var(--color-primary-common-box-shadow);
         border-radius: 2px;
         position: relative;
         padding-right: 30px;
@@ -18,7 +16,7 @@
             z-index: 2;
         }
         svg.download-import {
-            fill: $gray;
+            fill: var(--color-abbey);
         }
     }
     .import-data-row {

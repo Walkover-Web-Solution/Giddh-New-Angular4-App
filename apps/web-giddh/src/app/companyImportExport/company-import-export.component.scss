@@ -1,10 +1,8 @@
-@import "../../assets/css/color.scss";
-
 .backup-data {
     padding: 10px 0px;
-    border-bottom: 1px solid $gainsboro;
+    border-bottom: 1px solid var(--color-common-secondary-border);
     font-weight: 500;
-    color: $black;
+    color: var(--color-nero);
 }
 .main-container-import-export {
     height: 70vh;
@@ -20,8 +18,8 @@
     padding: 40px 67px;
     margin: 0 15px;
     border-radius: 2px;
-    border: 1px solid $gainsboro;
-    background: $alice-blue;
+    border: 1px solid var(--color-common-secondary-border);
+    background: var(--color-primary-company-import-export-card-background);
     width: 50%;
     text-align: center;
     transition: 0.5s all ease;
@@ -29,13 +27,13 @@
 .import-export-icon {
     width: 90px;
     height: 90px;
-    background: $whisper-color;
+    background: var(--color-dark-fog);
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: 90px;
     font-size: 34px;
-    color: $dark-gray;
+    color: var(--color-abbey);
     margin: 0 auto 20px;
 }
 

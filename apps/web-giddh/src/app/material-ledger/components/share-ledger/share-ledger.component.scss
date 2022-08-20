@@ -1,7 +1,5 @@
-@import "../../../../assets/css/color.scss";
-
 .btn-success:disabled {
-    color: $white !important;
+    color: var(--color-common-primary-disabled) !important;
 }
 .mat-form-field {
     width: 80% !important;

@@ -1,9 +1,7 @@
-@import "../../../assets/css/color.scss";
-
 .custom-file {
-    border: 1px dashed $gainsboro;
+    border: 1px dashed var(--color-iron);
     border-radius: 2px;
-    background: $white;
+    background: var(--color-white);
     width: 100px;
     height: 100px;
 }
@@ -15,7 +13,7 @@
 .custom-file-label {
     border: none;
     padding: 30px;
-    background: $white;
+    background: var(--color-white);
     height: 100%;
     &::after {
         height: 0 !important;
@@ -23,14 +21,14 @@
     }
     .icon-plus {
         font-size: 40px;
-        color: $whisper-color;
+        color: var(--color-dark-fog);
     }
 }
 
 .unique-name,
 .country-name,
 .parent-name {
-    color: $dark-gray;
+    color: var(--color-abbey);
     .country-info {
         display: inherit;
         .country-flag {
@@ -49,7 +47,7 @@
     }
 }
 .img-size {
-    color: $gray;
+    color: var(--color-abbey);
 }
 .container-fluid {
     padding-left: 0;

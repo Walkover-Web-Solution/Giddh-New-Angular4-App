@@ -80,7 +80,7 @@ export class TrialBalanceExportCsvComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
-        this.imgPath = (isElectron || isCordova) ? 'assets/images/csv.svg' : AppUrl + APP_FOLDER + 'assets/images/csv.svg';
+        this.imgPath = isElectron ? 'assets/images/csv.svg' : AppUrl + APP_FOLDER + 'assets/images/csv.svg';
     }
 
     public ngOnDestroy() {

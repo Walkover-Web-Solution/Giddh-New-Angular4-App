@@ -88,7 +88,7 @@ export let NAVIGATION_ITEM_LIST_ORIGINAL: IUlist[] = [
     { type: 'MENU', name: 'New V/S Old Invoices', uniqueName: '/pages/new-vs-old-invoices', hasTabs: false },
     { type: 'MENU', name: 'GST', uniqueName: '/pages/gstfiling', hasTabs: false },
     { type: 'MENU', name: 'Vat Report', uniqueName: '/pages/vat-report', hasTabs: false },
-    // { type: 'MENU', name: 'Import Data from TALLY', uniqueName: '/pages/tallysync', hasTabs: false },
+    { type: 'MENU', name: 'Import Data from TALLY', uniqueName: '/pages/tallysync', hasTabs: false },
     { type: 'MENU', name: 'All Modules', uniqueName: '/pages/all-modules', hasTabs: false },
     { type: 'MENU', name: 'Customer', uniqueName: '/pages/contact/customer', additional: { tab: 'customer', tabIndex: 0 }, hasTabs: true },
     { type: 'MENU', name: 'Vendor', uniqueName: '/pages/contact/vendor', additional: { tab: 'vendor', tabIndex: 0 }, hasTabs: false },

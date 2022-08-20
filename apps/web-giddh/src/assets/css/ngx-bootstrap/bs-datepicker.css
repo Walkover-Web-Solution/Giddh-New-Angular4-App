@@ -3,8 +3,8 @@
     display: flex;
     align-items: stretch;
     flex-flow: row wrap;
-    background: #fff;
-    box-shadow: 0 0 10px 0 #aaa;
+    background: var(--color-datepicker-background);
+    box-shadow: 0 0 10px 0 var(--color-datepicker-box-shadow);
     position: relative;
     z-index: 1;
     /* button */
@@ -63,14 +63,14 @@
     background: transparent;
     text-align: center;
     cursor: pointer;
-    color: #fff;
+    color: var(--color-white);
     transition: 0.3s;
 }
 .bs-datepicker-head button[disabled],
 .bs-datepicker-head button[disabled]:hover,
 .bs-datepicker-head button[disabled]:active {
-    background: rgba(221, 221, 221, 0.3);
-    color: #f5f5f5;
+    background: var(--color-white-secondary);
+    color: var(--color-white-secondary);
     cursor: not-allowed;
 }
 .bs-datepicker-head button.next,
@@ -96,17 +96,17 @@
     padding: 0 13px;
 }
 .bs-datepicker-head button:hover {
-    background-color: rgba(0, 0, 0, 0.1);
+    background-color: var(--color-iron);
 }
 .bs-datepicker-head button:active {
-    background-color: rgba(0, 0, 0, 0.2);
+    background-color: var(--color-gray);
 }
 .bs-datepicker-body {
     padding: 10px;
     border-radius: 0 0 3px 3px;
     min-height: 232px;
     min-width: 278px;
-    border: 1px solid #e9edf0;
+    border: 1px solid var(--color-dark-fog);
     /* .bs-datepicker-body table */
 }
 .bs-datepicker-body .days.weeks {
@@ -122,12 +122,12 @@
 }
 .bs-datepicker-body table th {
     font-size: 13px;
-    color: #9aaec1;
+    color: var(--color-gray);
     font-weight: 400;
     text-align: center;
 }
 .bs-datepicker-body table td {
-    color: #54708b;
+    color: var(--color-abbey);
     text-align: center;
     position: relative;
     padding: 0;
@@ -148,16 +148,16 @@
 }
 .bs-datepicker-body table td.is-highlighted:not(.disabled):not(.selected) span,
 .bs-datepicker-body table td span.is-highlighted:not(.disabled):not(.selected) {
-    background-color: #e9edf0;
+    background-color: var(--color-dark-fog);
     transition: 0s;
 }
 .bs-datepicker-body table td span.disabled,
 .bs-datepicker-body table td.disabled span {
-    color: #9aaec1;
+    color: var(--color-gray);
 }
 .bs-datepicker-body table td span.selected,
 .bs-datepicker-body table td.selected span {
-    color: #fff;
+    color: var(--color-white);
 }
 .bs-datepicker-body table td.active {
     position: relative;
@@ -206,13 +206,13 @@
 .bs-datepicker-body table td span[class*="select-"],
 .bs-datepicker-body table td[class*="select-"] span {
     border-radius: 50%;
-    color: #fff;
+    color: var(--color-white);
 }
 .bs-datepicker-body table.days td.active:not(.select-start):before,
 .bs-datepicker-body table.days td.in-range:not(.select-start):before,
 .bs-datepicker-body table.days span.active:not(.select-start):before,
 .bs-datepicker-body table.days span.in-range:not(.select-start):before {
-    background: #e9edf0;
+    background: var(--color-dark-fog);
 }
 .bs-datepicker-body table.days span {
     width: 32px;
@@ -234,7 +234,7 @@
 .bs-datepicker-body table.days td.active + td.select-end:before,
 .bs-datepicker-body table.days td.in-range + td.is-highlighted:before,
 .bs-datepicker-body table.days td.in-range + td.select-end:before {
-    background: #e9edf0;
+    background: var(--color-dark-fog);
     width: 100%;
 }
 .bs-datepicker-body table.weeks tr td:nth-child(2).active:before {
@@ -262,13 +262,13 @@
     border-radius: 15px;
 }
 .bs-datepicker .current-timedate {
-    color: #54708b;
+    color: var(--color-abbey);
     font-size: 15px;
     text-align: center;
     height: 30px;
     line-height: 30px;
     border-radius: 20px;
-    border: 1px solid #e9edf0;
+    border: 1px solid var(--color-dark-fog);
     margin-bottom: 10px;
     cursor: pointer;
     text-transform: uppercase;
@@ -317,18 +317,19 @@
 }
 .bs-datepicker-container {
     padding: 15px;
+    background-color: var(--color-datepicker-background);
 }
 .bs-datepicker-custom-range {
     padding: 15px;
-    background: #eee;
+    background: var(--color-dark-fog);
 }
 .bs-datepicker-predefined-btns button {
     width: 100%;
     display: block;
     height: 30px;
-    background-color: #9aaec1;
+    background-color: var(--color-gray);
     border-radius: 4px;
-    color: #fff;
+    color: var(--color-white);
     border: 0;
     margin-bottom: 10px;
     padding: 0 18px;
@@ -337,17 +338,17 @@
 }
 .bs-datepicker-predefined-btns button:active,
 .bs-datepicker-predefined-btns button:hover {
-    background-color: #54708b;
+    background-color: var(--color-abbey);
 }
 .bs-datepicker .is-other-month {
-    color: rgba(0, 0, 0, 0.25);
+    color: var(--color-gray);
 }
 .bs-datepicker-buttons {
     display: flex;
     flex-flow: row wrap;
     justify-content: flex-end;
     padding-top: 10px;
-    border-top: 1px solid #e9edf0;
+    border-top: 1px solid var(--color-dark-fog);
 }
 .bs-datepicker-buttons .btn-default {
     margin-left: 10px;
@@ -359,7 +360,7 @@
 }
 
 .bs-timepicker-label {
-    color: #54708b;
+    color: var(--color-abbey);
     margin-bottom: 10px;
 }
 
@@ -373,8 +374,8 @@
     height: 20px;
     border-radius: 50%;
     border: 0;
-    background-color: #e9edf0;
-    color: #54708b;
+    background-color: var(--color-dark-fog);
+    color: var(--color-abbey);
     font-size: 16px;
     font-weight: 700;
     vertical-align: middle;
@@ -383,14 +384,14 @@
     transition: 0.3s;
 }
 .bs-timepicker-controls button:hover {
-    background-color: #d5dadd;
+    background-color: var(--color-iron);
 }
 .bs-timepicker-controls input {
     width: 35px;
     height: 25px;
     border-radius: 13px;
     text-align: center;
-    border: 1px solid #e9edf0;
+    border: 1px solid var(--color-dark-fog);
 }
 
 .bs-timepicker .switch-time-format {
@@ -398,9 +399,9 @@
     min-width: 54px;
     height: 25px;
     border-radius: 20px;
-    border: 1px solid #e9edf0;
-    background: #fff;
-    color: #54708b;
+    border: 1px solid var(--color-dark-fog);
+    background: var(--color-white);
+    color: var(--color-abbey);
     font-size: 13px;
 }
 .bs-timepicker .switch-time-format img {
@@ -420,96 +421,80 @@
 }
 /* theming */
 .theme-default .bs-datepicker-head {
-    background-color: #777;
+    background-color: var(--color-abbey);
 }
 
 .theme-default .bs-datepicker-body table td span.selected,
 .theme-default .bs-datepicker-body table td.selected span,
 .theme-default .bs-datepicker-body table td span[class*="select-"]:after,
 .theme-default .bs-datepicker-body table td[class*="select-"] span:after {
-    background-color: #777;
+    background-color: var(--color-abbey);
 }
 
 .theme-default .bs-datepicker-body table td.week span {
-    color: #777;
-}
-
-.theme-green .bs-datepicker-head {
-    background-color: #5cb85c;
-}
-
-.theme-green .bs-datepicker-body table td span.selected,
-.theme-green .bs-datepicker-body table td.selected span,
-.theme-green .bs-datepicker-body table td span[class*="select-"]:after,
-.theme-green .bs-datepicker-body table td[class*="select-"] span:after {
-    background-color: #5cb85c;
-}
-
-.theme-green .bs-datepicker-body table td.week span {
-    color: #5cb85c;
+    color: var(--color-abbey);
 }
 
 .theme-blue .bs-datepicker-head {
-    background-color: #5bc0de;
+    background-color: var(--color-blue);
 }
 
 .theme-blue .bs-datepicker-body table td span.selected,
 .theme-blue .bs-datepicker-body table td.selected span,
 .theme-blue .bs-datepicker-body table td span[class*="select-"]:after,
 .theme-blue .bs-datepicker-body table td[class*="select-"] span:after {
-    background-color: #5bc0de;
+    background-color: var(--color-blue);
 }
 
 .theme-blue .bs-datepicker-body table td.week span {
-    color: #5bc0de;
+    color: var(--color-blue);
 }
 
 .theme-dark-blue .bs-datepicker-head {
-    background-color: #337ab7;
+    background-color: var(--color-blue);
 }
 
 .theme-dark-blue .bs-datepicker-body table td span.selected,
 .theme-dark-blue .bs-datepicker-body table td.selected span,
 .theme-dark-blue .bs-datepicker-body table td span[class*="select-"]:after,
 .theme-dark-blue .bs-datepicker-body table td[class*="select-"] span:after {
-    background-color: #337ab7;
+    background-color: var(--color-blue);
 }
 
 .theme-dark-blue .bs-datepicker-body table td.week span {
-    color: #337ab7;
+    color: var(--color-blue);
 }
 
 .theme-red .bs-datepicker-head {
-    background-color: #d9534f;
+    background-color: var(--color-red);
 }
 
 .theme-red .bs-datepicker-body table td span.selected,
 .theme-red .bs-datepicker-body table td.selected span,
 .theme-red .bs-datepicker-body table td span[class*="select-"]:after,
 .theme-red .bs-datepicker-body table td[class*="select-"] span:after {
-    background-color: #d9534f;
+    background-color: var(--color-red);
 }
 
 .theme-red .bs-datepicker-body table td.week span {
-    color: #d9534f;
+    color: var(--color-red);
 }
 
 .theme-orange .bs-datepicker-head {
-    background-color: #f0ad4e;
+    background-color: var(--color-orange);
 }
 
 .theme-orange .bs-datepicker-body table td span.selected,
 .theme-orange .bs-datepicker-body table td.selected span,
 .theme-orange .bs-datepicker-body table td span[class*="select-"]:after,
 .theme-orange .bs-datepicker-body table td[class*="select-"] span:after {
-    background-color: #f0ad4e;
+    background-color: var(--color-orange);
 }
 
 .theme-orange .bs-datepicker-body table td.week span {
-    color: #f0ad4e;
+    color: var(--color-orange);
 }
 
-/*# sourceMappingURL=bs-datepicker.css.map */
 bs-datepicker-navigation-view {
     display: flex;
     justify-content: space-between;
