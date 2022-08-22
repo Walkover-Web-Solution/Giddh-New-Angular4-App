@@ -245,13 +245,11 @@
                                         dropdown
                                         #dropdown="bs-dropdown"
                                         (blur)="dropdown.hide()"
-                                        [attachOutsideOnClick]="true"
-                                        (clickOutside)="dropdown.hide()"
                                     >
                                         <button
                                             (focus)="dropdown.show()"
                                             (click)="dropdown.show()"
-                                            dropdownToggle
+                                            (clickOutside)="dropdown.hide()"
                                             type="button"
                                             class="form-control text-left btn-block dropdown-toggle applicable-tax-btn"
                                             [ngClass]="{ 'select-tax-placeholder': !selectedTaxes?.length }"
@@ -260,7 +258,6 @@
                                             <span class="select-drop pull-right mr-t1"></span>
                                         </button>
                                         <ul
-                                            *dropdownMenu
                                             class="dropdown-menu dropdown-menu-2 width-100"
                                             role="menu"
                                             (click)="$event.stopPropagation()"
