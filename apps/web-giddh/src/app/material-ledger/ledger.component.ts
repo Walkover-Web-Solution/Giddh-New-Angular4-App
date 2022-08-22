@@ -1289,22 +1289,22 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.loaderService.show();
 
         if (this.lc.blankLedger.entryDate) {
-            if (!dayjs(this.lc.blankLedger.entryDate, GIDDH_DATE_FORMAT).isValid()) {
+            if ((typeof this.lc.blankLedger.entryDate === "object") ? !dayjs(this.lc.blankLedger.entryDate).isValid() : !dayjs(this.lc.blankLedger.entryDate, GIDDH_DATE_FORMAT).isValid()) {
                 this.toaster.showSnackBar("error", this.localeData?.invalid_date);
                 this.loaderService.hide();
                 return;
             } else {
-                this.lc.blankLedger.entryDate = dayjs(this.lc.blankLedger.entryDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                this.lc.blankLedger.entryDate = (typeof this.lc.blankLedger.entryDate === "object") ? dayjs(this.lc.blankLedger.entryDate).format(GIDDH_DATE_FORMAT) : dayjs(this.lc.blankLedger.entryDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
             }
         }
 
         if (this.lc.blankLedger.chequeClearanceDate) {
-            if (!dayjs(this.lc.blankLedger.chequeClearanceDate, GIDDH_DATE_FORMAT).isValid()) {
+            if ((typeof this.lc.blankLedger.chequeClearanceDate === "object") ? !dayjs(this.lc.blankLedger.chequeClearanceDate).isValid() : !dayjs(this.lc.blankLedger.chequeClearanceDate, GIDDH_DATE_FORMAT).isValid()) {
                 this.toaster.showSnackBar("error", this.localeData?.invalid_cheque_clearance_date);
                 this.loaderService.hide();
                 return;
             } else {
-                this.lc.blankLedger.chequeClearanceDate = dayjs(this.lc.blankLedger.chequeClearanceDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                this.lc.blankLedger.chequeClearanceDate = (typeof this.lc.blankLedger.chequeClearanceDate === "object") ? dayjs(this.lc.blankLedger.chequeClearanceDate).format(GIDDH_DATE_FORMAT) : dayjs(this.lc.blankLedger.chequeClearanceDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
             }
         }
 
