@@ -340,6 +340,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy, AfterViewIni
                 if (parsedNumber.isValid()) {
                     ele.classList.remove('error-box');
                     this.isMobileNumberValid = true;
+                    this.companyForm.form.controls['contactNo'].setErrors(null);
                 } else {
                     this.isMobileNumberValid = false;
                     this._toaster.errorToast(this.localeData?.invalid_contact_number_error);
@@ -349,6 +350,7 @@ export class CompanyAddNewUiComponent implements OnInit, OnDestroy, AfterViewIni
             } else {
                 // branch on-boarding is carried out where no mobile field is there
                 this.isMobileNumberValid = true;
+                this.companyForm.form.controls['contactNo'].setErrors(null);
             }
         } catch (error) {
             this.isMobileNumberValid = false;
