@@ -1,6 +1,7 @@
 import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { ClickOutsideModule } from "ng-click-outside";
 import { BsDropdownModule } from "ngx-bootstrap/dropdown";
 import { LoaderModule } from "../loader/loader.module";
 import { GiddhLayoutModule } from "../shared/layout/layout.module";
@@ -22,7 +23,8 @@ import { WelcomeRoutingModule } from "./welcome.routing.module";
         ReactiveFormsModule,
         TranslateDirectiveModule,
         ShSelectModule,
-        BsDropdownModule.forRoot()
+        BsDropdownModule.forRoot(),
+        ClickOutsideModule
     ],
     exports: [
         WelcomeComponent
