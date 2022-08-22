@@ -359,19 +359,19 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             }
         });
 
-        this.store.pipe(select(state => state.ledger.ledgerCreateInProcess), takeUntil(this.destroyed$)).subscribe(response => {
-            this.isLoading = response;
+        this.store.pipe(select(state => state?.ledger?.ledgerCreateInProcess), takeUntil(this.destroyed$)).subscribe((response:boolean) => {
+                this.isLoading = (response) ? true : false;
         });
 
-        this.store.pipe(select(p => p.ledger.ledgerCreateSuccess), takeUntil(this.destroyed$)).subscribe((s: boolean) => {
-            if (s) {
-                this._toaster.successToast(this.localeData?.entry_created, this.commonLocaleData?.app_success);
-                this.refreshEntry();
-                this.store.dispatch(this._ledgerActions.ResetLedger());
-                this.requestObj.description = '';
-                this.dateField?.nativeElement?.focus();
-            }
-        });
+        // this.store.pipe(select(p => p?.ledger?.ledgerCreateSuccess), takeUntil(this.destroyed$)).subscribe((s: boolean) => {
+        //     if (s) {
+        //         this._toaster.successToast(this.localeData?.entry_created, this.commonLocaleData?.app_success);
+        //         this.refreshEntry();
+        //         this.store.dispatch(this._ledgerActions.ResetLedger());
+        //         this.requestObj.description = '';
+        //         this.dateField?.nativeElement?.focus();
+        //     }
+        // });
 
         this.refreshEntry();
 
