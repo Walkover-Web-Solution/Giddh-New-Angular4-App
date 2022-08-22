@@ -1,16 +1,21 @@
 import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
-import { Observable, of } from 'rxjs';
+import { empty, Observable, of } from 'rxjs';
 import { LoaderService } from '../loader/loader.service';
 import { GeneralService } from './general.service';
 import { OrganizationType } from '../models/user-login-state';
 import { LocaleService } from './locale.service';
+import { catchError, retryWhen, tap } from 'rxjs/operators';
 
 @Injectable()
 export class GiddhHttpInterceptor implements HttpInterceptor {
 
     private isOnline: boolean = navigator.onLine;
+    /** Holds api call retry limit */
+    private retryLimit: number = 0;
+    /** Holds api call retry attempts */
+    private retryAttempts: number = 0;
 
     constructor(
         private toasterService: ToasterService,
@@ -32,7 +37,25 @@ export class GiddhHttpInterceptor implements HttpInterceptor {
         }
         request = this.addLanguage(request);
         if (this.isOnline) {
-            return next.handle(request);
+            return next.handle(request).pipe(
+                // retryWhen operator should come before catchError operator as it is more specific
+                retryWhen(errors => errors.pipe(
+                    // inside the retryWhen, use a tap operator to throw an error 
+                    // if you don't want to retry
+                    tap(error => {
+                        this.retryLimit = Number(error.headers.get("retry-after"));
+                        if (!error.headers.get("retry-after") || this.retryAttempts >= this.retryLimit) {
+                            throw error;
+                        } else {
+                            this.retryAttempts++;
+                        }
+                    })
+                )),
+                // now catch all other errors
+                catchError(() => {
+                    return empty();
+                })
+            );
         } else {
             setTimeout(() => {
                 this.toasterService.warningToast(this.localeService.translate("app_messages.internet_error"), this.localeService.translate("app_messages.internet_disconnected"));
