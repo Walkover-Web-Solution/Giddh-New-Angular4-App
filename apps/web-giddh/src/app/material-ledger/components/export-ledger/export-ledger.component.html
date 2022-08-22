@@ -165,7 +165,7 @@
                         </mat-slide-toggle>
                     </label>
                 </div>
-                <button mat-button class="btn-success btn unbold" (click)="exportLedger()">
+                <button mat-button class="btn-success btn unbold" (click)="exportLedger()" [disabled]="isLoading">
                     {{ commonLocaleData?.app_download }}
                 </button>
                 <button
