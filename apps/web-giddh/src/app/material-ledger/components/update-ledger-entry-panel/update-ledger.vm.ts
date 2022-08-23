@@ -494,7 +494,9 @@ export class UpdateLedgerVm {
 
                     // find account that's from category income || expenses || fixed assets and update it's amount too
                     if (category && this.isValidCategory(category) && !t.isTax) {
-                        t.amount = giddhRoundOff(Number(this.totalAmount), this.giddhBalanceDecimalPlaces);
+                        if (this.voucherApiVersion !== 2) {
+                            t.amount = giddhRoundOff(Number(this.totalAmount), this.giddhBalanceDecimalPlaces);
+                        }
                         t.isUpdated = true;
                     }
                     t.convertedAmount = this.calculateConversionRate(t.amount);
