@@ -1,7 +1,7 @@
 import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
-import { empty, Observable, of } from 'rxjs';
+import { empty, Observable, of, throwError } from 'rxjs';
 import { LoaderService } from '../loader/loader.service';
 import { GeneralService } from './general.service';
 import { OrganizationType } from '../models/user-login-state';
@@ -34,7 +34,7 @@ export class GiddhHttpInterceptor implements HttpInterceptor {
         request = this.addLanguage(request);
         if (this.isOnline) {
             /** Holds api call retry limit */
-            let retryLimit: number = 0;
+            let retryLimit: number = 1;
             /** Holds api call retry attempts */
             let retryAttempts: number = 0;
 
@@ -44,7 +44,6 @@ export class GiddhHttpInterceptor implements HttpInterceptor {
                     // inside the retryWhen, use a tap operator to throw an error 
                     // if you don't want to retry
                     tap(error => {
-                        retryLimit = Number(error.headers.get("retry-after"));
                         if (!error.headers.get("retry-after") || retryAttempts >= retryLimit) {
                             throw error;
                         } else {
@@ -53,8 +52,12 @@ export class GiddhHttpInterceptor implements HttpInterceptor {
                     })
                 )),
                 // now catch all other errors
-                catchError(() => {
-                    return empty();
+                catchError((error) => {
+                    if (retryAttempts === 1) {
+                        return throwError(error);
+                    } else {
+                        return empty();
+                    }
                 })
             );
         } else {
