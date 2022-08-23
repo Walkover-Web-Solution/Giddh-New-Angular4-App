@@ -5,7 +5,7 @@ import { AppState } from '../../store';
 import { InvoiceActions } from '../../actions/invoice/invoice.actions';
 import { RecurringInvoice } from '../../models/interfaces/RecurringInvoice';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import * as moment from 'moment';
+import * as dayjs from 'dayjs';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { ReplaySubject } from 'rxjs';
 import { ToasterService } from "../../services/toaster.service";
@@ -59,8 +59,8 @@ export class AsideMenuRecurringEntryComponent implements OnInit, OnChanges, OnDe
         this.form.controls.nextCronDate.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(p => {
             this.maxEndDate = p;
             const { cronEndDate } = this.form.value;
-            const end = moment(cronEndDate, cronEndDate instanceof Date ? null : GIDDH_DATE_FORMAT);
-            const next = moment(p);
+            const end = dayjs(cronEndDate, cronEndDate instanceof Date ? null : GIDDH_DATE_FORMAT);
+            const next = dayjs(p);
             if (end.isValid() && next.isAfter(end)) {
                 this.form.controls.cronEndDate?.patchValue('');
             }
@@ -75,8 +75,8 @@ export class AsideMenuRecurringEntryComponent implements OnInit, OnChanges, OnDe
             this.form?.patchValue({
                 voucherNumber: this.invoice.voucherNumber,
                 duration: this.invoice.duration.toLowerCase(),
-                nextCronDate: this.invoice.nextCronDate && moment(this.invoice.nextCronDate, GIDDH_DATE_FORMAT).toDate(),
-                cronEndDate: this.invoice.cronEndDate && moment(this.invoice.cronEndDate, GIDDH_DATE_FORMAT).toDate()
+                nextCronDate: this.invoice.nextCronDate && dayjs(this.invoice.nextCronDate, GIDDH_DATE_FORMAT).toDate(),
+                cronEndDate: this.invoice.cronEndDate && dayjs(this.invoice.cronEndDate, GIDDH_DATE_FORMAT).toDate()
             });
             if (!this.invoice.cronEndDate) {
                 this.isExpirableChanged({ checked: true });
@@ -159,7 +159,7 @@ export class AsideMenuRecurringEntryComponent implements OnInit, OnChanges, OnDe
     }
 
     public getFormattedDate(date): string {
-        return moment(date, date instanceof Date ? null : GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+        return dayjs(date, date instanceof Date ? null : GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
     }
 
     public ngOnDestroy() {

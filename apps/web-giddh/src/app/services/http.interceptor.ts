@@ -53,11 +53,7 @@ export class GiddhHttpInterceptor implements HttpInterceptor {
                 )),
                 // now catch all other errors
                 catchError((error) => {
-                    if (retryAttempts === 1) {
-                        return throwError(error);
-                    } else {
-                        return empty();
-                    }
+                    return throwError(error);
                 })
             );
         } else {

@@ -16,11 +16,11 @@
                     {{ localeData?.gstr1_label }}
 
                     <ng-container *ngIf="isMonthSelected">
-                        ({{ moment(currentPeriod.from, giddhDateFormat).format("MMMM YYYY") }})
+                        ({{ dayjs(currentPeriod.from, giddhDateFormat).format("MMMM YYYY") }})
                     </ng-container>
                     <ng-container *ngIf="!isMonthSelected">
-                        ({{ moment(currentPeriod.from, giddhDateFormat).format("DD MMM YYYY") }} -
-                        {{ moment(currentPeriod.to, giddhDateFormat).format("DD MMM YYYY") }})
+                        ({{ dayjs(currentPeriod.from, giddhDateFormat).format("DD MMM YYYY") }} -
+                        {{ dayjs(currentPeriod.to, giddhDateFormat).format("DD MMM YYYY") }})
                     </ng-container>
                 </div>
                 <div class="font-xs text-muted text-middle normal">{{ localeData?.outward_supplies_details }}</div>
@@ -91,11 +91,11 @@
                 {{ localeData?.gstr2_label }}
 
                 <ng-container *ngIf="isMonthSelected">
-                    ({{ moment(currentPeriod.from, giddhDateFormat).format("MMMM YYYY") }})
+                    ({{ dayjs(currentPeriod.from, giddhDateFormat).format("MMMM YYYY") }})
                 </ng-container>
                 <ng-container *ngIf="!isMonthSelected">
-                    ({{ moment(currentPeriod.from, giddhDateFormat).format("DD MMM YYYY") }} -
-                    {{ moment(currentPeriod.to, giddhDateFormat).format("DD MMM YYYY") }})
+                    ({{ dayjs(currentPeriod.from, giddhDateFormat).format("DD MMM YYYY") }} -
+                    {{ dayjs(currentPeriod.to, giddhDateFormat).format("DD MMM YYYY") }})
                 </ng-container>
             </div>
             <div class="font-xs text-muted text-middle normal">{{ localeData?.inward_supplies_details }}</div>

@@ -167,7 +167,7 @@
                                 <div class="clearfix">
                                     <div class="row">
                                         <!-- region customer name -->
-                                        <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3 col-xs-12">
+                                        <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3">
                                             <label
                                                 >{{
                                                     !isPurchaseInvoice && !isDebitNote
@@ -179,9 +179,7 @@
                                         <!-- endregion -->
 
                                         <!-- region customer dropdown -->
-                                        <div
-                                            class="col-sm-12 col-xl-7 col-lg-8 col-md-9 col-xs-12 select-customer-name"
-                                        >
+                                        <div class="col-sm-12 col-xl-7 col-lg-8 col-md-9 select-customer-name">
                                             <div class="clearfix d-flex flex-column">
                                                 <div class="d-flex">
                                                     <!-- region if not cashinvoice show customer dropdown -->
@@ -530,7 +528,6 @@
                                                                             class="col-sm-6 col-md-6"
                                                                             *ngIf="shouldShowTrnGstField"
                                                                         >
-                                                                            <!-- <label>GSTIN</label> -->
                                                                             <input
                                                                                 maxLength="15"
                                                                                 autocomplete="None"
@@ -972,11 +969,11 @@
                             <div class="inner-container">
                                 <!-- region attention to -->
                                 <div class="row">
-                                    <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3 col-xs-12">
+                                    <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3">
                                         <label>{{ localeData?.attention_to }}</label>
                                     </div>
 
-                                    <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12">
+                                    <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9">
                                         <div class="pl-0 col-sm-12 col-xl-6 col-lg-10 col-md-10">
                                             <input
                                                 type="text"
@@ -995,7 +992,7 @@
                                     <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3">
                                         <label>{{ commonLocaleData?.app_email_id }}</label>
                                     </div>
-                                    <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12">
+                                    <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9">
                                         <div class="col-sm-12 col-xl-6 col-lg-10 col-md-10 pl-0">
                                             <input
                                                 type="email"
@@ -1012,7 +1009,7 @@
 
                                 <!-- region mobile no -->
                                 <div class="row mt-1">
-                                    <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3 col-xs-12">
+                                    <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3">
                                         <label>{{ commonLocaleData?.app_mobile_number }}</label>
                                     </div>
                                     <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12">
@@ -1058,10 +1055,10 @@
                                     class="row mt-1"
                                     *ngIf="shouldShowWarehouse && warehouses && warehouses.length > 1"
                                 >
-                                    <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3 col-xs-12">
+                                    <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3">
                                         <label>{{ commonLocaleData?.app_warehouse }}</label>
                                     </div>
-                                    <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12">
+                                    <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9">
                                         <div class="col-sm-12 col-xl-6 col-lg-10 col-md-10 pl-0">
                                             <sh-select
                                                 class="multi-select"
@@ -1077,11 +1074,11 @@
                                 </div>
                                 <!-- end warehouse field -->
 
-                                <div class="row mt-1 delivery-from-field" *ngIf="isPurchaseInvoice">
+                                <div class="row mb-1 delivery-from-field" *ngIf="isPurchaseInvoice">
                                     <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3">
                                         <label>{{ localeData?.deliver_to }}<span class="red-text">*</span></label>
                                     </div>
-                                    <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12 select-customer-name">
+                                    <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 select-customer-name">
                                         <section class="form-inline">
                                             <div class="wrap-billing-address w-100 clearfix">
                                                 <div class="row">
@@ -1432,10 +1429,10 @@
                                         (!isUpdateMode || (isUpdateMode && poLinkUpdated))
                                     "
                                 >
-                                    <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3 col-xs-12">
+                                    <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3">
                                         <label>{{ localeData?.link_purchase_order }}</label>
                                     </div>
-                                    <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12">
+                                    <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9">
                                         <div class="col-xl-6 col-lg-10 col-md-10 pl-0">
                                             <sh-select
                                                 [options]="purchaseOrders"
@@ -1489,7 +1486,7 @@
                                     <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3">
                                         <label> {{ invoiceNoLabel }} </label>
                                     </div>
-                                    <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12">
+                                    <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9">
                                         <div class="col-sm-12 col-xl-6 col-lg-5 col-md-10 pl-0">
                                             <!-- Enabled for CR/DR update flow -->
                                             <div>
@@ -1632,7 +1629,7 @@
                                                         [placeholder]="giddhDateFormat"
                                                         #voucherDate="ngModel"
                                                         name="voucherDate"
-                                                        class="form-control dateinvoice"
+                                                        class="form-control date-invoice"
                                                         bsDatepicker
                                                         [bsConfig]="{ dateInputFormat: giddhDateFormat }"
                                                         [(ngModel)]="invFormData.voucherDetails.voucherDate"
@@ -1731,7 +1728,7 @@
                                     <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3">
                                         <label>{{ invoiceDateLabel }}</label>
                                     </div>
-                                    <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12">
+                                    <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9">
                                         <div class="col-sm-12 col-xl-6 col-lg-10 col-md-10 pl-0">
                                             <input
                                                 type="text"
@@ -1778,7 +1775,7 @@
                                     <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3">
                                         <label>{{ invoiceDueDateLabel }}</label>
                                     </div>
-                                    <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12">
+                                    <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9">
                                         <div class="col-sm-12 col-xl-6 col-lg-10 col-md-10 pl-0">
                                             <input
                                                 type="text"
@@ -1815,7 +1812,7 @@
                                     <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3" *ngIf="!isMobileView">
                                         <label></label>
                                     </div>
-                                    <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12">
+                                    <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9">
                                         <div class="col-sm-6 col-xl-6 col-lg-10 col-md-10 pl-0">
                                             <input
                                                 id="reverse-charge"
@@ -1854,7 +1851,7 @@
                                         <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3" *ngIf="!isMobileView">
                                             <label></label>
                                         </div>
-                                        <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12">
+                                        <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9">
                                             <div class="col-sm-12 col-xl-6 col-lg-10 col-md-10 pl-0">
                                                 <input
                                                     id="tourist-scheme"
@@ -1876,10 +1873,10 @@
                                         class="row mt-1"
                                         *ngIf="(isSalesInvoice || isCashInvoice) && invFormData.touristSchemeApplicable"
                                     >
-                                        <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3 col-xs-12">
+                                        <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3">
                                             <label>{{ localeData?.passport_number }}</label>
                                         </div>
-                                        <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12">
+                                        <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9">
                                             <div class="col-sm-12 col-xl-6 col-lg-10 col-md-10 pl-0">
                                                 <input
                                                     type="text"
@@ -1919,7 +1916,6 @@
                         *ngIf="!isMobileScreen"
                     >
                         <ng-container>
-                            <!-- switch currency on click, remaining functional work , UI is completed -->
                             <div class="switch-currency" *ngIf="isMulticurrencyAccount && !showSwitchedCurr">
                                 <span class="left-currency"
                                     >{{ commonLocaleData?.app_numbers?.one }} {{ companyCurrencyName }}</span
@@ -2292,7 +2288,7 @@
                                     </td>
                                     <td class="text-right item-tax delete-btn-absolute">
                                         <div class="td-wrapper">
-                                            <div class="flex-fill">
+                                            <div class="flex-grow-1">
                                                 <div class="wrap-td-data">
                                                     <span class="d-flex justify-content-end">
                                                         <amount-field
@@ -2572,6 +2568,7 @@
                                                                     </span>
                                                                 </span>
                                                             </div>
+
                                                             <div class="hsn-code-dropdown" *ngIf="hsnDropdownShow">
                                                                 <div class="d-flex wrap-hsn-sac mb-2 mt-3">
                                                                     <span>
@@ -2678,7 +2675,7 @@
                                             "
                                         >
                                             <option *ngFor="let stock of transaction.stockList" [ngValue]="stock.id">
-                                                {{ stock.text }}
+                                                {{ stock.id }}
                                             </option>
                                         </select>
                                     </td>
@@ -2769,6 +2766,7 @@
                                                 <discount-control-component
                                                     #discountComponent
                                                     [discountMenu]="false"
+                                                    [discountsList]="discountsList"
                                                     [discountAccountsDetails]="entry.discounts"
                                                     [discountSum]="entry.discountSum"
                                                     [showHeaderText]="false"
@@ -2852,7 +2850,7 @@
                                                     [prefix]="invFormData.accountDetails.currencySymbol"
                                                     [suffix]="selectedSuffixForCurrency"
                                                     [mask]="inputMaskFormat"
-                                                    (blur)="calculateTransactionValueInclusively(entry, transaction)"
+                                                    (change)="calculateTransactionValueInclusively(entry, transaction)"
                                                 />
 
                                                 <div *ngIf="isTcsTdsApplicable" class="wrap-other-tax">
@@ -3161,7 +3159,7 @@
                                             ngFileSelect
                                             [uploadInput]="uploadInput"
                                             (uploadOutput)="onUploadOutput($event)"
-                                            (change)="onFileChange($event.target)"
+                                            (change)="onFileChange($event?.target)"
                                             droppable="true"
                                         />
                                     </label>
@@ -3540,6 +3538,7 @@
                                                                             ></a>
                                                                         </div>
                                                                     </div>
+
                                                                     <label class="pull-right">{{
                                                                         localeData?.adjust_amount
                                                                     }}</label>
@@ -4129,7 +4128,7 @@
                                                         <!-- region entry date/ hsncode -->
                                                         <div class="date-hsn-code">
                                                             <div class="row">
-                                                                <div class="col-xs-6 col-sm-6 pr-0">
+                                                                <div class="col-6 pr-0">
                                                                     <div class="entry-date">
                                                                         <label>{{ localeData?.entry_date }}: </label>
 
@@ -4471,6 +4470,7 @@
                                                         <discount-control-component
                                                             #discountComponent
                                                             [discountMenu]="false"
+                                                            [discountsList]="discountsList"
                                                             [discountAccountsDetails]="entry.discounts"
                                                             [discountSum]="entry.discountSum"
                                                             [showHeaderText]="false"
@@ -4562,7 +4562,7 @@
                                                             type="tel"
                                                             name="transaction.total_{{ entryIdx }}"
                                                             class="form-control text-right"
-                                                            (blur)="
+                                                            (change)="
                                                                 calculateTransactionValueInclusively(entry, transaction)
                                                             "
                                                             [(ngModel)]="transaction.total"

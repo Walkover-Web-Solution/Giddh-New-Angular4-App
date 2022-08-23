@@ -18,7 +18,7 @@ import { each } from 'apps/web-giddh/src/app/lodash-optimized';
 import { Account, ChildGroup } from 'apps/web-giddh/src/app/models/api-models/Search';
 import { BalanceSheetData } from 'apps/web-giddh/src/app/models/api-models/tb-pl-bs';
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
-import * as moment from 'moment/moment';
+import * as dayjs from 'dayjs';
 import { ReplaySubject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
 
@@ -34,7 +34,7 @@ export class BalanceSheetGridComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public search: string = '';
     @Input() public bsData: BalanceSheetData;
     @Input() public padding: string;
-    public moment = moment;
+    public dayjs = dayjs;
     @Input() public expandAll: boolean;
     @Input() public searchInput: string = '';
     @Input() public from: string = '';

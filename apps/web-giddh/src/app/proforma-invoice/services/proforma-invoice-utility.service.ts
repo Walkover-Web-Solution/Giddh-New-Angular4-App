@@ -1,11 +1,9 @@
 import { Injectable } from '@angular/core';
 import { GIDDH_VOUCHER_FORM } from '../../app.constant';
-import {
-    ConfirmationModalButton,
-    ConfirmationModalConfiguration,
-} from '../../common/confirmation-modal/confirmation-modal.interface';
+import { ConfirmationModalButton, ConfirmationModalConfiguration } from '../../common/confirmation-modal/confirmation-modal.interface';
 import { VoucherTypeEnum } from '../../models/api-models/Sales';
 import { VoucherForm } from '../../models/api-models/Voucher';
+import * as cleaner from 'fast-clean';
 
 @Injectable({
     providedIn: 'any'
@@ -134,5 +132,26 @@ export class ProformaInvoiceUtilityService {
         } else {
             return GIDDH_VOUCHER_FORM.find(form => form.type === voucherType);
         }
+    }
+
+    /**
+     * This will clean the voucher object
+     *
+     * @param {*} updatedData
+     * @returns {*}
+     * @memberof ProformaInvoiceUtilityService
+     */
+    public cleanObject(updatedData: any): any {
+        delete updatedData?.account?.billingDetails?.country;
+        delete updatedData?.account?.billingDetails?.state?.name;
+        delete updatedData?.account?.shippingDetails?.country;
+        delete updatedData?.account?.shippingDetails?.state?.name;
+        delete updatedData?.account?.currency;
+        delete updatedData?.account?.currencyCode;
+        delete updatedData?.account?.currencySymbol;
+
+        return cleaner?.clean(updatedData, {
+            nullCleaner: true
+        });
     }
 }

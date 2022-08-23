@@ -1,8 +1,8 @@
 import { InjectionToken } from '@angular/core';
-import * as _moment from 'moment';
+import * as dayjs from 'dayjs';
+import * as localeData from 'dayjs/plugin/localeData' // load on demand
+dayjs.extend(localeData) // use plugin
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
-
-const moment = _moment;
 
 export const LOCALE_CONFIG = new InjectionToken<LocaleConfig>('daterangepicker.config');
 
@@ -32,8 +32,8 @@ export const DefaultLocaleConfig: LocaleConfig = {
     applyLabel: 'Apply',
     cancelLabel: 'Cancel',
     customRangeLabel: 'Custom range',
-    daysOfWeek: moment.weekdaysMin(),
-    monthNames: moment.monthsShort(),
-    firstDay: moment.localeData().firstDayOfWeek(),
+    daysOfWeek: dayjs.weekdaysMin(),
+    monthNames: dayjs.monthsShort(),
+    firstDay: dayjs.localeData().firstDayOfWeek(),
     format: GIDDH_DATE_FORMAT
 };

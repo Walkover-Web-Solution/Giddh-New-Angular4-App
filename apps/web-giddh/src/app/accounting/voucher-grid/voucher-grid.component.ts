@@ -10,9 +10,9 @@ import { AccountService } from './../../services/account.service';
 import { Observable, ReplaySubject } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../store/roots';
-import { AfterViewInit, Component, ComponentFactoryResolver, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
+import { AfterViewInit, Component, ComponentFactoryResolver, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { cloneDeep, forEach, isEqual, sumBy, filter, find, without, maxBy, findIndex } from 'apps/web-giddh/src/app/lodash-optimized';
-import * as moment from 'moment';
+import * as dayjs from 'dayjs';
 import { Router } from '@angular/router';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { ModalDirective } from 'ngx-bootstrap/modal';
@@ -79,7 +79,7 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
     public totalCreditAmount: number = 0;
     public totalDebitAmount: number = 0;
     public showConfirmationBox: boolean = false;
-    public moment = moment;
+    public dayjs = dayjs;
     public accountSearch: string;
     public selectedIdx: any;
     public isSelectedRow: boolean;
@@ -176,7 +176,7 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
         this.universalDate$.subscribe(dateObj => {
             if (dateObj) {
                 this.universalDate = cloneDeep(dateObj);
-                this.journalDate = moment(this.universalDate[1], GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                this.journalDate = dayjs(this.universalDate[1], GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
             }
         });
 
@@ -534,7 +534,7 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
      */
     public saveEntry() {
         let data = cloneDeep(this.requestObj);
-        data.entryDate = moment(this.journalDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+        data.entryDate = dayjs(this.journalDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
         data.transactions = this.validateTransaction(data.transactions);
 
         if (!data.transactions) {
@@ -624,8 +624,8 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
         this.showConfirmationBox = false;
         this.totalCreditAmount = 0;
         this.totalDebitAmount = 0;
-        this.requestObj.entryDate = moment().format(GIDDH_DATE_FORMAT);
-        this.journalDate = moment(this.universalDate[1], GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+        this.requestObj.entryDate = dayjs().format(GIDDH_DATE_FORMAT);
+        this.journalDate = dayjs(this.universalDate[1], GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
         this.requestObj.description = '';
         this.dateField?.nativeElement.focus();
         setTimeout(() => {
@@ -660,7 +660,7 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
      */
     public setDate(date) {
         this.showFromDatePicker = !this.showFromDatePicker;
-        this.requestObj.entryDate = moment(date).format(GIDDH_DATE_FORMAT);
+        this.requestObj.entryDate = dayjs(date).format(GIDDH_DATE_FORMAT);
     }
 
     /**
@@ -838,9 +838,9 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
     }
 
     public dateEntered() {
-        const date = moment(this.journalDate, GIDDH_DATE_FORMAT);
-        if (moment(date).format('dddd') !== 'Invalid date') {
-            this.displayDay = moment(date).format('dddd');
+        const date = dayjs(this.journalDate, GIDDH_DATE_FORMAT);
+        if (dayjs(date).format('dddd') !== 'Invalid date') {
+            this.displayDay = dayjs(date).format('dddd');
         } else {
             this.displayDay = '';
         }

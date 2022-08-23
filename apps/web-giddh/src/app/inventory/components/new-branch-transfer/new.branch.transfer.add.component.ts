@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
 import {
     CompanyResponse
 } from '../../../models/api-models/Company';
-import * as moment from 'moment/moment';
+import * as dayjs from 'dayjs';
 import { GeneralService } from '../../../services/general.service';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import {
@@ -857,9 +857,11 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
                     }
                 });
             }
+
             if (this.branchTransfer.destinations[index] && this.branchTransfer.destinations[index].uniqueName) {
                 // Update Destination warehouses
                 this.destinationWarehouses[this.branchTransfer.destinations[index].uniqueName] = [];
+
                 if (this.allWarehouses[this.branchTransfer.destinations[index].uniqueName] && this.allWarehouses[this.branchTransfer.destinations[index].uniqueName].length > 0) {
                     this.allWarehouses[this.branchTransfer.destinations[index].uniqueName].forEach(key => {
                         if (key.uniqueName !== this.branchTransfer.sources[index].warehouse.uniqueName &&
@@ -1040,10 +1042,10 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
 
     public submit(): void {
         this.isLoading = true;
-        this.branchTransfer.dateOfSupply = moment(this.tempDateParams.dateOfSupply).format(GIDDH_DATE_FORMAT);
+        this.branchTransfer.dateOfSupply = dayjs(this.tempDateParams.dateOfSupply).format(GIDDH_DATE_FORMAT);
 
         if (this.tempDateParams.dispatchedDate) {
-            this.branchTransfer.transporterDetails.dispatchedDate = moment(this.tempDateParams.dispatchedDate).format(GIDDH_DATE_FORMAT);
+            this.branchTransfer.transporterDetails.dispatchedDate = dayjs(this.tempDateParams.dispatchedDate).format(GIDDH_DATE_FORMAT);
         }
 
         this.branchTransfer.sources.forEach(source => {
@@ -1304,13 +1306,13 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
             branchName = hoBranch ? hoBranch.alias : '';
         }
         if (!this.editBranchTransferUniqueName) {
-            this.myCurrentCompany = this.isBranch ? branchName : hoBranch.alias;
+            this.myCurrentCompany = this.isBranch ? branchName : hoBranch?.alias;
             if (this.branchTransferMode === "deliverynote") {
                 this.branchTransfer.sources[0].uniqueName = selectedBranch ? selectedBranch.uniqueName : hoBranch?.uniqueName;
-                this.branchTransfer.sources[0].name = selectedBranch ? selectedBranch.name : hoBranch.name;
+                this.branchTransfer.sources[0].name = selectedBranch ? selectedBranch.name : hoBranch?.name;
             } else if (this.branchTransferMode === "receiptnote") {
                 this.branchTransfer.destinations[0].uniqueName = selectedBranch ? selectedBranch.uniqueName : hoBranch?.uniqueName;
-                this.branchTransfer.destinations[0].name = selectedBranch ? selectedBranch.name : hoBranch.name;
+                this.branchTransfer.destinations[0].name = selectedBranch ? selectedBranch.name : hoBranch?.name;
             }
         }
     }
