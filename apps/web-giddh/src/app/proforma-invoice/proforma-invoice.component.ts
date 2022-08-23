@@ -648,6 +648,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     public currentCompanyCountryCode: any = '';
     /** This will hold updatedNumber */
     public selectedCustomerNumber: any = '';
+    /** True if we need to destroy mobile number field */
+    public isMobileNumber: boolean = true;
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -1531,10 +1533,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     if (this.customerNameDropDown) {
                         this.customerNameDropDown.clear();
                     }
-
                     if (tempSelectedAcc) {
                         this.customerAcList$ = observableOf([{ label: tempSelectedAcc.name, value: tempSelectedAcc.uniqueName, additional: tempSelectedAcc }]);
                         this.invFormData.voucherDetails.customerName = tempSelectedAcc.name;
+                        this.selectedCustomerNumber = tempSelectedAcc.mobileNo ? "+" +tempSelectedAcc.mobileNo:'';
                         this.invFormData.voucherDetails.customerUniquename = tempSelectedAcc.uniqueName;
                         this.isCustomerSelected = true;
                         this.isMulticurrencyAccount = tempSelectedAcc.currencySymbol !== this.baseCurrencySymbol;
@@ -1584,6 +1586,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         if (tempSelectedAcc.addresses && tempSelectedAcc.addresses.length) {
                             tempSelectedAcc.addresses = [find(tempSelectedAcc.addresses, (tax) => tax.isDefault)];
                         }
+                        this.selectedCustomerNumber = tempSelectedAcc.mobileNo ? "+" + tempSelectedAcc.mobileNo : '';
                         this.invFormData.voucherDetails.customerUniquename = null;
                         this.invFormData.voucherDetails.customerName = tempSelectedAcc.name;
                         this.invFormData.accountDetails = new AccountDetailsClass(tempSelectedAcc);
@@ -2266,6 +2269,10 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     public resetInvoiceForm(f: NgForm) {
+        this.isMobileNumber = false;
+        setTimeout(() => {
+            this.isMobileNumber = true;
+        }, 50);
         if (f) {
             f.form.reset();
         }
@@ -5206,7 +5213,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         voucherClassConversion.accountDetails.billingDetails.gstNumber = result.account.billingDetails.gstNumber ?? result?.account?.billingDetails?.taxNumber;
         voucherClassConversion.accountDetails.billingDetails.state.code = this.getNewStateCode(result.account.billingDetails.stateCode ?? result?.account?.billingDetails?.state?.code);
         voucherClassConversion.accountDetails.billingDetails.state.name = result.account.billingDetails.stateName ?? result?.account?.billingDetails?.state?.name;
-        voucherClassConversion.accountDetails.mobileNumber = result.account.mobileNumber;
+        voucherClassConversion.accountDetails.mobileNumber = result?.account?.mobileNumber;
 
         voucherClassConversion.accountDetails.shippingDetails = new GstDetailsClass();
         if (result?.account?.shippingDetails) {
@@ -5940,6 +5947,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.customerAcList$ = observableOf(orderBy(this.defaultCustomerSuggestions, 'label'));
             this.salesAccounts$ = observableOf(orderBy(this.defaultItemSuggestions, 'label'));
             // reset form and other
+
             this.resetInvoiceForm(form);
 
             this.newVoucherUniqueName = response?.body?.uniqueName;

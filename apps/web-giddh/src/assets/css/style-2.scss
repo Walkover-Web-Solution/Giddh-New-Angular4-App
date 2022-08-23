@@ -10809,4 +10809,9 @@ input[type="checkbox"].cdk-visually-hidden::after {
         width: 402px;
         padding-left: 55px !important;
     }
+    .iti {
+        .search-container input {
+            padding-left: 10px !important;
+        }
+    }
 }
