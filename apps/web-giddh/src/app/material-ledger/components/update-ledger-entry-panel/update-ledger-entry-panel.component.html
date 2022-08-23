@@ -1114,7 +1114,7 @@
                                     [prefix]="vm.selectedPrefixForCurrency"
                                     [rawInputValue]="vm.grandTotal"
                                     [suffix]="vm.selectedSuffixForCurrency"
-                                    (blur)="vm.inventoryTotalChanged()"
+                                    (change)="vm.inventoryTotalChanged()"
                                     (keypress)="totalAmountChanged$.next(true)"
                                 />
                                 <p class="mb-0 amount-total pr-1 pb-1" *ngIf="vm.isMultiCurrencyAvailable">
