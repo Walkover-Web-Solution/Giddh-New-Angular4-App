@@ -115,9 +115,6 @@
                             "apps/web-giddh/src/assets/css/style-1.scss",
                             "apps/web-giddh/src/assets/css/style-2.scss",
                             "apps/web-giddh/src/assets/css/ladda-themeless.min.css",
-                            "apps/web-giddh/src/assets/css/perfect-scrollbar.component.scss",
-                            "apps/web-giddh/src/assets/css/toastr.css",
-                            "node_modules/ngx-lightbox/lightbox.css",
                             "node_modules/intl-tel-input/build/css/intlTelInput.css"
                         ],
                         "scripts": [
@@ -385,9 +382,6 @@
                             "apps/web-giddh/src/assets/css/style-1.scss",
                             "apps/web-giddh/src/assets/css/style-2.scss",
                             "apps/web-giddh/src/assets/css/ladda-themeless.min.css",
-                            "apps/web-giddh/src/assets/css/perfect-scrollbar.component.scss",
-                            "apps/web-giddh/src/assets/css/toastr.css",
-                            "node_modules/ngx-lightbox/lightbox.css",
                             "node_modules/intl-tel-input/build/css/intlTelInput.css"
                         ],
                         "scripts": [
