@@ -345,7 +345,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             this.getTransactionData();
         }
         // Después del éxito de la entrada. llamar para transacciones bancarias
-        this.lc.activeAccount$.pipe(takeUntil(this.destroyed$)).subscribe((data: AccountResponse) => {
+        this.lc.activeAccount$.pipe(take(1)).subscribe((data: AccountResponse) => {
             this.getBankTransactions();
         });
     }
@@ -785,7 +785,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 this.resetBlankTransaction();
                 this.resetPreviousSearchResults();
                 // After the success of the entrance call for bank transactions
-                this.lc.activeAccount$.pipe(takeUntil(this.destroyed$)).subscribe((data: AccountResponse) => {
+                this.lc.activeAccount$.pipe(take(1)).subscribe((data: AccountResponse) => {
                     this.loaderService.show();
                     this.getBankTransactions();
                 });
@@ -800,7 +800,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 this.trxRequest.q = term;
                 this.trxRequest.page = 0;
                 this.needToShowLoader = false;
-                this.getTransactionData();
+                if (term || this.trxRequest.q) {
+                    this.getTransactionData();
+                }
             });
 
         this.store.pipe(select(createSelector([(st: AppState) => st.general.addAndManageClosed], (yesOrNo: boolean) => {
