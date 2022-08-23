@@ -2263,7 +2263,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.firstBaseAccountSelected = resp[0].particular?.uniqueName;
 
         const initialAccounts: Array<IOption> = [];
-        this.vm.selectedLedger.transactions?.map(t => {
+        this.vm.selectedLedger.transactions?.map((t, index) => {
             t.amount = giddhRoundOff(t.amount, this.vm.giddhBalanceDecimalPlaces);
 
             if (this.vm.selectedLedger.discounts && this.vm.selectedLedger.discounts.length > 0 && !t?.isTax && t?.particular?.uniqueName !== 'roundoff') {
@@ -2275,7 +2275,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                      * so transaction amount of income/ expenses account differ from both the side
                      * so overcome this issue api provides the actual amount which was added by user while creating entry
                      */
-                    if (this.voucherApiVersion !== 2) {
+                    if (index === 0) {
                         t.amount = this.vm.selectedLedger.actualAmount;
                     }
                     // if transaction is stock transaction then also update inventory amount and recalculate inventory rate
