@@ -12,10 +12,6 @@ import { catchError, retryWhen, tap } from 'rxjs/operators';
 export class GiddhHttpInterceptor implements HttpInterceptor {
 
     private isOnline: boolean = navigator.onLine;
-    /** Holds api call retry limit */
-    private retryLimit: number = 0;
-    /** Holds api call retry attempts */
-    private retryAttempts: number = 0;
 
     constructor(
         private toasterService: ToasterService,
@@ -37,17 +33,22 @@ export class GiddhHttpInterceptor implements HttpInterceptor {
         }
         request = this.addLanguage(request);
         if (this.isOnline) {
+            /** Holds api call retry limit */
+            let retryLimit: number = 0;
+            /** Holds api call retry attempts */
+            let retryAttempts: number = 0;
+
             return next.handle(request).pipe(
                 // retryWhen operator should come before catchError operator as it is more specific
                 retryWhen(errors => errors.pipe(
                     // inside the retryWhen, use a tap operator to throw an error 
                     // if you don't want to retry
                     tap(error => {
-                        this.retryLimit = Number(error.headers.get("retry-after"));
-                        if (!error.headers.get("retry-after") || this.retryAttempts >= this.retryLimit) {
+                        retryLimit = Number(error.headers.get("retry-after"));
+                        if (!error.headers.get("retry-after") || retryAttempts >= retryLimit) {
                             throw error;
                         } else {
-                            this.retryAttempts++;
+                            retryAttempts++;
                         }
                     })
                 )),
