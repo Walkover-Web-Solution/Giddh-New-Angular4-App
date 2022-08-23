@@ -458,10 +458,10 @@
                                         [phoneValidation]="true"
                                         [numberFormat]="phoneNumberFormat.National"
                                         name="mobileNo"
-                                        formControlName="mobileNo"
                                         (countryChange)="checkNumber($event)"
                                         #mobileNo
                                         [selectedCountryISO]="currentCompanyCountryCode"
+                                        formControlName="mobileNo"
                                     >
                                     </ngx-intl-tel-input>
                                 </div>
@@ -471,7 +471,7 @@
                                         addAccountForm.controls['mobileNo'].touched &&
                                         addAccountForm.controls['mobileNo'].invalid
                                     "
-                                    >{{ localeData?.invalid_contact_number }}</span
+                                    >{{ localeData?.invalid_mobile_number }}</span
                                 >
                             </div>
                         </div>

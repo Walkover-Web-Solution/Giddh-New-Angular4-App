@@ -678,7 +678,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         } else {
             this.activeAccount$.pipe(take(1)).subscribe(activeAccountState => this.activeAccountName = activeAccountState?.uniqueName);
         }
-
         if (this.isHsnSacEnabledAcc) {
             delete accountRequest['addresses'];
         } else {
@@ -1772,7 +1771,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                     this.addAccountForm.get('hsnOrSac')?.patchValue('sac');
                 }
                 this.openingBalanceTypeChnaged(accountDetails.openingBalanceType);
-
                 this.toggleStateRequired();
                 setTimeout(() => {
                     this.generalService.invokeEvent.next(["accountEditing", acc]);
@@ -1792,11 +1790,11 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         this.store.dispatch(this.groupWithAccountsAction.HideAddAndManageFromOutside());
     }
 
-    /**
-    * This will check no and replace old country code with new country code
-    *
-    * @param {*} event
-    * @memberof AccountUpdateNewDetailsComponent
+    /**	
+    * This will check no and replace old country code with new country code	
+    *	
+    * @param {*} event	
+    * @memberof AccountUpdateNewDetailsComponent	
     */
     public checkNumber(event: any): void {
         if (event) {
