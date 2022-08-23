@@ -29,7 +29,7 @@
         <div *ngIf="isLoading">
             <giddh-page-loader></giddh-page-loader>
         </div>
-        <div class="table-content" *ngIf="!isLoading">
+        <div class="table-content" *ngIf="!isLoading && dataSource?.length">
             <table mat-table [dataSource]="dataSource" class="download-table">
                 <!-- Requested Date Column -->
                 <ng-container matColumnDef="requestedDate">
@@ -87,14 +87,14 @@
                 <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                 <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
             </table>
-            <section class="no-logs" *ngIf="!dataSource?.length && !isLoading">
-                <div class="no-data">
-                    <h1>{{ commonLocaleData?.app_no_record_found }}</h1>
-                </div>
-            </section>
         </div>
     </div>
 </ng-container>
+<section class="no-logs" *ngIf="!dataSource?.length && !isLoading">
+    <div class="no-data">
+        <h1>{{ commonLocaleData?.app_no_record_found }}</h1>
+    </div>
+</section>
 <div class="pagination-wrapper" *ngIf="downloadRequest?.totalItems > downloadRequest.count && !isLoading">
     <pagination
         [totalItems]="downloadRequest?.totalItems"

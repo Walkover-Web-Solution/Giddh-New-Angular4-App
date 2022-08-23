@@ -245,7 +245,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     /** True if we should select all checkbox */
     public showSelectAll: boolean = false;
     /** True if custom fields finished loading */
-    public customFieldsLoaded: boolean = false;
+    public customFieldsLoaded: boolean = true;
     /** Custom fields request */
     public customFieldsRequest: any = {
         page: 0,
@@ -254,6 +254,8 @@ export class ContactComponent implements OnInit, OnDestroy {
     };
     /** True, if custom date filter is selected or custom searching or sorting is performed */
     public showClearFilter: boolean = false;
+    /** True if it's default load */
+    public defaultLoad: boolean = true;
 
     constructor(public dialog: MatDialog, private store: Store<AppState>, private router: Router, private companyServices: CompanyService, private commonActions: CommonActions, private toaster: ToasterService,
         private contactService: ContactService, private settingsIntegrationActions: SettingsIntegrationActions, private companyActions: CompanyActions, private componentFactoryResolver: ComponentFactoryResolver,
@@ -393,8 +395,11 @@ export class ContactComponent implements OnInit, OnDestroy {
             debounceTime(1000),
             distinctUntilChanged(), takeUntil(this.destroyed$))
             .subscribe((term: any) => {
-                this.searchStr = term;
-                this.getAccounts(this.fromDate, this.toDate, null, "true", PAGINATION_LIMIT, term, this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
+                if (!this.defaultLoad) {
+                    this.searchStr = term;
+                    this.getAccounts(this.fromDate, this.toDate, null, "true", PAGINATION_LIMIT, term, this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
+                }
+                this.defaultLoad = false;
             });
 
         if (this.activeCompany && this.activeCompany.countryV2) {
@@ -524,15 +529,12 @@ export class ContactComponent implements OnInit, OnDestroy {
     }
 
     public goToRoute(part: string, additionalParams: string = "", accUniqueName: string) {
-        let url = location.href + `?returnUrl=${part}/${accUniqueName}`;
-
+        let url = location.href + `?returnUrl=${part}/${accUniqueName}`;                
         if (additionalParams) {
             url = `${url}${additionalParams}`;
         }
         if (isElectron) {
-            let ipcRenderer = (window as any).require('electron').ipcRenderer;
-            url = location.origin + location.pathname + `#./pages/${part}/${accUniqueName}`;
-            ipcRenderer.send('open-url', url);
+            this.router.navigate([`/pages/${part}/${accUniqueName}`]);
         } else {
             (window as any).open(url);
         }
@@ -1012,8 +1014,10 @@ export class ContactComponent implements OnInit, OnDestroy {
         this.isAdvanceSearchApplied = false;
         this.key = (this.activeTab === "vendor") ? "amountDue" : "name";
         this.order = (this.activeTab === "vendor") ? "desc" : "asc";
-        this.getAccounts(this.fromDate, this.toDate,
-            null, "true", PAGINATION_LIMIT, "", "", null, (this.currentBranch ? this.currentBranch.uniqueName : ""));
+        if (!this.searchedName?.value) {
+            this.getAccounts(this.fromDate, this.toDate,
+                null, "true", PAGINATION_LIMIT, "", "", null, (this.currentBranch ? this.currentBranch.uniqueName : ""));
+        }
         this.searchedName?.reset();
         this.searchStr = "";
         this.showNameSearch = false;
@@ -1142,7 +1146,7 @@ export class ContactComponent implements OnInit, OnDestroy {
         this.currentPage = pageNumber;
         let groupUniqueName = (this.activeTab === "customer") ? "sundrydebtors" : "sundrycreditors";
 
-        if (this.activeTab === "aging-report") {
+        if (this.activeTab === "aging-report" || (!this.todaySelected && (!fromDate || !toDate))) {
             return;
         }
 
@@ -1187,13 +1191,13 @@ export class ContactComponent implements OnInit, OnDestroy {
                     });
                     this.sundryDebtorsAccounts = cloneDeep(res.body.results);
                     this.sundryDebtorsAccounts = this.sundryDebtorsAccounts.map(element => {
-                        let customFields = [];
-                        element.customFields?.forEach(field => {
-                            customFields[field?.uniqueName] = [];
-                            customFields[field?.uniqueName] = field;
-                        });
+                        // let customFields = [];
+                        // element.customFields?.forEach(field => {
+                        //     customFields[field?.uniqueName] = [];
+                        //     customFields[field?.uniqueName] = field;
+                        // });
 
-                        element.customFields = customFields;
+                        // element.customFields = customFields;
 
                         let indexOfItem = this.selectedCheckedContacts.indexOf(element?.uniqueName);
                         if (indexOfItem === -1) {
@@ -1215,13 +1219,13 @@ export class ContactComponent implements OnInit, OnDestroy {
                     });
                     this.sundryCreditorsAccounts = cloneDeep(res.body.results);
                     this.sundryCreditorsAccounts = this.sundryCreditorsAccounts.map(element => {
-                        let customFields = [];
-                        element.customFields?.forEach(field => {
-                            customFields[field?.uniqueName] = [];
-                            customFields[field?.uniqueName] = field;
-                        });
+                        // let customFields = [];
+                        // element.customFields?.forEach(field => {
+                        //     customFields[field?.uniqueName] = [];
+                        //     customFields[field?.uniqueName] = field;
+                        // });
 
-                        element.customFields = customFields;
+                        // element.customFields = customFields;
 
                         let indexOfItem = this.selectedCheckedContacts.indexOf(element?.uniqueName);
                         if (indexOfItem === -1) {
@@ -1609,7 +1613,7 @@ export class ContactComponent implements OnInit, OnDestroy {
             this.addNewFieldFilters(availableColumns);
             this.setTableColspan();
 
-            this.getCompanyCustomField();
+            //this.getCompanyCustomField();
         }
     }
 

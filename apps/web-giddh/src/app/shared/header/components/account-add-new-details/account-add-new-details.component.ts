@@ -225,7 +225,9 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         this.initializeNewForm();
         this.activeGroup$.subscribe(response => {
             if (response) {
-                if (response.parentGroups && response.parentGroups.length) {
+                if (this.activeGroupUniqueName && response.uniqueName !== this.activeGroupUniqueName) {
+                    this.store.dispatch(this.groupWithAccountsAction.getGroupDetails(this.activeGroupUniqueName));
+                } else if (response.parentGroups && response.parentGroups.length) {
                     let parent = response.parentGroups;
                     const HSN_SAC_PARENT_GROUPS = ['revenuefromoperations', 'otherincome', 'operatingcost', 'indirectexpenses'];
                     if (parent?.length > 1 && parent[1]) {
@@ -362,7 +364,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
 
     public initializeNewForm() {
         this.addAccountForm = this._fb.group({
-            activeGroupUniqueName: [''],
+            activeGroupUniqueName: ['', Validators.required],
             name: ['', Validators.compose([Validators.required, Validators.maxLength(100)])],
             uniqueName: [''],
             openingBalanceType: ['CREDIT'],
@@ -640,7 +642,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     }
 
     public selectGroup(event: IOption) {
-        if (event) {
+        if (event?.value) {
             this.activeGroupUniqueName = event.value;
             this.store.dispatch(this.groupWithAccountsAction.getGroupDetails(this.activeGroupUniqueName));
             this.isParentDebtorCreditor(this.activeGroupUniqueName);

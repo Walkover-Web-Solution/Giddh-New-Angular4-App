@@ -83,6 +83,8 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
     public enableBillToBill: boolean = false;
     /** This will use for bill to bill value*/
     public emailTypeBillToBill: string;
+    /** This will use for stop multiple hit api*/
+    public isLoading: boolean = false;
 
     constructor(private ledgerService: LedgerService, private toaster: ToasterService, private permissionDataService: PermissionDataService, private store: Store<AppState>, private generalService: GeneralService, @Inject(MAT_DIALOG_DATA) public inputData, public dialogRef: MatDialogRef<any>, private changeDetectorRef: ChangeDetectorRef, private modalService: BsModalService, private router: Router) {
         this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
@@ -137,6 +139,7 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
      * @memberof ExportLedgerComponent
      */
     public exportLedger() {
+        this.isLoading = true;
         let exportByInvoiceNumber: boolean = this.emailTypeSelected === 'admin-condensed' ? false : this.withInvoiceNumber;
 
         let exportRequest = new ExportLedgerRequest();
@@ -164,6 +167,8 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
         }
         if (this.voucherApiVersion === 2 && this.emailTypeSelected === 'billToBill') {
             this.ledgerService.exportBillToBillLedger(exportRequest, this.inputData?.accountUniqueName).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
+                this.isLoading = false;
+                this.changeDetectorRef.detectChanges();
                 if (response?.status === "success") {
                     if (response?.body?.type === "message") {
                         this.toaster.showSnackBar("success", response.body.file);
@@ -177,6 +182,8 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
             });
         } else {
             this.ledgerService.ExportLedger(exportRequest, this.inputData?.accountUniqueName, body.dataToSend, exportByInvoiceNumber).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                this.isLoading = false;
+                this.changeDetectorRef.detectChanges();
                 if (response.status === 'success') {
                     if (response.body) {
                         if (this.emailTypeSelected === 'admin-detailed') {

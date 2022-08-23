@@ -968,16 +968,21 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         this.store.dispatch(this.accountsAction.moveAccount(grpObject, activeAcc?.uniqueName, this.activeGroupUniqueName));
         this.moveAccountForm.reset();
     }
+
+    /**
+     * This will use for merger accounts
+     *
+     * @return {*} 
+     * @memberof AccountUpdateNewDetailsComponent
+     */
     public mergeAccounts() {
         let activeAccount: AccountResponseV2 = null;
         this.activeAccount$.pipe(take(1)).subscribe(p => activeAccount = p);
         let finalData: AccountMergeRequest[] = [];
-        if (this.selectedaccountForMerge?.length) {
-            this.selectedaccountForMerge.map((acc) => {
-                let obj = new AccountMergeRequest();
-                obj.uniqueName = acc;
-                finalData.push(obj);
-            });
+        if (this.selectedaccountForMerge) {
+            let obj = new AccountMergeRequest();
+            obj.uniqueName = this.selectedaccountForMerge;
+            finalData.push(obj);
             this.store.dispatch(this.accountsAction.mergeAccount(activeAccount?.uniqueName, finalData));
             this.showDeleteMove = false;
         } else {
