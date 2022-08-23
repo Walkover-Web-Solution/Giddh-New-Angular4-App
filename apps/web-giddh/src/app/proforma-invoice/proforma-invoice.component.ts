@@ -649,7 +649,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     /** This will hold updatedNumber */
     public selectedCustomerNumber: any = '';
     /** True if we need to destroy mobile number field */
-    public isMobileNumber: boolean = true;
+    public showMobileNumberField: boolean = true;
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -2269,9 +2269,9 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     public resetInvoiceForm(f: NgForm) {
-        this.isMobileNumber = false;
+        this.showMobileNumberField = false;
         setTimeout(() => {
-            this.isMobileNumber = true;
+            this.showMobileNumberField = true;
         }, 50);
         if (f) {
             f.form.reset();
