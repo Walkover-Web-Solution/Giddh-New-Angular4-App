@@ -489,12 +489,12 @@ export class UpdateLedgerVm {
 
             // update every transaction conversion rates for multi-currency
             if (this.selectedLedger.transactions && this.selectedLedger.transactions.length > 0) {
-                this.selectedLedger.transactions = this.selectedLedger.transactions.map(t => {
+                this.selectedLedger.transactions = this.selectedLedger.transactions.map((t, i) => {
                     let category = this.getAccountCategory(t?.particular, t?.particular?.uniqueName);
 
                     // find account that's from category income || expenses || fixed assets and update it's amount too
                     if (category && this.isValidCategory(category) && !t.isTax) {
-                        if (this.voucherApiVersion !== 2) {
+                        if (i === 0) {
                             t.amount = giddhRoundOff(Number(this.totalAmount), this.giddhBalanceDecimalPlaces);
                         }
                         t.isUpdated = true;
