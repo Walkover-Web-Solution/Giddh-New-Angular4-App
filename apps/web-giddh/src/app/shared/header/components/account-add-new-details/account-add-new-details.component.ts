@@ -1235,12 +1235,12 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         this.store.dispatch(this.groupWithAccountsAction.HideAddAndManageFromOutside());
     }
 
-    /**
-     * This will check no and replace old country code with new country code
-     *
-     * @param {*} event
-     * @memberof AccountAddNewDetailsComponent
-     */
+    /**	
+    * This will check no and replace old country code with new country code	
+    *	
+    * @param {*} event	
+    * @memberof AccountAddNewDetailsComponent	
+    */
     public checkNumber(event: any): void {
         if (event) {
             this.newCountryCode = "+" + event?.dialCode;

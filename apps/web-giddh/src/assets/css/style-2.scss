@@ -11136,3 +11136,16 @@ hamburger-menu {
         }
     }
 }
+.ngx-wrapper {
+    margin-top: 10px !important;
+    margin-bottom: 10px !important;
+    ngx-intl-tel-input input {
+        width: 402px;
+        padding-left: 55px !important;
+    }
+    .iti {
+        .search-container input {
+            padding-left: 10px !important;
+        }
+    }
+}
