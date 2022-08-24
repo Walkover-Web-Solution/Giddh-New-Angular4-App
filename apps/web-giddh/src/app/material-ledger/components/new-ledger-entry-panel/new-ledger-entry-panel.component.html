@@ -350,6 +350,7 @@
                 <div class="text-right mr-b1" *ngIf="currentTxn?.selectedAccount && showOtherTax">
                     <ng-container *ngIf="isTcsTdsApplicable">
                         <mat-checkbox
+                            [checked]="blankLedger.isOtherTaxesApplicable"
                             color="primary"
                             [disabled]="isReadOnly"
                             id="ledger-other-tax"
@@ -1084,7 +1085,7 @@
     [@slideInOut]="asideMenuStateForOtherTaxes"
     [taxes]="companyTaxesList"
     [commonLocaleData]="commonLocaleData"
-    (closeModal)="toggleOtherTaxesAsidePane(true)"
+    (closeModal)="closeAsideMenuStateForOtherTax()"
     (applyTaxes)="calculateOtherTaxes($event); toggleOtherTaxesAsidePane(true); emitOtherTaxes()"
 >
 </app-aside-menu-sales-other-taxes>
