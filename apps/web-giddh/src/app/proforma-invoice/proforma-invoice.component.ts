@@ -1536,7 +1536,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     if (tempSelectedAcc) {
                         this.customerAcList$ = observableOf([{ label: tempSelectedAcc.name, value: tempSelectedAcc.uniqueName, additional: tempSelectedAcc }]);
                         this.invFormData.voucherDetails.customerName = tempSelectedAcc.name;
-                        this.selectedCustomerNumber = tempSelectedAcc.mobileNo ? "+" +tempSelectedAcc.mobileNo:'';
+                        this.selectedCustomerNumber = tempSelectedAcc.mobileNo ? "+" + tempSelectedAcc.mobileNo : '';
                         this.invFormData.voucherDetails.customerUniquename = tempSelectedAcc.uniqueName;
                         this.isCustomerSelected = true;
                         this.isMulticurrencyAccount = tempSelectedAcc.currencySymbol !== this.baseCurrencySymbol;
@@ -2349,7 +2349,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.createEmbeddedViewAtIndex(0);
     }
 
-    public triggerSubmitInvoiceForm(form: NgForm, isUpdate) {        
+    public triggerSubmitInvoiceForm(form: NgForm, isUpdate) {
         this.updateAccount = isUpdate;
         if (this.isPendingVoucherType) {
             this.startLoader(true);
@@ -2390,7 +2390,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         }
     }
 
-    public onSubmitInvoiceForm(form?: NgForm) {        
+    public onSubmitInvoiceForm(form?: NgForm) {
         if ((this.isSalesInvoice || this.isPurchaseInvoice) && this.depositAccountUniqueName && (this.userDeposit === null || this.userDeposit === undefined)) {
             this._toasty.errorToast(this.localeData?.enter_amount);
             this.startLoader(false);
@@ -4111,7 +4111,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      * @param {NgForm} invoiceForm Form instance for values
      * @memberof ProformaInvoiceComponent
      */
-    private handleUpdateInvoiceForm(invoiceForm: NgForm): void {        
+    private handleUpdateInvoiceForm(invoiceForm: NgForm): void {
         let requestObject: any = this.prepareDataForApi();
         if (!requestObject) {
             this.startLoader(false);
@@ -4174,7 +4174,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
                 salesEntryClassArray.push(salesEntryClass);
             });
-
             requestObject = {
                 account: data.accountDetails,
                 updateAccountDetails: this.updateAccount,
@@ -4209,7 +4208,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     this.startLoader(false);
                     return;
                 }
-
+                data.accountDetails.mobileNumber = this.selectedCustomerNumber?.e164Number;
                 const deposit = this.getDeposit();
                 requestObject = {
                     account: data.accountDetails,
