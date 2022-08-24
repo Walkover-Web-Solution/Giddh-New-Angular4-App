@@ -367,17 +367,17 @@ export class LedgerComponent implements OnInit, OnDestroy {
         let requestObject;
         if (e.additional.stock) {
             requestObject = {
-                stockUniqueName: e.additional.stock.uniqueName,
+                stockUniqueName: e.additional.stock?.uniqueName,
                 oppositeAccountUniqueName: e.additional?.uniqueName
             };
         }
-        const currentLedgerCategory = this.lc.activeAccount ? this.generalService.getAccountCategory(this.lc.activeAccount, this.lc.activeAccount.uniqueName) : '';
+        const currentLedgerCategory = this.lc.activeAccount ? this.generalService.getAccountCategory(this.lc.activeAccount, this.lc.activeAccount?.uniqueName) : '';
         /** If current ledger is of income or expense category then send current ledger unique name else send particular account unique name
             to fetch the correct stock details as the first preference is always the current ledger account and then particular account
             This logic is only required in ledger.
         */
         const accountUniqueName = e.additional.stock && (currentLedgerCategory === 'income' || currentLedgerCategory === 'expenses') ?
-            this.lc.activeAccount ? this.lc.activeAccount.uniqueName : '' :
+            this.lc.activeAccount ? this.lc.activeAccount?.uniqueName : '' :
             e.additional?.uniqueName;
         this.searchService.loadDetails(accountUniqueName, requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
             if (data && data.body) {
@@ -534,7 +534,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     this.currentCompanyBranches.unshift({
                         label: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : '',
                         name: this.activeCompany ? this.activeCompany.name : '',
-                        value: this.activeCompany ? this.activeCompany.uniqueName : '',
+                        value: this.activeCompany ? this.activeCompany?.uniqueName : '',
                         isCompany: true
                     });
                     let currentBranchUniqueName;
@@ -546,11 +546,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
                             currentBranchUniqueName = this.generalService.currentBranchUniqueName;
                             this.currentBranch = _.cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName)) || this.currentBranch;
                         } else {
-                            currentBranchUniqueName = this.activeCompany ? this.activeCompany.uniqueName : '';
+                            currentBranchUniqueName = this.activeCompany ? this.activeCompany?.uniqueName : '';
                             this.currentBranch = {
                                 name: this.activeCompany ? this.activeCompany.name : '',
                                 alias: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : '',
-                                uniqueName: this.activeCompany ? this.activeCompany.uniqueName : '',
+                                uniqueName: this.activeCompany ? this.activeCompany?.uniqueName : '',
                             };
                         }
                     }
@@ -1464,10 +1464,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
         if (!this.preventDefaultScrollApiCall &&
             (query || (this.defaultSuggestions && this.defaultSuggestions.length === 0) || successCallback)) {
             // Call the API when either query is provided, default suggestions are not present or success callback is provided
-            const currentLedgerCategory = this.lc.activeAccount ? this.generalService.getAccountCategory(this.lc.activeAccount, this.lc.activeAccount.uniqueName) : '';
+            const currentLedgerCategory = this.lc.activeAccount ? this.generalService.getAccountCategory(this.lc.activeAccount, this.lc.activeAccount?.uniqueName) : '';
             // If current ledger is of income or expense category then send current ledger as stockAccountUniqueName. Only required for ledger.
             const accountUniqueName = (currentLedgerCategory === 'income' || currentLedgerCategory === 'expenses') ?
-                this.lc.activeAccount ? this.lc.activeAccount.uniqueName : '' :
+                this.lc.activeAccount ? this.lc.activeAccount?.uniqueName : '' :
                 '';
             const requestObject = {
                 q: encodeURIComponent(query),
@@ -1981,11 +1981,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
             formattedCurrentLedgerAccountParentGroups = transaction.selectedAccount.parentGroups.map(parent => ({ uniqueName: parent }));
         }
         const currentLedgerAccountDetails = {
-            uniqueName: this.lc.activeAccount ? this.lc.activeAccount.uniqueName : '',
+            uniqueName: this.lc.activeAccount ? this.lc.activeAccount?.uniqueName : '',
             parentGroups: this.lc.activeAccount && this.lc.activeAccount.parentGroups ? this.lc.activeAccount.parentGroups : []
         };
         const selectedAccountDetails = {
-            uniqueName: transaction.selectedAccount ? transaction.selectedAccount.uniqueName : '',
+            uniqueName: transaction.selectedAccount ? transaction.selectedAccount?.uniqueName : '',
             parentGroups: formattedCurrentLedgerAccountParentGroups.length ? formattedCurrentLedgerAccountParentGroups : transaction.selectedAccount ? transaction.selectedAccount.parentGroups : []
         };
         const shouldShowRcmEntry = this.generalService.shouldShowRcmSection(currentLedgerAccountDetails, selectedAccountDetails, this.activeCompany);
