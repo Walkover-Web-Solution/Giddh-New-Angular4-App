@@ -118,6 +118,7 @@ import { VoucherForm } from '../models/api-models/Voucher';
 import { AdjustmentUtilityService } from '../shared/advance-receipt-adjustment/services/adjustment-utility.service';
 import { GstReconcileActions } from '../actions/gst-reconcile/GstReconcile.actions';
 import { CountryISO, PhoneNumberFormat, SearchCountryField } from 'ngx-intl-tel-input';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 /** Type of search: customer and item (product/service) search */
 const SEARCH_TYPE = {
@@ -1543,6 +1544,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         this.customerCountryName = tempSelectedAcc.country.countryName;
                         this.customerCountryCode = tempSelectedAcc?.country?.countryCode || 'IN';
                         this.checkIfNeedToExcludeTax(tempSelectedAcc);
+
+                        this.showMobileNumberField = false;
+                        setTimeout(() => {
+                            this.showMobileNumberField = true;
+                        }, 50);
 
                         this.getUpdatedStateCodes(tempSelectedAcc.country.countryCode).then(() => {
                             this.invFormData.accountDetails = new AccountDetailsClass(tempSelectedAcc);
