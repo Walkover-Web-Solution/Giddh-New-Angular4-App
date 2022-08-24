@@ -118,7 +118,6 @@ import { VoucherForm } from '../models/api-models/Voucher';
 import { AdjustmentUtilityService } from '../shared/advance-receipt-adjustment/services/adjustment-utility.service';
 import { GstReconcileActions } from '../actions/gst-reconcile/GstReconcile.actions';
 import { CountryISO, PhoneNumberFormat, SearchCountryField } from 'ngx-intl-tel-input';
-import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 /** Type of search: customer and item (product/service) search */
 const SEARCH_TYPE = {
