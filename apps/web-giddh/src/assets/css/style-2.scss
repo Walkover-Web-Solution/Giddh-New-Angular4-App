@@ -7864,6 +7864,10 @@ giddh-datepicker {
 }
 
 .stock-create-edit {
+    .cdk-overlay-container {
+        z-index: 9;
+        position: relative;
+    }
     #main {
         #content-wrapper {
             background-color: var(--color-common-septenary-background-for-all-components);
