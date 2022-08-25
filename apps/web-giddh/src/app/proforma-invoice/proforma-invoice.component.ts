@@ -4906,7 +4906,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 discountArray.push({
                     discountType: f?.discount.discountType,
                     amount: f?.discount.discountValue,
-                    name: f?.discount?.name,
+                    name: f?.discount.name,
                     particular: f?.account.uniqueName,
                     isActive: true,
                     discountValue: f?.discount.discountValue,

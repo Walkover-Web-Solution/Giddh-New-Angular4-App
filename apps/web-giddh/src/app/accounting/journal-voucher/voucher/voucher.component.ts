@@ -252,12 +252,12 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         private _ledgerActions: LedgerActions,
         private store: Store<AppState>,
         private _keyboardService: KeyboardService,
-        private _toaster: ToasterService, 
+        private _toaster: ToasterService,
         private router: Router,
         private tallyModuleService: TallyModuleService,
         private componentFactoryResolver: ComponentFactoryResolver,
         private inventoryService: InventoryService,
-        private fb: FormBuilder, 
+        private fb: FormBuilder,
         public bsConfig: BsDatepickerConfig,
         private salesAction: SalesActions,
         private modalService: BsModalService,
@@ -329,7 +329,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             if (dateObj) {
                 this.universalDate = cloneDeep(dateObj);
                 this.journalDate = moment(this.universalDate[1], GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
-                this.dateEntered();
             }
         });
 
@@ -363,15 +362,15 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 this.isLoading = (response) ? true : false;
         });
 
-        // this.store.pipe(select(p => p?.ledger?.ledgerCreateSuccess), takeUntil(this.destroyed$)).subscribe((s: boolean) => {
-        //     if (s) {
-        //         this._toaster.successToast(this.localeData?.entry_created, this.commonLocaleData?.app_success);
-        //         this.refreshEntry();
-        //         this.store.dispatch(this._ledgerActions.ResetLedger());
-        //         this.requestObj.description = '';
-        //         this.dateField?.nativeElement?.focus();
-        //     }
-        // });
+        this.store.pipe(select(p => p?.ledger?.ledgerCreateSuccess), takeUntil(this.destroyed$)).subscribe((s: boolean) => {
+            if (s) {
+                this._toaster.successToast(this.localeData?.entry_created, this.commonLocaleData?.app_success);
+                this.refreshEntry();
+                this.store.dispatch(this._ledgerActions.ResetLedger());
+                this.requestObj.description = '';
+                this.dateField?.nativeElement?.focus();
+            }
+        });
 
         this.refreshEntry();
 

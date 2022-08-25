@@ -356,7 +356,7 @@ export function AuthenticationReducer(state: AuthenticationState = initialState,
             if (resp.status === 'success') {
                 return {
                     ...state,
-                    user: Object.assign({}, state.user, {
+                    user: Object.assign({}, state?.user, {
                         contactNumber: resp.request.mobileNumber,
                         countryCode: resp.request.countryCode
                     }),
@@ -382,7 +382,7 @@ export function AuthenticationReducer(state: AuthenticationState = initialState,
                         isLoginWithPasswordIsShowVerifyOtp: true,
                         user: res.body
                     });
-                } else if (!res.body.user.isVerified) {
+                } else if (!res.body?.user.isVerified) {
                     return Object.assign({}, state, {
                         isLoginWithPasswordInProcess: false,
                         isLoginWithPasswordSuccessNotVerified: true,
@@ -682,7 +682,7 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
                 return {
                     ...state,
                     user: {
-                        ...state.user,
+                        ...state?.user,
                         user: userResp.body
                     }
                 };
