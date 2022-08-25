@@ -325,14 +325,11 @@ export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = i
             });
         case GroupWithAccountsAction.CREATE_GROUP_RESPONSE:
             let gData: BaseResponse<GroupResponse, GroupCreateRequest> = action.payload;
-            if (gData.status === 'success') {
-                let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
-                let myChildElementIsOpen = false;
-                AddAndActiveGroupFunc(groupArray, gData, myChildElementIsOpen);
+            if (gData?.status === 'success') {
                 return Object.assign({}, state, {
-                    groupswithaccounts: groupArray,
                     isCreateGroupInProcess: false,
-                    isCreateGroupSuccess: true
+                    isCreateGroupSuccess: true,
+                    showEditGroup: false
                 });
             }
             return Object.assign({}, state, {
@@ -480,16 +477,8 @@ export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = i
             });
         case GroupWithAccountsAction.UPDATE_GROUP_RESPONSE: {
             let activeGrpData: BaseResponse<GroupResponse, GroupUpateRequest> = action.payload;
-            if (activeGrpData.status === 'success') {
-                let newObj = Object.assign({}, activeGrpData.body, { isOpen: true, isActive: true });
-                let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
-                let result = false;
-                updateActiveGroupFunc(groupArray, activeGrpData.queryString?.groupUniqueName, activeGrpData.body, result);
+            if (activeGrpData?.status === 'success') {
                 return Object.assign({}, state, {
-                    activeGroup: newObj,
-                    activeGroupUniqueName: newObj.uniqueName,
-                    activeGroupInProgress: false,
-                    groupswithaccounts: groupArray,
                     isUpdateGroupInProcess: false,
                     isUpdateGroupSuccess: true
                 });
@@ -562,16 +551,14 @@ export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = i
                 isDeleteGroupSuccess: false
             };
         case GroupWithAccountsAction.DELETE_GROUP_RESPONSE:
-            let g: BaseResponse<string, string> = action.payload;
-            if (g.status === 'success') {
-                let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
-                removeGroupFunc(groupArray, g.request, null);
-                return Object.assign({}, state, {
-                    groupswithaccounts: groupArray,
-                    activeGroup: { uniqueName: g.queryString.parentUniqueName },
+            let g: BaseResponse<any, string> = action.payload;
+            if (g?.status === 'success') {
+                return {
+                    ...state,
                     isDeleteGroupInProcess: false,
-                    isDeleteGroupSuccess: true
-                });
+                    isDeleteGroupSuccess: true,
+                    showEditGroup: false
+                };
             }
             return {
                 ...state,
@@ -586,16 +573,11 @@ export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = i
             };
         case GroupWithAccountsAction.MOVE_GROUP_RESPONSE: {
             let m: BaseResponse<MoveGroupResponse, MoveGroupRequest> = action.payload;
-            if (m.status === 'success') {
-                let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
-                let deletedItem = removeGroupFunc(groupArray, m.queryString?.groupUniqueName, null);
-                addNewGroupFunc(groupArray, deletedItem, m.request.parentGroupUniqueName, false);
+            if (m?.status === 'success') {
                 return Object.assign({}, state, {
-                    groupswithaccounts: groupArray,
-                    activeGroup: { uniqueName: m.request.parentGroupUniqueName },
-                    activeGroupUniqueName: m.request.parentGroupUniqueName,
                     isMoveGroupInProcess: false,
-                    isMoveGroupSuccess: true
+                    isMoveGroupSuccess: true,
+                    showEditGroup: false
                 });
             }
             return {

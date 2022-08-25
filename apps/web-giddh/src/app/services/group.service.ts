@@ -128,14 +128,14 @@ export class GroupService {
         }), catchError((e) => this.errorHandler.HandleCatch<GroupResponse, string>(e, groupUniqueName, { groupUniqueName })));
     }
 
-    public DeleteGroup(groupUniqueName: string): Observable<BaseResponse<string, string>> {
+    public DeleteGroup(groupUniqueName: string): Observable<BaseResponse<any, string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.delete(this.config.apiUrl + GROUP_API.DELETE_GROUP.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':groupUniqueName', encodeURIComponent(groupUniqueName))).pipe(map((res) => {
-            let data: BaseResponse<string, string> = res;
+            let data: BaseResponse<any, string> = res;
             data.request = groupUniqueName;
             data.queryString = { groupUniqueName };
             return data;
-        }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e, groupUniqueName, { groupUniqueName })));
+        }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e, groupUniqueName, { groupUniqueName })));
     }
 
     public GetFlattenGroupsAccounts(q: string = '', page: number = 1, count: number = 20000, showEmptyGroups: string = 'false', branchUniqueName?: string): Observable<BaseResponse<FlattenGroupsAccountsResponse, string>> {

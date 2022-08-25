@@ -237,11 +237,7 @@ export class GroupWithAccountsAction {
                 if (action.payload.status === 'error') {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
                 } else {
-                    let data = action.payload as BaseResponse<MoveGroupResponse, MoveGroupRequest>;
-
-                    this._generalService.eventHandler.next({ name: eventsConst.groupMoved, payload: data });
                     this._toasty.successToast(this.localeService.translate("app_messages.group_moved"), '');
-                    return this.getGroupDetails(data.request.parentGroupUniqueName);
                 }
                 return {
                     type: 'EmptyAction'
@@ -297,11 +293,6 @@ export class GroupWithAccountsAction {
             ofType(GroupWithAccountsAction.DELETE_GROUP),
             switchMap((action: CustomActions) => this._groupService.DeleteGroup(action.payload)),
             map(response => {
-                let activeGrp: IGroupsWithAccounts;
-                this.store.pipe(select(s => s.groupwithaccounts.groupswithaccounts), take(1)).subscribe(a => {
-                    activeGrp = this.findMyParent(a, response.queryString?.groupUniqueName, null);
-                });
-                response.queryString = { groupUniqueName: response.queryString?.groupUniqueName, parentUniqueName: activeGrp.uniqueName };
                 return this.deleteGroupResponse(response);
             })));
 
@@ -312,14 +303,10 @@ export class GroupWithAccountsAction {
                 if (action.payload.status === 'error') {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
                 } else {
-                    this._generalService.eventHandler.next({ name: eventsConst.groupDeleted, payload: action.payload });
                     this._toasty.successToast(action.payload.body, '');
-                    if (action.payload.queryString.parentUniqueName) {
-                        this.store.dispatch(this.getGroupDetails(action.payload.queryString.parentUniqueName));
-                    }
                 }
                 return {
-                    type: 'EmptyAction'
+                    type: GroupWithAccountsAction.DELETE_GROUP_RESPONSE
                 };
             })));
 
@@ -525,7 +512,7 @@ export class GroupWithAccountsAction {
         };
     }
 
-    public deleteGroupResponse(value: BaseResponse<string, string>): CustomActions {
+    public deleteGroupResponse(value: BaseResponse<any, string>): CustomActions {
         return {
             type: GroupWithAccountsAction.DELETE_GROUP_RESPONSE,
             payload: value

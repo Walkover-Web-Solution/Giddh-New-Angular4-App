@@ -1,5 +1,5 @@
 <div class="grp-col" fxLayout="column" fxLayoutAlign="stretch" fxFlex>
-    <div class="grp-wrapper" fxFlex>
+    <div class="grp-wrapper" fxFlex [ngStyle]="{ 'width': masterColumnsData?.length * 255 + 'px' }">
         <div
             class="col-wrapper left-account-operation"
             [style.height.px]="height"

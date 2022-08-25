@@ -65,19 +65,19 @@ export class MasterComponent implements OnInit, OnChanges {
 
         this.store.pipe(select(state => state.groupwithaccounts.isUpdateGroupSuccess), takeUntil(this.destroyed$)).subscribe(response => {
             if (response && this.currentGroupColumnIndex > -1) {
-                this.getMasters(this.currentGroupUniqueName, this.currentGroupColumnIndex - 1, true);
+                this.getMasters(this.masterColumnsData[this.currentGroupColumnIndex]?.groupUniqueName, this.currentGroupColumnIndex - 1, true);
             }
         });
 
         this.store.pipe(select(state => state.groupwithaccounts.isDeleteGroupSuccess), takeUntil(this.destroyed$)).subscribe(response => {
             if (response && this.currentGroupColumnIndex > -1) {
-                this.getMasters(this.currentGroupUniqueName, this.currentGroupColumnIndex - 1, true);
+                this.getMasters(this.masterColumnsData[this.currentGroupColumnIndex]?.groupUniqueName, this.currentGroupColumnIndex - 1, true);
             }
         });
 
         this.store.pipe(select(state => state.groupwithaccounts.isMoveGroupSuccess), takeUntil(this.destroyed$)).subscribe(response => {
             if (response && this.currentGroupColumnIndex > -1) {
-                this.getMasters(this.currentGroupUniqueName, this.currentGroupColumnIndex - 1, true);
+                this.getMasters(this.masterColumnsData[this.currentGroupColumnIndex]?.groupUniqueName, this.currentGroupColumnIndex - 1, true);
             }
         });
 
@@ -86,7 +86,9 @@ export class MasterComponent implements OnInit, OnChanges {
         });
 
         this.store.pipe(select(state => state.groupwithaccounts.updateAccountIsSuccess), takeUntil(this.destroyed$)).subscribe(response => {
-
+            if (response && this.currentGroupColumnIndex > -1) {
+                this.getMasters(this.masterColumnsData[this.currentGroupColumnIndex]?.groupUniqueName, this.currentGroupColumnIndex, true);
+            }
         });
 
         this.store.pipe(select(state => state.groupwithaccounts.isDeleteAccSuccess), takeUntil(this.destroyed$)).subscribe(response => {
@@ -192,6 +194,8 @@ export class MasterComponent implements OnInit, OnChanges {
     }
 
     public onAccountClick(item: any, currentIndex: number): void {
+        this.currentGroupColumnIndex = currentIndex - 1;
+        this.currentGroupUniqueName = this.masterColumnsData[currentIndex].groupUniqueName;
         this.showCreateNewButton = true;
         this.store.dispatch(this.groupWithAccountsAction.hideAddNewForm());
         this.store.dispatch(this.groupWithAccountsAction.showEditAccountForm());
