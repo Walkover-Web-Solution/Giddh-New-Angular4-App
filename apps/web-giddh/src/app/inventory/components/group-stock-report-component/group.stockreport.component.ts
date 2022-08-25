@@ -663,7 +663,7 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
 
     public onOpenAdvanceSearch() {
         this.showAdvanceSearchModal = true;
-        this.advanceSearchModel.show();
+        this.advanceSearchModel?.show();
     }
 
     public advanceSearchAction(type?: string) {
