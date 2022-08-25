@@ -5225,6 +5225,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         voucherClassConversion.accountDetails.billingDetails.state.code = this.getNewStateCode(result.account.billingDetails.stateCode ?? result?.account?.billingDetails?.state?.code);
         voucherClassConversion.accountDetails.billingDetails.state.name = result.account.billingDetails.stateName ?? result?.account?.billingDetails?.state?.name;
         voucherClassConversion.accountDetails.mobileNumber = result?.account?.mobileNumber;
+        this.selectedCustomerNumber = result?.account?.mobileNumber ? "+" + result?.account?.mobileNumber : '';
 
         voucherClassConversion.accountDetails.shippingDetails = new GstDetailsClass();
         if (result?.account?.shippingDetails) {
@@ -7912,11 +7913,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.referenceVouchersCurrentPage = 1;
     }
 
-    /**	
-    * This will check no and replace old country code with new country code	
-    *	
-    * @param {*} event	
-    * @memberof ProformaInvoiceComponent	
+    /**
+    * This will check no and replace old country code with new country code
+    *
+    * @param {*} event
+    * @memberof ProformaInvoiceComponent
     */
     public checkNumber(event: any): void {
         if (event) {
