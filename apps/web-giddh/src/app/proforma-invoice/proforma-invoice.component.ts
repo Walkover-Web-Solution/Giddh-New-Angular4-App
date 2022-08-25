@@ -1395,13 +1395,18 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     if (tempSelectedAcc) {
                         this.customerAcList$ = observableOf([{ label: tempSelectedAcc.name, value: tempSelectedAcc.uniqueName, additional: tempSelectedAcc }]);
                         this.invFormData.voucherDetails.customerName = tempSelectedAcc.name;
-                        this.selectedCustomerNumber = tempSelectedAcc.mobileNo ? "+" +tempSelectedAcc.mobileNo:'';
+                        this.selectedCustomerNumber = tempSelectedAcc.mobileNo ? "+" + tempSelectedAcc.mobileNo : '';
                         this.invFormData.voucherDetails.customerUniquename = tempSelectedAcc.uniqueName;
                         this.isCustomerSelected = true;
                         this.isMulticurrencyAccount = tempSelectedAcc.currencySymbol !== this.baseCurrencySymbol;
                         this.customerCountryName = tempSelectedAcc.country.countryName;
                         this.customerCountryCode = tempSelectedAcc?.country?.countryCode || 'IN';
                         this.checkIfNeedToExcludeTax(tempSelectedAcc);
+
+                        this.showMobileNumberField = false;
+                        setTimeout(() => {
+                            this.showMobileNumberField = true;
+                        }, 50);
 
                         this.getUpdatedStateCodes(tempSelectedAcc.country.countryCode).then(() => {
                             this.invFormData.accountDetails = new AccountDetailsClass(tempSelectedAcc);
@@ -2212,7 +2217,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.createEmbeddedViewAtIndex(0);
     }
 
-    public triggerSubmitInvoiceForm(form: NgForm, isUpdate) {        
+    public triggerSubmitInvoiceForm(form: NgForm, isUpdate) {
         this.updateAccount = isUpdate;
         if (this.isPendingVoucherType) {
             this.startLoader(true);
@@ -2253,7 +2258,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         }
     }
 
-    public onSubmitInvoiceForm(form?: NgForm) {        
+    public onSubmitInvoiceForm(form?: NgForm) {
         if ((this.isSalesInvoice || this.isPurchaseInvoice) && this.depositAccountUniqueName && (this.userDeposit === null || this.userDeposit === undefined)) {
             this._toasty.errorToast(this.localeData?.enter_amount);
             this.startLoader(false);
@@ -2331,7 +2336,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                 if (!entry.transactions[0].accountUniqueName && indx !== 0) {
                     this.invFormData.entries.splice(indx, 1);
                 }
-                if(!transactionError) {
+                if (!transactionError) {
                     // filter active discounts
                     entry.discounts = entry.discounts.filter(dis => dis.isActive);
 
@@ -2347,7 +2352,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     }
 
                     entry.transactions = entry.transactions.map((txn: SalesTransactionItemClass) => {
-                        if(!transactionError) {
+                        if (!transactionError) {
                             // convert date object
                             // txn.date = this.convertDateForAPI(txn.date);
                             entry.entryDate = dayjs(this.convertDateForAPI(entry.entryDate), GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
@@ -2380,7 +2385,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     });
                 }
 
-                if(entry.transactions[0]?.accountUniqueName || indx === 0) {
+                if (entry.transactions[0]?.accountUniqueName || indx === 0) {
                     entries.push(entry);
                 }
 
@@ -2666,7 +2671,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     if (this.voucherApiVersion === 2) {
                         updatedData = this.proformaInvoiceUtilityService.cleanObject(updatedData);
                     }
-                    
+
                     this.salesService.generateGenericItem(updatedData, isVoucherV4).pipe(takeUntil(this.destroyed$)).subscribe((response: BaseResponse<any, GenericRequestForGenerateSCD>) => {
                         this.handleGenerateResponse(response, form);
                     }, () => {
@@ -3996,7 +4001,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      * @param {NgForm} invoiceForm Form instance for values
      * @memberof ProformaInvoiceComponent
      */
-    private handleUpdateInvoiceForm(invoiceForm: NgForm): void {        
+    private handleUpdateInvoiceForm(invoiceForm: NgForm): void {
         let requestObject: any = this.prepareDataForApi();
         if (!requestObject) {
             this.startLoader(false);
@@ -4093,7 +4098,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     this.startLoader(false);
                     return;
                 }
-
+                data.accountDetails.mobileNumber = this.selectedCustomerNumber?.e164Number;
                 const deposit = this.getDeposit();
                 requestObject = {
                     account: data.accountDetails,
@@ -7860,7 +7865,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
      * @private
      * @memberof ProformaInvoiceComponent
      */
-     private getDiscounts(): void {
+    private getDiscounts(): void {
         this.settingsDiscountService.GetDiscounts().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success" && response?.body?.length > 0) {
                 this.discountsList = response?.body;
