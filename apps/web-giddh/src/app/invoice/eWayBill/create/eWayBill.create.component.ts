@@ -161,7 +161,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
             this.generateEwayBillform.toGstIn = 'URP';
         }
         if (this.selectedInvoices.length === 0) {
-            this.router.navigate(['/invoice/preview/sales']);
+            this.router.navigate(['/pages/invoice/preview/sales']);
         }
         this.isEwaybillGeneratedSuccessfully$.subscribe(s => {
             if (s) {
@@ -300,7 +300,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
         if (userResponse.response && userResponse.close === 'closeConfirmation') {
             this.selectedInvoices.splice(0, 1);
             if (this.selectedInvoices.length === 0) {
-                this.router.navigate(['/invoice/preview/sales']);
+                this.router.navigate(['/pages/invoice/preview/sales']);
             }
         }
         this.invoiceRemoveConfirmationModel.hide();
@@ -407,7 +407,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
 
                 if(!voucher?.account?.billingDetails?.pincode) {
                     this.toaster.errorToast(this.localeData?.pincode_required);
-                    this.router.navigate(['/invoice/preview/sales']);
+                    this.router.navigate(['/pages/invoice/preview/sales']);
                 }
 
                 this.voucherDetails = voucher;
