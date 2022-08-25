@@ -61,6 +61,7 @@ import { SettingsTagService } from '../../../services/settings.tag.service';
 import { MatAccordion } from '@angular/material/expansion';
 import { CommonService } from '../../../services/common.service';
 import { AdjustmentUtilityService } from '../../../shared/advance-receipt-adjustment/services/adjustment-utility.service';
+import { LedgerUtilityService } from '../../services/ledger-utility.service';
 
 /** Info message to be displayed during adjustment if the voucher is not generated */
 const ADJUSTMENT_INFO_MESSAGE = 'Voucher should be generated in order to make adjustments';
@@ -291,10 +292,11 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         private changeDetectorRef: ChangeDetectorRef,
         public dialog: MatDialog,
         private commonService: CommonService,
-        private adjustmentUtilityService: AdjustmentUtilityService
+        private adjustmentUtilityService: AdjustmentUtilityService,
+        private ledgerUtilityService: LedgerUtilityService
     ) {
 
-        this.vm = new UpdateLedgerVm(this.generalService);
+        this.vm = new UpdateLedgerVm(this.generalService, this.ledgerUtilityService);
 
         this.entryUniqueName$ = this.store.pipe(select(p => p.ledger.selectedTxnForEditUniqueName), takeUntil(this.destroyed$));
         this.editAccUniqueName$ = this.store.pipe(select(p => p.ledger.selectedAccForEditUniqueName), takeUntil(this.destroyed$));

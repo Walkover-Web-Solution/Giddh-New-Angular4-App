@@ -67,6 +67,7 @@ import { NewConfirmationModalComponent } from '../../../theme/new-confirmation-m
 import { MatAccordion } from '@angular/material/expansion';
 import { AdjustmentUtilityService } from '../../../shared/advance-receipt-adjustment/services/adjustment-utility.service';
 import { SettingsDiscountService } from '../../../services/settings.discount.service';
+import { LedgerUtilityService } from '../../services/ledger-utility.service';
 
 /** New ledger entries */
 const NEW_LEDGER_ENTRIES = [
@@ -266,7 +267,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         public dialog: MatDialog,
         private settingsTagService: SettingsTagService,
         private adjustmentUtilityService: AdjustmentUtilityService,
-        private settingsDiscountService: SettingsDiscountService
+        private settingsDiscountService: SettingsDiscountService,
+        private ledgerUtilityService: LedgerUtilityService
     ) {
         this.companyTaxesList$ = this.store.pipe(select(p => p.company && p.company.taxes), takeUntil(this.destroyed$));
         this.sessionKey$ = this.store.pipe(select(p => p.session.user.session.id), takeUntil(this.destroyed$));
@@ -549,17 +551,19 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                     });
                 }
 
+                const isExportValid = this.checkIfExportIsValid();
+
                 if (this.isAdvanceReceipt) {
                     this.currentTxn.advanceReceiptAmount = giddhRoundOff((this.currentTxn.amount - this.currentTxn.tax), this.giddhBalanceDecimalPlaces);
-                    this.currentTxn.total = giddhRoundOff((this.currentTxn.advanceReceiptAmount + this.currentTxn.tax), this.giddhBalanceDecimalPlaces);
+                    this.currentTxn.total = giddhRoundOff((this.currentTxn.advanceReceiptAmount + (!isExportValid ? this.currentTxn.tax : 0)), this.giddhBalanceDecimalPlaces);
                     this.totalForTax = this.currentTxn.total;
-                    this.currentTxn.convertedTotal = giddhRoundOff((this.currentTxn.convertedAmount - this.currentTxn.convertedTax), this.giddhBalanceDecimalPlaces);
+                    this.currentTxn.convertedTotal = giddhRoundOff((this.currentTxn.convertedAmount - (!isExportValid ? this.currentTxn.convertedTax : 0)), this.giddhBalanceDecimalPlaces);
                 } else {
                     let total = (this.currentTxn.amount - this.currentTxn.discount) || 0;
                     const convertedTotal = (this.currentTxn.convertedAmount - this.currentTxn.convertedDiscount) || 0;
                     this.totalForTax = total;
-                    const taxApplied = this.isRcmEntry ? 0 : this.currentTxn.tax;
-                    const convertedTaxApplied = this.isRcmEntry ? 0 : this.currentTxn.convertedTax;
+                    const taxApplied = (this.isRcmEntry || isExportValid) ? 0 : this.currentTxn.tax;
+                    const convertedTaxApplied = (this.isRcmEntry || isExportValid) ? 0 : this.currentTxn.convertedTax;
                     this.currentTxn.total = giddhRoundOff((total + taxApplied), this.giddhBalanceDecimalPlaces);
                     this.currentTxn.convertedTotal = giddhRoundOff((convertedTotal + convertedTaxApplied), this.giddhBalanceDecimalPlaces);
                 }
@@ -1794,5 +1798,25 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         this.invoiceList = [];
         this.invoiceList$ = observableOf([]);
         this.referenceVouchersCurrentPage = 2;
+    }
+
+    /**
+     * Returns boolean if export case is valid/invalid
+     *
+     * @returns {boolean}
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    public checkIfExportIsValid(): boolean {
+        let activeAccount = null;
+        this.activeAccount$.pipe(take(1)).subscribe(account => activeAccount = account);
+
+        const data = {
+            isMultiCurrency: this.isLedgerAccountAllowsMultiCurrency,
+            voucherType: this.blankLedger.voucherType,
+            particularAccount: this.currentTxn?.selectedAccount,
+            ledgerAccount: activeAccount
+        };
+
+        return this.ledgerUtilityService.checkIfExportIsValid(data);
     }
 }
