@@ -150,7 +150,7 @@ export class LedgerColumnarReportTableComponent implements OnInit, OnDestroy, On
                     let columns = Object.keys(item.accountNameAndBalanceMap);
                     if (columns && columns.length > 0) {
                         columns.forEach((element) => {
-                            if (this.columnarTableColumn.indexOf(element) === -1) {
+                            if (element && this.columnarTableColumn.indexOf(element) === -1) {
                                 this.columnarTableColumn.push(element);
                                 this.tableHeadingColumns.push(element);
                             }

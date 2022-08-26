@@ -87,8 +87,8 @@ export class CompanyImportExportFormComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         this.fileTypes = [
-            { label: this.localeData?.file_types.accounting_entries, value: CompanyImportExportFileTypes.ACCOUNTING_ENTRIES.toString() },
-            { label: this.localeData?.file_types.master, value: CompanyImportExportFileTypes.MASTER_EXCEPT_ACCOUNTS.toString() }
+            { label: this.localeData?.file_types.accounting_entries, value: CompanyImportExportFileTypes.ACCOUNTING_ENTRIES?.toString() },
+            { label: this.localeData?.file_types.master, value: CompanyImportExportFileTypes.MASTER_EXCEPT_ACCOUNTS?.toString() }
         ];
 
         this.currentOrganizationType = this.generalService.currentOrganizationType;
