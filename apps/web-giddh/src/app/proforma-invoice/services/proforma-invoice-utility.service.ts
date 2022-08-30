@@ -82,9 +82,9 @@ export class ProformaInvoiceUtilityService {
         }
         if (data?.entries?.length) {
             // TODO: Remove this once the API issue is resolved
-            data.entries.forEach(entry => {
-                entry.discounts = entry.discounts.filter(discount => (discount.name && discount.particular) || discount.discountValue);
-                entry.transactions?.forEach(transaction => {
+            data?.entries?.forEach(entry => {
+                entry.discounts = entry?.discounts?.filter(discount => (discount?.name && discount?.particular) || discount?.discountValue);
+                entry?.transactions?.forEach(transaction => {
                     if (transaction?.stock) {
                         transaction.stock.rate.rateForAccount = transaction.stock.rate?.amountForAccount;
                         delete transaction.stock.rate?.amountForAccount;
