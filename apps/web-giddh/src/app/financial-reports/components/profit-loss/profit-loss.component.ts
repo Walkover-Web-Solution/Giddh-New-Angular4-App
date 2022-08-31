@@ -124,13 +124,15 @@ export class ProfitLossComponent implements OnInit, AfterViewInit, OnDestroy {
                 }
 
                 if (data && data.expArr) {
-                    this.InitData(data.expArr);
+                    this.InitData(data.expArr, "expenses");
                     data.expArr.forEach(g => {
+                        g.category = "expenses";
                         g.isVisible = true;
                         g.isCreated = true;
                         g.isIncludedInSearch = true;
                         g.isOpen = true;
                         g.childGroups.forEach(c => {
+                            c.category = "expenses";
                             c.isVisible = true;
                             c.isCreated = true;
                             c.isIncludedInSearch = true;
@@ -138,13 +140,15 @@ export class ProfitLossComponent implements OnInit, AfterViewInit, OnDestroy {
                     });
                 }
                 if (data && data.incArr) {
-                    this.InitData(data.incArr);
+                    this.InitData(data.incArr, "income");
                     data.incArr.forEach(g => {
+                        g.category = "income";
                         g.isVisible = true;
                         g.isCreated = true;
                         g.isIncludedInSearch = true;
                         g.isOpen = true;
                         g.childGroups.forEach(c => {
+                            c.category = "income";
                             c.isVisible = true;
                             c.isCreated = true;
                             c.isIncludedInSearch = true;
@@ -168,8 +172,9 @@ export class ProfitLossComponent implements OnInit, AfterViewInit, OnDestroy {
         });
     }
 
-    public InitData(d: ChildGroup[]) {
+    public InitData(d: ChildGroup[], category: string) {
         each(d, (grp: ChildGroup) => {
+            grp.category = category;
             grp.isVisible = false;
             grp.isCreated = false;
             grp.isIncludedInSearch = true;
@@ -177,9 +182,10 @@ export class ProfitLossComponent implements OnInit, AfterViewInit, OnDestroy {
                 acc.isIncludedInSearch = true;
                 acc.isCreated = false;
                 acc.isVisible = false;
+                acc.category = category;
             });
             if (grp.childGroups) {
-                this.InitData(grp.childGroups);
+                this.InitData(grp.childGroups, category);
             }
         });
     }
