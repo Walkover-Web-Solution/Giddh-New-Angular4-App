@@ -35,9 +35,9 @@ import { FilingOverviewComponent } from './filing/tabs/overview/overview.compone
 import { GstRoutingModule } from './gst.routing.module';
 import { ConfirmModalModule } from '../theme/confirm-modal';
 import { GstAsideMenuComponent } from './modals/gst-aside-menu/gst-aside-menu.component';
+import { SharedModule } from '../shared/shared.module';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { TaxSidebarModule } from '../shared/tax-sidebar/tax-sidebar.module';
-import { SharedModule } from '../shared/shared.module';
 import { UnitMappingComponent } from './unit-mapping/unit-mapping.component';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
@@ -53,15 +53,18 @@ import { MatButtonModule } from '@angular/material/button';
     imports: [
         GstRoutingModule,
         CollapseModule,
-        PaginationModule,
-        DatepickerModule,
-        BsDropdownModule,
+        PaginationModule.forRoot(),
+        DatepickerModule.forRoot(),
+        BsDropdownModule.forRoot(),
         Daterangepicker,
-        LaddaModule,
+        LaddaModule.forRoot({
+            style: 'slide-left',
+            spinnerSize: 30
+        }),
         HighlightModule,
-        TooltipModule,
+        TooltipModule.forRoot(),
         ClickOutsideModule,
-        TabsModule,
+        TabsModule.forRoot(),
         ElementViewChildModule,
         AlertModule,
         DecimalDigitsModule,

@@ -32,6 +32,7 @@ import { AdvanceReceiptAdjustmentModule } from '../shared/advance-receipt-adjust
 import { HasFocusDirectiveModule } from '../shared/helpers/directives/has-focus/has-focus.module';
 import { ReplacePipeModule } from '../shared/helpers/pipes/replace/replace.module';
 import { NgxBootstrapSwitchModule } from 'ngx-bootstrap-switch';
+import { NgxIntlTelInputModule } from 'ngx-intl-tel-input';
 
 @NgModule({
     imports: [
@@ -45,14 +46,17 @@ import { NgxBootstrapSwitchModule } from 'ngx-bootstrap-switch';
         DecimalDigitsModule,
         CollapseModule,
         NgxUploaderModule,
-        BsDropdownModule,
+        BsDropdownModule.forRoot(),
         DigitsOnlyModule,
         SharedModule,
         AsideMenuRecurringEntryModule,
         ModalModule,
         TaxControlModule,
         DiscountControlModule,
-        LaddaModule,
+        LaddaModule.forRoot({
+            style: 'slide-left',
+            spinnerSize: 30
+        }),
         SelectModule.forRoot(),
         SendEmailInvoiceModule,
         VoucherTypeToNamePipeModule,
@@ -61,6 +65,7 @@ import { NgxBootstrapSwitchModule } from 'ngx-bootstrap-switch';
         AdvanceReceiptAdjustmentModule,
         HasFocusDirectiveModule,
         ReplacePipeModule,
+        NgxIntlTelInputModule,
         NgxBootstrapSwitchModule.forRoot()
     ],
     exports: [ProformaInvoiceComponent, SalesAddStockComponent, AsideMenuProductServiceComponent],

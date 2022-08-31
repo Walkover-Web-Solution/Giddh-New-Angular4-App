@@ -17,7 +17,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { select, Store } from "@ngrx/store";
 import { IOption } from "apps/web-giddh/src/app/theme/ng-virtual-select/sh-options.interface";
 import { saveAs } from "file-saver";
-import * as moment from "moment/moment";
+import * as dayjs from "dayjs";
 import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
 import { PaginationComponent } from "ngx-bootstrap/pagination";
 import { BehaviorSubject, combineLatest, Observable, of as observableOf, ReplaySubject, Subject } from "rxjs";
@@ -99,7 +99,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     public payoutForm: CashfreeClass;
     public payoutObj: CashfreeClass = new CashfreeClass();
     public dueAmountReportData$: Observable<DueAmountReportResponse>;
-    public moment = moment;
+    public dayjs = dayjs;
     public toDate: string;
     public fromDate: string;
     public selectAllVendor: boolean = false;
@@ -206,12 +206,12 @@ export class ContactComponent implements OnInit, OnDestroy {
     public openingBalance: any;
     /** This will hold closing balance amount */
     public closingBalance: number = 0;
-    /** Stores the current organization type */
-    public currentOrganizationType: OrganizationType;
     /** This will hold local JSON data */
     public localeData: any = {};
     /** This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** Stores the current organization type */
+    public currentOrganizationType: OrganizationType;
     /** Listens for Master open/close event, required to load the data once master is closed */
     public isAddAndManageOpenedFromOutside$: Observable<boolean>;
     /** This will store screen size */
@@ -257,12 +257,32 @@ export class ContactComponent implements OnInit, OnDestroy {
     /** True if it's default load */
     public defaultLoad: boolean = true;
 
-    constructor(public dialog: MatDialog, private store: Store<AppState>, private router: Router, private companyServices: CompanyService, private commonActions: CommonActions, private toaster: ToasterService,
-        private contactService: ContactService, private settingsIntegrationActions: SettingsIntegrationActions, private companyActions: CompanyActions, private componentFactoryResolver: ComponentFactoryResolver,
-        private groupWithAccountsAction: GroupWithAccountsAction, private cdRef: ChangeDetectorRef, private generalService: GeneralService, private route: ActivatedRoute, private generalAction: GeneralActions,
-        private breakPointObservar: BreakpointObserver, private modalService: BsModalService, private settingsProfileActions: SettingsProfileActions,
-        private settingsBranchAction: SettingsBranchActions, public currencyPipe: GiddhCurrencyPipe, private lightbox: Lightbox, private renderer: Renderer2, private customFieldsService: CustomFieldsService) {
-        this.searchLoader$ = this.store.pipe(select(p => p.search.searchLoader), takeUntil(this.destroyed$));
+    constructor(
+        public dialog: MatDialog,
+        private store: Store<AppState>,
+        private router: Router,
+        private companyServices: CompanyService,
+        private commonActions: CommonActions,
+        private toaster: ToasterService,
+        private contactService: ContactService,
+        private settingsIntegrationActions: SettingsIntegrationActions,
+        private companyActions: CompanyActions,
+        private componentFactoryResolver: ComponentFactoryResolver,
+        private groupWithAccountsAction: GroupWithAccountsAction,
+        private cdRef: ChangeDetectorRef,
+        private generalService: GeneralService,
+        private route: ActivatedRoute,
+        private generalAction: GeneralActions,
+        private breakPointObservar: BreakpointObserver,
+        private modalService: BsModalService,
+        private settingsProfileActions: SettingsProfileActions,
+        private settingsBranchAction: SettingsBranchActions,
+        public currencyPipe: GiddhCurrencyPipe,
+        private lightbox: Lightbox,
+        private renderer: Renderer2,
+        private customFieldsService: CustomFieldsService) {
+
+        this.searchLoader$ = this.store.pipe(select(state => state.search.searchLoader), takeUntil(this.destroyed$));
         this.dueAmountReportRequest = new DueAmountReportQueryRequest();
         this.createAccountIsSuccess$ = this.store.pipe(select(state => state.groupwithaccounts.createAccountIsSuccess), takeUntil(this.destroyed$));
 
@@ -288,9 +308,8 @@ export class ContactComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         this.renderer.addClass(document.body, 'contact-body');
-        this.imgPath = isElectron ? "assets/images/" : AppUrl + APP_FOLDER + "assets/images/";
+        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         this.store.dispatch(this.companyActions.getAllRegistrations());
-        this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
         this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.isAddAndManageOpenedFromOutside$ = this.store.pipe(select(appStore => appStore.groupwithaccounts.isAddAndManageOpenedFromOutside), takeUntil(this.destroyed$));
         // localStorage supported
@@ -357,13 +376,13 @@ export class ContactComponent implements OnInit, OnDestroy {
                         this.todaySelected = response;
 
                         if (this.universalDate && !this.todaySelected) {
-                            this.fromDate = moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
-                            this.toDate = moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
+                            this.fromDate = dayjs(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
+                            this.toDate = dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
                             this.selectedDateRange = {
-                                startDate: moment(this.universalDate[0]),
-                                endDate: moment(this.universalDate[1]),
+                                startDate: dayjs(this.universalDate[0]),
+                                endDate: dayjs(this.universalDate[1]),
                             };
-                            this.selectedDateRangeUi = moment(this.universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(this.universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                            this.selectedDateRangeUi = dayjs(this.universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(this.universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
                         } else {
                             this.universalDate = [];
                             this.fromDate = "";
@@ -407,10 +426,14 @@ export class ContactComponent implements OnInit, OnDestroy {
         }
 
         this.store.pipe(select(store => store.settings.profile), takeUntil(this.destroyed$)).subscribe(response => {
-            if (response && response.balanceDecimalPlaces) {
-                this.giddhDecimalPlaces = response.balanceDecimalPlaces;
+            if (response) {
+                if (response.balanceDecimalPlaces) {
+                    this.giddhDecimalPlaces = response.balanceDecimalPlaces;
+                } else {
+                    this.giddhDecimalPlaces = 2;
+                }
             } else {
-                this.giddhDecimalPlaces = 2;
+                this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
             }
         });
 
@@ -573,12 +596,12 @@ export class ContactComponent implements OnInit, OnDestroy {
 
             if (this.universalDate && this.universalDate[0] && this.universalDate[1] && !this.todaySelected) {
                 this.selectedDateRange = {
-                    startDate: moment(this.universalDate[0]),
-                    endDate: moment(this.universalDate[1]),
+                    startDate: dayjs(this.universalDate[0]),
+                    endDate: dayjs(this.universalDate[1]),
                 };
-                this.selectedDateRangeUi = moment(this.universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(this.universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-                this.fromDate = moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
-                this.toDate = moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
+                this.selectedDateRangeUi = dayjs(this.universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(this.universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                this.fromDate = dayjs(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
+                this.toDate = dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
             } else {
                 this.fromDate = "";
                 this.toDate = "";
@@ -946,10 +969,10 @@ export class ContactComponent implements OnInit, OnDestroy {
 
         if (value && value.startDate && value.endDate) {
             this.todaySelected = false;
-            this.selectedDateRange = { startDate: moment(value.startDate), endDate: moment(value.endDate) };
-            this.selectedDateRangeUi = moment(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
-            this.fromDate = moment(value.startDate).format(GIDDH_DATE_FORMAT);
-            this.toDate = moment(value.endDate).format(GIDDH_DATE_FORMAT);
+            this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
+            this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
+            this.fromDate = dayjs(value.startDate).format(GIDDH_DATE_FORMAT);
+            this.toDate = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
             this.getAccounts(this.fromDate, this.toDate, null, "true", PAGINATION_LIMIT, this.searchStr, this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
             this.detectChanges();
         }
@@ -1239,10 +1262,10 @@ export class ContactComponent implements OnInit, OnDestroy {
 
                 if (this.todaySelected) {
                     this.selectedDateRange = {
-                        startDate: moment(res.body.fromDate, GIDDH_DATE_FORMAT),
-                        endDate: moment(res.body.toDate, GIDDH_DATE_FORMAT),
+                        startDate: dayjs(res.body.fromDate, GIDDH_DATE_FORMAT),
+                        endDate: dayjs(res.body.toDate, GIDDH_DATE_FORMAT),
                     };
-                    this.selectedDateRangeUi = moment(res.body.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(res.body.toDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
+                    this.selectedDateRangeUi = dayjs(res.body.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(res.body.toDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
                 }
 
                 this.allSelectionModel = this.checkboxInfo[this.checkboxInfo.selectedPage] ? true : false;
@@ -1300,7 +1323,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     }
 
     private setTableColspan() {
-        let balancesColsArr = ['openingBalance'];
+        let balancesColsArr = ["openingBalance"];
         let length = Object.keys(this.showFieldFilter).filter(f => this.showFieldFilter[f]).filter(f => balancesColsArr.includes(f))?.length;
         this.tableColsPan = length > 0 ? 4 : 3;
     }

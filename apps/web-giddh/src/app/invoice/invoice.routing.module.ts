@@ -74,6 +74,7 @@ const DEFAULT_FONT_PICKER_CONFIG: FontPickerConfigInterface = {
     apiKey: 'AIzaSyAAvwBeHl0uuVSEVeZ3bTylwIkRGKCFvdI'
 };
 const INVOICE_ROUTES: Routes = [
+
     {
         path: '',
         canActivate: [NeedsAuthentication],
@@ -84,6 +85,7 @@ const INVOICE_ROUTES: Routes = [
             { path: 'preview/:voucherType/:selectedType', component: InvoiceComponent },
             { path: 'preview/:voucherType/:voucherNoForDetail/:voucherAction', component: InvoiceComponent },
             { path: 'ewaybill/create', component: EWayBillCreateComponent },
+
         ]
     },
     { path: 'ewaybill', canActivate: [NeedsAuthentication], component: EWayBillComponent },
@@ -116,16 +118,16 @@ const INVOICE_ROUTES: Routes = [
         EWayBillCredentialsComponent,
         InvoicePreviewDetailsComponent,
         ProformaListComponent,
-        DownloadVoucherComponent
+        DownloadVoucherComponent,
     ],
     imports: [
         FormsModule,
         CommonModule,
-        TabsModule,
+        TabsModule.forRoot(),
         ReactiveFormsModule,
         ModalModule,
-        TooltipModule,
-        PaginationModule,
+        TooltipModule.forRoot(),
+        PaginationModule.forRoot(),
         RouterModule.forChild(INVOICE_ROUTES),
         InvoiceTemplatesModule,
         KeyboardShortutModule,
@@ -133,13 +135,16 @@ const INVOICE_ROUTES: Routes = [
         CollapseModule.forRoot(),
         NgxUploaderModule,
         SelectModule,
-        LaddaModule,
+        LaddaModule.forRoot({
+            style: 'slide-left',
+            spinnerSize: 30
+        }),
         ShSelectModule,
         ClickOutsideModule,
         ElementViewChildModule,
         DecimalDigitsModule,
         DatepickerModule,
-        BsDropdownModule,
+        BsDropdownModule.forRoot(),
         AsideMenuRecurringEntryModule,
         SalesShSelectModule,
         TextMaskModule,

@@ -39,13 +39,12 @@ module.exports = {
             'process.env.errlyticsKey': JSON.stringify(''),
             'process.env.AppUrl': JSON.stringify('https://test.giddh.com/'),
             'process.env.ApiUrl': JSON.stringify('https://apitest.giddh.com/'),
-            'process.env.APP_FOLDER': JSON.stringify('') //JSON.stringify('app/')""
+            'process.env.APP_FOLDER': JSON.stringify('')
         }),
-        new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
         new CompressionPlugin({
             filename: "[path][base].br",
             algorithm: "brotliCompress",
-            test: /\.(js|css|html|svg)$/,
+            test: /\.(js|css|html|svg|json)$/,
             compressionOptions: {
                 params: {
                     [zlib.constants.BROTLI_PARAM_QUALITY]: 11,

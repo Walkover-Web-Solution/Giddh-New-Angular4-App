@@ -10,7 +10,7 @@ import { InvoiceService } from '../../../services/invoice.service';
 import { Router } from '@angular/router';
 import { takeUntil } from 'rxjs/operators';
 import { Observable, ReplaySubject, of } from 'rxjs';
-import * as moment from 'moment';
+import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 import { ToasterService } from '../../../services/toaster.service';
 
@@ -161,7 +161,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
             this.generateEwayBillform.toGstIn = 'URP';
         }
         if (this.selectedInvoices.length === 0) {
-            this.router.navigate(['/invoice/preview/sales']);
+            this.router.navigate(['/pages/invoice/preview/sales']);
         }
         this.isEwaybillGeneratedSuccessfully$.subscribe(s => {
             if (s) {
@@ -200,7 +200,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
             this.generateBill['transactionType'] = '1';                // transactionType is always 1 for Regular
             this.generateBill['invoiceNumber'] = this.invoiceNumber;
             this.generateBill['toGstIn'] = this.invoiceBillingGstinNo ? this.invoiceBillingGstinNo : 'URP';
-            this.generateBill['transDocDate'] = this.generateBill['transDocDate'] ? moment(this.generateBill['transDocDate']).format('DD/MM/YYYY') : null;
+            this.generateBill['transDocDate'] = this.generateBill['transDocDate'] ? dayjs(this.generateBill['transDocDate']).format('DD/MM/YYYY') : null;
             this.generateBill['uniqueName'] = this.generateEwayBillform?.uniqueName;
 
             if (generateBillform.valid) {
@@ -300,7 +300,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
         if (userResponse.response && userResponse.close === 'closeConfirmation') {
             this.selectedInvoices.splice(0, 1);
             if (this.selectedInvoices.length === 0) {
-                this.router.navigate(['/invoice/preview/sales']);
+                this.router.navigate(['/pages/invoice/preview/sales']);
             }
         }
         this.invoiceRemoveConfirmationModel.hide();
@@ -407,7 +407,7 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
 
                 if(!voucher?.account?.billingDetails?.pincode) {
                     this.toaster.errorToast(this.localeData?.pincode_required);
-                    this.router.navigate(['/invoice/preview/sales']);
+                    this.router.navigate(['/pages/invoice/preview/sales']);
                 }
 
                 this.voucherDetails = voucher;

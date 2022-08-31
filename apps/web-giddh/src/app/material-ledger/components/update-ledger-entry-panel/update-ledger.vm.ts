@@ -15,6 +15,7 @@ import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
 import { RATE_FIELD_PRECISION } from '../../../app.constant';
 import { take } from 'rxjs/operators';
 import { GeneralService } from '../../../services/general.service';
+import { LedgerUtilityService } from '../../services/ledger-utility.service';
 
 export class UpdateLedgerVm {
     public otherAccountList: IFlattenAccountsResultItem[] = [];
@@ -90,7 +91,8 @@ export class UpdateLedgerVm {
     public voucherApiVersion: 1 | 2;
 
     constructor(
-        private generalService: GeneralService
+        private generalService: GeneralService,
+        private ledgerUtilityService: LedgerUtilityService
     ) {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
     }
@@ -382,16 +384,19 @@ export class UpdateLedgerVm {
         this.totalForTax = total;
         let particularAccount = this.getParticularAccount();
         let ledgerAccount = this.getLedgerAccount(particularAccount);
+
+        const isExportValid = this.checkIfExportIsValid();
+
         if (this.isAdvanceReceipt || this.generalService.isReceiptPaymentEntry(ledgerAccount, particularAccount, this.selectedLedger.voucher.shortCode)) {
             this.taxTrxTotal = giddhRoundOff(this.getInclusiveTax(), this.giddhBalanceDecimalPlaces);
             this.advanceReceiptAmount = giddhRoundOff(this.totalAmount - this.taxTrxTotal, this.giddhBalanceDecimalPlaces);
-            this.grandTotal = giddhRoundOff(this.advanceReceiptAmount + this.taxTrxTotal, this.giddhBalanceDecimalPlaces);
+            this.grandTotal = giddhRoundOff(this.advanceReceiptAmount + (!isExportValid ? this.taxTrxTotal : 0), this.giddhBalanceDecimalPlaces);
         } else {
             if (this.isRcmEntry) {
                 taxTotal = 0;
             }
             this.taxTrxTotal = giddhRoundOff(((total * taxTotal) / 100), this.giddhBalanceDecimalPlaces);
-            this.grandTotal = giddhRoundOff((total + this.taxTrxTotal), this.giddhBalanceDecimalPlaces);
+            this.grandTotal = giddhRoundOff((total + (!isExportValid ? this.taxTrxTotal : 0)), this.giddhBalanceDecimalPlaces);
         }
         this.convertedTaxTrxTotal = this.calculateConversionRate(this.taxTrxTotal);
         this.convertedGrandTotal = this.calculateConversionRate(this.grandTotal);
@@ -489,12 +494,12 @@ export class UpdateLedgerVm {
 
             // update every transaction conversion rates for multi-currency
             if (this.selectedLedger.transactions && this.selectedLedger.transactions.length > 0) {
-                this.selectedLedger.transactions = this.selectedLedger.transactions.map(t => {
+                this.selectedLedger.transactions = this.selectedLedger.transactions.map((t, i) => {
                     let category = this.getAccountCategory(t?.particular, t?.particular?.uniqueName);
 
                     // find account that's from category income || expenses || fixed assets and update it's amount too
                     if (category && this.isValidCategory(category) && !t.isTax) {
-                        if (this.voucherApiVersion !== 2) {
+                        if (i === 0) {
                             t.amount = giddhRoundOff(Number(this.totalAmount), this.giddhBalanceDecimalPlaces);
                         }
                         t.isUpdated = true;
@@ -738,5 +743,22 @@ export class UpdateLedgerVm {
             return pv + cv.amount;
         }, 0);
         return (this.totalAmount * totalPercentage) / (100 + totalPercentage);
+    }
+
+    /**
+     * Returns boolean if export case is valid/invalid
+     *
+     * @returns {boolean}
+     * @memberof UpdateLedgerVm
+     */
+    public checkIfExportIsValid(): boolean {
+        const data = {
+            isMultiCurrency: this.isMultiCurrencyAvailable,
+            voucherType: this.selectedLedger?.voucher?.shortCode,
+            particularAccount: this.getParticularAccount(),
+            ledgerAccount: this.activeAccount
+        };
+
+        return this.ledgerUtilityService.checkIfExportIsValid(data);
     }
 }

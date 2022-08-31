@@ -11,7 +11,6 @@ import { JsPDFAutoTable } from 'apps/web-giddh/src/customTypes/jsPDF';
 import * as jsPDF from 'jspdf';
 import { ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-
 import { DataFormatter, IFormatable } from '../../model/data-formatter';
 import { Total } from '../export-csv/export-csv.component';
 

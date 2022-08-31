@@ -1,6 +1,6 @@
 import { AfterViewInit, ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { select, Store } from '@ngrx/store';
-import * as moment from 'moment/moment';
+import * as dayjs from 'dayjs';
 import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal';
 import { fromEvent, merge, Observable, ReplaySubject } from 'rxjs';
 import { debounceTime, takeUntil, take } from 'rxjs/operators';
@@ -50,8 +50,8 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
     @ViewChild('receiptAdvanceSearchModalContainer', { static: false }) public receiptAdvanceSearchModalContainer: ModalDirective;
     /** Instance of receipt confirmation modal */
     @ViewChild('receiptConfirmationModel', { static: false }) public receiptConfirmationModel: ModalDirective;
-    /** Moment method */
-    public moment = moment;
+    /** dayjs method */
+    public dayjs = dayjs;
     /** Receipt type for filter */
     public receiptType: Array<any>;
     /** Modal reference */
@@ -97,10 +97,10 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
     public currentBranch: any = { name: '', uniqueName: '' };
     /** Stores the current company */
     public activeCompany: any;
-    /** Stores the current organization type */
-    public currentOrganizationType: OrganizationType;
     /** True if api call in progress */
     public isLoading: boolean = false;
+    /** Stores the current organization type */
+    public currentOrganizationType: OrganizationType;
     /** Advance search model to initialize the advance search fields */
     private advanceSearchModel: ReceiptAdvanceSearchModel = {
         adjustmentVoucherDetails: {
@@ -208,10 +208,10 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
             if (applicationDate) {
                 this.universalDate = applicationDate;
                 let universalDate = _.cloneDeep(applicationDate);
-                this.selectedDateRange = { startDate: moment(universalDate[0]), endDate: moment(universalDate[1]) };
-                this.selectedDateRangeUi = moment(applicationDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(applicationDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-                this.fromDate = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
-                this.toDate = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
+                this.selectedDateRange = { startDate: dayjs(universalDate[0]), endDate: dayjs(universalDate[1]) };
+                this.selectedDateRangeUi = dayjs(applicationDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(applicationDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                this.fromDate = dayjs(universalDate[0]).format(GIDDH_DATE_FORMAT);
+                this.toDate = dayjs(universalDate[1]).format(GIDDH_DATE_FORMAT);
             }
             this.fetchReceiptsData();
         });
@@ -400,10 +400,10 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
      */
     public resetAdvanceSearch(): void {
         this.showClearFilter = false;
-        this.selectedDateRange = { startDate: moment(this.universalDate[0]), endDate: moment(this.universalDate[1]) };
-        this.selectedDateRangeUi = moment(this.universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(this.universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-        this.fromDate = moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
-        this.toDate = moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
+        this.selectedDateRange = { startDate: dayjs(this.universalDate[0]), endDate: dayjs(this.universalDate[1]) };
+        this.selectedDateRangeUi = dayjs(this.universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(this.universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+        this.fromDate = dayjs(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
+        this.toDate = dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
 
         this.searchQueryParams = {
             receiptTypes: [],
@@ -710,10 +710,10 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
         }
         this.hideGiddhDatepicker();
         if (value && value.startDate && value.endDate) {
-            this.selectedDateRange = { startDate: moment(value.startDate), endDate: moment(value.endDate) };
-            this.selectedDateRangeUi = moment(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
-            this.fromDate = moment(value.startDate).format(GIDDH_DATE_FORMAT);
-            this.toDate = moment(value.endDate).format(GIDDH_DATE_FORMAT);
+            this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
+            this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
+            this.fromDate = dayjs(value.startDate).format(GIDDH_DATE_FORMAT);
+            this.toDate = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
             this.showClearFilter = true;
             this.fetchReceiptsData();
         }
@@ -773,9 +773,9 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
      * @memberof AdvanceReceiptReportComponent
      */
     public previewVoucher(receipt: any): void {
-        // if (this.voucherApiVersion === 2) {
-        //     this.router.navigate(['/pages/voucher/receipt/preview/' + receipt.uniqueName + '/' + receipt.account?.uniqueName]);
-        // }
+        if (this.voucherApiVersion === 2) {
+            this.router.navigate(['/pages/voucher/receipt/preview/' + receipt.uniqueName + '/' + receipt.account?.uniqueName]);
+        }
     }
 
     /**

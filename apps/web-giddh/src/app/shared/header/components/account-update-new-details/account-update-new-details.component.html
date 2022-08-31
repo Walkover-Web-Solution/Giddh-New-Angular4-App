@@ -179,7 +179,7 @@
                                             value="hsn"
                                         />
                                         <label for="hsnCodeType" class="radio-custom-label">{{
-                                            commonLocaleData?.app_hsn_code
+                                            commonLocaleData?.app_hsn
                                         }}</label>
                                     </span>
                                     <span>
@@ -192,7 +192,7 @@
                                             value="sac"
                                         />
                                         <label for="sacCodeType" class="ml-1 radio-custom-label">{{
-                                            commonLocaleData?.app_sac_code
+                                            commonLocaleData?.app_sac
                                         }}</label>
                                     </span>
                                 </div>
@@ -453,32 +453,32 @@
                             <div class="form-group">
                                 <label>{{ commonLocaleData?.app_mobile_number }}</label>
                                 <div class="d-flex mobileNumberWidth">
-                                    <sh-select
-                                        [placeholder]="commonLocaleData?.app_country_code"
-                                        [options]="countryPhoneCode"
-                                        formControlName="mobileCode"
-                                        class="contact-number-select"
-                                    ></sh-select>
-                                    <input
-                                        type="text"
-                                        pattern="[0-9]*"
-                                        class="form-control pull-right"
-                                        [placeholder]="localeData?.mobile_no_placeholder"
+                                    <ngx-intl-tel-input
+                                        [cssClass]="'pull-right'"
+                                        [enableAutoCountrySelect]="true"
+                                        [enablePlaceholder]="true"
+                                        [searchCountryFlag]="true"
+                                        [searchCountryField]="[searchCountryField.Iso2, searchCountryField.Name]"
+                                        [selectFirstCountry]="false"
+                                        [maxLength]="30"
+                                        [phoneValidation]="true"
+                                        [numberFormat]="phoneNumberFormat.National"
+                                        name="mobileNo"
+                                        (countryChange)="checkNumber($event)"
+                                        #mobileNo
                                         formControlName="mobileNo"
-                                        id="contactNo"
-                                        autocomplete="off"
-                                        (blur)="isValidMobileNumber(mobileNoEl)"
-                                        #mobileNoEl
-                                    />
-                                    <small
-                                        class="clearfix error-msg"
-                                        *ngIf="
-                                            addAccountForm.get('mobileNo').value &&
-                                            !addAccountForm.get('mobileCode').value
-                                        "
-                                        >{{ localeData?.phone_code_error }}</small
+                                        [selectedCountryISO]="currentCompanyCountryCode"
                                     >
+                                    </ngx-intl-tel-input>
                                 </div>
+                                <span
+                                    class="error-msg"
+                                    *ngIf="
+                                        addAccountForm.controls['mobileNo'].touched &&
+                                        addAccountForm.controls['mobileNo'].invalid
+                                    "
+                                    >{{ localeData?.invalid_mobile_number }}
+                                </span>
                             </div>
                         </div>
                     </div>
@@ -622,7 +622,6 @@
                                 <input
                                     type="text"
                                     class="form-control"
-                                    [control]="addAccountForm.get('uniqueName')"
                                     textCaseChangeDirective
                                     UniqueNameDirective
                                     formControlName="uniqueName"
@@ -718,7 +717,7 @@
                         >
                             <div
                                 class="row mr-b15"
-                                *ngIf="item.uniqueName === customFieldsItem.get('uniqueName').value"
+                                *ngIf="item?.uniqueName === customFieldsItem.get('uniqueName')?.value"
                             >
                                 <div class="col-lg-8">
                                     <div class="name-of-field">
@@ -921,7 +920,7 @@
                                     (click)="setAccountForMoveFunc(merged)"
                                 >
                                     {{ merged }}
-                                    <span class="" (click)="showDeleteMergedAccountModal(merged)">×</span>
+                                    <span (click)="showDeleteMergedAccountModal(merged)">×</span>
                                 </a>
                             </li>
                         </ul>

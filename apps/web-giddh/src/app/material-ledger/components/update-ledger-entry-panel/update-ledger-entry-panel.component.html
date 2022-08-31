@@ -1114,7 +1114,7 @@
                                     [prefix]="vm.selectedPrefixForCurrency"
                                     [rawInputValue]="vm.grandTotal"
                                     [suffix]="vm.selectedSuffixForCurrency"
-                                    (blur)="vm.inventoryTotalChanged()"
+                                    (change)="vm.inventoryTotalChanged()"
                                     (keypress)="totalAmountChanged$.next(true)"
                                 />
                                 <p class="mb-0 amount-total pr-1 pb-1" *ngIf="vm.isMultiCurrencyAvailable">
@@ -1523,7 +1523,6 @@
                                                     <input
                                                         matInput
                                                         *ngIf="vm.selectedLedger?.voucher?.shortCode !== 'sal'"
-                                                        [disabled]=""
                                                         id="update-ledger-invoice-number"
                                                         type="text"
                                                         [placeholder]="
@@ -1721,8 +1720,8 @@
                                             <td
                                                 *ngIf="
                                                     voucherApiVersion === 2 &&
-                                                    (vm.selectedLedger.voucher?.shortCode === 'credit note' ||
-                                                        vm.selectedLedger.voucher?.shortCode === 'debit note')
+                                                    (vm.selectedLedger?.voucher?.shortCode === 'credit note' ||
+                                                        vm.selectedLedger?.voucher?.shortCode === 'debit note')
                                                 "
                                                 class="pd-r1 pb-1"
                                             >
@@ -1738,10 +1737,10 @@
                                             </td>
                                             <td
                                                 *ngIf="
-                                                    vm.selectedLedger.voucher?.shortCode !== 'jr' &&
-                                                    vm.selectedLedger.voucher?.shortCode !== 'cntr' &&
-                                                    vm.selectedLedger.voucher?.shortCode !== 'rcpt' &&
-                                                    vm.selectedLedger.voucher?.shortCode !== 'advance-receipt'
+                                                    vm.selectedLedger?.voucher?.shortCode !== 'jr' &&
+                                                    vm.selectedLedger?.voucher?.shortCode !== 'cntr' &&
+                                                    vm.selectedLedger?.voucher?.shortCode !== 'rcpt' &&
+                                                    vm.selectedLedger?.voucher?.shortCode !== 'advance-receipt'
                                                 "
                                                 class="pd-r1 pb-1"
                                             >
@@ -2153,20 +2152,6 @@
         </div>
     </ng-template>
     <!-- Tourist scheme template block end-->
-
-    <!--Advance receipt adjusted remove confirmation modal -->
-    <ng-template #advanceReceiptRemoveConfirmationModal>
-        <div class="modal-dialog modal-md">
-            <div class="modal-content">
-                <delete-template-confirmation-modal
-                    [message]="removeAdvanceReceiptConfirmationMessage"
-                    [flag]="confirmationFlag"
-                    (closeModelEvent)="onAdvanceReceiptRemoveCloseConfirmationModal($event)"
-                >
-                </delete-template-confirmation-modal>
-            </div>
-        </div>
-    </ng-template>
 
     <ng-template #adjustPaymentModal>
         <div class="modal-dialog modal-xl">
