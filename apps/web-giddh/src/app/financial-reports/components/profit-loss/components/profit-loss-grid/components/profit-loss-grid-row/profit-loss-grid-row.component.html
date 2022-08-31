@@ -5,7 +5,7 @@
     [ngClass]="{ 'isHidden': !groupDetail.isVisible }"
 >
     <div
-        class="col-8 group rav-{{ groupDetail.category }}"
+        class="col-8 group"
         [innerHTML]="groupDetail.groupName | highlight: search"
         [ngStyle]="{ 'padding-left': padding + 'px' }"
     ></div>
