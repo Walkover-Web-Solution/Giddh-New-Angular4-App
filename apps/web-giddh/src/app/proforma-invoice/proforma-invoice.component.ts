@@ -6200,7 +6200,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         const results = response.map(result => {
                             return {
                                 value: result.stock ? `${result.uniqueName}#${result.stock.uniqueName}` : result.uniqueName,
-                                label: result.stock ? `${result.name} (${result.stock?.name})` : result?.name,
+                                label: result.stock ? `${result.name} (${result.stock?.name})` : result.name,
                                 additional: result
                             }
                         }) || [];
@@ -7103,7 +7103,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             this.defaultItemSuggestions = response.map(result => {
                 return {
                     value: result.stock ? `${result.uniqueName}#${result.stock.uniqueName}` : result.uniqueName,
-                    label: result.stock ? `${result?.name} (${result.stock?.name})` : result?.name,
+                    label: result.stock ? `${result.name} (${result.stock?.name})` : result.name,
                     additional: result
                 }
             }) || [];
