@@ -328,7 +328,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         this.universalDate$.subscribe(dateObj => {
             if (dateObj) {
                 this.universalDate = cloneDeep(dateObj);
-                this.journalDate = dayjs(this.universalDate[1], GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                this.journalDate = dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
                 this.dateEntered();
             }
         });
@@ -561,7 +561,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     public onSubmitChequeDetail() {
         const chequeDetails = this.chequeDetailForm.value;
         this.requestObj.chequeNumber = chequeDetails.chequeNumber;
-        this.requestObj.chequeClearanceDate = dayjs(chequeDetails.chequeClearanceDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+        this.requestObj.chequeClearanceDate = (chequeDetails.chequeClearanceDate) ? (typeof chequeDetails.chequeClearanceDate === "object") ? dayjs(chequeDetails.chequeClearanceDate).format(GIDDH_DATE_FORMAT) : dayjs(chequeDetails.chequeClearanceDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT) : "";
         this.closeChequeDetailForm();
         setTimeout(() => {
             this.selectedParticular.focus();
@@ -594,7 +594,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 let idx = this.selectedIdx;
                 let transaction = this.requestObj.transactions[idx];
                 if (acc) {
-                    const formattedCurrentDate = dayjs(this.universalDate[1], GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                    const formattedCurrentDate = dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
                     this.tallyModuleService.getCurrentBalance(this.currentCompanyUniqueName, acc.uniqueName, formattedCurrentDate, formattedCurrentDate).subscribe((data) => {
                         if (data && data.body) {
                             this.setAccountCurrentBalance(data.body, idx);
@@ -777,7 +777,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      */
     public saveEntry() {
         let data = cloneDeep(this.requestObj);
-        data.entryDate = dayjs(this.journalDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+        data.entryDate = (typeof this.journalDate === "object") ? dayjs(this.journalDate).format(GIDDH_DATE_FORMAT) : dayjs(this.journalDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
         data.transactions = this.validateTransaction(data.transactions);
 
         if (!data.transactions) {
@@ -950,7 +950,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         this.adjustmentTransaction = {};
         this.requestObj.entryDate = dayjs().format(GIDDH_DATE_FORMAT);
         if (this.universalDate[1]) {
-            this.journalDate = dayjs(this.universalDate[1], GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+            this.journalDate = dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
         } else {
             this.journalDate = dayjs().format(GIDDH_DATE_FORMAT);
         }
@@ -1174,7 +1174,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     }
 
     public dateEntered() {
-        const date = dayjs(this.journalDate, GIDDH_DATE_FORMAT).format("dddd");
+        const date = (typeof this.journalDate === "object") ? dayjs(this.journalDate).format("dddd") : dayjs(this.journalDate, GIDDH_DATE_FORMAT).format("dddd");
         this.displayDay = (date !== 'Invalid date') ? date : '';
         this.changeDetectionRef.detectChanges();
     }

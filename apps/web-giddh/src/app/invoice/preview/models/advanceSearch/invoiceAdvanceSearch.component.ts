@@ -233,11 +233,11 @@ export class InvoiceAdvanceSearchComponent implements OnInit, OnChanges {
 
     public parseAllDateField() {
         if (this.request.invoiceDate) {
-            this.request.invoiceDate = dayjs(this.request.invoiceDate).format(GIDDH_DATE_FORMAT);
+            this.request.invoiceDate = (typeof this.request.invoiceDate === "object") ? dayjs(this.request.invoiceDate).format(GIDDH_DATE_FORMAT) : dayjs(this.request.invoiceDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
         }
 
         if (this.request.dueDate) {
-            this.request.dueDate = dayjs(this.request.dueDate).format(GIDDH_DATE_FORMAT);
+            this.request.dueDate = (typeof this.request.dueDate === "object") ? dayjs(this.request.dueDate).format(GIDDH_DATE_FORMAT) : dayjs(this.request.dueDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
         }
     }
 

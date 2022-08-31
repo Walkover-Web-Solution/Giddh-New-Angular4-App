@@ -319,7 +319,7 @@ export class InvoiceBulkUpdateModalComponent implements OnInit, OnChanges, OnDes
 
                 case 'dueDate':
                     if (this.updateDueDatesRequest.dueDate) {
-                        this.updateDueDatesRequest.dueDate = dayjs(this.updateDueDatesRequest.dueDate, this.giddhDateFormat).format(this.giddhDateFormat);
+                        this.updateDueDatesRequest.dueDate = (typeof this.updateDueDatesRequest.dueDate === "object") ? dayjs(this.updateDueDatesRequest.dueDate).format(this.giddhDateFormat) : dayjs(this.updateDueDatesRequest.dueDate, this.giddhDateFormat).format(this.giddhDateFormat);
                     }
                     this.bulkUpdateRequest(this.updateDueDatesRequest, 'duedate');
 
