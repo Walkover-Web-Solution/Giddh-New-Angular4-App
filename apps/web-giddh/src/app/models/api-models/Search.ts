@@ -23,6 +23,7 @@ export class Account {
     public isVisible: boolean = false;
     public isIncludedInSearch: boolean = true;
     public isCreated: boolean = false;
+    public category?: string;
 }
 
 export interface AccountFlat {

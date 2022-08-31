@@ -175,6 +175,16 @@
                                                 <div class="col-8 group pd-l1">{{ localeData?.total_revenue }}</div>
                                                 <div class="col-4 bd-rl group text-right pull-right pd-l1">
                                                     <span>
+                                                        <ng-container
+                                                            *ngTemplateOutlet="
+                                                                operatorSign;
+                                                                context: {
+                                                                    $implicit: plData?.incomeStatment?.revenue,
+                                                                    category: grp.category
+                                                                }
+                                                            "
+                                                        >
+                                                        </ng-container>
                                                         <span class="d-inline-flex">
                                                             <amount-field
                                                                 [amount]="plData?.incomeStatment.revenue.amount"
@@ -195,6 +205,16 @@
                                                 {{ localeData?.total_operating_expenses }}
                                             </div>
                                             <div class="col-4 group text-right pull-right bd-rl pd-l1">
+                                                <ng-container
+                                                    *ngTemplateOutlet="
+                                                        operatorSign;
+                                                        context: {
+                                                            $implicit: plData?.incomeStatment?.operatingExpenses,
+                                                            category: grp.category
+                                                        }
+                                                    "
+                                                >
+                                                </ng-container>
                                                 <span class="d-inline-flex">
                                                     <amount-field
                                                         [amount]="plData?.incomeStatment.operatingExpenses.amount"
@@ -235,6 +255,16 @@
                                                 </div>
                                                 <div class="col-4 bd-rl group text-right pull-right pd-l1">
                                                     <span>
+                                                        <ng-container
+                                                            *ngTemplateOutlet="
+                                                                operatorSign;
+                                                                context: {
+                                                                    $implicit: plData?.incomeStatment?.otherExpenses,
+                                                                    category: grp.category
+                                                                }
+                                                            "
+                                                        >
+                                                        </ng-container>
                                                         <span class="d-inline-flex">
                                                             <amount-field
                                                                 [amount]="plData?.incomeStatment.otherExpenses.amount"
@@ -313,4 +343,14 @@
             </div>
         </div>
     </div>
+    <ng-template #operatorSign let-data let-category="category">
+        <span
+            *ngIf="
+                ((category === 'income' && data.type === 'DEBIT') ||
+                    (category === 'expenses' && data.type === 'CREDIT')) &&
+                data.amount !== 0
+            "
+            >-</span
+        >
+    </ng-template>
 </ng-container>

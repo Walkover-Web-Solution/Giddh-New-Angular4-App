@@ -5,7 +5,7 @@
     [ngClass]="{ 'isHidden': !groupDetail.isVisible }"
 >
     <div
-        class="col-8 group"
+        class="col-8 group rav-{{ groupDetail.category }}"
         [innerHTML]="groupDetail.groupName | highlight: search"
         [ngStyle]="{ 'padding-left': padding + 'px' }"
     ></div>
@@ -97,6 +97,22 @@
             <div class="col-4 bd-rl text-left pull-right">
                 <div class="row d-flex">
                     <span class="col-sm-6 col-12 text-right">
+                        <span
+                            *ngIf="
+                                account.category === 'income' &&
+                                account.closingBalance.type === 'DEBIT' &&
+                                account.closingBalance.amount !== 0
+                            "
+                            >-</span
+                        >
+                        <span
+                            *ngIf="
+                                account.category === 'expenses' &&
+                                account.closingBalance.type === 'CREDIT' &&
+                                account.closingBalance.amount !== 0
+                            "
+                            >-</span
+                        >
                         <span class="d-inline-flex">
                             <amount-field
                                 [amount]="account.closingBalance.amount"
@@ -107,6 +123,22 @@
                         </span>
                     </span>
                     <span class="col-sm-6 col-12 invisible">
+                        <span
+                            *ngIf="
+                                account.category === 'income' &&
+                                account.closingBalance.type === 'DEBIT' &&
+                                account.closingBalance.amount !== 0
+                            "
+                            >-</span
+                        >
+                        <span
+                            *ngIf="
+                                account.category === 'expenses' &&
+                                account.closingBalance.type === 'CREDIT' &&
+                                account.closingBalance.amount !== 0
+                            "
+                            >-</span
+                        >
                         <span class="d-inline-flex">
                             <amount-field
                                 [amount]="account.closingBalance.amount"
