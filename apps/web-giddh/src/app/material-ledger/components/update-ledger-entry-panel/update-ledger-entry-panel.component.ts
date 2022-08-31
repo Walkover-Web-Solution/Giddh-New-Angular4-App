@@ -830,23 +830,25 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public saveLedgerTransaction() {
         // due to date picker of Tx entry date format need to change
         if (this.vm.selectedLedger.entryDate) {
-            if (!dayjs(this.vm.selectedLedger.entryDate, GIDDH_DATE_FORMAT).isValid()) {
+            let entryDate = (typeof this.vm.selectedLedger.entryDate === "object") ? dayjs(this.vm.selectedLedger.entryDate) : dayjs(this.vm.selectedLedger.entryDate, GIDDH_DATE_FORMAT);
+            if (!entryDate.isValid()) {
                 this.toaster.showSnackBar("error", this.localeData?.invalid_date);
                 this.loaderService.hide();
                 return;
             } else {
-                this.vm.selectedLedger.entryDate = dayjs(this.vm.selectedLedger.entryDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                this.vm.selectedLedger.entryDate = (typeof this.vm.selectedLedger.entryDate === "object") ? dayjs(this.vm.selectedLedger.entryDate).format(GIDDH_DATE_FORMAT) : dayjs(this.vm.selectedLedger.entryDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
             }
         }
 
         // due to date picker of Tx chequeClearance date format need to change
         if (this.vm.selectedLedger.chequeClearanceDate) {
-            if (!dayjs(this.vm.selectedLedger.chequeClearanceDate, GIDDH_DATE_FORMAT).isValid()) {
+            let chequeClearanceDate = (typeof this.vm.selectedLedger.chequeClearanceDate === "object") ? dayjs(this.vm.selectedLedger.chequeClearanceDate) : dayjs(this.vm.selectedLedger.chequeClearanceDate, GIDDH_DATE_FORMAT);
+            if (!chequeClearanceDate.isValid()) {
                 this.toaster.showSnackBar("error", this.localeData?.invalid_cheque_clearance_date);
                 this.loaderService.hide();
                 return;
             } else {
-                this.vm.selectedLedger.chequeClearanceDate = dayjs(this.vm.selectedLedger.chequeClearanceDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
+                this.vm.selectedLedger.chequeClearanceDate = (typeof this.vm.selectedLedger.chequeClearanceDate === "object") ? dayjs(this.vm.selectedLedger.chequeClearanceDate).format(GIDDH_DATE_FORMAT) : dayjs(this.vm.selectedLedger.chequeClearanceDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
             }
         }
         let requestObj: LedgerResponse = this.vm.prepare4Submit();
