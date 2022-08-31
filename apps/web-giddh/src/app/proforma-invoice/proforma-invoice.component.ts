@@ -3377,7 +3377,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             entry.isOtherTaxApplicable = true;
         } else {
             // assign taxes for non stock accounts
-            transaction.applicableTaxes = o.applicableTaxes;
+            if (isBulkItem) {
+                transaction.applicableTaxes = o.stock.groupTaxes;
+            } else {
+                transaction.applicableTaxes = o.applicableTaxes;
+            }
         }
 
         transaction.accountName = o?.name;
