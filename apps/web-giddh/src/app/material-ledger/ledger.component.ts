@@ -377,8 +377,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
             This logic is only required in ledger.
         */
         const accountUniqueName = e.additional.stock && (currentLedgerCategory === 'income' || currentLedgerCategory === 'expenses') ?
-            this.lc.activeAccount ? this.lc.activeAccount?.uniqueName : '' :
-            e.additional.uniqueName;
+            this.lc.activeAccount ? this.lc.activeAccount.uniqueName : '' :
+            e.additional?.uniqueName;
         this.searchService.loadDetails(accountUniqueName, requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
             if (data && data.body) {
                 txn.showTaxationDiscountBox = false;
@@ -546,7 +546,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                             currentBranchUniqueName = this.generalService.currentBranchUniqueName;
                             this.currentBranch = _.cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName)) || this.currentBranch;
                         } else {
-                            currentBranchUniqueName = this.activeCompany ? this.activeCompany?.uniqueName : '';
+                            currentBranchUniqueName = this.activeCompany ? this.activeCompany.uniqueName : '';
                             this.currentBranch = {
                                 name: this.activeCompany ? this.activeCompany.name : '',
                                 alias: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : '',

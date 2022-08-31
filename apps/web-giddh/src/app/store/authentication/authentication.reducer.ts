@@ -382,7 +382,7 @@ export function AuthenticationReducer(state: AuthenticationState = initialState,
                         isLoginWithPasswordIsShowVerifyOtp: true,
                         user: res.body
                     });
-                } else if (!res.body?.user.isVerified) {
+                } else if (!res.body?.user?.isVerified) {
                     return Object.assign({}, state, {
                         isLoginWithPasswordInProcess: false,
                         isLoginWithPasswordSuccessNotVerified: true,
