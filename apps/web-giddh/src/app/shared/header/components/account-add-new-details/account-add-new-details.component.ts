@@ -1250,5 +1250,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public closeMaster(): void {
         this.closeAccountModal.emit(true);
         this.store.dispatch(this.groupWithAccountsAction.HideAddAndManageFromOutside());
+        document.querySelector('body')?.classList?.remove('master-page');
     }
 }
