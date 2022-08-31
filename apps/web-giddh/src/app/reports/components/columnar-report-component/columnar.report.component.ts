@@ -152,11 +152,11 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
                 let startDate = dayjs(new Date(this.fromMonth));
                 let monthsCount = dayjs(new Date(this.toMonth)).diff(startDate, 'months');
 
-                monthYear.push(dayjs(startDate.toDate(), GIDDH_DATE_FORMAT).format("MM-YYYY"));
+                monthYear.push(dayjs(startDate.toDate()).format("MM-YYYY"));
 
                 for (let dateLoop = 1; dateLoop <= monthsCount; dateLoop++) {
                     startDate = startDate.add(1, 'month');
-                    monthYear.push(dayjs(startDate.toDate(), GIDDH_DATE_FORMAT).format("MM-YYYY"));
+                    monthYear.push(dayjs(startDate.toDate()).format("MM-YYYY"));
                 }
 
                 this.exportRequest.monthYear = monthYear;
@@ -225,13 +225,13 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
             this.fromMonthNames = [];
             this.toMonthNames = [];
 
-            this.fromMonthNames.push({ label: dayjs(startDate.toDate(), GIDDH_DATE_FORMAT).format("MMM-YYYY"), value: startDate.toDate() });
-            this.toMonthNames.push({ label: dayjs(startDate.toDate(), GIDDH_DATE_FORMAT).format("MMM-YYYY"), value: startDate.toDate() });
+            this.fromMonthNames.push({ label: dayjs(startDate.toDate()).format("MMM-YYYY"), value: startDate.toDate() });
+            this.toMonthNames.push({ label: dayjs(startDate.toDate()).format("MMM-YYYY"), value: startDate.toDate() });
 
             for (let dateLoop = 1; dateLoop <= monthsCount; dateLoop++) {
                 startDate = startDate.add(1, 'month');
-                this.fromMonthNames.push({ label: dayjs(startDate.toDate(), GIDDH_DATE_FORMAT).format("MMM-YYYY"), value: startDate.toDate() });
-                this.toMonthNames.push({ label: dayjs(startDate.toDate(), GIDDH_DATE_FORMAT).format("MMM-YYYY"), value: startDate.toDate() });
+                this.fromMonthNames.push({ label: dayjs(startDate.toDate()).format("MMM-YYYY"), value: startDate.toDate() });
+                this.toMonthNames.push({ label: dayjs(startDate.toDate()).format("MMM-YYYY"), value: startDate.toDate() });
             }
         }
     }
@@ -264,11 +264,11 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
             let monthsCount = toMonth.diff(fromMonth, 'months');
             this.toMonthNames = [];
 
-            this.toMonthNames.push({ label: dayjs(startDate.toDate(), GIDDH_DATE_FORMAT).format("MMM-YYYY"), value: startDate.toDate(), disabled: (new Date(event.value) > startDate.toDate()) });
+            this.toMonthNames.push({ label: dayjs(startDate.toDate()).format("MMM-YYYY"), value: startDate.toDate(), disabled: (new Date(event.value) > startDate.toDate()) });
 
             for (let dateLoop = 1; dateLoop <= monthsCount; dateLoop++) {
                 startDate = startDate.add(1, 'month');
-                this.toMonthNames.push({ label: dayjs(startDate.toDate(), GIDDH_DATE_FORMAT).format("MMM-YYYY"), value: startDate.toDate(), disabled: (new Date(event.value) > startDate.toDate()) });
+                this.toMonthNames.push({ label: dayjs(startDate.toDate()).format("MMM-YYYY"), value: startDate.toDate(), disabled: (new Date(event.value) > startDate.toDate()) });
             }
         }
     }
@@ -287,11 +287,11 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
             let monthsCount = toMonth.diff(fromMonth, 'months');
             this.fromMonthNames = [];
 
-            this.fromMonthNames.push({ label: dayjs(startDate.toDate(), GIDDH_DATE_FORMAT).format("MMM-YYYY"), value: startDate.toDate(), disabled: (new Date(event.value) < startDate.toDate()) });
+            this.fromMonthNames.push({ label: dayjs(startDate.toDate()).format("MMM-YYYY"), value: startDate.toDate(), disabled: (new Date(event.value) < startDate.toDate()) });
 
             for (let dateLoop = 1; dateLoop <= monthsCount; dateLoop++) {
                 startDate = startDate.add(1, 'month');
-                this.fromMonthNames.push({ label: dayjs(startDate.toDate(), GIDDH_DATE_FORMAT).format("MMM-YYYY"), value: startDate.toDate(), disabled: (new Date(event.value) < startDate.toDate()) });
+                this.fromMonthNames.push({ label: dayjs(startDate.toDate()).format("MMM-YYYY"), value: startDate.toDate(), disabled: (new Date(event.value) < startDate.toDate()) });
             }
         }
     }
