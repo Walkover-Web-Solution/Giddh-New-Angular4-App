@@ -435,21 +435,6 @@
     color: var(--color-abbey);
 }
 
-.theme-green .bs-datepicker-head {
-    background-color: var(--color-teal);
-}
-
-.theme-green .bs-datepicker-body table td span.selected,
-.theme-green .bs-datepicker-body table td.selected span,
-.theme-green .bs-datepicker-body table td span[class*="select-"]:after,
-.theme-green .bs-datepicker-body table td[class*="select-"] span:after {
-    background-color: var(--color-teal);
-}
-
-.theme-green .bs-datepicker-body table td.week span {
-    color: var(--color-teal);
-}
-
 .theme-blue .bs-datepicker-head {
     background-color: var(--color-blue);
 }
@@ -510,7 +495,6 @@
     color: var(--color-orange);
 }
 
-/*# sourceMappingURL=bs-datepicker.css.map */
 bs-datepicker-navigation-view {
     display: flex;
     justify-content: space-between;

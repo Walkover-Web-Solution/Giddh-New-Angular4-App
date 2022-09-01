@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
-import * as moment from 'moment';
+import * as dayjs from 'dayjs';
 import { Observable, of, ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import { GeneralActions } from '../actions/general/general.actions';
@@ -136,8 +136,8 @@ export class AllGiddhItemComponent implements OnInit, OnDestroy {
         this.loadTaxDetails();
         this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch;
         this.currentPeriod = {
-            from: moment().startOf('month').format(GIDDH_DATE_FORMAT),
-            to: moment().endOf('month').format(GIDDH_DATE_FORMAT)
+            from: dayjs().startOf('month').format(GIDDH_DATE_FORMAT),
+            to: dayjs().endOf('month').format(GIDDH_DATE_FORMAT)
         };
 
         this.store.dispatch(this.generalActions.getSideMenuItems());

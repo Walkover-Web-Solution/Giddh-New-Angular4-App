@@ -2154,20 +2154,6 @@
     </ng-template>
     <!-- Tourist scheme template block end-->
 
-    <!--Advance receipt adjusted remove confirmation modal -->
-    <ng-template #advanceReceiptRemoveConfirmationModal>
-        <div class="modal-dialog modal-md">
-            <div class="modal-content">
-                <delete-template-confirmation-modal
-                    [message]="removeAdvanceReceiptConfirmationMessage"
-                    [flag]="confirmationFlag"
-                    (closeModelEvent)="onAdvanceReceiptRemoveCloseConfirmationModal($event)"
-                >
-                </delete-template-confirmation-modal>
-            </div>
-        </div>
-    </ng-template>
-
     <ng-template #adjustPaymentModal>
         <div class="modal-dialog modal-xl">
             <div class="modal-content">

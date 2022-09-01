@@ -4,7 +4,7 @@ import { InventoryEntry, InventoryUser } from '../../../../models/api-models/Inv
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
 import { IStocksItem } from '../../../../models/interfaces/stocksItem.interface';
-import * as moment from 'moment';
+import * as dayjs from 'dayjs';
 import { StockUnitRequest } from '../../../../models/api-models/Inventory';
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 
@@ -58,7 +58,7 @@ export class OutwardNoteComponent implements OnChanges {
 
     public initializeForm(initialRequest: boolean = false) {
         this.form = this._fb.group({
-            inventoryEntryDate: [moment().format(GIDDH_DATE_FORMAT), Validators.required],
+            inventoryEntryDate: [dayjs().format(GIDDH_DATE_FORMAT), Validators.required],
             transactions: this._fb.array([], Validators.required),
             description: [''],
             inventoryUser: [''],
@@ -72,7 +72,7 @@ export class OutwardNoteComponent implements OnChanges {
     public modeChanged(mode: 'receiver' | 'product') {
         this.mode = mode;
         this.form.reset();
-        this.inventoryEntryDate?.patchValue(moment().format(GIDDH_DATE_FORMAT));
+        this.inventoryEntryDate?.patchValue(dayjs().format(GIDDH_DATE_FORMAT));
         this.transactions.controls = this.transactions.controls.filter(trx => false);
 
         if (this.mode === 'receiver') {
@@ -166,7 +166,7 @@ export class OutwardNoteComponent implements OnChanges {
                 return rv;
             });
             let value: InventoryEntry = {
-                inventoryEntryDate: moment(this.inventoryEntryDate.value, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT),
+                inventoryEntryDate: dayjs(this.inventoryEntryDate.value, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT),
                 description: this.description.value,
                 transactions: rawValues
             };

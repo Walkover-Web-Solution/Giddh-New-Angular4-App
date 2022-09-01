@@ -2,7 +2,7 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 import { AfterViewInit, Component, ComponentFactoryResolver, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
-import * as moment from 'moment/moment';
+import * as dayjs from 'dayjs';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { BsDropdownConfig } from 'ngx-bootstrap/dropdown';
 import { ModalDirective } from 'ngx-bootstrap/modal';
@@ -69,7 +69,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
     public isBranch: boolean = false;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public branchViewType: string = 'card';
-    public moment = moment;
+    public dayjs = dayjs;
     public filters: any[] = [];
     public formFields: any[] = [];
     public universalDate$: Observable<any>;
@@ -139,8 +139,8 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
         // listen for universal date
         this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$)).subscribe((dateObj) => {
             if (dateObj) {
-                this.filters['from'] = moment(dateObj[0]).format(GIDDH_DATE_FORMAT);
-                this.filters['to'] = moment(dateObj[1]).format(GIDDH_DATE_FORMAT);
+                this.filters['from'] = dayjs(dateObj[0]).format(GIDDH_DATE_FORMAT);
+                this.filters['to'] = dayjs(dateObj[1]).format(GIDDH_DATE_FORMAT);
 
                 this.dateRangePickerValue = [dateObj[0], dateObj[1]];
                 this.getAllBranches();
@@ -369,8 +369,8 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
     public setFilterDate(data) {
         if (data) {
             let branchFilterRequest = new BranchFilterRequest();
-            branchFilterRequest.from = moment(data[0]).format(GIDDH_DATE_FORMAT);
-            branchFilterRequest.to = moment(data[1]).format(GIDDH_DATE_FORMAT);
+            branchFilterRequest.from = dayjs(data[0]).format(GIDDH_DATE_FORMAT);
+            branchFilterRequest.to = dayjs(data[1]).format(GIDDH_DATE_FORMAT);
 
             this.filters['from'] = branchFilterRequest.from;
             this.filters['to'] = branchFilterRequest.to;

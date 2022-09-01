@@ -19,7 +19,7 @@ import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { InvViewService } from './inv.view.service';
 import { SidebarAction } from "../actions/inventory/sidebar.actions";
 import { StockReportActions } from "../actions/inventory/stocks-report.actions";
-import * as moment from 'moment/moment';
+import * as dayjs from 'dayjs';
 import { IGroupsWithStocksHierarchyMinItem } from "../models/interfaces/groupsWithStocks.interface";
 import { InventoryService } from '../services/inventory.service';
 import { ToasterService } from '../services/toaster.service';
@@ -512,11 +512,11 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
         if (firstElement) {
             this.universalDate$.pipe(take(1)).subscribe(dateObj => {
                 if (dateObj) {
-                    this.GroupStockReportRequest.from = moment(dateObj[0]).format(GIDDH_DATE_FORMAT);
-                    this.GroupStockReportRequest.to = moment(dateObj[1]).format(GIDDH_DATE_FORMAT);
+                    this.GroupStockReportRequest.from = dayjs(dateObj[0]).format(GIDDH_DATE_FORMAT);
+                    this.GroupStockReportRequest.to = dayjs(dateObj[1]).format(GIDDH_DATE_FORMAT);
                 } else {
-                    this.GroupStockReportRequest.from = moment().add(-1, 'month').format(GIDDH_DATE_FORMAT);
-                    this.GroupStockReportRequest.to = moment().format(GIDDH_DATE_FORMAT);
+                    this.GroupStockReportRequest.from = dayjs().add(-1, 'month').format(GIDDH_DATE_FORMAT);
+                    this.GroupStockReportRequest.to = dayjs().format(GIDDH_DATE_FORMAT);
                 }
             });
 
