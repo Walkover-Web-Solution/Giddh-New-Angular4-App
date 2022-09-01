@@ -5077,20 +5077,20 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                         salesEntryClass.isOtherTaxApplicable = true;
                         let otherTaxModal = new SalesOtherTaxesModal();
                         otherTaxModal.appliedOtherTax = { name: ta?.name, uniqueName: ta?.uniqueName };
-                        otherTaxModal.tcsCalculationMethod = ta.calculationMethod;
+                        otherTaxModal.tcsCalculationMethod = ta?.calculationMethod;
                         salesEntryClass.otherTaxModal = otherTaxModal;
 
                         if (ta.taxType === 'tdsrc' || ta.taxType === 'tdspay') {
-                            salesEntryClass.tdsTaxList.push(ta.uniqueName);
+                            salesEntryClass.tdsTaxList.push(ta?.uniqueName);
                         } else {
-                            salesEntryClass.tcsTaxList.push(ta.uniqueName);
+                            salesEntryClass.tcsTaxList.push(ta?.uniqueName);
                         }
 
                     } else {
-                        const selectedTax = this.companyTaxesList.find(tax => tax.uniqueName === ta.uniqueName);
+                        const selectedTax = this.companyTaxesList.find(tax => tax.uniqueName === ta?.uniqueName);
                         salesEntryClass.taxes.push({
                             amount: ta.taxPercent,
-                            uniqueName: ta.uniqueName,
+                            uniqueName: ta?.uniqueName,
                             isChecked: true,
                             isDisabled: false,
                             type: ta?.taxType,
