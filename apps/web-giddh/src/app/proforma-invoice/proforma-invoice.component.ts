@@ -810,8 +810,8 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         }
 
         this.getInventorySettings();
-        this.getProfile();
         this.getDiscounts();
+        this.getProfile();
         this.store.dispatch(this.companyActions.getTax());
         this.store.dispatch(this.invoiceActions.getInvoiceSetting());
         this.store.dispatch(this.salesAction.resetAccountDetailsForSales());
@@ -2671,7 +2671,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     if (this.voucherApiVersion === 2) {
                         updatedData = this.proformaInvoiceUtilityService.cleanObject(updatedData);
                     }
-
+                    
                     this.salesService.generateGenericItem(updatedData, isVoucherV4).pipe(takeUntil(this.destroyed$)).subscribe((response: BaseResponse<any, GenericRequestForGenerateSCD>) => {
                         this.handleGenerateResponse(response, form);
                     }, () => {
