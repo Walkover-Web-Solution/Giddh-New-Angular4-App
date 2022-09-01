@@ -486,8 +486,6 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
      * getAllBranch
      */
     public getAllBranch() {
-        let branchFilterRequest = new BranchFilterRequest();
-        this.store.dispatch(this.settingsBranchActions.GetALLBranches(branchFilterRequest));
         // tslint:disable-next-line:no-shadowed-variable
         this.store.pipe(select(createSelector([(state: AppState) => state.settings.branches], (entities) => {
             if (entities) {

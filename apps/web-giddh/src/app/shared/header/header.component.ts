@@ -429,8 +429,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                     this.activeCompanyForDb.uniqueName = selectedCmp.uniqueName;
                     this.selectedCompanyCountry = selectedCmp.country;
                 }
-
-                this.loadCompanyBranches();
             }
         });
 
@@ -481,6 +479,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.store.pipe(select(state => state.general.isCalendlyModelOpen), takeUntil(this.destroyed$)).subscribe(response => {
             this.isCalendlyModelActivate = response;
         });
+
+        this.loadCompanyBranches();
     }
 
     public ngOnInit() {

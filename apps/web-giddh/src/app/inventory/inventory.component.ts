@@ -55,8 +55,6 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
     @ViewChild('warehouseFilter', { static: false }) warehouseFilter: ShSelectComponent;
 
     public dataSyncOption = IsyncData;
-    public currentBranch: string = null;
-    public currentBranchNameAlias: string = null;
     public companies$: Observable<CompanyResponse[]>;
     public branches$: Observable<CompanyResponse[]>;
     public selectedCompaniesUniquename: string[] = [];
@@ -96,6 +94,8 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
     public shouldShowInventoryReport$: Observable<any>;
     /** Emits when group delete operation is successful */
     public removeGroupSuccess$: Observable<any>;
+    /** True if get branches api has initiated once */
+    private getBranchesInitiated: boolean = false;
 
     constructor(
         private store: Store<AppState>,
@@ -126,22 +126,9 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
         this.activeStock$ = this.store.pipe(select(p => p.inventory.activeStock), takeUntil(this.destroyed$));
         this.activeGroup$ = this.store.pipe(select(p => p.inventory.activeGroup), takeUntil(this.destroyed$));
         this.groupsWithStocks$ = this.store.pipe(select(s => s.inventory.groupsWithStocks), takeUntil(this.destroyed$));
-
-        this.store.pipe(select(p => p.settings.profile), takeUntil(this.destroyed$)).subscribe((o) => {
-            if (o && !isEmpty(o)) {
-                let companyInfo = cloneDeep(o);
-                this.currentBranch = companyInfo.name;
-                this.currentBranchNameAlias = companyInfo.nameAlias;
-            }
-        });
     }
 
     public ngOnInit() {
-        let branchFilterRequest = new BranchFilterRequest();
-
-        this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
-        this.store.dispatch(this.settingsBranchActions.GetALLBranches(branchFilterRequest));
-
         this.store.pipe(select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.settings.branches], (companies, branches) => {
             if (branches) {
                 if (branches.length) {
@@ -154,6 +141,8 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
                 } else if (branches.length === 0) {
                     this.branches$ = observableOf(null);
                 }
+            } else {
+                this.getAllBranches();
             }
             if (companies && companies.length && branches) {
                 let companiesWithSuperAdminRole = [];
@@ -346,9 +335,11 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     public getAllBranches() {
-        let branchFilterRequest = new BranchFilterRequest();
-        this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
-        this.store.dispatch(this.settingsBranchActions.GetALLBranches(branchFilterRequest));
+        if (!this.getBranchesInitiated) {
+            this.getBranchesInitiated = true;
+            let branchFilterRequest = new BranchFilterRequest();
+            this.store.dispatch(this.settingsBranchActions.GetALLBranches(branchFilterRequest));
+        }
     }
 
     /**
