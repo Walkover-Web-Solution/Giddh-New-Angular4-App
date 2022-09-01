@@ -252,12 +252,12 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         private _ledgerActions: LedgerActions,
         private store: Store<AppState>,
         private _keyboardService: KeyboardService,
-        private _toaster: ToasterService, 
+        private _toaster: ToasterService,
         private router: Router,
         private tallyModuleService: TallyModuleService,
         private componentFactoryResolver: ComponentFactoryResolver,
         private inventoryService: InventoryService,
-        private fb: FormBuilder, 
+        private fb: FormBuilder,
         public bsConfig: BsDatepickerConfig,
         private salesAction: SalesActions,
         private modalService: BsModalService,
@@ -359,11 +359,11 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             }
         });
 
-        this.store.pipe(select(state => state.ledger.ledgerCreateInProcess), takeUntil(this.destroyed$)).subscribe(response => {
-            this.isLoading = response;
+        this.store.pipe(select(state => state?.ledger?.ledgerCreateInProcess), takeUntil(this.destroyed$)).subscribe((response: boolean) => {
+            this.isLoading = (response) ? true : false;
         });
 
-        this.store.pipe(select(p => p.ledger.ledgerCreateSuccess), takeUntil(this.destroyed$)).subscribe((s: boolean) => {
+        this.store.pipe(select(p => p?.ledger?.ledgerCreateSuccess), takeUntil(this.destroyed$)).subscribe((s: boolean) => {
             if (s) {
                 this._toaster.successToast(this.localeData?.entry_created, this.commonLocaleData?.app_success);
                 this.refreshEntry();

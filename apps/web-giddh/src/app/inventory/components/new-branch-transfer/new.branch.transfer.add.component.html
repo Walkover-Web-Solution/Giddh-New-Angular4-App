@@ -898,7 +898,7 @@
                                                 [prefix]="activeCompany?.baseCurrencySymbol"
                                                 [validation]="false"
                                                 [mask]="inputMaskFormat"
-                                                (blur)="dispatchDate.show(); hideActiveRow()"
+                                                (blur)="dispatchDate?.show(); hideActiveRow()"
                                             />
                                         </div>
                                         <div *ngIf="activeRow !== i">
@@ -1049,7 +1049,7 @@
                                                 [prefix]="activeCompany?.baseCurrencySymbol"
                                                 [validation]="false"
                                                 [mask]="inputMaskFormat"
-                                                (blur)="dispatchDate.show(); hideActiveRow()"
+                                                (blur)="dispatchDate?.show(); hideActiveRow()"
                                             />
                                         </div>
                                         <div *ngIf="activeRow !== i">
@@ -1207,7 +1207,7 @@
                                                 [prefix]="activeCompany?.baseCurrencySymbol"
                                                 [validation]="false"
                                                 [mask]="inputMaskFormat"
-                                                (blur)="dispatchDate.show(); hideActiveRow()"
+                                                (blur)="dispatchDate?.show(); hideActiveRow()"
                                             />
                                         </div>
                                         <div *ngIf="activeRow !== i">
