@@ -473,7 +473,7 @@ export class UpdateLedgerVm {
         this.generateCompoundTotal();
     }
 
-    public inventoryAmountChanged(event = null) {
+    public inventoryAmountChanged() {
         this.convertedTotalAmount = this.calculateConversionRate(this.totalAmount);
         if (this.stockTrxEntry) {
             if (this.stockTrxEntry.amount !== giddhRoundOff(Number(this.totalAmount), this.giddhBalanceDecimalPlaces)) {
@@ -760,5 +760,21 @@ export class UpdateLedgerVm {
         };
 
         return this.ledgerUtilityService.checkIfExportIsValid(data);
+    }
+
+    /**
+     * Updates entry amount if manually updated
+     *
+     * @memberof UpdateLedgerVm
+     */
+    public updateFirstEntryAmount(): void {
+        if (this.selectedLedger.transactions && this.selectedLedger.transactions.length > 0) {
+            this.selectedLedger.transactions = this.selectedLedger.transactions.map(transaction => {
+                if (transaction?.particular?.uniqueName && !transaction.isTax) {
+                    transaction.amount = giddhRoundOff(Number(this.totalAmount), this.giddhBalanceDecimalPlaces);
+                }
+                return transaction;
+            });
+        }
     }
 }
