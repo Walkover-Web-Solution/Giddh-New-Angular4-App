@@ -290,7 +290,6 @@ export class ContactComponent implements OnInit, OnDestroy {
         this.renderer.addClass(document.body, 'contact-body');
         this.imgPath = isElectron ? "assets/images/" : AppUrl + APP_FOLDER + "assets/images/";
         this.store.dispatch(this.companyActions.getAllRegistrations());
-        this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
         this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.isAddAndManageOpenedFromOutside$ = this.store.pipe(select(appStore => appStore.groupwithaccounts.isAddAndManageOpenedFromOutside), takeUntil(this.destroyed$));
         // localStorage supported
@@ -407,10 +406,14 @@ export class ContactComponent implements OnInit, OnDestroy {
         }
 
         this.store.pipe(select(store => store.settings.profile), takeUntil(this.destroyed$)).subscribe(response => {
-            if (response && response.balanceDecimalPlaces) {
-                this.giddhDecimalPlaces = response.balanceDecimalPlaces;
+            if (response) {
+                if (response.balanceDecimalPlaces) {
+                    this.giddhDecimalPlaces = response.balanceDecimalPlaces;
+                } else {
+                    this.giddhDecimalPlaces = 2;
+                }
             } else {
-                this.giddhDecimalPlaces = 2;
+                this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
             }
         });
 

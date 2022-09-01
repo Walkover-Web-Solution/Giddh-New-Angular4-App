@@ -166,6 +166,8 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     public personalInformationTabHeading: string = "";
     /* This will store screen size */
     public isMobileScreen: boolean = false;
+    /** True if initial data is fetched */
+    private initialDataFetched: boolean = false;
 
     constructor(
         private commonService: CommonService,
@@ -272,21 +274,24 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
 
     public getInitialProfileData() {
         this.store.pipe(select(appStore => appStore.session.currentOrganizationDetails), takeUntil(this.destroyed$)).subscribe((organization: Organization) => {
-            if (organization) {
-                if (organization.type === OrganizationType.Branch) {
-                    this.store.dispatch(this.settingsProfileActions.getBranchInfo());
-                    this.currentOrganizationType = OrganizationType.Branch;
-                } else if (organization.type === OrganizationType.Company) {
+            if (!this.initialDataFetched) {
+                this.initialDataFetched = true;
+                if (organization) {
+                    if (organization.type === OrganizationType.Branch) {
+                        this.store.dispatch(this.settingsProfileActions.getBranchInfo());
+                        this.currentOrganizationType = OrganizationType.Branch;
+                    } else if (organization.type === OrganizationType.Company) {
+                        this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
+                        this.currentOrganizationType = OrganizationType.Company;
+                    }
+                } else {
+                    // Treat it as company
                     this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
                     this.currentOrganizationType = OrganizationType.Company;
                 }
-            } else {
-                // Treat it as company
-                this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
-                this.currentOrganizationType = OrganizationType.Company;
-            }
 
-            this.loadAddresses('GET');
+                this.loadAddresses('GET');
+            }
         });
     }
 
