@@ -3262,7 +3262,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
      * @returns {SalesTransactionItemClass} Returns the complete transaction instance
      * @memberof CreatePurchaseOrderComponent
      */
-    private calculateItemValues(selectedAcc: any, transaction: SalesTransactionItemClass, entry: SalesEntryClass, calculateTransaction: boolean = true): SalesTransactionItemClass {
+    private calculateItemValues(selectedAcc: any, transaction: SalesTransactionItemClass, entry: SalesEntryClass, calculateTransaction: boolean = true, isBulkItem?: boolean): SalesTransactionItemClass {
         let additional = _.cloneDeep(selectedAcc.additional);
         transaction.quantity = additional.quantity ? additional.quantity : (additional.stock) ? 1 : null;
         transaction.applicableTaxes = [];
@@ -3309,7 +3309,11 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
             });
         } else {
             // assign taxes for non stock accounts
-            transaction.applicableTaxes = additional.applicableTaxes;
+            if (isBulkItem) {
+                transaction.applicableTaxes = additional.stock?.groupTaxes;
+            } else {
+                transaction.applicableTaxes = additional.applicableTaxes;
+            }
         }
 
         transaction.accountName = additional.name;
