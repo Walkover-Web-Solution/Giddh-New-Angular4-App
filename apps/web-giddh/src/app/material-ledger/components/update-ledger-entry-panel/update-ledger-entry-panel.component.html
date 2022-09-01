@@ -927,7 +927,7 @@
                                     [prefix]="vm.selectedPrefixForCurrency"
                                     [suffix]="vm.selectedSuffixForCurrency"
                                     (focus)="hideDiscountTax()"
-                                    (blur)="vm.inventoryAmountChanged()"
+                                    (blur)="vm.updateFirstEntryAmount(); vm.inventoryAmountChanged()"
                                     [(ngModel)]="vm.totalAmount"
                                 />
                                 <p class="mb-0 amount-total pr-1" *ngIf="vm.isMultiCurrencyAvailable">
