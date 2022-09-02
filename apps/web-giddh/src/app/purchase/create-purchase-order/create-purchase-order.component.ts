@@ -3422,8 +3422,6 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         this.focusOnDescription();
         this.calculateStockEntryAmount(transaction);
         this.calculateWhenTrxAltered(entry, transaction);
-        console.log(transaction);
-
         return transaction;
     }
 
