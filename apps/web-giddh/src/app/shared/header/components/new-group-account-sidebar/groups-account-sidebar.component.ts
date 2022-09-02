@@ -471,8 +471,10 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges, OnDestr
                 parentPath.push(group.name);
             }
         }
-        parentUniquenamePath.push(activeEntity.uniqueName);
-        parentPath.push(activeEntity.name);
+        if (activeEntity) {
+            parentUniquenamePath.push(activeEntity.uniqueName);
+            parentPath.push(activeEntity.name);
+        }
         result = activeEntity;
         return result;
     }

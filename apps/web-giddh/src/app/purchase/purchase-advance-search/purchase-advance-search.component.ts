@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef, EventEmitter, Output, Input, OnDestroy } from '@angular/core';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal'
 import { IOption } from '../../theme/ng-select/ng-select';
-import * as moment from 'moment/moment';
+import * as dayjs from 'dayjs';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
@@ -43,8 +43,8 @@ export class PurchaseAdvanceSearchComponent implements OnInit, OnDestroy {
     public selectedDateRangeUi: any;
     /* This will store available date ranges */
     public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
-    /* Moment object */
-    public moment = moment;
+    /* dayjs object */
+    public dayjs = dayjs;
     /* Selected range label */
     public selectedRangeLabel: any = "";
     /* This will store the x/y position of the field to show datepicker under it */
@@ -96,8 +96,8 @@ export class PurchaseAdvanceSearchComponent implements OnInit, OnDestroy {
         });
 
         if (this.purchaseOrderPostRequest && this.purchaseOrderPostRequest.dueFrom && this.purchaseOrderPostRequest.dueTo) {
-            this.selectedDateRange = { startDate: moment(this.purchaseOrderPostRequest.dueFrom, GIDDH_DATE_FORMAT), endDate: moment(this.purchaseOrderPostRequest.dueTo, GIDDH_DATE_FORMAT) };
-            this.selectedDateRangeUi = moment(this.purchaseOrderPostRequest.dueFrom, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(this.purchaseOrderPostRequest.dueTo, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
+            this.selectedDateRange = { startDate: dayjs(this.purchaseOrderPostRequest.dueFrom, GIDDH_DATE_FORMAT), endDate: dayjs(this.purchaseOrderPostRequest.dueTo, GIDDH_DATE_FORMAT) };
+            this.selectedDateRangeUi = dayjs(this.purchaseOrderPostRequest.dueFrom, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(this.purchaseOrderPostRequest.dueTo, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
         }
     }
 
@@ -149,10 +149,10 @@ export class PurchaseAdvanceSearchComponent implements OnInit, OnDestroy {
         this.hideGiddhDatepicker();
 
         if (value && value.startDate && value.endDate) {
-            this.selectedDateRange = { startDate: moment(value.startDate), endDate: moment(value.endDate) };
-            this.selectedDateRangeUi = moment(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
-            this.purchaseOrderPostRequest.dueFrom = moment(value.startDate).format(GIDDH_DATE_FORMAT);
-            this.purchaseOrderPostRequest.dueTo = moment(value.endDate).format(GIDDH_DATE_FORMAT);
+            this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
+            this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
+            this.purchaseOrderPostRequest.dueFrom = dayjs(value.startDate).format(GIDDH_DATE_FORMAT);
+            this.purchaseOrderPostRequest.dueTo = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
         }
     }
 

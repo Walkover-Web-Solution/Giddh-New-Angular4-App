@@ -4,7 +4,7 @@ import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { InventoryEntry, InventoryUser } from '../../../../models/api-models/Inventory-in-out';
 import { IStocksItem } from '../../../../models/interfaces/stocksItem.interface';
 import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
-import * as moment from 'moment';
+import * as dayjs from 'dayjs';
 import { StockUnitRequest } from '../../../../models/api-models/Inventory';
 import { digitsOnly, stockManufacturingDetailsValidator } from '../../../../shared/helpers';
 import { ToasterService } from '../../../../services/toaster.service';
@@ -86,7 +86,7 @@ export class InwardNoteComponent implements OnInit, OnChanges, OnDestroy {
 
     public initializeForm(initialRequest: boolean = false) {
         this.form = this._fb.group({
-            inventoryEntryDate: [moment().format(GIDDH_DATE_FORMAT), Validators.required],
+            inventoryEntryDate: [dayjs().format(GIDDH_DATE_FORMAT), Validators.required],
             transactions: this._fb.array([], Validators.required),
             description: [''],
             inventoryUser: [''],
@@ -120,7 +120,7 @@ export class InwardNoteComponent implements OnInit, OnChanges, OnDestroy {
     public modeChanged(mode: 'sender' | 'product') {
         this.mode = mode;
         this.form.reset();
-        this.inventoryEntryDate?.patchValue(moment().format(GIDDH_DATE_FORMAT));
+        this.inventoryEntryDate?.patchValue(dayjs().format(GIDDH_DATE_FORMAT));
         this.transactions.controls = this.transactions.controls.filter(trx => false);
 
         if (this.mode === 'sender') {
@@ -317,7 +317,7 @@ export class InwardNoteComponent implements OnInit, OnChanges, OnDestroy {
                 return rv;
             });
             let value: InventoryEntry = {
-                inventoryEntryDate: moment(this.inventoryEntryDate.value, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT),
+                inventoryEntryDate: dayjs(this.inventoryEntryDate.value, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT),
                 description: this.description.value,
                 transactions: rawValues,
             };

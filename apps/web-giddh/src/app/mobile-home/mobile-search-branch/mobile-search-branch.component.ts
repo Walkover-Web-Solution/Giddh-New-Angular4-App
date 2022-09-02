@@ -134,19 +134,6 @@ export class MobileSearchBranchComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * This will get the current company data
-     *
-     * @memberof MobileSearchBranchComponent
-     */
-    public getCurrentCompanyData(): void {
-        this.settingsProfileService.GetProfileInfo().pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
-            if (response && response.status === "success" && response.body) {
-                this.activeCompany = response.body;
-            }
-        });
-    }
-
-    /**
      * Filters the branches based on text provided
      *
      * @param {string} branchName Branch name query entered by the user
@@ -169,18 +156,6 @@ export class MobileSearchBranchComponent implements OnInit, OnDestroy {
             });
         } else {
             this.currentCompanyBranches = branches;
-        }
-    }
-
-    /**
-     * Loads company branches
-     *
-     * @memberof MobileSearchBranchComponent
-     */
-    public loadCompanyBranches(): void {
-        if (this.generalService.companyUniqueName) {
-            // Avoid API call if new user is onboarded
-            this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '' }));
         }
     }
 
