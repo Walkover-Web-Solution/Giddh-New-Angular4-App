@@ -605,7 +605,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         this.store.pipe(select((state: AppState) => state.session.applicationDate)).pipe(takeUntil(this.destroyed$)).subscribe((dateObj: Date[]) => {
             if (dateObj) {
                 try {
-                    this.universalDate = dayjs(dateObj[1]);
+                    const universalDate: any = dayjs(dateObj[1]);
+                    this.universalDate = universalDate.$d;
                     this.assignDates();
                 } catch (e) {
                     this.universalDate = new Date();
@@ -665,8 +666,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
             this.isMulticurrencyAccount = accountDetails.currency !== this.companyCurrency;
             if (this.isMulticurrencyAccount) {
                 this.customerCurrencyCode = accountDetails.currency;
-                this.getCurrencyRate(this.companyCurrency, accountDetails.currency,
-                    dayjs(this.purchaseOrder.voucherDetails.voucherDate).format(GIDDH_DATE_FORMAT));
+                let voucherDate = (typeof this.purchaseOrder.voucherDetails.voucherDate === "object") ? dayjs(this.purchaseOrder.voucherDetails.voucherDate).format(GIDDH_DATE_FORMAT) : this.purchaseOrder.voucherDetails.voucherDate;
+                this.getCurrencyRate(this.companyCurrency, accountDetails.currency, voucherDate);
             } else {
                 this.customerCurrencyCode = this.companyCurrency;
                 this.previousExchangeRate = this.exchangeRate;
@@ -2974,7 +2975,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
     public onUpdateOrderDate(): void {
         this.isOrderDateChanged = true;
         if (this.isMulticurrencyAccount && this.purchaseOrder.voucherDetails.voucherDate) {
-            this.getCurrencyRate(this.companyCurrency, this.customerCurrencyCode, dayjs(this.purchaseOrder.voucherDetails.voucherDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT));
+            let voucherDate = (typeof this.purchaseOrder.voucherDetails.voucherDate === "object") ? dayjs(this.purchaseOrder.voucherDetails.voucherDate).format(GIDDH_DATE_FORMAT) : this.purchaseOrder.voucherDetails.voucherDate;
+            this.getCurrencyRate(this.companyCurrency, this.customerCurrencyCode, voucherDate);
         }
         if (this.invoiceSettings && this.invoiceSettings.purchaseBillSettings) {
             setTimeout(() => {
