@@ -742,7 +742,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 return;
             }
         }
-        // Taxes checkbox will be false in case of receipt and payment voucher 
+        // Taxes checkbox will be false in case of receipt and payment voucher
         if (this.voucherApiVersion === 2 && (this.blankLedger.voucherType === 'rcpt' || this.blankLedger.voucherType === 'pay') && !this.isAdvanceReceipt) {
             this.currentTxn?.taxesVm?.map(tax => {
                 tax.isChecked = false;
@@ -1115,9 +1115,27 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
     public toggleBodyClass() {
         if (this.asideMenuStateForOtherTaxes === 'in') {
+
             document.querySelector('body')?.classList?.add('fixed');
         } else {
             document.querySelector('body')?.classList?.remove('fixed');
+        }
+    }
+
+    /**
+     *Closes the other taxes side menu panel on click of overlay
+     *
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    public closeAsideMenuStateForOtherTax(): void {
+        if (this.asideMenuStateForOtherTaxes === 'in') {
+            this.blankLedger.otherTaxModal = new SalesOtherTaxesModal();
+            if (this.blankLedger.otherTaxesSum > 0) {
+                this.blankLedger.isOtherTaxesApplicable = true;
+            } else {
+                this.blankLedger.isOtherTaxesApplicable = false;
+            }
+            this.toggleOtherTaxesAsidePane(true);
         }
     }
 
