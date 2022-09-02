@@ -1298,15 +1298,16 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                 };
             }
             if (isBulkItem) {
-                txn = this.calculateItemValues(selectedAcc, txn, entry);
+                txn = this.calculateItemValues(selectedAcc, txn, entry, false, true);
             } else {
                 this.searchService.loadDetails(selectedAcc.additional.uniqueName, requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
                     if (data && data.body) {
                         // Take taxes of parent group and stock's own taxes
-                        const taxes = data.body.taxes || [];
-                        if (data.body.stock) {
-                            taxes.push(...data.body.stock.taxes);
-                        }
+                        const taxes = this.generalService.fetchTaxesOnPriority(
+                            data.body.stock?.taxes ?? [],
+                            data.body.stock?.groupTaxes ?? [],
+                            data.body.taxes ?? [],
+                            data.body.groupTaxes ?? []);
 
                         // directly assign additional property
                         selectedAcc.additional = {
