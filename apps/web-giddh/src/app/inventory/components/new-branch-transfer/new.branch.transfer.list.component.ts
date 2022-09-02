@@ -345,7 +345,7 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
     public showDeleteBranchTransferModal(item): void {
         this.selectedBranchTransfer = item.uniqueName;
         this.selectedBranchTransferType = (item.voucherType === "receiptnote") ? "Receipt Note" : "Delivery Challan";
-        this.deleteBranchTransferModal.show();
+        this.deleteBranchTransferModal?.show();
     }
 
     public hideBranchTransferModal(): void {

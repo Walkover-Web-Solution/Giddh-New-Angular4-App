@@ -54,7 +54,7 @@ export class DataFormatter {
         formatable.setHeader(this.selectedCompany);
         createCsv = (groups: ChildGroup[]) => {
             const addRow = (group: ChildGroup) => {
-                if (group.accounts.length > 0) {
+                if (group.accounts?.length > 0) {
                     group.accounts.forEach(account => {
                         let data1 = [];
                         let name = this.truncate(`${this.firstCapital(account.name)} (${this.firstCapital(group.groupName)})`, true, 37);
@@ -68,14 +68,14 @@ export class DataFormatter {
                 }
             };
             groups.forEach(group => {
-                if (group.accounts.length > 0) {
+                if (group.accounts?.length > 0) {
                     addRow(group);
                 }
                 group.childGroups.forEach(childGroup => {
-                    if (childGroup.accounts.length > 0) {
+                    if (childGroup.accounts?.length > 0) {
                         addRow(childGroup);
                     }
-                    if (childGroup.childGroups.length > 0) {
+                    if (childGroup.childGroups?.length > 0) {
                         return createCsv(childGroup.childGroups);
                     }
                 });
@@ -120,7 +120,7 @@ export class DataFormatter {
                     data1.push(`${group.closingBalance.amount} ${this.recType.transform(group.closingBalance)}`);
                     formatable.setRowData(data1, strIndex);
                     data1 = [];
-                    if (group.accounts.length > 0) {
+                    if (group.accounts?.length > 0) {
                         group.accounts.forEach(acc => {
                             if (true) {
                                 data1.push(this.truncate(`${this.firstCapital(acc.name)}(${this.firstCapital(group.groupName)})`, true, 25));
@@ -133,7 +133,7 @@ export class DataFormatter {
                             }
                         });
                     }
-                    if (group.childGroups.length > 0) {
+                    if (group.childGroups?.length > 0) {
                         createCsv(group.childGroups, index + 1);
                     }
                 }
@@ -218,7 +218,7 @@ export class DataFormatter {
         if (!max) {
             return value;
         }
-        if (value.length <= max) {
+        if (value?.length <= max) {
             return value;
         }
         value = value.substr(0, max);

@@ -225,7 +225,7 @@ export class JobworkComponent implements OnInit, OnDestroy {
             }
 
         });
-        
+
         // initialization for voucher type array initially all selected
         this.initVoucherType();
         // Advance search modal
@@ -490,7 +490,7 @@ export class JobworkComponent implements OnInit, OnDestroy {
     }
 
     public onOpenAdvanceSearch() {
-        this.advanceSearchModel.show();
+        this.advanceSearchModel?.show();
     }
 
     public advanceSearchAction(type: string) {
