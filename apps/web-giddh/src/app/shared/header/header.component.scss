@@ -1,7 +1,3 @@
-.ddMaxHeight {
-    max-height: 500px;
-}
-
 .giddh-logo {
     width: 100px;
 }
@@ -882,7 +878,7 @@ ul.sub-list {
 
 /*new header css starts*/
 .fixed-padding {
-    padding-top: 58px;
+    padding-top: 12px;
 }
 #primary-new-header.primary-main-header {
     padding-left: 15px;
@@ -1051,13 +1047,6 @@ aside-setting {
         }
     }
 }
-@media (max-width: 1024px) {
-    .fixed-padding {
-        #primary-new-header {
-            z-index: 99999 !important;
-        }
-    }
-}
 @media (max-width: 767px) {
     .setting-sidebar-wrapper {
         z-index: 9999;
@@ -1076,7 +1065,7 @@ aside-setting {
         text-align: center;
     }
     .fixed-padding {
-        padding-top: 90px;
+        padding-top: 44px;
         #primary-new-header.primary-main-header {
             background-color: var(--color-giddh-blue);
             position: fixed;

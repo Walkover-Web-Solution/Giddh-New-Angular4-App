@@ -3,7 +3,7 @@
         <div class="search-box position-relative mr-t1 mr-b1">
             <div class="input-group flex-nowrap">
                 <div class="input-group-prepend">
-                    <span class="input-group-text border-right-none" id="addon-wrapping">
+                    <span class="input-group-text border-right-none">
                         <i class="icon-search"></i>
                     </span>
                 </div>
@@ -11,8 +11,6 @@
                     type="text"
                     class="form-control"
                     [placeholder]="localeData?.search_company"
-                    [attr.aria-label]="localeData?.search_company"
-                    aria-describedby="addon-wrapping"
                     [(ngModel)]="searchCompany"
                     (ngModelChange)="filterCompanyList($event)"
                     autocomplete="off"
@@ -22,8 +20,6 @@
                     type="text"
                     class="form-control"
                     [placeholder]="localeData?.search_branch"
-                    [attr.aria-label]="localeData?.search_branch"
-                    aria-describedby="addon-wrapping"
                     [(ngModel)]="searchBranch"
                     (ngModelChange)="filterBranchList($event)"
                     autocomplete="off"

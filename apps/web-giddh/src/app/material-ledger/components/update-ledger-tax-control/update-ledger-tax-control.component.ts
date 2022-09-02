@@ -11,7 +11,7 @@ import {
     ViewChild,
 } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
-import * as moment from 'moment/moment';
+import * as dayjs from 'dayjs';
 import { TaxResponse } from '../../../models/api-models/Company';
 import { INameUniqueName } from '../../../models/api-models/Inventory';
 import { ITaxDetail } from '../../../models/interfaces/tax.interface';
@@ -91,7 +91,7 @@ export class UpdateLedgerTaxControlComponent implements OnDestroy, OnChanges {
             if (hasApplicableTaxesChanged) {
                 this.taxRenderData = [];
             }
-            const hasDateChanged = changes['date'] && changes['date'].currentValue !== changes['date'].previousValue && moment(changes['date'].currentValue, GIDDH_DATE_FORMAT).isValid();
+            const hasDateChanged = changes['date'] && changes['date'].currentValue !== changes['date'].previousValue && dayjs(changes['date'].currentValue, GIDDH_DATE_FORMAT).isValid();
             if (hasApplicableTaxesChanged || hasDateChanged) {
                 this.sum = 0;
                 this.prepareTaxObject();
@@ -123,7 +123,7 @@ export class UpdateLedgerTaxControlComponent implements OnDestroy, OnChanges {
             if (index > -1) {
                 if (this.date && tax.taxDetail && tax.taxDetail.length) {
                     this.taxRenderData[index].amount =
-                        (moment(tax.taxDetail[0].date, GIDDH_DATE_FORMAT).isSame(moment(this.date, GIDDH_DATE_FORMAT)) || moment(tax.taxDetail[0].date, GIDDH_DATE_FORMAT) < moment(this.date, GIDDH_DATE_FORMAT)) ?
+                        (dayjs(tax.taxDetail[0].date, GIDDH_DATE_FORMAT).isSame(dayjs(this.date, GIDDH_DATE_FORMAT)) || dayjs(tax.taxDetail[0].date, GIDDH_DATE_FORMAT) < dayjs(this.date, GIDDH_DATE_FORMAT)) ?
                             tax.taxDetail[0].taxValue : 0;
                 }
             } else {
@@ -133,13 +133,13 @@ export class UpdateLedgerTaxControlComponent implements OnDestroy, OnChanges {
                 taxObj.uniqueName = tax?.uniqueName;
                 if (this.date) {
                     let taxObject = orderBy(tax.taxDetail, (p: ITaxDetail) => {
-                        return moment(p.date, GIDDH_DATE_FORMAT);
+                        return dayjs(p.date, GIDDH_DATE_FORMAT);
                     }, 'desc');
-                    let exactDate = taxObject.filter(p => moment(p.date, GIDDH_DATE_FORMAT).isSame(moment(this.date, GIDDH_DATE_FORMAT)));
+                    let exactDate = taxObject.filter(p => dayjs(p.date, GIDDH_DATE_FORMAT).isSame(dayjs(this.date, GIDDH_DATE_FORMAT)));
                     if (exactDate && exactDate.length > 0) {
                         taxObj.amount = exactDate[0].taxValue;
                     } else {
-                        let filteredTaxObject = taxObject.filter(p => moment(p.date, GIDDH_DATE_FORMAT) < moment(this.date, GIDDH_DATE_FORMAT));
+                        let filteredTaxObject = taxObject.filter(p => dayjs(p.date, GIDDH_DATE_FORMAT) < dayjs(this.date, GIDDH_DATE_FORMAT));
                         if (filteredTaxObject && filteredTaxObject.length > 0) {
                             taxObj.amount = filteredTaxObject[0].taxValue;
                         } else {

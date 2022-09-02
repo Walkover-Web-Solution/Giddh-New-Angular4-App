@@ -83,15 +83,18 @@ import { AccountsFilterPipe } from './pipes/accounts-filter.pipe';
         ReactiveFormsModule,
         Daterangepicker,
         FinancialReportsRoutingModule,
-        TabsModule,
-        LaddaModule,
+        TabsModule.forRoot(),
+        LaddaModule.forRoot({
+            style: 'slide-left',
+            spinnerSize: 30
+        }),
         HighlightModule,
         RecTypeModule,
         ShSelectModule,
         ClickOutsideModule,
-        BsDropdownModule,
+        BsDropdownModule.forRoot(),
         CurrencyModule,
-        TooltipModule,
+        TooltipModule.forRoot(),
         AccountDetailModalModule,
         ScrollingModule,
         TranslateDirectiveModule,
@@ -99,7 +102,7 @@ import { AccountsFilterPipe } from './pipes/accounts-filter.pipe';
         GiddhPageLoaderModule,
         AmountFieldComponentModule,
         DatepickerWrapperModule,
-        PopoverModule
+        PopoverModule.forRoot()
     ],
 })
 export class FinancialReportsModule {

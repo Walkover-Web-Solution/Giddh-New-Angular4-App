@@ -52,10 +52,13 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         HomeRoutingModule,
         ModalModule,
         HighchartsChartModule,
-        LaddaModule,
+        LaddaModule.forRoot({
+            style: 'slide-left',
+            spinnerSize: 30
+        }),
         PerfectScrollbarModule,
-        BsDropdownModule,
-        TabsModule,
+        BsDropdownModule.forRoot(),
+        TabsModule.forRoot(),
         TooltipModule.forRoot(),
         Daterangepicker,
         CurrencyModule,
