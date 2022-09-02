@@ -194,7 +194,7 @@
                             "namedChunks": false,
                             "aot": true,
                             "extractLicenses": true,
-                            "vendorChunk": true,
+                            "vendorChunk": false,
                             "buildOptimizer": true
                         },
                         "prod": {
@@ -443,9 +443,9 @@
                             "optimization": true,
                             "outputHashing": "all",
                             "sourceMap": false,
-                            "namedChunks": false,
+                            "namedChunks": true,
                             "aot": true,
-                            "extractLicenses": true,
+                            "extractLicenses": false,
                             "vendorChunk": true,
                             "buildOptimizer": true
                         },
