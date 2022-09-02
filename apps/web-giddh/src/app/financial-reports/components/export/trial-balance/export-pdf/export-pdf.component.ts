@@ -192,7 +192,7 @@ export class TrialBalanceExportPdfComponent implements OnInit, OnDestroy {
         pdf.autoTable(columns, rows, {
             theme: 'plain',
             margin: {
-                top: this.selectedCompany.address ? 110 + (this.selectedCompany.address.split('\n').length * 15) : 110 + 15
+                top: this.selectedCompany.address ? 110 + (this.selectedCompany.address?.split('\n')?.length * 15) : 110 + 15
             },
             drawCell: (cell, data) => {
 
