@@ -1047,13 +1047,6 @@ aside-setting {
         }
     }
 }
-@media (max-width: 1024px) {
-    .fixed-padding {
-        #primary-new-header {
-            z-index: 99999 !important;
-        }
-    }
-}
 @media (max-width: 767px) {
     .setting-sidebar-wrapper {
         z-index: 9999;
