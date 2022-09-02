@@ -1,11 +1,12 @@
 import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
-import { Observable, of } from 'rxjs';
+import { empty, Observable, of, throwError } from 'rxjs';
 import { LoaderService } from '../loader/loader.service';
 import { GeneralService } from './general.service';
 import { OrganizationType } from '../models/user-login-state';
 import { LocaleService } from './locale.service';
+import { catchError, retryWhen, tap } from 'rxjs/operators';
 
 @Injectable()
 export class GiddhHttpInterceptor implements HttpInterceptor {
@@ -32,7 +33,29 @@ export class GiddhHttpInterceptor implements HttpInterceptor {
         }
         request = this.addLanguage(request);
         if (this.isOnline) {
-            return next.handle(request);
+            /** Holds api call retry limit */
+            let retryLimit: number = 1;
+            /** Holds api call retry attempts */
+            let retryAttempts: number = 0;
+
+            return next.handle(request).pipe(
+                // retryWhen operator should come before catchError operator as it is more specific
+                retryWhen(errors => errors.pipe(
+                    // inside the retryWhen, use a tap operator to throw an error 
+                    // if you don't want to retry
+                    tap(error => {
+                        if (!error.headers.get("retry-after") || retryAttempts >= retryLimit) {
+                            throw error;
+                        } else {
+                            retryAttempts++;
+                        }
+                    })
+                )),
+                // now catch all other errors
+                catchError((error) => {
+                    return throwError(error);
+                })
+            );
         } else {
             setTimeout(() => {
                 this.toasterService.warningToast(this.localeService.translate("app_messages.internet_error"), this.localeService.translate("app_messages.internet_disconnected"));

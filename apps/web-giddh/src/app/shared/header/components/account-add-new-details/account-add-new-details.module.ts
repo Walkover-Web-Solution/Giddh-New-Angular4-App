@@ -15,11 +15,14 @@ import { NgxBootstrapSwitchModule } from 'ngx-bootstrap-switch';
     exports: [AccountAddNewDetailsComponent],
     imports: [
         CommonModule,
-        LaddaModule,
+        LaddaModule.forRoot({
+            style: 'slide-left',
+            spinnerSize: 30
+        }),
         ReactiveFormsModule,
         SelectModule,
         ShSelectModule,
-        TabsModule,
+        TabsModule.forRoot(),
         TranslateDirectiveModule,
         NgxBootstrapSwitchModule.forRoot(),
         RouterModule

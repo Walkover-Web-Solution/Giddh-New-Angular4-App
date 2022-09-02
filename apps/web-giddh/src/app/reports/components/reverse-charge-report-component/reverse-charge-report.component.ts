@@ -8,7 +8,7 @@ import { take, takeUntil } from 'rxjs/operators';
 import { ToasterService } from '../../../services/toaster.service';
 import { ReverseChargeService } from '../../../services/reversecharge.service';
 import { BsDaterangepickerConfig } from 'ngx-bootstrap/datepicker';
-import * as moment from 'moment/moment';
+import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
 import { OrganizationType } from '../../../models/user-login-state';
@@ -67,8 +67,8 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
     public selectedDateRangeUi: any;
     /* This will store available date ranges */
     public datePickerOption: any = GIDDH_DATE_RANGE_PICKER_RANGES;
-    /* Moment object */
-    public moment = moment;
+    /* dayjs object */
+    public dayjs = dayjs;
     /* Selected range label */
     public selectedRangeLabel: any = "";
     /* This will store the x/y position of the field to show datepicker under it */
@@ -142,11 +142,11 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
                     this.store.pipe(select(state => state.session.todaySelected), take(1)).subscribe(response => {
                         this.todaySelected = response;
                         if (this.universalDate && !this.todaySelected) {
-                            this.selectedDateRange = { startDate: moment(this.universalDate[0]), endDate: moment(this.universalDate[1]) };
-                            this.selectedDateRangeUi = moment(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                            this.selectedDateRange = { startDate: dayjs(this.universalDate[0]), endDate: dayjs(this.universalDate[1]) };
+                            this.selectedDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
 
-                            this.reverseChargeReportGetRequest.from = moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
-                            this.reverseChargeReportGetRequest.to = moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
+                            this.reverseChargeReportGetRequest.from = dayjs(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
+                            this.reverseChargeReportGetRequest.to = dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
                         } else {
                             this.universalDate = [];
                             this.reverseChargeReportGetRequest.from = "";
@@ -274,8 +274,8 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
                     this.reverseChargeReportResults = res.body;
 
                     if(this.todaySelected) {
-                        this.selectedDateRange = { startDate: moment(this.reverseChargeReportResults.from, GIDDH_DATE_FORMAT), endDate: moment(this.reverseChargeReportResults.to, GIDDH_DATE_FORMAT) };
-                        this.selectedDateRangeUi = moment(this.reverseChargeReportResults.from, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(this.reverseChargeReportResults.to, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
+                        this.selectedDateRange = { startDate: dayjs(this.reverseChargeReportResults.from, GIDDH_DATE_FORMAT), endDate: dayjs(this.reverseChargeReportResults.to, GIDDH_DATE_FORMAT) };
+                        this.selectedDateRangeUi = dayjs(this.reverseChargeReportResults.from, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(this.reverseChargeReportResults.to, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
                     }
 
                     this.cdRef.detectChanges();
@@ -340,7 +340,7 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
      * @memberof ReverseChargeReport
      */
     public checkIfFiltersApplied(): boolean {
-        if (this.reverseChargeReportPostRequest.invoiceNumber || this.reverseChargeReportPostRequest.supplierCountry || this.reverseChargeReportPostRequest.supplierName || this.reverseChargeReportPostRequest.voucherType || (this.reverseChargeReportGetRequest.from && this.reverseChargeReportGetRequest.from !== moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT)) || (this.reverseChargeReportGetRequest.to && this.reverseChargeReportGetRequest.to !== moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT))) {
+        if (this.reverseChargeReportPostRequest.invoiceNumber || this.reverseChargeReportPostRequest.supplierCountry || this.reverseChargeReportPostRequest.supplierName || this.reverseChargeReportPostRequest.voucherType || (this.reverseChargeReportGetRequest.from && this.reverseChargeReportGetRequest.from !== dayjs(this.universalDate[0]).format(GIDDH_DATE_FORMAT)) || (this.reverseChargeReportGetRequest.to && this.reverseChargeReportGetRequest.to !== dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT))) {
             return true;
         } else {
             return false;
@@ -365,10 +365,10 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
         this.reverseChargeReportGetRequest.from = "";
         this.reverseChargeReportGetRequest.to = "";
         if(!this.todaySelected) {
-            this.selectedDateRange = { startDate: moment(this.universalDate[0]), endDate: moment(this.universalDate[1]) };
-            this.selectedDateRangeUi = moment(this.universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(this.universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-            this.reverseChargeReportGetRequest.from = moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
-            this.reverseChargeReportGetRequest.to = moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
+            this.selectedDateRange = { startDate: dayjs(this.universalDate[0]), endDate: dayjs(this.universalDate[1]) };
+            this.selectedDateRangeUi = dayjs(this.universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(this.universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+            this.reverseChargeReportGetRequest.from = dayjs(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
+            this.reverseChargeReportGetRequest.to = dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
         }
         this.getReverseChargeReport(true);
     }
@@ -416,10 +416,10 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
         }
         this.hideGiddhDatepicker();
         if (value && value.startDate && value.endDate) {
-            this.selectedDateRange = { startDate: moment(value.startDate), endDate: moment(value.endDate) };
-            this.selectedDateRangeUi = moment(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
-            this.reverseChargeReportGetRequest.from = moment(value.startDate).format(GIDDH_DATE_FORMAT);
-            this.reverseChargeReportGetRequest.to = moment(value.endDate).format(GIDDH_DATE_FORMAT);
+            this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
+            this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
+            this.reverseChargeReportGetRequest.from = dayjs(value.startDate).format(GIDDH_DATE_FORMAT);
+            this.reverseChargeReportGetRequest.to = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
             this.getReverseChargeReport(true);
         }
     }

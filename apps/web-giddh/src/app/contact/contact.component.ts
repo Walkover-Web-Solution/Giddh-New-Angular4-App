@@ -17,7 +17,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { select, Store } from "@ngrx/store";
 import { IOption } from "apps/web-giddh/src/app/theme/ng-virtual-select/sh-options.interface";
 import { saveAs } from "file-saver";
-import * as moment from "moment/moment";
+import * as dayjs from "dayjs";
 import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
 import { PaginationComponent } from "ngx-bootstrap/pagination";
 import { BehaviorSubject, combineLatest, Observable, of as observableOf, ReplaySubject, Subject } from "rxjs";
@@ -99,7 +99,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     public payoutForm: CashfreeClass;
     public payoutObj: CashfreeClass = new CashfreeClass();
     public dueAmountReportData$: Observable<DueAmountReportResponse>;
-    public moment = moment;
+    public dayjs = dayjs;
     public toDate: string;
     public fromDate: string;
     public selectAllVendor: boolean = false;
@@ -290,7 +290,6 @@ export class ContactComponent implements OnInit, OnDestroy {
         this.renderer.addClass(document.body, 'contact-body');
         this.imgPath = isElectron ? "assets/images/" : AppUrl + APP_FOLDER + "assets/images/";
         this.store.dispatch(this.companyActions.getAllRegistrations());
-        this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
         this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.isAddAndManageOpenedFromOutside$ = this.store.pipe(select(appStore => appStore.groupwithaccounts.isAddAndManageOpenedFromOutside), takeUntil(this.destroyed$));
         // localStorage supported
@@ -357,13 +356,13 @@ export class ContactComponent implements OnInit, OnDestroy {
                         this.todaySelected = response;
 
                         if (this.universalDate && !this.todaySelected) {
-                            this.fromDate = moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
-                            this.toDate = moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
+                            this.fromDate = dayjs(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
+                            this.toDate = dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
                             this.selectedDateRange = {
-                                startDate: moment(this.universalDate[0]),
-                                endDate: moment(this.universalDate[1]),
+                                startDate: dayjs(this.universalDate[0]),
+                                endDate: dayjs(this.universalDate[1]),
                             };
-                            this.selectedDateRangeUi = moment(this.universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(this.universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                            this.selectedDateRangeUi = dayjs(this.universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(this.universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
                         } else {
                             this.universalDate = [];
                             this.fromDate = "";
@@ -407,10 +406,14 @@ export class ContactComponent implements OnInit, OnDestroy {
         }
 
         this.store.pipe(select(store => store.settings.profile), takeUntil(this.destroyed$)).subscribe(response => {
-            if (response && response.balanceDecimalPlaces) {
-                this.giddhDecimalPlaces = response.balanceDecimalPlaces;
+            if (response) {
+                if (response.balanceDecimalPlaces) {
+                    this.giddhDecimalPlaces = response.balanceDecimalPlaces;
+                } else {
+                    this.giddhDecimalPlaces = 2;
+                }
             } else {
-                this.giddhDecimalPlaces = 2;
+                this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
             }
         });
 
@@ -529,15 +532,12 @@ export class ContactComponent implements OnInit, OnDestroy {
     }
 
     public goToRoute(part: string, additionalParams: string = "", accUniqueName: string) {
-        let url = location.href + `?returnUrl=${part}/${accUniqueName}`;
-
+        let url = location.href + `?returnUrl=${part}/${accUniqueName}`;                
         if (additionalParams) {
             url = `${url}${additionalParams}`;
         }
         if (isElectron) {
-            let ipcRenderer = (window as any).require('electron').ipcRenderer;
-            url = location.origin + location.pathname + `#./pages/${part}/${accUniqueName}`;
-            ipcRenderer.send('open-url', url);
+            this.router.navigate([`/pages/${part}/${accUniqueName}`]);
         } else {
             (window as any).open(url);
         }
@@ -576,12 +576,12 @@ export class ContactComponent implements OnInit, OnDestroy {
 
             if (this.universalDate && this.universalDate[0] && this.universalDate[1] && !this.todaySelected) {
                 this.selectedDateRange = {
-                    startDate: moment(this.universalDate[0]),
-                    endDate: moment(this.universalDate[1]),
+                    startDate: dayjs(this.universalDate[0]),
+                    endDate: dayjs(this.universalDate[1]),
                 };
-                this.selectedDateRangeUi = moment(this.universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(this.universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-                this.fromDate = moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
-                this.toDate = moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
+                this.selectedDateRangeUi = dayjs(this.universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(this.universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                this.fromDate = dayjs(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
+                this.toDate = dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
             } else {
                 this.fromDate = "";
                 this.toDate = "";
@@ -949,10 +949,10 @@ export class ContactComponent implements OnInit, OnDestroy {
 
         if (value && value.startDate && value.endDate) {
             this.todaySelected = false;
-            this.selectedDateRange = { startDate: moment(value.startDate), endDate: moment(value.endDate) };
-            this.selectedDateRangeUi = moment(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
-            this.fromDate = moment(value.startDate).format(GIDDH_DATE_FORMAT);
-            this.toDate = moment(value.endDate).format(GIDDH_DATE_FORMAT);
+            this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
+            this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
+            this.fromDate = dayjs(value.startDate).format(GIDDH_DATE_FORMAT);
+            this.toDate = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
             this.getAccounts(this.fromDate, this.toDate, null, "true", PAGINATION_LIMIT, this.searchStr, this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
             this.detectChanges();
         }
@@ -1242,10 +1242,10 @@ export class ContactComponent implements OnInit, OnDestroy {
 
                 if (this.todaySelected) {
                     this.selectedDateRange = {
-                        startDate: moment(res.body.fromDate, GIDDH_DATE_FORMAT),
-                        endDate: moment(res.body.toDate, GIDDH_DATE_FORMAT),
+                        startDate: dayjs(res.body.fromDate, GIDDH_DATE_FORMAT),
+                        endDate: dayjs(res.body.toDate, GIDDH_DATE_FORMAT),
                     };
-                    this.selectedDateRangeUi = moment(res.body.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(res.body.toDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
+                    this.selectedDateRangeUi = dayjs(res.body.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(res.body.toDate, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
                 }
 
                 this.allSelectionModel = this.checkboxInfo[this.checkboxInfo.selectedPage] ? true : false;

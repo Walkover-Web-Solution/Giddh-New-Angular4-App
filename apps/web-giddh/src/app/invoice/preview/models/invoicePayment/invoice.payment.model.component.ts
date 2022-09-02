@@ -2,7 +2,7 @@ import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, QueryList, SimpleChanges, ViewChild, ViewChildren, ChangeDetectorRef } from '@angular/core';
 import { ILedgersInvoiceResult, InvoicePaymentRequest } from '../../../../models/api-models/Invoice';
-import * as moment from 'moment/moment';
+import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT } from '../../../../shared/helpers/defaultDateFormat';
 import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
 import { AppState } from '../../../../store';
@@ -35,7 +35,7 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
     @Input() public commonLocaleData: any = {};
 
     public paymentActionFormObj: InvoicePaymentRequest;
-    public moment = moment;
+    public dayjs = dayjs;
     public showDatePicker: boolean = false;
     public showClearanceDatePicker: boolean = false;
     public paymentMode: IOption[] = [];
@@ -79,7 +79,7 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
         private generalService: GeneralService
     ) {
         this.paymentActionFormObj = new InvoicePaymentRequest();
-        this.paymentActionFormObj.paymentDate = moment().toDate();
+        this.paymentActionFormObj.paymentDate = dayjs().toDate();
         this.isActionSuccess$ = this.store.pipe(select(s => s.invoice.invoiceActionUpdated), takeUntil(this.destroyed$));
         // get user country from his profile
         this.store.pipe(select(s => s.settings.profile), takeUntil(this.destroyed$)).subscribe(profile => {
@@ -137,7 +137,7 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
     }
 
     public onConfirmation(formObj) {
-        formObj.paymentDate = moment(formObj.paymentDate).format(GIDDH_DATE_FORMAT);
+        formObj.paymentDate = dayjs(formObj.paymentDate).format(GIDDH_DATE_FORMAT);
         formObj.exchangeRate = this.exchangeRate;
 
         if (this.generalService.voucherApiVersion === 2) {
@@ -169,13 +169,13 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
      * setPaymentDate
      */
     public setPaymentDate(date) {
-        this.paymentActionFormObj.paymentDate = _.cloneDeep(moment(date).format(GIDDH_DATE_FORMAT));
+        this.paymentActionFormObj.paymentDate = _.cloneDeep(dayjs(date).format(GIDDH_DATE_FORMAT));
         this.showDatePicker = !this.showDatePicker;
     }
 
     public setClearanceDate(date) {
         this.showClearanceDatePicker = !this.showClearanceDatePicker;
-        this.paymentActionFormObj.chequeClearanceDate = _.cloneDeep(moment(date).format(GIDDH_DATE_FORMAT));
+        this.paymentActionFormObj.chequeClearanceDate = _.cloneDeep(dayjs(date).format(GIDDH_DATE_FORMAT));
     }
 
     public onSelectPaymentMode(event) {
@@ -217,7 +217,7 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
 
     public resetFrom() {
         this.paymentActionFormObj = new InvoicePaymentRequest();
-        this.paymentActionFormObj.paymentDate = moment().toDate();
+        this.paymentActionFormObj.paymentDate = dayjs().toDate();
         this.paymentActionFormObj.uniqueName = this.selectedInvoiceForPayment?.uniqueName;
 
         if (this.allShSelectComponents) {
@@ -293,7 +293,7 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
 
     public getCurrencyRate(from, to) {
         if (from && to) {
-            let date = moment().format(GIDDH_DATE_FORMAT);
+            let date = dayjs().format(GIDDH_DATE_FORMAT);
             this._ledgerService.GetCurrencyRateNewApi(from, to, date).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 let rate = response.body;
                 if (rate) {

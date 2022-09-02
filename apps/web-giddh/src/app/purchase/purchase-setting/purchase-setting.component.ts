@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
-import * as moment from 'moment/moment';
+import * as dayjs from 'dayjs';
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { SettingsIntegrationActions } from '../../actions/settings/settings.integration.action';
@@ -100,7 +100,7 @@ export class PurchaseSettingComponent implements OnInit, OnDestroy {
                 this.originalEmail = _.cloneDeep(this.invoiceSettings.purchaseBillSettings.email);
 
                 if (this.invoiceSettings.purchaseBillSettings.lockDate) {
-                    this.lockDate = moment(this.invoiceSettings.purchaseBillSettings.lockDate, GIDDH_DATE_FORMAT).toDate();
+                    this.lockDate = dayjs(this.invoiceSettings.purchaseBillSettings.lockDate, GIDDH_DATE_FORMAT).toDate();
                 }
             }
         });
@@ -128,7 +128,7 @@ export class PurchaseSettingComponent implements OnInit, OnDestroy {
         let formToSave = _.cloneDeep(this.invoiceSettings);
 
         if (formToSave.purchaseBillSettings.lockDate instanceof Date) {
-            formToSave.purchaseBillSettings.lockDate = moment(formToSave.purchaseBillSettings.lockDate).format(GIDDH_DATE_FORMAT);
+            formToSave.purchaseBillSettings.lockDate = dayjs(formToSave.purchaseBillSettings.lockDate).format(GIDDH_DATE_FORMAT);
         }
 
         this.invoiceService.UpdateInvoiceSetting(formToSave).pipe(takeUntil(this.destroyed$)).subscribe(response => {

@@ -2746,6 +2746,7 @@
                                                 <discount-control-component
                                                     #discountComponent
                                                     [discountMenu]="false"
+                                                    [discountsList]="discountsList"
                                                     [discountAccountsDetails]="entry.discounts"
                                                     [discountSum]="entry.discountSum"
                                                     [showHeaderText]="false"
@@ -2829,7 +2830,7 @@
                                                     [prefix]="invFormData.accountDetails.currencySymbol"
                                                     [suffix]="selectedSuffixForCurrency"
                                                     [mask]="inputMaskFormat"
-                                                    (blur)="calculateTransactionValueInclusively(entry, transaction)"
+                                                    (change)="calculateTransactionValueInclusively(entry, transaction)"
                                                 />
 
                                                 <div *ngIf="isTcsTdsApplicable" class="wrap-other-tax">
@@ -4448,6 +4449,7 @@
                                                         <discount-control-component
                                                             #discountComponent
                                                             [discountMenu]="false"
+                                                            [discountsList]="discountsList"
                                                             [discountAccountsDetails]="entry.discounts"
                                                             [discountSum]="entry.discountSum"
                                                             [showHeaderText]="false"
@@ -4539,7 +4541,7 @@
                                                             type="tel"
                                                             name="transaction.total_{{ entryIdx }}"
                                                             class="form-control text-right"
-                                                            (blur)="
+                                                            (change)="
                                                                 calculateTransactionValueInclusively(entry, transaction)
                                                             "
                                                             [(ngModel)]="transaction.total"

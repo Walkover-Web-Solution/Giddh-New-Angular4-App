@@ -147,7 +147,6 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
         });
 
         this.store.dispatch(this.settingsProfileActions.resetPatchProfile());
-        this.getCurrentCompanyData();
 
         /** This will use for get active company data */
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
@@ -582,20 +581,6 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
             this.toasty.errorToast(this.localeData?.invalid_contact_number_error);
             ele.classList.add('error-box');
         }
-    }
-
-    /**
-     * This will get the current company data
-     *
-     * @memberof BillingDetailComponent
-     */
-    public getCurrentCompanyData(): void {
-        this.settingsProfileService.GetProfileInfo().pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
-            if (response && response.status === "success" && response.body) {
-                this.store.dispatch(this.settingsProfileActions.handleCompanyProfileResponse(response));
-                this.store.dispatch(this.companyActions.setActiveCompanyData(response.body));
-            }
-        });
     }
 
     /**
