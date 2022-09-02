@@ -432,6 +432,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 });
         }
         this.voucherApiVersion = this.generalService.voucherApiVersion;
+        document.querySelector('body')?.classList?.add('update-ledger-entry-panel-popup');
     }
 
     public toggleShow(): void {
@@ -961,6 +962,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.destroyed$.complete();
         // Remove the transaction details for ledger once the component is destroyed
         this.store.dispatch(this.ledgerAction.resetLedgerTrxDetails());
+        document.querySelector('body')?.classList?.remove('update-ledger-entry-panel-popup');
     }
 
     public downloadAttachedFile(fileName: string, e: Event) {

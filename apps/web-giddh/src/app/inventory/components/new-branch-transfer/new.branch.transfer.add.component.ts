@@ -1421,7 +1421,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
             setTimeout(() => {
                 this.setActiveRow(index);
                 setTimeout(() => {
-                    this.selectDropdown.show('');
+                    this.selectDropdown?.show('');
                 }, 100);
             }, 100);
         }
@@ -1436,7 +1436,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     public focusSourceWarehouse(event: any): void {
         if (this.allowAutoFocusInField && event && event.value) {
             setTimeout(() => {
-                this.sourceWarehouse.show('');
+                this.sourceWarehouse?.show('');
             }, 100);
         }
     }
@@ -1450,7 +1450,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     public focusDestinationWarehouse(event: any): void {
         if (this.allowAutoFocusInField && event && event.value) {
             setTimeout(() => {
-                this.destinationWarehouse.show('');
+                this.destinationWarehouse?.show('');
             }, 100);
         }
     }
@@ -1458,7 +1458,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     public focusTransporterMode(): void {
         if (this.allowAutoFocusInField) {
             setTimeout(() => {
-                this.transMode.show('');
+                this.transMode?.show('');
             }, 100);
         }
     }
@@ -1477,7 +1477,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
         if (this.allowAutoFocusInField) {
             setTimeout(() => {
                 if (this.tempDateParams.dispatchedDate) {
-                    this.transCompany.show('');
+                    this.transCompany?.show('');
                 }
             }, 100);
         }
@@ -1486,7 +1486,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     public focusDestinationWarehouses(): void {
         if (this.allowAutoFocusInField) {
             setTimeout(() => {
-                this.destinationWarehouseList.show('');
+                this.destinationWarehouseList?.show('');
             }, 100);
         }
     }
@@ -1494,7 +1494,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     public focusSourceWarehouses(): void {
         if (this.allowAutoFocusInField) {
             setTimeout(() => {
-                this.sourceWarehouseList.show('');
+                this.sourceWarehouseList?.show('');
             }, 100);
         }
     }
