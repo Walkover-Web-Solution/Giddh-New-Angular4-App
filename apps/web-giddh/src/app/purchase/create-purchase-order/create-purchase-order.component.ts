@@ -1309,6 +1309,11 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                             data.body.taxes ?? [],
                             data.body.groupTaxes ?? []);
 
+                        const taxComponent = this.taxControlComponent;
+                        if (taxComponent) {
+                            taxComponent.enableAllTheTaxes();
+                        }
+
                         // directly assign additional property
                         selectedAcc.additional = {
                             ...selectedAcc.additional,
