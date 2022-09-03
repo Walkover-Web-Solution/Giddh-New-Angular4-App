@@ -52,31 +52,31 @@ export class MasterComponent implements OnInit, OnChanges {
 
         this.store.pipe(select(state => state.groupwithaccounts.isCreateGroupSuccess), takeUntil(this.destroyed$)).subscribe(response => {
             if (response && this.currentGroupColumnIndex > -1) {
-                this.getMasters(this.currentGroupUniqueName, this.currentGroupColumnIndex, true);
+                this.getMasters((this.masterColumnsData[this.currentGroupColumnIndex + 1].groupUniqueName) ? this.masterColumnsData[this.currentGroupColumnIndex + 1].groupUniqueName : this.currentGroupUniqueName, ((this.masterColumnsData[this.currentGroupColumnIndex + 1].groupUniqueName)) ? this.currentGroupColumnIndex + 1 : this.currentGroupColumnIndex, true);
             }
         });
 
         this.store.pipe(select(state => state.groupwithaccounts.isUpdateGroupSuccess), takeUntil(this.destroyed$)).subscribe(response => {
             if (response && this.currentGroupColumnIndex > -1) {
-                this.getMasters(this.masterColumnsData[this.currentGroupColumnIndex]?.groupUniqueName, this.currentGroupColumnIndex - 1, true);
+                this.getMasters(this.masterColumnsData[this.currentGroupColumnIndex]?.groupUniqueName, this.currentGroupColumnIndex, true);
             }
         });
 
         this.store.pipe(select(state => state.groupwithaccounts.isDeleteGroupSuccess), takeUntil(this.destroyed$)).subscribe(response => {
             if (response && this.currentGroupColumnIndex > -1) {
-                this.getMasters(this.masterColumnsData[this.currentGroupColumnIndex]?.groupUniqueName, this.currentGroupColumnIndex - 1, true);
+                this.getMasters(this.masterColumnsData[this.currentGroupColumnIndex]?.groupUniqueName, this.currentGroupColumnIndex, true);
             }
         });
 
         this.store.pipe(select(state => state.groupwithaccounts.isMoveGroupSuccess), takeUntil(this.destroyed$)).subscribe(response => {
             if (response && this.currentGroupColumnIndex > -1) {
-                this.getMasters(this.masterColumnsData[this.currentGroupColumnIndex]?.groupUniqueName, this.currentGroupColumnIndex - 1, true);
+                this.getMasters(this.masterColumnsData[this.currentGroupColumnIndex]?.groupUniqueName, this.currentGroupColumnIndex - 1);
             }
         });
 
         this.store.pipe(select(state => state.groupwithaccounts.createAccountIsSuccess), takeUntil(this.destroyed$)).subscribe(response => {
             if (response && this.currentGroupColumnIndex > -1) {
-                this.getMasters(this.currentGroupUniqueName, this.currentGroupColumnIndex, true);
+                this.getMasters((this.masterColumnsData[this.currentGroupColumnIndex].groupUniqueName) ? this.masterColumnsData[this.currentGroupColumnIndex].groupUniqueName : this.currentGroupUniqueName, this.currentGroupColumnIndex, true);
             }
         });
 
@@ -168,15 +168,15 @@ export class MasterComponent implements OnInit, OnChanges {
         this.groupService.getMasters(groupUniqueName, page).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
             if (response?.status === "success") {
                 if (!isLoadMore) {
-                    let newIndex = Number(currentIndex) + 1;
                     if (!isRefresh) {
+                        let newIndex = Number(currentIndex) + 1;
                         this.masterColumnsData = this.masterColumnsData.slice(0, newIndex);
                         this.masterColumnsData[newIndex] = { results: response?.body?.results, page: response?.body?.page, totalPages: response?.body?.totalPages, groupUniqueName: groupUniqueName };
                     } else {
-                        this.masterColumnsData[newIndex].page = response?.body?.page;
-                        this.masterColumnsData[newIndex].totalPages = response?.body?.totalPages;
-                        this.masterColumnsData[newIndex].groupUniqueName = groupUniqueName;
-                        this.masterColumnsData[newIndex].results = response?.body?.results;
+                        this.masterColumnsData[currentIndex].page = response?.body?.page;
+                        this.masterColumnsData[currentIndex].totalPages = response?.body?.totalPages;
+                        this.masterColumnsData[currentIndex].groupUniqueName = groupUniqueName;
+                        this.masterColumnsData[currentIndex].results = response?.body?.results;
                     }
                 } else {
                     this.masterColumnsData[currentIndex].page = response?.body?.page;
@@ -231,8 +231,7 @@ export class MasterComponent implements OnInit, OnChanges {
         return masterColumnsData;
     }
 
-    public showAddNewForm(currentIndex: number) {
-        this.currentGroupColumnIndex = currentIndex;
+    public showAddNewForm() {
         this.breadcrumbPath = [];
         this.breadcrumbUniqueNamePath = [];
         let activeGroup;
