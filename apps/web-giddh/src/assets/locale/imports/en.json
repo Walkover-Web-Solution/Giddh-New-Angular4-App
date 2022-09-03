@@ -7,5 +7,8 @@
     "error_sheet": "Error Sheet",
     "succes_sheet": "Success Sheet",
      "expiry": "Expiry",
-    "expired": "Expired"
+    "expired": "Expired",
+    "success":"success",
+    "failed":"failed",
+    "total":"total"
 }

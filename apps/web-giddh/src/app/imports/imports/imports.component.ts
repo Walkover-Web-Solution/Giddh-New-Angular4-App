@@ -178,9 +178,23 @@ export class ImportsComponent implements OnInit, OnDestroy {
         }
         this.isLoading = true;
         this.importsService.getImports(this.importRequest).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+            // console.log(response);
             this.isLoading = false;
             if (response && response.status === 'success') {
                 response.body?.items?.forEach((result: any) => {
+                    let success = 0;
+                    let failed = 0;
+                    let total = 0;
+                    Object.keys(result.metaData).forEach(key => {
+                        total += Number(result.metaData[key].total);
+                        success += Number(result.metaData[key].success);
+                        failed += Number(result.metaData[key].failed);
+                    });
+                    result.count = {
+                        success:success,
+                        failed:failed,
+                        total:total
+                    }
                     result.date = dayjs(result.date, GIDDH_DATE_FORMAT + " HH:mm:ss").format(GIDDH_DATE_FORMAT);
                     let today = dayjs().format('YYYY-MM-DD');
                     let expiryDate = dayjs(result.expireAt, GIDDH_DATE_FORMAT + " HH:mm:ss").format('YYYY-MM-DD');
