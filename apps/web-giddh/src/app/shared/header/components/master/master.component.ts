@@ -23,6 +23,7 @@ export class MasterComponent implements OnInit, OnChanges {
     @Input() public isSearchingGroups: boolean = false;
     /* This will hold local JSON data */
     @Input() public localeData: any = {};
+    @Input() public topSharedGroups: any[] = [];
     public masterColumnsData: any[] = [];
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public loadMoreInProgress: boolean = false;
@@ -47,14 +48,6 @@ export class MasterComponent implements OnInit, OnChanges {
     }
 
     public ngOnInit(): void {
-        this.store.pipe(select(state => state.groupwithaccounts.firstLevelGroups), takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
-                this.masterColumnsData = [];
-                this.masterColumnsData[0] = { results: response, page: 1, totalPages: 1, groupUniqueName: '' };
-                this.changeDetectorRef.detectChanges();
-            }
-        });
-
         this.activeGroup$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroup), takeUntil(this.destroyed$));
 
         this.store.pipe(select(state => state.groupwithaccounts.isCreateGroupSuccess), takeUntil(this.destroyed$)).subscribe(response => {
@@ -82,7 +75,9 @@ export class MasterComponent implements OnInit, OnChanges {
         });
 
         this.store.pipe(select(state => state.groupwithaccounts.createAccountIsSuccess), takeUntil(this.destroyed$)).subscribe(response => {
-
+            if (response && this.currentGroupColumnIndex > -1) {
+                this.getMasters(this.currentGroupUniqueName, this.currentGroupColumnIndex, true);
+            }
         });
 
         this.store.pipe(select(state => state.groupwithaccounts.updateAccountIsSuccess), takeUntil(this.destroyed$)).subscribe(response => {
@@ -92,11 +87,15 @@ export class MasterComponent implements OnInit, OnChanges {
         });
 
         this.store.pipe(select(state => state.groupwithaccounts.isDeleteAccSuccess), takeUntil(this.destroyed$)).subscribe(response => {
-
+            if (response && this.currentGroupColumnIndex > -1) {
+                this.getMasters(this.masterColumnsData[this.currentGroupColumnIndex]?.groupUniqueName, this.currentGroupColumnIndex - 1, true);
+            }
         });
 
         this.store.pipe(select(state => state.groupwithaccounts.moveAccountSuccess), takeUntil(this.destroyed$)).subscribe(response => {
-
+            if (response && this.currentGroupColumnIndex > -1) {
+                this.getMasters(this.masterColumnsData[this.currentGroupColumnIndex]?.groupUniqueName, this.currentGroupColumnIndex - 1, true);
+            }
         });
 
         this.scrollDispatcher.scrolled().pipe(filter(event => this.virtualScroll.getRenderedRange().end === this.virtualScroll.getDataLength())).subscribe((event: any) => {
@@ -109,6 +108,12 @@ export class MasterComponent implements OnInit, OnChanges {
     }
 
     public ngOnChanges(changes: SimpleChanges): void {
+        if (changes?.topSharedGroups) {
+            this.masterColumnsData = [];
+            this.masterColumnsData[0] = { results: changes?.topSharedGroups?.currentValue, page: 1, totalPages: 1, groupUniqueName: '' };
+            this.changeDetectorRef.detectChanges();
+        }
+
         if (changes?.searchedMasterData?.currentValue?.length > 0) {
             let masterColumnsData = [];
             //let masterTempData = [];
@@ -226,7 +231,8 @@ export class MasterComponent implements OnInit, OnChanges {
         return masterColumnsData;
     }
 
-    public showAddNewForm() {
+    public showAddNewForm(currentIndex: number) {
+        this.currentGroupColumnIndex = currentIndex;
         this.breadcrumbPath = [];
         this.breadcrumbUniqueNamePath = [];
         let activeGroup;

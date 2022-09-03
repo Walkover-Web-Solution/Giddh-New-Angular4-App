@@ -21,7 +21,6 @@ export interface CurrentGroupAndAccountState {
     showAddNewGroup: boolean;
     showEditGroup: boolean;
     showEditAccount: boolean;
-    firstLevelGroups: GroupsWithAccountsResponse[];
     groupswithaccounts: GroupsWithAccountsResponse[];
     isGroupWithAccountsLoading: boolean;
     isAddAndManageOpenedFromOutside: boolean;
@@ -71,129 +70,6 @@ const prepare = (mockData: GroupsWithAccountsResponse[]): GroupsWithAccountsResp
     }), 'category');
 };
 
-const firstLevelGroups = [
-    {
-        name: 'Shareholders’ Funds',
-        uniqueName: 'shareholdersfunds',
-        synonyms: 'E.g. Capital, Owner or Investor Fund',
-        category: 'liabilities',
-        groups: [],
-        accounts: [],
-        isActive: false,
-        isOpen: false,
-        isVisible: true,
-        type: "GROUP"
-    },
-    {
-        name: 'Non Current Liabilities',
-        uniqueName: 'noncurrentliabilities',
-        synonyms: 'E.g. Loans',
-        category: 'liabilities',
-        groups: [],
-        accounts: [],
-        isActive: false,
-        isOpen: false,
-        isVisible: true,
-        type: "GROUP"
-    },
-    {
-        name: 'Current Liabilities',
-        uniqueName: 'currentliabilities',
-        synonyms: 'E.g. Vendors, Creditors, Taxes payable, Cash credits',
-        category: 'liabilities',
-        groups: [],
-        accounts: [],
-        isActive: false,
-        isOpen: false,
-        isVisible: true,
-        type: "GROUP"
-    },
-    {
-        name: 'Fixed Assets',
-        uniqueName: 'fixedassets',
-        synonyms: 'E.g. Land & building, Plant & machinery, Patents',
-        category: 'assets',
-        groups: [],
-        accounts: [],
-        isActive: false,
-        isOpen: false,
-        isVisible: true,
-        type: "GROUP"
-    },
-    {
-        name: 'Non Current Assets',
-        uniqueName: 'noncurrentassets',
-        synonyms: 'E.g. Long term Investments',
-        category: 'assets',
-        groups: [],
-        accounts: [],
-        isActive: false,
-        isOpen: false,
-        isVisible: true,
-        type: "GROUP"
-    },
-    {
-        name: 'Current Assets',
-        uniqueName: 'currentassets',
-        synonyms: 'E.g. Debtors, Clients, Cash, Bank',
-        category: 'assets',
-        groups: [],
-        accounts: [],
-        isActive: false,
-        isOpen: false,
-        isVisible: true,
-        type: "GROUP"
-    },
-    {
-        name: 'Revenue From Operations',
-        uniqueName: 'revenuefromoperations',
-        synonyms: 'E.g. Revenues, Sales',
-        category: 'income',
-        groups: [],
-        accounts: [],
-        isActive: false,
-        isOpen: false,
-        isVisible: true,
-        type: "GROUP"
-    },
-    {
-        name: 'Other Income',
-        uniqueName: 'otherincome',
-        synonyms: 'E.g. Interest on deposits, Profit from sell of assets',
-        category: 'income',
-        groups: [],
-        accounts: [],
-        isActive: false,
-        isOpen: false,
-        isVisible: true,
-        type: "GROUP"
-    },
-    {
-        name: 'Operating Cost',
-        uniqueName: 'operatingcost',
-        synonyms: 'E.g. Purchases, Discount',
-        category: 'expenses',
-        groups: [],
-        accounts: [],
-        isActive: false,
-        isOpen: false,
-        isVisible: true,
-        type: "GROUP"
-    },
-    {
-        name: 'Indirect Expenses',
-        uniqueName: 'indirectexpenses',
-        synonyms: 'E.g. Office expenses, Administration expenses',
-        category: 'expenses',
-        groups: [],
-        accounts: [],
-        isActive: false,
-        isOpen: false,
-        isVisible: true,
-        type: "GROUP"
-    }
-];
-
 /**
  * Setting the InitialState for this Reducer's Store
  */
@@ -203,7 +79,6 @@ const initialState: CurrentGroupAndAccountState = {
     showAddNewGroup: false,
     showEditGroup: false,
     showEditAccount: false,
-    firstLevelGroups: null,
     groupswithaccounts: null,
     isGroupWithAccountsLoading: false,
     activeGroup: null,
@@ -686,16 +561,6 @@ export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = i
         case GroupWithAccountsAction.UPDATE_ACTIVE_TAB_ADD_AND_MANAGE: {
             return Object.assign({}, state, {
                 activeTab: action.payload
-            });
-        }
-        case GroupWithAccountsAction.INITIALIZE_FIRST_LEVEL_GROUPS: {
-            return Object.assign({}, state, {
-                firstLevelGroups: firstLevelGroups
-            });
-        }
-        case GroupWithAccountsAction.RESET_FIRST_LEVEL_GROUPS: {
-            return Object.assign({}, state, {
-                firstLevelGroups: []
             });
         }
         default: {

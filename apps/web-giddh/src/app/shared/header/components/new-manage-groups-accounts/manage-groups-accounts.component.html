@@ -60,7 +60,7 @@
                         <span class="spinner small"></span> {{ commonLocaleData?.app_loading }}
                     </div>
                 </div>
-                <div class="search-loading no-result" *ngIf="!(searchLoad | async) && !(groupList$ | async)?.length">
+                <div class="search-loading no-result" *ngIf="!(searchLoad | async) && !topSharedGroups?.length">
                     <div class="vertical-center">
                         <h1>{{ localeData?.no_result_found }}</h1>
                     </div>
@@ -106,6 +106,7 @@
                     >
                         <div class="wrap-account-sidebar">
                             <master
+                                [topSharedGroups]="topSharedGroups"
                                 [searchedMasterData]="searchedMasterData"
                                 [ngStyle]="{
                                     'height':

@@ -32,6 +32,8 @@ import { differenceBy, each, flatten, flattenDeep, map, omit, union } from 'apps
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { LedgerService } from 'apps/web-giddh/src/app/services/ledger.service';
 import { Router } from '@angular/router';
+import { SettingsDiscountService } from 'apps/web-giddh/src/app/services/settings.discount.service';
+import { PermissionActions } from 'apps/web-giddh/src/app/actions/permission/permission.action';
 
 @Component({
     selector: 'account-operations',
@@ -127,9 +129,11 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     public settings = {};
     // This will use for group export body request
     public groupExportLedgerBodyRequest: ExportBodyRequest = new ExportBodyRequest();
+    /** List of discounts */
+    public discounts: any[] = [];
 
     constructor(private _fb: FormBuilder, private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction,
-        private companyActions: CompanyActions, private _ledgerActions: LedgerActions, private accountsAction: AccountsAction, private toaster: ToasterService, _permissionDataService: PermissionDataService, private invoiceActions: InvoiceActions, public generalService: GeneralService, public ledgerService: LedgerService, public router: Router) {
+        private companyActions: CompanyActions, private _ledgerActions: LedgerActions, private accountsAction: AccountsAction, private toaster: ToasterService, _permissionDataService: PermissionDataService, private invoiceActions: InvoiceActions, public generalService: GeneralService, public ledgerService: LedgerService, public router: Router, private settingsDiscountService: SettingsDiscountService, private permissionActions: PermissionActions) {
         this.isUserSuperAdmin = _permissionDataService.isUserSuperAdmin;
     }
 
@@ -334,6 +338,9 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
                 this.accountSharedWith = this.localeData?.shared_with.replace("[ACCOUNT_GROUPS_COUNT]", String(response.length));
             }
         });
+
+        this.getDiscountList();
+        this.store.dispatch(this.permissionActions.GetAllPermissions());
     }
 
     public ngAfterViewInit() {
@@ -697,5 +704,25 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+    }
+
+    /**
+     * To get discount list
+     *
+     * @memberof AccountOperationsComponent
+     */
+    public getDiscountList(): void {
+        this.discounts = [];
+        this.settingsDiscountService.GetDiscounts().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.status === "success" && response?.body?.length > 0) {
+                Object.keys(response?.body).forEach(key => {
+                    this.discounts.push({
+                        label: response?.body[key].name,
+                        value: response?.body[key].uniqueName,
+                        isSelected: false
+                    });
+                });
+            }
+        });
     }
 }

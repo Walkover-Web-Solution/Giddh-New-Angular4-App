@@ -13,5 +13,6 @@ export const GROUP_API = {
     TAX_HIERARCHY: 'company/:companyUniqueName/groups/:groupUniqueName/tax-hierarchy', // get call
     CREATE_COMPANY_CUSTOM_FIELD: 'company/:companyUniqueName/custom-fields',
     SEARCH_GROUPS: 'company/:companyUniqueName/group-search',
-    GET_MASTERS: 'company/:companyUniqueName/groups/:groupUniqueName/masters?page=:page&count=:count'
+    GET_MASTERS: 'company/:companyUniqueName/groups/:groupUniqueName/masters?page=:page&count=:count',
+    GET_TOP_SHARED_GROUPS: 'company/:companyUniqueName/top-shared-groups'
 };

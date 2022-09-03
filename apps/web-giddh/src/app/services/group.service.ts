@@ -235,4 +235,12 @@ export class GroupService {
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<GroupResponse, string>(e, groupUniqueName, { groupUniqueName })));
     }
+
+    public getTopSharedGroups(): Observable<BaseResponse<GroupResponse, string>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.get(this.config.apiUrl + GROUP_API.GET_TOP_SHARED_GROUPS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
+            let data: BaseResponse<GroupResponse, string> = res;
+            return data;
+        }), catchError((error) => this.errorHandler.HandleCatch<any, any>(error)));
+    }
 }

@@ -1,7 +1,6 @@
 import { debounceTime, takeUntil } from 'rxjs/operators';
 import { GroupsAccountSidebarComponent } from '../new-group-account-sidebar/groups-account-sidebar.component';
 import { AfterViewChecked, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, OnDestroy, OnInit, Output, Renderer2, ViewChild } from '@angular/core';
-import { GroupsWithAccountsResponse } from '../../../../models/api-models/GroupsWithAccounts';
 import { AppState } from '../../../../store/roots';
 import { Store, select } from '@ngrx/store';
 import { Observable, ReplaySubject, Subject } from 'rxjs';
@@ -32,7 +31,6 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
     public breadcrumbUniquePath: string[] = [];
     public myModelRect: any;
     public searchLoad: Observable<boolean>;
-    public groupList$: Observable<GroupsWithAccountsResponse[]>;
     public currentColumns: GroupAccountSidebarVM;
     public psConfig: PerfectScrollbarConfigInterface;
     public groupAndAccountSearchString$: Observable<string>;
@@ -48,6 +46,7 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
     /** True if initial component load */
     public initialLoad: boolean = true;
     public searchedMasterData: any[] = [];
+    public topSharedGroups: any[] = [];
 
     // tslint:disable-next-line:no-empty
     constructor(
@@ -62,8 +61,6 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
         this.searchLoad = this.store.pipe(select(state => state.groupwithaccounts.isGroupWithAccountsLoading), takeUntil(this.destroyed$));
         this.groupAndAccountSearchString$ = this.store.pipe(select(s => s.groupwithaccounts.groupAndAccountSearchString), takeUntil(this.destroyed$));
         this.psConfig = { maxScrollbarLength: 80 };
-        this.store.dispatch(this.groupWithAccountsAction.initializeFirstLevelGroups());
-        this.groupList$ = this.store.pipe(select(state => state.groupwithaccounts.firstLevelGroups), takeUntil(this.destroyed$));
     }
 
     @HostListener('window:resize', ['$event'])
@@ -90,6 +87,7 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
     // tslint:disable-next-line:no-empty
     public ngOnInit() {
         this.store.dispatch(this.generalAction.addAndManageClosed());
+        this.getTopSharedGroups();
         // search groups
         this.groupSearchTerms.pipe(
             debounceTime(700), takeUntil(this.destroyed$))
@@ -99,10 +97,7 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
                         this.searchMasters(term);
                     } else {
                         this.searchedMasterData = [];
-                        this.store.dispatch(this.groupWithAccountsAction.resetFirstLevelGroups());
-                        setTimeout(() => {
-                            this.store.dispatch(this.groupWithAccountsAction.initializeFirstLevelGroups());
-                        }, 10);
+                        this.getTopSharedGroups();
                     }
                 }
                 this.initialLoad = false;
@@ -124,13 +119,11 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
             }
         });
 
-        this.groupList$.subscribe(response => {
-            if (this.keyupInitialized) {
-                setTimeout(() => {
-                    this.groupSrch?.nativeElement.focus();
-                }, 200);
-            }
-        });
+        if (this.keyupInitialized) {
+            setTimeout(() => {
+                this.groupSrch?.nativeElement.focus();
+            }, 200);
+        }
 
         document.querySelector('body')?.classList?.add('master-page');
     }
@@ -185,6 +178,15 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
         this.groupService.GetGroupsWithAccounts(term).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
             if (response?.status === "success") {
                 this.searchedMasterData = response?.body;
+            }
+        });
+    }
+
+    private getTopSharedGroups(): void {
+        this.topSharedGroups = [];
+        this.groupService.getTopSharedGroups().pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
+            if (response?.status === "success") {
+                this.topSharedGroups = response?.body?.results;
             }
         });
     }

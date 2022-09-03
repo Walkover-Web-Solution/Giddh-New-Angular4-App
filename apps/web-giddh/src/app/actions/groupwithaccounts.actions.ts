@@ -580,28 +580,4 @@ export class GroupWithAccountsAction {
             payload: value
         };
     }
-
-    /**
-     * Initializes first level groups
-     *
-     * @returns
-     * @memberof GroupWithAccountsAction
-     */
-    public initializeFirstLevelGroups() {
-        return {
-            type: GroupWithAccountsAction.INITIALIZE_FIRST_LEVEL_GROUPS
-        };
-    }
-
-    /**
-     * Resets first level groups
-     *
-     * @returns
-     * @memberof GroupWithAccountsAction
-     */
-     public resetFirstLevelGroups() {
-        return {
-            type: GroupWithAccountsAction.RESET_FIRST_LEVEL_GROUPS
-        };
-    }
 }
