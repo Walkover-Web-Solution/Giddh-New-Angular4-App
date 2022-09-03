@@ -105,7 +105,7 @@
                     <th mat-header-cell *matHeaderCellDef>{{ localeData?.import_file }}</th>
                     <td mat-cell *matCellDef="let element">
                         <a target="_blank" [href]="element.efsPath" mat-button class="import-button-status btn-success">
-                            Completed
+                            {{ commonLocaleData?.app_download }}
                         </a>
                     </td>
                 </ng-container>
@@ -113,7 +113,9 @@
                 <ng-container matColumnDef="count">
                     <th mat-header-cell *matHeaderCellDef>{{ localeData?.count }}</th>
                     <td mat-cell *matCellDef="let element">
-                        <span>Succes:20</span><br /><span>Failed:20</span><br /><span>Total:20</span>
+                        <span>{{ localeData?.success }} : {{ element.count.success }}</span
+                        ><br /><span>{{ localeData?.failed }} : {{ element.count.failed }}</span
+                        ><br /><span>{{ localeData?.total }} : {{ element.count.total }}</span>
                     </td>
                 </ng-container>
                 <!-- Error Sheet Column -->
