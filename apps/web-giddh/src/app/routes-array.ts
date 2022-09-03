@@ -105,6 +105,7 @@ export const ROUTES = [
             { path: 'mobile-search-branch', loadChildren: () => import('./mobile-home/mobile-home.module').then(module => module.MobileHomeModule) },
             { path: 'voucher', loadChildren: () => import('./payment-receipt/payment-receipt.module').then(module => module.PaymentReceiptModule) },
             { path: 'downloads', loadChildren: () => import('./downloads/downloads.module').then(module => module.DownloadsModule) },
+            { path: 'imports', loadChildren: () => import('./imports/imports.module').then(module => module.ImportsModule) },
             { path: 'custom-fields', loadChildren: () => import('./custom-fields/custom-fields.module').then(module => module.CustomFieldsModule) },
             { path: '**', redirectTo: 'home', pathMatch: 'full' }
         ]
