@@ -97,8 +97,6 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
                     this.country = 'india';
                     this.isIndia = true;
                 }
-            } else {
-                this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
             }
         });
 

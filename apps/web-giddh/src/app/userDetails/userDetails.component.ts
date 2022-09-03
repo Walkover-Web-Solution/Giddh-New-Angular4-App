@@ -11,7 +11,9 @@ import { CompanyResponse } from '../models/api-models/Company';
 import { cloneDeep } from '../lodash-optimized';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SessionActions } from '../actions/session.action';
-import * as moment from 'moment';
+import * as dayjs from 'dayjs';
+import * as duration from 'dayjs/plugin/duration';
+dayjs.extend(duration)
 import { GIDDH_DATE_FORMAT_DD_MM_YYYY, GIDDH_DATE_FORMAT_UI } from '../shared/helpers/defaultDateFormat';
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { BsModalRef } from 'ngx-bootstrap/modal';
@@ -58,7 +60,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
     public apiTabActivated: boolean = false;
     public userSessionResponse$: Observable<any>;
     public userSessionList: any[] = [];
-    public moment = moment;
+    public dayjs = dayjs;
     public giddhDateFormatUI: string = GIDDH_DATE_FORMAT_UI;
     public userSessionId: any = null;
     public modalRef: BsModalRef;
@@ -191,11 +193,11 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
             if (s && s.length) {
                 this.userSessionList = s.map(session => {
                     // Calculate sign in date
-                    session.signInDate = moment(session.createdAt).format(GIDDH_DATE_FORMAT_DD_MM_YYYY);
+                    session.signInDate = dayjs(session.createdAt).format(GIDDH_DATE_FORMAT_DD_MM_YYYY);
                     // Calculate sign in time
-                    session.signInTime = moment(session.createdAt).format('LTS');
+                    session.signInTime = dayjs(session.createdAt).format('LTS');
                     // Calculate duration
-                    const duration = moment.duration(moment().diff(session.createdAt));
+                    const duration = dayjs.duration(dayjs().diff(session.createdAt));
                     session.sessionDuration = `${duration.days()}/${duration.hours()}/${duration.minutes()}/${duration.seconds()}`;
                     return session;
                 });

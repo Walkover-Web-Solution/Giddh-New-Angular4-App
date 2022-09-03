@@ -5,7 +5,7 @@ import { ExportLedgerRequest } from '../../../models/api-models/Ledger';
 import { ToasterService } from '../../../services/toaster.service';
 import { PermissionDataService } from 'apps/web-giddh/src/app/permissions/permission-data.service';
 import { some } from '../../../lodash-optimized';
-import * as moment from 'moment/moment';
+import * as dayjs from 'dayjs';
 import { Observable, ReplaySubject } from 'rxjs';
 import { AppState } from 'apps/web-giddh/src/app/store';
 import { Store, select } from '@ngrx/store';
@@ -54,8 +54,8 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
     public selectedDateRangeUi: any;
     /* This will store available date ranges */
     public datePickerOption: any = GIDDH_DATE_RANGE_PICKER_RANGES;
-    /* Moment object */
-    public moment = moment;
+    /* dayjs object */
+    public dayjs = dayjs;
     /* Selected from date */
     public fromDate: string;
     /* Selected to date */
@@ -83,6 +83,8 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
     public enableBillToBill: boolean = false;
     /** This will use for bill to bill value*/
     public emailTypeBillToBill: string;
+    /** This will use for stop multiple hit api*/
+    public isLoading: boolean = false;
 
     constructor(private ledgerService: LedgerService, private toaster: ToasterService, private permissionDataService: PermissionDataService, private store: Store<AppState>, private generalService: GeneralService, @Inject(MAT_DIALOG_DATA) public inputData, public dialogRef: MatDialogRef<any>, private changeDetectorRef: ChangeDetectorRef, private modalService: BsModalService, private router: Router) {
         this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
@@ -122,10 +124,10 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
             this.universalDate$.pipe(take(1)).subscribe(dateObj => {
                 if (dateObj) {
                     let universalDate = _.cloneDeep(dateObj);
-                    this.selectedDateRange = { startDate: moment(dateObj[0]), endDate: moment(dateObj[1]) };
-                    this.selectedDateRangeUi = moment(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-                    this.fromDate = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
-                    this.toDate = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
+                    this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
+                    this.selectedDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                    this.fromDate = dayjs(universalDate[0]).format(GIDDH_DATE_FORMAT);
+                    this.toDate = dayjs(universalDate[1]).format(GIDDH_DATE_FORMAT);
                 }
             });
         }
@@ -137,6 +139,7 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
      * @memberof ExportLedgerComponent
      */
     public exportLedger() {
+        this.isLoading = true;
         let exportByInvoiceNumber: boolean = this.emailTypeSelected === 'admin-condensed' ? false : this.withInvoiceNumber;
 
         let exportRequest = new ExportLedgerRequest();
@@ -164,6 +167,8 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
         }
         if (this.voucherApiVersion === 2 && this.emailTypeSelected === 'billToBill') {
             this.ledgerService.exportBillToBillLedger(exportRequest, this.inputData?.accountUniqueName).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
+                this.isLoading = false;
+                this.changeDetectorRef.detectChanges();
                 if (response?.status === "success") {
                     if (response?.body?.type === "message") {
                         this.toaster.showSnackBar("success", response.body.file);
@@ -177,6 +182,8 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
             });
         } else {
             this.ledgerService.ExportLedger(exportRequest, this.inputData?.accountUniqueName, body.dataToSend, exportByInvoiceNumber).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                this.isLoading = false;
+                this.changeDetectorRef.detectChanges();
                 if (response.status === 'success') {
                     if (response.body) {
                         if (this.emailTypeSelected === 'admin-detailed') {
@@ -285,10 +292,10 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
         }
         this.hideGiddhDatepicker();
         if (value && value.startDate && value.endDate) {
-            this.selectedDateRange = { startDate: moment(value.startDate), endDate: moment(value.endDate) };
-            this.selectedDateRangeUi = moment(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
-            this.fromDate = moment(value.startDate).format(GIDDH_DATE_FORMAT);
-            this.toDate = moment(value.endDate).format(GIDDH_DATE_FORMAT);
+            this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
+            this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
+            this.fromDate = dayjs(value.startDate).format(GIDDH_DATE_FORMAT);
+            this.toDate = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
         }
     }
 

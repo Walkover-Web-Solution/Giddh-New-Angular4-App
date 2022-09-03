@@ -1,8 +1,8 @@
-import { AppState } from './store/roots';
-import { Store } from '@ngrx/store';
 import { AfterViewInit, Component } from '@angular/core';
-import { GeneralService } from './services/general.service';
-import { GeneralActions } from './actions/general/general.actions';
+import { GeneralService } from '../services/general.service';
+import { GeneralActions } from '../actions/general/general.actions';
+import { AppState } from '../store';
+import { Store } from '@ngrx/store';
 
 @Component({
     selector: 'page',
@@ -19,12 +19,12 @@ import { GeneralActions } from './actions/general/general.actions';
 export class PageComponent implements AfterViewInit {
     public sideMenu: { isopen: boolean } = { isopen: true };
 
-    constructor(private store: Store<AppState>, private _generalService: GeneralService, private generalActions: GeneralActions) {
+    constructor(private store: Store<AppState>, private generalService: GeneralService, private generalActions: GeneralActions) {
 
     }
 
     public ngAfterViewInit() {
-        this._generalService.SetIAmLoaded(true);
+        this.generalService.SetIAmLoaded(true);
     }
 
     public sidebarStatusChange(event) {

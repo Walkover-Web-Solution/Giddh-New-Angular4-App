@@ -9,7 +9,7 @@ import { ToasterService } from '../services/toaster.service';
 import { takeUntil } from 'rxjs/operators';
 import { SettingsFinancialYearActions } from '../actions/settings/financial-year/financial-year.action';
 import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
-import * as moment from 'moment';
+import * as dayjs from 'dayjs';
 import { NewVsOldInvoicesService } from '../services/new-vs-old-invoices.service';
 
 @Component({
@@ -71,8 +71,8 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
         this.store.pipe(select(state => state.settings.financialYearLimits), takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.startDate && response.endDate) {
                 this.yearOptions = [];
-                let startYear = Number(moment(response.startDate, GIDDH_DATE_FORMAT).format("YYYY"));
-                let endYear = Number(moment(response.endDate, GIDDH_DATE_FORMAT).format("YYYY"));
+                let startYear = Number(dayjs(response.startDate, GIDDH_DATE_FORMAT).format("YYYY"));
+                let endYear = Number(dayjs(response.endDate, GIDDH_DATE_FORMAT).format("YYYY"));
 
                 for (startYear; startYear <= endYear; startYear++) {
                     this.yearOptions.push({ label: String(startYear), value: String(startYear) });
@@ -82,15 +82,15 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
 
         this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                let universalEndDate = moment(response[1]).format("YYYY");
+                let universalEndDate = dayjs(response[1]).format("YYYY");
 
-                if (moment(response[1]).toDate() >= moment().toDate()) {
+                if (dayjs(response[1]).toDate() >= dayjs().toDate()) {
                     this.selectedYear = (new Date()).getFullYear().toString();
                     this.selectedmonth = ("0" + (new Date().getMonth() + 1)).slice(-2).toString();
                     this.getSalesBifurcation();
                 } else {
                     this.selectedYear = universalEndDate;
-                    this.selectedmonth = ("0" + (moment(response[1]).format("M"))).slice(-2).toString();
+                    this.selectedmonth = ("0" + (dayjs(response[1]).format("M"))).slice(-2).toString();
                     this.getSalesBifurcation();
                 }
             }

@@ -41,6 +41,7 @@ import { MatTableModule } from "@angular/material/table";
 import { MatInputModule } from "@angular/material/input";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { MatDialogModule } from "@angular/material/dialog";
+import { AccountUpdateNewDetailsModule } from '../shared/header/components/account-update-new-details/account-update-new-details.module';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     suppressScrollX: false,
@@ -64,16 +65,19 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         FormsModule,
         ReactiveFormsModule,
         ContactRoutingModule,
-        LaddaModule,
+        LaddaModule.forRoot({
+            style: 'slide-left',
+            spinnerSize: 30
+        }),
         ShSelectModule,
         TabsModule,
-        BsDropdownModule,
-        TooltipModule,
+        BsDropdownModule.forRoot(),
+        TooltipModule.forRoot(),
         SharedModule,
         SelectModule.forRoot(),
         TabsModule.forRoot(),
         ModalModule.forRoot(),
-        PaginationModule,
+        PaginationModule.forRoot(),
         ClickOutsideModule,
         DigitsOnlyModule,
         ElementViewChildModule,
@@ -96,7 +100,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
         MatTableModule,
         MatInputModule,
         MatTooltipModule,
-        MatDialogModule
+        MatDialogModule,
+        AccountUpdateNewDetailsModule
     ],
     entryComponents: [
         PaginationComponent

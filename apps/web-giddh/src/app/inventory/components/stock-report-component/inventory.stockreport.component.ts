@@ -21,7 +21,7 @@ import {
 import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
 import { Observable, of as observableOf, ReplaySubject, Subscription } from 'rxjs';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import * as moment from 'moment/moment';
+import * as dayjs from 'dayjs';
 import { InventoryAction } from '../../../actions/inventory/inventory.actions';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { BranchFilterRequest, CompanyResponse } from '../../../models/api-models/Company';
@@ -82,7 +82,7 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
     public showToDatePicker: boolean;
     public toDate: string;
     public fromDate: string;
-    public moment = moment;
+    public dayjs = dayjs;
     public activeStockName = null;
     public asideMenuState: string = 'out';
     public isWarehouse: boolean = false;
@@ -216,28 +216,28 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
         },
         ranges: {
             'Last 1 Day': [
-                moment().subtract(1, 'days'),
-                moment()
+                dayjs().subtract(1, 'day'),
+                dayjs()
             ],
             'Last 7 Days': [
-                moment().subtract(6, 'days'),
-                moment()
+                dayjs().subtract(6, 'day'),
+                dayjs()
             ],
             'Last 30 Days': [
-                moment().subtract(29, 'days'),
-                moment()
+                dayjs().subtract(29, 'day'),
+                dayjs()
             ],
             'Last 6 Months': [
-                moment().subtract(6, 'months'),
-                moment()
+                dayjs().subtract(6, 'month'),
+                dayjs()
             ],
             'Last 1 Year': [
-                moment().subtract(12, 'months'),
-                moment()
+                dayjs().subtract(12, 'month'),
+                dayjs()
             ]
         },
-        startDate: moment().subtract(30, 'days'),
-        endDate: moment()
+        startDate: dayjs().subtract(30, 'day'),
+        endDate: dayjs()
     };
     public stockReport: StockReportResponse;
     public universalDate$: Observable<any>;
@@ -375,13 +375,13 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
         this.universalDate$.subscribe(a => {
             if (a) {
                 this.datePickerOptions = { ...this.datePickerOptions, startDate: a[0], endDate: a[1], chosenLabel: a[2] };
-                this.fromDate = moment(a[0]).format(GIDDH_DATE_FORMAT);
-                this.toDate = moment(a[1]).format(GIDDH_DATE_FORMAT);
+                this.fromDate = dayjs(a[0]).format(GIDDH_DATE_FORMAT);
+                this.toDate = dayjs(a[1]).format(GIDDH_DATE_FORMAT);
                 let universalDate = cloneDeep(a);
-                this.selectedDateRange = { startDate: moment(a[0]), endDate: moment(a[1]) };
-                this.selectedDateRangeUi = moment(a[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(a[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-                this.fromDate = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
-                this.toDate = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
+                this.selectedDateRange = { startDate: dayjs(a[0]), endDate: dayjs(a[1]) };
+                this.selectedDateRangeUi = dayjs(a[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(a[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                this.fromDate = dayjs(universalDate[0]).format(GIDDH_DATE_FORMAT);
+                this.toDate = dayjs(universalDate[1]).format(GIDDH_DATE_FORMAT);
                 this.getStockReport(true);
             }
         });
@@ -486,8 +486,6 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
      * getAllBranch
      */
     public getAllBranch() {
-        let branchFilterRequest = new BranchFilterRequest();
-        this.store.dispatch(this.settingsBranchActions.GetALLBranches(branchFilterRequest));
         // tslint:disable-next-line:no-shadowed-variable
         this.store.pipe(select(createSelector([(state: AppState) => state.settings.branches], (entities) => {
             if (entities) {
@@ -555,8 +553,8 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
     }
 
     public selectedDate(value?: any, from?: string) { //from like advance search
-        this.fromDate = moment(value.picker.startDate).format(GIDDH_DATE_FORMAT);
-        this.toDate = moment(value.picker.endDate).format(GIDDH_DATE_FORMAT);
+        this.fromDate = dayjs(value.picker.startDate).format(GIDDH_DATE_FORMAT);
+        this.toDate = dayjs(value.picker.endDate).format(GIDDH_DATE_FORMAT);
         this.pickerSelectedFromDate = value.picker.startDate;
         this.pickerSelectedToDate = value.picker.endDate;
         if (!from) {
@@ -703,13 +701,13 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
         this.universalDate$.subscribe(a => {
             if (a) {
                 this.datePickerOptions = { ...this.datePickerOptions, startDate: a[0], endDate: a[1], chosenLabel: a[2] };
-                this.fromDate = moment(a[0]).format(GIDDH_DATE_FORMAT);
-                this.toDate = moment(a[1]).format(GIDDH_DATE_FORMAT);
+                this.fromDate = dayjs(a[0]).format(GIDDH_DATE_FORMAT);
+                this.toDate = dayjs(a[1]).format(GIDDH_DATE_FORMAT);
                 let universalDate = cloneDeep(a);
-                this.selectedDateRange = { startDate: moment(a[0]), endDate: moment(a[1]) };
-                this.selectedDateRangeUi = moment(a[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(a[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-                this.fromDate = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
-                this.toDate = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
+                this.selectedDateRange = { startDate: dayjs(a[0]), endDate: dayjs(a[1]) };
+                this.selectedDateRangeUi = dayjs(a[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(a[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                this.fromDate = dayjs(universalDate[0]).format(GIDDH_DATE_FORMAT);
+                this.toDate = dayjs(universalDate[1]).format(GIDDH_DATE_FORMAT);
             }
         });
         //Reset Date
@@ -738,8 +736,8 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
         if (this.isFilterCorrect) {
 
             this.datePickerOptions = {
-                ...this.datePickerOptions, startDate: moment(this.pickerSelectedFromDate).toDate(),
-                endDate: moment(this.pickerSelectedToDate).toDate()
+                ...this.datePickerOptions, startDate: dayjs(this.pickerSelectedFromDate).toDate(),
+                endDate: dayjs(this.pickerSelectedToDate).toDate()
             };
 
             this.advanceSearchModalShow = false;
@@ -962,10 +960,10 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
         }
         this.hideGiddhDatepicker();
         if (value && value.startDate && value.endDate) {
-            this.selectedDateRange = { startDate: moment(value.startDate), endDate: moment(value.endDate) };
-            this.selectedDateRangeUi = moment(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
-            this.fromDate = moment(value.startDate).format(GIDDH_DATE_FORMAT);
-            this.toDate = moment(value.endDate).format(GIDDH_DATE_FORMAT);
+            this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
+            this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
+            this.fromDate = dayjs(value.startDate).format(GIDDH_DATE_FORMAT);
+            this.toDate = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
             this.pickerSelectedFromDate = this.fromDate;
             this.pickerSelectedToDate = this.toDate;
             if (!from) {

@@ -111,7 +111,6 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         });
     }
 
-
     public sidebarStatusChange(event) {
         this.sideMenu.isopen = event;
     }
@@ -146,10 +145,6 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         this.sideBarStateChange(true);
         this.subscribeToLazyRouteLoading();
 
-        if (this._generalService.companyUniqueName && !window.location.href.includes('login') && !window.location.href.includes('token-verify')) {
-            this.store.dispatch(this.companyActions.RefreshCompanies());
-        }
-
         this.store.pipe(select(state => state.session.currentLocale), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 if (this.activeLocale !== response?.value) {
@@ -172,9 +167,26 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
                 this.store.dispatch(this.commonActions.setActiveTheme(availableThemes[0]));
             }
         });
+
+        setTimeout(() => {
+            this._generalService.addLinkTag("./assets/css/font-awesome.css");
+            this._generalService.addLinkTag("./assets/fonts/icomoon/icomoon.css");
+            this._generalService.addLinkTag("./assets/css/toastr.css");
+            this._generalService.addLinkTag("./assets/css/perfect-scrollbar.component.scss");
+            this._generalService.addLinkTag("./assets/css/ngx-bootstrap/bs-datepicker.css");
+            this._generalService.addLinkTag("./assets/css/ladda-themeless.min.css");
+        }, 1000);
     }
 
     public ngAfterViewInit() {
+        this.hideMainGiddhLoader();
+
+        if (this._generalService.companyUniqueName && !window.location.href.includes('login') && !window.location.href.includes('token-verify')) {
+            setTimeout(() => {
+                this.store.dispatch(this.companyActions.RefreshCompanies());
+            }, 1000);
+        }
+
         this._generalService.IAmLoaded.next(true);
         this._cdr.detectChanges();
         this.router.events.pipe(takeUntil(this.destroyed$)).subscribe((evt) => {
@@ -208,7 +220,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         }
 
         if (!LOCAL_ENV && !isElectron) {
-            this._versionCheckService.initVersionCheck(AppUrl + '/version.json');
+            this._versionCheckService.initVersionCheck(AppUrl + 'version.json');
 
             this._versionCheckService.onVersionChange$.pipe(takeUntil(this.destroyed$)).subscribe((isChanged: boolean) => {
                 if (isChanged) {
@@ -216,6 +228,16 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
                 }
             });
         }
+    }
+
+    /**
+     * Hides main giddh loader for login/signup/token verify and shows on other pages
+     *
+     * @private
+     * @memberof AppComponent
+     */
+    private hideMainGiddhLoader(): void {
+        document.getElementById("main-giddh-loader")?.classList.add("d-none");
     }
 
     private getLastStateFromUrl(url: string): string {

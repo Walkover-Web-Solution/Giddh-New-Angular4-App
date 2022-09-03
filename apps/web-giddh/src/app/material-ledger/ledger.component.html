@@ -1281,7 +1281,7 @@
                                                             transactions.entryUniqueName === lc.selectedTxnUniqueName ||
                                                             transactions.isChecked
                                                     }"
-                                                    tooltip="{{ transactions.description }}"
+                                                    [matTooltip]="transactions.description"
                                                     (mouseover)="entryHovered(transactions.entryUniqueName)"
                                                     (mouseout)="selectedTrxWhileHovering = ''"
                                                 >
@@ -1399,31 +1399,30 @@
                             <span class="black"
                                 >{{ (lc.transactionData$ | async)?.totalPages }} {{ localeData?.pages }}</span
                             >
-                            <div
-                                id="pagination"
-                                element-view-container-ref
-                                #paginationChild="elementviewcontainerref"
-                            ></div>
+                            <pagination
+                                *ngIf="paginationObject.showPagination"
+                                [totalItems]="paginationObject.totalItems"
+                                [(ngModel)]="paginationObject.page"
+                                [maxSize]="5"
+                                class="pagination-sm"
+                                [boundaryLinks]="true"
+                                [itemsPerPage]="paginationObject.itemsPerPage"
+                                (pageChanged)="pageChanged($event)"
+                                [firstText]="commonLocaleData?.app_first"
+                                [previousText]="commonLocaleData?.app_previous"
+                                [nextText]="commonLocaleData?.app_next"
+                                [lastText]="commonLocaleData?.app_last"
+                            >
+                            </pagination>
                         </div>
                         <!-- endregion -->
                     </div>
                     <!-- end mobile view -->
                     <!-- region main transactions-->
-                    <div
-                        class="ledger-book"
-                        *ngIf="!isMobileScreen"
-                        [navigationWalker]="{ horizontal: 'hr-item', vertical: 'vr-item', ignore: 'no-tree' }"
-                        #navigator="navigationWalker"
-                        #root
-                        (onReset)="initNavigator(navigator, root.children[0])"
-                        (onLeft)="onLeftArrow(navigator, $event)"
-                        (onRight)="onRightArrow(navigator, $event)"
-                    >
+                    <div class="ledger-book" *ngIf="!isMobileScreen">
                         <!-- region debit transaction-->
                         <div
                             [ngClass]="Shown ? 'active' : ''"
-                            hr-item
-                            (ngInit)="initNavigator(navigator, $event?.nativeElement); navigator.nextVertical()"
                             class="left-col-new"
                             [ngClass]="{
                                 'bd-rr':
@@ -1528,7 +1527,6 @@
                             <mat-grid-list
                                 cols="4"
                                 rowHeight="50px"
-                                vr-item
                                 tabindex="-1"
                                 class="ledger-row"
                                 *ngFor="
@@ -1712,7 +1710,6 @@
                                                             [notFoundMsg]="noResultsFoundLabel"
                                                             [options]="searchResults"
                                                             [(ngModel)]="txn.particular"
-                                                            vr-item
                                                             tabindex="-1"
                                                             #select
                                                             [showClear]="false"
@@ -1853,8 +1850,6 @@
                         <div
                             [ngClass]="isHide ? 'active' : 'right-col-new'"
                             class="right-col-new"
-                            hr-item
-                            (ngInit)="initNavigator(navigator, $event?.nativeElement); navigator.nextVertical()"
                             [ngClass]="{
                                 'bd-rl':
                                     (lc.transactionData$ | async)?.debitTransactions?.length <
@@ -1881,7 +1876,6 @@
                                 rowHeight="50px"
                                 tabindex="-1"
                                 class="ledger-row"
-                                vr-item
                                 tabindex="-1"
                                 *ngIf="
                                     ledgerTxnBalance?.forwardedBalance?.amount > 0 &&
@@ -1970,7 +1964,6 @@
                                 "
                                 (touchend)="showUpdateLedgerModalIpad(txn)"
                                 (dblclick)="showUpdateLedgerModal(txn)"
-                                vr-item
                                 tabindex="-1"
                                 (keydown.enter)="showUpdateLedgerModal(txn)"
                                 [ngClass]="{
@@ -2128,7 +2121,6 @@
                                                             [idEl]="txn.id"
                                                             #shCredit
                                                             [options]="searchResults"
-                                                            vr-item
                                                             tabindex="-1"
                                                             [isPaginationEnabled]="true"
                                                             (scrollEnd)="handleScrollEnd()"
@@ -2386,11 +2378,21 @@
                             <span class="black"
                                 >{{ (lc.transactionData$ | async)?.totalPages }} {{ localeData?.pages }}</span
                             >
-                            <div
-                                id="pagination"
-                                element-view-container-ref
-                                #paginationChild="elementviewcontainerref"
-                            ></div>
+                            <pagination
+                                *ngIf="paginationObject.showPagination"
+                                [totalItems]="paginationObject.totalItems"
+                                [(ngModel)]="paginationObject.page"
+                                [maxSize]="5"
+                                class="pagination-sm"
+                                [boundaryLinks]="true"
+                                [itemsPerPage]="paginationObject.itemsPerPage"
+                                (pageChanged)="pageChanged($event)"
+                                [firstText]="commonLocaleData?.app_first"
+                                [previousText]="commonLocaleData?.app_previous"
+                                [nextText]="commonLocaleData?.app_next"
+                                [lastText]="commonLocaleData?.app_last"
+                            >
+                            </pagination>
                         </div>
                         <!-- endregion -->
                     </div>

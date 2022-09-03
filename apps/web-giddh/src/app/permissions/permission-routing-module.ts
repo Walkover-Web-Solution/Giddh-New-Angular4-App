@@ -49,9 +49,12 @@ const PERMISSION_ROUTES: Routes = [
         CommonModule,
         FormsModule,
         RouterModule.forChild(PERMISSION_ROUTES),
-        LaddaModule,
+        LaddaModule.forRoot({
+            style: 'slide-left',
+            spinnerSize: 30
+        }),
         ModalModule,
-        BsDropdownModule,
+        BsDropdownModule.forRoot(),
         SharedModule
     ],
     exports: [
