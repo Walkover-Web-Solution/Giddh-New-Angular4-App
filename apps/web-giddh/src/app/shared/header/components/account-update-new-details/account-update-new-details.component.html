@@ -468,6 +468,7 @@
                                         #mobileNo
                                         formControlName="mobileNo"
                                         [selectedCountryISO]="currentCompanyCountryCode"
+                                        (click)="focusInCallingCodeSearch($event)"
                                     >
                                     </ngx-intl-tel-input>
                                 </div>
