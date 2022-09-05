@@ -113,6 +113,7 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
     public ngOnChanges(changes: SimpleChanges) {
         // change
         if ('date' in changes && changes.date.currentValue !== changes.date.previousValue) {
+            this.date = (typeof changes['date'].currentValue === "object") ? dayjs(changes['date'].currentValue).format(GIDDH_DATE_FORMAT) : changes['date'].currentValue;
             if (dayjs(changes['date'].currentValue, GIDDH_DATE_FORMAT).isValid()) {
                 this.taxSum = 0;
                 this.prepareTaxObject();
