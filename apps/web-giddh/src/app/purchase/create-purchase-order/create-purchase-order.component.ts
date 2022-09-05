@@ -1298,16 +1298,16 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                 };
             }
             if (isBulkItem) {
-                txn = this.calculateItemValues(selectedAcc, txn, entry);
+                txn = this.calculateItemValues(selectedAcc, txn, entry, false, true);
             } else {
                 this.searchService.loadDetails(selectedAcc.additional.uniqueName, requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
                     if (data && data.body) {
                         // Take taxes of parent group and stock's own taxes
-                        const taxes = data.body.taxes || [];
-                        if (data.body.stock) {
-                            taxes.push(...data.body.stock.taxes);
-                        }
-
+                        const taxes = this.generalService.fetchTaxesOnPriority(
+                            data.body.stock?.taxes ?? [],
+                            data.body.stock?.groupTaxes ?? [],
+                            data.body.taxes ?? [],
+                            data.body.groupTaxes ?? []);
                         // directly assign additional property
                         selectedAcc.additional = {
                             ...selectedAcc.additional,
@@ -3270,7 +3270,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
      * @returns {SalesTransactionItemClass} Returns the complete transaction instance
      * @memberof CreatePurchaseOrderComponent
      */
-    private calculateItemValues(selectedAcc: any, transaction: SalesTransactionItemClass, entry: SalesEntryClass, calculateTransaction: boolean = true): SalesTransactionItemClass {
+    private calculateItemValues(selectedAcc: any, transaction: SalesTransactionItemClass, entry: SalesEntryClass, calculateTransaction: boolean = true, isBulkItem?: boolean): SalesTransactionItemClass {
         let additional = _.cloneDeep(selectedAcc.additional);
         transaction.quantity = additional.quantity ? additional.quantity : (additional.stock) ? 1 : null;
         transaction.applicableTaxes = [];
@@ -3317,7 +3317,11 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
             });
         } else {
             // assign taxes for non stock accounts
-            transaction.applicableTaxes = additional.applicableTaxes;
+            if (isBulkItem) {
+                transaction.applicableTaxes = additional.stock?.groupTaxes ? additional.stock?.groupTaxes : additional.applicableTaxes;
+            } else {
+                transaction.applicableTaxes = additional.applicableTaxes;
+            }
         }
 
         transaction.accountName = additional.name;
