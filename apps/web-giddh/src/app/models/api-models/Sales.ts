@@ -4,7 +4,7 @@ import { LedgerResponseDiscountClass } from './Ledger';
 import { giddhRoundOff } from '../../shared/helpers/helperFunctions';
 import { INameUniqueName } from '../interfaces/nameUniqueName.interface';
 import { TaxControlData } from '../../theme/tax-control/tax-control.component';
-import * as moment from 'moment';
+import * as dayjs from 'dayjs';
 import { VoucherAdjustments } from './AdvanceReceiptsAdjust';
 import { ReferenceVoucher } from '../../material-ledger/ledger.vm';
 
@@ -345,7 +345,7 @@ export class SalesEntryClass {
 
     constructor() {
         this.transactions = [new SalesTransactionItemClass()];
-        this.entryDate = moment().toDate();
+        this.entryDate = dayjs().toDate();
         this.taxes = [];
         this.taxList = [];
         this.discounts = [this.staticDefaultDiscount()];

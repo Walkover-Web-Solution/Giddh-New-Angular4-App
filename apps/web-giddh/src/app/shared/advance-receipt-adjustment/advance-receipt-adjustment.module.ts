@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LaddaModule } from 'angular2-ladda';
-
 import { SelectModule } from '../../theme/ng-select/ng-select';
 import { ShSelectModule } from '../../theme/ng-virtual-select/sh-select.module';
 import { TranslateDirectiveModule } from '../../theme/translate/translate.directive.module';
@@ -18,7 +17,10 @@ import { AdvanceReceiptAdjustmentComponent } from './advance-receipt-adjustment.
         FormsModule,
         ReactiveFormsModule,
         CommonModule,
-        LaddaModule,
+        LaddaModule.forRoot({
+            style: 'slide-left',
+            spinnerSize: 30
+        }),
         SelectModule,
         AmountFieldComponentModule,
         NgxMaskModule.forRoot(),

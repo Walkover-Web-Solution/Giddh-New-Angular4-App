@@ -26,7 +26,9 @@ import { TaxResponse } from '../../models/api-models/Company';
 import { IContentCommon } from '../../models/api-models/Invoice';
 import { giddhRoundOff } from '../../shared/helpers/helperFunctions';
 import { cloneDeep } from '../../lodash-optimized';
-import * as moment from 'moment/moment';
+import * as dayjs from 'dayjs';
+import * as customParseFormat from 'dayjs/plugin/customParseFormat';
+dayjs.extend(customParseFormat);
 import { DiscountListComponent } from '../../sales/discount-list/discountList.component';
 import { TaxControlComponent } from '../../theme/tax-control/tax-control.component';
 import { CompanyActions } from '../../actions/company.actions';
@@ -39,7 +41,6 @@ import { CurrentCompanyState } from '../../store/Company/company.reducer';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LedgerDiscountClass } from '../../models/api-models/SettingsDiscount';
 import { LedgerResponseDiscountClass } from '../../models/api-models/Ledger';
-import { GeneralActions } from '../../actions/general/general.actions';
 import { InvoiceService } from '../../services/invoice.service';
 import { PURCHASE_ORDER_STATUS } from '../../shared/helpers/purchaseOrderStatus';
 import { INameUniqueName } from '../../models/api-models/Inventory';
@@ -51,6 +52,7 @@ import { SettingsBranchActions } from '../../actions/settings/branch/settings.br
 import { SearchService } from '../../services/search.service';
 import { SalesShSelectComponent } from '../../theme/sales-ng-virtual-select/sh-select.component';
 import { LedgerService } from '../../services/ledger.service';
+import { SettingsDiscountService } from '../../services/settings.discount.service';
 
 /** Type of search: vendor and item (product/service) search */
 const SEARCH_TYPE = {
@@ -238,8 +240,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
     public isRcmEntry: boolean = false;
     /* This will hold universal date */
     public universalDate: any;
-    /* moment object */
-    public moment = moment;
+    /* dayjs object */
+    public dayjs = dayjs;
     /* This will hold currency symbol of company */
     public baseCurrencySymbol: string = '';
     /* Object for selected vendor */
@@ -366,6 +368,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
     public voucherApiVersion: 1 | 2;
     /** True if form save in progress */
     public isFormSaveInProgress: boolean = false;
+    /** List of discounts */
+    public discountsList: any[] = [];
 
     constructor(
         private store: Store<AppState>,
@@ -383,14 +387,14 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         private loaderService: LoaderService,
         private route: ActivatedRoute,
         private router: Router,
-        private generalActions: GeneralActions,
         private ledgerService: LedgerService,
         private invoiceService: InvoiceService,
         private modalService: BsModalService,
         private settingsBranchAction: SettingsBranchActions,
         private searchService: SearchService,
         private ngZone: NgZone,
-        private changeDetection: ChangeDetectorRef
+        private changeDetection: ChangeDetectorRef,
+        private settingsDiscountService: SettingsDiscountService
     ) {
         this.selectedAccountDetails$ = this.store.pipe(select(state => state.sales.acDtl), takeUntil(this.destroyed$));
         this.createAccountIsSuccess$ = this.store.pipe(select(state => state.sales.createAccountSuccess), takeUntil(this.destroyed$));
@@ -409,11 +413,9 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
     public ngOnInit(): void {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.getInvoiceSettings();
-        this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
+        this.getDiscounts();
         this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: 0 }));
         this.store.dispatch(this.companyActions.getTax());
-        this.store.dispatch(this.settingsBranchAction.resetAllBranches());
-        this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '' }));
 
         this.breakPointObservar.observe([
             '(max-width: 1024px)'
@@ -540,6 +542,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                 }
 
                 this.changeDetection.detectChanges();
+            } else {
+                this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
             }
         });
 
@@ -601,7 +605,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         this.store.pipe(select((state: AppState) => state.session.applicationDate)).pipe(takeUntil(this.destroyed$)).subscribe((dateObj: Date[]) => {
             if (dateObj) {
                 try {
-                    this.universalDate = moment(dateObj[1]).toDate();
+                    const universalDate: any = dayjs(dateObj[1]);
+                    this.universalDate = universalDate.$d;
                     this.assignDates();
                 } catch (e) {
                     this.universalDate = new Date();
@@ -661,8 +666,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
             this.isMulticurrencyAccount = accountDetails.currency !== this.companyCurrency;
             if (this.isMulticurrencyAccount) {
                 this.customerCurrencyCode = accountDetails.currency;
-                this.getCurrencyRate(this.companyCurrency, accountDetails.currency,
-                    moment(this.purchaseOrder.voucherDetails.voucherDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT));
+                let voucherDate = (typeof this.purchaseOrder.voucherDetails.voucherDate === "object") ? dayjs(this.purchaseOrder.voucherDetails.voucherDate).format(GIDDH_DATE_FORMAT) : this.purchaseOrder.voucherDetails.voucherDate;
+                this.getCurrencyRate(this.companyCurrency, accountDetails.currency, voucherDate);
             } else {
                 this.customerCurrencyCode = this.companyCurrency;
                 this.previousExchangeRate = this.exchangeRate;
@@ -2046,7 +2051,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
             }
         }
 
-        if (moment(data.voucherDetails.dueDate, GIDDH_DATE_FORMAT).isBefore(moment(data.voucherDetails.voucherDate, GIDDH_DATE_FORMAT), 'd')) {
+        if (dayjs(data.voucherDetails.dueDate, GIDDH_DATE_FORMAT).isBefore(dayjs(data.voucherDetails.voucherDate, GIDDH_DATE_FORMAT), 'd')) {
             this.startLoader(false);
             this.toaster.errorToast(this.localeData?.delivery_date_error);
             return;
@@ -2299,7 +2304,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                 }
             } else {
                 try {
-                    return moment(val).format(GIDDH_DATE_FORMAT);
+                    return dayjs(val).format(GIDDH_DATE_FORMAT);
                 } catch (error) {
                     return '';
                 }
@@ -2409,6 +2414,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         this.store.pipe(select(appStore => appStore.settings.branches), take(1)).subscribe(response => {
             if (response && response.length) {
                 branches = response;
+            } else {
+                this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '' }));
             }
         });
         if (this.generalService.currentOrganizationType === OrganizationType.Branch) {
@@ -2874,7 +2881,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
     public assignDueDate(): void {
         let duePeriod: number;
         duePeriod = this.invoiceSettings.purchaseBillSettings ? this.invoiceSettings.purchaseBillSettings.poDuePeriod : 0;
-        this.purchaseOrder.voucherDetails.dueDate = duePeriod > 0 ? moment(this.purchaseOrder.voucherDetails.voucherDate).add(duePeriod, 'days').toDate() : moment(this.purchaseOrder.voucherDetails.voucherDate).toDate();
+        this.purchaseOrder.voucherDetails.dueDate = duePeriod > 0 ? dayjs(this.purchaseOrder.voucherDetails.voucherDate).add(duePeriod, 'day').toDate() : dayjs(this.purchaseOrder.voucherDetails.voucherDate).toDate();
     }
 
     /**
@@ -2968,7 +2975,8 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
     public onUpdateOrderDate(): void {
         this.isOrderDateChanged = true;
         if (this.isMulticurrencyAccount && this.purchaseOrder.voucherDetails.voucherDate) {
-            this.getCurrencyRate(this.companyCurrency, this.customerCurrencyCode, moment(this.purchaseOrder.voucherDetails.voucherDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT));
+            let voucherDate = (typeof this.purchaseOrder.voucherDetails.voucherDate === "object") ? dayjs(this.purchaseOrder.voucherDetails.voucherDate).format(GIDDH_DATE_FORMAT) : this.purchaseOrder.voucherDetails.voucherDate;
+            this.getCurrencyRate(this.companyCurrency, this.customerCurrencyCode, voucherDate);
         }
         if (this.invoiceSettings && this.invoiceSettings.purchaseBillSettings) {
             setTimeout(() => {
@@ -3644,10 +3652,10 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
      *
      * @param {string} to Converted to currency symbol
      * @param {string} from Converted from currency symbol
-     * @param {string} [date=moment().format(GIDDH_DATE_FORMAT)] Date on which currency rate is required, default is today's date
+     * @param {string} [date=dayjs().format(GIDDH_DATE_FORMAT)] Date on which currency rate is required, default is today's date
      * @memberof CreatePurchaseOrderComponent
      */
-    public getCurrencyRate(to: string, from: string, date = moment().format(GIDDH_DATE_FORMAT)): void {
+    public getCurrencyRate(to: string, from: string, date = dayjs().format(GIDDH_DATE_FORMAT)): void {
         if (from && to) {
             this.ledgerService.GetCurrencyRateNewApi(from, to, date).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 let rate = response.body;
@@ -3767,5 +3775,19 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                 transaction.convertedTotal = giddhRoundOff(transaction.total * this.exchangeRate, 2);
             }
         }
+    }
+
+    /**
+     * Get list of discounts
+     *
+     * @private
+     * @memberof CreatePurchaseOrderComponent
+     */
+     private getDiscounts(): void {
+        this.settingsDiscountService.GetDiscounts().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.status === "success" && response?.body?.length > 0) {
+                this.discountsList = response?.body;
+            }
+        });
     }
 }
