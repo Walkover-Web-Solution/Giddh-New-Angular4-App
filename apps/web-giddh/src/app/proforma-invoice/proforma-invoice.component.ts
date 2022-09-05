@@ -7878,4 +7878,14 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
             }
         });
     }
+
+    /**
+     * Will put focus in search field in calling code dropdown
+     *
+     * @param {*} element
+     * @memberof ProformaInvoiceComponent
+     */
+    public focusInCallingCodeSearch(element: any): void {
+        this.generalService.focusInCountrySearch(element);
+    }
 }

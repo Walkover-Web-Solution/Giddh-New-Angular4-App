@@ -37,7 +37,8 @@ import { NgxIntlTelInputModule } from 'ngx-intl-tel-input';
             style: 'slide-left',
             spinnerSize: 30
         }),
-        PopoverModule.forRoot()
+        PopoverModule.forRoot(),
+        NgxIntlTelInputModule
     ],
     exports: [
         AccountUpdateNewDetailsComponent,
