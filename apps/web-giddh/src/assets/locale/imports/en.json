@@ -1,9 +1,7 @@
 {
     "import_date": "Import Date",
-    "by":"By",
     "module": "Module",
     "import_file": "Import File",
-    "count": "Count",
     "error_sheet": "Error Sheet",
     "succes_sheet": "Success Sheet",
      "expiry": "Expiry",

@@ -1,9 +1,7 @@
 {
     "import_date": "आयात तिथि",
-    "by":"द्वारा",
     "module": "मापांक",
     "import_file": "फ़ाइल आयात करें",
-    "count": "गिनती करना",
     "error_sheet": "त्रुटि पत्रक",
     "succes_sheet": "सफलता पत्रक",
     "expiry": "समाप्ति",

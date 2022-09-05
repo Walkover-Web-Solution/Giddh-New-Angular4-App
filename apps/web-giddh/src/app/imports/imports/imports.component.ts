@@ -178,7 +178,6 @@ export class ImportsComponent implements OnInit, OnDestroy {
         }
         this.isLoading = true;
         this.importsService.getImports(this.importRequest).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
-            // console.log(response);
             this.isLoading = false;
             if (response && response.status === 'success') {
                 response.body?.items?.forEach((result: any) => {
@@ -255,8 +254,8 @@ export class ImportsComponent implements OnInit, OnDestroy {
             this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
             this.fromDate = dayjs(value.startDate).format(GIDDH_DATE_FORMAT);
             this.toDate = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
-            this.importRequest.from = null;
-            this.importRequest.to = null;
+            this.importRequest.from = this.fromDate;
+            this.importRequest.to = this.toDate;
             this.getImports(true);
         }
     }

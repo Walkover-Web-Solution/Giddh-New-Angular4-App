@@ -5,7 +5,7 @@ export class ImportsRequest {
     public count?: number;
     public totalPages?: number;
     public totalItems?: number;
-    branchUniqueName?: string;
+    public branchUniqueName?: string;
 }
 export class ImportsResponse {
     public page?: any;
@@ -14,17 +14,16 @@ export class ImportsResponse {
     public totalItems?: number;
     public items?: [];
 }
-
 export interface ImportsData {
-    date?: any;
-    efsPath?: any;
+    date?: string;
+    efsPath?: string;
     expireAt?: any;
     metaData?: any;
     importFiile?: any;
-    count?: any;
+    count?: number;
     requestId?: any;
     status?: any;
-    type?:any;
-    user?:any
+    type?: string;
+    user?: any
 }
 

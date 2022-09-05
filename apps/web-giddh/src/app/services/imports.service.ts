@@ -11,15 +11,19 @@ import { IMPORTS_API } from './apiurls/imports.api';
 
 @Injectable()
 export class ImportsService {
-
     /** This will hold the company uniquename */
     private companyUniqueName: string;
 
     constructor(private errorHandler: GiddhErrorHandler, private http: HttpWrapperService,
         private generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
     }
-
-
+    /**
+     * This will use for get imports
+     *
+     * @param {ImportsRequest} importsRequest
+     * @return {*}  {Observable<BaseResponse<ImportsResponse, ImportsRequest>>}
+     * @memberof ImportsService
+     */
     public getImports(importsRequest: ImportsRequest): Observable<BaseResponse<ImportsResponse, ImportsRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let url = this.config.apiUrl + IMPORTS_API.IMPORTS;
