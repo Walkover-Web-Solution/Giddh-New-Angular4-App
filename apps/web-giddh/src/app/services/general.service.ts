@@ -1139,4 +1139,37 @@ export class GeneralService {
     public dropdownFocusOut(dropdownListItem: HTMLElement): void {
         dropdownListItem.classList.remove('custom-keyboard-dropdown-list-focus');
     }
+
+    /**
+     * Adds link tag
+     *
+     * @param {string} path
+     * @memberof GeneralService
+     */
+    public addLinkTag(path: string): void {
+        let linkTag = document.createElement('link');
+        linkTag.href = path;
+        linkTag.rel = 'stylesheet';
+        linkTag.crossOrigin = "anonymous";
+        linkTag.as = "style";
+        document.body.appendChild(linkTag);
+    }
+
+    /**
+     * Returns true if css is loaded else false
+     *
+     * @param {string} path
+     * @returns {boolean}
+     * @memberof GeneralService
+     */
+    public checkIfCssExists(path: string): boolean {
+        let found = false;
+        for (let i = 0; i < document.styleSheets.length; i++) {
+            if (document.styleSheets[i].href == path) {
+                found = true;
+                break;
+            }
+        }
+        return found;
+    }
 }

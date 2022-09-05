@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges, ChangeDetectionStrategy, OnDestroy, ViewChild } from '@angular/core';
-import * as _moment from 'moment';
+import * as dayjs from 'dayjs';
 import { MatDatepickerInputEvent, MatDatepicker } from '@angular/material/datepicker';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { ReplaySubject } from 'rxjs';
@@ -7,8 +7,6 @@ import { takeUntil } from 'rxjs/operators';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store';
 import { SettingsFinancialYearActions } from '../../actions/settings/financial-year/financial-year.action';
-
-const moment = _moment;
 
 @Component({
     selector: 'giddh-daterangepicker',
@@ -51,10 +49,10 @@ export class GiddhDaterangepickerComponent implements OnInit, OnChanges, OnDestr
         this.store.dispatch(this.settingsFinancialYearActions.GetAllFinancialYears());
 
         if (this.inputStartDate) {
-            this.startDate = moment(this.inputStartDate, GIDDH_DATE_FORMAT).toDate();
+            this.startDate = dayjs(this.inputStartDate, GIDDH_DATE_FORMAT).toDate();
         }
         if (this.inputEndDate) {
-            this.endDate = moment(this.inputEndDate, GIDDH_DATE_FORMAT).toDate();
+            this.endDate = dayjs(this.inputEndDate, GIDDH_DATE_FORMAT).toDate();
         }
 
         this.store.pipe(select(state => state.settings.financialYears), takeUntil(this.destroyed$)).subscribe(response => {
@@ -109,10 +107,10 @@ export class GiddhDaterangepickerComponent implements OnInit, OnChanges, OnDestr
      */
     public dateChange(type: string, event: MatDatepickerInputEvent<Date>): void {
         if (type === "start") {
-            this.startDate = moment(event.value, GIDDH_DATE_FORMAT).toDate();
+            this.startDate = dayjs(event.value, GIDDH_DATE_FORMAT).toDate();
         }
         if (type === "end") {
-            this.endDate = moment(event.value, GIDDH_DATE_FORMAT).toDate();
+            this.endDate = dayjs(event.value, GIDDH_DATE_FORMAT).toDate();
         }
     }
 

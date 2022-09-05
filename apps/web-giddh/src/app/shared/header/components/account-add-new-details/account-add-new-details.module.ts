@@ -15,11 +15,14 @@ import { NgxIntlTelInputModule } from 'ngx-intl-tel-input';
     exports: [AccountAddNewDetailsComponent],
     imports: [
         CommonModule,
-        LaddaModule,
+        LaddaModule.forRoot({
+            style: 'slide-left',
+            spinnerSize: 30
+        }),
         ReactiveFormsModule,
         SelectModule,
         ShSelectModule,
-        TabsModule,
+        TabsModule.forRoot(),
         TranslateDirectiveModule,
         NgxIntlTelInputModule,
         NgxBootstrapSwitchModule.forRoot(),

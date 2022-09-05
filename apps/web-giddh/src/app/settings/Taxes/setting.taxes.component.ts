@@ -4,7 +4,7 @@ import { GIDDH_DATE_FORMAT } from './../../shared/helpers/defaultDateFormat';
 import { select, Store } from '@ngrx/store';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { AppState } from '../../store';
-import * as moment from 'moment/moment';
+import * as dayjs from 'dayjs';
 import { CompanyActions } from '../../actions/company.actions';
 import { TaxResponse } from '../../models/api-models/Company';
 import { SettingsTaxesActions } from '../../actions/settings/taxes/settings.taxes.action';
@@ -37,7 +37,7 @@ export class SettingTaxesComponent implements OnInit, OnDestroy {
 
     public availableTaxes: TaxResponse[] = [];
     public newTaxObj: TaxResponse = new TaxResponse();
-    public moment = moment;
+    public dayjs = dayjs;
     public days: IOption[] = [];
     public records = []; // This array is just for generating dynamic ngModel
     public taxToEdit = []; // It is for edit toogle
@@ -82,7 +82,7 @@ export class SettingTaxesComponent implements OnInit, OnDestroy {
                 this.forceClear$ = observableOf({ status: true });
                 map(o.taxes, (tax) => {
                     each(tax.taxDetail, (t) => {
-                        t.date = moment(t.date, GIDDH_DATE_FORMAT);
+                        t.date = dayjs(t.date, GIDDH_DATE_FORMAT);
                     });
                 });
                 this.onCancel();
@@ -137,7 +137,7 @@ export class SettingTaxesComponent implements OnInit, OnDestroy {
                 this.store.dispatch(this._settingsTaxesActions.DeleteTax(this.newTaxObj.uniqueName));
             } else if (this.confirmationFor === 'edit') {
                 each(this.newTaxObj.taxDetail, (tax) => {
-                    tax.date = moment(tax.date).format(GIDDH_DATE_FORMAT);
+                    tax.date = dayjs(tax.date).format(GIDDH_DATE_FORMAT);
                 });
                 this.store.dispatch(this._settingsTaxesActions.UpdateTax(this.newTaxObj));
             }

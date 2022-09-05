@@ -6,7 +6,7 @@ import { MagicLinkRequest } from '../../../models/api-models/Ledger';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store/index';
 import { LedgerActions } from '../../../actions/ledger/ledger.actions';
-import * as moment from 'moment/moment';
+import * as dayjs from 'dayjs';
 import { takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -55,9 +55,9 @@ export class ShareLedgerComponent implements OnInit, OnDestroy {
     public getMagicLink() {
         let magicLinkRequest = new MagicLinkRequest();
         const data = _.cloneDeep(this.inputData?.advanceSearchRequest);
-        data.dataToSend.bsRangeValue = [moment(this.inputData?.from, GIDDH_DATE_FORMAT).toDate(), moment(this.inputData?.to, GIDDH_DATE_FORMAT).toDate()];
-        magicLinkRequest.from = moment(data.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT) ? moment(data.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT) : moment().add(-1, 'month').format(GIDDH_DATE_FORMAT);
-        magicLinkRequest.to = moment(data.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT) ? moment(data.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT) : moment().format(GIDDH_DATE_FORMAT);
+        data.dataToSend.bsRangeValue = [dayjs(this.inputData?.from, GIDDH_DATE_FORMAT).toDate(), dayjs(this.inputData?.to, GIDDH_DATE_FORMAT).toDate()];
+        magicLinkRequest.from = dayjs(data.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT) ? dayjs(data.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT) : dayjs().add(-1, 'month').format(GIDDH_DATE_FORMAT);
+        magicLinkRequest.to = dayjs(data.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT) ? dayjs(data.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT) : dayjs().format(GIDDH_DATE_FORMAT);
         magicLinkRequest.branchUniqueName = this.inputData?.advanceSearchRequest.branchUniqueName || '';
         this.ledgerService.GenerateMagicLink(magicLinkRequest, this.inputData?.accountUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(resp => {
             if (resp.status === 'success') {

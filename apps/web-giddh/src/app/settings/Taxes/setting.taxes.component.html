@@ -78,7 +78,7 @@
                                     [attr.data-title]="localeData?.applied_from"
                                 >
                                     <div *ngFor="let t of tax.taxDetail">
-                                        {{ moment(t.date).format(giddhDateFormat) }}
+                                        {{ dayjs(t.date).format(giddhDateFormat) }}
                                     </div>
                                 </td>
 
@@ -90,7 +90,7 @@
                                         <div class="input-group">
                                             <input
                                                 type="text"
-                                                [ngModel]="moment(t.date).format(giddhDateFormat)"
+                                                [ngModel]="dayjs(t.date).format(giddhDateFormat)"
                                                 name="tax_date_{{ i }}_{{ j }}"
                                                 (focus)="showDatePickerInTable = true"
                                                 class="form-control"
