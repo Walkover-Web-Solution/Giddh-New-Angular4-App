@@ -228,7 +228,7 @@ export class GroupService {
 
     public getMasters(groupUniqueName: string, page: Number): Observable<BaseResponse<GroupResponse, string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.get(this.config.apiUrl + GROUP_API.GET_MASTERS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':groupUniqueName', encodeURIComponent(groupUniqueName)).replace(':page', encodeURIComponent(page.toString())).replace(':count', encodeURIComponent(PAGINATION_LIMIT))).pipe(map((res) => {
+        return this.http.get(this.config.apiUrl + GROUP_API.GET_MASTERS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':groupUniqueName', encodeURIComponent(groupUniqueName)).replace(':page', encodeURIComponent(page.toString())).replace(':count', '1000')).pipe(map((res) => {
             let data: BaseResponse<GroupResponse, string> = res;
             data.request = groupUniqueName;
             data.queryString = { groupUniqueName };

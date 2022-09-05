@@ -1,5 +1,4 @@
 import { debounceTime, takeUntil } from 'rxjs/operators';
-import { GroupsAccountSidebarComponent } from '../new-group-account-sidebar/groups-account-sidebar.component';
 import { AfterViewChecked, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, OnDestroy, OnInit, Output, Renderer2, ViewChild } from '@angular/core';
 import { AppState } from '../../../../store/roots';
 import { Store, select } from '@ngrx/store';
@@ -24,7 +23,6 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
     public headerRect: any;
     public showForm: boolean = false;
     @ViewChild('myModel', { static: true }) public myModel: ElementRef;
-    @ViewChild('groupsidebar', { static: true }) public groupsidebar: GroupsAccountSidebarComponent;
     public config: PerfectScrollbarConfigInterface = { suppressScrollX: false, suppressScrollY: false };
     @ViewChild('perfectdirective', { static: true }) public directiveScroll: PerfectScrollbarComponent;
     public breadcrumbPath: string[] = [];

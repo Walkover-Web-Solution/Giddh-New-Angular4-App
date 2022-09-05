@@ -62,9 +62,6 @@ export class GroupWithAccountsAction {
     public static HIDE_ADD_AND_MANAGE_FROM_OUTSIDE = 'HIDE_ADD_AND_MANAGE_FROM_OUTSIDE';
     public static UPDATE_ACTIVE_TAB_ADD_AND_MANAGE = 'UPDATE_ACTIVE_TAB_ADD_AND_MANAGE';
 
-    public static INITIALIZE_FIRST_LEVEL_GROUPS = 'INITIALIZE_FIRST_LEVEL_GROUPS';
-    public static RESET_FIRST_LEVEL_GROUPS = 'RESET_FIRST_LEVEL_GROUPS';
-
     public ApplyGroupTax$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(GroupWithAccountsAction.APPLY_GROUP_TAX),

@@ -1,14 +1,16 @@
 import { CdkVirtualScrollViewport, ScrollDispatcher } from "@angular/cdk/scrolling";
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output, QueryList, SimpleChanges, ViewChildren } from "@angular/core";
 import { select, Store } from "@ngrx/store";
 import { AccountsAction } from "apps/web-giddh/src/app/actions/accounts.actions";
 import { GroupWithAccountsAction } from "apps/web-giddh/src/app/actions/groupwithaccounts.actions";
 import { cloneDeep } from "apps/web-giddh/src/app/lodash-optimized";
 import { IGroupsWithAccounts } from "apps/web-giddh/src/app/models/interfaces/groupsWithAccounts.interface";
+import { GeneralService } from "apps/web-giddh/src/app/services/general.service";
 import { GroupService } from "apps/web-giddh/src/app/services/group.service";
 import { AppState } from "apps/web-giddh/src/app/store";
 import { Observable, ReplaySubject } from "rxjs";
-import { filter, take, takeUntil } from "rxjs/operators";
+import { take, takeUntil } from "rxjs/operators";
+import { eventsConst } from "../eventsConst";
 
 @Component({
     selector: "master",
@@ -17,7 +19,7 @@ import { filter, take, takeUntil } from "rxjs/operators";
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MasterComponent implements OnInit, OnChanges {
-    @ViewChild(CdkVirtualScrollViewport) virtualScroll: CdkVirtualScrollViewport;
+    @ViewChildren(CdkVirtualScrollViewport) virtualScroll: QueryList<CdkVirtualScrollViewport>;
     @Input() public searchedMasterData: any[] = [];
     @Input() public height: number;
     @Input() public isSearchingGroups: boolean = false;
@@ -42,7 +44,8 @@ export class MasterComponent implements OnInit, OnChanges {
         private accountsAction: AccountsAction,
         private store: Store<AppState>,
         private scrollDispatcher: ScrollDispatcher,
-        private changeDetectorRef: ChangeDetectorRef
+        private changeDetectorRef: ChangeDetectorRef,
+        private generalService: GeneralService
     ) {
 
     }
@@ -71,12 +74,13 @@ export class MasterComponent implements OnInit, OnChanges {
         this.store.pipe(select(state => state.groupwithaccounts.isMoveGroupSuccess), takeUntil(this.destroyed$)).subscribe(response => {
             if (response && this.currentGroupColumnIndex > -1) {
                 this.getMasters(this.masterColumnsData[this.currentGroupColumnIndex]?.groupUniqueName, this.currentGroupColumnIndex - 1);
+                this.store.dispatch(this.groupWithAccountsAction.moveGroupComplete());
             }
         });
 
         this.store.pipe(select(state => state.groupwithaccounts.createAccountIsSuccess), takeUntil(this.destroyed$)).subscribe(response => {
             if (response && this.currentGroupColumnIndex > -1) {
-                this.getMasters((this.masterColumnsData[this.currentGroupColumnIndex].groupUniqueName) ? this.masterColumnsData[this.currentGroupColumnIndex].groupUniqueName : this.currentGroupUniqueName, this.currentGroupColumnIndex, true);
+                this.getMasters((this.masterColumnsData[this.currentGroupColumnIndex + 1].groupUniqueName) ? this.masterColumnsData[this.currentGroupColumnIndex + 1].groupUniqueName : this.currentGroupUniqueName, ((this.masterColumnsData[this.currentGroupColumnIndex + 1].groupUniqueName)) ? this.currentGroupColumnIndex + 1 : this.currentGroupColumnIndex, true);
             }
         });
 
@@ -88,22 +92,51 @@ export class MasterComponent implements OnInit, OnChanges {
 
         this.store.pipe(select(state => state.groupwithaccounts.isDeleteAccSuccess), takeUntil(this.destroyed$)).subscribe(response => {
             if (response && this.currentGroupColumnIndex > -1) {
-                this.getMasters(this.masterColumnsData[this.currentGroupColumnIndex]?.groupUniqueName, this.currentGroupColumnIndex - 1, true);
+                this.getMasters(this.masterColumnsData[this.currentGroupColumnIndex]?.groupUniqueName, this.currentGroupColumnIndex, true);
             }
         });
 
         this.store.pipe(select(state => state.groupwithaccounts.moveAccountSuccess), takeUntil(this.destroyed$)).subscribe(response => {
             if (response && this.currentGroupColumnIndex > -1) {
-                this.getMasters(this.masterColumnsData[this.currentGroupColumnIndex]?.groupUniqueName, this.currentGroupColumnIndex - 1, true);
+                this.getMasters(this.masterColumnsData[this.currentGroupColumnIndex]?.groupUniqueName, this.currentGroupColumnIndex - 1);
+                this.store.dispatch(this.accountsAction.moveAccountReset());
             }
         });
 
-        this.scrollDispatcher.scrolled().pipe(filter(event => this.virtualScroll.getRenderedRange().end === this.virtualScroll.getDataLength())).subscribe((event: any) => {
-            //console.log(this.virtualScroll, this.virtualScroll.getRenderedRange().end, this.virtualScroll.getDataLength());
-            if (!this.loadMoreInProgress && this.masterColumnsData[event?.elementRef?.nativeElement?.id]?.page < this.masterColumnsData[event?.elementRef?.nativeElement?.id]?.totalPages) {
-                this.getMasters(this.masterColumnsData[event?.elementRef?.nativeElement?.id]?.groupUniqueName, event?.elementRef?.nativeElement?.id, false, true);
-                this.loadMoreInProgress = true;
+        this.scrollDispatcher.scrolled().subscribe((event: any) => {
+            if (event && event?.getDataLength() - event?.getRenderedRange().end < 50) {
+                if (!this.loadMoreInProgress && this.masterColumnsData[event?.elementRef?.nativeElement?.id]?.page < this.masterColumnsData[event?.elementRef?.nativeElement?.id]?.totalPages) {
+                    this.getMasters(this.masterColumnsData[event?.elementRef?.nativeElement?.id]?.groupUniqueName, event?.elementRef?.nativeElement?.id, false, true);
+                    this.loadMoreInProgress = true;
+                }
             }
+        });
+
+        this.generalService.eventHandler.pipe(takeUntil(this.destroyed$)).subscribe(s => {
+            let groups: IGroupsWithAccounts[];
+            this.store.pipe(select(state => state.general.groupswithaccounts), take(1)).subscribe(grp => groups = grp);
+
+            let activeGroup: any;
+            this.store.pipe(select(state => state.groupwithaccounts.activeGroup), take(1)).subscribe(grp => activeGroup = grp);
+
+            let activeAccount;
+            this.store.pipe(select(state => state.groupwithaccounts.activeAccount), take(1)).subscribe(acc => activeAccount = acc);
+
+            // reset search string when you're in search case for move group || move account || merge account
+            if (s.name === eventsConst.groupMoved || s.name === eventsConst.accountMoved || s.name === eventsConst.accountMerged) {
+                this.isSearchingGroups = false;
+            }
+
+            this.breadcrumbPath = [];
+            this.breadcrumbUniqueNamePath = [];
+
+            if (!activeAccount) {
+                this.getBreadCrumbPathFromGroup(activeGroup, null, this.breadcrumbPath, this.breadcrumbUniqueNamePath);
+            } else {
+                this.getBreadCrumbPathFromGroup(activeAccount, null, this.breadcrumbPath, this.breadcrumbUniqueNamePath);
+            }
+
+            this.breadcrumbPathChanged.emit({ breadcrumbPath: this.breadcrumbPath, breadcrumbUniqueNamePath: this.breadcrumbUniqueNamePath });
         });
     }
 
@@ -180,7 +213,7 @@ export class MasterComponent implements OnInit, OnChanges {
                     }
                 } else {
                     this.masterColumnsData[currentIndex].page = response?.body?.page;
-                    this.masterColumnsData[currentIndex].results.push(response?.body?.results);
+                    this.masterColumnsData[currentIndex].results = this.masterColumnsData[currentIndex].results.concat(response?.body?.results);
                 }
             }
             this.loadMoreInProgress = false;
@@ -199,7 +232,7 @@ export class MasterComponent implements OnInit, OnChanges {
     }
 
     public onAccountClick(item: any, currentIndex: number): void {
-        this.currentGroupColumnIndex = currentIndex - 1;
+        this.currentGroupColumnIndex = currentIndex;
         this.currentGroupUniqueName = this.masterColumnsData[currentIndex].groupUniqueName;
         this.showCreateNewButton = true;
         this.store.dispatch(this.groupWithAccountsAction.hideAddNewForm());

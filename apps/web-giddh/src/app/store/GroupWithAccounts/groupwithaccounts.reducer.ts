@@ -491,6 +491,11 @@ export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = i
                 moveAccountSuccess: false
             });
         }
+        case AccountsAction.MOVE_ACCOUNT_RESET: {
+            return Object.assign({}, state, {
+                moveAccountSuccess: false
+            });
+        }
         case AccountsAction.MERGE_ACCOUNT_RESPONSE: {
             let dd: BaseResponse<string, AccountMergeRequest[]> = action.payload;
             if (dd.status === 'success') {
