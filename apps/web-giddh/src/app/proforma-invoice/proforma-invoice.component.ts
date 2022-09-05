@@ -2671,7 +2671,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     if (this.voucherApiVersion === 2) {
                         updatedData = this.proformaInvoiceUtilityService.cleanObject(updatedData);
                     }
-                    
+
                     this.salesService.generateGenericItem(updatedData, isVoucherV4).pipe(takeUntil(this.destroyed$)).subscribe((response: BaseResponse<any, GenericRequestForGenerateSCD>) => {
                         this.handleGenerateResponse(response, form);
                     }, () => {
@@ -3188,6 +3188,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
     }
 
     public onSelectSalesAccount(selectedAcc: any, txn: SalesTransactionItemClass, entry: SalesEntryClass, isBulkItem: boolean = false, isLinkedPoItem: boolean = false, entryIndex: number): any {
+
         this.invFormData.entries[entryIndex] = entry;
         this.invFormData.entries[entryIndex].transactions[0] = txn;
         if ((selectedAcc.value || isBulkItem) && selectedAcc.additional && selectedAcc.additional?.uniqueName) {
@@ -3378,7 +3379,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         } else {
             // assign taxes for non stock accounts
             if (isBulkItem) {
-                transaction.applicableTaxes = o.stock?.groupTaxes;
+                transaction.applicableTaxes = o.stock?.groupTaxes ? o.stock?.groupTaxes : o.applicableTaxes;
             } else {
                 transaction.applicableTaxes = o.applicableTaxes;
             }
