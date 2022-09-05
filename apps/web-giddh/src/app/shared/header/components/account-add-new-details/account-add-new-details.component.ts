@@ -1251,4 +1251,14 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             this.addAccountForm.get('mobileNo').setValue(newNumber);
         }
     }
+
+    /**
+     * Will put focus in search field in calling code dropdown
+     *
+     * @param {*} element
+     * @memberof AccountAddNewDetailsComponent
+     */
+    public focusInCallingCodeSearch(element: any): void {
+        this.generalService.focusInCountrySearch(element);
+    }
 }
