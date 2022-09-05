@@ -3319,7 +3319,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         } else {
             // assign taxes for non stock accounts
             if (isBulkItem) {
-                transaction.applicableTaxes = additional.stock?.groupTaxes;
+                transaction.applicableTaxes = additional.stock?.groupTaxes ? additional.stock?.groupTaxes : additional.applicableTaxes;
             } else {
                 transaction.applicableTaxes = additional.applicableTaxes;
             }
