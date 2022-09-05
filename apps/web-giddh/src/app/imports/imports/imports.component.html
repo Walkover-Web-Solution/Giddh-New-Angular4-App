@@ -92,7 +92,7 @@
                 </ng-container>
                 <!-- Requested Date Column -->
                 <ng-container matColumnDef="by">
-                    <th mat-header-cell *matHeaderCellDef>{{ localeData?.by }}</th>
+                    <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_by }}</th>
                     <td mat-cell *matCellDef="let element">{{ element.user.name }}</td>
                 </ng-container>
                 <!-- Requested Date Column -->
@@ -111,7 +111,7 @@
                 </ng-container>
                 <!-- Count Column -->
                 <ng-container matColumnDef="count">
-                    <th mat-header-cell *matHeaderCellDef>{{ localeData?.count }}</th>
+                    <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_count }}</th>
                     <td mat-cell *matCellDef="let element">
                         <span>{{ localeData?.success }} : {{ element.count.success }}</span
                         ><br /><span>{{ localeData?.failed }} : {{ element.count.failed }}</span

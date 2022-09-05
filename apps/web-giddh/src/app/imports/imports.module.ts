@@ -7,7 +7,6 @@ import { PaginationModule } from "ngx-bootstrap/pagination";
 import { GiddhPageLoaderModule } from "../shared/giddh-page-loader/giddh-page-loader.module";
 import { HamburgerMenuModule } from "../shared/header/components/hamburger-menu/hamburger-menu.module";
 import { NoDataModule } from "../shared/no-data/no-data.module";
-import { SharedModule } from "../shared/shared.module";
 import { TranslateDirectiveModule } from "../theme/translate/translate.directive.module";
 import { ImportsRoutingModule } from "./imports.routing.module";
 import { ImportsComponent } from "./imports/imports.component";
@@ -17,7 +16,7 @@ import { ImportsComponent } from "./imports/imports.component";
     declarations: [ImportsComponent],
     exports: [],
     imports: [CommonModule, PaginationModule.forRoot(), MatTableModule, ImportsRoutingModule, MatButtonModule, MatDialogModule, HamburgerMenuModule, TranslateDirectiveModule, NoDataModule,
-        GiddhPageLoaderModule, SharedModule]
+        GiddhPageLoaderModule]
 })
 
 export class ImportsModule { }
