@@ -1,7 +1,7 @@
 import * as dayjs from 'dayjs';
 import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { InvoicePurchaseActions } from '../../../actions/purchase-invoice/purchase-invoice.action';
-import { GstReconcileActionsEnum, GstReconcileInvoiceRequest, GstrSheetDownloadRequest } from '../../../models/api-models/GstReconcile';
+import { GstOverViewRequest, GstReconcileActionsEnum, GstReconcileInvoiceRequest, GstrJsonDownloadRequest, GstrSheetDownloadRequest } from '../../../models/api-models/GstReconcile';
 import { select, Store } from '@ngrx/store';
 import { ToasterService } from '../../../services/toaster.service';
 import { animate, state, style, transition, trigger } from '@angular/animations';
@@ -16,6 +16,8 @@ import { ActivatedRoute } from '@angular/router';
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 import { GstReport } from '../../constants/gst.constant';
 import { SHOW_GST_FILING } from '../../../app.constant';
+import { GstReconcileService } from '../../../services/GstReconcile.service';
+import { GeneralService } from '../../../services/general.service';
 
 @Component({
     // tslint:disable-next-line:component-selector
@@ -56,6 +58,7 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     /** True if current organization is company */
     @Input() public isCompany: boolean;
     @ViewChild('cancelConfirmationModel', { static: true }) public cancelConfirmationModel: ModalDirective;
+    @ViewChild('pushToPortalModel', { static: true }) public pushToPortalModel: ModalDirective;
     public gstAuthenticated$: Observable<boolean>;
     public GstAsidePaneState: string = 'out';
     public selectedService: 'VAYANA' | 'TAXPRO' | 'RECONCILE' | 'JIO_GST';
@@ -76,6 +79,10 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
     /** True, if GST filing needs to be shown */
     public showGstFiling: boolean = SHOW_GST_FILING;
+    /** This will use for selected month on datepicker*/
+    public selectedMonth: any = null;
+    /** This will use for date selected */
+    public dateSelected: boolean = false;
 
     constructor(
         private store: Store<AppState>,
@@ -83,7 +90,9 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
         private reconcileAction: GstReconcileActions,
         private invoicePurchaseActions: InvoicePurchaseActions,
         private gstReconcileActions: GstReconcileActions,
-        private activatedRoute: ActivatedRoute
+        private activatedRoute: ActivatedRoute,
+        private gstReconcileService: GstReconcileService,
+        private generalService: GeneralService
     ) {
         this.gstAuthenticated$ = this.store.pipe(select(p => p.gstR.gstAuthenticated), takeUntil(this.destroyed$));
         this.companyGst$ = this.store.pipe(select(p => p.gstR.activeCompanyGst), takeUntil(this.destroyed$));
@@ -107,11 +116,15 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
 
         this.gstAuthenticated$.subscribe((a) => this.gstAuthenticated = a);
         this.activatedRoute.queryParams.pipe(takeUntil(this.destroyed$)).subscribe(params => {
-            this.currentPeriod = {
-                from: params['from'],
-                to: params['to']
-            };
-            this.store.dispatch(this.gstReconcileActions.SetSelectedPeriod(this.currentPeriod));
+            if (params && params['from'] && params['to']) {
+                this.currentPeriod = {
+                    from: params['from'],
+                    to: params['to']
+                };
+                this.selectedMonth = dayjs(this.currentPeriod.from, GIDDH_DATE_FORMAT).toISOString();
+                this.selectedMonth = dayjs(this.selectedMonth).format('MMMM YYYY');
+                this.store.dispatch(this.gstReconcileActions.SetSelectedPeriod(this.currentPeriod));
+            }
             this.selectedGst = params['return_type'];
         });
     }
@@ -247,5 +260,58 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
 
     public toggleCancelModel() {
         this.cancelConfirmationModel.toggle();
+    }
+
+    /**
+     * This will use for period change
+     *
+     * @param {*} ev
+     * @memberof FilingHeaderComponent
+     */
+    public periodChanged(ev) {
+        if (ev) {
+            this.selectedMonth = dayjs(ev).format('MMMM YYYY');
+            this.currentPeriod = {
+                from: dayjs(ev).startOf('month').format(GIDDH_DATE_FORMAT),
+                to: dayjs(ev).endOf('month').format(GIDDH_DATE_FORMAT)
+            };
+            this.dateSelected = true;
+            this.store.dispatch(this.reconcileAction.SetSelectedPeriod(this.currentPeriod));
+            let request: GstOverViewRequest = new GstOverViewRequest();
+            request.from = this.currentPeriod.from;
+            request.to = this.currentPeriod.to;
+            request.gstin = this.activeCompanyGstNumber;
+            if (this.selectedGst === GstReport.Gstr1) {
+                this.store.dispatch(this.reconcileAction.GetOverView(GstReport.Gstr1, request));
+            } else {
+                this.store.dispatch(this.reconcileAction.GetOverView(GstReport.Gstr2, request));
+            }
+        }
+    }
+
+    /**
+    * Download Json GSTR1
+    *
+    * @param {any} string:
+    * @memberof FilingHeaderComponent
+    */
+    public onDownloadJsonGSTR(type: string) {
+        if (this.activeCompanyGstNumber) {
+            let request: GstrJsonDownloadRequest = new GstrJsonDownloadRequest();
+            request.type = type;
+            request.gstin = this.activeCompanyGstNumber;
+            request.from = this.currentPeriod.from;
+            request.to = this.currentPeriod.to;
+            this.gstReconcileService.downloadGSTRJSON(request).subscribe(res => {
+                if (res.status === "success") {
+                    let blobData = this.generalService.base64ToBlob(res?.body, "json", 512);
+                    return saveAs(blobData, `${this.activeCompanyGstNumber}.json`);
+                } else {
+                    this.toasty.errorToast(res?.body.message);
+                }
+            });
+        } else {
+            this.toasty.errorToast(this.localeData?.filing?.gst_unavailable);
+        }
     }
 }

@@ -14,14 +14,50 @@
             <div class="text-middle nav-top">
                 <div class="text-middle head head-font-weight">
                     {{ localeData?.gstr1_label }}
-
-                    <ng-container *ngIf="isMonthSelected">
-                        ({{ dayjs(currentPeriod.from, giddhDateFormat).format("MMMM YYYY") }})
-                    </ng-container>
-                    <ng-container *ngIf="!isMonthSelected">
-                        ({{ dayjs(currentPeriod.from, giddhDateFormat).format("DD MMM YYYY") }} -
-                        {{ dayjs(currentPeriod.to, giddhDateFormat).format("DD MMM YYYY") }})
-                    </ng-container>
+                    <div
+                        class="btn-group dropdown d-inline-block"
+                        dropdown
+                        [autoClose]="false"
+                        #monthWise="bs-dropdown"
+                        (clickOutside)="monthWise.hide()"
+                        [attachOutsideOnClick]="true"
+                    >
+                        <button
+                            id="button-nested"
+                            dropdownToggle
+                            type="button"
+                            class="
+                                dropdown
+                                clearfix
+                                list-title
+                                filter-by
+                                return-sel
+                                font-large
+                                dropdown-toggle
+                                pull-left
+                            "
+                            aria-controls="dropdown-nested"
+                        >
+                            <ng-container>
+                                {{ selectedMonth }}
+                            </ng-container>
+                            <span class="caret"></span>
+                        </button>
+                        <ul *dropdownMenu class="dropdown-menu month-picker" role="menu" id="monthPicker">
+                            <li role="menuitem">
+                                <a class="dropdown-item" href="javascript:void(0)">
+                                    <datepicker
+                                        [datepickerMode]="'month'"
+                                        name="fromDate"
+                                        (click)="$event.stopPropagation()"
+                                        [showWeeks]="false"
+                                        [minMode]="'month'"
+                                        (selectionDone)="periodChanged($event); monthWise.hide()"
+                                    ></datepicker>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
                 <div class="font-xs text-muted text-middle normal">{{ localeData?.outward_supplies_details }}</div>
             </div>
@@ -30,9 +66,19 @@
         <div class="col-lg-6 col-sm-4 col-12">
             <ul class="list-inline list-middle download-drop-down">
                 <li>
-                    <div class="btn-group" dropdown #dropdown="bs-dropdown">
+                    <button
+                        type="button"
+                        class="btn btn-sky-blue mr-0 error-button"
+                        (click)="onDownloadSheetGSTR('error')"
+                    >
+                        {{ localeData?.filing?.errors }}
+                    </button>
+                    <button type="button" class="btn btn-sky-blue mr-0" (click)="pushToPortalModal?.show()">
+                        {{ localeData?.filing?.push_to_portal }}
+                    </button>
+                    <!-- <div class="btn-group" dropdown #dropdown="bs-dropdown">
                         <button dropdownToggle type="button" class="btn dropdown-toggle btn-sky-blue mr-0">
-                            <i class="icon-download"></i> {{ commonLocaleData?.app_download }}
+                            <i class="icon-download"></i>{{ localeData?.filing?.errors }}
                         </button>
                         <ul
                             id="dropdown-menu_gstr1"
@@ -58,7 +104,7 @@
                                 >
                             </li>
                         </ul>
-                    </div>
+                    </div> -->
                 </li>
 
                 <li>
@@ -89,14 +135,41 @@
         <div class="text-middle nav-top">
             <div class="text-middle head-font-weight">
                 {{ localeData?.gstr2_label }}
-
-                <ng-container *ngIf="isMonthSelected">
-                    ({{ dayjs(currentPeriod.from, giddhDateFormat).format("MMMM YYYY") }})
-                </ng-container>
-                <ng-container *ngIf="!isMonthSelected">
-                    ({{ dayjs(currentPeriod.from, giddhDateFormat).format("DD MMM YYYY") }} -
-                    {{ dayjs(currentPeriod.to, giddhDateFormat).format("DD MMM YYYY") }})
-                </ng-container>
+                <div
+                    class="btn-group dropdown d-inline-block"
+                    dropdown
+                    [autoClose]="false"
+                    #monthWise="bs-dropdown"
+                    (clickOutside)="monthWise.hide()"
+                    [attachOutsideOnClick]="true"
+                >
+                    <button
+                        id="button-nested"
+                        dropdownToggle
+                        type="button"
+                        class="dropdown clearfix list-title filter-by return-sel font-large dropdown-toggle pull-left"
+                        aria-controls="dropdown-nested"
+                    >
+                        <ng-container>
+                            {{ selectedMonth }}
+                        </ng-container>
+                        <span class="caret"></span>
+                    </button>
+                    <ul *dropdownMenu class="dropdown-menu month-picker" role="menu" id="monthPicker">
+                        <li role="menuitem">
+                            <a class="dropdown-item" href="javascript:void(0)">
+                                <datepicker
+                                    [datepickerMode]="'month'"
+                                    name="fromDate"
+                                    (click)="$event.stopPropagation()"
+                                    [showWeeks]="false"
+                                    [minMode]="'month'"
+                                    (selectionDone)="periodChanged($event); monthWise.hide()"
+                                ></datepicker>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
             </div>
             <div class="font-xs text-muted text-middle normal">{{ localeData?.inward_supplies_details }}</div>
         </div>
@@ -177,6 +250,25 @@
                 (successCallBack)="cancelConfirmationModel.hide(); toggleSettingAsidePane(null)"
                 (cancelCallBack)="cancelConfirmationModel.hide()"
             ></confirm-modal>
+        </div>
+    </div>
+</div>
+<!--push to portal modal -->
+<div
+    bsModal
+    #pushToPortalModal="bs-modal"
+    class="modal z-index-for-aside fade"
+    role="dialog"
+    [config]="{ ignoreBackdropClick: true }"
+>
+    <div class="modal-dialog modal-md second">
+        <div class="modal-content">
+            <push-to-portal
+                [localeData]="localeData"
+                (cancelCallBack)="pushToPortalModal?.hide()"
+                (downloadExcel)="onDownloadSheetGSTR('main')"
+                (downloadJson)="onDownloadJsonGSTR('main')"
+            ></push-to-portal>
         </div>
     </div>
 </div>

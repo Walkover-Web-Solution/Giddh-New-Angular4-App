@@ -74,8 +74,8 @@
                                 dropdown
                                 [autoClose]="false"
                                 (isOpenChange)="onOpenChange($event)"
-                                #periodDropdown="bs-dropdown"
-                                (clickOutside)="checkIfDatepickerVisible()"
+                                #monthWise="bs-dropdown"
+                                (clickOutside)="monthWise?.hide()"
                                 [attachOutsideOnClick]="true"
                                 [isDisabled]="
                                     (gstr1OverviewDataInProgress$ | async) ||
@@ -108,51 +108,23 @@
                                     </ng-container>
                                     <span class="caret"></span>
                                 </button>
-
-                                <ul
-                                    id="dropdown-nested"
-                                    *dropdownMenu
-                                    class="dropdown-menu"
-                                    role="menu"
-                                    aria-labelledby="button-nested"
-                                >
-                                    <li
-                                        role="menuitem"
-                                        dropdown
-                                        placement="right"
-                                        [autoClose]="false"
-                                        #monthWise="bs-dropdown"
-                                    >
-                                        <a dropdownToggle class="dropdown-item dropdown-toggle cp">
-                                            {{ commonLocaleData?.app_month_wise }}
-                                            <div class="pull-right">
-                                                <span class="caret rotate-90"></span>
-                                            </div>
+                                <ul *dropdownMenu class="dropdown-menu month-picker" role="menu" id="monthPicker">
+                                    <li role="menuitem">
+                                        <a class="dropdown-item" href="javascript:void(0)">
+                                            <datepicker
+                                                [datepickerMode]="'month'"
+                                                name="fromDate"
+                                                (click)="$event.stopPropagation()"
+                                                [showWeeks]="false"
+                                                [minMode]="'month'"
+                                                (selectionDone)="periodChanged($event); monthWise?.hide()"
+                                                [ngModel]="selectedMonth"
+                                            >
+                                            </datepicker>
                                         </a>
-                                        <ul
-                                            *dropdownMenu
-                                            class="dropdown-menu month-picker"
-                                            role="menu"
-                                            id="monthPicker"
-                                        >
-                                            <li role="menuitem">
-                                                <a class="dropdown-item" href="javascript:void(0)">
-                                                    <datepicker
-                                                        [datepickerMode]="'month'"
-                                                        name="fromDate"
-                                                        (click)="$event.stopPropagation()"
-                                                        [showWeeks]="false"
-                                                        [minMode]="'month'"
-                                                        (selectionDone)="periodChanged($event); monthWise.hide()"
-                                                        [ngModel]="selectedMonth"
-                                                    >
-                                                    </datepicker>
-                                                </a>
-                                            </li>
-                                        </ul>
                                     </li>
-
-                                    <!-- <li role="menuitem">
+                                </ul>
+                                <!-- <li role="menuitem">
                                         <a
                                             class="dropdown-item"
                                             href="javascript:void(0)"
@@ -177,7 +149,6 @@
                                             />
                                         </a>
                                     </li> -->
-                                </ul>
                             </div>
                         </li>
                     </ul>
@@ -322,9 +293,6 @@
                                                 d="M406.5 251.5c-1-.9-2.3-1.4-3.7-1.4l-42.8 2c-1.4.1-2.7.7-3.6 1.8l-38.6 46H202.9l-42.1-46.2c-.9-1-2.1-1.6-3.4-1.6l-48.1-2.4c-1.4-.1-2.7.4-3.7 1.4-1 .9-1.6 2.3-1.6 3.6V392c0 2.8 2.2 5 5 5h294c2.8 0 5-2.2 5-5V255.2c0-1.4-.6-2.7-1.5-3.7zm-251.7 10.6l42.2 46.3c.9 1 2.3 1.6 3.7 1.6h119.5c1.5 0 2.9-.7 3.8-1.8l38.6-46.1 35.4-1.7V351H114v-91l40.8 2.1zM114 387v-26h284v26H114z"
                                             ></path>
                                         </svg>
-                                        <div class="font-large">
-                                            <b>{{ localeData?.push_gstin }}</b>
-                                        </div>
                                     </div>
                                     <div
                                         *ngIf="isCompany"

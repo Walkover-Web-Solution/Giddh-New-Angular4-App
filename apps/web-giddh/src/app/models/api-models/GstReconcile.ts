@@ -386,3 +386,6 @@ export class Gstr3bOverviewResult {
     status: string;
     body: Gstr3bOverviewResult2;
 }
+export class GstrJsonDownloadRequest extends GstOverViewRequest {
+    public type: string;
+}
