@@ -1,7 +1,9 @@
 .icon-download {
     font-weight: 600;
 }
-
+.error-button {
+    margin-right: 20px !important;
+}
 .dropdown-menu > li > a:hover {
     color: var(--color-blue);
     background: var(--color-dark-fog);
