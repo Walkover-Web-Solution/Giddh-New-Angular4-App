@@ -111,7 +111,7 @@
                         >
                             <master
                                 #master
-                                [topSharedGroups]="topSharedGroups"
+                                [topSharedGroups]="!searchString ? topSharedGroups : []"
                                 [searchedMasterData]="searchedMasterData"
                                 [ngStyle]="{
                                     'height':

@@ -97,7 +97,6 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
                         this.searchMasters(term);
                     } else {
                         this.searchedMasterData = [];
-                        this.getTopSharedGroups();
                     }
                 }
                 this.initialLoad = false;
@@ -148,6 +147,7 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
         this.breadcrumbPath = [];
         this.breadcrumbUniquePath = [];
         this.renderer.setProperty(this.groupSrch?.nativeElement, 'value', '');
+        this.searchString = "";
     }
 
     public closePopupEvent() {
