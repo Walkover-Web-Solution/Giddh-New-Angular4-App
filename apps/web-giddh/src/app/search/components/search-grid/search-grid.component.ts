@@ -1,7 +1,7 @@
 import { Observable, of, ReplaySubject } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
-import * as moment from 'moment/moment';
+import * as dayjs from 'dayjs';
 import { AccountFlat, BulkEmailRequest, SearchDataSet, SearchRequest } from '../../../models/api-models/Search';
 import { AppState } from '../../../store';
 import { saveAs } from 'file-saver';
@@ -25,7 +25,7 @@ export class SearchGridComponent implements OnInit, OnDestroy {
     @Input() public localeData: any = {};
     /* This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
-    public moment = moment;
+    public dayjs = dayjs;
     public companyUniqueName: string;
     public searchResponse$: Observable<AccountFlat[]>;
     public searchResponseFiltered$: Observable<AccountFlat[]>;

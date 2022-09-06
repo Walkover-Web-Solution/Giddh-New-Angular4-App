@@ -1233,6 +1233,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public closeMaster(): void {
         this.closeAccountModal.emit(true);
         this.store.dispatch(this.groupWithAccountsAction.HideAddAndManageFromOutside());
+        document.querySelector('body')?.classList?.remove('master-page');
     }
 
     /**	
@@ -1249,5 +1250,15 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             this.updatedNumber = newNumber;
             this.addAccountForm.get('mobileNo').setValue(newNumber);
         }
+    }
+
+    /**
+     * Will put focus in search field in calling code dropdown
+     *
+     * @param {*} element
+     * @memberof AccountAddNewDetailsComponent
+     */
+    public focusInCallingCodeSearch(element: any): void {
+        this.generalService.focusInCountrySearch(element);
     }
 }

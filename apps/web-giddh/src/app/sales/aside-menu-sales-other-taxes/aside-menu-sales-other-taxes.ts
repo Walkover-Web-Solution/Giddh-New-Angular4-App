@@ -76,4 +76,13 @@ export class AsideMenuSalesOtherTaxes implements OnInit, OnChanges {
         this.otherTaxesModal = cloneDeep(this.defaultOtherTaxesModal);
         this.applyTaxes.emit(this.otherTaxesModal);
     }
+
+    /**
+     *Close the aside-menu-modal
+     *
+     * @memberof AsideMenuSalesOtherTaxes
+     */
+    public closeTaxesModal(): void {
+        this.closeModal.emit(true);
+    }
 }

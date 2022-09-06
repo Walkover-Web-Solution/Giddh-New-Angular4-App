@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
 import {
     CompanyResponse
 } from '../../../models/api-models/Company';
-import * as moment from 'moment/moment';
+import * as dayjs from 'dayjs';
 import { GeneralService } from '../../../services/general.service';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import {
@@ -1040,10 +1040,10 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
 
     public submit(): void {
         this.isLoading = true;
-        this.branchTransfer.dateOfSupply = moment(this.tempDateParams.dateOfSupply).format(GIDDH_DATE_FORMAT);
+        this.branchTransfer.dateOfSupply = dayjs(this.tempDateParams.dateOfSupply).format(GIDDH_DATE_FORMAT);
 
         if (this.tempDateParams.dispatchedDate) {
-            this.branchTransfer.transporterDetails.dispatchedDate = moment(this.tempDateParams.dispatchedDate).format(GIDDH_DATE_FORMAT);
+            this.branchTransfer.transporterDetails.dispatchedDate = dayjs(this.tempDateParams.dispatchedDate).format(GIDDH_DATE_FORMAT);
         }
 
         this.branchTransfer.sources.forEach(source => {
@@ -1421,7 +1421,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
             setTimeout(() => {
                 this.setActiveRow(index);
                 setTimeout(() => {
-                    this.selectDropdown.show('');
+                    this.selectDropdown?.show('');
                 }, 100);
             }, 100);
         }
@@ -1436,7 +1436,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     public focusSourceWarehouse(event: any): void {
         if (this.allowAutoFocusInField && event && event.value) {
             setTimeout(() => {
-                this.sourceWarehouse.show('');
+                this.sourceWarehouse?.show('');
             }, 100);
         }
     }
@@ -1450,7 +1450,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     public focusDestinationWarehouse(event: any): void {
         if (this.allowAutoFocusInField && event && event.value) {
             setTimeout(() => {
-                this.destinationWarehouse.show('');
+                this.destinationWarehouse?.show('');
             }, 100);
         }
     }
@@ -1458,7 +1458,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     public focusTransporterMode(): void {
         if (this.allowAutoFocusInField) {
             setTimeout(() => {
-                this.transMode.show('');
+                this.transMode?.show('');
             }, 100);
         }
     }
@@ -1477,7 +1477,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
         if (this.allowAutoFocusInField) {
             setTimeout(() => {
                 if (this.tempDateParams.dispatchedDate) {
-                    this.transCompany.show('');
+                    this.transCompany?.show('');
                 }
             }, 100);
         }
@@ -1486,7 +1486,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     public focusDestinationWarehouses(): void {
         if (this.allowAutoFocusInField) {
             setTimeout(() => {
-                this.destinationWarehouseList.show('');
+                this.destinationWarehouseList?.show('');
             }, 100);
         }
     }
@@ -1494,7 +1494,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
     public focusSourceWarehouses(): void {
         if (this.allowAutoFocusInField) {
             setTimeout(() => {
-                this.sourceWarehouseList.show('');
+                this.sourceWarehouseList?.show('');
             }, 100);
         }
     }

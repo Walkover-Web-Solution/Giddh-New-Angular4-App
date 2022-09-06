@@ -15,7 +15,7 @@ import { NgxBootstrapSwitchModule } from 'ngx-bootstrap-switch';
         FormsModule,
         ReactiveFormsModule,
         ShSelectModule,
-        BsDropdownModule,
+        BsDropdownModule.forRoot(),
         ConfirmModalModule,
         NgxBootstrapSwitchModule.forRoot()
     ],

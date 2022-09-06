@@ -4,7 +4,6 @@ import { ReplaySubject } from 'rxjs';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store';
 import { takeUntil } from 'rxjs/operators';
-import { SettingsDiscountService } from '../../services/settings.discount.service';
 import { GeneralService } from '../../services/general.service';
 
 @Component({
@@ -43,13 +42,11 @@ export class DiscountControlComponent implements OnInit, OnDestroy, OnChanges {
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** List of discounts */
-    private discountsList: any[] = [];
-    /** True if get discounts list api call in progress */
-    private getDiscountsLoading: boolean = false;
+    @Input() public discountsList: any[] = [];
 
     constructor(
         private store: Store<AppState>,
-        private settingsDiscountService: SettingsDiscountService, private generalService: GeneralService,
+        private generalService: GeneralService,
     ) {
 
     }
@@ -113,18 +110,6 @@ export class DiscountControlComponent implements OnInit, OnDestroy, OnChanges {
     public prepareDiscountList() {
         if (this.discountsList?.length > 0) {
             this.processDiscountList();
-        } else {
-            if (this.getDiscountsLoading) {
-                return;
-            }
-            this.getDiscountsLoading = true;
-            this.settingsDiscountService.GetDiscounts().pipe(takeUntil(this.destroyed$)).subscribe(response => {
-                if (response?.status === "success" && response?.body?.length > 0) {
-                    this.discountsList = response?.body;
-                    this.processDiscountList();
-                }
-                this.getDiscountsLoading = false;
-            });
         }
     }
 
