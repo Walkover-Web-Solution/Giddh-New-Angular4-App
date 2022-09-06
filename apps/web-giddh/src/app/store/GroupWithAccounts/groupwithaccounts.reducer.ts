@@ -5,7 +5,7 @@ import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { GroupsWithAccountsResponse } from '../../models/api-models/GroupsWithAccounts';
 import { IGroupsWithAccounts } from '../../models/interfaces/groupsWithAccounts.interface';
 import { IFlattenGroupsAccountsDetail } from '../../models/interfaces/flattenGroupsAccountsDetail.interface';
-import { AccountMergeRequest, AccountMoveRequest, AccountRequest, AccountRequestV2, AccountResponse, AccountResponseV2, AccountSharedWithResponse, AccountsTaxHierarchyResponse } from '../../models/api-models/Account';
+import { AccountMergeRequest, AccountMoveRequest, AccountRequest, AccountRequestV2, AccountResponse, AccountResponseV2, AccountSharedWithResponse, AccountsTaxHierarchyResponse, AccountUnMergeRequest } from '../../models/api-models/Account';
 import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
 import { IAccountsInfo } from '../../models/interfaces/accountInfo.interface';
 import { INameUniqueName } from '../../models/api-models/Inventory';
@@ -54,6 +54,8 @@ export interface CurrentGroupAndAccountState {
     isDeleteAccInProcess: boolean;
     isDeleteAccSuccess: boolean;
     activeTab: number;
+    isMergeAccountSuccess?: boolean;
+    isUnmergeAccountSuccess?: boolean;
 }
 
 const prepare = (mockData: GroupsWithAccountsResponse[]): GroupsWithAccountsResponse[] => {
@@ -100,7 +102,9 @@ const initialState: CurrentGroupAndAccountState = {
     isAddAndManageOpenedFromOutside: false,
     isDeleteAccSuccess: false,
     isDeleteAccInProcess: false,
-    activeTab: 0
+    activeTab: 0,
+    isMergeAccountSuccess: false,
+    isUnmergeAccountSuccess: false
 };
 
 export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = initialState, action: CustomActions): CurrentGroupAndAccountState {
@@ -355,7 +359,8 @@ export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = i
             if (activeGrpData?.status === 'success') {
                 return Object.assign({}, state, {
                     isUpdateGroupInProcess: false,
-                    isUpdateGroupSuccess: true
+                    isUpdateGroupSuccess: true,
+                    activeGroup: activeGrpData?.body
                 });
             }
             return Object.assign({}, state, {
@@ -379,12 +384,9 @@ export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = i
         case AccountsAction.UPDATE_ACCOUNT_RESPONSEV2: {
             let updatedAccount: BaseResponse<AccountResponseV2, AccountRequestV2> = action.payload;
             if (updatedAccount.status === 'success') {
-                let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
-                UpdateAccountFunc(groupArray, updatedAccount.body, updatedAccount.queryString?.groupUniqueName, updatedAccount.queryString?.accountUniqueName, false);
                 return Object.assign({}, state, {
                     activeAccount: action.payload.body,
                     updateAccountInProcess: false,
-                    groupswithaccounts: groupArray,
                     updateAccountIsSuccess: true
                 });
             }
@@ -496,17 +498,31 @@ export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = i
                 moveAccountSuccess: false
             });
         }
+        case AccountsAction.MERGE_ACCOUNT: {
+            return Object.assign({}, state, {
+                isMergeAccountSuccess: false
+            });
+        }
         case AccountsAction.MERGE_ACCOUNT_RESPONSE: {
-            let dd: BaseResponse<string, AccountMergeRequest[]> = action.payload;
-            if (dd.status === 'success') {
-                let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
-                dd.request.forEach(f => {
-                    findAndRemoveAccountFunc(groupArray, f.uniqueName, false);
-                });
-
+            let response: BaseResponse<string, AccountMergeRequest[]> = action.payload;
+            if (response.status === 'success') {
                 return {
                     ...state,
-                    groupswithaccounts: groupArray
+                    isMergeAccountSuccess: true
+                };
+            }
+        }
+        case AccountsAction.UNMERGE_ACCOUNT: {
+            return Object.assign({}, state, {
+                isUnmergeAccountSuccess: false
+            });
+        }
+        case AccountsAction.UNMERGE_ACCOUNT_RESPONSE: {
+            let response: BaseResponse<string, AccountUnMergeRequest> = action.payload;
+            if (response.status === 'success') {
+                return {
+                    ...state,
+                    isUnmergeAccountSuccess: true
                 };
             }
         }

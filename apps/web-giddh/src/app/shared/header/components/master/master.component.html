@@ -1,16 +1,28 @@
 <div class="grp-col" fxLayout="column" fxLayoutAlign="stretch" fxFlex>
-    <div class="grp-wrapper" fxFlex [ngStyle]="{ 'width': masterColumnsData?.length * 255 + 'px' }">
+    <div
+        class="grp-wrapper"
+        fxFlex
+        [ngStyle]="{ 'width': masterColumnsData?.length * 255 + 'px' }"
+        [navigationWalker]="{ vertical: 'nav-vr-item', horizontal: 'nav-hr-item' }"
+        #navigation="navigationWalker"
+        #root
+        (onReset)="initNavigator(navigation, root.children[0])"
+        (onRight)="onRightKey($event, navigation)"
+        (onLeft)="onLeftKey($event, navigation)"
+    >
         <div
             class="col-wrapper left-account-operation"
             [style.height.px]="height"
+            nav-hr-item
+            (ngInit)="onColAdd($event, navigation)"
             *ngFor="let items of masterColumnsData; let i = index"
         >
             <ul class="new-btn-ul" *ngIf="i !== 0">
                 <li class="new-btn">
                     <a
                         href="javascript:void(0)"
-                        nav-vr-item
                         class="btn-link"
+                        nav-vr-item
                         *ngIf="showCreateNewButton"
                         (click)="showAddNewForm()"
                         >{{ localeData?.create_new }}</a
@@ -39,6 +51,21 @@
                                     (click)="onGroupClick(item, i)"
                                     tooltip="{{ item.synonyms || item.name }}"
                                     placement="bottom"
+                                    [ngClass]="{
+                                        'isActive':
+                                            ((activeGroupUniqueName$ | async) === item?.uniqueName ||
+                                                (searchString &&
+                                                    (i === masterColumnsData?.length - 1 ||
+                                                        (i === masterColumnsData?.length - 2 &&
+                                                            masterColumnsData[masterColumnsData?.length - 1] &&
+                                                            (!masterColumnsData[masterColumnsData?.length - 1]
+                                                                .results ||
+                                                                masterColumnsData[masterColumnsData?.length - 1].results
+                                                                    ?.length === 0))) &&
+                                                    j === 0)) &&
+                                            !(activeAccount | async),
+                                        'isParent': item?.isOpen
+                                    }"
                                 >
                                     {{ item?.name }}
                                 </a>
@@ -46,14 +73,22 @@
                             <ng-container *ngIf="item.type === 'ACCOUNT'">
                                 <a
                                     href="javascript:void(0);"
-                                    nav-vr-item
                                     class="list-item isAcc"
+                                    nav-vr-item
                                     id="acc_{{ item.name }}"
                                     tooltip="{{ item.name }}"
                                     placement="bottom"
                                     (click)="onAccountClick(item, i)"
+                                    [ngClass]="{
+                                        'isActive':
+                                            (activeAccount | async)?.uniqueName === item?.uniqueName ||
+                                            (searchString &&
+                                                i === masterColumnsData?.length - 1 &&
+                                                j === 0 &&
+                                                !(activeAccount | async)?.uniqueName)
+                                    }"
                                 >
-                                    {{ item?.name }}
+                                    {{ item?.name }} {{ commonLocaleData?.app_ac }}
                                 </a>
                             </ng-container>
                         </li>

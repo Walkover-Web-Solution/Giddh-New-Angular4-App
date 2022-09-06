@@ -43,8 +43,10 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
     public commonLocaleData: any = {};
     /** True if initial component load */
     public initialLoad: boolean = true;
-    public searchedMasterData: any[] = [];
+    /** List of top shared groups */
     public topSharedGroups: any[] = [];
+    /** List of data searched */
+    public searchedMasterData: any[] = [];
 
     // tslint:disable-next-line:no-empty
     constructor(
@@ -171,6 +173,13 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
         this.breadcrumbPath = obj.breadcrumbPath;
     }
 
+    /**
+     * Get master data based on search
+     *
+     * @private
+     * @param {*} term
+     * @memberof ManageGroupsAccountsComponent
+     */
     private searchMasters(term: any): void {
         this.searchedMasterData = [];
         this.groupService.GetGroupsWithAccounts(term).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
@@ -180,6 +189,12 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
         });
     }
 
+    /**
+     * Get top shared groups
+     *
+     * @private
+     * @memberof ManageGroupsAccountsComponent
+     */
     private getTopSharedGroups(): void {
         this.topSharedGroups = [];
         this.groupService.getTopSharedGroups().pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {

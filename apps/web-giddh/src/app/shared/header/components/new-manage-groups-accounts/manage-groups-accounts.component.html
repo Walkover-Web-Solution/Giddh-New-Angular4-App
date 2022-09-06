@@ -104,8 +104,13 @@
                         [config]="config"
                         [scrollIndicators]="true"
                     >
-                        <div class="wrap-account-sidebar">
+                        <div
+                            *ngIf="!(searchLoad | async)"
+                            [ngStyle]="{ 'width': master?.masterColumnsData?.length * 255 + 'px' }"
+                            class="wrap-account-sidebar"
+                        >
                             <master
+                                #master
                                 [topSharedGroups]="topSharedGroups"
                                 [searchedMasterData]="searchedMasterData"
                                 [ngStyle]="{
@@ -117,6 +122,7 @@
                                 [height]="(myModelRect ? myModelRect.height : 0) - (headerRect ? headerRect.height : 0)"
                                 [isSearchingGroups]="!(grpSrch.value === '')"
                                 [localeData]="localeData"
+                                [commonLocaleData]="commonLocaleData"
                                 (resetSearchString)="resetGroupSearchString(false)"
                                 (breadcrumbPathChanged)="breadcrumbPathChanged($event)"
                             >
