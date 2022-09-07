@@ -108,7 +108,15 @@
         "transaction_date": "Transaction Date",
         "reconcilation_note": "All transactions in Giddh Books whose vendor GSTIN, invoice number, invoice date, invoice amount and tax amount are same as the transactions in GSTN are displayed in this section.",
         "cancel_title": "Are you sure you want to cancel it?",
-        "total_invoice_value": "Total Invoice Value"
+        "total_invoice_value": "Total Invoice Value",
+        "errors":"Errors",
+        "push_to_portal":"Push to Portal",
+        "gst_offline_utility":"GST Offline Utility",
+        "download_excel":"Download Excel",
+        "excel_file_support":"1. This Excel file support , GSTIN Portal Offline tool.",
+        "organised_accountant":" 2. Its an organised way to give to any accountant/CA.",
+        "json_support":"JSON file support by GST Portal",
+        "download_json":"Download JSON"
     },
     "gstr3b": {
         "gstr3b_summary": "GSTR 3B Summary",

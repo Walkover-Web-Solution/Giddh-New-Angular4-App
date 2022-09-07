@@ -1,0 +1,41 @@
+<div>
+    <div class="modal-header">
+        <h3 class="modal-title">{{ localeData?.filing?.push_to_portal }}</h3>
+        <button mat-icon-button class="close" data-dismiss="modal" (click)="onCancel($event)">×</button>
+    </div>
+    <div class="row main-container">
+        <div class="col-sm left-side">
+            <div class="left-side-center">
+                <button type="button" class="btn btn-sky-blue mr-0 downloads-button" (click)="onDownloadExcel($event)">
+                    {{ localeData?.filing?.download_excel }}
+                </button>
+            </div>
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <p class="summary-content">{{ localeData?.filing?.excel_file_support }}</p>
+                </li>
+                <li class="list-group-item">
+                    <p class="summary-content">{{ localeData?.filing?.organised_accountant }}</p>
+                </li>
+            </ul>
+            <a
+                class="btn btn-sky-blue mr-0 downloads-button json-button"
+                target="_blank"
+                href="https://www.gst.gov.in/download/returns"
+                >{{ localeData?.filing?.gst_offline_utility }}</a
+            >
+        </div>
+        <div class="col-sm right-side">
+            <div class="right-side-center">
+                <button type="button" class="btn btn-sky-blue mr-0 downloads-button" (click)="onDownloadJson($event)">
+                    {{ localeData?.filing?.download_json }}
+                </button>
+            </div>
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <p class="summary-content">{{ localeData?.filing?.json_support }}</p>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
