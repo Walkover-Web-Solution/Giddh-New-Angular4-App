@@ -5,11 +5,11 @@ import { Store, select } from '@ngrx/store';
 import { Observable, ReplaySubject, Subject } from 'rxjs';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 import { GroupWithAccountsAction } from '../../../../actions/groupwithaccounts.actions';
-import { GroupAccountSidebarVM } from '../new-group-account-sidebar/VM';
 import { PerfectScrollbarComponent } from 'ngx-perfect-scrollbar';
 import { GeneralService } from "../../../../services/general.service";
 import { GeneralActions } from 'apps/web-giddh/src/app/actions/general/general.actions';
 import { GroupService } from 'apps/web-giddh/src/app/services/group.service';
+import { AccountsAction } from 'apps/web-giddh/src/app/actions/accounts.actions';
 
 @Component({
     selector: 'app-manage-groups-accounts',
@@ -29,7 +29,6 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
     public breadcrumbUniquePath: string[] = [];
     public myModelRect: any;
     public searchLoad: Observable<boolean>;
-    public currentColumns: GroupAccountSidebarVM;
     public psConfig: PerfectScrollbarConfigInterface;
     public groupAndAccountSearchString$: Observable<string>;
     private groupSearchTerms = new Subject<string>();
@@ -56,7 +55,8 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
         private renderer: Renderer2,
         private generalService: GeneralService,
         private generalAction: GeneralActions,
-        private groupService: GroupService
+        private groupService: GroupService,
+        private accountsAction: AccountsAction
     ) {
         this.searchLoad = this.store.pipe(select(state => state.groupwithaccounts.isGroupWithAccountsLoading), takeUntil(this.destroyed$));
         this.groupAndAccountSearchString$ = this.store.pipe(select(s => s.groupwithaccounts.groupAndAccountSearchString), takeUntil(this.destroyed$));
@@ -93,6 +93,9 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
             debounceTime(700), takeUntil(this.destroyed$))
             .subscribe(term => {
                 if (!this.initialLoad) {
+                    this.store.dispatch(this.groupWithAccountsAction.hideAddNewForm());
+                    this.store.dispatch(this.accountsAction.resetActiveAccount());
+                    this.store.dispatch(this.groupWithAccountsAction.showEditAccountForm());
                     if (term) {
                         this.searchMasters(term);
                     } else {

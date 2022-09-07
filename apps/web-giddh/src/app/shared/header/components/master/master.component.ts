@@ -20,28 +20,44 @@ import { eventsConst } from "../eventsConst";
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MasterComponent implements OnInit, OnChanges {
+    /** Instance of cdk virtual scroller */
     @ViewChildren(CdkVirtualScrollViewport) virtualScroll: QueryList<CdkVirtualScrollViewport>;
+    /** Data obtained by searching master */
     @Input() public searchedMasterData: any[] = [];
+    /** Height of column */
     @Input() public height: number;
+    /** true/false if searching */
     @Input() public isSearchingGroups: boolean = false;
-    /* This will hold local JSON data */
+    /** This will hold local JSON data */
     @Input() public localeData: any = {};
+    /** This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
+    /** List of top shared groups */
     @Input() public topSharedGroups: any[] = [];
+    /** Holds master columns data */
     public masterColumnsData: any[] = [];
+    /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** True if load more in progress */
     public loadMoreInProgress: boolean = false;
+    /** Breadcrumb path */
     public breadcrumbPath: string[] = [];
+    /** Breadcrumb unique name path */
     public breadcrumbUniqueNamePath: string[] = [];
+    /** Emits breadcrumb path */
     @Output() public breadcrumbPathChanged = new EventEmitter();
     /** Active group observable */
     private activeGroup$: Observable<any>;
+    /** Shows/hides create new button */
     public showCreateNewButton: boolean = true;
+    /** Holds index of active column */
     private currentGroupColumnIndex: number = -1;
+    /** Holds group unique name of active group */
     private currentGroupUniqueName: any = '';
     /** Active group unique name observable */
     public activeGroupUniqueName$: Observable<string>;
-    public activeAccount: Observable<AccountResponseV2>;
+    /** Active account observable */
+    public activeAccount$: Observable<AccountResponseV2>;
 
     constructor(
         private groupService: GroupService,
@@ -55,10 +71,15 @@ export class MasterComponent implements OnInit, OnChanges {
 
     }
 
+    /**
+     * Initializes the component
+     *
+     * @memberof MasterComponent
+     */
     public ngOnInit(): void {
         this.activeGroup$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroup), takeUntil(this.destroyed$));
         this.activeGroupUniqueName$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroupUniqueName), takeUntil(this.destroyed$));
-        this.activeAccount = this.store.pipe(select(state => state.groupwithaccounts.activeAccount), takeUntil(this.destroyed$));
+        this.activeAccount$ = this.store.pipe(select(state => state.groupwithaccounts.activeAccount), takeUntil(this.destroyed$));
 
         this.store.pipe(select(state => state.groupwithaccounts.isCreateGroupSuccess), takeUntil(this.destroyed$)).subscribe(response => {
             if (response && this.currentGroupColumnIndex > -1) {
@@ -185,17 +206,36 @@ export class MasterComponent implements OnInit, OnChanges {
         });
     }
 
+    /**
+     * Handles the change of input data
+     *
+     * @param {SimpleChanges} changes
+     * @memberof MasterComponent
+     */
     public ngOnChanges(changes: SimpleChanges): void {
-        if (changes?.topSharedGroups) {
-            this.masterColumnsData = [];
-            this.masterColumnsData[0] = { results: changes?.topSharedGroups?.currentValue, page: 1, totalPages: 1, groupUniqueName: '' };
-            this.changeDetectorRef.detectChanges();
+        if (changes?.isSearchingGroups) {
+            this.isSearchingGroups = changes?.isSearchingGroups?.currentValue;
         }
 
-        if (changes?.searchedMasterData?.currentValue?.length > 0) {
+        if (this.topSharedGroups && !this.isSearchingGroups) {
+            this.masterColumnsData = [];
+            this.masterColumnsData[0] = { results: this.topSharedGroups, page: 1, totalPages: 1, groupUniqueName: '' };
+        }
+
+        if (changes?.searchedMasterData?.currentValue && this.isSearchingGroups) {
             let masterColumnsData = [];
+            if (changes?.searchedMasterData?.currentValue?.length > 0) {
+                masterColumnsData = this.mapNestedGroupsAccounts(changes?.searchedMasterData?.currentValue, 0, masterColumnsData);
+                masterColumnsData?.map(columnData => {
+                    columnData.results = columnData?.results.sort((a, b) => b.type.localeCompare(a.type));
+                    return columnData;
+                });
+            }
+            this.masterColumnsData = cloneDeep(masterColumnsData);
+
+            /** Login to handle json like command k */
             //let masterTempData = [];
-            masterColumnsData = this.mapNestedGroupsAccounts(changes?.searchedMasterData?.currentValue, 0, masterColumnsData);
+
             //changes?.searchedMasterData?.currentValue.forEach(master => {
             // master?.parentGroups?.forEach((masterParentGroup, index) => {
             //     if (!masterTempData[masterParentGroup?.uniqueName]) {
@@ -223,21 +263,26 @@ export class MasterComponent implements OnInit, OnChanges {
             //     masterColumnsData[master?.parentGroups?.length] = { results: [master], page: 1, totalPages: 1, groupUniqueName: '' };
             // }
             //});
-
-            masterColumnsData?.map(columnData => {
-                columnData.results = columnData?.results.sort((a, b) => b.type.localeCompare(a.type));
-                return columnData;
-            });
-
-            this.masterColumnsData = cloneDeep(masterColumnsData);
-            this.changeDetectorRef.detectChanges();
         }
 
         if (changes?.isSearchingGroups?.currentValue) {
             this.showCreateNewButton = false;
         }
+
+        this.changeDetectorRef.detectChanges();
     }
 
+    /**
+     * Calls master api and gets groups/accounts
+     *
+     * @private
+     * @param {string} groupUniqueName
+     * @param {number} currentIndex
+     * @param {boolean} [isRefresh=false]
+     * @param {boolean} [isLoadMore=false]
+     * @returns {void}
+     * @memberof MasterComponent
+     */
     private getMasters(groupUniqueName: string, currentIndex: number, isRefresh: boolean = false, isLoadMore: boolean = false): void {
         if (!groupUniqueName) {
             return;
@@ -266,6 +311,14 @@ export class MasterComponent implements OnInit, OnChanges {
         });
     }
 
+    /**
+     * Handles group click
+     *
+     * @param {*} item
+     * @param {number} currentIndex
+     * @param {boolean} [loadMaster=true]
+     * @memberof MasterComponent
+     */
     public onGroupClick(item: any, currentIndex: number, loadMaster: boolean = true): void {
         this.currentGroupColumnIndex = currentIndex;
         this.currentGroupUniqueName = item.uniqueName;
@@ -280,6 +333,13 @@ export class MasterComponent implements OnInit, OnChanges {
         this.store.dispatch(this.accountsAction.resetActiveAccount());
     }
 
+    /**
+     * Handles account click
+     *
+     * @param {*} item
+     * @param {number} currentIndex
+     * @memberof MasterComponent
+     */
     public onAccountClick(item: any, currentIndex: number): void {
         this.currentGroupColumnIndex = currentIndex;
         this.currentGroupUniqueName = this.masterColumnsData[currentIndex].groupUniqueName;
@@ -307,10 +367,28 @@ export class MasterComponent implements OnInit, OnChanges {
         this.store.dispatch(this.accountsAction.getAccountDetails(item?.uniqueName));
     }
 
+    /**
+     * Track by function
+     *
+     * @param {number} index
+     * @param {IGroupsWithAccounts} item
+     * @returns
+     * @memberof MasterComponent
+     */
     public trackByFn(index: number, item: IGroupsWithAccounts) {
         return item.uniqueName;
     }
 
+    /**
+     * Mapper to handle group with accounts data
+     *
+     * @private
+     * @param {*} master
+     * @param {number} index
+     * @param {*} masterColumnsData
+     * @returns {*}
+     * @memberof MasterComponent
+     */
     private mapNestedGroupsAccounts(master: any, index: number, masterColumnsData: any): any {
         master?.forEach(data => {
             if (masterColumnsData[index]) {
@@ -331,6 +409,11 @@ export class MasterComponent implements OnInit, OnChanges {
         return masterColumnsData;
     }
 
+    /**
+     * Shows add new account form
+     *
+     * @memberof MasterComponent
+     */
     public showAddNewForm() {
         this.breadcrumbPath = [];
         this.breadcrumbUniqueNamePath = [];
@@ -354,7 +437,7 @@ export class MasterComponent implements OnInit, OnChanges {
      * @param {string[]} parentPath Stores the path of names
      * @param {string[]} parentUniquenamePath Stores the path of uniquenames
      * @returns {*} Entity that is selected for which breadcrumb is formed
-     * @memberof GroupsAccountSidebarComponent
+     * @memberof MasterComponent
      */
     public getBreadCrumbPathFromGroup(activeEntity: any, result: IGroupsWithAccounts, parentPath: string[], parentUniquenamePath: string[]): any {
         if (result !== null) {
@@ -381,8 +464,9 @@ export class MasterComponent implements OnInit, OnChanges {
      * by clicking the active node/link.
      * @param nodes Object containing current and previous nodes
      * @param navigator instance of NavigationWalker
+     * @memberof MasterComponent
      */
-    public onRightKey(nodes, navigator) {
+    public onRightKey(nodes?: any, navigator?: any): void {
         if (nodes.currentVertical) {
             nodes.currentVertical.click();
         } else {
@@ -394,8 +478,9 @@ export class MasterComponent implements OnInit, OnChanges {
      * Handles right key press for navigating back to previous groups or accounts.
      * @param nodes Object containing current and previous nodes
      * @param navigator instance of NavigationWalker
+     * @memberof MasterComponent
      */
-    public onLeftKey(nodes, navigator) {
+    public onLeftKey(nodes?: any, navigator?: any): void {
         navigator.remove();
         if (navigator.currentVertical && !navigator.currentVertical.attributes.getNamedItem('nav-vr-item')) {
             navigator.nextVertical();
@@ -406,9 +491,12 @@ export class MasterComponent implements OnInit, OnChanges {
      * Handles new column added usually when group/link is clicked
      * @param el element reference
      * @param navigation instance of NavigationWalker
+     * @memberof MasterComponent
      */
-     public onColAdd(el, navigation) {
-        navigation.add(el?.nativeElement);
-        navigation.nextVertical();
+    public onColAdd(element?: any, navigation?: any): void {
+        setTimeout(() => {
+            navigation.add(element?.nativeElement);
+            navigation.nextVertical();
+        }, 200);
     }
 }

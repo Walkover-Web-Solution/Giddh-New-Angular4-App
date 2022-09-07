@@ -66,37 +66,6 @@
                     </div>
                 </div>
                 <div>
-                    <!-- <perfect-scrollbar
-                        #perfectdirective
-                        class="scroll-container"
-                        fxFlex="auto"
-                        [config]="config"
-                        [scrollIndicators]="true"
-                    >
-                        <div
-                            *ngIf="!(searchLoad | async)"
-                            [ngStyle]="{ 'width': groupsidebar?.mc?.columns?.length * 255 + 'px' }"
-                            class="wrap-account-sidebar"
-                        >
-                            <groups-account-sidebar
-                                (columnsChanged)="currentColumns = $event"
-                                #groupsidebar
-                                [ngStyle]="{
-                                    'height':
-                                        (myModelRect ? myModelRect.height : 0) -
-                                        (headerRect ? headerRect.height : 0) +
-                                        'px'
-                                }"
-                                [height]="(myModelRect ? myModelRect.height : 0) - (headerRect ? headerRect.height : 0)"
-                                [groups]="groupList$ | async"
-                                (breadcrumbPathChanged)="breadcrumbPathChanged($event)"
-                                (resetSearchString)="resetGroupSearchString(false)"
-                                (ScrollToRight)="ScrollToRight()"
-                                [isSearchingGroups]="!(grpSrch.value === '')"
-                                [localeData]="localeData"
-                            ></groups-account-sidebar>
-                        </div>
-                    </perfect-scrollbar> -->
                     <perfect-scrollbar
                         #perfectdirective
                         class="scroll-container"
@@ -111,7 +80,7 @@
                         >
                             <master
                                 #master
-                                [topSharedGroups]="!searchString ? topSharedGroups : []"
+                                [topSharedGroups]="topSharedGroups"
                                 [searchedMasterData]="searchedMasterData"
                                 [ngStyle]="{
                                     'height':
@@ -134,7 +103,7 @@
             <!-- middle body -->
             <div class="form-box form-bg height-in-vh">
                 <account-operations
-                    [columnsRef]="currentColumns"
+                    [topSharedGroups]="topSharedGroups"
                     [height]="(myModelRect ? myModelRect.height : 0) - (headerRect ? headerRect.height : 0)"
                     [breadcrumbPath]="breadcrumbPath"
                     [breadcrumbUniquePath]="breadcrumbUniquePath"

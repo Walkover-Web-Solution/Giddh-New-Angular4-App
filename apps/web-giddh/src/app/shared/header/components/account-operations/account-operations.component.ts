@@ -18,7 +18,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ApplyTaxRequest } from '../../../../models/api-models/ApplyTax';
 import { AccountMergeRequest, AccountMoveRequest, AccountRequestV2, AccountResponseV2, AccountsTaxHierarchyResponse, AccountUnMergeRequest, ShareAccountRequest } from '../../../../models/api-models/Account';
 import { ModalDirective } from 'ngx-bootstrap/modal';
-import { ColumnGroupsAccountVM, GroupAccountSidebarVM } from '../new-group-account-sidebar/VM';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 import { IAccountsInfo } from '../../../../models/interfaces/accountInfo.interface';
 import { ToasterService } from '../../../../services/toaster.service';
@@ -55,7 +54,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     public showEditAccount$: Observable<boolean>;
     public showEditGroup$: Observable<boolean>;
     @Output() public ShowForm: EventEmitter<boolean> = new EventEmitter(false);
-    @Input() public columnsRef: GroupAccountSidebarVM;
+    @Input() public topSharedGroups: any[];
     @Input() public height: number;
     public activeAccount$: Observable<AccountResponseV2>;
     public isTaxableAccount$: Observable<boolean>;
@@ -423,8 +422,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     }
 
     public isRootLevelGroupFunc(uniqueName: string) {
-        const rootLevelGroups: ColumnGroupsAccountVM[] | any[] = this.columnsRef?.columns[0]?.groups || [];
-        for (let grp of rootLevelGroups) {
+        for (let grp of this.topSharedGroups) {
             if (grp.uniqueName === uniqueName) {
                 this.isRootLevelGroup = true;
                 return;

@@ -63,7 +63,7 @@
                                                                 masterColumnsData[masterColumnsData?.length - 1].results
                                                                     ?.length === 0))) &&
                                                     j === 0)) &&
-                                            !(activeAccount | async),
+                                            !(activeAccount$ | async),
                                         'isParent': item?.isOpen
                                     }"
                                 >
@@ -81,11 +81,11 @@
                                     (click)="onAccountClick(item, i)"
                                     [ngClass]="{
                                         'isActive':
-                                            (activeAccount | async)?.uniqueName === item?.uniqueName ||
+                                            (activeAccount$ | async)?.uniqueName === item?.uniqueName ||
                                             (searchString &&
                                                 i === masterColumnsData?.length - 1 &&
                                                 j === 0 &&
-                                                !(activeAccount | async)?.uniqueName)
+                                                !(activeAccount$ | async)?.uniqueName)
                                     }"
                                 >
                                     {{ item?.name }} {{ commonLocaleData?.app_ac }}
