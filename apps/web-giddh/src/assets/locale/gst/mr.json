@@ -112,11 +112,11 @@
         "errors":"चुका",
         "push_to_portal":"पोर्टलवर पुश करा",
         "gst_offline_utility":"जीएसटी ऑफलाइन उपयुक्तता",
-        "download_excel":" एक्सेल डाउनलोड करा",
+        "download_excel":"एक्सेल डाउनलोड करा",
         "excel_file_support":"1. हे एक्सेल फाइल सपोर्ट, जीएसटीआयएन पोर्टल ऑफलाइन टूल.",
         "organised_accountant":"2. कोणत्याही अकाउंटंट/सीएला देण्याचा हा एक संघटित मार्ग आहे.",
-        "json_support":" GST पोर्टलद्वारे JSON फाइल समर्थन",
-        "download_json":" JSON डाउनलोड करा"
+        "json_support":"GST पोर्टलद्वारे JSON फाइल समर्थन",
+        "download_json":"JSON डाउनलोड करा"
 	},
 	"gstr3b": {
 		"gstr3b_summary": "जीएसटीआर 3 बी सारांश",
