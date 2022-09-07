@@ -11,7 +11,6 @@ import { JsPDFAutoTable } from 'apps/web-giddh/src/customTypes/jsPDF';
 import * as jsPDF from 'jspdf';
 import { ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-
 import { DataFormatter, IFormatable } from '../../model/data-formatter';
 import { Total } from '../export-csv/export-csv.component';
 
@@ -193,7 +192,7 @@ export class TrialBalanceExportPdfComponent implements OnInit, OnDestroy {
         pdf.autoTable(columns, rows, {
             theme: 'plain',
             margin: {
-                top: this.selectedCompany.address ? 110 + (this.selectedCompany.address.split('\n').length * 15) : 110 + 15
+                top: this.selectedCompany.address ? 110 + (this.selectedCompany.address?.split('\n')?.length * 15) : 110 + 15
             },
             drawCell: (cell, data) => {
 

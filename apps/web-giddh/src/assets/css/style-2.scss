@@ -4,6 +4,7 @@
 @import "@angular/material/prebuilt-themes/indigo-pink.css";
 @import "./json-tree.scss";
 @import "./json-diff.scss";
+@import "./ngx-intl-input.scss";
 $custom-typography: mat-typography-config(
     $font-family: "opensans-regular",
 );
@@ -7864,6 +7865,10 @@ giddh-datepicker {
 }
 
 .stock-create-edit {
+    .cdk-overlay-container {
+        z-index: 9;
+        position: relative;
+    }
     #main {
         #content-wrapper {
             background-color: var(--color-common-septenary-background-for-all-components);
@@ -10798,6 +10803,19 @@ input[type="checkbox"].cdk-visually-hidden::after {
                     background: var(--color-secondary-input-bar-background);
                 }
             }
+        }
+    }
+}
+.ngx-wrapper {
+    margin-top: 10px !important;
+    margin-bottom: 10px !important;
+    ngx-intl-tel-input input {
+        width: 402px;
+        padding-left: 55px !important;
+    }
+    .iti {
+        .search-container input {
+            padding-left: 10px !important;
         }
     }
 }

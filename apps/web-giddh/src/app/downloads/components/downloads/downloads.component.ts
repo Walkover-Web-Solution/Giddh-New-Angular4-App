@@ -5,7 +5,9 @@ import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/hel
 import { DownloadsJsonComponent } from '../downloads-json/downloads-json.component';
 import { takeUntil } from 'rxjs/operators';
 import { Observable, ReplaySubject } from 'rxjs';
-import * as moment from 'moment';
+import * as dayjs from 'dayjs';
+import * as isSameOrAfter from 'dayjs/plugin/isSameOrAfter' // load on demand
+dayjs.extend(isSameOrAfter) // use plugin
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { GeneralService } from '../../../services/general.service';
 import { select, Store } from '@ngrx/store';
@@ -91,10 +93,10 @@ export class DownloadsComponent implements OnInit, OnDestroy {
         this.universalDate$.subscribe(dateObj => {
             if (dateObj) {
                 let universalDate = cloneDeep(dateObj);
-                this.selectedDateRange = { startDate: moment(dateObj[0]), endDate: moment(dateObj[1]) };
-                this.selectedDateRangeUi = moment(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-                this.downloadRequest.from = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
-                this.downloadRequest.to = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
+                this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
+                this.selectedDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                this.downloadRequest.from = dayjs(universalDate[0]).format(GIDDH_DATE_FORMAT);
+                this.downloadRequest.to = dayjs(universalDate[1]).format(GIDDH_DATE_FORMAT);
             }
         });
     }
@@ -127,12 +129,12 @@ export class DownloadsComponent implements OnInit, OnDestroy {
             this.isLoading = false;
             if (response && response.status === 'success') {
                 response.body?.items?.forEach((result: any) => {
-                    result.date = moment(result.date, GIDDH_DATE_FORMAT + " HH:mm:ss").format(GIDDH_DATE_FORMAT);
-                    let today = moment().format('YYYY-MM-DD');
-                    let expiryDate = moment(result.expireAt, GIDDH_DATE_FORMAT + " HH:mm:ss").format('YYYY-MM-DD');
-                    if (moment(expiryDate)
+                    result.date = dayjs(result.date, GIDDH_DATE_FORMAT + " HH:mm:ss").format(GIDDH_DATE_FORMAT);
+                    let today = dayjs().format('YYYY-MM-DD');
+                    let expiryDate = dayjs(result.expireAt, GIDDH_DATE_FORMAT + " HH:mm:ss").format('YYYY-MM-DD');
+                    if (dayjs(expiryDate)
                         .isSameOrAfter(today)) {
-                        result.expireAt = moment(result.expireAt, GIDDH_DATE_FORMAT + " HH:mm:ss").format(GIDDH_DATE_FORMAT);
+                        result.expireAt = dayjs(result.expireAt, GIDDH_DATE_FORMAT + " HH:mm:ss").format(GIDDH_DATE_FORMAT);
                     } else {
                         result.expireAt = this.localeData?.expired;
                     }
@@ -183,10 +185,10 @@ export class DownloadsComponent implements OnInit, OnDestroy {
         this.hideGiddhDatepicker();
         if (value && value.startDate && value.endDate) {
             this.showClearFilter = true;
-            this.selectedDateRange = { startDate: moment(value.startDate), endDate: moment(value.endDate) };
-            this.selectedDateRangeUi = moment(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
-            this.fromDate = moment(value.startDate).format(GIDDH_DATE_FORMAT);
-            this.toDate = moment(value.endDate).format(GIDDH_DATE_FORMAT);
+            this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
+            this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
+            this.fromDate = dayjs(value.startDate).format(GIDDH_DATE_FORMAT);
+            this.toDate = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
             this.downloadRequest.from = this.fromDate;
             this.downloadRequest.to = this.toDate;
             this.getDownloads(true);
@@ -228,11 +230,11 @@ export class DownloadsComponent implements OnInit, OnDestroy {
         //Reset Date with universal date
         this.universalDate$.subscribe(dateObj => {
             if (dateObj) {
-                this.downloadRequest.from = moment(dateObj[0]).format(GIDDH_DATE_FORMAT);
-                this.downloadRequest.to = moment(dateObj[1]).format(GIDDH_DATE_FORMAT);
+                this.downloadRequest.from = dayjs(dateObj[0]).format(GIDDH_DATE_FORMAT);
+                this.downloadRequest.to = dayjs(dateObj[1]).format(GIDDH_DATE_FORMAT);
                 let universalDate = cloneDeep(dateObj);
-                this.selectedDateRange = { startDate: moment(universalDate[0]), endDate: moment(universalDate[1]) };
-                this.selectedDateRangeUi = moment(universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                this.selectedDateRange = { startDate: dayjs(universalDate[0]), endDate: dayjs(universalDate[1]) };
+                this.selectedDateRangeUi = dayjs(universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
             }
         });
         this.getDownloads(true);
