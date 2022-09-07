@@ -278,7 +278,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
         private commonService: CommonService,
         private adjustmentUtilityService: AdjustmentUtilityService
     ) {
-
         this.lc = new LedgerVM();
         this.advanceSearchRequest = new AdvanceSearchRequest();
         this.trxRequest = new TransactionsRequest();
@@ -757,7 +756,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                         totalPages: lt.totalPages,
                         showPagination: true
                     };
-                    
+
                     if (!this.cdRf['destroyed']) {
                         this.cdRf.detectChanges();
                     }
@@ -1462,7 +1461,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             const currentLedgerCategory = this.lc.activeAccount ? this.generalService.getAccountCategory(this.lc.activeAccount, this.lc.activeAccount.uniqueName) : '';
             // If current ledger is of income or expense category then send current ledger as stockAccountUniqueName. Only required for ledger.
             const accountUniqueName = (currentLedgerCategory === 'income' || currentLedgerCategory === 'expenses') ?
-                this.lc.activeAccount ? this.lc.activeAccount?.uniqueName : '' :
+                this.lc.activeAccount ? this.lc.activeAccount.uniqueName : '' :
                 '';
             const requestObject = {
                 q: encodeURIComponent(query),
@@ -1748,11 +1747,13 @@ export class LedgerComponent implements OnInit, OnDestroy {
         if (output.type === 'allAddedToQueue') {
             let sessionKey = null;
             let companyUniqueName = null;
+            let branchUniqueName = this.generalService.currentBranchUniqueName;
             this.sessionKey$.pipe(take(1)).subscribe(a => sessionKey = a);
             this.companyName$.pipe(take(1)).subscribe(a => companyUniqueName = a);
             let url = Configuration.ApiUrl + LEDGER_API.UPLOAD_FILE.replace(':companyUniqueName', companyUniqueName);
             if (this.generalService.voucherApiVersion === 2) {
                 url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
+                url = url.concat(`&branchUniqueName=${branchUniqueName}`);
             }
             const event: UploadInput = {
                 type: 'uploadAll',

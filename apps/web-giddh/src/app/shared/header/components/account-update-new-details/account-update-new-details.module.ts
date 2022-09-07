@@ -32,6 +32,7 @@ import { NgxIntlTelInputModule } from 'ngx-intl-tel-input';
         ModalModule,
         ConfirmModalModule,
         ConfirmationModalModule,
+        NgxIntlTelInputModule,
         LaddaModule.forRoot({
             style: 'slide-left',
             spinnerSize: 30

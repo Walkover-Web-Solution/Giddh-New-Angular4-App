@@ -9,9 +9,9 @@ import { Observable, ReplaySubject, of as observableOf } from 'rxjs';
 import { distinct, filter, take, takeUntil } from 'rxjs/operators';
 import { InventoryAction } from '../../actions/inventory/inventory.actions';
 import { ManufacturingActions } from '../../actions/manufacturing/manufacturing.actions';
+import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../app.constant';
 import { SettingsBranchActions } from '../../actions/settings/branch/settings.branch.action';
 import { OrganizationType } from '../../models/user-login-state';
-import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../app.constant';
 import { StocksResponse } from '../../models/api-models/Inventory';
 import { IMfStockSearchRequest } from '../../models/interfaces/manufacturing.interface';
 import { GeneralService } from '../../services/general.service';
@@ -207,13 +207,13 @@ export class MfReportComponent implements OnInit, OnDestroy {
                 });
                 this.isCompany = this.currentOrganizationType !== OrganizationType.Branch && this.currentCompanyBranches?.length > 2;
                 let currentBranchUniqueName;
-                if (!this.currentBranch.uniqueName) {
+                if (!this.currentBranch?.uniqueName) {
                     // Assign the current branch only when it is not selected. This check is necessary as
                     // opening the branch switcher would reset the current selected branch as this subscription is run everytime
                     // branches are loaded
                     if (this.currentOrganizationType === OrganizationType.Branch) {
                         currentBranchUniqueName = this.generalService.currentBranchUniqueName;
-                        this.currentBranch = cloneDeep(response.find(branch => branch.uniqueName === currentBranchUniqueName)) || this.currentBranch;
+                        this.currentBranch = cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName)) || this.currentBranch;
                     } else {
                         currentBranchUniqueName = this.activeCompany ? this.activeCompany.uniqueName : '';
                         this.currentBranch = {
@@ -265,7 +265,7 @@ export class MfReportComponent implements OnInit, OnDestroy {
     }
 
     public editMFItem(item) {
-        if (item.uniqueName) {
+        if (item?.uniqueName) {
             this.store.dispatch(this.manufacturingActions.SetMFItemUniqueNameInStore(item.uniqueName));
             this.router.navigate(['/pages/manufacturing/edit']);
         }

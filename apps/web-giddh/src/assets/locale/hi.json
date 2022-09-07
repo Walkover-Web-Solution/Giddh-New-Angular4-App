@@ -673,5 +673,6 @@
     "app_purchase_bill": "खरीद बिल",
     "app_on": "On",
     "app_off": "Off",
-    "app_preview_formats": "पूर्वावलोकन के लिए ये फ़ाइल प्रारूप समर्थित नहीं हैं (xls, xlsx, doc, CSV)"
+    "app_preview_formats": "पूर्वावलोकन के लिए ये फ़ाइल प्रारूप समर्थित नहीं हैं (xls, xlsx, doc, CSV)",
+    "app_count": "गिनती"
 }

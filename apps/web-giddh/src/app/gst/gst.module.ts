@@ -35,13 +35,14 @@ import { FilingOverviewComponent } from './filing/tabs/overview/overview.compone
 import { GstRoutingModule } from './gst.routing.module';
 import { ConfirmModalModule } from '../theme/confirm-modal';
 import { GstAsideMenuComponent } from './modals/gst-aside-menu/gst-aside-menu.component';
+import { SharedModule } from '../shared/shared.module';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { TaxSidebarModule } from '../shared/tax-sidebar/tax-sidebar.module';
-import { SharedModule } from '../shared/shared.module';
 import { UnitMappingComponent } from './unit-mapping/unit-mapping.component';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 import { MatButtonModule } from '@angular/material/button';
+import { PushtToPortalComponent } from './modals/push-to-portal/push-to-portal.component';
 
 @NgModule({
     declarations: [FileGstR3Component,
@@ -49,7 +50,7 @@ import { MatButtonModule } from '@angular/material/button';
         ReconcileComponent, PushToGstInComponent, ViewTransactionsComponent,
         OverviewSummaryComponent, TransactionSummaryComponent,
         PushToGstInComponent, NilSummaryComponent, HsnSummaryComponent, B2csSummaryComponent,
-        DocumentIssuedComponent, FailedTransactionsComponent, GstAsideMenuComponent, UnitMappingComponent],
+        DocumentIssuedComponent, FailedTransactionsComponent, GstAsideMenuComponent, UnitMappingComponent, PushtToPortalComponent],
     imports: [
         GstRoutingModule,
         CollapseModule,

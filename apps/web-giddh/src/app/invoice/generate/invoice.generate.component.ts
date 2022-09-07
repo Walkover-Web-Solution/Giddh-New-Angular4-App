@@ -15,9 +15,9 @@ import { DaterangePickerComponent } from '../../theme/ng2-daterangepicker/datera
 import { GeneralService } from '../../services/general.service';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { GeneralActions } from '../../actions/general/general.actions';
+import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../app.constant';
 import { OrganizationType } from '../../models/user-login-state';
 import { CommonActions } from '../../actions/common.actions';
-import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../app.constant';
 import { cloneDeep, find, forEach, groupBy, indexOf, map, orderBy, uniq } from '../../lodash-optimized';
 
 const COUNTS = [
@@ -96,6 +96,18 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
     public getLedgerDataInProcess$: Observable<boolean> = of(false);
     /** This will hold checked invoices */
     public selectedInvoices: any[] = [];
+    /** Date format type */
+    public giddhDateFormat: string = GIDDH_DATE_FORMAT;
+    /** directive to get reference of element */
+    @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
+    /* This will store selected date range to show on UI */
+    public selectedDateRangeUi: any;
+    /* This will store available date ranges */
+    public datePickerOption: any = GIDDH_DATE_RANGE_PICKER_RANGES;
+    /* Selected range label */
+    public selectedRangeLabel: any = "";
+    /* This will store the x/y position of the field to show datepicker under it */
+    public dateFieldPosition: any = { x: 0, y: 0 };
     /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
     public isCompany: boolean;
     /** Current branches */
@@ -114,18 +126,6 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
         { label: '', value: 'lessThanOrEquals' },
         { label: '', value: 'equals' }
     ];
-    /** Date format type */
-    public giddhDateFormat: string = GIDDH_DATE_FORMAT;
-    /** directive to get reference of element */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
-    /* This will store selected date range to show on UI */
-    public selectedDateRangeUi: any;
-    /* This will store available date ranges */
-    public datePickerOption: any = GIDDH_DATE_RANGE_PICKER_RANGES;
-    /* Selected range label */
-    public selectedRangeLabel: any = "";
-    /* This will store the x/y position of the field to show datepicker under it */
-    public dateFieldPosition: any = { x: 0, y: 0 };
     /** True if user has pending invoices list permissions */
     public hasPendingVouchersListPermissions: boolean = true;
     /** True if today selected */
@@ -146,8 +146,8 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
         private generalService: GeneralService,
         private generalActions: GeneralActions,
         private _breakPointObservar: BreakpointObserver,
-        private commonActions: CommonActions,
-        private modalService: BsModalService
+        private modalService: BsModalService,
+        private commonActions: CommonActions
     ) {
         // set initial values
         this.ledgerSearchRequest.page = 1;
@@ -239,6 +239,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
         this.isBulkInvoiceGenerated$.subscribe(result => {
             if (result) {
                 this.toggleAllItems(false);
+                this.getLedgersOfInvoice();
             }
         });
         this.isBulkInvoiceGeneratedWithoutErr$.subscribe(result => {
@@ -656,6 +657,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
         this.toggleAllItems(false);
         this.destroyed$.next(true);
         this.destroyed$.complete();
+        this.store.dispatch(this.invoiceActions.resetPendingData());
     }
 
     public resetDateSearch() {

@@ -186,8 +186,10 @@ th.mat-header-cell:first-of-type {
     }
     .mat-table tbody {
         tr {
-            td:first-child {
-                padding-left: 18px;
+            td {
+                &:first-child {
+                    padding-left: 18px;
+                }
             }
         }
     }
@@ -206,9 +208,6 @@ th.mat-header-cell:first-of-type {
                 padding-left: 10px !important;
             }
         }
-    }
-    .total-padding {
-        height: 130px;
     }
     .mat-customer-name span:nth-child(2) {
         position: relative;
@@ -248,8 +247,10 @@ th.mat-header-cell:first-of-type {
     .main-table {
         tbody {
             tr {
-                td:first-child {
-                    min-width: 242px !important;
+                td {
+                    &:first-child {
+                        min-width: 242px !important;
+                    }
                 }
             }
         }
@@ -258,8 +259,10 @@ th.mat-header-cell:first-of-type {
 @media (max-width: 1024px) {
     .main-table {
         th {
-            .mat-header-cell:first-of-type {
-                min-width: 242px !important;
+            .mat-header-cell {
+                &:first-of-type {
+                    min-width: 242px !important;
+                }
             }
         }
     }

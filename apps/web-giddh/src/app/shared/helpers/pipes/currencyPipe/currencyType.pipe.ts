@@ -117,7 +117,7 @@ export class GiddhCurrencyPipe implements OnDestroy, PipeTransform {
                     if (otherNumbers !== '' && otherNumbers !== '-') {
                         lastThree = ',' + lastThree;
                     }
-                    let output = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ',') + lastThree;
+                    let output = otherNumbers?.replace(/\B(?=(\d{2})+(?!\d))/g, ',') + lastThree;
                     if (afterdecDigit) {
                         output += '.' + afterdecDigit;
                     }
@@ -155,7 +155,7 @@ export class GiddhCurrencyPipe implements OnDestroy, PipeTransform {
                 if (otherNumbers !== '' && otherNumbers !== '-') {
                     lastThree = '\'' + lastThree;
                 }
-                let output = otherNumbers.replace(/\B(?=(\d{3})+(?!\d))/g, "\'") + lastThree;
+                let output = otherNumbers?.replace(/\B(?=(\d{3})+(?!\d))/g, "\'") + lastThree;
                 if (afterdecDigit) {
                     output += '.' + afterdecDigit;
                 }
@@ -178,6 +178,5 @@ export class GiddhCurrencyPipe implements OnDestroy, PipeTransform {
                 break;
         }
         return shouldRemoveTrailingZeros ? finaloutput?.replace(REMOVE_TRAILING_ZERO_REGEX, '$1$2$3') : finaloutput;
-
     }
 }

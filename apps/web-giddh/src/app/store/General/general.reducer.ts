@@ -298,17 +298,17 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
             }
         }
         case GENERAL_ACTIONS.UPDATE_CURRENT_LIABILITIES: {
-            if (state?.flattenAccounts) {
-                let flattenAccountsArray = [...state.flattenAccounts];
-                flattenAccountsArray = flattenAccountsArray.filter(account => account.uniqueName !== action.payload);
-                return {
-                    ...state,
-                    flattenAccounts: flattenAccountsArray
-                }
+            if(state?.flattenAccounts){
+               let flattenAccountsArray = [...state.flattenAccounts];
+               flattenAccountsArray = flattenAccountsArray.filter(account => account.uniqueName !== action.payload);
+               return {
+                ...state,
+                flattenAccounts: flattenAccountsArray
+               }
             }
             return {
-                ...state,
-                flattenAccounts: []
+              ...state,
+              flattenAccounts: []
             }
         }
         case GENERAL_ACTIONS.UPDATE_INDEX_DB: {

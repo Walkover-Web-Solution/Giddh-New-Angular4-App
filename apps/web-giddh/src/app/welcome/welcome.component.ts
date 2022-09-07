@@ -1015,7 +1015,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
             this.createNewCompanyPreObj.subscriptionRequest = this.subscriptionRequestObj;
             this.store.dispatch(this.companyActions.CreateNewCompany(this.createNewCompanyPreObj));
         } else {
-            this.subscriptionRequestObj.planUniqueName = this.subscriptionPlan.planDetails.uniqueName;
+            this.subscriptionRequestObj.planUniqueName = this.subscriptionPlan.planDetails?.uniqueName;
             this.createNewCompanyPreObj.subscriptionRequest = this.subscriptionRequestObj;
             this.store.dispatch(this.companyActions.CreateNewCompany(this.createNewCompanyPreObj));
         }
@@ -1027,7 +1027,7 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
      * @memberof WelcomeComponent
      */
     public createBranch(): void {
-        this.companyService.createNewBranch(this.activeCompany.uniqueName, this.createNewCompanyPreObj).pipe(takeUntil(this.destroyed$)).subscribe(data => {
+        this.companyService.createNewBranch(this.activeCompany?.uniqueName, this.createNewCompanyPreObj).pipe(takeUntil(this.destroyed$)).subscribe(data => {
             this.store.dispatch(this.companyActions.userStoreCreateBranch(null));
             this.store.dispatch(this.companyActions.removeCompanyCreateSession());
             this.router.navigate(['pages/settings/branch']);
