@@ -357,10 +357,13 @@ export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = i
         case GroupWithAccountsAction.UPDATE_GROUP_RESPONSE: {
             let activeGrpData: BaseResponse<GroupResponse, GroupUpateRequest> = action.payload;
             if (activeGrpData?.status === 'success') {
+                let newObj = Object.assign({}, activeGrpData.body, { isOpen: true, isActive: true });
                 return Object.assign({}, state, {
                     isUpdateGroupInProcess: false,
                     isUpdateGroupSuccess: true,
-                    activeGroup: activeGrpData?.body
+                    activeGroup: newObj,
+                    activeGroupUniqueName: newObj.uniqueName,
+                    activeGroupInProgress: false
                 });
             }
             return Object.assign({}, state, {

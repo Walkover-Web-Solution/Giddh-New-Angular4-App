@@ -1,5 +1,5 @@
 import { CdkVirtualScrollViewport, ScrollDispatcher } from "@angular/cdk/scrolling";
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output, QueryList, SimpleChanges, ViewChildren } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, QueryList, SimpleChanges, ViewChildren } from "@angular/core";
 import { select, Store } from "@ngrx/store";
 import { AccountsAction } from "apps/web-giddh/src/app/actions/accounts.actions";
 import { GroupWithAccountsAction } from "apps/web-giddh/src/app/actions/groupwithaccounts.actions";
@@ -19,7 +19,7 @@ import { eventsConst } from "../eventsConst";
     styleUrls: ["./master.component.scss"],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class MasterComponent implements OnInit, OnChanges {
+export class MasterComponent implements OnInit, OnChanges, OnDestroy {
     /** Instance of cdk virtual scroller */
     @ViewChildren(CdkVirtualScrollViewport) virtualScroll: QueryList<CdkVirtualScrollViewport>;
     /** Data obtained by searching master */
@@ -150,8 +150,8 @@ export class MasterComponent implements OnInit, OnChanges {
         this.scrollDispatcher.scrolled().pipe(takeUntil(this.destroyed$)).subscribe((event: any) => {
             if (event && event?.getDataLength() - event?.getRenderedRange().end < 50) {
                 if (!this.loadMoreInProgress && this.masterColumnsData[event?.elementRef?.nativeElement?.id]?.page < this.masterColumnsData[event?.elementRef?.nativeElement?.id]?.totalPages) {
-                    this.getMasters(this.masterColumnsData[event?.elementRef?.nativeElement?.id]?.groupUniqueName, event?.elementRef?.nativeElement?.id, false, true);
                     this.loadMoreInProgress = true;
+                    this.getMasters(this.masterColumnsData[event?.elementRef?.nativeElement?.id]?.groupUniqueName, event?.elementRef?.nativeElement?.id, false, true);
                 }
             }
         });
@@ -217,9 +217,8 @@ export class MasterComponent implements OnInit, OnChanges {
             this.isSearchingGroups = changes?.isSearchingGroups?.currentValue;
         }
 
-        if (this.topSharedGroups && !this.isSearchingGroups) {
-            this.masterColumnsData = [];
-            this.masterColumnsData[0] = { results: this.topSharedGroups, page: 1, totalPages: 1, groupUniqueName: '' };
+        if (changes?.topSharedGroups?.currentValue) {
+            this.showTopLevelGroups();
         }
 
         if (changes?.searchedMasterData?.currentValue && this.isSearchingGroups) {
@@ -414,7 +413,7 @@ export class MasterComponent implements OnInit, OnChanges {
      *
      * @memberof MasterComponent
      */
-    public showAddNewForm() {
+    public showAddNewForm(items: any): void {
         this.breadcrumbPath = [];
         this.breadcrumbUniqueNamePath = [];
         let activeGroup;
@@ -422,8 +421,8 @@ export class MasterComponent implements OnInit, OnChanges {
         this.getBreadCrumbPathFromGroup(activeGroup, null, this.breadcrumbPath, this.breadcrumbUniqueNamePath);
         this.breadcrumbPathChanged.emit({ breadcrumbPath: this.breadcrumbPath, breadcrumbUniqueNamePath: this.breadcrumbUniqueNamePath });
 
-        if (activeGroup.uniqueName) {
-            this.store.dispatch(this.groupWithAccountsAction.SetActiveGroup(activeGroup.uniqueName));
+        if (items.groupUniqueName) {
+            this.store.dispatch(this.groupWithAccountsAction.SetActiveGroup(items.groupUniqueName));
         }
         this.store.dispatch(this.groupWithAccountsAction.showAddNewForm());
         this.store.dispatch(this.accountsAction.resetActiveAccount());
@@ -455,8 +454,15 @@ export class MasterComponent implements OnInit, OnChanges {
         return result;
     }
 
-    public initNavigator(navigator, el) {
-        navigator.add(el);
+    /**
+     * Initializes navigator
+     *
+     * @param {*} navigator
+     * @param {*} el
+     * @memberof MasterComponent
+     */
+    public initNavigator(navigator?: any, element?: any): void {
+        navigator.add(element);
     }
 
     /**
@@ -498,5 +504,25 @@ export class MasterComponent implements OnInit, OnChanges {
             navigation.add(element?.nativeElement);
             navigation.nextVertical();
         }, 200);
+    }
+
+    /**
+     * Shows top levels groups
+     *
+     * @memberof MasterComponent
+     */
+    public showTopLevelGroups(): void {
+        this.masterColumnsData = [];
+        this.masterColumnsData[0] = { results: this.topSharedGroups, page: 1, totalPages: 1, groupUniqueName: '' };
+    }
+
+    /**
+     * Destroys all the observables
+     *
+     * @memberof MasterComponent
+     */
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 }
