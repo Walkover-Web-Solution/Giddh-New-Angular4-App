@@ -10,6 +10,7 @@ import { GeneralService } from "../../../../services/general.service";
 import { GeneralActions } from 'apps/web-giddh/src/app/actions/general/general.actions';
 import { GroupService } from 'apps/web-giddh/src/app/services/group.service';
 import { AccountsAction } from 'apps/web-giddh/src/app/actions/accounts.actions';
+import { MasterComponent } from '../master/master.component';
 
 @Component({
     selector: 'app-manage-groups-accounts',
@@ -18,6 +19,8 @@ import { AccountsAction } from 'apps/web-giddh/src/app/actions/accounts.actions'
 })
 export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterViewChecked {
     @Output() public closeEvent: EventEmitter<boolean> = new EventEmitter(true);
+    /** Instance of master component */
+    @ViewChild('master', {static: false}) public master: MasterComponent;
     @ViewChild('header', { static: true }) public header: ElementRef;
     @ViewChild('grpSrch', { static: true }) public groupSrch: ElementRef;
     public headerRect: any;
@@ -151,6 +154,7 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
             this.store.dispatch(this.groupWithAccountsAction.resetAddAndMangePopup());
         }
 
+        this.master?.showTopLevelGroups();
         this.breadcrumbPath = [];
         this.breadcrumbUniquePath = [];
         this.renderer.setProperty(this.groupSrch?.nativeElement, 'value', '');
