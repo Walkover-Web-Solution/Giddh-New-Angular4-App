@@ -248,11 +248,11 @@ export class GstReconcileService {
     }
 
     /**
- * This will use for download json for gstr1
- *
- * @returns {Observable<BaseResponse<any, any>>} Observable to carry out further operations
- * @memberof GstReconcileService
- */
+     * This will use for download json for gstr1
+     *
+     * @returns {Observable<BaseResponse<any, any>>} Observable to carry out further operations
+     * @memberof GstReconcileService
+     */
     public downloadGSTRJSON(reqObj: GstrJsonDownloadRequest): Observable<BaseResponse<any, GstrJsonDownloadRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let apiUrl = GSTR_API.DOWNLOAD_JSON

@@ -58,6 +58,7 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     /** True if current organization is company */
     @Input() public isCompany: boolean;
     @ViewChild('cancelConfirmationModel', { static: true }) public cancelConfirmationModel: ModalDirective;
+    /** Directive to get reference of element */
     @ViewChild('pushToPortalModel', { static: true }) public pushToPortalModel: ModalDirective;
     public gstAuthenticated$: Observable<boolean>;
     public GstAsidePaneState: string = 'out';
@@ -268,12 +269,12 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
      * @param {*} ev
      * @memberof FilingHeaderComponent
      */
-    public periodChanged(ev): void {
-        if (ev) {
-            this.selectedMonth = dayjs(ev).format('MMMM YYYY');
+    public periodChanged(event?:any): void {
+        if (event) {
+            this.selectedMonth = dayjs(event).format('MMMM YYYY');
             this.currentPeriod = {
-                from: dayjs(ev).startOf('month').format(GIDDH_DATE_FORMAT),
-                to: dayjs(ev).endOf('month').format(GIDDH_DATE_FORMAT)
+                from: dayjs(event).startOf('month').format(GIDDH_DATE_FORMAT),
+                to: dayjs(event).endOf('month').format(GIDDH_DATE_FORMAT)
             };
             this.dateSelected = true;
             this.store.dispatch(this.reconcileAction.SetSelectedPeriod(this.currentPeriod));
@@ -302,12 +303,12 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
             request.gstin = this.activeCompanyGstNumber;
             request.from = this.currentPeriod.from;
             request.to = this.currentPeriod.to;
-            this.gstReconcileService.downloadGSTRJSON(request).subscribe(res => {
+            this.gstReconcileService.downloadGSTRJSON(request).pipe(takeUntil(this.destroyed$)).subscribe(res => {
                 if (res.status === "success") {
                     let blobData = this.generalService.base64ToBlob(res?.body, "json", 512);
                     return saveAs(blobData, `${this.activeCompanyGstNumber}.json`);
                 } else {
-                    this.toasty.errorToast(res?.body.message);
+                    this.toasty.errorToast(res?.message);
                 }
             });
         } else {
