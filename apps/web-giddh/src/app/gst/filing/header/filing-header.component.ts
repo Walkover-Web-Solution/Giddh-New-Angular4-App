@@ -337,7 +337,7 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
      * @param {*} type
      * @memberof FilingHeaderComponent
      */
-    public navigateToOverview() {
+    public navigateToOverview(): void {
         this.router.navigate(
             [],
             {
