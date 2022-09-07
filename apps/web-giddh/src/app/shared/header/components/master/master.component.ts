@@ -83,7 +83,7 @@ export class MasterComponent implements OnInit, OnChanges, OnDestroy {
 
         this.store.pipe(select(state => state.groupwithaccounts.isCreateGroupSuccess), takeUntil(this.destroyed$)).subscribe(response => {
             if (response && this.currentGroupColumnIndex > -1) {
-                this.getMasters((this.masterColumnsData[this.currentGroupColumnIndex + 1].groupUniqueName) ? this.masterColumnsData[this.currentGroupColumnIndex + 1].groupUniqueName : this.currentGroupUniqueName, ((this.masterColumnsData[this.currentGroupColumnIndex + 1].groupUniqueName)) ? this.currentGroupColumnIndex + 1 : this.currentGroupColumnIndex, true);
+                this.getMasters((this.masterColumnsData[this.currentGroupColumnIndex + 1]?.groupUniqueName) ? this.masterColumnsData[this.currentGroupColumnIndex + 1]?.groupUniqueName : this.currentGroupUniqueName, ((this.masterColumnsData[this.currentGroupColumnIndex + 1]?.groupUniqueName)) ? this.currentGroupColumnIndex + 1 : this.currentGroupColumnIndex, true);
             }
         });
 
@@ -109,7 +109,7 @@ export class MasterComponent implements OnInit, OnChanges, OnDestroy {
 
         this.store.pipe(select(state => state.groupwithaccounts.createAccountIsSuccess), takeUntil(this.destroyed$)).subscribe(response => {
             if (response && this.currentGroupColumnIndex > -1) {
-                this.getMasters((this.masterColumnsData[this.currentGroupColumnIndex + 1].groupUniqueName) ? this.masterColumnsData[this.currentGroupColumnIndex + 1].groupUniqueName : this.currentGroupUniqueName, ((this.masterColumnsData[this.currentGroupColumnIndex + 1].groupUniqueName)) ? this.currentGroupColumnIndex + 1 : this.currentGroupColumnIndex, true);
+                this.getMasters((this.masterColumnsData[this.currentGroupColumnIndex + 1]?.groupUniqueName) ? this.masterColumnsData[this.currentGroupColumnIndex + 1]?.groupUniqueName : this.currentGroupUniqueName, ((this.masterColumnsData[this.currentGroupColumnIndex + 1]?.groupUniqueName)) ? this.currentGroupColumnIndex + 1 : this.currentGroupColumnIndex, true);
             }
         });
 
