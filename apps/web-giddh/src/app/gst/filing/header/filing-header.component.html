@@ -15,6 +15,7 @@
                 <div class="text-middle head head-font-weight">
                     {{ localeData?.gstr1_label }}
                     <div
+                        *ngIf="showDate"
                         class="btn-group dropdown d-inline-block"
                         dropdown
                         [autoClose]="false"
@@ -57,6 +58,15 @@
                                 </a>
                             </li>
                         </ul>
+                    </div>
+                    <div class="datepicker-header" *ngIf="!showDate">
+                        <ng-container *ngIf="isMonthSelected">
+                            ({{ dayjs(currentPeriod.from, giddhDateFormat).format("MMMM YYYY") }})
+                        </ng-container>
+                        <ng-container *ngIf="!isMonthSelected">
+                            ({{ dayjs(currentPeriod.from, giddhDateFormat).format("DD MMM YYYY") }} -
+                            {{ dayjs(currentPeriod.to, giddhDateFormat).format("DD MMM YYYY") }})</ng-container
+                        >
                     </div>
                 </div>
                 <div class="font-xs text-muted text-middle normal">{{ localeData?.outward_supplies_details }}</div>
@@ -107,6 +117,7 @@
             <div class="text-middle head-font-weight">
                 {{ localeData?.gstr2_label }}
                 <div
+                    *ngIf="showDate"
                     class="btn-group dropdown d-inline-block"
                     dropdown
                     [autoClose]="false"
@@ -140,6 +151,15 @@
                             </a>
                         </li>
                     </ul>
+                </div>
+                <div class="datepicker-header" *ngIf="!showDate">
+                    <ng-container *ngIf="isMonthSelected">
+                        ({{ dayjs(currentPeriod.from, giddhDateFormat).format("MMMM YYYY") }})
+                    </ng-container>
+                    <ng-container *ngIf="!isMonthSelected">
+                        ({{ dayjs(currentPeriod.from, giddhDateFormat).format("DD MMM YYYY") }} -
+                        {{ dayjs(currentPeriod.to, giddhDateFormat).format("DD MMM YYYY") }})</ng-container
+                    >
                 </div>
             </div>
             <div class="font-xs text-muted text-middle normal">{{ localeData?.inward_supplies_details }}</div>
