@@ -12,7 +12,7 @@ import { Observable, of, ReplaySubject } from 'rxjs';
 import { AppState } from '../../../store';
 import { takeUntil } from 'rxjs/operators';
 import { GstReconcileActions } from '../../../actions/gst-reconcile/GstReconcile.actions';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 import { GstReport } from '../../constants/gst.constant';
 import { SHOW_GST_FILING } from '../../../app.constant';
@@ -84,6 +84,10 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     public selectedMonth: any = null;
     /** This will use for date selected */
     public dateSelected: boolean = false;
+    /** This will use for hold url */
+    public holdActiveRoute: boolean;
+    /** This will use for date show */
+    public showDate: boolean = true;
 
     constructor(
         private store: Store<AppState>,
@@ -93,7 +97,8 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
         private gstReconcileActions: GstReconcileActions,
         private activatedRoute: ActivatedRoute,
         private gstReconcileService: GstReconcileService,
-        private generalService: GeneralService
+        private generalService: GeneralService,
+        private router: Router,
     ) {
         this.gstAuthenticated$ = this.store.pipe(select(p => p.gstR.gstAuthenticated), takeUntil(this.destroyed$));
         this.companyGst$ = this.store.pipe(select(p => p.gstR.activeCompanyGst), takeUntil(this.destroyed$));
@@ -101,6 +106,14 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     public ngOnInit() {
+        this.activatedRoute.url.pipe(takeUntil(this.destroyed$)).subscribe(params => {
+            this.holdActiveRoute = this.router.routerState.snapshot.url.includes('entityType');
+            if (this.holdActiveRoute) {
+                this.showDate = false;
+            } else {
+                this.showDate = true;
+            }
+        });
         this.imgPath = isElectron ? 'assets/images/gst/' : AppUrl + APP_FOLDER + 'assets/images/gst/';
         this.companyGst$.subscribe(a => {
             if (a) {
@@ -269,7 +282,7 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
      * @param {*} ev
      * @memberof FilingHeaderComponent
      */
-    public periodChanged(event?:any): void {
+    public periodChanged(event?: any): void {
         if (event) {
             this.selectedMonth = dayjs(event).format('MMMM YYYY');
             this.currentPeriod = {
@@ -283,8 +296,10 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
             request.to = this.currentPeriod.to;
             request.gstin = this.activeCompanyGstNumber;
             if (this.selectedGst === GstReport.Gstr1) {
+                this.navigateToOverview()
                 this.store.dispatch(this.reconcileAction.GetOverView(GstReport.Gstr1, request));
             } else {
+                this.navigateToOverview()
                 this.store.dispatch(this.reconcileAction.GetOverView(GstReport.Gstr2, request));
             }
         }
@@ -314,5 +329,21 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
         } else {
             this.toasty.errorToast(this.localeData?.filing?.gst_unavailable);
         }
+    }
+
+    /**
+     * Navigate To Overview
+     *
+     * @param {*} type
+     * @memberof FilingHeaderComponent
+     */
+    public navigateToOverview(): void {
+        this.router.navigate(
+            [],
+            {
+                relativeTo: this.activatedRoute,
+                queryParams: { from: this.currentPeriod.from, to: this.currentPeriod.to },
+                queryParamsHandling: 'merge'
+            });
     }
 }
