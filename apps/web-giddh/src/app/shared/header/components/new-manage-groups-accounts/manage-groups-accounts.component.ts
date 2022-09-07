@@ -101,6 +101,10 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
                     } else {
                         this.searchedMasterData = [];
                     }
+                } else {
+                    if (term) {
+                        this.searchMasters(term);
+                    }
                 }
                 this.initialLoad = false;
             });
