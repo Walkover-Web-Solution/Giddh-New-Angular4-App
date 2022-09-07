@@ -268,7 +268,7 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
      * @param {*} ev
      * @memberof FilingHeaderComponent
      */
-    public periodChanged(ev) {
+    public periodChanged(ev): void {
         if (ev) {
             this.selectedMonth = dayjs(ev).format('MMMM YYYY');
             this.currentPeriod = {
@@ -295,7 +295,7 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     * @param {any} string:
     * @memberof FilingHeaderComponent
     */
-    public onDownloadJsonGSTR(type: string) {
+    public onDownloadJsonGSTR(type: string): void {
         if (this.activeCompanyGstNumber) {
             let request: GstrJsonDownloadRequest = new GstrJsonDownloadRequest();
             request.type = type;

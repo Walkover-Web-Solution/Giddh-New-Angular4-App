@@ -19,7 +19,7 @@
                         dropdown
                         [autoClose]="false"
                         #monthWise="bs-dropdown"
-                        (clickOutside)="monthWise.hide()"
+                        (clickOutside)="monthWise?.hide()"
                         [attachOutsideOnClick]="true"
                     >
                         <button
@@ -52,7 +52,7 @@
                                         (click)="$event.stopPropagation()"
                                         [showWeeks]="false"
                                         [minMode]="'month'"
-                                        (selectionDone)="periodChanged($event); monthWise.hide()"
+                                        (selectionDone)="periodChanged($event); monthWise?.hide()"
                                     ></datepicker>
                                 </a>
                             </li>
@@ -76,35 +76,6 @@
                     <button type="button" class="btn btn-sky-blue mr-0" (click)="pushToPortalModal?.show()">
                         {{ localeData?.filing?.push_to_portal }}
                     </button>
-                    <!-- <div class="btn-group" dropdown #dropdown="bs-dropdown">
-                        <button dropdownToggle type="button" class="btn dropdown-toggle btn-sky-blue mr-0">
-                            <i class="icon-download"></i>{{ localeData?.filing?.errors }}
-                        </button>
-                        <ul
-                            id="dropdown-menu_gstr1"
-                            *dropdownMenu
-                            class="dropdown-menu dropdown-menu-right mt-3"
-                            role="menu"
-                            aria-labelledby="button-triggers-manual"
-                        >
-                            <li role="menuitem">
-                                <a
-                                    class="dropdown-item"
-                                    href="javascript:void(0)"
-                                    (click)="onDownloadSheetGSTR('main')"
-                                    >{{ localeData?.filing?.download_sheet }}</a
-                                >
-                            </li>
-                            <li role="menuitem">
-                                <a
-                                    class="dropdown-item"
-                                    href="javascript:void(0)"
-                                    (click)="onDownloadSheetGSTR('error')"
-                                    >{{ localeData?.filing?.download_error_sheet }}</a
-                                >
-                            </li>
-                        </ul>
-                    </div> -->
                 </li>
 
                 <li>
@@ -140,7 +111,7 @@
                     dropdown
                     [autoClose]="false"
                     #monthWise="bs-dropdown"
-                    (clickOutside)="monthWise.hide()"
+                    (clickOutside)="monthWise?.hide()"
                     [attachOutsideOnClick]="true"
                 >
                     <button
@@ -164,7 +135,7 @@
                                     (click)="$event.stopPropagation()"
                                     [showWeeks]="false"
                                     [minMode]="'month'"
-                                    (selectionDone)="periodChanged($event); monthWise.hide()"
+                                    (selectionDone)="periodChanged($event); monthWise?.hide()"
                                 ></datepicker>
                             </a>
                         </li>
