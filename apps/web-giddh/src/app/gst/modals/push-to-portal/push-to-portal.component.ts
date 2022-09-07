@@ -22,9 +22,7 @@ export class PushtToPortalComponent implements OnInit {
      *
      * @memberof PushtToPortalComponent
      */
-    public ngOnInit(): void {
-
-    }
+    public ngOnInit(): void {}
 
     /**
      * This will use for download success sheet
@@ -32,7 +30,7 @@ export class PushtToPortalComponent implements OnInit {
      * @param {Event} e
      * @memberof PushtToPortalComponent
      */
-    public onDownloadExcel(e: Event) {
+    public onDownloadExcel(e: Event): void {
         this.downloadExcel.emit(e);
     }
 
@@ -42,7 +40,7 @@ export class PushtToPortalComponent implements OnInit {
  * @param {Event} e
  * @memberof PushtToPortalComponent
  */
-    public onDownloadJson(e: Event) {
+    public onDownloadJson(e: Event): void {
         this.downloadJson.emit(e);
     }
 
@@ -52,7 +50,7 @@ export class PushtToPortalComponent implements OnInit {
      * @param {Event} e
      * @memberof PushtToPortalComponent
      */
-    public onCancel(e: Event) {
+    public onCancel(e: Event): void {
         this.cancelCallBack.emit(e);
     }
 }
