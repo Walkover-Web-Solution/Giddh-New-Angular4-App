@@ -10,6 +10,7 @@ import { GROUP_API } from './apiurls/group.api';
 import { GroupsWithAccountsResponse } from '../models/api-models/GroupsWithAccounts';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
+import { PAGINATION_LIMIT } from '../app.constant';
 
 declare var _: any;
 
@@ -127,14 +128,14 @@ export class GroupService {
         }), catchError((e) => this.errorHandler.HandleCatch<GroupResponse, string>(e, groupUniqueName, { groupUniqueName })));
     }
 
-    public DeleteGroup(groupUniqueName: string): Observable<BaseResponse<string, string>> {
+    public DeleteGroup(groupUniqueName: string): Observable<BaseResponse<any, string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.delete(this.config.apiUrl + GROUP_API.DELETE_GROUP.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':groupUniqueName', encodeURIComponent(groupUniqueName))).pipe(map((res) => {
-            let data: BaseResponse<string, string> = res;
+            let data: BaseResponse<any, string> = res;
             data.request = groupUniqueName;
             data.queryString = { groupUniqueName };
             return data;
-        }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e, groupUniqueName, { groupUniqueName })));
+        }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e, groupUniqueName, { groupUniqueName })));
     }
 
     public GetFlattenGroupsAccounts(q: string = '', page: number = 1, count: number = 20000, showEmptyGroups: string = 'false', branchUniqueName?: string): Observable<BaseResponse<FlattenGroupsAccountsResponse, string>> {
@@ -223,5 +224,23 @@ export class GroupService {
         }
         return this.http.get(contextPath)
             .pipe(catchError((error) => this.errorHandler.HandleCatch<any, any>(error)));
+    }
+
+    public getMasters(groupUniqueName: string, page: Number): Observable<BaseResponse<GroupResponse, string>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.get(this.config.apiUrl + GROUP_API.GET_MASTERS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':groupUniqueName', encodeURIComponent(groupUniqueName)).replace(':page', encodeURIComponent(page.toString())).replace(':count', '1000')).pipe(map((res) => {
+            let data: BaseResponse<GroupResponse, string> = res;
+            data.request = groupUniqueName;
+            data.queryString = { groupUniqueName };
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<GroupResponse, string>(e, groupUniqueName, { groupUniqueName })));
+    }
+
+    public getTopSharedGroups(): Observable<BaseResponse<GroupResponse, string>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.get(this.config.apiUrl + GROUP_API.GET_TOP_SHARED_GROUPS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
+            let data: BaseResponse<GroupResponse, string> = res;
+            return data;
+        }), catchError((error) => this.errorHandler.HandleCatch<any, any>(error)));
     }
 }

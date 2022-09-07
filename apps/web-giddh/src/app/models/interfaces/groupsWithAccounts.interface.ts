@@ -6,7 +6,6 @@ export interface IGroupsWithAccounts extends INameUniqueName {
     accounts: IAccountsInfo[];
     category: string;
     groups: IGroupsWithAccounts[];
-
     isActive: boolean;
     isOpen: boolean;
     isVisible: boolean;

@@ -25,7 +25,7 @@ import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
 import { AsideMenuOtherTaxes } from './aside-menu-other-taxes/aside-menu-other-taxes';
-import { AccountOperationsComponent, GroupsAccountSidebarComponent, ManageGroupsAccountsComponent } from './header/components';
+import { AccountOperationsComponent, ManageGroupsAccountsComponent } from './header/components';
 import { GroupAddComponent } from './header/components/group-add/group-add.component';
 import { ExportGroupLedgerComponent } from './header/components/group-export-ledger-modal/export-group-ledger.component';
 import { GroupUpdateComponent } from './header/components/group-update/group-update.component';
@@ -57,7 +57,7 @@ import { GiddhDatepickerModule } from '../theme/giddh-datepicker/giddh-datepicke
 import { DeleteTemplateConfirmationModalModule } from '../invoice/templates/edit-template/modals/confirmation-modal/confirmation.modal.module';
 import { NgxBootstrapSwitchModule } from 'ngx-bootstrap-switch';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { NgxIntlTelInputModule } from 'ngx-intl-tel-input';
+import { MasterComponent } from './header/components/master/master.component';
 import { CheckPermissionModule } from '../permissions/check-permission.module';
 import { GenericAsideMenuAccountModule } from './generic-aside-menu-account/generic.aside.menu.account.module';
 import { AccountUpdateNewDetailsModule } from './header/components/account-update-new-details/account-update-new-details.module';
@@ -83,7 +83,6 @@ export function provideConfig() {
         AccountOperationsComponent,
         AccountFilterPipe,
         OnBoardingComponent,
-        GroupsAccountSidebarComponent,
         GroupAddComponent,
         GroupUpdateComponent,
         ShareGroupModalComponent,
@@ -93,7 +92,8 @@ export function provideConfig() {
         ProformaAddBulkItemsComponent,
         RevisionHistoryComponent,
         PurchaseOrderPreviewModalComponent,
-        PurchaseSendEmailModalComponent
+        PurchaseSendEmailModalComponent,
+        MasterComponent
     ],
     imports: [
         KeyboardShortutModule,
@@ -144,7 +144,6 @@ export function provideConfig() {
         DeleteTemplateConfirmationModalModule,
         NgxBootstrapSwitchModule.forRoot(),
         MatSlideToggleModule,
-        NgxIntlTelInputModule,
         CheckPermissionModule,
         AccountUpdateNewDetailsModule
     ],
@@ -192,12 +191,13 @@ export function provideConfig() {
         GiddhPageLoaderModule,
         GiddhDatepickerModule,
         DeleteTemplateConfirmationModalModule,
-        GenericAsideMenuAccountModule
+        GenericAsideMenuAccountModule,
+        MasterComponent
     ],
     entryComponents: [
         ManageGroupsAccountsComponent,
         AccountOperationsComponent,
-        GroupsAccountSidebarComponent,
+        MasterComponent,
         OnBoardingComponent
     ],
     providers: [

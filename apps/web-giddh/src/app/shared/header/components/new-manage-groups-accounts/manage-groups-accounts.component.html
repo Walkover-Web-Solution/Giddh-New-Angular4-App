@@ -60,7 +60,7 @@
                         <span class="spinner small"></span> {{ commonLocaleData?.app_loading }}
                     </div>
                 </div>
-                <div class="search-loading no-result" *ngIf="!(searchLoad | async) && !(groupList$ | async)?.length">
+                <div class="search-loading no-result" *ngIf="!(searchLoad | async) && !topSharedGroups?.length">
                     <div class="vertical-center">
                         <h1>{{ localeData?.no_result_found }}</h1>
                     </div>
@@ -75,12 +75,13 @@
                     >
                         <div
                             *ngIf="!(searchLoad | async)"
-                            [ngStyle]="{ 'width': groupsidebar?.mc?.columns?.length * 255 + 'px' }"
+                            [ngStyle]="{ 'width': master?.masterColumnsData?.length * 255 + 'px' }"
                             class="wrap-account-sidebar"
                         >
-                            <groups-account-sidebar
-                                (columnsChanged)="currentColumns = $event"
-                                #groupsidebar
+                            <master
+                                #master
+                                [topSharedGroups]="topSharedGroups"
+                                [searchedMasterData]="searchedMasterData"
                                 [ngStyle]="{
                                     'height':
                                         (myModelRect ? myModelRect.height : 0) -
@@ -88,13 +89,13 @@
                                         'px'
                                 }"
                                 [height]="(myModelRect ? myModelRect.height : 0) - (headerRect ? headerRect.height : 0)"
-                                [groups]="groupList$ | async"
-                                (breadcrumbPathChanged)="breadcrumbPathChanged($event)"
-                                (resetSearchString)="resetGroupSearchString(false)"
-                                (ScrollToRight)="ScrollToRight()"
                                 [isSearchingGroups]="!(grpSrch.value === '')"
                                 [localeData]="localeData"
-                            ></groups-account-sidebar>
+                                [commonLocaleData]="commonLocaleData"
+                                (resetSearchString)="resetGroupSearchString(false)"
+                                (breadcrumbPathChanged)="breadcrumbPathChanged($event)"
+                            >
+                            </master>
                         </div>
                     </perfect-scrollbar>
                 </div>
@@ -102,7 +103,7 @@
             <!-- middle body -->
             <div class="form-box form-bg height-in-vh">
                 <account-operations
-                    [columnsRef]="currentColumns"
+                    [topSharedGroups]="topSharedGroups"
                     [height]="(myModelRect ? myModelRect.height : 0) - (headerRect ? headerRect.height : 0)"
                     [breadcrumbPath]="breadcrumbPath"
                     [breadcrumbUniquePath]="breadcrumbUniquePath"

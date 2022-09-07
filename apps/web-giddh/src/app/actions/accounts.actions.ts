@@ -42,6 +42,7 @@ export class AccountsAction {
     public static SHARED_ACCOUNT_WITH_RESPONSE = 'AccountSharedWithResponse';
     public static MOVE_ACCOUNT = 'AccountMove';
     public static MOVE_ACCOUNT_RESPONSE = 'AccountMoveResponse';
+    public static MOVE_ACCOUNT_RESET = 'AccountMoveReset';
     public static UPDATE_ACCOUNT = 'UpdateAccount';
     public static UPDATE_ACCOUNT_RESPONSE = 'UpdateAccountResponse';
     public static UPDATE_ACCOUNTV2 = 'UpdateAccountV2';
@@ -417,7 +418,7 @@ export class AccountsAction {
                     let data: BaseResponse<string, AccountMoveRequest> = action.payload;
                     this._generalServices.eventHandler.next({ name: eventsConst.accountMoved, payload: data });
                     this._toasty.successToast(this.localeService.translate("app_messages.account_moved"), '');
-                    this.groupWithAccountsAction.getGroupDetails(data.request.uniqueName);
+                    this.store.dispatch(this.groupWithAccountsAction.getGroupDetails(data.request.uniqueName));
                 }
                 return {
                     type: 'EmptyAction'
@@ -710,6 +711,12 @@ export class AccountsAction {
         return {
             type: AccountsAction.MOVE_ACCOUNT_RESPONSE,
             payload: value
+        };
+    }
+
+    public moveAccountReset(): CustomActions {
+        return {
+            type: AccountsAction.MOVE_ACCOUNT_RESET
         };
     }
 

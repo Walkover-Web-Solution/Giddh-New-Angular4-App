@@ -4063,7 +4063,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
 
                 salesEntryClassArray.push(salesEntryClass);
             });
-
             requestObject = {
                 account: data.accountDetails,
                 updateAccountDetails: this.updateAccount,

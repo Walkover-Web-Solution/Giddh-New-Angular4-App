@@ -93,62 +93,62 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
         }
 
         // groups with accounts actions
-        case GroupWithAccountsAction.CREATE_GROUP_RESPONSE:
-            let gData: BaseResponse<GroupResponse, GroupCreateRequest> = action.payload;
-            if (gData.status === 'success') {
-                let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
-                if (groupArray) {
-                    let myChildElementIsOpen = false;
-                    AddAndActiveGroupFunc(groupArray, gData, myChildElementIsOpen);
-                    return {
-                        ...state,
-                        groupswithaccounts: groupArray
-                    };
-                }
-            }
-            return state;
-        case GroupWithAccountsAction.UPDATE_GROUP_RESPONSE: {
-            let activeGrpData: BaseResponse<GroupResponse, GroupUpateRequest> = action.payload;
-            if (activeGrpData.status === 'success') {
-                Object.assign({}, activeGrpData.body, { isOpen: true, isActive: true });
-                let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
-                if (groupArray) {
-                    updateActiveGroupFunc(groupArray, activeGrpData.queryString?.groupUniqueName, activeGrpData.body, false);
-                    return {
-                        ...state,
-                        groupswithaccounts: groupArray
-                    };
-                }
-            }
-            return state;
-        }
-        case GroupWithAccountsAction.DELETE_GROUP_RESPONSE:
-            let g: BaseResponse<string, string> = action.payload;
-            if (g.status === 'success') {
-                let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
-                if (groupArray) {
-                    removeGroupFunc(groupArray, g.request, null);
-                    return {
-                        ...state,
-                        groupswithaccounts: groupArray
-                    };
-                }
-            }
-            return state;
-        case GroupWithAccountsAction.MOVE_GROUP_RESPONSE:
-            let m: BaseResponse<MoveGroupResponse, MoveGroupRequest> = action.payload;
-            if (m.status === 'success') {
-                let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
-                if (groupArray) {
-                    let deletedItem = removeGroupFunc(groupArray, m.queryString?.groupUniqueName, null);
-                    addNewGroupFunc(groupArray, deletedItem, m.request.parentGroupUniqueName, false);
-                    return {
-                        ...state,
-                        groupswithaccounts: groupArray
-                    };
-                }
-            }
-            return state;
+        // case GroupWithAccountsAction.CREATE_GROUP_RESPONSE:
+        //     let gData: BaseResponse<GroupResponse, GroupCreateRequest> = action.payload;
+        //     if (gData.status === 'success') {
+        //         let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
+        //         if (groupArray) {
+        //             let myChildElementIsOpen = false;
+        //             AddAndActiveGroupFunc(groupArray, gData, myChildElementIsOpen);
+        //             return {
+        //                 ...state,
+        //                 groupswithaccounts: groupArray
+        //             };
+        //         }
+        //     }
+        //     return state;
+        // case GroupWithAccountsAction.UPDATE_GROUP_RESPONSE: {
+        //     let activeGrpData: BaseResponse<GroupResponse, GroupUpateRequest> = action.payload;
+        //     if (activeGrpData.status === 'success') {
+        //         Object.assign({}, activeGrpData.body, { isOpen: true, isActive: true });
+        //         let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
+        //         if (groupArray) {
+        //             updateActiveGroupFunc(groupArray, activeGrpData.queryString?.groupUniqueName, activeGrpData.body, false);
+        //             return {
+        //                 ...state,
+        //                 groupswithaccounts: groupArray
+        //             };
+        //         }
+        //     }
+        //     return state;
+        // }
+        // case GroupWithAccountsAction.DELETE_GROUP_RESPONSE:
+        //     let g: BaseResponse<any, string> = action.payload;
+        //     if (g.status === 'success') {
+        //         let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
+        //         if (groupArray) {
+        //             removeGroupFunc(groupArray, g.request, null);
+        //             return {
+        //                 ...state,
+        //                 groupswithaccounts: groupArray
+        //             };
+        //         }
+        //     }
+        //     return state;
+        // case GroupWithAccountsAction.MOVE_GROUP_RESPONSE:
+        //     let m: BaseResponse<MoveGroupResponse, MoveGroupRequest> = action.payload;
+        //     if (m.status === 'success') {
+        //         let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
+        //         if (groupArray) {
+        //             let deletedItem = removeGroupFunc(groupArray, m.queryString?.groupUniqueName, null);
+        //             addNewGroupFunc(groupArray, deletedItem, m.request.parentGroupUniqueName, false);
+        //             return {
+        //                 ...state,
+        //                 groupswithaccounts: groupArray
+        //             };
+        //         }
+        //     }
+        //     return state;
 
         //  accounts actions
         case AccountsAction.CREATE_ACCOUNT_RESPONSEV2: {

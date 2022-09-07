@@ -1308,7 +1308,6 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                             data.body.stock?.groupTaxes ?? [],
                             data.body.taxes ?? [],
                             data.body.groupTaxes ?? []);
-
                         // directly assign additional property
                         selectedAcc.additional = {
                             ...selectedAcc.additional,

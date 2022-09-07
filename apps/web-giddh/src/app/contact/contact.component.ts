@@ -516,11 +516,6 @@ export class ContactComponent implements OnInit, OnDestroy {
 
     public performActions(type: number, account: any, event?: any) {
         switch (type) {
-            case 0: // go to add and manage
-                this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(account.name));
-                this.store.dispatch(this.groupWithAccountsAction.OpenAddAndManageFromOutside(account.name));
-                break;
-
             case 1: // go to ledger
                 this.goToRoute("ledger", `/${this.fromDate}/${this.toDate}`, account?.uniqueName);
                 break;

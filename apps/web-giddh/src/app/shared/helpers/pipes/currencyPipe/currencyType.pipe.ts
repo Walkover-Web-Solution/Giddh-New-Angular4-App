@@ -142,7 +142,7 @@ export class GiddhCurrencyPipe implements OnDestroy, PipeTransform {
                 if (otherNumbers !== '' && otherNumbers !== '-') {
                     lastThree = ' ' + lastThree;
                 }
-                let output = otherNumbers.replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + lastThree;
+                let output = otherNumbers?.replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + lastThree;
                 if (afterdecDigit) {
                     output += '.' + afterdecDigit;
                 }
