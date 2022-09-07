@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit, Input } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import * as dayjs from 'dayjs';
-import { of as observableOf, ReplaySubject } from 'rxjs';
+import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { map as lodashMap } from '../../../lodash-optimized';
 import { AuditLogsActions } from '../../../actions/audit-logs/audit-logs.actions';
@@ -15,6 +15,7 @@ import { AuditLogsSidebarVM } from './Vm';
 import { GroupService } from '../../../services/group.service';
 import { SearchService } from '../../../services/search.service';
 import { API_COUNT_LIMIT } from '../../../app.constant';
+import { IForceClear } from '../../../models/api-models/Sales';
 
 @Component({
     selector: 'audit-logs-sidebar',
@@ -66,6 +67,18 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
     };
     /** Stores the value of groups */
     public searchedGroups: IOption[];
+    /** To clear filter by sh-select options   */
+    public forceClearFilterBy$: Observable<IForceClear> = observableOf({ status: false });
+    /** To clear entity sh-select options   */
+    public forceClearEntity$: Observable<IForceClear> = observableOf({ status: false });
+    /** To clear operations sh-select options   */
+    public forceClearOperations$: Observable<IForceClear> = observableOf({ status: false });
+    /** To clear account sh-select options   */
+    public forceClearAccount$: Observable<IForceClear> = observableOf({ status: false });
+    /** To clear group sh-select options   */
+    public forceClearGroup$: Observable<IForceClear> = observableOf({ status: false });
+    /** To clear user sh-select options   */
+    public forceClearUser$: Observable<IForceClear> = observableOf({ status: false });
 
     constructor(
         private store: Store<AppState>,
@@ -106,7 +119,7 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.vm.reset();
+        this.resetFilters();
         this.loadDefaultAccountsSuggestions();
         this.loadDefaultGroupsSuggestions();
     }
@@ -135,22 +148,9 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
     }
 
     public ngOnDestroy() {
-        this.vm.reset();
-        this.store.dispatch(this.auditLogsActions.ResetLogs());
+        this.resetFilters();
         this.destroyed$.next(true);
         this.destroyed$.complete();
-    }
-
-    public selectDateOption(v) {
-        this.vm.selectedDateOption = v.value || '';
-    }
-
-    public selectEntityOption(v) {
-        this.vm.selectedEntity = v.value || '';
-    }
-
-    public selectOperationOption(v) {
-        this.vm.selectedOperation = v.value || '';
     }
 
     public selectAccount(v) {
@@ -207,7 +207,97 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
 
     public resetFilters() {
         this.vm.reset();
+        this.resetFilterBy();
+        this.resetEntity();
+        this.resetGroup();
+        this.resetAccount();
+        this.resetUser();
+        this.resetOperation();
         this.store.dispatch(this.auditLogsActions.ResetLogs());
+    }
+
+    /**
+     * Resets filter by
+     *
+     * @memberof AuditLogsSidebarComponent
+     */
+    public resetFilterBy(): void {
+        this.forceClearFilterBy$ = observableOf({ status: true });
+
+        setTimeout(() => {
+            this.forceClearFilterBy$ = observableOf({ status: false });
+            this.vm.selectedDateOption = "0";
+        }, 100);
+    }
+
+    /**
+     * Resets entity
+     *
+     * @memberof AuditLogsSidebarComponent
+     */
+    public resetEntity(): void {
+        this.forceClearEntity$ = observableOf({ status: true });
+        this.vm.selectedEntity = "";
+
+        setTimeout(() => {
+            this.forceClearEntity$ = observableOf({ status: false });
+        }, 500);
+    }
+
+    /**
+     * Resets group
+     *
+     * @memberof AuditLogsSidebarComponent
+     */
+    public resetGroup(): void {
+        this.forceClearGroup$ = observableOf({ status: true });
+        this.vm.selectedGroupUnq = "";
+
+        setTimeout(() => {
+            this.forceClearGroup$ = observableOf({ status: false });
+        }, 500);
+    }
+
+    /**
+     * Resets account
+     *
+     * @memberof AuditLogsSidebarComponent
+     */
+    public resetAccount(): void {
+        this.forceClearAccount$ = observableOf({ status: true });
+        this.vm.selectedAccountUnq = "";
+
+        setTimeout(() => {
+            this.forceClearAccount$ = observableOf({ status: false });
+        }, 500);
+    }
+
+    /**
+     * Resets user
+     *
+     * @memberof AuditLogsSidebarComponent
+     */
+    public resetUser(): void {
+        this.forceClearUser$ = observableOf({ status: true });
+        this.vm.selectedUserUnq = "";
+
+        setTimeout(() => {
+            this.forceClearUser$ = observableOf({ status: false });
+        }, 500);
+    }
+
+    /**
+     * Resets operation
+     *
+     * @memberof AuditLogsSidebarComponent
+     */
+    public resetOperation(): void {
+        this.forceClearOperations$ = observableOf({ status: true });
+        this.vm.selectedOperation = "";
+
+        setTimeout(() => {
+            this.forceClearOperations$ = observableOf({ status: false });
+        }, 500);
     }
 
     /**

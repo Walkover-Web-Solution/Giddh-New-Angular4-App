@@ -26,7 +26,6 @@ import { IForceClear } from "../../../../models/api-models/Sales";
 import { CountryRequest, OnboardingFormRequest } from "../../../../models/api-models/Common";
 import { CommonActions } from '../../../../actions/common.actions';
 import { GeneralActions } from "../../../../actions/general/general.actions";
-import { parsePhoneNumberFromString, CountryCode } from 'libphonenumber-js/min';
 import { GroupService } from 'apps/web-giddh/src/app/services/group.service';
 import { GroupWithAccountsAction } from 'apps/web-giddh/src/app/actions/groupwithaccounts.actions';
 import { API_COUNT_LIMIT, BootstrapToggleSwitch, EMAIL_VALIDATION_REGEX } from 'apps/web-giddh/src/app/app.constant';
@@ -36,6 +35,7 @@ import { GeneralService } from 'apps/web-giddh/src/app/services/general.service'
 import { clone, cloneDeep, uniqBy } from 'apps/web-giddh/src/app/lodash-optimized';
 import { CustomFieldsService } from 'apps/web-giddh/src/app/services/custom-fields.service';
 import { FieldTypes } from 'apps/web-giddh/src/app/custom-fields/custom-fields.constant';
+import { CountryISO, PhoneNumberFormat, SearchCountryField } from 'ngx-intl-tel-input';
 
 @Component({
     selector: 'account-add-new-details',
@@ -116,7 +116,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public countryPhoneCode: IOption[] = [];
     public callingCodesSource$: Observable<IOption[]> = observableOf([]);
     public stateGstCode: any[] = [];
-    public isMobileNumberValid: boolean = false;
     public formFields: any[] = [];
     public isGstValid$: Observable<boolean> = observableOf(true);
     public GSTIN_OR_TRN: string;
@@ -170,6 +169,20 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public availableFieldTypes: any = FieldTypes;
     /** This will hold toggle buttons value and size */
     public bootstrapToggleSwitch = BootstrapToggleSwitch;
+    /** This will hold SearchCountryField */
+    public searchCountryField = SearchCountryField;
+    /** This will hold CountryISO */
+    public countryISO = CountryISO;
+    /** This will hold PhoneNumberFormat */
+    public phoneNumberFormat = PhoneNumberFormat;
+    /** This will hold newCountryCode */
+    public newCountryCode: any = '';
+    /** This will hold oldCountryCode */
+    public oldCountryCode: any = '';
+    /** This will hold updatedNumber */
+    public updatedNumber: any = '';
+    /** This will hold currentCompanyCountryCode */
+    public currentCompanyCountryCode: any = '';
 
     constructor(
         private _fb: FormBuilder,
@@ -299,6 +312,11 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     }
 
     public ngAfterViewInit() {
+        this.addAccountForm?.get('mobileNo')?.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.oldCountryCode = response?.dialCode;
+            }
+        });
         this.addAccountForm.get('country').get('countryCode').setValidators(Validators.required);
         let activegroupName = this.addAccountForm.get('activeGroupUniqueName').value;
         if (activegroupName === 'sundrydebtors' || activegroupName === 'sundrycreditors') {
@@ -324,18 +342,16 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public setCountryByCompany(company: CompanyResponse) {
         if (this.activeCompany && this.activeCompany.countryV2) {
             const countryCode = this.activeCompany.countryV2.alpha2CountryCode;
+            this.currentCompanyCountryCode = countryCode.toLowerCase();
             const countryName = this.activeCompany.countryV2.countryName;
-            const callingCode = this.activeCompany.countryV2.callingCode;
             this.addAccountForm.get('country').get('countryCode').setValue(countryCode);
             this.selectedCountry = `${countryCode} - ${countryName}`;
             this.selectedCountryCode = countryCode;
-            this.addAccountForm.get('mobileCode').setValue(callingCode);
             this.addAccountForm.get('currency').setValue(company.baseCurrency);
             this.getOnboardingForm(countryCode);
             this.companyCountry = countryCode;
         } else {
             this.addAccountForm.get('country').get('countryCode').setValue('IN');
-            this.addAccountForm.get('mobileCode').setValue('91');
             this.selectedCountry = 'IN - India';
             this.selectedCountryCode = 'IN';
             this.addAccountForm.get('currency').setValue('IN');
@@ -355,7 +371,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             foreignOpeningBalance: [''],
             openingBalance: [''],
             mobileNo: [''],
-            mobileCode: [''],
             email: ['', Validators.pattern(EMAIL_VALIDATION_REGEX)],
             companyName: [''],
             attentionTo: [''],
@@ -523,30 +538,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         this.addAccountForm.reset();
     }
 
-    public isValidMobileNumber(ele: HTMLInputElement) {
-        if (ele.value) {
-            this.checkMobileNo(ele);
-        }
-    }
-
-    public checkMobileNo(ele) {
-        try {
-            let parsedNumber = parsePhoneNumberFromString('+' + this.addAccountForm.get('mobileCode').value + ele.value, this.addAccountForm.get('country').get('countryCode').value as CountryCode);
-            if (parsedNumber.isValid()) {
-                ele.classList.remove('error-box');
-                this.isMobileNumberValid = true;
-            } else {
-                this.isMobileNumberValid = false;
-                this._toaster.errorToast(this.localeData?.invalid_contact_number);
-                ele.classList.add('error-box');
-            }
-        } catch (error) {
-            this.isMobileNumberValid = false;
-            this._toaster.errorToast(this.localeData?.invalid_contact_number);
-            ele.classList.add('error-box');
-        }
-    }
-
     public submit() {
         if (!this.addAccountForm.get('openingBalance').value) {
             this.addAccountForm.get('openingBalance').setValue('0');
@@ -571,14 +562,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         }
         delete accountRequest['addAccountForm'];
 
-        if (!accountRequest.mobileNo) {
-            accountRequest.mobileCode = '';
-        } else {
-            if (!this.isMobileNumberValid) {
-                this._toaster.errorToast(this.localeData?.invalid_contact_number);
-                return false;
-            }
-        }
         if (this.isHsnSacEnabledAcc) {
             delete accountRequest['addresses'];
         } else {
@@ -601,6 +584,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             delete accountRequest['addresses'];
         }
 
+        let mobileNo = this.addAccountForm?.get('mobileNo')?.value?.e164Number;
+        accountRequest['mobileNo'] = mobileNo;
         accountRequest['hsnNumber'] = (accountRequest["hsnOrSac"] === "hsn") ? accountRequest['hsnNumber'] : "";
         accountRequest['sacNumber'] = (accountRequest["hsnOrSac"] === "sac") ? accountRequest['sacNumber'] : "";
 
@@ -639,8 +624,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             this.store.dispatch(this._generalActions.resetStatesList());
             this.store.dispatch(this.commonActions.resetOnboardingForm());
             this.getOnboardingForm(event.value);
-            let phoneCode = event.additional;
-            this.addAccountForm.get('mobileCode').setValue(phoneCode);
             let currencyCode = this.countryCurrency[event.value];
             this.addAccountForm.get('currency').setValue(currencyCode);
             this.getStates(event.value);
@@ -1251,5 +1234,31 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         this.closeAccountModal.emit(true);
         this.store.dispatch(this.groupWithAccountsAction.HideAddAndManageFromOutside());
         document.querySelector('body')?.classList?.remove('master-page');
+    }
+
+    /**	
+    * This will check no and replace old country code with new country code	
+    *	
+    * @param {*} event	
+    * @memberof AccountAddNewDetailsComponent	
+    */
+    public checkNumber(event: any): void {
+        if (event) {
+            this.newCountryCode = "+" + event?.dialCode;
+            const value = this.addAccountForm?.get('mobileNo')?.value?.e164Number;
+            let newNumber = value ? value?.replace(this.oldCountryCode, this.newCountryCode) : this.newCountryCode;
+            this.updatedNumber = newNumber;
+            this.addAccountForm.get('mobileNo').setValue(newNumber);
+        }
+    }
+
+    /**
+     * Will put focus in search field in calling code dropdown
+     *
+     * @param {*} element
+     * @memberof AccountAddNewDetailsComponent
+     */
+    public focusInCallingCodeSearch(element: any): void {
+        this.generalService.focusInCountrySearch(element);
     }
 }
