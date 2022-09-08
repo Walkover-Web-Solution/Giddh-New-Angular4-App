@@ -27,3 +27,7 @@ export interface ImportsData {
     user?: any
 }
 
+export class ImportsSheetDownloadRequest  {
+    public status: any;
+    public requestId: any;
+}

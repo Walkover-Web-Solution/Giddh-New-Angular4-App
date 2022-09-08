@@ -8,7 +8,7 @@ dayjs.extend(isSameOrAfter) // use plugin
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { select, Store } from '@ngrx/store';
 import { ImportsService } from '../../services/imports.service';
-import { ImportsData, ImportsRequest } from '../../models/api-models/imports';
+import { ImportsData, ImportsRequest, ImportsSheetDownloadRequest } from '../../models/api-models/imports';
 import { GeneralService } from '../../services/general.service';
 import { AppState } from '../../store';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
@@ -16,6 +16,8 @@ import { cloneDeep } from '../../lodash-optimized';
 import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from '../../app.constant';
 import { OrganizationType } from '../../models/user-login-state';
 import { SettingsBranchActions } from '../../actions/settings/branch/settings.branch.action';
+import { ToasterService } from '../../services/toaster.service';
+import { download } from '@giddh-workspaces/utils';
 
 /** Hold information of import  */
 const ELEMENT_DATA: ImportsData[] = [];
@@ -90,7 +92,7 @@ export class ImportsComponent implements OnInit, OnDestroy {
     /** True if initial api got called */
     public initialApiCalled: boolean = false;
 
-    constructor(public dialog: MatDialog, private importsService: ImportsService, private changeDetection: ChangeDetectorRef, private generalService: GeneralService, private modalService: BsModalService, private settingsBranchAction: SettingsBranchActions, private store: Store<AppState>) {
+    constructor(public dialog: MatDialog, private importsService: ImportsService, private changeDetection: ChangeDetectorRef, private generalService: GeneralService, private modalService: BsModalService, private toaster: ToasterService, private settingsBranchAction: SettingsBranchActions, private store: Store<AppState>) {
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
     }
 
@@ -190,9 +192,9 @@ export class ImportsComponent implements OnInit, OnDestroy {
                         failed += Number(result.metaData[key].failed);
                     });
                     result.count = {
-                        success:success,
-                        failed:failed,
-                        total:total
+                        success: success,
+                        failed: failed,
+                        total: total
                     }
                     result.date = dayjs(result.date, GIDDH_DATE_FORMAT + " HH:mm:ss").format(GIDDH_DATE_FORMAT);
                     let today = dayjs().format('YYYY-MM-DD');
@@ -206,8 +208,7 @@ export class ImportsComponent implements OnInit, OnDestroy {
                 });
                 this.dataSource = response.body.items;
                 this.importRequest.totalItems = response.body.totalItems;
-                this.importRequest.totalPages = response.body.totalPages;
-                this.importRequest.count = response.body.count;
+                this.importRequest.page = response.body.page;
             } else {
                 this.dataSource = [];
                 this.importRequest.totalItems = 0;
@@ -338,6 +339,46 @@ export class ImportsComponent implements OnInit, OnDestroy {
         this.currentBranch.name = selectedEntity.label;
         this.importRequest.branchUniqueName = selectedEntity.value;
         this.getImports();
+    }
+
+    /**
+     * This will use for download error sheet
+     *
+     * @param {*} element
+     * @memberof ImportsComponent
+     */
+    public downloadErrorSheet(element: any): void {
+        let exportRequest = new ImportsSheetDownloadRequest();
+        exportRequest.requestId = element.requestId;
+        exportRequest.status = "FAILED";
+        this.importsService.downloadImportsSheet(exportRequest).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+            if (response?.status === "success") {
+                let blob = this.generalService.base64ToBlob(response?.body, 'application/vnd.ms-excel', 512);
+                return download(`error_sheet.xlsx`, blob, 'application/vnd.ms-excel');
+            } else {
+                this.toaster.showSnackBar("error", response.message, response.code);
+            }
+        });
+    }
+
+    /**
+     *This will use for download success sheet
+     *
+     * @param {*} element
+     * @memberof ImportsComponent
+     */
+    public downloadSuccessSheet(element: any): void {
+        let exportRequest = new ImportsSheetDownloadRequest();
+        exportRequest.requestId = element.requestId;
+        exportRequest.status = "SUCCESS";
+        this.importsService.downloadImportsSheet(exportRequest).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+            if (response?.status === "success") {
+                let blob = this.generalService.base64ToBlob(response?.body, 'application/vnd.ms-excel', 512);
+                return download(`success_sheet.xlsx`, blob, 'application/vnd.ms-excel');
+            } else {
+                this.toaster.showSnackBar("error", response.message, response.code);
+            }
+        });
     }
 }
 

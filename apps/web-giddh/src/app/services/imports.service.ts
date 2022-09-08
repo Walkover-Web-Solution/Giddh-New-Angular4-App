@@ -6,7 +6,7 @@ import { GeneralService } from './general.service';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { catchError, map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
-import { ImportsRequest, ImportsResponse } from '../models/api-models/imports';
+import { ImportsRequest, ImportsResponse, ImportsSheetDownloadRequest } from '../models/api-models/imports';
 import { IMPORTS_API } from './apiurls/imports.api';
 
 @Injectable()
@@ -52,5 +52,26 @@ export class ImportsService {
                     count: importsRequest.count,
                     page: importsRequest.page
                 })));
+    }
+
+    /**
+     * This will use for download error sheet and success sheet
+     *
+     * @param {GstrSheetDownloadRequest} reqObj
+     * @return {*}  {Observable<BaseResponse<any, GstrSheetDownloadRequest>>}
+     * @memberof ImportsService
+     */
+    public downloadImportsSheet(reqObj: ImportsSheetDownloadRequest): Observable<BaseResponse<any, ImportsSheetDownloadRequest>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        let apiUrl = IMPORTS_API.DOWNLOAD_SHEET
+            .replace(':companyUniqueName', this.companyUniqueName)
+            .replace(':status', reqObj.status)
+            .replace(':requestId', reqObj.requestId)
+
+        return this.http.get(this.config.apiUrl + apiUrl).pipe(map((res) => {
+            let data: BaseResponse<any, ImportsSheetDownloadRequest> = res;
+            data.queryString = reqObj;
+            return data;
+        }), catchError((error) => this.errorHandler.HandleCatch<any, ImportsSheetDownloadRequest>(error)));
     }
 }
