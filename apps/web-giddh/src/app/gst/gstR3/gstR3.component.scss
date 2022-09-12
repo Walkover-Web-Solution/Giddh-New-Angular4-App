@@ -614,25 +614,3 @@ ul#dropdown-menu {
         }
     }
 }
-::ng-deep #monthPicker button.btn.btn-default.btn-info {
-    background: var(--color-blue) !important;
-    color: var(--color-white) !important;
-    text-decoration: none;
-    border-radius: 3px;
-}
-
-::ng-deep #monthPicker .btn-info > .text-success {
-    color: var(--color-blue) !important;
-}
-::ng-deep #monthPicker .btn-default.btn-info > .text-success {
-    color: inherit !important;
-}
-::ng-deep #monthPicker .btn-info:hover .text-success {
-    color: var(--color-white) !important;
-}
-::ng-deep #monthPicker .btn-default > .text-success {
-    color: inherit !important;
-}
-::ng-deep #monthPicker .btn-default:hover > .text-success {
-    color: var(--color-white) !important;
-}
