@@ -10819,3 +10819,6 @@ input[type="checkbox"].cdk-visually-hidden::after {
         }
     }
 }
+body.hide-scroll-body.master-page {
+    overflow-y: hidden !important;
+}
