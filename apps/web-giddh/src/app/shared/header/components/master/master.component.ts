@@ -46,6 +46,8 @@ export class MasterComponent implements OnInit, OnChanges, OnDestroy {
     public breadcrumbUniqueNamePath: string[] = [];
     /** Emits breadcrumb path */
     @Output() public breadcrumbPathChanged = new EventEmitter();
+    /** Emits event to scroll to right */
+    @Output() public scrollToRight: EventEmitter<boolean> = new EventEmitter(true);
     /** Active group observable */
     private activeGroup$: Observable<any>;
     /** Shows/hides create new button */
@@ -312,6 +314,7 @@ export class MasterComponent implements OnInit, OnChanges, OnDestroy {
                     this.masterColumnsData[currentIndex].page = response?.body?.page;
                     this.masterColumnsData[currentIndex].results = this.masterColumnsData[currentIndex].results.concat(response?.body?.results);
                 }
+                this.scrollToRight.emit(true);
             }
             this.loadMoreInProgress = false;
             this.changeDetectorRef.detectChanges();
