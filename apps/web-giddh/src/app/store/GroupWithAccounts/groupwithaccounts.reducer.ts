@@ -407,10 +407,7 @@ export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = i
         case AccountsAction.DELETE_ACCOUNT_RESPONSE:
             let d: BaseResponse<string, any> = action.payload;
             if (d.status === 'success') {
-                let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
-                removeAccountFunc(groupArray, d.request.accountUniqueName, d.request?.groupUniqueName, null);
                 return Object.assign({}, state, {
-                    groupswithaccounts: groupArray,
                     activeAccount: null,
                     activeGroup: { uniqueName: d.request?.groupUniqueName },
                     isDeleteAccSuccess: true,
@@ -478,15 +475,9 @@ export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = i
         case AccountsAction.MOVE_ACCOUNT_RESPONSE: {
             let mAcc: BaseResponse<string, AccountMoveRequest> = action.payload;
             if (mAcc.status === 'success') {
-                let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
-                let deletedItem = removeAccountFunc(groupArray, mAcc.queryString.activeGroupUniqueName, mAcc.queryString.accountUniqueName, null);
-                addNewAccountFunc(groupArray, deletedItem, mAcc.request.uniqueName, false);
                 return Object.assign({}, state, {
-                    groupswithaccounts: groupArray,
                     moveAccountSuccess: true,
                     activeAccount: null,
-                    activeGroup: { uniqueName: mAcc.request.uniqueName },
-                    activeGroupUniqueName: mAcc.request.uniqueName,
                     showEditGroup: true,
                     showEditAccount: false,
                     showAddNewAccount: false
@@ -587,6 +578,15 @@ export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = i
                 activeTab: action.payload
             });
         }
+        case GroupWithAccountsAction.GET_ACCOUNT_GROUP_DETAILS_RESPONSE:
+            let groupData: BaseResponse<GroupResponse, string> = action.payload;
+            if (groupData.status === 'success') {
+                return Object.assign({}, state, {
+                    activeGroup: groupData.body,
+                    activeGroupUniqueName: groupData.body.uniqueName
+                });
+            }
+            return state;
         default: {
             return state;
         }

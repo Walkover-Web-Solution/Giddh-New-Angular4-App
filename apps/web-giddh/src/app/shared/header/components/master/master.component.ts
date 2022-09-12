@@ -89,6 +89,15 @@ export class MasterComponent implements OnInit, OnChanges, OnDestroy {
 
         this.store.pipe(select(state => state.groupwithaccounts.isUpdateGroupSuccess), takeUntil(this.destroyed$)).subscribe(response => {
             if (response && this.currentGroupColumnIndex > -1) {
+                let activeGroup;
+                this.activeGroup$.pipe(take(1)).subscribe(group => activeGroup = group);
+                if (activeGroup?.uniqueName) {
+                    this.masterColumnsData?.forEach((column, index) => {
+                        if (column?.groupUniqueName === this.currentGroupUniqueName) {
+                            this.masterColumnsData[index].groupUniqueName = activeGroup?.uniqueName;
+                        }
+                    });
+                }
                 this.getMasters(this.masterColumnsData[this.currentGroupColumnIndex]?.groupUniqueName, this.currentGroupColumnIndex, true);
             }
         });
@@ -411,9 +420,11 @@ export class MasterComponent implements OnInit, OnChanges, OnDestroy {
     /**
      * Shows add new account form
      *
+     * @param {*} items
+     * @param {number} currentIndex
      * @memberof MasterComponent
      */
-    public showAddNewForm(items: any): void {
+    public showAddNewForm(items: any, currentIndex: number): void {
         this.breadcrumbPath = [];
         this.breadcrumbUniqueNamePath = [];
         let activeGroup;
@@ -422,6 +433,8 @@ export class MasterComponent implements OnInit, OnChanges, OnDestroy {
         this.breadcrumbPathChanged.emit({ breadcrumbPath: this.breadcrumbPath, breadcrumbUniqueNamePath: this.breadcrumbUniqueNamePath });
 
         if (items.groupUniqueName) {
+            this.currentGroupColumnIndex = currentIndex - 1;
+            this.currentGroupUniqueName = items.groupUniqueName;
             this.store.dispatch(this.groupWithAccountsAction.SetActiveGroup(items.groupUniqueName));
         }
         this.store.dispatch(this.groupWithAccountsAction.showAddNewForm());

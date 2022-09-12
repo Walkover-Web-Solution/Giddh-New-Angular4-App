@@ -418,7 +418,6 @@ export class AccountsAction {
                     let data: BaseResponse<string, AccountMoveRequest> = action.payload;
                     this._generalServices.eventHandler.next({ name: eventsConst.accountMoved, payload: data });
                     this._toasty.successToast(this.localeService.translate("app_messages.account_moved"), '');
-                    this.store.dispatch(this.groupWithAccountsAction.getGroupDetails(data.request.uniqueName));
                 }
                 return {
                     type: 'EmptyAction'
