@@ -1015,41 +1015,17 @@
                                     <div class="col-sm-12 col-xl-2 col-lg-3 col-md-3 col-xs-12">
                                         <label>{{ commonLocaleData?.app_mobile_number }}</label>
                                     </div>
+
                                     <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12">
-                                        <div
-                                            class="col-sm-12 col-xl-6 col-lg-10 col-md-10 pl-0 ngx-wrapper"
-                                            *ngIf="showMobileNumberField"
-                                        >
-                                            <ngx-intl-tel-input
-                                                [cssClass]="'form-control'"
-                                                [enableAutoCountrySelect]="true"
-                                                [enablePlaceholder]="true"
-                                                [searchCountryFlag]="true"
-                                                [searchCountryField]="[
-                                                    searchCountryField.Iso2,
-                                                    searchCountryField.Name
-                                                ]"
-                                                [selectFirstCountry]="false"
-                                                [maxLength]="30"
-                                                [phoneValidation]="true"
-                                                [numberFormat]="phoneNumberFormat.National"
-                                                name="mobileNumber"
-                                                (countryChange)="checkNumber($event)"
-                                                #mobileNumber="ngModel"
-                                                [selectedCountryISO]="currentCompanyCountryCode"
-                                                [(ngModel)]="selectedCustomerNumber"
-                                                (click)="focusInCallingCodeSearch($event)"
-                                            >
-                                            </ngx-intl-tel-input>
-                                            <br />
-                                            <p
-                                                class="error-msg"
-                                                *ngIf="
-                                                    mobileNumber.errors && (mobileNumber.dirty || mobileNumber.touched)
-                                                "
-                                            >
-                                                {{ localeData?.invalid_mobile_number }}
-                                            </p>
+                                        <div class="col-sm-12 col-xl-6 col-lg-10 col-md-10 pl-0">
+                                            <input
+                                                digitsOnlyDirective
+                                                [placeholder]="localeData?.mobile_number_placeholder"
+                                                type="tel"
+                                                name="accountDetails.mobileNumber"
+                                                class="form-control attention-to"
+                                                [(ngModel)]="invFormData.accountDetails.mobileNumber"
+                                            />
                                         </div>
                                     </div>
                                 </div>
