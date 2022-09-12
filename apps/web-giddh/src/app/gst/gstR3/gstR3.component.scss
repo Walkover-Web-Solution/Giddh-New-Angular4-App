@@ -216,7 +216,7 @@ svg.icon.icon-xxlg {
 .tax-engine .summary-content {
     max-width: 930px;
     margin: 0 auto 30px;
-    font-family: ProximaNovaLight, ProximaNovaRegular, "Source Sans Pro", Arial, sans-serif;
+    font-family: "opensans-regular";
 }
 
 .tax-engine .summary-content .gstr-3b-user {
@@ -315,7 +315,7 @@ h3,
 h4,
 h5,
 h6 {
-    font-family: ProximaNovaRegular, "Source Sans Pro", Helvetica, Arial, sans-serif;
+    font-family: "opensans-regular";
     font-weight: 500;
     line-height: 1.1;
 }
@@ -613,4 +613,26 @@ ul#dropdown-menu {
             padding-right: 0;
         }
     }
+}
+::ng-deep #monthPicker button.btn.btn-default.btn-info {
+    background: var(--color-blue) !important;
+    color: var(--color-white) !important;
+    text-decoration: none;
+    border-radius: 3px;
+}
+
+::ng-deep #monthPicker .btn-info > .text-success {
+    color: var(--color-blue) !important;
+}
+::ng-deep #monthPicker .btn-default.btn-info > .text-success {
+    color: inherit !important;
+}
+::ng-deep #monthPicker .btn-info:hover .text-success {
+    color: var(--color-white) !important;
+}
+::ng-deep #monthPicker .btn-default > .text-success {
+    color: inherit !important;
+}
+::ng-deep #monthPicker .btn-default:hover > .text-success {
+    color: var(--color-white) !important;
 }

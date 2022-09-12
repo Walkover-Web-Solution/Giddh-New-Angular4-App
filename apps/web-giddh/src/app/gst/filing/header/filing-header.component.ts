@@ -136,7 +136,6 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
                     to: params['to']
                 };
                 this.selectedMonth = dayjs(this.currentPeriod.from, GIDDH_DATE_FORMAT).toISOString();
-                this.selectedMonth = dayjs(this.selectedMonth).format('MMMM YYYY');
                 this.store.dispatch(this.gstReconcileActions.SetSelectedPeriod(this.currentPeriod));
             }
             this.selectedGst = params['return_type'];
@@ -284,7 +283,7 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
      */
     public periodChanged(event?: any): void {
         if (event) {
-            this.selectedMonth = dayjs(event).format('MMMM YYYY');
+            this.selectedMonth = event;
             this.currentPeriod = {
                 from: dayjs(event).startOf('month').format(GIDDH_DATE_FORMAT),
                 to: dayjs(event).endOf('month').format(GIDDH_DATE_FORMAT)

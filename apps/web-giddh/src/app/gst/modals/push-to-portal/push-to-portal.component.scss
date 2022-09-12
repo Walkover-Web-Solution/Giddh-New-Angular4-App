@@ -1,6 +1,7 @@
 .main-container {
     .left-side {
         border-right: 1px solid var(--color-black);
+        padding-bottom: 15px;
         .left-side-center {
             text-align: center;
         }
@@ -14,11 +15,18 @@
     }
     .list-group-item {
         border: none;
+        padding-bottom: 0 !important;
     }
     .json-button {
         margin-left: 6%;
     }
     .summary-content {
-        font-family: ProximaNovaLight, ProximaNovaRegular, "Source Sans Pro", Arial, sans-serif;
+        font-family: "opensans-regular";
+    }
+    .last-content {
+        margin-bottom: 20px;
+    }
+    .return-link {
+        text-decoration: underline;
     }
 }
