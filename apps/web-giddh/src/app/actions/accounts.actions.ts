@@ -219,7 +219,9 @@ export class AccountsAction {
                     this._generalServices.invokeEvent.next(["accountUpdated", resData]);
                     this._generalServices.eventHandler.next({ name: eventsConst.accountUpdated, payload: resData });
                     this._toasty.successToast(this.localeService.translate("app_messages.account_updated"));
-                    this.store.dispatch(this.getAccountDetails(resData.body.uniqueName));
+                    if (!action.payload?.queryString?.isMasterOpen) {
+                        this.store.dispatch(this.getAccountDetails(resData.body.uniqueName));
+                    }
                 }
                 return { type: 'EmptyAction' };
             })));
@@ -593,7 +595,7 @@ export class AccountsAction {
         };
     }
 
-    public updateAccountV2(value: { groupUniqueName: string, accountUniqueName: string }, account: AccountRequestV2): CustomActions {
+    public updateAccountV2(value: { groupUniqueName: string, accountUniqueName: string, isMasterOpen?: boolean }, account: AccountRequestV2): CustomActions {
         return {
             type: AccountsAction.UPDATE_ACCOUNTV2,
             payload: { account, value }
