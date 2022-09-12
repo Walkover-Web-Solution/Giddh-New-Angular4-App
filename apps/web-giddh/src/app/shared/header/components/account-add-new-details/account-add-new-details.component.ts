@@ -225,7 +225,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         this.activeGroup$.subscribe(response => {
             if (response) {
                 if (this.activeGroupUniqueName && response.uniqueName !== this.activeGroupUniqueName) {
-                    this.store.dispatch(this.groupWithAccountsAction.getGroupDetails(this.activeGroupUniqueName));
+                    this.store.dispatch(this.groupWithAccountsAction.getAccountGroupDetails(this.activeGroupUniqueName));
                 } else if (response.parentGroups && response.parentGroups.length) {
                     let parent = response.parentGroups;
                     const HSN_SAC_PARENT_GROUPS = ['revenuefromoperations', 'otherincome', 'operatingcost', 'indirectexpenses'];
