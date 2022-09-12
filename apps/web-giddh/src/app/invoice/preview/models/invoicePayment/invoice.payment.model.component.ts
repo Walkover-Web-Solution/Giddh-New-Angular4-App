@@ -120,7 +120,7 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
         this.isActionSuccess$.subscribe(a => {
             if (a) {
                 this.resetFrom();
-                
+
                 if (this.selectedInvoiceForPayment) {
                     this.assignAmount(this.selectedInvoiceForPayment?.balanceDue?.amountForAccount, this.selectedInvoiceForPayment?.account?.currency?.symbol);
                 }
@@ -185,7 +185,6 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
             } else {
                 this.assignAmount(this.selectedInvoiceForPayment?.balanceDue?.amountForCompany, event?.additional?.currencySymbol);
             }
-            
             this.selectedPaymentMode = event;
             this.searchService.loadDetails(event.value).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 if (response && response.body) {
@@ -203,6 +202,7 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
                     this.paymentActionFormObj.chequeClearanceDate = '';
                     this.paymentActionFormObj.chequeNumber = '';
                 }
+                this.changeDetectorRef.detectChanges();
             })
             this.paymentActionFormObj.accountUniqueName = event.value;
         } else {
@@ -213,6 +213,7 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
             this.paymentActionFormObj.chequeClearanceDate = '';
             this.paymentActionFormObj.chequeNumber = '';
         }
+        this.changeDetectorRef.detectChanges();
     }
 
     public resetFrom() {
