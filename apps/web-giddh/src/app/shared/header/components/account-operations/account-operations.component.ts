@@ -45,6 +45,8 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     @Input() public localeData: any = {};
     /* This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
+    /** True if master is open */
+    @Input() public isMasterOpen: boolean = false;
     /** This will hold content for group shared with */
     public groupSharedWith: string = "";
     /** This will hold content for account shared with */
@@ -629,7 +631,8 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         this.store.dispatch(this.accountsAction.createAccountV2(accRequestObject.activeGroupUniqueName, accRequestObject.accountRequest));
     }
 
-    public updateAccount(accRequestObject: { value: { groupUniqueName: string, accountUniqueName: string }, accountRequest: AccountRequestV2 }) {
+    public updateAccount(accRequestObject: { value: { groupUniqueName: string, accountUniqueName: string, isMasterOpen?: boolean }, accountRequest: AccountRequestV2 }) {
+        accRequestObject.value.isMasterOpen = this.isMasterOpen;
         this.store.dispatch(this.accountsAction.updateAccountV2(accRequestObject.value, accRequestObject.accountRequest));
     }
 

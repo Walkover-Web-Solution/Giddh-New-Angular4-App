@@ -90,6 +90,7 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
     // tslint:disable-next-line:no-empty
     public ngOnInit() {
         this.store.dispatch(this.generalAction.addAndManageClosed());
+        this.store.dispatch(this.groupWithAccountsAction.hideAddNewForm());
         this.getTopSharedGroups();
         // search groups
         this.groupSearchTerms.pipe(
