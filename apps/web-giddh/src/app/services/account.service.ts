@@ -237,7 +237,7 @@ export class AccountService {
             catchError((e) => this.errorHandler.HandleCatch<AccountResponseV2, AccountRequestV2>(e, model, { groupUniqueName })));
     }
 
-    public UpdateAccountV2(model: AccountRequestV2, reqObj: { groupUniqueName: string, accountUniqueName: string }): Observable<BaseResponse<AccountResponseV2, AccountRequestV2>> {
+    public UpdateAccountV2(model: AccountRequestV2, reqObj: { groupUniqueName: string, accountUniqueName: string, isMasterOpen?: boolean }): Observable<BaseResponse<AccountResponseV2, AccountRequestV2>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.put(this.config.apiUrl + ACCOUNTS_API_V2.UPDATE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             .replace(':groupUniqueName', encodeURIComponent(reqObj?.groupUniqueName))

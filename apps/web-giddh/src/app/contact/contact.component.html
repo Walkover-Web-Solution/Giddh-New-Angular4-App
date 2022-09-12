@@ -685,7 +685,7 @@
                                         <div class="d-flex p-0">
                                             <div class="account-detail-padding flex-fill border-right-0">
                                                 <h3 class="account-detail-custom-title word-break">
-                                                    <span (click)="performActions(0, account)">
+                                                    <span (click)="updateCustomerAcc('customer', account)">
                                                         {{ account?.name }}
                                                     </span>
                                                 </h3>
@@ -1034,7 +1034,7 @@
                                         <div class="d-flex p-0">
                                             <div class="account-detail-padding flex-fill border-right-0">
                                                 <h3 class="account-detail-custom-title word-break">
-                                                    <span (click)="performActions(0, account)">{{
+                                                    <span (click)="updateCustomerAcc('vendor', account)">{{
                                                         account?.name
                                                     }}</span>
                                                 </h3>

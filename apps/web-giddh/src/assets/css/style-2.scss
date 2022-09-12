@@ -5634,7 +5634,7 @@ footer#footer.absolute-footer {
 }
 
 .master-page {
-    groups-account-sidebar {
+    master {
         .grp-list {
             .cdk-virtual-scroll-viewport {
                 .cdk-virtual-scroll-content-wrapper {
@@ -10818,4 +10818,7 @@ input[type="checkbox"].cdk-visually-hidden::after {
             padding-left: 10px !important;
         }
     }
+}
+body.hide-scroll-body.master-page {
+    overflow-y: hidden !important;
 }

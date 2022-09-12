@@ -42,6 +42,7 @@ export class AccountsAction {
     public static SHARED_ACCOUNT_WITH_RESPONSE = 'AccountSharedWithResponse';
     public static MOVE_ACCOUNT = 'AccountMove';
     public static MOVE_ACCOUNT_RESPONSE = 'AccountMoveResponse';
+    public static MOVE_ACCOUNT_RESET = 'AccountMoveReset';
     public static UPDATE_ACCOUNT = 'UpdateAccount';
     public static UPDATE_ACCOUNT_RESPONSE = 'UpdateAccountResponse';
     public static UPDATE_ACCOUNTV2 = 'UpdateAccountV2';
@@ -218,7 +219,9 @@ export class AccountsAction {
                     this._generalServices.invokeEvent.next(["accountUpdated", resData]);
                     this._generalServices.eventHandler.next({ name: eventsConst.accountUpdated, payload: resData });
                     this._toasty.successToast(this.localeService.translate("app_messages.account_updated"));
-                    this.store.dispatch(this.getAccountDetails(resData.body.uniqueName));
+                    if (!action.payload?.queryString?.isMasterOpen) {
+                        this.store.dispatch(this.getAccountDetails(resData.body.uniqueName));
+                    }
                 }
                 return { type: 'EmptyAction' };
             })));
@@ -417,7 +420,6 @@ export class AccountsAction {
                     let data: BaseResponse<string, AccountMoveRequest> = action.payload;
                     this._generalServices.eventHandler.next({ name: eventsConst.accountMoved, payload: data });
                     this._toasty.successToast(this.localeService.translate("app_messages.account_moved"), '');
-                    this.groupWithAccountsAction.getGroupDetails(data.request.uniqueName);
                 }
                 return {
                     type: 'EmptyAction'
@@ -593,7 +595,7 @@ export class AccountsAction {
         };
     }
 
-    public updateAccountV2(value: { groupUniqueName: string, accountUniqueName: string }, account: AccountRequestV2): CustomActions {
+    public updateAccountV2(value: { groupUniqueName: string, accountUniqueName: string, isMasterOpen?: boolean }, account: AccountRequestV2): CustomActions {
         return {
             type: AccountsAction.UPDATE_ACCOUNTV2,
             payload: { account, value }
@@ -710,6 +712,12 @@ export class AccountsAction {
         return {
             type: AccountsAction.MOVE_ACCOUNT_RESPONSE,
             payload: value
+        };
+    }
+
+    public moveAccountReset(): CustomActions {
+        return {
+            type: AccountsAction.MOVE_ACCOUNT_RESET
         };
     }
 
