@@ -11141,3 +11141,6 @@ hamburger-menu {
         }
     }
 }
+body.hide-scroll-body.master-page {
+    overflow-y: hidden !important;
+}
