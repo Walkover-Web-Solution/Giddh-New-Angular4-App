@@ -78,13 +78,8 @@
                             "
                             aria-controls="dropdown-nested"
                         >
-                            <ng-container *ngIf="isMonthSelected">
-                                {{ dayjs(selectedMonth).format("MMMM YYYY") }}
-                            </ng-container>
-                            <ng-container *ngIf="!isMonthSelected">
-                                ({{ dayjs(currentPeriod?.from, giddhDateFormat).format("DD MMM YYYY") }}
-                                -
-                                {{ dayjs(currentPeriod?.to, giddhDateFormat).format("DD MMM YYYY") }})
+                            <ng-container>
+                                {{ isDateShow }}
                             </ng-container>
                             <span class="caret"></span>
                         </button>
@@ -98,7 +93,7 @@
                                         [showWeeks]="false"
                                         [minMode]="'month'"
                                         (selectionDone)="periodChanged($event); monthWise.hide()"
-                                        [ngModel]="selectedMonth"
+                                        [(ngModel)]="selectedMonth"
                                     ></datepicker>
                                 </a>
                             </li>
