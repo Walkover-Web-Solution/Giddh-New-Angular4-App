@@ -24,7 +24,7 @@
                         class="btn-link"
                         nav-vr-item
                         *ngIf="showCreateNewButton"
-                        (click)="showAddNewForm(items)"
+                        (click)="showAddNewForm(items, i)"
                         >{{ localeData?.create_new }}</a
                     >
                 </li>

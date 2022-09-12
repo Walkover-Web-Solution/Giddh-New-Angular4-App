@@ -61,6 +61,9 @@ export class GroupWithAccountsAction {
     public static OPEN_ADD_AND_MANAGE_FROM_OUTSIDE = 'OPEN_ADD_AND_MANAGE_FROM_OUTSIDE';
     public static HIDE_ADD_AND_MANAGE_FROM_OUTSIDE = 'HIDE_ADD_AND_MANAGE_FROM_OUTSIDE';
     public static UPDATE_ACTIVE_TAB_ADD_AND_MANAGE = 'UPDATE_ACTIVE_TAB_ADD_AND_MANAGE';
+    public static RESET_EDIT_GROUP = 'ResetEditGroup';
+    public static GET_ACCOUNT_GROUP_DETAILS = 'GetAccountGroupDetails';
+    public static GET_ACCOUNT_GROUP_DETAILS_RESPONSE = 'GetAccountGroupDetailsResponse';
 
     public ApplyGroupTax$: Observable<Action> = createEffect(() => this.action$
         .pipe(
@@ -304,6 +307,26 @@ export class GroupWithAccountsAction {
                 }
                 return {
                     type: GroupWithAccountsAction.DELETE_GROUP_RESPONSE
+                };
+            })));
+
+    public getAccountGroupsDetails$: Observable<Action> = createEffect(() => this.action$
+        .pipe(
+            ofType(GroupWithAccountsAction.GET_ACCOUNT_GROUP_DETAILS),
+            switchMap((action: CustomActions) => this._groupService.GetGroupDetails(action.payload)),
+            map((response) => {
+                return this.getAccountGroupDetailsResponse(response);
+            })));
+
+    public getAccountGroupDetailsResponse$: Observable<Action> = createEffect(() => this.action$
+        .pipe(
+            ofType(GroupWithAccountsAction.GET_ACCOUNT_GROUP_DETAILS_RESPONSE),
+            map((action: CustomActions) => {
+                if (action.payload.status === 'error') {
+                    this._toasty.errorToast(action.payload.message, action.payload.code);
+                }
+                return {
+                    type: 'EmptyAction'
                 };
             })));
 
@@ -574,6 +597,34 @@ export class GroupWithAccountsAction {
     public updateActiveTabOpenAddAndManage(value: number) {
         return {
             type: GroupWithAccountsAction.UPDATE_ACTIVE_TAB_ADD_AND_MANAGE,
+            payload: value
+        };
+    }
+
+    /**
+     * Gets account group details
+     *
+     * @param {string} value
+     * @returns {CustomActions}
+     * @memberof GroupWithAccountsAction
+     */
+    public getAccountGroupDetails(value: string): CustomActions {
+        return {
+            type: GroupWithAccountsAction.GET_ACCOUNT_GROUP_DETAILS,
+            payload: value
+        };
+    }
+
+    /**
+     * Handles account group details
+     *
+     * @param {BaseResponse<GroupResponse, string>} value
+     * @returns {CustomActions}
+     * @memberof GroupWithAccountsAction
+     */
+    public getAccountGroupDetailsResponse(value: BaseResponse<GroupResponse, string>): CustomActions {
+        return {
+            type: GroupWithAccountsAction.GET_ACCOUNT_GROUP_DETAILS_RESPONSE,
             payload: value
         };
     }
