@@ -1,3 +1,4 @@
+import * as dayjs from 'dayjs';
 import { Component, OnInit, OnDestroy} from '@angular/core';
 import { Observable, ReplaySubject, of } from 'rxjs';
 import {
@@ -11,7 +12,6 @@ import { AppState } from '../../store';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ToasterService } from '../../services/toaster.service';
 import { GstReconcileActions } from '../../actions/gst-reconcile/GstReconcile.actions';
-import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { InvoicePurchaseActions } from '../../actions/purchase-invoice/purchase-invoice.action';
 import { GstReport } from '../constants/gst.constant';
@@ -60,6 +60,8 @@ export class FileGstR3Component implements OnInit, OnDestroy {
     public isMonthSelected: boolean = true;
     /** True, if GST filing needs to be shown */
     public showGstFiling: boolean = SHOW_GST_FILING;
+    /** This will use for instance dayjs */
+    public dayjs = dayjs;
 
     constructor(
         private store: Store<AppState>,
@@ -80,7 +82,7 @@ export class FileGstR3Component implements OnInit, OnDestroy {
         });
         this.gstFileSuccess$.subscribe(a => this.fileReturnSucces = a);
     }
-    
+
     public ngOnInit(): void {
         document.querySelector('body').classList.add('gst-sidebar-open');
         this.breakpointObserver
@@ -103,7 +105,6 @@ export class FileGstR3Component implements OnInit, OnDestroy {
             }
             this.isCompany = params['isCompany'] === 'true';
             this.selectedMonth = dayjs(this.currentPeriod.from, GIDDH_DATE_FORMAT).toISOString();
-            this.selectedMonth = dayjs(this.selectedMonth).format('MMMM YYYY');
             this.store.dispatch(this.gstAction.SetSelectedPeriod(this.currentPeriod));
             this.selectedGstr = params['return_type'];
         });
@@ -226,7 +227,7 @@ export class FileGstR3Component implements OnInit, OnDestroy {
 
     public periodChanged(ev) {
         if (ev) {
-            this.selectedMonth = dayjs(ev).format('MMMM YYYY');
+            this.selectedMonth = ev;
             this.currentPeriod = {
                 from: dayjs(ev).startOf('month').format(GIDDH_DATE_FORMAT),
                 to: dayjs(ev).endOf('month').format(GIDDH_DATE_FORMAT)
@@ -271,7 +272,7 @@ export class FileGstR3Component implements OnInit, OnDestroy {
             this.userEmail = '';
         }
     }
-    
+
     /**
     * Unsubscribes from subscription
     *
