@@ -87,6 +87,7 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     public holdActiveRoute: boolean;
     /** This will use for date show */
     public showDate: boolean = true;
+    /** This will use for string date show */
     public visibleSelectMonth: string = '';
     /** Instance of dayjs */
     public dayjs = dayjs;
