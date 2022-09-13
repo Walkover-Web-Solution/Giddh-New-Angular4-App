@@ -262,6 +262,13 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
      * @memberof AdvanceReceiptAdjustmentComponent
      */
     public assignVoucherDetails(): void {
+        if (!this.isVoucherModule) {
+            const customerDetails = this.adjustmentUtilityService.getAdjustedCustomer(this.invoiceListRequestParams);
+            if (customerDetails?.customerName) {
+                this.invoiceFormDetails.voucherDetails.customerName = customerDetails.customerName;
+                this.invoiceFormDetails.voucherDetails.customerUniquename = customerDetails.customerUniquename;
+            }
+        }
         this.adjustPayment = Object.assign(this.adjustPayment, {
             balanceDue: Number(this.invoiceFormDetails.voucherDetails.balanceDue),
             grandTotal: Number(this.invoiceFormDetails.voucherDetails.grandTotal),
