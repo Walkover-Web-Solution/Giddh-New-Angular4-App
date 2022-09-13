@@ -2,7 +2,7 @@
     <hamburger-menu [pageHeading]="commonLocaleData?.app_dashboard"></hamburger-menu>
     <section id="dashboard" class="clearfix">
         <div class="container-fluid top-bar">
-            <div class="dashboard-container">
+            <div class="dashboard-container" *ngIf="companyUniqueName">
                 <div class="row">
                     <!-- total overdues -->
                     <div class="col-sm-12 col-md-12 col-lg-6 col-12 col-xl-4 panel-block" *ngIf="!hideallcharts">

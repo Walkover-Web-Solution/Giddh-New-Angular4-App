@@ -1745,6 +1745,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
                 }
 
                 const currentDate = dayjs().format(GIDDH_DATE_FORMAT);
+                this.financialYears = [];
                 res.body.financialYears.forEach(key => {
                     let financialYearStarts = dayjs(key.financialYearStarts, GIDDH_DATE_FORMAT).format("MMM-YYYY");
                     let financialYearEnds = dayjs(key.financialYearEnds, GIDDH_DATE_FORMAT).format("MMM-YYYY");

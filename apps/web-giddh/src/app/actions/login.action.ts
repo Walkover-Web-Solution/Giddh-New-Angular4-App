@@ -444,8 +444,6 @@ export class LoginActions {
             ofType(CompanyActions.CHANGE_COMPANY_RESPONSE),
             map((action: CustomActions) => {
                 if (action.payload.status === 'success') {
-                    // get groups with accounts for general use
-                    this.store.dispatch(this._generalAction.getGroupWithAccounts());
                     this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
                 }
                 return { type: 'EmptyAction' };
