@@ -65,7 +65,6 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     public selectedService: 'VAYANA' | 'TAXPRO' | 'RECONCILE' | 'JIO_GST';
     public companyGst$: Observable<string> = of('');
     public activeCompanyGstNumber: string = '';
-    public dayjs = dayjs;
     public imgPath: string = '';
     public gstAuthenticated: boolean = false;
     public gstSessionResponse$: Observable<any> = of({});
@@ -88,6 +87,8 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     public holdActiveRoute: boolean;
     /** This will use for date show */
     public showDate: boolean = true;
+    /** This will use for  string date show */
+    public isDateShow;
 
     constructor(
         private store: Store<AppState>,
@@ -136,6 +137,8 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
                     to: params['to']
                 };
                 this.selectedMonth = dayjs(this.currentPeriod.from, GIDDH_DATE_FORMAT).toISOString();
+                this.selectedMonth = dayjs(this.selectedMonth).format('MMMM YYYY');
+                this.isDateShow = this.selectedMonth
                 this.store.dispatch(this.gstReconcileActions.SetSelectedPeriod(this.currentPeriod));
             }
             this.selectedGst = params['return_type'];
@@ -284,6 +287,7 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     public periodChanged(event?: any): void {
         if (event) {
             this.selectedMonth = event;
+            this.isDateShow = dayjs(this.selectedMonth).format('MMMM YYYY')
             this.currentPeriod = {
                 from: dayjs(event).startOf('month').format(GIDDH_DATE_FORMAT),
                 to: dayjs(event).endOf('month').format(GIDDH_DATE_FORMAT)
@@ -344,5 +348,8 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
                 queryParams: { from: this.currentPeriod.from, to: this.currentPeriod.to },
                 queryParamsHandling: 'merge'
             });
+    }
+    public onChange(event){
+        console.log(event)
     }
 }
