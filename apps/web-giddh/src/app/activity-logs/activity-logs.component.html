@@ -83,7 +83,7 @@
                 [dataSource]="dataSource"
                 multiTemplateDataRows
                 *ngIf="dataSource?.length"
-                class="giddh-table table activity-table position-relative"
+                class="giddh-table table activity-table"
             >
                 <!-- UserName Column -->
                 <ng-container matColumnDef="name">
@@ -274,7 +274,7 @@
                         </div>
                     </td>
                 </ng-container>
-                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
                 <tr class="cursor-pointer" mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                 <tr
                     mat-row
