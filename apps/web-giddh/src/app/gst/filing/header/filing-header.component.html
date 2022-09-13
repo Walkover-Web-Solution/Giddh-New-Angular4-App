@@ -40,7 +40,7 @@
                             aria-controls="dropdown-nested"
                         >
                             <ng-container>
-                                {{ isDateShow }}
+                                {{ visibleSelectMonth }}
                             </ng-container>
                             <span class="caret"></span>
                         </button>
@@ -54,8 +54,7 @@
                                         [showWeeks]="false"
                                         [minMode]="'month'"
                                         (selectionDone)="periodChanged($event); monthWise?.hide()"
-                                        [(ngModel)]="selectedMonth"
-                                        (ngModelChange)="onChange($event)"
+                                        [ngModel]="selectedMonth"
                                     ></datepicker>
                                 </a>
                             </li>
@@ -135,7 +134,7 @@
                         aria-controls="dropdown-nested"
                     >
                         <ng-container>
-                            {{ isDateShow }}
+                            {{ visibleSelectMonth }}
                         </ng-container>
                         <span class="caret"></span>
                     </button>
@@ -149,8 +148,7 @@
                                     [showWeeks]="false"
                                     [minMode]="'month'"
                                     (selectionDone)="periodChanged($event); monthWise?.hide()"
-                                    [(ngModel)]="selectedMonth"
-                                    (ngModelChange)="onChange($event)"
+                                    [ngModel]="selectedMonth"
                                 ></datepicker>
                             </a>
                         </li>
