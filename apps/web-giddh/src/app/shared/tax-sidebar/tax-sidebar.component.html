@@ -12,8 +12,8 @@
                         <a
                             class="d-block clearfix"
                             routerLinkActive
-                            #rla="routerLinkActive"
-                            [class.active]="rla.isActive"
+                            #gstdashboard="routerLinkActive"
+                            [class.active]="gstdashboard.isActive"
                             [routerLinkActiveOptions]="{ exact: true }"
                             [routerLink]="['/pages/gstfiling']"
                         >
@@ -86,6 +86,9 @@
                             href="javascript:void(0);"
                             [routerLink]="['/pages/invoice/ewaybill']"
                             class="d-block clearfix"
+                            routerLinkActive
+                            #ewaybill="routerLinkActive"
+                            [class.active]="ewaybill.isActive"
                         >
                             <span><i class="icon-eway-bill-new"></i></span>
                             <span>{{ localeData?.eway_bill }}</span>
@@ -96,13 +99,23 @@
                             href="javascript:void(0);"
                             [routerLink]="['/pages/reports/reverse-charge']"
                             class="d-block clearfix"
+                            routerLinkActive
+                            #reversecharge="routerLinkActive"
+                            [class.active]="reversecharge.isActive"
                         >
                             <span><i class="icon-reverse-charge"></i></span>
                             <span>{{ localeData?.reverse_charge }}</span>
                         </a>
                     </li>
                     <li>
-                        <a href="javascript:void(0);" class="d-block clearfix" [routerLink]="['/pages/settings/taxes']">
+                        <a
+                            href="javascript:void(0);"
+                            class="d-block clearfix"
+                            [routerLink]="['/pages/settings/taxes']"
+                            routerLinkActive
+                            #taxes="routerLinkActive"
+                            [class.active]="taxes.isActive"
+                        >
                             <span><i class="icon-settings-cog"></i></span>
                             <span>{{ localeData?.setting }}</span>
                         </a>
