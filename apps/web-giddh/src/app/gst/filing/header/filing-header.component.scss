@@ -35,6 +35,14 @@
 .head-font-weight {
     font-weight: 500 !important;
 }
+.month-picker {
+    li {
+        a {
+            background-color: transparent !important;
+            border: none !important;
+        }
+    }
+}
 @media (max-width: 991px) {
     .list-filter {
         height: auto;
