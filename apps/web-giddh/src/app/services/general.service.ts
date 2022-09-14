@@ -815,7 +815,7 @@ export class GeneralService {
     public finalNavigate(route: any, parameter?: any, isSocialLogin?: boolean): void {
         let isQueryParams: boolean;
         if (screen.width <= 767) {
-            this.router.navigate(["/pages/mobile-home"]);
+            this.router.navigate(["/pages/mobile/home"]);
         } else {
             if (route.includes('?')) {
                 parameter = parameter || {};
