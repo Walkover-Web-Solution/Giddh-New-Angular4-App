@@ -1574,7 +1574,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      * @memberof HeaderComponent
      */
     public redirectToMobileHome(): void {
-        this.router.navigate(['/pages/mobile-home']);
+        this.router.navigate(['/pages/mobile/home']);
     }
 
     /**
