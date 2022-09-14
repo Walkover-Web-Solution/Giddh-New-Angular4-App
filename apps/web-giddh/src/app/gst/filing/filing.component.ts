@@ -23,7 +23,7 @@ import { SHOW_GST_FILING } from '../../app.constant';
     encapsulation: ViewEncapsulation.Emulated
 })
 export class FilingComponent implements OnInit, OnDestroy {
-    @ViewChild('staticTabs', { static: true }) public staticTabs: TabsetComponent;
+    @ViewChild('staticTabs', { static: false }) public staticTabs: TabsetComponent;
     /** This will hold the value out/in to open/close setting sidebar popup */
     public asideGstSidebarMenuState: string = 'in';
     /** Aside pane state*/
