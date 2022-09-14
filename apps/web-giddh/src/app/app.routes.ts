@@ -5,7 +5,6 @@ import { UserAuthenticated } from './decorators/UserAuthenticated';
 import { NewUserAuthGuard } from './decorators/newUserGuard';
 import { AppLoginSuccessComponent } from "./app-login-success/app-login-success";
 import { PageComponent } from './page/page.component';
-import { HomeComponent } from './home/home.component';
 
 export const ROUTES: Routes = [
     { path: 'download', loadChildren: () => import('./download/download.module').then(module => module.DownloadModule) },
@@ -44,7 +43,6 @@ export const ROUTES: Routes = [
     { path: 'new-vs-old-invoices', redirectTo: 'pages/new-vs-old-invoices', pathMatch: 'full' },
     { path: 'reports', redirectTo: 'pages/reports', pathMatch: 'full' },
     { path: 'proforma-invoice', redirectTo: 'pages/proforma-invoice' },
-    { path: 'mobile-home', redirectTo: 'pages/mobile-home', pathMatch: 'full' },
     {
         path: 'pages', component: PageComponent,
         children: [
@@ -82,9 +80,7 @@ export const ROUTES: Routes = [
             { path: 'onboarding', loadChildren: () => import('./onboarding/onboarding.module').then(module => module.OnboardingModule), canActivate: [NeedsAuthorization] },
             { path: 'welcome', loadChildren: () => import('./welcome/welcome.module').then(module => module.WelcomeModule), canActivate: [NeedsAuthorization] },
             { path: 'billing-detail', loadChildren: () => import('./billing-details/billingDetail.module').then(module => module.BillingDetailModule) },
-            { path: 'mobile-home', loadChildren: () => import('./mobile-home/mobile-home.module').then(module => module.MobileHomeModule) },
-            { path: 'mobile-search-company', loadChildren: () => import('./mobile-home/mobile-home.module').then(module => module.MobileHomeModule) },
-            { path: 'mobile-search-branch', loadChildren: () => import('./mobile-home/mobile-home.module').then(module => module.MobileHomeModule) },
+            { path: 'mobile', loadChildren: () => import('./mobile-home/mobile-home.module').then(module => module.MobileHomeModule), canActivate: [NeedsAuthorization] },
             { path: 'giddh-all-items', loadChildren: () => import('./all-items/all-item.module').then(module => module.AllItemModule), canActivate: [NeedsAuthorization] },
             { path: 'tallysync', loadChildren: () => import('./tallysync/tallysync.module').then(module => module.TallysyncModule), canActivate: [NeedsAuthorization] },
             { path: 'expenses-manager', loadChildren: () => import('./expenses/expenses.module').then(module => module.ExpensesModule), canActivate: [NeedsAuthorization] },
