@@ -42,6 +42,7 @@ import { UnitMappingComponent } from './unit-mapping/unit-mapping.component';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 import { MatButtonModule } from '@angular/material/button';
+import { PushToPortalComponent } from './modals/push-to-portal/push-to-portal.component';
 
 @NgModule({
     declarations: [FileGstR3Component,
@@ -49,7 +50,7 @@ import { MatButtonModule } from '@angular/material/button';
         ReconcileComponent, PushToGstInComponent, ViewTransactionsComponent,
         OverviewSummaryComponent, TransactionSummaryComponent,
         PushToGstInComponent, NilSummaryComponent, HsnSummaryComponent, B2csSummaryComponent,
-        DocumentIssuedComponent, FailedTransactionsComponent, GstAsideMenuComponent, UnitMappingComponent],
+        DocumentIssuedComponent, FailedTransactionsComponent, GstAsideMenuComponent, UnitMappingComponent, PushToPortalComponent],
     imports: [
         GstRoutingModule,
         CollapseModule,
