@@ -6,7 +6,7 @@ import { GiddhErrorHandler } from './catchManager/catchmanger';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { GST_RECONCILE_API } from './apiurls/GstReconcile.api';
-import { FileGstr1Request, GetGspSessionResponse, GstOverViewRequest, GstOverViewResult, Gstr1SummaryRequest, Gstr1SummaryResponse, GstReconcileInvoiceRequest, GstReconcileInvoiceResponse, GstrSheetDownloadRequest, GstSaveGspSessionRequest, GStTransactionRequest, GstTransactionResult, VerifyOtpRequest, Gstr3bOverviewResult } from '../models/api-models/GstReconcile';
+import { FileGstr1Request, GetGspSessionResponse, GstOverViewRequest, GstOverViewResult, Gstr1SummaryRequest, Gstr1SummaryResponse, GstReconcileInvoiceRequest, GstReconcileInvoiceResponse, GstrSheetDownloadRequest, GstSaveGspSessionRequest, GStTransactionRequest, GstTransactionResult, VerifyOtpRequest, Gstr3bOverviewResult, GstrJsonDownloadRequest } from '../models/api-models/GstReconcile';
 import { catchError, map } from 'rxjs/operators';
 import { GSTR_API } from './apiurls/gstR.api';
 import { GST_RETURN_API } from './apiurls/purchase-invoice.api';
@@ -245,5 +245,26 @@ export class GstReconcileService {
         return this.http.get(this.config.apiUrl + GST_RETURN_API.GET_TAX_DETAILS
             .replace(':companyUniqueName', this.companyUniqueName))
             .pipe(catchError((error) => this.errorHandler.HandleCatch<any, any>(error)));
+    }
+
+    /**
+     * This will use for download json for gstr1
+     *
+     * @returns {Observable<BaseResponse<any, any>>} Observable to carry out further operations
+     * @memberof GstReconcileService
+     */
+    public downloadGSTRJSON(reqObj: GstrJsonDownloadRequest): Observable<BaseResponse<any, GstrJsonDownloadRequest>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        let apiUrl = GSTR_API.DOWNLOAD_JSON
+            .replace(':companyUniqueName', this.companyUniqueName)
+            .replace(':from', reqObj.from)
+            .replace(':to', reqObj.to)
+            .replace(':type', reqObj.type)
+            .replace(':gstIn', reqObj.gstin);
+        return this.http.get(this.config.apiUrl + apiUrl).pipe(map((res) => {
+            let data: BaseResponse<any, GstrJsonDownloadRequest> = res;
+            data.queryString = reqObj;
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<any, GstrJsonDownloadRequest>(e)));
     }
 }

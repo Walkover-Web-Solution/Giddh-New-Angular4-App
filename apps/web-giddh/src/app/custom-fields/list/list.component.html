@@ -33,8 +33,8 @@
             </div>
         </div>
         <div class="custom-field-list mr-t15">
-            <div [ngClass]="{ 'table-responsive': dataSource?.length }">
-                <table mat-table [dataSource]="dataSource" class="giddh-table" *ngIf="dataSource?.length">
+            <div [ngClass]="{ 'table-content': dataSource?.length }">
+                <table mat-table [dataSource]="dataSource" class="giddh-table table" *ngIf="dataSource?.length">
                     <ng-container matColumnDef="serialNo">
                         <th mat-header-cell *matHeaderCellDef>{{ localeData?.s_no }}</th>
                         <td mat-cell *matCellDef="let element">{{ element.index }}</td>
@@ -74,7 +74,7 @@
                             ></a>
                         </td>
                     </ng-container>
-                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
                     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                 </table>
                 <div class="no-data" *ngIf="!dataSource?.length">
