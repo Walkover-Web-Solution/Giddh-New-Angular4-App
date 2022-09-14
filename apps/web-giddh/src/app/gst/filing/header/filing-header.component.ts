@@ -300,10 +300,10 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
             request.to = this.currentPeriod.to;
             request.gstin = this.activeCompanyGstNumber;
             if (this.selectedGst === GstReport.Gstr1) {
-                this.navigateToOverview()
+                this.navigateToOverview();
                 this.store.dispatch(this.reconcileAction.GetOverView(GstReport.Gstr1, request));
             } else {
-                this.navigateToOverview()
+                this.navigateToOverview();
                 this.store.dispatch(this.reconcileAction.GetOverView(GstReport.Gstr2, request));
             }
         }
