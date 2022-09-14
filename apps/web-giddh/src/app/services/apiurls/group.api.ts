@@ -5,7 +5,7 @@ export const GROUP_API = {
     SHARED_WITH: 'company/:companyUniqueName/groups/:groupUniqueName/shared-with',
     UPDATE: 'company/:companyUniqueName/groups/:groupUniqueName',
     GROUPS_WITH_ACCOUNT: 'company/:companyUniqueName/groups-with-accounts?q=:q',
-    GET_GROUP_DETAILS: 'company/:companyUniqueName/groups/:groupUniqueName', // delete method,
+    GET_GROUP_DETAILS: 'v2/company/:companyUniqueName/groups/:groupUniqueName', // get method,
     DELETE_GROUP: 'company/:companyUniqueName/groups/:groupUniqueName', // delete method,
     MOVE_GROUP: 'company/:companyUniqueName/groups/:groupUniqueName/move',
     FLATTEN_GROUP_WITH_ACCOUNTS: 'company/:companyUniqueName/flatten-groups-with-accounts?q=:q&page=:page&count=:count&showEmptyGroups=:showEmptyGroups',
