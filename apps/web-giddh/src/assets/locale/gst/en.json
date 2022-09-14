@@ -113,9 +113,9 @@
         "push_to_portal":"Push to Portal",
         "gst_offline_utility":"GST Offline Utility",
         "download_excel":"Download Excel",
-        "excel_file_support":"1. This Excel file support , GSTIN Portal Offline tool.",
-        "organised_accountant":" 2. Its an organised way to give to any accountant/CA.",
-        "json_support":"JSON file support by GST Portal",
+        "excel_file_support":"1. This Excel file support GSTIN Portal Offline tool.",
+        "organised_accountant":"2. It's an organised way to give to any accountant/CA.",
+        "json_support":"1. JSON file supported by GST Portal",
         "download_json":"Download JSON"
     },
     "gstr3b": {

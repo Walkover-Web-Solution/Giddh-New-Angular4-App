@@ -65,7 +65,6 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     public selectedService: 'VAYANA' | 'TAXPRO' | 'RECONCILE' | 'JIO_GST';
     public companyGst$: Observable<string> = of('');
     public activeCompanyGstNumber: string = '';
-    public dayjs = dayjs;
     public imgPath: string = '';
     public gstAuthenticated: boolean = false;
     public gstSessionResponse$: Observable<any> = of({});
@@ -88,6 +87,10 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
     public holdActiveRoute: boolean;
     /** This will use for date show */
     public showDate: boolean = true;
+    /** This will use for string date show */
+    public visibleSelectMonth: string = '';
+    /** Instance of dayjs */
+    public dayjs = dayjs;
 
     constructor(
         private store: Store<AppState>,
@@ -135,8 +138,10 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
                     from: params['from'],
                     to: params['to']
                 };
-                this.selectedMonth = dayjs(this.currentPeriod.from, GIDDH_DATE_FORMAT).toISOString();
-                this.selectedMonth = dayjs(this.selectedMonth).format('MMMM YYYY');
+                if (!this.selectedMonth) {
+                    this.selectedMonth = dayjs(this.currentPeriod.from, GIDDH_DATE_FORMAT).toISOString();
+                }
+                this.visibleSelectMonth = dayjs(this.currentPeriod.from, GIDDH_DATE_FORMAT).format('MMMM YYYY');
                 this.store.dispatch(this.gstReconcileActions.SetSelectedPeriod(this.currentPeriod));
             }
             this.selectedGst = params['return_type'];
@@ -284,7 +289,6 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
      */
     public periodChanged(event?: any): void {
         if (event) {
-            this.selectedMonth = dayjs(event).format('MMMM YYYY');
             this.currentPeriod = {
                 from: dayjs(event).startOf('month').format(GIDDH_DATE_FORMAT),
                 to: dayjs(event).endOf('month').format(GIDDH_DATE_FORMAT)
