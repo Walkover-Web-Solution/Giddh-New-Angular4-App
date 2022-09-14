@@ -60,6 +60,8 @@ export class MasterComponent implements OnInit, OnChanges, OnDestroy {
     public activeGroupUniqueName$: Observable<string>;
     /** Active account observable */
     public activeAccount$: Observable<AccountResponseV2>;
+    /** True if we need to use breadcrumb of account */
+    private useAccountBreadcrumb: boolean = false;
 
     constructor(
         private groupService: GroupService,
@@ -82,6 +84,23 @@ export class MasterComponent implements OnInit, OnChanges, OnDestroy {
         this.activeGroup$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroup), takeUntil(this.destroyed$));
         this.activeGroupUniqueName$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroupUniqueName), takeUntil(this.destroyed$));
         this.activeAccount$ = this.store.pipe(select(state => state.groupwithaccounts.activeAccount), takeUntil(this.destroyed$));
+
+        this.activeAccount$.subscribe(response => {
+            if (this.useAccountBreadcrumb && response) {
+                this.breadcrumbPath = [];
+                this.breadcrumbUniqueNamePath = [];
+
+                const currentAccount = {
+                    name: response.name,
+                    uniqueName: response.uniqueName,
+                    parentGroups: [
+                        ...response.parentGroups
+                    ]
+                };
+                this.getBreadCrumbPathFromGroup(currentAccount, null, this.breadcrumbPath, this.breadcrumbUniqueNamePath);
+                this.breadcrumbPathChanged.emit({ breadcrumbPath: this.breadcrumbPath, breadcrumbUniqueNamePath: this.breadcrumbUniqueNamePath });
+            }
+        });
 
         this.store.pipe(select(state => state.groupwithaccounts.isCreateGroupSuccess), takeUntil(this.destroyed$)).subscribe(response => {
             if (response && this.currentGroupColumnIndex > -1) {
@@ -332,6 +351,7 @@ export class MasterComponent implements OnInit, OnChanges, OnDestroy {
         this.currentGroupColumnIndex = currentIndex;
         this.currentGroupUniqueName = item.uniqueName;
         this.showCreateNewButton = true;
+        this.useAccountBreadcrumb = false;
         this.breadcrumbPath = [];
         this.breadcrumbUniqueNamePath = [];
         if (loadMaster) {
@@ -353,23 +373,10 @@ export class MasterComponent implements OnInit, OnChanges, OnDestroy {
         this.currentGroupColumnIndex = currentIndex;
         this.currentGroupUniqueName = this.masterColumnsData[currentIndex].groupUniqueName;
         this.showCreateNewButton = true;
+        this.useAccountBreadcrumb = true;
 
-        let activeGroup;
-        this.activeGroup$.pipe(take(1)).subscribe(group => activeGroup = group);
-
-        this.breadcrumbPath = [];
-        this.breadcrumbUniqueNamePath = [];
-
-        const currentAccount = {
-            name: item.name,
-            uniqueName: item.uniqueName,
-            parentGroups: activeGroup ? [
-                ...activeGroup.parentGroups,
-                { name: activeGroup.name, uniqueName: activeGroup.uniqueName }
-            ] : []
-        };
-        this.getBreadCrumbPathFromGroup(currentAccount, null, this.breadcrumbPath, this.breadcrumbUniqueNamePath);
-        this.breadcrumbPathChanged.emit({ breadcrumbPath: this.breadcrumbPath, breadcrumbUniqueNamePath: this.breadcrumbUniqueNamePath });
+        let newIndex = Number(currentIndex) + 1;
+        this.masterColumnsData = this.masterColumnsData.slice(0, newIndex);
 
         this.store.dispatch(this.groupWithAccountsAction.hideAddNewForm());
         this.store.dispatch(this.groupWithAccountsAction.showEditAccountForm());
