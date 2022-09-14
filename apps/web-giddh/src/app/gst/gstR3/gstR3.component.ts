@@ -106,7 +106,7 @@ export class FileGstR3Component implements OnInit, OnDestroy {
             this.isCompany = params['isCompany'] === 'true';
             this.selectedMonth = dayjs(this.currentPeriod.from, GIDDH_DATE_FORMAT).toISOString();
             this.selectedMonth = dayjs(this.selectedMonth).format('MMMM YYYY');
-            this.visibleSelectMonth = this.selectedMonth
+            this.visibleSelectMonth = this.selectedMonth;
             this.store.dispatch(this.gstAction.SetSelectedPeriod(this.currentPeriod));
             this.selectedGstr = params['return_type'];
         });
@@ -234,7 +234,7 @@ export class FileGstR3Component implements OnInit, OnDestroy {
                 to: dayjs(ev).endOf('month').format(GIDDH_DATE_FORMAT)
             };
             this.selectedMonth = dayjs(ev).format('MMMM YYYY');
-            this.visibleSelectMonth = this.selectedMonth
+            this.visibleSelectMonth = this.selectedMonth;
             this.dateSelected = true;
             this.store.dispatch(this.gstAction.SetSelectedPeriod(this.currentPeriod));
             let request: GstOverViewRequest = new GstOverViewRequest();
