@@ -556,6 +556,14 @@ ul#dropdown-menu {
         }
     }
 }
+.month-picker {
+    li {
+        a:hover {
+            background-color: transparent !important;
+            border: none !important;
+        }
+    }
+}
 @media (max-width: 991px) {
     .gstr-summary-head {
         height: auto;
