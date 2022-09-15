@@ -367,6 +367,8 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
                 }
                 this.store.dispatch(this.inventoryAction.hideLoaderForStock());
                 this.allowReset = true;
+
+                this.updateHsnSac();
             } else {
                 this.isUpdatingStockForm = false;
             }
@@ -1269,7 +1271,16 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
      */
     public toggleOtherDetails(): void {
         this.showOtherDetails = !this.showOtherDetails;
+        this.updateHsnSac();
+    }
 
+    /**
+     * Will update hsn/sac value
+     *
+     * @private
+     * @memberof InventoryAddStockComponent
+     */
+    private updateHsnSac(): void {
         if (this.addStockForm.get("hsnNumber").value) {
             this.addStockForm.get("showCodeType")?.patchValue("hsn");
         } else if (this.addStockForm.get("sacNumber").value) {
