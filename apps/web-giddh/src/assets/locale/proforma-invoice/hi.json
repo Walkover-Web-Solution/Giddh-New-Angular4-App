@@ -11,7 +11,7 @@
     "customer_name": "ग्राहक का नाम",
     "balance_due": "शेष राशि",
     "copy_previous_invoices": "पिछला चालान [INVOICE_TYPE] कॉपी करें",
-    "copy_previous_dr_cr": "पिछला [INVOICE_TYPE] कॉपी करें",    
+    "copy_previous_dr_cr": "पिछला [INVOICE_TYPE] कॉपी करें",
     "customer_details": "उपभोक्ता विवरण",
     "vendor_details": "विक्रेता विवरण",
     "billing_address": "बिल भेजने का पता",
@@ -107,6 +107,5 @@
     "exchange_label": "विनिमय",
     "confirm_delete_file": "क्या आप वाकई संलग्न फ़ाइल को हटाना चाहते हैं?",
     "enter_amount": "कृपया जमा राशि दर्ज करें",
-    "voucher_number_required": "वाउचर नंबर अनिवार्य है।",
-    "invalid_mobile_number": "अमान्य मोबाइल नंबर"
+    "voucher_number_required": "वाउचर नंबर अनिवार्य है।"
 }

@@ -13,8 +13,6 @@ import { ModalModule } from "ngx-bootstrap/modal";
 import { PopoverModule } from "ngx-bootstrap/popover";
 import { TabsModule } from "ngx-bootstrap/tabs";
 import { AccountUpdateNewDetailsComponent } from "./account-update-new-details.component";
-import { NgxIntlTelInputModule } from 'ngx-intl-tel-input';
-
 @NgModule({
     declarations: [
         AccountUpdateNewDetailsComponent
@@ -32,13 +30,11 @@ import { NgxIntlTelInputModule } from 'ngx-intl-tel-input';
         ModalModule,
         ConfirmModalModule,
         ConfirmationModalModule,
-        NgxIntlTelInputModule,
         LaddaModule.forRoot({
             style: 'slide-left',
             spinnerSize: 30
         }),
         PopoverModule.forRoot(),
-        NgxIntlTelInputModule
     ],
     exports: [
         AccountUpdateNewDetailsComponent,
