@@ -14,8 +14,8 @@ import { AppState } from '../../store';
 
 @Component({
     selector: 'mobile-search-branch',
-    templateUrl: './mobile-search-branch.component.html',
-    styleUrls: ['./mobile-search-branch.component.scss'],
+    templateUrl: './search-branch.component.html',
+    styleUrls: ['./search-branch.component.scss'],
 })
 export class MobileSearchBranchComponent implements OnInit, OnDestroy {
 
@@ -120,7 +120,7 @@ export class MobileSearchBranchComponent implements OnInit, OnDestroy {
         this.companyService.getStateDetails(this.generalService.companyUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.body) {
                 if (screen.width <= 767) {
-                    window.location.href = '/pages/mobile-home';
+                    window.location.href = '/pages/mobile/home';
                 } else if (isElectron) {
                     this.router.navigate([response.body.lastState]);
                     setTimeout(() => {
