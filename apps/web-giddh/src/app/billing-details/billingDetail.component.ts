@@ -447,7 +447,6 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
                     this.billingDetailsObj.stateCode = selectedState.stateCode;
                 }
             }
-            console.log(this.activeCompany, this.createNewCompany);
         }
 
         this.billingDetailsObj.name = this.createNewCompany.name;
