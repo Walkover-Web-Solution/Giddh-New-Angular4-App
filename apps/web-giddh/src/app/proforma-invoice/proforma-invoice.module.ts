@@ -30,10 +30,6 @@ import { AdvanceReceiptAdjustmentModule } from '../shared/advance-receipt-adjust
 import { HasFocusDirectiveModule } from '../shared/helpers/directives/has-focus/has-focus.module';
 import { ReplacePipeModule } from '../shared/helpers/pipes/replace/replace.module';
 import { NgxBootstrapSwitchModule } from 'ngx-bootstrap-switch';
-import { VoucherAddBulkItemsModule } from '../shared/voucher-add-bulk-items/voucher-add-bulk-items.module';
-import { AsideMenuOtherTaxesModule } from '../shared/aside-menu-other-taxes/aside-menu-other-taxes.module';
-import { AsideMenuProductServiceModule } from '../shared/aside-menu-product-service/aside-menu-product-service.module';
-
 @NgModule({
     imports: [
         ProformaInvoiceRoutingModule,
@@ -65,10 +61,7 @@ import { AsideMenuProductServiceModule } from '../shared/aside-menu-product-serv
         AdvanceReceiptAdjustmentModule,
         HasFocusDirectiveModule,
         ReplacePipeModule,
-        NgxBootstrapSwitchModule.forRoot(),
-        VoucherAddBulkItemsModule,
-        AsideMenuOtherTaxesModule,
-        AsideMenuProductServiceModule
+        NgxBootstrapSwitchModule.forRoot()
     ],
     exports: [ProformaInvoiceComponent],
     declarations: [

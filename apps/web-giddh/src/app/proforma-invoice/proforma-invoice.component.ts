@@ -4081,7 +4081,6 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     this.startLoader(false);
                     return;
                 }
-
                 const deposit = this.getDeposit();
                 requestObject = {
                     account: data.accountDetails,

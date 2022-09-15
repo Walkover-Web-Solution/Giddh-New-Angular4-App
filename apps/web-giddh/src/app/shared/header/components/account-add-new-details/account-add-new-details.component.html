@@ -474,18 +474,17 @@
                             </div>
                         </div>
                     </div>
-
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label>{{ commonLocaleData?.app_email_id }}</label>
-                                <input type="email" class="form-control" formControlName="email" name="emailId" />
-                                <span
-                                    class="error-msg"
-                                    *ngIf="addAccountForm.get('email').dirty && addAccountForm.get('email').errors"
-                                    >{{ localeData?.email_id_error }}</span
-                                >
-                            </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label>{{ commonLocaleData?.app_email_id }}</label>
+                            <input type="email" class="form-control" formControlName="email" name="emailId" />
+                            <span
+                                class="error-msg"
+                                *ngIf="addAccountForm.get('email').dirty && addAccountForm.get('email').errors"
+                                >{{ localeData?.email_id_error }}</span
+                            >
                         </div>
                     </div>
                 </div>

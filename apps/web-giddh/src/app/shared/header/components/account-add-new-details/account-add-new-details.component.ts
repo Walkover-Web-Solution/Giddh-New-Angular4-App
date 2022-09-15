@@ -116,7 +116,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public countryPhoneCode: IOption[] = [];
     public callingCodesSource$: Observable<IOption[]> = observableOf([]);
     public stateGstCode: any[] = [];
-    public isMobileNumberValid: boolean = false;
     public formFields: any[] = [];
     public isGstValid$: Observable<boolean> = observableOf(true);
     public GSTIN_OR_TRN: string;
@@ -170,6 +169,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public availableFieldTypes: any = FieldTypes;
     /** This will hold toggle buttons value and size */
     public bootstrapToggleSwitch = BootstrapToggleSwitch;
+    /** This will hold isMobileNumberValid */
+    public isMobileNumberValid: boolean = false;
 
     constructor(
         private _fb: FormBuilder,
