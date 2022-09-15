@@ -359,7 +359,7 @@ export class MasterComponent implements OnInit, OnChanges, OnDestroy {
             this.getMasters(item?.uniqueName, currentIndex);
         }
         this.store.dispatch(this.groupWithAccountsAction.hideAddNewForm());
-        this.store.dispatch(this.groupWithAccountsAction.getGroupDetails(item.uniqueName));
+        this.store.dispatch(this.groupWithAccountsAction.getGroupDetails(item?.uniqueName));
         this.store.dispatch(this.accountsAction.resetActiveAccount());
     }
 
@@ -393,7 +393,7 @@ export class MasterComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof MasterComponent
      */
     public trackByFn(index: number, item: IGroupsWithAccounts) {
-        return item.uniqueName;
+        return item?.uniqueName;
     }
 
     /**
@@ -466,12 +466,12 @@ export class MasterComponent implements OnInit, OnChanges, OnDestroy {
         }
         if (activeEntity?.parentGroups) {
             for (let group of activeEntity.parentGroups) {
-                parentUniquenamePath.push(group.uniqueName);
-                parentPath.push(group.name);
+                parentUniquenamePath.push(group?.uniqueName);
+                parentPath.push(group?.name);
             }
         }
-        parentUniquenamePath.push(activeEntity.uniqueName);
-        parentPath.push(activeEntity.name);
+        parentUniquenamePath.push(activeEntity?.uniqueName);
+        parentPath.push(activeEntity?.name);
         result = activeEntity;
         return result;
     }
