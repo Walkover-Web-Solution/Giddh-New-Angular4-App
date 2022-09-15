@@ -124,6 +124,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     public ngOnInit(): void {
+        this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
         /* RAZORPAY */
         if (window['Razorpay'] === undefined) {
             let scriptTag = document.createElement('script');
@@ -487,8 +488,8 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
                 let countryRequest = new CountryRequest();
                 countryRequest.formName = '';
                 this.store.dispatch(this.commonActions.GetAllCountry(countryRequest));
+                this.cdRef.detectChanges();
             }
-            this.cdRef.detectChanges();
         });
     }
 
@@ -499,7 +500,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof BillingDetailComponent
      */
     public getStates(): void {
-        this.store.pipe(select(s => s.general.states), take(1)).subscribe(res => {
+        this.store.pipe(select(s => s.general.states), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
                 this.states = [];
                 Object.keys(res.stateList).forEach(key => {
@@ -521,6 +522,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
                 this.filteredBillingStates = cloneDeep(this.states);
                 this.statesSource$ = observableOf(this.states);
                 this.showLoader = false;
+                this.cdRef.detectChanges();
             } else {
                 // initialize new StatesRequest();
                 let statesRequest = new StatesRequest();
@@ -528,8 +530,8 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
                 // check if createNewCompany object is initialized if not then user current company country code
                 statesRequest.country = this.createNewCompany ? this.createNewCompany.country : this.activeCompany.countryV2 ? this.activeCompany.countryV2.alpha2CountryCode : '';
                 this.store.dispatch(this.generalActions.getAllState(statesRequest));
+                this.cdRef.detectChanges();
             }
-            this.cdRef.detectChanges();
         });
     }
 
