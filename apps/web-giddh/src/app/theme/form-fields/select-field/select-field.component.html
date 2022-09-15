@@ -5,10 +5,11 @@
     [placeholder]="placeholder"
     matInput
     [matAutocomplete]="auto"
-    (blur)="resetValueIfOptionNotSelected()"
+    (blur)="onBlur()"
     [name]="name"
     [formControl]="searchFormControl"
     [readonly]="readonly"
+    [required]="required"
     (click)="!readonly ? trigger?.openPanel() : trigger?.closePanel()"
     #trigger="matAutocompleteTrigger"
 />

@@ -198,16 +198,6 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
                     this.menuTwoWidth = 14;
                 }
         });
-
-        /* RAZORPAY */
-        if (window['Razorpay'] === undefined) {
-            let scriptTag = document.createElement('script');
-            scriptTag.src = 'https://checkout.razorpay.com/v1/checkout.js';
-            scriptTag.type = 'text/javascript';
-            scriptTag.defer = true;
-            document.body.appendChild(scriptTag);
-        }
-        /* RAZORPAY */
     }
 
     public ngOnChanges(): void {
