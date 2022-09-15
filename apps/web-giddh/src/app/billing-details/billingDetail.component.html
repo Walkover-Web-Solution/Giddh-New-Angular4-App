@@ -165,10 +165,7 @@
                                 </mat-form-field>
                             </div>
                             <div class="form-group">
-                                <mat-form-field
-                                    appearance="fill"
-                                    class="mat-field-select width-100 only-bottom-border mat-input"
-                                >
+                                <div class="mat-field-select width-100 only-bottom-border mat-input">
                                     <label [ngClass]="{ 'form-label': showLoader, 'skeleton-common-class': showLoader }"
                                         >{{ commonLocaleData?.app_state }}
                                         <span [ngClass]="{ 'red-text-content': showLoader }" class="red-text"
@@ -176,7 +173,18 @@
                                         ></label
                                     >
                                     <ng-container *ngTemplateOutlet="skeletonLoader"></ng-container>
-                                    <input
+                                    <select-field
+                                        [cssClass]="'form-control mat-field-border'"
+                                        [name]="'stateCode'"
+                                        [ngClass]="{ 'form-field': showLoader }"
+                                        [placeholder]="commonLocaleData?.app_state"
+                                        [options]="companyStatesSource"
+                                        (selectedOption)="onStateChange($event)"
+                                        [defaultValue]="searchBillingStates"
+                                        [required]="true"
+                                    >
+                                    </select-field>
+                                    <!-- <input
                                         type="text"
                                         [placeholder]="commonLocaleData?.app_state"
                                         [ngClass]="{ 'form-field': showLoader }"
@@ -197,8 +205,8 @@
                                         <mat-option *ngFor="let state of companyStatesSource" [value]="state">
                                             {{ state.label }}
                                         </mat-option>
-                                    </mat-autocomplete>
-                                </mat-form-field>
+                                    </mat-autocomplete> -->
+                                </div>
                             </div>
                             <!-- static pincode start -->
                             <!-- <div class="form-group">
