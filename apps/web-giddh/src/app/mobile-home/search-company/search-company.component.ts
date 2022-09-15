@@ -9,8 +9,8 @@ import { LoginActions } from '../../actions/login.action';
 
 @Component({
     selector: 'mobile-seach-company',
-    templateUrl: './mobile-search-company.component.html',
-    styleUrls: ['./mobile-search-company.component.scss'],
+    templateUrl: './search-company.component.html',
+    styleUrls: ['./search-company.component.scss'],
 })
 
 export class MobileSearchCompanyComponent implements OnInit, OnDestroy {

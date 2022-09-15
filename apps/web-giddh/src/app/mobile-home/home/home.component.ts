@@ -1,24 +1,24 @@
 import { HostListener, Inject, Component, OnInit, ChangeDetectorRef, OnDestroy, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 import { Subject, ReplaySubject, Observable } from 'rxjs';
 import { Store, select } from '@ngrx/store';
-import { AppState } from '../store';
-import { GeneralService } from '../services/general.service';
-import { CommandKService } from '../services/commandk.service';
-import { takeUntil, debounceTime } from 'rxjs/operators';
-import { remove } from '../lodash-optimized';
 import { Router } from '@angular/router';
 import { BACKSPACE } from '@angular/cdk/keycodes';
-import { LoginActions } from '../actions/login.action';
-import { AuthService } from '../theme/ng-social-login-module/index';
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { CommandKRequest } from '../models/api-models/Common';
 import { BsDropdownConfig, BsDropdownDirective } from 'ngx-bootstrap/dropdown';
 import { DOCUMENT } from '@angular/common';
+import { CommandKRequest } from '../../models/api-models/Common';
+import { AppState } from '../../store';
+import { GeneralService } from '../../services/general.service';
+import { LoginActions } from '../../actions/login.action';
+import { CommandKService } from '../../services/commandk.service';
+import { AuthService } from '../../theme/ng-social-login-module';
+import { debounceTime, takeUntil } from 'rxjs/operators';
+import { remove } from '../../lodash-optimized';
 
 @Component({
     selector: 'mobile-home',
-    templateUrl: './mobile-home.component.html',
-    styleUrls: ['./mobile-home.component.scss'],
+    templateUrl: './home.component.html',
+    styleUrls: ['./home.component.scss'],
     providers: [
         {
             provide: BsDropdownConfig, useValue: { insideClick: true },
@@ -81,7 +81,7 @@ export class MobileHomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
     constructor(@Inject(DOCUMENT) document, private store: Store<AppState>, private generalService: GeneralService, private commandKService: CommandKService, private cdref: ChangeDetectorRef, private router: Router, private loginAction: LoginActions, private socialAuthService: AuthService, private breakPointObservar: BreakpointObserver) {
         document.querySelector('body').classList.add('mobile-home');
-        this.isLoggedInWithSocialAccount$ = this.store.pipe(select(state => state.login.isLoggedInWithSocialAccount, takeUntil(this.destroyed$)));
+        this.isLoggedInWithSocialAccount$ = this.store.pipe(select(state => state.login.isLoggedInWithSocialAccount), takeUntil(this.destroyed$));
     }
 
     /**

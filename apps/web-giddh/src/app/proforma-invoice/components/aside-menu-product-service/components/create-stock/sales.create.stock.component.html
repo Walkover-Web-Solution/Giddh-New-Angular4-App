@@ -26,7 +26,6 @@
                                         [notFoundLinkText]="'+ Add New'"
                                         (noResultsClicked)="addNewGroupPane()"
                                         [notFoundLink]="false"
-                                        [dropdownMinHeight]="33"
                                     ></sh-select>
                                 </div>
                                 <div class="form-group col-5 col-sm-5" *ngIf="isUpdatingStockForm">
@@ -422,7 +421,6 @@
                                                     [notFoundLinkText]="'+ Add New'"
                                                     (noResultsClicked)="addNewStockUnit()"
                                                     [notFoundLink]="true"
-                                                    [dropdownMinHeight]="70"
                                                     (selected)="onSelectPurchaseStockUnitCode()"
                                                 >
                                                 </sh-select>
@@ -520,7 +518,6 @@
                                                     [notFoundLinkText]="'+ Add New'"
                                                     (noResultsClicked)="addNewStockUnit()"
                                                     [notFoundLink]="true"
-                                                    [dropdownMinHeight]="70"
                                                     (selected)="onSelectSalesStockUnitCode()"
                                                 >
                                                 </sh-select>

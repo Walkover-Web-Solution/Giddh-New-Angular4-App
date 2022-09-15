@@ -5,14 +5,16 @@ import { RouterModule } from "@angular/router";
 import { ClickOutsideModule } from "ng-click-outside";
 import { BsDropdownModule } from "ngx-bootstrap/dropdown";
 import { TranslateDirectiveModule } from "../theme/translate/translate.directive.module";
-import { MobileHomeSidebarComponent } from "./mobile-home-sidebar/mobile-home-sidebar.component";
-import { MobileHomeComponent } from "./mobile-home.component";
+import { MobileHomeComponent } from "./home/home.component";
+import { MainComponent } from "./main.component";
+import { MobileHomeSidebarComponent } from "./sidebar/sidebar.component";
 import { MobileHomeRoutingModule } from "./mobile-home.routing.module";
-import { MobileSearchBranchComponent } from "./mobile-search-branch/mobile-search-branch.component";
-import { MobileSearchCompanyComponent } from "./mobile-search-company/mobile-search-company.component";
+import { MobileSearchBranchComponent } from "./search-branch/search-branch.component";
+import { MobileSearchCompanyComponent } from "./search-company/search-company.component";
 
 @NgModule({
     declarations: [
+        MainComponent,
         MobileHomeComponent,
         MobileHomeSidebarComponent,
         MobileSearchCompanyComponent,
@@ -27,9 +29,6 @@ import { MobileSearchCompanyComponent } from "./mobile-search-company/mobile-sea
         ReactiveFormsModule,
         RouterModule,
         ClickOutsideModule
-    ],
-    exports: [
-        
     ]
 })
 
