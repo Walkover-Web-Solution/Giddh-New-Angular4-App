@@ -352,9 +352,11 @@
                         <div class="col-12">
                             <p class="change-preference">{{ localeData?.onboarding_note }}</p>
                             <br />
-                            <p class="taxation-not-supported" *ngIf="!formFields['taxName']">
-                                {{ localeData?.tax_reports_note }}
-                            </p>
+                            <p
+                                class="taxation-not-supported"
+                                [innerHTML]="localeData?.tax_reports_note"
+                                *ngIf="!formFields['taxName']"
+                            ></p>
                         </div>
                         <div class="col-12 d-flex mr-t5">
                             <button class="btn btn-primary" (click)="back(isBranch)">
