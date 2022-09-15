@@ -124,7 +124,6 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     public ngOnInit(): void {
-        this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
         /* RAZORPAY */
         if (window['Razorpay'] === undefined) {
             let scriptTag = document.createElement('script');
@@ -143,12 +142,11 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
         this.store.dispatch(this.settingsProfileActions.resetPatchProfile());
 
         /** This will use for get active company data */
-        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
-            if (activeCompany) {
-                this.getUpdatedStateCodes(activeCompany.countryV2?.alpha3CountryCode, true);
-                this.showGstAndTaxUsingCountryName(activeCompany.countryV2?.countryName);
-                // this.searchCountry.setValue({ label: activeCompany.countryV2?.countryName });
-                this.activeCompany = activeCompany;
+        this.settingsProfileService.GetProfileInfo().pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
+            if (response?.status === "success") {
+                this.getUpdatedStateCodes(response?.body?.countryV2?.alpha3CountryCode, true);
+                this.showGstAndTaxUsingCountryName(response?.body?.countryV2?.countryName);
+                this.activeCompany = response?.body;
                 this.reFillForm();
                 this.getStates();
             }
@@ -457,7 +455,7 @@ export class BillingDetailComponent implements OnInit, OnDestroy, AfterViewInit 
 
         let selectedBusinesstype = this.createNewCompany.businessType;
         if (selectedBusinesstype === 'Registered') {
-            this.billingDetailsObj.gstin = this.createNewCompany.addresses[0].taxNumber;
+            this.billingDetailsObj.gstin = this.createNewCompany.addresses[0]?.taxNumber;
         }
         this.billingDetailsObj.address = this.createNewCompany.address;
     }
