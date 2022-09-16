@@ -33,7 +33,7 @@ export const ROUTES = [
     { path: 'journal-voucher', redirectTo: 'pages/journal-voucher', pathMatch: 'full' },
     { path: 'contact', redirectTo: 'pages/contact' },
     { path: 'aging-report', redirectTo: 'pages/aging-report', pathMatch: 'full' },
-    { path: 'import', redirectTo: 'pages/import', pathMatch: 'full' },
+    // { path: 'import', redirectTo: 'pages/import', pathMatch: 'full' },
     // { path: 'tallysync', redirectTo: 'pages/tallysync', pathMatch: 'full' },
     { path: 'gstfiling', redirectTo: 'pages/gstfiling', pathMatch: 'full' },
     { path: 'company-import-export', redirectTo: 'pages/company-import-export', pathMatch: 'full' },

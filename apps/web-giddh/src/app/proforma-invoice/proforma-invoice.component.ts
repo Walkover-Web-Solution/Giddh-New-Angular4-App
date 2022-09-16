@@ -1504,9 +1504,11 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
                     }
                     this.isUpdateDataInProcess = false;
                     if (this.isPurchaseInvoice || this.currentVoucherFormDetails?.attachmentAllowed) {
-                        this.selectedFileName = results[0].attachedFileName;
-                        if (this.invFormData && this.invFormData.entries && this.invFormData.entries[0]) {
-                            this.invFormData.entries[0].attachedFile = (results[0]?.attachedFiles) ? results[0]?.attachedFiles[0] : '';
+                        if (!this.copyPurchaseBill) {
+                            this.selectedFileName = results[0].attachedFileName;
+                            if (this.invFormData && this.invFormData.entries && this.invFormData.entries[0]) {
+                                this.invFormData.entries[0].attachedFile = (results[0]?.attachedFiles) ? results[0]?.attachedFiles[0] : '';
+                            }
                         }
                         this.saveCurrentPurchaseRecordDetails();
                     }
@@ -2334,6 +2336,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.userDeposit = null;
         this.fillDeliverToAddress();
         this.createEmbeddedViewAtIndex(0);
+        this.onSearchQueryChanged('', 1, 'customer');
     }
 
     public triggerSubmitInvoiceForm(form: NgForm, isUpdate) {
