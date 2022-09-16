@@ -2215,6 +2215,7 @@ export class ProformaInvoiceComponent implements OnInit, OnDestroy, AfterViewIni
         this.userDeposit = null;
         this.fillDeliverToAddress();
         this.createEmbeddedViewAtIndex(0);
+        this.onSearchQueryChanged('', 1, 'customer');
     }
 
     public triggerSubmitInvoiceForm(form: NgForm, isUpdate) {
