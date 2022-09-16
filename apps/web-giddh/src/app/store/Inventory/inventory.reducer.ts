@@ -57,6 +57,7 @@ export interface InventoryState {
     moveStockSuccess: boolean;
     isGetManufactureStockInProgress: boolean;
     getStocksInProgress: boolean;
+    stocksTotalPages: number;
 }
 
 const prepare = (mockData: IGroupsWithStocksHierarchyMinItem[]): IGroupsWithStocksHierarchyMinItem[] => {
@@ -121,7 +122,8 @@ const initialState: InventoryState = {
     isStockUnitCodeAvailable: false,
     moveStockSuccess: false,
     isGetManufactureStockInProgress: false,
-    getStocksInProgress: false
+    getStocksInProgress: false,
+    stocksTotalPages: 0
 };
 
 export function InventoryReducer(state: InventoryState = initialState, action: CustomActions): InventoryState {
@@ -163,9 +165,9 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
                     }
                 }
                 if (action.payload?.queryString?.page > 1) {
-                    return Object.assign({}, state, { getStocksInProgress: false, groupsWithStocks: [...state.groupsWithStocks.concat(groupArray)] });
+                    return Object.assign({}, state, { getStocksInProgress: false, stocksTotalPages: (action.payload as BaseResponse<GroupsWithStocksHierarchyMin, string>).body.totalPages, groupsWithStocks: [...state.groupsWithStocks.concat(groupArray)] });
                 } else {
-                    return Object.assign({}, state, { getStocksInProgress: false, groupsWithStocks: groupArray });
+                    return Object.assign({}, state, { getStocksInProgress: false, stocksTotalPages: (action.payload as BaseResponse<GroupsWithStocksHierarchyMin, string>).body.totalPages, groupsWithStocks: groupArray });
                 }
             }
             return Object.assign({}, state, { getStocksInProgress: false });
@@ -522,7 +524,11 @@ export function InventoryReducer(state: InventoryState = initialState, action: C
                     }
                 }
                 groupArray = _.orderBy(groupArray, ['name']);
-                return Object.assign({}, state, { getStocksInProgress: false, groupsWithStocks: groupArray });
+                if (action.payload?.queryString?.page > 1) {
+                    return Object.assign({}, state, { getStocksInProgress: false, stocksTotalPages: (action.payload as BaseResponse<GroupsWithStocksHierarchyMin, string>).body.totalPages, groupsWithStocks: [...state.groupsWithStocks.concat(groupArray)] });
+                } else {
+                    return Object.assign({}, state, { getStocksInProgress: false, stocksTotalPages: (action.payload as BaseResponse<GroupsWithStocksHierarchyMin, string>).body.totalPages, groupsWithStocks: groupArray });
+                }
             }
             return Object.assign({}, state, { getStocksInProgress: false });
         case InventoryActionsConst.GetStockWithUniqueNameResponse:
