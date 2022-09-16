@@ -51,13 +51,6 @@ export let NAVIGATION_ITEM_LIST_ORIGINAL: IUlist[] = [
     { type: 'MENU', name: 'Settings > Group', uniqueName: '/pages/settings', additional: { tab: 'Group', tabIndex: 10 }, hasTabs: true },
     // { type: 'MENU', name: 'Contact', uniqueName: '/pages/contact' },
     // {type: 'MENU', name: 'Inventory In/Out', uniqueName: '/pages/inventory-in-out'},
-    { type: 'MENU', name: 'Import', uniqueName: '/pages/import', hasTabs: false },
-    { type: 'MENU', name: 'Import > Groups', uniqueName: '/pages/import/group', hasTabs: false },
-    { type: 'MENU', name: 'Import > Accounts', uniqueName: '/pages/import/account', hasTabs: false },
-    { type: 'MENU', name: 'Import > Inventory', uniqueName: '/pages/import/stock', hasTabs: false },
-    { type: 'MENU', name: 'Import > Entries', uniqueName: '/pages/import/entries', hasTabs: false },
-    { type: 'MENU', name: 'Import > Trial Balance', uniqueName: '/pages/import/trial-balance', hasTabs: false },
-
 
     { type: 'MENU', name: 'Settings > Group', uniqueName: '/pages/settings', additional: { tab: 'Group', tabIndex: 10 } },
     { type: 'MENU', name: 'Onboarding', uniqueName: '/pages/onboarding', hasTabs: false },
@@ -71,7 +64,6 @@ export let NAVIGATION_ITEM_LIST_ORIGINAL: IUlist[] = [
     { type: 'MENU', name: 'New Credit Note', uniqueName: '/pages/proforma-invoice/invoice/credit note', hasTabs: false },
     { type: 'MENU', name: 'New Debit Note', uniqueName: '/pages/proforma-invoice/invoice/debit note', hasTabs: false },
 
-    { type: 'MENU', name: 'Company Import/Export', uniqueName: '/pages/company-import-export', hasTabs: false },
     { type: 'MENU', name: 'New V/S Old Invoices', uniqueName: '/pages/new-vs-old-invoices', hasTabs: false },
     { type: 'MENU', name: 'GST', uniqueName: '/pages/gstfiling', hasTabs: false },
     { type: 'MENU', name: 'Vat Report', uniqueName: '/pages/vat-report', hasTabs: false },
