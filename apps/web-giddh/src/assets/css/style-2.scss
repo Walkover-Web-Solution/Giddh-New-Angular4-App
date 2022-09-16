@@ -10428,7 +10428,10 @@ input[type="checkbox"].cdk-visually-hidden::after {
         overflow: hidden;
     }
 }
-
+hamburger-menu {
+    position: relative;
+    z-index: 99999;
+}
 .activity-log-page {
     .hamburger-menu {
         position: relative;
