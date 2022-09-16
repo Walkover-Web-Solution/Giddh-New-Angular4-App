@@ -266,48 +266,6 @@
             ]
         },
         {
-            "label": "Import",
-            "icon": "icon-import",
-            "items": [
-                {
-                    "label": "Accounts",
-                    "link": "/pages/import/account",
-                    "icon": "icon-proft-loss-new",
-                    "description": "Import excel and CSV and update existing one"
-                },
-                {
-                    "label": "Company Import",
-                    "link": "/pages/company-import-export",
-                    "icon": "icon-company-impex",
-                    "description": "Company import & export"
-                },
-                {
-                    "label": "Entries",
-                    "link": "/pages/import/entries",
-                    "icon": "icon-invoice-new",
-                    "description": "Multicurrency, Recurring invoice, Cash invoice"
-                },
-                {
-                    "label": "Group",
-                    "link": "/pages/import/group",
-                    "icon": "icon-group-new",
-                    "description": "Import excel and CSV and update existing one"
-                },
-                {
-                    "label": "Inventory",
-                    "link": "/pages/import/stock",
-                    "icon": "icon-inventory",
-                    "description": "Import/create stock, group & unit"
-                },
-                {
-                    "label": "Trial Balance",
-                    "link": "/pages/import/trial-balance",
-                    "icon": "icon-trial-balance-new",
-                    "description": "Import all credit & debit balances"
-                }
-            ]
-        },
-        {
             "label": "Inventory",
             "icon": "icon-inventory",
             "items": [
