@@ -507,40 +507,6 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
     }
 
     /**
-     * Clears the selected range
-     *
-     * @param {string} type
-     * @memberof AdvanceSearchModelComponent
-     */
-    public clearRange(type: string): void {
-        switch (type) {
-            case 'amount':
-                this.advanceSearchForm.get('amountOption')?.patchValue("");
-                this.advanceSearchForm.get('includeAmount')?.patchValue(false);
-                this.advanceSearchForm.get('amountGreaterThan')?.patchValue(false);
-                this.advanceSearchForm.get('amountLessThan')?.patchValue(false);
-                this.advanceSearchForm.get('amountEqualTo')?.patchValue(false);
-                break;
-
-            case 'inventoryQty':
-                this.advanceSearchForm.get('inventoryQty')?.patchValue("");
-                this.advanceSearchForm.get('inventory.includeQuantity')?.patchValue(false);
-                this.advanceSearchForm.get('inventory.quantityGreaterThan')?.patchValue(false);
-                this.advanceSearchForm.get('inventory.quantityLessThan')?.patchValue(false);
-                this.advanceSearchForm.get('inventory.quantityEqualTo')?.patchValue(false);
-                break;
-
-            case 'inventoryVal':
-                this.advanceSearchForm.get('inventoryVal')?.patchValue("");
-                this.advanceSearchForm.get('inventory.includeItemValue')?.patchValue(false);
-                this.advanceSearchForm.get('inventory.includeItemGreaterThan')?.patchValue(false);
-                this.advanceSearchForm.get('inventory.includeItemLessThan')?.patchValue(false);
-                this.advanceSearchForm.get('inventory.includeItemEqualTo')?.patchValue(true);
-                break;
-        }
-    }
-
-    /**
      * toggleOtherDetails
      *
      * @memberof AdvanceSearchModelComponent
