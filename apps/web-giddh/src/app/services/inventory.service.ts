@@ -94,7 +94,7 @@ export class InventoryService {
     /**
      * get Groups with Stocks
      */
-    public SearchStockGroupsWithStocks(q: string = '', page: number = 1, count: string = '100000000'): Observable<BaseResponse<GroupsWithStocksFlatten, any>> {
+    public SearchStockGroupsWithStocks(q: string = '', page: number = 1, count?: number): Observable<BaseResponse<GroupsWithStocksFlatten, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.get(this.config.apiUrl + INVENTORY_API.GROUPS_WITH_STOCKS_FLATTEN.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':q', encodeURIComponent(q || '')).replace(':page', page.toString()).replace(':count', count.toString())).pipe(map((res) => {
             let data: BaseResponse<GroupsWithStocksFlatten, string> = res;
@@ -173,7 +173,7 @@ export class InventoryService {
     /**
      * get Stocks with hierarchy
      */
-    public GetGroupsWithStocksHierarchyMin(q: string = '', page: number = 1, count: string = ''): Observable<BaseResponse<GroupsWithStocksHierarchyMin, string>> {
+    public GetGroupsWithStocksHierarchyMin(q: string = '', page: number = 1, count?: number): Observable<BaseResponse<GroupsWithStocksHierarchyMin, string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.get(this.config.apiUrl + INVENTORY_API.GROUPS_WITH_STOCKS_HIERARCHY.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':q', encodeURIComponent(q || '')).replace(':page', encodeURIComponent(page.toString())).replace(':count', encodeURIComponent(count.toString()))).pipe(map((res) => {
             let data: BaseResponse<GroupsWithStocksHierarchyMin, string> = res;
