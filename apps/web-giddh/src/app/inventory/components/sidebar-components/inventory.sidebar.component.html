@@ -101,6 +101,10 @@
                 </div>
             </div>
         </div>
-        <stockgrp-list class="parent-group stock-group-parent" [Groups]="stockGroupData"></stockgrp-list>
+        <stockgrp-list
+            class="parent-group stock-group-parent"
+            [Groups]="stockGroupData"
+            (loadMore)="loadMore()"
+        ></stockgrp-list>
     </div>
 </section>

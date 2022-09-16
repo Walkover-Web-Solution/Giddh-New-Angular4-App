@@ -3,6 +3,7 @@ import { Store, select } from '@ngrx/store';
 import { fromEvent as observableFromEvent, Observable, ReplaySubject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map, takeUntil } from 'rxjs/operators';
 import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
+import { PAGINATION_LIMIT } from '../../../app.constant';
 import { InventoryDownloadRequest } from '../../../models/api-models/Inventory';
 import { IGroupsWithStocksHierarchyMinItem } from '../../../models/interfaces/groupsWithStocks.interface';
 import { OrganizationType } from '../../../models/user-login-state';
@@ -30,6 +31,8 @@ export class InventorySidebarComponent implements OnInit, OnDestroy, AfterViewIn
     @ViewChild('search', { static: true }) public search: ElementRef;
     @ViewChild('sidebar', { static: true }) public sidebar: ElementRef;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Current page */
+    private currentPage: number = 1;
 
     /**
      * TypeScript public modifiers
@@ -56,7 +59,7 @@ export class InventorySidebarComponent implements OnInit, OnDestroy, AfterViewIn
             this.toDate = v.to;
         });
 
-        this.store.dispatch(this.sidebarAction.GetGroupsWithStocksHierarchyMin());
+        this.getStocks('', 1);
     }
 
     public ngAfterViewInit() {
@@ -73,8 +76,10 @@ export class InventorySidebarComponent implements OnInit, OnDestroy, AfterViewIn
             .subscribe((val: string) => {
                 if (val) {
                     this.isSearching = true;
+                } else {
+                    this.isSearching = false;
                 }
-                this.store.dispatch(this.sidebarAction.SearchGroupsWithStocks(val));
+                this.getStocks(val, 1);
             });
     }
 
@@ -114,5 +119,36 @@ export class InventorySidebarComponent implements OnInit, OnDestroy, AfterViewIn
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+    }
+
+    /**
+     * Get List of stocks
+     *
+     * @private
+     * @param {string} [q]
+     * @param {number} [page=1]
+     * @memberof InventorySidebarComponent
+     */
+    private getStocks(q?: string, page: number = 1): void {
+        this.currentPage = page;
+        if (!this.isSearching) {
+            this.store.dispatch(this.sidebarAction.GetGroupsWithStocksHierarchyMin('', page, 200));
+        } else {
+            this.store.dispatch(this.sidebarAction.SearchGroupsWithStocks(q, page, 200));
+        }
+    }
+
+    /**
+     * Load More stocks
+     *
+     * @memberof InventorySidebarComponent
+     */
+    public loadMore(): void {
+        let getStocksInProgress;
+        this.store.pipe(select(state => state.inventory.getStocksInProgress)).subscribe(response => getStocksInProgress = response);
+        if (!getStocksInProgress) {
+            this.currentPage = this.currentPage + 1;
+            this.getStocks(this.search?.nativeElement?.value, this.currentPage);
+        }
     }
 }

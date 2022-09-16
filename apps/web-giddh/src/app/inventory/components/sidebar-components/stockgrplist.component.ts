@@ -2,7 +2,7 @@ import { takeUntil } from 'rxjs/operators';
 import { StockDetailResponse, StockGroupResponse } from '../../../models/api-models/Inventory';
 import { AppState } from '../../../store/roots';
 import { IGroupsWithStocksHierarchyMinItem } from '../../../models/interfaces/groupsWithStocks.interface';
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
 import { Store, select } from '@ngrx/store';
 import { Observable, ReplaySubject } from 'rxjs';
@@ -18,8 +18,9 @@ export class StockgrpListComponent implements OnInit, OnDestroy {
     public activeStock$: Observable<StockDetailResponse>;
     public activeGroup$: Observable<StockGroupResponse>;
     public activeGroupUniqueName$: Observable<string>;
-    @Input()
-    public Groups: IGroupsWithStocksHierarchyMinItem[];
+    @Input() public Groups: IGroupsWithStocksHierarchyMinItem[];
+    /** Emits if we need to load next page of stocks */
+    @Output() public loadMore: EventEmitter<boolean> = new EventEmitter(true);
     public stockUniqueName: string;
     public activeGroup: any = null;
     public activeStock: any = null;
@@ -79,4 +80,15 @@ export class StockgrpListComponent implements OnInit, OnDestroy {
         this.store.dispatch(this.inventoryAction.ManageInventoryAside({ isOpen, isGroup, isUpdate }));
     }
 
+    /**
+     * Callback if stock scroller reached end
+     *
+     * @param {*} event
+     * @memberof StockgrpListComponent
+     */
+    public onScrollEnd(event: any): void {
+        if (event?.target?.className !== "ps") {
+            this.loadMore.emit(true);
+        }
+    }
 }
