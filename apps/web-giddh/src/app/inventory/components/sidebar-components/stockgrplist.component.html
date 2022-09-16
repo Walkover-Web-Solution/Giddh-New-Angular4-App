@@ -1,49 +1,53 @@
-<ul class="list-unstyled stock-grp-list clearfix">
-    <li
-        class="clearfix main-group p-0"
-        [ngClass]="{ 'isGrp': grp.childStockGroups.length > 0, 'group-open': grp.isOpen }"
-        *ngFor="let grp of Groups"
-    >
-        <div
-            class="item-group"
-            [ngClass]="{
-                'active':
-                    grp.isOpen &&
-                    activeGroup &&
-                    activeGroup.uniqueName === grp.uniqueName &&
-                    !(activeStockUniqueName$ | async)
-            }"
+<perfect-scrollbar (psYReachEnd)="onScrollEnd($event)" *ngIf="Groups?.length > 0">
+    <ul class="list-unstyled stock-grp-list clearfix" style="min-height: 100px">
+        <li
+            class="clearfix main-group p-0"
+            [ngClass]="{ 'isGrp': grp.childStockGroups.length > 0, 'group-open': grp.isOpen }"
+            *ngFor="let grp of Groups"
         >
-            <a (click)="OpenGroup(grp, $event)" class="d-flex">
-                <a class="text-black inventory-group-name">{{ grp.name }}</a>
-                <i
-                    (click)="OpenGroup(grp, $event)"
-                    class="icon-arrow-down position-relative"
-                    [ngClass]="{ 'open': grp.isOpen }"
-                ></i>
-            </a>
-            <span class="pull-right">
-                <button
-                    class="btn btn-link btn-xs pull-right"
-                    (click)="goToManageGroup(grp)"
-                    *ngIf="
+            <div
+                class="item-group"
+                [ngClass]="{
+                    'active':
                         grp.isOpen &&
                         activeGroup &&
                         activeGroup.uniqueName === grp.uniqueName &&
                         !(activeStockUniqueName$ | async)
-                    "
-                >
-                    <i class="icon-edit-pencil"> </i>
-                </button>
-            </span>
-        </div>
-        <div>
-            <stock-list [Groups]="grp"> </stock-list>
-            <stockgrp-list [Groups]="grp.childStockGroups" *ngIf="grp.childStockGroups.length > 0 && grp.isOpen">
-            </stockgrp-list>
-        </div>
-    </li>
-    <li class="no-data-box text-center text-light" *ngIf="Groups && Groups.length <= 0">
+                }"
+            >
+                <a (click)="OpenGroup(grp, $event)" class="d-flex">
+                    <a class="text-black inventory-group-name">{{ grp.name }}</a>
+                    <i
+                        (click)="OpenGroup(grp, $event)"
+                        class="icon-arrow-down position-relative"
+                        [ngClass]="{ 'open': grp.isOpen }"
+                    ></i>
+                </a>
+                <span class="pull-right">
+                    <button
+                        class="btn btn-link btn-xs pull-right"
+                        (click)="goToManageGroup(grp)"
+                        *ngIf="
+                            grp.isOpen &&
+                            activeGroup &&
+                            activeGroup.uniqueName === grp.uniqueName &&
+                            !(activeStockUniqueName$ | async)
+                        "
+                    >
+                        <i class="icon-edit-pencil"> </i>
+                    </button>
+                </span>
+            </div>
+            <div>
+                <stock-list [Groups]="grp"> </stock-list>
+                <stockgrp-list [Groups]="grp.childStockGroups" *ngIf="grp.childStockGroups.length > 0 && grp.isOpen">
+                </stockgrp-list>
+            </div>
+        </li>
+    </ul>
+</perfect-scrollbar>
+<ul class="list-unstyled stock-grp-list clearfix" *ngIf="Groups && Groups.length <= 0">
+    <li class="no-data-box text-center text-light">
         <img src="assets/images/search-data-not-found.svg" /><br />
         No Data Found
     </li>
