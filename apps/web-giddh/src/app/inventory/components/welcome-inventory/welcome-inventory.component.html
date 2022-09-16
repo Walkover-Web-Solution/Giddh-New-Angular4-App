@@ -8,7 +8,8 @@
 </div>
 
 <!-- aside menu section -->
-<div class="aside-overlay" *ngIf="asideMenuState === 'in'">
+<div class="aside-overlay" *ngIf="asideMenuState === 'in'"></div>
+<div *ngIf="asideMenuState === 'in'">
     <aside-pane
         [class]="asideMenuState"
         [@slideInOut]="asideMenuState"
