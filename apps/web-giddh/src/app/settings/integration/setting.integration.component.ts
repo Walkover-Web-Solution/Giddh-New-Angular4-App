@@ -147,8 +147,8 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public bootstrapToggleSwitch = BootstrapToggleSwitch;
     /** This will hold isCopied */
     public isCopied: boolean = false;
-    /** This will hold magicLink */
-    public magicLink: string = '';
+    /** This will hold apiUrl */
+    public apiUrl: string = '';
 
     constructor(
         private router: Router,
@@ -181,7 +181,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
 
     public ngOnInit() {
         let companyUniqueName = this.generalService.companyUniqueName;
-        this.magicLink = `${ApiUrl}company/${companyUniqueName}/imports/tally-import`;
+        this.apiUrl = `${ApiUrl}company/${companyUniqueName}/imports/tally-import`;
         this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         //logic to switch to payment tab if coming from vedor tabs add payment
         if (this.selectedTabParent !== undefined && this.selectedTabParent !== null) {
@@ -1042,11 +1042,11 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     }
 
     /**
-     * This will use for copy magic link and display copied
+     * This will use for copy api url link and display copied
      *
      * @memberof SettingIntegrationComponent
      */
-    public toggleIsCopied() {
+    public toggleIsCopied() : void {
         this.isCopied = true;
         setTimeout(() => {
             this.isCopied = false;
