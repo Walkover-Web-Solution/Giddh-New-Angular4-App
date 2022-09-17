@@ -643,12 +643,12 @@ export class WelcomeComponent implements OnInit, OnDestroy, AfterViewInit {
                     Object.keys(res.applicableTaxes).forEach(key => {
                         if (res.applicableTaxes[key]) {
                             this.taxesList.push({
-                                label: res.applicableTaxes[key].name,
-                                value: res.applicableTaxes[key].uniqueName,
+                                label: res.applicableTaxes[key]?.name,
+                                value: res.applicableTaxes[key]?.uniqueName,
                                 isSelected: false
                             });
-                            this.currentTaxList[res.applicableTaxes[key].uniqueName] = [];
-                            this.currentTaxList[res.applicableTaxes[key].uniqueName] = res.applicableTaxes[key];
+                            this.currentTaxList[res.applicableTaxes[key]?.uniqueName] = [];
+                            this.currentTaxList[res.applicableTaxes[key]?.uniqueName] = res.applicableTaxes[key];
                         }
                     });
                 }

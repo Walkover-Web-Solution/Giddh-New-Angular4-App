@@ -115,17 +115,17 @@ export class CompanyImportExportFormComponent implements OnInit, OnDestroy {
             if (response?.length) {
                 this.currentCompanyBranches = response.map(branch => ({
                     label: branch.alias,
-                    value: branch.uniqueName,
+                    value: branch?.uniqueName,
                     name: branch.name,
                     parentBranch: branch.parentBranch
                 }));
                 const hoBranch = response.find(branch => !branch.parentBranch);
-                const currentBranchUniqueName = this.currentOrganizationType === OrganizationType.Branch ? this.generalService.currentBranchUniqueName : hoBranch ? hoBranch.uniqueName : '';
-                if (!this.currentBranch.uniqueName) {
+                const currentBranchUniqueName = this.currentOrganizationType === OrganizationType.Branch ? this.generalService.currentBranchUniqueName : hoBranch ? hoBranch?.uniqueName : '';
+                if (!this.currentBranch?.uniqueName) {
                     // Assign the current branch only when it is not selected. This check is necessary as
                     // opening the branch switcher would reset the current selected branch as this subscription is run everytime
                     // branches are loaded
-                    this.currentBranch = _.cloneDeep(response.find(branch => branch.uniqueName === currentBranchUniqueName));
+                    this.currentBranch = _.cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName));
                     this.currentBranch.name = this.currentBranch.name + (this.currentBranch.alias ? ` (${this.currentBranch.alias})` : '');
                 }
             } else {
@@ -155,7 +155,7 @@ export class CompanyImportExportFormComponent implements OnInit, OnDestroy {
             this.isExportInProcess$ = of(true);
 
             if(parseInt(this.fileType) === CompanyImportExportFileTypes.MASTER_EXCEPT_ACCOUNTS) {
-                this.companyImportExportService.ExportRequest(this.currentBranch.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                this.companyImportExportService.ExportRequest(this.currentBranch?.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     if (response?.status === 'success') {
                         let res = { body: response?.body };
                         let blob = new Blob([JSON.stringify(res)], { type: 'application/json' });
@@ -168,7 +168,7 @@ export class CompanyImportExportFormComponent implements OnInit, OnDestroy {
                     this.isExportInProcess$ = of(false);
                 });
             } else {
-                this.companyImportExportService.ExportLedgersRequest(this.from, this.to, this.currentBranch.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                this.companyImportExportService.ExportLedgersRequest(this.from, this.to, this.currentBranch?.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     if (response?.status === 'success' && response?.body) {
                         if (response?.body?.type === "message") {
                             this.toaster.successToast(response?.body?.file);
@@ -189,7 +189,7 @@ export class CompanyImportExportFormComponent implements OnInit, OnDestroy {
             this.isImportInProcess$ = of(true);
 
             if(parseInt(this.fileType) === CompanyImportExportFileTypes.MASTER_EXCEPT_ACCOUNTS) {
-                this.companyImportExportService.ImportRequest(this.selectedFile, this.currentBranch.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                this.companyImportExportService.ImportRequest(this.selectedFile, this.currentBranch?.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     this.handleImportEntriesResponse(response);
                 });
             } else {

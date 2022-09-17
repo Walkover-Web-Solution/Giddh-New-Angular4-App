@@ -1179,7 +1179,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
         if (event.shiftKey || event.ctrlKey || (event.which >= 37 && event.which <= 40)) {
             return;
         }
-        event.target.value = (event && event.target && event.target.value) ? event.target.value.replace(/[^0-9]/g, '') : 0;
+        event.target.value = (event && event.target && event.target.value) ? event.target.value?.replace(/[^0-9]/g, '') : 0;
         if (event.target.value > this.noOfDaysAllowed) {
             event.target.value = this.noOfDaysAllowed;
         }
@@ -1617,7 +1617,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
                 if (!disabled) {
                     cname += 'available';
                 }
-                this.calendarVariables[side].classes[row][col] = cname.replace(/^\s+|\s+$/g, '');
+                this.calendarVariables[side].classes[row][col] = cname?.replace(/^\s+|\s+$/g, '');
             }
             this.calendarVariables[side].classes[row].classList = rowClasses.join(' ');
         }

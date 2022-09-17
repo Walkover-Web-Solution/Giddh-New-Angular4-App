@@ -123,7 +123,7 @@
                                                     <input type="text" class="form-control" placeholder="Notes" name="notes" [(ngModel)]="entry.note">
                                                 </div> -->
                                             <div
-                                                class="single-field relative {{ entry.tax.uniqueName }}"
+                                                class="single-field relative {{ entry.tax?.uniqueName }}"
                                                 *ngIf="entry.type !== 'againstReference'"
                                             >
                                                 <sh-select

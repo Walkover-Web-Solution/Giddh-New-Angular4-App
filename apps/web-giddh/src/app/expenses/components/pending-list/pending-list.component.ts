@@ -162,7 +162,7 @@ export class PendingListComponent implements OnInit, OnChanges {
      * @memberof PendingListComponent
      */
     public async approveEntry(event: any) {
-        if (!event?.baseAccount.uniqueName) {
+        if (!event?.baseAccount?.uniqueName) {
             this.toaster.showSnackBar("error", this.localeData?.approve_entry_error);
             this.hideApproveConfirmPopup(false);
             return;
@@ -172,11 +172,11 @@ export class PendingListComponent implements OnInit, OnChanges {
         let ledgerRequest;
         let actionType: ActionPettycashRequest = {
             actionType: 'approve',
-            uniqueName: event.uniqueName,
-            accountUniqueName: event.baseAccount.uniqueName
+            uniqueName: event?.uniqueName,
+            accountUniqueName: event.baseAccount?.uniqueName
         };
         try {
-            ledgerRequest = await this.expenseService.getPettycashEntry(event.uniqueName).toPromise();
+            ledgerRequest = await this.expenseService.getPettycashEntry(event?.uniqueName).toPromise();
         } catch (e) {
             this.approveEntryRequestInProcess = false;
             this.toaster.showSnackBar("error", e);
@@ -337,7 +337,7 @@ export class PendingListComponent implements OnInit, OnChanges {
      */
     private isCashBankAccount(particular: any): boolean {
         if (particular) {
-            return particular.parentGroups.some(parent => parent.uniqueName === 'bankaccounts' || parent.uniqueName === 'cash');
+            return particular.parentGroups.some(parent => parent?.uniqueName === 'bankaccounts' || parent?.uniqueName === 'cash');
         }
         return false;
     }

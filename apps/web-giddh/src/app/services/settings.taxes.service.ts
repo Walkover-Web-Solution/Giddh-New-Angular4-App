@@ -20,7 +20,7 @@ export class SettingsTaxesService {
      */
     public CreateTax(model): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.post(this.config.apiUrl + COMPANY_API.TAX.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(map((res) => {
+        return this.http.post(this.config.apiUrl + COMPANY_API.TAX?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(map((res) => {
             let data: BaseResponse<any, any> = res;
             data.request = model;
             return data;
@@ -32,7 +32,7 @@ export class SettingsTaxesService {
      */
     public UpdateTax(model, taxUniqueName: string): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.put(this.config.apiUrl + COMPANY_API.TAX.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)) + '/' + taxUniqueName, model).pipe(map((res) => {
+        return this.http.put(this.config.apiUrl + COMPANY_API.TAX?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)) + '/' + taxUniqueName, model).pipe(map((res) => {
             let data: BaseResponse<any, any> = res;
             data.request = model;
             return data;
@@ -44,7 +44,7 @@ export class SettingsTaxesService {
      */
     public DeleteTax(taxUniqueName: string): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.delete(this.config.apiUrl + COMPANY_API.TAX.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)) + '/' + taxUniqueName).pipe(map((res) => {
+        return this.http.delete(this.config.apiUrl + COMPANY_API.TAX?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)) + '/' + taxUniqueName).pipe(map((res) => {
             let data: BaseResponse<any, any> = res;
             data.request = taxUniqueName;
             return data;
@@ -55,7 +55,7 @@ export class SettingsTaxesService {
      * Get Tax List
      */
     public GetTaxList(countryCode: string): Observable<BaseResponse<any, any>> {
-        return this.http.get(this.config.apiUrl + COMPANY_API.GET_ALL_TAXES.replace(':country', encodeURIComponent(countryCode))).pipe(map((res) => {
+        return this.http.get(this.config.apiUrl + COMPANY_API.GET_ALL_TAXES?.replace(':country', encodeURIComponent(countryCode))).pipe(map((res) => {
             let data: BaseResponse<any, any> = res;
             return data;
         }));

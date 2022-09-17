@@ -471,7 +471,7 @@
                                 <div
                                     *ngIf="modalUniqueName === item.uniqueName"
                                     account-detail-modal-component
-                                    [accountUniqueName]="item.account.uniqueName"
+                                    [accountUniqueName]="item.account?.uniqueName"
                                     [voucherType]="'sales'"
                                     [from]="this.from"
                                     [to]="this.to"

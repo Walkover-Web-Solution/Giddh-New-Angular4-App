@@ -135,7 +135,7 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
      * @memberof ColumnarReportComponent
      */
     public selectGroup(event: any): void {
-        this.groupUniqueName = event.value;
+        this.groupUniqueName = event?.value;
     }
 
     /**
@@ -257,7 +257,7 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
      * @memberof ColumnarReportComponent
      */
     public selectFromMonth(event): void {
-        if (event.value) {
+        if (event?.value) {
             let fromMonth = dayjs(new Date(this.financialYearSelected.financialYearStarts.split("-").reverse().join("-")));
             let toMonth = dayjs(new Date(this.financialYearSelected.financialYearEnds.split("-").reverse().join("-")));
             let startDate = fromMonth;
@@ -280,7 +280,7 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
      * @memberof ColumnarReportComponent
      */
     public selectToMonth(event): void {
-        if (event.value) {
+        if (event?.value) {
             let fromMonth = dayjs(new Date(this.financialYearSelected.financialYearStarts.split("-").reverse().join("-")));
             let toMonth = dayjs(new Date(this.financialYearSelected.financialYearEnds.split("-").reverse().join("-")));
             let startDate = fromMonth;
@@ -304,11 +304,11 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
     public selectActiveFinancialYear(): void {
         if (this.selectYear && this.selectYear.length > 0 && this.activeFinancialYear) {
             this.selectYear.forEach(key => {
-                if (key.value.uniqueName === this.activeFinancialYear) {
+                if (key?.value?.uniqueName === this.activeFinancialYear) {
                     this.selectFinancialYear(key);
 
-                    let financialYearStarts = dayjs(key.value.financialYearStarts, GIDDH_DATE_FORMAT).format("MMM-YYYY");
-                    let financialYearEnds = dayjs(key.value.financialYearEnds, GIDDH_DATE_FORMAT).format("MMM-YYYY");
+                    let financialYearStarts = dayjs(key?.value.financialYearStarts, GIDDH_DATE_FORMAT).format("MMM-YYYY");
+                    let financialYearEnds = dayjs(key?.value.financialYearEnds, GIDDH_DATE_FORMAT).format("MMM-YYYY");
                     this.activeFinancialYearLabel = financialYearStarts + " - " + financialYearEnds;
                 }
             });

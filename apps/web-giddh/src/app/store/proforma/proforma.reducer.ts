@@ -88,7 +88,7 @@ export function ProformaReducer(state: ProformaState = initialState, action: Cus
                     ...state,
                     isGenerateInProcess: false,
                     isGenerateSuccess: true,
-                    lastGeneratedVoucherDetails: { voucherNo: no, accountUniqueName: response.request.accountDetails.uniqueName }
+                    lastGeneratedVoucherDetails: { voucherNo: no, accountUniqueName: response.request.accountDetails?.uniqueName }
                 });
             }
             return cloneDeep({

@@ -237,7 +237,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
 
             if (a && this.breadcrumbUniquePath[1]) {
                 this.isDiscountableAccount$ = observableOf(this.breadcrumbUniquePath[1] === 'sundrydebtors');
-                this.discountAccountForm?.patchValue({ discountUniqueName: a.discounts[0] ? a.discounts[0].uniqueName : undefined });
+                this.discountAccountForm?.patchValue({ discountUniqueName: a.discounts[0] ? a.discounts[0]?.uniqueName : undefined });
             }
         });
         this.groupDetailForm = this._fb.group({
@@ -330,13 +330,13 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
 
         this.activeGroupSharedWith$.subscribe(response => {
             if (response) {
-                this.groupSharedWith = this.localeData?.shared_with.replace("[ACCOUNT_GROUPS_COUNT]", String(response.length));
+                this.groupSharedWith = this.localeData?.shared_with?.replace("[ACCOUNT_GROUPS_COUNT]", String(response.length));
             }
         });
 
         this.activeAccountSharedWith$.subscribe(response => {
             if (response) {
-                this.accountSharedWith = this.localeData?.shared_with.replace("[ACCOUNT_GROUPS_COUNT]", String(response.length));
+                this.accountSharedWith = this.localeData?.shared_with?.replace("[ACCOUNT_GROUPS_COUNT]", String(response.length));
             }
         });
 
@@ -371,7 +371,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     }
 
     public moveToAccountSelected(event: any) {
-        this.moveAccountForm?.patchValue({ moveto: event.item?.uniqueName });
+        this.moveAccountForm?.patchValue({ moveto: event?.item?.uniqueName });
     }
 
     public moveAccount() {
@@ -425,7 +425,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
 
     public isRootLevelGroupFunc(uniqueName: string) {
         for (let grp of this.topSharedGroups) {
-            if (grp.uniqueName === uniqueName) {
+            if (grp?.uniqueName === uniqueName) {
                 this.isRootLevelGroup = true;
                 return;
             } else {
@@ -550,7 +550,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
 
     public showDeleteMergedAccountModal(merge: string) {
         merge = merge?.trim();
-        this.deleteMergedAccountModalBody = this.localeData?.delete_merged_account_content.replace("[MERGE]", merge);
+        this.deleteMergedAccountModalBody = this.localeData?.delete_merged_account_content?.replace("[MERGE]", merge);
         this.selectedAccountForDelete = merge;
         this.deleteMergedAccountModal?.show();
     }
@@ -606,8 +606,8 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
 
     public showMoveMergedAccountModal() {
         this.moveMergedAccountModalBody = this.localeData?.move_merged_account_content
-            .replace("[SOURCE_ACCOUNT]", this.setAccountForMove)
-            .replace("[DESTINATION_ACCOUNT]", this.selectedAccountForMove);
+            ?.replace("[SOURCE_ACCOUNT]", this.setAccountForMove)
+            ?.replace("[DESTINATION_ACCOUNT]", this.selectedAccountForMove);
         this.moveMergedAccountModal.show();
     }
 
@@ -718,8 +718,8 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
             if (response?.status === "success" && response?.body?.length > 0) {
                 Object.keys(response?.body).forEach(key => {
                     this.discounts.push({
-                        label: response?.body[key].name,
-                        value: response?.body[key].uniqueName,
+                        label: response?.body[key]?.name,
+                        value: response?.body[key]?.uniqueName,
                         isSelected: false
                     });
                 });

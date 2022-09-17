@@ -362,9 +362,9 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
                 item.isSelected = this.allItemsSelected ? true : false;
 
                 if (this.allItemsSelected) {
-                    this.selectedInvoices = this.generalService.addValueInArray(this.selectedInvoices, item.uniqueName);
+                    this.selectedInvoices = this.generalService.addValueInArray(this.selectedInvoices, item?.uniqueName);
                 } else {
-                    this.selectedInvoices = this.generalService.removeValueFromArray(this.selectedInvoices, item.uniqueName);
+                    this.selectedInvoices = this.generalService.removeValueFromArray(this.selectedInvoices, item?.uniqueName);
                 }
 
                 return item;
@@ -401,11 +401,11 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
         }
 
         let res = find(this.ledgersData.results, (item: ILedgersInvoiceResult) => {
-            return item.uniqueName === this.selectedLedgerItems[0];
+            return item?.uniqueName === this.selectedLedgerItems[0];
         });
         this.selectedItem = cloneDeep(res);
-        if (this.selectedItem && this.selectedItem.account && this.selectedItem.account.uniqueName) {
-            this.selectedAccountUniqueName = this.selectedItem.account.uniqueName;
+        if (this.selectedItem && this.selectedItem.account && this.selectedItem.account?.uniqueName) {
+            this.selectedAccountUniqueName = this.selectedItem.account?.uniqueName;
         } else {
             this.selectedAccountUniqueName = '';
         }
@@ -456,7 +456,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
             let model: GenerateBulkInvoiceObject[] = [];
             forEach(res, (item: any): void => {
                 forEach(item, (obj: GenBulkInvoiceGroupByObj): void => {
-                    model.push(obj.uniqueName);
+                    model.push(obj?.uniqueName);
                 });
             });
             this.store.dispatch(this.invoiceActions.GenerateBulkInvoice({ combined: action }, { entryUniqueNames: model }));
@@ -467,7 +467,7 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
                 obj.entries = [];
                 forEach(item, (o: GenBulkInvoiceGroupByObj): void => {
                     obj.accountUniqueName = o.accUniqueName;
-                    obj.entries.push(o.uniqueName);
+                    obj.entries.push(o?.uniqueName);
                 });
                 model.push(obj);
             });
@@ -566,11 +566,11 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
     public insertItemsIntoArr() {
         if (this.ledgersData) {
             forEach(this.ledgersData.results, (item: ILedgersInvoiceResult) => {
-                let idx = indexOf(this.selectedLedgerItems, item.uniqueName);
+                let idx = indexOf(this.selectedLedgerItems, item?.uniqueName);
                 if (item.isSelected) {
                     if (idx === -1) {
-                        this.selectedLedgerItems.push(item.uniqueName);
-                        this.selectedCountOfAccounts.push(item.account.uniqueName);
+                        this.selectedLedgerItems.push(item?.uniqueName);
+                        this.selectedCountOfAccounts.push(item.account?.uniqueName);
                     }
                 } else {
                     if (idx !== -1) {

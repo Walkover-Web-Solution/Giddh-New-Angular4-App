@@ -97,7 +97,7 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
                     value: this.activeCompany ? this.activeCompany.uniqueName : '',
                     isCompany: true
                 });
-                if (!this.currentBranch || !this.currentBranch.uniqueName) {
+                if (!this.currentBranch || !this.currentBranch?.uniqueName) {
                     let currentBranchUniqueName;
                     if (this.currentOrganizationType === OrganizationType.Branch) {
                         currentBranchUniqueName = this.generalService.currentBranchUniqueName;
@@ -269,7 +269,7 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
                     this._toaster.errorToast(res.message);
                 } else {
                     this.salesRegisterTotal = new ReportsModel();
-                    this.salesRegisterTotal.particular = this.activeFinacialYr.uniqueName;
+                    this.salesRegisterTotal.particular = this.activeFinacialYr?.uniqueName;
                     this.reportRespone = this.filterReportResp(res.body);
                 }
             });
@@ -293,7 +293,7 @@ export class ReportsDetailsComponent implements OnInit, OnDestroy {
                     this._toaster.errorToast(res.message);
                 } else {
                     this.salesRegisterTotal = new ReportsModel();
-                    this.salesRegisterTotal.particular = this.activeFinacialYr.uniqueName;
+                    this.salesRegisterTotal.particular = this.activeFinacialYr?.uniqueName;
                     this.reportRespone = this.filterReportResp(res.body);
                 }
             });

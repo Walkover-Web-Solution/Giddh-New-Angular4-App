@@ -18,7 +18,7 @@ export class CompanyImportExportService {
 
     public ExportRequest(branchUniqueName?: string): Observable<BaseResponse<any, string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        let url = this.config.apiUrl + COMPANY_IMPORT_EXPORT_API.EXPORT.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName));
+        let url = this.config.apiUrl + COMPANY_IMPORT_EXPORT_API.EXPORT?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName));
         if (branchUniqueName) {
             url = url.concat(`?branchUniqueName=${branchUniqueName}`);
         }
@@ -33,9 +33,9 @@ export class CompanyImportExportService {
     public ExportLedgersRequest(from: string, to: string, branchUniqueName?: string): Observable<BaseResponse<any, string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let url = this.config.apiUrl + COMPANY_IMPORT_EXPORT_API.EXPORT_LEDGERS
-            .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            .replace(':from', encodeURIComponent(from))
-            .replace(':to', encodeURIComponent(to));
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':from', encodeURIComponent(from))
+            ?.replace(':to', encodeURIComponent(to));
         if (branchUniqueName) {
             url = url.concat(`&branchUniqueName=${branchUniqueName}`);
         }
@@ -57,7 +57,7 @@ export class CompanyImportExportService {
             headers: { 'Content-Type': 'multipart/form-data', 'Accept': 'application/json' }
         };
         let url = this.config.apiUrl + COMPANY_IMPORT_EXPORT_API.IMPORT
-            .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName));
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName));
         if (branchUniqueName) {
             url = url.concat(`?branchUniqueName=${branchUniqueName}`);
         }
@@ -81,7 +81,7 @@ export class CompanyImportExportService {
         };
 
         return this.http.post(this.config.apiUrl + COMPANY_IMPORT_EXPORT_API.IMPORT_LEDGERS
-            .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), formData, httpOptions).pipe(
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), formData, httpOptions).pipe(
                 map((res) => {
                     let data: BaseResponse<string, string> = res;
                     return data;

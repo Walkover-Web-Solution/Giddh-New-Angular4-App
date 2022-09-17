@@ -304,7 +304,7 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
             for (let key of grps) {
                 if (key.stocks && key.stocks.length > 0) {
 
-                    let index = key.stocks.findIndex(p => p.uniqueName === stockUniqueName);
+                    let index = key.stocks.findIndex(p => p?.uniqueName === stockUniqueName);
                     if (index === -1) {
                         let result = this.findStockNameFromId(key.childStockGroups, stockUniqueName);
                         if (result !== '') {
@@ -491,7 +491,7 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
             if (entities) {
                 if (entities.length) {
                     const branches = cloneDeep(entities);
-                    if (this.selectedCmp && branches.findIndex(p => p.uniqueName === this.selectedCmp.uniqueName) === -1) {
+                    if (this.selectedCmp && branches.findIndex(p => p?.uniqueName === this.selectedCmp?.uniqueName) === -1) {
                         this.selectedCmp['label'] = this.selectedCmp.name;
                         branches.push(this.selectedCmp);
                     }

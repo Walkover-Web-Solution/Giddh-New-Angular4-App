@@ -761,7 +761,7 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
         this.confirmationFlag = 'closeConfirmation';
         this.selectedTemplateUniqueName = null;
         this.deleteTemplateConfirmationMessage = `Are you sure want to close this popup? Your unsaved changes will be discarded`;
-        this.customTemplateConfirmationModal.show();
+        this.customTemplateConfirmationModal?.show();
     }
 
     /**
@@ -863,7 +863,7 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
                     this.confirmationFlag = null;
                     this.selectedTemplateUniqueName = null;
                     this.deleteTemplateConfirmationMessage = null;
-                    this.customTemplateConfirmationModal.hide();
+                    this.customTemplateConfirmationModal?.hide();
                     this.templateModal.hide();
                     this._invoiceUiDataService.resetCustomTemplate();
                     this._invoiceUiDataService.setLogoPath('');
@@ -884,9 +884,9 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     public newLineToBR(template) {
-        template.sections['footer'].data['message1'].label = template.sections['footer'].data['message1'].label ? template.sections['footer'].data['message1'].label.replace(/(?:\r\n|\r|\n)/g, '<br />') : template.sections['footer'].data['message1'].label = '';
-        template.sections['footer'].data['companyAddress'].label = template.sections['footer'].data['companyAddress'].label ? template.sections['footer'].data['companyAddress'].label.replace(/(?:\r\n|\r|\n)/g, '<br />') : template.sections['footer'].data['companyAddress'].label = '';
-        template.sections['footer'].data['slogan'].label = template.sections['footer'].data['slogan'].label.replace(/(?:\r\n|\r|\n)/g, '<br />');
+        template.sections['footer'].data['message1'].label = template.sections['footer'].data['message1'].label ? template.sections['footer'].data['message1'].label?.replace(/(?:\r\n|\r|\n)/g, '<br />') : template.sections['footer'].data['message1'].label = '';
+        template.sections['footer'].data['companyAddress'].label = template.sections['footer'].data['companyAddress'].label ? template.sections['footer'].data['companyAddress'].label?.replace(/(?:\r\n|\r|\n)/g, '<br />') : template.sections['footer'].data['companyAddress'].label = '';
+        template.sections['footer'].data['slogan'].label = template.sections['footer'].data['slogan'].label?.replace(/(?:\r\n|\r|\n)/g, '<br />');
 
         // template.sections[2].content[9].label = template.sections[2].content[9].label.replace(/(?:\r\n|\r|\n)/g, '<br />');
         return template;
@@ -907,7 +907,7 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
         this._invoiceUiDataService.setTemplateUniqueName(template?.uniqueName, 'preview', customCreatedTemplates, defaultTemplate);
         // let data = cloneDeep(this._invoiceUiDataService.customTemplate.getValue());
         this.showinvoiceTemplatePreviewModal = true;
-        this.invoiceTemplatePreviewModal.show();
+        this.invoiceTemplatePreviewModal?.show();
     }
 
     /**
@@ -926,7 +926,7 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
         this.transactionMode = 'update';
         this._invoiceUiDataService.setTemplateUniqueName(template?.uniqueName, 'update', customCreatedTemplates, defaultTemplate);
         this.selectedTemplateUniqueName = template.copyFrom;
-        this.templateModal.show();
+        this.templateModal?.show();
     }
 
     /**
@@ -948,7 +948,7 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
             let selectedTemplate = cloneDeep(template);
             this.deleteTemplateConfirmationMessage = `Are you sure you want to delete "<b>${selectedTemplate.name}</b>" template?`;
             this.selectedTemplateUniqueName = selectedTemplate?.uniqueName;
-            this.customTemplateConfirmationModal.show();
+            this.customTemplateConfirmationModal?.show();
         }
     }
 
@@ -971,14 +971,14 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
             this.showtemplateModal = false;
             this._invoiceUiDataService.unusedImageSignature = '';
         }
-        this.customTemplateConfirmationModal.hide();
+        this.customTemplateConfirmationModal?.hide();
     }
 
     /**
      * onClosePreviewModal
      */
     public onClosePreviewModal() {
-        this.invoiceTemplatePreviewModal.hide();
+        this.invoiceTemplatePreviewModal?.hide();
         this.showinvoiceTemplatePreviewModal = false;
     }
 

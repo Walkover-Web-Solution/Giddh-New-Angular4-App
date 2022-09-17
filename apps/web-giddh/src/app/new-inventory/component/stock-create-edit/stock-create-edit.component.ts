@@ -285,12 +285,12 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
         groups.map(group => {
             if (group) {
                 let newOption: IOption = { label: '', value: '', additional: {} };
-                newOption.label = group.name;
-                newOption.value = group.uniqueName;
+                newOption.label = group?.name;
+                newOption.value = group?.uniqueName;
                 newOption.additional = group;
                 parents.push(newOption);
-                if (group.childStockGroups?.length > 0) {
-                    this.arrangeStockGroups(group.childStockGroups, parents);
+                if (group?.childStockGroups?.length > 0) {
+                    this.arrangeStockGroups(group?.childStockGroups, parents);
                 }
             }
         });
@@ -306,7 +306,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
             if (data.status === 'success') {
                 let purchaseAccounts: IOption[] = [];
                 data.body.results.map(account => {
-                    purchaseAccounts.push({ label: `${account.name} (${account.uniqueName})`, value: account.uniqueName, additional: account });
+                    purchaseAccounts.push({ label: `${account.name} (${account?.uniqueName})`, value: account?.uniqueName, additional: account });
                 });
 
                 this.purchaseAccounts = purchaseAccounts;
@@ -328,7 +328,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
             if (data.status === 'success') {
                 let salesAccounts: IOption[] = [];
                 data.body.results.map(account => {
-                    salesAccounts.push({ label: `${account.name} (${account.uniqueName})`, value: account.uniqueName, additional: account });
+                    salesAccounts.push({ label: `${account.name} (${account?.uniqueName})`, value: account?.uniqueName, additional: account });
                 });
 
                 this.salesAccounts = salesAccounts;
@@ -362,7 +362,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
      * @memberof StockCreateEditComponent
      */
     public deleteVariantOption(index: number): void {
-        this.stockForm.options = this.stockForm.options.filter((data, optionIndex) => optionIndex !== index).map((data, optionIndex) => {
+        this.stockForm.options = this.stockForm.options?.filter((data, optionIndex) => optionIndex !== index).map((data, optionIndex) => {
             return {
                 name: data.name,
                 values: data.values,
@@ -775,7 +775,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
      * @memberof StockCreateEditComponent
      */
     public selectTax(taxSelected: any): void {
-        let isSelected = this.selectedTaxes?.filter(selectedTax => selectedTax === taxSelected.uniqueName);
+        let isSelected = this.selectedTaxes?.filter(selectedTax => selectedTax === taxSelected?.uniqueName);
 
         if (taxSelected.taxType !== 'gstcess') {
             let index = findIndex(this.taxTempArray, (taxTemp) => taxTemp.taxType === taxSelected.taxType);
@@ -812,7 +812,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
             } else if (index > -1 && !isSelected?.length) {
                 taxSelected.isChecked = true;
                 taxSelected.isDisabled = false;
-                this.taxTempArray = this.taxTempArray.filter(taxTemp => {
+                this.taxTempArray = this.taxTempArray?.filter(taxTemp => {
                     return taxSelected.taxType !== taxTemp.taxType;
                 });
                 this.taxTempArray.push(taxSelected);
@@ -884,7 +884,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
     public formatRequest(): any {
         let stockForm = cloneDeep(this.stockForm);
 
-        stockForm.taxes = this.taxTempArray.map(tax => tax.uniqueName);
+        stockForm.taxes = this.taxTempArray.map(tax => tax?.uniqueName);
 
         if (!this.isPurchaseInformationEnabled) {
             stockForm.purchaseAccountDetails = null;
@@ -895,8 +895,8 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
 
         stockForm.customFields = stockForm.customFields?.map(customField => {
             return {
-                uniqueName: customField.uniqueName,
-                value: customField.value
+                uniqueName: customField?.uniqueName,
+                value: customField?.value
             }
         });
 
@@ -911,7 +911,7 @@ export class StockCreateEditComponent implements OnInit, OnDestroy {
     public mapCustomFieldsData(): void {
         if (this.stockForm.customFields?.length > 0 && this.customFieldsData?.length > 0) {
             this.stockForm.customFields?.forEach(customField => {
-                const customFieldData = this.customFieldsData?.filter(cfData => cfData.uniqueName === customField.uniqueName);
+                const customFieldData = this.customFieldsData?.filter(cfData => cfData?.uniqueName === customField?.uniqueName);
                 if (customFieldData?.length > 0) {
                     customField.value = customFieldData[0].value;
                 }

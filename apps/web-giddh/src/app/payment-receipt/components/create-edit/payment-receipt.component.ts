@@ -791,7 +791,7 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
             this.sessionKey$.pipe(take(1)).subscribe(key => sessionKey = key);
             const event: UploadInput = {
                 type: 'uploadAll',
-                url: Configuration.ApiUrl + LEDGER_API.UPLOAD_FILE.replace(':companyUniqueName', companyUniqueName),
+                url: Configuration.ApiUrl + LEDGER_API.UPLOAD_FILE?.replace(':companyUniqueName', companyUniqueName),
                 method: 'POST',
                 fieldName: 'file',
                 data: { company: companyUniqueName },
@@ -1436,7 +1436,7 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
         }
 
         let selectedTaxes = [];
-        this.voucherFormData.entries[0].taxes.filter(tax => tax.isChecked).forEach(tax => {
+        this.voucherFormData.entries[0].taxes?.filter(tax => tax.isChecked).forEach(tax => {
             selectedTaxes.push({ uniqueName: tax.uniqueName });
         });
 
@@ -1447,8 +1447,8 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
             if (response) {
                 if (response.status === "success") {
                     let message = this.localeData?.voucher_created;
-                    message = message.replace("[VOUCHER]", this.titleCasePipe.transform(this.voucherFormData.type));
-                    message = message.replace("[VOUCHER_NUMBER]", response.body?.number);
+                    message = message?.replace("[VOUCHER]", this.titleCasePipe.transform(this.voucherFormData.type));
+                    message = message?.replace("[VOUCHER_NUMBER]", response.body?.number);
                     this.toaster.showSnackBar("success", message);
                     this.resetForm(formObj);
 
@@ -1495,7 +1495,7 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
         let taxPercentage: number = 0;
         let cessPercentage: number = 0;
         this.selectedTaxes = [];
-        this.voucherFormData.entries[0].taxes.filter(tax => tax.isChecked).forEach(tax => {
+        this.voucherFormData.entries[0].taxes?.filter(tax => tax.isChecked).forEach(tax => {
             this.selectedTaxes.push(tax);
             if (tax.type === 'gstcess') {
                 cessPercentage += tax.amount;
@@ -1577,7 +1577,7 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
         }
 
         let selectedTaxes = [];
-        this.voucherFormData.entries[0].taxes.filter(tax => tax.isChecked).forEach(tax => {
+        this.voucherFormData.entries[0].taxes?.filter(tax => tax.isChecked).forEach(tax => {
             selectedTaxes.push({ uniqueName: tax.uniqueName });
         });
 
@@ -1588,7 +1588,7 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
             if (response) {
                 if (response.status === "success") {
                     let message = this.localeData?.voucher_updated;
-                    message = message.replace("[VOUCHER]", this.titleCasePipe.transform(this.voucherFormData.type));
+                    message = message?.replace("[VOUCHER]", this.titleCasePipe.transform(this.voucherFormData.type));
                     this.toaster.showSnackBar("success", message);
 
                     this.router.navigate(['/pages/voucher/' + this.voucherFormData.type + '/preview/' + this.voucherFormData.uniqueName + '/' + this.voucherFormData.account?.uniqueName]);

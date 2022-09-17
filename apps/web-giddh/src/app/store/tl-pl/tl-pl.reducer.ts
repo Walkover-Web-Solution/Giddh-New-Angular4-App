@@ -223,7 +223,7 @@ const filterProfitLossData = (data, statement) => {
                 }
                 return filterPlData.incArr[0].childGroups.push(grp);
             case 'expenses':
-                if (grp.uniqueName === 'operatingcost') {
+                if (grp?.uniqueName === 'operatingcost') {
                     filterPlData.expArr.push(operatingGrp);
                     return filterPlData.expArr[0].childGroups.push(grp);
                 } else {

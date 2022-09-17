@@ -229,7 +229,7 @@ export class LoginActions {
                             this.store.dispatch(this.companyActions.setCompanyBranch(organization));
                         }
                         cmpUniqueName = stateDetail.body.companyUniqueName;
-                        if (companies?.body?.findIndex(p => p.uniqueName === cmpUniqueName) > -1 && ROUTES.findIndex(p => p.path.split('/')[0] === stateDetail.body.lastState.split('/')[0]) > -1) {
+                        if (companies?.body?.findIndex(p => p?.uniqueName === cmpUniqueName) > -1 && ROUTES.findIndex(p => p.path.split('/')[0] === stateDetail.body.lastState.split('/')[0]) > -1) {
                             return this.finalThingTodo(stateDetail, companies);
                         } else {
                             // old user fail safe scenerio
@@ -295,7 +295,7 @@ export class LoginActions {
                             this.store.dispatch(this.companyActions.setCompanyBranch(organization));
                         }
                         cmpUniqueName = stateDetail.body.companyUniqueName;
-                        if (companies?.body?.findIndex(p => p.uniqueName === cmpUniqueName) > -1 && ROUTES.findIndex(p => p.path.split('/')[0] === stateDetail.body.lastState.split('/')[0]) > -1) {
+                        if (companies?.body?.findIndex(p => p?.uniqueName === cmpUniqueName) > -1 && ROUTES.findIndex(p => p.path.split('/')[0] === stateDetail.body.lastState.split('/')[0]) > -1) {
                             return this.finalThingTodo(stateDetail, companies, results[2]);
                         } else {
                             // old user fail safe scenerio
@@ -944,7 +944,7 @@ export class LoginActions {
         let cArr = companies.body.sort((a, b) => a.name.length - b.name.length);
         let company = cArr[0];
         if (company) {
-            respState.body.companyUniqueName = company.uniqueName;
+            respState.body.companyUniqueName = company?.uniqueName;
         } else {
             respState.body.companyUniqueName = "";
         }
@@ -958,7 +958,7 @@ export class LoginActions {
                 let entitiesArr = company.userEntityRoles.sort((a, b) => a.entity.name.length - b.entity.name.length);
                 let entityObj = entitiesArr[0].entity;
                 if (entityObj.entity === 'ACCOUNT') {
-                    respState.body.lastState = `ledger/${entityObj.uniqueName}`;
+                    respState.body.lastState = `ledger/${entityObj?.uniqueName}`;
                 } else if (entityObj.entity === 'GROUP') {
                     // get a/c`s of group and set first a/c
                     this.store.dispatch(this.SetRedirectToledger());
@@ -976,7 +976,7 @@ export class LoginActions {
 
     private finalThingTodo(stateDetail: any, companies: any, isSocialLogin?: boolean) {
         this.store.pipe(select(state => state.session.user), take(1)).subscribe(response => {
-            let request = { userUniqueName: response.user.uniqueName, companyUniqueName: stateDetail.body.companyUniqueName };
+            let request = { userUniqueName: response.user?.uniqueName, companyUniqueName: stateDetail.body.companyUniqueName };
             this.store.dispatch(this.companyActions.getCompanyUser(request));
         });
         this.store.dispatch(this.companyActions.GetStateDetailsResponse(stateDetail));

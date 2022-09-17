@@ -41,7 +41,7 @@ export class CompanyDetailsSidebarComponent implements OnInit {
      * @memberof CompanyDetailsSidebarComponent
      */
     public getCompanyDetails(): void {
-        this.settingsProfileService.getCompanyDetails(this.selectedCompany.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
+        this.settingsProfileService.getCompanyDetails(this.selectedCompany?.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
             if (response && response.status === "success" && response.body) {
                 this.selectedCompany = response.body;
             }

@@ -223,30 +223,30 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
             if (response && response.length) {
                 this.currentCompanyBranches = response.map(branch => ({
                     label: branch.alias,
-                    value: branch.uniqueName,
+                    value: branch?.uniqueName,
                     name: branch.name,
                     parentBranch: branch.parentBranch
                 }));
                 this.currentCompanyBranches.unshift({
                     label: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : '',
                     name: this.activeCompany ? this.activeCompany.name : '',
-                    value: this.activeCompany ? this.activeCompany.uniqueName : '',
+                    value: this.activeCompany ? this.activeCompany?.uniqueName : '',
                     isCompany: true
                 });
-                if (!this.currentBranch.uniqueName) {
+                if (!this.currentBranch?.uniqueName) {
                     // Assign the current branch only when it is not selected. This check is necessary as
                     // opening the branch switcher would reset the current selected branch as this subscription is run everytime
                     // branches are loaded
                     let currentBranchUniqueName;
                     if (this.currentOrganizationType === OrganizationType.Branch) {
                         currentBranchUniqueName = this.generalService.currentBranchUniqueName;
-                        this.currentBranch = _.cloneDeep(response.find(branch => branch.uniqueName === currentBranchUniqueName)) || this.currentBranch;
+                        this.currentBranch = _.cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName)) || this.currentBranch;
                     } else {
-                        currentBranchUniqueName = this.activeCompany ? this.activeCompany.uniqueName : '';
+                        currentBranchUniqueName = this.activeCompany ? this.activeCompany?.uniqueName : '';
                         this.currentBranch = {
                             name: this.activeCompany ? this.activeCompany.name : '',
                             alias: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : '',
-                            uniqueName: this.activeCompany ? this.activeCompany.uniqueName : '',
+                            uniqueName: this.activeCompany ? this.activeCompany?.uniqueName : '',
                         };
                     }
                 }
@@ -509,7 +509,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
                 balanceDue: (this.advanceSearchModel.unusedAmountFilter) ? this.advanceSearchModel.unusedAmountFilter.amount : "",
                 sort: this.searchQueryParams.sort,
                 sortBy: this.searchQueryParams.sortBy,
-                branchUniqueName: this.currentBranch.uniqueName
+                branchUniqueName: this.currentBranch?.uniqueName
             };
 
             if (additionalRequestParameters.receiptTypes?.length > 0) {
@@ -574,7 +574,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
                 unUsedAmountOperation: (this.advanceSearchModel.unusedAmountFilter) ? this.advanceSearchModel.unusedAmountFilter.selectedValue : "",
                 sort: this.searchQueryParams.sort,
                 sortBy: this.searchQueryParams.sortBy,
-                branchUniqueName: this.currentBranch.uniqueName
+                branchUniqueName: this.currentBranch?.uniqueName
             };
         }
 
@@ -611,7 +611,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
                 companyUniqueName: this.activeCompanyUniqueName,
                 from: this.fromDate,
                 to: this.toDate,
-                branchUniqueName: this.currentBranch.uniqueName
+                branchUniqueName: this.currentBranch?.uniqueName
             };
             return this.receiptService.fetchSummary(requestObject);
         }
@@ -786,7 +786,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
      */
     public toggleReceipt(receipt: any): void {
         if (receipt.isSelected) {
-            this.selectedReceipts = this.selectedReceipts.filter(selectedReceipt => selectedReceipt !== receipt?.uniqueName);
+            this.selectedReceipts = this.selectedReceipts?.filter(selectedReceipt => selectedReceipt !== receipt?.uniqueName);
             this.allReceiptsSelected = false;
         } else {
             this.selectedReceipts.push(receipt?.uniqueName);

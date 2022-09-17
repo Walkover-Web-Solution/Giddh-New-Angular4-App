@@ -109,7 +109,7 @@ export class CustomFieldsCreateEditComponent implements OnInit, OnDestroy {
                 if (response.status === 'success') {
                     this.customFieldRequest = cloneDeep(response.body);
                     this.selectFieldType({ label: this.customFieldRequest.fieldType?.name, value: this.customFieldRequest.fieldType?.type });
-                    this.selectedModules = this.customFieldRequest?.modules?.map(module => module.uniqueName);
+                    this.selectedModules = this.customFieldRequest?.modules?.map(module => module?.uniqueName);
                 } else if (response.message) {
                     this.toasterService.errorToast(response.message);
                 }
@@ -232,9 +232,9 @@ export class CustomFieldsCreateEditComponent implements OnInit, OnDestroy {
             this.customFieldRequest.modules = [];
         }
 
-        let isModuleSelected = this.customFieldRequest.modules?.filter(module => module.uniqueName === selectedModule?.uniqueName);
+        let isModuleSelected = this.customFieldRequest.modules?.filter(module => module?.uniqueName === selectedModule?.uniqueName);
         if (isModuleSelected?.length > 0) {
-            this.customFieldRequest.modules = this.customFieldRequest.modules?.filter(module => module.uniqueName !== selectedModule?.uniqueName);
+            this.customFieldRequest.modules = this.customFieldRequest.modules?.filter(module => module?.uniqueName !== selectedModule?.uniqueName);
         } else {
             this.customFieldRequest.modules.push(selectedModule);
         }
