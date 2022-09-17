@@ -25,7 +25,7 @@ export class ManufacturingService {
      */
     public CreateManufacturingItem(model: IManufacturingItemRequest, stockUniqueName: string): Observable<BaseResponse<ICommonResponseOfManufactureItem, IManufacturingItemRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.post(this.config.apiUrl + MANUFACTURING_API.CREATE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':stockUniqueName', encodeURIComponent(stockUniqueName)), model).pipe(map((res) => {
+        return this.http.post(this.config.apiUrl + MANUFACTURING_API.CREATE?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':stockUniqueName', encodeURIComponent(stockUniqueName)), model).pipe(map((res) => {
             let data: BaseResponse<ICommonResponseOfManufactureItem, IManufacturingItemRequest> = res;
             data.request = model;
             data.queryString = { stockUniqueName };
@@ -39,7 +39,7 @@ export class ManufacturingService {
      */
     public UpdateManufacturingItem(model: IManufacturingItemRequest, reqModal: IManufacturingUnqItemObj): Observable<BaseResponse<ICommonResponseOfManufactureItem, IManufacturingItemRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.put(this.config.apiUrl + MANUFACTURING_API.UPDATE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':stockUniqueName', reqModal.stockUniqueName).replace(':manufacturingUniqueName', reqModal.manufacturingUniqueName), model).pipe(map((res) => {
+        return this.http.put(this.config.apiUrl + MANUFACTURING_API.UPDATE?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':stockUniqueName', reqModal.stockUniqueName)?.replace(':manufacturingUniqueName', reqModal.manufacturingUniqueName), model).pipe(map((res) => {
             let data: BaseResponse<ICommonResponseOfManufactureItem, IManufacturingItemRequest> = res;
             data.request = model;
             data.queryString = reqModal;
@@ -53,7 +53,7 @@ export class ManufacturingService {
      */
     public DeleteManufacturingItem(model: IManufacturingUnqItemObj): Observable<BaseResponse<string, string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.delete(this.config.apiUrl + MANUFACTURING_API.DELETE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':stockUniqueName', encodeURIComponent(model.stockUniqueName)).replace(':manufacturingUniqueName', model.manufacturingUniqueName)).pipe(map((res) => {
+        return this.http.delete(this.config.apiUrl + MANUFACTURING_API.DELETE?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':stockUniqueName', encodeURIComponent(model.stockUniqueName))?.replace(':manufacturingUniqueName', model.manufacturingUniqueName)).pipe(map((res) => {
             let data: BaseResponse<string, string> = res;
             data.request = '';
             data.queryString = { model };
@@ -101,7 +101,7 @@ export class ManufacturingService {
             url = url.concat(`&branchUniqueName=${encodeURIComponent(model.branchUniqueName)}`)
         }
 
-        return this.http.get(url.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(
+        return this.http.get(url?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(
             map((res) => {
                 let data: BaseResponse<StocksResponse, IMfStockSearchRequest> = res;
                 data.request = model;
@@ -117,7 +117,7 @@ export class ManufacturingService {
      */
     public GetStockWithRate(model: IManufacturingUnqItemObj): Observable<BaseResponse<ICommonResponseOfManufactureItem, string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.get(this.config.apiUrl + MANUFACTURING_API.GET_STOCK_WITH_RATE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':stockUniqueName', encodeURIComponent(model.stockUniqueName))).pipe(
+        return this.http.get(this.config.apiUrl + MANUFACTURING_API.GET_STOCK_WITH_RATE?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':stockUniqueName', encodeURIComponent(model.stockUniqueName))).pipe(
             map((res) => {
                 let data: BaseResponse<ICommonResponseOfManufactureItem, string> = res;
                 data.queryString = model;

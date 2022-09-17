@@ -60,7 +60,7 @@ export class AsideTransferPaneComponent implements OnInit, OnDestroy {
 
         this.stockUnits$ = this._store.pipe(select(p => p.inventory.stockUnits), takeUntil(this.destroyed$));
 
-        this.userList$ = this._store.pipe(select(p => p.inventoryInOutState.inventoryUsers.filter(o => o.uniqueName !== this._generalService.companyUniqueName)), takeUntil(this.destroyed$));
+        this.userList$ = this._store.pipe(select(p => p.inventoryInOutState.inventoryUsers?.filter(o => o?.uniqueName !== this._generalService.companyUniqueName)), takeUntil(this.destroyed$));
 
         this._store.pipe(select(p => p.inventoryInOutState.entryInProcess), takeUntil(this.destroyed$)).subscribe(p => this.isLoading = p);
 

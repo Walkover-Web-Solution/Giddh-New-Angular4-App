@@ -152,8 +152,8 @@ export class MfReportComponent implements OnInit, OnDestroy {
                     this.stockListDropDown = [];
                     forEach(o.results, (unit: any) => {
                         this.stockListDropDown.push({
-                            label: ` ${unit.name} (${unit.uniqueName})`,
-                            value: unit.uniqueName,
+                            label: ` ${unit.name} (${unit?.uniqueName})`,
+                            value: unit?.uniqueName,
                             additional: unit.stockGroup
                         });
                     });
@@ -215,11 +215,11 @@ export class MfReportComponent implements OnInit, OnDestroy {
                         currentBranchUniqueName = this.generalService.currentBranchUniqueName;
                         this.currentBranch = cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName)) || this.currentBranch;
                     } else {
-                        currentBranchUniqueName = this.activeCompany ? this.activeCompany.uniqueName : '';
+                        currentBranchUniqueName = this.activeCompany ? this.activeCompany?.uniqueName : '';
                         this.currentBranch = {
                             name: this.activeCompany ? this.activeCompany.name : '',
                             alias: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : '',
-                            uniqueName: this.activeCompany ? this.activeCompany.uniqueName : '',
+                            uniqueName: this.activeCompany ? this.activeCompany?.uniqueName : '',
                         };
                     }
                 }
@@ -266,7 +266,7 @@ export class MfReportComponent implements OnInit, OnDestroy {
 
     public editMFItem(item) {
         if (item?.uniqueName) {
-            this.store.dispatch(this.manufacturingActions.SetMFItemUniqueNameInStore(item.uniqueName));
+            this.store.dispatch(this.manufacturingActions.SetMFItemUniqueNameInStore(item?.uniqueName));
             this.router.navigate(['/pages/manufacturing/edit']);
         }
     }
@@ -386,7 +386,7 @@ export class MfReportComponent implements OnInit, OnDestroy {
             this.warehouses = [];
             if (warehouses && warehouses.results) {
                 warehouses.results.forEach(warehouse => {
-                    this.warehouses.push({ label: warehouse.name, value: warehouse.uniqueName, additional: warehouse });
+                    this.warehouses.push({ label: warehouse.name, value: warehouse?.uniqueName, additional: warehouse });
                 });
             }
         });

@@ -22,9 +22,9 @@ export class NewVsOldInvoicesService {
     public GetNewVsOldInvoices(queryRequest: NewVsOldInvoicesRequest): Observable<BaseResponse<NewVsOldInvoicesResponse, string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.get(this.config.apiUrl + NEWVSOLDINVOICE_API.GET
-            .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            .replace(':type', queryRequest.type.toString())
-            .replace(':value', queryRequest.value.toString()))
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':type', queryRequest.type.toString())
+            ?.replace(':value', queryRequest.value.toString()))
             .pipe(map((res) => {
                 let data: BaseResponse<NewVsOldInvoicesResponse, string> = res;
                 data.queryString = queryRequest;

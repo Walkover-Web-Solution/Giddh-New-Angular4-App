@@ -151,7 +151,7 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
 
         filteredArr = this.getFilteredArrOfIOptionItems(array, term, action);
 
-        startsWithArr = filteredArr.filter(function (item) {
+        startsWithArr = filteredArr?.filter(function (item) {
             if (startsWith(item.label.toLocaleLowerCase(), term) || startsWith(item.value.toLocaleLowerCase(), term)) {
                 return item;
             } else {
@@ -166,13 +166,13 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
 
     public getFilteredArrOfIOptionItems(array: IOption[], term: string, action: string) {
         if (action === FLATTEN_SEARCH_TERM) {
-            return array.filter((item) => {
+            return array?.filter((item) => {
                 let mergedAccounts = item.additional && item.additional.mergedAccounts ?
                     _.cloneDeep(item.additional.mergedAccounts.split(',').map(a => a.trim().toLocaleLowerCase())) : '';
-                return _.includes(item.label.toLocaleLowerCase(), term) || _.includes(item.additional.uniqueName.toLocaleLowerCase(), term) || _.includes(mergedAccounts, term);
+                return _.includes(item.label.toLocaleLowerCase(), term) || _.includes(item.additional?.uniqueName.toLocaleLowerCase(), term) || _.includes(mergedAccounts, term);
             });
         } else {
-            return array.filter((item: IOption) => {
+            return array?.filter((item: IOption) => {
                 return includes(item.label.toLocaleLowerCase(), term) || includes(item.value.toLocaleLowerCase(), term);
             });
         }
@@ -448,7 +448,7 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
 
     public clearSingleSelection(event, option: IOption) {
         event.stopPropagation();
-        this.selectedValues = this.selectedValues.filter(f => f?.value !== option?.value).map(p => p?.value);
+        this.selectedValues = this.selectedValues?.filter(f => f?.value !== option?.value).map(p => p?.value);
         this.onChange();
     }
 

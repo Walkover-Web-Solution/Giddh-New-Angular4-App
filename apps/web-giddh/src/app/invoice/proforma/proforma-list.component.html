@@ -388,14 +388,14 @@
                         >
                             <tr
                                 *ngFor="let item of voucherData.results; let i = index"
-                                (mouseover)="hoveredItemUniqueName = item.uniqueName"
+                                (mouseover)="hoveredItemUniqueName = item?.uniqueName"
                             >
                                 <td
                                     class="check-image"
                                     width="4%"
                                     data-title="#"
                                     *ngIf="
-                                        hoveredItemUniqueName === item.uniqueName ||
+                                        hoveredItemUniqueName === item?.uniqueName ||
                                         item.isSelected ||
                                         selectedItems.length > 0
                                     "
@@ -418,7 +418,7 @@
                                     width="4%"
                                     *ngIf="
                                         !item.isSelected &&
-                                        hoveredItemUniqueName !== item.uniqueName &&
+                                        hoveredItemUniqueName !== item?.uniqueName &&
                                         selectedItems.length === 0
                                     "
                                     data-title="#"
@@ -439,7 +439,7 @@
                                             href="javascript:void(0);"
                                             class="btn-link-2"
                                             (click)="onSelectInvoice(item)"
-                                            >{{ item.uniqueName }}</a
+                                            >{{ item?.uniqueName }}</a
                                         >
                                     </div>
                                     <span *ngIf="item.expiredDays !== null">
@@ -451,19 +451,19 @@
 
                                 <td
                                     width="19%"
-                                    (dblclick)="selectedCustomerUniqueName = item.uniqueName"
+                                    (dblclick)="selectedCustomerUniqueName = item?.uniqueName"
                                     class="cp no-dbl-click-select"
                                     (clickOutside)="selectedCustomerUniqueName = ''"
                                     [attr.data-title]="commonLocaleData?.app_customer"
                                 >
                                     {{ item.customerName }}
                                     <div
-                                        *ngIf="selectedCustomerUniqueName === item.uniqueName"
+                                        *ngIf="selectedCustomerUniqueName === item?.uniqueName"
                                         account-detail-modal-component
                                         [accountUniqueName]="item.customerUniqueName"
                                         [from]="this.advanceSearchFilter.from"
                                         [to]="this.advanceSearchFilter.to"
-                                        [isModalOpen]="selectedCustomerUniqueName === item.uniqueName"
+                                        [isModalOpen]="selectedCustomerUniqueName === item?.uniqueName"
                                     ></div>
                                 </td>
 
@@ -508,7 +508,7 @@
                                 <td
                                     width="10%"
                                     [attr.data-title]="commonLocaleData?.app_action"
-                                    (click)="clickedItemUniqueName = item.uniqueName"
+                                    (click)="clickedItemUniqueName = item?.uniqueName"
                                     class="cp"
                                     *ngIf="item.action !== 'invoiced'"
                                 >

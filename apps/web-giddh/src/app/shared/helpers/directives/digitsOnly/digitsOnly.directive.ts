@@ -16,7 +16,7 @@ export class DigitsOnlyDirective {
         if (el.shiftKey || el.ctrlKey || (el.which >= 37 && el.which <= 40)) {
             return;
         }
-        this.renderer.setProperty(this.el, 'value', ((this.el && this.el.value) ? this.el.value.replace(/[^0-9]/g, '') : ''));
+        this.renderer.setProperty(this.el, 'value', ((this.el && this.el.value) ? this.el.value?.replace(/[^0-9]/g, '') : ''));
     }
 
 }

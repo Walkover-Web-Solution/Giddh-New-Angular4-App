@@ -402,7 +402,7 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
             if (response) {
                 this.ledgerService.removeAttachment(this.attachments[index]?.uniqueName).subscribe((response) => {
                     if (response?.status === 'success') {
-                        let updatedAttachments = this.attachments.filter(attachment => attachment.uniqueName !== this.attachments[index]?.uniqueName);
+                        let updatedAttachments = this.attachments?.filter(attachment => attachment.uniqueName !== this.attachments[index]?.uniqueName);
                         this.attachments = updatedAttachments;
                         this.refreshAfterClose = true;
 

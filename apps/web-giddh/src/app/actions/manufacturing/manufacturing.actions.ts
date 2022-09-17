@@ -87,7 +87,7 @@ export class ManufacturingActions {
         .pipe(
             ofType(MANUFACTURING_ACTIONS.UPDATE_MF_ITEM),
             switchMap((action: CustomActions) => {
-                return this._manufacturingService.UpdateManufacturingItem(action.payload, { stockUniqueName: action.payload.stockUniqueName, manufacturingUniqueName: action.payload.uniqueName }).pipe(
+                return this._manufacturingService.UpdateManufacturingItem(action.payload, { stockUniqueName: action.payload.stockUniqueName, manufacturingUniqueName: action.payload?.uniqueName }).pipe(
                     map(response => this.UpdateMfItemResponse(response)));
             })));
 

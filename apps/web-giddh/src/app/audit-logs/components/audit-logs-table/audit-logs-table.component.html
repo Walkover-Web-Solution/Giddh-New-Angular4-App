@@ -37,7 +37,7 @@
             </ng-template>
             <ng-container *ngIf="log?.details?.type && log.operationType === 'MERGE'">
                 <span *ngIf="log?.details?.type === 'TARGET' && log?.details?.target">
-                    - {{ log?.details?.target?.name }}({{ log?.details?.target.uniqueName }})</span
+                    - {{ log?.details?.target?.name }}({{ log?.details?.target?.uniqueName }})</span
                 >
                 <ng-container *ngFor="let source of log?.details?.source">
                     <span *ngIf="log?.details?.type === 'SOURCE' && log?.details?.source">
@@ -47,7 +47,7 @@
             </ng-container>
             <ng-container *ngIf="log?.operationType === 'MOVE'">
                 <span *ngIf="log?.details?.entity">
-                    - {{ log?.details?.entity.name }}({{ log?.details?.entity.uniqueName }})</span
+                    - {{ log?.details?.entity.name }}({{ log?.details?.entity?.uniqueName }})</span
                 >
             </ng-container>
             <!-- For account start header -->
@@ -792,7 +792,7 @@
                     <tr *ngFor="let transaction of log.log.updated.transactions; let i = index">
                         <td>{{ i + 1 }}</td>
                         <td>{{ log.log.updated.entryDate }}</td>
-                        <td>{{ transaction.particular.name }} ({{ transaction.particular.uniqueName }})</td>
+                        <td>{{ transaction.particular.name }} ({{ transaction.particular?.uniqueName }})</td>
                         <td>{{ transaction.amount }}</td>
                         <td>{{ transaction.type }}</td>
                     </tr>
@@ -814,7 +814,7 @@
                     <tr *ngFor="let transaction of log.log.old.transactions; let i = index">
                         <td>{{ i + 1 }}</td>
                         <td>{{ log.log.old.entryDate }}</td>
-                        <td>{{ transaction.particular.name }} ({{ transaction.particular.uniqueName }})</td>
+                        <td>{{ transaction.particular.name }} ({{ transaction.particular?.uniqueName }})</td>
                         <td>{{ transaction.amount }}</td>
                         <td>{{ transaction.type }}</td>
                     </tr>

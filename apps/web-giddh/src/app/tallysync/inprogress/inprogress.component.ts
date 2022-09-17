@@ -160,7 +160,7 @@ export class InprogressComponent implements OnInit, OnDestroy {
         this.downloadTallyErrorLogRequest.date = row['dateDDMMYY'] ? row['dateDDMMYY'] : '';
         this.downloadTallyErrorLogRequest.hour = row['hour'] ? row['hour'] : null;
         this.downloadTallyErrorLogRequest.type = row['type'];
-        this.tallysyncService.getErrorLog(row.company.uniqueName, this.downloadTallyErrorLogRequest)
+        this.tallysyncService.getErrorLog(row.company?.uniqueName, this.downloadTallyErrorLogRequest)
             .pipe(takeUntil(this.destroyed$))
             .subscribe(res => {
                 if (res.status === "success") {

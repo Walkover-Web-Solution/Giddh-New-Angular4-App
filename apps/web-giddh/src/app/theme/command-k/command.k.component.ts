@@ -239,7 +239,7 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
 
         if (this.listOfSelectedGroups && this.listOfSelectedGroups.length > 0) {
             let lastGroup = this._generalService.getLastElement(this.listOfSelectedGroups);
-            this.commandKRequestParams.group = lastGroup.uniqueName;
+            this.commandKRequestParams.group = lastGroup?.uniqueName;
         } else {
             this.commandKRequestParams.group = "";
         }
@@ -454,7 +454,7 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
      * @memberof CommandKComponent
      */
     public trackByFn(index, item: any) {
-        return item.uniqueName; // unique id corresponding to the item
+        return item?.uniqueName; // unique id corresponding to the item
     }
 
     /**
@@ -515,9 +515,9 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
      * @memberof CommandKComponent
      */
     public getPageUniqueName(route: string): string {
-        let string = route.replace(/\s+/g, '-');
-        string = string.replace(/\//g, '-');
-        string = string.replace(/^-|-$/g, '');
+        let string = route?.replace(/\s+/g, '-');
+        string = string?.replace(/\//g, '-');
+        string = string?.replace(/^-|-$/g, '');
         return string;
     }
 

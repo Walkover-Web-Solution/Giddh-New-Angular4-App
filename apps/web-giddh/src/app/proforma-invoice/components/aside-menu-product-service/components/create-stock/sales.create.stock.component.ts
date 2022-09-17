@@ -733,7 +733,7 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
         let stockObj = new CreateStockRequest();
         let uniqueName = this.addStockForm.get('uniqueName');
         if (uniqueName.value) {
-            uniqueName?.patchValue(uniqueName.value.replace(/ /g, '').toLowerCase());
+            uniqueName?.patchValue(uniqueName.value?.replace(/ /g, '').toLowerCase());
         }
         this.addStockForm.get('uniqueName').enable();
 
@@ -754,7 +754,7 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
 
         if (formObj.enablePurchase) {
             if (this.validateStock(formObj.purchaseUnitRates)) {
-                formObj.purchaseUnitRates = formObj.purchaseUnitRates.filter((pr) => {
+                formObj.purchaseUnitRates = formObj.purchaseUnitRates?.filter((pr) => {
                     // Aditya: In inventory while creating purchase and sales unit and rate are mandatory error issue
                     // return pr.stockUnitCode && pr.rate;
                     return pr.stockUnitCode || pr.rate;
@@ -770,7 +770,7 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
         }
         if (formObj.enableSales) {
             if (this.validateStock(formObj.purchaseUnitRates)) {
-                formObj.saleUnitRates = formObj.saleUnitRates.filter((pr) => {
+                formObj.saleUnitRates = formObj.saleUnitRates?.filter((pr) => {
                     // Aditya: In inventory while creating purchase and sales unit and rate are mandatory error issue
                     // return pr.stockUnitCode && pr.rate;
                     return pr.stockUnitCode || pr.rate;
@@ -1020,7 +1020,7 @@ export class SalesAddStockComponent implements OnInit, AfterViewInit, OnDestroy,
             } else if (index > -1 && e.target.checked) {
                 tax.isChecked = true;
                 tax.isDisabled = false;
-                this.taxTempArray = this.taxTempArray.filter(ele => {
+                this.taxTempArray = this.taxTempArray?.filter(ele => {
                     return tax.taxType !== ele.taxType;
                 });
                 this.taxTempArray.push(tax);

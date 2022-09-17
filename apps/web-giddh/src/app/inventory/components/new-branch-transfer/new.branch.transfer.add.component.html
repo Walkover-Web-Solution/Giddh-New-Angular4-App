@@ -182,8 +182,8 @@
                                 <i
                                     class="icon-info"
                                     *ngIf="
-                                        senderWarehouses[branchTransfer.sources[0].uniqueName]?.length !==
-                                        allWarehouses[branchTransfer.sources[0].uniqueName]?.length
+                                        senderWarehouses[branchTransfer.sources[0]?.uniqueName]?.length !==
+                                        allWarehouses[branchTransfer.sources[0]?.uniqueName]?.length
                                     "
                                     [tooltip]="branchTransferInfoText"
                                 ></i>
@@ -197,7 +197,7 @@
                                 <sh-select
                                     #sourceWarehouse
                                     name="sourceWarehouse"
-                                    [options]="senderWarehouses[branchTransfer.sources[0].uniqueName]"
+                                    [options]="senderWarehouses[branchTransfer.sources[0]?.uniqueName]"
                                     [isFilterEnabled]="true"
                                     [forceClearReactive]="senderWarehouseClear$ | async"
                                     [(ngModel)]="branchTransfer.sources[0].warehouse.uniqueName"
@@ -213,7 +213,7 @@
                             class="row mr-b2"
                             *ngIf="
                                 branchTransfer.sources[0].warehouse.taxNumber &&
-                                branchTransfer.sources[0].warehouse.uniqueName &&
+                                branchTransfer.sources[0].warehouse?.uniqueName &&
                                 formFields &&
                                 formFields['taxName']
                             "
@@ -270,8 +270,8 @@
                                 <i
                                     class="icon-info"
                                     *ngIf="
-                                        destinationWarehouses[branchTransfer.destinations[0].uniqueName]?.length !==
-                                        allWarehouses[branchTransfer.destinations[0].uniqueName]?.length
+                                        destinationWarehouses[branchTransfer.destinations[0]?.uniqueName]?.length !==
+                                        allWarehouses[branchTransfer.destinations[0]?.uniqueName]?.length
                                     "
                                     [tooltip]="branchTransferInfoText"
                                 ></i>
@@ -285,7 +285,7 @@
                                 <sh-select
                                     #destinationWarehouse
                                     name="destinationWarehouse"
-                                    [options]="destinationWarehouses[branchTransfer.destinations[0].uniqueName]"
+                                    [options]="destinationWarehouses[branchTransfer.destinations[0]?.uniqueName]"
                                     [isFilterEnabled]="true"
                                     [forceClearReactive]="destinationWarehouseClear$ | async"
                                     [(ngModel)]="branchTransfer.destinations[0].warehouse.uniqueName"
@@ -301,7 +301,7 @@
                             class="row mr-b2"
                             *ngIf="
                                 branchTransfer.destinations[0].warehouse.taxNumber &&
-                                branchTransfer.destinations[0].warehouse.uniqueName &&
+                                branchTransfer.destinations[0].warehouse?.uniqueName &&
                                 transferType !== 'senders' &&
                                 formFields &&
                                 formFields['taxName']
@@ -467,8 +467,8 @@
                                 <i
                                     class="icon-info"
                                     *ngIf="
-                                        senderWarehouses[branchTransfer.sources[0].uniqueName]?.length !==
-                                        allWarehouses[branchTransfer.sources[0].uniqueName]?.length
+                                        senderWarehouses[branchTransfer.sources[0]?.uniqueName]?.length !==
+                                        allWarehouses[branchTransfer.sources[0]?.uniqueName]?.length
                                     "
                                     [tooltip]="branchTransferInfoText"
                                 ></i>
@@ -484,7 +484,7 @@
                                     name="sourceWarehouse"
                                     [isFilterEnabled]="true"
                                     [forceClearReactive]="senderWarehouseClear$ | async"
-                                    [options]="senderWarehouses[branchTransfer.sources[0].uniqueName]"
+                                    [options]="senderWarehouses[branchTransfer.sources[0]?.uniqueName]"
                                     [(ngModel)]="branchTransfer.sources[0].warehouse.uniqueName"
                                     (selected)="focusDestinationWarehouse($event); getWarehouseDetails('sources', 0)"
                                     required
@@ -496,7 +496,7 @@
                         <div
                             *ngIf="
                                 branchTransfer.sources[0].warehouse.taxNumber &&
-                                branchTransfer.sources[0].warehouse.uniqueName &&
+                                branchTransfer.sources[0].warehouse?.uniqueName &&
                                 transferType !== 'senders' &&
                                 formFields &&
                                 formFields['taxName']
@@ -564,8 +564,8 @@
                                 <i
                                     class="icon-info"
                                     *ngIf="
-                                        destinationWarehouses[branchTransfer.destinations[0].uniqueName]?.length !==
-                                        allWarehouses[branchTransfer.destinations[0].uniqueName]?.length
+                                        destinationWarehouses[branchTransfer.destinations[0]?.uniqueName]?.length !==
+                                        allWarehouses[branchTransfer.destinations[0]?.uniqueName]?.length
                                     "
                                     [tooltip]="branchTransferInfoText"
                                 ></i>
@@ -581,7 +581,7 @@
                                     name="destinationWarehouse"
                                     [isFilterEnabled]="true"
                                     [forceClearReactive]="destinationWarehouseClear$ | async"
-                                    [options]="destinationWarehouses[branchTransfer.destinations[0].uniqueName]"
+                                    [options]="destinationWarehouses[branchTransfer.destinations[0]?.uniqueName]"
                                     [(ngModel)]="branchTransfer.destinations[0].warehouse.uniqueName"
                                     (selected)="getWarehouseDetails('destinations', 0); focusSelectDropdown(0, $event)"
                                     (onClear)="resetWarehouse('destinations', 0)"
@@ -595,7 +595,7 @@
                             class="row mr-b2"
                             *ngIf="
                                 branchTransfer.destinations[0].warehouse.taxNumber &&
-                                branchTransfer.destinations[0].warehouse.uniqueName &&
+                                branchTransfer.destinations[0].warehouse?.uniqueName &&
                                 formFields &&
                                 formFields['taxName']
                             "
@@ -689,7 +689,7 @@
                                                 <div
                                                     class="sku-code"
                                                     (click)="focusSkuNumber()"
-                                                    *ngIf="activeRow == i && product.uniqueName"
+                                                    *ngIf="activeRow == i && product?.uniqueName"
                                                 >
                                                     <label class="">SKU Code: </label>
                                                     <span
@@ -737,7 +737,7 @@
                                                 maxlength="100"
                                                 class="form-control"
                                                 name="productDescription{{ i }}"
-                                                *ngIf="product.uniqueName"
+                                                *ngIf="product?.uniqueName"
                                                 [(ngModel)]="product.description"
                                             ></textarea>
                                         </div>
@@ -941,8 +941,8 @@
                                                 #destinationWarehouseList
                                                 [isFilterEnabled]="true"
                                                 [forceClearReactive]="warehouseClear$ | async"
-                                                *ngIf="destination.uniqueName"
-                                                [options]="destinationWarehouses[destination.uniqueName]"
+                                                *ngIf="destination?.uniqueName"
+                                                [options]="destinationWarehouses[destination?.uniqueName]"
                                                 [(ngModel)]="destination.warehouse.uniqueName"
                                                 name="destinationWarehouse{{ i }}"
                                                 (selected)="
@@ -958,7 +958,7 @@
                                                 *ngIf="
                                                     formFields &&
                                                     formFields['taxName'] &&
-                                                    destination.warehouse.uniqueName &&
+                                                    destination.warehouse?.uniqueName &&
                                                     destination.warehouse.taxNumber
                                                 "
                                                 name="destinationWarehouseTaxnumber{{ i }}"
@@ -969,7 +969,7 @@
                                             <textarea
                                                 [disabled]="destination?.warehouse?.uniqueName"
                                                 class="form-control"
-                                                *ngIf="destination.warehouse.uniqueName"
+                                                *ngIf="destination.warehouse?.uniqueName"
                                                 name="destinationWarehouseAddress{{ i }}"
                                                 [(ngModel)]="destination.warehouse.address"
                                             ></textarea>
@@ -1073,8 +1073,8 @@
                                                     'change-position': branchTransfer.destinations.length > 1
                                                 }"
                                                 *ngIf="
-                                                    destinationWarehouses[destination.uniqueName]?.length !==
-                                                    allWarehouses[destination.uniqueName]?.length
+                                                    destinationWarehouses[destination?.uniqueName]?.length !==
+                                                    allWarehouses[destination?.uniqueName]?.length
                                                 "
                                                 [tooltip]="branchTransferInfoText"
                                             ></i>
@@ -1107,8 +1107,8 @@
                                                 #sourceWarehouses
                                                 [isFilterEnabled]="true"
                                                 [forceClearReactive]="warehouseClear$ | async"
-                                                *ngIf="source.uniqueName"
-                                                [options]="senderWarehouses[source.uniqueName]"
+                                                *ngIf="source?.uniqueName"
+                                                [options]="senderWarehouses[source?.uniqueName]"
                                                 [(ngModel)]="source.warehouse.uniqueName"
                                                 name="sourceWarehouse{{ i }}"
                                                 (selected)="getWarehouseDetails('sources', i); focusSourceQuantity()"
@@ -1122,7 +1122,7 @@
                                                 *ngIf="
                                                     formFields &&
                                                     formFields['taxName'] &&
-                                                    source.warehouse.uniqueName &&
+                                                    source.warehouse?.uniqueName &&
                                                     source.warehouse.taxNumber
                                                 "
                                                 name="sourceWarehouseTaxnumber{{ i }}"
@@ -1133,7 +1133,7 @@
                                             <textarea
                                                 [disabled]="source?.warehouse?.uniqueName"
                                                 class="form-control"
-                                                *ngIf="source.warehouse.uniqueName"
+                                                *ngIf="source.warehouse?.uniqueName"
                                                 name="sourceWarehouseAddress{{ i }}"
                                                 [(ngModel)]="source.warehouse.address"
                                             ></textarea>
@@ -1226,8 +1226,8 @@
                                                 class="icon-info"
                                                 [ngClass]="{ 'change-position': branchTransfer.sources.length > 1 }"
                                                 *ngIf="
-                                                    senderWarehouses[source.uniqueName]?.length !==
-                                                    allWarehouses[source.uniqueName]?.length
+                                                    senderWarehouses[source?.uniqueName]?.length !==
+                                                    allWarehouses[source?.uniqueName]?.length
                                                 "
                                                 [tooltip]="branchTransferInfoText"
                                             ></i>

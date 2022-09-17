@@ -21,10 +21,10 @@ export class VatService {
         this.companyUniqueName = this.generalService.companyUniqueName;
 
         let url = this.config.apiUrl + VAT_API.VIEW_REPORT;
-        url = url.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName));
-        url = url.replace(':from', request.from);
-        url = url.replace(':to', request.to);
-        url = url.replace(':taxNumber', request.taxNumber);
+        url = url?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName));
+        url = url?.replace(':from', request.from);
+        url = url?.replace(':to', request.to);
+        url = url?.replace(':taxNumber', request.taxNumber);
         if (request.branchUniqueName) {
             request.branchUniqueName = request.branchUniqueName !== this.companyUniqueName ? request.branchUniqueName : '';
             url = url.concat(`&branchUniqueName=${encodeURIComponent(request.branchUniqueName)}`);
@@ -40,10 +40,10 @@ export class VatService {
         this.companyUniqueName = this.generalService.companyUniqueName;
 
         let url = this.config.apiUrl + VAT_API.DOWNLOAD_REPORT;
-        url = url.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName));
-        url = url.replace(':from', request.from);
-        url = url.replace(':to', request.to);
-        url = url.replace(':taxNumber', request.taxNumber);
+        url = url?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName));
+        url = url?.replace(':from', request.from);
+        url = url?.replace(':to', request.to);
+        url = url?.replace(':taxNumber', request.taxNumber);
         if (request.branchUniqueName) {
             request.branchUniqueName = request.branchUniqueName !== this.companyUniqueName ? request.branchUniqueName : '';
             url = url.concat(`&branchUniqueName=${encodeURIComponent(request.branchUniqueName)}`);
@@ -64,13 +64,13 @@ export class VatService {
      */
     public getVatReportTransactions(companyUniqueName: string, request: VatReportTransactionsRequest): Observable<BaseResponse<any, any>> {
         let url = this.config.apiUrl + VAT_API.VIEW_TRANSACTIONS_REPORT;
-        url = url.replace(':companyUniqueName', encodeURIComponent(companyUniqueName));
-        url = url.replace(':from', request.from);
-        url = url.replace(':to', request.to);
-        url = url.replace(':taxNumber', request.taxNumber);
-        url = url.replace(':section', request.section);
-        url = url.replace(':page', request.page);
-        url = url.replace(':count', request.count);
+        url = url?.replace(':companyUniqueName', encodeURIComponent(companyUniqueName));
+        url = url?.replace(':from', request.from);
+        url = url?.replace(':to', request.to);
+        url = url?.replace(':taxNumber', request.taxNumber);
+        url = url?.replace(':section', request.section);
+        url = url?.replace(':page', request.page);
+        url = url?.replace(':count', request.count);
         return this.http.get(url).pipe(
             map((res) => {
                 let data: BaseResponse<any, any> = res;

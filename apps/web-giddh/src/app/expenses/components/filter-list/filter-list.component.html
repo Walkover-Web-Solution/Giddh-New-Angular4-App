@@ -4,7 +4,7 @@
             <mat-list-item
                 class="cursor-pointer"
                 (click)="editExpense(filterItem)"
-                [ngClass]="{ 'activeItem': filterItem.uniqueName === selectedItem.uniqueName }"
+                [ngClass]="{ 'activeItem': filterItem?.uniqueName === selectedItem?.uniqueName }"
             >
                 <div class="left-item">
                     <p class="font-12 text-gray">
