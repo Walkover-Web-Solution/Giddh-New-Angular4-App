@@ -5,7 +5,6 @@
     >
         <tax-sidebar
             (navigateEvent)="handleNavigation($event)"
-            [activeCompanyGstNumber]="activeCompanyGstNumber"
             (clickOutside)="isMobileScreen ? (asideGstSidebarMenuState = 'out') : ''"
             [exclude]="'#primary-new-header'"
             [isMonthSelected]="false"
